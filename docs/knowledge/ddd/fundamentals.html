@@ -1,12 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fundamentals - CORTEX</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/variables.css?v=2026-01-03">
     <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-03">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
     <style>
         .stub-container {
             min-height: 100vh;
@@ -92,7 +118,7 @@
     <div class="stub-container">
         <div class="stub-card">
             <div class="stub-icon">
-                <i class="fas fa-hammer"></i>
+                <i class="pulse-glow-glass--fast fa-hammer"></i>
             </div>
             
             <div class="stub-category">Ddd</div>
@@ -105,7 +131,7 @@
             </p>
             
             <a href="../ddd-hub.html" class="stub-back-link">
-                <i class="fas fa-arrow-left"></i>
+                <i class="pulse-glow-glass--fast fa-arrow-left"></i>
                 Back to Overview
             </a>
             

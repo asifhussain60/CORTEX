@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CI/CD Pipelines - Continuous integration and deployment best practices">
@@ -8,13 +33,14 @@
     <title>CI/CD Pipelines - CORTEX Knowledge</title>
     <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
-        <button class="back-button" onclick="history.back()" aria-label="Go back">← Back</button>
+    <nav class="breadcrumb-separator sticky-nav" mobile-nav-optimized aria-label="Breadcrumb">
+        <button class="grid-background" onclick="history.back()" aria-label="Go back">← Back</button>
         <ol class="breadcrumb">
             <li><a href="../../index.html">Home</a></li>
             <li><a href="../index.html">Knowledge Library</a></li>
@@ -29,16 +55,16 @@
         </div>
         <h1 class="hero-title">⚙️ CI/CD Pipelines</h1>
         <p class="hero-subtitle">Continuous integration and deployment automation patterns</p>
-        <div class="file-metadata">
+        <div class="code-file">
             <span class="metadata-item">📦 50+ Rules</span>
             <span class="metadata-item">🏷️ DevOps</span>
             <span class="metadata-item">📅 Updated: Dec 2025</span>
         </div>
     </section>
 
-    <aside class="toc-sidebar" aria-label="Table of contents">
+    <aside class="toc-link" aria-label="Table of contents">
         <h3>On This Page</h3>
-        <nav class="toc-nav">
+        <nav class="toc-nav" mobile-nav-optimized>
             <a href="#overview" class="toc-link">Overview</a>
             <a href="#stages" class="toc-link">Pipeline Stages</a>
             <a href="#testing" class="toc-link">Automated Testing</a>
@@ -49,7 +75,7 @@
         </nav>
     </aside>
 
-    <main class="file-content">
+    <main class="code-file">
         <section class="glass-card" id="overview">
             <h2>What is CI/CD?</h2>
             <p>
@@ -59,21 +85,37 @@
             </p>
 
             <h3>Key Benefits</h3>
-            <ul class="feature-list">
-                <li><strong>Faster Time to Market:</strong> 60-90% reduction in release cycle time</li>
-                <li><strong>Reduced Risk:</strong> Small, frequent releases easier to troubleshoot</li>
-                <li><strong>Improved Quality:</strong> Automated testing catches bugs before production</li>
-                <li><strong>Consistent Deployments:</strong> Eliminates human error (95% success rate)</li>
-                <li><strong>Rapid Feedback:</strong> 10x faster feedback loop for developers</li>
-            </ul>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Faster Time to Market:</strong> 60-90% reduction in release cycle time</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Reduced Risk:</strong> Small, frequent releases easier to troubleshoot</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Improved Quality:</strong> Automated testing catches bugs before production</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Consistent Deployments:</strong> Eliminates human error (95% success rate)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Rapid Feedback:</strong> 10x faster feedback loop for developers</div>
+    </div>
+</div>
 
-            <div class="info-banner">
+            <div class="level1-feature-icon-container--info">
                 <strong>💡 CI vs CD vs Continuous Deployment:</strong>
-                <ul class="feature-list">
-                    <li><strong>CI:</strong> Automatically build and test on every commit</li>
-                    <li><strong>CD (Delivery):</strong> Always deployable, manual approval for production</li>
-                    <li><strong>CD (Deployment):</strong> Every passing build automatically deploys to production</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>CI:</strong> Automatically build and test on every commit</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>CD (Delivery):</strong> Always deployable, manual approval for production</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>CD (Deployment):</strong> Every passing build automatically deploys to production</div>
+    </div>
+</div>
             </div>
         </section>
 
@@ -83,12 +125,12 @@
 
             <div class="rule-card">
                 <h3>Stage 1: Source</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Trigger pipeline on code changes and clone repository.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ GitHub Actions Example</h4>
-                    <pre><code class="language-yaml">name: CI Pipeline
+                    <pre><code class="language-badge">name: CI Pipeline
 on:
   push:
     branches: [main, develop]
@@ -107,21 +149,27 @@ jobs:
                 </div>
 
                 <h4>Best Practices</h4>
-                <ul class="feature-list">
-                    <li>Use webhooks for instant triggering (not polling)</li>
-                    <li>Shallow clone to reduce clone time</li>
-                    <li>Cache dependencies between runs</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Use webhooks for instant triggering (not polling)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Shallow clone to reduce clone time</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Cache dependencies between runs</div>
+    </div>
+</div>
             </div>
 
             <div class="rule-card">
                 <h3>Stage 2: Build</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Compile code, resolve dependencies, create artifacts.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Multi-Language Build</h4>
-                    <pre><code class="language-yaml"># .NET Build
+                    <pre><code class="language-badge"># .NET Build
 - name: Setup .NET
   uses: actions/setup-dotnet@v3
   with:
@@ -138,9 +186,9 @@ jobs:
 </code></pre>
                 </div>
 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Node.js Build</h4>
-                    <pre><code class="language-yaml"># Node.js Build
+                    <pre><code class="language-badge"># Node.js Build
 - name: Setup Node.js
   uses: actions/setup-node@v4
   with:
@@ -156,22 +204,30 @@ jobs:
                 </div>
 
                 <h4>Best Practices</h4>
-                <ul class="feature-list">
-                    <li>Keep build time under 10 minutes</li>
-                    <li>Fail fast on build errors</li>
-                    <li>Cache dependencies (npm, NuGet, Maven)</li>
-                    <li>Use specific tool versions (not "latest")</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Keep build time under 10 minutes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Fail fast on build errors</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Cache dependencies (npm, NuGet, Maven)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use specific tool versions (not "latest")</div>
+    </div>
+</div>
             </div>
 
             <div class="rule-card">
                 <h3>Stage 3: Test</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Run automated tests to validate code quality.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Multi-Level Testing</h4>
-                    <pre><code class="language-yaml">- name: Unit Tests
+                    <pre><code class="language-badge">- name: Unit Tests
   run: dotnet test --configuration Release --no-build --verbosity normal --logger trx
 
 - name: Integration Tests
@@ -195,22 +251,30 @@ jobs:
                 </div>
 
                 <h4>Test Categories</h4>
-                <ul class="feature-list">
-                    <li><strong>Unit Tests:</strong> Fast, isolated tests (seconds)</li>
-                    <li><strong>Integration Tests:</strong> Test component interactions (minutes)</li>
-                    <li><strong>E2E Tests:</strong> Full user workflows (minutes to hours)</li>
-                    <li><strong>Performance Tests:</strong> Load/stress testing</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Unit Tests:</strong> Fast, isolated tests (seconds)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Integration Tests:</strong> Test component interactions (minutes)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>E2E Tests:</strong> Full user workflows (minutes to hours)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Performance Tests:</strong> Load/stress testing</div>
+    </div>
+</div>
             </div>
 
             <div class="rule-card">
                 <h3>Stage 4: Security Scanning</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Scan for vulnerabilities, secrets, and code quality issues.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Security Checks</h4>
-                    <pre><code class="language-yaml">- name: Dependency Vulnerability Scan
+                    <pre><code class="language-badge">- name: Dependency Vulnerability Scan
   run: dotnet list package --vulnerable --include-transitive
 
 - name: Secret Scanning
@@ -232,12 +296,12 @@ jobs:
 
             <div class="rule-card">
                 <h3>Stage 5: Artifact Storage</h3>
-                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <span class="badge badge-security">MEDIUM PRIORITY</span>
                 <p>Package and store build artifacts for deployment.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Docker Image</h4>
-                    <pre><code class="language-yaml">- name: Build Docker Image
+                    <pre><code class="language-badge">- name: Build Docker Image
   run: |
     docker build -t myapp:${{ github.sha }} .
     docker tag myapp:${{ github.sha }} myapp:latest
@@ -250,9 +314,9 @@ jobs:
 </code></pre>
                 </div>
 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ NuGet Package</h4>
-                    <pre><code class="language-yaml">- name: Pack NuGet Package
+                    <pre><code class="language-badge">- name: Pack NuGet Package
   run: dotnet pack --configuration Release --output ./nupkgs
 
 - name: Push to NuGet.org
@@ -268,12 +332,12 @@ jobs:
 
             <div class="rule-card">
                 <h3>Test Pyramid</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Balance fast unit tests with slower integration and E2E tests.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>Recommended Distribution</h4>
-                    <pre><code class="language-markdown">         /\
+                    <pre><code class="language-badge">         /\
         /E2E\       10% - Slow, brittle, expensive
        /------\
       /  Intg  \    20% - Medium speed, test interactions
@@ -304,12 +368,12 @@ E2E TESTS (10%):
 
             <div class="rule-card">
                 <h3>Test Quality Gates</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Define thresholds that must pass before deployment.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Quality Gate Configuration</h4>
-                    <pre><code class="language-yaml"># Fail pipeline if quality gates not met
+                    <pre><code class="language-badge"># Fail pipeline if quality gates not met
 - name: Check Code Coverage
   run: |
     COVERAGE=$(grep -Po 'Line coverage: \K[0-9.]+' coverage.txt)
@@ -329,13 +393,23 @@ E2E TESTS (10%):
                 </div>
 
                 <h4>Common Quality Gates</h4>
-                <ul class="feature-list">
-                    <li><strong>Code Coverage:</strong> ≥ 80% line coverage</li>
-                    <li><strong>Test Pass Rate:</strong> 100% tests passing</li>
-                    <li><strong>Security Vulnerabilities:</strong> Zero critical/high vulnerabilities</li>
-                    <li><strong>Code Smells:</strong> SonarQube rating ≥ A</li>
-                    <li><strong>Build Time:</strong> &lt; 10 minutes</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Code Coverage:</strong> ≥ 80% line coverage</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Test Pass Rate:</strong> 100% tests passing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Security Vulnerabilities:</strong> Zero critical/high vulnerabilities</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Code Smells:</strong> SonarQube rating ≥ A</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Build Time:</strong> &lt; 10 minutes</div>
+    </div>
+</div>
             </div>
         </section>
 
@@ -345,12 +419,12 @@ E2E TESTS (10%):
 
             <div class="rule-card">
                 <h3>Blue-Green Deployment</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Maintain two identical environments. Switch traffic instantly, instant rollback.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Blue-Green Strategy</h4>
-                    <pre><code class="language-yaml"># Deploy to Green (inactive) environment
+                    <pre><code class="language-badge"># Deploy to Green (inactive) environment
 - name: Deploy to Green
   run: |
     kubectl apply -f k8s/green-deployment.yaml
@@ -380,23 +454,33 @@ E2E TESTS (10%):
                 </div>
 
                 <h4>Pros & Cons</h4>
-                <ul class="feature-list">
-                    <li>✅ Instant rollback (just switch traffic back)</li>
-                    <li>✅ Zero downtime</li>
-                    <li>✅ Full production testing before cutover</li>
-                    <li>❌ Requires double infrastructure (expensive)</li>
-                    <li>❌ Database migration challenges</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">✅ Instant rollback (just switch traffic back)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Zero downtime</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Full production testing before cutover</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">❌ Requires double infrastructure (expensive)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">❌ Database migration challenges</div>
+    </div>
+</div>
             </div>
 
             <div class="rule-card">
                 <h3>Canary Deployment</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Gradually roll out to small percentage of users, monitor, then expand.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Canary Strategy</h4>
-                    <pre><code class="language-yaml"># Deploy canary (5% traffic)
+                    <pre><code class="language-badge"># Deploy canary (5% traffic)
 - name: Deploy Canary
   run: |
     kubectl apply -f k8s/canary-deployment.yaml
@@ -439,23 +523,33 @@ E2E TESTS (10%):
                 </div>
 
                 <h4>Pros & Cons</h4>
-                <ul class="feature-list">
-                    <li>✅ Limits blast radius (only affects small % of users)</li>
-                    <li>✅ Real production testing with real users</li>
-                    <li>✅ Gradual rollout reduces risk</li>
-                    <li>❌ Complex traffic routing</li>
-                    <li>❌ Requires monitoring/alerting</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">✅ Limits blast radius (only affects small % of users)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Real production testing with real users</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Gradual rollout reduces risk</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">❌ Complex traffic routing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">❌ Requires monitoring/alerting</div>
+    </div>
+</div>
             </div>
 
             <div class="rule-card">
                 <h3>Rolling Deployment</h3>
-                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <span class="badge badge-security">MEDIUM PRIORITY</span>
                 <p>Update instances one by one. Simple but limited rollback.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Kubernetes Rolling Update</h4>
-                    <pre><code class="language-yaml">apiVersion: apps/v1
+                    <pre><code class="language-badge">apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: myapp
@@ -488,12 +582,12 @@ spec:
 
             <div class="rule-card">
                 <h3>Secrets Management</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Never hardcode secrets. Use secret managers.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ GitHub Secrets</h4>
-                    <pre><code class="language-yaml">- name: Deploy to Production
+                    <pre><code class="language-badge">- name: Deploy to Production
   run: |
     az login --service-principal \
       --username ${{ secrets.AZURE_CLIENT_ID }} \
@@ -504,9 +598,9 @@ spec:
 </code></pre>
                 </div>
 
-                <div class="example-section bad-example">
+                <div class="command-example bad-example">
                     <h4>❌ Avoid - Hardcoded Secrets</h4>
-                    <pre><code class="language-yaml"># NEVER DO THIS!
+                    <pre><code class="language-badge"># NEVER DO THIS!
 - name: Deploy
   run: |
     export API_KEY="sk-1234567890abcdef"  # Exposed in logs!
@@ -517,12 +611,12 @@ spec:
 
             <div class="rule-card">
                 <h3>Least Privilege Access</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Grant minimum permissions needed for each pipeline stage.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Scoped Permissions</h4>
-                    <pre><code class="language-yaml">permissions:
+                    <pre><code class="language-badge">permissions:
   contents: read        # Read repository
   packages: write       # Publish packages
   deployments: write    # Create deployments
@@ -540,12 +634,12 @@ spec:
 
             <div class="rule-card">
                 <h3>Caching Dependencies</h3>
-                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <span class="badge badge-security">MEDIUM PRIORITY</span>
                 <p>Cache dependencies to avoid re-downloading on every build.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Multi-Language Caching</h4>
-                    <pre><code class="language-yaml"># Node.js
+                    <pre><code class="language-badge"># Node.js
 - uses: actions/setup-node@v4
   with:
     node-version: '20'
@@ -566,18 +660,18 @@ spec:
     python-version: '3.11'
     cache: 'pip'
 </code></pre>
-                    <p class="example-note">✅ Reduces build time by 50-80%</p>
+                    <p class="command-example">✅ Reduces build time by 50-80%</p>
                 </div>
             </div>
 
             <div class="rule-card">
                 <h3>Parallel Jobs</h3>
-                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <span class="badge badge-security">MEDIUM PRIORITY</span>
                 <p>Run independent jobs in parallel to reduce total pipeline time.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Matrix Strategy</h4>
-                    <pre><code class="language-yaml">jobs:
+                    <pre><code class="language-badge">jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
@@ -598,19 +692,19 @@ spec:
 
         <section class="glass-card" id="related">
             <h2>Related Knowledge Files</h2>
-            <div class="related-grid">
-                <a href="infrastructure-as-code.html" class="related-card">
-                    <span class="related-icon">🏗️</span>
+            <div class="level1-relationship-grid">
+                <a href="infrastructure-as-code.html" class="level1-relationship-grid">
+                    <span class="level1-relationship-grid">🏗️</span>
                     <h3>Infrastructure as Code</h3>
                     <p>Automated infrastructure provisioning</p>
                 </a>
-                <a href="monitoring-observability.html" class="related-card">
-                    <span class="related-icon">📊</span>
+                <a href="monitoring-observability.html" class="level1-relationship-grid">
+                    <span class="level1-relationship-grid">📊</span>
                     <h3>Monitoring & Observability</h3>
                     <p>Pipeline and application monitoring</p>
                 </a>
-                <a href="../containers/kubernetes-patterns.html" class="related-card">
-                    <span class="related-icon">🐳</span>
+                <a href="../containers/kubernetes-patterns.html" class="level1-relationship-grid">
+                    <span class="level1-relationship-grid">🐳</span>
                     <h3>Kubernetes Patterns</h3>
                     <p>Container orchestration for deployments</p>
                 </a>

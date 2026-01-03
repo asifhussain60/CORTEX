@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Testing Learning Hub - Master TDD, BDD, E2E, and test automation through interactive modules">
@@ -8,6 +33,7 @@
     <meta name="author" content="Asif Hussain">
     <title>Testing Learning Hub | CORTEX Best Practices</title>
     <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <link rel="stylesheet" href="../assets/css/learning-hub.css?v=2026-01-02">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
@@ -17,10 +43,35 @@
 
     <!-- Header Navigation -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../index.html" class="nav-link">
-                    <span class="nav-icon">🏠</span> Home
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../index.html" class="nav-link" mobile-nav-optimized>
+                    <span class="nav-content" mobile-nav-optimized>🏠</span> Home
                 </a>
             </nav>
         </div>
@@ -78,9 +129,9 @@ graph LR
                 📚 Interactive Learning Modules
             </h2>
             
-            <div class="module-nav-grid">
+            <div class="module-nav-grid" mobile-nav-optimized>
                 <!-- Module 1: TDD Fundamentals -->
-                <a href="testing/tdd-fundamentals.html" class="module-nav-card">
+                <a href="testing/tdd-fundamentals.html" class="module-nav-card" mobile-nav-optimized>
                     <div class="module-card-header">
                         <span class="module-number">Module 1</span>
                         <span class="difficulty-badge beginner">Beginner</span>
@@ -97,7 +148,7 @@ graph LR
                 </a>
 
                 <!-- Module 2: Unit Testing Mastery -->
-                <a href="testing/unit-testing-mastery.html" class="module-nav-card">
+                <a href="testing/unit-testing-mastery.html" class="module-nav-card" mobile-nav-optimized>
                     <div class="module-card-header">
                         <span class="module-number">Module 2</span>
                         <span class="difficulty-badge beginner">Beginner</span>
@@ -114,7 +165,7 @@ graph LR
                 </a>
 
                 <!-- Module 3: BDD & E2E Testing -->
-                <a href="testing/bdd-e2e-testing.html" class="module-nav-card">
+                <a href="testing/bdd-e2e-testing.html" class="module-nav-card" mobile-nav-optimized>
                     <div class="module-card-header">
                         <span class="module-number">Module 3</span>
                         <span class="difficulty-badge intermediate">Intermediate</span>
@@ -131,7 +182,7 @@ graph LR
                 </a>
 
                 <!-- Module 4: Test Coverage Analysis -->
-                <a href="testing/test-coverage-analysis.html" class="module-nav-card">
+                <a href="testing/test-coverage-analysis.html" class="module-nav-card" mobile-nav-optimized>
                     <div class="module-card-header">
                         <span class="module-number">Module 4</span>
                         <span class="difficulty-badge intermediate">Intermediate</span>
@@ -148,7 +199,7 @@ graph LR
                 </a>
 
                 <!-- Module 5: Mocking & CI/CD Integration -->
-                <a href="testing/mocking-ci-cd.html" class="module-nav-card">
+                <a href="testing/mocking-ci-cd.html" class="module-nav-card" mobile-nav-optimized>
                     <div class="module-card-header">
                         <span class="module-number">Module 5</span>
                         <span class="difficulty-badge advanced">Advanced</span>
@@ -197,24 +248,24 @@ graph TD
             <p class="prerequisites-description">
                 Recommended knowledge before starting this learning path:
             </p>
-            <ul class="prerequisites-list">
-                <li>
-                    <strong>Programming Fundamentals</strong>
-                    Proficiency in at least one programming language (Python, C#, JavaScript, Java)
-                </li>
-                <li>
-                    <strong>Object-Oriented Concepts</strong>
-                    Understanding of classes, methods, interfaces, and dependency injection
-                </li>
-                <li>
-                    <strong>Version Control (Git)</strong>
-                    Basic Git commands for committing code and working with branches
-                </li>
-                <li>
-                    <strong>Development Environment</strong>
-                    Familiarity with IDE/editor and running code locally
-                </li>
-            </ul>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Programming Fundamentals</strong>
+                    Proficiency in at least one programming language (Python, C#, JavaScript, Java)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Object-Oriented Concepts</strong>
+                    Understanding of classes, methods, interfaces, and dependency injection</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Version Control (Git)</strong>
+                    Basic Git commands for committing code and working with branches</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Development Environment</strong>
+                    Familiarity with IDE/editor and running code locally</div>
+    </div>
+</div>
         </section>
 
         <!-- Quick Reference Glossary -->
@@ -294,7 +345,7 @@ graph TD
     <footer class="glass-footer">
         <div class="footer-content">
             <p>© 2026 Asif Hussain. All rights reserved.</p>
-            <nav class="footer-nav">
+            <nav class="footer-bottom">
                 <a href="https://github.com/asifhussain60/CORTEX" target="_blank">GitHub</a>
                 <a href="../index.html">Documentation</a>
             </nav>

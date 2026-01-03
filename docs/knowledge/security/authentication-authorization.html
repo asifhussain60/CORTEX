@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Authentication & Authorization - Security Learning Module">
@@ -8,8 +33,11 @@
     <meta name="author" content="Asif Hussain">
     <title>Authentication & Authorization | CORTEX Learning Hub</title>
     <link rel="stylesheet" href="../../assets/css/main.css?v=2026-01-02">
-    <link rel="stylesheet" href="../../assets/css/learning-hub.css?v=2026-01-02">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
+    
+    <link rel="stylesheet" href="../..../..../..../..../..../../assets/css/generated-classes.css"><link rel="stylesheet" href="../../assets/css/learning-hub.css?v=2026-01-02">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/editor/editor.main.css">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
@@ -18,14 +46,39 @@
 
     <!-- Header Navigation -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../../index.html" class="nav-link">
-                    <span class="nav-icon">🏠</span> Home
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../../index.html" class="nav-link" mobile-nav-optimized>
+                    <span class="nav-content" mobile-nav-optimized>🏠</span> Home
                 </a>
-                <span class="nav-separator">›</span>
-                <a href="../security-hub.html" class="nav-link">
-                    <span class="nav-icon">🔐</span> Security
+                <span class="nav-content" mobile-nav-optimized>›</span>
+                <a href="../security-hub.html" class="nav-link" mobile-nav-optimized>
+                    <span class="nav-content" mobile-nav-optimized>🔐</span> Security
                 </a>
             </nav>
         </div>
@@ -36,7 +89,7 @@
         <div class="module-header">
             <div class="breadcrumb">
                 <span class="difficulty-badge intermediate">Intermediate</span>
-                <span style="color: var(--text-secondary);">Module 2 of 6</span>
+                <span class="inline-fix-9">Module 2 of 6</span>
             </div>
             <h1 class="hero-title">🔐 Authentication & Authorization</h1>
             <p class="hero-subtitle">Master OAuth 2.0, JWT tokens, session management, and access control patterns</p>
@@ -52,48 +105,60 @@
     <!-- Main Content -->
     <div class="container">
         <!-- Learning Objectives -->
-        <section class="glass-card" style="margin-top: var(--spacing-2xl);">
+        <section class="glass-card" class="inline-fix-14">
             <h2>🎓 Learning Objectives</h2>
-            <ul class="objective-list">
-                <li><strong>Differentiate Authentication vs Authorization:</strong> Understand "who are you" vs "what can you do"</li>
-                <li><strong>Implement OAuth 2.0 Flows:</strong> Authorization Code, Client Credentials, PKCE extensions</li>
-                <li><strong>Secure JWT Token Handling:</strong> Generation, validation, refresh strategies, and expiration</li>
-                <li><strong>Design Access Control:</strong> RBAC (role-based), ABAC (attribute-based), and hybrid models</li>
-                <li><strong>Prevent Session Attacks:</strong> Hijacking, fixation, replay attacks, and secure storage</li>
-                <li><strong>Apply Security Best Practices:</strong> MFA, password policies, audit logging, and least privilege</li>
-            </ul>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Differentiate Authentication vs Authorization:</strong> Understand "who are you" vs "what can you do"</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Implement OAuth 2.0 Flows:</strong> Authorization Code, Client Credentials, PKCE extensions</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Secure JWT Token Handling:</strong> Generation, validation, refresh strategies, and expiration</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Design Access Control:</strong> RBAC (role-based), ABAC (attribute-based), and hybrid models</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Prevent Session Attacks:</strong> Hijacking, fixation, replay attacks, and secure storage</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Apply Security Best Practices:</strong> MFA, password policies, audit logging, and least privilege</div>
+    </div>
+</div>
         </section>
 
         <!-- OAuth 2.0 Flows Visualization -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🔄 OAuth 2.0 Authorization Flows</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 OAuth 2.0 provides multiple authorization flows (grant types) for different scenarios. 
                 Hover over flow bars to see use cases and security characteristics.
             </p>
             
-            <div class="visualization-container" id="oauth-flows-viz" style="width: 100%; height: 500px; margin-bottom: var(--spacing-2xl); border: 1px solid var(--module-border); border-radius: 8px; background: rgba(26, 31, 58, 0.3);"></div>
+            <div class="visualization-container" id="oauth-flows-viz" class="inline-fix-224"></div>
             
-            <div class="legend" style="display: flex; justify-content: center; gap: var(--spacing-lg); margin-top: var(--spacing-lg); flex-wrap: wrap;">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <div style="width: 16px; height: 16px; background: #10b981; border-radius: 4px;"></div>
-                    <span style="color: var(--text-secondary); font-size: 14px;">Recommended</span>
+            <div class="level2-legend-orange" class="inline-fix-283">
+                <div class="inline-fix-60">
+                    <div class="inline-fix-307"></div>
+                    <span class="inline-fix-61">Recommended</span>
                 </div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <div style="width: 16px; height: 16px; background: #fbbf24; border-radius: 4px;"></div>
-                    <span style="color: var(--text-secondary); font-size: 14px;">Limited Use</span>
+                <div class="inline-fix-60">
+                    <div class="inline-fix-239"></div>
+                    <span class="inline-fix-61">Limited Use</span>
                 </div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <div style="width: 16px; height: 16px; background: #ef4444; border-radius: 4px;"></div>
-                    <span style="color: var(--text-secondary); font-size: 14px;">Deprecated</span>
+                <div class="inline-fix-60">
+                    <div class="inline-fix-282"></div>
+                    <span class="inline-fix-61">Deprecated</span>
                 </div>
             </div>
         </section>
 
         <!-- Authorization Code Flow Sequence -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>📨 Authorization Code Flow (PKCE)</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 The most secure OAuth 2.0 flow for web and mobile apps. PKCE (Proof Key for Code Exchange) prevents authorization code interception attacks.
             </p>
             
@@ -128,21 +193,29 @@ sequenceDiagram
     API->>Client: Protected Resource Data
             </div>
             
-            <div class="info-box" style="margin-top: var(--spacing-xl); padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-left: 4px solid #10b981; border-radius: 6px;">
-                <strong style="color: #10b981;">🔒 PKCE Security Benefits:</strong>
-                <ul style="margin-top: var(--spacing-sm); color: var(--text-secondary);">
-                    <li>Protects against authorization code interception attacks</li>
-                    <li>No client secret required (safe for mobile/SPA apps)</li>
-                    <li>Code verifier never transmitted over network before token exchange</li>
-                    <li>Authorization server validates challenge matches verifier</li>
-                </ul>
+            <div class="info-box" class="inline-fix-142">
+                <strong class="inline-fix-13">🔒 PKCE Security Benefits:</strong>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Protects against authorization code interception attacks</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">No client secret required (safe for mobile/SPA apps)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Code verifier never transmitted over network before token exchange</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Authorization server validates challenge matches verifier</div>
+    </div>
+</div>
             </div>
         </section>
 
         <!-- JWT Token Lifecycle -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🎫 JWT Token Lifecycle</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 JSON Web Tokens (JWT) are self-contained tokens that encode user identity and claims. 
                 Understand generation, validation, refresh, and expiration patterns.
             </p>
@@ -175,28 +248,28 @@ stateDiagram-v2
     end note
             </div>
             
-            <div class="info-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-lg); margin-top: var(--spacing-xl);">
-                <div style="padding: var(--spacing-lg); background: rgba(123, 97, 255, 0.1); border-radius: 8px; border: 1px solid var(--module-border);">
-                    <h4 style="color: var(--hub-primary); margin-bottom: var(--spacing-sm);">Access Token</h4>
-                    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5;">
+            <div class="level1-feature-icon-container--info" class="inline-fix-164">
+                <div class="inline-fix-140">
+                    <h4 class="inline-fix-174">Access Token</h4>
+                    <p class="inline-fix-129">
                         <strong>Lifetime:</strong> 15-60 minutes<br>
                         <strong>Purpose:</strong> Authorize API requests<br>
                         <strong>Storage:</strong> Memory (never localStorage)<br>
                         <strong>Contains:</strong> User ID, roles, permissions
                     </p>
                 </div>
-                <div style="padding: var(--spacing-lg); background: rgba(0, 212, 255, 0.1); border-radius: 8px; border: 1px solid var(--module-border);">
-                    <h4 style="color: #00d4ff; margin-bottom: var(--spacing-sm);">Refresh Token</h4>
-                    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5;">
+                <div class="inline-fix-156">
+                    <h4 class="inline-fix-19">Refresh Token</h4>
+                    <p class="inline-fix-129">
                         <strong>Lifetime:</strong> 7-30 days<br>
                         <strong>Purpose:</strong> Obtain new access token<br>
                         <strong>Storage:</strong> HttpOnly cookie<br>
                         <strong>Contains:</strong> User ID, token family
                     </p>
                 </div>
-                <div style="padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-radius: 8px; border: 1px solid var(--module-border);">
-                    <h4 style="color: #10b981; margin-bottom: var(--spacing-sm);">ID Token</h4>
-                    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5;">
+                <div class="inline-fix-183">
+                    <h4 class="inline-fix-22">ID Token</h4>
+                    <p class="inline-fix-129">
                         <strong>Lifetime:</strong> Same as access token<br>
                         <strong>Purpose:</strong> Prove user identity<br>
                         <strong>Storage:</strong> Memory or session<br>
@@ -207,18 +280,18 @@ stateDiagram-v2
         </section>
 
         <!-- RBAC vs ABAC Comparison -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>👥 Access Control Models: RBAC vs ABAC</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 Choose between Role-Based Access Control (RBAC) and Attribute-Based Access Control (ABAC) based on your application's complexity and requirements.
             </p>
             
-            <div class="visualization-container" id="rbac-abac-comparison" style="width: 100%; height: 450px; margin-bottom: var(--spacing-2xl); border: 1px solid var(--module-border); border-radius: 8px; background: rgba(26, 31, 58, 0.3);"></div>
+            <div class="visualization-container" id="rbac-abac-comparison" class="inline-fix-309"></div>
             
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-xl); margin-top: var(--spacing-xl);">
-                <div style="padding: var(--spacing-lg); background: rgba(123, 97, 255, 0.1); border-radius: 8px; border: 1px solid var(--module-border);">
-                    <h4 style="color: var(--hub-primary); margin-bottom: var(--spacing-md);">🎯 RBAC Example</h4>
-                    <pre style="background: rgba(0,0,0,0.3); padding: var(--spacing-md); border-radius: 6px; overflow-x: auto;"><code style="color: #10b981; font-size: 13px;">{
+            <div class="inline-fix-115">
+                <div class="inline-fix-140">
+                    <h4 class="inline-fix-80">🎯 RBAC Example</h4>
+                    <pre class="inline-fix-178"><code class="inline-fix-219">{
   "user": "alice@company.com",
   "roles": ["editor", "viewer"],
   "permissions": {
@@ -233,9 +306,9 @@ if (user.roles.includes("editor")) {
 }</code></pre>
                 </div>
                 
-                <div style="padding: var(--spacing-lg); background: rgba(0, 212, 255, 0.1); border-radius: 8px; border: 1px solid var(--module-border);">
-                    <h4 style="color: #00d4ff; margin-bottom: var(--spacing-md);">🎯 ABAC Example</h4>
-                    <pre style="background: rgba(0,0,0,0.3); padding: var(--spacing-md); border-radius: 6px; overflow-x: auto;"><code style="color: #00d4ff; font-size: 13px;">{
+                <div class="inline-fix-156">
+                    <h4 class="inline-fix-90">🎯 ABAC Example</h4>
+                    <pre class="inline-fix-178"><code class="inline-fix-322">{
   "user": {"dept": "finance", "level": 3},
   "resource": {"type": "report", "dept": "finance"},
   "environment": {"time": "09:00", "ip": "10.0.0.5"},
@@ -253,112 +326,140 @@ if (user.dept === resource.dept &&
         </section>
 
         <!-- JWT & Session Management Playground -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>💻 Interactive Playground: JWT Generation & Validation</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 Explore JWT token creation, validation, and common pitfalls. Switch between secure and insecure implementations.
             </p>
             
-            <div class="playground-container" style="margin-top: var(--spacing-xl);">
-                <div class="playground-tabs" style="display: flex; gap: var(--spacing-sm); margin-bottom: var(--spacing-lg); border-bottom: 2px solid var(--module-border);">
-                    <button class="tab-btn active" data-tab="jwt-generation" style="padding: var(--spacing-md) var(--spacing-lg); background: transparent; border: none; color: var(--hub-primary); cursor: pointer; border-bottom: 2px solid var(--hub-primary); font-weight: 600;">JWT Generation</button>
-                    <button class="tab-btn" data-tab="jwt-validation" style="padding: var(--spacing-md) var(--spacing-lg); background: transparent; border: none; color: var(--text-secondary); cursor: pointer; border-bottom: 2px solid transparent; font-weight: 600;">JWT Validation</button>
-                    <button class="tab-btn" data-tab="session-mgmt" style="padding: var(--spacing-md) var(--spacing-lg); background: transparent; border: none; color: var(--text-secondary); cursor: pointer; border-bottom: 2px solid transparent; font-weight: 600;">Session Management</button>
+            <div class="playground-container" class="inline-fix-155">
+                <div class="playground-tabs" class="inline-fix-165">
+                    <button class="tab-btn active" data-tab="jwt-generation" class="inline-fix-131">JWT Generation</button>
+                    <button class="tab-btn" data-tab="jwt-validation" class="inline-fix-84">JWT Validation</button>
+                    <button class="tab-btn" data-tab="session-mgmt" class="inline-fix-84">Session Management</button>
                 </div>
                 
-                <div id="jwt-generation" class="tab-content" style="display: block;">
-                    <div id="jwt-generation-editor" style="width: 100%; height: 400px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                <div id="jwt-generation" class="tab-content" class="inline-fix-137">
+                    <div id="jwt-generation-editor" class="inline-fix-76"></div>
                 </div>
                 
-                <div id="jwt-validation" class="tab-content" style="display: none;">
-                    <div id="jwt-validation-editor" style="width: 100%; height: 400px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                <div id="jwt-validation" class="tab-content" class="inline-fix-48">
+                    <div id="jwt-validation-editor" class="inline-fix-76"></div>
                 </div>
                 
-                <div id="session-mgmt" class="tab-content" style="display: none;">
-                    <div id="session-mgmt-editor" style="width: 100%; height: 400px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                <div id="session-mgmt" class="tab-content" class="inline-fix-48">
+                    <div id="session-mgmt-editor" class="inline-fix-76"></div>
                 </div>
             </div>
         </section>
 
         <!-- RBAC Implementation Playground -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>💻 Interactive Playground: RBAC Implementation</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 Build a complete role-based access control system with hierarchical roles, permission inheritance, and dynamic checks.
             </p>
             
-            <div id="rbac-playground-editor" style="width: 100%; height: 500px; border: 1px solid var(--module-border); border-radius: 8px; margin-top: var(--spacing-lg);"></div>
+            <div id="rbac-playground-editor" class="inline-fix-112"></div>
         </section>
 
         <!-- Challenge: Multi-Factor Authentication -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🏆 Security Challenge: Implement Multi-Factor Authentication</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 Design a secure MFA system that combines password + TOTP (Time-based One-Time Password). 
                 Your implementation must prevent common attacks and follow OWASP guidelines.
             </p>
             
-            <div class="challenge-requirements" style="background: rgba(123, 97, 255, 0.1); padding: var(--spacing-lg); border-radius: 8px; border: 1px solid var(--module-border); margin-bottom: var(--spacing-xl);">
-                <h4 style="color: var(--hub-primary); margin-bottom: var(--spacing-md);">Requirements:</h4>
-                <ul style="color: var(--text-secondary); line-height: 1.8;">
-                    <li><strong>Password Validation:</strong> Hash with bcrypt, enforce strong password policy (12+ chars, mixed case, special chars)</li>
-                    <li><strong>TOTP Generation:</strong> Generate time-based codes (30-second window, 6 digits, SHA-256)</li>
-                    <li><strong>Rate Limiting:</strong> Max 5 failed attempts per 15 minutes, exponential backoff</li>
-                    <li><strong>Session Management:</strong> Secure tokens, HttpOnly cookies, CSRF protection</li>
-                    <li><strong>Audit Logging:</strong> Track all auth events (success, failures, lockouts)</li>
-                    <li><strong>Backup Codes:</strong> Generate 10 single-use recovery codes (SHA-256 hashed)</li>
-                </ul>
+            <div class="challenge-container" class="inline-fix-158">
+                <h4 class="inline-fix-80">Requirements:</h4>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Password Validation:</strong> Hash with bcrypt, enforce strong password policy (12+ chars, mixed case, special chars)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>TOTP Generation:</strong> Generate time-based codes (30-second window, 6 digits, SHA-256)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Rate Limiting:</strong> Max 5 failed attempts per 15 minutes, exponential backoff</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Session Management:</strong> Secure tokens, HttpOnly cookies, CSRF protection</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Audit Logging:</strong> Track all auth events (success, failures, lockouts)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Backup Codes:</strong> Generate 10 single-use recovery codes (SHA-256 hashed)</div>
+    </div>
+</div>
             </div>
             
-            <div id="mfa-challenge-editor" style="width: 100%; height: 600px; border: 1px solid var(--module-border); border-radius: 8px; margin-bottom: var(--spacing-xl);"></div>
+            <div id="mfa-challenge-editor" class="inline-fix-168"></div>
             
-            <button id="show-mfa-solution" class="primary-btn" style="padding: var(--spacing-md) var(--spacing-2xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">🔓 Show Secure Solution</button>
+            <button id="show-mfa-solution" class="level1-text-primary" class="inline-fix-169">🔓 Show Secure Solution</button>
         </section>
 
         <!-- Solution Section -->
-        <section id="mfa-solution" class="glass-card" style="margin-top: var(--spacing-3xl); display: none;">
+        <section id="mfa-solution" class="glass-card" class="inline-fix-130">
             <h2>✅ Secure MFA Solution</h2>
             
-            <div class="solution-vulnerabilities" style="background: rgba(16, 185, 129, 0.1); padding: var(--spacing-lg); border-radius: 8px; border-left: 4px solid #10b981; margin-bottom: var(--spacing-xl);">
-                <h4 style="color: #10b981; margin-bottom: var(--spacing-md);">🔒 Security Features Implemented:</h4>
-                <ul style="color: var(--text-secondary); line-height: 1.8;">
-                    <li><strong>Password Security:</strong> Bcrypt with 12 rounds, strong policy enforcement, no plaintext storage</li>
-                    <li><strong>TOTP Security:</strong> SHA-256 HMAC, 30-second window, base32 secret encoding</li>
-                    <li><strong>Rate Limiting:</strong> Token bucket algorithm, IP + user tracking, progressive delays</li>
-                    <li><strong>Session Security:</strong> Cryptographically random tokens, HttpOnly+Secure cookies, SameSite=Strict</li>
-                    <li><strong>Audit Trail:</strong> Structured logging with timestamps, IP addresses, user agents</li>
-                    <li><strong>Recovery Codes:</strong> Cryptographically random, SHA-256 hashed, single-use enforcement</li>
-                    <li><strong>Timing Attack Prevention:</strong> Constant-time comparisons for all sensitive operations</li>
-                    <li><strong>Account Lockout:</strong> Temporary lockout after 5 failures, automatic unlock after 15 minutes</li>
-                </ul>
+            <div class="solution-content" class="inline-fix-151">
+                <h4 class="inline-fix-44">🔒 Security Features Implemented:</h4>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Password Security:</strong> Bcrypt with 12 rounds, strong policy enforcement, no plaintext storage</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>TOTP Security:</strong> SHA-256 HMAC, 30-second window, base32 secret encoding</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Rate Limiting:</strong> Token bucket algorithm, IP + user tracking, progressive delays</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Session Security:</strong> Cryptographically random tokens, HttpOnly+Secure cookies, SameSite=Strict</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Audit Trail:</strong> Structured logging with timestamps, IP addresses, user agents</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Recovery Codes:</strong> Cryptographically random, SHA-256 hashed, single-use enforcement</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Timing Attack Prevention:</strong> Constant-time comparisons for all sensitive operations</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Account Lockout:</strong> Temporary lockout after 5 failures, automatic unlock after 15 minutes</div>
+    </div>
+</div>
             </div>
             
-            <div id="mfa-solution-editor" style="width: 100%; height: 700px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+            <div id="mfa-solution-editor" class="inline-fix-138"></div>
         </section>
 
         <!-- Quiz Section -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>✅ Knowledge Check: Authentication & Authorization Quiz</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 Test your understanding of OAuth 2.0, JWT, RBAC/ABAC, and session security. 10 questions with instant feedback!
             </p>
             
             <div class="quiz-container" id="quiz">
-                <p style="color: var(--text-primary); text-align: center; padding: var(--spacing-3xl);">
+                <p class="inline-fix-39">
                     📝 Quiz loading...
                 </p>
             </div>
             
-            <div id="quiz-results" class="quiz-results" style="display: none; margin-top: var(--spacing-2xl); padding: var(--spacing-xl); background: rgba(123, 97, 255, 0.1); border-radius: 12px; border: 2px solid var(--hub-primary);">
+            <div id="quiz-results" class="quiz-results" class="inline-fix-173">
                 <div id="score-display"></div>
-                <button id="retry-quiz" class="secondary-btn" style="margin-top: var(--spacing-lg); padding: var(--spacing-md) var(--spacing-xl); background: rgba(123, 97, 255, 0.2); color: var(--hub-primary); border: 2px solid var(--hub-primary); border-radius: 8px; cursor: pointer; font-weight: 600;">🔄 Retry Quiz</button>
+                <button id="retry-quiz" class="bwc-panel-scan-line-secondary" class="inline-fix-170">🔄 Retry Quiz</button>
             </div>
         </section>
 
         <!-- Next Steps -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🚀 Next Steps</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 You've completed Authentication & Authorization! Continue your learning journey:
             </p>
             <div class="next-module-cards">
@@ -375,11 +476,11 @@ if (user.dept === resource.dept &&
     </div>
 
     <!-- Footer -->
-    <footer style="margin-top: var(--spacing-3xl); padding: var(--spacing-xl); text-align: center; color: var(--text-secondary);">
+    <footer class="inline-fix-17">
         <p>© 2026 Asif Hussain. All rights reserved.</p>
-        <p style="margin-top: var(--spacing-sm);">
-            <a href="../../index.html" style="color: var(--hub-primary);">Back to Home</a> • 
-            <a href="../security-hub.html" style="color: var(--hub-primary);">Security Hub</a>
+        <p class="inline-fix-12">
+            <a href="../../index.html" class="inline-fix-10">Back to Home</a> • 
+            <a href="../security-hub.html" class="inline-fix-10">Security Hub</a>
         </p>
     </footer>
 
@@ -782,11 +883,11 @@ if (user.dept === resource.dept &&
                     .attr('opacity', 1);
             });
             
-            // Legend
-            const legend = svg.append('g')
+            // level2-legend-orange
+            const level2-legend-orange = svg.append('g')
                 .attr('transform', `translate(${width - margin.right + 20}, ${margin.top})`);
             
-            legend.append('rect')
+            level2-legend-orange.append('rect')
                 .attr('x', 0)
                 .attr('y', 0)
                 .attr('width', 20)
@@ -794,7 +895,7 @@ if (user.dept === resource.dept &&
                 .attr('fill', '#7b61ff')
                 .attr('rx', 4);
             
-            legend.append('text')
+            level2-legend-orange.append('text')
                 .attr('x', 28)
                 .attr('y', 15)
                 .attr('fill', '#7b61ff')
@@ -802,7 +903,7 @@ if (user.dept === resource.dept &&
                 .attr('font-weight', '600')
                 .text('RBAC');
             
-            legend.append('rect')
+            level2-legend-orange.append('rect')
                 .attr('x', 0)
                 .attr('y', 35)
                 .attr('width', 20)
@@ -810,7 +911,7 @@ if (user.dept === resource.dept &&
                 .attr('fill', '#00d4ff')
                 .attr('rx', 4);
             
-            legend.append('text')
+            level2-legend-orange.append('text')
                 .attr('x', 28)
                 .attr('y', 50)
                 .attr('fill', '#00d4ff')
@@ -1924,24 +2025,24 @@ if __name__ == '__main__':
         function renderQuiz() {
             const quizContainer = document.getElementById('quiz');
             quizContainer.innerHTML = quizData.map((item, index) => `
-                <div class="quiz-question" style="margin-bottom: var(--spacing-2xl); padding: var(--spacing-lg); background: rgba(26, 31, 58, 0.5); border-radius: 8px; border: 1px solid var(--module-border);">
-                    <h4 style="color: var(--text-primary); margin-bottom: var(--spacing-md); font-size: 1.1rem;">
+                <div class="quiz-question" class="inline-fix-56">
+                    <h4 class="inline-fix-66">
                         Question ${index + 1}: ${item.question}
                     </h4>
-                    <div class="options-container">
+                    <div class="quiz-options">
                         ${item.options.map((option, optIndex) => `
-                            <label class="quiz-option" style="display: block; padding: var(--spacing-md); margin: var(--spacing-sm) 0; background: rgba(123, 97, 255, 0.1); border: 2px solid transparent; border-radius: 8px; cursor: pointer; transition: all 0.2s ease;">
-                                <input type="radio" name="question-${index}" value="${optIndex}" style="margin-right: var(--spacing-sm);">
-                                <span style="color: var(--text-secondary);">${option}</span>
+                            <label class="quiz-option" class="inline-fix-63">
+                                <input type="radio" name="question-${index}" value="${optIndex}" class="inline-fix-54">
+                                <span class="inline-fix-9">${option}</span>
                             </label>
                         `).join('')}
                     </div>
-                    <div id="feedback-${index}" class="question-feedback" style="display: none; margin-top: var(--spacing-md); padding: var(--spacing-md); border-radius: 6px;"></div>
+                    <div id="feedback-${index}" class="faq-question" class="inline-fix-55"></div>
                 </div>
             `).join('');
             
             quizContainer.innerHTML += `
-                <button id="submit-quiz-btn" class="submit-quiz-btn" style="padding: var(--spacing-md) var(--spacing-2xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600;">
+                <button id="submit-quiz-btn" class="submit-quiz-btn" class="inline-fix-62">
                     🔐 Submit Authentication Quiz
                 </button>
             `;
@@ -1988,24 +2089,24 @@ if __name__ == '__main__':
                         feedback.style.background = 'rgba(16, 185, 129, 0.1)';
                         feedback.style.borderLeft = '4px solid #10b981';
                         feedback.innerHTML = `
-                            <strong style="color: #10b981;">✅ Correct!</strong><br>
-                            <span style="color: var(--text-secondary); font-size: 0.95rem;">${item.explanation}</span>
+                            <strong class="inline-fix-13">✅ Correct!</strong><br>
+                            <span class="inline-fix-6">${item.explanation}</span>
                         `;
                     } else {
                         feedback.style.display = 'block';
                         feedback.style.background = 'rgba(239, 68, 68, 0.1)';
                         feedback.style.borderLeft = '4px solid #ef4444';
                         feedback.innerHTML = `
-                            <strong style="color: #ef4444;">❌ Incorrect</strong><br>
-                            <span style="color: var(--text-secondary); font-size: 0.95rem;">The correct answer is: <strong>${item.options[item.correct]}</strong></span><br>
-                            <span style="color: var(--text-secondary); font-size: 0.95rem;">${item.explanation}</span>
+                            <strong class="inline-fix-21">❌ Incorrect</strong><br>
+                            <span class="inline-fix-6">The correct answer is: <strong>${item.options[item.correct]}</strong></span><br>
+                            <span class="inline-fix-6">${item.explanation}</span>
                         `;
                     }
                 } else {
                     feedback.style.display = 'block';
                     feedback.style.background = 'rgba(251, 191, 36, 0.1)';
                     feedback.style.borderLeft = '4px solid #fbbf24';
-                    feedback.innerHTML = `<strong style="color: #fbbf24;">⚠️ No answer selected</strong>`;
+                    feedback.innerHTML = `<strong class="inline-fix-15">⚠️ No answer selected</strong>`;
                 }
             });
             
@@ -2033,12 +2134,12 @@ if __name__ == '__main__':
             }
             
             scoreDisplay.innerHTML = `
-                <div style="text-align: center;">
-                    <h3 style="color: ${color}; font-size: 2rem; margin-bottom: var(--spacing-sm);">${grade}</h3>
-                    <p style="font-size: 1.5rem; color: var(--text-primary); margin-bottom: var(--spacing-sm);">
+                <div class="inline-fix-16">
+                    <h3 class="inline-fix-58">${grade}</h3>
+                    <p class="inline-fix-59">
                         Score: ${correctCount}/${quizData.length} (${percentage.toFixed(0)}%)
                     </p>
-                    <p style="color: var(--text-secondary);">${message}</p>
+                    <p class="inline-fix-9">${message}</p>
                 </div>
             `;
             

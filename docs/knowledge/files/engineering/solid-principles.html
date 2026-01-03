@@ -1,21 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SOLID Principles | CORTEX Knowledge</title>
     <link rel="stylesheet" href="../../../assets/css/main.css">
+    <link rel="stylesheet" href="../../../assets/css/intentional-classes.css">
 </head>
 <body>
     <!-- Header with Breadcrumb Navigation -->
-    <header class="header-glass">
+    <header class="panel-header-centered">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="container">
             <nav class="breadcrumb">
-                <a href="../../../index.html" class="breadcrumb-link">Home</a>
+                <a href="../../../index.html" class="breadcrumb-separator">Home</a>
                 <span class="breadcrumb-separator">/</span>
-                <a href="../../index.html" class="breadcrumb-link">Knowledge Library</a>
+                <a href="../../index.html" class="breadcrumb-separator">Knowledge Library</a>
                 <span class="breadcrumb-separator">/</span>
-                <a href="../../engineering.html" class="breadcrumb-link">Engineering</a>
+                <a href="../../engineering.html" class="breadcrumb-separator">Engineering</a>
                 <span class="breadcrumb-separator">/</span>
                 <span class="breadcrumb-current">SOLID Principles</span>
             </nav>
@@ -23,22 +74,22 @@
     </header>
 
     <!-- Main Content -->
-    <main class="main-content">
+    <main class="level1-domain-icon--frontend">
         <!-- Hero Section -->
         <section class="knowledge-file-hero">
             <div class="container">
                 <div class="hero-content">
                     <h1 class="hero-title">SOLID Principles</h1>
                     <p class="hero-subtitle">Five Principles of Object-Oriented Design</p>
-                    <div class="hero-meta">
-                        <span class="meta-item">
-                            <i class="icon-author"></i> Robert C. Martin (Uncle Bob)
+                    <div class="btn-hero-story">
+                        <span class="metadata-grid">
+                            <i class="level1-integration-icon-container"></i> Robert C. Martin (Uncle Bob)
                         </span>
-                        <span class="meta-item">
-                            <i class="icon-category"></i> Software Engineering
+                        <span class="metadata-grid">
+                            <i class="level1-integration-icon-container"></i> Software Engineering
                         </span>
-                        <span class="meta-item">
-                            <i class="icon-version"></i> v1.0.0
+                        <span class="metadata-grid">
+                            <i class="level1-integration-icon-container"></i> v1.0.0
                         </span>
                     </div>
                 </div>
@@ -46,9 +97,9 @@
         </section>
 
         <!-- Tab Navigation -->
-        <section class="tab-container">
+        <section class="demo-tab-v-desc">
             <div class="container">
-                <div class="tab-nav">
+                <div class="demo-tab-v-desc">
                     <button class="tab-button active" data-tab="overview">Overview</button>
                     <button class="tab-button" data-tab="content">Content</button>
                     <button class="tab-button" data-tab="examples">Examples</button>
@@ -59,70 +110,70 @@
                 <div class="tab-content active" id="overview">
                     <div class="content-section">
                         <h2 class="section-header">What are SOLID Principles?</h2>
-                        <p class="section-text">
+                        <p class="level2-section-title-green">
                             SOLID is an acronym representing five fundamental principles of object-oriented design that, when applied together, make software designs more understandable, flexible, and maintainable. Coined by Robert C. Martin (Uncle Bob) in the early 2000s, these principles have become the cornerstone of professional software engineering.
                         </p>
-                        <p class="section-text">
+                        <p class="level2-section-title-green">
                             Each principle addresses a specific aspect of software design, from managing dependencies to ensuring classes have well-defined responsibilities. When followed, SOLID principles lead to code that is easier to test, modify, and extend over time, significantly reducing technical debt and maintenance costs.
                         </p>
-                        <p class="section-text">
+                        <p class="level2-section-title-green">
                             These principles are language-agnostic and apply to any object-oriented programming language, including Python, C#, Java, JavaScript, and TypeScript. They form the foundation for many modern design patterns and architectural styles.
                         </p>
                     </div>
 
                     <div class="content-section">
                         <h2 class="section-header">The Five Principles</h2>
-                        <div class="principle-grid">
+                        <div class="principle-title">
                             <div class="principle-card">
                                 <div class="principle-letter">S</div>
-                                <h3 class="principle-name">Single Responsibility</h3>
-                                <p class="principle-desc">A class should have one, and only one, reason to change</p>
+                                <h3 class="principle-title">Single Responsibility</h3>
+                                <p class="principle-title">A class should have one, and only one, reason to change</p>
                             </div>
                             <div class="principle-card">
                                 <div class="principle-letter">O</div>
-                                <h3 class="principle-name">Open/Closed</h3>
-                                <p class="principle-desc">Software entities should be open for extension but closed for modification</p>
+                                <h3 class="principle-title">Open/Closed</h3>
+                                <p class="principle-title">Software entities should be open for extension but closed for modification</p>
                             </div>
                             <div class="principle-card">
                                 <div class="principle-letter">L</div>
-                                <h3 class="principle-name">Liskov Substitution</h3>
-                                <p class="principle-desc">Derived classes must be substitutable for their base classes</p>
+                                <h3 class="principle-title">Liskov Substitution</h3>
+                                <p class="principle-title">Derived classes must be substitutable for their base classes</p>
                             </div>
                             <div class="principle-card">
                                 <div class="principle-letter">I</div>
-                                <h3 class="principle-name">Interface Segregation</h3>
-                                <p class="principle-desc">Many client-specific interfaces are better than one general-purpose interface</p>
+                                <h3 class="principle-title">Interface Segregation</h3>
+                                <p class="principle-title">Many client-specific interfaces are better than one general-purpose interface</p>
                             </div>
                             <div class="principle-card">
                                 <div class="principle-letter">D</div>
-                                <h3 class="principle-name">Dependency Inversion</h3>
-                                <p class="principle-desc">Depend upon abstractions, not concretions</p>
+                                <h3 class="principle-title">Dependency Inversion</h3>
+                                <p class="principle-title">Depend upon abstractions, not concretions</p>
                             </div>
                         </div>
                     </div>
 
                     <div class="content-section">
                         <h2 class="section-header">Key Benefits</h2>
-                        <ul class="benefit-list">
-                            <li class="benefit-item">
-                                <strong>Maintainability:</strong> Easier to understand and modify code without fear of breaking existing functionality
-                            </li>
-                            <li class="benefit-item">
-                                <strong>Testability:</strong> Classes with single responsibilities and clear dependencies are straightforward to test
-                            </li>
-                            <li class="benefit-item">
-                                <strong>Flexibility:</strong> Changes can be made by extending code rather than modifying existing implementations
-                            </li>
-                            <li class="benefit-item">
-                                <strong>Reusability:</strong> Well-designed classes can be reused across different contexts
-                            </li>
-                            <li class="benefit-item">
-                                <strong>Reduced Coupling:</strong> Dependencies are minimized and managed through abstractions
-                            </li>
-                            <li class="benefit-item">
-                                <strong>Increased Cohesion:</strong> Related functionality is grouped together in focused classes
-                            </li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Maintainability:</strong> Easier to understand and modify code without fear of breaking existing functionality</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Testability:</strong> Classes with single responsibilities and clear dependencies are straightforward to test</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Flexibility:</strong> Changes can be made by extending code rather than modifying existing implementations</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Reusability:</strong> Well-designed classes can be reused across different contexts</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Reduced Coupling:</strong> Dependencies are minimized and managed through abstractions</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Increased Cohesion:</strong> Related functionality is grouped together in focused classes</div>
+    </div>
+</div>
                     </div>
 
                     <div class="content-section">
@@ -130,24 +181,46 @@
                         <div class="usage-grid">
                             <div class="usage-card usage-when">
                                 <h3 class="usage-title">✅ Use When</h3>
-                                <ul class="usage-list">
-                                    <li>Building enterprise applications expected to evolve over years</li>
-                                    <li>Working on team projects with multiple developers</li>
-                                    <li>Creating reusable libraries or frameworks</li>
-                                    <li>Maintaining legacy codebases that need refactoring</li>
-                                    <li>Implementing complex business logic with many moving parts</li>
-                                    <li>Designing systems that require high testability</li>
-                                </ul>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Building enterprise applications expected to evolve over years</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Working on team projects with multiple developers</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Creating reusable libraries or frameworks</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Maintaining legacy codebases that need refactoring</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Implementing complex business logic with many moving parts</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Designing systems that require high testability</div>
+    </div>
+</div>
                             </div>
                             <div class="usage-card usage-avoid">
                                 <h3 class="usage-title">❌ Consider Alternatives When</h3>
-                                <ul class="usage-list">
-                                    <li>Building simple scripts or one-off utilities</li>
-                                    <li>Creating prototypes or proof-of-concept projects</li>
-                                    <li>Working under extreme time constraints (technical debt trade-off)</li>
-                                    <li>Dealing with very simple domains (over-engineering risk)</li>
-                                    <li>Team lacks OOP experience (training required first)</li>
-                                </ul>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Building simple scripts or one-off utilities</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Creating prototypes or proof-of-concept projects</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Working under extreme time constraints (technical debt trade-off)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Dealing with very simple domains (over-engineering risk)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Team lacks OOP experience (training required first)</div>
+    </div>
+</div>
                             </div>
                         </div>
                     </div>
@@ -157,182 +230,270 @@
                 <div class="tab-content" id="content">
                     <div class="content-section">
                         <h2 class="section-header">Single Responsibility Principle (SRP)</h2>
-                        <div class="principle-detail">
-                            <p class="principle-definition">
+                        <div class="principle-title">
+                            <p class="principle-title">
                                 <strong>Definition:</strong> A class should have one, and only one, reason to change.
                             </p>
-                            <p class="section-text">
+                            <p class="level2-section-title-green">
                                 "Reason to change" refers to different stakeholders or actors who might request changes. If multiple actors need different things from the same class, those are multiple responsibilities. Each class should serve a single actor.
                             </p>
                             
-                            <h3 class="subsection-header">Common Violations</h3>
-                            <ul class="violation-list">
-                                <li><strong>God Objects:</strong> Classes that know too much or do too much (>20 methods, >500 lines)</li>
-                                <li><strong>Divergent Change:</strong> Having to change the same class for unrelated feature requests</li>
-                                <li><strong>Multiple Concerns:</strong> Class handles business logic AND persistence AND validation</li>
-                                <li><strong>Generic Names:</strong> Classes named Manager, Controller, Handler, Util often violate SRP</li>
-                            </ul>
+                            <h3 class="level1-subsection-title">Common Violations</h3>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>God Objects:</strong> Classes that know too much or do too much (>20 methods, >500 lines)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Divergent Change:</strong> Having to change the same class for unrelated feature requests</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Multiple Concerns:</strong> Class handles business logic AND persistence AND validation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Generic Names:</strong> Classes named Manager, Controller, Handler, Util often violate SRP</div>
+    </div>
+</div>
 
-                            <h3 class="subsection-header">Detection Heuristics</h3>
-                            <ul class="heuristic-list">
-                                <li>More than 20 methods → likely multiple responsibilities</li>
-                                <li>More than 300 lines of code → probably doing too much</li>
-                                <li>More than 10 dependencies → interacting with too many other classes</li>
-                                <li>Class description contains "and" or "or" → suggests multiple responsibilities</li>
-                            </ul>
+                            <h3 class="level1-subsection-title">Detection Heuristics</h3>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">More than 20 methods → likely multiple responsibilities</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">More than 300 lines of code → probably doing too much</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">More than 10 dependencies → interacting with too many other classes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Class description contains "and" or "or" → suggests multiple responsibilities</div>
+    </div>
+</div>
 
-                            <h3 class="subsection-header">Refactoring Strategies</h3>
-                            <ul class="strategy-list">
-                                <li><strong>Extract Class:</strong> Create new classes for each distinct responsibility</li>
-                                <li><strong>Move Method:</strong> Move methods to classes they depend on most</li>
-                                <li><strong>Extract Interface:</strong> Separate interface from implementation</li>
-                            </ul>
+                            <h3 class="level1-subsection-title">Refactoring Strategies</h3>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Extract Class:</strong> Create new classes for each distinct responsibility</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Move Method:</strong> Move methods to classes they depend on most</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Extract Interface:</strong> Separate interface from implementation</div>
+    </div>
+</div>
                         </div>
                     </div>
 
                     <div class="content-section">
                         <h2 class="section-header">Open/Closed Principle (OCP)</h2>
-                        <div class="principle-detail">
-                            <p class="principle-definition">
+                        <div class="principle-title">
+                            <p class="principle-title">
                                 <strong>Definition:</strong> Software entities should be open for extension but closed for modification.
                             </p>
-                            <p class="section-text">
+                            <p class="level2-section-title-green">
                                 You should be able to add new functionality without changing existing code. This is achieved through abstraction, polymorphism, and dependency injection. The goal is to change behavior by adding new code, not by modifying existing working code.
                             </p>
                             
-                            <h3 class="subsection-header">Key Techniques</h3>
-                            <ul class="technique-list">
-                                <li><strong>Inheritance:</strong> Extend base classes to add new behavior</li>
-                                <li><strong>Interfaces:</strong> Define contracts that can be implemented in multiple ways</li>
-                                <li><strong>Strategy Pattern:</strong> Encapsulate algorithms and make them interchangeable</li>
-                                <li><strong>Template Method:</strong> Define skeleton algorithms with customizable steps</li>
-                            </ul>
+                            <h3 class="level1-subsection-title">Key Techniques</h3>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Inheritance:</strong> Extend base classes to add new behavior</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Interfaces:</strong> Define contracts that can be implemented in multiple ways</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Strategy Pattern:</strong> Encapsulate algorithms and make them interchangeable</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Template Method:</strong> Define skeleton algorithms with customizable steps</div>
+    </div>
+</div>
 
-                            <h3 class="subsection-header">Benefits</h3>
-                            <ul class="benefit-list">
-                                <li>Minimizes risk of breaking existing functionality</li>
-                                <li>Easier to add new features</li>
-                                <li>Better separation of concerns</li>
-                                <li>Supports plugin architectures</li>
-                            </ul>
+                            <h3 class="level1-subsection-title">Benefits</h3>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Minimizes risk of breaking existing functionality</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Easier to add new features</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Better separation of concerns</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Supports plugin architectures</div>
+    </div>
+</div>
                         </div>
                     </div>
 
                     <div class="content-section">
                         <h2 class="section-header">Liskov Substitution Principle (LSP)</h2>
-                        <div class="principle-detail">
-                            <p class="principle-definition">
+                        <div class="principle-title">
+                            <p class="principle-title">
                                 <strong>Definition:</strong> Derived classes must be substitutable for their base classes without altering correctness.
                             </p>
-                            <p class="section-text">
+                            <p class="level2-section-title-green">
                                 If class B is a subclass of class A, we should be able to replace A with B without disrupting the behavior of the program. Subtypes must strengthen, not weaken, the contract defined by the base type.
                             </p>
                             
-                            <h3 class="subsection-header">Contract Rules</h3>
-                            <ul class="contract-list">
-                                <li>Preconditions cannot be strengthened in subtype</li>
-                                <li>Postconditions cannot be weakened in subtype</li>
-                                <li>Invariants must be preserved in subtype</li>
-                                <li>No new exceptions should be thrown by subtype</li>
-                            </ul>
+                            <h3 class="level1-subsection-title">Contract Rules</h3>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Preconditions cannot be strengthened in subtype</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Postconditions cannot be weakened in subtype</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Invariants must be preserved in subtype</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">No new exceptions should be thrown by subtype</div>
+    </div>
+</div>
 
-                            <h3 class="subsection-header">Common Violations</h3>
-                            <ul class="violation-list">
-                                <li>Rectangle/Square problem (mutable dimensions)</li>
-                                <li>Empty implementations that throw NotImplementedException</li>
-                                <li>Subtypes that strengthen preconditions</li>
-                                <li>Subtypes that weaken postconditions</li>
-                            </ul>
+                            <h3 class="level1-subsection-title">Common Violations</h3>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Rectangle/Square problem (mutable dimensions)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Empty implementations that throw NotImplementedException</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Subtypes that strengthen preconditions</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Subtypes that weaken postconditions</div>
+    </div>
+</div>
                         </div>
                     </div>
 
                     <div class="content-section">
                         <h2 class="section-header">Interface Segregation Principle (ISP)</h2>
-                        <div class="principle-detail">
-                            <p class="principle-definition">
+                        <div class="principle-title">
+                            <p class="principle-title">
                                 <strong>Definition:</strong> Many client-specific interfaces are better than one general-purpose interface.
                             </p>
-                            <p class="section-text">
+                            <p class="level2-section-title-green">
                                 No client should be forced to depend on methods it does not use. Instead of one fat interface, create multiple smaller, cohesive interfaces. This prevents clients from depending on functionality they don't need.
                             </p>
                             
-                            <h3 class="subsection-header">Interface Design Guidelines</h3>
-                            <ul class="guideline-list">
-                                <li>Keep interfaces small and focused (2-5 methods)</li>
-                                <li>Group related methods together</li>
-                                <li>Segregate by client needs, not by implementation</li>
-                                <li>Use role interfaces (e.g., Readable, Writable, Closeable)</li>
-                            </ul>
+                            <h3 class="level1-subsection-title">Interface Design Guidelines</h3>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Keep interfaces small and focused (2-5 methods)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Group related methods together</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Segregate by client needs, not by implementation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use role interfaces (e.g., Readable, Writable, Closeable)</div>
+    </div>
+</div>
 
-                            <h3 class="subsection-header">Benefits</h3>
-                            <ul class="benefit-list">
-                                <li>Reduced coupling between clients and implementations</li>
-                                <li>Easier to understand and implement</li>
-                                <li>Better testability with focused mocks</li>
-                                <li>Supports composition over inheritance</li>
-                            </ul>
+                            <h3 class="level1-subsection-title">Benefits</h3>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Reduced coupling between clients and implementations</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Easier to understand and implement</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Better testability with focused mocks</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Supports composition over inheritance</div>
+    </div>
+</div>
                         </div>
                     </div>
 
                     <div class="content-section">
                         <h2 class="section-header">Dependency Inversion Principle (DIP)</h2>
-                        <div class="principle-detail">
-                            <p class="principle-definition">
+                        <div class="principle-title">
+                            <p class="principle-title">
                                 <strong>Definition:</strong> High-level modules should not depend on low-level modules. Both should depend on abstractions.
                             </p>
-                            <p class="section-text">
+                            <p class="level2-section-title-green">
                                 Abstractions should not depend on details. Details should depend on abstractions. This inverts the typical dependency structure where high-level business logic depends on low-level implementation details.
                             </p>
                             
-                            <h3 class="subsection-header">Key Concepts</h3>
-                            <ul class="concept-list">
-                                <li><strong>Inversion of Control (IoC):</strong> Framework controls flow, not your code</li>
-                                <li><strong>Dependency Injection (DI):</strong> Dependencies provided externally, not created internally</li>
-                                <li><strong>Abstract Dependencies:</strong> Depend on interfaces/abstract classes, not concrete classes</li>
-                                <li><strong>Plugin Architecture:</strong> Core depends on abstractions, plugins provide implementations</li>
-                            </ul>
+                            <h3 class="level1-subsection-title">Key Concepts</h3>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Inversion of Control (IoC):</strong> Framework controls flow, not your code</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Dependency Injection (DI):</strong> Dependencies provided externally, not created internally</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Abstract Dependencies:</strong> Depend on interfaces/abstract classes, not concrete classes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Plugin Architecture:</strong> Core depends on abstractions, plugins provide implementations</div>
+    </div>
+</div>
 
-                            <h3 class="subsection-header">Implementation Techniques</h3>
-                            <ul class="technique-list">
-                                <li>Constructor injection (preferred)</li>
-                                <li>Property injection</li>
-                                <li>Method injection</li>
-                                <li>Service locator pattern</li>
-                                <li>IoC containers (e.g., dependency_injector, Spring, Unity)</li>
-                            </ul>
+                            <h3 class="level1-subsection-title">Implementation Techniques</h3>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Constructor injection (preferred)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Property injection</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Method injection</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Service locator pattern</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">IoC containers (e.g., dependency_injector, Spring, Unity)</div>
+    </div>
+</div>
                         </div>
                     </div>
 
                     <div class="content-section">
                         <h2 class="section-header">Compliance Scoring</h2>
-                        <p class="section-text">
+                        <p class="level2-section-title-green">
                             CORTEX uses a 0-100 scoring system to evaluate SOLID compliance:
                         </p>
-                        <div class="score-grid">
-                            <div class="score-card score-critical">
-                                <div class="score-range">0-20</div>
-                                <div class="score-label">Critical</div>
-                                <div class="score-desc">God objects, immediate refactoring required</div>
+                        <div class="level2-score-low">
+                            <div class="level2-score-low level2-score-low">
+                                <div class="level2-score-low">0-20</div>
+                                <div class="level2-score-low">Critical</div>
+                                <div class="level2-score-low">God objects, immediate refactoring required</div>
                             </div>
-                            <div class="score-card score-severe">
-                                <div class="score-range">20-40</div>
-                                <div class="score-label">Severe</div>
-                                <div class="score-desc">Multiple clear responsibilities, schedule refactoring</div>
+                            <div class="level2-score-low level2-score-low">
+                                <div class="level2-score-low">20-40</div>
+                                <div class="level2-score-low">Severe</div>
+                                <div class="level2-score-low">Multiple clear responsibilities, schedule refactoring</div>
                             </div>
-                            <div class="score-card score-moderate">
-                                <div class="score-range">40-60</div>
-                                <div class="score-label">Moderate</div>
-                                <div class="score-desc">Some mixed concerns, address during regular refactoring</div>
+                            <div class="level2-score-low level2-score-low">
+                                <div class="level2-score-low">40-60</div>
+                                <div class="level2-score-low">Moderate</div>
+                                <div class="level2-score-low">Some mixed concerns, address during regular refactoring</div>
                             </div>
-                            <div class="score-card score-minor">
-                                <div class="score-range">60-80</div>
-                                <div class="score-label">Minor</div>
-                                <div class="score-desc">Mostly compliant, monitor and improve opportunistically</div>
+                            <div class="level2-score-low level2-score-low">
+                                <div class="level2-score-low">60-80</div>
+                                <div class="level2-score-low">Minor</div>
+                                <div class="level2-score-low">Mostly compliant, monitor and improve opportunistically</div>
                             </div>
-                            <div class="score-card score-good">
-                                <div class="score-range">80-100</div>
-                                <div class="score-label">Good</div>
-                                <div class="score-desc">Clear single responsibility, maintain current design</div>
+                            <div class="level2-score-low level2-score-low">
+                                <div class="level2-score-low">80-100</div>
+                                <div class="level2-score-low">Good</div>
+                                <div class="level2-score-low">Clear single responsibility, maintain current design</div>
                             </div>
                         </div>
                     </div>
@@ -343,8 +504,8 @@
                     <div class="content-section">
                         <h2 class="section-header">Single Responsibility Principle - Python Example</h2>
                         
-                        <h3 class="example-header">❌ Violation: Multiple Responsibilities</h3>
-                        <pre class="code-block"><code class="language-python"># ❌ Violates SRP - Multiple responsibilities
+                        <h3 class="command-example">❌ Violation: Multiple Responsibilities</h3>
+                        <pre class="code-block"><code class="language-badge"># ❌ Violates SRP - Multiple responsibilities
 class User:
     def __init__(self, name, email):
         self.name = name
@@ -367,8 +528,8 @@ class User:
     def validate_email(self):
         return '@' in self.email</code></pre>
 
-                        <h3 class="example-header">✅ Compliant: Separated Responsibilities</h3>
-                        <pre class="code-block"><code class="language-python"># ✅ Follows SRP - Separated responsibilities
+                        <h3 class="command-example">✅ Compliant: Separated Responsibilities</h3>
+                        <pre class="code-block"><code class="language-badge"># ✅ Follows SRP - Separated responsibilities
 class User:
     """Domain model - single responsibility: represent user data"""
     def __init__(self, name, email):
@@ -395,8 +556,8 @@ class EmailValidator:
                     <div class="content-section">
                         <h2 class="section-header">Single Responsibility Principle - C# Example</h2>
                         
-                        <h3 class="example-header">❌ Violation: Multiple Responsibilities</h3>
-                        <pre class="code-block"><code class="language-csharp">// ❌ Violates SRP - Multiple responsibilities
+                        <h3 class="command-example">❌ Violation: Multiple Responsibilities</h3>
+                        <pre class="code-block"><code class="language-badge">// ❌ Violates SRP - Multiple responsibilities
 public class User
 {
     public string Name { get; set; }
@@ -429,8 +590,8 @@ public class User
     }
 }</code></pre>
 
-                        <h3 class="example-header">✅ Compliant: Separated Responsibilities</h3>
-                        <pre class="code-block"><code class="language-csharp">// ✅ Follows SRP - Separated responsibilities
+                        <h3 class="command-example">✅ Compliant: Separated Responsibilities</h3>
+                        <pre class="code-block"><code class="language-badge">// ✅ Follows SRP - Separated responsibilities
 public class User
 {
     // Single responsibility: represent user data
@@ -470,8 +631,8 @@ public class EmailValidator
                     <div class="content-section">
                         <h2 class="section-header">Open/Closed Principle - Example</h2>
                         
-                        <h3 class="example-header">❌ Violation: Modification Required</h3>
-                        <pre class="code-block"><code class="language-python"># ❌ Violates OCP - Must modify to add new shapes
+                        <h3 class="command-example">❌ Violation: Modification Required</h3>
+                        <pre class="code-block"><code class="language-badge"># ❌ Violates OCP - Must modify to add new shapes
 class AreaCalculator:
     def calculate_area(self, shape):
         if shape.type == "circle":
@@ -481,8 +642,8 @@ class AreaCalculator:
         elif shape.type == "triangle":  # Must modify for new shape!
             return 0.5 * shape.base * shape.height</code></pre>
 
-                        <h3 class="example-header">✅ Compliant: Extension Through Inheritance</h3>
-                        <pre class="code-block"><code class="language-python"># ✅ Follows OCP - Extend without modification
+                        <h3 class="command-example">✅ Compliant: Extension Through Inheritance</h3>
+                        <pre class="code-block"><code class="language-badge"># ✅ Follows OCP - Extend without modification
 from abc import ABC, abstractmethod
 
 class Shape(ABC):
@@ -521,8 +682,8 @@ class AreaCalculator:
                     <div class="content-section">
                         <h2 class="section-header">Dependency Inversion Principle - Example</h2>
                         
-                        <h3 class="example-header">❌ Violation: Depends on Concrete Implementation</h3>
-                        <pre class="code-block"><code class="language-python"># ❌ Violates DIP - High-level depends on low-level
+                        <h3 class="command-example">❌ Violation: Depends on Concrete Implementation</h3>
+                        <pre class="code-block"><code class="language-badge"># ❌ Violates DIP - High-level depends on low-level
 class EmailSender:
     def send(self, message):
         # SMTP implementation
@@ -535,8 +696,8 @@ class UserNotificationService:
     def notify_user(self, user, message):
         self.email_sender.send(message)</code></pre>
 
-                        <h3 class="example-header">✅ Compliant: Depends on Abstraction</h3>
-                        <pre class="code-block"><code class="language-python"># ✅ Follows DIP - Depends on abstraction
+                        <h3 class="command-example">✅ Compliant: Depends on Abstraction</h3>
+                        <pre class="code-block"><code class="language-badge"># ✅ Follows DIP - Depends on abstraction
 from abc import ABC, abstractmethod
 
 class MessageSender(ABC):
@@ -575,16 +736,16 @@ notification_service = UserNotificationService(sms_sender)</code></pre>
                 <div class="tab-content" id="cortex">
                     <div class="content-section">
                         <h2 class="section-header">How CORTEX Uses SOLID Principles</h2>
-                        <p class="section-text">
+                        <p class="level2-section-title-green">
                             CORTEX is architected using SOLID principles throughout its codebase, ensuring maintainability, testability, and extensibility. Here's how each principle is applied in the CORTEX architecture.
                         </p>
                     </div>
 
                     <div class="content-section">
                         <h2 class="section-header">Single Responsibility in CORTEX</h2>
-                        <div class="cortex-example">
-                            <h3 class="subsection-header">Separated Agent Responsibilities</h3>
-                            <pre class="code-block"><code class="language-python"># src/cortex_agents/code_reviewer.py
+                        <div class="built-with-cortex-panel">
+                            <h3 class="level1-subsection-title">Separated Agent Responsibilities</h3>
+                            <pre class="code-block"><code class="language-badge"># src/cortex_agents/code_reviewer.py
 class CodeReviewer:
     """Single responsibility: Review code for quality and compliance"""
     def review_code(self, file_path: str) -> ReviewResult:
@@ -613,9 +774,9 @@ class TDDOrchestrator:
 
                     <div class="content-section">
                         <h2 class="section-header">Open/Closed in CORTEX</h2>
-                        <div class="cortex-example">
-                            <h3 class="subsection-header">Extensible Agent System</h3>
-                            <pre class="code-block"><code class="language-python"># cortex-brain/agents/base_agent.py
+                        <div class="built-with-cortex-panel">
+                            <h3 class="level1-subsection-title">Extensible Agent System</h3>
+                            <pre class="code-block"><code class="language-badge"># cortex-brain/agents/base_agent.py
 class BaseAgent(ABC):
     """Base abstraction - closed for modification"""
     @abstractmethod
@@ -640,9 +801,9 @@ class SecurityAgent(BaseAgent):
 
                     <div class="content-section">
                         <h2 class="section-header">Liskov Substitution in CORTEX</h2>
-                        <div class="cortex-example">
-                            <h3 class="subsection-header">Interchangeable Orchestrators</h3>
-                            <pre class="code-block"><code class="language-python"># src/orchestrators/base_orchestrator.py
+                        <div class="built-with-cortex-panel">
+                            <h3 class="level1-subsection-title">Interchangeable Orchestrators</h3>
+                            <pre class="code-block"><code class="language-badge"># src/orchestrators/base_orchestrator.py
 class BaseOrchestrator(ABC):
     @abstractmethod
     def execute(self) -> OrchestratorResult:
@@ -663,9 +824,9 @@ result = orchestrator.execute()  # Works identically</code></pre>
 
                     <div class="content-section">
                         <h2 class="section-header">Interface Segregation in CORTEX</h2>
-                        <div class="cortex-example">
-                            <h3 class="subsection-header">Focused Role Interfaces</h3>
-                            <pre class="code-block"><code class="language-python"># Instead of one fat interface:
+                        <div class="built-with-cortex-panel">
+                            <h3 class="level1-subsection-title">Focused Role Interfaces</h3>
+                            <pre class="code-block"><code class="language-badge"># Instead of one fat interface:
 # class Agent(ABC):
 #     def analyze() ...
 #     def generate() ...
@@ -699,9 +860,9 @@ class TestGenerator(Generatable):  # Only needs generate capability
 
                     <div class="content-section">
                         <h2 class="section-header">Dependency Inversion in CORTEX</h2>
-                        <div class="cortex-example">
-                            <h3 class="subsection-header">Brain Storage Abstraction</h3>
-                            <pre class="code-block"><code class="language-python"># High-level orchestrators depend on abstraction
+                        <div class="built-with-cortex-panel">
+                            <h3 class="level1-subsection-title">Brain Storage Abstraction</h3>
+                            <pre class="code-block"><code class="language-badge"># High-level orchestrators depend on abstraction
 class BrainStorage(ABC):
     @abstractmethod
     def store(self, key: str, value: Any) -> None:
@@ -734,21 +895,31 @@ class MaintenanceOrchestrator:
 
                     <div class="content-section">
                         <h2 class="section-header">SOLID Compliance Checking</h2>
-                        <p class="section-text">
+                        <p class="level2-section-title-green">
                             CORTEX includes automated SOLID compliance checking as part of its code review workflow:
                         </p>
-                        <ul class="cortex-feature-list">
-                            <li><strong>SRP Violations:</strong> Detects classes with >20 methods or >300 lines</li>
-                            <li><strong>OCP Violations:</strong> Identifies switch statements and type checking that should use polymorphism</li>
-                            <li><strong>LSP Violations:</strong> Finds empty overrides and contract violations</li>
-                            <li><strong>ISP Violations:</strong> Reports fat interfaces with >10 methods</li>
-                            <li><strong>DIP Violations:</strong> Detects direct instantiation of concrete dependencies</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>SRP Violations:</strong> Detects classes with >20 methods or >300 lines</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>OCP Violations:</strong> Identifies switch statements and type checking that should use polymorphism</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>LSP Violations:</strong> Finds empty overrides and contract violations</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>ISP Violations:</strong> Reports fat interfaces with >10 methods</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>DIP Violations:</strong> Detects direct instantiation of concrete dependencies</div>
+    </div>
+</div>
                     </div>
 
                     <div class="content-section">
                         <h2 class="section-header">Query SOLID Knowledge in CORTEX</h2>
-                        <p class="section-text">
+                        <p class="level2-section-title-green">
                             You can query SOLID principles knowledge in CORTEX Chat using these prompts:
                         </p>
                         <div class="query-examples">
@@ -773,7 +944,7 @@ class MaintenanceOrchestrator:
 
                     <div class="content-section">
                         <h2 class="section-header">Related Knowledge Files</h2>
-                        <div class="related-files">
+                        <div class="level1-relationship-grid">
                             <a href="design-patterns.html" class="related-file-card">
                                 <h3 class="related-file-title">Design Patterns</h3>
                                 <p class="related-file-desc">Common patterns that implement SOLID principles</p>
@@ -798,15 +969,15 @@ class MaintenanceOrchestrator:
     </main>
 
     <!-- Footer -->
-    <footer class="footer-glass">
+    <footer class="footer-bottom">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3 class="footer-title">CORTEX Knowledge</h3>
-                    <p class="footer-text">Part of the CORTEX AI Assistant ecosystem</p>
+                    <h3 class="footer-bottom">CORTEX Knowledge</h3>
+                    <p class="footer-bottom">Part of the CORTEX AI Assistant ecosystem</p>
                 </div>
                 <div class="footer-section">
-                    <h3 class="footer-title">Quick Links</h3>
+                    <h3 class="footer-bottom">Quick Links</h3>
                     <ul class="footer-links">
                         <li><a href="../../index.html" class="footer-link">Knowledge Library</a></li>
                         <li><a href="../../engineering.html" class="footer-link">Engineering Category</a></li>
@@ -814,9 +985,9 @@ class MaintenanceOrchestrator:
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h3 class="footer-title">Source</h3>
-                    <p class="footer-text">Robert C. Martin (Uncle Bob)</p>
-                    <p class="footer-text">Agile Software Development, Principles, Patterns, and Practices</p>
+                    <h3 class="footer-bottom">Source</h3>
+                    <p class="footer-bottom">Robert C. Martin (Uncle Bob)</p>
+                    <p class="footer-bottom">Agile Software Development, Principles, Patterns, and Practices</p>
                 </div>
             </div>
             <div class="footer-bottom">

@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CORTEX Sharpen The Saw - 6 continuous improvement practices">
@@ -10,26 +35,52 @@
     <link rel="stylesheet" href="../assets/css/variables.css">
     <link rel="stylesheet" href="../assets/css/glass-patterns.css">
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
 </head>
-<body class="level1-page">
+<body class="level1-integration-icon-container">
     <a href="#main-content" class="skip-link">Skip to main content</a>
     
-    <header class="level1-header">
+    <header class="level1-integration-icon-container">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <nav class="breadcrumb" aria-label="Breadcrumb">
-            <a href="../index.html" class="breadcrumb-link">
-                <i class="fas fa-home"></i> Home
+            <a href="../index.html" class="breadcrumb-separator">
+                <i class="pulse-glow-glass--fast fa-home"></i> Home
             </a>
             <span class="breadcrumb-separator">→</span>
             <span class="breadcrumb-current">Sharpen The Saw</span>
         </nav>
-        <h1 class="level1-title">🔧 Sharpen The Saw</h1>
-        <p class="level1-subtitle">Continuous Improvement Practices - 6 Core Disciplines</p>
+        <h1 class="level1-integration-icon-container">🔧 Sharpen The Saw</h1>
+        <p class="level1-integration-icon-container">Continuous Improvement Practices - 6 Core Disciplines</p>
     </header>
     
-    <main id="main-content" class="level1-container">
-        <section class="glass-card category-overview">
-            <h2 class="section-title"><i class="fas fa-tools"></i> STS Philosophy</h2>
-            <p class="overview-text">
+    <main id="main-content" class="level1-integration-icon-container">
+        <section class="glass-card sts-category-icon-wrapper">
+            <h2 class="section-title"><i class="pulse-glow-glass--fast fa-tools"></i> STS Philosophy</h2>
+            <p class="glass-card--no-hover">
                 Sharpen The Saw represents continuous improvement through deliberate practice in code quality,
                 testing, performance, and security. Regular maintenance of skills and systems prevents degradation.
             </p>
@@ -45,21 +96,21 @@
                 <span class="category-icon">💎</span>
                 Code Quality
             </h2>
-            <div class="orchestrator-grid">
-                <article class="orchestrator-card">
-                    <div class="orchestrator-header">
-                        <span class="orchestrator-icon">✨</span>
-                        <h3 class="orchestrator-name">Code Quality Metrics</h3>
+            <div class="orchestrator-viz-section">
+                <article class="orchestrator-viz-section">
+                    <div class="orchestrator-viz-section">
+                        <span class="orchestrator-viz-section">✨</span>
+                        <h3 class="orchestrator-viz-section">Code Quality Metrics</h3>
                     </div>
-                    <p class="orchestrator-description">
+                    <p class="orchestrator-viz-section">
                         Cyclomatic complexity, maintainability index, code coverage tracking, and quality dashboards.
                     </p>
-                    <div class="orchestrator-features">
+                    <div class="orchestrator-viz-section">
                         <span class="feature-badge">Complexity Analysis</span>
                         <span class="feature-badge">Coverage Tracking</span>
                         <span class="feature-badge">Quality Gates</span>
                     </div>
-                    <a href="sts/code-quality.html" class="orchestrator-link">View Details <i class="fas fa-arrow-right"></i></a>
+                    <a href="sts/code-quality.html" class="orchestrator-viz-section">View Details <i class="pulse-glow-glass--fast fa-arrow-right"></i></a>
                 </article>
             </div>
         </section>
@@ -69,23 +120,23 @@
                 <span class="category-icon">🏛️</span>
                 SOLID Principles
             </h2>
-            <div class="orchestrator-grid">
-                <article class="orchestrator-card">
-                    <div class="orchestrator-header">
-                        <span class="orchestrator-icon">🔷</span>
-                        <h3 class="orchestrator-name">SOLID Design Patterns</h3>
+            <div class="orchestrator-viz-section">
+                <article class="orchestrator-viz-section">
+                    <div class="orchestrator-viz-section">
+                        <span class="orchestrator-viz-section">🔷</span>
+                        <h3 class="orchestrator-viz-section">SOLID Design Patterns</h3>
                     </div>
-                    <p class="orchestrator-description">
+                    <p class="orchestrator-viz-section">
                         Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion.
                     </p>
-                    <div class="orchestrator-features">
+                    <div class="orchestrator-viz-section">
                         <span class="feature-badge">SRP</span>
                         <span class="feature-badge">OCP</span>
                         <span class="feature-badge">LSP</span>
                         <span class="feature-badge">ISP</span>
                         <span class="feature-badge">DIP</span>
                     </div>
-                    <a href="sts/solid-principles.html" class="orchestrator-link">View Details <i class="fas fa-arrow-right"></i></a>
+                    <a href="sts/solid-principles.html" class="orchestrator-viz-section">View Details <i class="pulse-glow-glass--fast fa-arrow-right"></i></a>
                 </article>
             </div>
         </section>
@@ -95,21 +146,21 @@
                 <span class="category-icon">🧪</span>
                 Testing Strategies
             </h2>
-            <div class="orchestrator-grid">
-                <article class="orchestrator-card">
-                    <div class="orchestrator-header">
-                        <span class="orchestrator-icon">✅</span>
-                        <h3 class="orchestrator-name">Test Pyramid & Coverage</h3>
+            <div class="orchestrator-viz-section">
+                <article class="orchestrator-viz-section">
+                    <div class="orchestrator-viz-section">
+                        <span class="orchestrator-viz-section">✅</span>
+                        <h3 class="orchestrator-viz-section">Test Pyramid & Coverage</h3>
                     </div>
-                    <p class="orchestrator-description">
+                    <p class="orchestrator-viz-section">
                         Unit, integration, E2E testing strategies with TDD/BDD methodologies and coverage enforcement.
                     </p>
-                    <div class="orchestrator-features">
+                    <div class="orchestrator-viz-section">
                         <span class="feature-badge">Test Pyramid</span>
                         <span class="feature-badge">TDD/BDD</span>
                         <span class="feature-badge">Coverage >80%</span>
                     </div>
-                    <a href="sts/testing-strategies.html" class="orchestrator-link">View Details <i class="fas fa-arrow-right"></i></a>
+                    <a href="sts/testing-strategies.html" class="orchestrator-viz-section">View Details <i class="pulse-glow-glass--fast fa-arrow-right"></i></a>
                 </article>
             </div>
         </section>
@@ -119,21 +170,21 @@
                 <span class="category-icon">⚡</span>
                 Performance Optimization
             </h2>
-            <div class="orchestrator-grid">
-                <article class="orchestrator-card">
-                    <div class="orchestrator-header">
-                        <span class="orchestrator-icon">🚀</span>
-                        <h3 class="orchestrator-name">Performance Benchmarks</h3>
+            <div class="orchestrator-viz-section">
+                <article class="orchestrator-viz-section">
+                    <div class="orchestrator-viz-section">
+                        <span class="orchestrator-viz-section">🚀</span>
+                        <h3 class="orchestrator-viz-section">Performance Benchmarks</h3>
                     </div>
-                    <p class="orchestrator-description">
+                    <p class="orchestrator-viz-section">
                         Profiling, benchmarking, memory optimization, and latency reduction strategies.
                     </p>
-                    <div class="orchestrator-features">
+                    <div class="orchestrator-viz-section">
                         <span class="feature-badge">Profiling</span>
                         <span class="feature-badge">Benchmarking</span>
                         <span class="feature-badge">Optimization</span>
                     </div>
-                    <a href="sts/performance-optimization.html" class="orchestrator-link">View Details <i class="fas fa-arrow-right"></i></a>
+                    <a href="sts/performance-optimization.html" class="orchestrator-viz-section">View Details <i class="pulse-glow-glass--fast fa-arrow-right"></i></a>
                 </article>
             </div>
         </section>
@@ -143,21 +194,21 @@
                 <span class="category-icon">🔐</span>
                 Security Best Practices
             </h2>
-            <div class="orchestrator-grid">
-                <article class="orchestrator-card">
-                    <div class="orchestrator-header">
-                        <span class="orchestrator-icon">🛡️</span>
-                        <h3 class="orchestrator-name">Security Patterns</h3>
+            <div class="orchestrator-viz-section">
+                <article class="orchestrator-viz-section">
+                    <div class="orchestrator-viz-section">
+                        <span class="orchestrator-viz-section">🛡️</span>
+                        <h3 class="orchestrator-viz-section">Security Patterns</h3>
                     </div>
-                    <p class="orchestrator-description">
+                    <p class="orchestrator-viz-section">
                         Secure coding patterns, OWASP compliance, threat modeling, and vulnerability management.
                     </p>
-                    <div class="orchestrator-features">
+                    <div class="orchestrator-viz-section">
                         <span class="feature-badge">Secure Coding</span>
                         <span class="feature-badge">OWASP</span>
                         <span class="feature-badge">Threat Modeling</span>
                     </div>
-                    <a href="sts/security-best-practices.html" class="orchestrator-link">View Details <i class="fas fa-arrow-right"></i></a>
+                    <a href="sts/security-best-practices.html" class="orchestrator-viz-section">View Details <i class="pulse-glow-glass--fast fa-arrow-right"></i></a>
                 </article>
             </div>
         </section>
@@ -167,30 +218,30 @@
                 <span class="category-icon">📚</span>
                 Documentation Guidelines
             </h2>
-            <div class="orchestrator-grid">
-                <article class="orchestrator-card">
-                    <div class="orchestrator-header">
-                        <span class="orchestrator-icon">📖</span>
-                        <h3 class="orchestrator-name">Documentation Standards</h3>
+            <div class="orchestrator-viz-section">
+                <article class="orchestrator-viz-section">
+                    <div class="orchestrator-viz-section">
+                        <span class="orchestrator-viz-section">📖</span>
+                        <h3 class="orchestrator-viz-section">Documentation Standards</h3>
                     </div>
-                    <p class="orchestrator-description">
+                    <p class="orchestrator-viz-section">
                         API docs, inline comments, README templates, architecture decision records (ADRs).
                     </p>
-                    <div class="orchestrator-features">
+                    <div class="orchestrator-viz-section">
                         <span class="feature-badge">API Docs</span>
                         <span class="feature-badge">ADRs</span>
                         <span class="feature-badge">README Templates</span>
                     </div>
-                    <a href="sts/documentation-guidelines.html" class="orchestrator-link">View Details <i class="fas fa-arrow-right"></i></a>
+                    <a href="sts/documentation-guidelines.html" class="orchestrator-viz-section">View Details <i class="pulse-glow-glass--fast fa-arrow-right"></i></a>
                 </article>
             </div>
         </section>
     </main>
     
-    <footer class="level1-footer">
+    <footer class="level1-integration-icon-container">
         <div class="footer-content">
             <p class="copyright">© 2026 Asif Hussain. All rights reserved.</p>
-            <p class="version">CORTEX v4.0.0</p>
+            <p class="level1-pkg-version">CORTEX v4.0.0</p>
             <a href="https://github.com/asifhussain60/CORTEX" class="github-link" target="_blank">
                 <i class="fab fa-github"></i> GitHub
             </a>
@@ -204,7 +255,7 @@
             });
         }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
         
-        document.querySelectorAll('.orchestrator-card, .category-section').forEach(el => {
+        document.querySelectorAll('.orchestrator-viz-section, .category-section').forEach(el => {
             el.classList.add('fade-in');
             observer.observe(el);
         });

@@ -1,15 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="API Design Fundamentals - Master HTTP methods, status codes, and REST principles">
     <meta name="keywords" content="api design, http methods, rest, status codes, api fundamentals">
     <meta name="author" content="Asif Hussain">
     <title>API Design Fundamentals | CORTEX Learning Hub</title>
-    <link rel="stylesheet" href="../../assets/css/main.css?v=2026-01-02">
-    <link rel="stylesheet" href="../../assets/css/learning-hub.css?v=2026-01-02">
+    <link rel="stylesheet" href="../../assets/css/main.csslevel1-integration-icon-containerv=2026-01-02">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
+    
+    <link rel="stylesheet" href="../..../..../..../..../..../../assets/css/generated-classes.css"><link rel="stylesheet" href="../../assets/css/learning-hub.csslevel1-integration-icon-containerv=2026-01-02">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/editor/editor.main.css">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
@@ -18,14 +46,39 @@
 
     <!-- Header Navigation -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../../index.html" class="nav-link">
-                    <span class="nav-icon">🏠</span> Home
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../../index.html" class="nav-link" mobile-nav-optimized>
+                    <span class="nav-content" mobile-nav-optimized>🏠</span> Home
                 </a>
-                <span class="nav-separator">›</span>
-                <a href="../api-design-hub.html" class="nav-link">
-                    <span class="nav-icon">🌐</span> API Design
+                <span class="nav-content" mobile-nav-optimized>›</span>
+                <a href="../api-design-hub.html" class="nav-link" mobile-nav-optimized>
+                    <span class="nav-content" mobile-nav-optimized>🌐</span> API Design
                 </a>
             </nav>
         </div>
@@ -36,7 +89,7 @@
         <div class="module-header">
             <div class="breadcrumb">
                 <span class="difficulty-badge beginner">Beginner</span>
-                <span style="color: var(--text-secondary);">Module 1 of 5</span>
+                <span class="inline-fix-9">Module 1 of 5</span>
             </div>
             <h1 class="hero-title">🎯 API Design Fundamentals</h1>
             <p class="hero-subtitle">Master HTTP methods, status codes, and request/response patterns</p>
@@ -52,31 +105,41 @@
     <!-- Main Content -->
     <div class="container">
         <!-- Learning Objectives -->
-        <section class="glass-card" style="margin-top: var(--spacing-2xl);">
+        <section class="glass-card" class="inline-fix-14">
             <h2>🎓 Learning Objectives</h2>
-            <ul class="objective-list">
-                <li>Understand REST architectural constraints and principles</li>
-                <li>Master HTTP methods (GET, POST, PUT, PATCH, DELETE) and their semantics</li>
-                <li>Learn proper status code selection (2xx, 3xx, 4xx, 5xx)</li>
-                <li>Design resource-oriented URIs following REST conventions</li>
-                <li>Implement request/response patterns with proper headers</li>
-            </ul>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Understand REST architectural constraints and principles</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Master HTTP methods (GET, POST, PUT, PATCH, DELETE) and their semantics</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Learn proper status code selection (2xx, 3xx, 4xx, 5xx)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Design resource-oriented URIs following REST conventions</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Implement request/response patterns with proper headers</div>
+    </div>
+</div>
         </section>
 
         <!-- HTTP Methods Decision Tree (D3.js) -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🌳 HTTP Method Decision Tree</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 Interactive decision tree to help you choose the right HTTP method for your API operation. 
                 Click nodes to explore different paths.
             </p>
-            <div id="http-methods-tree" style="width: 100%; height: 600px; overflow: auto;"></div>
+            <div id="http-methods-tree" class="inline-fix-230"></div>
         </section>
 
         <!-- REST Principles Flowchart (Mermaid) -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>📐 REST Architectural Constraints</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 The six fundamental constraints that define RESTful architecture.
             </p>
             <div class="mermaid-container">
@@ -108,49 +171,75 @@ graph TB
         </section>
 
         <!-- Status Code Reference -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>📊 HTTP Status Code Quick Reference</h2>
             <div class="status-code-grid">
-                <div class="status-category">
-                    <h4 style="color: #10b981;">2xx Success</h4>
-                    <ul class="status-list">
-                        <li><code>200 OK</code> - Request succeeded</li>
-                        <li><code>201 Created</code> - Resource created</li>
-                        <li><code>204 No Content</code> - Success, no body</li>
-                    </ul>
+                <div class="stat-item">
+                    <h4 class="inline-fix-13">2xx Success</h4>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><code>200 OK</code> - Request succeeded</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>201 Created</code> - Resource created</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>204 No Content</code> - Success, no body</div>
+    </div>
+</div>
                 </div>
-                <div class="status-category">
-                    <h4 style="color: #00d4ff;">3xx Redirection</h4>
-                    <ul class="status-list">
-                        <li><code>301 Moved Permanently</code> - Permanent redirect</li>
-                        <li><code>302 Found</code> - Temporary redirect</li>
-                        <li><code>304 Not Modified</code> - Cached version valid</li>
-                    </ul>
+                <div class="stat-item">
+                    <h4 class="inline-fix-25">3xx Redirection</h4>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><code>301 Moved Permanently</code> - Permanent redirect</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>302 Found</code> - Temporary redirect</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>304 Not Modified</code> - Cached version valid</div>
+    </div>
+</div>
                 </div>
-                <div class="status-category">
-                    <h4 style="color: #fbbf24;">4xx Client Error</h4>
-                    <ul class="status-list">
-                        <li><code>400 Bad Request</code> - Invalid syntax</li>
-                        <li><code>401 Unauthorized</code> - Authentication required</li>
-                        <li><code>403 Forbidden</code> - No permission</li>
-                        <li><code>404 Not Found</code> - Resource doesn't exist</li>
-                    </ul>
+                <div class="stat-item">
+                    <h4 class="inline-fix-15">4xx Client Error</h4>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><code>400 Bad Request</code> - Invalid syntax</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>401 Unauthorized</code> - Authentication required</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>403 Forbidden</code> - No permission</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>404 Not Found</code> - Resource doesn't exist</div>
+    </div>
+</div>
                 </div>
-                <div class="status-category">
-                    <h4 style="color: #f97316;">5xx Server Error</h4>
-                    <ul class="status-list">
-                        <li><code>500 Internal Server Error</code> - Server crashed</li>
-                        <li><code>502 Bad Gateway</code> - Invalid upstream response</li>
-                        <li><code>503 Service Unavailable</code> - Server overloaded</li>
-                    </ul>
+                <div class="stat-item">
+                    <h4 class="inline-fix-280">5xx Server Error</h4>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><code>500 Internal Server Error</code> - Server crashed</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>502 Bad Gateway</code> - Invalid upstream response</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>503 Service Unavailable</code> - Server overloaded</div>
+    </div>
+</div>
                 </div>
             </div>
         </section>
 
         <!-- Code Playground 1: Build Your First Endpoint -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>💻 Code Playground: Build Your First REST Endpoint</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 Implement a simple user management API with proper HTTP methods and status codes. 
                 Click <strong>Run Code</strong> to test your implementation.
             </p>
@@ -162,11 +251,11 @@ graph TB
                 </div>
                 
                 <div class="tab-content active" id="python">
-                    <div id="editor-python" style="height: 400px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                    <div id="editor-python" class="inline-fix-82"></div>
                 </div>
                 
                 <div class="tab-content" id="javascript">
-                    <div id="editor-javascript" style="height: 400px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                    <div id="editor-javascript" class="inline-fix-82"></div>
                 </div>
                 
                 <button class="run-code-btn" id="run-code">
@@ -181,9 +270,9 @@ graph TB
         </section>
 
         <!-- Interactive Quiz -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>✅ Knowledge Check: API Fundamentals Quiz</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 Test your understanding with 10 questions. Instant feedback provided!
             </p>
             
@@ -191,7 +280,7 @@ graph TB
                 <!-- Questions will be dynamically generated -->
             </div>
             
-            <div class="quiz-results" id="quiz-results" style="display: none;">
+            <div class="quiz-results" id="quiz-results" class="inline-fix-48">
                 <h3 id="score-display"></h3>
                 <div id="feedback-summary"></div>
                 <button class="retry-btn" id="retry-quiz">🔄 Retry Quiz</button>
@@ -199,25 +288,35 @@ graph TB
         </section>
 
         <!-- Progressive Challenge -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🏆 Progressive Challenge: E-Commerce API Design</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 Design a RESTful API for an e-commerce platform. Apply what you've learned!
             </p>
             
             <div class="challenge-container">
-                <div class="challenge-requirements">
+                <div class="challenge-container">
                     <h4>📋 Requirements</h4>
-                    <ul>
-                        <li>Design endpoints for products, orders, and users</li>
-                        <li>Use appropriate HTTP methods for each operation</li>
-                        <li>Return correct status codes for success/error scenarios</li>
-                        <li>Follow REST URI naming conventions</li>
-                        <li>Include request/response examples</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Design endpoints for products, orders, and users</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use appropriate HTTP methods for each operation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Return correct status codes for success/error scenarios</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Follow REST URI naming conventions</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Include request/response examples</div>
+    </div>
+</div>
                 </div>
                 
-                <div class="challenge-hints">
+                <div class="challenge-container">
                     <details>
                         <summary>💡 Hint 1: Resource Naming</summary>
                         <p>Use plural nouns: <code>/products</code>, <code>/orders</code>, <code>/users</code></p>
@@ -234,7 +333,7 @@ graph TB
                 
                 <div class="challenge-solution">
                     <button class="show-solution-btn" id="show-solution">👁️ Show Solution</button>
-                    <div class="solution-content" id="solution-content" style="display: none;">
+                    <div class="solution-content" id="solution-content" class="inline-fix-48">
                         <h4>✨ Model Solution</h4>
                         <pre><code>// Product Endpoints
 GET    /api/v1/products          → 200 OK (list all products)
@@ -261,9 +360,9 @@ PUT    /api/v1/users/{id}        → 200 OK | 403 Forbidden | 404 Not Found</cod
         </section>
 
         <!-- Next Steps -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🚀 Next Steps</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 You've completed API Design Fundamentals! Continue your learning journey:
             </p>
             <div class="next-module-cards">
@@ -280,11 +379,11 @@ PUT    /api/v1/users/{id}        → 200 OK | 403 Forbidden | 404 Not Found</cod
     </div>
 
     <!-- Footer -->
-    <footer style="margin-top: var(--spacing-3xl); padding: var(--spacing-xl); text-align: center; color: var(--text-secondary);">
+    <footer class="inline-fix-17">
         <p>© 2026 Asif Hussain. All rights reserved.</p>
-        <p style="margin-top: var(--spacing-sm);">
-            <a href="../../index.html" style="color: var(--hub-primary);">Back to Home</a> • 
-            <a href="../api-design-hub.html" style="color: var(--hub-primary);">API Design Hub</a>
+        <p class="inline-fix-12">
+            <a href="../../index.html" class="inline-fix-10">Back to Home</a> • 
+            <a href="../api-design-hub.html" class="inline-fix-10">API Design Hub</a>
         </p>
     </footer>
 

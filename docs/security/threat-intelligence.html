@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CORTEX Threat Intelligence - Real-time threat monitoring and proactive defense intelligence">
@@ -10,15 +35,41 @@
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo-64.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/main.css?v=4.0.1">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
     <!-- Glass Header (Level 1 - No Logo) -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../index.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../index.html" class="nav-link" mobile-nav-optimized><i class="pulse-glow-glass--fast fa-home"></i> Home</a>
             </nav>
         </div>
     </header>
@@ -27,7 +78,7 @@
     <section class="hero-section">
         <div class="hero-content">
             <div class="hero-icon">
-                <i class="fas fa-brain"></i>
+                <i class="pulse-glow-glass--fast fa-brain"></i>
             </div>
             <h1 class="hero-title">Threat Intelligence</h1>
             <p class="hero-subtitle">
@@ -41,7 +92,7 @@
         <!-- Intelligence Overview -->
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-crosshairs"></i>
+                <i class="pulse-glow-glass--fast fa-crosshairs"></i>
                 <h2 class="card-title">Intelligence Overview</h2>
             </div>
             <p class="card-description">CORTEX Threat Intelligence Platform aggregates data from multiple sources including OSINT, CVE databases, ISAC feeds, vendor advisories, and dark web monitoring. The platform transforms raw intelligence into actionable insights, providing indicators of compromise (IOCs), tactics/techniques/procedures (TTPs), and strategic recommendations for proactive defense.</p>
@@ -68,7 +119,7 @@
         <!-- Intelligence Sources -->
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-globe"></i>
+                <i class="pulse-glow-glass--fast fa-globe"></i>
                 <h2 class="card-title">Intelligence Sources</h2>
             </div>
             <p class="card-description">Multi-source threat intelligence aggregation provides comprehensive visibility into the global threat landscape. Each source contributes unique insights that feed into the centralized Threat Intelligence Platform.</p>
@@ -104,7 +155,7 @@ graph TB
         <!-- Threat Actor Landscape -->
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-project-diagram"></i>
+                <i class="pulse-glow-glass--fast fa-project-diagram"></i>
                 <h2 class="card-title">Threat Actor Landscape</h2>
             </div>
             <p class="card-description">Interactive network graph showing relationships between threat actor groups, shared TTPs, infrastructure, and targets. Node size indicates campaign volume; colors represent primary motivation.</p>
@@ -114,11 +165,11 @@ graph TB
         <!-- Real-Time Threat Feed -->
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-broadcast-tower"></i>
+                <i class="pulse-glow-glass--fast fa-broadcast-tower"></i>
                 <h2 class="card-title">Real-Time Threat Feed</h2>
             </div>
             <p class="card-description">Live timeline visualization of the latest 100 threats from aggregated feeds. Auto-updates every 30 seconds with new threats fading in. Filter by severity, category, or source.</p>
-            <div class="feed-controls">
+            <div class="feedback-item">
                 <button class="filter-btn active" data-filter="all">All</button>
                 <button class="filter-btn" data-filter="critical">Critical</button>
                 <button class="filter-btn" data-filter="high">High</button>
@@ -131,7 +182,7 @@ graph TB
         <!-- MITRE ATT&CK Coverage Matrix -->
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-crosshairs"></i>
+                <i class="pulse-glow-glass--fast fa-crosshairs"></i>
                 <h2 class="card-title">MITRE ATT&CK Coverage Matrix</h2>
             </div>
             <p class="card-description">Heatmap showing detection coverage across MITRE ATT&CK tactics and techniques. Identifies blind spots and prioritizes detection development efforts. Click cells for technique details.</p>
@@ -141,7 +192,7 @@ graph TB
         <!-- Intelligence Metrics -->
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-chart-bar"></i>
+                <i class="pulse-glow-glass--fast fa-chart-bar"></i>
                 <h2 class="card-title">Intelligence Metrics</h2>
             </div>
             <div class="metrics-grid">
@@ -149,31 +200,31 @@ graph TB
                     <h3>IOC Processing</h3>
                     <div class="metric-value">2,847</div>
                     <div class="metric-label">IOCs processed today</div>
-                    <div class="metric-trend positive">+12% vs yesterday</div>
+                    <div class="metric-highlight positive">+12% vs yesterday</div>
                 </div>
                 <div class="metric-card">
                     <h3>Threat Enrichment</h3>
                     <div class="metric-value">94%</div>
                     <div class="metric-label">Enrichment success rate</div>
-                    <div class="metric-trend positive">+2% this week</div>
+                    <div class="metric-highlight positive">+2% this week</div>
                 </div>
                 <div class="metric-card">
                     <h3>False Positives</h3>
                     <div class="metric-value">3.2%</div>
                     <div class="metric-label">FP rate this month</div>
-                    <div class="metric-trend positive">-0.5% vs last month</div>
+                    <div class="metric-highlight positive">-0.5% vs last month</div>
                 </div>
                 <div class="metric-card">
                     <h3>Response Time</h3>
                     <div class="metric-value">4.2h</div>
                     <div class="metric-label">Avg IOC to action</div>
-                    <div class="metric-trend positive">-1.3h vs last month</div>
+                    <div class="metric-highlight positive">-1.3h vs last month</div>
                 </div>
             </div>
         </article>
     </main>
 
-    <footer class="footer-container">
+    <footer class="footer-bottom">
         <p>&copy; 2026 Asif Hussain. All rights reserved.</p>
         <p>CORTEX Threat Intelligence Platform v4.0.0</p>
     </footer>

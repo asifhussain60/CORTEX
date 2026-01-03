@@ -1,21 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OWASP Top 10 - CORTEX Security</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo-64.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/main.css?v=4.0.1">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
     <!-- Glass Header (Level 1 - No Logo) -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../index.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../index.html" class="nav-link" mobile-nav-optimized><i class="pulse-glow-glass--fast fa-home"></i> Home</a>
             </nav>
         </div>
     </header>
@@ -24,7 +75,7 @@
     <section class="hero-section">
         <div class="hero-content">
             <div class="hero-icon">
-                <i class="fas fa-exclamation-triangle"></i>
+                <i class="pulse-glow-glass--fast fa-exclamation-triangle"></i>
             </div>
             <h1 class="hero-title">OWASP Top 10</h1>
             <p class="hero-subtitle">
@@ -38,7 +89,7 @@
         <!-- Overview Card -->
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-shield-alt"></i>
+                <i class="pulse-glow-glass--fast fa-shield-alt"></i>
                 <h2 class="card-title">About OWASP Top 10</h2>
             </div>
             <p class="card-description">
@@ -46,18 +97,18 @@
                 security risks to web applications, updated periodically based on data collected from organizations worldwide.
             </p>
             <div class="feature-grid">
-                <div class="feature-item">
-                    <i class="fas fa-calendar-alt"></i>
+                <div class="level1-feature-panel">
+                    <i class="pulse-glow-glass--fast fa-calendar-alt"></i>
                     <h4>Current Edition</h4>
                     <p>2021</p>
                 </div>
-                <div class="feature-item">
-                    <i class="fas fa-clock"></i>
+                <div class="level1-feature-panel">
+                    <i class="pulse-glow-glass--fast fa-clock"></i>
                     <h4>Next Update</h4>
                     <p>Expected 2025</p>
                 </div>
-                <div class="feature-item">
-                    <i class="fas fa-link"></i>
+                <div class="level1-feature-panel">
+                    <i class="pulse-glow-glass--fast fa-link"></i>
                     <h4>Official Source</h4>
                     <p><a href="https://owasp.org/Top10/" target="_blank" rel="noopener noreferrer">owasp.org/Top10</a></p>
                 </div>
@@ -67,7 +118,7 @@
         <!-- OWASP Top 10 Hierarchy Visualization -->
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-sitemap"></i>
+                <i class="pulse-glow-glass--fast fa-sitemap"></i>
                 <h2 class="card-title">OWASP Top 10 2021 Hierarchy</h2>
             </div>
             <p class="card-description">
@@ -100,7 +151,7 @@ graph TD
     style A10 fill:#2ecc71,stroke:#fff,stroke-width:2px,color:#fff
                 </div>
             </div>
-            <div class="badge-container">
+            <div class="badge-security">
                 <span class="severity-badge critical">Critical</span>
                 <span class="severity-badge high">High</span>
                 <span class="severity-badge medium">Medium-High</span>
@@ -111,7 +162,7 @@ graph TD
         <!-- Interactive Compliance Progress Dashboard -->
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-chart-bar"></i>
+                <i class="pulse-glow-glass--fast fa-chart-bar"></i>
                 <h2 class="card-title">OWASP Compliance Progress</h2>
             </div>
             <p class="card-description">
@@ -123,230 +174,334 @@ graph TD
         <!-- Detailed Risk Breakdown -->
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-list-ol"></i>
+                <i class="pulse-glow-glass--fast fa-list-ol"></i>
                 <h2 class="card-title">A01: Broken Access Control</h2>
             </div>
-            <div class="badge-container">
+            <div class="badge-security">
                 <span class="severity-badge critical">Critical</span>
             </div>
             <p class="card-description">
                 <strong>Description:</strong> Restrictions on authenticated users not properly enforced. Attackers can access 
                 unauthorized functionality and/or data, such as accessing other users' accounts, viewing sensitive files, or modifying data.
             </p>
-            <h4 class="section-subtitle"><i class="fas fa-shield-alt"></i> Mitigation Strategies</h4>
-            <ul class="feature-list">
-                <li><i class="fas fa-check-circle"></i> Implement proper authorization checks at the server side</li>
-                <li><i class="fas fa-check-circle"></i> Deny by default - fail securely</li>
-                <li><i class="fas fa-check-circle"></i> Use centralized access control mechanisms</li>
-                <li><i class="fas fa-check-circle"></i> Minimize CORS usage</li>
-                <li><i class="fas fa-check-circle"></i> Disable directory listing on web servers</li>
-            </ul>
+            <h4 class="section-subtitle"><i class="pulse-glow-glass--fast fa-shield-alt"></i> Mitigation Strategies</h4>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Implement proper authorization checks at the server side</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Deny by default - fail securely</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Use centralized access control mechanisms</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Minimize CORS usage</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Disable directory listing on web servers</div>
+    </div>
+</div>
         </article>
 
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-key"></i>
+                <i class="pulse-glow-glass--fast fa-key"></i>
                 <h2 class="card-title">A02: Cryptographic Failures</h2>
             </div>
-            <div class="badge-container">
+            <div class="badge-security">
                 <span class="severity-badge critical">Critical</span>
             </div>
             <p class="card-description">
                 <strong>Description:</strong> Failures related to cryptography (or lack thereof) that often lead to exposure of sensitive data. 
                 Previously known as "Sensitive Data Exposure," this includes weaknesses in encryption, key management, and data protection.
             </p>
-            <h4 class="section-subtitle"><i class="fas fa-shield-alt"></i> Mitigation Strategies</h4>
-            <ul class="feature-list">
-                <li><i class="fas fa-check-circle"></i> Classify data processed, stored, or transmitted by application</li>
-                <li><i class="fas fa-check-circle"></i> Apply controls per classification (e.g., GDPR, PCI DSS)</li>
-                <li><i class="fas fa-check-circle"></i> Encrypt all sensitive data at rest and in transit</li>
-                <li><i class="fas fa-check-circle"></i> Use strong, up-to-date encryption algorithms and protocols</li>
-                <li><i class="fas fa-check-circle"></i> Implement proper key management practices</li>
-                <li><i class="fas fa-check-circle"></i> Disable caching for sensitive data responses</li>
-            </ul>
+            <h4 class="section-subtitle"><i class="pulse-glow-glass--fast fa-shield-alt"></i> Mitigation Strategies</h4>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Classify data processed, stored, or transmitted by application</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Apply controls per classification (e.g., GDPR, PCI DSS)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Encrypt all sensitive data at rest and in transit</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Use strong, up-to-date encryption algorithms and protocols</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Implement proper key management practices</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Disable caching for sensitive data responses</div>
+    </div>
+</div>
         </article>
 
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-code"></i>
+                <i class="pulse-glow-glass--fast fa-code"></i>
                 <h2 class="card-title">A03: Injection</h2>
             </div>
-            <div class="badge-container">
+            <div class="badge-security">
                 <span class="severity-badge high">High</span>
             </div>
             <p class="card-description">
                 <strong>Description:</strong> Application is vulnerable when user-supplied data is not validated, filtered, or sanitized. 
                 Includes SQL, NoSQL, OS command, ORM, LDAP, and Expression Language (EL) or Object Graph Navigation Library (OGNL) injection.
             </p>
-            <h4 class="section-subtitle"><i class="fas fa-shield-alt"></i> Mitigation Strategies</h4>
-            <ul class="feature-list">
-                <li><i class="fas fa-check-circle"></i> Use parameterized queries, prepared statements, or stored procedures</li>
-                <li><i class="fas fa-check-circle"></i> Use ORM frameworks safely (watch for lazy loading vulnerabilities)</li>
-                <li><i class="fas fa-check-circle"></i> Validate input using positive server-side validation (allowlists)</li>
-                <li><i class="fas fa-check-circle"></i> Escape special characters using syntax-appropriate escaping</li>
-                <li><i class="fas fa-check-circle"></i> Use LIMIT and other SQL controls within queries</li>
-            </ul>
+            <h4 class="section-subtitle"><i class="pulse-glow-glass--fast fa-shield-alt"></i> Mitigation Strategies</h4>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Use parameterized queries, prepared statements, or stored procedures</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Use ORM frameworks safely (watch for lazy loading vulnerabilities)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Validate input using positive server-side validation (allowlists)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Escape special characters using syntax-appropriate escaping</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Use LIMIT and other SQL controls within queries</div>
+    </div>
+</div>
         </article>
 
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-drafting-compass"></i>
+                <i class="pulse-glow-glass--fast fa-drafting-compass"></i>
                 <h2 class="card-title">A04: Insecure Design</h2>
             </div>
-            <div class="badge-container">
+            <div class="badge-security">
                 <span class="severity-badge high">High</span>
             </div>
             <p class="card-description">
                 <strong>Description:</strong> Risks related to design and architectural flaws. Missing or ineffective control design. 
                 Different from insecure implementation - even perfect implementation cannot fix insecure design. Requires secure development lifecycle and threat modeling.
             </p>
-            <h4 class="section-subtitle"><i class="fas fa-shield-alt"></i> Mitigation Strategies</h4>
-            <ul class="feature-list">
-                <li><i class="fas fa-check-circle"></i> Establish and use a secure development lifecycle with security professionals</li>
-                <li><i class="fas fa-check-circle"></i> Use threat modeling for critical authentication, access control, business logic, and key flows</li>
-                <li><i class="fas fa-check-circle"></i> Integrate security language and controls into user stories</li>
-                <li><i class="fas fa-check-circle"></i> Implement plausibility checks at each tier of application</li>
-                <li><i class="fas fa-check-circle"></i> Write unit and integration tests to validate all critical flows</li>
-            </ul>
+            <h4 class="section-subtitle"><i class="pulse-glow-glass--fast fa-shield-alt"></i> Mitigation Strategies</h4>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Establish and use a secure development lifecycle with security professionals</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Use threat modeling for critical authentication, access control, business logic, and key flows</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Integrate security language and controls into user stories</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Implement plausibility checks at each tier of application</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Write unit and integration tests to validate all critical flows</div>
+    </div>
+</div>
         </article>
 
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-cog"></i>
+                <i class="pulse-glow-glass--fast fa-cog"></i>
                 <h2 class="card-title">A05: Security Misconfiguration</h2>
             </div>
-            <div class="badge-container">
+            <div class="badge-security">
                 <span class="severity-badge high">High</span>
             </div>
             <p class="card-description">
                 <strong>Description:</strong> Missing appropriate security hardening or improperly configured permissions. 
                 Includes insecure default configurations, incomplete or ad hoc configurations, open cloud storage, misconfigured HTTP headers, verbose error messages.
             </p>
-            <h4 class="section-subtitle"><i class="fas fa-shield-alt"></i> Mitigation Strategies</h4>
-            <ul class="feature-list">
-                <li><i class="fas fa-check-circle"></i> Implement secure installation processes with repeatable hardening</li>
-                <li><i class="fas fa-check-circle"></i> Use minimal platform without unnecessary features, components, or documentation</li>
-                <li><i class="fas fa-check-circle"></i> Review and update configurations as part of patch management process</li>
-                <li><i class="fas fa-check-circle"></i> Use segmented application architecture for effective security separation</li>
-                <li><i class="fas fa-check-circle"></i> Send security directives to clients (e.g., Security Headers)</li>
-            </ul>
+            <h4 class="section-subtitle"><i class="pulse-glow-glass--fast fa-shield-alt"></i> Mitigation Strategies</h4>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Implement secure installation processes with repeatable hardening</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Use minimal platform without unnecessary features, components, or documentation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Review and update configurations as part of patch management process</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Use segmented application architecture for effective security separation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Send security directives to clients (e.g., Security Headers)</div>
+    </div>
+</div>
         </article>
 
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-cubes"></i>
+                <i class="pulse-glow-glass--fast fa-cubes"></i>
                 <h2 class="card-title">A06: Vulnerable and Outdated Components</h2>
             </div>
-            <div class="badge-container">
+            <div class="badge-security">
                 <span class="severity-badge high">High</span>
             </div>
             <p class="card-description">
                 <strong>Description:</strong> Using components with known vulnerabilities. Includes unsupported or out-of-date versions of OS, 
                 web/application server, DBMS, APIs, and all components, libraries, and frameworks. Not scanning for vulnerabilities regularly.
             </p>
-            <h4 class="section-subtitle"><i class="fas fa-shield-alt"></i> Mitigation Strategies</h4>
-            <ul class="feature-list">
-                <li><i class="fas fa-check-circle"></i> Remove unused dependencies, features, files, and documentation</li>
-                <li><i class="fas fa-check-circle"></i> Continuously inventory versions of client-side and server-side components</li>
-                <li><i class="fas fa-check-circle"></i> Monitor sources like CVE and NVD for vulnerability information</li>
-                <li><i class="fas fa-check-circle"></i> Only obtain components from official sources over secure links</li>
-                <li><i class="fas fa-check-circle"></i> Monitor for unmaintained libraries and components</li>
-            </ul>
+            <h4 class="section-subtitle"><i class="pulse-glow-glass--fast fa-shield-alt"></i> Mitigation Strategies</h4>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Remove unused dependencies, features, files, and documentation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Continuously inventory versions of client-side and server-side components</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Monitor sources like CVE and NVD for vulnerability information</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Only obtain components from official sources over secure links</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Monitor for unmaintained libraries and components</div>
+    </div>
+</div>
         </article>
 
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-user-lock"></i>
+                <i class="pulse-glow-glass--fast fa-user-lock"></i>
                 <h2 class="card-title">A07: Identification and Authentication Failures</h2>
             </div>
-            <div class="badge-container">
+            <div class="badge-security">
                 <span class="severity-badge medium">Medium-High</span>
             </div>
             <p class="card-description">
                 <strong>Description:</strong> Confirmation of user's identity, authentication, and session management is critical to protect against 
                 authentication-related attacks. Previously "Broken Authentication." Includes credential stuffing, brute force, and weak passwords.
             </p>
-            <h4 class="section-subtitle"><i class="fas fa-shield-alt"></i> Mitigation Strategies</h4>
-            <ul class="feature-list">
-                <li><i class="fas fa-check-circle"></i> Implement multi-factor authentication wherever possible</li>
-                <li><i class="fas fa-check-circle"></i> Do not ship or deploy with default credentials (especially for admin users)</li>
-                <li><i class="fas fa-check-circle"></i> Implement weak password checks (e.g., against top 10,000 worst passwords)</li>
-                <li><i class="fas fa-check-circle"></i> Limit or delay failed login attempts (rate limiting)</li>
-                <li><i class="fas fa-check-circle"></i> Use secure session management with proper invalidation</li>
-                <li><i class="fas fa-check-circle"></i> Align password length, complexity, and rotation policies with NIST 800-63b</li>
-            </ul>
+            <h4 class="section-subtitle"><i class="pulse-glow-glass--fast fa-shield-alt"></i> Mitigation Strategies</h4>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Implement multi-factor authentication wherever possible</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Do not ship or deploy with default credentials (especially for admin users)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Implement weak password checks (e.g., against top 10,000 worst passwords)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Limit or delay failed login attempts (rate limiting)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Use secure session management with proper invalidation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Align password length, complexity, and rotation policies with NIST 800-63b</div>
+    </div>
+</div>
         </article>
 
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-file-signature"></i>
+                <i class="pulse-glow-glass--fast fa-file-signature"></i>
                 <h2 class="card-title">A08: Software and Data Integrity Failures</h2>
             </div>
-            <div class="badge-container">
+            <div class="badge-security">
                 <span class="severity-badge low">Medium</span>
             </div>
             <p class="card-description">
                 <strong>Description:</strong> Code and infrastructure that does not protect against integrity violations. Includes insecure CI/CD pipelines, 
                 auto-update without integrity verification, and serialization/deserialization issues. Previously included "Insecure Deserialization."
             </p>
-            <h4 class="section-subtitle"><i class="fas fa-shield-alt"></i> Mitigation Strategies</h4>
-            <ul class="feature-list">
-                <li><i class="fas fa-check-circle"></i> Use digital signatures to verify software or data is from expected source</li>
-                <li><i class="fas fa-check-circle"></i> Ensure libraries and dependencies are consuming trusted repositories</li>
-                <li><i class="fas fa-check-circle"></i> Use software supply chain security tools (OWASP Dependency Check, Snyk)</li>
-                <li><i class="fas fa-check-circle"></i> Ensure CI/CD pipeline has proper segregation, configuration, and access control</li>
-                <li><i class="fas fa-check-circle"></i> Verify unsigned or unencrypted serialized data is not sent to untrusted clients</li>
-            </ul>
+            <h4 class="section-subtitle"><i class="pulse-glow-glass--fast fa-shield-alt"></i> Mitigation Strategies</h4>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Use digital signatures to verify software or data is from expected source</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Ensure libraries and dependencies are consuming trusted repositories</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Use software supply chain security tools (OWASP Dependency Check, Snyk)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Ensure CI/CD pipeline has proper segregation, configuration, and access control</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Verify unsigned or unencrypted serialized data is not sent to untrusted clients</div>
+    </div>
+</div>
         </article>
 
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-clipboard-list"></i>
+                <i class="pulse-glow-glass--fast fa-clipboard-list"></i>
                 <h2 class="card-title">A09: Security Logging and Monitoring Failures</h2>
             </div>
-            <div class="badge-container">
+            <div class="badge-security">
                 <span class="severity-badge low">Medium</span>
             </div>
             <p class="card-description">
                 <strong>Description:</strong> Insufficient logging, detection, monitoring, and active response. Without logging and monitoring, 
                 breaches cannot be detected. Includes logins, failed logins, and high-value transactions not logged. Warnings and errors generate inadequate logs.
             </p>
-            <h4 class="section-subtitle"><i class="fas fa-shield-alt"></i> Mitigation Strategies</h4>
-            <ul class="feature-list">
-                <li><i class="fas fa-check-circle"></i> Ensure all login, access control, and server-side input validation failures can be logged</li>
-                <li><i class="fas fa-check-circle"></i> Log with sufficient user context to identify suspicious or malicious accounts</li>
-                <li><i class="fas fa-check-circle"></i> Ensure logs are in a format that can be consumed by centralized log management</li>
-                <li><i class="fas fa-check-circle"></i> Establish effective monitoring and alerting for suspicious activities</li>
-                <li><i class="fas fa-check-circle"></i> Establish or adopt incident response and recovery plans (e.g., NIST 800-61r2)</li>
-            </ul>
+            <h4 class="section-subtitle"><i class="pulse-glow-glass--fast fa-shield-alt"></i> Mitigation Strategies</h4>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Ensure all login, access control, and server-side input validation failures can be logged</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Log with sufficient user context to identify suspicious or malicious accounts</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Ensure logs are in a format that can be consumed by centralized log management</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Establish effective monitoring and alerting for suspicious activities</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Establish or adopt incident response and recovery plans (e.g., NIST 800-61r2)</div>
+    </div>
+</div>
         </article>
 
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-exchange-alt"></i>
+                <i class="pulse-glow-glass--fast fa-exchange-alt"></i>
                 <h2 class="card-title">A10: Server-Side Request Forgery (SSRF)</h2>
             </div>
-            <div class="badge-container">
+            <div class="badge-security">
                 <span class="severity-badge low">Medium</span>
             </div>
             <p class="card-description">
                 <strong>Description:</strong> SSRF flaws occur whenever a web application fetches a remote resource without validating the user-supplied URL. 
                 Allows an attacker to coerce the application to send a crafted request to an unexpected destination, even when protected by firewall, VPN, or network ACL.
             </p>
-            <h4 class="section-subtitle"><i class="fas fa-shield-alt"></i> Mitigation Strategies</h4>
-            <ul class="feature-list">
-                <li><i class="fas fa-check-circle"></i> Sanitize and validate all client-supplied input data</li>
-                <li><i class="fas fa-check-circle"></i> Enforce URL schema, port, and destination with a positive allow list</li>
-                <li><i class="fas fa-check-circle"></i> Do not send raw responses to clients</li>
-                <li><i class="fas fa-check-circle"></i> Disable HTTP redirections</li>
-                <li><i class="fas fa-check-circle"></i> Use network segmentation to separate resource access (e.g., DMZ)</li>
-            </ul>
+            <h4 class="section-subtitle"><i class="pulse-glow-glass--fast fa-shield-alt"></i> Mitigation Strategies</h4>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Sanitize and validate all client-supplied input data</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Enforce URL schema, port, and destination with a positive allow list</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Do not send raw responses to clients</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Disable HTTP redirections</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i> Use network segmentation to separate resource access (e.g., DMZ)</div>
+    </div>
+</div>
         </article>
 
         <!-- CORTEX Implementation Status -->
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-check-circle"></i>
+                <i class="pulse-glow-glass--fast fa-check-circle"></i>
                 <h2 class="card-title">CORTEX Implementation Status</h2>
             </div>
             <p class="card-description">
@@ -354,52 +509,52 @@ graph TD
             </p>
             
             <div class="feature-grid">
-                <div class="feature-item">
+                <div class="level1-feature-panel">
                     <span class="severity-badge critical">A01</span>
                     <h4>Access Control</h4>
                     <p><strong>✓ Implemented</strong><br>Brain tier isolation, SKULL rules, Git isolation</p>
                 </div>
-                <div class="feature-item">
+                <div class="level1-feature-panel">
                     <span class="severity-badge critical">A02</span>
                     <h4>Cryptography</h4>
                     <p><strong>✓ Implemented</strong><br>Sanitization orchestrator, data anonymization</p>
                 </div>
-                <div class="feature-item">
+                <div class="level1-feature-panel">
                     <span class="severity-badge high">A03</span>
                     <h4>Injection</h4>
                     <p><strong>✓ Implemented</strong><br>Input validation, parameterized queries</p>
                 </div>
-                <div class="feature-item">
+                <div class="level1-feature-panel">
                     <span class="severity-badge high">A04</span>
                     <h4>Design</h4>
                     <p><strong>✓ Implemented</strong><br>Threat modeling, TDD enforcement</p>
                 </div>
-                <div class="feature-item">
+                <div class="level1-feature-panel">
                     <span class="severity-badge high">A05</span>
                     <h4>Misconfiguration</h4>
                     <p><strong>✓ Implemented</strong><br>Config validation, maintenance checks</p>
                 </div>
-                <div class="feature-item">
+                <div class="level1-feature-panel">
                     <span class="severity-badge high">A06</span>
                     <h4>Components</h4>
                     <p><strong>✓ Implemented</strong><br>Dependency scanning, STS updates</p>
                 </div>
-                <div class="feature-item">
+                <div class="level1-feature-panel">
                     <span class="severity-badge medium">A07</span>
                     <h4>Authentication</h4>
                     <p><strong>◐ Partial</strong><br>Session management, access control</p>
                 </div>
-                <div class="feature-item">
+                <div class="level1-feature-panel">
                     <span class="severity-badge low">A08</span>
                     <h4>Integrity</h4>
                     <p><strong>✓ Implemented</strong><br>Git checkpoints, CI/CD security</p>
                 </div>
-                <div class="feature-item">
+                <div class="level1-feature-panel">
                     <span class="severity-badge low">A09</span>
                     <h4>Logging</h4>
                     <p><strong>✓ Implemented</strong><br>Audit logging, analytics dashboard</p>
                 </div>
-                <div class="feature-item">
+                <div class="level1-feature-panel">
                     <span class="severity-badge low">A10</span>
                     <h4>SSRF</h4>
                     <p><strong>◐ Partial</strong><br>URL validation in integrations</p>
@@ -410,34 +565,34 @@ graph TD
         <!-- Additional Resources -->
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-book"></i>
+                <i class="pulse-glow-glass--fast fa-book"></i>
                 <h2 class="card-title">Additional Resources</h2>
             </div>
             <div class="feature-grid">
-                <div class="feature-item">
+                <div class="level1-feature-panel">
                     <a href="https://owasp.org/Top10/" target="_blank" rel="noopener noreferrer">
-                        <i class="fas fa-external-link-alt"></i>
+                        <i class="pulse-glow-glass--fast fa-external-link-alt"></i>
                         <h4>OWASP Top 10</h4>
                         <p>Official documentation</p>
                     </a>
                 </div>
-                <div class="feature-item">
+                <div class="level1-feature-panel">
                     <a href="https://cheatsheetseries.owasp.org/" target="_blank" rel="noopener noreferrer">
-                        <i class="fas fa-file-alt"></i>
+                        <i class="pulse-glow-glass--fast fa-file-alt"></i>
                         <h4>Cheat Sheets</h4>
                         <p>Implementation guides</p>
                     </a>
                 </div>
-                <div class="feature-item">
+                <div class="level1-feature-panel">
                     <a href="https://owasp.org/www-project-web-security-testing-guide/" target="_blank" rel="noopener noreferrer">
-                        <i class="fas fa-clipboard-check"></i>
+                        <i class="pulse-glow-glass--fast fa-clipboard-check"></i>
                         <h4>Testing Guide</h4>
                         <p>Security testing procedures</p>
                     </a>
                 </div>
-                <div class="feature-item">
+                <div class="level1-feature-panel">
                     <a href="compliance-standards.html">
-                        <i class="fas fa-balance-scale"></i>
+                        <i class="pulse-glow-glass--fast fa-balance-scale"></i>
                         <h4>Compliance</h4>
                         <p>Standards & frameworks</p>
                     </a>
@@ -457,7 +612,7 @@ graph TD
                     <i class="fab fa-github"></i> GitHub
                 </a>
                 <a href="../index.html">
-                    <i class="fas fa-home"></i> Home
+                    <i class="pulse-glow-glass--fast fa-home"></i> Home
                 </a>
             </div>
             <div class="footer-version">

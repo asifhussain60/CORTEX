@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CORTEX Data Protection - Encryption Strategies, Data Loss Prevention (DLP), and Privacy Controls">
@@ -10,15 +35,41 @@
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo-64.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/main.css?v=4.0.0">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
     <!-- Glass Header (Level 1 - No Logo) -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../index.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../index.html" class="nav-link" mobile-nav-optimized><i class="pulse-glow-glass--fast fa-home"></i> Home</a>
             </nav>
         </div>
     </header>
@@ -27,7 +78,7 @@
     <section class="hero-section">
         <div class="hero-content">
             <div class="hero-icon">
-                <i class="fas fa-database"></i>
+                <i class="pulse-glow-glass--fast fa-database"></i>
             </div>
             <h1 class="hero-title">Data Protection</h1>
             <p class="hero-subtitle">
@@ -42,7 +93,7 @@
         <!-- Encryption Architecture -->
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-lock"></i>
+                <i class="pulse-glow-glass--fast fa-lock"></i>
                 <h2 class="card-title">Encryption Architecture</h2>
             </div>
             <p class="card-description">
@@ -100,7 +151,7 @@ graph TB
         <!-- Data Classification Matrix -->
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-tag"></i>
+                <i class="pulse-glow-glass--fast fa-tag"></i>
                 <h2 class="card-title">Data Classification & Handling</h2>
             </div>
             <p class="card-description">
@@ -112,7 +163,7 @@ graph TB
         <!-- DLP Policy Flow -->
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-shield-virus"></i>
+                <i class="pulse-glow-glass--fast fa-shield-virus"></i>
                 <h2 class="card-title">Data Loss Prevention (DLP) Workflow</h2>
             </div>
             <p class="card-description">
@@ -165,16 +216,16 @@ flowchart LR
         <!-- Encryption Standards -->
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-certificate"></i>
+                <i class="pulse-glow-glass--fast fa-certificate"></i>
                 <h2 class="card-title">Encryption Standards</h2>
             </div>
-            <div class="standards-grid">
-                <div class="standard-card">
-                    <div class="standard-icon">
-                        <i class="fas fa-hard-drive"></i>
+            <div class="level1-level1-standard-card">
+                <div class="level1-standard-card">
+                    <div class="level1-level1-standard-card">
+                        <i class="pulse-glow-glass--fast fa-hard-drive"></i>
                     </div>
-                    <h3 class="standard-title">Data at Rest</h3>
-                    <div class="standard-details">
+                    <h3 class="level1-level1-standard-card">Data at Rest</h3>
+                    <div class="level1-standard-card">
                         <p><strong>Algorithm:</strong> AES-256-GCM</p>
                         <p><strong>Key Length:</strong> 256 bits</p>
                         <p><strong>Key Rotation:</strong> Every 90 days</p>
@@ -182,12 +233,12 @@ flowchart LR
                     </div>
                 </div>
                 
-                <div class="standard-card">
-                    <div class="standard-icon">
-                        <i class="fas fa-exchange-alt"></i>
+                <div class="level1-standard-card">
+                    <div class="level1-level1-standard-card">
+                        <i class="pulse-glow-glass--fast fa-exchange-alt"></i>
                     </div>
-                    <h3 class="standard-title">Data in Transit</h3>
-                    <div class="standard-details">
+                    <h3 class="level1-level1-standard-card">Data in Transit</h3>
+                    <div class="level1-standard-card">
                         <p><strong>Protocol:</strong> TLS 1.3</p>
                         <p><strong>Cipher Suite:</strong> TLS_AES_256_GCM_SHA384</p>
                         <p><strong>Certificate:</strong> ECC P-384</p>
@@ -195,12 +246,12 @@ flowchart LR
                     </div>
                 </div>
                 
-                <div class="standard-card">
-                    <div class="standard-icon">
-                        <i class="fas fa-memory"></i>
+                <div class="level1-standard-card">
+                    <div class="level1-level1-standard-card">
+                        <i class="pulse-glow-glass--fast fa-memory"></i>
                     </div>
-                    <h3 class="standard-title">Data in Use</h3>
-                    <div class="standard-details">
+                    <h3 class="level1-level1-standard-card">Data in Use</h3>
+                    <div class="level1-standard-card">
                         <p><strong>Technology:</strong> Intel SGX / AMD SEV</p>
                         <p><strong>Memory:</strong> Encrypted RAM</p>
                         <p><strong>Scrubbing:</strong> Secure memory wiping</p>
@@ -208,12 +259,12 @@ flowchart LR
                     </div>
                 </div>
                 
-                <div class="standard-card">
-                    <div class="standard-icon">
-                        <i class="fas fa-key"></i>
+                <div class="level1-standard-card">
+                    <div class="level1-level1-standard-card">
+                        <i class="pulse-glow-glass--fast fa-key"></i>
                     </div>
-                    <h3 class="standard-title">Key Management</h3>
-                    <div class="standard-details">
+                    <h3 class="level1-level1-standard-card">Key Management</h3>
+                    <div class="level1-standard-card">
                         <p><strong>KMS:</strong> AWS KMS / Azure Key Vault</p>
                         <p><strong>Hierarchy:</strong> Master + Data Encryption Keys</p>
                         <p><strong>Backup:</strong> Offline HSM backup</p>
@@ -226,13 +277,13 @@ flowchart LR
         <!-- Privacy Controls -->
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-user-secret"></i>
+                <i class="pulse-glow-glass--fast fa-user-secret"></i>
                 <h2 class="card-title">Privacy-by-Design Principles</h2>
             </div>
             <div class="principles-grid">
                 <div class="principle-card">
                     <div class="principle-icon">
-                        <i class="fas fa-minimize"></i>
+                        <i class="pulse-glow-glass--fast fa-minimize"></i>
                     </div>
                     <h3 class="principle-title">Data Minimization</h3>
                     <p class="principle-description">
@@ -243,7 +294,7 @@ flowchart LR
                 
                 <div class="principle-card">
                     <div class="principle-icon">
-                        <i class="fas fa-user-slash"></i>
+                        <i class="pulse-glow-glass--fast fa-user-slash"></i>
                     </div>
                     <h3 class="principle-title">Anonymization</h3>
                     <p class="principle-description">
@@ -254,7 +305,7 @@ flowchart LR
                 
                 <div class="principle-card">
                     <div class="principle-icon">
-                        <i class="fas fa-eye-slash"></i>
+                        <i class="pulse-glow-glass--fast fa-eye-slash"></i>
                     </div>
                     <h3 class="principle-title">Purpose Limitation</h3>
                     <p class="principle-description">
@@ -265,7 +316,7 @@ flowchart LR
                 
                 <div class="principle-card">
                     <div class="principle-icon">
-                        <i class="fas fa-user-check"></i>
+                        <i class="pulse-glow-glass--fast fa-user-check"></i>
                     </div>
                     <h3 class="principle-title">User Control</h3>
                     <p class="principle-description">
@@ -279,12 +330,12 @@ flowchart LR
         <!-- Implementation Example -->
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-code"></i>
+                <i class="pulse-glow-glass--fast fa-code"></i>
                 <h2 class="card-title">Encryption Implementation</h2>
             </div>
             <div class="code-example">
                 <h3 class="code-title">Field-Level Encryption Example</h3>
-                <pre><code class="language-python"># Python Field-Level Encryption for CORTEX
+                <pre><code class="language-badge"># Python Field-Level Encryption for CORTEX
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cortex_brain.tier0.security import KeyManager
 import os
@@ -343,24 +394,24 @@ ssn = encryptor.decrypt_field(user_data['ssn'])</code></pre>
         <!-- Quick Links -->
         <article class="glass-card-clickable animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-link"></i>
+                <i class="pulse-glow-glass--fast fa-link"></i>
                 <h2 class="card-title">Related Security Topics</h2>
             </div>
             <div class="quick-links-grid">
                 <a href="access-control.html" class="quick-link-item">
-                    <i class="fas fa-lock"></i>
+                    <i class="pulse-glow-glass--fast fa-lock"></i>
                     <span>Access Control</span>
                 </a>
                 <a href="audit-logging.html" class="quick-link-item">
-                    <i class="fas fa-clipboard-list"></i>
+                    <i class="pulse-glow-glass--fast fa-clipboard-list"></i>
                     <span>Audit Logging</span>
                 </a>
                 <a href="compliance.html" class="quick-link-item">
-                    <i class="fas fa-certificate"></i>
+                    <i class="pulse-glow-glass--fast fa-certificate"></i>
                     <span>Compliance Standards</span>
                 </a>
                 <a href="threat-modeling.html" class="quick-link-item">
-                    <i class="fas fa-crosshairs"></i>
+                    <i class="pulse-glow-glass--fast fa-crosshairs"></i>
                     <span>Threat Modeling</span>
                 </a>
             </div>

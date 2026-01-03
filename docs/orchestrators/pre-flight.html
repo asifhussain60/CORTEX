@@ -1,25 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CORTEX Pre-Flight Orchestrator - Environment validation before plan execution with pattern detection and remediation scripts">
     <title>Pre-Flight Orchestrator - CORTEX</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
         .mermaid { background: transparent; margin: 1.5rem 0; }
-        .diagram-card { margin-bottom: 2rem; }
-        .diagram-title { font-size: 1.1rem; color: var(--accent-primary); margin-bottom: 1rem; font-weight: 600; }
-        .pattern-heatmap { width: 100%; min-height: 320px; }
+        .architecture-diagram { margin-bottom: 2rem; }
+        .architecture-diagram { font-size: 1.1rem; color: var(--accent-primary); margin-bottom: 1rem; font-weight: 600; }
+        .badge-patterns { width: 100%; min-height: 320px; }
         .gate-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0; }
         .gate-card { padding: 1.5rem; background: rgba(26, 26, 46, 0.6); border-radius: 8px; text-align: center; border-top: 4px solid; }
         .gate-status { font-size: 2.5rem; margin-bottom: 0.5rem; }
         .pattern-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin: 1rem 0; }
-        .pattern-item { padding: 0.75rem; background: rgba(26, 26, 46, 0.6); border-radius: 6px; font-size: 0.9rem; }
+        .badge-patterns { padding: 0.75rem; background: rgba(26, 26, 46, 0.6); border-radius: 6px; font-size: 0.9rem; }
         @media (max-width: 768px) { 
             .gate-grid { grid-template-columns: 1fr; } 
             .pattern-grid { grid-template-columns: 1fr; }
@@ -32,10 +58,35 @@
     
     <!-- Glass Header Navigation -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../index.html" class="nav-link">
-                    <i class="fas fa-home"></i>
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../index.html" class="nav-link" mobile-nav-optimized>
+                    <i class="pulse-glow-glass--fast fa-home"></i>
                     <span>Home</span>
                 </a>
             </nav>
@@ -89,7 +140,7 @@
         </div>
         
         <!-- Gate Status -->
-        <section class="section-gates">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>🚦</span> Gate Enforcement</h2>
                 
@@ -123,20 +174,20 @@
         </section>
         
         <!-- Pattern Detection Heatmap -->
-        <section class="section-heatmap">
-            <div class="glass-card diagram-card">
+        <section class="level2-section-title-green">
+            <div class="glass-card architecture-diagram">
                 <h2><span>🔍</span> Pattern Detection Coverage (D3.js)</h2>
-                <p class="diagram-title">Project patterns detected by file triggers</p>
+                <p class="architecture-diagram">Project patterns detected by file triggers</p>
                 
-                <div id="pattern-heatmap" class="pattern-heatmap"></div>
+                <div id="badge-patterns" class="badge-patterns"></div>
             </div>
         </section>
         
         <!-- 7-Step Workflow -->
-        <section class="section-workflow">
-            <div class="glass-card diagram-card">
+        <section class="level2-section-title-green">
+            <div class="glass-card architecture-diagram">
                 <h2><span>🔄</span> 7-Step Validation Workflow</h2>
-                <p class="diagram-title">From detection to gate enforcement</p>
+                <p class="architecture-diagram">From detection to gate enforcement</p>
                 
                 <div class="mermaid">
 flowchart TB
@@ -195,48 +246,48 @@ flowchart TB
         </section>
         
         <!-- Supported Patterns -->
-        <section class="section-patterns">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>📂</span> Supported Project Patterns</h2>
                 
                 <div class="pattern-grid">
-                    <div class="pattern-item">
+                    <div class="badge-patterns">
                         <strong>🔷 DOTNET_API</strong>
                         <p>.csproj with Microsoft.NET.Sdk.Web</p>
                     </div>
-                    <div class="pattern-item">
+                    <div class="badge-patterns">
                         <strong>🔷 DOTNET_CONSOLE</strong>
                         <p>.csproj (other SDK)</p>
                     </div>
-                    <div class="pattern-item">
+                    <div class="badge-patterns">
                         <strong>🐍 PYTHON_FASTAPI</strong>
                         <p>requirements.txt with fastapi</p>
                     </div>
-                    <div class="pattern-item">
+                    <div class="badge-patterns">
                         <strong>🐍 PYTHON_FLASK</strong>
                         <p>requirements.txt with flask</p>
                     </div>
-                    <div class="pattern-item">
+                    <div class="badge-patterns">
                         <strong>📦 NODEJS_EXPRESS</strong>
                         <p>package.json with express</p>
                     </div>
-                    <div class="pattern-item">
+                    <div class="badge-patterns">
                         <strong>⚛️ REACT_SPA</strong>
                         <p>package.json with react</p>
                     </div>
-                    <div class="pattern-item">
+                    <div class="badge-patterns">
                         <strong>🔐 JWT_AUTH</strong>
                         <p>Code contains jwt/JWT</p>
                     </div>
-                    <div class="pattern-item">
+                    <div class="badge-patterns">
                         <strong>🗃️ DATABASE_MIGRATIONS</strong>
                         <p>migrations/ folder exists</p>
                     </div>
-                    <div class="pattern-item">
+                    <div class="badge-patterns">
                         <strong>🐳 DOCKER_COMPOSE</strong>
                         <p>docker-compose.yml</p>
                     </div>
-                    <div class="pattern-item">
+                    <div class="badge-patterns">
                         <strong>☸️ KUBERNETES</strong>
                         <p>k8s/*.yaml, kubernetes/*.yaml</p>
                     </div>
@@ -245,10 +296,10 @@ flowchart TB
         </section>
         
         <!-- Integration -->
-        <section class="section-integration">
-            <div class="glass-card diagram-card">
+        <section class="level2-section-title-green">
+            <div class="glass-card architecture-diagram">
                 <h2><span>🔗</span> Planning System Integration</h2>
-                <p class="diagram-title">Pre-Flight automatically invoked before Phase 1</p>
+                <p class="architecture-diagram">Pre-Flight automatically invoked before Phase 1</p>
                 
                 <div class="mermaid">
 flowchart LR
@@ -279,7 +330,7 @@ flowchart LR
         </section>
         
         <!-- Validation Report -->
-        <section class="section-report">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>📋</span> Example Validation Report</h2>
                 
@@ -342,7 +393,7 @@ flowchart LR
         </section>
         
         <!-- Remediation Script -->
-        <section class="section-script">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>📜</span> Generated Remediation Script</h2>
                 
@@ -380,7 +431,7 @@ Write-Host "`n🎉 Environment setup complete! Re-run pre-flight check." -Foregr
         </section>
         
         <!-- Related Features -->
-        <section class="section-related">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>🔗</span> Related Orchestrators</h2>
                 <div class="feature-grid feature-grid-3">
@@ -421,7 +472,7 @@ Write-Host "`n🎉 Environment setup complete! Re-run pre-flight check." -Foregr
         
         // D3.js Pattern Detection Heatmap
         (function() {
-            const container = document.getElementById('pattern-heatmap');
+            const container = document.getElementById('badge-patterns');
             const width = container.clientWidth || 700;
             const height = 300;
             const margin = { top: 50, right: 30, bottom: 50, left: 140 };
@@ -459,7 +510,7 @@ Write-Host "`n🎉 Environment setup complete! Re-run pre-flight check." -Foregr
                 });
             });
             
-            const svg = d3.select('#pattern-heatmap')
+            const svg = d3.select('#badge-patterns')
                 .append('svg')
                 .attr('width', width)
                 .attr('height', height);

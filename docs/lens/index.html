@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CORTEX Lens - AST Analysis, Reverse Engineering, and Intelligence Extraction Dashboard">
@@ -9,6 +34,7 @@
     <title>CORTEX Lens | CORTEX 4.0</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02-v4">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
@@ -16,10 +42,35 @@
 <body>
     <!-- Glass Header Navigation -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../index.html" class="nav-link">
-                    <i class="fas fa-home"></i>
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../index.html" class="nav-link" mobile-nav-optimized>
+                    <i class="pulse-glow-glass--fast fa-home"></i>
                     <span>Home</span>
                 </a>
             </nav>
@@ -32,7 +83,7 @@
         <div class="glass-card-display animation-t1">
             <div class="page-title-section">
                 <h1 class="page-title">
-                    <i class="fas fa-microscope"></i>
+                    <i class="pulse-glow-glass--fast fa-microscope"></i>
                     CORTEX Lens
                 </h1>
                 <p class="page-subtitle">AST Analysis · Reverse Engineering · Intelligence Extraction Dashboard</p>
@@ -40,27 +91,27 @@
             
             <div class="metadata-grid">
                 <div class="metadata-item">
-                    <i class="fas fa-code-branch"></i>
+                    <i class="pulse-glow-glass--fast fa-code-branch"></i>
                     <span>AST Analysis</span>
                 </div>
                 <div class="metadata-item">
-                    <i class="fas fa-search"></i>
+                    <i class="pulse-glow-glass--fast fa-search"></i>
                     <span>Pattern Detection</span>
                 </div>
                 <div class="metadata-item">
-                    <i class="fas fa-brain"></i>
+                    <i class="pulse-glow-glass--fast fa-brain"></i>
                     <span>Intelligence Extraction</span>
                 </div>
                 <div class="metadata-item">
-                    <i class="fas fa-network-wired"></i>
+                    <i class="pulse-glow-glass--fast fa-network-wired"></i>
                     <span>Dependency Mapping</span>
                 </div>
                 <div class="metadata-item">
-                    <i class="fas fa-chart-bar"></i>
+                    <i class="pulse-glow-glass--fast fa-chart-bar"></i>
                     <span>Score: 30</span>
                 </div>
                 <div class="metadata-item">
-                    <i class="fas fa-calendar-alt"></i>
+                    <i class="pulse-glow-glass--fast fa-calendar-alt"></i>
                     <span>Updated: Jan 2026</span>
                 </div>
             </div>
@@ -69,7 +120,7 @@
         <!-- Executive Summary -->
         <section class="glass-card-display animation-t1">
             <h2 class="section-title">
-                <i class="fas fa-book-open"></i>
+                <i class="pulse-glow-glass--fast fa-book-open"></i>
                 What Is CORTEX Lens?
             </h2>
             
@@ -77,17 +128,27 @@
             
             <div class="highlight-box">
                 <div class="highlight-icon">
-                    <i class="fas fa-lightbulb"></i>
+                    <i class="pulse-glow-glass--fast fa-lightbulb"></i>
                 </div>
                 <div class="highlight-content">
                     <h3>Key Capabilities</h3>
-                    <ul class="feature-list">
-                        <li><i class="fas fa-check-circle"></i><strong>AST Analysis:</strong> Parse and understand code structure at token level</li>
-                        <li><i class="fas fa-check-circle"></i><strong>Pattern Detection:</strong> Identify design patterns, anti-patterns, code smells</li>
-                        <li><i class="fas fa-check-circle"></i><strong>Dependency Mapping:</strong> Build complete dependency graphs automatically</li>
-                        <li><i class="fas fa-check-circle"></i><strong>Intelligence Extraction:</strong> Extract architectural decisions, relationships, contracts</li>
-                        <li><i class="fas fa-check-circle"></i><strong>Reverse Engineering:</strong> Reconstruct architecture from code artifacts</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i><strong>AST Analysis:</strong> Parse and understand code structure at token level</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i><strong>Pattern Detection:</strong> Identify design patterns, anti-patterns, code smells</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i><strong>Dependency Mapping:</strong> Build complete dependency graphs automatically</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i><strong>Intelligence Extraction:</strong> Extract architectural decisions, relationships, contracts</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check-circle"></i><strong>Reverse Engineering:</strong> Reconstruct architecture from code artifacts</div>
+    </div>
+</div>
                 </div>
             </div>
         </section>
@@ -95,7 +156,7 @@
         <!-- Analysis Pipeline -->
         <section class="glass-card-display animation-t1">
             <h2 class="section-title">
-                <i class="fas fa-stream"></i>
+                <i class="pulse-glow-glass--fast fa-stream"></i>
                 Intelligence Extraction Pipeline
             </h2>
             
@@ -130,7 +191,7 @@ graph LR
         <!-- Analysis Capabilities -->
         <section class="glass-card-display animation-t1">
             <h2 class="section-title">
-                <i class="fas fa-cogs"></i>
+                <i class="pulse-glow-glass--fast fa-cogs"></i>
                 Analysis Capabilities
             </h2>
             
@@ -140,104 +201,104 @@ graph LR
                 <!-- AST Analysis -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon ast-icon">
-                        <i class="fas fa-code-branch"></i>
+                        <i class="pulse-glow-glass--fast fa-code-branch"></i>
                     </div>
                     <h4 class="card-title">AST Analysis</h4>
                     <p class="card-description">Parse code into Abstract Syntax Trees. Extract functions, classes, imports, decorators, type annotations.</p>
                     <div class="card-stats">
-                        <span class="stat-item"><i class="fas fa-language"></i> Multi-Language</span>
-                        <span class="stat-item"><i class="fas fa-layer-group"></i> Token-Level</span>
+                        <span class="stat-item"><i class="pulse-glow-glass--fast fa-language"></i> Multi-Language</span>
+                        <span class="stat-item"><i class="pulse-glow-glass--fast fa-layer-group"></i> Token-Level</span>
                     </div>
                 </div>
                 
                 <!-- Pattern Detection -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon pattern-icon">
-                        <i class="fas fa-search"></i>
+                        <i class="pulse-glow-glass--fast fa-search"></i>
                     </div>
                     <h4 class="card-title">Pattern Detection</h4>
                     <p class="card-description">Identify 23 design patterns (Singleton, Factory, Observer, etc.) and 15 anti-patterns automatically.</p>
                     <div class="card-stats">
-                        <span class="stat-item"><i class="fas fa-check"></i> 23 Patterns</span>
-                        <span class="stat-item"><i class="fas fa-exclamation-triangle"></i> 15 Anti-Patterns</span>
+                        <span class="stat-item"><i class="pulse-glow-glass--fast fa-check"></i> 23 Patterns</span>
+                        <span class="stat-item"><i class="pulse-glow-glass--fast fa-exclamation-triangle"></i> 15 Anti-Patterns</span>
                     </div>
                 </div>
                 
                 <!-- Dependency Mapping -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon dependency-icon">
-                        <i class="fas fa-network-wired"></i>
+                        <i class="pulse-glow-glass--fast fa-network-wired"></i>
                     </div>
                     <h4 class="card-title">Dependency Mapping</h4>
                     <p class="card-description">Build complete dependency graphs. Detect circular dependencies, unused imports, coupling metrics.</p>
                     <div class="card-stats">
-                        <span class="stat-item"><i class="fas fa-project-diagram"></i> Graph-Based</span>
-                        <span class="stat-item"><i class="fas fa-chart-line"></i> Metrics</span>
+                        <span class="stat-item"><i class="pulse-glow-glass--fast fa-project-diagram"></i> Graph-Based</span>
+                        <span class="stat-item"><i class="pulse-glow-glass--fast fa-chart-line"></i> Metrics</span>
                     </div>
                 </div>
                 
                 <!-- Architecture Extraction -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon arch-icon">
-                        <i class="fas fa-sitemap"></i>
+                        <i class="pulse-glow-glass--fast fa-sitemap"></i>
                     </div>
                     <h4 class="card-title">Architecture Extraction</h4>
                     <p class="card-description">Reconstruct system architecture from code. Identify layers, modules, service boundaries.</p>
                     <div class="card-stats">
-                        <span class="stat-item"><i class="fas fa-cube"></i> Module Detection</span>
-                        <span class="stat-item"><i class="fas fa-layer-group"></i> Layer Mapping</span>
+                        <span class="stat-item"><i class="pulse-glow-glass--fast fa-cube"></i> Module Detection</span>
+                        <span class="stat-item"><i class="pulse-glow-glass--fast fa-layer-group"></i> Layer Mapping</span>
                     </div>
                 </div>
                 
                 <!-- Code Smells -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon smell-icon">
-                        <i class="fas fa-bug"></i>
+                        <i class="pulse-glow-glass--fast fa-bug"></i>
                     </div>
                     <h4 class="card-title">Code Smell Detection</h4>
                     <p class="card-description">Identify 30+ code smells: long methods, large classes, god objects, feature envy, data clumps.</p>
                     <div class="card-stats">
-                        <span class="stat-item"><i class="fas fa-exclamation-circle"></i> 30+ Smells</span>
-                        <span class="stat-item"><i class="fas fa-chart-bar"></i> Severity Scoring</span>
+                        <span class="stat-item"><i class="pulse-glow-glass--fast fa-exclamation-circle"></i> 30+ Smells</span>
+                        <span class="stat-item"><i class="pulse-glow-glass--fast fa-chart-bar"></i> Severity Scoring</span>
                     </div>
                 </div>
                 
                 <!-- Complexity Metrics -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon complexity-icon">
-                        <i class="fas fa-chart-line"></i>
+                        <i class="pulse-glow-glass--fast fa-chart-line"></i>
                     </div>
                     <h4 class="card-title">Complexity Metrics</h4>
                     <p class="card-description">Calculate cyclomatic complexity, cognitive complexity, maintainability index, technical debt.</p>
                     <div class="card-stats">
-                        <span class="stat-item"><i class="fas fa-calculator"></i> 8 Metrics</span>
-                        <span class="stat-item"><i class="fas fa-tachometer-alt"></i> Real-Time</span>
+                        <span class="stat-item"><i class="pulse-glow-glass--fast fa-calculator"></i> 8 Metrics</span>
+                        <span class="stat-item"><i class="pulse-glow-glass--fast fa-tachometer-alt"></i> Real-Time</span>
                     </div>
                 </div>
                 
                 <!-- Test Coverage -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon test-icon">
-                        <i class="fas fa-vial"></i>
+                        <i class="pulse-glow-glass--fast fa-vial"></i>
                     </div>
                     <h4 class="card-title">Test Coverage Analysis</h4>
                     <p class="card-description">Map test coverage to code paths. Identify untested branches, missing edge cases, coverage gaps.</p>
                     <div class="card-stats">
-                        <span class="stat-item"><i class="fas fa-percentage"></i> Coverage %</span>
-                        <span class="stat-item"><i class="fas fa-route"></i> Branch Analysis</span>
+                        <span class="stat-item"><i class="pulse-glow-glass--fast fa-percentage"></i> Coverage %</span>
+                        <span class="stat-item"><i class="pulse-glow-glass--fast fa-route"></i> Branch Analysis</span>
                     </div>
                 </div>
                 
                 <!-- Security Scan -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon security-icon">
-                        <i class="fas fa-shield-alt"></i>
+                        <i class="pulse-glow-glass--fast fa-shield-alt"></i>
                     </div>
                     <h4 class="card-title">Security Scanning</h4>
                     <p class="card-description">Detect security vulnerabilities: SQL injection, XSS, hardcoded secrets, insecure dependencies.</p>
                     <div class="card-stats">
-                        <span class="stat-item"><i class="fas fa-lock"></i> 12 Checks</span>
-                        <span class="stat-item"><i class="fas fa-exclamation-triangle"></i> CVE Database</span>
+                        <span class="stat-item"><i class="pulse-glow-glass--fast fa-lock"></i> 12 Checks</span>
+                        <span class="stat-item"><i class="pulse-glow-glass--fast fa-exclamation-triangle"></i> CVE Database</span>
                     </div>
                 </div>
             </div>
@@ -246,7 +307,7 @@ graph LR
         <!-- Intelligence Extraction Flow -->
         <section class="glass-card-display animation-t1">
             <h2 class="section-title">
-                <i class="fas fa-brain"></i>
+                <i class="pulse-glow-glass--fast fa-brain"></i>
                 Intelligence Extraction Workflow
             </h2>
             
@@ -277,22 +338,38 @@ sequenceDiagram
             <div class="two-column-grid">
                 <div class="info-box">
                     <h3>Input Sources</h3>
-                    <ul class="feature-list-compact">
-                        <li>Python, JavaScript, TypeScript, C#</li>
-                        <li>SQL scripts, YAML configs</li>
-                        <li>Documentation files</li>
-                        <li>Test suites</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Python, JavaScript, TypeScript, C#</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">SQL scripts, YAML configs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Documentation files</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Test suites</div>
+    </div>
+</div>
                 </div>
                 
                 <div class="info-box">
                     <h3>Output Intelligence</h3>
-                    <ul class="feature-list-compact">
-                        <li>Architecture diagrams</li>
-                        <li>Dependency graphs</li>
-                        <li>Quality metrics</li>
-                        <li>Pattern catalog</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Architecture diagrams</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Dependency graphs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Quality metrics</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Pattern catalog</div>
+    </div>
+</div>
                 </div>
             </div>
         </section>
@@ -300,7 +377,7 @@ sequenceDiagram
         <!-- Dashboard Features -->
         <section class="glass-card-display animation-t1">
             <h2 class="section-title">
-                <i class="fas fa-chart-pie"></i>
+                <i class="pulse-glow-glass--fast fa-chart-pie"></i>
                 Interactive Dashboard
             </h2>
             
@@ -309,7 +386,7 @@ sequenceDiagram
             <div class="dashboard-grid">
                 <div class="dashboard-panel">
                     <div class="panel-header">
-                        <i class="fas fa-project-diagram"></i>
+                        <i class="pulse-glow-glass--fast fa-project-diagram"></i>
                         <span>Dependency Graph</span>
                     </div>
                     <p class="panel-description">Interactive D3.js force-directed graph showing module dependencies, circular references, coupling metrics.</p>
@@ -317,7 +394,7 @@ sequenceDiagram
                 
                 <div class="dashboard-panel">
                     <div class="panel-header">
-                        <i class="fas fa-sitemap"></i>
+                        <i class="pulse-glow-glass--fast fa-sitemap"></i>
                         <span>Architecture Map</span>
                     </div>
                     <p class="panel-description">Reconstructed system architecture with layers, boundaries, and service communication patterns.</p>
@@ -325,7 +402,7 @@ sequenceDiagram
                 
                 <div class="dashboard-panel">
                     <div class="panel-header">
-                        <i class="fas fa-chart-bar"></i>
+                        <i class="pulse-glow-glass--fast fa-chart-bar"></i>
                         <span>Complexity Metrics</span>
                     </div>
                     <p class="panel-description">Real-time complexity scores: cyclomatic, cognitive, maintainability index, technical debt ratio.</p>
@@ -333,7 +410,7 @@ sequenceDiagram
                 
                 <div class="dashboard-panel">
                     <div class="panel-header">
-                        <i class="fas fa-bug"></i>
+                        <i class="pulse-glow-glass--fast fa-bug"></i>
                         <span>Code Smells</span>
                     </div>
                     <p class="panel-description">Ranked list of detected code smells with severity, location, and refactoring suggestions.</p>
@@ -341,7 +418,7 @@ sequenceDiagram
                 
                 <div class="dashboard-panel">
                     <div class="panel-header">
-                        <i class="fas fa-vial"></i>
+                        <i class="pulse-glow-glass--fast fa-vial"></i>
                         <span>Test Coverage</span>
                     </div>
                     <p class="panel-description">Heat map of test coverage across files, functions, and branches. Identifies untested code paths.</p>
@@ -349,7 +426,7 @@ sequenceDiagram
                 
                 <div class="dashboard-panel">
                     <div class="panel-header">
-                        <i class="fas fa-shield-alt"></i>
+                        <i class="pulse-glow-glass--fast fa-shield-alt"></i>
                         <span>Security Report</span>
                     </div>
                     <p class="panel-description">Vulnerability scanner results with CVE references, OWASP Top 10 mapping, remediation guidance.</p>
@@ -360,14 +437,14 @@ sequenceDiagram
         <!-- Use Cases -->
         <section class="glass-card-display animation-t1">
             <h2 class="section-title">
-                <i class="fas fa-lightbulb"></i>
+                <i class="pulse-glow-glass--fast fa-lightbulb"></i>
                 Common Use Cases
             </h2>
             
             <div class="use-case-grid">
                 <div class="use-case-card">
                     <div class="use-case-icon">
-                        <i class="fas fa-search"></i>
+                        <i class="pulse-glow-glass--fast fa-search"></i>
                     </div>
                     <h4 class="use-case-title">Onboarding</h4>
                     <p class="use-case-description">New developers quickly understand codebase architecture, patterns, and dependencies through visual dashboards.</p>
@@ -375,7 +452,7 @@ sequenceDiagram
                 
                 <div class="use-case-card">
                     <div class="use-case-icon">
-                        <i class="fas fa-recycle"></i>
+                        <i class="pulse-glow-glass--fast fa-recycle"></i>
                     </div>
                     <h4 class="use-case-title">Refactoring</h4>
                     <p class="use-case-description">Identify high-priority refactoring targets based on complexity metrics, code smells, and technical debt.</p>
@@ -383,7 +460,7 @@ sequenceDiagram
                 
                 <div class="use-case-card">
                     <div class="use-case-icon">
-                        <i class="fas fa-shield-alt"></i>
+                        <i class="pulse-glow-glass--fast fa-shield-alt"></i>
                     </div>
                     <h4 class="use-case-title">Security Audits</h4>
                     <p class="use-case-description">Automated security scanning detects vulnerabilities, insecure patterns, and compliance violations.</p>
@@ -391,7 +468,7 @@ sequenceDiagram
                 
                 <div class="use-case-card">
                     <div class="use-case-icon">
-                        <i class="fas fa-book"></i>
+                        <i class="pulse-glow-glass--fast fa-book"></i>
                     </div>
                     <h4 class="use-case-title">Documentation</h4>
                     <p class="use-case-description">Auto-generate architecture diagrams, API documentation, and dependency maps for knowledge bases.</p>
@@ -402,14 +479,14 @@ sequenceDiagram
         <!-- Performance Metrics -->
         <section class="glass-card-display animation-t1">
             <h2 class="section-title">
-                <i class="fas fa-tachometer-alt"></i>
+                <i class="pulse-glow-glass--fast fa-tachometer-alt"></i>
                 Performance Metrics
             </h2>
             
             <div class="metrics-grid">
                 <div class="metric-card">
                     <div class="metric-icon">
-                        <i class="fas fa-file-code"></i>
+                        <i class="pulse-glow-glass--fast fa-file-code"></i>
                     </div>
                     <div class="metric-value">500K</div>
                     <div class="metric-label">Lines/Minute</div>
@@ -417,7 +494,7 @@ sequenceDiagram
                 
                 <div class="metric-card">
                     <div class="metric-icon">
-                        <i class="fas fa-code-branch"></i>
+                        <i class="pulse-glow-glass--fast fa-code-branch"></i>
                     </div>
                     <div class="metric-value">10K</div>
                     <div class="metric-label">AST Nodes/Sec</div>
@@ -425,7 +502,7 @@ sequenceDiagram
                 
                 <div class="metric-card">
                     <div class="metric-icon">
-                        <i class="fas fa-search"></i>
+                        <i class="pulse-glow-glass--fast fa-search"></i>
                     </div>
                     <div class="metric-value">38</div>
                     <div class="metric-label">Pattern Types</div>
@@ -433,7 +510,7 @@ sequenceDiagram
                 
                 <div class="metric-card">
                     <div class="metric-icon">
-                        <i class="fas fa-language"></i>
+                        <i class="pulse-glow-glass--fast fa-language"></i>
                     </div>
                     <div class="metric-value">4</div>
                     <div class="metric-label">Languages</div>
@@ -441,7 +518,7 @@ sequenceDiagram
                 
                 <div class="metric-card">
                     <div class="metric-icon">
-                        <i class="fas fa-network-wired"></i>
+                        <i class="pulse-glow-glass--fast fa-network-wired"></i>
                     </div>
                     <div class="metric-value">Real-Time</div>
                     <div class="metric-label">Dependency Graph</div>
@@ -449,7 +526,7 @@ sequenceDiagram
                 
                 <div class="metric-card">
                     <div class="metric-icon">
-                        <i class="fas fa-chart-bar"></i>
+                        <i class="pulse-glow-glass--fast fa-chart-bar"></i>
                     </div>
                     <div class="metric-value">15</div>
                     <div class="metric-label">Metrics Tracked</div>
@@ -460,29 +537,45 @@ sequenceDiagram
         <!-- Related Resources -->
         <section class="glass-card-display animation-t1">
             <h2 class="section-title">
-                <i class="fas fa-link"></i>
+                <i class="pulse-glow-glass--fast fa-link"></i>
                 Related Resources
             </h2>
             
             <div class="reference-grid">
                 <div class="reference-section">
                     <h3>Implementation</h3>
-                    <ul class="reference-list">
-                        <li><code>src/operations/lens/</code></li>
-                        <li><code>src/operations/lens/ast_analyzer.py</code></li>
-                        <li><code>src/operations/lens/pattern_detector.py</code></li>
-                        <li><code>src/operations/lens/dependency_mapper.py</code></li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><code>src/operations/lens/</code></div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>src/operations/lens/ast_analyzer.py</code></div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>src/operations/lens/pattern_detector.py</code></div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>src/operations/lens/dependency_mapper.py</code></div>
+    </div>
+</div>
                 </div>
                 
                 <div class="reference-section">
                     <h3>Dashboard</h3>
-                    <ul class="reference-list">
-                        <li><code>docs/lens/dashboard.html</code></li>
-                        <li>Interactive D3.js visualizations</li>
-                        <li>Real-time metric updates</li>
-                        <li>Export to PNG/PDF</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><code>docs/lens/dashboard.html</code></div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Interactive D3.js visualizations</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Real-time metric updates</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Export to PNG/PDF</div>
+    </div>
+</div>
                 </div>
                 
                 <div class="reference-section">
@@ -496,12 +589,20 @@ sequenceDiagram
                 
                 <div class="reference-section">
                     <h3>Analysis Output</h3>
-                    <ul class="reference-list">
-                        <li><code>cortex-lens-output/</code></li>
-                        <li>Architecture diagrams (PNG/SVG)</li>
-                        <li>Dependency graphs (JSON)</li>
-                        <li>Metric reports (HTML/JSON)</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><code>cortex-lens-output/</code></div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Architecture diagrams (PNG/SVG)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Dependency graphs (JSON)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Metric reports (HTML/JSON)</div>
+    </div>
+</div>
                 </div>
             </div>
         </section>

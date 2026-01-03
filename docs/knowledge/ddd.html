@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Domain-Driven Design - Bounded contexts, aggregates, strategic and tactical patterns">
@@ -8,6 +33,7 @@
     <meta name="author" content="Asif Hussain">
     <title>Domain-Driven Design | CORTEX Knowledge</title>
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
@@ -24,14 +50,14 @@
     <section class="hero" id="main-content">
         <h1 class="hero-title">🎯 Domain-Driven Design</h1>
         <p class="hero-subtitle">Bounded Contexts, Aggregates, and Strategic Patterns</p>
-        <div class="file-metadata">
+        <div class="code-file">
             <span class="metadata-item">📐 Architecture</span>
             <span class="metadata-item">🏗️ Patterns</span>
             <span class="metadata-item">📅 Updated: Dec 2025</span>
         </div>
     </section>
 
-    <section class="section file-content">
+    <section class="section code-file">
         <div class="container">
             <div id="overview" class="content-section">
                 <div class="glass-card">
@@ -40,12 +66,20 @@
                     
                     <div class="info-box info-box-primary">
                         <strong>Core Concepts:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Ubiquitous Language:</strong> Shared vocabulary between developers and domain experts</li>
-                            <li><strong>Bounded Context:</strong> Explicit boundaries around domain models</li>
-                            <li><strong>Strategic Design:</strong> High-level patterns for system architecture</li>
-                            <li><strong>Tactical Design:</strong> Building blocks for domain models</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Ubiquitous Language:</strong> Shared vocabulary between developers and domain experts</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Bounded Context:</strong> Explicit boundaries around domain models</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Strategic Design:</strong> High-level patterns for system architecture</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Tactical Design:</strong> Building blocks for domain models</div>
+    </div>
+</div>
                     </div>
 
                     <h3>DDD Layers</h3>
@@ -78,48 +112,84 @@ graph TB
                             <span class="framework-panel-icon">🔲</span>
                             <h3>Bounded Context</h3>
                             <h4>Purpose</h4>
-                            <ul>
-                                <li>Explicit boundaries around models</li>
-                                <li>Isolate domain logic</li>
-                                <li>Clear ownership</li>
-                                <li>Independent evolution</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Explicit boundaries around models</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Isolate domain logic</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Clear ownership</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Independent evolution</div>
+    </div>
+</div>
                             <h4>Guidelines</h4>
-                            <ul>
-                                <li>One team per context</li>
-                                <li>Align with business capabilities</li>
-                                <li>Minimize dependencies</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">One team per context</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Align with business capabilities</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Minimize dependencies</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">💬</span>
                             <h3>Ubiquitous Language</h3>
                             <h4>Purpose</h4>
-                            <ul>
-                                <li>Shared vocabulary</li>
-                                <li>Domain expert terminology</li>
-                                <li>Used in code and conversation</li>
-                                <li>Evolves with understanding</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Shared vocabulary</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Domain expert terminology</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Used in code and conversation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Evolves with understanding</div>
+    </div>
+</div>
                             <h4>Benefits</h4>
-                            <ul>
-                                <li>Reduces miscommunication</li>
-                                <li>Code matches business</li>
-                                <li>Easier onboarding</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Reduces miscommunication</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Code matches business</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Easier onboarding</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🗺️</span>
                             <h3>Context Mapping</h3>
                             <h4>Relationship Patterns</h4>
-                            <ul>
-                                <li><strong>Shared Kernel:</strong> Share subset of model</li>
-                                <li><strong>Customer/Supplier:</strong> Upstream/downstream</li>
-                                <li><strong>Conformist:</strong> Conform to upstream</li>
-                                <li><strong>Anti-Corruption Layer:</strong> Translation layer</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Shared Kernel:</strong> Share subset of model</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Customer/Supplier:</strong> Upstream/downstream</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Conformist:</strong> Conform to upstream</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Anti-Corruption Layer:</strong> Translation layer</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -156,54 +226,96 @@ graph LR
                             <span class="framework-panel-icon">🎯</span>
                             <h3>Entity</h3>
                             <h4>Characteristics</h4>
-                            <ul>
-                                <li>Has unique identity</li>
-                                <li>Identity persists over time</li>
-                                <li>Mutable state</li>
-                                <li>Equality by ID</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Has unique identity</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Identity persists over time</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Mutable state</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Equality by ID</div>
+    </div>
+</div>
                             <h4>Examples</h4>
-                            <ul>
-                                <li>User (by ID)</li>
-                                <li>Order (by order number)</li>
-                                <li>Account (by account ID)</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">User (by ID)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Order (by order number)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Account (by account ID)</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">💎</span>
                             <h3>Value Object</h3>
                             <h4>Characteristics</h4>
-                            <ul>
-                                <li>No identity</li>
-                                <li>Immutable</li>
-                                <li>Equality by value</li>
-                                <li>Can be shared</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">No identity</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Immutable</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Equality by value</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Can be shared</div>
+    </div>
+</div>
                             <h4>Examples</h4>
-                            <ul>
-                                <li>Money (amount + currency)</li>
-                                <li>Address</li>
-                                <li>Date range</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Money (amount + currency)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Address</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Date range</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">📦</span>
                             <h3>Aggregate</h3>
                             <h4>Characteristics</h4>
-                            <ul>
-                                <li>Cluster of entities/value objects</li>
-                                <li>Consistency boundary</li>
-                                <li>One aggregate root</li>
-                                <li>External access via root</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Cluster of entities/value objects</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Consistency boundary</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">One aggregate root</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">External access via root</div>
+    </div>
+</div>
                             <h4>Guidelines</h4>
-                            <ul>
-                                <li>Keep aggregates small</li>
-                                <li>Reference by ID</li>
-                                <li>Transactional boundary</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Keep aggregates small</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Reference by ID</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Transactional boundary</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -236,36 +348,60 @@ graph TB
                             <span class="framework-panel-icon">🗄️</span>
                             <h3>Repository</h3>
                             <h4>Purpose</h4>
-                            <ul>
-                                <li>Abstract data access</li>
-                                <li>Collection-like interface</li>
-                                <li>One per aggregate root</li>
-                                <li>Persistence ignorance</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Abstract data access</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Collection-like interface</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">One per aggregate root</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Persistence ignorance</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">⚙️</span>
                             <h3>Domain Service</h3>
                             <h4>When to Use</h4>
-                            <ul>
-                                <li>Operation doesn't fit in entity</li>
-                                <li>Involves multiple aggregates</li>
-                                <li>Stateless operation</li>
-                                <li>Domain logic, not infrastructure</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Operation doesn't fit in entity</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Involves multiple aggregates</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Stateless operation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Domain logic, not infrastructure</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🏭</span>
                             <h3>Factory</h3>
                             <h4>Purpose</h4>
-                            <ul>
-                                <li>Complex object creation</li>
-                                <li>Encapsulate construction logic</li>
-                                <li>Ensure valid state</li>
-                                <li>Reconstitute from storage</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Complex object creation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Encapsulate construction logic</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Ensure valid state</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Reconstitute from storage</div>
+    </div>
+</div>
                         </div>
                     </div>
                 </div>
@@ -280,42 +416,72 @@ graph TB
                             <span class="framework-panel-icon">✨</span>
                             <h3>Domain Events</h3>
                             <h4>Characteristics</h4>
-                            <ul>
-                                <li>Something that happened in domain</li>
-                                <li>Past tense naming</li>
-                                <li>Immutable</li>
-                                <li>Timestamp included</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Something that happened in domain</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Past tense naming</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Immutable</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Timestamp included</div>
+    </div>
+</div>
                             <h4>Examples</h4>
-                            <ul>
-                                <li>OrderPlaced</li>
-                                <li>PaymentProcessed</li>
-                                <li>InventoryUpdated</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">OrderPlaced</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">PaymentProcessed</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">InventoryUpdated</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🔄</span>
                             <h3>Event Sourcing</h3>
                             <h4>Pattern</h4>
-                            <ul>
-                                <li>Store events, not state</li>
-                                <li>Rebuild state by replaying</li>
-                                <li>Complete audit trail</li>
-                                <li>Time travel debugging</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Store events, not state</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Rebuild state by replaying</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Complete audit trail</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Time travel debugging</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">📊</span>
                             <h3>CQRS</h3>
                             <h4>Pattern</h4>
-                            <ul>
-                                <li>Separate read and write models</li>
-                                <li>Commands modify state</li>
-                                <li>Queries retrieve data</li>
-                                <li>Eventual consistency</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Separate read and write models</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Commands modify state</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Queries retrieve data</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Eventual consistency</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -346,24 +512,44 @@ sequenceDiagram
                     
                     <div class="info-box info-box-success">
                         <strong>DDD Guidelines:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Start with Exploration:</strong> Event storming sessions with domain experts</li>
-                            <li><strong>Small Aggregates:</strong> Keep aggregates focused and small</li>
-                            <li><strong>Consistency Boundaries:</strong> One transaction per aggregate</li>
-                            <li><strong>Reference by ID:</strong> Don't hold references to other aggregates</li>
-                            <li><strong>Eventual Consistency:</strong> Use domain events between aggregates</li>
-                            <li><strong>Protect Invariants:</strong> Enforce business rules in domain model</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Start with Exploration:</strong> Event storming sessions with domain experts</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Small Aggregates:</strong> Keep aggregates focused and small</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Consistency Boundaries:</strong> One transaction per aggregate</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Reference by ID:</strong> Don't hold references to other aggregates</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Eventual Consistency:</strong> Use domain events between aggregates</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Protect Invariants:</strong> Enforce business rules in domain model</div>
+    </div>
+</div>
                     </div>
 
                     <div class="info-box info-box-warning">
                         <strong>Common Pitfalls:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Anemic Domain Model:</strong> Domain objects with no behavior</li>
-                            <li><strong>Large Aggregates:</strong> Performance and complexity issues</li>
-                            <li><strong>Over-Engineering:</strong> DDD not needed for simple CRUD</li>
-                            <li><strong>Ignoring Business:</strong> Technical solutions without domain input</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Anemic Domain Model:</strong> Domain objects with no behavior</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Large Aggregates:</strong> Performance and complexity issues</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Over-Engineering:</strong> DDD not needed for simple CRUD</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Ignoring Business:</strong> Technical solutions without domain input</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -376,12 +562,20 @@ sequenceDiagram
                         <div class="framework-panel">
                             <span class="framework-panel-icon">📖</span>
                             <h3>Essential Books</h3>
-                            <ul>
-                                <li><strong>Domain-Driven Design</strong> - Eric Evans (Blue Book)</li>
-                                <li><strong>Implementing DDD</strong> - Vaughn Vernon (Red Book)</li>
-                                <li><strong>Domain Modeling Made Functional</strong> - Scott Wlaschin</li>
-                                <li><strong>Learning DDD</strong> - Vlad Khononov</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Domain-Driven Design</strong> - Eric Evans (Blue Book)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Implementing DDD</strong> - Vaughn Vernon (Red Book)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Domain Modeling Made Functional</strong> - Scott Wlaschin</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Learning DDD</strong> - Vlad Khononov</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">

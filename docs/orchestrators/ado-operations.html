@@ -1,12 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CORTEX ADO Operations - Azure DevOps integration with automated story/feature generation">
     <title>ADO Operations - CORTEX</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -67,7 +93,7 @@
             </div>
         </div>
         
-        <section class="section-workflow">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>📋</span> Generated Work Items</h2>
                 
@@ -80,12 +106,20 @@
                                 <div class="tier-subtitle">Epic-level item</div>
                             </div>
                         </div>
-                        <ul class="feature-list">
-                            <li>• Title and description</li>
-                            <li>• Business value statement</li>
-                            <li>• Child story links</li>
-                            <li>• Acceptance criteria</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">• Title and description</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">• Business value statement</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">• Child story links</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">• Acceptance criteria</div>
+    </div>
+</div>
                     </div>
                     
                     <div class="tier-card tier-1">
@@ -96,18 +130,26 @@
                                 <div class="tier-subtitle">Implementation items</div>
                             </div>
                         </div>
-                        <ul class="feature-list">
-                            <li>• As a [user], I want...</li>
-                            <li>• Acceptance criteria (Given/When/Then)</li>
-                            <li>• Story points estimate</li>
-                            <li>• DoR/DoD compliance</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">• As a [user], I want...</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">• Acceptance criteria (Given/When/Then)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">• Story points estimate</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">• DoR/DoD compliance</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
         </section>
         
-        <section class="section-usage">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>📊</span> Example Output</h2>
                 
@@ -138,7 +180,7 @@ increasing user base and engagement metrics.
             </div>
         </section>
         
-        <section class="section-integration">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>🔗</span> Related Features</h2>
                 <div class="feature-grid feature-grid-3">

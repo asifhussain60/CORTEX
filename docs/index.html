@@ -1,6 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a:not(.glass-card):not(.level0-tile), 
+button, 
+[role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CORTEX - AI-Powered Development Intelligence with Planning, TDD, and Autonomous Orchestration">
@@ -20,6 +44,9 @@
     <link rel="preload" href="assets/images/Awakening-200.png" as="image">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/main.css?v=4.0.1">
+    <link rel="stylesheet" href="assets/css/index-multipanel.css">
+    <link rel="stylesheet" href="assets/css/generated-classes.css">
+    <link rel="stylesheet" href="assets/css/intentional-classes.css">
     <style>
         /* ============================================
            PAGE LOADING OVERLAY - Glassmorphism Theme
@@ -64,13 +91,13 @@
         }
 
         /* Animated Brain Logo Spinner */
-        .loading-brain {
+        .loading-brain-spinner {
             width: 80px;
             height: 80px;
             position: relative;
         }
 
-        .loading-brain img {
+        .loading-brain-spinner img {
             width: 100%;
             height: 100%;
             filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.6));
@@ -105,7 +132,7 @@
         }
 
         /* Loading Text */
-        .loading-text {
+        .loading-title {
             font-size: 1.1rem;
             font-weight: 600;
             color: #ffffff;
@@ -113,7 +140,7 @@
             letter-spacing: 0.05em;
         }
 
-        .loading-destination {
+        .loading-subtitle {
             font-size: 0.9rem;
             color: var(--accent-primary, #00d4ff);
             margin-top: 0.25rem;
@@ -175,7 +202,7 @@
                 margin: 1rem;
             }
 
-            .loading-brain {
+            .search-results-loading {
                 width: 60px;
                 height: 60px;
             }
@@ -192,14 +219,14 @@
     <!-- Page Loading Overlay -->
     <div class="page-loading-overlay" id="pageLoadingOverlay" role="status" aria-live="polite">
         <div class="loading-spinner-container">
-            <div class="loading-brain">
+            <div class="search-results-loading">
                 <div class="loading-spinner-ring"></div>
                 <img src="assets/images/CORTEX-logo-128.png" alt="Loading" aria-hidden="true">
             </div>
-            <div class="loading-text">
+            <div class="search-results-loading">
                 <div>Loading</div>
-                <div class="loading-destination" id="loadingDestination">CORTEX</div>
-                <div class="loading-dots">
+                <div class="search-results-loading" id="loadingDestination">CORTEX</div>
+                <div class="search-results-loading">
                     <span></span>
                     <span></span>
                     <span></span>
@@ -344,7 +371,7 @@
                         <div class="bwc-achievement-panel">
                             <div class="bwc-panel-scan-line"></div>
                             <div class="bwc-panel-header">
-                                <span class="bwc-panel-icon"><i class="fas fa-code-branch"></i></span>
+                                <span class="bwc-panel-icon"><i class="pulse-glow-glass--fast fa-code-branch"></i></span>
                                 <h4 class="bwc-panel-title">CORTEX Codebase</h4>
                             </div>
                             <p class="bwc-panel-subtitle">Built by CORTEX</p>
@@ -373,7 +400,7 @@
                         <div class="bwc-achievement-panel bwc-achievement-panel-secondary">
                             <div class="bwc-panel-scan-line bwc-panel-scan-line-secondary"></div>
                             <div class="bwc-panel-header">
-                                <span class="bwc-panel-icon"><i class="fas fa-globe"></i></span>
+                                <span class="bwc-panel-icon"><i class="pulse-glow-glass--fast fa-globe"></i></span>
                                 <h4 class="bwc-panel-title">Documentation Site</h4>
                             </div>
                             <p class="bwc-panel-subtitle">Designed by CORTEX</p>
@@ -401,25 +428,25 @@
                     
                     <div class="bwc-stats">
                         <div class="bwc-stat" data-stat="pages">
-                            <div class="bwc-stat-icon"><i class="fas fa-file-code"></i></div>
+                            <div class="bwc-stat-icon"><i class="pulse-glow-glass--fast fa-file-code"></i></div>
                             <div class="bwc-stat-value" data-value="30">30+</div>
                             <div class="bwc-stat-label">Pages Created</div>
                             <div class="bwc-stat-bar"><div class="bwc-stat-fill level0-stat-fill" data-fill="85"></div></div>
                         </div>
                         <div class="bwc-stat" data-stat="diagrams">
-                            <div class="bwc-stat-icon"><i class="fas fa-project-diagram"></i></div>
+                            <div class="bwc-stat-icon"><i class="pulse-glow-glass--fast fa-project-diagram"></i></div>
                             <div class="bwc-stat-value" data-value="15">15+</div>
                             <div class="bwc-stat-label">D3.js Diagrams</div>
                             <div class="bwc-stat-bar"><div class="bwc-stat-fill level0-stat-fill" data-fill="70"></div></div>
                         </div>
                         <div class="bwc-stat" data-stat="ai">
-                            <div class="bwc-stat-icon"><i class="fas fa-robot"></i></div>
+                            <div class="bwc-stat-icon"><i class="pulse-glow-glass--fast fa-robot"></i></div>
                             <div class="bwc-stat-value" data-value="100">100%</div>
                             <div class="bwc-stat-label">AI Generated</div>
                             <div class="bwc-stat-bar"><div class="bwc-stat-fill level0-stat-fill" data-fill="100"></div></div>
                         </div>
                         <div class="bwc-stat" data-stat="manual">
-                            <div class="bwc-stat-icon"><i class="fas fa-keyboard"></i></div>
+                            <div class="bwc-stat-icon"><i class="pulse-glow-glass--fast fa-keyboard"></i></div>
                             <div class="bwc-stat-value" data-value="0">0</div>
                             <div class="bwc-stat-label">Lines Hand-Coded</div>
                             <div class="bwc-stat-bar"><div class="bwc-stat-fill level0-stat-fill" data-fill="0"></div></div>
@@ -459,7 +486,7 @@
                         <span class="btn-hero-caption">Master Orchestrator Routing Layer</span>
                     </a>
                     <a href="lens/index.html" class="btn-hero btn-hero-primary animation-t2">
-                        <span class="btn-hero-icon"><i class="fas fa-search-plus"></i></span>
+                        <span class="btn-hero-icon"><i class="pulse-glow-glass--fast fa-search-plus"></i></span>
                         <span class="btn-hero-text">CORTEX LENS</span>
                         <span class="btn-hero-caption">AST Analysis & Reverse Engineering</span>
                     </a>
@@ -918,7 +945,7 @@
                     <p>Frequently asked questions</p>
                 </a>
                 <a href="sitemap.html" class="glass-card card-link">
-                    <span class="card-icon"><i class="fas fa-sitemap"></i></span>
+                    <span class="card-icon"><i class="pulse-glow-glass--fast fa-sitemap"></i></span>
                     <h4>Site Map</h4>
                     <p>Complete navigation guide to all documentation</p>
                 </a>

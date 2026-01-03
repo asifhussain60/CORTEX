@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="RAG Domains - Retrieval Augmented Generation, vector databases, embeddings, semantic search">
@@ -8,6 +33,7 @@
     <meta name="author" content="Asif Hussain">
     <title>RAG Domains | CORTEX Knowledge</title>
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
@@ -24,14 +50,14 @@
     <section class="hero" id="main-content">
         <h1 class="hero-title">🧠 RAG Domains</h1>
         <p class="hero-subtitle">Retrieval Augmented Generation and Vector Search</p>
-        <div class="file-metadata">
+        <div class="code-file">
             <span class="metadata-item">🤖 AI/ML</span>
             <span class="metadata-item">🔍 Semantic Search</span>
             <span class="metadata-item">📅 Updated: Dec 2025</span>
         </div>
     </section>
 
-    <section class="section file-content">
+    <section class="section code-file">
         <div class="container">
             <div id="overview" class="content-section">
                 <div class="glass-card">
@@ -40,13 +66,23 @@
                     
                     <div class="info-box info-box-primary">
                         <strong>RAG Benefits:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Accuracy:</strong> Grounded responses from verified sources</li>
-                            <li><strong>Up-to-date:</strong> Access current information without retraining</li>
-                            <li><strong>Transparency:</strong> Cite sources for verification</li>
-                            <li><strong>Cost-effective:</strong> No need for continuous model fine-tuning</li>
-                            <li><strong>Domain-specific:</strong> Inject specialized knowledge</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Accuracy:</strong> Grounded responses from verified sources</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Up-to-date:</strong> Access current information without retraining</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Transparency:</strong> Cite sources for verification</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Cost-effective:</strong> No need for continuous model fine-tuning</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Domain-specific:</strong> Inject specialized knowledge</div>
+    </div>
+</div>
                     </div>
 
                     <h3>RAG Architecture</h3>
@@ -81,53 +117,93 @@ graph LR
                             <span class="framework-panel-icon">📄</span>
                             <h3>1. Document Loading</h3>
                             <h4>Sources</h4>
-                            <ul>
-                                <li>PDFs, Word docs</li>
-                                <li>Markdown, HTML</li>
-                                <li>APIs, databases</li>
-                                <li>Web scraping</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">PDFs, Word docs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Markdown, HTML</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">APIs, databases</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Web scraping</div>
+    </div>
+</div>
                             <h4>Tools</h4>
-                            <ul>
-                                <li>LangChain document loaders</li>
-                                <li>PyPDF2, pdfplumber</li>
-                                <li>Beautiful Soup</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">LangChain document loaders</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">PyPDF2, pdfplumber</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Beautiful Soup</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">✂️</span>
                             <h3>2. Text Chunking</h3>
                             <h4>Strategies</h4>
-                            <ul>
-                                <li><strong>Fixed size:</strong> 512-1024 tokens</li>
-                                <li><strong>Semantic:</strong> By paragraphs/sections</li>
-                                <li><strong>Overlap:</strong> 20-50 token overlap</li>
-                                <li><strong>Recursive:</strong> Split by hierarchy</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Fixed size:</strong> 512-1024 tokens</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Semantic:</strong> By paragraphs/sections</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Overlap:</strong> 20-50 token overlap</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Recursive:</strong> Split by hierarchy</div>
+    </div>
+</div>
                             <h4>Considerations</h4>
-                            <ul>
-                                <li>Context window size</li>
-                                <li>Semantic coherence</li>
-                                <li>Metadata preservation</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Context window size</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Semantic coherence</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Metadata preservation</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🧬</span>
                             <h3>3. Embedding</h3>
                             <h4>Models</h4>
-                            <ul>
-                                <li><strong>OpenAI:</strong> text-embedding-ada-002 (1536d)</li>
-                                <li><strong>Cohere:</strong> embed-english-v3.0</li>
-                                <li><strong>Open Source:</strong> sentence-transformers</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>OpenAI:</strong> text-embedding-ada-002 (1536d)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Cohere:</strong> embed-english-v3.0</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Open Source:</strong> sentence-transformers</div>
+    </div>
+</div>
                             <h4>Properties</h4>
-                            <ul>
-                                <li>Vector dimensions</li>
-                                <li>Semantic similarity</li>
-                                <li>Cosine/dot product distance</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Vector dimensions</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Semantic similarity</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Cosine/dot product distance</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -137,36 +213,60 @@ graph LR
                             <span class="framework-panel-icon">🔍</span>
                             <h3>4. Query Processing</h3>
                             <h4>Steps</h4>
-                            <ul>
-                                <li>Embed user query</li>
-                                <li>Optional query expansion</li>
-                                <li>Metadata filtering</li>
-                                <li>Hybrid search (keyword + semantic)</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Embed user query</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Optional query expansion</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Metadata filtering</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Hybrid search (keyword + semantic)</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">📊</span>
                             <h3>5. Retrieval</h3>
                             <h4>Techniques</h4>
-                            <ul>
-                                <li><strong>Top-k:</strong> Retrieve k most similar</li>
-                                <li><strong>MMR:</strong> Maximal Marginal Relevance (diversity)</li>
-                                <li><strong>Reranking:</strong> Cross-encoder scoring</li>
-                                <li><strong>Threshold:</strong> Minimum similarity score</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Top-k:</strong> Retrieve k most similar</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>MMR:</strong> Maximal Marginal Relevance (diversity)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Reranking:</strong> Cross-encoder scoring</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Threshold:</strong> Minimum similarity score</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">💬</span>
                             <h3>6. Generation</h3>
                             <h4>Steps</h4>
-                            <ul>
-                                <li>Build context from chunks</li>
-                                <li>Construct prompt</li>
-                                <li>LLM generates answer</li>
-                                <li>Cite sources</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Build context from chunks</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Construct prompt</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">LLM generates answer</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Cite sources</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -205,12 +305,20 @@ sequenceDiagram
                             <span class="framework-panel-icon">📌</span>
                             <h3>Pinecone</h3>
                             <h4>Features</h4>
-                            <ul>
-                                <li>Managed cloud service</li>
-                                <li>Fast ANN search</li>
-                                <li>Metadata filtering</li>
-                                <li>Automatic scaling</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Managed cloud service</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Fast ANN search</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Metadata filtering</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Automatic scaling</div>
+    </div>
+</div>
                             <h4>Best For</h4>
                             <ul>
                                 <li>Production RAG systems</li>
@@ -222,12 +330,20 @@ sequenceDiagram
                             <span class="framework-panel-icon">🌊</span>
                             <h3>Weaviate</h3>
                             <h4>Features</h4>
-                            <ul>
-                                <li>Open source</li>
-                                <li>GraphQL API</li>
-                                <li>Hybrid search (vector + keyword)</li>
-                                <li>Multi-tenancy</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Open source</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">GraphQL API</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Hybrid search (vector + keyword)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Multi-tenancy</div>
+    </div>
+</div>
                             <h4>Best For</h4>
                             <ul>
                                 <li>Self-hosted deployments</li>
@@ -239,12 +355,20 @@ sequenceDiagram
                             <span class="framework-panel-icon">🎨</span>
                             <h3>Chroma</h3>
                             <h4>Features</h4>
-                            <ul>
-                                <li>Lightweight, embeddable</li>
-                                <li>Python-first API</li>
-                                <li>Easy integration</li>
-                                <li>Local development</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Lightweight, embeddable</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Python-first API</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Easy integration</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Local development</div>
+    </div>
+</div>
                             <h4>Best For</h4>
                             <ul>
                                 <li>Prototyping</li>
@@ -258,31 +382,49 @@ sequenceDiagram
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🔷</span>
                             <h3>Qdrant</h3>
-                            <ul>
-                                <li>Rust-based, fast</li>
-                                <li>Rich filtering</li>
-                                <li>Cloud and self-hosted</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Rust-based, fast</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Rich filtering</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Cloud and self-hosted</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🐘</span>
                             <h3>pgvector</h3>
-                            <ul>
-                                <li>PostgreSQL extension</li>
-                                <li>Leverage existing DB</li>
-                                <li>SQL queries with vectors</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">PostgreSQL extension</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Leverage existing DB</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">SQL queries with vectors</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🌲</span>
                             <h3>FAISS</h3>
-                            <ul>
-                                <li>Facebook AI library</li>
-                                <li>In-memory, ultra-fast</li>
-                                <li>Not a full database</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Facebook AI library</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">In-memory, ultra-fast</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Not a full database</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -341,11 +483,17 @@ sequenceDiagram
                             <span class="framework-panel-icon">🤖</span>
                             <h3>OpenAI Embeddings</h3>
                             <h4>Models</h4>
-                            <ul>
-                                <li><strong>text-embedding-ada-002:</strong> 1536 dimensions</li>
-                                <li><strong>text-embedding-3-small:</strong> 512-1536d</li>
-                                <li><strong>text-embedding-3-large:</strong> 3072d</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>text-embedding-ada-002:</strong> 1536 dimensions</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>text-embedding-3-small:</strong> 512-1536d</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>text-embedding-3-large:</strong> 3072d</div>
+    </div>
+</div>
                             <h4>Pricing</h4>
                             <ul>
                                 <li>Pay per token</li>
@@ -372,28 +520,48 @@ sequenceDiagram
                             <span class="framework-panel-icon">🔓</span>
                             <h3>Open Source</h3>
                             <h4>Models</h4>
-                            <ul>
-                                <li><strong>sentence-transformers:</strong> all-MiniLM-L6-v2</li>
-                                <li><strong>BGE:</strong> BAAI embeddings</li>
-                                <li><strong>E5:</strong> Microsoft embeddings</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>sentence-transformers:</strong> all-MiniLM-L6-v2</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>BGE:</strong> BAAI embeddings</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>E5:</strong> Microsoft embeddings</div>
+    </div>
+</div>
                             <h4>Benefits</h4>
-                            <ul>
-                                <li>Self-hosted</li>
-                                <li>No API costs</li>
-                                <li>Privacy control</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Self-hosted</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">No API costs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Privacy control</div>
+    </div>
+</div>
                         </div>
                     </div>
 
                     <div class="info-box info-box-primary">
                         <strong>Embedding Best Practices:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Consistent Model:</strong> Use same model for indexing and querying</li>
-                            <li><strong>Domain Adaptation:</strong> Fine-tune for specialized domains</li>
-                            <li><strong>Dimensionality:</strong> Higher dimensions = better accuracy, more storage</li>
-                            <li><strong>Batch Processing:</strong> Embed documents in batches for efficiency</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Consistent Model:</strong> Use same model for indexing and querying</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Domain Adaptation:</strong> Fine-tune for specialized domains</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Dimensionality:</strong> Higher dimensions = better accuracy, more storage</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Batch Processing:</strong> Embed documents in batches for efficiency</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -407,45 +575,75 @@ sequenceDiagram
                             <span class="framework-panel-icon">🔁</span>
                             <h3>Hybrid Search</h3>
                             <h4>Approach</h4>
-                            <ul>
-                                <li>Combine vector + keyword search</li>
-                                <li>BM25 for keyword matching</li>
-                                <li>Weighted fusion of results</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Combine vector + keyword search</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">BM25 for keyword matching</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Weighted fusion of results</div>
+    </div>
+</div>
                             <h4>Benefits</h4>
-                            <ul>
-                                <li>Better recall</li>
-                                <li>Handle exact matches</li>
-                                <li>Complementary strengths</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Better recall</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Handle exact matches</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Complementary strengths</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">📈</span>
                             <h3>Reranking</h3>
                             <h4>Approach</h4>
-                            <ul>
-                                <li>Retrieve larger candidate set (20-50)</li>
-                                <li>Cross-encoder scoring</li>
-                                <li>Return top k (3-5)</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Retrieve larger candidate set (20-50)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Cross-encoder scoring</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Return top k (3-5)</div>
+    </div>
+</div>
                             <h4>Models</h4>
-                            <ul>
-                                <li>Cohere Rerank</li>
-                                <li>cross-encoder models</li>
-                                <li>Custom scoring</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Cohere Rerank</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">cross-encoder models</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Custom scoring</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🧩</span>
                             <h3>Query Expansion</h3>
                             <h4>Techniques</h4>
-                            <ul>
-                                <li>Multi-query generation</li>
-                                <li>HyDE (Hypothetical Document Embeddings)</li>
-                                <li>Step-back prompting</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Multi-query generation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">HyDE (Hypothetical Document Embeddings)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Step-back prompting</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -454,35 +652,57 @@ sequenceDiagram
                             <span class="framework-panel-icon">🎯</span>
                             <h3>Metadata Filtering</h3>
                             <h4>Filters</h4>
-                            <ul>
-                                <li>Document type</li>
-                                <li>Date range</li>
-                                <li>Author/source</li>
-                                <li>Access permissions</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Document type</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Date range</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Author/source</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Access permissions</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🧠</span>
                             <h3>Agentic RAG</h3>
                             <h4>Features</h4>
-                            <ul>
-                                <li>Multi-step reasoning</li>
-                                <li>Query decomposition</li>
-                                <li>Self-reflection</li>
-                                <li>Tool use</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Multi-step reasoning</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Query decomposition</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Self-reflection</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Tool use</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">📚</span>
                             <h3>Contextual Compression</h3>
                             <h4>Approach</h4>
-                            <ul>
-                                <li>Extract relevant sentences</li>
-                                <li>Reduce token usage</li>
-                                <li>Improve context quality</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Extract relevant sentences</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Reduce token usage</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Improve context quality</div>
+    </div>
+</div>
                         </div>
                     </div>
                 </div>
@@ -497,34 +717,54 @@ sequenceDiagram
                             <span class="framework-panel-icon">🎯</span>
                             <h3>Retrieval Metrics</h3>
                             <h4>Metrics</h4>
-                            <ul>
-                                <li><strong>Precision:</strong> Relevant docs retrieved / Total retrieved</li>
-                                <li><strong>Recall:</strong> Relevant docs retrieved / Total relevant</li>
-                                <li><strong>MRR:</strong> Mean Reciprocal Rank</li>
-                                <li><strong>NDCG:</strong> Normalized Discounted Cumulative Gain</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Precision:</strong> Relevant docs retrieved / Total retrieved</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Recall:</strong> Relevant docs retrieved / Total relevant</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>MRR:</strong> Mean Reciprocal Rank</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>NDCG:</strong> Normalized Discounted Cumulative Gain</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">💬</span>
                             <h3>Generation Metrics</h3>
                             <h4>Metrics</h4>
-                            <ul>
-                                <li><strong>Faithfulness:</strong> Answer grounded in context</li>
-                                <li><strong>Relevance:</strong> Answers the question</li>
-                                <li><strong>Coherence:</strong> Fluent and logical</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Faithfulness:</strong> Answer grounded in context</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Relevance:</strong> Answers the question</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Coherence:</strong> Fluent and logical</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🛠️</span>
                             <h3>Evaluation Tools</h3>
                             <h4>Frameworks</h4>
-                            <ul>
-                                <li><strong>RAGAS:</strong> RAG Assessment</li>
-                                <li><strong>TruLens:</strong> Observability</li>
-                                <li><strong>LangSmith:</strong> Testing & monitoring</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>RAGAS:</strong> RAG Assessment</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>TruLens:</strong> Observability</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>LangSmith:</strong> Testing & monitoring</div>
+    </div>
+</div>
                         </div>
                     </div>
                 </div>
@@ -538,11 +778,17 @@ sequenceDiagram
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🛠️</span>
                             <h3>Frameworks</h3>
-                            <ul>
-                                <li><a href="https://python.langchain.com/" target="_blank" rel="noopener">LangChain</a> - RAG orchestration</li>
-                                <li><a href="https://docs.llamaindex.ai/" target="_blank" rel="noopener">LlamaIndex</a> - Data framework for LLMs</li>
-                                <li><a href="https://haystack.deepset.ai/" target="_blank" rel="noopener">Haystack</a> - NLP framework</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><a href="https://python.langchain.com/" target="_blank" rel="noopener">LangChain</a> - RAG orchestration</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://docs.llamaindex.ai/" target="_blank" rel="noopener">LlamaIndex</a> - Data framework for LLMs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://haystack.deepset.ai/" target="_blank" rel="noopener">Haystack</a> - NLP framework</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">

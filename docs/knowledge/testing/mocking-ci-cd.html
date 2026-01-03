@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Mocking & CI/CD Integration - Testing Learning Module">
@@ -8,8 +33,11 @@
     <meta name="author" content="Asif Hussain">
     <title>Mocking & CI/CD Integration | CORTEX Learning Hub</title>
     <link rel="stylesheet" href="../../assets/css/main.css?v=2026-01-02">
-    <link rel="stylesheet" href="../../assets/css/learning-hub.css?v=2026-01-02">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
+    
+    <link rel="stylesheet" href="../..../..../..../..../..../../assets/css/generated-classes.css"><link rel="stylesheet" href="../../assets/css/learning-hub.css?v=2026-01-02">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/editor/editor.main.css">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
@@ -18,14 +46,39 @@
 
     <!-- Header Navigation -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../../index.html" class="nav-link">
-                    <span class="nav-icon">🏠</span> Home
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../../index.html" class="nav-link" mobile-nav-optimized>
+                    <span class="nav-content" mobile-nav-optimized>🏠</span> Home
                 </a>
-                <span class="nav-separator">›</span>
-                <a href="../testing-hub.html" class="nav-link">
-                    <span class="nav-icon">🧪</span> Testing
+                <span class="nav-content" mobile-nav-optimized>›</span>
+                <a href="../testing-hub.html" class="nav-link" mobile-nav-optimized>
+                    <span class="nav-content" mobile-nav-optimized>🧪</span> Testing
                 </a>
             </nav>
         </div>
@@ -36,7 +89,7 @@
         <div class="module-header">
             <div class="breadcrumb">
                 <span class="difficulty-badge advanced">Advanced</span>
-                <span style="color: var(--text-secondary);">Module 5 of 5</span>
+                <span class="inline-fix-9">Module 5 of 5</span>
             </div>
             <h1 class="hero-title">🔗 Mocking & CI/CD Integration</h1>
             <p class="hero-subtitle">Master test doubles, isolation strategies, and automated testing pipelines</p>
@@ -52,22 +105,34 @@
     <!-- Main Content -->
     <div class="container">
         <!-- Learning Objectives -->
-        <section class="glass-card" style="margin-top: var(--spacing-2xl);">
+        <section class="glass-card" class="inline-fix-14">
             <h2>🎓 Learning Objectives</h2>
-            <ul class="objective-list">
-                <li>Master mocking frameworks: unittest.mock (Python), Jest (JavaScript), Mockito (Java)</li>
-                <li>Understand test double patterns: Mocks, Stubs, Spies, Fakes, Dummies</li>
-                <li>Integrate tests into CI/CD pipelines (GitHub Actions, GitLab CI, Jenkins)</li>
-                <li>Optimize test execution with parallelization and caching strategies</li>
-                <li>Handle test data, fixtures, and database seeding effectively</li>
-                <li>Monitor test health, flakiness, and execution trends</li>
-            </ul>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Master mocking frameworks: unittest.mock (Python), Jest (JavaScript), Mockito (Java)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Understand test double patterns: Mocks, Stubs, Spies, Fakes, Dummies</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Integrate tests into CI/CD pipelines (GitHub Actions, GitLab CI, Jenkins)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Optimize test execution with parallelization and caching strategies</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Handle test data, fixtures, and database seeding effectively</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Monitor test health, flakiness, and execution trends</div>
+    </div>
+</div>
         </section>
 
         <!-- CI/CD Pipeline Visualization -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🔄 CI/CD Test Pipeline</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 Modern CI/CD pipelines run tests automatically on every commit, providing rapid feedback and preventing regressions.
             </p>
             
@@ -108,175 +173,213 @@ graph LR
                 </pre>
             </div>
             
-            <div style="margin-top: var(--spacing-xl); padding: var(--spacing-lg); background: rgba(0, 212, 255, 0.1); border-radius: 8px; border-left: 4px solid #00d4ff;">
-                <h4 style="color: #00d4ff; margin-bottom: var(--spacing-md);">💡 Pipeline Best Practices</h4>
-                <ul style="color: var(--text-secondary); line-height: 1.8;">
-                    <li><strong>Fast Feedback:</strong> Run unit tests first (1-3 minutes)</li>
-                    <li><strong>Parallel Execution:</strong> Split E2E tests across multiple runners</li>
-                    <li><strong>Caching:</strong> Cache dependencies (npm_modules, .venv) for speed</li>
-                    <li><strong>Fail Fast:</strong> Stop pipeline on first critical failure</li>
-                    <li><strong>Retry Flaky Tests:</strong> Auto-retry E2E tests up to 2 times</li>
-                    <li><strong>Coverage Gates:</strong> Require 80%+ coverage to merge</li>
-                </ul>
+            <div class="inline-fix-177">
+                <h4 class="inline-fix-90">💡 Pipeline Best Practices</h4>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Fast Feedback:</strong> Run unit tests first (1-3 minutes)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Parallel Execution:</strong> Split E2E tests across multiple runners</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Caching:</strong> Cache dependencies (npm_modules, .venv) for speed</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Fail Fast:</strong> Stop pipeline on first critical failure</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Retry Flaky Tests:</strong> Auto-retry E2E tests up to 2 times</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Coverage Gates:</strong> Require 80%+ coverage to merge</div>
+    </div>
+</div>
             </div>
         </section>
 
         <!-- Mocking Strategies -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🎭 Mock Strategies Comparison</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 Different test double patterns serve different purposes. Choose the right strategy for your testing scenario.
             </p>
             
-            <div id="mock-strategies-viz" style="width: 100%; height: 450px; margin: var(--spacing-xl) 0;"></div>
+            <div id="mock-strategies-viz" class="inline-fix-163"></div>
             
-            <div class="strategies-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-lg); margin-top: var(--spacing-xl);">
-                <div style="padding: var(--spacing-lg); background: rgba(123, 97, 255, 0.1); border-left: 4px solid #7b61ff; border-radius: 8px;">
-                    <h4 style="color: #7b61ff; margin-bottom: var(--spacing-sm);">🎯 Mock</h4>
-                    <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            <div class="orchestrator-viz-section" class="inline-fix-27">
+                <div class="inline-fix-139">
+                    <h4 class="inline-fix-154">🎯 Mock</h4>
+                    <p class="inline-fix-6">
                         Verifies behavior by tracking method calls. <strong>Use for:</strong> Testing interactions.
                     </p>
-                    <code style="display: block; margin-top: var(--spacing-sm); padding: var(--spacing-sm); background: rgba(0,0,0,0.3); border-radius: 4px; color: #00d4ff; font-size: 0.85rem;">mock.method.assert_called_once()</code>
+                    <code class="inline-fix-95">mock.method.assert_called_once()</code>
                 </div>
-                <div style="padding: var(--spacing-lg); background: rgba(0, 212, 255, 0.1); border-left: 4px solid #00d4ff; border-radius: 8px;">
-                    <h4 style="color: #00d4ff; margin-bottom: var(--spacing-sm);">📝 Stub</h4>
-                    <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                <div class="inline-fix-143">
+                    <h4 class="inline-fix-19">📝 Stub</h4>
+                    <p class="inline-fix-6">
                         Returns predefined data. <strong>Use for:</strong> Testing with controlled inputs.
                     </p>
-                    <code style="display: block; margin-top: var(--spacing-sm); padding: var(--spacing-sm); background: rgba(0,0,0,0.3); border-radius: 4px; color: #00d4ff; font-size: 0.85rem;">stub.get_user() → {id: 1}</code>
+                    <code class="inline-fix-95">stub.get_user() → {id: 1}</code>
                 </div>
-                <div style="padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-left: 4px solid #10b981; border-radius: 8px;">
-                    <h4 style="color: #10b981; margin-bottom: var(--spacing-sm);">🕵️ Spy</h4>
-                    <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                <div class="inline-fix-167">
+                    <h4 class="inline-fix-22">🕵️ Spy</h4>
+                    <p class="inline-fix-6">
                         Wraps real object, records calls. <strong>Use for:</strong> Partial mocking.
                     </p>
-                    <code style="display: block; margin-top: var(--spacing-sm); padding: var(--spacing-sm); background: rgba(0,0,0,0.3); border-radius: 4px; color: #00d4ff; font-size: 0.85rem;">spy.on(obj, 'method')</code>
+                    <code class="inline-fix-95">spy.on(obj, 'method')</code>
                 </div>
-                <div style="padding: var(--spacing-lg); background: rgba(251, 191, 36, 0.1); border-left: 4px solid #fbbf24; border-radius: 8px;">
-                    <h4 style="color: #fbbf24; margin-bottom: var(--spacing-sm);">🏗️ Fake</h4>
-                    <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                <div class="inline-fix-176">
+                    <h4 class="inline-fix-65">🏗️ Fake</h4>
+                    <p class="inline-fix-6">
                         Working implementation (in-memory DB). <strong>Use for:</strong> Complex logic.
                     </p>
-                    <code style="display: block; margin-top: var(--spacing-sm); padding: var(--spacing-sm); background: rgba(0,0,0,0.3); border-radius: 4px; color: #00d4ff; font-size: 0.85rem;">FakeDatabase()</code>
+                    <code class="inline-fix-95">FakeDatabase()</code>
                 </div>
             </div>
         </section>
 
         <!-- Code Playground: Python Mocking -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>💻 Playground: Python unittest.mock</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 Explore mocking patterns in Python using the unittest.mock library.
             </p>
             
             <div class="playground-container">
-                <div class="tabs" style="display: flex; gap: var(--spacing-sm); margin-bottom: var(--spacing-md); border-bottom: 2px solid var(--module-border);">
-                    <button class="tab-btn active" data-tab="mock-basics" style="padding: var(--spacing-sm) var(--spacing-lg); background: transparent; border: none; color: var(--text-secondary); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s;">
+                <div class="demo-tabs-vertical" class="inline-fix-99">
+                    <button class="tab-btn active" data-tab="mock-basics" class="inline-fix-50">
                         Mock Basics
                     </button>
-                    <button class="tab-btn" data-tab="patch-decorator" style="padding: var(--spacing-sm) var(--spacing-lg); background: transparent; border: none; color: var(--text-secondary); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s;">
+                    <button class="tab-btn" data-tab="patch-decorator" class="inline-fix-50">
                         @patch Decorator
                     </button>
-                    <button class="tab-btn" data-tab="side-effects" style="padding: var(--spacing-sm) var(--spacing-lg); background: transparent; border: none; color: var(--text-secondary); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s;">
+                    <button class="tab-btn" data-tab="side-effects" class="inline-fix-50">
                         Side Effects
                     </button>
                 </div>
                 
-                <div id="mock-basics" class="tab-content active" style="min-height: 400px;"></div>
-                <div id="patch-decorator" class="tab-content" style="display: none; min-height: 400px;"></div>
-                <div id="side-effects" class="tab-content" style="display: none; min-height: 400px;"></div>
+                <div id="mock-basics" class="tab-content active" class="inline-fix-93"></div>
+                <div id="patch-decorator" class="tab-content" class="inline-fix-73"></div>
+                <div id="side-effects" class="tab-content" class="inline-fix-73"></div>
             </div>
         </section>
 
         <!-- GitHub Actions Example -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>⚙️ GitHub Actions: Complete Test Workflow</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 Production-ready CI configuration with parallel test execution, caching, and coverage reporting.
             </p>
             
-            <div id="github-actions-editor" style="min-height: 500px; border: 1px solid var(--module-border); border-radius: 8px; overflow: hidden;"></div>
+            <div id="github-actions-editor" class="inline-fix-147"></div>
         </section>
 
         <!-- Interactive Quiz -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>✅ Knowledge Check: Mocking & CI/CD Quiz</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 Test your understanding of mocking strategies, test doubles, and CI/CD integration.
             </p>
             <div class="quiz-container" id="quiz"></div>
             
-            <div id="quiz-results" class="quiz-results" style="display: none; margin-top: var(--spacing-xl); padding: var(--spacing-xl); background: rgba(123, 97, 255, 0.1); border-radius: 12px; text-align: center;">
+            <div id="quiz-results" class="quiz-results" class="inline-fix-108">
                 <div id="score-display"></div>
-                <button id="retry-quiz" style="margin-top: var(--spacing-lg); padding: var(--spacing-sm) var(--spacing-xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                <button id="retry-quiz" class="inline-fix-104">
                     🔄 Retry Quiz
                 </button>
             </div>
         </section>
 
         <!-- Progressive Challenge -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🏆 Challenge: Complete CI/CD Setup</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 Your team needs a complete CI/CD pipeline with unit tests, E2E tests, coverage reporting, and deployment to staging.
             </p>
             
-            <div class="challenge-scenario" style="padding: var(--spacing-lg); background: rgba(251, 191, 36, 0.1); border-radius: 8px; margin-bottom: var(--spacing-lg);">
-                <h4 style="color: #fbbf24; margin-bottom: var(--spacing-sm);">📋 Requirements</h4>
-                <p style="color: var(--text-secondary); line-height: 1.8;">
+            <div class="challenge-container" class="inline-fix-128">
+                <h4 class="inline-fix-65">📋 Requirements</h4>
+                <p class="inline-fix-34">
                     Set up a GitHub Actions workflow that:
                 </p>
-                <ul style="color: var(--text-secondary); margin-top: var(--spacing-sm); line-height: 1.8;">
-                    <li>Runs on every PR and push to main</li>
-                    <li>Executes unit tests with 80%+ coverage requirement</li>
-                    <li>Runs E2E tests in parallel (4 runners)</li>
-                    <li>Caches dependencies for faster builds</li>
-                    <li>Uploads coverage reports to Codecov</li>
-                    <li>Deploys to staging only if all tests pass</li>
-                    <li>Sends Slack notification on failure</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Runs on every PR and push to main</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Executes unit tests with 80%+ coverage requirement</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Runs E2E tests in parallel (4 runners)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Caches dependencies for faster builds</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Uploads coverage reports to Codecov</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Deploys to staging only if all tests pass</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Sends Slack notification on failure</div>
+    </div>
+</div>
             </div>
             
-            <button id="show-cicd-solution" class="show-solution-btn" style="padding: var(--spacing-sm) var(--spacing-xl); background: var(--hub-accent); color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+            <button id="show-cicd-solution" class="show-solution-btn" class="inline-fix-119">
                 💡 Show Solution
             </button>
             
-            <div id="cicd-solution" class="solution-container" style="display: none; margin-top: var(--spacing-lg); padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-radius: 8px; border-left: 4px solid #10b981;">
-                <h4 style="color: #10b981; margin-bottom: var(--spacing-md);">✅ Solution: Production-Ready CI/CD Pipeline</h4>
+            <div id="cicd-solution" class="solution-content" class="inline-fix-121">
+                <h4 class="inline-fix-44">✅ Solution: Production-Ready CI/CD Pipeline</h4>
                 
-                <div id="solution-workflow-editor" style="min-height: 600px; border: 1px solid var(--module-border); border-radius: 8px; overflow: hidden;"></div>
+                <div id="solution-workflow-editor" class="inline-fix-145"></div>
                 
-                <div style="margin-top: var(--spacing-lg); padding: var(--spacing-md); background: rgba(0, 212, 255, 0.1); border-radius: 6px;">
-                    <h5 style="color: #00d4ff; margin-bottom: var(--spacing-sm);">🎯 Key Features</h5>
-                    <ul style="color: var(--text-secondary); line-height: 1.8;">
-                        <li><strong>Matrix Strategy:</strong> Test on Python 3.9, 3.10, 3.11 in parallel</li>
-                        <li><strong>Dependency Caching:</strong> pip cache reduces install time from 2min to 20s</li>
-                        <li><strong>Parallel E2E:</strong> 4 sharded Cypress runners complete in 3 minutes instead of 12</li>
-                        <li><strong>Coverage Enforcement:</strong> Fails if coverage drops below 80%</li>
-                        <li><strong>Conditional Deployment:</strong> Staging deploy only on main branch success</li>
-                        <li><strong>Notifications:</strong> Slack alerts with build status and logs</li>
-                    </ul>
+                <div class="inline-fix-146">
+                    <h5 class="inline-fix-19">🎯 Key Features</h5>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Matrix Strategy:</strong> Test on Python 3.9, 3.10, 3.11 in parallel</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Dependency Caching:</strong> pip cache reduces install time from 2min to 20s</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Parallel E2E:</strong> 4 sharded Cypress runners complete in 3 minutes instead of 12</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Coverage Enforcement:</strong> Fails if coverage drops below 80%</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Conditional Deployment:</strong> Staging deploy only on main branch success</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Notifications:</strong> Slack alerts with build status and logs</div>
+    </div>
+</div>
                 </div>
             </div>
         </section>
 
         <!-- Congratulations -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl); background: linear-gradient(135deg, rgba(0, 255, 136, 0.1) 0%, rgba(0, 212, 255, 0.1) 100%); border: 2px solid var(--hub-success);">
+        <section class="glass-card" class="inline-fix-86">
             <h2>🎉 Congratulations!</h2>
-            <p style="color: var(--text-primary); font-size: 1.1rem; margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-92">
                 You've completed the entire Testing learning path! 
             </p>
-            <p style="color: var(--text-secondary);">
+            <p class="inline-fix-9">
                 Ready to explore more? Check out other learning hubs:
             </p>
-            <div style="display: flex; gap: var(--spacing-md); margin-top: var(--spacing-lg); flex-wrap: wrap;">
-                <a href="../api-design-hub.html" style="padding: var(--spacing-md) var(--spacing-lg); background: var(--hub-primary); border-radius: 8px; color: #fff; text-decoration: none; font-weight: 600;">
+            <div class="inline-fix-94">
+                <a href="../api-design-hub.html" class="inline-fix-45">
                     🌐 API Design
                 </a>
-                <a href="../security-hub.html" style="padding: var(--spacing-md) var(--spacing-lg); background: var(--hub-primary); border-radius: 8px; color: #fff; text-decoration: none; font-weight: 600;">
+                <a href="../security-hub.html" class="inline-fix-45">
                     🔐 Security
                 </a>
-                <a href="../design-patterns-hub.html" style="padding: var(--spacing-md) var(--spacing-lg); background: var(--hub-primary); border-radius: 8px; color: #fff; text-decoration: none; font-weight: 600;">
+                <a href="../design-patterns-hub.html" class="inline-fix-45">
                     🎨 Design Patterns
                 </a>
             </div>
@@ -284,11 +387,11 @@ graph LR
     </div>
 
     <!-- Footer -->
-    <footer style="margin-top: var(--spacing-3xl); padding: var(--spacing-xl); text-align: center; color: var(--text-secondary);">
+    <footer class="inline-fix-17">
         <p>© 2026 Asif Hussain. All rights reserved.</p>
-        <p style="margin-top: var(--spacing-sm);">
-            <a href="../../index.html" style="color: var(--hub-primary);">Back to Home</a> • 
-            <a href="../testing-hub.html" style="color: var(--hub-primary);">Testing Hub</a>
+        <p class="inline-fix-12">
+            <a href="../../index.html" class="inline-fix-10">Back to Home</a> • 
+            <a href="../testing-hub.html" class="inline-fix-10">Testing Hub</a>
         </p>
     </footer>
 
@@ -1010,24 +1113,24 @@ jobs:
         function renderQuiz() {
             const quizContainer = document.getElementById('quiz');
             quizContainer.innerHTML = quizData.map((item, index) => `
-                <div class="quiz-question" style="margin-bottom: var(--spacing-2xl); padding: var(--spacing-lg); background: rgba(26, 31, 58, 0.5); border-radius: 8px; border: 1px solid var(--module-border);">
-                    <h4 style="color: var(--text-primary); margin-bottom: var(--spacing-md); font-size: 1.1rem;">
+                <div class="quiz-question" class="inline-fix-56">
+                    <h4 class="inline-fix-66">
                         Question ${index + 1}: ${item.question}
                     </h4>
-                    <div class="options-container">
+                    <div class="quiz-options">
                         ${item.options.map((option, optIndex) => `
-                            <label class="quiz-option" style="display: block; padding: var(--spacing-md); margin: var(--spacing-sm) 0; background: rgba(123, 97, 255, 0.1); border: 2px solid transparent; border-radius: 8px; cursor: pointer; transition: all 0.2s ease;">
-                                <input type="radio" name="question-${index}" value="${optIndex}" style="margin-right: var(--spacing-sm);">
-                                <span style="color: var(--text-secondary);">${option}</span>
+                            <label class="quiz-option" class="inline-fix-63">
+                                <input type="radio" name="question-${index}" value="${optIndex}" class="inline-fix-54">
+                                <span class="inline-fix-9">${option}</span>
                             </label>
                         `).join('')}
                     </div>
-                    <div id="feedback-${index}" class="question-feedback" style="display: none; margin-top: var(--spacing-md); padding: var(--spacing-md); border-radius: 6px;"></div>
+                    <div id="feedback-${index}" class="faq-question" class="inline-fix-55"></div>
                 </div>
             `).join('');
             
             quizContainer.innerHTML += `
-                <button id="submit-quiz-btn" class="submit-quiz-btn" style="padding: var(--spacing-md) var(--spacing-2xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600;">
+                <button id="submit-quiz-btn" class="submit-quiz-btn" class="inline-fix-62">
                     🔗 Submit Quiz
                 </button>
             `;
@@ -1074,24 +1177,24 @@ jobs:
                         feedback.style.background = 'rgba(16, 185, 129, 0.1)';
                         feedback.style.borderLeft = '4px solid #10b981';
                         feedback.innerHTML = `
-                            <strong style="color: #10b981;">✅ Correct!</strong><br>
-                            <span style="color: var(--text-secondary); font-size: 0.95rem;">${item.explanation}</span>
+                            <strong class="inline-fix-13">✅ Correct!</strong><br>
+                            <span class="inline-fix-6">${item.explanation}</span>
                         `;
                     } else {
                         feedback.style.display = 'block';
                         feedback.style.background = 'rgba(239, 68, 68, 0.1)';
                         feedback.style.borderLeft = '4px solid #ef4444';
                         feedback.innerHTML = `
-                            <strong style="color: #ef4444;">❌ Incorrect</strong><br>
-                            <span style="color: var(--text-secondary); font-size: 0.95rem;">The correct answer is: <strong>${item.options[item.correct]}</strong></span><br>
-                            <span style="color: var(--text-secondary); font-size: 0.95rem;">${item.explanation}</span>
+                            <strong class="inline-fix-21">❌ Incorrect</strong><br>
+                            <span class="inline-fix-6">The correct answer is: <strong>${item.options[item.correct]}</strong></span><br>
+                            <span class="inline-fix-6">${item.explanation}</span>
                         `;
                     }
                 } else {
                     feedback.style.display = 'block';
                     feedback.style.background = 'rgba(251, 191, 36, 0.1)';
                     feedback.style.borderLeft = '4px solid #fbbf24';
-                    feedback.innerHTML = `<strong style="color: #fbbf24;">⚠️ No answer selected</strong>`;
+                    feedback.innerHTML = `<strong class="inline-fix-15">⚠️ No answer selected</strong>`;
                 }
             });
             
@@ -1119,12 +1222,12 @@ jobs:
             }
             
             scoreDisplay.innerHTML = `
-                <div style="text-align: center;">
-                    <h3 style="color: ${color}; font-size: 2rem; margin-bottom: var(--spacing-sm);">${grade}</h3>
-                    <p style="font-size: 1.5rem; color: var(--text-primary); margin-bottom: var(--spacing-sm);">
+                <div class="inline-fix-16">
+                    <h3 class="inline-fix-58">${grade}</h3>
+                    <p class="inline-fix-59">
                         Score: ${correctCount}/${quizData.length} (${percentage.toFixed(0)}%)
                     </p>
-                    <p style="color: var(--text-secondary);">${message}</p>
+                    <p class="inline-fix-9">${message}</p>
                 </div>
             `;
             

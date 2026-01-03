@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="TDD Fundamentals - Testing Learning Module">
@@ -8,8 +33,11 @@
     <meta name="author" content="Asif Hussain">
     <title>TDD Fundamentals | CORTEX Learning Hub</title>
     <link rel="stylesheet" href="../../assets/css/main.css?v=2026-01-02">
-    <link rel="stylesheet" href="../../assets/css/learning-hub.css?v=2026-01-02">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
+    
+    <link rel="stylesheet" href="../..../..../..../..../..../../assets/css/generated-classes.css"><link rel="stylesheet" href="../../assets/css/learning-hub.css?v=2026-01-02">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/editor/editor.main.css">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
@@ -18,14 +46,39 @@
 
     <!-- Header Navigation -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../../index.html" class="nav-link">
-                    <span class="nav-icon">🏠</span> Home
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../../index.html" class="nav-link" mobile-nav-optimized>
+                    <span class="nav-content" mobile-nav-optimized>🏠</span> Home
                 </a>
-                <span class="nav-separator">›</span>
-                <a href="../testing-hub.html" class="nav-link">
-                    <span class="nav-icon">🧪</span> Testing
+                <span class="nav-content" mobile-nav-optimized>›</span>
+                <a href="../testing-hub.html" class="nav-link" mobile-nav-optimized>
+                    <span class="nav-content" mobile-nav-optimized>🧪</span> Testing
                 </a>
             </nav>
         </div>
@@ -36,7 +89,7 @@
         <div class="module-header">
             <div class="breadcrumb">
                 <span class="difficulty-badge beginner">Beginner</span>
-                <span style="color: var(--text-secondary);">Module 1 of 5</span>
+                <span class="inline-fix-9">Module 1 of 5</span>
             </div>
             <h1 class="hero-title">🧪 TDD Fundamentals</h1>
             <p class="hero-subtitle">Interactive learning with quizzes, code playgrounds, and challenges</p>
@@ -52,26 +105,36 @@
     <!-- Main Content -->
     <div class="container">
         <!-- Learning Objectives -->
-        <section class="glass-card" style="margin-top: var(--spacing-2xl);">
+        <section class="glass-card" class="inline-fix-14">
             <h2>🎓 Learning Objectives</h2>
-            <ul class="objective-list">
-                <li>Understand RED-GREEN-REFACTOR cycle</li>
-                <li>Write tests before implementation</li>
-                <li>Practice test-first development</li>
-                <li>Learn TDD benefits and when to use it</li>
-                <li>Avoid common TDD pitfalls</li>
-            </ul>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Understand RED-GREEN-REFACTOR cycle</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Write tests before implementation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Practice test-first development</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Learn TDD benefits and when to use it</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Avoid common TDD pitfalls</div>
+    </div>
+</div>
         </section>
 
         <!-- RED-GREEN-REFACTOR Cycle -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🔄 The RED-GREEN-REFACTOR Cycle</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 TDD follows a simple three-step cycle that ensures code correctness and design quality. This D3.js visualization shows the continuous flow of the TDD process.
             </p>
-            <div id="tdd-cycle-viz" style="width: 100%; height: 500px; margin: var(--spacing-xl) 0; background: rgba(26, 31, 58, 0.5); border-radius: 12px; border: 1px solid var(--module-border);"></div>
+            <div id="tdd-cycle-viz" class="inline-fix-122"></div>
             
-            <div class="mermaid-container" style="margin-top: var(--spacing-2xl);">
+            <div class="mermaid-container" class="inline-fix-14">
                 <pre class="mermaid">
 stateDiagram-v2
     [*] --> RED: Write Failing Test
@@ -102,7 +165,7 @@ stateDiagram-v2
         </section>
 
         <!-- TDD Workflow -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🛠️ TDD Workflow Step-by-Step</h2>
             <div class="mermaid-container">
                 <pre class="mermaid">
@@ -143,46 +206,70 @@ flowchart TD
         </section>
 
         <!-- Benefits & Pitfalls -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>⚖️ TDD Benefits vs Common Pitfalls</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 Understanding both the advantages and common mistakes helps you maximize TDD effectiveness.
             </p>
             
             <!-- Benefits Timeline Visualization -->
-            <h3 style="color: var(--text-primary); margin: var(--spacing-2xl) 0 var(--spacing-lg);">📈 TDD Benefits Timeline</h3>
-            <div id="benefits-timeline-viz" style="width: 100%; height: 400px; margin: var(--spacing-xl) 0; background: rgba(26, 31, 58, 0.5); border-radius: 12px; border: 1px solid var(--module-border);"></div>
+            <h3 class="inline-fix-321">📈 TDD Benefits Timeline</h3>
+            <div id="benefits-timeline-viz" class="inline-fix-205"></div>
             
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--spacing-lg); margin-top: var(--spacing-2xl);">
-                <div style="padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-radius: 8px; border: 1px solid #10b981;">
-                    <h4 style="color: #10b981; margin-bottom: var(--spacing-md);">✅ Key Benefits</h4>
-                    <ul style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8;">
-                        <li><strong>Better Design:</strong> Test-first thinking leads to cleaner interfaces</li>
-                        <li><strong>Living Documentation:</strong> Tests describe expected behavior</li>
-                        <li><strong>Confidence:</strong> Safe refactoring with regression protection</li>
-                        <li><strong>Early Detection:</strong> Bugs caught immediately, not in production</li>
-                        <li><strong>Reduced Debugging:</strong> Less time hunting for issues</li>
-                        <li><strong>Safety Net:</strong> Prevent regressions when adding features</li>
-                    </ul>
+            <div class="inline-fix-293">
+                <div class="inline-fix-18">
+                    <h4 class="inline-fix-44">✅ Key Benefits</h4>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Better Design:</strong> Test-first thinking leads to cleaner interfaces</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Living Documentation:</strong> Tests describe expected behavior</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Confidence:</strong> Safe refactoring with regression protection</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Early Detection:</strong> Bugs caught immediately, not in production</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Reduced Debugging:</strong> Less time hunting for issues</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Safety Net:</strong> Prevent regressions when adding features</div>
+    </div>
+</div>
                 </div>
-                <div style="padding: var(--spacing-lg); background: rgba(239, 68, 68, 0.1); border-radius: 8px; border: 1px solid #ef4444;">
-                    <h4 style="color: #ef4444; margin-bottom: var(--spacing-md);">⚠️ Common Pitfalls</h4>
-                    <ul style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8;">
-                        <li><strong>Tests After Code:</strong> Loses design benefits (not TDD!)</li>
-                        <li><strong>Testing Implementation:</strong> Brittle tests that break easily</li>
-                        <li><strong>Over-Mocking:</strong> Tests don't reflect real behavior</li>
-                        <li><strong>Skipping Refactor:</strong> Technical debt accumulates</li>
-                        <li><strong>Complex Tests:</strong> Tests harder to maintain than code</li>
-                        <li><strong>Infrequent Runs:</strong> Delayed feedback, harder debugging</li>
-                    </ul>
+                <div class="inline-fix-81">
+                    <h4 class="inline-fix-52">⚠️ Common Pitfalls</h4>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Tests After Code:</strong> Loses design benefits (not TDD!)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Testing Implementation:</strong> Brittle tests that break easily</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Over-Mocking:</strong> Tests don't reflect real behavior</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Skipping Refactor:</strong> Technical debt accumulates</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Complex Tests:</strong> Tests harder to maintain than code</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Infrequent Runs:</strong> Delayed feedback, harder debugging</div>
+    </div>
+</div>
                 </div>
             </div>
         </section>
 
         <!-- Code Playground -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>💻 Code Playground: TDD in Action</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 Practice TDD by implementing a simple calculator. Follow the RED-GREEN-REFACTOR cycle.
             </p>
             <div class="playground-container">
@@ -192,13 +279,13 @@ flowchart TD
                     <button class="tab-btn" data-tab="refactor">Refactored (BLUE)</button>
                 </div>
                 <div class="tab-content active" id="test">
-                    <div id="editor-test" style="height: 450px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                    <div id="editor-test" class="inline-fix-26"></div>
                 </div>
                 <div class="tab-content" id="impl">
-                    <div id="editor-impl" style="height: 450px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                    <div id="editor-impl" class="inline-fix-26"></div>
                 </div>
                 <div class="tab-content" id="refactor">
-                    <div id="editor-refactor" style="height: 450px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                    <div id="editor-refactor" class="inline-fix-26"></div>
                 </div>
                 <button class="run-code-btn" id="run-code"><span class="btn-icon">▶️</span> Run Tests</button>
                 <div class="output-container" id="output">
@@ -209,34 +296,44 @@ flowchart TD
         </section>
 
         <!-- Interactive Quiz -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>✅ Knowledge Check: TDD Fundamentals Quiz</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 Test your understanding with 10 questions. Instant feedback provided!
             </p>
             <div class="quiz-container" id="quiz"></div>
-            <div class="quiz-results" id="quiz-results" style="display: none;">
+            <div class="quiz-results" id="quiz-results" class="inline-fix-48">
                 <h3 id="score-display"></h3>
-                <button class="retry-btn" id="retry-quiz" style="margin-top: var(--spacing-lg); padding: var(--spacing-md) var(--spacing-xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 8px; cursor: pointer;">🔄 Retry Quiz</button>
+                <button class="retry-btn" id="retry-quiz" class="inline-fix-77">🔄 Retry Quiz</button>
             </div>
         </section>
 
         <!-- Challenge -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🏆 TDD Challenge</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 Build a string reversal function using pure TDD. Requirements:
             </p>
-            <ul style="color: var(--text-secondary);">
-                <li>Write test first for empty string</li>
-                <li>Write test for single character</li>
-                <li>Write test for multiple characters</li>
-                <li>Handle edge cases (null, undefined)</li>
-                <li>Refactor after each passing test</li>
-            </ul>
-            <button id="show-solution-btn" style="padding: var(--spacing-sm) var(--spacing-lg); background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid #10b981; border-radius: 8px; cursor: pointer; margin-top: var(--spacing-md);">✅ Show Solution</button>
-            <div id="challenge-solution" style="margin-top: var(--spacing-lg); display: none;">
-                <pre style="background: rgba(26, 31, 58, 0.8); padding: var(--spacing-lg); border-radius: 8px; overflow-x: auto; color: #e5e7eb;"><code># TDD Solution: String Reversal
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Write test first for empty string</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Write test for single character</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Write test for multiple characters</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Handle edge cases (null, undefined)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Refactor after each passing test</div>
+    </div>
+</div>
+            <button id="show-solution-btn" class="inline-fix-160">✅ Show Solution</button>
+            <div id="challenge-solution" class="inline-fix-74">
+                <pre class="inline-fix-71"><code># TDD Solution: String Reversal
 
 # Test 1: Empty string
 def test_reverse_empty_string():
@@ -281,9 +378,9 @@ def reverse(s):
         </section>
 
         <!-- Next Steps -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🚀 Next Steps</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 You've completed TDD Fundamentals! Continue your learning journey:
             </p>
             <div class="next-module-cards">
@@ -300,11 +397,11 @@ def reverse(s):
     </div>
 
     <!-- Footer -->
-    <footer style="margin-top: var(--spacing-3xl); padding: var(--spacing-xl); text-align: center; color: var(--text-secondary);">
+    <footer class="inline-fix-17">
         <p>© 2026 Asif Hussain. All rights reserved.</p>
-        <p style="margin-top: var(--spacing-sm);">
-            <a href="../../index.html" style="color: var(--hub-primary);">Back to Home</a> • 
-            <a href="../testing-hub.html" style="color: var(--hub-primary);">Testing Hub</a>
+        <p class="inline-fix-12">
+            <a href="../../index.html" class="inline-fix-10">Back to Home</a> • 
+            <a href="../testing-hub.html" class="inline-fix-10">Testing Hub</a>
         </p>
     </footer>
 
@@ -821,24 +918,24 @@ def reverse(s):
         function renderQuiz() {
             const quizContainer = document.getElementById('quiz');
             quizContainer.innerHTML = quizData.map((item, index) => `
-                <div class="quiz-question" style="margin-bottom: var(--spacing-2xl); padding: var(--spacing-lg); background: rgba(26, 31, 58, 0.5); border-radius: 8px; border: 1px solid var(--module-border);">
-                    <h4 style="color: var(--text-primary); margin-bottom: var(--spacing-md); font-size: 1.1rem;">
+                <div class="quiz-question" class="inline-fix-56">
+                    <h4 class="inline-fix-66">
                         Question ${index + 1}: ${item.question}
                     </h4>
-                    <div class="options-container">
+                    <div class="quiz-options">
                         ${item.options.map((option, optIndex) => `
-                            <label class="quiz-option" style="display: block; padding: var(--spacing-md); margin: var(--spacing-sm) 0; background: rgba(123, 97, 255, 0.1); border: 2px solid transparent; border-radius: 8px; cursor: pointer; transition: all 0.2s ease;">
-                                <input type="radio" name="question-${index}" value="${optIndex}" style="margin-right: var(--spacing-sm);">
-                                <span style="color: var(--text-secondary);">${option}</span>
+                            <label class="quiz-option" class="inline-fix-63">
+                                <input type="radio" name="question-${index}" value="${optIndex}" class="inline-fix-54">
+                                <span class="inline-fix-9">${option}</span>
                             </label>
                         `).join('')}
                     </div>
-                    <div id="feedback-${index}" class="question-feedback" style="display: none; margin-top: var(--spacing-md); padding: var(--spacing-md); border-radius: 6px;"></div>
+                    <div id="feedback-${index}" class="faq-question" class="inline-fix-55"></div>
                 </div>
             `).join('');
             
             quizContainer.innerHTML += `
-                <button id="submit-quiz-btn" class="submit-quiz-btn" style="padding: var(--spacing-md) var(--spacing-2xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600; transition: transform 0.2s ease;">
+                <button id="submit-quiz-btn" class="submit-quiz-btn" class="inline-fix-159">
                     📝 Submit Quiz
                 </button>
             `;
@@ -886,17 +983,17 @@ def reverse(s):
                         feedback.style.background = 'rgba(16, 185, 129, 0.1)';
                         feedback.style.borderLeft = '4px solid #10b981';
                         feedback.innerHTML = `
-                            <strong style="color: #10b981;">✅ Correct!</strong><br>
-                            <span style="color: var(--text-secondary); font-size: 0.95rem;">${item.explanation}</span>
+                            <strong class="inline-fix-13">✅ Correct!</strong><br>
+                            <span class="inline-fix-6">${item.explanation}</span>
                         `;
                     } else {
                         feedback.style.display = 'block';
                         feedback.style.background = 'rgba(239, 68, 68, 0.1)';
                         feedback.style.borderLeft = '4px solid #ef4444';
                         feedback.innerHTML = `
-                            <strong style="color: #ef4444;">❌ Incorrect</strong><br>
-                            <span style="color: var(--text-secondary); font-size: 0.95rem;">The correct answer is: <strong>${item.options[item.correct]}</strong></span><br>
-                            <span style="color: var(--text-secondary); font-size: 0.95rem;">${item.explanation}</span>
+                            <strong class="inline-fix-21">❌ Incorrect</strong><br>
+                            <span class="inline-fix-6">The correct answer is: <strong>${item.options[item.correct]}</strong></span><br>
+                            <span class="inline-fix-6">${item.explanation}</span>
                         `;
                     }
                 } else {
@@ -904,7 +1001,7 @@ def reverse(s):
                     feedback.style.background = 'rgba(251, 191, 36, 0.1)';
                     feedback.style.borderLeft = '4px solid #fbbf24';
                     feedback.innerHTML = `
-                        <strong style="color: #fbbf24;">⚠️ No answer selected</strong>
+                        <strong class="inline-fix-15">⚠️ No answer selected</strong>
                     `;
                 }
             });
@@ -934,12 +1031,12 @@ def reverse(s):
             }
             
             scoreDisplay.innerHTML = `
-                <div style="text-align: center;">
-                    <h3 style="color: ${color}; font-size: 2rem; margin-bottom: var(--spacing-sm);">${grade}</h3>
-                    <p style="font-size: 1.5rem; color: var(--text-primary); margin-bottom: var(--spacing-sm);">
+                <div class="inline-fix-16">
+                    <h3 class="inline-fix-58">${grade}</h3>
+                    <p class="inline-fix-59">
                         Score: ${correctCount}/${quizData.length} (${percentage.toFixed(0)}%)
                     </p>
-                    <p style="color: var(--text-secondary);">${message}</p>
+                    <p class="inline-fix-9">${message}</p>
                 </div>
             `;
             

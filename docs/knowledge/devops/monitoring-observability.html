@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Monitoring & Observability - Metrics, logs, traces, and SRE practices">
@@ -8,13 +33,14 @@
     <title>Monitoring & Observability - CORTEX Knowledge</title>
     <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
-        <button class="back-button" onclick="history.back()" aria-label="Go back">← Back</button>
+    <nav class="breadcrumb-separator sticky-nav" mobile-nav-optimized aria-label="Breadcrumb">
+        <button class="grid-background" onclick="history.back()" aria-label="Go back">← Back</button>
         <ol class="breadcrumb">
             <li><a href="../../index.html">Home</a></li>
             <li><a href="../index.html">Knowledge Library</a></li>
@@ -29,16 +55,16 @@
         </div>
         <h1 class="hero-title">📊 Monitoring & Observability</h1>
         <p class="hero-subtitle">The three pillars: metrics, logs, and traces for system reliability</p>
-        <div class="file-metadata">
+        <div class="code-file">
             <span class="metadata-item">📦 40+ Rules</span>
             <span class="metadata-item">🏷️ DevOps</span>
             <span class="metadata-item">📅 Updated: Dec 2025</span>
         </div>
     </section>
 
-    <aside class="toc-sidebar" aria-label="Table of contents">
+    <aside class="toc-link" aria-label="Table of contents">
         <h3>On This Page</h3>
-        <nav class="toc-nav">
+        <nav class="toc-nav" mobile-nav-optimized>
             <a href="#overview" class="toc-link">Overview</a>
             <a href="#metrics" class="toc-link">Metrics</a>
             <a href="#logs" class="toc-link">Logs</a>
@@ -49,7 +75,7 @@
         </nav>
     </aside>
 
-    <main class="file-content">
+    <main class="code-file">
         <section class="glass-card" id="overview">
             <h2>Observability vs Monitoring</h2>
             <p>
@@ -59,13 +85,19 @@
             </p>
 
             <h3>The Three Pillars of Observability</h3>
-            <ul class="feature-list">
-                <li><strong>Metrics:</strong> Numerical measurements over time (CPU, latency, request rate)</li>
-                <li><strong>Logs:</strong> Discrete events with timestamp and context for debugging</li>
-                <li><strong>Traces:</strong> Request journey through distributed system showing causality</li>
-            </ul>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Metrics:</strong> Numerical measurements over time (CPU, latency, request rate)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Logs:</strong> Discrete events with timestamp and context for debugging</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Traces:</strong> Request journey through distributed system showing causality</div>
+    </div>
+</div>
 
-            <div class="info-banner">
+            <div class="level1-feature-icon-container--info">
                 <strong>💡 Benefits:</strong> 50-70% faster incident resolution (MTTR), proactive problem 
                 detection, data-driven optimization, improved reliability.
             </div>
@@ -77,12 +109,12 @@
 
             <div class="rule-card">
                 <h3>Four Golden Signals (Google SRE)</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Monitor these four metrics for every service.</p>
                 
                 <h4>1. Latency</h4>
-                <div class="example-section">
-                    <pre><code class="language-yaml"># Prometheus metric
+                <div class="command-example">
+                    <pre><code class="language-badge"># Prometheus metric
 http_request_duration_seconds{
   method="GET",
   endpoint="/api/users",
@@ -99,8 +131,8 @@ http_request_duration_seconds{
                 </div>
 
                 <h4>2. Traffic (Request Rate)</h4>
-                <div class="example-section">
-                    <pre><code class="language-yaml">rate(http_requests_total[5m])
+                <div class="command-example">
+                    <pre><code class="language-badge">rate(http_requests_total[5m])
 
 # Alert on traffic drop (potential outage)
 - alert: TrafficDrop
@@ -112,8 +144,8 @@ http_request_duration_seconds{
                 </div>
 
                 <h4>3. Errors (Error Rate)</h4>
-                <div class="example-section">
-                    <pre><code class="language-yaml">rate(http_requests_total{status=~"5.."}[5m]) / rate(http_requests_total[5m])
+                <div class="command-example">
+                    <pre><code class="language-badge">rate(http_requests_total{status=~"5.."}[5m]) / rate(http_requests_total[5m])
 
 # Alert on error rate spike
 - alert: HighErrorRate
@@ -125,8 +157,8 @@ http_request_duration_seconds{
                 </div>
 
                 <h4>4. Saturation (Resource Utilization)</h4>
-                <div class="example-section">
-                    <pre><code class="language-yaml">node_cpu_seconds_total
+                <div class="command-example">
+                    <pre><code class="language-badge">node_cpu_seconds_total
 node_memory_MemAvailable_bytes
 
 # Alert on high CPU
@@ -141,18 +173,24 @@ node_memory_MemAvailable_bytes
 
             <div class="rule-card">
                 <h3>RED Method (for Services)</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Simplified metrics for request-driven services.</p>
                 
-                <ul class="feature-list">
-                    <li><strong>Rate:</strong> Requests per second</li>
-                    <li><strong>Errors:</strong> Failed requests per second</li>
-                    <li><strong>Duration:</strong> Latency distribution (P50, P95, P99)</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Rate:</strong> Requests per second</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Errors:</strong> Failed requests per second</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Duration:</strong> Latency distribution (P50, P95, P99)</div>
+    </div>
+</div>
 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Implementing RED Metrics</h4>
-                    <pre><code class="language-python">from prometheus_client import Counter, Histogram
+                    <pre><code class="language-badge">from prometheus_client import Counter, Histogram
 import time
 
 # Metrics
@@ -188,14 +226,20 @@ def get_users():
 
             <div class="rule-card">
                 <h3>USE Method (for Resources)</h3>
-                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <span class="badge badge-security">MEDIUM PRIORITY</span>
                 <p>Metrics for infrastructure resources (CPU, memory, disk, network).</p>
                 
-                <ul class="feature-list">
-                    <li><strong>Utilization:</strong> % time resource busy</li>
-                    <li><strong>Saturation:</strong> Queue depth, wait time</li>
-                    <li><strong>Errors:</strong> Error count/rate</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Utilization:</strong> % time resource busy</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Saturation:</strong> Queue depth, wait time</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Errors:</strong> Error count/rate</div>
+    </div>
+</div>
             </div>
         </section>
 
@@ -205,12 +249,12 @@ def get_users():
 
             <div class="rule-card">
                 <h3>Structured Logging Best Practices</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Log in JSON format with consistent fields for easy parsing.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Structured Logs (JSON)</h4>
-                    <pre><code class="language-python">import logging
+                    <pre><code class="language-badge">import logging
 import json
 from datetime import datetime
 
@@ -244,12 +288,12 @@ logger.setLevel(logging.INFO)
 # Usage
 logger.info('User logged in', extra={'user_id': 12345, 'request_id': 'abc-123'})
 </code></pre>
-                    <p class="example-note">Output: {"timestamp": "2025-12-28T10:30:00", "level": "INFO", "message": "User logged in", "user_id": 12345, "request_id": "abc-123"}</p>
+                    <p class="command-example">Output: {"timestamp": "2025-12-28T10:30:00", "level": "INFO", "message": "User logged in", "user_id": 12345, "request_id": "abc-123"}</p>
                 </div>
 
-                <div class="example-section bad-example">
+                <div class="command-example bad-example">
                     <h4>❌ Unstructured Logs</h4>
-                    <pre><code class="language-python">print(f"User {user_id} logged in at {timestamp}")
+                    <pre><code class="language-badge">print(f"User {user_id} logged in at {timestamp}")
 # Hard to parse, search, analyze
 </code></pre>
                 </div>
@@ -257,20 +301,30 @@ logger.info('User logged in', extra={'user_id': 12345, 'request_id': 'abc-123'})
 
             <div class="rule-card">
                 <h3>Log Levels</h3>
-                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <span class="badge badge-security">MEDIUM PRIORITY</span>
                 <p>Use appropriate log levels for filtering and alerting.</p>
                 
-                <ul class="feature-list">
-                    <li><strong>TRACE/DEBUG:</strong> Detailed diagnostic info (dev only)</li>
-                    <li><strong>INFO:</strong> General informational messages</li>
-                    <li><strong>WARN:</strong> Potential issues, degraded functionality</li>
-                    <li><strong>ERROR:</strong> Error events, application can continue</li>
-                    <li><strong>FATAL/CRITICAL:</strong> Severe errors, application may crash</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>TRACE/DEBUG:</strong> Detailed diagnostic info (dev only)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>INFO:</strong> General informational messages</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>WARN:</strong> Potential issues, degraded functionality</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>ERROR:</strong> Error events, application can continue</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>FATAL/CRITICAL:</strong> Severe errors, application may crash</div>
+    </div>
+</div>
 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Appropriate Log Levels</h4>
-                    <pre><code class="language-python">logger.debug(f"Processing {len(items)} items")  # Detailed debugging
+                    <pre><code class="language-badge">logger.debug(f"Processing {len(items)} items")  # Detailed debugging
 logger.info("User registered successfully")       # Normal operation
 logger.warning("Cache miss, fetching from DB")    # Potential issue
 logger.error("Failed to send email", exc_info=True)  # Error with stack trace
@@ -281,12 +335,12 @@ logger.critical("Database connection failed")     # Severe error
 
             <div class="rule-card">
                 <h3>Correlation IDs</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Track requests across services with correlation/trace IDs.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Correlation ID Pattern</h4>
-                    <pre><code class="language-python">import uuid
+                    <pre><code class="language-badge">import uuid
 from flask import request, g
 
 @app.before_request
@@ -310,7 +364,7 @@ def call_downstream_service():
         'status_code': response.status_code
     })
 </code></pre>
-                    <p class="example-note">✅ Enables tracing request flow through multiple services.</p>
+                    <p class="command-example">✅ Enables tracing request flow through multiple services.</p>
                 </div>
             </div>
         </section>
@@ -321,12 +375,12 @@ def call_downstream_service():
 
             <div class="rule-card">
                 <h3>OpenTelemetry Tracing</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Use OpenTelemetry for vendor-neutral instrumentation.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Python OpenTelemetry</h4>
-                    <pre><code class="language-python">from opentelemetry import trace
+                    <pre><code class="language-badge">from opentelemetry import trace
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.exporter.jaeger.thrift import JaegerExporter
@@ -365,12 +419,12 @@ def get_user(user_id):
 
             <div class="rule-card">
                 <h3>Trace Visualization</h3>
-                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <span class="badge badge-security">MEDIUM PRIORITY</span>
                 <p>Visualize traces to identify slow operations.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>Example Trace Timeline</h4>
-                    <pre><code class="language-plaintext">GET /api/orders/123                     [===================] 450ms
+                    <pre><code class="language-badge">GET /api/orders/123                     [===================] 450ms
   ├─ AuthService.validate()             [==]                    50ms
   ├─ OrderService.getOrder()            [=============]        350ms
   │  ├─ Database.query()                [========]             200ms
@@ -391,21 +445,31 @@ Bottleneck: Database query (200ms - 44% of total time)
 
             <div class="rule-card">
                 <h3>Alert Design Principles</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Every alert should be actionable, relevant, and non-redundant.</p>
                 
                 <h4>Good Alert Checklist</h4>
-                <ul class="feature-list">
-                    <li><strong>Actionable:</strong> Requires human intervention</li>
-                    <li><strong>Relevant:</strong> Impacts users or business</li>
-                    <li><strong>Timely:</strong> Fires when action is needed (not too early/late)</li>
-                    <li><strong>Contextualized:</strong> Includes runbook link</li>
-                    <li><strong>Severity-Appropriate:</strong> Critical vs warning vs info</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Actionable:</strong> Requires human intervention</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Relevant:</strong> Impacts users or business</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Timely:</strong> Fires when action is needed (not too early/late)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Contextualized:</strong> Includes runbook link</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Severity-Appropriate:</strong> Critical vs warning vs info</div>
+    </div>
+</div>
 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Good Alert</h4>
-                    <pre><code class="language-yaml">- alert: HighErrorRate
+                    <pre><code class="language-badge">- alert: HighErrorRate
   expr: |
     rate(http_requests_total{status=~"5.."}[5m]) 
     / rate(http_requests_total[5m]) 
@@ -422,9 +486,9 @@ Bottleneck: Database query (200ms - 44% of total time)
 </code></pre>
                 </div>
 
-                <div class="example-section bad-example">
+                <div class="command-example bad-example">
                     <h4>❌ Poor Alert</h4>
-                    <pre><code class="language-yaml"># Too vague, no context
+                    <pre><code class="language-badge"># Too vague, no context
 - alert: SomethingWrong
   expr: errors > 0
   annotations:
@@ -435,17 +499,27 @@ Bottleneck: Database query (200ms - 44% of total time)
 
             <div class="rule-card">
                 <h3>Alert Fatigue Prevention</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Reduce noise to ensure alerts get attention.</p>
                 
                 <h4>Strategies</h4>
-                <ul class="feature-list">
-                    <li><strong>Aggregation:</strong> Group similar alerts</li>
-                    <li><strong>Thresholds:</strong> Use appropriate thresholds (not too sensitive)</li>
-                    <li><strong>For Durations:</strong> Wait before alerting (avoid flapping)</li>
-                    <li><strong>Escalation:</strong> Warn → Critical → Page</li>
-                    <li><strong>Maintenance Windows:</strong> Silence during deployments</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Aggregation:</strong> Group similar alerts</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Thresholds:</strong> Use appropriate thresholds (not too sensitive)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>For Durations:</strong> Wait before alerting (avoid flapping)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Escalation:</strong> Warn → Critical → Page</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Maintenance Windows:</strong> Silence during deployments</div>
+    </div>
+</div>
             </div>
         </section>
 
@@ -455,12 +529,12 @@ Bottleneck: Database query (200ms - 44% of total time)
 
             <div class="rule-card">
                 <h3>Definitions</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 
                 <h4>SLI (Service Level Indicator)</h4>
                 <p>Quantitative measure of service level (e.g., latency, availability, error rate).</p>
-                <div class="example-section">
-                    <pre><code class="language-markdown">Examples:
+                <div class="command-example">
+                    <pre><code class="language-badge">Examples:
 - Availability: % of successful requests
 - Latency: % of requests served under 200ms
 - Throughput: Requests per second
@@ -470,8 +544,8 @@ Bottleneck: Database query (200ms - 44% of total time)
 
                 <h4>SLO (Service Level Objective)</h4>
                 <p>Target value or range for SLI (e.g., 99.9% availability).</p>
-                <div class="example-section">
-                    <pre><code class="language-markdown">Examples:
+                <div class="command-example">
+                    <pre><code class="language-badge">Examples:
 - 99.9% of requests succeed (availability SLO)
 - 95% of requests complete in &lt;200ms (latency SLO)
 - 99% of requests return correct data (correctness SLO)
@@ -480,8 +554,8 @@ Bottleneck: Database query (200ms - 44% of total time)
 
                 <h4>SLA (Service Level Agreement)</h4>
                 <p>Contract with users specifying consequences if SLO not met.</p>
-                <div class="example-section">
-                    <pre><code class="language-markdown">Example SLA:
+                <div class="command-example">
+                    <pre><code class="language-badge">Example SLA:
 - Uptime Guarantee: 99.95%
 - If uptime &lt; 99.95%: 10% service credit
 - If uptime &lt; 99.0%: 25% service credit
@@ -491,12 +565,12 @@ Bottleneck: Database query (200ms - 44% of total time)
 
             <div class="rule-card">
                 <h3>Error Budget</h3>
-                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <span class="badge badge-security">MEDIUM PRIORITY</span>
                 <p>Amount of downtime allowed within SLO (e.g., 99.9% = 43 minutes/month).</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>Error Budget Calculation</h4>
-                    <pre><code class="language-python"># 99.9% availability SLO
+                    <pre><code class="language-badge"># 99.9% availability SLO
 SLO = 0.999
 ERROR_BUDGET = 1 - SLO  # 0.001 = 0.1%
 
@@ -519,19 +593,19 @@ if error_budget_remaining &lt; 0:
 
         <section class="glass-card" id="related">
             <h2>Related Knowledge Files</h2>
-            <div class="related-grid">
-                <a href="cicd-pipelines.html" class="related-card">
-                    <span class="related-icon">⚙️</span>
+            <div class="level1-relationship-grid">
+                <a href="cicd-pipelines.html" class="level1-relationship-grid">
+                    <span class="level1-relationship-grid">⚙️</span>
                     <h3>CI/CD Pipelines</h3>
                     <p>Monitor pipeline health and performance</p>
                 </a>
-                <a href="../cloud/aws-best-practices.html" class="related-card">
-                    <span class="related-icon">☁️</span>
+                <a href="../cloud/aws-best-practices.html" class="level1-relationship-grid">
+                    <span class="level1-relationship-grid">☁️</span>
                     <h3>AWS Best Practices</h3>
                     <p>CloudWatch monitoring for AWS services</p>
                 </a>
-                <a href="../performance/profiling-analysis.html" class="related-card">
-                    <span class="related-icon">⚡</span>
+                <a href="../performance/profiling-analysis.html" class="level1-relationship-grid">
+                    <span class="level1-relationship-grid">⚡</span>
                     <h3>Performance Profiling</h3>
                     <p>Application performance analysis</p>
                 </a>

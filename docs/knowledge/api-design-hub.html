@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="API Design Learning Hub - Master REST, GraphQL, and API versioning through interactive modules">
@@ -8,7 +33,9 @@
     <meta name="author" content="Asif Hussain">
     <title>API Design Learning Hub | CORTEX Best Practices</title>
     <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02">
-    <link rel="stylesheet" href="../assets/css/learning-hub.css?v=2026-01-02">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
+    
+    <link rel="stylesheet" href="../..../..../..../..../../assets/css/generated-classes.css"><link rel="stylesheet" href="../assets/css/learning-hub.css?v=2026-01-02">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
@@ -17,10 +44,35 @@
 
     <!-- Header Navigation -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../index.html" class="nav-link">
-                    <span class="nav-icon">🏠</span> Home
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../index.html" class="nav-link" mobile-nav-optimized>
+                    <span class="nav-content" mobile-nav-optimized>🏠</span> Home
                 </a>
             </nav>
         </div>
@@ -45,7 +97,7 @@
         <!-- Learning Path Roadmap -->
         <section class="learning-path-roadmap glass-card">
             <h4>🗺️ Your Learning Journey</h4>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 This curated path takes you from fundamental HTTP concepts to expert-level API architecture. 
                 Each module builds on the previous, with hands-on exercises and real-world examples.
             </p>
@@ -73,15 +125,15 @@ graph LR
         </section>
 
         <!-- Module Navigation Cards -->
-        <section style="margin-top: var(--spacing-3xl);">
-            <h2 style="color: var(--text-primary); margin-bottom: var(--spacing-xl); font-size: 2rem;">
+        <section class="inline-fix-1">
+            <h2 class="inline-fix-24">
                 📚 Interactive Learning Modules
             </h2>
             
-            <div class="module-nav-grid">
+            <div class="module-nav-grid" mobile-nav-optimized>
                 <!-- Module 1: Fundamentals -->
-                <a href="api-design/fundamentals.html" class="module-nav-card">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <a href="api-design/fundamentals.html" class="module-nav-card" mobile-nav-optimized>
+                    <div class="inline-fix-5">
                         <span class="module-number">Module 1</span>
                         <span class="difficulty-badge beginner">Beginner</span>
                     </div>
@@ -92,13 +144,13 @@ graph LR
                     </p>
                     <div class="module-footer">
                         <span class="time-estimate">⏱️ 30 minutes</span>
-                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                        <span class="inline-fix-4">Start →</span>
                     </div>
                 </a>
 
                 <!-- Module 2: REST Principles -->
-                <a href="api-design/rest-principles.html" class="module-nav-card">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <a href="api-design/rest-principles.html" class="module-nav-card" mobile-nav-optimized>
+                    <div class="inline-fix-5">
                         <span class="module-number">Module 2</span>
                         <span class="difficulty-badge intermediate">Intermediate</span>
                     </div>
@@ -109,13 +161,13 @@ graph LR
                     </p>
                     <div class="module-footer">
                         <span class="time-estimate">⏱️ 45 minutes</span>
-                        <span style="color: var(--hub-primary); font-weight: 600;">Continue →</span>
+                        <span class="inline-fix-4">Continue →</span>
                     </div>
                 </a>
 
                 <!-- Module 3: Versioning & Evolution -->
-                <a href="api-design/versioning-evolution.html" class="module-nav-card">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <a href="api-design/versioning-evolution.html" class="module-nav-card" mobile-nav-optimized>
+                    <div class="inline-fix-5">
                         <span class="module-number">Module 3</span>
                         <span class="difficulty-badge intermediate">Intermediate</span>
                     </div>
@@ -126,13 +178,13 @@ graph LR
                     </p>
                     <div class="module-footer">
                         <span class="time-estimate">⏱️ 40 minutes</span>
-                        <span style="color: var(--hub-primary); font-weight: 600;">Continue →</span>
+                        <span class="inline-fix-4">Continue →</span>
                     </div>
                 </a>
 
                 <!-- Module 4: Authentication & Security -->
-                <a href="api-design/authentication-security.html" class="module-nav-card">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <a href="api-design/authentication-security.html" class="module-nav-card" mobile-nav-optimized>
+                    <div class="inline-fix-5">
                         <span class="module-number">Module 4</span>
                         <span class="difficulty-badge advanced">Advanced</span>
                     </div>
@@ -143,13 +195,13 @@ graph LR
                     </p>
                     <div class="module-footer">
                         <span class="time-estimate">⏱️ 50 minutes</span>
-                        <span style="color: var(--hub-primary); font-weight: 600;">Continue →</span>
+                        <span class="inline-fix-4">Continue →</span>
                     </div>
                 </a>
 
                 <!-- Module 5: Real-World Case Studies -->
-                <a href="api-design/real-world-case-studies.html" class="module-nav-card">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <a href="api-design/real-world-case-studies.html" class="module-nav-card" mobile-nav-optimized>
+                    <div class="inline-fix-5">
                         <span class="module-number">Module 5</span>
                         <span class="difficulty-badge expert">Expert</span>
                     </div>
@@ -160,7 +212,7 @@ graph LR
                     </p>
                     <div class="module-footer">
                         <span class="time-estimate">⏱️ 60 minutes</span>
-                        <span style="color: var(--hub-primary); font-weight: 600;">Master →</span>
+                        <span class="inline-fix-4">Master →</span>
                     </div>
                 </a>
             </div>
@@ -169,27 +221,27 @@ graph LR
         <!-- Prerequisites Section -->
         <section class="prerequisites-section">
             <h4>📋 Prerequisites Tree</h4>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 Recommended knowledge before starting this learning path:
             </p>
-            <ul class="prerequisites-list">
-                <li>
-                    <strong>HTTP Protocol Basics</strong>
-                    Understanding of HTTP methods (GET, POST, PUT, DELETE) and status codes (200, 404, 500)
-                </li>
-                <li>
-                    <strong>JSON Data Format</strong>
-                    Ability to read and write JSON structures for request/response payloads
-                </li>
-                <li>
-                    <strong>Programming Fundamentals</strong>
-                    Basic experience with any programming language (Python, JavaScript, C#, Java)
-                </li>
-                <li>
-                    <strong>Web Development Concepts</strong>
-                    Familiarity with client-server architecture and web requests
-                </li>
-            </ul>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>HTTP Protocol Basics</strong>
+                    Understanding of HTTP methods (GET, POST, PUT, DELETE) and status codes (200, 404, 500)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>JSON Data Format</strong>
+                    Ability to read and write JSON structures for request/response payloads</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Programming Fundamentals</strong>
+                    Basic experience with any programming language (Python, JavaScript, C#, Java)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Web Development Concepts</strong>
+                    Familiarity with client-server architecture and web requests</div>
+    </div>
+</div>
         </section>
 
         <!-- Quick Reference Glossary -->
@@ -248,18 +300,18 @@ graph LR
         </section>
 
         <!-- Learning Metrics Summary -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl); text-align: center; padding: var(--spacing-2xl);">
-            <h3 style="color: var(--hub-primary); margin-bottom: var(--spacing-lg);">
+        <section class="glass-card" class="inline-fix-111">
+            <h3 class="inline-fix-78">
                 🎓 Learning Path Completion
             </h3>
-            <div class="learning-metrics" style="justify-content: center;">
+            <div class="learning-metrics" class="inline-fix-109">
                 <span class="metric">📊 50 Total Quiz Questions</span>
                 <span class="metric">💻 6 Interactive Playgrounds</span>
                 <span class="metric">🏆 4 Progressive Challenges</span>
                 <span class="metric">⏱️ 3.5 Hours Total Time</span>
             </div>
-            <p style="color: var(--text-secondary); margin-top: var(--spacing-xl); max-width: 600px; margin-left: auto; margin-right: auto;">
-                Complete all modules to earn your <strong style="color: var(--hub-success);">API Design Expert</strong> certification. 
+            <p class="inline-fix-123">
+                Complete all modules to earn your <strong class="inline-fix-113">API Design Expert</strong> certification. 
                 Track your progress in the CORTEX dashboard.
             </p>
         </section>
@@ -269,7 +321,7 @@ graph LR
     <footer class="glass-footer">
         <div class="footer-content">
             <p>© 2026 Asif Hussain. All rights reserved.</p>
-            <nav class="footer-nav">
+            <nav class="footer-bottom">
                 <a href="https://github.com/asifhussain60/CORTEX" target="_blank">GitHub</a>
                 <a href="../index.html">Documentation</a>
             </nav>

@@ -1,23 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CORTEX Debug Orchestrator - Automated bug resolution with root cause analysis, template-based debugging, and fix verification loops">
     <title>Debug Orchestrator - CORTEX</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
         .mermaid { background: transparent; margin: 1.5rem 0; }
-        .diagram-card { margin-bottom: 2rem; }
-        .diagram-title { font-size: 1.1rem; color: var(--accent-primary); margin-bottom: 1rem; font-weight: 600; }
+        .architecture-diagram { margin-bottom: 2rem; }
+        .architecture-diagram { font-size: 1.1rem; color: var(--accent-primary); margin-bottom: 1rem; font-weight: 600; }
         .d3-container { width: 100%; min-height: 400px; background: rgba(26, 26, 46, 0.5); border-radius: 12px; }
         .debug-flow { width: 100%; height: 450px; }
         .root-cause-tree { width: 100%; height: 400px; }
-        .integration-network { width: 100%; height: 380px; }
+        .level1-integration-icon-container { width: 100%; height: 380px; }
         .dor-dod-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem; }
         @media (max-width: 768px) { .dor-dod-grid { grid-template-columns: 1fr; } }
     </style>
@@ -28,10 +54,35 @@
     
     <!-- Glass Header Navigation -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../index.html" class="nav-link">
-                    <i class="fas fa-home"></i>
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../index.html" class="nav-link" mobile-nav-optimized>
+                    <i class="pulse-glow-glass--fast fa-home"></i>
                     <span>Home</span>
                 </a>
             </nav>
@@ -87,10 +138,10 @@
         </div>
         
         <!-- Debug Workflow Loop -->
-        <section class="section-workflow">
-            <div class="glass-card diagram-card">
+        <section class="level2-section-title-green">
+            <div class="glass-card architecture-diagram">
                 <h2><span>🔄</span> Debug-Fix-Verify Loop</h2>
-                <p class="diagram-title">The core iterative debugging workflow</p>
+                <p class="architecture-diagram">The core iterative debugging workflow</p>
                 
                 <div class="mermaid">
 flowchart TD
@@ -147,20 +198,20 @@ flowchart TD
         </section>
         
         <!-- Root Cause Analysis Tree -->
-        <section class="section-rca">
-            <div class="glass-card diagram-card">
+        <section class="level2-section-title-green">
+            <div class="glass-card architecture-diagram">
                 <h2><span>🌳</span> Root Cause Analysis Tree (D3.js)</h2>
-                <p class="diagram-title">Interactive fault tree showing how evidence converges to root cause</p>
+                <p class="architecture-diagram">Interactive fault tree showing how evidence converges to root cause</p>
                 
                 <div id="root-cause-tree" class="root-cause-tree"></div>
             </div>
         </section>
         
         <!-- Template-Based Debug Injection -->
-        <section class="section-templates">
-            <div class="glass-card diagram-card">
+        <section class="level2-section-title-green">
+            <div class="glass-card architecture-diagram">
                 <h2><span>📝</span> Template-Based Debug Injection</h2>
-                <p class="diagram-title">Debug markers injected at strategic code locations</p>
+                <p class="architecture-diagram">Debug markers injected at strategic code locations</p>
                 
                 <div class="mermaid">
 flowchart LR
@@ -216,17 +267,17 @@ flowchart LR
         </section>
         
         <!-- Integration Network -->
-        <section class="section-integrations">
-            <div class="glass-card diagram-card">
+        <section class="level2-section-title-green">
+            <div class="glass-card architecture-diagram">
                 <h2><span>🔗</span> Integration Network (D3.js Force Graph)</h2>
-                <p class="diagram-title">How Debug Orchestrator connects with other CORTEX systems</p>
+                <p class="architecture-diagram">How Debug Orchestrator connects with other CORTEX systems</p>
                 
-                <div id="integration-network" class="integration-network"></div>
+                <div id="level1-integration-icon-container" class="level1-integration-icon-container"></div>
             </div>
         </section>
         
         <!-- DoR/DoD Quality Gates -->
-        <section class="section-quality">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>✅</span> Debug Quality Gates (DoR/DoD)</h2>
                 
@@ -239,12 +290,20 @@ flowchart LR
                                 <div class="tier-subtitle">Before debug session starts</div>
                             </div>
                         </div>
-                        <ul class="feature-list">
-                            <li>• Bug is reproducible</li>
-                            <li>• Affected files identified</li>
-                            <li>• Tests failing consistently</li>
-                            <li>• Git working directory clean</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">• Bug is reproducible</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">• Affected files identified</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">• Tests failing consistently</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">• Git working directory clean</div>
+    </div>
+</div>
                     </div>
                     
                     <div class="tier-card tier-3">
@@ -255,22 +314,30 @@ flowchart LR
                                 <div class="tier-subtitle">After debug session completes</div>
                             </div>
                         </div>
-                        <ul class="feature-list">
-                            <li>• All tests passing</li>
-                            <li>• Zero debug markers remaining</li>
-                            <li>• Patterns learned to Tier 2</li>
-                            <li>• Git checkpoint created</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">• All tests passing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">• Zero debug markers remaining</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">• Patterns learned to Tier 2</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">• Git checkpoint created</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
         </section>
         
         <!-- Event Tracing Sequence -->
-        <section class="section-tracing">
-            <div class="glass-card diagram-card">
+        <section class="level2-section-title-green">
+            <div class="glass-card architecture-diagram">
                 <h2><span>📊</span> Event Tracing Sequence</h2>
-                <p class="diagram-title">How events are captured and correlated during debugging</p>
+                <p class="architecture-diagram">How events are captured and correlated during debugging</p>
                 
                 <div class="mermaid">
 sequenceDiagram
@@ -318,10 +385,10 @@ sequenceDiagram
         </section>
         
         <!-- Marker Lifecycle -->
-        <section class="section-markers">
-            <div class="glass-card diagram-card">
+        <section class="level2-section-title-green">
+            <div class="glass-card architecture-diagram">
                 <h2><span>🏷️</span> Debug Marker Lifecycle</h2>
-                <p class="diagram-title">From injection to guaranteed cleanup</p>
+                <p class="architecture-diagram">From injection to guaranteed cleanup</p>
                 
                 <div class="mermaid">
 stateDiagram-v2
@@ -372,7 +439,7 @@ stateDiagram-v2
         </section>
         
         <!-- Example Output -->
-        <section class="section-output">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>📋</span> Example Debug Session Report</h2>
                 
@@ -429,7 +496,7 @@ stateDiagram-v2
         </section>
         
         <!-- Related Features -->
-        <section class="section-related">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>🔗</span> Related Orchestrators</h2>
                 <div class="feature-grid feature-grid-3">
@@ -604,7 +671,7 @@ stateDiagram-v2
         
         // D3.js Integration Network Force Graph
         (function() {
-            const container = document.getElementById('integration-network');
+            const container = document.getElementById('level1-integration-icon-container');
             const width = container.clientWidth || 800;
             const height = 360;
             
@@ -627,7 +694,7 @@ stateDiagram-v2
                 { source: 'debug', target: 'templates', label: 'response rendering', type: 'outgoing' }
             ];
             
-            const svg = d3.select('#integration-network')
+            const svg = d3.select('#level1-integration-icon-container')
                 .append('svg')
                 .attr('width', width)
                 .attr('height', height);

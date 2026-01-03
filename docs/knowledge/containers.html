@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Container Technology - Docker, Kubernetes, orchestration, and cloud-native deployment">
@@ -8,6 +33,7 @@
     <meta name="author" content="Asif Hussain">
     <title>Container Technology | CORTEX Knowledge</title>
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
@@ -25,14 +51,14 @@
     <section class="hero" id="main-content">
         <h1 class="hero-title">📦 Container Technology</h1>
         <p class="hero-subtitle">Docker, Kubernetes, and Container Orchestration</p>
-        <div class="file-metadata">
+        <div class="code-file">
             <span class="metadata-item">🐳 Docker</span>
             <span class="metadata-item">☸️ Kubernetes</span>
             <span class="metadata-item">📅 Updated: Dec 2025</span>
         </div>
     </section>
 
-    <section class="section file-content">
+    <section class="section code-file">
         <div class="container">
             <!-- Overview -->
             <div id="overview" class="content-section">
@@ -42,12 +68,20 @@
                     
                     <div class="info-box info-box-primary">
                         <strong>Container Benefits:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Portability:</strong> Run anywhere - dev, test, production</li>
-                            <li><strong>Efficiency:</strong> Lightweight compared to VMs</li>
-                            <li><strong>Consistency:</strong> Eliminate "works on my machine" issues</li>
-                            <li><strong>Scalability:</strong> Quick startup and horizontal scaling</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Portability:</strong> Run anywhere - dev, test, production</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Efficiency:</strong> Lightweight compared to VMs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Consistency:</strong> Eliminate "works on my machine" issues</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Scalability:</strong> Quick startup and horizontal scaling</div>
+    </div>
+</div>
                     </div>
 
                     <h3>Container vs VM Architecture</h3>
@@ -98,55 +132,99 @@ graph TB
                             <span class="framework-panel-icon">📄</span>
                             <h3>Images</h3>
                             <h4>Characteristics</h4>
-                            <ul>
-                                <li>Read-only templates</li>
-                                <li>Layered file system</li>
-                                <li>Built from Dockerfile</li>
-                                <li>Stored in registries</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Read-only templates</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Layered file system</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Built from Dockerfile</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Stored in registries</div>
+    </div>
+</div>
                             <h4>Best Practices</h4>
-                            <ul>
-                                <li>Use official base images</li>
-                                <li>Multi-stage builds</li>
-                                <li>Minimize layers</li>
-                                <li>Tag properly</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Use official base images</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Multi-stage builds</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Minimize layers</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Tag properly</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">📦</span>
                             <h3>Containers</h3>
                             <h4>Characteristics</h4>
-                            <ul>
-                                <li>Running instance of image</li>
-                                <li>Isolated process</li>
-                                <li>Ephemeral by default</li>
-                                <li>Lightweight and fast</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Running instance of image</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Isolated process</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Ephemeral by default</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Lightweight and fast</div>
+    </div>
+</div>
                             <h4>Lifecycle</h4>
-                            <ul>
-                                <li>Create, Start, Stop</li>
-                                <li>Restart, Pause, Unpause</li>
-                                <li>Remove</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Create, Start, Stop</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Restart, Pause, Unpause</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Remove</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🗂️</span>
                             <h3>Volumes</h3>
                             <h4>Purpose</h4>
-                            <ul>
-                                <li>Persistent data storage</li>
-                                <li>Share data between containers</li>
-                                <li>Decouple data from container</li>
-                                <li>Backup and migration</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Persistent data storage</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Share data between containers</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Decouple data from container</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Backup and migration</div>
+    </div>
+</div>
                             <h4>Types</h4>
-                            <ul>
-                                <li>Named volumes</li>
-                                <li>Bind mounts</li>
-                                <li>tmpfs mounts</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Named volumes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Bind mounts</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">tmpfs mounts</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -156,36 +234,60 @@ graph TB
                             <span class="framework-panel-icon">🏗️</span>
                             <h3>Multi-Stage Builds</h3>
                             <h4>Benefits</h4>
-                            <ul>
-                                <li>Smaller final images</li>
-                                <li>Separate build/runtime deps</li>
-                                <li>Better security</li>
-                                <li>Reduced attack surface</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Smaller final images</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Separate build/runtime deps</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Better security</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Reduced attack surface</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">⚡</span>
                             <h3>Layer Optimization</h3>
                             <h4>Techniques</h4>
-                            <ul>
-                                <li>Order commands by change frequency</li>
-                                <li>Combine RUN commands</li>
-                                <li>Use .dockerignore</li>
-                                <li>Clean up in same layer</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Order commands by change frequency</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Combine RUN commands</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use .dockerignore</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Clean up in same layer</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🔒</span>
                             <h3>Security</h3>
                             <h4>Practices</h4>
-                            <ul>
-                                <li>Run as non-root user</li>
-                                <li>Scan for vulnerabilities</li>
-                                <li>Use specific versions</li>
-                                <li>Minimal base images</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Run as non-root user</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Scan for vulnerabilities</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use specific versions</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Minimal base images</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -222,36 +324,60 @@ graph LR
                             <span class="framework-panel-icon">🎛️</span>
                             <h3>API Server</h3>
                             <h4>Role</h4>
-                            <ul>
-                                <li>Frontend for control plane</li>
-                                <li>RESTful API interface</li>
-                                <li>Validates and processes requests</li>
-                                <li>Gateway to cluster</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Frontend for control plane</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">RESTful API interface</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Validates and processes requests</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Gateway to cluster</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">💾</span>
                             <h3>etcd</h3>
                             <h4>Role</h4>
-                            <ul>
-                                <li>Distributed key-value store</li>
-                                <li>Cluster state storage</li>
-                                <li>Configuration data</li>
-                                <li>Strongly consistent</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Distributed key-value store</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Cluster state storage</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Configuration data</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Strongly consistent</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">📅</span>
                             <h3>Scheduler</h3>
                             <h4>Role</h4>
-                            <ul>
-                                <li>Assigns pods to nodes</li>
-                                <li>Resource requirements</li>
-                                <li>Affinity/anti-affinity</li>
-                                <li>Taints and tolerations</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Assigns pods to nodes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Resource requirements</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Affinity/anti-affinity</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Taints and tolerations</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -312,36 +438,60 @@ graph TB
                             <span class="framework-panel-icon">📦</span>
                             <h3>Pods</h3>
                             <h4>Characteristics</h4>
-                            <ul>
-                                <li>Smallest deployable unit</li>
-                                <li>One or more containers</li>
-                                <li>Shared network namespace</li>
-                                <li>Ephemeral by nature</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Smallest deployable unit</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">One or more containers</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Shared network namespace</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Ephemeral by nature</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🔄</span>
                             <h3>Deployments</h3>
                             <h4>Features</h4>
-                            <ul>
-                                <li>Declarative updates</li>
-                                <li>Rolling updates</li>
-                                <li>Rollback capability</li>
-                                <li>Replica management</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Declarative updates</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Rolling updates</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Rollback capability</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Replica management</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">⚙️</span>
                             <h3>StatefulSets</h3>
                             <h4>Use Cases</h4>
-                            <ul>
-                                <li>Stable network identities</li>
-                                <li>Ordered deployment/scaling</li>
-                                <li>Persistent storage</li>
-                                <li>Databases, queues</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Stable network identities</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Ordered deployment/scaling</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Persistent storage</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Databases, queues</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -352,12 +502,20 @@ graph TB
                             <h3>Services</h3>
                             <p class="framework-subtitle">Stable Network Endpoints</p>
                             <h4>Types</h4>
-                            <ul>
-                                <li><strong>ClusterIP:</strong> Internal only (default)</li>
-                                <li><strong>NodePort:</strong> Expose on node port</li>
-                                <li><strong>LoadBalancer:</strong> Cloud load balancer</li>
-                                <li><strong>ExternalName:</strong> DNS CNAME</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>ClusterIP:</strong> Internal only (default)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>NodePort:</strong> Expose on node port</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>LoadBalancer:</strong> Cloud load balancer</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>ExternalName:</strong> DNS CNAME</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -365,12 +523,20 @@ graph TB
                             <h3>Ingress</h3>
                             <p class="framework-subtitle">HTTP/HTTPS Routing</p>
                             <h4>Features</h4>
-                            <ul>
-                                <li>Host-based routing</li>
-                                <li>Path-based routing</li>
-                                <li>TLS termination</li>
-                                <li>Load balancing</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Host-based routing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Path-based routing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">TLS termination</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Load balancing</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -378,12 +544,20 @@ graph TB
                             <h3>ConfigMaps & Secrets</h3>
                             <p class="framework-subtitle">Configuration Management</p>
                             <h4>Purpose</h4>
-                            <ul>
-                                <li>Decouple config from code</li>
-                                <li>Environment variables</li>
-                                <li>Volume mounts</li>
-                                <li>Secrets: base64 encoded</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Decouple config from code</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Environment variables</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Volume mounts</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Secrets: base64 encoded</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -428,36 +602,60 @@ sequenceDiagram
                             <span class="framework-panel-icon">📈</span>
                             <h3>Horizontal Pod Autoscaler</h3>
                             <h4>Metrics</h4>
-                            <ul>
-                                <li>CPU utilization</li>
-                                <li>Memory usage</li>
-                                <li>Custom metrics</li>
-                                <li>External metrics</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">CPU utilization</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Memory usage</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Custom metrics</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">External metrics</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">⬆️</span>
                             <h3>Vertical Pod Autoscaler</h3>
                             <h4>Purpose</h4>
-                            <ul>
-                                <li>Adjust resource requests</li>
-                                <li>Right-size containers</li>
-                                <li>Optimize resource usage</li>
-                                <li>Reduce waste</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Adjust resource requests</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Right-size containers</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Optimize resource usage</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Reduce waste</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🖥️</span>
                             <h3>Cluster Autoscaler</h3>
                             <h4>Behavior</h4>
-                            <ul>
-                                <li>Add nodes when needed</li>
-                                <li>Remove underutilized nodes</li>
-                                <li>Cloud provider integration</li>
-                                <li>Cost optimization</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Add nodes when needed</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Remove underutilized nodes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Cloud provider integration</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Cost optimization</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -491,14 +689,26 @@ sequenceDiagram
 
                     <div class="info-box info-box-success">
                         <strong>Kubernetes Best Practices:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Resource Limits:</strong> Set CPU/memory requests and limits</li>
-                            <li><strong>Health Probes:</strong> Always define liveness and readiness</li>
-                            <li><strong>Labels:</strong> Use consistent labeling strategy</li>
-                            <li><strong>Namespaces:</strong> Organize resources logically</li>
-                            <li><strong>RBAC:</strong> Implement least privilege access</li>
-                            <li><strong>NetworkPolicies:</strong> Control pod-to-pod communication</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Resource Limits:</strong> Set CPU/memory requests and limits</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Health Probes:</strong> Always define liveness and readiness</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Labels:</strong> Use consistent labeling strategy</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Namespaces:</strong> Organize resources logically</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>RBAC:</strong> Implement least privilege access</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>NetworkPolicies:</strong> Control pod-to-pod communication</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -512,23 +722,39 @@ sequenceDiagram
                         <div class="framework-panel">
                             <span class="framework-panel-icon">📖</span>
                             <h3>Essential Books</h3>
-                            <ul>
-                                <li><strong>Kubernetes in Action</strong> - Marko Lukša</li>
-                                <li><strong>Docker Deep Dive</strong> - Nigel Poulton</li>
-                                <li><strong>Kubernetes Patterns</strong> - Bilgin Ibryam</li>
-                                <li><strong>Cloud Native DevOps with Kubernetes</strong> - Arundel & Domingus</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Kubernetes in Action</strong> - Marko Lukša</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Docker Deep Dive</strong> - Nigel Poulton</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Kubernetes Patterns</strong> - Bilgin Ibryam</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Cloud Native DevOps with Kubernetes</strong> - Arundel & Domingus</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🎓</span>
                             <h3>Certifications</h3>
-                            <ul>
-                                <li><strong>CKA:</strong> Certified Kubernetes Administrator</li>
-                                <li><strong>CKAD:</strong> Kubernetes Application Developer</li>
-                                <li><strong>CKS:</strong> Kubernetes Security Specialist</li>
-                                <li><strong>DCA:</strong> Docker Certified Associate</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>CKA:</strong> Certified Kubernetes Administrator</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>CKAD:</strong> Kubernetes Application Developer</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>CKS:</strong> Kubernetes Security Specialist</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>DCA:</strong> Docker Certified Associate</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">

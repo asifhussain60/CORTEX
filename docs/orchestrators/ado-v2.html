@@ -1,12 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CORTEX ADO Orchestrator v2.0 - Conversational wizard + automatic generation for Azure DevOps work items">
     <title>ADO Orchestrator v2.0 - CORTEX</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
@@ -16,10 +42,35 @@
     
     <!-- Level 1 Navigation Header (glassmorphism v4.1.0 compliant) -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../index.html" class="nav-link">
-                    <i class="fas fa-home"></i>
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../index.html" class="nav-link" mobile-nav-optimized>
+                    <i class="pulse-glow-glass--fast fa-home"></i>
                     <span>Home</span>
                 </a>
             </nav>
@@ -30,12 +81,12 @@
     <main class="container" id="main-content">
         <!-- Hero Section -->
         <article class="glass-card-display animation-t1">
-            <div class="hero-header">
+            <div class="btn-hero-story">
                 <h1>🎯 ADO Orchestrator v2.0</h1>
                 <p class="hero-subtitle">Conversational Wizard + Automatic Generation for Azure DevOps</p>
             </div>
             
-            <p class="hero-description">
+            <p class="btn-hero-story">
                 The v2.0 ADO Orchestrator revolutionizes work item creation with a <strong>dual-mode architecture</strong>: 
                 a <strong>7-stage conversational wizard</strong> for interactive refinement, and <strong>6-phase automatic generation</strong> 
                 for Planning v5 integration. Whether you prefer guided conversations or fully autonomous workflows, v2.0 generates 
@@ -89,7 +140,7 @@
         <article class="glass-card-display animation-t1">
             <h2>🔀 Dual-Mode Architecture</h2>
             
-            <div class="dual-modes">
+            <div class="feature-benefit-panel-dual">
                 <div class="mode-card glass-card-display">
                     <div class="mode-header">
                         <div class="mode-icon">💬</div>
@@ -100,14 +151,26 @@
                         7-stage dialogue for manual work item creation. Ideal for exploratory features, 
                         quick stories, or when human judgment is needed.
                     </p>
-                    <ul class="mode-features">
-                        <li>✅ Natural language input</li>
-                        <li>✅ Progressive refinement</li>
-                        <li>✅ Real-time validation</li>
-                        <li>✅ Interactive effort estimation</li>
-                        <li>✅ Acceptance criteria builder</li>
-                        <li>✅ Preview before generation</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">✅ Natural language input</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Progressive refinement</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Real-time validation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Interactive effort estimation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Acceptance criteria builder</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Preview before generation</div>
+    </div>
+</div>
                     <div class="mode-timing">
                         <strong>⏱️ Time:</strong> 5-10 minutes (guided)
                     </div>
@@ -123,14 +186,26 @@
                         6-phase automatic workflow from Planning v5 manifests. Zero interaction required—
                         perfect for complex features already planned.
                     </p>
-                    <ul class="mode-features">
-                        <li>✅ Planning v5 integration</li>
-                        <li>✅ Zero human input</li>
-                        <li>✅ Complete work item hierarchy</li>
-                        <li>✅ Acceptance criteria from plan</li>
-                        <li>✅ Automatic effort calculation</li>
-                        <li>✅ Immediate CSV export</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">✅ Planning v5 integration</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Zero human input</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Complete work item hierarchy</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Acceptance criteria from plan</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Automatic effort calculation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Immediate CSV export</div>
+    </div>
+</div>
                     <div class="mode-timing">
                         <strong>⏱️ Time:</strong> 30-90 seconds (autonomous)
                     </div>
@@ -141,77 +216,77 @@
         <!-- 7-Stage Conversational Wizard -->
         <article class="glass-card-display animation-t1">
             <h2>💬 7-Stage Conversational Wizard</h2>
-            <p class="section-intro">
+            <p class="level2-section-title-green">
                 Interactive dialogue flow for manual work item creation. Click any stage to explore its deep-dive documentation.
             </p>
             
-            <div class="phases-masonry">
+            <div class="workflow-phases">
                 <a href="ado-v2/wizard-stage-1-work-item-type.html" class="glass-card-clickable animation-t1">
-                    <div class="phase-badge">Stage 1</div>
+                    <div class="workflow-phases">Stage 1</div>
                     <div class="phase-icon">🎯</div>
                     <h3>Work Item Type Selection</h3>
                     <p>Choose Feature, User Story, or Task with context-aware recommendations</p>
-                    <div class="phase-meta">
+                    <div class="workflow-phases">
                         <span class="phase-duration">⏱️ 10-20s</span>
                     </div>
                 </a>
                 
                 <a href="ado-v2/wizard-stage-2-title-description.html" class="glass-card-clickable animation-t1">
-                    <div class="phase-badge">Stage 2</div>
+                    <div class="workflow-phases">Stage 2</div>
                     <div class="phase-icon">✍️</div>
                     <h3>Title & Description</h3>
                     <p>Natural language input with auto-refinement and template suggestions</p>
-                    <div class="phase-meta">
+                    <div class="workflow-phases">
                         <span class="phase-duration">⏱️ 30-60s</span>
                     </div>
                 </a>
                 
                 <a href="ado-v2/wizard-stage-3-acceptance-criteria.html" class="glass-card-clickable animation-t1">
-                    <div class="phase-badge">Stage 3</div>
+                    <div class="workflow-phases">Stage 3</div>
                     <div class="phase-icon">✅</div>
                     <h3>Acceptance Criteria</h3>
                     <p>Interactive builder with GIVEN-WHEN-THEN templates and validation</p>
-                    <div class="phase-meta">
+                    <div class="workflow-phases">
                         <span class="phase-duration">⏱️ 1-2min</span>
                     </div>
                 </a>
                 
                 <a href="ado-v2/wizard-stage-4-effort-estimation.html" class="glass-card-clickable animation-t1">
-                    <div class="phase-badge">Stage 4</div>
+                    <div class="workflow-phases">Stage 4</div>
                     <div class="phase-icon">⏳</div>
                     <h3>Effort Estimation</h3>
                     <p>AI-powered estimation with historical data comparison and adjustment</p>
-                    <div class="phase-meta">
+                    <div class="workflow-phases">
                         <span class="phase-duration">⏱️ 30-45s</span>
                     </div>
                 </a>
                 
                 <a href="ado-v2/wizard-stage-5-hierarchy-relationships.html" class="glass-card-clickable animation-t1">
-                    <div class="phase-badge">Stage 5</div>
+                    <div class="workflow-phases">Stage 5</div>
                     <div class="phase-icon">🔗</div>
                     <h3>Hierarchy & Relationships</h3>
                     <p>Define parent-child links, dependencies, and related work items</p>
-                    <div class="phase-meta">
+                    <div class="workflow-phases">
                         <span class="phase-duration">⏱️ 45-90s</span>
                     </div>
                 </a>
                 
                 <a href="ado-v2/wizard-stage-6-metadata-tagging.html" class="glass-card-clickable animation-t1">
-                    <div class="phase-badge">Stage 6</div>
+                    <div class="workflow-phases">Stage 6</div>
                     <div class="phase-icon">🏷️</div>
                     <h3>Metadata & Tagging</h3>
                     <p>Set priority, severity, tags, area path, and iteration path</p>
-                    <div class="phase-meta">
+                    <div class="workflow-phases">
                         <span class="phase-duration">⏱️ 30-60s</span>
                     </div>
                 </a>
                 
                 <a href="ado-v2/wizard-stage-7-preview-export.html" class="glass-card-clickable animation-t1">
-                    <div class="phase-badge">Stage 7</div>
+                    <div class="workflow-phases">Stage 7</div>
                     <div class="phase-icon">📤</div>
                     <h3>Preview & Export</h3>
                     <p>Review complete work item, adjust, and export as CSV or push via API</p>
-                    <div class="phase-meta">
+                    <div class="workflow-phases">
                         <span class="phase-duration">⏱️ 30-60s</span>
                     </div>
                 </a>
@@ -221,75 +296,75 @@
         <!-- 6-Phase Automatic Generation -->
         <article class="glass-card-display animation-t1">
             <h2>⚡ 6-Phase Automatic Generation</h2>
-            <p class="section-intro">
+            <p class="level2-section-title-green">
                 Fully autonomous workflow from Planning v5 manifests. No user interaction required. 
                 Click any phase to explore its deep-dive documentation.
             </p>
             
-            <div class="phases-masonry">
+            <div class="workflow-phases">
                 <a href="ado-v2/auto-phase-1-manifest-parsing.html" class="glass-card-clickable animation-t1">
-                    <div class="phase-badge">Phase 1</div>
+                    <div class="workflow-phases">Phase 1</div>
                     <div class="phase-icon">📄</div>
                     <h3>Manifest Parsing</h3>
                     <p>Load Planning v5 manifest, validate structure, extract work item data</p>
-                    <div class="phase-meta">
+                    <div class="workflow-phases">
                         <span class="phase-duration">⏱️ 2-5s</span>
-                        <span class="phase-criticality">🔴 Critical</span>
+                        <span class="workflow-phases">🔴 Critical</span>
                     </div>
                 </a>
                 
                 <a href="ado-v2/auto-phase-2-hierarchy-mapping.html" class="glass-card-clickable animation-t1">
-                    <div class="phase-badge">Phase 2</div>
+                    <div class="workflow-phases">Phase 2</div>
                     <div class="phase-icon">🗂️</div>
                     <h3>Hierarchy Mapping</h3>
                     <p>Map plan phases to Feature → User Story → Task hierarchy automatically</p>
-                    <div class="phase-meta">
+                    <div class="workflow-phases">
                         <span class="phase-duration">⏱️ 3-8s</span>
-                        <span class="phase-criticality">🔴 Critical</span>
+                        <span class="workflow-phases">🔴 Critical</span>
                     </div>
                 </a>
                 
                 <a href="ado-v2/auto-phase-3-acceptance-criteria-extraction.html" class="glass-card-clickable animation-t1">
-                    <div class="phase-badge">Phase 3</div>
+                    <div class="workflow-phases">Phase 3</div>
                     <div class="phase-icon">✅</div>
                     <h3>Acceptance Criteria Extraction</h3>
                     <p>Extract Success Conditions, Validation Gates, and Rollback Triggers from plan</p>
-                    <div class="phase-meta">
+                    <div class="workflow-phases">
                         <span class="phase-duration">⏱️ 5-10s</span>
-                        <span class="phase-criticality">🟡 High</span>
+                        <span class="workflow-phases">🟡 High</span>
                     </div>
                 </a>
                 
                 <a href="ado-v2/auto-phase-4-effort-calculation.html" class="glass-card-clickable animation-t1">
-                    <div class="phase-badge">Phase 4</div>
+                    <div class="workflow-phases">Phase 4</div>
                     <div class="phase-icon">⏳</div>
                     <h3>Effort Calculation</h3>
                     <p>Calculate effort from complexity scores and historical velocity data</p>
-                    <div class="phase-meta">
+                    <div class="workflow-phases">
                         <span class="phase-duration">⏱️ 3-6s</span>
-                        <span class="phase-criticality">🟢 Medium</span>
+                        <span class="workflow-phases">🟢 Medium</span>
                     </div>
                 </a>
                 
                 <a href="ado-v2/auto-phase-5-metadata-enrichment.html" class="glass-card-clickable animation-t1">
-                    <div class="phase-badge">Phase 5</div>
+                    <div class="workflow-phases">Phase 5</div>
                     <div class="phase-icon">🏷️</div>
                     <h3>Metadata Enrichment</h3>
                     <p>Add priority, tags, area/iteration paths from plan context and org defaults</p>
-                    <div class="phase-meta">
+                    <div class="workflow-phases">
                         <span class="phase-duration">⏱️ 2-4s</span>
-                        <span class="phase-criticality">🟢 Medium</span>
+                        <span class="workflow-phases">🟢 Medium</span>
                     </div>
                 </a>
                 
                 <a href="ado-v2/auto-phase-6-csv-generation.html" class="glass-card-clickable animation-t1">
-                    <div class="phase-badge">Phase 6</div>
+                    <div class="workflow-phases">Phase 6</div>
                     <div class="phase-icon">📤</div>
                     <h3>CSV Generation & Export</h3>
                     <p>Generate ADO-compliant CSV with proper column mapping and validation</p>
-                    <div class="phase-meta">
+                    <div class="workflow-phases">
                         <span class="phase-duration">⏱️ 3-7s</span>
-                        <span class="phase-criticality">🔴 Critical</span>
+                        <span class="workflow-phases">🔴 Critical</span>
                     </div>
                 </a>
             </div>
@@ -352,7 +427,7 @@ graph TB
                 </pre>
             </div>
             
-            <p class="diagram-caption">
+            <p class="architecture-diagram">
                 ADO v2.0 architecture showing dual-mode operation: 7-stage conversational wizard for interactive 
                 creation and 6-phase automatic generation from Planning v5 manifests.
             </p>
@@ -371,32 +446,56 @@ graph TB
             <div class="hierarchy-description">
                 <div class="hierarchy-item">
                     <h3>🎯 Features (Epic-level)</h3>
-                    <ul>
-                        <li>High-level business capabilities</li>
-                        <li>Maps to Planning v5 "Feature" scope</li>
-                        <li>Contains: Title, Description, Business Value, Acceptance Criteria</li>
-                        <li>Example: "User Authentication System"</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">High-level business capabilities</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Maps to Planning v5 "Feature" scope</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Contains: Title, Description, Business Value, Acceptance Criteria</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Example: "User Authentication System"</div>
+    </div>
+</div>
                 </div>
                 
                 <div class="hierarchy-item">
                     <h3>📖 User Stories (Requirement-level)</h3>
-                    <ul>
-                        <li>User-focused functional requirements</li>
-                        <li>Maps to Planning v5 "Phases"</li>
-                        <li>Contains: As-a / I-want / So-that, Acceptance Criteria, Story Points</li>
-                        <li>Example: "As a user, I want OAuth2 login so that I can access with Google"</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">User-focused functional requirements</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Maps to Planning v5 "Phases"</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Contains: As-a / I-want / So-that, Acceptance Criteria, Story Points</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Example: "As a user, I want OAuth2 login so that I can access with Google"</div>
+    </div>
+</div>
                 </div>
                 
                 <div class="hierarchy-item">
                     <h3>✅ Tasks (Implementation-level)</h3>
-                    <ul>
-                        <li>Technical implementation tasks</li>
-                        <li>Maps to Planning v5 "Phase Tasks"</li>
-                        <li>Contains: Description, Effort (hours), Remaining Work, Activity</li>
-                        <li>Example: "Implement OAuth2 provider integration (8 hours)"</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Technical implementation tasks</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Maps to Planning v5 "Phase Tasks"</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Contains: Description, Effort (hours), Remaining Work, Activity</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Example: "Implement OAuth2 provider integration (8 hours)"</div>
+    </div>
+</div>
                 </div>
             </div>
         </article>
@@ -419,19 +518,41 @@ Task,Implement OAuth2 Provider,"Create OAuth2Provider class...","Task complete w
             
             <div class="csv-columns">
                 <h3>Standard Columns</h3>
-                <ul>
-                    <li><strong>Work Item Type:</strong> Feature | User Story | Task</li>
-                    <li><strong>Title:</strong> Concise work item name (50-80 chars)</li>
-                    <li><strong>Description:</strong> Detailed explanation with markdown</li>
-                    <li><strong>Acceptance Criteria:</strong> GIVEN-WHEN-THEN or SC-X format</li>
-                    <li><strong>State:</strong> New | Active | Resolved | Closed</li>
-                    <li><strong>Priority:</strong> 1 (Critical) → 4 (Low)</li>
-                    <li><strong>Effort:</strong> Story Points (Stories) or Hours (Tasks)</li>
-                    <li><strong>Tags:</strong> Semicolon-separated keywords</li>
-                    <li><strong>Area Path:</strong> Project\Component hierarchy</li>
-                    <li><strong>Iteration Path:</strong> Sprint or release timeline</li>
-                    <li><strong>Parent:</strong> Parent work item title (for hierarchy)</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Work Item Type:</strong> Feature | User Story | Task</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Title:</strong> Concise work item name (50-80 chars)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Description:</strong> Detailed explanation with markdown</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Acceptance Criteria:</strong> GIVEN-WHEN-THEN or SC-X format</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>State:</strong> New | Active | Resolved | Closed</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Priority:</strong> 1 (Critical) → 4 (Low)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Effort:</strong> Story Points (Stories) or Hours (Tasks)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Tags:</strong> Semicolon-separated keywords</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Area Path:</strong> Project\Component hierarchy</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Iteration Path:</strong> Sprint or release timeline</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Parent:</strong> Parent work item title (for hierarchy)</div>
+    </div>
+</div>
             </div>
         </article>
         
@@ -439,38 +560,38 @@ Task,Implement OAuth2 Provider,"Create OAuth2Provider class...","Task complete w
         <article class="glass-card-display animation-t1">
             <h2>🎯 Key Benefits</h2>
             
-            <div class="benefits-grid">
-                <div class="benefit-card glass-card-display">
+            <div class="feature-benefit-panel">
+                <div class="feature-benefit-panel glass-card-display">
                     <div class="benefit-icon">⏱️</div>
                     <h3>90% Time Saved</h3>
                     <p>What took 2-3 hours of manual ADO data entry now takes 30-90 seconds with automatic generation</p>
                 </div>
                 
-                <div class="benefit-card glass-card-display">
+                <div class="feature-benefit-panel glass-card-display">
                     <div class="benefit-icon">🎯</div>
                     <h3>Perfect Hierarchy</h3>
                     <p>Automatic parent-child linking ensures proper Feature → Story → Task relationships</p>
                 </div>
                 
-                <div class="benefit-card glass-card-display">
+                <div class="feature-benefit-panel glass-card-display">
                     <div class="benefit-icon">✅</div>
                     <h3>Complete Acceptance Criteria</h3>
                     <p>Every work item includes testable AC in GIVEN-WHEN-THEN or SC-VG-RT format</p>
                 </div>
                 
-                <div class="benefit-card glass-card-display">
+                <div class="feature-benefit-panel glass-card-display">
                     <div class="benefit-icon">📊</div>
                     <h3>Accurate Effort Estimation</h3>
                     <p>AI-powered estimates based on complexity scoring and historical velocity data</p>
                 </div>
                 
-                <div class="benefit-card glass-card-display">
+                <div class="feature-benefit-panel glass-card-display">
                     <div class="benefit-icon">🔗</div>
                     <h3>Planning v5 Integration</h3>
                     <p>Seamless handoff from Planning v5 manifests to ADO work items (zero manual mapping)</p>
                 </div>
                 
-                <div class="benefit-card glass-card-display">
+                <div class="feature-benefit-panel glass-card-display">
                     <div class="benefit-icon">🚀</div>
                     <h3>Immediate Import</h3>
                     <p>Generated CSV files import directly to ADO with zero validation errors</p>
@@ -561,34 +682,34 @@ Task,Implement OAuth2 Provider,"Create OAuth2Provider class...","Task complete w
         <article class="glass-card-display animation-t1">
             <h2>📚 Related Documentation</h2>
             
-            <div class="related-links">
-                <a href="planning-v5.html" class="related-link glass-card-clickable animation-t1">
-                    <div class="related-icon">🧠</div>
-                    <div class="related-content">
+            <div class="level1-relationship-grid">
+                <a href="planning-v5.html" class="level1-relationship-grid glass-card-clickable animation-t1">
+                    <div class="level1-relationship-grid">🧠</div>
+                    <div class="level1-relationship-grid">
                         <h3>Planning System v5</h3>
                         <p>Create comprehensive plans that feed directly into ADO v2</p>
                     </div>
                 </a>
                 
-                <a href="execution-orchestrator.html" class="related-link glass-card-clickable animation-t1">
-                    <div class="related-icon">⚡</div>
-                    <div class="related-content">
+                <a href="execution-orchestrator.html" class="level1-relationship-grid glass-card-clickable animation-t1">
+                    <div class="level1-relationship-grid">⚡</div>
+                    <div class="level1-relationship-grid">
                         <h3>Execution Orchestrator</h3>
                         <p>Execute work items generated by ADO v2 with TDD integration</p>
                     </div>
                 </a>
                 
-                <a href="../architecture/knowledge-graph.html" class="related-link glass-card-clickable animation-t1">
-                    <div class="related-icon">🕸️</div>
-                    <div class="related-content">
+                <a href="../architecture/knowledge-graph.html" class="level1-relationship-grid glass-card-clickable animation-t1">
+                    <div class="level1-relationship-grid">🕸️</div>
+                    <div class="level1-relationship-grid">
                         <h3>Knowledge Graph</h3>
                         <p>Powers ADO v2 metadata enrichment and relationship mapping</p>
                     </div>
                 </a>
                 
-                <a href="../getting-started/index.html" class="related-link glass-card-clickable animation-t1">
-                    <div class="related-icon">🚀</div>
-                    <div class="related-content">
+                <a href="../getting-started/index.html" class="level1-relationship-grid glass-card-clickable animation-t1">
+                    <div class="level1-relationship-grid">🚀</div>
+                    <div class="level1-relationship-grid">
                         <h3>Getting Started</h3>
                         <p>Learn how to configure ADO v2 with your Azure DevOps instance</p>
                     </div>

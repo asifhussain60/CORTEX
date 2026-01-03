@@ -1,21 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Design Patterns | CORTEX Knowledge</title>
     <link rel="stylesheet" href="../../../assets/css/main.css">
+    <link rel="stylesheet" href="../../../assets/css/intentional-classes.css">
 </head>
 <body>
     <!-- Header with Breadcrumb Navigation -->
-    <header class="header-glass">
+    <header class="panel-header-centered">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="container">
             <nav class="breadcrumb">
-                <a href="../../../index.html" class="breadcrumb-link">Home</a>
+                <a href="../../../index.html" class="breadcrumb-separator">Home</a>
                 <span class="breadcrumb-separator">/</span>
-                <a href="../../index.html" class="breadcrumb-link">Knowledge Library</a>
+                <a href="../../index.html" class="breadcrumb-separator">Knowledge Library</a>
                 <span class="breadcrumb-separator">/</span>
-                <a href="../../engineering.html" class="breadcrumb-link">Engineering</a>
+                <a href="../../engineering.html" class="breadcrumb-separator">Engineering</a>
                 <span class="breadcrumb-separator">/</span>
                 <span class="breadcrumb-current">Design Patterns</span>
             </nav>
@@ -23,22 +74,22 @@
     </header>
 
     <!-- Main Content -->
-    <main class="main-content">
+    <main class="level1-domain-icon--frontend">
         <!-- Hero Section -->
         <section class="knowledge-file-hero">
             <div class="container">
                 <div class="hero-content">
                     <h1 class="hero-title">Design Patterns</h1>
                     <p class="hero-subtitle">Elements of Reusable Object-Oriented Software</p>
-                    <div class="hero-meta">
-                        <span class="meta-item">
-                            <i class="icon-author"></i> Gang of Four (GoF)
+                    <div class="btn-hero-story">
+                        <span class="metadata-grid">
+                            <i class="level1-integration-icon-container"></i> Gang of Four (GoF)
                         </span>
-                        <span class="meta-item">
-                            <i class="icon-category"></i> Software Engineering
+                        <span class="metadata-grid">
+                            <i class="level1-integration-icon-container"></i> Software Engineering
                         </span>
-                        <span class="meta-item">
-                            <i class="icon-version"></i> v1.0.0
+                        <span class="metadata-grid">
+                            <i class="level1-integration-icon-container"></i> v1.0.0
                         </span>
                     </div>
                 </div>
@@ -46,9 +97,9 @@
         </section>
 
         <!-- Tab Navigation -->
-        <section class="tab-container">
+        <section class="demo-tab-v-desc">
             <div class="container">
-                <div class="tab-nav">
+                <div class="demo-tab-v-desc">
                     <button class="tab-button active" data-tab="overview">Overview</button>
                     <button class="tab-button" data-tab="content">Content</button>
                     <button class="tab-button" data-tab="examples">Examples</button>
@@ -59,13 +110,13 @@
                 <div class="tab-content active" id="overview">
                     <div class="content-section">
                         <h2 class="section-header">What are Design Patterns?</h2>
-                        <p class="section-text">
+                        <p class="level2-section-title-green">
                             Design patterns are reusable solutions to commonly occurring problems in software design. First cataloged by the Gang of Four (Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides) in their seminal 1994 book "Design Patterns: Elements of Reusable Object-Oriented Software," these patterns represent decades of collective wisdom from experienced software architects.
                         </p>
-                        <p class="section-text">
+                        <p class="level2-section-title-green">
                             A design pattern is not a finished design that can be directly transformed into code. Rather, it's a template for how to solve a problem that can be used in many different situations. Patterns show relationships and interactions between classes or objects without specifying the final application classes or objects involved.
                         </p>
-                        <p class="section-text">
+                        <p class="level2-section-title-green">
                             Design patterns accelerate development by providing tested, proven development paradigms. They improve code readability for experienced developers and facilitate communication through a shared vocabulary. Well-established patterns create a common language that transcends programming languages and frameworks.
                         </p>
                     </div>
@@ -73,94 +124,176 @@
                     <div class="content-section">
                         <h2 class="section-header">Pattern Categories</h2>
                         <div class="pattern-category-grid">
-                            <div class="category-card">
-                                <h3 class="category-name">Creational Patterns</h3>
-                                <p class="category-desc">Deal with object creation mechanisms</p>
-                                <ul class="pattern-list">
-                                    <li>Singleton</li>
-                                    <li>Factory Method</li>
-                                    <li>Abstract Factory</li>
-                                    <li>Builder</li>
-                                    <li>Prototype</li>
-                                </ul>
+                            <div class="sts-category-icon-wrapper">
+                                <h3 class="sts-category-icon-wrapper">Creational Patterns</h3>
+                                <p class="sts-category-icon-wrapper">Deal with object creation mechanisms</p>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Singleton</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Factory Method</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Abstract Factory</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Builder</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Prototype</div>
+    </div>
+</div>
                             </div>
-                            <div class="category-card">
-                                <h3 class="category-name">Structural Patterns</h3>
-                                <p class="category-desc">Deal with object composition and relationships</p>
-                                <ul class="pattern-list">
-                                    <li>Adapter</li>
-                                    <li>Bridge</li>
-                                    <li>Composite</li>
-                                    <li>Decorator</li>
-                                    <li>Facade</li>
-                                    <li>Flyweight</li>
-                                    <li>Proxy</li>
-                                </ul>
+                            <div class="sts-category-icon-wrapper">
+                                <h3 class="sts-category-icon-wrapper">Structural Patterns</h3>
+                                <p class="sts-category-icon-wrapper">Deal with object composition and relationships</p>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Adapter</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Bridge</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Composite</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Decorator</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Facade</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Flyweight</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Proxy</div>
+    </div>
+</div>
                             </div>
-                            <div class="category-card">
-                                <h3 class="category-name">Behavioral Patterns</h3>
-                                <p class="category-desc">Deal with object collaboration and responsibilities</p>
-                                <ul class="pattern-list">
-                                    <li>Chain of Responsibility</li>
-                                    <li>Command</li>
-                                    <li>Iterator</li>
-                                    <li>Mediator</li>
-                                    <li>Observer</li>
-                                    <li>State</li>
-                                    <li>Strategy</li>
-                                    <li>Template Method</li>
-                                </ul>
+                            <div class="sts-category-icon-wrapper">
+                                <h3 class="sts-category-icon-wrapper">Behavioral Patterns</h3>
+                                <p class="sts-category-icon-wrapper">Deal with object collaboration and responsibilities</p>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Chain of Responsibility</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Command</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Iterator</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Mediator</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Observer</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">State</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Strategy</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Template Method</div>
+    </div>
+</div>
                             </div>
-                            <div class="category-card">
-                                <h3 class="category-name">Modern Enterprise</h3>
-                                <p class="category-desc">Modern patterns for enterprise applications</p>
-                                <ul class="pattern-list">
-                                    <li>Dependency Injection</li>
-                                    <li>Repository</li>
-                                    <li>Unit of Work</li>
-                                    <li>Specification</li>
-                                </ul>
+                            <div class="sts-category-icon-wrapper">
+                                <h3 class="sts-category-icon-wrapper">Modern Enterprise</h3>
+                                <p class="sts-category-icon-wrapper">Modern patterns for enterprise applications</p>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Dependency Injection</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Repository</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Unit of Work</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Specification</div>
+    </div>
+</div>
                             </div>
                         </div>
                     </div>
 
                     <div class="content-section">
                         <h2 class="section-header">Pattern Selection Guide</h2>
-                        <p class="section-text">
+                        <p class="level2-section-title-green">
                             Choose the right pattern based on your specific problem:
                         </p>
-                        <div class="selection-guide">
+                        <div class="selected">
                             <div class="guide-section">
                                 <h3 class="guide-header">Object Creation Problems</h3>
-                                <ul class="guide-list">
-                                    <li><strong>Single instance needed:</strong> Singleton</li>
-                                    <li><strong>Create without specifying class:</strong> Factory Method</li>
-                                    <li><strong>Families of related objects:</strong> Abstract Factory</li>
-                                    <li><strong>Complex object construction:</strong> Builder</li>
-                                    <li><strong>Clone existing objects:</strong> Prototype</li>
-                                </ul>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Single instance needed:</strong> Singleton</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Create without specifying class:</strong> Factory Method</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Families of related objects:</strong> Abstract Factory</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Complex object construction:</strong> Builder</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Clone existing objects:</strong> Prototype</div>
+    </div>
+</div>
                             </div>
                             <div class="guide-section">
                                 <h3 class="guide-header">Object Structure Problems</h3>
-                                <ul class="guide-list">
-                                    <li><strong>Incompatible interfaces:</strong> Adapter</li>
-                                    <li><strong>Separate abstraction/implementation:</strong> Bridge</li>
-                                    <li><strong>Tree structures:</strong> Composite</li>
-                                    <li><strong>Add responsibilities dynamically:</strong> Decorator</li>
-                                    <li><strong>Simplify complex system:</strong> Facade</li>
-                                    <li><strong>Control object access:</strong> Proxy</li>
-                                </ul>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Incompatible interfaces:</strong> Adapter</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Separate abstraction/implementation:</strong> Bridge</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Tree structures:</strong> Composite</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Add responsibilities dynamically:</strong> Decorator</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Simplify complex system:</strong> Facade</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Control object access:</strong> Proxy</div>
+    </div>
+</div>
                             </div>
                             <div class="guide-section">
                                 <h3 class="guide-header">Object Behavior Problems</h3>
-                                <ul class="guide-list">
-                                    <li><strong>Chain of handlers:</strong> Chain of Responsibility</li>
-                                    <li><strong>Encapsulate requests:</strong> Command</li>
-                                    <li><strong>Notify multiple objects:</strong> Observer</li>
-                                    <li><strong>Interchangeable algorithms:</strong> Strategy</li>
-                                    <li><strong>Algorithm skeleton:</strong> Template Method</li>
-                                    <li><strong>Behavior based on state:</strong> State</li>
-                                </ul>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Chain of handlers:</strong> Chain of Responsibility</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Encapsulate requests:</strong> Command</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Notify multiple objects:</strong> Observer</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Interchangeable algorithms:</strong> Strategy</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Algorithm skeleton:</strong> Template Method</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Behavior based on state:</strong> State</div>
+    </div>
+</div>
                             </div>
                         </div>
                     </div>
@@ -170,25 +303,49 @@
                         <div class="usage-grid">
                             <div class="usage-card usage-when">
                                 <h3 class="usage-title">✅ Use When</h3>
-                                <ul class="usage-list">
-                                    <li>Building large-scale enterprise applications</li>
-                                    <li>Working on frameworks or libraries</li>
-                                    <li>Designing extensible architectures</li>
-                                    <li>Team needs shared vocabulary for design discussions</li>
-                                    <li>Problem matches known pattern perfectly</li>
-                                    <li>Long-term maintainability is priority</li>
-                                </ul>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Building large-scale enterprise applications</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Working on frameworks or libraries</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Designing extensible architectures</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Team needs shared vocabulary for design discussions</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Problem matches known pattern perfectly</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Long-term maintainability is priority</div>
+    </div>
+</div>
                             </div>
                             <div class="usage-card usage-avoid">
                                 <h3 class="usage-title">❌ Be Cautious When</h3>
-                                <ul class="usage-list">
-                                    <li>Building simple applications (avoid over-engineering)</li>
-                                    <li>Team unfamiliar with patterns (training needed)</li>
-                                    <li>Pattern doesn't fit problem (force-fitting anti-pattern)</li>
-                                    <li>Simpler solution exists</li>
-                                    <li>Pattern adds unnecessary complexity</li>
-                                    <li>Performance is critical concern (some patterns add overhead)</li>
-                                </ul>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Building simple applications (avoid over-engineering)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Team unfamiliar with patterns (training needed)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Pattern doesn't fit problem (force-fitting anti-pattern)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Simpler solution exists</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Pattern adds unnecessary complexity</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Performance is critical concern (some patterns add overhead)</div>
+    </div>
+</div>
                             </div>
                         </div>
                     </div>
@@ -199,37 +356,51 @@
                     <div class="content-section">
                         <h2 class="section-header">Creational Patterns</h2>
                         
-                        <div class="pattern-detail">
-                            <h3 class="pattern-name">Singleton Pattern</h3>
-                            <p class="pattern-intent"><strong>Intent:</strong> Ensure a class has only one instance and provide global access point</p>
-                            <p class="section-text">
+                        <div class="badge-patterns">
+                            <h3 class="badge-patterns">Singleton Pattern</h3>
+                            <p class="badge-patterns"><strong>Intent:</strong> Ensure a class has only one instance and provide global access point</p>
+                            <p class="level2-section-title-green">
                                 The Singleton pattern restricts instantiation of a class to a single instance. This is useful when exactly one object is needed to coordinate actions across the system, such as database connections, configuration managers, or logging services.
                             </p>
                             
-                            <h4 class="subsection-header">Structure</h4>
-                            <pre class="structure-diagram">Singleton
+                            <h4 class="level1-subsection-title">Structure</h4>
+                            <pre class="level1-viz-instructions">Singleton
 ├── static instance: Singleton
 ├── private constructor()
 └── static getInstance(): Singleton</pre>
 
-                            <h4 class="subsection-header">Pros & Cons</h4>
+                            <h4 class="level1-subsection-title">Pros & Cons</h4>
                             <div class="pros-cons-grid">
-                                <div class="pros-section">
+                                <div class="level1-text-prose-lg">
                                     <strong>Pros:</strong>
-                                    <ul>
-                                        <li>Controlled access to sole instance</li>
-                                        <li>Reduced namespace pollution vs globals</li>
-                                        <li>Permits variable number of instances</li>
-                                    </ul>
+                                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Controlled access to sole instance</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Reduced namespace pollution vs globals</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Permits variable number of instances</div>
+    </div>
+</div>
                                 </div>
                                 <div class="cons-section">
                                     <strong>Cons:</strong>
-                                    <ul>
-                                        <li>Difficult to test (hard to mock)</li>
-                                        <li>Violates Single Responsibility Principle</li>
-                                        <li>Thread safety concerns</li>
-                                        <li>Can hide dependencies</li>
-                                    </ul>
+                                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Difficult to test (hard to mock)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Violates Single Responsibility Principle</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Thread safety concerns</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Can hide dependencies</div>
+    </div>
+</div>
                                 </div>
                             </div>
 
@@ -238,15 +409,15 @@
                             </p>
                         </div>
 
-                        <div class="pattern-detail">
-                            <h3 class="pattern-name">Factory Method Pattern</h3>
-                            <p class="pattern-intent"><strong>Intent:</strong> Define interface for creating object, let subclasses decide which class to instantiate</p>
-                            <p class="section-text">
+                        <div class="badge-patterns">
+                            <h3 class="badge-patterns">Factory Method Pattern</h3>
+                            <p class="badge-patterns"><strong>Intent:</strong> Define interface for creating object, let subclasses decide which class to instantiate</p>
+                            <p class="level2-section-title-green">
                                 Factory Method lets a class defer instantiation to subclasses. It provides a way to delegate the instantiation logic to child classes, making the code more flexible and reusable.
                             </p>
                             
-                            <h4 class="subsection-header">Structure</h4>
-                            <pre class="structure-diagram">Creator (abstract)
+                            <h4 class="level1-subsection-title">Structure</h4>
+                            <pre class="level1-viz-instructions">Creator (abstract)
 ├── factoryMethod(): Product (abstract)
 └── operation()
 
@@ -257,168 +428,246 @@ Product (interface)
 ├── ConcreteProductA
 └── ConcreteProductB</pre>
 
-                            <h4 class="subsection-header">When to Use</h4>
-                            <ul class="usage-list">
-                                <li>Class cannot anticipate the class of objects it must create</li>
-                                <li>Class wants subclasses to specify objects it creates</li>
-                                <li>Classes delegate responsibility to helper subclasses</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">When to Use</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Class cannot anticipate the class of objects it must create</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Class wants subclasses to specify objects it creates</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Classes delegate responsibility to helper subclasses</div>
+    </div>
+</div>
                         </div>
 
-                        <div class="pattern-detail">
-                            <h3 class="pattern-name">Builder Pattern</h3>
-                            <p class="pattern-intent"><strong>Intent:</strong> Separate construction of complex object from its representation</p>
-                            <p class="section-text">
+                        <div class="badge-patterns">
+                            <h3 class="badge-patterns">Builder Pattern</h3>
+                            <p class="badge-patterns"><strong>Intent:</strong> Separate construction of complex object from its representation</p>
+                            <p class="level2-section-title-green">
                                 The Builder pattern constructs complex objects step by step. It allows you to produce different types and representations of an object using the same construction code. Particularly useful for objects with many optional parameters.
                             </p>
                             
-                            <h4 class="subsection-header">Key Benefits</h4>
-                            <ul class="benefit-list">
-                                <li>Construct objects step-by-step with method chaining</li>
-                                <li>Reuse same construction code for different representations</li>
-                                <li>Isolate complex construction code from business logic</li>
-                                <li>Avoid telescoping constructors (constructor with many parameters)</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">Key Benefits</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Construct objects step-by-step with method chaining</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Reuse same construction code for different representations</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Isolate complex construction code from business logic</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Avoid telescoping constructors (constructor with many parameters)</div>
+    </div>
+</div>
                         </div>
                     </div>
 
                     <div class="content-section">
                         <h2 class="section-header">Structural Patterns</h2>
                         
-                        <div class="pattern-detail">
-                            <h3 class="pattern-name">Adapter Pattern</h3>
-                            <p class="pattern-intent"><strong>Intent:</strong> Convert interface of class into another interface clients expect</p>
-                            <p class="section-text">
+                        <div class="badge-patterns">
+                            <h3 class="badge-patterns">Adapter Pattern</h3>
+                            <p class="badge-patterns"><strong>Intent:</strong> Convert interface of class into another interface clients expect</p>
+                            <p class="level2-section-title-green">
                                 The Adapter pattern allows incompatible interfaces to work together. It acts as a bridge between two incompatible interfaces by wrapping an existing class with a new interface.
                             </p>
                             
-                            <h4 class="subsection-header">Use Cases</h4>
-                            <ul class="usage-list">
-                                <li>Integrate third-party libraries with incompatible interfaces</li>
-                                <li>Create reusable classes that work with unforeseen classes</li>
-                                <li>Wrap legacy code to work with modern interfaces</li>
-                                <li>Enable multiple implementations of same interface</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">Use Cases</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Integrate third-party libraries with incompatible interfaces</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Create reusable classes that work with unforeseen classes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Wrap legacy code to work with modern interfaces</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Enable multiple implementations of same interface</div>
+    </div>
+</div>
                         </div>
 
-                        <div class="pattern-detail">
-                            <h3 class="pattern-name">Decorator Pattern</h3>
-                            <p class="pattern-intent"><strong>Intent:</strong> Attach additional responsibilities to object dynamically</p>
-                            <p class="section-text">
+                        <div class="badge-patterns">
+                            <h3 class="badge-patterns">Decorator Pattern</h3>
+                            <p class="badge-patterns"><strong>Intent:</strong> Attach additional responsibilities to object dynamically</p>
+                            <p class="level2-section-title-green">
                                 Decorators provide a flexible alternative to subclassing for extending functionality. They wrap objects to add new behaviors without modifying the original object's code.
                             </p>
                             
-                            <h4 class="subsection-header">Advantages</h4>
-                            <ul class="benefit-list">
-                                <li>More flexible than static inheritance</li>
-                                <li>Avoids feature-laden classes high in hierarchy</li>
-                                <li>Can add/remove responsibilities at runtime</li>
-                                <li>Responsibilities can be combined in different ways</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">Advantages</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">More flexible than static inheritance</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Avoids feature-laden classes high in hierarchy</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Can add/remove responsibilities at runtime</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Responsibilities can be combined in different ways</div>
+    </div>
+</div>
                         </div>
 
-                        <div class="pattern-detail">
-                            <h3 class="pattern-name">Facade Pattern</h3>
-                            <p class="pattern-intent"><strong>Intent:</strong> Provide unified interface to set of interfaces in subsystem</p>
-                            <p class="section-text">
+                        <div class="badge-patterns">
+                            <h3 class="badge-patterns">Facade Pattern</h3>
+                            <p class="badge-patterns"><strong>Intent:</strong> Provide unified interface to set of interfaces in subsystem</p>
+                            <p class="level2-section-title-green">
                                 The Facade pattern defines a higher-level interface that makes a subsystem easier to use. It provides a simplified interface to a complex system of classes, libraries, or frameworks.
                             </p>
                             
-                            <h4 class="subsection-header">Benefits</h4>
-                            <ul class="benefit-list">
-                                <li>Shields clients from subsystem components</li>
-                                <li>Promotes weak coupling between subsystem and clients</li>
-                                <li>Simplifies usage of complex libraries</li>
-                                <li>Provides entry point to each subsystem level</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">Benefits</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Shields clients from subsystem components</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Promotes weak coupling between subsystem and clients</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Simplifies usage of complex libraries</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Provides entry point to each subsystem level</div>
+    </div>
+</div>
                         </div>
                     </div>
 
                     <div class="content-section">
                         <h2 class="section-header">Behavioral Patterns</h2>
                         
-                        <div class="pattern-detail">
-                            <h3 class="pattern-name">Strategy Pattern</h3>
-                            <p class="pattern-intent"><strong>Intent:</strong> Define family of algorithms, encapsulate each, make them interchangeable</p>
-                            <p class="section-text">
+                        <div class="badge-patterns">
+                            <h3 class="badge-patterns">Strategy Pattern</h3>
+                            <p class="badge-patterns"><strong>Intent:</strong> Define family of algorithms, encapsulate each, make them interchangeable</p>
+                            <p class="level2-section-title-green">
                                 The Strategy pattern lets the algorithm vary independently from clients that use it. It defines a family of algorithms, puts each in a separate class, and makes their objects interchangeable.
                             </p>
                             
-                            <h4 class="subsection-header">When to Use</h4>
-                            <ul class="usage-list">
-                                <li>Many related classes differ only in their behavior</li>
-                                <li>Need different variants of an algorithm</li>
-                                <li>Algorithm uses data clients shouldn't know about</li>
-                                <li>Class defines many behaviors as conditional statements</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">When to Use</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Many related classes differ only in their behavior</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Need different variants of an algorithm</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Algorithm uses data clients shouldn't know about</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Class defines many behaviors as conditional statements</div>
+    </div>
+</div>
                         </div>
 
-                        <div class="pattern-detail">
-                            <h3 class="pattern-name">Observer Pattern</h3>
-                            <p class="pattern-intent"><strong>Intent:</strong> Define one-to-many dependency so when one object changes, dependents are notified</p>
-                            <p class="section-text">
+                        <div class="badge-patterns">
+                            <h3 class="badge-patterns">Observer Pattern</h3>
+                            <p class="badge-patterns"><strong>Intent:</strong> Define one-to-many dependency so when one object changes, dependents are notified</p>
+                            <p class="level2-section-title-green">
                                 The Observer pattern establishes a subscription mechanism to notify multiple objects about events that happen to the object they're observing. Also known as Publish-Subscribe pattern.
                             </p>
                             
-                            <h4 class="subsection-header">Key Components</h4>
-                            <ul class="component-list">
-                                <li><strong>Subject:</strong> Maintains list of observers, notifies them of state changes</li>
-                                <li><strong>Observer:</strong> Defines updating interface for objects notified of changes</li>
-                                <li><strong>ConcreteSubject:</strong> Stores state of interest to observers</li>
-                                <li><strong>ConcreteObserver:</strong> Maintains reference to subject, implements update</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">Key Components</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Subject:</strong> Maintains list of observers, notifies them of state changes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Observer:</strong> Defines updating interface for objects notified of changes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>ConcreteSubject:</strong> Stores state of interest to observers</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>ConcreteObserver:</strong> Maintains reference to subject, implements update</div>
+    </div>
+</div>
                         </div>
 
-                        <div class="pattern-detail">
-                            <h3 class="pattern-name">Command Pattern</h3>
-                            <p class="pattern-intent"><strong>Intent:</strong> Encapsulate request as object, allowing parameterization and queuing</p>
-                            <p class="section-text">
+                        <div class="badge-patterns">
+                            <h3 class="badge-patterns">Command Pattern</h3>
+                            <p class="badge-patterns"><strong>Intent:</strong> Encapsulate request as object, allowing parameterization and queuing</p>
+                            <p class="level2-section-title-green">
                                 The Command pattern turns a request into a stand-alone object containing all information about the request. This transformation lets you pass requests as method arguments, delay or queue request execution, and support undoable operations.
                             </p>
                             
-                            <h4 class="subsection-header">Use Cases</h4>
-                            <ul class="usage-list">
-                                <li>Parameterize objects with operations (menu items, buttons)</li>
-                                <li>Queue operations for later execution</li>
-                                <li>Support undo/redo functionality</li>
-                                <li>Log changes for crash recovery</li>
-                                <li>Structure system around high-level operations</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">Use Cases</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Parameterize objects with operations (menu items, buttons)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Queue operations for later execution</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Support undo/redo functionality</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Log changes for crash recovery</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Structure system around high-level operations</div>
+    </div>
+</div>
                         </div>
                     </div>
 
                     <div class="content-section">
                         <h2 class="section-header">Modern Enterprise Patterns</h2>
                         
-                        <div class="pattern-detail">
-                            <h3 class="pattern-name">Dependency Injection</h3>
-                            <p class="pattern-intent"><strong>Intent:</strong> Decouple object creation from dependencies</p>
-                            <p class="section-text">
+                        <div class="badge-patterns">
+                            <h3 class="badge-patterns">Dependency Injection</h3>
+                            <p class="badge-patterns"><strong>Intent:</strong> Decouple object creation from dependencies</p>
+                            <p class="level2-section-title-green">
                                 Dependency Injection is a technique where an object receives other objects it depends on, rather than creating them internally. This inversion of control improves modularity and testability.
                             </p>
                             
-                            <h4 class="subsection-header">Injection Types</h4>
-                            <ul class="technique-list">
-                                <li><strong>Constructor Injection:</strong> Dependencies provided through constructor (preferred)</li>
-                                <li><strong>Property Injection:</strong> Dependencies set through public properties</li>
-                                <li><strong>Method Injection:</strong> Dependencies passed as method parameters</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">Injection Types</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Constructor Injection:</strong> Dependencies provided through constructor (preferred)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Property Injection:</strong> Dependencies set through public properties</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Method Injection:</strong> Dependencies passed as method parameters</div>
+    </div>
+</div>
                         </div>
 
-                        <div class="pattern-detail">
-                            <h3 class="pattern-name">Repository Pattern</h3>
-                            <p class="pattern-intent"><strong>Intent:</strong> Abstract data access layer</p>
-                            <p class="section-text">
+                        <div class="badge-patterns">
+                            <h3 class="badge-patterns">Repository Pattern</h3>
+                            <p class="badge-patterns"><strong>Intent:</strong> Abstract data access layer</p>
+                            <p class="level2-section-title-green">
                                 The Repository pattern mediates between domain and data mapping layers using a collection-like interface for accessing domain objects. It provides a more object-oriented view of the persistence layer.
                             </p>
                             
-                            <h4 class="subsection-header">Benefits</h4>
-                            <ul class="benefit-list">
-                                <li>Centralizes data access logic</li>
-                                <li>Provides substitution point for unit tests (mock repositories)</li>
-                                <li>Minimizes duplicate query logic</li>
-                                <li>Decouples application from persistence technology</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">Benefits</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Centralizes data access logic</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Provides substitution point for unit tests (mock repositories)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Minimizes duplicate query logic</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Decouples application from persistence technology</div>
+    </div>
+</div>
                         </div>
                     </div>
                 </div>
@@ -428,8 +677,8 @@ Product (interface)
                     <div class="content-section">
                         <h2 class="section-header">Singleton Pattern - Python</h2>
                         
-                        <h3 class="example-header">❌ Bad: Not Thread-Safe</h3>
-                        <pre class="code-block"><code class="language-python"># ❌ Not thread-safe
+                        <h3 class="command-example">❌ Bad: Not Thread-Safe</h3>
+                        <pre class="code-block"><code class="language-badge"># ❌ Not thread-safe
 class Singleton:
     _instance = None
     
@@ -440,8 +689,8 @@ class Singleton:
 
 # Problem: Race condition in multi-threaded environment</code></pre>
 
-                        <h3 class="example-header">✅ Good: Thread-Safe Implementation</h3>
-                        <pre class="code-block"><code class="language-python">import threading
+                        <h3 class="command-example">✅ Good: Thread-Safe Implementation</h3>
+                        <pre class="code-block"><code class="language-badge">import threading
 
 class Singleton:
     _instance = None
@@ -463,8 +712,8 @@ assert s1 is s2  # ✅ Same instance</code></pre>
                     <div class="content-section">
                         <h2 class="section-header">Singleton Pattern - C#</h2>
                         
-                        <h3 class="example-header">✅ Good: Lazy Thread-Safe Implementation</h3>
-                        <pre class="code-block"><code class="language-csharp">public sealed class Singleton
+                        <h3 class="command-example">✅ Good: Lazy Thread-Safe Implementation</h3>
+                        <pre class="code-block"><code class="language-badge">public sealed class Singleton
 {
     private static readonly Lazy<Singleton> lazy =
         new Lazy<Singleton>(() => new Singleton());
@@ -486,8 +735,8 @@ var s2 = Singleton.Instance;
                     <div class="content-section">
                         <h2 class="section-header">Strategy Pattern - Python</h2>
                         
-                        <h3 class="example-header">✅ Interchangeable Algorithms</h3>
-                        <pre class="code-block"><code class="language-python">from abc import ABC, abstractmethod
+                        <h3 class="command-example">✅ Interchangeable Algorithms</h3>
+                        <pre class="code-block"><code class="language-badge">from abc import ABC, abstractmethod
 
 # Strategy interface
 class PaymentStrategy(ABC):
@@ -539,8 +788,8 @@ cart.checkout(75.0)   # Crypto payment</code></pre>
                     <div class="content-section">
                         <h2 class="section-header">Observer Pattern - TypeScript</h2>
                         
-                        <h3 class="example-header">✅ Event Notification System</h3>
-                        <pre class="code-block"><code class="language-typescript">// Observer interface
+                        <h3 class="command-example">✅ Event Notification System</h3>
+                        <pre class="code-block"><code class="language-badge">// Observer interface
 interface Observer {
     update(data: any): void;
 }
@@ -600,8 +849,8 @@ subject.notify({ message: "Order confirmed!" });
                     <div class="content-section">
                         <h2 class="section-header">Dependency Injection - Python</h2>
                         
-                        <h3 class="example-header">❌ Bad: Tight Coupling</h3>
-                        <pre class="code-block"><code class="language-python"># ❌ Tight coupling - hard to test
+                        <h3 class="command-example">❌ Bad: Tight Coupling</h3>
+                        <pre class="code-block"><code class="language-badge"># ❌ Tight coupling - hard to test
 class UserService:
     def __init__(self):
         self.db = MySQLDatabase()  # Direct dependency!
@@ -611,8 +860,8 @@ class UserService:
         self.db.save(user)
         self.email.send_welcome(user.email)</code></pre>
 
-                        <h3 class="example-header">✅ Good: Dependency Injection</h3>
-                        <pre class="code-block"><code class="language-python"># ✅ Loose coupling - easy to test
+                        <h3 class="command-example">✅ Good: Dependency Injection</h3>
+                        <pre class="code-block"><code class="language-badge"># ✅ Loose coupling - easy to test
 from abc import ABC, abstractmethod
 
 class Database(ABC):
@@ -648,8 +897,8 @@ service = UserService(
                     <div class="content-section">
                         <h2 class="section-header">Repository Pattern - C#</h2>
                         
-                        <h3 class="example-header">✅ Abstract Data Access Layer</h3>
-                        <pre class="code-block"><code class="language-csharp">// Repository interface
+                        <h3 class="command-example">✅ Abstract Data Access Layer</h3>
+                        <pre class="code-block"><code class="language-badge">// Repository interface
 public interface IRepository<T> where T : class
 {
     T GetById(int id);
@@ -724,18 +973,18 @@ public class UserService
                 <div class="tab-content" id="cortex">
                     <div class="content-section">
                         <h2 class="section-header">Design Patterns in CORTEX Architecture</h2>
-                        <p class="section-text">
+                        <p class="level2-section-title-green">
                             CORTEX extensively uses design patterns throughout its architecture to ensure maintainability, extensibility, and testability. Here's how key patterns are implemented in the CORTEX codebase.
                         </p>
                     </div>
 
                     <div class="content-section">
                         <h2 class="section-header">Strategy Pattern: Agent System</h2>
-                        <div class="cortex-example">
-                            <p class="section-text">
+                        <div class="built-with-cortex-panel">
+                            <p class="level2-section-title-green">
                                 CORTEX uses the Strategy pattern for its agent system, allowing different AI agents to be swapped dynamically based on the task.
                             </p>
-                            <pre class="code-block"><code class="language-python"># src/cortex_agents/base_agent.py
+                            <pre class="code-block"><code class="language-badge"># src/cortex_agents/base_agent.py
 class BaseAgent(ABC):
     """Strategy interface for agents"""
     @abstractmethod
@@ -765,11 +1014,11 @@ class TaskExecutor:
 
                     <div class="content-section">
                         <h2 class="section-header">Repository Pattern: Brain Storage</h2>
-                        <div class="cortex-example">
-                            <p class="section-text">
+                        <div class="built-with-cortex-panel">
+                            <p class="level2-section-title-green">
                                 CORTEX implements the Repository pattern to abstract brain storage operations, allowing easy switching between SQLite, PostgreSQL, or other backends.
                             </p>
-                            <pre class="code-block"><code class="language-python"># cortex-brain/core/repositories.py
+                            <pre class="code-block"><code class="language-badge"># cortex-brain/core/repositories.py
 class BrainRepository(ABC):
     @abstractmethod
     def store_conversation(self, conv: Conversation) -> str:
@@ -800,11 +1049,11 @@ class ConversationManager:
 
                     <div class="content-section">
                         <h2 class="section-header">Observer Pattern: Event System</h2>
-                        <div class="cortex-example">
-                            <p class="section-text">
+                        <div class="built-with-cortex-panel">
+                            <p class="level2-section-title-green">
                                 CORTEX uses the Observer pattern for its event notification system, notifying multiple components when significant events occur.
                             </p>
-                            <pre class="code-block"><code class="language-python"># cortex-brain/core/events.py
+                            <pre class="code-block"><code class="language-badge"># cortex-brain/core/events.py
 class EventObserver(ABC):
     @abstractmethod
     def on_event(self, event: Event) -> None:
@@ -834,11 +1083,11 @@ class EventBus:
 
                     <div class="content-section">
                         <h2 class="section-header">Command Pattern: Orchestrators</h2>
-                        <div class="cortex-example">
-                            <p class="section-text">
+                        <div class="built-with-cortex-panel">
+                            <p class="level2-section-title-green">
                                 CORTEX orchestrators use the Command pattern to encapsulate operations, enabling undo/redo and operation queuing.
                             </p>
-                            <pre class="code-block"><code class="language-python"># src/orchestrators/commands.py
+                            <pre class="code-block"><code class="language-badge"># src/orchestrators/commands.py
 class Command(ABC):
     @abstractmethod
     def execute(self) -> CommandResult:
@@ -883,11 +1132,11 @@ class CommandQueue:
 
                     <div class="content-section">
                         <h2 class="section-header">Facade Pattern: High-Level API</h2>
-                        <div class="cortex-example">
-                            <p class="section-text">
+                        <div class="built-with-cortex-panel">
+                            <p class="level2-section-title-green">
                                 CORTEX provides a Facade to simplify complex subsystem interactions, offering a clean high-level API.
                             </p>
-                            <pre class="code-block"><code class="language-python"># src/cortex_facade.py
+                            <pre class="code-block"><code class="language-badge"># src/cortex_facade.py
 class CORTEXFacade:
     """Simplified interface to complex CORTEX subsystems"""
     
@@ -922,20 +1171,28 @@ class CORTEXFacade:
 
                     <div class="content-section">
                         <h2 class="section-header">Pattern Detection in CORTEX</h2>
-                        <p class="section-text">
+                        <p class="level2-section-title-green">
                             CORTEX includes automated pattern detection as part of its code review capabilities:
                         </p>
-                        <ul class="cortex-feature-list">
-                            <li><strong>Pattern Recognition:</strong> Identifies 23 GoF patterns + modern patterns</li>
-                            <li><strong>Anti-Pattern Detection:</strong> Flags misuse of patterns (e.g., Singleton abuse)</li>
-                            <li><strong>Pattern Suggestions:</strong> Recommends patterns for specific problems</li>
-                            <li><strong>Refactoring to Patterns:</strong> Transforms code to use appropriate patterns</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Pattern Recognition:</strong> Identifies 23 GoF patterns + modern patterns</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Anti-Pattern Detection:</strong> Flags misuse of patterns (e.g., Singleton abuse)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Pattern Suggestions:</strong> Recommends patterns for specific problems</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Refactoring to Patterns:</strong> Transforms code to use appropriate patterns</div>
+    </div>
+</div>
                     </div>
 
                     <div class="content-section">
                         <h2 class="section-header">Query Design Patterns in CORTEX</h2>
-                        <p class="section-text">
+                        <p class="level2-section-title-green">
                             Use these prompts to leverage design pattern knowledge in CORTEX Chat:
                         </p>
                         <div class="query-examples">
@@ -960,7 +1217,7 @@ class CORTEXFacade:
 
                     <div class="content-section">
                         <h2 class="section-header">Related Knowledge Files</h2>
-                        <div class="related-files">
+                        <div class="level1-relationship-grid">
                             <a href="solid-principles.html" class="related-file-card">
                                 <h3 class="related-file-title">SOLID Principles</h3>
                                 <p class="related-file-desc">Foundational principles that design patterns implement</p>
@@ -985,15 +1242,15 @@ class CORTEXFacade:
     </main>
 
     <!-- Footer -->
-    <footer class="footer-glass">
+    <footer class="footer-bottom">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3 class="footer-title">CORTEX Knowledge</h3>
-                    <p class="footer-text">Part of the CORTEX AI Assistant ecosystem</p>
+                    <h3 class="footer-bottom">CORTEX Knowledge</h3>
+                    <p class="footer-bottom">Part of the CORTEX AI Assistant ecosystem</p>
                 </div>
                 <div class="footer-section">
-                    <h3 class="footer-title">Quick Links</h3>
+                    <h3 class="footer-bottom">Quick Links</h3>
                     <ul class="footer-links">
                         <li><a href="../../index.html" class="footer-link">Knowledge Library</a></li>
                         <li><a href="../../engineering.html" class="footer-link">Engineering Category</a></li>
@@ -1001,9 +1258,9 @@ class CORTEXFacade:
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h3 class="footer-title">Source</h3>
-                    <p class="footer-text">Gang of Four (Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides)</p>
-                    <p class="footer-text">Design Patterns: Elements of Reusable Object-Oriented Software (1994)</p>
+                    <h3 class="footer-bottom">Source</h3>
+                    <p class="footer-bottom">Gang of Four (Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides)</p>
+                    <p class="footer-bottom">Design Patterns: Elements of Reusable Object-Oriented Software (1994)</p>
                 </div>
             </div>
             <div class="footer-bottom">

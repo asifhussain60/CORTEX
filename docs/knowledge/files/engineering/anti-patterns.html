@@ -1,44 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anti-Patterns Catalog | CORTEX Knowledge</title>
     <link rel="stylesheet" href="../../../assets/css/main.css">
+    <link rel="stylesheet" href="../../../assets/css/intentional-classes.css">
 </head>
 <body>
-    <header class="header-glass">
+    <header class="panel-header-centered">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="container">
             <nav class="breadcrumb">
-                <a href="../../../index.html" class="breadcrumb-link">Home</a>
+                <a href="../../../index.html" class="breadcrumb-separator">Home</a>
                 <span class="breadcrumb-separator">/</span>
-                <a href="../../index.html" class="breadcrumb-link">Knowledge Library</a>
+                <a href="../../index.html" class="breadcrumb-separator">Knowledge Library</a>
                 <span class="breadcrumb-separator">/</span>
-                <a href="../../engineering.html" class="breadcrumb-link">Engineering</a>
+                <a href="../../engineering.html" class="breadcrumb-separator">Engineering</a>
                 <span class="breadcrumb-separator">/</span>
                 <span class="breadcrumb-current">Anti-Patterns</span>
             </nav>
         </div>
     </header>
 
-    <main class="main-content">
+    <main class="level1-domain-icon--frontend">
         <section class="knowledge-file-hero">
             <div class="container">
                 <div class="hero-content">
                     <h1 class="hero-title">Anti-Patterns Catalog</h1>
                     <p class="hero-subtitle">Common Mistakes in Software Development & How to Fix Them</p>
-                    <div class="hero-meta">
-                        <span class="meta-item"><i class="icon-author"></i> Brown et al. 1998</span>
-                        <span class="meta-item"><i class="icon-category"></i> Software Craftsmanship</span>
-                        <span class="meta-item"><i class="icon-version"></i> v1.0.0</span>
+                    <div class="btn-hero-story">
+                        <span class="metadata-grid"><i class="level1-integration-icon-container"></i> Brown et al. 1998</span>
+                        <span class="metadata-grid"><i class="level1-integration-icon-container"></i> Software Craftsmanship</span>
+                        <span class="metadata-grid"><i class="level1-integration-icon-container"></i> v1.0.0</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="tab-container">
+        <section class="demo-tab-v-desc">
             <div class="container">
-                <div class="tab-nav">
+                <div class="demo-tab-v-desc">
                     <button class="tab-button active" data-tab="overview">Overview</button>
                     <button class="tab-button" data-tab="content">Content</button>
                     <button class="tab-button" data-tab="examples">Examples</button>
@@ -48,10 +99,10 @@
                 <div class="tab-content active" id="overview">
                     <div class="content-section">
                         <h2 class="section-header">What are Anti-Patterns?</h2>
-                        <p class="section-text">
+                        <p class="level2-section-title-green">
                             Anti-patterns are common responses to recurring problems that are ineffective and counterproductive. Unlike design patterns (best practices), anti-patterns document common mistakes and their consequences. Recognizing anti-patterns helps developers avoid repeating past mistakes.
                         </p>
-                        <p class="section-text">
+                        <p class="level2-section-title-green">
                             The book "AntiPatterns: Refactoring Software, Architectures, and Projects in Crisis" (1998) by William Brown and others cataloged these problematic patterns and provided refactoring paths to healthier solutions.
                         </p>
                     </div>
@@ -59,75 +110,127 @@
                     <div class="content-section">
                         <h2 class="section-header">Anti-Pattern Categories by Severity</h2>
                         <div class="severity-category-grid">
-                            <div class="severity-card critical">
-                                <h3 class="severity-level">CRITICAL</h3>
-                                <ul class="antipattern-list">
-                                    <li><strong>God Object</strong> - Class doing everything</li>
-                                    <li><strong>Tight Coupling</strong> - Components inseparable</li>
-                                    <li><strong>No Abstraction</strong> - Concrete dependencies everywhere</li>
-                                </ul>
+                            <div class="severity-medium critical">
+                                <h3 class="severity-medium">CRITICAL</h3>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>God Object</strong> - Class doing everything</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Tight Coupling</strong> - Components inseparable</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>No Abstraction</strong> - Concrete dependencies everywhere</div>
+    </div>
+</div>
                             </div>
-                            <div class="severity-card high">
-                                <h3 class="severity-level">HIGH</h3>
-                                <ul class="antipattern-list">
-                                    <li><strong>Spaghetti Code</strong> - Tangled control flow</li>
-                                    <li><strong>Copy-Paste Programming</strong> - Duplicate code everywhere</li>
-                                    <li><strong>Hard-Coded Values</strong> - No configuration</li>
-                                </ul>
+                            <div class="severity-medium high">
+                                <h3 class="severity-medium">HIGH</h3>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Spaghetti Code</strong> - Tangled control flow</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Copy-Paste Programming</strong> - Duplicate code everywhere</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Hard-Coded Values</strong> - No configuration</div>
+    </div>
+</div>
                             </div>
-                            <div class="severity-card medium">
-                                <h3 class="severity-level">MEDIUM</h3>
-                                <ul class="antipattern-list">
-                                    <li><strong>Lava Flow</strong> - Dead code remains</li>
-                                    <li><strong>Golden Hammer</strong> - One tool for everything</li>
-                                    <li><strong>Premature Optimization</strong> - Optimize too early</li>
-                                </ul>
+                            <div class="severity-medium medium">
+                                <h3 class="severity-medium">MEDIUM</h3>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Lava Flow</strong> - Dead code remains</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Golden Hammer</strong> - One tool for everything</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Premature Optimization</strong> - Optimize too early</div>
+    </div>
+</div>
                             </div>
-                            <div class="severity-card low">
-                                <h3 class="severity-level">LOW</h3>
-                                <ul class="antipattern-list">
-                                    <li><strong>Magic Numbers</strong> - Unnamed constants</li>
-                                    <li><strong>Long Method</strong> - Methods too long</li>
-                                    <li><strong>Poor Naming</strong> - Unclear variable names</li>
-                                </ul>
+                            <div class="severity-medium low">
+                                <h3 class="severity-medium">LOW</h3>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Magic Numbers</strong> - Unnamed constants</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Long Method</strong> - Methods too long</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Poor Naming</strong> - Unclear variable names</div>
+    </div>
+</div>
                             </div>
                         </div>
                     </div>
 
                     <div class="content-section">
                         <h2 class="section-header">Detection Framework</h2>
-                        <p class="section-text">
+                        <p class="level2-section-title-green">
                             Anti-patterns can be detected automatically using code metrics and static analysis:
                         </p>
                         <div class="detection-grid">
                             <div class="detection-card">
                                 <h3 class="detection-method">Code Metrics</h3>
-                                <ul class="metric-list">
-                                    <li>Cyclomatic Complexity > 20</li>
-                                    <li>Lines of Code > 500 per class</li>
-                                    <li>Methods > 30 per class</li>
-                                    <li>Inheritance Depth > 5</li>
-                                    <li>Coupling Count > 10</li>
-                                    <li>Duplicate Code > 5%</li>
-                                </ul>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Cyclomatic Complexity > 20</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Lines of Code > 500 per class</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Methods > 30 per class</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Inheritance Depth > 5</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Coupling Count > 10</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Duplicate Code > 5%</div>
+    </div>
+</div>
                             </div>
                             <div class="detection-card">
                                 <h3 class="detection-method">Code Patterns</h3>
-                                <ul class="pattern-list">
-                                    <li>Deep inheritance trees (regex)</li>
-                                    <li>Complex conditionals (AST analysis)</li>
-                                    <li>TODO/FIXME comments (grep)</li>
-                                    <li>Singleton overuse (getInstance)</li>
-                                </ul>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Deep inheritance trees (regex)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Complex conditionals (AST analysis)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">TODO/FIXME comments (grep)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Singleton overuse (getInstance)</div>
+    </div>
+</div>
                             </div>
                             <div class="detection-card">
                                 <h3 class="detection-method">Architecture Issues</h3>
-                                <ul class="architecture-list">
-                                    <li>Circular dependencies (graph)</li>
-                                    <li>Vendor lock-in (import analysis)</li>
-                                    <li>Missing abstraction layers</li>
-                                    <li>Monolithic structure</li>
-                                </ul>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Circular dependencies (graph)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Vendor lock-in (import analysis)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Missing abstraction layers</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Monolithic structure</div>
+    </div>
+</div>
                             </div>
                         </div>
                     </div>
@@ -164,42 +267,76 @@
                                 <span class="antipattern-severity">CRITICAL</span>
                             </div>
                             
-                            <h4 class="subsection-header">Description</h4>
-                            <p class="section-text">
+                            <h4 class="level1-subsection-title">Description</h4>
+                            <p class="level2-section-title-green">
                                 Single class that knows too much or does too much. Takes on most responsibilities in system, causing tight coupling and low cohesion. Also known as "Blob" or "Winnebago".
                             </p>
 
-                            <h4 class="subsection-header">Symptoms</h4>
-                            <ul class="symptom-list">
-                                <li>Single class with >30 methods</li>
-                                <li>Class with >1000 lines of code</li>
-                                <li>Generic class names (Manager, Controller, Handler, Service)</li>
-                                <li>Many dependencies on this class</li>
-                                <li>Class touches many different concerns</li>
-                                <li>Difficult to test in isolation</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">Symptoms</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Single class with >30 methods</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Class with >1000 lines of code</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Generic class names (Manager, Controller, Handler, Service)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Many dependencies on this class</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Class touches many different concerns</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Difficult to test in isolation</div>
+    </div>
+</div>
 
-                            <h4 class="subsection-header">Consequences</h4>
-                            <ul class="consequence-list">
-                                <li>High coupling to many other classes</li>
-                                <li>Low cohesion (unrelated responsibilities)</li>
-                                <li>Hard to understand and maintain</li>
-                                <li>Difficult to test</li>
-                                <li>Limits reusability</li>
-                                <li>Single point of failure</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">Consequences</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">High coupling to many other classes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Low cohesion (unrelated responsibilities)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Hard to understand and maintain</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Difficult to test</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Limits reusability</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Single point of failure</div>
+    </div>
+</div>
 
-                            <h4 class="subsection-header">Detection</h4>
-                            <ul class="detection-metric-list">
-                                <li>Cyclomatic Complexity > 50</li>
-                                <li>Lines of Code > 500</li>
-                                <li>Number of Methods > 30</li>
-                                <li>Fan-In > 10 (many classes depend on it)</li>
-                                <li>Fan-Out > 20 (depends on many classes)</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">Detection</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Cyclomatic Complexity > 50</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Lines of Code > 500</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Number of Methods > 30</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Fan-In > 10 (many classes depend on it)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Fan-Out > 20 (depends on many classes)</div>
+    </div>
+</div>
 
-                            <h4 class="subsection-header">Refactoring Path</h4>
-                            <ol class="refactoring-steps">
+                            <h4 class="level1-subsection-title">Refactoring Path</h4>
+                            <ol class="refactor-explanation">
                                 <li>Identify distinct responsibilities</li>
                                 <li>Group methods by cohesive functionality</li>
                                 <li>Extract classes for each responsibility</li>
@@ -217,30 +354,48 @@
                                 <span class="antipattern-severity">HIGH</span>
                             </div>
                             
-                            <h4 class="subsection-header">Description</h4>
-                            <p class="section-text">
+                            <h4 class="level1-subsection-title">Description</h4>
+                            <p class="level2-section-title-green">
                                 Code with complex and tangled control structure. Difficult to follow logic flow, heavy use of GOTO (in old languages) or complex nested conditionals.
                             </p>
 
-                            <h4 class="subsection-header">Symptoms</h4>
-                            <ul class="symptom-list">
-                                <li>Deeply nested if/else statements (>5 levels)</li>
-                                <li>Complex control flow (hard to follow)</li>
-                                <li>Methods with >50 lines</li>
-                                <li>Minimal use of functions/methods</li>
-                                <li>Lots of global state</li>
-                                <li>Hard to debug</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">Symptoms</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Deeply nested if/else statements (>5 levels)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Complex control flow (hard to follow)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Methods with >50 lines</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Minimal use of functions/methods</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Lots of global state</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Hard to debug</div>
+    </div>
+</div>
 
-                            <h4 class="subsection-header">Detection</h4>
-                            <ul class="detection-metric-list">
-                                <li>Cyclomatic Complexity > 20</li>
-                                <li>Nesting Depth > 5</li>
-                                <li>Method Length > 50 lines</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">Detection</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Cyclomatic Complexity > 20</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Nesting Depth > 5</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Method Length > 50 lines</div>
+    </div>
+</div>
 
-                            <h4 class="subsection-header">Refactoring Path</h4>
-                            <ol class="refactoring-steps">
+                            <h4 class="level1-subsection-title">Refactoring Path</h4>
+                            <ol class="refactor-explanation">
                                 <li>Extract nested logic into methods</li>
                                 <li>Use guard clauses (early returns)</li>
                                 <li>Apply Strategy pattern for complex conditionals</li>
@@ -257,30 +412,48 @@
                                 <span class="antipattern-severity">MEDIUM</span>
                             </div>
                             
-                            <h4 class="subsection-header">Description</h4>
-                            <p class="section-text">
+                            <h4 class="level1-subsection-title">Description</h4>
+                            <p class="level2-section-title-green">
                                 Dead code and forgotten design artifacts that remain in codebase. Code that was experimental or temporary but never removed.
                             </p>
 
-                            <h4 class="subsection-header">Symptoms</h4>
-                            <ul class="symptom-list">
-                                <li>Commented-out code blocks</li>
-                                <li>TODO/FIXME comments from years ago</li>
-                                <li>Unused variables/methods/classes</li>
-                                <li>Obsolete design patterns</li>
-                                <li>Fear of deleting code ("might need it later")</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">Symptoms</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Commented-out code blocks</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">TODO/FIXME comments from years ago</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Unused variables/methods/classes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Obsolete design patterns</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Fear of deleting code ("might need it later")</div>
+    </div>
+</div>
 
-                            <h4 class="subsection-header">Detection</h4>
-                            <ul class="detection-metric-list">
-                                <li>Static analysis for unused code</li>
-                                <li>Search for TODO/FIXME older than 6 months</li>
-                                <li>Find commented-out code blocks</li>
-                                <li>Coverage analysis (0% coverage = likely unused)</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">Detection</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Static analysis for unused code</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Search for TODO/FIXME older than 6 months</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Find commented-out code blocks</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Coverage analysis (0% coverage = likely unused)</div>
+    </div>
+</div>
 
-                            <h4 class="subsection-header">Refactoring Path</h4>
-                            <ol class="refactoring-steps">
+                            <h4 class="level1-subsection-title">Refactoring Path</h4>
+                            <ol class="refactor-explanation">
                                 <li>Run static analysis (Pylint, ReSharper, SonarQube)</li>
                                 <li>Delete commented-out code (version control preserves history)</li>
                                 <li>Remove or complete TODO/FIXME items</li>
@@ -297,29 +470,45 @@
                                 <span class="antipattern-severity">MEDIUM</span>
                             </div>
                             
-                            <h4 class="subsection-header">Description</h4>
-                            <p class="section-text">
+                            <h4 class="level1-subsection-title">Description</h4>
+                            <p class="level2-section-title-green">
                                 Using familiar tool/technology for everything, regardless of fit. "If all you have is a hammer, everything looks like a nail." Also known as "Silver Bullet".
                             </p>
 
-                            <h4 class="subsection-header">Symptoms</h4>
-                            <ul class="symptom-list">
-                                <li>Same pattern used everywhere</li>
-                                <li>Forcing technology into inappropriate use cases</li>
-                                <li>Resistance to learning new approaches</li>
-                                <li>Complex workarounds to make tool fit</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">Symptoms</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Same pattern used everywhere</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Forcing technology into inappropriate use cases</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Resistance to learning new approaches</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Complex workarounds to make tool fit</div>
+    </div>
+</div>
 
-                            <h4 class="subsection-header">Examples</h4>
-                            <ul class="example-list">
-                                <li><strong>Singleton for everything</strong> - Makes testing difficult, hides dependencies</li>
-                                <li><strong>ORM for all database access</strong> - Complex queries become inefficient</li>
-                                <li><strong>Microservices for small apps</strong> - Unnecessary complexity, operational overhead</li>
-                                <li><strong>NoSQL for all data</strong> - Loses ACID guarantees when needed</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">Examples</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Singleton for everything</strong> - Makes testing difficult, hides dependencies</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>ORM for all database access</strong> - Complex queries become inefficient</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Microservices for small apps</strong> - Unnecessary complexity, operational overhead</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>NoSQL for all data</strong> - Loses ACID guarantees when needed</div>
+    </div>
+</div>
 
-                            <h4 class="subsection-header">Prevention</h4>
-                            <ol class="refactoring-steps">
+                            <h4 class="level1-subsection-title">Prevention</h4>
+                            <ol class="refactor-explanation">
                                 <li>Understand problem requirements first</li>
                                 <li>Evaluate multiple solutions</li>
                                 <li>Choose technology that fits problem</li>
@@ -337,37 +526,61 @@
                                 <span class="antipattern-severity">MEDIUM</span>
                             </div>
                             
-                            <h4 class="subsection-header">Description</h4>
-                            <p class="section-text">
+                            <h4 class="level1-subsection-title">Description</h4>
+                            <p class="level2-section-title-green">
                                 Copying code from one place and pasting it elsewhere with minor modifications. Creates maintenance burden - bugs must be fixed in multiple places. Also known as "Code Clone" or "Duplicate Code".
                             </p>
 
-                            <h4 class="subsection-header">Symptoms</h4>
-                            <ul class="symptom-list">
-                                <li>Similar code blocks in multiple places</li>
-                                <li>Same logic with slightly different variables</li>
-                                <li>Duplicate validation logic</li>
-                                <li>Repeated algorithms</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">Symptoms</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Similar code blocks in multiple places</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Same logic with slightly different variables</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Duplicate validation logic</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Repeated algorithms</div>
+    </div>
+</div>
 
-                            <h4 class="subsection-header">Consequences</h4>
-                            <ul class="consequence-list">
-                                <li>Bug fixes required in multiple places</li>
-                                <li>Inconsistent behavior</li>
-                                <li>Increased maintenance cost</li>
-                                <li>Larger codebase</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">Consequences</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Bug fixes required in multiple places</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Inconsistent behavior</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Increased maintenance cost</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Larger codebase</div>
+    </div>
+</div>
 
-                            <h4 class="subsection-header">Detection Tools</h4>
-                            <ul class="tool-list">
-                                <li><strong>PMD CPD</strong> - Copy/Paste Detector</li>
-                                <li><strong>SonarQube</strong> - Duplicate code detection</li>
-                                <li><strong>Jscpd</strong> - JavaScript/TypeScript clone detector</li>
-                                <li><strong>Threshold:</strong> >5% duplicate code</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">Detection Tools</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>PMD CPD</strong> - Copy/Paste Detector</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>SonarQube</strong> - Duplicate code detection</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Jscpd</strong> - JavaScript/TypeScript clone detector</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Threshold:</strong> >5% duplicate code</div>
+    </div>
+</div>
 
-                            <h4 class="subsection-header">Refactoring Path</h4>
-                            <ol class="refactoring-steps">
+                            <h4 class="level1-subsection-title">Refactoring Path</h4>
+                            <ol class="refactor-explanation">
                                 <li>Identify duplicate code blocks</li>
                                 <li>Extract common logic to shared function</li>
                                 <li>Use inheritance/composition for shared behavior</li>
@@ -384,20 +597,26 @@
                                 <span class="antipattern-severity">LOW</span>
                             </div>
                             
-                            <h4 class="subsection-header">Description</h4>
-                            <p class="section-text">
+                            <h4 class="level1-subsection-title">Description</h4>
+                            <p class="level2-section-title-green">
                                 Using unnamed numerical constants directly in code. Reduces readability and maintainability.
                             </p>
 
-                            <h4 class="subsection-header">Symptoms</h4>
-                            <ul class="symptom-list">
-                                <li>Unexplained numbers in code</li>
-                                <li>Same number repeated multiple places</li>
-                                <li>No context for what number represents</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">Symptoms</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Unexplained numbers in code</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Same number repeated multiple places</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">No context for what number represents</div>
+    </div>
+</div>
 
-                            <h4 class="subsection-header">Refactoring Path</h4>
-                            <ol class="refactoring-steps">
+                            <h4 class="level1-subsection-title">Refactoring Path</h4>
+                            <ol class="refactor-explanation">
                                 <li>Extract constants with meaningful names</li>
                                 <li>Use Replace Magic Number with Symbolic Constant refactoring</li>
                                 <li>Group related constants (enums or static classes)</li>
@@ -409,8 +628,8 @@
                 <div class="tab-content" id="examples">
                     <div class="content-section">
                         <h2 class="section-header">God Object - Python</h2>
-                        <h3 class="example-header">❌ God Object Anti-Pattern</h3>
-                        <pre class="code-block"><code class="language-python"># ❌ CRITICAL: Class doing everything
+                        <h3 class="command-example">❌ God Object Anti-Pattern</h3>
+                        <pre class="code-block"><code class="language-badge"># ❌ CRITICAL: Class doing everything
 class UserManager:
     def authenticate(self, username, password): pass
     def authorize(self, user, resource): pass
@@ -423,8 +642,8 @@ class UserManager:
     def import_data(self, user, data): pass
     # ... 20+ more unrelated methods</code></pre>
 
-                        <h3 class="example-header">✅ Refactored: Separated Responsibilities</h3>
-                        <pre class="code-block"><code class="language-python"># ✅ Each class has single responsibility
+                        <h3 class="command-example">✅ Refactored: Separated Responsibilities</h3>
+                        <pre class="code-block"><code class="language-badge"># ✅ Each class has single responsibility
 class AuthenticationService:
     def authenticate(self, username, password): pass
 
@@ -444,8 +663,8 @@ class ReportGenerator:
 
                     <div class="content-section">
                         <h2 class="section-header">Spaghetti Code - Python</h2>
-                        <h3 class="example-header">❌ Spaghetti Code Anti-Pattern</h3>
-                        <pre class="code-block"><code class="language-python"># ❌ HIGH: Deeply nested conditionals
+                        <h3 class="command-example">❌ Spaghetti Code Anti-Pattern</h3>
+                        <pre class="code-block"><code class="language-badge"># ❌ HIGH: Deeply nested conditionals
 def process_order(order):
     if order.items:
         if order.customer:
@@ -457,8 +676,8 @@ def process_order(order):
                                 # ... deeply nested logic
                                 pass</code></pre>
 
-                        <h3 class="example-header">✅ Refactored: Guard Clauses</h3>
-                        <pre class="code-block"><code class="language-python"># ✅ Guard clauses (early returns)
+                        <h3 class="command-example">✅ Refactored: Guard Clauses</h3>
+                        <pre class="code-block"><code class="language-badge"># ✅ Guard clauses (early returns)
 def process_order(order):
     if not order.items:
         raise ValueError("Order has no items")
@@ -480,8 +699,8 @@ def _validate_payment(self, order):
 
                     <div class="content-section">
                         <h2 class="section-header">Lava Flow - Python & C#</h2>
-                        <h3 class="example-header">❌ Lava Flow Anti-Pattern</h3>
-                        <pre class="code-block"><code class="language-python"># ❌ MEDIUM: Dead code remains
+                        <h3 class="command-example">❌ Lava Flow Anti-Pattern</h3>
+                        <pre class="code-block"><code class="language-badge"># ❌ MEDIUM: Dead code remains
 class UserService:
     def get_user(self, id):
         # Old implementation - DO NOT USE
@@ -492,8 +711,8 @@ class UserService:
         
         return self.repository.find_by_id(id)</code></pre>
 
-                        <h3 class="example-header">✅ Refactored: Clean Code</h3>
-                        <pre class="code-block"><code class="language-python"># ✅ No commented-out code, no old TODOs
+                        <h3 class="command-example">✅ Refactored: Clean Code</h3>
+                        <pre class="code-block"><code class="language-badge"># ✅ No commented-out code, no old TODOs
 class UserService:
     def get_user(self, id):
         return self.repository.find_by_id(id)</code></pre>
@@ -501,8 +720,8 @@ class UserService:
 
                     <div class="content-section">
                         <h2 class="section-header">Copy-Paste Programming - Python</h2>
-                        <h3 class="example-header">❌ Copy-Paste Anti-Pattern</h3>
-                        <pre class="code-block"><code class="language-python"># ❌ MEDIUM: Duplicate validation logic
+                        <h3 class="command-example">❌ Copy-Paste Anti-Pattern</h3>
+                        <pre class="code-block"><code class="language-badge"># ❌ MEDIUM: Duplicate validation logic
 def validate_user_email(email):
     if not email:
         return False
@@ -521,8 +740,8 @@ def validate_admin_email(email):
         return False
     return True  # Same logic duplicated!</code></pre>
 
-                        <h3 class="example-header">✅ Refactored: DRY Principle</h3>
-                        <pre class="code-block"><code class="language-python"># ✅ Single source of truth
+                        <h3 class="command-example">✅ Refactored: DRY Principle</h3>
+                        <pre class="code-block"><code class="language-badge"># ✅ Single source of truth
 def validate_email(email: str) -> bool:
     if not email:
         return False
@@ -542,8 +761,8 @@ def validate_admin_email(email):
 
                     <div class="content-section">
                         <h2 class="section-header">Magic Numbers - Python & C#</h2>
-                        <h3 class="example-header">❌ Magic Numbers Anti-Pattern</h3>
-                        <pre class="code-block"><code class="language-python"># ❌ LOW: Unnamed constants
+                        <h3 class="command-example">❌ Magic Numbers Anti-Pattern</h3>
+                        <pre class="code-block"><code class="language-badge"># ❌ LOW: Unnamed constants
 def calculate_discount(price):
     if price > 1000:
         return price * 0.15
@@ -552,8 +771,8 @@ def calculate_discount(price):
     else:
         return price * 0.05</code></pre>
 
-                        <h3 class="example-header">✅ Refactored: Named Constants</h3>
-                        <pre class="code-block"><code class="language-python"># ✅ Self-documenting constants
+                        <h3 class="command-example">✅ Refactored: Named Constants</h3>
+                        <pre class="code-block"><code class="language-badge"># ✅ Self-documenting constants
 PREMIUM_THRESHOLD = 1000
 STANDARD_THRESHOLD = 500
 PREMIUM_DISCOUNT = 0.15
@@ -568,7 +787,7 @@ def calculate_discount(price):
     else:
         return price * BASIC_DISCOUNT</code></pre>
 
-                        <pre class="code-block"><code class="language-csharp">// ✅ C# with const
+                        <pre class="code-block"><code class="language-badge">// ✅ C# with const
 private const decimal PremiumThreshold = 1000m;
 private const decimal StandardThreshold = 500m;
 private const decimal PremiumDiscount = 0.15m;
@@ -585,15 +804,15 @@ public decimal CalculateDiscount(decimal price)
                 <div class="tab-content" id="cortex">
                     <div class="content-section">
                         <h2 class="section-header">Automated Anti-Pattern Detection in CORTEX</h2>
-                        <p class="section-text">
+                        <p class="level2-section-title-green">
                             CORTEX includes intelligent agents that automatically detect anti-patterns using code metrics, pattern matching, and architectural analysis.
                         </p>
                     </div>
 
                     <div class="content-section">
                         <h2 class="section-header">Anti-Pattern Detector</h2>
-                        <div class="cortex-example">
-                            <pre class="code-block"><code class="language-python"># CORTEX Anti-Pattern Detection System
+                        <div class="built-with-cortex-panel">
+                            <pre class="code-block"><code class="language-badge"># CORTEX Anti-Pattern Detection System
 class AntiPatternDetector:
     def detect(self, file_path: str) -> List[AntiPattern]:
         detected = []
@@ -660,8 +879,8 @@ class AntiPatternDetector:
 
                     <div class="content-section">
                         <h2 class="section-header">Refactoring Suggestions</h2>
-                        <div class="cortex-example">
-                            <pre class="code-block"><code class="language-python"># Anti-Pattern → Refactoring Mapping
+                        <div class="built-with-cortex-panel">
+                            <pre class="code-block"><code class="language-badge"># Anti-Pattern → Refactoring Mapping
 REFACTORING_MAP = {
     "God Object": [
         "Extract Class for each responsibility",
@@ -698,8 +917,8 @@ REFACTORING_MAP = {
 
                     <div class="content-section">
                         <h2 class="section-header">Automated Metrics Collection</h2>
-                        <div class="cortex-example">
-                            <pre class="code-block"><code class="language-python"># Code Metrics Analysis
+                        <div class="built-with-cortex-panel">
+                            <pre class="code-block"><code class="language-badge"># Code Metrics Analysis
 class CodeMetricsAnalyzer:
     def analyze(self, file_path: str) -> Metrics:
         return Metrics(
@@ -756,7 +975,7 @@ class CodeMetricsAnalyzer:
 
                     <div class="content-section">
                         <h2 class="section-header">Related Knowledge Files</h2>
-                        <div class="related-files">
+                        <div class="level1-relationship-grid">
                             <a href="refactoring.html" class="related-file-card">
                                 <h3 class="related-file-title">Refactoring</h3>
                                 <p class="related-file-desc">Techniques to fix anti-patterns</p>
@@ -780,15 +999,15 @@ class CodeMetricsAnalyzer:
         </section>
     </main>
 
-    <footer class="footer-glass">
+    <footer class="footer-bottom">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3 class="footer-title">CORTEX Knowledge</h3>
-                    <p class="footer-text">Part of the CORTEX AI Assistant ecosystem</p>
+                    <h3 class="footer-bottom">CORTEX Knowledge</h3>
+                    <p class="footer-bottom">Part of the CORTEX AI Assistant ecosystem</p>
                 </div>
                 <div class="footer-section">
-                    <h3 class="footer-title">Quick Links</h3>
+                    <h3 class="footer-bottom">Quick Links</h3>
                     <ul class="footer-links">
                         <li><a href="../../index.html" class="footer-link">Knowledge Library</a></li>
                         <li><a href="../../engineering.html" class="footer-link">Engineering Category</a></li>
@@ -796,9 +1015,9 @@ class CodeMetricsAnalyzer:
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h3 class="footer-title">Source</h3>
-                    <p class="footer-text">William Brown et al.</p>
-                    <p class="footer-text">AntiPatterns (1998)</p>
+                    <h3 class="footer-bottom">Source</h3>
+                    <p class="footer-bottom">William Brown et al.</p>
+                    <p class="footer-bottom">AntiPatterns (1998)</p>
                 </div>
             </div>
             <div class="footer-bottom">

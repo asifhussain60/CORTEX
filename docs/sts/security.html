@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CORTEX Security Showcase">
@@ -8,6 +33,7 @@
     <title>Security | STS | CORTEX 4.0</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <link rel="stylesheet" href="../assets/css/sts.css?v=2026-01-02-v2">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
@@ -15,10 +41,35 @@
 <body class="sts-showcase">
     <!-- Glass Header Navigation -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../index.html" class="nav-link">
-                    <i class="fas fa-home"></i>
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../index.html" class="nav-link" mobile-nav-optimized>
+                    <i class="pulse-glow-glass--fast fa-home"></i>
                     <span>Home</span>
                 </a>
             </nav>
@@ -27,7 +78,7 @@
 
     <main class="sts-main">
         <section class="sts-hero">
-            <h1><i class="fas fa-shield-alt"></i> Security Vulnerabilities Fixed</h1>
+            <h1><i class="pulse-glow-glass--fast fa-shield-alt"></i> Security Vulnerabilities Fixed</h1>
             <p class="hero-subtitle">Watch CORTEX identify and fix critical security vulnerabilities</p>
             <div class="sts-metrics">
                 <div class="metric-card">
@@ -48,25 +99,31 @@
         <!-- SQL Injection - C# -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="fas fa-database"></i> SQL Injection Prevention</h3>
+                <h3><i class="pulse-glow-glass--fast fa-database"></i> SQL Injection Prevention</h3>
                 <span class="language-badge csharp">C#</span>
             </div>
             
             <div class="refactor-explanation">
-                <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
-                <ul>
-                    <li><strong>Vulnerability:</strong> String concatenation allows attackers to inject malicious SQL</li>
-                    <li><strong>Fix:</strong> Parameterized queries separate data from SQL commands</li>
-                    <li><strong>Result:</strong> User input is treated as data, never as executable code</li>
-                </ul>
+                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Vulnerability:</strong> String concatenation allows attackers to inject malicious SQL</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Fix:</strong> Parameterized queries separate data from SQL commands</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Result:</strong> User input is treated as data, never as executable code</div>
+    </div>
+</div>
             </div>
 
             <div class="comparison-container">
                 <div class="panel before-panel">
                     <div class="panel-header">
-                        <i class="fas fa-times-circle"></i> Before: Vulnerable
+                        <i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Vulnerable
                     </div>
-                    <pre><code class="language-csharp">public class UserRepository
+                    <pre><code class="language-badge">public class UserRepository
 {
     public User GetUser(string username)
     {
@@ -85,9 +142,9 @@
 
                 <div class="panel after-panel">
                     <div class="panel-header">
-                        <i class="fas fa-check-circle"></i> After: Secure
+                        <i class="pulse-glow-glass--fast fa-check-circle"></i> After: Secure
                     </div>
-                    <pre><code class="language-csharp">public class UserRepository
+                    <pre><code class="language-badge">public class UserRepository
 {
     public User GetUser(string username)
     {
@@ -110,25 +167,31 @@
         <!-- XSS - Angular -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="fas fa-code"></i> Cross-Site Scripting (XSS)</h3>
+                <h3><i class="pulse-glow-glass--fast fa-code"></i> Cross-Site Scripting (XSS)</h3>
                 <span class="language-badge angular">Angular</span>
             </div>
             
             <div class="refactor-explanation">
-                <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
-                <ul>
-                    <li><strong>Vulnerability:</strong> innerHTML bypasses Angular's built-in sanitization</li>
-                    <li><strong>Fix:</strong> Use text interpolation or DomSanitizer for trusted HTML</li>
-                    <li><strong>Result:</strong> Malicious scripts in user content are automatically neutralized</li>
-                </ul>
+                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Vulnerability:</strong> innerHTML bypasses Angular's built-in sanitization</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Fix:</strong> Use text interpolation or DomSanitizer for trusted HTML</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Result:</strong> Malicious scripts in user content are automatically neutralized</div>
+    </div>
+</div>
             </div>
 
             <div class="comparison-container">
                 <div class="panel before-panel">
                     <div class="panel-header">
-                        <i class="fas fa-times-circle"></i> Before: Vulnerable
+                        <i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Vulnerable
                     </div>
-                    <pre><code class="language-typescript">@Component({
+                    <pre><code class="language-badge">@Component({
   selector: 'app-comment',
   template: \`
     &lt;!-- VULNERABLE: innerHTML executes scripts --&gt;
@@ -143,9 +206,9 @@ export class CommentComponent {
 
                 <div class="panel after-panel">
                     <div class="panel-header">
-                        <i class="fas fa-check-circle"></i> After: Secure
+                        <i class="pulse-glow-glass--fast fa-check-circle"></i> After: Secure
                     </div>
-                    <pre><code class="language-typescript">@Component({
+                    <pre><code class="language-badge">@Component({
   selector: 'app-comment',
   template: \`
     &lt;!-- SECURE: Interpolation auto-escapes --&gt;
@@ -171,25 +234,31 @@ export class CommentComponent {
         <!-- Auth - TypeScript -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="fas fa-key"></i> Secure Authentication</h3>
+                <h3><i class="pulse-glow-glass--fast fa-key"></i> Secure Authentication</h3>
                 <span class="language-badge typescript">TypeScript</span>
             </div>
             
             <div class="refactor-explanation">
-                <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
-                <ul>
-                    <li><strong>Vulnerability:</strong> Plain text passwords stored and compared directly</li>
-                    <li><strong>Fix:</strong> bcrypt hashing with salt + rate limiting for brute force protection</li>
-                    <li><strong>Result:</strong> Passwords remain safe even if database is compromised</li>
-                </ul>
+                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Vulnerability:</strong> Plain text passwords stored and compared directly</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Fix:</strong> bcrypt hashing with salt + rate limiting for brute force protection</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Result:</strong> Passwords remain safe even if database is compromised</div>
+    </div>
+</div>
             </div>
 
             <div class="comparison-container">
                 <div class="panel before-panel">
                     <div class="panel-header">
-                        <i class="fas fa-times-circle"></i> Before: Vulnerable
+                        <i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Vulnerable
                     </div>
-                    <pre><code class="language-typescript">class AuthService {
+                    <pre><code class="language-badge">class AuthService {
   async login(email: string, password: string) {
     const user = await this.db.findUser(email);
     
@@ -209,9 +278,9 @@ export class CommentComponent {
 
                 <div class="panel after-panel">
                     <div class="panel-header">
-                        <i class="fas fa-check-circle"></i> After: Secure
+                        <i class="pulse-glow-glass--fast fa-check-circle"></i> After: Secure
                     </div>
-                    <pre><code class="language-typescript">import bcrypt from 'bcrypt';
+                    <pre><code class="language-badge">import bcrypt from 'bcrypt';
 
 class AuthService {
   private limiter = new RateLimiter({ maxAttempts: 5 });
@@ -238,25 +307,31 @@ class AuthService {
         <!-- SQL Procedure -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="fas fa-server"></i> Secure Stored Procedures</h3>
+                <h3><i class="pulse-glow-glass--fast fa-server"></i> Secure Stored Procedures</h3>
                 <span class="language-badge sql">SQL</span>
             </div>
             
             <div class="refactor-explanation">
-                <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
-                <ul>
-                    <li><strong>Vulnerability:</strong> Dynamic SQL with EXEC allows injection even in stored procedures</li>
-                    <li><strong>Fix:</strong> Use sp_executesql with typed parameters for safe dynamic queries</li>
-                    <li><strong>Result:</strong> Parameters are bound safely at execution time</li>
-                </ul>
+                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Vulnerability:</strong> Dynamic SQL with EXEC allows injection even in stored procedures</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Fix:</strong> Use sp_executesql with typed parameters for safe dynamic queries</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Result:</strong> Parameters are bound safely at execution time</div>
+    </div>
+</div>
             </div>
 
             <div class="comparison-container">
                 <div class="panel before-panel">
                     <div class="panel-header">
-                        <i class="fas fa-times-circle"></i> Before: Vulnerable
+                        <i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Vulnerable
                     </div>
-                    <pre><code class="language-sql">CREATE PROCEDURE SearchProducts
+                    <pre><code class="language-badge">CREATE PROCEDURE SearchProducts
     @SearchTerm NVARCHAR(100)
 AS
 BEGIN
@@ -272,9 +347,9 @@ END</code></pre>
 
                 <div class="panel after-panel">
                     <div class="panel-header">
-                        <i class="fas fa-check-circle"></i> After: Secure
+                        <i class="pulse-glow-glass--fast fa-check-circle"></i> After: Secure
                     </div>
-                    <pre><code class="language-sql">CREATE PROCEDURE SearchProducts
+                    <pre><code class="language-badge">CREATE PROCEDURE SearchProducts
     @SearchTerm NVARCHAR(100)
 AS
 BEGIN

@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Database Design - SQL, NoSQL, data modeling, and optimization strategies">
@@ -8,6 +33,7 @@
     <meta name="author" content="Asif Hussain">
     <title>Database Design | CORTEX Knowledge</title>
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
@@ -25,14 +51,14 @@
     <section class="hero" id="main-content">
         <h1 class="hero-title">💾 Database Design</h1>
         <p class="hero-subtitle">SQL, NoSQL, Data Modeling, and Optimization</p>
-        <div class="file-metadata">
+        <div class="code-file">
             <span class="metadata-item">🗄️ Data Storage</span>
             <span class="metadata-item">⚡ Performance</span>
             <span class="metadata-item">📅 Updated: Dec 2025</span>
         </div>
     </section>
 
-    <section class="section file-content">
+    <section class="section code-file">
         <div class="container">
             <!-- Overview -->
             <div id="overview" class="content-section">
@@ -42,12 +68,20 @@
                     
                     <div class="info-box info-box-primary">
                         <strong>Key Concepts:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Normalization:</strong> Organize data to reduce redundancy</li>
-                            <li><strong>Indexing:</strong> Accelerate query performance</li>
-                            <li><strong>Transactions:</strong> ACID guarantees for data integrity</li>
-                            <li><strong>Sharding:</strong> Horizontal scaling for large datasets</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Normalization:</strong> Organize data to reduce redundancy</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Indexing:</strong> Accelerate query performance</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Transactions:</strong> ACID guarantees for data integrity</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Sharding:</strong> Horizontal scaling for large datasets</div>
+    </div>
+</div>
                     </div>
 
                     <h3>Database Technology Landscape</h3>
@@ -89,47 +123,81 @@ graph TB
                             <span class="framework-panel-icon">📐</span>
                             <h3>Normalization</h3>
                             <h4>Forms</h4>
-                            <ul>
-                                <li><strong>1NF:</strong> Atomic values, no repeating groups</li>
-                                <li><strong>2NF:</strong> No partial dependencies</li>
-                                <li><strong>3NF:</strong> No transitive dependencies</li>
-                                <li><strong>BCNF:</strong> Every determinant is a key</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>1NF:</strong> Atomic values, no repeating groups</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>2NF:</strong> No partial dependencies</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>3NF:</strong> No transitive dependencies</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>BCNF:</strong> Every determinant is a key</div>
+    </div>
+</div>
                             <h4>Benefits</h4>
-                            <ul>
-                                <li>Eliminates data redundancy</li>
-                                <li>Prevents update anomalies</li>
-                                <li>Maintains data integrity</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Eliminates data redundancy</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Prevents update anomalies</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Maintains data integrity</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🔗</span>
                             <h3>Relationships</h3>
                             <h4>Types</h4>
-                            <ul>
-                                <li><strong>One-to-One:</strong> User ↔ Profile</li>
-                                <li><strong>One-to-Many:</strong> Customer → Orders</li>
-                                <li><strong>Many-to-Many:</strong> Students ↔ Courses</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>One-to-One:</strong> User ↔ Profile</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>One-to-Many:</strong> Customer → Orders</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Many-to-Many:</strong> Students ↔ Courses</div>
+    </div>
+</div>
                             <h4>Implementation</h4>
-                            <ul>
-                                <li>Foreign keys enforce integrity</li>
-                                <li>Junction tables for M:N</li>
-                                <li>Cascade operations</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Foreign keys enforce integrity</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Junction tables for M:N</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Cascade operations</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">✅</span>
                             <h3>ACID Properties</h3>
                             <h4>Guarantees</h4>
-                            <ul>
-                                <li><strong>Atomicity:</strong> All-or-nothing transactions</li>
-                                <li><strong>Consistency:</strong> Valid state transitions</li>
-                                <li><strong>Isolation:</strong> Concurrent transaction safety</li>
-                                <li><strong>Durability:</strong> Committed data persists</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Atomicity:</strong> All-or-nothing transactions</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Consistency:</strong> Valid state transitions</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Isolation:</strong> Concurrent transaction safety</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Durability:</strong> Committed data persists</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -185,12 +253,20 @@ erDiagram
                             <h3>B-Tree Index</h3>
                             <p class="framework-subtitle">Default for Most RDBMS</p>
                             <h4>Best For</h4>
-                            <ul>
-                                <li>Equality searches (WHERE id = 5)</li>
-                                <li>Range queries (WHERE price BETWEEN 10 AND 50)</li>
-                                <li>ORDER BY operations</li>
-                                <li>Primary keys, unique constraints</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Equality searches (WHERE id = 5)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Range queries (WHERE price BETWEEN 10 AND 50)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">ORDER BY operations</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Primary keys, unique constraints</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -198,12 +274,20 @@ erDiagram
                             <h3>Full-Text Index</h3>
                             <p class="framework-subtitle">Text Search Optimization</p>
                             <h4>Best For</h4>
-                            <ul>
-                                <li>Natural language search</li>
-                                <li>Keyword matching</li>
-                                <li>Relevance ranking</li>
-                                <li>PostgreSQL: GIN/GiST</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Natural language search</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Keyword matching</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Relevance ranking</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">PostgreSQL: GIN/GiST</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -211,24 +295,42 @@ erDiagram
                             <h3>Spatial Index</h3>
                             <p class="framework-subtitle">Geospatial Queries</p>
                             <h4>Best For</h4>
-                            <ul>
-                                <li>Location-based queries</li>
-                                <li>Distance calculations</li>
-                                <li>Bounding box searches</li>
-                                <li>PostGIS for PostgreSQL</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Location-based queries</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Distance calculations</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Bounding box searches</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">PostGIS for PostgreSQL</div>
+    </div>
+</div>
                         </div>
                     </div>
 
                     <div class="info-box info-box-success">
                         <strong>Index Best Practices:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Selective Columns:</strong> Index columns with high cardinality</li>
-                            <li><strong>Composite Indexes:</strong> Order matters (most selective first)</li>
-                            <li><strong>Covering Indexes:</strong> Include all query columns</li>
-                            <li><strong>Avoid Over-Indexing:</strong> Each index slows writes</li>
-                            <li><strong>Monitor Usage:</strong> Remove unused indexes</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Selective Columns:</strong> Index columns with high cardinality</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Composite Indexes:</strong> Order matters (most selective first)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Covering Indexes:</strong> Include all query columns</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Avoid Over-Indexing:</strong> Each index slows writes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Monitor Usage:</strong> Remove unused indexes</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -245,18 +347,32 @@ erDiagram
                             <h3>Document Stores</h3>
                             <p class="framework-subtitle">MongoDB, Couchbase</p>
                             <h4>Characteristics</h4>
-                            <ul>
-                                <li>JSON/BSON documents</li>
-                                <li>Flexible schemas</li>
-                                <li>Embedded relationships</li>
-                                <li>Rich query language</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">JSON/BSON documents</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Flexible schemas</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Embedded relationships</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Rich query language</div>
+    </div>
+</div>
                             <h4>Use Cases</h4>
-                            <ul>
-                                <li>Content management</li>
-                                <li>User profiles</li>
-                                <li>Product catalogs</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Content management</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">User profiles</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Product catalogs</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -264,18 +380,32 @@ erDiagram
                             <h3>Key-Value Stores</h3>
                             <p class="framework-subtitle">Redis, DynamoDB</p>
                             <h4>Characteristics</h4>
-                            <ul>
-                                <li>Simple key → value mapping</li>
-                                <li>In-memory performance</li>
-                                <li>Horizontal scalability</li>
-                                <li>TTL support</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Simple key → value mapping</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">In-memory performance</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Horizontal scalability</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">TTL support</div>
+    </div>
+</div>
                             <h4>Use Cases</h4>
-                            <ul>
-                                <li>Caching layers</li>
-                                <li>Session storage</li>
-                                <li>Real-time analytics</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Caching layers</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Session storage</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Real-time analytics</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -283,18 +413,32 @@ erDiagram
                             <h3>Column-Family</h3>
                             <p class="framework-subtitle">Cassandra, HBase</p>
                             <h4>Characteristics</h4>
-                            <ul>
-                                <li>Wide-column storage</li>
-                                <li>Time-series optimized</li>
-                                <li>Massive scalability</li>
-                                <li>Tunable consistency</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Wide-column storage</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Time-series optimized</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Massive scalability</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Tunable consistency</div>
+    </div>
+</div>
                             <h4>Use Cases</h4>
-                            <ul>
-                                <li>IoT sensor data</li>
-                                <li>Time-series metrics</li>
-                                <li>Event logging</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">IoT sensor data</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Time-series metrics</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Event logging</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -304,41 +448,69 @@ erDiagram
                             <span class="framework-panel-icon">📐</span>
                             <h3>Schema Design</h3>
                             <h4>Patterns</h4>
-                            <ul>
-                                <li><strong>Embedding:</strong> Related data in same document</li>
-                                <li><strong>Referencing:</strong> Links between documents</li>
-                                <li><strong>Hybrid:</strong> Mix of both approaches</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Embedding:</strong> Related data in same document</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Referencing:</strong> Links between documents</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Hybrid:</strong> Mix of both approaches</div>
+    </div>
+</div>
                             <h4>Guidelines</h4>
-                            <ul>
-                                <li>Embed for 1:1 or 1:few</li>
-                                <li>Reference for 1:many or many:many</li>
-                                <li>Consider query patterns</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Embed for 1:1 or 1:few</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Reference for 1:many or many:many</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Consider query patterns</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">⚡</span>
                             <h3>Indexing</h3>
                             <h4>Index Types</h4>
-                            <ul>
-                                <li><strong>Single Field:</strong> One field index</li>
-                                <li><strong>Compound:</strong> Multiple fields</li>
-                                <li><strong>Text:</strong> Full-text search</li>
-                                <li><strong>Geospatial:</strong> Location queries</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Single Field:</strong> One field index</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Compound:</strong> Multiple fields</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Text:</strong> Full-text search</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Geospatial:</strong> Location queries</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🔄</span>
                             <h3>Aggregation</h3>
                             <h4>Pipeline Stages</h4>
-                            <ul>
-                                <li><strong>$match:</strong> Filter documents</li>
-                                <li><strong>$group:</strong> Aggregate by key</li>
-                                <li><strong>$sort:</strong> Order results</li>
-                                <li><strong>$project:</strong> Shape output</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>$match:</strong> Filter documents</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>$group:</strong> Aggregate by key</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>$sort:</strong> Order results</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>$project:</strong> Shape output</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -369,12 +541,20 @@ graph LR
 
                     <div class="info-box info-box-info">
                         <strong>Graph Database Use Cases:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Social Networks:</strong> Friend connections, followers</li>
-                            <li><strong>Recommendation Engines:</strong> "Users who bought X also bought Y"</li>
-                            <li><strong>Fraud Detection:</strong> Transaction pattern analysis</li>
-                            <li><strong>Knowledge Graphs:</strong> Entity relationships</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Social Networks:</strong> Friend connections, followers</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Recommendation Engines:</strong> "Users who bought X also bought Y"</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Fraud Detection:</strong> Transaction pattern analysis</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Knowledge Graphs:</strong> Entity relationships</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -390,42 +570,72 @@ graph LR
                             <span class="framework-panel-icon">🔍</span>
                             <h3>EXPLAIN Plans</h3>
                             <h4>Analysis</h4>
-                            <ul>
-                                <li>Sequential scans (slow)</li>
-                                <li>Index scans (fast)</li>
-                                <li>Join algorithms</li>
-                                <li>Cost estimates</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Sequential scans (slow)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Index scans (fast)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Join algorithms</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Cost estimates</div>
+    </div>
+</div>
                             <h4>Red Flags</h4>
-                            <ul>
-                                <li>Full table scans on large tables</li>
-                                <li>Nested loop joins with no indexes</li>
-                                <li>High estimated row counts</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Full table scans on large tables</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Nested loop joins with no indexes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">High estimated row counts</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🎯</span>
                             <h3>Query Patterns</h3>
                             <h4>Optimization</h4>
-                            <ul>
-                                <li><strong>SELECT specific:</strong> Avoid SELECT *</li>
-                                <li><strong>WHERE clauses:</strong> Filter early</li>
-                                <li><strong>JOIN optimization:</strong> Index foreign keys</li>
-                                <li><strong>Subquery alternatives:</strong> Use JOINs when possible</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>SELECT specific:</strong> Avoid SELECT *</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>WHERE clauses:</strong> Filter early</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>JOIN optimization:</strong> Index foreign keys</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Subquery alternatives:</strong> Use JOINs when possible</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">💾</span>
                             <h3>Caching Strategies</h3>
                             <h4>Layers</h4>
-                            <ul>
-                                <li><strong>Query Result Cache:</strong> Redis, Memcached</li>
-                                <li><strong>Connection Pooling:</strong> Reuse connections</li>
-                                <li><strong>Materialized Views:</strong> Pre-computed results</li>
-                                <li><strong>CDN:</strong> Edge caching for static data</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Query Result Cache:</strong> Redis, Memcached</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Connection Pooling:</strong> Reuse connections</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Materialized Views:</strong> Pre-computed results</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>CDN:</strong> Edge caching for static data</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -474,8 +684,8 @@ sequenceDiagram
                             </tr>
                             <tr>
                                 <td><strong>Complexity</strong></td>
-                                <td><span class="badge-low">Simple</span></td>
-                                <td><span class="badge-high">Complex</span></td>
+                                <td><span class="badge-security">Simple</span></td>
+                                <td><span class="badge-security">Complex</span></td>
                             </tr>
                             <tr>
                                 <td><strong>Cost</strong></td>
@@ -506,11 +716,17 @@ sequenceDiagram
                             <span class="framework-panel-icon">🔢</span>
                             <h3>Range-Based</h3>
                             <h4>Strategy</h4>
-                            <ul>
-                                <li>Partition by value ranges</li>
-                                <li>Example: A-M, N-Z</li>
-                                <li>Time-based: 2024, 2025</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Partition by value ranges</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Example: A-M, N-Z</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Time-based: 2024, 2025</div>
+    </div>
+</div>
                             <h4>Pros/Cons</h4>
                             <ul>
                                 <li>✅ Simple range queries</li>
@@ -522,11 +738,17 @@ sequenceDiagram
                             <span class="framework-panel-icon">🔑</span>
                             <h3>Hash-Based</h3>
                             <h4>Strategy</h4>
-                            <ul>
-                                <li>Hash function on shard key</li>
-                                <li>Consistent hashing</li>
-                                <li>Even distribution</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Hash function on shard key</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Consistent hashing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Even distribution</div>
+    </div>
+</div>
                             <h4>Pros/Cons</h4>
                             <ul>
                                 <li>✅ Balanced load</li>
@@ -538,11 +760,17 @@ sequenceDiagram
                             <span class="framework-panel-icon">🗺️</span>
                             <h3>Geographic</h3>
                             <h4>Strategy</h4>
-                            <ul>
-                                <li>Partition by location</li>
-                                <li>US-East, EU, Asia</li>
-                                <li>Data locality</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Partition by location</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">US-East, EU, Asia</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Data locality</div>
+    </div>
+</div>
                             <h4>Pros/Cons</h4>
                             <ul>
                                 <li>✅ Low latency</li>
@@ -558,12 +786,20 @@ sequenceDiagram
                             <h3>Leader-Follower</h3>
                             <p class="framework-subtitle">Master-Slave Replication</p>
                             <h4>Pattern</h4>
-                            <ul>
-                                <li>Writes to leader only</li>
-                                <li>Reads from followers</li>
-                                <li>Async or sync replication</li>
-                                <li>Failover to follower</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Writes to leader only</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Reads from followers</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Async or sync replication</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Failover to follower</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -571,12 +807,20 @@ sequenceDiagram
                             <h3>Multi-Leader</h3>
                             <p class="framework-subtitle">Multi-Master</p>
                             <h4>Pattern</h4>
-                            <ul>
-                                <li>Multiple write nodes</li>
-                                <li>Conflict resolution needed</li>
-                                <li>Geographic distribution</li>
-                                <li>Better write availability</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Multiple write nodes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Conflict resolution needed</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Geographic distribution</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Better write availability</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -584,12 +828,20 @@ sequenceDiagram
                             <h3>Leaderless</h3>
                             <p class="framework-subtitle">Peer-to-Peer</p>
                             <h4>Pattern</h4>
-                            <ul>
-                                <li>Write to multiple nodes</li>
-                                <li>Quorum-based consistency</li>
-                                <li>Cassandra, DynamoDB</li>
-                                <li>High availability</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Write to multiple nodes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Quorum-based consistency</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Cassandra, DynamoDB</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">High availability</div>
+    </div>
+</div>
                         </div>
                     </div>
                 </div>
@@ -604,23 +856,39 @@ sequenceDiagram
                         <div class="framework-panel">
                             <span class="framework-panel-icon">📖</span>
                             <h3>Essential Books</h3>
-                            <ul>
-                                <li><strong>Designing Data-Intensive Applications</strong> - Martin Kleppmann</li>
-                                <li><strong>Database Internals</strong> - Alex Petrov</li>
-                                <li><strong>SQL Performance Explained</strong> - Markus Winand</li>
-                                <li><strong>MongoDB: The Definitive Guide</strong> - Shannon Bradshaw</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Designing Data-Intensive Applications</strong> - Martin Kleppmann</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Database Internals</strong> - Alex Petrov</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>SQL Performance Explained</strong> - Markus Winand</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>MongoDB: The Definitive Guide</strong> - Shannon Bradshaw</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🛠️</span>
                             <h3>Tools & Platforms</h3>
-                            <ul>
-                                <li><a href="https://www.postgresql.org/" target="_blank" rel="noopener">PostgreSQL</a> - Advanced SQL database</li>
-                                <li><a href="https://www.mongodb.com/" target="_blank" rel="noopener">MongoDB</a> - Document database</li>
-                                <li><a href="https://redis.io/" target="_blank" rel="noopener">Redis</a> - In-memory data store</li>
-                                <li><a href="https://neo4j.com/" target="_blank" rel="noopener">Neo4j</a> - Graph database</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><a href="https://www.postgresql.org/" target="_blank" rel="noopener">PostgreSQL</a> - Advanced SQL database</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://www.mongodb.com/" target="_blank" rel="noopener">MongoDB</a> - Document database</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://redis.io/" target="_blank" rel="noopener">Redis</a> - In-memory data store</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://neo4j.com/" target="_blank" rel="noopener">Neo4j</a> - Graph database</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">

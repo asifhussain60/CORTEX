@@ -1,23 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CORTEX Rollback Orchestrator - Safe checkpoint rollback with validation, safety checks, and user confirmation">
     <title>Rollback Orchestrator - CORTEX</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
         .mermaid { background: transparent; margin: 1.5rem 0; }
-        .diagram-card { margin-bottom: 2rem; }
-        .diagram-title { font-size: 1.1rem; color: var(--accent-primary); margin-bottom: 1rem; font-weight: 600; }
-        .checkpoint-selector { width: 100%; min-height: 280px; }
+        .architecture-diagram { margin-bottom: 2rem; }
+        .architecture-diagram { font-size: 1.1rem; color: var(--accent-primary); margin-bottom: 1rem; font-weight: 600; }
+        .level1-check-icon-error { width: 100%; min-height: 280px; }
         .safety-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 1rem 0; }
         .safety-card { padding: 1rem; background: rgba(26, 26, 46, 0.6); border-radius: 8px; border-left: 4px solid; }
-        .check-pass { color: #10b981; }
-        .check-fail { color: #ef4444; }
+        .level1-check-icon-error { color: #10b981; }
+        .level1-check-icon-error { color: #ef4444; }
         @media (max-width: 768px) { .safety-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
@@ -88,23 +114,23 @@
         </div>
         
         <!-- Checkpoint Timeline -->
-        <section class="section-timeline">
-            <div class="glass-card diagram-card">
+        <section class="level2-section-title-green">
+            <div class="glass-card architecture-diagram">
                 <h2><span>📍</span> Checkpoint Selection (D3.js)</h2>
-                <p class="diagram-title">Available checkpoints with rollback targets</p>
+                <p class="architecture-diagram">Available checkpoints with rollback targets</p>
                 
-                <div id="checkpoint-selector" class="checkpoint-selector"></div>
+                <div id="level1-check-icon-error" class="level1-check-icon-error"></div>
             </div>
         </section>
         
         <!-- Safety Checks -->
-        <section class="section-safety">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>🛡️</span> Safety Checks</h2>
                 
                 <div class="safety-grid">
                     <div class="safety-card">
-                        <h3><span class="check-fail">⚠️</span> Uncommitted Changes</h3>
+                        <h3><span class="level1-check-icon-error">⚠️</span> Uncommitted Changes</h3>
                         <p>
                             Detects modified files in working tree. Rollback blocked until changes are 
                             committed or stashed. Lists all affected files.
@@ -112,7 +138,7 @@
                         <code>SAFETY_MSG_UNCOMMITTED</code>
                     </div>
                     <div class="safety-card">
-                        <h3><span class="check-fail">⚠️</span> Merge In Progress</h3>
+                        <h3><span class="level1-check-icon-error">⚠️</span> Merge In Progress</h3>
                         <p>
                             Checks for .git/MERGE_HEAD presence. Cannot rollback during active merge. 
                             Complete or abort merge first.
@@ -120,7 +146,7 @@
                         <code>SAFETY_MSG_MERGE</code>
                     </div>
                     <div class="safety-card">
-                        <h3><span class="check-pass">✅</span> Checkpoint Exists</h3>
+                        <h3><span class="level1-check-icon-error">✅</span> Checkpoint Exists</h3>
                         <p>
                             Validates checkpoint ID exists in PhaseCheckpointManager registry 
                             before attempting rollback.
@@ -128,7 +154,7 @@
                         <code>validate_checkpoint()</code>
                     </div>
                     <div class="safety-card">
-                        <h3><span class="check-pass">✅</span> User Confirmation</h3>
+                        <h3><span class="level1-check-icon-error">✅</span> User Confirmation</h3>
                         <p>
                             Shows diff preview (optional) and requires explicit user confirmation 
                             before executing rollback.
@@ -140,10 +166,10 @@
         </section>
         
         <!-- Rollback Flow -->
-        <section class="section-flow">
-            <div class="glass-card diagram-card">
+        <section class="level2-section-title-green">
+            <div class="glass-card architecture-diagram">
                 <h2><span>🔄</span> Rollback Execution Flow</h2>
-                <p class="diagram-title">Complete workflow from command to state restoration</p>
+                <p class="architecture-diagram">Complete workflow from command to state restoration</p>
                 
                 <div class="mermaid">
 flowchart TB
@@ -193,10 +219,10 @@ flowchart TB
         </section>
         
         <!-- State Comparison -->
-        <section class="section-comparison">
-            <div class="glass-card diagram-card">
+        <section class="level2-section-title-green">
+            <div class="glass-card architecture-diagram">
                 <h2><span>⚖️</span> State Comparison</h2>
-                <p class="diagram-title">Before vs after rollback visualization</p>
+                <p class="architecture-diagram">Before vs after rollback visualization</p>
                 
                 <div class="mermaid">
 sequenceDiagram
@@ -233,7 +259,7 @@ sequenceDiagram
         </section>
         
         <!-- Checkpoint Metadata -->
-        <section class="section-metadata">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>📋</span> Checkpoint Summary Format</h2>
                 
@@ -263,10 +289,10 @@ Files Changed:
         </section>
         
         <!-- Data Model -->
-        <section class="section-datamodel">
-            <div class="glass-card diagram-card">
+        <section class="level2-section-title-green">
+            <div class="glass-card architecture-diagram">
                 <h2><span>🗃️</span> Rollback Data Model</h2>
-                <p class="diagram-title">Key classes and methods for rollback operations</p>
+                <p class="architecture-diagram">Key classes and methods for rollback operations</p>
                 
                 <div class="mermaid">
 classDiagram
@@ -312,7 +338,7 @@ classDiagram
         </section>
         
         <!-- Command Options -->
-        <section class="section-options">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>⚙️</span> Command Options</h2>
                 
@@ -356,7 +382,7 @@ classDiagram
         </section>
         
         <!-- Related Features -->
-        <section class="section-related">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>🔗</span> Related Orchestrators</h2>
                 <div class="feature-grid feature-grid-3">
@@ -397,7 +423,7 @@ classDiagram
         
         // D3.js Checkpoint Selector
         (function() {
-            const container = document.getElementById('checkpoint-selector');
+            const container = document.getElementById('level1-check-icon-error');
             const width = container.clientWidth || 700;
             const height = 260;
             
@@ -418,7 +444,7 @@ classDiagram
                 DEBUG: '#8b5cf6'
             };
             
-            const svg = d3.select('#checkpoint-selector')
+            const svg = d3.select('#level1-check-icon-error')
                 .append('svg')
                 .attr('width', width)
                 .attr('height', height);

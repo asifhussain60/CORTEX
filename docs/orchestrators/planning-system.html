@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CORTEX Planning System - Autonomous feature planning with DoR/DoD compliance and TDD integration">
@@ -8,6 +33,7 @@
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
 </head>
 <body>
     <!-- Skip Link -->
@@ -15,10 +41,35 @@
     
     <!-- Level 1 Navigation Header (glassmorphism v4.1.0 compliant) -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../index.html" class="nav-link">
-                    <i class="fas fa-home"></i>
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../index.html" class="nav-link" mobile-nav-optimized>
+                    <i class="pulse-glow-glass--fast fa-home"></i>
                     <span>Home</span>
                 </a>
             </nav>
@@ -75,7 +126,7 @@
         </div>
         
         <!-- 4 Core Phases -->
-        <section class="section-workflow">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>📋</span> The 4-Phase Workflow</h2>
                 
@@ -121,7 +172,7 @@
         </section>
         
         <!-- Complexity Tiers -->
-        <section class="section-architecture">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>🎚️</span> 4 Complexity Tiers</h2>
                 <p>
@@ -137,11 +188,17 @@
                                 <div class="tier-subtitle">Direct execution, no artifacts</div>
                             </div>
                         </div>
-                        <ul class="feature-list">
-                            <li>Simple queries, file reads</li>
-                            <li>1-3 steps, ~30 seconds</li>
-                            <li>No planning artifacts stored</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Simple queries, file reads</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">1-3 steps, ~30 seconds</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">No planning artifacts stored</div>
+    </div>
+</div>
                     </div>
                     
                     <div class="tier-card tier-2">
@@ -152,11 +209,17 @@
                                 <div class="tier-subtitle">Inline notes, minimal planning</div>
                             </div>
                         </div>
-                        <ul class="feature-list">
-                            <li>Single-file edits, small refactors</li>
-                            <li>3-8 steps, ~2 minutes</li>
-                            <li>Inline notes only (no folder)</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Single-file edits, small refactors</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">3-8 steps, ~2 minutes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Inline notes only (no folder)</div>
+    </div>
+</div>
                     </div>
                     
                     <div class="tier-card tier-3">
@@ -167,14 +230,20 @@
                                 <div class="tier-subtitle">Structured plan folder</div>
                             </div>
                         </div>
-                        <ul class="feature-list">
-                            <li>Multi-file changes, feature additions</li>
-                            <li>8-20 steps, ~10 minutes</li>
-                            <li>Full planning folder structure</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Multi-file changes, feature additions</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">8-20 steps, ~10 minutes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Full planning folder structure</div>
+    </div>
+</div>
                     </div>
                     
-                    <div class="tier-card tier-4">
+                    <div class="tier-card tier-icon">
                         <div class="tier-header">
                             <span class="tier-icon">🏗️</span>
                             <div>
@@ -182,18 +251,24 @@
                                 <div class="tier-subtitle">Multi-phase, gates, reviews</div>
                             </div>
                         </div>
-                        <ul class="feature-list">
-                            <li>Architecture changes, major features</li>
-                            <li>20+ steps, phases with gates</li>
-                            <li>Full documentation + phase reviews</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Architecture changes, major features</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">20+ steps, phases with gates</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Full documentation + phase reviews</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
         </section>
         
         <!-- Example Output -->
-        <section class="section-usage">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>📊</span> Example Plan Structure</h2>
                 
@@ -227,7 +302,7 @@
         </section>
         
         <!-- Related -->
-        <section class="section-integration">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>🔗</span> Related Features</h2>
                 <div class="feature-grid feature-grid-3">

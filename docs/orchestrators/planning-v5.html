@@ -1,12 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CORTEX Planning System v5.0 - Pure autonomous planning with Tier 0 Governance, Knowledge Graphs, and 10-phase execution">
     <title>Planning System v5.0 - CORTEX</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
@@ -16,10 +42,35 @@
     
     <!-- Level 1 Navigation Header (glassmorphism v4.1.0 compliant) -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../index.html" class="nav-link">
-                    <i class="fas fa-home"></i>
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../index.html" class="nav-link" mobile-nav-optimized>
+                    <i class="pulse-glow-glass--fast fa-home"></i>
                     <span>Home</span>
                 </a>
             </nav>
@@ -30,12 +81,12 @@
     <main class="container" id="main-content">
         <!-- Hero Section -->
         <article class="glass-card-display animation-t1">
-            <div class="hero-header">
+            <div class="btn-hero-story">
                 <h1>🧠 Planning System v5.0</h1>
                 <p class="hero-subtitle">Pure Autonomous Planning with Tier 0 Governance + Knowledge Graphs</p>
             </div>
             
-            <p class="hero-description">
+            <p class="btn-hero-story">
                 The v5.0 Planning System represents a paradigm shift from guided workflows to <strong>fully autonomous planning</strong>. 
                 By integrating <strong>Tier 0 Governance Validation</strong>, <strong>Knowledge Graph reasoning</strong>, and 
                 <strong>AST-based impact analysis</strong>, it generates enterprise-grade plans with zero human intervention—while 
@@ -81,37 +132,37 @@
             <h2>✨ What's New in v5.0</h2>
             
             <div class="features-grid">
-                <div class="feature-item">
+                <div class="level1-feature-panel">
                     <div class="feature-icon">🛡️</div>
                     <h3>Tier 0 Governance</h3>
                     <p>Bootstrap phase validates against brain-protection-rules.yaml, SKULL principles, and architectural constraints before plan generation</p>
                 </div>
                 
-                <div class="feature-item">
+                <div class="level1-feature-panel">
                     <div class="feature-icon">🕸️</div>
                     <h3>Knowledge Graph Reasoning</h3>
                     <p>Leverages knowledge-graph.yaml to understand component relationships, identify dependencies, and suggest optimal implementation paths</p>
                 </div>
                 
-                <div class="feature-item">
+                <div class="level1-feature-panel">
                     <div class="feature-icon">🌳</div>
                     <h3>AST Impact Analysis</h3>
                     <p>Analyzes Abstract Syntax Trees to predict code changes, estimate complexity, and identify potential breaking changes</p>
                 </div>
                 
-                <div class="feature-item">
+                <div class="level1-feature-panel">
                     <div class="feature-icon">📊</div>
                     <h3>Interactive Visualizations</h3>
                     <p>D3.js timelines, force graphs, and heatmaps show dependency networks, execution flow, and complexity distributions</p>
                 </div>
                 
-                <div class="feature-item">
+                <div class="level1-feature-panel">
                     <div class="feature-icon">🎯</div>
                     <h3>Acceptance Criteria Framework</h3>
                     <p>Auto-generates Success Conditions, Validation Gates, and Rollback Triggers with testable metrics</p>
                 </div>
                 
-                <div class="feature-item">
+                <div class="level1-feature-panel">
                     <div class="feature-icon">💰</div>
                     <h3>Token Optimization</h3>
                     <p>Plans include token usage estimates and optimization strategies achieving 97% input reduction</p>
@@ -122,118 +173,118 @@
         <!-- 10-Phase Execution Pipeline -->
         <article class="glass-card-display animation-t1">
             <h2>🔄 10-Phase Execution Pipeline</h2>
-            <p class="section-intro">
+            <p class="level2-section-title-green">
                 Each phase operates autonomously with built-in validation gates and rollback triggers. Click any phase to explore its deep-dive documentation.
             </p>
             
-            <div class="phases-masonry">
+            <div class="workflow-phases">
                 <a href="planning-v5/phase-1-governance-validation.html" class="glass-card-clickable animation-t1">
-                    <div class="phase-badge">Phase 1</div>
+                    <div class="workflow-phases">Phase 1</div>
                     <div class="phase-icon">🛡️</div>
                     <h3>Governance Validation</h3>
                     <p>Bootstrap phase validates Tier 0 rules, SKULL principles, and architectural constraints</p>
-                    <div class="phase-meta">
+                    <div class="workflow-phases">
                         <span class="phase-duration">⏱️ 5-10s</span>
-                        <span class="phase-criticality">🔴 Critical</span>
+                        <span class="workflow-phases">🔴 Critical</span>
                     </div>
                 </a>
                 
                 <a href="planning-v5/phase-2-knowledge-graph-analysis.html" class="glass-card-clickable animation-t1">
-                    <div class="phase-badge">Phase 2</div>
+                    <div class="workflow-phases">Phase 2</div>
                     <div class="phase-icon">🕸️</div>
                     <h3>Knowledge Graph Analysis</h3>
                     <p>Query knowledge graph for component relationships, patterns, and architectural context</p>
-                    <div class="phase-meta">
+                    <div class="workflow-phases">
                         <span class="phase-duration">⏱️ 8-15s</span>
-                        <span class="phase-criticality">🟡 High</span>
+                        <span class="workflow-phases">🟡 High</span>
                     </div>
                 </a>
                 
                 <a href="planning-v5/phase-3-ast-impact-analysis.html" class="glass-card-clickable animation-t1">
-                    <div class="phase-badge">Phase 3</div>
+                    <div class="workflow-phases">Phase 3</div>
                     <div class="phase-icon">🌳</div>
                     <h3>AST Impact Analysis</h3>
                     <p>Parse codebase AST to predict file changes, complexity impact, and breaking changes</p>
-                    <div class="phase-meta">
+                    <div class="workflow-phases">
                         <span class="phase-duration">⏱️ 10-20s</span>
-                        <span class="phase-criticality">🟡 High</span>
+                        <span class="workflow-phases">🟡 High</span>
                     </div>
                 </a>
                 
                 <a href="planning-v5/phase-4-complexity-scoring.html" class="glass-card-clickable animation-t1">
-                    <div class="phase-badge">Phase 4</div>
+                    <div class="workflow-phases">Phase 4</div>
                     <div class="phase-icon">📊</div>
                     <h3>Complexity Scoring</h3>
                     <p>Calculate multi-dimensional complexity using 8 factors (LOC, dependencies, cognitive, etc.)</p>
-                    <div class="phase-meta">
+                    <div class="workflow-phases">
                         <span class="phase-duration">⏱️ 3-5s</span>
-                        <span class="phase-criticality">🟢 Medium</span>
+                        <span class="workflow-phases">🟢 Medium</span>
                     </div>
                 </a>
                 
                 <a href="planning-v5/phase-5-strategy-selection.html" class="glass-card-clickable animation-t1">
-                    <div class="phase-badge">Phase 5</div>
+                    <div class="workflow-phases">Phase 5</div>
                     <div class="phase-icon">🎯</div>
                     <h3>Strategy Selection</h3>
                     <p>Choose incremental vs skeleton strategy based on complexity, risk, and scope</p>
-                    <div class="phase-meta">
+                    <div class="workflow-phases">
                         <span class="phase-duration">⏱️ 2-3s</span>
-                        <span class="phase-criticality">🔴 Critical</span>
+                        <span class="workflow-phases">🔴 Critical</span>
                     </div>
                 </a>
                 
                 <a href="planning-v5/phase-6-phase-breakdown.html" class="glass-card-clickable animation-t1">
-                    <div class="phase-badge">Phase 6</div>
+                    <div class="workflow-phases">Phase 6</div>
                     <div class="phase-icon">📋</div>
                     <h3>Phase Breakdown</h3>
                     <p>Generate detailed phases with tasks, dependencies, effort estimates, and acceptance criteria</p>
-                    <div class="phase-meta">
+                    <div class="workflow-phases">
                         <span class="phase-duration">⏱️ 15-30s</span>
-                        <span class="phase-criticality">🔴 Critical</span>
+                        <span class="workflow-phases">🔴 Critical</span>
                     </div>
                 </a>
                 
                 <a href="planning-v5/phase-7-tdd-integration.html" class="glass-card-clickable animation-t1">
-                    <div class="phase-badge">Phase 7</div>
+                    <div class="workflow-phases">Phase 7</div>
                     <div class="phase-icon">🧪</div>
                     <h3>TDD Integration</h3>
                     <p>Generate test specifications for each phase following RED→GREEN→REFACTOR cycle</p>
-                    <div class="phase-meta">
+                    <div class="workflow-phases">
                         <span class="phase-duration">⏱️ 10-20s</span>
-                        <span class="phase-criticality">🟡 High</span>
+                        <span class="workflow-phases">🟡 High</span>
                     </div>
                 </a>
                 
                 <a href="planning-v5/phase-8-token-optimization.html" class="glass-card-clickable animation-t1">
-                    <div class="phase-badge">Phase 8</div>
+                    <div class="workflow-phases">Phase 8</div>
                     <div class="phase-icon">💰</div>
                     <h3>Token Optimization</h3>
                     <p>Analyze token usage and recommend optimization strategies (tier offload, caching, etc.)</p>
-                    <div class="phase-meta">
+                    <div class="workflow-phases">
                         <span class="phase-duration">⏱️ 5-8s</span>
-                        <span class="phase-criticality">🟢 Medium</span>
+                        <span class="workflow-phases">🟢 Medium</span>
                     </div>
                 </a>
                 
                 <a href="planning-v5/phase-9-visualization-generation.html" class="glass-card-clickable animation-t1">
-                    <div class="phase-badge">Phase 9</div>
+                    <div class="workflow-phases">Phase 9</div>
                     <div class="phase-icon">📈</div>
                     <h3>Visualization Generation</h3>
                     <p>Create D3.js charts and Mermaid diagrams for plan artifacts (timeline, dependencies, flow)</p>
-                    <div class="phase-meta">
+                    <div class="workflow-phases">
                         <span class="phase-duration">⏱️ 12-18s</span>
-                        <span class="phase-criticality">🟢 Medium</span>
+                        <span class="workflow-phases">🟢 Medium</span>
                     </div>
                 </a>
                 
                 <a href="planning-v5/phase-10-manifest-finalization.html" class="glass-card-clickable animation-t1">
-                    <div class="phase-badge">Phase 10</div>
+                    <div class="workflow-phases">Phase 10</div>
                     <div class="phase-icon">✅</div>
                     <h3>Manifest Finalization</h3>
                     <p>Write complete planning manifest to cortex-brain/documents/planning/active/ with metadata</p>
-                    <div class="phase-meta">
+                    <div class="workflow-phases">
                         <span class="phase-duration">⏱️ 3-5s</span>
-                        <span class="phase-criticality">🔴 Critical</span>
+                        <span class="workflow-phases">🔴 Critical</span>
                     </div>
                 </a>
             </div>
@@ -294,7 +345,7 @@ graph TB
                 </pre>
             </div>
             
-            <p class="diagram-caption">
+            <p class="architecture-diagram">
                 Planning v5.0 architecture showing 10-phase autonomous execution with Tier 0 governance, 
                 knowledge graph reasoning, and automatic ADO integration.
             </p>
@@ -311,41 +362,49 @@ graph TB
             
             <div id="complexity-scoring-viz" class="viz-container"></div>
             
-            <div class="complexity-factors">
-                <div class="factor-item">
+            <div class="level1-comparison-box-error">
+                <div class="refactor-explanation">
                     <strong>1. Lines of Code (LOC):</strong> Estimated code volume (weight: 15%)
                 </div>
-                <div class="factor-item">
+                <div class="refactor-explanation">
                     <strong>2. File Count:</strong> Number of files to create/modify (weight: 10%)
                 </div>
-                <div class="factor-item">
+                <div class="refactor-explanation">
                     <strong>3. Dependency Depth:</strong> Transitive dependency count (weight: 20%)
                 </div>
-                <div class="factor-item">
+                <div class="refactor-explanation">
                     <strong>4. Cognitive Complexity:</strong> Cyclomatic complexity estimate (weight: 15%)
                 </div>
-                <div class="factor-item">
+                <div class="refactor-explanation">
                     <strong>5. Integration Points:</strong> External system connections (weight: 12%)
                 </div>
-                <div class="factor-item">
+                <div class="refactor-explanation">
                     <strong>6. Risk Level:</strong> Breaking change potential (weight: 18%)
                 </div>
-                <div class="factor-item">
+                <div class="refactor-explanation">
                     <strong>7. Test Coverage:</strong> Required test scenarios (weight: 5%)
                 </div>
-                <div class="factor-item">
+                <div class="refactor-explanation">
                     <strong>8. Documentation Burden:</strong> Doc pages to create/update (weight: 5%)
                 </div>
             </div>
             
-            <div class="strategy-thresholds">
+            <div class="orchestrator-viz-section">
                 <h3>Strategy Selection Thresholds</h3>
-                <ul>
-                    <li><strong>0-30:</strong> Skeleton Strategy (quick scaffolding)</li>
-                    <li><strong>31-60:</strong> Incremental Strategy (3-5 phases)</li>
-                    <li><strong>61-85:</strong> Incremental Strategy (6-8 phases)</li>
-                    <li><strong>86-100:</strong> Incremental Strategy (9-12 phases)</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>0-30:</strong> Skeleton Strategy (quick scaffolding)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>31-60:</strong> Incremental Strategy (3-5 phases)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>61-85:</strong> Incremental Strategy (6-8 phases)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>86-100:</strong> Incremental Strategy (9-12 phases)</div>
+    </div>
+</div>
             </div>
         </article>
         
@@ -353,38 +412,38 @@ graph TB
         <article class="glass-card-display animation-t1">
             <h2>🎯 Key Benefits</h2>
             
-            <div class="benefits-grid">
-                <div class="benefit-card glass-card-display">
+            <div class="feature-benefit-panel">
+                <div class="feature-benefit-panel glass-card-display">
                     <div class="benefit-icon">⚡</div>
                     <h3>65% Faster Planning</h3>
                     <p>Autonomous execution eliminates iterative refinement cycles, reducing 2-hour planning sessions to 30 minutes</p>
                 </div>
                 
-                <div class="benefit-card glass-card-display">
+                <div class="feature-benefit-panel glass-card-display">
                     <div class="benefit-icon">✅</div>
                     <h3>100% Compliance</h3>
                     <p>Tier 0 validation ensures every plan adheres to brain protection rules and architectural standards</p>
                 </div>
                 
-                <div class="benefit-card glass-card-display">
+                <div class="feature-benefit-panel glass-card-display">
                     <div class="benefit-icon">🧪</div>
                     <h3>TDD by Default</h3>
                     <p>Every phase includes test specifications following RED→GREEN→REFACTOR cycle</p>
                 </div>
                 
-                <div class="benefit-card glass-card-display">
+                <div class="feature-benefit-panel glass-card-display">
                     <div class="benefit-icon">📊</div>
                     <h3>Visual Insights</h3>
                     <p>Interactive D3.js visualizations reveal dependencies, bottlenecks, and optimization opportunities</p>
                 </div>
                 
-                <div class="benefit-card glass-card-display">
+                <div class="feature-benefit-panel glass-card-display">
                     <div class="benefit-icon">🔗</div>
                     <h3>ADO Ready</h3>
                     <p>Plans automatically integrate with ADO Orchestrator for one-click work item generation</p>
                 </div>
                 
-                <div class="benefit-card glass-card-display">
+                <div class="feature-benefit-panel glass-card-display">
                     <div class="benefit-icon">🎓</div>
                     <h3>Knowledge Leverage</h3>
                     <p>Every plan benefits from accumulated organizational knowledge via knowledge graph reasoning</p>
@@ -475,34 +534,34 @@ graph TB
         <article class="glass-card-display animation-t1">
             <h2>📚 Related Documentation</h2>
             
-            <div class="related-links">
-                <a href="ado-v2.html" class="related-link glass-card-clickable animation-t1">
-                    <div class="related-icon">🎯</div>
-                    <div class="related-content">
+            <div class="level1-relationship-grid">
+                <a href="ado-v2.html" class="level1-relationship-grid glass-card-clickable animation-t1">
+                    <div class="level1-relationship-grid">🎯</div>
+                    <div class="level1-relationship-grid">
                         <h3>ADO Orchestrator v2</h3>
                         <p>Convert Planning v5 manifests to Azure DevOps work items</p>
                     </div>
                 </a>
                 
-                <a href="tdd-orchestrator.html" class="related-link glass-card-clickable animation-t1">
-                    <div class="related-icon">🧪</div>
-                    <div class="related-content">
+                <a href="tdd-orchestrator.html" class="level1-relationship-grid glass-card-clickable animation-t1">
+                    <div class="level1-relationship-grid">🧪</div>
+                    <div class="level1-relationship-grid">
                         <h3>TDD Master Orchestrator</h3>
                         <p>Execute test-driven development workflows generated by Planning v5</p>
                     </div>
                 </a>
                 
-                <a href="../architecture/knowledge-graph.html" class="related-link glass-card-clickable animation-t1">
-                    <div class="related-icon">🕸️</div>
-                    <div class="related-content">
+                <a href="../architecture/knowledge-graph.html" class="level1-relationship-grid glass-card-clickable animation-t1">
+                    <div class="level1-relationship-grid">🕸️</div>
+                    <div class="level1-relationship-grid">
                         <h3>Knowledge Graph</h3>
                         <p>Explore the knowledge graph powering Planning v5 reasoning</p>
                     </div>
                 </a>
                 
-                <a href="../token-optimization/index.html" class="related-link glass-card-clickable animation-t1">
-                    <div class="related-icon">💰</div>
-                    <div class="related-content">
+                <a href="../token-optimization/index.html" class="level1-relationship-grid glass-card-clickable animation-t1">
+                    <div class="level1-relationship-grid">💰</div>
+                    <div class="level1-relationship-grid">
                         <h3>Token Optimization</h3>
                         <p>Learn about token optimization strategies included in Planning v5</p>
                     </div>

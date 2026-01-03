@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Messaging & Event-Driven Architecture Learning Hub - Master Kafka, RabbitMQ, and event streaming">
@@ -8,7 +33,9 @@
     <meta name="author" content="Asif Hussain">
     <title>Messaging & Event-Driven Hub | CORTEX Best Practices</title>
     <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02">
-    <link rel="stylesheet" href="../assets/css/learning-hub.css?v=2026-01-02">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
+    
+    <link rel="stylesheet" href="../..../..../..../..../../assets/css/generated-classes.css"><link rel="stylesheet" href="../assets/css/learning-hub.css?v=2026-01-02">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
@@ -16,10 +43,35 @@
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../index.html" class="nav-link">
-                    <span class="nav-icon">🏠</span> Home
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../index.html" class="nav-link" mobile-nav-optimized>
+                    <span class="nav-content" mobile-nav-optimized>🏠</span> Home
                 </a>
             </nav>
         </div>
@@ -41,7 +93,7 @@
     <div class="container">
         <section class="learning-path-roadmap glass-card">
             <h4>🗺️ Your Learning Journey</h4>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 From message queue fundamentals to advanced event streaming architectures. Learn Apache Kafka, 
                 RabbitMQ, and build scalable event-driven systems with CQRS and event sourcing.
             </p>
@@ -65,14 +117,14 @@ graph LR
             </div>
         </section>
 
-        <section style="margin-top: var(--spacing-3xl);">
-            <h2 style="color: var(--text-primary); margin-bottom: var(--spacing-xl); font-size: 2rem;">
+        <section class="inline-fix-1">
+            <h2 class="inline-fix-24">
                 📚 Interactive Learning Modules
             </h2>
             
-            <div class="module-nav-grid">
-                <a href="messaging/fundamentals.html" class="module-nav-card">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div class="module-nav-grid" mobile-nav-optimized>
+                <a href="messaging/fundamentals.html" class="module-nav-card" mobile-nav-optimized>
+                    <div class="inline-fix-5">
                         <span class="module-number">Module 1</span>
                         <span class="difficulty-badge beginner">Beginner</span>
                     </div>
@@ -83,12 +135,12 @@ graph LR
                     </p>
                     <div class="module-footer">
                         <span class="time-estimate">⏱️ 35 minutes</span>
-                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                        <span class="inline-fix-4">Start →</span>
                     </div>
                 </a>
 
-                <a href="messaging/kafka-streams.html" class="module-nav-card">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <a href="messaging/kafka-streams.html" class="module-nav-card" mobile-nav-optimized>
+                    <div class="inline-fix-5">
                         <span class="module-number">Module 2</span>
                         <span class="difficulty-badge intermediate">Intermediate</span>
                     </div>
@@ -99,12 +151,12 @@ graph LR
                     </p>
                     <div class="module-footer">
                         <span class="time-estimate">⏱️ 40 minutes</span>
-                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                        <span class="inline-fix-4">Start →</span>
                     </div>
                 </a>
 
-                <a href="messaging/event-sourcing.html" class="module-nav-card">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <a href="messaging/event-sourcing.html" class="module-nav-card" mobile-nav-optimized>
+                    <div class="inline-fix-5">
                         <span class="module-number">Module 3</span>
                         <span class="difficulty-badge advanced">Advanced</span>
                     </div>
@@ -115,12 +167,12 @@ graph LR
                     </p>
                     <div class="module-footer">
                         <span class="time-estimate">⏱️ 40 minutes</span>
-                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                        <span class="inline-fix-4">Start →</span>
                     </div>
                 </a>
 
-                <a href="messaging/cqrs-pattern.html" class="module-nav-card">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <a href="messaging/cqrs-pattern.html" class="module-nav-card" mobile-nav-optimized>
+                    <div class="inline-fix-5">
                         <span class="module-number">Module 4</span>
                         <span class="difficulty-badge expert">Expert</span>
                     </div>
@@ -131,105 +183,129 @@ graph LR
                     </p>
                     <div class="module-footer">
                         <span class="time-estimate">⏱️ 35 minutes</span>
-                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                        <span class="inline-fix-4">Start →</span>
                     </div>
                 </a>
             </div>
         </section>
 
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>📋 Prerequisites & Recommendations</h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-lg); margin-top: var(--spacing-xl);">
-                <div style="padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-radius: 8px; border: 1px solid #10b981;">
-                    <h4 style="color: #10b981; margin-bottom: var(--spacing-sm);">✅ Recommended Background</h4>
-                    <ul style="color: var(--text-secondary); font-size: 0.95rem;">
-                        <li>Understanding of async programming</li>
-                        <li>Basic distributed systems knowledge</li>
-                        <li>REST API experience</li>
-                        <li>No messaging experience required</li>
-                    </ul>
+            <div class="inline-fix-27">
+                <div class="inline-fix-18">
+                    <h4 class="inline-fix-22">✅ Recommended Background</h4>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Understanding of async programming</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Basic distributed systems knowledge</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">REST API experience</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">No messaging experience required</div>
+    </div>
+</div>
                 </div>
-                <div style="padding: var(--spacing-lg); background: rgba(0, 212, 255, 0.1); border-radius: 8px; border: 1px solid #00d4ff;">
-                    <h4 style="color: #00d4ff; margin-bottom: var(--spacing-sm);">🛠️ Tools You'll Use</h4>
-                    <ul style="color: var(--text-secondary); font-size: 0.95rem;">
-                        <li>Apache Kafka & Kafka Streams</li>
-                        <li>RabbitMQ (AMQP broker)</li>
-                        <li>EventStoreDB</li>
-                        <li>Docker for local setup</li>
-                    </ul>
+                <div class="inline-fix-28">
+                    <h4 class="inline-fix-19">🛠️ Tools You'll Use</h4>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Apache Kafka & Kafka Streams</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">RabbitMQ (AMQP broker)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">EventStoreDB</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Docker for local setup</div>
+    </div>
+</div>
                 </div>
-                <div style="padding: var(--spacing-lg); background: rgba(139, 92, 246, 0.1); border-radius: 8px; border: 1px solid #8b5cf6;">
-                    <h4 style="color: #8b5cf6; margin-bottom: var(--spacing-sm);">🎯 What You'll Build</h4>
-                    <ul style="color: var(--text-secondary); font-size: 0.95rem;">
-                        <li>Kafka real-time analytics pipeline</li>
-                        <li>Event-sourced order system</li>
-                        <li>CQRS-based microservice</li>
-                        <li>Message-driven architecture</li>
-                    </ul>
+                <div class="inline-fix-41">
+                    <h4 class="inline-fix-43">🎯 What You'll Build</h4>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Kafka real-time analytics pipeline</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Event-sourced order system</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">CQRS-based microservice</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Message-driven architecture</div>
+    </div>
+</div>
                 </div>
             </div>
         </section>
 
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🎓 Learning Outcomes</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 By completing this learning path, you'll be able to:
             </p>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-md);">
-                <div style="padding: var(--spacing-md); background: rgba(16, 185, 129, 0.05); border-left: 3px solid #10b981; border-radius: 4px;">
-                    <strong style="color: #10b981;">Message Queues</strong>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+            <div class="inline-fix-31">
+                <div class="inline-fix-20">
+                    <strong class="inline-fix-13">Message Queues</strong>
+                    <p class="inline-fix-8">
                         Design reliable messaging with RabbitMQ and delivery guarantees
                     </p>
                 </div>
-                <div style="padding: var(--spacing-md); background: rgba(0, 212, 255, 0.05); border-left: 3px solid #00d4ff; border-radius: 4px;">
-                    <strong style="color: #00d4ff;">Kafka Expertise</strong>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                <div class="inline-fix-33">
+                    <strong class="inline-fix-25">Kafka Expertise</strong>
+                    <p class="inline-fix-8">
                         Build real-time stream processing with Kafka Streams
                     </p>
                 </div>
-                <div style="padding: var(--spacing-md); background: rgba(139, 92, 246, 0.05); border-left: 3px solid #8b5cf6; border-radius: 4px;">
-                    <strong style="color: #8b5cf6;">Event Sourcing</strong>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                <div class="inline-fix-29">
+                    <strong class="inline-fix-37">Event Sourcing</strong>
+                    <p class="inline-fix-8">
                         Implement complete audit trails with event stores
                     </p>
                 </div>
-                <div style="padding: var(--spacing-md); background: rgba(251, 191, 36, 0.05); border-left: 3px solid #fbbf24; border-radius: 4px;">
-                    <strong style="color: #fbbf24;">CQRS Pattern</strong>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                <div class="inline-fix-38">
+                    <strong class="inline-fix-15">CQRS Pattern</strong>
+                    <p class="inline-fix-8">
                         Separate read/write models for optimal performance
                     </p>
                 </div>
             </div>
         </section>
 
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🔗 Related Learning Paths</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 Expand your knowledge with these complementary paths:
             </p>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-lg);">
+            <div class="inline-fix-30">
                 <a href="microservices-hub.html" class="related-path-card">
-                    <span class="path-icon">🔬</span>
+                    <span class="learning-path-roadmap">🔬</span>
                     <h5>Microservices Architecture</h5>
                     <p>Service communication, distributed systems</p>
                 </a>
                 <a href="ddd-hub.html" class="related-path-card">
-                    <span class="path-icon">🏗️</span>
+                    <span class="learning-path-roadmap">🏗️</span>
                     <h5>Domain-Driven Design</h5>
                     <p>Domain events, bounded contexts</p>
                 </a>
                 <a href="devops-hub.html" class="related-path-card">
-                    <span class="path-icon">🔄</span>
+                    <span class="learning-path-roadmap">🔄</span>
                     <h5>DevOps & CI/CD</h5>
                     <p>Deployment pipelines, monitoring</p>
                 </a>
             </div>
         </section>
 
-        <section class="glass-card" style="margin-top: var(--spacing-3xl); margin-bottom: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-40">
             <h2>📚 Additional Resources</h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-md); margin-top: var(--spacing-lg);">
+            <div class="inline-fix-32">
                 <a href="https://kafka.apache.org/documentation/" target="_blank" rel="noopener" class="resource-link">
                     📖 Kafka Documentation
                 </a>
@@ -246,11 +322,11 @@ graph LR
         </section>
     </div>
 
-    <footer style="padding: var(--spacing-2xl); text-align: center; color: var(--text-secondary); background: rgba(0, 0, 0, 0.3);">
+    <footer class="inline-fix-42">
         <p>© 2026 Asif Hussain. All rights reserved.</p>
-        <p style="margin-top: var(--spacing-sm);">
-            <a href="../index.html" style="color: var(--hub-primary); text-decoration: none;">Back to Home</a> • 
-            <a href="index.html" style="color: var(--hub-primary); text-decoration: none;">All Learning Paths</a>
+        <p class="inline-fix-12">
+            <a href="../index.html" class="inline-fix-11">Back to Home</a> • 
+            <a href="index.html" class="inline-fix-11">All Learning Paths</a>
         </p>
     </footer>
 

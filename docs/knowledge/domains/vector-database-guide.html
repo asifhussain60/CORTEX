@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Vector Database Guide - Similarity search, embeddings storage, and RAG integration">
@@ -8,13 +33,14 @@
     <title>Vector Database Guide - CORTEX Knowledge</title>
     <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
-        <button class="back-button" onclick="history.back()" aria-label="Go back">← Back</button>
+    <nav class="breadcrumb-separator sticky-nav" mobile-nav-optimized aria-label="Breadcrumb">
+        <button class="grid-background" onclick="history.back()" aria-label="Go back">← Back</button>
         <ol class="breadcrumb">
             <li><a href="../../index.html">Home</a></li>
             <li><a href="../index.html">Knowledge Library</a></li>
@@ -29,16 +55,16 @@
         </div>
         <h1 class="hero-title">🗄️ Vector Database Guide</h1>
         <p class="hero-subtitle">Similarity search and embeddings storage for RAG systems</p>
-        <div class="file-metadata">
+        <div class="code-file">
             <span class="metadata-item">📦 30+ Rules</span>
             <span class="metadata-item">🏷️ RAG & AI Domains</span>
             <span class="metadata-item">📅 Updated: Dec 2025</span>
         </div>
     </section>
 
-    <aside class="toc-sidebar" aria-label="Table of contents">
+    <aside class="toc-link" aria-label="Table of contents">
         <h3>On This Page</h3>
-        <nav class="toc-nav">
+        <nav class="toc-nav" mobile-nav-optimized>
             <a href="#overview" class="toc-link">Overview</a>
             <a href="#similarity" class="toc-link">Similarity Metrics</a>
             <a href="#databases" class="toc-link">Vector Databases</a>
@@ -48,7 +74,7 @@
         </nav>
     </aside>
 
-    <main class="file-content">
+    <main class="code-file">
         <section class="glass-card" id="overview">
             <h2>What is a Vector Database?</h2>
             <p>
@@ -58,21 +84,39 @@
             </p>
 
             <h3>Key Features</h3>
-            <ul class="feature-list">
-                <li><strong>Similarity Search:</strong> Find nearest neighbors based on vector distance</li>
-                <li><strong>High-Dimensional Indexing:</strong> Efficient search in 100s-1000s of dimensions</li>
-                <li><strong>ANN Algorithms:</strong> Trade accuracy for speed (HNSW, IVF, LSH)</li>
-                <li><strong>Metadata Filtering:</strong> Combine vector search with traditional filters</li>
-            </ul>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Similarity Search:</strong> Find nearest neighbors based on vector distance</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>High-Dimensional Indexing:</strong> Efficient search in 100s-1000s of dimensions</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>ANN Algorithms:</strong> Trade accuracy for speed (HNSW, IVF, LSH)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Metadata Filtering:</strong> Combine vector search with traditional filters</div>
+    </div>
+</div>
 
             <h3>Use Cases</h3>
-            <ul class="feature-list">
-                <li><strong>RAG Systems:</strong> Retrieve relevant documents for LLM context</li>
-                <li><strong>Semantic Search:</strong> Find similar documents by meaning, not keywords</li>
-                <li><strong>Recommendation Systems:</strong> Find similar products, content, users</li>
-                <li><strong>Image Search:</strong> Find visually similar images</li>
-                <li><strong>Deduplication:</strong> Identify near-duplicate content</li>
-            </ul>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>RAG Systems:</strong> Retrieve relevant documents for LLM context</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Semantic Search:</strong> Find similar documents by meaning, not keywords</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Recommendation Systems:</strong> Find similar products, content, users</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Image Search:</strong> Find visually similar images</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Deduplication:</strong> Identify near-duplicate content</div>
+    </div>
+</div>
         </section>
 
         <section class="glass-card" id="similarity">
@@ -81,12 +125,12 @@
 
             <div class="rule-card">
                 <h3>Cosine Similarity (Recommended for Text)</h3>
-                <span class="badge badge-high">MOST COMMON</span>
+                <span class="badge badge-security">MOST COMMON</span>
                 <p>Measures angle between vectors. Range: -1 (opposite) to 1 (identical).</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Formula & Implementation</h4>
-                    <pre><code class="language-python">import numpy as np
+                    <pre><code class="language-badge">import numpy as np
 
 def cosine_similarity(a, b):
     """Compute cosine similarity between two vectors."""
@@ -107,21 +151,27 @@ similarity = cosine_similarity(query_embedding, doc_embedding)
                 </div>
 
                 <h4>When to Use</h4>
-                <ul class="feature-list">
-                    <li>✅ Text embeddings (OpenAI, Sentence Transformers)</li>
-                    <li>✅ When direction matters more than magnitude</li>
-                    <li>✅ Normalized embeddings</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">✅ Text embeddings (OpenAI, Sentence Transformers)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ When direction matters more than magnitude</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Normalized embeddings</div>
+    </div>
+</div>
             </div>
 
             <div class="rule-card">
                 <h3>Euclidean Distance</h3>
-                <span class="badge badge-medium">SPATIAL DATA</span>
+                <span class="badge badge-security">SPATIAL DATA</span>
                 <p>Straight-line distance between points. Range: 0 (identical) to ∞.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Implementation</h4>
-                    <pre><code class="language-python">def euclidean_distance(a, b):
+                    <pre><code class="language-badge">def euclidean_distance(a, b):
     """Compute Euclidean distance between two vectors."""
     return np.linalg.norm(a - b)
 
@@ -135,21 +185,27 @@ print(f"Euclidean distance: {distance:.4f}")  # 5.196
                 </div>
 
                 <h4>When to Use</h4>
-                <ul class="feature-list">
-                    <li>✅ Image embeddings</li>
-                    <li>✅ Spatial/geographic data</li>
-                    <li>✅ When magnitude matters</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">✅ Image embeddings</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Spatial/geographic data</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ When magnitude matters</div>
+    </div>
+</div>
             </div>
 
             <div class="rule-card">
                 <h3>Dot Product</h3>
-                <span class="badge badge-medium">CONFIDENCE SCORES</span>
+                <span class="badge badge-security">CONFIDENCE SCORES</span>
                 <p>Product of magnitudes and cosine. Range: -∞ to ∞.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Implementation</h4>
-                    <pre><code class="language-python">def dot_product(a, b):
+                    <pre><code class="language-badge">def dot_product(a, b):
     """Compute dot product of two vectors."""
     return np.dot(a, b)
 
@@ -172,21 +228,31 @@ top_k_indices = np.argsort(similarity_scores)[::-1][:5]  # Top 5
 
             <div class="rule-card">
                 <h3>Pinecone (Recommended for Production)</h3>
-                <span class="badge badge-high">MANAGED SERVICE</span>
+                <span class="badge badge-security">MANAGED SERVICE</span>
                 <p>Fully managed vector database with excellent performance.</p>
                 
                 <h4>Strengths</h4>
-                <ul class="feature-list">
-                    <li>Fully managed (no ops burden)</li>
-                    <li>Fast queries (< 100ms at scale)</li>
-                    <li>Auto-scaling</li>
-                    <li>Metadata filtering</li>
-                    <li>HNSW algorithm</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Fully managed (no ops burden)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Fast queries (< 100ms at scale)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Auto-scaling</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Metadata filtering</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">HNSW algorithm</div>
+    </div>
+</div>
 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Python Implementation</h4>
-                    <pre><code class="language-python">import pinecone
+                    <pre><code class="language-badge">import pinecone
 
 # Initialize
 pinecone.init(api_key="your-api-key", environment="us-west1-gcp")
@@ -231,20 +297,28 @@ for match in results.matches:
 
             <div class="rule-card">
                 <h3>Weaviate</h3>
-                <span class="badge badge-high">OPEN SOURCE</span>
+                <span class="badge badge-security">OPEN SOURCE</span>
                 <p>Open-source vector database with strong GraphQL support.</p>
                 
                 <h4>Strengths</h4>
-                <ul class="feature-list">
-                    <li>Open source (self-host or cloud)</li>
-                    <li>GraphQL API</li>
-                    <li>Built-in vectorization modules</li>
-                    <li>Hybrid search (vector + keyword)</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Open source (self-host or cloud)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">GraphQL API</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Built-in vectorization modules</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Hybrid search (vector + keyword)</div>
+    </div>
+</div>
 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Python Implementation</h4>
-                    <pre><code class="language-python">import weaviate
+                    <pre><code class="language-badge">import weaviate
 
 client = weaviate.Client("http://localhost:8080")
 
@@ -290,20 +364,28 @@ print(result)
 
             <div class="rule-card">
                 <h3>ChromaDB</h3>
-                <span class="badge badge-medium">SIMPLEST</span>
+                <span class="badge badge-security">SIMPLEST</span>
                 <p>Lightweight, embedded vector database. Great for prototypes.</p>
                 
                 <h4>Strengths</h4>
-                <ul class="feature-list">
-                    <li>Extremely simple API</li>
-                    <li>Embedded (no server needed)</li>
-                    <li>Perfect for prototypes</li>
-                    <li>Persistent or in-memory</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Extremely simple API</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Embedded (no server needed)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Perfect for prototypes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Persistent or in-memory</div>
+    </div>
+</div>
 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Python Implementation</h4>
-                    <pre><code class="language-python">import chromadb
+                    <pre><code class="language-badge">import chromadb
 
 # Create client (persistent)
 client = chromadb.PersistentClient(path="./chroma_data")
@@ -340,30 +422,46 @@ print(results)
                 </div>
 
                 <h4>When to Use</h4>
-                <ul class="feature-list">
-                    <li>✅ Prototypes and POCs</li>
-                    <li>✅ Small datasets (< 1M vectors)</li>
-                    <li>✅ Local development</li>
-                    <li>❌ Not for production at scale</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">✅ Prototypes and POCs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Small datasets (< 1M vectors)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Local development</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">❌ Not for production at scale</div>
+    </div>
+</div>
             </div>
 
             <div class="rule-card">
                 <h3>Qdrant</h3>
-                <span class="badge badge-medium">HIGH PERFORMANCE</span>
+                <span class="badge badge-security">HIGH PERFORMANCE</span>
                 <p>Rust-based vector database with excellent performance.</p>
                 
                 <h4>Strengths</h4>
-                <ul class="feature-list">
-                    <li>Written in Rust (fast)</li>
-                    <li>Rich filtering</li>
-                    <li>Payload storage</li>
-                    <li>Self-host or cloud</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Written in Rust (fast)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Rich filtering</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Payload storage</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Self-host or cloud</div>
+    </div>
+</div>
 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Python Implementation</h4>
-                    <pre><code class="language-python">from qdrant_client import QdrantClient
+                    <pre><code class="language-badge">from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams, PointStruct
 
 client = QdrantClient("localhost", port=6333)
@@ -415,12 +513,12 @@ for hit in search_result:
 
             <div class="rule-card">
                 <h3>Batch Upsert for Performance</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Insert vectors in batches for 10x+ speedup.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Batch Insert</h4>
-                    <pre><code class="language-python">def upsert_documents_batch(documents, embeddings, batch_size=100):
+                    <pre><code class="language-badge">def upsert_documents_batch(documents, embeddings, batch_size=100):
     """Upsert documents in batches for better performance."""
     for i in range(0, len(documents), batch_size):
         batch_docs = documents[i:i + batch_size]
@@ -445,12 +543,12 @@ upsert_documents_batch(documents, embeddings, batch_size=100)
 
             <div class="rule-card">
                 <h3>Metadata Filtering</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Combine vector similarity with metadata filters for precise results.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Filtered Search</h4>
-                    <pre><code class="language-python"># Search with metadata filters
+                    <pre><code class="language-badge"># Search with metadata filters
 results = index.query(
     vector=query_embedding,
     top_k=10,
@@ -474,12 +572,12 @@ results = index.query(
 
             <div class="rule-card">
                 <h3>Index Tuning</h3>
-                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <span class="badge badge-security">MEDIUM PRIORITY</span>
                 <p>Adjust index parameters for accuracy vs speed tradeoff.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>HNSW Parameters</h4>
-                    <pre><code class="language-python"># HNSW parameters
+                    <pre><code class="language-badge"># HNSW parameters
 index_config = {
     "m": 16,           # Number of connections per layer (default: 16)
                        # Higher = more accurate, slower build, more memory
@@ -504,35 +602,45 @@ index_config = {
 
             <div class="rule-card">
                 <h3>Query Optimization</h3>
-                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <span class="badge badge-security">MEDIUM PRIORITY</span>
                 <p>Optimize queries for production latency requirements.</p>
                 
                 <h4>Best Practices</h4>
-                <ul class="feature-list">
-                    <li><strong>Batch Queries:</strong> Query multiple vectors at once</li>
-                    <li><strong>Limit top_k:</strong> Request only what you need (5-10 typical)</li>
-                    <li><strong>Cache Results:</strong> Cache frequent queries</li>
-                    <li><strong>Async Queries:</strong> Use async/await for concurrent queries</li>
-                    <li><strong>Filter Early:</strong> Apply metadata filters to reduce search space</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Batch Queries:</strong> Query multiple vectors at once</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Limit top_k:</strong> Request only what you need (5-10 typical)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Cache Results:</strong> Cache frequent queries</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Async Queries:</strong> Use async/await for concurrent queries</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Filter Early:</strong> Apply metadata filters to reduce search space</div>
+    </div>
+</div>
             </div>
         </section>
 
         <section class="glass-card" id="related">
             <h2>Related Knowledge Files</h2>
-            <div class="related-grid">
-                <a href="embeddings-strategy.html" class="related-card">
-                    <span class="related-icon">🧠</span>
+            <div class="level1-relationship-grid">
+                <a href="embeddings-strategy.html" class="level1-relationship-grid">
+                    <span class="level1-relationship-grid">🧠</span>
                     <h3>Embeddings Strategy</h3>
                     <p>Generate high-quality embeddings for storage</p>
                 </a>
-                <a href="retrieval-pipeline.html" class="related-card">
-                    <span class="related-icon">🔍</span>
+                <a href="retrieval-pipeline.html" class="level1-relationship-grid">
+                    <span class="level1-relationship-grid">🔍</span>
                     <h3>Retrieval Pipeline</h3>
                     <p>Build complete RAG retrieval systems</p>
                 </a>
-                <a href="domain-rag-integration.html" class="related-card">
-                    <span class="related-icon">🧩</span>
+                <a href="domain-rag-integration.html" class="level1-relationship-grid">
+                    <span class="level1-relationship-grid">🧩</span>
                     <h3>Domain RAG Integration</h3>
                     <p>Integrate vector search with domain knowledge</p>
                 </a>

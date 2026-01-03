@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Domain Events - Event-driven architecture, event sourcing, CQRS, and saga patterns">
@@ -8,13 +33,14 @@
     <title>Domain Events - CORTEX Knowledge</title>
     <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
-        <button class="back-button" onclick="history.back()" aria-label="Go back">← Back</button>
+    <nav class="breadcrumb-separator sticky-nav" mobile-nav-optimized aria-label="Breadcrumb">
+        <button class="grid-background" onclick="history.back()" aria-label="Go back">← Back</button>
         <ol class="breadcrumb">
             <li><a href="../../index.html">Home</a></li>
             <li><a href="../index.html">Knowledge Library</a></li>
@@ -29,16 +55,16 @@
         </div>
         <h1 class="hero-title">📡 Domain Events</h1>
         <p class="hero-subtitle">Event-driven architecture patterns for decoupled systems</p>
-        <div class="file-metadata">
+        <div class="code-file">
             <span class="metadata-item">📦 45+ Rules</span>
             <span class="metadata-item">🏷️ Domain-Driven Design</span>
             <span class="metadata-item">📅 Updated: Dec 2025</span>
         </div>
     </section>
 
-    <aside class="toc-sidebar" aria-label="Table of contents">
+    <aside class="toc-link" aria-label="Table of contents">
         <h3>On This Page</h3>
-        <nav class="toc-nav">
+        <nav class="toc-nav" mobile-nav-optimized>
             <a href="#overview" class="toc-link">Overview</a>
             <a href="#design" class="toc-link">Event Design</a>
             <a href="#publishing" class="toc-link">Publishing Events</a>
@@ -49,10 +75,10 @@
         </nav>
     </aside>
 
-    <main class="file-content">
+    <main class="code-file">
         <section class="glass-card" id="overview">
             <h2>What are Domain Events?</h2>
-            <blockquote class="info-banner">
+            <blockquote class="level1-feature-icon-container--info">
                 "Use a domain event to capture an occurrence of something that happened in the domain." 
                 — Eric Evans
             </blockquote>
@@ -64,22 +90,38 @@
             </p>
 
             <h3>Characteristics</h3>
-            <ul class="feature-list">
-                <li><strong>Past Tense Naming:</strong> OrderPlaced (not PlaceOrder) - describes what happened</li>
-                <li><strong>Immutable:</strong> What happened cannot change after the fact</li>
-                <li><strong>Contains Relevant Data:</strong> Information needed by event consumers</li>
-                <li><strong>Published After Persistence:</strong> Only after aggregate state is saved</li>
-                <li><strong>Triggers Side Effects:</strong> Can cause actions in other parts of system</li>
-            </ul>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Past Tense Naming:</strong> OrderPlaced (not PlaceOrder) - describes what happened</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Immutable:</strong> What happened cannot change after the fact</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Contains Relevant Data:</strong> Information needed by event consumers</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Published After Persistence:</strong> Only after aggregate state is saved</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Triggers Side Effects:</strong> Can cause actions in other parts of system</div>
+    </div>
+</div>
 
             <h3>Types of Events</h3>
-            <ul class="feature-list">
-                <li><strong>Internal Domain Events:</strong> Within same bounded context (OrderConfirmed → EmailSent)</li>
-                <li><strong>Integration Events:</strong> Across bounded contexts (OrderPlaced → Fulfillment notified)</li>
-                <li><strong>Event Sourcing Events:</strong> Complete state representation for rebuilding aggregates</li>
-            </ul>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Internal Domain Events:</strong> Within same bounded context (OrderConfirmed → EmailSent)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Integration Events:</strong> Across bounded contexts (OrderPlaced → Fulfillment notified)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Event Sourcing Events:</strong> Complete state representation for rebuilding aggregates</div>
+    </div>
+</div>
 
-            <div class="info-banner">
+            <div class="level1-feature-icon-container--info">
                 <strong>💡 Benefits:</strong> Decouples components, enables eventual consistency, provides audit trail, 
                 supports temporal queries, makes implicit processes explicit.
             </div>
@@ -91,12 +133,12 @@
 
             <div class="rule-card">
                 <h3>Event Structure Components</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Every domain event should contain these key components.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Recommended - Well-Designed Event</h4>
-                    <pre><code class="language-csharp">// Base domain event class
+                    <pre><code class="language-badge">// Base domain event class
 public abstract class DomainEvent
 {
     public Guid EventId { get; }          // Unique event identifier
@@ -154,12 +196,12 @@ public class OrderItemDto
 
             <div class="rule-card">
                 <h3>Event Naming Convention</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Use past tense to describe what happened. Be specific and business-focused.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Good Event Names</h4>
-                    <pre><code class="language-csharp">// E-commerce
+                    <pre><code class="language-badge">// E-commerce
 OrderPlacedEvent
 OrderShippedEvent
 PaymentProcessedEvent
@@ -178,9 +220,9 @@ TestResultsPublishedEvent
 </code></pre>
                 </div>
 
-                <div class="example-section bad-example">
+                <div class="command-example bad-example">
                     <h4>❌ Poor Event Names</h4>
-                    <pre><code class="language-csharp">// Avoid command-style names (not past tense)
+                    <pre><code class="language-badge">// Avoid command-style names (not past tense)
 PlaceOrderEvent          // Use: OrderPlacedEvent
 ProcessPaymentEvent      // Use: PaymentProcessedEvent
 
@@ -202,12 +244,12 @@ CacheInvalidatedEvent    // Implementation detail, not domain event
 
             <div class="rule-card">
                 <h3>In-Memory Event Publishing Pattern</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Collect events in aggregate, publish after successful persistence.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Recommended</h4>
-                    <pre><code class="language-csharp">// Aggregate collects events
+                    <pre><code class="language-badge">// Aggregate collects events
 public class Order : Entity, IAggregateRoot
 {
     private readonly List&lt;DomainEvent&gt; _domainEvents = new();
@@ -271,18 +313,18 @@ public class OrderService
     }
 }
 </code></pre>
-                    <p class="example-note">✅ Events only published after successful database save.</p>
+                    <p class="command-example">✅ Events only published after successful database save.</p>
                 </div>
             </div>
 
             <div class="rule-card">
                 <h3>Outbox Pattern for Reliability</h3>
-                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <span class="badge badge-security">MEDIUM PRIORITY</span>
                 <p>Store events in database table, publish asynchronously for guaranteed delivery.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Recommended for Distributed Systems</h4>
-                    <pre><code class="language-csharp">// Outbox table stores unpublished events
+                    <pre><code class="language-badge">// Outbox table stores unpublished events
 public class OutboxMessage
 {
     public Guid Id { get; set; }
@@ -369,7 +411,7 @@ public class OutboxProcessor : BackgroundService
     }
 }
 </code></pre>
-                    <p class="example-note">✅ Guarantees event delivery even if message bus is temporarily unavailable.</p>
+                    <p class="command-example">✅ Guarantees event delivery even if message bus is temporarily unavailable.</p>
                 </div>
             </div>
         </section>
@@ -380,12 +422,12 @@ public class OutboxProcessor : BackgroundService
 
             <div class="rule-card">
                 <h3>Event Handler Pattern</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Implement handlers for specific event types. Handlers should be idempotent.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Recommended</h4>
-                    <pre><code class="language-csharp">// Event handler interface
+                    <pre><code class="language-badge">// Event handler interface
 public interface IEventHandler&lt;TEvent&gt; where TEvent : DomainEvent
 {
     Task HandleAsync(TEvent @event);
@@ -459,12 +501,12 @@ public class EventBus : IEventBus
 
             <div class="rule-card">
                 <h3>Idempotent Event Handling</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Handlers must be idempotent - processing same event multiple times has same result.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Recommended - Idempotency Check</h4>
-                    <pre><code class="language-csharp">// Track processed events
+                    <pre><code class="language-badge">// Track processed events
 public class ProcessedEventTracker
 {
     private readonly DbContext _context;
@@ -512,7 +554,7 @@ public class PaymentProcessedEventHandler : IEventHandler&lt;PaymentProcessedEve
     }
 }
 </code></pre>
-                    <p class="example-note">✅ Prevents duplicate processing if event is delivered multiple times.</p>
+                    <p class="command-example">✅ Prevents duplicate processing if event is delivered multiple times.</p>
                 </div>
             </div>
         </section>
@@ -526,12 +568,12 @@ public class PaymentProcessedEventHandler : IEventHandler&lt;PaymentProcessedEve
 
             <div class="rule-card">
                 <h3>Event Sourcing Pattern</h3>
-                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <span class="badge badge-security">MEDIUM PRIORITY</span>
                 <p>Store events as primary source of truth, rebuild state by replaying events.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Recommended</h4>
-                    <pre><code class="language-csharp">// Event-sourced aggregate
+                    <pre><code class="language-badge">// Event-sourced aggregate
 public class BankAccount
 {
     public Guid Id { get; private set; }
@@ -628,12 +670,12 @@ public class EventStore
 
             <div class="rule-card">
                 <h3>CQRS Pattern</h3>
-                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <span class="badge badge-security">MEDIUM PRIORITY</span>
                 <p>Split command (write) operations from query (read) operations.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Recommended</h4>
-                    <pre><code class="language-csharp">// COMMAND SIDE (Write Model)
+                    <pre><code class="language-badge">// COMMAND SIDE (Write Model)
 public class PlaceOrderCommand
 {
     public Guid CustomerId { get; set; }
@@ -691,19 +733,19 @@ public class OrderSummaryQueryHandler
 
         <section class="glass-card" id="related">
             <h2>Related Knowledge Files</h2>
-            <div class="related-grid">
-                <a href="aggregates-entities.html" class="related-card">
-                    <span class="related-icon">📐</span>
+            <div class="level1-relationship-grid">
+                <a href="aggregates-entities.html" class="level1-relationship-grid">
+                    <span class="level1-relationship-grid">📐</span>
                     <h3>Aggregates & Entities</h3>
                     <p>Tactical DDD patterns for raising events</p>
                 </a>
-                <a href="bounded-contexts.html" class="related-card">
-                    <span class="related-icon">🏗️</span>
+                <a href="bounded-contexts.html" class="level1-relationship-grid">
+                    <span class="level1-relationship-grid">🏗️</span>
                     <h3>Bounded Contexts</h3>
                     <p>Integration events between contexts</p>
                 </a>
-                <a href="../messaging/event-driven-patterns.html" class="related-card">
-                    <span class="related-icon">📨</span>
+                <a href="../messaging/event-driven-patterns.html" class="level1-relationship-grid">
+                    <span class="level1-relationship-grid">📨</span>
                     <h3>Event-Driven Patterns</h3>
                     <p>Messaging infrastructure for events</p>
                 </a>

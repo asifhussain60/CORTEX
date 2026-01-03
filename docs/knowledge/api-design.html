@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="API Design Excellence - REST, GraphQL, and API versioning strategies">
@@ -8,6 +33,7 @@
     <meta name="author" content="Asif Hussain">
     <title>API Design Excellence | CORTEX Knowledge</title>
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
@@ -25,14 +51,14 @@
     <section class="hero" id="main-content">
         <h1 class="hero-title">🌐 API Design Excellence</h1>
         <p class="hero-subtitle">REST, GraphQL, and API Versioning Strategies</p>
-        <div class="file-metadata">
+        <div class="code-file">
             <span class="metadata-item">📡 Backend APIs</span>
             <span class="metadata-item">🏷️ REST & GraphQL</span>
             <span class="metadata-item">📅 Updated: Dec 2025</span>
         </div>
     </section>
 
-    <section class="section file-content">
+    <section class="section code-file">
         <div class="container">
             <!-- Overview -->
             <div id="overview" class="content-section">
@@ -42,12 +68,20 @@
                     
                     <div class="info-box info-box-primary">
                         <strong>Key Concepts:</strong>
-                        <ul class="feature-list">
-                            <li><strong>REST Architecture:</strong> Stateless, client-server, cacheable, uniform interface</li>
-                            <li><strong>GraphQL:</strong> Strongly-typed schemas with client-specified queries</li>
-                            <li><strong>API Versioning:</strong> Backward compatibility and safe evolution</li>
-                            <li><strong>Security:</strong> Authentication, authorization, rate limiting</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>REST Architecture:</strong> Stateless, client-server, cacheable, uniform interface</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>GraphQL:</strong> Strongly-typed schemas with client-specified queries</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>API Versioning:</strong> Backward compatibility and safe evolution</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Security:</strong> Authentication, authorization, rate limiting</div>
+    </div>
+</div>
                     </div>
 
                     <h3>API Design Landscape</h3>
@@ -110,39 +144,69 @@ graph LR
                             <span class="framework-panel-icon">📦</span>
                             <h3>Resource-Based</h3>
                             <h4>Key Concepts</h4>
-                            <ul>
-                                <li><strong>Nouns not Verbs:</strong> /users not /getUsers</li>
-                                <li><strong>Plural Forms:</strong> /users /orders /products</li>
-                                <li><strong>Hierarchical:</strong> /users/123/orders</li>
-                                <li><strong>Lowercase:</strong> Use hyphens for multi-word</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Nouns not Verbs:</strong> /users not /getUsers</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Plural Forms:</strong> /users /orders /products</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Hierarchical:</strong> /users/123/orders</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Lowercase:</strong> Use hyphens for multi-word</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">⚡</span>
                             <h3>HTTP Methods</h3>
                             <h4>Standard Operations</h4>
-                            <ul>
-                                <li><strong>GET:</strong> Retrieve (safe, idempotent)</li>
-                                <li><strong>POST:</strong> Create new resource</li>
-                                <li><strong>PUT:</strong> Replace entire resource</li>
-                                <li><strong>PATCH:</strong> Partial update</li>
-                                <li><strong>DELETE:</strong> Remove resource</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>GET:</strong> Retrieve (safe, idempotent)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>POST:</strong> Create new resource</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>PUT:</strong> Replace entire resource</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>PATCH:</strong> Partial update</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>DELETE:</strong> Remove resource</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">✅</span>
                             <h3>Status Codes</h3>
                             <h4>HTTP Responses</h4>
-                            <ul>
-                                <li><strong>200 OK:</strong> Successful GET/PUT/PATCH</li>
-                                <li><strong>201 Created:</strong> Resource created (POST)</li>
-                                <li><strong>204 No Content:</strong> Successful DELETE</li>
-                                <li><strong>400 Bad Request:</strong> Invalid input</li>
-                                <li><strong>401 Unauthorized:</strong> Authentication required</li>
-                                <li><strong>404 Not Found:</strong> Resource doesn't exist</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>200 OK:</strong> Successful GET/PUT/PATCH</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>201 Created:</strong> Resource created (POST)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>204 No Content:</strong> Successful DELETE</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>400 Bad Request:</strong> Invalid input</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>401 Unauthorized:</strong> Authentication required</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>404 Not Found:</strong> Resource doesn't exist</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -153,18 +217,32 @@ graph LR
                             <h3>Offset-Based</h3>
                             <p class="framework-subtitle">Page and Limit Parameters</p>
                             <h4>Implementation</h4>
-                            <ul>
-                                <li>Query: <code>?page=2&limit=20</code></li>
-                                <li>Simple to implement</li>
-                                <li>Good for small datasets</li>
-                                <li>Issues with data changes</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Query: <code>?page=2&limit=20</code></div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Simple to implement</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Good for small datasets</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Issues with data changes</div>
+    </div>
+</div>
                             <h4>Response Format</h4>
-                            <ul>
-                                <li>Total pages/items count</li>
-                                <li>Current page number</li>
-                                <li>Has next/previous flags</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Total pages/items count</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Current page number</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Has next/previous flags</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -172,32 +250,58 @@ graph LR
                             <h3>Cursor-Based</h3>
                             <p class="framework-subtitle">Recommended for Large Datasets</p>
                             <h4>Implementation</h4>
-                            <ul>
-                                <li>Query: <code>?cursor=abc123&limit=20</code></li>
-                                <li>Consistent results</li>
-                                <li>Handles real-time data</li>
-                                <li>Better performance</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Query: <code>?cursor=abc123&limit=20</code></div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Consistent results</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Handles real-time data</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Better performance</div>
+    </div>
+</div>
                             <h4>Response Format</h4>
-                            <ul>
-                                <li>Next/previous cursor tokens</li>
-                                <li>Has more indicator</li>
-                                <li>No total count (expensive)</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Next/previous cursor tokens</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Has more indicator</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">No total count (expensive)</div>
+    </div>
+</div>
                         </div>
                     </div>
 
                     <h3>Best Practices</h3>
                     <div class="info-box info-box-success">
                         <strong>REST API Excellence:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Versioning:</strong> Include API version in URL or headers</li>
-                            <li><strong>Filtering:</strong> Use query parameters (?status=active&role=admin)</li>
-                            <li><strong>Sorting:</strong> Support multi-field sorting (?sort=created_at,-price)</li>
-                            <li><strong>Field Selection:</strong> Let clients specify fields (?fields=id,name,email)</li>
-                            <li><strong>Error Format:</strong> Consistent JSON error structure with codes</li>
-                            <li><strong>HATEOAS:</strong> Include links to related resources</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Versioning:</strong> Include API version in URL or headers</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Filtering:</strong> Use query parameters (?status=active&role=admin)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Sorting:</strong> Support multi-field sorting (?sort=created_at,-price)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Field Selection:</strong> Let clients specify fields (?fields=id,name,email)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Error Format:</strong> Consistent JSON error structure with codes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>HATEOAS:</strong> Include links to related resources</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -213,39 +317,69 @@ graph LR
                             <span class="framework-panel-icon">📐</span>
                             <h3>Type System</h3>
                             <h4>Core Types</h4>
-                            <ul>
-                                <li><strong>Object Types:</strong> Main schema building blocks</li>
-                                <li><strong>Scalar Types:</strong> Int, Float, String, Boolean, ID</li>
-                                <li><strong>Enums:</strong> Fixed set of values</li>
-                                <li><strong>Interfaces:</strong> Abstract types with shared fields</li>
-                                <li><strong>Unions:</strong> Multiple possible types</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Object Types:</strong> Main schema building blocks</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Scalar Types:</strong> Int, Float, String, Boolean, ID</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Enums:</strong> Fixed set of values</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Interfaces:</strong> Abstract types with shared fields</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Unions:</strong> Multiple possible types</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🔤</span>
                             <h3>Naming Conventions</h3>
                             <h4>Best Practices</h4>
-                            <ul>
-                                <li><strong>Types:</strong> PascalCase (User, OrderItem)</li>
-                                <li><strong>Fields:</strong> camelCase (firstName, createdAt)</li>
-                                <li><strong>Enums:</strong> SCREAMING_SNAKE_CASE</li>
-                                <li><strong>Booleans:</strong> Prefix with is/has</li>
-                                <li><strong>Input Types:</strong> End with Input suffix</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Types:</strong> PascalCase (User, OrderItem)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Fields:</strong> camelCase (firstName, createdAt)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Enums:</strong> SCREAMING_SNAKE_CASE</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Booleans:</strong> Prefix with is/has</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Input Types:</strong> End with Input suffix</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">⚠️</span>
                             <h3>Nullability</h3>
                             <h4>Field Requirements</h4>
-                            <ul>
-                                <li><strong>! (Non-null):</strong> Use sparingly</li>
-                                <li><strong>Nullable Default:</strong> More flexible evolution</li>
-                                <li><strong>Lists:</strong> Consider [Type!]! patterns</li>
-                                <li><strong>Required Fields:</strong> Only guaranteed data</li>
-                                <li><strong>Evolution:</strong> Can't make non-null later</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>! (Non-null):</strong> Use sparingly</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Nullable Default:</strong> More flexible evolution</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Lists:</strong> Consider [Type!]! patterns</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Required Fields:</strong> Only guaranteed data</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Evolution:</strong> Can't make non-null later</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -256,12 +390,20 @@ graph LR
                             <h3>DataLoader Pattern</h3>
                             <p class="framework-subtitle">Solve N+1 Query Problem</p>
                             <h4>Batching</h4>
-                            <ul>
-                                <li>Batch multiple requests</li>
-                                <li>Single database query</li>
-                                <li>Per-request caching</li>
-                                <li>Automatic deduplication</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Batch multiple requests</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Single database query</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Per-request caching</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Automatic deduplication</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -269,12 +411,20 @@ graph LR
                             <h3>Query Complexity</h3>
                             <p class="framework-subtitle">Prevent Expensive Queries</p>
                             <h4>Analysis</h4>
-                            <ul>
-                                <li>Calculate query cost</li>
-                                <li>Depth limiting (max 7 levels)</li>
-                                <li>Complexity scoring</li>
-                                <li>Rate limiting by cost</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Calculate query cost</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Depth limiting (max 7 levels)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Complexity scoring</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Rate limiting by cost</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -282,26 +432,46 @@ graph LR
                             <h3>Pagination</h3>
                             <p class="framework-subtitle">Relay-Style Connections</p>
                             <h4>Pattern</h4>
-                            <ul>
-                                <li>Edges and nodes structure</li>
-                                <li>Cursor-based pagination</li>
-                                <li>PageInfo with indicators</li>
-                                <li>Total count optional</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Edges and nodes structure</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Cursor-based pagination</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">PageInfo with indicators</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Total count optional</div>
+    </div>
+</div>
                         </div>
                     </div>
 
                     <h3>Mutation Best Practices</h3>
                     <div class="info-box info-box-info">
                         <strong>GraphQL Mutations:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Naming:</strong> Verb + noun (createUser, updateProduct, deleteOrder)</li>
-                            <li><strong>Input Types:</strong> Single input argument with Input suffix</li>
-                            <li><strong>Payload Types:</strong> Include data, errors, clientMutationId</li>
-                            <li><strong>Error Handling:</strong> User errors in payload, system errors thrown</li>
-                            <li><strong>Side Effects:</strong> Document all side effects clearly</li>
-                            <li><strong>Idempotency:</strong> Use clientMutationId for deduplication</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Naming:</strong> Verb + noun (createUser, updateProduct, deleteOrder)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Input Types:</strong> Single input argument with Input suffix</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Payload Types:</strong> Include data, errors, clientMutationId</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Error Handling:</strong> User errors in payload, system errors thrown</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Side Effects:</strong> Document all side effects clearly</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Idempotency:</strong> Use clientMutationId for deduplication</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -318,18 +488,32 @@ graph LR
                             <h3>URI Versioning</h3>
                             <p class="framework-subtitle">Most Common Approach</p>
                             <h4>Implementation</h4>
-                            <ul>
-                                <li>Pattern: <code>/v1/users</code></li>
-                                <li>Highly visible</li>
-                                <li>Easy to test</li>
-                                <li>Cache-friendly</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Pattern: <code>/v1/users</code></div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Highly visible</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Easy to test</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Cache-friendly</div>
+    </div>
+</div>
                             <h4>Best For</h4>
-                            <ul>
-                                <li>Public APIs</li>
-                                <li>External clients</li>
-                                <li>Clear communication</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Public APIs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">External clients</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Clear communication</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -337,18 +521,32 @@ graph LR
                             <h3>Header Versioning</h3>
                             <p class="framework-subtitle">Clean URLs</p>
                             <h4>Implementation</h4>
-                            <ul>
-                                <li>Header: <code>X-API-Version: 2</code></li>
-                                <li>Clean URLs</li>
-                                <li>Per-resource versioning</li>
-                                <li>More RESTful</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Header: <code>X-API-Version: 2</code></div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Clean URLs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Per-resource versioning</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">More RESTful</div>
+    </div>
+</div>
                             <h4>Best For</h4>
-                            <ul>
-                                <li>Internal APIs</li>
-                                <li>Microservices</li>
-                                <li>Gradual migration</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Internal APIs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Microservices</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Gradual migration</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -356,18 +554,32 @@ graph LR
                             <h3>Content Negotiation</h3>
                             <p class="framework-subtitle">Most RESTful</p>
                             <h4>Implementation</h4>
-                            <ul>
-                                <li>Accept: <code>application/vnd.api.v2+json</code></li>
-                                <li>Standards-compliant</li>
-                                <li>Hypermedia support</li>
-                                <li>Complex setup</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Accept: <code>application/vnd.api.v2+json</code></div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Standards-compliant</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Hypermedia support</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Complex setup</div>
+    </div>
+</div>
                             <h4>Best For</h4>
-                            <ul>
-                                <li>Mature REST APIs</li>
-                                <li>HATEOAS compliance</li>
-                                <li>Content types matter</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Mature REST APIs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">HATEOAS compliance</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Content types matter</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -383,32 +595,32 @@ graph LR
                         <tbody>
                             <tr>
                                 <td>Remove endpoint/field</td>
-                                <td><span class="badge-high">BREAKING</span></td>
+                                <td><span class="badge-security">BREAKING</span></td>
                                 <td>Deprecate first, then remove</td>
                             </tr>
                             <tr>
                                 <td>Rename field/endpoint</td>
-                                <td><span class="badge-high">BREAKING</span></td>
+                                <td><span class="badge-security">BREAKING</span></td>
                                 <td>Add new, deprecate old, support both</td>
                             </tr>
                             <tr>
                                 <td>Change data type</td>
-                                <td><span class="badge-high">BREAKING</span></td>
+                                <td><span class="badge-security">BREAKING</span></td>
                                 <td>New field with different name</td>
                             </tr>
                             <tr>
                                 <td>Add required field</td>
-                                <td><span class="badge-high">BREAKING</span></td>
+                                <td><span class="badge-security">BREAKING</span></td>
                                 <td>Make optional, then require later</td>
                             </tr>
                             <tr>
                                 <td>Add optional field</td>
-                                <td><span class="badge-low">SAFE</span></td>
+                                <td><span class="badge-security">SAFE</span></td>
                                 <td>Deploy directly</td>
                             </tr>
                             <tr>
                                 <td>Add new endpoint</td>
-                                <td><span class="badge-low">SAFE</span></td>
+                                <td><span class="badge-security">SAFE</span></td>
                                 <td>Deploy directly</td>
                             </tr>
                         </tbody>
@@ -436,14 +648,26 @@ graph LR
 
                     <div class="info-box info-box-warning">
                         <strong>Deprecation Best Practices:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Sunset Header:</strong> RFC 8594 standard deprecation header</li>
-                            <li><strong>Migration Guide:</strong> Clear documentation for transition</li>
-                            <li><strong>Support Period:</strong> Minimum 6-12 months for major changes</li>
-                            <li><strong>Monitoring:</strong> Track usage of deprecated endpoints</li>
-                            <li><strong>Communication:</strong> Email campaigns, changelog, release notes</li>
-                            <li><strong>Final Warning:</strong> 3-month notice before actual removal</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Sunset Header:</strong> RFC 8594 standard deprecation header</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Migration Guide:</strong> Clear documentation for transition</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Support Period:</strong> Minimum 6-12 months for major changes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Monitoring:</strong> Track usage of deprecated endpoints</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Communication:</strong> Email campaigns, changelog, release notes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Final Warning:</strong> 3-month notice before actual removal</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -460,12 +684,20 @@ graph LR
                             <h3>JWT Tokens</h3>
                             <p class="framework-subtitle">Stateless Authentication</p>
                             <h4>Implementation</h4>
-                            <ul>
-                                <li>Bearer token in Authorization header</li>
-                                <li>Short expiration (15 minutes)</li>
-                                <li>Refresh token rotation</li>
-                                <li>Claims for permissions</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Bearer token in Authorization header</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Short expiration (15 minutes)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Refresh token rotation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Claims for permissions</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -473,12 +705,20 @@ graph LR
                             <h3>Rate Limiting</h3>
                             <p class="framework-subtitle">Prevent Abuse</p>
                             <h4>Strategies</h4>
-                            <ul>
-                                <li>Per-user or per-IP limits</li>
-                                <li>Sliding window algorithm</li>
-                                <li>429 Too Many Requests response</li>
-                                <li>Retry-After header</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Per-user or per-IP limits</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Sliding window algorithm</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">429 Too Many Requests response</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Retry-After header</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -486,12 +726,20 @@ graph LR
                             <h3>Input Validation</h3>
                             <p class="framework-subtitle">Data Integrity</p>
                             <h4>Best Practices</h4>
-                            <ul>
-                                <li>Schema validation (JSON Schema)</li>
-                                <li>Type checking</li>
-                                <li>Length/range validation</li>
-                                <li>Sanitize user input</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Schema validation (JSON Schema)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Type checking</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Length/range validation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Sanitize user input</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -501,24 +749,40 @@ graph LR
                             <span class="framework-panel-icon">⚡</span>
                             <h3>HTTP Caching</h3>
                             <h4>Cache Headers</h4>
-                            <ul>
-                                <li><strong>ETag:</strong> Response version identifier</li>
-                                <li><strong>Cache-Control:</strong> Caching directives</li>
-                                <li><strong>If-None-Match:</strong> Conditional request</li>
-                                <li><strong>304 Not Modified:</strong> Use cached version</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>ETag:</strong> Response version identifier</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Cache-Control:</strong> Caching directives</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>If-None-Match:</strong> Conditional request</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>304 Not Modified:</strong> Use cached version</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🗜️</span>
                             <h3>Compression</h3>
                             <h4>Response Optimization</h4>
-                            <ul>
-                                <li><strong>GZIP:</strong> Standard compression</li>
-                                <li><strong>Brotli:</strong> Better compression ratio</li>
-                                <li><strong>Accept-Encoding:</strong> Client support check</li>
-                                <li><strong>Content-Encoding:</strong> Applied compression</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>GZIP:</strong> Standard compression</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Brotli:</strong> Better compression ratio</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Accept-Encoding:</strong> Client support check</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Content-Encoding:</strong> Applied compression</div>
+    </div>
+</div>
                         </div>
                     </div>
                 </div>
@@ -556,12 +820,20 @@ graph LR
                         <div class="framework-panel">
                             <span class="framework-panel-icon">📚</span>
                             <h3>Books & Tools</h3>
-                            <ul>
-                                <li><strong>RESTful Web APIs</strong> - Leonard Richardson</li>
-                                <li><strong>Production Ready GraphQL</strong> - Marc-André Giroux</li>
-                                <li><strong>API Design Patterns</strong> - JJ Geewax</li>
-                                <li><a href="https://www.postman.com/" target="_blank" rel="noopener">Postman</a> - API testing</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>RESTful Web APIs</strong> - Leonard Richardson</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Production Ready GraphQL</strong> - Marc-André Giroux</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>API Design Patterns</strong> - JJ Geewax</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://www.postman.com/" target="_blank" rel="noopener">Postman</a> - API testing</div>
+    </div>
+</div>
                         </div>
                     </div>
                 </div>

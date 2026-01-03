@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="DevOps Practices - CI/CD, GitOps, infrastructure as code, and automation">
@@ -8,6 +33,7 @@
     <meta name="author" content="Asif Hussain">
     <title>DevOps Practices | CORTEX Knowledge</title>
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
@@ -24,14 +50,14 @@
     <section class="hero" id="main-content">
         <h1 class="hero-title">🔄 DevOps Practices</h1>
         <p class="hero-subtitle">CI/CD, GitOps, Infrastructure as Code, and Automation</p>
-        <div class="file-metadata">
+        <div class="code-file">
             <span class="metadata-item">🚀 Automation</span>
             <span class="metadata-item">🔧 Tooling</span>
             <span class="metadata-item">📅 Updated: Dec 2025</span>
         </div>
     </section>
 
-    <section class="section file-content">
+    <section class="section code-file">
         <div class="container">
             <div id="overview" class="content-section">
                 <div class="glass-card">
@@ -40,12 +66,20 @@
                     
                     <div class="info-box info-box-primary">
                         <strong>DevOps Principles:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Automation:</strong> Eliminate manual repetitive tasks</li>
-                            <li><strong>Continuous Integration:</strong> Merge code frequently</li>
-                            <li><strong>Continuous Delivery:</strong> Always production-ready</li>
-                            <li><strong>Monitoring:</strong> Observability and feedback</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Automation:</strong> Eliminate manual repetitive tasks</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Continuous Integration:</strong> Merge code frequently</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Continuous Delivery:</strong> Always production-ready</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Monitoring:</strong> Observability and feedback</div>
+    </div>
+</div>
                     </div>
 
                     <h3>DevOps Lifecycle</h3>
@@ -82,39 +116,69 @@ graph LR
                             <span class="framework-panel-icon">🔨</span>
                             <h3>Continuous Integration</h3>
                             <h4>Stages</h4>
-                            <ul>
-                                <li>Code commit triggers build</li>
-                                <li>Compile source code</li>
-                                <li>Run unit tests</li>
-                                <li>Code quality analysis</li>
-                                <li>Security scanning</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Code commit triggers build</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Compile source code</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Run unit tests</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Code quality analysis</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Security scanning</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🚀</span>
                             <h3>Continuous Delivery</h3>
                             <h4>Stages</h4>
-                            <ul>
-                                <li>Integration tests</li>
-                                <li>Package artifacts</li>
-                                <li>Deploy to staging</li>
-                                <li>Acceptance tests</li>
-                                <li>Manual approval gate</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Integration tests</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Package artifacts</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Deploy to staging</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Acceptance tests</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Manual approval gate</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">⚡</span>
                             <h3>Continuous Deployment</h3>
                             <h4>Automation</h4>
-                            <ul>
-                                <li>Automated production deploy</li>
-                                <li>Blue-green deployment</li>
-                                <li>Canary releases</li>
-                                <li>Feature flags</li>
-                                <li>Automated rollback</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Automated production deploy</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Blue-green deployment</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Canary releases</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Feature flags</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Automated rollback</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -187,12 +251,20 @@ flowchart LR
                             <h3>Terraform</h3>
                             <p class="framework-subtitle">Multi-Cloud Provisioning</p>
                             <h4>Features</h4>
-                            <ul>
-                                <li>Declarative configuration</li>
-                                <li>Provider ecosystem</li>
-                                <li>State management</li>
-                                <li>Plan before apply</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Declarative configuration</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Provider ecosystem</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">State management</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Plan before apply</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -200,12 +272,20 @@ flowchart LR
                             <h3>Ansible</h3>
                             <p class="framework-subtitle">Configuration Management</p>
                             <h4>Features</h4>
-                            <ul>
-                                <li>Agentless architecture</li>
-                                <li>YAML playbooks</li>
-                                <li>Idempotent operations</li>
-                                <li>SSH-based</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Agentless architecture</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">YAML playbooks</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Idempotent operations</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">SSH-based</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -213,23 +293,39 @@ flowchart LR
                             <h3>CloudFormation</h3>
                             <p class="framework-subtitle">AWS Native</p>
                             <h4>Features</h4>
-                            <ul>
-                                <li>JSON/YAML templates</li>
-                                <li>Stack management</li>
-                                <li>Drift detection</li>
-                                <li>Deep AWS integration</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">JSON/YAML templates</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Stack management</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Drift detection</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Deep AWS integration</div>
+    </div>
+</div>
                         </div>
                     </div>
 
                     <div class="info-box info-box-success">
                         <strong>IaC Benefits:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Version Control:</strong> Infrastructure changes tracked in Git</li>
-                            <li><strong>Reproducibility:</strong> Identical environments every time</li>
-                            <li><strong>Documentation:</strong> Code serves as documentation</li>
-                            <li><strong>Automation:</strong> Eliminate manual provisioning errors</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Version Control:</strong> Infrastructure changes tracked in Git</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Reproducibility:</strong> Identical environments every time</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Documentation:</strong> Code serves as documentation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Automation:</strong> Eliminate manual provisioning errors</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -244,36 +340,60 @@ flowchart LR
                             <span class="framework-panel-icon">📦</span>
                             <h3>Git as Source of Truth</h3>
                             <h4>Approach</h4>
-                            <ul>
-                                <li>All config in Git repositories</li>
-                                <li>Declarative desired state</li>
-                                <li>Immutable artifacts</li>
-                                <li>Version controlled</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">All config in Git repositories</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Declarative desired state</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Immutable artifacts</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Version controlled</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🔄</span>
                             <h3>Automated Sync</h3>
                             <h4>Process</h4>
-                            <ul>
-                                <li>Agents watch Git repos</li>
-                                <li>Auto-apply changes</li>
-                                <li>Reconciliation loops</li>
-                                <li>Self-healing systems</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Agents watch Git repos</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Auto-apply changes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Reconciliation loops</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Self-healing systems</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">✅</span>
                             <h3>Pull-Based Deployment</h3>
                             <h4>Benefits</h4>
-                            <ul>
-                                <li>Better security</li>
-                                <li>No external access needed</li>
-                                <li>Audit trail</li>
-                                <li>Easy rollback</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Better security</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">No external access needed</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Audit trail</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Easy rollback</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -282,23 +402,39 @@ flowchart LR
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🦑</span>
                             <h3>ArgoCD</h3>
-                            <ul>
-                                <li>Kubernetes-native</li>
-                                <li>Web UI dashboard</li>
-                                <li>Multi-cluster support</li>
-                                <li>RBAC integration</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Kubernetes-native</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Web UI dashboard</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Multi-cluster support</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">RBAC integration</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🌊</span>
                             <h3>Flux</h3>
-                            <ul>
-                                <li>CNCF project</li>
-                                <li>GitOps toolkit</li>
-                                <li>Helm support</li>
-                                <li>Image automation</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">CNCF project</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">GitOps toolkit</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Helm support</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Image automation</div>
+    </div>
+</div>
                         </div>
                     </div>
                 </div>
@@ -314,51 +450,87 @@ flowchart LR
                             <span class="framework-panel-icon">📈</span>
                             <h3>Metrics</h3>
                             <h4>Tools</h4>
-                            <ul>
-                                <li>Prometheus + Grafana</li>
-                                <li>DataDog, New Relic</li>
-                                <li>CloudWatch, Azure Monitor</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Prometheus + Grafana</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">DataDog, New Relic</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">CloudWatch, Azure Monitor</div>
+    </div>
+</div>
                             <h4>Key Metrics</h4>
-                            <ul>
-                                <li>Request rate, errors, duration</li>
-                                <li>CPU, memory, disk</li>
-                                <li>Custom business metrics</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Request rate, errors, duration</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">CPU, memory, disk</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Custom business metrics</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">📝</span>
                             <h3>Logs</h3>
                             <h4>Tools</h4>
-                            <ul>
-                                <li>ELK Stack (Elasticsearch)</li>
-                                <li>Splunk, Loki</li>
-                                <li>CloudWatch Logs</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">ELK Stack (Elasticsearch)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Splunk, Loki</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">CloudWatch Logs</div>
+    </div>
+</div>
                             <h4>Best Practices</h4>
-                            <ul>
-                                <li>Structured JSON logging</li>
-                                <li>Correlation IDs</li>
-                                <li>Log levels</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Structured JSON logging</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Correlation IDs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Log levels</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🔍</span>
                             <h3>Traces</h3>
                             <h4>Tools</h4>
-                            <ul>
-                                <li>Jaeger, Zipkin</li>
-                                <li>OpenTelemetry</li>
-                                <li>AWS X-Ray</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Jaeger, Zipkin</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">OpenTelemetry</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">AWS X-Ray</div>
+    </div>
+</div>
                             <h4>Purpose</h4>
-                            <ul>
-                                <li>Request flow tracking</li>
-                                <li>Latency analysis</li>
-                                <li>Dependency mapping</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Request flow tracking</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Latency analysis</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Dependency mapping</div>
+    </div>
+</div>
                         </div>
                     </div>
                 </div>
@@ -372,12 +544,20 @@ flowchart LR
                         <div class="framework-panel">
                             <span class="framework-panel-icon">📖</span>
                             <h3>Essential Books</h3>
-                            <ul>
-                                <li><strong>The DevOps Handbook</strong> - Kim, Humble, Debois, Willis</li>
-                                <li><strong>Continuous Delivery</strong> - Jez Humble</li>
-                                <li><strong>Site Reliability Engineering</strong> - Google</li>
-                                <li><strong>Terraform: Up & Running</strong> - Yevgeniy Brikman</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>The DevOps Handbook</strong> - Kim, Humble, Debois, Willis</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Continuous Delivery</strong> - Jez Humble</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Site Reliability Engineering</strong> - Google</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Terraform: Up & Running</strong> - Yevgeniy Brikman</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">

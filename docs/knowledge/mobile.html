@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Mobile Development - React Native, Flutter, iOS, Android, Cross-Platform Apps">
@@ -8,6 +33,7 @@
     <meta name="author" content="Asif Hussain">
     <title>Mobile Development | CORTEX Knowledge</title>
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
@@ -25,14 +51,14 @@
     <section class="hero" id="main-content">
         <h1 class="hero-title">📱 Mobile Development</h1>
         <p class="hero-subtitle">Native and Cross-Platform Mobile App Development</p>
-        <div class="file-metadata">
+        <div class="code-file">
             <span class="metadata-item">📦 Mobile Apps</span>
             <span class="metadata-item">🏷️ iOS & Android</span>
             <span class="metadata-item">📅 Updated: Dec 2025</span>
         </div>
     </section>
 
-    <section class="section file-content">
+    <section class="section code-file">
         <div class="container">
             <!-- Overview -->
             <div id="overview" class="content-section">
@@ -42,12 +68,20 @@
                     
                     <div class="info-box info-box-primary">
                         <strong>Mobile Development Landscape:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Native:</strong> Platform-specific development (Swift/Kotlin)</li>
-                            <li><strong>Cross-Platform:</strong> Single codebase for multiple platforms</li>
-                            <li><strong>Hybrid:</strong> Web technologies wrapped in native container</li>
-                            <li><strong>Progressive Web Apps:</strong> Web apps with mobile capabilities</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Native:</strong> Platform-specific development (Swift/Kotlin)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Cross-Platform:</strong> Single codebase for multiple platforms</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Hybrid:</strong> Web technologies wrapped in native container</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Progressive Web Apps:</strong> Web apps with mobile capabilities</div>
+    </div>
+</div>
                     </div>
 
                     <h3>Mobile Platform Statistics</h3>
@@ -168,23 +202,39 @@ graph TB
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🎯</span>
                             <h3>Choose Native When:</h3>
-                            <ul>
-                                <li>Performance is critical (games, AR/VR)</li>
-                                <li>Deep platform integration required</li>
-                                <li>Platform-specific UI is essential</li>
-                                <li>Complex hardware access needed</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Performance is critical (games, AR/VR)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Deep platform integration required</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Platform-specific UI is essential</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Complex hardware access needed</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🚀</span>
                             <h3>Choose Cross-Platform When:</h3>
-                            <ul>
-                                <li>Faster time-to-market required</li>
-                                <li>Limited development resources</li>
-                                <li>Consistent UI across platforms</li>
-                                <li>Existing web developer expertise</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Faster time-to-market required</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Limited development resources</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Consistent UI across platforms</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Existing web developer expertise</div>
+    </div>
+</div>
                         </div>
                     </div>
                 </div>
@@ -198,12 +248,20 @@ graph TB
                     <h3>What is React Native?</h3>
                     <div class="info-box info-box-primary">
                         <p><strong>React Native</strong> is Meta's cross-platform framework that allows you to build native mobile apps using React and JavaScript. It renders actual native components, not web views.</p>
-                        <ul class="feature-list">
-                            <li><strong>Learn Once, Write Anywhere:</strong> Use React knowledge for mobile</li>
-                            <li><strong>Native Rendering:</strong> Real native UI components</li>
-                            <li><strong>Hot Reload:</strong> See changes instantly</li>
-                            <li><strong>Large Ecosystem:</strong> npm packages and native modules</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Learn Once, Write Anywhere:</strong> Use React knowledge for mobile</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Native Rendering:</strong> Real native UI components</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Hot Reload:</strong> See changes instantly</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Large Ecosystem:</strong> npm packages and native modules</div>
+    </div>
+</div>
                     </div>
 
                     <h3>Architecture</h3>
@@ -229,40 +287,76 @@ graph LR
                         <div class="framework-panel">
                             <span class="framework-panel-icon">📦</span>
                             <h3>Built-in Components</h3>
-                            <ul>
-                                <li><strong>View:</strong> Container component (like div)</li>
-                                <li><strong>Text:</strong> Text rendering component</li>
-                                <li><strong>Image:</strong> Display images</li>
-                                <li><strong>ScrollView:</strong> Scrollable container</li>
-                                <li><strong>FlatList:</strong> Performant lists</li>
-                                <li><strong>TextInput:</strong> Text input field</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>View:</strong> Container component (like div)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Text:</strong> Text rendering component</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Image:</strong> Display images</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>ScrollView:</strong> Scrollable container</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>FlatList:</strong> Performant lists</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>TextInput:</strong> Text input field</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">📱</span>
                             <h3>Platform-Specific APIs</h3>
-                            <ul>
-                                <li><strong>Platform:</strong> Detect OS (iOS/Android)</li>
-                                <li><strong>Dimensions:</strong> Screen dimensions</li>
-                                <li><strong>Keyboard:</strong> Keyboard events</li>
-                                <li><strong>Linking:</strong> Open URLs/deep links</li>
-                                <li><strong>Alert:</strong> Native alert dialogs</li>
-                                <li><strong>StatusBar:</strong> Status bar control</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Platform:</strong> Detect OS (iOS/Android)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Dimensions:</strong> Screen dimensions</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Keyboard:</strong> Keyboard events</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Linking:</strong> Open URLs/deep links</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Alert:</strong> Native alert dialogs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>StatusBar:</strong> Status bar control</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">📚</span>
                             <h3>Popular Libraries</h3>
-                            <ul>
-                                <li><strong>React Navigation:</strong> Routing and navigation</li>
-                                <li><strong>Redux/Zustand:</strong> State management</li>
-                                <li><strong>React Native Paper:</strong> Material Design components</li>
-                                <li><strong>Expo:</strong> Development toolkit and services</li>
-                                <li><strong>Reanimated:</strong> Advanced animations</li>
-                                <li><strong>React Native Elements:</strong> Cross-platform UI toolkit</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>React Navigation:</strong> Routing and navigation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Redux/Zustand:</strong> State management</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>React Native Paper:</strong> Material Design components</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Expo:</strong> Development toolkit and services</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Reanimated:</strong> Advanced animations</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>React Native Elements:</strong> Cross-platform UI toolkit</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -314,12 +408,20 @@ graph LR
                     <h3>What is Flutter?</h3>
                     <div class="info-box info-box-primary">
                         <p><strong>Flutter</strong> is Google's UI toolkit for building natively compiled applications from a single codebase. It uses Dart language and renders its own UI components.</p>
-                        <ul class="feature-list">
-                            <li><strong>Fast Rendering:</strong> Custom rendering engine (Skia)</li>
-                            <li><strong>Widget-Based:</strong> Everything is a widget</li>
-                            <li><strong>Hot Reload:</strong> Instant UI updates</li>
-                            <li><strong>Multi-Platform:</strong> Mobile, web, desktop from one codebase</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Fast Rendering:</strong> Custom rendering engine (Skia)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Widget-Based:</strong> Everything is a widget</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Hot Reload:</strong> Instant UI updates</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Multi-Platform:</strong> Mobile, web, desktop from one codebase</div>
+    </div>
+</div>
                     </div>
 
                     <h3>Flutter Architecture</h3>
@@ -352,39 +454,71 @@ graph TB
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🧩</span>
                             <h3>Widgets</h3>
-                            <ul>
-                                <li><strong>Stateless:</strong> Immutable widgets</li>
-                                <li><strong>Stateful:</strong> Mutable state widgets</li>
-                                <li><strong>Inherited:</strong> Propagate data down tree</li>
-                                <li><strong>Material:</strong> Material Design widgets</li>
-                                <li><strong>Cupertino:</strong> iOS-style widgets</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Stateless:</strong> Immutable widgets</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Stateful:</strong> Mutable state widgets</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Inherited:</strong> Propagate data down tree</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Material:</strong> Material Design widgets</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Cupertino:</strong> iOS-style widgets</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🔄</span>
                             <h3>State Management</h3>
-                            <ul>
-                                <li><strong>setState:</strong> Simple local state</li>
-                                <li><strong>Provider:</strong> Recommended by Flutter team</li>
-                                <li><strong>Bloc:</strong> Business logic separation</li>
-                                <li><strong>Riverpod:</strong> Modern provider alternative</li>
-                                <li><strong>GetX:</strong> Lightweight state management</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>setState:</strong> Simple local state</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Provider:</strong> Recommended by Flutter team</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Bloc:</strong> Business logic separation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Riverpod:</strong> Modern provider alternative</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>GetX:</strong> Lightweight state management</div>
+    </div>
+</div>
                         </div>
                     </div>
 
                     <h3>Flutter Advantages</h3>
                     <div class="info-box info-box-info">
                         <strong>Why Choose Flutter:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Performance:</strong> Near-native performance with custom rendering</li>
-                            <li><strong>Consistency:</strong> Same UI across all platforms</li>
-                            <li><strong>Productivity:</strong> Hot reload and expressive UI</li>
-                            <li><strong>Single Codebase:</strong> iOS, Android, web, desktop</li>
-                            <li><strong>Rich Widgets:</strong> Extensive built-in widget library</li>
-                            <li><strong>Growing Ecosystem:</strong> Active community and packages</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Performance:</strong> Near-native performance with custom rendering</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Consistency:</strong> Same UI across all platforms</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Productivity:</strong> Hot reload and expressive UI</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Single Codebase:</strong> iOS, Android, web, desktop</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Rich Widgets:</strong> Extensive built-in widget library</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Growing Ecosystem:</strong> Active community and packages</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -397,25 +531,45 @@ graph TB
                     <h3>iOS Development (Swift)</h3>
                     <div class="info-box info-box-primary">
                         <strong>Swift Ecosystem:</strong>
-                        <ul class="feature-list">
-                            <li><strong>SwiftUI:</strong> Declarative UI framework (modern)</li>
-                            <li><strong>UIKit:</strong> Imperative UI framework (traditional)</li>
-                            <li><strong>Xcode:</strong> Official IDE with Interface Builder</li>
-                            <li><strong>TestFlight:</strong> Beta testing platform</li>
-                            <li><strong>App Store Connect:</strong> App distribution</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>SwiftUI:</strong> Declarative UI framework (modern)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>UIKit:</strong> Imperative UI framework (traditional)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Xcode:</strong> Official IDE with Interface Builder</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>TestFlight:</strong> Beta testing platform</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>App Store Connect:</strong> App distribution</div>
+    </div>
+</div>
                     </div>
 
                     <h3>Android Development (Kotlin)</h3>
                     <div class="info-box info-box-success">
                         <strong>Kotlin Ecosystem:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Jetpack Compose:</strong> Modern declarative UI</li>
-                            <li><strong>XML Layouts:</strong> Traditional view system</li>
-                            <li><strong>Android Studio:</strong> Official IDE</li>
-                            <li><strong>Android Jetpack:</strong> Modern development components</li>
-                            <li><strong>Google Play Console:</strong> App distribution</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Jetpack Compose:</strong> Modern declarative UI</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>XML Layouts:</strong> Traditional view system</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Android Studio:</strong> Official IDE</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Android Jetpack:</strong> Modern development components</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Google Play Console:</strong> App distribution</div>
+    </div>
+</div>
                     </div>
 
                     <h3>Native vs Cross-Platform</h3>
@@ -423,25 +577,45 @@ graph TB
                         <div class="framework-panel">
                             <span class="framework-panel-icon">✨</span>
                             <h3>Native Advantages</h3>
-                            <ul>
-                                <li>Maximum performance</li>
-                                <li>Full platform API access</li>
-                                <li>Best user experience</li>
-                                <li>Latest features immediately</li>
-                                <li>Better debugging tools</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Maximum performance</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Full platform API access</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Best user experience</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Latest features immediately</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Better debugging tools</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">⚠️</span>
                             <h3>Native Challenges</h3>
-                            <ul>
-                                <li>Separate codebases (2x work)</li>
-                                <li>Different languages/tools</li>
-                                <li>Higher development cost</li>
-                                <li>Slower time-to-market</li>
-                                <li>Two teams or broader skillset</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Separate codebases (2x work)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Different languages/tools</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Higher development cost</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Slower time-to-market</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Two teams or broader skillset</div>
+    </div>
+</div>
                         </div>
                     </div>
                 </div>
@@ -476,12 +650,20 @@ graph TB
                     <h3>MVVM Pattern (Recommended)</h3>
                     <div class="info-box info-box-success">
                         <p><strong>Model-View-ViewModel:</strong> Separation of concerns with data binding</p>
-                        <ul class="feature-list">
-                            <li><strong>Model:</strong> Data and business logic</li>
-                            <li><strong>View:</strong> UI components and layout</li>
-                            <li><strong>ViewModel:</strong> Presentation logic and state</li>
-                            <li><strong>Benefits:</strong> Testable, maintainable, scalable</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Model:</strong> Data and business logic</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>View:</strong> UI components and layout</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>ViewModel:</strong> Presentation logic and state</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Benefits:</strong> Testable, maintainable, scalable</div>
+    </div>
+</div>
                     </div>
 
                     <h3>Clean Architecture Layers</h3>
@@ -489,34 +671,58 @@ graph TB
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🎨</span>
                             <h3>Presentation Layer</h3>
-                            <ul>
-                                <li>UI Components</li>
-                                <li>ViewModels</li>
-                                <li>Navigation</li>
-                                <li>User Input</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">UI Components</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">ViewModels</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Navigation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">User Input</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">⚙️</span>
                             <h3>Domain Layer</h3>
-                            <ul>
-                                <li>Business Logic</li>
-                                <li>Use Cases</li>
-                                <li>Entities</li>
-                                <li>Repository Interfaces</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Business Logic</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use Cases</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Entities</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Repository Interfaces</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">💾</span>
                             <h3>Data Layer</h3>
-                            <ul>
-                                <li>Repository Implementations</li>
-                                <li>Data Sources</li>
-                                <li>API Clients</li>
-                                <li>Local Database</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Repository Implementations</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Data Sources</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">API Clients</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Local Database</div>
+    </div>
+</div>
                         </div>
                     </div>
                 </div>
@@ -532,23 +738,39 @@ graph TB
                         <div class="framework-panel">
                             <span class="framework-panel-icon">⚛️</span>
                             <h3>React Native Testing</h3>
-                            <ul>
-                                <li><strong>Jest:</strong> Unit and integration tests</li>
-                                <li><strong>React Native Testing Library:</strong> Component testing</li>
-                                <li><strong>Detox:</strong> E2E testing framework</li>
-                                <li><strong>Maestro:</strong> Mobile UI testing</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Jest:</strong> Unit and integration tests</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>React Native Testing Library:</strong> Component testing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Detox:</strong> E2E testing framework</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Maestro:</strong> Mobile UI testing</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🐦</span>
                             <h3>Flutter Testing</h3>
-                            <ul>
-                                <li><strong>flutter_test:</strong> Unit and widget tests</li>
-                                <li><strong>mockito:</strong> Mocking dependencies</li>
-                                <li><strong>integration_test:</strong> E2E testing</li>
-                                <li><strong>Golden Tests:</strong> Screenshot comparison</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>flutter_test:</strong> Unit and widget tests</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>mockito:</strong> Mocking dependencies</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>integration_test:</strong> E2E testing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Golden Tests:</strong> Screenshot comparison</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -578,14 +800,26 @@ graph TB
                     <h3>Testing Best Practices</h3>
                     <div class="info-box info-box-warning">
                         <strong>Mobile Testing Guidelines:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Test on Real Devices:</strong> Simulators don't catch all issues</li>
-                            <li><strong>Test Different Screen Sizes:</strong> Cover various device dimensions</li>
-                            <li><strong>Test Network Conditions:</strong> Slow, offline, intermittent</li>
-                            <li><strong>Test Permissions:</strong> Location, camera, notifications</li>
-                            <li><strong>Test Battery Impact:</strong> Monitor power consumption</li>
-                            <li><strong>Automated CI/CD:</strong> Run tests on every commit</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Test on Real Devices:</strong> Simulators don't catch all issues</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Test Different Screen Sizes:</strong> Cover various device dimensions</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Test Network Conditions:</strong> Slow, offline, intermittent</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Test Permissions:</strong> Location, camera, notifications</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Test Battery Impact:</strong> Monitor power consumption</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Automated CI/CD:</strong> Run tests on every commit</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -600,34 +834,58 @@ graph TB
                         <div class="framework-panel">
                             <span class="framework-panel-icon">⚛️</span>
                             <h3>React Native</h3>
-                            <ul>
-                                <li><a href="https://reactnative.dev/" target="_blank" rel="noopener">React Native Docs</a> - Official documentation</li>
-                                <li><a href="https://docs.expo.dev/" target="_blank" rel="noopener">Expo Docs</a> - Expo development platform</li>
-                                <li><a href="https://reactnavigation.org/" target="_blank" rel="noopener">React Navigation</a> - Routing library</li>
-                                <li><a href="https://www.reactnative.directory/" target="_blank" rel="noopener">React Native Directory</a> - Library directory</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><a href="https://reactnative.dev/" target="_blank" rel="noopener">React Native Docs</a> - Official documentation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://docs.expo.dev/" target="_blank" rel="noopener">Expo Docs</a> - Expo development platform</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://reactnavigation.org/" target="_blank" rel="noopener">React Navigation</a> - Routing library</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://www.reactnative.directory/" target="_blank" rel="noopener">React Native Directory</a> - Library directory</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🐦</span>
                             <h3>Flutter</h3>
-                            <ul>
-                                <li><a href="https://flutter.dev/" target="_blank" rel="noopener">Flutter Docs</a> - Official documentation</li>
-                                <li><a href="https://pub.dev/" target="_blank" rel="noopener">pub.dev</a> - Flutter package repository</li>
-                                <li><a href="https://api.flutter.dev/" target="_blank" rel="noopener">Flutter API Reference</a> - API documentation</li>
-                                <li><a href="https://dartpad.dev/" target="_blank" rel="noopener">DartPad</a> - Online Dart playground</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><a href="https://flutter.dev/" target="_blank" rel="noopener">Flutter Docs</a> - Official documentation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://pub.dev/" target="_blank" rel="noopener">pub.dev</a> - Flutter package repository</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://api.flutter.dev/" target="_blank" rel="noopener">Flutter API Reference</a> - API documentation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://dartpad.dev/" target="_blank" rel="noopener">DartPad</a> - Online Dart playground</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🍎</span>
                             <h3>iOS Development</h3>
-                            <ul>
-                                <li><a href="https://developer.apple.com/documentation/" target="_blank" rel="noopener">Apple Developer</a> - Official iOS documentation</li>
-                                <li><a href="https://developer.apple.com/swift/" target="_blank" rel="noopener">Swift.org</a> - Swift language guide</li>
-                                <li><a href="https://developer.apple.com/design/human-interface-guidelines/" target="_blank" rel="noopener">HIG</a> - Human Interface Guidelines</li>
-                                <li><a href="https://www.hackingwithswift.com/" target="_blank" rel="noopener">Hacking with Swift</a> - Swift tutorials</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><a href="https://developer.apple.com/documentation/" target="_blank" rel="noopener">Apple Developer</a> - Official iOS documentation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://developer.apple.com/swift/" target="_blank" rel="noopener">Swift.org</a> - Swift language guide</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://developer.apple.com/design/human-interface-guidelines/" target="_blank" rel="noopener">HIG</a> - Human Interface Guidelines</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://www.hackingwithswift.com/" target="_blank" rel="noopener">Hacking with Swift</a> - Swift tutorials</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -636,12 +894,20 @@ graph TB
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🤖</span>
                             <h3>Android Development</h3>
-                            <ul>
-                                <li><a href="https://developer.android.com/" target="_blank" rel="noopener">Android Developers</a> - Official documentation</li>
-                                <li><a href="https://kotlinlang.org/" target="_blank" rel="noopener">Kotlin Docs</a> - Kotlin language guide</li>
-                                <li><a href="https://developer.android.com/jetpack/compose" target="_blank" rel="noopener">Jetpack Compose</a> - Modern Android UI</li>
-                                <li><a href="https://material.io/develop/android" target="_blank" rel="noopener">Material Design</a> - Android design system</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><a href="https://developer.android.com/" target="_blank" rel="noopener">Android Developers</a> - Official documentation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://kotlinlang.org/" target="_blank" rel="noopener">Kotlin Docs</a> - Kotlin language guide</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://developer.android.com/jetpack/compose" target="_blank" rel="noopener">Jetpack Compose</a> - Modern Android UI</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://material.io/develop/android" target="_blank" rel="noopener">Material Design</a> - Android design system</div>
+    </div>
+</div>
                         </div>
                     </div>
                 </div>

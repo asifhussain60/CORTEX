@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Software Engineering - Best practices, design patterns, SOLID principles, clean code">
@@ -8,6 +33,7 @@
     <meta name="author" content="Asif Hussain">
     <title>Software Engineering | CORTEX Knowledge</title>
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
@@ -24,14 +50,14 @@
     <section class="hero" id="main-content">
         <h1 class="hero-title">💻 Software Engineering</h1>
         <p class="hero-subtitle">Best Practices, Design Patterns, and Clean Code</p>
-        <div class="file-metadata">
+        <div class="code-file">
             <span class="metadata-item">🏗️ Architecture</span>
             <span class="metadata-item">📐 Patterns</span>
             <span class="metadata-item">📅 Updated: Dec 2025</span>
         </div>
     </section>
 
-    <section class="section file-content">
+    <section class="section code-file">
         <div class="container">
             <div id="overview" class="content-section">
                 <div class="glass-card">
@@ -40,12 +66,20 @@
                     
                     <div class="info-box info-box-primary">
                         <strong>Core Principles:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Maintainability:</strong> Easy to understand and modify</li>
-                            <li><strong>Scalability:</strong> Grows with requirements</li>
-                            <li><strong>Reliability:</strong> Works correctly under all conditions</li>
-                            <li><strong>Testability:</strong> Easy to verify behavior</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Maintainability:</strong> Easy to understand and modify</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Scalability:</strong> Grows with requirements</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Reliability:</strong> Works correctly under all conditions</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Testability:</strong> Easy to verify behavior</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -59,51 +93,87 @@
                             <span class="framework-panel-icon">S</span>
                             <h3>Single Responsibility</h3>
                             <h4>Principle</h4>
-                            <ul>
-                                <li>A class should have one reason to change</li>
-                                <li>One responsibility per class</li>
-                                <li>High cohesion</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">A class should have one reason to change</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">One responsibility per class</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">High cohesion</div>
+    </div>
+</div>
                             <h4>Benefits</h4>
-                            <ul>
-                                <li>Easier to understand</li>
-                                <li>Simpler testing</li>
-                                <li>Reduced coupling</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Easier to understand</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Simpler testing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Reduced coupling</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">O</span>
                             <h3>Open/Closed</h3>
                             <h4>Principle</h4>
-                            <ul>
-                                <li>Open for extension</li>
-                                <li>Closed for modification</li>
-                                <li>Use abstraction</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Open for extension</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Closed for modification</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use abstraction</div>
+    </div>
+</div>
                             <h4>Benefits</h4>
-                            <ul>
-                                <li>Add features without breaking existing code</li>
-                                <li>Plugin architectures</li>
-                                <li>Strategy pattern</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Add features without breaking existing code</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Plugin architectures</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Strategy pattern</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">L</span>
                             <h3>Liskov Substitution</h3>
                             <h4>Principle</h4>
-                            <ul>
-                                <li>Subtypes must be substitutable</li>
-                                <li>Preserve expected behavior</li>
-                                <li>Contract compliance</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Subtypes must be substitutable</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Preserve expected behavior</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Contract compliance</div>
+    </div>
+</div>
                             <h4>Benefits</h4>
-                            <ul>
-                                <li>Reliable polymorphism</li>
-                                <li>Predictable behavior</li>
-                                <li>Proper inheritance</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Reliable polymorphism</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Predictable behavior</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Proper inheritance</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -112,22 +182,34 @@
                             <span class="framework-panel-icon">I</span>
                             <h3>Interface Segregation</h3>
                             <h4>Principle</h4>
-                            <ul>
-                                <li>Many specific interfaces better than one general</li>
-                                <li>Clients shouldn't depend on unused methods</li>
-                                <li>Role interfaces</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Many specific interfaces better than one general</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Clients shouldn't depend on unused methods</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Role interfaces</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">D</span>
                             <h3>Dependency Inversion</h3>
                             <h4>Principle</h4>
-                            <ul>
-                                <li>Depend on abstractions, not concretions</li>
-                                <li>High-level modules independent</li>
-                                <li>Dependency injection</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Depend on abstractions, not concretions</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">High-level modules independent</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Dependency injection</div>
+    </div>
+</div>
                         </div>
                     </div>
                 </div>
@@ -148,11 +230,17 @@
                                 <li>Encapsulate object creation</li>
                             </ul>
                             <h4>Use Cases</h4>
-                            <ul>
-                                <li>Framework libraries</li>
-                                <li>Plugin systems</li>
-                                <li>Product families</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Framework libraries</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Plugin systems</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Product families</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -164,11 +252,17 @@
                                 <li>Global access point</li>
                             </ul>
                             <h4>Use Cases</h4>
-                            <ul>
-                                <li>Configuration manager</li>
-                                <li>Logger</li>
-                                <li>Connection pool</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Configuration manager</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Logger</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Connection pool</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -180,11 +274,17 @@
                                 <li>Separate construction from representation</li>
                             </ul>
                             <h4>Use Cases</h4>
-                            <ul>
-                                <li>Complex configurations</li>
-                                <li>Fluent interfaces</li>
-                                <li>Immutable objects</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Complex configurations</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Fluent interfaces</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Immutable objects</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -265,50 +365,88 @@
                             <span class="framework-panel-icon">📝</span>
                             <h3>Naming</h3>
                             <h4>Guidelines</h4>
-                            <ul>
-                                <li>Intention-revealing names</li>
-                                <li>Avoid mental mapping</li>
-                                <li>Use searchable names</li>
-                                <li>Class names: nouns</li>
-                                <li>Method names: verbs</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Intention-revealing names</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Avoid mental mapping</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use searchable names</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Class names: nouns</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Method names: verbs</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🔧</span>
                             <h3>Functions</h3>
                             <h4>Guidelines</h4>
-                            <ul>
-                                <li>Small (≤20 lines)</li>
-                                <li>Do one thing well</li>
-                                <li>Few parameters (≤3)</li>
-                                <li>No side effects</li>
-                                <li>Command-query separation</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Small (≤20 lines)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Do one thing well</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Few parameters (≤3)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">No side effects</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Command-query separation</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">💬</span>
                             <h3>Comments</h3>
                             <h4>Guidelines</h4>
-                            <ul>
-                                <li>Explain WHY, not WHAT</li>
-                                <li>Avoid redundant comments</li>
-                                <li>Update with code changes</li>
-                                <li>Use for warnings/TODOs</li>
-                                <li>Prefer self-documenting code</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Explain WHY, not WHAT</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Avoid redundant comments</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Update with code changes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use for warnings/TODOs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Prefer self-documenting code</div>
+    </div>
+</div>
                         </div>
                     </div>
 
                     <div class="info-box info-box-success">
                         <strong>Code Quality Metrics:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Cyclomatic Complexity:</strong> Keep ≤10 per method</li>
-                            <li><strong>Code Coverage:</strong> Aim for ≥80% test coverage</li>
-                            <li><strong>Technical Debt:</strong> Refactor regularly</li>
-                            <li><strong>Code Duplication:</strong> DRY principle - Don't Repeat Yourself</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Cyclomatic Complexity:</strong> Keep ≤10 per method</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Code Coverage:</strong> Aim for ≥80% test coverage</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Technical Debt:</strong> Refactor regularly</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Code Duplication:</strong> DRY principle - Don't Repeat Yourself</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -322,33 +460,51 @@
                             <span class="framework-panel-icon">🔍</span>
                             <h3>Extract Method</h3>
                             <h4>When to Use</h4>
-                            <ul>
-                                <li>Long methods</li>
-                                <li>Code needs comment to explain</li>
-                                <li>Duplicate logic</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Long methods</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Code needs comment to explain</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Duplicate logic</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">📦</span>
                             <h3>Extract Class</h3>
                             <h4>When to Use</h4>
-                            <ul>
-                                <li>Class doing too much</li>
-                                <li>Subset of data used together</li>
-                                <li>Improve cohesion</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Class doing too much</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Subset of data used together</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Improve cohesion</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🔄</span>
                             <h3>Replace Conditional</h3>
                             <h4>When to Use</h4>
-                            <ul>
-                                <li>Complex conditionals</li>
-                                <li>Type checking</li>
-                                <li>Use polymorphism instead</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Complex conditionals</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Type checking</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use polymorphism instead</div>
+    </div>
+</div>
                         </div>
                     </div>
                 </div>
@@ -362,12 +518,20 @@
                         <div class="framework-panel">
                             <span class="framework-panel-icon">📖</span>
                             <h3>Essential Books</h3>
-                            <ul>
-                                <li><strong>Clean Code</strong> - Robert C. Martin</li>
-                                <li><strong>Design Patterns</strong> - Gang of Four</li>
-                                <li><strong>Refactoring</strong> - Martin Fowler</li>
-                                <li><strong>The Pragmatic Programmer</strong> - Hunt & Thomas</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Clean Code</strong> - Robert C. Martin</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Design Patterns</strong> - Gang of Four</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Refactoring</strong> - Martin Fowler</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>The Pragmatic Programmer</strong> - Hunt & Thomas</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">

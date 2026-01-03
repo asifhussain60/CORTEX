@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CORTEX Testing Showcase - Best Practices">
@@ -8,6 +33,7 @@
     <title>Testing | STS | CORTEX 4.0</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <link rel="stylesheet" href="../assets/css/sts.css?v=2026-01-02-v2">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
@@ -15,10 +41,35 @@
 <body class="sts-showcase">
     <!-- Glass Header Navigation -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../index.html" class="nav-link">
-                    <i class="fas fa-home"></i>
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../index.html" class="nav-link" mobile-nav-optimized>
+                    <i class="pulse-glow-glass--fast fa-home"></i>
                     <span>Home</span>
                 </a>
             </nav>
@@ -27,7 +78,7 @@
 
     <main class="sts-main">
         <section class="sts-hero">
-            <h1><i class="fas fa-vial"></i> Testing Best Practices</h1>
+            <h1><i class="pulse-glow-glass--fast fa-vial"></i> Testing Best Practices</h1>
             <p class="hero-subtitle">Write maintainable, reliable tests that catch real bugs</p>
             <div class="sts-metrics">
                 <div class="metric-card"><div class="metric-value">3</div><div class="metric-label">Patterns</div></div>
@@ -39,21 +90,27 @@
         <!-- AAA Pattern - TypeScript Jest -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="fas fa-check-double"></i> Arrange-Act-Assert Pattern</h3>
+                <h3><i class="pulse-glow-glass--fast fa-check-double"></i> Arrange-Act-Assert Pattern</h3>
                 <span class="language-badge typescript">TypeScript</span>
             </div>
             <div class="refactor-explanation">
-                <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
-                <ul>
-                    <li><strong>Problem:</strong> Tests are hard to read, unclear what's being tested</li>
-                    <li><strong>Fix:</strong> Structure tests with clear Arrange/Act/Assert sections</li>
-                    <li><strong>Result:</strong> Self-documenting tests that are easy to maintain</li>
-                </ul>
+                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Problem:</strong> Tests are hard to read, unclear what's being tested</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Fix:</strong> Structure tests with clear Arrange/Act/Assert sections</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Result:</strong> Self-documenting tests that are easy to maintain</div>
+    </div>
+</div>
             </div>
             <div class="comparison-container">
                 <div class="panel before-panel">
-                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before: Unclear Structure</div>
-                    <pre><code class="language-typescript">test('cart test', () => {
+                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Unclear Structure</div>
+                    <pre><code class="language-badge">test('cart test', () => {
   const cart = new ShoppingCart();
   cart.addItem({ id: '1', name: 'Book', price: 10 });
   cart.addItem({ id: '2', name: 'Pen', price: 2 });
@@ -66,8 +123,8 @@
 });</code></pre>
                 </div>
                 <div class="panel after-panel">
-                    <div class="panel-header"><i class="fas fa-check-circle"></i> After: AAA Pattern</div>
-                    <pre><code class="language-typescript">describe('ShoppingCart', () => {
+                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-check-circle"></i> After: AAA Pattern</div>
+                    <pre><code class="language-badge">describe('ShoppingCart', () => {
   describe('applyDiscount', () => {
     it('should reduce total by percentage', () => {
       // Arrange
@@ -89,21 +146,27 @@
         <!-- Dependency Injection - C# -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="fas fa-puzzle-piece"></i> Testable Code with DI</h3>
+                <h3><i class="pulse-glow-glass--fast fa-puzzle-piece"></i> Testable Code with DI</h3>
                 <span class="language-badge csharp">C#</span>
             </div>
             <div class="refactor-explanation">
-                <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
-                <ul>
-                    <li><strong>Problem:</strong> Hardcoded dependencies make unit testing impossible</li>
-                    <li><strong>Fix:</strong> Inject dependencies through constructor</li>
-                    <li><strong>Result:</strong> Can mock dependencies in tests</li>
-                </ul>
+                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Problem:</strong> Hardcoded dependencies make unit testing impossible</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Fix:</strong> Inject dependencies through constructor</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Result:</strong> Can mock dependencies in tests</div>
+    </div>
+</div>
             </div>
             <div class="comparison-container">
                 <div class="panel before-panel">
-                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before: Untestable</div>
-                    <pre><code class="language-csharp">public class OrderService
+                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Untestable</div>
+                    <pre><code class="language-badge">public class OrderService
 {
     public async Task&lt;Order&gt; CreateOrder(OrderRequest request)
     {
@@ -122,8 +185,8 @@
 }</code></pre>
                 </div>
                 <div class="panel after-panel">
-                    <div class="panel-header"><i class="fas fa-check-circle"></i> After: Testable with DI</div>
-                    <pre><code class="language-csharp">public class OrderService
+                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-check-circle"></i> After: Testable with DI</div>
+                    <pre><code class="language-badge">public class OrderService
 {
     private readonly IOrderRepository _repo;
     private readonly IEmailService _email;
@@ -155,21 +218,27 @@
         <!-- Component Testing - Angular -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="fas fa-cube"></i> Angular Component Testing</h3>
+                <h3><i class="pulse-glow-glass--fast fa-cube"></i> Angular Component Testing</h3>
                 <span class="language-badge angular">Angular</span>
             </div>
             <div class="refactor-explanation">
-                <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
-                <ul>
-                    <li><strong>Problem:</strong> Testing implementation details, brittle tests</li>
-                    <li><strong>Fix:</strong> Test behavior from user's perspective</li>
-                    <li><strong>Result:</strong> Tests survive refactoring, catch real bugs</li>
-                </ul>
+                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Problem:</strong> Testing implementation details, brittle tests</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Fix:</strong> Test behavior from user's perspective</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Result:</strong> Tests survive refactoring, catch real bugs</div>
+    </div>
+</div>
             </div>
             <div class="comparison-container">
                 <div class="panel before-panel">
-                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before: Testing Internals</div>
-                    <pre><code class="language-typescript">it('should toggle', () => {
+                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Testing Internals</div>
+                    <pre><code class="language-badge">it('should toggle', () => {
   // Testing internal state - brittle!
   expect(component.isExpanded).toBeFalse();
   
@@ -183,8 +252,8 @@
 // Doesn't test what user actually sees</code></pre>
                 </div>
                 <div class="panel after-panel">
-                    <div class="panel-header"><i class="fas fa-check-circle"></i> After: Testing Behavior</div>
-                    <pre><code class="language-typescript">it('should expand panel when header clicked', () => {
+                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-check-circle"></i> After: Testing Behavior</div>
+                    <pre><code class="language-badge">it('should expand panel when header clicked', () => {
   // Arrange
   const header = fixture.debugElement
     .query(By.css('[data-testid="panel-header"]'));

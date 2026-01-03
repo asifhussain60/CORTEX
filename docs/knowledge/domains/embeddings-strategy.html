@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Embeddings Strategy - Model selection, optimization, and evaluation for RAG systems">
@@ -8,13 +33,14 @@
     <title>Embeddings Strategy - CORTEX Knowledge</title>
     <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
-        <button class="back-button" onclick="history.back()" aria-label="Go back">← Back</button>
+    <nav class="breadcrumb-separator sticky-nav" mobile-nav-optimized aria-label="Breadcrumb">
+        <button class="grid-background" onclick="history.back()" aria-label="Go back">← Back</button>
         <ol class="breadcrumb">
             <li><a href="../../index.html">Home</a></li>
             <li><a href="../index.html">Knowledge Library</a></li>
@@ -29,16 +55,16 @@
         </div>
         <h1 class="hero-title">🧠 Embeddings Strategy</h1>
         <p class="hero-subtitle">Model selection, optimization, and evaluation for RAG systems</p>
-        <div class="file-metadata">
+        <div class="code-file">
             <span class="metadata-item">📦 20+ Rules</span>
             <span class="metadata-item">🏷️ RAG & AI Domains</span>
             <span class="metadata-item">📅 Updated: Dec 2025</span>
         </div>
     </section>
 
-    <aside class="toc-sidebar" aria-label="Table of contents">
+    <aside class="toc-link" aria-label="Table of contents">
         <h3>On This Page</h3>
-        <nav class="toc-nav">
+        <nav class="toc-nav" mobile-nav-optimized>
             <a href="#overview" class="toc-link">Overview</a>
             <a href="#models" class="toc-link">Embedding Models</a>
             <a href="#optimization" class="toc-link">Optimization</a>
@@ -47,7 +73,7 @@
         </nav>
     </aside>
 
-    <main class="file-content">
+    <main class="code-file">
         <section class="glass-card" id="overview">
             <h2>What are Embeddings?</h2>
             <p>
@@ -55,7 +81,7 @@
                 similarity search in RAG systems by converting documents and queries into comparable vectors.
             </p>
 
-            <div class="info-banner">
+            <div class="level1-feature-icon-container--info">
                 <strong>💡 Key Insight:</strong> Similar concepts have similar vector representations, enabling 
                 semantic search beyond keyword matching.
             </div>
@@ -66,20 +92,33 @@
 
             <div class="rule-card">
                 <h3>OpenAI text-embedding-ada-002 (Recommended)</h3>
-                <span class="badge badge-high">PRODUCTION READY</span>
+                <span class="badge badge-security">PRODUCTION READY</span>
                 <p>Industry-standard embedding model for production RAG systems.</p>
                 
                 <h4>Specifications</h4>
-                <ul class="feature-list">
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Dimensions:</strong> 1536</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Max Tokens:</strong> 8191 tokens per input</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Cost:</strong> <ul class="feature-list">
                     <li><strong>Dimensions:</strong> 1536</li>
                     <li><strong>Max Tokens:</strong> 8191 tokens per input</li>
                     <li><strong>Cost:</strong> $0.10 per 1M tokens</li>
                     <li><strong>Performance:</strong> Excellent for general-purpose RAG</li>
-                </ul>
+                </ul>.10 per 1M tokens</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Performance:</strong> Excellent for general-purpose RAG</div>
+    </div>
+</div>
 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Python Implementation</h4>
-                    <pre><code class="language-python">from openai import OpenAI
+                    <pre><code class="language-badge">from openai import OpenAI
 
 client = OpenAI(api_key="your-api-key")
 
@@ -104,35 +143,61 @@ print(f"Embedding dimensions: {len(embedding)}")  # 1536
 
             <div class="rule-card">
                 <h3>OpenAI text-embedding-3-small</h3>
-                <span class="badge badge-medium">COST-OPTIMIZED</span>
+                <span class="badge badge-security">COST-OPTIMIZED</span>
                 <p>80% cheaper than ada-002 with good performance for cost-sensitive applications.</p>
                 
                 <h4>Specifications</h4>
-                <ul class="feature-list">
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Dimensions:</strong> 1536</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Cost:</strong> <ul class="feature-list">
                     <li><strong>Dimensions:</strong> 1536</li>
                     <li><strong>Cost:</strong> $0.02 per 1M tokens (5x cheaper than ada-002)</li>
                     <li><strong>Performance:</strong> Good for most use cases</li>
                     <li><strong>Best For:</strong> High-volume applications where cost matters</li>
-                </ul>
+                </ul>.02 per 1M tokens (5x cheaper than ada-002)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Performance:</strong> Good for most use cases</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Best For:</strong> High-volume applications where cost matters</div>
+    </div>
+</div>
             </div>
 
             <div class="rule-card">
                 <h3>OpenAI text-embedding-3-large</h3>
-                <span class="badge badge-medium">MAXIMUM ACCURACY</span>
+                <span class="badge badge-security">MAXIMUM ACCURACY</span>
                 <p>Highest accuracy embedding model with 3072 dimensions.</p>
                 
                 <h4>Specifications</h4>
-                <ul class="feature-list">
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Dimensions:</strong> 3072 (2x ada-002)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Cost:</strong> <ul class="feature-list">
                     <li><strong>Dimensions:</strong> 3072 (2x ada-002)</li>
                     <li><strong>Cost:</strong> $0.13 per 1M tokens</li>
                     <li><strong>Performance:</strong> Best accuracy</li>
                     <li><strong>Best For:</strong> Mission-critical RAG where accuracy is paramount</li>
-                </ul>
+                </ul>.13 per 1M tokens</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Performance:</strong> Best accuracy</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Best For:</strong> Mission-critical RAG where accuracy is paramount</div>
+    </div>
+</div>
             </div>
 
             <div class="rule-card">
                 <h3>Sentence Transformers (Self-Hosted)</h3>
-                <span class="badge badge-medium">OPEN SOURCE</span>
+                <span class="badge badge-security">OPEN SOURCE</span>
                 <p>Free, self-hosted embeddings for privacy-sensitive applications.</p>
                 
                 <h4>Popular Models</h4>
@@ -141,9 +206,9 @@ print(f"Embedding dimensions: {len(embedding)}")  # 1536
                     <li><strong>all-mpnet-base-v2:</strong> 768 dimensions, more accurate</li>
                 </ul>
 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Python Implementation</h4>
-                    <pre><code class="language-python">from sentence_transformers import SentenceTransformer
+                    <pre><code class="language-badge">from sentence_transformers import SentenceTransformer
 
 # Load model (downloads automatically first time)
 model = SentenceTransformer('all-MiniLM-L6-v2')
@@ -166,13 +231,23 @@ print(similarity_matrix)
                 </div>
 
                 <h4>Pros & Cons</h4>
-                <ul class="feature-list">
-                    <li>✅ Free (no API costs)</li>
-                    <li>✅ Full data privacy (self-hosted)</li>
-                    <li>✅ No rate limits</li>
-                    <li>❌ Lower accuracy than OpenAI models</li>
-                    <li>❌ Requires GPU for fast inference</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">✅ Free (no API costs)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Full data privacy (self-hosted)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ No rate limits</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">❌ Lower accuracy than OpenAI models</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">❌ Requires GPU for fast inference</div>
+    </div>
+</div>
             </div>
         </section>
 
@@ -181,12 +256,12 @@ print(similarity_matrix)
 
             <div class="rule-card">
                 <h3>Batch Processing</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Process multiple texts in batches for 5-10x speedup.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Batch Processing</h4>
-                    <pre><code class="language-python">from openai import OpenAI
+                    <pre><code class="language-badge">from openai import OpenAI
 import numpy as np
 
 client = OpenAI(api_key="your-api-key")
@@ -218,12 +293,12 @@ embeddings = get_embeddings_batch(documents, batch_size=128)
 
             <div class="rule-card">
                 <h3>Embedding Caching</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Cache embeddings to avoid recomputing identical texts.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Redis Caching</h4>
-                    <pre><code class="language-python">import redis
+                    <pre><code class="language-badge">import redis
 import hashlib
 import json
 import numpy as np
@@ -257,18 +332,18 @@ text = "Machine learning is amazing"
 embedding1 = get_embedding_cached(text)  # API call
 embedding2 = get_embedding_cached(text)  # Cache hit (instant!)
 </code></pre>
-                    <p class="example-note">✅ Reduces API costs and latency for repeated queries.</p>
+                    <p class="command-example">✅ Reduces API costs and latency for repeated queries.</p>
                 </div>
             </div>
 
             <div class="rule-card">
                 <h3>Dimensionality Reduction</h3>
-                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <span class="badge badge-security">MEDIUM PRIORITY</span>
                 <p>Reduce storage and improve search speed with 50-75% fewer dimensions.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ PCA Dimensionality Reduction</h4>
-                    <pre><code class="language-python">from sklearn.decomposition import PCA
+                    <pre><code class="language-badge">from sklearn.decomposition import PCA
 import numpy as np
 
 # Original embeddings (N x 1536)
@@ -284,7 +359,7 @@ print(f"Reduced shape: {reduced_embeddings.shape}")  # (1000, 512)
 variance_retained = pca.explained_variance_ratio_.sum()
 print(f"Variance retained: {variance_retained:.2%}")  # ~95%
 </code></pre>
-                    <p class="example-note">✅ Benefits: 67% less storage, faster similarity search, minimal accuracy loss.</p>
+                    <p class="command-example">✅ Benefits: 67% less storage, faster similarity search, minimal accuracy loss.</p>
                 </div>
             </div>
         </section>
@@ -294,12 +369,12 @@ print(f"Variance retained: {variance_retained:.2%}")  # ~95%
 
             <div class="rule-card">
                 <h3>Retrieval Accuracy Testing</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Measure how well embeddings retrieve relevant documents.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Recall@K Evaluation</h4>
-                    <pre><code class="language-python">from sklearn.metrics.pairwise import cosine_similarity
+                    <pre><code class="language-badge">from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 
 def recall_at_k(query_embedding, document_embeddings, relevant_doc_ids, k=5):
@@ -339,12 +414,12 @@ print(f"Average Recall@5: {avg_recall:.2%}")
 
             <div class="rule-card">
                 <h3>A/B Testing Embedding Models</h3>
-                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <span class="badge badge-security">MEDIUM PRIORITY</span>
                 <p>Compare different embedding models on your specific data.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Model Comparison</h4>
-                    <pre><code class="language-python">models = [
+                    <pre><code class="language-badge">models = [
     "text-embedding-ada-002",
     "text-embedding-3-small",
     "text-embedding-3-large"
@@ -379,19 +454,19 @@ for model, metrics in results.items():
 
         <section class="glass-card" id="related">
             <h2>Related Knowledge Files</h2>
-            <div class="related-grid">
-                <a href="vector-database-guide.html" class="related-card">
-                    <span class="related-icon">🗄️</span>
+            <div class="level1-relationship-grid">
+                <a href="vector-database-guide.html" class="level1-relationship-grid">
+                    <span class="level1-relationship-grid">🗄️</span>
                     <h3>Vector Database Guide</h3>
                     <p>Store and search embeddings efficiently</p>
                 </a>
-                <a href="retrieval-pipeline.html" class="related-card">
-                    <span class="related-icon">🔍</span>
+                <a href="retrieval-pipeline.html" class="level1-relationship-grid">
+                    <span class="level1-relationship-grid">🔍</span>
                     <h3>Retrieval Pipeline</h3>
                     <p>Build complete RAG retrieval systems</p>
                 </a>
-                <a href="domain-rag-integration.html" class="related-card">
-                    <span class="related-icon">🧩</span>
+                <a href="domain-rag-integration.html" class="level1-relationship-grid">
+                    <span class="level1-relationship-grid">🧩</span>
                     <h3>Domain RAG Integration</h3>
                     <p>Integrate embeddings with domain knowledge</p>
                 </a>

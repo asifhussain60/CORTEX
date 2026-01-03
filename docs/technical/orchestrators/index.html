@@ -1,12 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CORTEX Orchestrators | Interactive Map</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <link rel="stylesheet" href="shared-styles.css">
-    <style>
+    
+    <link rel="stylesheet" href="../..../..../..../..../..../../assets/css/generated-classes.css"><style>
         body {
             background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
         }
@@ -39,37 +65,37 @@
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             margin-bottom: 40px;
         }
-        .controls {
+        .level1-integration-icon-container {
             display: flex;
             gap: 15px;
             margin-bottom: 30px;
             flex-wrap: wrap;
             justify-content: center;
         }
-        .control-btn {
+        .level1-integration-icon-container {
             padding: 10px 20px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             font-size: 14px;
             font-weight: 600;
-            transition: all 0.3s ease;
+            transition: callout-link 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-        .control-btn:hover {
+        .level1-integration-icon-container:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
-        .control-btn.active {
+        .level1-integration-icon-container.active {
             box-shadow: 0 0 0 3px rgba(255,255,255,0.5), 0 5px 15px rgba(0,0,0,0.3);
         }
-        .control-btn.all { background: linear-gradient(135deg, #00d4ff 0%, #7b61ff 100%); color: white; }
-        .control-btn.planning { background: #2196F3; color: white; }
-        .control-btn.execution { background: #4CAF50; color: white; }
-        .control-btn.system { background: #FF9800; color: white; }
-        .control-btn.analysis { background: #9C27B0; color: white; }
-        .control-btn.debug { background: #F44336; color: white; }
+        .level1-integration-icon-container.callout-link { background: linear-gradient(135deg, #00d4ff 0%, #7b61ff 100%); color: white; }
+        .level1-integration-icon-container.improvement-explanation { background: #2196F3; color: white; }
+        .level1-integration-icon-container.viz-execution { background: #4CAF50; color: white; }
+        .level1-integration-icon-container.viz-system { background: #FF9800; color: white; }
+        .level1-integration-icon-container.viz-analysis { background: #9C27B0; color: white; }
+        .level1-integration-icon-container.viz-debug { background: #F44336; color: white; }
         #orchestratorMap {
             width: 100%;
             height: 800px;
@@ -79,7 +105,7 @@
             cursor: pointer;
             stroke: #fff;
             stroke-width: 3px;
-            transition: all 0.3s ease;
+            transition: callout-link 0.3s ease;
         }
         .node:hover circle {
             stroke-width: 5px;
@@ -98,7 +124,7 @@
             stroke-opacity: 0.3;
             stroke-width: 2px;
         }
-        .tooltip {
+        .visualization-tooltip {
             position: absolute;
             background: rgba(0,0,0,0.9);
             color: white;
@@ -112,16 +138,16 @@
             line-height: 1.6;
             box-shadow: 0 5px 20px rgba(0,0,0,0.4);
         }
-        .tooltip.visible {
+        .visualization-tooltip.visible {
             opacity: 1;
         }
-        .tooltip h3 {
+        .visualization-tooltip h3 {
             margin: 0 0 8px 0;
             font-size: 16px;
             border-bottom: 2px solid #00d4ff;
             padding-bottom: 5px;
         }
-        .tooltip .badge {
+        .visualization-tooltip .badge {
             display: inline-block;
             padding: 3px 8px;
             border-radius: 4px;
@@ -152,19 +178,19 @@
             font-size: 1.1rem;
             opacity: 0.95;
         }
-        .legend {
+        .level2-legend-orange {
             display: flex;
             gap: 20px;
             justify-content: center;
             flex-wrap: wrap;
             margin-top: 30px;
         }
-        .legend-item {
+        .level2-legend-orange-item {
             display: flex;
             align-items: center;
             gap: 8px;
         }
-        .legend-color {
+        .level2-level2-legend-orange-orange {
             width: 20px;
             height: 20px;
             border-radius: 50%;
@@ -197,43 +223,68 @@
 
     <div class="container">
         <header>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
             <h1>🎭 CORTEX Orchestrator Suite</h1>
             <p class="tagline">Interactive visualization of 16 specialized orchestrators</p>
         </header>
 
         <div class="visualization-container">
-            <div class="controls">
-                <button class="control-btn all active" data-category="all">All Orchestrators</button>
-                <button class="control-btn planning" data-category="planning">Planning (4)</button>
-                <button class="control-btn execution" data-category="execution">Execution (2)</button>
-                <button class="control-btn system" data-category="system">System (5)</button>
-                <button class="control-btn analysis" data-category="analysis">Analysis (3)</button>
-                <button class="control-btn debug" data-category="debug">Debug (2)</button>
+            <div class="level1-integration-icon-container">
+                <button class="level1-integration-icon-container callout-link active" data-category="callout-link">callout-link Orchestrators</button>
+                <button class="level1-integration-icon-container improvement-explanation" data-category="improvement-explanation">improvement-explanation (4)</button>
+                <button class="level1-integration-icon-container viz-execution" data-category="viz-execution">viz-execution (2)</button>
+                <button class="level1-integration-icon-container viz-system" data-category="viz-system">viz-system (5)</button>
+                <button class="level1-integration-icon-container viz-analysis" data-category="viz-analysis">viz-analysis (3)</button>
+                <button class="level1-integration-icon-container viz-debug" data-category="viz-debug">viz-debug (2)</button>
             </div>
 
             <div id="orchestratorMap"></div>
-            <div class="tooltip"></div>
+            <div class="visualization-tooltip"></div>
 
-            <div class="legend">
-                <div class="legend-item">
-                    <div class="legend-color"></div>
-                    <span>Planning</span>
+            <div class="level2-legend-orange">
+                <div class="level2-legend-orange-item">
+                    <div class="level2-level2-legend-orange-orange"></div>
+                    <span>improvement-explanation</span>
                 </div>
-                <div class="legend-item">
-                    <div class="legend-color"></div>
-                    <span>Execution</span>
+                <div class="level2-legend-orange-item">
+                    <div class="level2-level2-legend-orange-orange"></div>
+                    <span>viz-execution</span>
                 </div>
-                <div class="legend-item">
-                    <div class="legend-color"></div>
-                    <span>System</span>
+                <div class="level2-legend-orange-item">
+                    <div class="level2-level2-legend-orange-orange"></div>
+                    <span>viz-system</span>
                 </div>
-                <div class="legend-item">
-                    <div class="legend-color"></div>
-                    <span>Analysis</span>
+                <div class="level2-legend-orange-item">
+                    <div class="level2-level2-legend-orange-orange"></div>
+                    <span>viz-analysis</span>
                 </div>
-                <div class="legend-item">
-                    <div class="legend-color"></div>
-                    <span>Debug</span>
+                <div class="level2-legend-orange-item">
+                    <div class="level2-level2-legend-orange-orange"></div>
+                    <span>viz-debug</span>
                 </div>
             </div>
         </div>
@@ -260,41 +311,41 @@
 
     <script>
         const orchestrators = [
-            // Planning (4)
-            { id: 'planning-system', name: 'Planning System', category: 'planning', phases: 13, complexity: 'HIGH', color: '#2196F3', url: 'planning-system.html', description: '4-tier routing, complexity detection, TDD auto-inclusion' },
-            { id: 'tdd', name: 'TDD', category: 'planning', phases: 11, complexity: 'HIGH', color: '#1976D2', url: 'tdd-orchestrator.html', description: 'RED→GREEN→REFACTOR cycle with 11+ language support' },
-            { id: 'ado', name: 'ADO Planning', category: 'planning', phases: 10, complexity: 'MEDIUM', color: '#0D47A1', url: 'ado-planning.html', description: 'Story/Feature/Task creation with manifest inheritance' },
-            { id: 'pre-flight', name: 'Pre-Flight', category: 'planning', phases: 5, complexity: 'LOW', color: '#42A5F5', url: 'pre-flight.html', description: 'Pre-planning discovery and complexity estimation' },
+            // improvement-explanation (4)
+            { id: 'improvement-explanation-viz-system', name: 'improvement-explanation viz-system', category: 'improvement-explanation', phases: 13, complexity: 'HIGH', color: '#2196F3', url: 'improvement-explanation-viz-system.html', description: '4-tier routing, complexity detection, TDD auto-inclusion' },
+            { id: 'tdd', name: 'TDD', category: 'improvement-explanation', phases: 11, complexity: 'HIGH', color: '#1976D2', url: 'tdd-orchestrator.html', description: 'RED→GREEN→REFACTOR cycle with 11+ language support' },
+            { id: 'ado', name: 'ADO improvement-explanation', category: 'improvement-explanation', phases: 10, complexity: 'MEDIUM', color: '#0D47A1', url: 'ado-improvement-explanation.html', description: 'Story/Feature/Task creation with manifest inheritance' },
+            { id: 'pre-flight', name: 'Pre-Flight', category: 'improvement-explanation', phases: 5, complexity: 'LOW', color: '#42A5F5', url: 'pre-flight.html', description: 'Pre-improvement-explanation discovery and complexity estimation' },
             
-            // Execution (2)
-            { id: 'sanitization', name: 'Code Sanitization', category: 'execution', phases: 5, complexity: 'HIGH', color: '#4CAF50', url: 'code-sanitization.html', description: '5-phase workflow for company data removal' },
-            { id: 'autonomous', name: 'Autonomous Execution', category: 'execution', phases: 8, complexity: 'MEDIUM', color: '#388E3C', url: 'autonomous-execution.html', description: 'Phase-by-phase execution automation' },
+            // viz-execution (2)
+            { id: 'sanitization', name: 'Code Sanitization', category: 'viz-execution', phases: 5, complexity: 'HIGH', color: '#4CAF50', url: 'code-sanitization.html', description: '5-phase workflow for company data removal' },
+            { id: 'autonomous', name: 'Autonomous viz-execution', category: 'viz-execution', phases: 8, complexity: 'MEDIUM', color: '#388E3C', url: 'autonomous-viz-execution.html', description: 'Phase-by-phase viz-execution automation' },
             
-            // System (5)
-            { id: 'maintenance', name: 'System Maintenance', category: 'system', phases: 7, complexity: 'HIGH', color: '#FF9800', url: 'maintenance-orchestrator.html', description: 'Tiered routing with 7-phase workflow' },
-            { id: 'integrity', name: 'System Integrity', category: 'system', phases: 8, complexity: 'HIGH', color: '#F57C00', url: 'system-integrity.html', description: '8-phase validation with auto-fix capabilities' },
-            { id: 'refinement', name: 'Refinement', category: 'system', phases: 7, complexity: 'HIGH', color: '#E65100', url: 'refinement-orchestrator.html', description: 'Holistic improvement with SKULL test optimization' },
-            { id: 'cleanup', name: 'Cleanup', category: 'system', phases: 4, complexity: 'MEDIUM', color: '#FB8C00', url: 'cleanup-orchestrator.html', description: 'AST-powered cleanup with reference tracking' },
-            { id: 'git-checkpoint', name: 'Git Checkpoint', category: 'system', phases: 3, complexity: 'MEDIUM', color: '#FFA726', url: 'git-checkpoint.html', description: 'Phase milestone tracking with rollback management' },
+            // viz-system (5)
+            { id: 'maintenance', name: 'viz-system Maintenance', category: 'viz-system', phases: 7, complexity: 'HIGH', color: '#FF9800', url: 'maintenance-orchestrator.html', description: 'Tiered routing with 7-phase workflow' },
+            { id: 'integrity', name: 'viz-system Integrity', category: 'viz-system', phases: 8, complexity: 'HIGH', color: '#F57C00', url: 'viz-system-integrity.html', description: '8-phase validation with auto-fix capabilities' },
+            { id: 'refinement', name: 'Refinement', category: 'viz-system', phases: 7, complexity: 'HIGH', color: '#E65100', url: 'refinement-orchestrator.html', description: 'Holistic improvement with SKULL test optimization' },
+            { id: 'cleanup', name: 'Cleanup', category: 'viz-system', phases: 4, complexity: 'MEDIUM', color: '#FB8C00', url: 'cleanup-orchestrator.html', description: 'AST-powered cleanup with reference tracking' },
+            { id: 'git-checkpoint', name: 'Git Checkpoint', category: 'viz-system', phases: 3, complexity: 'MEDIUM', color: '#FFA726', url: 'git-checkpoint.html', description: 'Phase milestone tracking with rollback management' },
             
-            // Analysis (3)
-            { id: 'architectural', name: 'Architectural Review', category: 'analysis', phases: 6, complexity: 'MEDIUM', color: '#9C27B0', url: 'architectural-review.html', description: '6-phase analysis with 0-100 scoring' },
-            { id: 'lens', name: 'CORTEX Lens v3', category: 'analysis', phases: 8, complexity: 'HIGH', color: '#7B1FA2', url: 'cortex-lens.html', description: 'Narrative generation with pattern detection' },
-            { id: 'dashboard', name: 'Intelligent Dashboard', category: 'analysis', phases: 4, complexity: 'MEDIUM', color: '#4A148C', url: 'intelligent-dashboard.html', description: 'Metrics collection and live monitoring' },
+            // viz-analysis (3)
+            { id: 'architectural', name: 'Architectural Review', category: 'viz-analysis', phases: 6, complexity: 'MEDIUM', color: '#9C27B0', url: 'architectural-review.html', description: '6-phase viz-analysis with 0-100 scoring' },
+            { id: 'lens', name: 'CORTEX Lens v3', category: 'viz-analysis', phases: 8, complexity: 'HIGH', color: '#7B1FA2', url: 'cortex-lens.html', description: 'Narrative generation with pattern detection' },
+            { id: 'dashboard', name: 'Intelligent Dashboard', category: 'viz-analysis', phases: 4, complexity: 'MEDIUM', color: '#4A148C', url: 'intelligent-dashboard.html', description: 'Metrics collection and live monitoring' },
             
-            // Debug (2)
-            { id: 'debug', name: 'Debug', category: 'debug', phases: 5, complexity: 'MEDIUM', color: '#F44336', url: 'debug-orchestrator.html', description: 'Symptom analysis → root cause → fix strategy' },
-            { id: 'rollback', name: 'Rollback', category: 'debug', phases: 3, complexity: 'MEDIUM', color: '#D32F2F', url: 'rollback-orchestrator.html', description: 'Safe rollback with state restoration' }
+            // viz-debug (2)
+            { id: 'viz-debug', name: 'viz-debug', category: 'viz-debug', phases: 5, complexity: 'MEDIUM', color: '#F44336', url: 'viz-debug-orchestrator.html', description: 'Symptom viz-analysis → root cause → fix strategy' },
+            { id: 'rollback', name: 'Rollback', category: 'viz-debug', phases: 3, complexity: 'MEDIUM', color: '#D32F2F', url: 'rollback-orchestrator.html', description: 'Safe rollback with state restoration' }
         ];
 
         // Define relationships
         const links = [
-            { source: 'planning-system', target: 'tdd' },
-            { source: 'planning-system', target: 'ado' },
-            { source: 'planning-system', target: 'pre-flight' },
-            { source: 'planning-system', target: 'autonomous' },
+            { source: 'improvement-explanation-viz-system', target: 'tdd' },
+            { source: 'improvement-explanation-viz-system', target: 'ado' },
+            { source: 'improvement-explanation-viz-system', target: 'pre-flight' },
+            { source: 'improvement-explanation-viz-system', target: 'autonomous' },
             { source: 'tdd', target: 'autonomous' },
-            { source: 'pre-flight', target: 'planning-system' },
+            { source: 'pre-flight', target: 'improvement-explanation-viz-system' },
             { source: 'autonomous', target: 'git-checkpoint' },
             { source: 'sanitization', target: 'integrity' },
             { source: 'maintenance', target: 'integrity' },
@@ -304,7 +355,7 @@
             { source: 'integrity', target: 'git-checkpoint' },
             { source: 'architectural', target: 'refinement' },
             { source: 'lens', target: 'dashboard' },
-            { source: 'debug', target: 'rollback' },
+            { source: 'viz-debug', target: 'rollback' },
             { source: 'git-checkpoint', target: 'rollback' }
         ];
 
@@ -328,8 +379,8 @@
 
         svg.call(zoom);
 
-        // Tooltip
-        const tooltip = d3.select('.tooltip');
+        // visualization-tooltip
+        const visualization-tooltip = d3.select('.visualization-tooltip');
 
         // Force simulation
         const simulation = d3.forceSimulation(orchestrators)
@@ -378,13 +429,13 @@
                 .duration(200)
                 .attr('r', (d.phases * 2) + 25);
 
-            tooltip.html(`
+            visualization-tooltip.html(`
                 <h3>${d.name} Orchestrator</h3>
                 <p>${d.description}</p>
                 <div>
-                    <span class="badge" style="background: ${d.color};">${d.category.toUpperCase()}</span>
-                    <span class="badge" style="background: #666;">${d.phases} Phases</span>
-                    <span class="badge" style="background: #666;">${d.complexity}</span>
+                    <span class="badge" class="inline-fix-278">${d.category.toUpperCase()}</span>
+                    <span class="badge" class="inline-fix-171">${d.phases} Phases</span>
+                    <span class="badge" class="inline-fix-171">${d.complexity}</span>
                 </div>
                 <p>Click to view details</p>
             `)
@@ -399,7 +450,7 @@
                 .duration(200)
                 .attr('r', 20 + (d.phases * 2));
 
-            tooltip.classed('visible', false);
+            visualization-tooltip.classed('visible', false);
         });
 
         // Update positions
@@ -432,9 +483,9 @@
         }
 
         // Category filtering
-        document.querySelectorAll('.control-btn').forEach(btn => {
+        document.querySelectorAll('.level1-integration-icon-container').forEach(btn => {
             btn.addEventListener('click', function() {
-                document.querySelectorAll('.control-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.level1-integration-icon-container').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
 
                 const category = this.dataset.category;
@@ -442,13 +493,13 @@
                 node.transition()
                     .duration(300)
                     .style('opacity', d => {
-                        return category === 'all' || d.category === category ? 1 : 0.2;
+                        return category === 'callout-link' || d.category === category ? 1 : 0.2;
                     });
 
                 link.transition()
                     .duration(300)
                     .style('opacity', l => {
-                        if (category === 'all') return 0.3;
+                        if (category === 'callout-link') return 0.3;
                         return (l.source.category === category && l.target.category === category) ? 0.3 : 0.05;
                     });
             });

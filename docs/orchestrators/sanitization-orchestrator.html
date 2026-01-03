@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CORTEX Sanitization Orchestrator - 5-phase code sanitization for secure sharing">
@@ -8,6 +33,7 @@
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
 </head>
 <body>
     <!-- Skip Link -->
@@ -15,10 +41,35 @@
     
     <!-- Level 1 Navigation Header -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../index.html" class="nav-link">
-                    <i class="fas fa-home"></i>
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../index.html" class="nav-link" mobile-nav-optimized>
+                    <i class="pulse-glow-glass--fast fa-home"></i>
                     <span>Home</span>
                 </a>
             </nav>
@@ -72,7 +123,7 @@
         </div>
         
         <!-- 5 Phase Workflow -->
-        <section class="section-workflow">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>📋</span> The 5-Phase Workflow</h2>
                 
@@ -112,29 +163,43 @@
         </section>
         
         <!-- Detection Categories -->
-        <section class="section-features">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>🔒</span> What Gets Sanitized</h2>
-                <ul class="feature-list">
-                    <li><strong>Company Names:</strong> Organization identifiers, brand names</li>
-                    <li><strong>Internal URLs:</strong> Intranet, internal APIs, private domains</li>
-                    <li><strong>Secrets:</strong> API keys, tokens, passwords, connection strings</li>
-                    <li><strong>Email Addresses:</strong> Corporate email patterns</li>
-                    <li><strong>IP Addresses:</strong> Internal network addresses</li>
-                    <li><strong>Database Names:</strong> Production/staging database identifiers</li>
-                    <li><strong>Employee Names:</strong> Author tags, comments with names</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Company Names:</strong> Organization identifiers, brand names</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Internal URLs:</strong> Intranet, internal APIs, private domains</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Secrets:</strong> API keys, tokens, passwords, connection strings</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Email Addresses:</strong> Corporate email patterns</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>IP Addresses:</strong> Internal network addresses</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Database Names:</strong> Production/staging database identifiers</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Employee Names:</strong> Author tags, comments with names</div>
+    </div>
+</div>
             </div>
         </section>
         
         <!-- Related Links -->
-        <section class="section-related">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>🔗</span> Related Documentation</h2>
-                <div class="related-links">
-                    <a href="sanitization.html" class="btn btn-outline">Sanitization Guide</a>
-                    <a href="../security/index.html" class="btn btn-outline">Security</a>
-                    <a href="../governance/skull-rulebook.html" class="btn btn-outline">SKULL Rules</a>
+                <div class="level1-relationship-grid">
+                    <a href="sanitization.html" class="btn level1-btn-icon">Sanitization Guide</a>
+                    <a href="../security/index.html" class="btn level1-btn-icon">Security</a>
+                    <a href="../governance/skull-rulebook.html" class="btn level1-btn-icon">SKULL Rules</a>
                 </div>
             </div>
         </section>

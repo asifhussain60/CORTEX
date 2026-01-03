@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="UI/UX Design - Design Systems, Accessibility, Usability Patterns, WCAG Standards">
@@ -8,6 +33,7 @@
     <meta name="author" content="Asif Hussain">
     <title>UI/UX Design | CORTEX Knowledge</title>
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
@@ -25,14 +51,14 @@
     <section class="hero" id="main-content">
         <h1 class="hero-title">🎨 UI/UX Design</h1>
         <p class="hero-subtitle">Design Systems, Accessibility, Usability Patterns, and WCAG Standards</p>
-        <div class="file-metadata">
+        <div class="code-file">
             <span class="metadata-item">📦 Design & Accessibility</span>
             <span class="metadata-item">🏷️ UI/UX</span>
             <span class="metadata-item">📅 Updated: Dec 2025</span>
         </div>
     </section>
 
-    <section class="section file-content">
+    <section class="section code-file">
         <div class="container">
             <!-- Overview -->
             <div id="overview" class="content-section">
@@ -42,12 +68,20 @@
                     
                     <div class="info-box info-box-primary">
                         <strong>Core UI/UX Principles:</strong>
-                        <ul class="feature-list">
-                            <li><strong>User-Centered:</strong> Design with users' needs and goals in mind</li>
-                            <li><strong>Accessible:</strong> Ensure usability for people of all abilities</li>
-                            <li><strong>Consistent:</strong> Maintain design patterns across the interface</li>
-                            <li><strong>Responsive:</strong> Adapt seamlessly across devices and screen sizes</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>User-Centered:</strong> Design with users' needs and goals in mind</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Accessible:</strong> Ensure usability for people of all abilities</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Consistent:</strong> Maintain design patterns across the interface</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Responsive:</strong> Adapt seamlessly across devices and screen sizes</div>
+    </div>
+</div>
                     </div>
 
                     <h3>Design Process Flow</h3>
@@ -78,12 +112,20 @@ graph LR
                     <h3>What is a Design System?</h3>
                     <div class="info-box info-box-info">
                         <p>A design system is a collection of reusable components, patterns, and guidelines that ensure consistency across digital products.</p>
-                        <ul class="feature-list">
-                            <li><strong>Components:</strong> Reusable UI elements (buttons, inputs, cards)</li>
-                            <li><strong>Patterns:</strong> Common UI solutions (navigation, forms, modals)</li>
-                            <li><strong>Guidelines:</strong> Rules for spacing, typography, colors</li>
-                            <li><strong>Documentation:</strong> Usage examples and best practices</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Components:</strong> Reusable UI elements (buttons, inputs, cards)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Patterns:</strong> Common UI solutions (navigation, forms, modals)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Guidelines:</strong> Rules for spacing, typography, colors</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Documentation:</strong> Usage examples and best practices</div>
+    </div>
+</div>
                     </div>
 
                     <h3>Popular Design Systems</h3>
@@ -95,12 +137,20 @@ graph LR
                             <p class="framework-subtitle">Google's Design Language</p>
                             
                             <h4>Core Principles</h4>
-                            <ul>
-                                <li><strong>Motion-Based:</strong> Physics-inspired animations</li>
-                                <li><strong>Elevation:</strong> Depth through shadows</li>
-                                <li><strong>Bold Design:</strong> Vibrant colors & typography</li>
-                                <li><strong>Components:</strong> Comprehensive library</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Motion-Based:</strong> Physics-inspired animations</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Elevation:</strong> Depth through shadows</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Bold Design:</strong> Vibrant colors & typography</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Components:</strong> Comprehensive library</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -109,12 +159,20 @@ graph LR
                             <p class="framework-subtitle">Apple's Design Principles</p>
                             
                             <h4>Core Principles</h4>
-                            <ul>
-                                <li><strong>Clarity & Depth:</strong> Clear visual hierarchy</li>
-                                <li><strong>Platform-Specific:</strong> Native patterns</li>
-                                <li><strong>Content First:</strong> Emphasis on content</li>
-                                <li><strong>Cross-Platform:</strong> iOS, macOS, watchOS</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Clarity & Depth:</strong> Clear visual hierarchy</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Platform-Specific:</strong> Native patterns</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Content First:</strong> Emphasis on content</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Cross-Platform:</strong> iOS, macOS, watchOS</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -123,12 +181,20 @@ graph LR
                             <p class="framework-subtitle">Microsoft's Design System</p>
                             
                             <h4>Core Principles</h4>
-                            <ul>
-                                <li><strong>Light & Depth:</strong> Layered interfaces</li>
-                                <li><strong>Motion & Material:</strong> Acrylic surfaces</li>
-                                <li><strong>Cross-Platform:</strong> Consistent UX</li>
-                                <li><strong>Coverage:</strong> Windows, web, mobile</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Light & Depth:</strong> Layered interfaces</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Motion & Material:</strong> Acrylic surfaces</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Cross-Platform:</strong> Consistent UX</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Coverage:</strong> Windows, web, mobile</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -140,26 +206,46 @@ graph LR
                             <p class="framework-subtitle">IBM's Enterprise System</p>
                             
                             <h4>Core Principles</h4>
-                            <ul>
-                                <li><strong>Enterprise-Focused:</strong> Business apps</li>
-                                <li><strong>Accessibility First:</strong> WCAG compliant</li>
-                                <li><strong>Data Visualization:</strong> Chart components</li>
-                                <li><strong>Open Source:</strong> Component library</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Enterprise-Focused:</strong> Business apps</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Accessibility First:</strong> WCAG compliant</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Data Visualization:</strong> Chart components</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Open Source:</strong> Component library</div>
+    </div>
+</div>
                         </div>
                     </div>
 
                     <h3>Building a Design System</h3>
                     <div class="info-box info-box-primary">
                         <strong>Key Steps:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Audit:</strong> Review existing UI components and patterns</li>
-                            <li><strong>Define Tokens:</strong> Establish colors, typography, spacing scales</li>
-                            <li><strong>Create Components:</strong> Build reusable, flexible components</li>
-                            <li><strong>Document:</strong> Provide clear usage guidelines and examples</li>
-                            <li><strong>Version Control:</strong> Track changes and maintain consistency</li>
-                            <li><strong>Governance:</strong> Establish processes for updates and contributions</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Audit:</strong> Review existing UI components and patterns</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Define Tokens:</strong> Establish colors, typography, spacing scales</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Create Components:</strong> Build reusable, flexible components</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Document:</strong> Provide clear usage guidelines and examples</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Version Control:</strong> Track changes and maintain consistency</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Governance:</strong> Establish processes for updates and contributions</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -178,12 +264,20 @@ graph LR
                             <p class="framework-subtitle">Information Must Be Presentable</p>
                             
                             <h4>Requirements</h4>
-                            <ul>
-                                <li><strong>Text Alternatives:</strong> Alt text for images</li>
-                                <li><strong>Adaptable:</strong> Multiple presentation ways</li>
-                                <li><strong>Distinguishable:</strong> Sufficient contrast</li>
-                                <li><strong>Captions:</strong> Audio/video alternatives</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Text Alternatives:</strong> Alt text for images</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Adaptable:</strong> Multiple presentation ways</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Distinguishable:</strong> Sufficient contrast</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Captions:</strong> Audio/video alternatives</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -192,12 +286,20 @@ graph LR
                             <p class="framework-subtitle">Interface Must Be Usable</p>
                             
                             <h4>Requirements</h4>
-                            <ul>
-                                <li><strong>Keyboard Access:</strong> All functions via keyboard</li>
-                                <li><strong>Enough Time:</strong> User controls timing</li>
-                                <li><strong>Seizures:</strong> No flashing content</li>
-                                <li><strong>Navigable:</strong> Clear navigation paths</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Keyboard Access:</strong> All functions via keyboard</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Enough Time:</strong> User controls timing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Seizures:</strong> No flashing content</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Navigable:</strong> Clear navigation paths</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -206,12 +308,20 @@ graph LR
                             <p class="framework-subtitle">Information Must Be Comprehensible</p>
                             
                             <h4>Requirements</h4>
-                            <ul>
-                                <li><strong>Readable:</strong> Clear language structure</li>
-                                <li><strong>Predictable:</strong> Consistent behavior</li>
-                                <li><strong>Input Assistance:</strong> Error prevention</li>
-                                <li><strong>Instructions:</strong> Clear form guidance</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Readable:</strong> Clear language structure</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Predictable:</strong> Consistent behavior</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Input Assistance:</strong> Error prevention</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Instructions:</strong> Clear form guidance</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -223,12 +333,20 @@ graph LR
                             <p class="framework-subtitle">Content Must Be Compatible</p>
                             
                             <h4>Requirements</h4>
-                            <ul>
-                                <li><strong>Compatible:</strong> Works with assistive tech</li>
-                                <li><strong>Valid HTML:</strong> Semantic markup</li>
-                                <li><strong>ARIA:</strong> Accessible attributes</li>
-                                <li><strong>Future-Proof:</strong> New technology support</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Compatible:</strong> Works with assistive tech</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Valid HTML:</strong> Semantic markup</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>ARIA:</strong> Accessible attributes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Future-Proof:</strong> New technology support</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -263,29 +381,57 @@ graph LR
                     <h3>Accessibility Checklist</h3>
                     <div class="info-box info-box-warning">
                         <strong>Essential Accessibility Practices:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Semantic HTML:</strong> Use appropriate HTML elements (header, nav, main, article)</li>
-                            <li><strong>Alt Text:</strong> Descriptive alternative text for all images</li>
-                            <li><strong>Color Contrast:</strong> Minimum 4.5:1 for normal text, 3:1 for large text</li>
-                            <li><strong>Keyboard Navigation:</strong> Tab order and focus indicators</li>
-                            <li><strong>ARIA Labels:</strong> aria-label, aria-labelledby for complex components</li>
-                            <li><strong>Form Labels:</strong> Explicit labels for all form inputs</li>
-                            <li><strong>Headings:</strong> Proper heading hierarchy (h1 → h6)</li>
-                            <li><strong>Skip Links:</strong> Allow users to skip repetitive content</li>
-                            <li><strong>Responsive Text:</strong> Text resizes up to 200% without loss of content</li>
-                            <li><strong>Error Identification:</strong> Clear error messages and recovery paths</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Semantic HTML:</strong> Use appropriate HTML elements (header, nav, main, article)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Alt Text:</strong> Descriptive alternative text for all images</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Color Contrast:</strong> Minimum 4.5:1 for normal text, 3:1 for large text</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Keyboard Navigation:</strong> Tab order and focus indicators</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>ARIA Labels:</strong> aria-label, aria-labelledby for complex components</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Form Labels:</strong> Explicit labels for all form inputs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Headings:</strong> Proper heading hierarchy (h1 → h6)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Skip Links:</strong> Allow users to skip repetitive content</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Responsive Text:</strong> Text resizes up to 200% without loss of content</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Error Identification:</strong> Clear error messages and recovery paths</div>
+    </div>
+</div>
                     </div>
 
                     <h3>Assistive Technologies</h3>
                     <div class="info-box info-box-info">
                         <strong>Common Assistive Technologies:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Screen Readers:</strong> JAWS, NVDA, VoiceOver, TalkBack</li>
-                            <li><strong>Screen Magnifiers:</strong> ZoomText, Windows Magnifier</li>
-                            <li><strong>Voice Control:</strong> Dragon NaturallySpeaking, Voice Control</li>
-                            <li><strong>Switch Devices:</strong> Alternative input methods for motor impairments</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Screen Readers:</strong> JAWS, NVDA, VoiceOver, TalkBack</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Screen Magnifiers:</strong> ZoomText, Windows Magnifier</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Voice Control:</strong> Dragon NaturallySpeaking, Voice Control</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Switch Devices:</strong> Alternative input methods for motor impairments</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -341,24 +487,44 @@ graph LR
                     <h3>Common UX Patterns</h3>
                     <div class="info-box info-box-info">
                         <strong>Navigation Patterns:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Hamburger Menu:</strong> Collapsible menu for mobile navigation</li>
-                            <li><strong>Breadcrumbs:</strong> Show user's location in hierarchy</li>
-                            <li><strong>Tab Navigation:</strong> Organize related content sections</li>
-                            <li><strong>Mega Menu:</strong> Multi-column dropdown for complex sites</li>
-                            <li><strong>Sticky Navigation:</strong> Fixed nav bar during scrolling</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Hamburger Menu:</strong> Collapsible menu for mobile navigation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Breadcrumbs:</strong> Show user's location in hierarchy</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Tab Navigation:</strong> Organize related content sections</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Mega Menu:</strong> Multi-column dropdown for complex sites</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Sticky Navigation:</strong> Fixed nav bar during scrolling</div>
+    </div>
+</div>
                     </div>
 
                     <div class="info-box info-box-info">
                         <strong>Input Patterns:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Autocomplete:</strong> Suggest completions as user types</li>
-                            <li><strong>Input Masking:</strong> Format input (phone, credit card)</li>
-                            <li><strong>Inline Validation:</strong> Real-time error feedback</li>
-                            <li><strong>Multi-Step Forms:</strong> Break long forms into steps</li>
-                            <li><strong>Search Filters:</strong> Refine results with faceted search</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Autocomplete:</strong> Suggest completions as user types</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Input Masking:</strong> Format input (phone, credit card)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Inline Validation:</strong> Real-time error feedback</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Multi-Step Forms:</strong> Break long forms into steps</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Search Filters:</strong> Refine results with faceted search</div>
+    </div>
+</div>
                     </div>
 
                     <h3>Mobile UX Patterns</h3>
@@ -430,12 +596,20 @@ graph TB
                     <h3>Mobile-First Approach</h3>
                     <div class="info-box info-box-success">
                         <strong>Mobile-First Benefits:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Performance:</strong> Start with essential content and features</li>
-                            <li><strong>Progressive Enhancement:</strong> Add complexity for larger screens</li>
-                            <li><strong>Focus:</strong> Prioritize critical user needs</li>
-                            <li><strong>Flexibility:</strong> Easier to scale up than scale down</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Performance:</strong> Start with essential content and features</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Progressive Enhancement:</strong> Add complexity for larger screens</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Focus:</strong> Prioritize critical user needs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Flexibility:</strong> Easier to scale up than scale down</div>
+    </div>
+</div>
                     </div>
 
                     <h3>Responsive Techniques</h3>
@@ -444,34 +618,58 @@ graph TB
                         <div class="framework-panel">
                             <span class="framework-panel-icon">📊</span>
                             <h3>Fluid Layouts</h3>
-                            <ul>
-                                <li>Percentage-based widths</li>
-                                <li>CSS Grid and Flexbox</li>
-                                <li>Viewport units (vw, vh)</li>
-                                <li>max-width constraints</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Percentage-based widths</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">CSS Grid and Flexbox</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Viewport units (vw, vh)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">max-width constraints</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🖼️</span>
                             <h3>Flexible Media</h3>
-                            <ul>
-                                <li>Responsive images (srcset)</li>
-                                <li>Picture element for art direction</li>
-                                <li>SVG for scalable graphics</li>
-                                <li>Aspect ratio boxes</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Responsive images (srcset)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Picture element for art direction</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">SVG for scalable graphics</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Aspect ratio boxes</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">📱</span>
                             <h3>Media Queries</h3>
-                            <ul>
-                                <li>Breakpoint-based styling</li>
-                                <li>Orientation queries</li>
-                                <li>Feature detection</li>
-                                <li>Container queries (new)</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Breakpoint-based styling</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Orientation queries</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Feature detection</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Container queries (new)</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -480,12 +678,20 @@ graph TB
                         <div class="framework-panel">
                             <span class="framework-panel-icon">👆</span>
                             <h3>Touch Optimization</h3>
-                            <ul>
-                                <li>44x44px minimum touch targets</li>
-                                <li>Adequate spacing between elements</li>
-                                <li>Touch gesture support</li>
-                                <li>Prevent accidental taps</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">44x44px minimum touch targets</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Adequate spacing between elements</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Touch gesture support</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Prevent accidental taps</div>
+    </div>
+</div>
                         </div>
                     </div>
                 </div>
@@ -501,34 +707,58 @@ graph TB
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🎨</span>
                             <h3>Design Resources</h3>
-                            <ul>
-                                <li><a href="https://www.w3.org/WAI/WCAG21/quickref/" target="_blank" rel="noopener">WCAG Quick Reference</a> - Accessibility guidelines</li>
-                                <li><a href="https://www.nngroup.com/" target="_blank" rel="noopener">Nielsen Norman Group</a> - UX research and articles</li>
-                                <li><a href="https://material.io/design" target="_blank" rel="noopener">Material Design</a> - Google's design system</li>
-                                <li><a href="https://www.figma.com/resources/" target="_blank" rel="noopener">Figma Resources</a> - Design tool and community</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><a href="https://www.w3.org/WAI/WCAG21/quickref/" target="_blank" rel="noopener">WCAG Quick Reference</a> - Accessibility guidelines</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://www.nngroup.com/" target="_blank" rel="noopener">Nielsen Norman Group</a> - UX research and articles</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://material.io/design" target="_blank" rel="noopener">Material Design</a> - Google's design system</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://www.figma.com/resources/" target="_blank" rel="noopener">Figma Resources</a> - Design tool and community</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">♿</span>
                             <h3>Accessibility Tools</h3>
-                            <ul>
-                                <li><a href="https://wave.webaim.org/" target="_blank" rel="noopener">WAVE</a> - Web accessibility evaluation tool</li>
-                                <li><a href="https://www.deque.com/axe/" target="_blank" rel="noopener">axe DevTools</a> - Accessibility testing</li>
-                                <li><a href="https://webaim.org/resources/contrastchecker/" target="_blank" rel="noopener">Contrast Checker</a> - Color contrast analyzer</li>
-                                <li><a href="https://www.nvaccess.org/" target="_blank" rel="noopener">NVDA</a> - Free screen reader</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><a href="https://wave.webaim.org/" target="_blank" rel="noopener">WAVE</a> - Web accessibility evaluation tool</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://www.deque.com/axe/" target="_blank" rel="noopener">axe DevTools</a> - Accessibility testing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://webaim.org/resources/contrastchecker/" target="_blank" rel="noopener">Contrast Checker</a> - Color contrast analyzer</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://www.nvaccess.org/" target="_blank" rel="noopener">NVDA</a> - Free screen reader</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">👥</span>
                             <h3>Design Communities</h3>
-                            <ul>
-                                <li><a href="https://dribbble.com/" target="_blank" rel="noopener">Dribbble</a> - Design inspiration</li>
-                                <li><a href="https://www.behance.net/" target="_blank" rel="noopener">Behance</a> - Creative portfolios</li>
-                                <li><a href="https://uxdesign.cc/" target="_blank" rel="noopener">UX Collective</a> - UX articles and insights</li>
-                                <li><a href="https://www.smashingmagazine.com/" target="_blank" rel="noopener">Smashing Magazine</a> - Web design resources</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><a href="https://dribbble.com/" target="_blank" rel="noopener">Dribbble</a> - Design inspiration</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://www.behance.net/" target="_blank" rel="noopener">Behance</a> - Creative portfolios</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://uxdesign.cc/" target="_blank" rel="noopener">UX Collective</a> - UX articles and insights</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://www.smashingmagazine.com/" target="_blank" rel="noopener">Smashing Magazine</a> - Web design resources</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -537,12 +767,20 @@ graph TB
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🎓</span>
                             <h3>Learning Platforms</h3>
-                            <ul>
-                                <li><a href="https://www.interaction-design.org/" target="_blank" rel="noopener">Interaction Design Foundation</a> - UX courses</li>
-                                <li><a href="https://www.coursera.org/specializations/ui-ux-design" target="_blank" rel="noopener">Coursera UI/UX</a> - Specialization courses</li>
-                                <li><a href="https://www.udacity.com/course/ux-designer-nanodegree--nd578" target="_blank" rel="noopener">Udacity UX Nanodegree</a> - UX program</li>
-                                <li><a href="https://designlab.com/" target="_blank" rel="noopener">Designlab</a> - Mentored UX courses</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><a href="https://www.interaction-design.org/" target="_blank" rel="noopener">Interaction Design Foundation</a> - UX courses</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://www.coursera.org/specializations/ui-ux-design" target="_blank" rel="noopener">Coursera UI/UX</a> - Specialization courses</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://www.udacity.com/course/ux-designer-nanodegree--nd578" target="_blank" rel="noopener">Udacity UX Nanodegree</a> - UX program</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://designlab.com/" target="_blank" rel="noopener">Designlab</a> - Mentored UX courses</div>
+    </div>
+</div>
                         </div>
                     </div>
                 </div>

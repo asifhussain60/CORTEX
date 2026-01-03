@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CORTEX Code Quality Showcase - DRY, KISS, YAGNI">
@@ -8,6 +33,7 @@
     <title>Code Quality | STS | CORTEX 4.0</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <link rel="stylesheet" href="../assets/css/sts.css?v=2026-01-02-v2">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
@@ -15,10 +41,35 @@
 <body class="sts-showcase">
     <!-- Glass Header Navigation -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../index.html" class="nav-link">
-                    <i class="fas fa-home"></i>
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../index.html" class="nav-link" mobile-nav-optimized>
+                    <i class="pulse-glow-glass--fast fa-home"></i>
                     <span>Home</span>
                 </a>
             </nav>
@@ -27,7 +78,7 @@
 
     <main class="sts-main">
         <section class="sts-hero">
-            <h1><i class="fas fa-gem"></i> Clean Code Principles</h1>
+            <h1><i class="pulse-glow-glass--fast fa-gem"></i> Clean Code Principles</h1>
             <p class="hero-subtitle">DRY, KISS, and YAGNI transformations for maintainable code</p>
             <div class="sts-metrics">
                 <div class="metric-card"><div class="metric-value">3</div><div class="metric-label">Anti-Patterns</div></div>
@@ -39,21 +90,27 @@
         <!-- DRY - Angular -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="fas fa-copy"></i> DRY - Don't Repeat Yourself</h3>
+                <h3><i class="pulse-glow-glass--fast fa-copy"></i> DRY - Don't Repeat Yourself</h3>
                 <span class="language-badge angular">Angular</span>
             </div>
             <div class="refactor-explanation">
-                <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
-                <ul>
-                    <li><strong>Problem:</strong> Same validation logic duplicated across multiple components</li>
-                    <li><strong>Fix:</strong> Extract common validation into reusable service and directive</li>
-                    <li><strong>Result:</strong> Single source of truth - changes propagate automatically</li>
-                </ul>
+                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Problem:</strong> Same validation logic duplicated across multiple components</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Fix:</strong> Extract common validation into reusable service and directive</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Result:</strong> Single source of truth - changes propagate automatically</div>
+    </div>
+</div>
             </div>
             <div class="comparison-container">
                 <div class="panel before-panel">
-                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before: Duplicated Logic</div>
-                    <pre><code class="language-typescript">// user-form.component.ts
+                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Duplicated Logic</div>
+                    <pre><code class="language-badge">// user-form.component.ts
 validateEmail(email: string): boolean {
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return regex.test(email);
@@ -72,8 +129,8 @@ validateEmail(email: string): boolean {
 }</code></pre>
                 </div>
                 <div class="panel after-panel">
-                    <div class="panel-header"><i class="fas fa-check-circle"></i> After: Centralized</div>
-                    <pre><code class="language-typescript">// validation.service.ts
+                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-check-circle"></i> After: Centralized</div>
+                    <pre><code class="language-badge">// validation.service.ts
 @Injectable({ providedIn: 'root' })
 export class ValidationService {
   private emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -96,21 +153,27 @@ isValid = this.validation.validateEmail(email);</code></pre>
         <!-- KISS - TypeScript -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="fas fa-feather"></i> KISS - Keep It Simple</h3>
+                <h3><i class="pulse-glow-glass--fast fa-feather"></i> KISS - Keep It Simple</h3>
                 <span class="language-badge typescript">TypeScript</span>
             </div>
             <div class="refactor-explanation">
-                <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
-                <ul>
-                    <li><strong>Problem:</strong> Over-engineered solution with unnecessary complexity</li>
-                    <li><strong>Fix:</strong> Use simple, direct approach - leverage built-in methods</li>
-                    <li><strong>Result:</strong> Readable, maintainable code that does exactly what's needed</li>
-                </ul>
+                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Problem:</strong> Over-engineered solution with unnecessary complexity</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Fix:</strong> Use simple, direct approach - leverage built-in methods</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Result:</strong> Readable, maintainable code that does exactly what's needed</div>
+    </div>
+</div>
             </div>
             <div class="comparison-container">
                 <div class="panel before-panel">
-                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before: Over-Engineered</div>
-                    <pre><code class="language-typescript">class ArrayProcessor&lt;T&gt; {
+                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Over-Engineered</div>
+                    <pre><code class="language-badge">class ArrayProcessor&lt;T&gt; {
   private items: T[] = [];
   private filterFn: ((item: T) =&gt; boolean) | null = null;
   
@@ -130,8 +193,8 @@ const result = new ArrayProcessor&lt;number&gt;()
   .execute();</code></pre>
                 </div>
                 <div class="panel after-panel">
-                    <div class="panel-header"><i class="fas fa-check-circle"></i> After: Simple & Direct</div>
-                    <pre><code class="language-typescript">// Just use the built-in array method!
+                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-check-circle"></i> After: Simple & Direct</div>
+                    <pre><code class="language-badge">// Just use the built-in array method!
 const numbers = [1, 2, 3, 4, 5];
 const result = numbers.filter(n =&gt; n &gt; 2);
 
@@ -151,21 +214,27 @@ const filtered = filterGreaterThan(numbers, 2);</code></pre>
         <!-- YAGNI - C# -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="fas fa-cut"></i> YAGNI - You Aren't Gonna Need It</h3>
+                <h3><i class="pulse-glow-glass--fast fa-cut"></i> YAGNI - You Aren't Gonna Need It</h3>
                 <span class="language-badge csharp">C#</span>
             </div>
             <div class="refactor-explanation">
-                <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
-                <ul>
-                    <li><strong>Problem:</strong> Premature abstractions and features "just in case"</li>
-                    <li><strong>Fix:</strong> Remove unused code - implement only what's actually needed now</li>
-                    <li><strong>Result:</strong> Lean codebase that's easier to understand and maintain</li>
-                </ul>
+                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Problem:</strong> Premature abstractions and features "just in case"</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Fix:</strong> Remove unused code - implement only what's actually needed now</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Result:</strong> Lean codebase that's easier to understand and maintain</div>
+    </div>
+</div>
             </div>
             <div class="comparison-container">
                 <div class="panel before-panel">
-                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before: Premature Features</div>
-                    <pre><code class="language-csharp">public interface IConfigProvider { }
+                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Premature Features</div>
+                    <pre><code class="language-badge">public interface IConfigProvider { }
 public interface IConfigProviderV2 : IConfigProvider { }
 public interface IConfigFactory { }
 
@@ -186,8 +255,8 @@ public class ConfigManager
 }</code></pre>
                 </div>
                 <div class="panel after-panel">
-                    <div class="panel-header"><i class="fas fa-check-circle"></i> After: Only What's Needed</div>
-                    <pre><code class="language-csharp">public class ConfigService
+                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-check-circle"></i> After: Only What's Needed</div>
+                    <pre><code class="language-badge">public class ConfigService
 {
     public string GetSetting(string key) =&gt;
         Environment.GetEnvironmentVariable(key) 

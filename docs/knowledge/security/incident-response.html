@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Security Incident Response - Security Learning Module">
@@ -8,8 +33,11 @@
     <meta name="author" content="Asif Hussain">
     <title>Security Incident Response | CORTEX Learning Hub</title>
     <link rel="stylesheet" href="../../assets/css/main.css?v=2026-01-02">
-    <link rel="stylesheet" href="../../assets/css/learning-hub.css?v=2026-01-02">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
+    
+    <link rel="stylesheet" href="../..../..../..../..../..../../assets/css/generated-classes.css"><link rel="stylesheet" href="../../assets/css/learning-hub.css?v=2026-01-02">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/editor/editor.main.css">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
@@ -18,14 +46,39 @@
 
     <!-- Header Navigation -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../../index.html" class="nav-link">
-                    <span class="nav-icon">🏠</span> Home
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../../index.html" class="nav-link" mobile-nav-optimized>
+                    <span class="nav-content" mobile-nav-optimized>🏠</span> Home
                 </a>
-                <span class="nav-separator">›</span>
-                <a href="../security-hub.html" class="nav-link">
-                    <span class="nav-icon">🔐</span> Security
+                <span class="nav-content" mobile-nav-optimized>›</span>
+                <a href="../security-hub.html" class="nav-link" mobile-nav-optimized>
+                    <span class="nav-content" mobile-nav-optimized>🔐</span> Security
                 </a>
             </nav>
         </div>
@@ -36,7 +89,7 @@
         <div class="module-header">
             <div class="breadcrumb">
                 <span class="difficulty-badge expert">Expert</span>
-                <span style="color: var(--text-secondary);">Module 6 of 6</span>
+                <span class="inline-fix-9">Module 6 of 6</span>
             </div>
             <h1 class="hero-title">🔐 Security Incident Response</h1>
             <p class="hero-subtitle">Interactive learning with quizzes, code playgrounds, and challenges</p>
@@ -52,72 +105,82 @@
     <!-- Main Content -->
     <div class="container">
         <!-- Learning Objectives -->
-        <section class="glass-card" style="margin-top: var(--spacing-2xl);">
+        <section class="glass-card" class="inline-fix-14">
             <h2>🎓 Learning Objectives</h2>
-            <ul class="objective-list">
-                <li>Prepare incident response plans</li>
-                <li>Detect security breaches quickly</li>
-                <li>Contain and eradicate threats</li>
-                <li>Recover from security incidents</li>
-                <li>Learn from post-mortems</li>
-            </ul>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Prepare incident response plans</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Detect security breaches quickly</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Contain and eradicate threats</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Recover from security incidents</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Learn from post-mortems</div>
+    </div>
+</div>
         </section>
 
         <!-- Interactive Content Placeholder -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>📚 Module Content</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 This module includes:
             </p>
-            <ul style="list-style-type: none; padding-left: 0;">
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Interactive Visualizations:</strong> D3.js charts and Mermaid diagrams
-                </li>
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Code Playgrounds:</strong> Hands-on Monaco editor with live execution
-                </li>
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Knowledge Checks:</strong> Interactive quizzes with instant feedback
-                </li>
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Real-World Examples:</strong> Production-grade code samples
-                </li>
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Progressive Challenges:</strong> Apply what you've learned
-                </li>
-            </ul>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">✅ <strong>Interactive Visualizations:</strong> D3.js charts and Mermaid diagrams</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ <strong>Code Playgrounds:</strong> Hands-on Monaco editor with live execution</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ <strong>Knowledge Checks:</strong> Interactive quizzes with instant feedback</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ <strong>Real-World Examples:</strong> Production-grade code samples</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ <strong>Progressive Challenges:</strong> Apply what you've learned</div>
+    </div>
+</div>
         </section>
 
         <!-- Interactive Quiz Placeholder -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>✅ Knowledge Check: Quiz</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 Test your understanding with interactive questions. Instant feedback provided!
             </p>
             <div class="quiz-container" id="quiz">
-                <p style="color: var(--text-primary); text-align: center; padding: var(--spacing-3xl);">
+                <p class="inline-fix-39">
                     📝 Quiz system loading...
                 </p>
             </div>
         </section>
 
         <!-- Congratulations -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl); background: linear-gradient(135deg, rgba(0, 255, 136, 0.1) 0%, rgba(0, 212, 255, 0.1) 100%); border: 2px solid var(--hub-success);">
+        <section class="glass-card" class="inline-fix-86">
             <h2>🎉 Congratulations!</h2>
-            <p style="color: var(--text-primary); font-size: 1.1rem; margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-92">
                 You've completed the entire Security learning path! 
             </p>
-            <p style="color: var(--text-secondary);">
+            <p class="inline-fix-9">
                 Ready to explore more? Check out other learning hubs:
             </p>
-            <div style="display: flex; gap: var(--spacing-md); margin-top: var(--spacing-lg); flex-wrap: wrap;">
-                <a href="../api-design-hub.html" style="padding: var(--spacing-md) var(--spacing-lg); background: var(--hub-primary); border-radius: 8px; color: #fff; text-decoration: none; font-weight: 600;">
+            <div class="inline-fix-94">
+                <a href="../api-design-hub.html" class="inline-fix-45">
                     🌐 API Design
                 </a>
-                <a href="../testing-hub.html" style="padding: var(--spacing-md) var(--spacing-lg); background: var(--hub-primary); border-radius: 8px; color: #fff; text-decoration: none; font-weight: 600;">
+                <a href="../testing-hub.html" class="inline-fix-45">
                     🧪 Testing
                 </a>
-                <a href="../design-patterns-hub.html" style="padding: var(--spacing-md) var(--spacing-lg); background: var(--hub-primary); border-radius: 8px; color: #fff; text-decoration: none; font-weight: 600;">
+                <a href="../design-patterns-hub.html" class="inline-fix-45">
                     🎨 Design Patterns
                 </a>
             </div>
@@ -125,11 +188,11 @@
     </div>
 
     <!-- Footer -->
-    <footer style="margin-top: var(--spacing-3xl); padding: var(--spacing-xl); text-align: center; color: var(--text-secondary);">
+    <footer class="inline-fix-17">
         <p>© 2026 Asif Hussain. All rights reserved.</p>
-        <p style="margin-top: var(--spacing-sm);">
-            <a href="../../index.html" style="color: var(--hub-primary);">Back to Home</a> • 
-            <a href="../security-hub.html" style="color: var(--hub-primary);">Security Hub</a>
+        <p class="inline-fix-12">
+            <a href="../../index.html" class="inline-fix-10">Back to Home</a> • 
+            <a href="../security-hub.html" class="inline-fix-10">Security Hub</a>
         </p>
     </footer>
 

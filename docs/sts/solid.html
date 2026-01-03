@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CORTEX SOLID Principles Showcase">
@@ -8,6 +33,7 @@
     <title>SOLID | STS | CORTEX 4.0</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <link rel="stylesheet" href="../assets/css/sts.css?v=2026-01-02-v2">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
@@ -16,10 +42,35 @@
 <body class="sts-showcase">
     <!-- Glass Header Navigation -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../index.html" class="nav-link">
-                    <i class="fas fa-home"></i>
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../index.html" class="nav-link" mobile-nav-optimized>
+                    <i class="pulse-glow-glass--fast fa-home"></i>
                     <span>Home</span>
                 </a>
             </nav>
@@ -28,7 +79,7 @@
 
     <main class="sts-main">
         <section class="sts-hero">
-            <h1><i class="fas fa-drafting-compass"></i> SOLID Principles Applied</h1>
+            <h1><i class="pulse-glow-glass--fast fa-drafting-compass"></i> SOLID Principles Applied</h1>
             <p class="hero-subtitle">Watch CORTEX refactor code to follow clean architecture patterns</p>
             <div class="sts-metrics">
                 <div class="metric-card"><div class="metric-value">5</div><div class="metric-label">Violations</div></div>
@@ -40,21 +91,27 @@
         <!-- SRP - C# -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="fas fa-cube"></i> Single Responsibility Principle</h3>
+                <h3><i class="pulse-glow-glass--fast fa-cube"></i> Single Responsibility Principle</h3>
                 <span class="language-badge csharp">C#</span>
             </div>
             <div class="refactor-explanation">
-                <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
-                <ul>
-                    <li><strong>Problem:</strong> One class handling user data, validation, email, and database operations</li>
-                    <li><strong>Fix:</strong> Extract each responsibility into focused, single-purpose classes</li>
-                    <li><strong>Result:</strong> Each class has one reason to change, improving maintainability</li>
-                </ul>
+                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Problem:</strong> One class handling user data, validation, email, and database operations</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Fix:</strong> Extract each responsibility into focused, single-purpose classes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Result:</strong> Each class has one reason to change, improving maintainability</div>
+    </div>
+</div>
             </div>
             <div class="comparison-container">
                 <div class="panel before-panel">
-                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before: Multiple Responsibilities</div>
-                    <pre><code class="language-csharp">public class UserManager
+                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Multiple Responsibilities</div>
+                    <pre><code class="language-badge">public class UserManager
 {
     public void CreateUser(string name, string email)
     {
@@ -74,8 +131,8 @@
 }</code></pre>
                 </div>
                 <div class="panel after-panel">
-                    <div class="panel-header"><i class="fas fa-check-circle"></i> After: Single Responsibility</div>
-                    <pre><code class="language-csharp">public class UserService
+                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-check-circle"></i> After: Single Responsibility</div>
+                    <pre><code class="language-badge">public class UserService
 {
     private readonly IUserValidator _validator;
     private readonly IUserRepository _repository;
@@ -100,21 +157,27 @@
         <!-- OCP - TypeScript -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="fas fa-lock-open"></i> Open/Closed Principle</h3>
+                <h3><i class="pulse-glow-glass--fast fa-lock-open"></i> Open/Closed Principle</h3>
                 <span class="language-badge typescript">TypeScript</span>
             </div>
             <div class="refactor-explanation">
-                <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
-                <ul>
-                    <li><strong>Problem:</strong> Adding new payment types requires modifying existing code</li>
-                    <li><strong>Fix:</strong> Use strategy pattern with interface - extend via new classes</li>
-                    <li><strong>Result:</strong> Open for extension (new payment types), closed for modification</li>
-                </ul>
+                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Problem:</strong> Adding new payment types requires modifying existing code</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Fix:</strong> Use strategy pattern with interface - extend via new classes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Result:</strong> Open for extension (new payment types), closed for modification</div>
+    </div>
+</div>
             </div>
             <div class="comparison-container">
                 <div class="panel before-panel">
-                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before: Modification Required</div>
-                    <pre><code class="language-typescript">class PaymentProcessor {
+                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Modification Required</div>
+                    <pre><code class="language-badge">class PaymentProcessor {
   process(type: string, amount: number): void {
     if (type === 'credit') {
       // Credit card logic
@@ -130,8 +193,8 @@
 }</code></pre>
                 </div>
                 <div class="panel after-panel">
-                    <div class="panel-header"><i class="fas fa-check-circle"></i> After: Extension Only</div>
-                    <pre><code class="language-typescript">interface PaymentStrategy {
+                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-check-circle"></i> After: Extension Only</div>
+                    <pre><code class="language-badge">interface PaymentStrategy {
   process(amount: number): Promise&lt;PaymentResult&gt;;
 }
 
@@ -155,21 +218,27 @@ class PaymentProcessor {
         <!-- ISP - Angular -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="fas fa-puzzle-piece"></i> Interface Segregation Principle</h3>
+                <h3><i class="pulse-glow-glass--fast fa-puzzle-piece"></i> Interface Segregation Principle</h3>
                 <span class="language-badge angular">Angular</span>
             </div>
             <div class="refactor-explanation">
-                <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
-                <ul>
-                    <li><strong>Problem:</strong> Fat interface forces classes to implement unused methods</li>
-                    <li><strong>Fix:</strong> Split into focused interfaces that clients actually need</li>
-                    <li><strong>Result:</strong> Components only depend on interfaces they use</li>
-                </ul>
+                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Problem:</strong> Fat interface forces classes to implement unused methods</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Fix:</strong> Split into focused interfaces that clients actually need</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Result:</strong> Components only depend on interfaces they use</div>
+    </div>
+</div>
             </div>
             <div class="comparison-container">
                 <div class="panel before-panel">
-                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before: Fat Interface</div>
-                    <pre><code class="language-typescript">interface IWorker {
+                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Fat Interface</div>
+                    <pre><code class="language-badge">interface IWorker {
   work(): void;
   eat(): void;
   sleep(): void;
@@ -187,8 +256,8 @@ class Robot implements IWorker {
 }</code></pre>
                 </div>
                 <div class="panel after-panel">
-                    <div class="panel-header"><i class="fas fa-check-circle"></i> After: Segregated Interfaces</div>
-                    <pre><code class="language-typescript">interface Workable { work(): void; }
+                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-check-circle"></i> After: Segregated Interfaces</div>
+                    <pre><code class="language-badge">interface Workable { work(): void; }
 interface Feedable { eat(): void; }
 interface Restable { sleep(): void; }
 interface Meetable { attendMeeting(): void; }
@@ -212,21 +281,27 @@ class Robot implements Workable, Meetable {
         <!-- DIP - C# -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="fas fa-exchange-alt"></i> Dependency Inversion Principle</h3>
+                <h3><i class="pulse-glow-glass--fast fa-exchange-alt"></i> Dependency Inversion Principle</h3>
                 <span class="language-badge csharp">C#</span>
             </div>
             <div class="refactor-explanation">
-                <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
-                <ul>
-                    <li><strong>Problem:</strong> High-level module directly depends on low-level implementation</li>
-                    <li><strong>Fix:</strong> Both depend on abstractions; inject dependencies via constructor</li>
-                    <li><strong>Result:</strong> Loose coupling enables testing and swapping implementations</li>
-                </ul>
+                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Problem:</strong> High-level module directly depends on low-level implementation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Fix:</strong> Both depend on abstractions; inject dependencies via constructor</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Result:</strong> Loose coupling enables testing and swapping implementations</div>
+    </div>
+</div>
             </div>
             <div class="comparison-container">
                 <div class="panel before-panel">
-                    <div class="panel-header"><i class="fas fa-times-circle"></i> Before: Direct Dependency</div>
-                    <pre><code class="language-csharp">public class OrderService
+                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Direct Dependency</div>
+                    <pre><code class="language-badge">public class OrderService
 {
     private SqlDatabase _database = new SqlDatabase();
     private SmtpEmailer _emailer = new SmtpEmailer();
@@ -240,8 +315,8 @@ class Robot implements Workable, Meetable {
 }</code></pre>
                 </div>
                 <div class="panel after-panel">
-                    <div class="panel-header"><i class="fas fa-check-circle"></i> After: Abstraction Dependency</div>
-                    <pre><code class="language-csharp">public class OrderService
+                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-check-circle"></i> After: Abstraction Dependency</div>
+                    <pre><code class="language-badge">public class OrderService
 {
     private readonly IOrderRepository _repository;
     private readonly INotificationService _notifier;

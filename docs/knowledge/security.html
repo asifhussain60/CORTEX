@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Application Security - Authentication, authorization, OWASP Top 10, encryption, secure coding">
@@ -8,6 +33,7 @@
     <meta name="author" content="Asif Hussain">
     <title>Application Security | CORTEX Knowledge</title>
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
@@ -24,14 +50,14 @@
     <section class="hero" id="main-content">
         <h1 class="hero-title">🔐 Application Security</h1>
         <p class="hero-subtitle">Authentication, Authorization, and Secure Coding Practices</p>
-        <div class="file-metadata">
+        <div class="code-file">
             <span class="metadata-item">🛡️ Security</span>
             <span class="metadata-item">🔒 OWASP</span>
             <span class="metadata-item">📅 Updated: Dec 2025</span>
         </div>
     </section>
 
-    <section class="section file-content">
+    <section class="section code-file">
         <div class="container">
             <div id="overview" class="content-section">
                 <div class="glass-card">
@@ -40,13 +66,23 @@
                     
                     <div class="info-box info-box-primary">
                         <strong>Security Pillars:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Confidentiality:</strong> Keep data private and encrypted</li>
-                            <li><strong>Integrity:</strong> Prevent unauthorized modification</li>
-                            <li><strong>Availability:</strong> Ensure system remains accessible</li>
-                            <li><strong>Authentication:</strong> Verify user identity</li>
-                            <li><strong>Authorization:</strong> Control access to resources</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Confidentiality:</strong> Keep data private and encrypted</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Integrity:</strong> Prevent unauthorized modification</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Availability:</strong> Ensure system remains accessible</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Authentication:</strong> Verify user identity</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Authorization:</strong> Control access to resources</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -61,41 +97,69 @@
                             <span class="framework-panel-icon">🎫</span>
                             <h3>JWT (JSON Web Tokens)</h3>
                             <h4>Characteristics</h4>
-                            <ul>
-                                <li>Self-contained tokens</li>
-                                <li>Header + Payload + Signature</li>
-                                <li>Stateless authentication</li>
-                                <li>Base64 encoded</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Self-contained tokens</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Header + Payload + Signature</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Stateless authentication</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Base64 encoded</div>
+    </div>
+</div>
                             <h4>Use Cases</h4>
-                            <ul>
-                                <li>API authentication</li>
-                                <li>Single Sign-On (SSO)</li>
-                                <li>Microservices</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">API authentication</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Single Sign-On (SSO)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Microservices</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🔐</span>
                             <h3>OAuth 2.0</h3>
                             <h4>Grant Types</h4>
-                            <ul>
-                                <li><strong>Authorization Code:</strong> Server-side apps</li>
-                                <li><strong>Implicit:</strong> Legacy browser apps</li>
-                                <li><strong>Client Credentials:</strong> Machine-to-machine</li>
-                                <li><strong>Password:</strong> Trusted apps only</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Authorization Code:</strong> Server-side apps</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Implicit:</strong> Legacy browser apps</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Client Credentials:</strong> Machine-to-machine</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Password:</strong> Trusted apps only</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🎭</span>
                             <h3>Multi-Factor Auth (MFA)</h3>
                             <h4>Factors</h4>
-                            <ul>
-                                <li><strong>Something you know:</strong> Password</li>
-                                <li><strong>Something you have:</strong> Token, phone</li>
-                                <li><strong>Something you are:</strong> Biometric</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Something you know:</strong> Password</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Something you have:</strong> Token, phone</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Something you are:</strong> Biometric</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -129,51 +193,87 @@ sequenceDiagram
                             <span class="framework-panel-icon">👥</span>
                             <h3>RBAC (Role-Based)</h3>
                             <h4>Concept</h4>
-                            <ul>
-                                <li>Assign roles to users</li>
-                                <li>Permissions tied to roles</li>
-                                <li>Users → Roles → Permissions</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Assign roles to users</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Permissions tied to roles</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Users → Roles → Permissions</div>
+    </div>
+</div>
                             <h4>Example Roles</h4>
-                            <ul>
-                                <li>Admin: Full access</li>
-                                <li>Editor: Read + Write</li>
-                                <li>Viewer: Read only</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Admin: Full access</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Editor: Read + Write</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Viewer: Read only</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🏷️</span>
                             <h3>ABAC (Attribute-Based)</h3>
                             <h4>Concept</h4>
-                            <ul>
-                                <li>Attributes define access</li>
-                                <li>User, resource, environment</li>
-                                <li>Dynamic policies</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Attributes define access</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">User, resource, environment</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Dynamic policies</div>
+    </div>
+</div>
                             <h4>Example Attributes</h4>
-                            <ul>
-                                <li>Department</li>
-                                <li>Time of day</li>
-                                <li>Location</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Department</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Time of day</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Location</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">📝</span>
                             <h3>Policy-Based</h3>
                             <h4>Concept</h4>
-                            <ul>
-                                <li>Explicit access rules</li>
-                                <li>Centralized policies</li>
-                                <li>Fine-grained control</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Explicit access rules</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Centralized policies</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Fine-grained control</div>
+    </div>
+</div>
                             <h4>Example Policies</h4>
-                            <ul>
-                                <li>IAM policies (AWS)</li>
-                                <li>Open Policy Agent</li>
-                                <li>XACML</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">IAM policies (AWS)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Open Policy Agent</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">XACML</div>
+    </div>
+</div>
                         </div>
                     </div>
                 </div>
@@ -188,52 +288,90 @@ sequenceDiagram
                             <span class="framework-panel-icon">💉</span>
                             <h3>1. Injection</h3>
                             <h4>Types</h4>
-                            <ul>
-                                <li>SQL injection</li>
-                                <li>NoSQL injection</li>
-                                <li>OS command injection</li>
-                                <li>LDAP injection</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">SQL injection</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">NoSQL injection</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">OS command injection</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">LDAP injection</div>
+    </div>
+</div>
                             <h4>Prevention</h4>
-                            <ul>
-                                <li>Parameterized queries</li>
-                                <li>Input validation</li>
-                                <li>ORM frameworks</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Parameterized queries</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Input validation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">ORM frameworks</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🔓</span>
                             <h3>2. Broken Authentication</h3>
                             <h4>Issues</h4>
-                            <ul>
-                                <li>Weak passwords</li>
-                                <li>Session hijacking</li>
-                                <li>Credential stuffing</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Weak passwords</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Session hijacking</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Credential stuffing</div>
+    </div>
+</div>
                             <h4>Prevention</h4>
-                            <ul>
-                                <li>Multi-factor auth</li>
-                                <li>Strong password policy</li>
-                                <li>Session timeouts</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Multi-factor auth</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Strong password policy</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Session timeouts</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🔍</span>
                             <h3>3. Sensitive Data Exposure</h3>
                             <h4>Issues</h4>
-                            <ul>
-                                <li>Unencrypted data</li>
-                                <li>Weak crypto</li>
-                                <li>Insecure storage</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Unencrypted data</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Weak crypto</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Insecure storage</div>
+    </div>
+</div>
                             <h4>Prevention</h4>
-                            <ul>
-                                <li>Encrypt in transit (TLS)</li>
-                                <li>Encrypt at rest</li>
-                                <li>Strong algorithms</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Encrypt in transit (TLS)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Encrypt at rest</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Strong algorithms</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -242,33 +380,51 @@ sequenceDiagram
                             <span class="framework-panel-icon">🌐</span>
                             <h3>4. XML External Entities</h3>
                             <h4>Prevention</h4>
-                            <ul>
-                                <li>Disable XML external entities</li>
-                                <li>Use JSON instead</li>
-                                <li>Update XML processors</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Disable XML external entities</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use JSON instead</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Update XML processors</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🚫</span>
                             <h3>5. Broken Access Control</h3>
                             <h4>Prevention</h4>
-                            <ul>
-                                <li>Deny by default</li>
-                                <li>Validate ownership</li>
-                                <li>Disable directory listing</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Deny by default</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Validate ownership</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Disable directory listing</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">⚙️</span>
                             <h3>6. Security Misconfiguration</h3>
                             <h4>Prevention</h4>
-                            <ul>
-                                <li>Remove defaults</li>
-                                <li>Minimal installation</li>
-                                <li>Regular updates</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Remove defaults</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Minimal installation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Regular updates</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -277,33 +433,51 @@ sequenceDiagram
                             <span class="framework-panel-icon">📜</span>
                             <h3>7. Cross-Site Scripting (XSS)</h3>
                             <h4>Prevention</h4>
-                            <ul>
-                                <li>Escape output</li>
-                                <li>Content Security Policy</li>
-                                <li>Input validation</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Escape output</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Content Security Policy</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Input validation</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🔄</span>
                             <h3>8. Insecure Deserialization</h3>
                             <h4>Prevention</h4>
-                            <ul>
-                                <li>Avoid native serialization</li>
-                                <li>Integrity checks</li>
-                                <li>Isolate deserialization</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Avoid native serialization</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Integrity checks</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Isolate deserialization</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">📦</span>
                             <h3>9. Using Components with Vulnerabilities</h3>
                             <h4>Prevention</h4>
-                            <ul>
-                                <li>Regular updates</li>
-                                <li>Dependency scanning</li>
-                                <li>Remove unused dependencies</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Regular updates</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Dependency scanning</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Remove unused dependencies</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -312,12 +486,20 @@ sequenceDiagram
                             <span class="framework-panel-icon">📊</span>
                             <h3>10. Insufficient Logging</h3>
                             <h4>Prevention</h4>
-                            <ul>
-                                <li>Log security events</li>
-                                <li>Monitor for anomalies</li>
-                                <li>Incident response plan</li>
-                                <li>Centralized logging</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Log security events</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Monitor for anomalies</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Incident response plan</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Centralized logging</div>
+    </div>
+</div>
                         </div>
                     </div>
                 </div>
@@ -337,11 +519,17 @@ sequenceDiagram
                                 <li><strong>ChaCha20:</strong> Fast, mobile-friendly</li>
                             </ul>
                             <h4>Use Cases</h4>
-                            <ul>
-                                <li>Database encryption</li>
-                                <li>File encryption</li>
-                                <li>Bulk data</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Database encryption</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">File encryption</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Bulk data</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -353,28 +541,46 @@ sequenceDiagram
                                 <li><strong>ECC:</strong> Smaller keys, same security</li>
                             </ul>
                             <h4>Use Cases</h4>
-                            <ul>
-                                <li>TLS/SSL handshake</li>
-                                <li>Digital signatures</li>
-                                <li>Key distribution</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">TLS/SSL handshake</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Digital signatures</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Key distribution</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">#</span>
                             <h3>Hashing</h3>
                             <h4>Algorithms</h4>
-                            <ul>
-                                <li><strong>bcrypt:</strong> Password hashing</li>
-                                <li><strong>Argon2:</strong> Modern, memory-hard</li>
-                                <li><strong>SHA-256:</strong> General purpose</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>bcrypt:</strong> Password hashing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Argon2:</strong> Modern, memory-hard</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>SHA-256:</strong> General purpose</div>
+    </div>
+</div>
                             <h4>Use Cases</h4>
-                            <ul>
-                                <li>Password storage</li>
-                                <li>Data integrity</li>
-                                <li>Checksums</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Password storage</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Data integrity</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Checksums</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -406,26 +612,50 @@ sequenceDiagram
                     
                     <div class="info-box info-box-success">
                         <strong>Security Checklist:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Input Validation:</strong> Whitelist validation, reject by default</li>
-                            <li><strong>Output Encoding:</strong> Context-aware encoding (HTML, JS, SQL)</li>
-                            <li><strong>Authentication:</strong> MFA, strong passwords, secure session management</li>
-                            <li><strong>Authorization:</strong> Principle of least privilege, deny by default</li>
-                            <li><strong>Cryptography:</strong> Use proven algorithms, never roll your own</li>
-                            <li><strong>Error Handling:</strong> Don't leak sensitive info in errors</li>
-                            <li><strong>Logging:</strong> Log security events, protect log files</li>
-                            <li><strong>Dependencies:</strong> Keep updated, scan for vulnerabilities</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Input Validation:</strong> Whitelist validation, reject by default</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Output Encoding:</strong> Context-aware encoding (HTML, JS, SQL)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Authentication:</strong> MFA, strong passwords, secure session management</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Authorization:</strong> Principle of least privilege, deny by default</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Cryptography:</strong> Use proven algorithms, never roll your own</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Error Handling:</strong> Don't leak sensitive info in errors</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Logging:</strong> Log security events, protect log files</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Dependencies:</strong> Keep updated, scan for vulnerabilities</div>
+    </div>
+</div>
                     </div>
 
                     <div class="info-box info-box-warning">
                         <strong>Common Mistakes:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Hardcoded Secrets:</strong> Use environment variables or vaults</li>
-                            <li><strong>Insecure Defaults:</strong> Change default credentials</li>
-                            <li><strong>Client-Side Security:</strong> Never trust client input</li>
-                            <li><strong>Security by Obscurity:</strong> Not a valid strategy</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Hardcoded Secrets:</strong> Use environment variables or vaults</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Insecure Defaults:</strong> Change default credentials</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Client-Side Security:</strong> Never trust client input</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Security by Obscurity:</strong> Not a valid strategy</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -438,34 +668,58 @@ sequenceDiagram
                         <div class="framework-panel">
                             <span class="framework-panel-icon">📖</span>
                             <h3>Essential Resources</h3>
-                            <ul>
-                                <li><strong>The Web Application Hacker's Handbook</strong> - Stuttard & Pinto</li>
-                                <li><strong>Cryptography Engineering</strong> - Ferguson, Schneier, Kohno</li>
-                                <li><a href="https://owasp.org/" target="_blank" rel="noopener">OWASP</a> - Security knowledge base</li>
-                                <li><a href="https://cwe.mitre.org/" target="_blank" rel="noopener">CWE</a> - Common weaknesses</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>The Web Application Hacker's Handbook</strong> - Stuttard & Pinto</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Cryptography Engineering</strong> - Ferguson, Schneier, Kohno</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://owasp.org/" target="_blank" rel="noopener">OWASP</a> - Security knowledge base</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://cwe.mitre.org/" target="_blank" rel="noopener">CWE</a> - Common weaknesses</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🛠️</span>
                             <h3>Security Tools</h3>
-                            <ul>
-                                <li><a href="https://owasp.org/www-project-zap/" target="_blank" rel="noopener">OWASP ZAP</a> - Vulnerability scanner</li>
-                                <li><a href="https://www.sonarqube.org/" target="_blank" rel="noopener">SonarQube</a> - Code analysis</li>
-                                <li><a href="https://snyk.io/" target="_blank" rel="noopener">Snyk</a> - Dependency scanning</li>
-                                <li><a href="https://www.vaultproject.io/" target="_blank" rel="noopener">HashiCorp Vault</a> - Secrets management</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><a href="https://owasp.org/www-project-zap/" target="_blank" rel="noopener">OWASP ZAP</a> - Vulnerability scanner</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://www.sonarqube.org/" target="_blank" rel="noopener">SonarQube</a> - Code analysis</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://snyk.io/" target="_blank" rel="noopener">Snyk</a> - Dependency scanning</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://www.vaultproject.io/" target="_blank" rel="noopener">HashiCorp Vault</a> - Secrets management</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🎓</span>
                             <h3>Certifications</h3>
-                            <ul>
-                                <li><strong>CISSP</strong> - Security professional</li>
-                                <li><strong>CEH</strong> - Ethical hacker</li>
-                                <li><strong>OSCP</strong> - Penetration testing</li>
-                                <li><strong>Security+</strong> - Entry level</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>CISSP</strong> - Security professional</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>CEH</strong> - Ethical hacker</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>OSCP</strong> - Penetration testing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Security+</strong> - Entry level</div>
+    </div>
+</div>
                         </div>
                     </div>
                 </div>

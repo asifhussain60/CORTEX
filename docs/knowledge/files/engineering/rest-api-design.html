@@ -1,44 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>REST API Design Best Practices | CORTEX Knowledge</title>
     <link rel="stylesheet" href="../../../assets/css/main.css">
+    <link rel="stylesheet" href="../../../assets/css/intentional-classes.css">
 </head>
 <body>
-    <header class="header-glass">
+    <header class="panel-header-centered">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="container">
             <nav class="breadcrumb">
-                <a href="../../../index.html" class="breadcrumb-link">Home</a>
+                <a href="../../../index.html" class="breadcrumb-separator">Home</a>
                 <span class="breadcrumb-separator">/</span>
-                <a href="../../index.html" class="breadcrumb-link">Knowledge Library</a>
+                <a href="../../index.html" class="breadcrumb-separator">Knowledge Library</a>
                 <span class="breadcrumb-separator">/</span>
-                <a href="../../engineering.html" class="breadcrumb-link">Engineering</a>
+                <a href="../../engineering.html" class="breadcrumb-separator">Engineering</a>
                 <span class="breadcrumb-separator">/</span>
                 <span class="breadcrumb-current">REST API Design</span>
             </nav>
         </div>
     </header>
 
-    <main class="main-content">
+    <main class="level1-domain-icon--frontend">
         <section class="knowledge-file-hero">
             <div class="container">
                 <div class="hero-content">
                     <h1 class="hero-title">REST API Design Best Practices</h1>
                     <p class="hero-subtitle">Build RESTful APIs Following Industry Standards</p>
-                    <div class="hero-meta">
-                        <span class="meta-item"><i class="icon-category"></i> API Design Excellence</span>
-                        <span class="meta-item"><i class="icon-version"></i> v1.0.0</span>
-                        <span class="meta-item"><i class="icon-scope"></i> Production-Ready</span>
+                    <div class="btn-hero-story">
+                        <span class="metadata-grid"><i class="level1-integration-icon-container"></i> API Design Excellence</span>
+                        <span class="metadata-grid"><i class="level1-integration-icon-container"></i> v1.0.0</span>
+                        <span class="metadata-grid"><i class="level1-integration-icon-container"></i> Production-Ready</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="tab-container">
+        <section class="demo-tab-v-desc">
             <div class="container">
-                <div class="tab-nav">
+                <div class="demo-tab-v-desc">
                     <button class="tab-button active" data-tab="overview">Overview</button>
                     <button class="tab-button" data-tab="content">Content</button>
                     <button class="tab-button" data-tab="examples">Examples</button>
@@ -48,7 +99,7 @@
                 <div class="tab-content active" id="overview">
                     <div class="content-section">
                         <h2 class="section-header">What is REST?</h2>
-                        <p class="section-text">
+                        <p class="level2-section-title-green">
                             REST (Representational State Transfer) is an architectural style for designing networked applications. It relies on stateless, client-server communication, typically over HTTP. REST APIs expose resources (nouns) and use standard HTTP methods (verbs) to manipulate them.
                         </p>
                     </div>
@@ -59,47 +110,77 @@
                             <div class="constraint-card">
                                 <h3 class="constraint-name">Client-Server Separation</h3>
                                 <p class="constraint-desc">Separate concerns between client and server. Server manages data and business logic, client manages UI and user state.</p>
-                                <ul class="benefit-list">
-                                    <li>Scalability</li>
-                                    <li>Portability</li>
-                                    <li>Independent evolution</li>
-                                </ul>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Scalability</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Portability</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Independent evolution</div>
+    </div>
+</div>
                             </div>
                             <div class="constraint-card">
                                 <h3 class="constraint-name">Statelessness</h3>
                                 <p class="constraint-desc">Each request contains all information needed to process it. No session state stored on server.</p>
-                                <ul class="benefit-list">
-                                    <li>Scalability</li>
-                                    <li>Reliability</li>
-                                    <li>Simplified server</li>
-                                </ul>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Scalability</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Reliability</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Simplified server</div>
+    </div>
+</div>
                             </div>
                             <div class="constraint-card">
                                 <h3 class="constraint-name">Cacheability</h3>
                                 <p class="constraint-desc">Responses must define themselves as cacheable or not using Cache-Control headers and ETags.</p>
-                                <ul class="benefit-list">
-                                    <li>Performance</li>
-                                    <li>Reduced server load</li>
-                                    <li>Bandwidth savings</li>
-                                </ul>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Performance</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Reduced server load</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Bandwidth savings</div>
+    </div>
+</div>
                             </div>
                             <div class="constraint-card">
                                 <h3 class="constraint-name">Uniform Interface</h3>
                                 <p class="constraint-desc">Standardized way to interact with resources via URIs, representations, self-descriptive messages, and HATEOAS.</p>
-                                <ul class="benefit-list">
-                                    <li>Simplicity</li>
-                                    <li>Discoverability</li>
-                                    <li>Evolvability</li>
-                                </ul>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Simplicity</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Discoverability</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Evolvability</div>
+    </div>
+</div>
                             </div>
                             <div class="constraint-card">
                                 <h3 class="constraint-name">Layered System</h3>
                                 <p class="constraint-desc">Client cannot tell if connected directly to end server. Supports proxies, gateways, load balancers.</p>
-                                <ul class="benefit-list">
-                                    <li>Scalability</li>
-                                    <li>Security</li>
-                                    <li>Legacy encapsulation</li>
-                                </ul>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Scalability</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Security</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Legacy encapsulation</div>
+    </div>
+</div>
                             </div>
                         </div>
                     </div>
@@ -108,34 +189,34 @@
                         <h2 class="section-header">Resource Naming Conventions</h2>
                         <div class="naming-rules">
                             <div class="naming-rule">
-                                <h3 class="rule-title">✅ Use Nouns, Not Verbs</h3>
-                                <p class="rule-good"><strong>Good:</strong> <code>/users</code>, <code>/orders</code>, <code>/products</code></p>
-                                <p class="rule-bad"><strong>Bad:</strong> <code>/getUsers</code>, <code>/createOrder</code></p>
-                                <p class="rule-rationale">HTTP methods provide the verbs (GET, POST, PUT, DELETE)</p>
+                                <h3 class="rules-showcase">✅ Use Nouns, Not Verbs</h3>
+                                <p class="rules-showcase"><strong>Good:</strong> <code>/users</code>, <code>/orders</code>, <code>/products</code></p>
+                                <p class="rules-showcase"><strong>Bad:</strong> <code>/getUsers</code>, <code>/createOrder</code></p>
+                                <p class="rules-showcase">HTTP methods provide the verbs (GET, POST, PUT, DELETE)</p>
                             </div>
                             <div class="naming-rule">
-                                <h3 class="rule-title">✅ Use Plural Nouns for Collections</h3>
-                                <p class="rule-good"><strong>Good:</strong> <code>/users</code>, <code>/users/123</code></p>
-                                <p class="rule-bad"><strong>Bad:</strong> <code>/user</code>, <code>/user/123</code></p>
-                                <p class="rule-rationale">Consistency - all resources treated as collections</p>
+                                <h3 class="rules-showcase">✅ Use Plural Nouns for Collections</h3>
+                                <p class="rules-showcase"><strong>Good:</strong> <code>/users</code>, <code>/users/123</code></p>
+                                <p class="rules-showcase"><strong>Bad:</strong> <code>/user</code>, <code>/user/123</code></p>
+                                <p class="rules-showcase">Consistency - all resources treated as collections</p>
                             </div>
                             <div class="naming-rule">
-                                <h3 class="rule-title">✅ Use Lowercase and Hyphens</h3>
-                                <p class="rule-good"><strong>Good:</strong> <code>/order-items</code>, <code>/shipping-addresses</code></p>
-                                <p class="rule-bad"><strong>Bad:</strong> <code>/OrderItems</code>, <code>/shipping_addresses</code></p>
-                                <p class="rule-rationale">URL case-sensitivity and readability</p>
+                                <h3 class="rules-showcase">✅ Use Lowercase and Hyphens</h3>
+                                <p class="rules-showcase"><strong>Good:</strong> <code>/order-items</code>, <code>/shipping-addresses</code></p>
+                                <p class="rules-showcase"><strong>Bad:</strong> <code>/OrderItems</code>, <code>/shipping_addresses</code></p>
+                                <p class="rules-showcase">URL case-sensitivity and readability</p>
                             </div>
                             <div class="naming-rule">
-                                <h3 class="rule-title">✅ Nest Resources for Relationships</h3>
-                                <p class="rule-good"><strong>Good:</strong> <code>/users/123/orders</code>, <code>/orders/456/items</code></p>
-                                <p class="rule-bad"><strong>Bad:</strong> <code>/userOrders?userId=123</code></p>
-                                <p class="rule-rationale">Express hierarchy and ownership clearly</p>
+                                <h3 class="rules-showcase">✅ Nest Resources for Relationships</h3>
+                                <p class="rules-showcase"><strong>Good:</strong> <code>/users/123/orders</code>, <code>/orders/456/items</code></p>
+                                <p class="rules-showcase"><strong>Bad:</strong> <code>/userOrders?userId=123</code></p>
+                                <p class="rules-showcase">Express hierarchy and ownership clearly</p>
                             </div>
                             <div class="naming-rule">
-                                <h3 class="rule-title">✅ Limit Nesting Depth to 2-3 Levels</h3>
-                                <p class="rule-good"><strong>Good:</strong> <code>/authors/123/books/456/reviews</code></p>
-                                <p class="rule-bad"><strong>Bad:</strong> <code>/publishers/1/authors/2/books/3/chapters/4/sections/5</code></p>
-                                <p class="rule-rationale">Avoid complexity and coupling</p>
+                                <h3 class="rules-showcase">✅ Limit Nesting Depth to 2-3 Levels</h3>
+                                <p class="rules-showcase"><strong>Good:</strong> <code>/authors/123/books/456/reviews</code></p>
+                                <p class="rules-showcase"><strong>Bad:</strong> <code>/publishers/1/authors/2/books/3/chapters/4/sections/5</code></p>
+                                <p class="rules-showcase">Avoid complexity and coupling</p>
                             </div>
                         </div>
                     </div>
@@ -146,51 +227,81 @@
                             <div class="method-card method-get">
                                 <h3 class="method-name">GET</h3>
                                 <p class="method-purpose">Retrieve resource(s)</p>
-                                <ul class="method-properties">
-                                    <li>✅ Safe</li>
-                                    <li>✅ Idempotent</li>
-                                    <li>❌ No Request Body</li>
-                                </ul>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">✅ Safe</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Idempotent</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">❌ No Request Body</div>
+    </div>
+</div>
                                 <p class="method-status">Status: 200, 304, 404</p>
                             </div>
                             <div class="method-card method-post">
                                 <h3 class="method-name">POST</h3>
                                 <p class="method-purpose">Create new resource</p>
-                                <ul class="method-properties">
-                                    <li>❌ Not Safe</li>
-                                    <li>❌ Not Idempotent</li>
-                                    <li>✅ Request Body</li>
-                                </ul>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">❌ Not Safe</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">❌ Not Idempotent</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Request Body</div>
+    </div>
+</div>
                                 <p class="method-status">Status: 201, 400, 409</p>
                             </div>
                             <div class="method-card method-put">
                                 <h3 class="method-name">PUT</h3>
                                 <p class="method-purpose">Replace entire resource</p>
-                                <ul class="method-properties">
-                                    <li>❌ Not Safe</li>
-                                    <li>✅ Idempotent</li>
-                                    <li>✅ Request Body</li>
-                                </ul>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">❌ Not Safe</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Idempotent</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Request Body</div>
+    </div>
+</div>
                                 <p class="method-status">Status: 200, 204, 404</p>
                             </div>
                             <div class="method-card method-patch">
                                 <h3 class="method-name">PATCH</h3>
                                 <p class="method-purpose">Partial update</p>
-                                <ul class="method-properties">
-                                    <li>❌ Not Safe</li>
-                                    <li>✅ Idempotent</li>
-                                    <li>✅ Request Body</li>
-                                </ul>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">❌ Not Safe</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Idempotent</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Request Body</div>
+    </div>
+</div>
                                 <p class="method-status">Status: 200, 400, 404</p>
                             </div>
                             <div class="method-card method-delete">
                                 <h3 class="method-name">DELETE</h3>
                                 <p class="method-purpose">Remove resource</p>
-                                <ul class="method-properties">
-                                    <li>❌ Not Safe</li>
-                                    <li>✅ Idempotent</li>
-                                    <li>❌ No Request Body</li>
-                                </ul>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">❌ Not Safe</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Idempotent</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">❌ No Request Body</div>
+    </div>
+</div>
                                 <p class="method-status">Status: 204, 404</p>
                             </div>
                         </div>
@@ -201,31 +312,51 @@
                     <div class="content-section">
                         <h2 class="section-header">HTTP Status Codes</h2>
                         
-                        <h3 class="subsection-header">Success (2xx)</h3>
-                        <ul class="status-code-list">
-                            <li><code>200 OK</code> - GET, PUT, PATCH successful with response body</li>
-                            <li><code>201 Created</code> - POST successful, include Location header</li>
-                            <li><code>204 No Content</code> - DELETE, PUT successful with no response body</li>
-                        </ul>
+                        <h3 class="level1-subsection-title">Success (2xx)</h3>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><code>200 OK</code> - GET, PUT, PATCH successful with response body</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>201 Created</code> - POST successful, include Location header</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>204 No Content</code> - DELETE, PUT successful with no response body</div>
+    </div>
+</div>
 
-                        <h3 class="subsection-header">Redirection (3xx)</h3>
+                        <h3 class="level1-subsection-title">Redirection (3xx)</h3>
                         <ul class="status-code-list">
                             <li><code>301 Moved Permanently</code> - Resource permanently moved, include Location header</li>
                             <li><code>304 Not Modified</code> - Conditional GET with valid cache</li>
                         </ul>
 
-                        <h3 class="subsection-header">Client Error (4xx)</h3>
-                        <ul class="status-code-list">
-                            <li><code>400 Bad Request</code> - Invalid request syntax or validation error</li>
-                            <li><code>401 Unauthorized</code> - Authentication required or failed</li>
-                            <li><code>403 Forbidden</code> - Authenticated but insufficient permissions</li>
-                            <li><code>404 Not Found</code> - Resource does not exist</li>
-                            <li><code>409 Conflict</code> - Resource state conflict (e.g., duplicate)</li>
-                            <li><code>422 Unprocessable Entity</code> - Semantic validation error</li>
-                            <li><code>429 Too Many Requests</code> - Rate limit exceeded</li>
-                        </ul>
+                        <h3 class="level1-subsection-title">Client Error (4xx)</h3>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><code>400 Bad Request</code> - Invalid request syntax or validation error</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>401 Unauthorized</code> - Authentication required or failed</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>403 Forbidden</code> - Authenticated but insufficient permissions</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>404 Not Found</code> - Resource does not exist</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>409 Conflict</code> - Resource state conflict (e.g., duplicate)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>422 Unprocessable Entity</code> - Semantic validation error</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>429 Too Many Requests</code> - Rate limit exceeded</div>
+    </div>
+</div>
 
-                        <h3 class="subsection-header">Server Error (5xx)</h3>
+                        <h3 class="level1-subsection-title">Server Error (5xx)</h3>
                         <ul class="status-code-list">
                             <li><code>500 Internal Server Error</code> - Unexpected server error</li>
                             <li><code>503 Service Unavailable</code> - Temporary server overload or maintenance</li>
@@ -236,10 +367,10 @@
                         <h2 class="section-header">Pagination Patterns</h2>
                         
                         <div class="pagination-pattern">
-                            <h3 class="pattern-name">Offset-Based Pagination</h3>
-                            <p class="pattern-desc">Use page number and size for navigation</p>
-                            <p class="pattern-example"><strong>Request:</strong> <code>GET /users?page=2&limit=20</code></p>
-                            <pre class="code-block"><code class="language-json">{
+                            <h3 class="badge-patterns">Offset-Based Pagination</h3>
+                            <p class="badge-patterns">Use page number and size for navigation</p>
+                            <p class="badge-patterns"><strong>Request:</strong> <code>GET /users?page=2&limit=20</code></p>
+                            <pre class="code-block"><code class="language-badge">{
   "data": ["user1", "user2"],
   "pagination": {
     "page": 2,
@@ -248,85 +379,135 @@
     "total_items": 200
   }
 }</code></pre>
-                            <ul class="pros-cons">
-                                <li class="pro">✅ Simple and familiar</li>
-                                <li class="pro">✅ Supports jumping to specific page</li>
-                                <li class="con">❌ Performance degradation with large offsets</li>
-                                <li class="con">❌ Inconsistent results with concurrent inserts/deletes</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">✅ Simple and familiar</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Supports jumping to specific page</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">❌ Performance degradation with large offsets</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">❌ Inconsistent results with concurrent inserts/deletes</div>
+    </div>
+</div>
                         </div>
 
                         <div class="pagination-pattern">
-                            <h3 class="pattern-name">Cursor-Based Pagination</h3>
-                            <p class="pattern-desc">Use opaque cursor token for next page</p>
-                            <p class="pattern-example"><strong>Request:</strong> <code>GET /users?cursor=eyJpZCI6MTIzfQ&limit=20</code></p>
-                            <pre class="code-block"><code class="language-json">{
+                            <h3 class="badge-patterns">Cursor-Based Pagination</h3>
+                            <p class="badge-patterns">Use opaque cursor token for next page</p>
+                            <p class="badge-patterns"><strong>Request:</strong> <code>GET /users?cursor=eyJpZCI6MTIzfQ&limit=20</code></p>
+                            <pre class="code-block"><code class="language-badge">{
   "data": ["user1", "user2"],
   "pagination": {
     "next_cursor": "eyJpZCI6MTQzfQ",
     "has_more": true
   }
 }</code></pre>
-                            <ul class="pros-cons">
-                                <li class="pro">✅ Consistent results</li>
-                                <li class="pro">✅ Better performance</li>
-                                <li class="pro">✅ Handles inserts/deletes gracefully</li>
-                                <li class="con">❌ Cannot jump to specific page</li>
-                                <li class="con">❌ More complex implementation</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">✅ Consistent results</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Better performance</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Handles inserts/deletes gracefully</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">❌ Cannot jump to specific page</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">❌ More complex implementation</div>
+    </div>
+</div>
                         </div>
 
                         <div class="pagination-pattern">
-                            <h3 class="pattern-name">Link Header Pagination</h3>
-                            <p class="pattern-desc">Use standard Link header for pagination URLs</p>
-                            <pre class="code-block"><code class="language-http">Link: &lt;/users?page=3&gt;; rel="next",
+                            <h3 class="badge-patterns">Link Header Pagination</h3>
+                            <p class="badge-patterns">Use standard Link header for pagination URLs</p>
+                            <pre class="code-block"><code class="language-badge">Link: &lt;/users?page=3&gt;; rel="next",
       &lt;/users?page=1&gt;; rel="first",
       &lt;/users?page=10&gt;; rel="last"</code></pre>
-                            <ul class="pros-cons">
-                                <li class="pro">✅ Standard (RFC 5988)</li>
-                                <li class="pro">✅ Discoverable</li>
-                                <li class="pro">✅ Separates concerns</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">✅ Standard (RFC 5988)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Discoverable</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Separates concerns</div>
+    </div>
+</div>
                         </div>
                     </div>
 
                     <div class="content-section">
                         <h2 class="section-header">Filtering and Sorting</h2>
                         
-                        <h3 class="subsection-header">Filtering Patterns</h3>
-                        <ul class="pattern-list">
-                            <li><strong>Field-value pairs:</strong> <code>GET /users?role=admin&status=active</code></li>
-                            <li><strong>Comparison operators:</strong> <code>GET /orders?total[gte]=100&created_at[lt]=2025-01-01</code></li>
-                            <li><strong>Complex filters (JSON):</strong> <code>GET /users?filter={"age":{"$gte":18,"$lte":65}}</code></li>
-                        </ul>
+                        <h3 class="level1-subsection-title">Filtering Patterns</h3>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Field-value pairs:</strong> <code>GET /users?role=admin&status=active</code></div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Comparison operators:</strong> <code>GET /orders?total[gte]=100&created_at[lt]=2025-01-01</code></div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Complex filters (JSON):</strong> <code>GET /users?filter={"age":{"$gte":18,"$lte":65}}</code></div>
+    </div>
+</div>
 
-                        <h4 class="subsection-header">Filtering Best Practices</h4>
-                        <ul class="best-practice-list">
-                            <li>Support multiple filters with AND logic by default</li>
-                            <li>Document available filter fields and operators</li>
-                            <li>Validate filter parameters</li>
-                            <li>Consider search endpoints for complex queries (<code>POST /users/search</code>)</li>
-                        </ul>
+                        <h4 class="level1-subsection-title">Filtering Best Practices</h4>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Support multiple filters with AND logic by default</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Document available filter fields and operators</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Validate filter parameters</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Consider search endpoints for complex queries (<code>POST /users/search</code>)</div>
+    </div>
+</div>
 
-                        <h3 class="subsection-header">Sorting Patterns</h3>
-                        <ul class="pattern-list">
-                            <li><strong>Single field:</strong> <code>GET /users?sort=created_at</code> (ascending by default)</li>
-                            <li><strong>Multiple fields:</strong> <code>GET /users?sort=last_name,first_name</code></li>
-                            <li><strong>Direction prefix:</strong> <code>GET /users?sort=-created_at,+name</code> (- for desc, + for asc)</li>
-                        </ul>
+                        <h3 class="level1-subsection-title">Sorting Patterns</h3>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Single field:</strong> <code>GET /users?sort=created_at</code> (ascending by default)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Multiple fields:</strong> <code>GET /users?sort=last_name,first_name</code></div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Direction prefix:</strong> <code>GET /users?sort=-created_at,+name</code> (- for desc, + for asc)</div>
+    </div>
+</div>
 
-                        <h4 class="subsection-header">Sorting Best Practices</h4>
-                        <ul class="best-practice-list">
-                            <li>Default to meaningful sort order (e.g., <code>created_at desc</code>)</li>
-                            <li>Limit sortable fields to indexed columns</li>
-                            <li>Document available sort fields</li>
-                        </ul>
+                        <h4 class="level1-subsection-title">Sorting Best Practices</h4>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Default to meaningful sort order (e.g., <code>created_at desc</code>)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Limit sortable fields to indexed columns</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Document available sort fields</div>
+    </div>
+</div>
                     </div>
 
                     <div class="content-section">
                         <h2 class="section-header">Error Response Format</h2>
-                        <p class="section-text">Standardized error format with error codes, messages, and field-level details:</p>
-                        <pre class="code-block"><code class="language-json">{
+                        <p class="level2-section-title-green">Standardized error format with error codes, messages, and field-level details:</p>
+                        <pre class="code-block"><code class="language-badge">{
   "error": {
     "code": "VALIDATION_ERROR",
     "message": "Invalid input provided",
@@ -347,51 +528,87 @@
   }
 }</code></pre>
 
-                        <h3 class="subsection-header">Standard Error Codes</h3>
-                        <ul class="error-code-list">
-                            <li><code>VALIDATION_ERROR</code> (400) - Input validation failed</li>
-                            <li><code>AUTHENTICATION_FAILED</code> (401) - Authentication credentials invalid</li>
-                            <li><code>INSUFFICIENT_PERMISSIONS</code> (403) - User lacks required permissions</li>
-                            <li><code>RESOURCE_NOT_FOUND</code> (404) - Requested resource does not exist</li>
-                            <li><code>CONFLICT</code> (409) - Resource state conflict</li>
-                            <li><code>RATE_LIMIT_EXCEEDED</code> (429) - Too many requests</li>
-                            <li><code>INTERNAL_ERROR</code> (500) - Unexpected server error</li>
-                        </ul>
+                        <h3 class="level1-subsection-title">Standard Error Codes</h3>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><code>VALIDATION_ERROR</code> (400) - Input validation failed</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>AUTHENTICATION_FAILED</code> (401) - Authentication credentials invalid</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>INSUFFICIENT_PERMISSIONS</code> (403) - User lacks required permissions</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>RESOURCE_NOT_FOUND</code> (404) - Requested resource does not exist</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>CONFLICT</code> (409) - Resource state conflict</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>RATE_LIMIT_EXCEEDED</code> (429) - Too many requests</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>INTERNAL_ERROR</code> (500) - Unexpected server error</div>
+    </div>
+</div>
                     </div>
 
                     <div class="content-section">
                         <h2 class="section-header">Security Best Practices</h2>
                         
-                        <h3 class="subsection-header">Authentication</h3>
-                        <ul class="security-list">
-                            <li><strong>OAuth 2.0:</strong> Third-party integrations (use Authorization Code + PKCE)</li>
-                            <li><strong>JWT:</strong> Stateless authentication (use short expiration: 15 minutes)</li>
-                            <li><strong>API Keys:</strong> Simple server-to-server communication</li>
-                        </ul>
+                        <h3 class="level1-subsection-title">Authentication</h3>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>OAuth 2.0:</strong> Third-party integrations (use Authorization Code + PKCE)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>JWT:</strong> Stateless authentication (use short expiration: 15 minutes)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>API Keys:</strong> Simple server-to-server communication</div>
+    </div>
+</div>
 
-                        <h3 class="subsection-header">Authorization</h3>
-                        <ul class="security-list">
-                            <li>Implement Role-Based Access Control (RBAC)</li>
-                            <li>Verify permissions on every request</li>
-                            <li>Use least privilege principle</li>
-                            <li>Return 403 Forbidden for insufficient permissions</li>
-                        </ul>
+                        <h3 class="level1-subsection-title">Authorization</h3>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Implement Role-Based Access Control (RBAC)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Verify permissions on every request</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use least privilege principle</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Return 403 Forbidden for insufficient permissions</div>
+    </div>
+</div>
 
-                        <h3 class="subsection-header">Security Headers</h3>
-                        <ul class="security-list">
-                            <li><code>Strict-Transport-Security</code> - Enforce HTTPS</li>
-                            <li><code>X-Content-Type-Options: nosniff</code> - Prevent MIME sniffing</li>
-                            <li><code>X-Frame-Options: DENY</code> - Prevent clickjacking</li>
-                            <li><code>Content-Security-Policy</code> - Prevent XSS attacks</li>
-                        </ul>
+                        <h3 class="level1-subsection-title">Security Headers</h3>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><code>Strict-Transport-Security</code> - Enforce HTTPS</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>X-Content-Type-Options: nosniff</code> - Prevent MIME sniffing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>X-Frame-Options: DENY</code> - Prevent clickjacking</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>Content-Security-Policy</code> - Prevent XSS attacks</div>
+    </div>
+</div>
                     </div>
                 </div>
 
                 <div class="tab-content" id="examples">
                     <div class="content-section">
                         <h2 class="section-header">Resource Naming Examples</h2>
-                        <h3 class="example-header">✅ Good Resource URIs</h3>
-                        <pre class="code-block"><code class="language-http">GET    /users                    # List users
+                        <h3 class="command-example">✅ Good Resource URIs</h3>
+                        <pre class="code-block"><code class="language-badge">GET    /users                    # List users
 GET    /users/123                # Get specific user
 POST   /users                    # Create user
 PUT    /users/123                # Replace user
@@ -406,8 +623,8 @@ POST   /orders/456/items         # Add item to order
 GET    /products?category=books&price[lte]=50  # Filtered products
 GET    /users?sort=-created_at&limit=20        # Sorted & paginated</code></pre>
 
-                        <h3 class="example-header">❌ Bad Resource URIs</h3>
-                        <pre class="code-block"><code class="language-http">GET    /getUsers                 # Verb in URL (use GET /users)
+                        <h3 class="command-example">❌ Bad Resource URIs</h3>
+                        <pre class="code-block"><code class="language-badge">GET    /getUsers                 # Verb in URL (use GET /users)
 POST   /createUser               # Verb in URL (use POST /users)
 GET    /user/123                 # Singular (use /users/123)
 GET    /UserProfiles             # PascalCase (use /user-profiles)
@@ -417,8 +634,8 @@ DELETE /deleteUserById/123       # Verb + mixed naming</code></pre>
 
                     <div class="content-section">
                         <h2 class="section-header">POST Request Example - Create User</h2>
-                        <h3 class="example-header">Request</h3>
-                        <pre class="code-block"><code class="language-http">POST /users HTTP/1.1
+                        <h3 class="command-example">Request</h3>
+                        <pre class="code-block"><code class="language-badge">POST /users HTTP/1.1
 Host: api.example.com
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
@@ -430,8 +647,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
   "role": "user"
 }</code></pre>
 
-                        <h3 class="example-header">Response (201 Created)</h3>
-                        <pre class="code-block"><code class="language-http">HTTP/1.1 201 Created
+                        <h3 class="command-example">Response (201 Created)</h3>
+                        <pre class="code-block"><code class="language-badge">HTTP/1.1 201 Created
 Location: /users/789
 Content-Type: application/json
 
@@ -448,8 +665,8 @@ Content-Type: application/json
 
                     <div class="content-section">
                         <h2 class="section-header">Error Response Example</h2>
-                        <h3 class="example-header">400 Bad Request - Validation Error</h3>
-                        <pre class="code-block"><code class="language-json">{
+                        <h3 class="command-example">400 Bad Request - Validation Error</h3>
+                        <pre class="code-block"><code class="language-badge">{
   "error": {
     "code": "VALIDATION_ERROR",
     "message": "Invalid input provided",
@@ -473,12 +690,12 @@ Content-Type: application/json
 
                     <div class="content-section">
                         <h2 class="section-header">Pagination Example</h2>
-                        <h3 class="example-header">Request</h3>
-                        <pre class="code-block"><code class="language-http">GET /users?page=2&limit=20 HTTP/1.1
+                        <h3 class="command-example">Request</h3>
+                        <pre class="code-block"><code class="language-badge">GET /users?page=2&limit=20 HTTP/1.1
 Host: api.example.com</code></pre>
 
-                        <h3 class="example-header">Response with Link Header</h3>
-                        <pre class="code-block"><code class="language-http">HTTP/1.1 200 OK
+                        <h3 class="command-example">Response with Link Header</h3>
+                        <pre class="code-block"><code class="language-badge">HTTP/1.1 200 OK
 Content-Type: application/json
 Link: &lt;/users?page=3&limit=20&gt;; rel="next",
       &lt;/users?page=1&limit=20&gt;; rel="first",
@@ -502,15 +719,15 @@ Link: &lt;/users?page=3&limit=20&gt;; rel="next",
                 <div class="tab-content" id="cortex">
                     <div class="content-section">
                         <h2 class="section-header">REST API Validation in CORTEX</h2>
-                        <p class="section-text">
+                        <p class="level2-section-title-green">
                             CORTEX includes intelligent agents that validate REST API designs against best practices and industry standards.
                         </p>
                     </div>
 
                     <div class="content-section">
                         <h2 class="section-header">API Design Validator</h2>
-                        <div class="cortex-example">
-                            <pre class="code-block"><code class="language-python"># CORTEX REST API Design Validator
+                        <div class="built-with-cortex-panel">
+                            <pre class="code-block"><code class="language-badge"># CORTEX REST API Design Validator
 class RestApiValidator:
     def validate_api(self, api_spec: dict) -> List[Violation]:
         violations = []
@@ -580,8 +797,8 @@ class RestApiValidator:
 
                     <div class="content-section">
                         <h2 class="section-header">Automated API Testing</h2>
-                        <div class="cortex-example">
-                            <pre class="code-block"><code class="language-python"># CORTEX REST API Tester
+                        <div class="built-with-cortex-panel">
+                            <pre class="code-block"><code class="language-badge"># CORTEX REST API Tester
 class RestApiTester:
     def test_rest_constraints(self, base_url: str):
         results = []
@@ -644,7 +861,7 @@ class RestApiTester:
 
                     <div class="content-section">
                         <h2 class="section-header">Related Knowledge Files</h2>
-                        <div class="related-files">
+                        <div class="level1-relationship-grid">
                             <a href="graphql-best-practices.html" class="related-file-card">
                                 <h3 class="related-file-title">GraphQL Best Practices</h3>
                                 <p class="related-file-desc">Alternative API design approach</p>
@@ -668,15 +885,15 @@ class RestApiTester:
         </section>
     </main>
 
-    <footer class="footer-glass">
+    <footer class="footer-bottom">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3 class="footer-title">CORTEX Knowledge</h3>
-                    <p class="footer-text">Part of the CORTEX AI Assistant ecosystem</p>
+                    <h3 class="footer-bottom">CORTEX Knowledge</h3>
+                    <p class="footer-bottom">Part of the CORTEX AI Assistant ecosystem</p>
                 </div>
                 <div class="footer-section">
-                    <h3 class="footer-title">Quick Links</h3>
+                    <h3 class="footer-bottom">Quick Links</h3>
                     <ul class="footer-links">
                         <li><a href="../../index.html" class="footer-link">Knowledge Library</a></li>
                         <li><a href="../../engineering.html" class="footer-link">Engineering Category</a></li>
@@ -684,10 +901,10 @@ class RestApiTester:
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h3 class="footer-title">Standards</h3>
-                    <p class="footer-text">REST Architectural Style</p>
-                    <p class="footer-text">HTTP/1.1 RFC 7231</p>
-                    <p class="footer-text">OAuth 2.0, OpenAPI 3.0</p>
+                    <h3 class="footer-bottom">Standards</h3>
+                    <p class="footer-bottom">REST Architectural Style</p>
+                    <p class="footer-bottom">HTTP/1.1 RFC 7231</p>
+                    <p class="footer-bottom">OAuth 2.0, OpenAPI 3.0</p>
                 </div>
             </div>
             <div class="footer-bottom">

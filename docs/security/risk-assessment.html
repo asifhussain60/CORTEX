@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CORTEX Risk Assessment - Risk Calculation, Prioritization, and Treatment Planning">
@@ -10,15 +35,41 @@
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo-64.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/main.css?v=4.0.0">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
     <!-- Glass Header (Level 1 - No Logo) -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../index.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../index.html" class="nav-link" mobile-nav-optimized><i class="pulse-glow-glass--fast fa-home"></i> Home</a>
             </nav>
         </div>
     </header>
@@ -27,7 +78,7 @@
     <section class="hero-section">
         <div class="hero-content">
             <div class="hero-icon">
-                <i class="fas fa-chart-line"></i>
+                <i class="pulse-glow-glass--fast fa-chart-line"></i>
             </div>
             <h1 class="hero-title">Risk Assessment</h1>
             <p class="hero-subtitle">
@@ -42,7 +93,7 @@
         <!-- Risk Calculation Formula -->
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-calculator"></i>
+                <i class="pulse-glow-glass--fast fa-calculator"></i>
                 <h2 class="card-title">Risk Calculation Methodology</h2>
             </div>
             <p class="card-description">
@@ -105,7 +156,7 @@ Asset Value Multiplier (0.5-2.0):
         <!-- Risk Treatment Decision Tree -->
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-sitemap"></i>
+                <i class="pulse-glow-glass--fast fa-sitemap"></i>
                 <h2 class="card-title">Risk Treatment Decision Tree</h2>
             </div>
             <p class="card-description">
@@ -141,7 +192,7 @@ graph TD
         <!-- Risk Priority Bubble Chart -->
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-circle-dot"></i>
+                <i class="pulse-glow-glass--fast fa-circle-dot"></i>
                 <h2 class="card-title">Risk Priority Matrix</h2>
             </div>
             <p class="card-description">
@@ -154,7 +205,7 @@ graph TD
         <!-- Risk Heatmap Time-Series -->
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-calendar-days"></i>
+                <i class="pulse-glow-glass--fast fa-calendar-days"></i>
                 <h2 class="card-title">Risk Trends Over Time</h2>
             </div>
             <p class="card-description">
@@ -167,7 +218,7 @@ graph TD
         <!-- Risk Treatment Strategies -->
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-shield-halved"></i>
+                <i class="pulse-glow-glass--fast fa-shield-halved"></i>
                 <h2 class="card-title">Risk Treatment Strategies</h2>
             </div>
             <div class="principles-grid">
@@ -213,24 +264,24 @@ graph TD
         <!-- Quick Links -->
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-link"></i>
+                <i class="pulse-glow-glass--fast fa-link"></i>
                 <h2 class="card-title">Related Resources</h2>
             </div>
             <div class="quick-links-grid">
                 <a href="threat-modeling.html" class="quick-link-card">
-                    <i class="fas fa-bullseye"></i>
+                    <i class="pulse-glow-glass--fast fa-bullseye"></i>
                     <span>Threat Modeling</span>
                 </a>
                 <a href="vulnerability-assessment.html" class="quick-link-card">
-                    <i class="fas fa-bug"></i>
+                    <i class="pulse-glow-glass--fast fa-bug"></i>
                     <span>Vulnerability Assessment</span>
                 </a>
                 <a href="compliance.html" class="quick-link-card">
-                    <i class="fas fa-certificate"></i>
+                    <i class="pulse-glow-glass--fast fa-certificate"></i>
                     <span>Compliance Standards</span>
                 </a>
                 <a href="dashboard.html" class="quick-link-card">
-                    <i class="fas fa-gauge-high"></i>
+                    <i class="pulse-glow-glass--fast fa-gauge-high"></i>
                     <span>Security Dashboard</span>
                 </a>
             </div>

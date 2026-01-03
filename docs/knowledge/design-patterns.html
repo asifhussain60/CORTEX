@@ -1,26 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CORTEX Design Patterns Tutorial - Gang of Four patterns with modern C# implementations for CORTEX optimization">
-    <meta name="keywords" content="CORTEX, design patterns, Gang of Four, C#, creational, structural, behavioral, tutorial">
+    <meta name="keywords" content="CORTEX, design patterns, Gang of Four, C#, creational, level1-viz-instructions, behavioral, tutorial">
     <meta name="author" content="Asif Hussain">
     <title>Design Patterns - CORTEX Knowledge Library</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
         /* Design Patterns Specific Styles */
-        .patterns-hero {
+        .badge-patterns {
             text-align: center;
             padding: 3rem 1rem;
             margin-bottom: 2rem;
         }
         
-        .patterns-hero h1 {
+        .badge-patterns h1 {
             font-size: 2.5rem;
             margin-bottom: 1rem;
             background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
@@ -29,7 +55,7 @@
             background-clip: text;
         }
         
-        .patterns-hero h1 i {
+        .badge-patterns h1 i {
             color: var(--accent-primary);
             -webkit-text-fill-color: var(--accent-primary);
             margin-right: 0.5rem;
@@ -69,7 +95,7 @@
         }
         
         /* Pattern Type Tabs */
-        .pattern-tabs {
+        .badge-patterns {
             display: flex;
             justify-content: center;
             gap: 1rem;
@@ -77,7 +103,7 @@
             margin-bottom: 2rem;
         }
         
-        .pattern-tab {
+        .badge-patterns {
             padding: 0.75rem 1.5rem;
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
@@ -88,19 +114,19 @@
             font-weight: 500;
         }
         
-        .pattern-tab:hover, .pattern-tab.active {
+        .badge-patterns:hover, .badge-patterns.active {
             background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
             color: white;
             border-color: transparent;
             transform: translateY(-2px);
         }
         
-        .pattern-tab i {
+        .badge-patterns i {
             margin-right: 0.5rem;
         }
         
         /* Interactive Map Section */
-        .map-section {
+        .level1-map-container {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
             border-radius: var(--radius-lg);
@@ -109,13 +135,13 @@
             backdrop-filter: blur(10px);
         }
         
-        .map-section h2 {
+        .level1-map-container h2 {
             text-align: center;
             margin-bottom: 1rem;
             color: var(--accent-primary);
         }
         
-        .map-controls {
+        .level1-map-container {
             display: flex;
             justify-content: center;
             gap: 0.75rem;
@@ -123,7 +149,7 @@
             flex-wrap: wrap;
         }
         
-        .map-btn {
+        .level1-map-container {
             padding: 0.5rem 1rem;
             background: var(--bg-secondary);
             border: 1px solid var(--glass-border);
@@ -134,7 +160,7 @@
             font-size: 0.875rem;
         }
         
-        .map-btn:hover, .map-btn.active {
+        .level1-map-container:hover, .level1-map-container.active {
             background: var(--accent-primary);
             color: white;
             border-color: var(--accent-primary);
@@ -148,14 +174,14 @@
         }
         
         /* Pattern Categories Grid */
-        .categories-grid {
+        .sts-category-icon-wrapper {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
         
-        .category-card {
+        .sts-category-icon-wrapper {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
             border-radius: var(--radius-lg);
@@ -164,13 +190,13 @@
             transition: all var(--transition-base);
         }
         
-        .category-card:hover {
+        .sts-category-icon-wrapper:hover {
             transform: translateY(-4px);
             box-shadow: var(--shadow-lg);
             border-color: var(--accent-primary);
         }
         
-        .category-header {
+        .sts-category-icon-wrapper {
             display: flex;
             align-items: center;
             gap: 1rem;
@@ -188,9 +214,9 @@
         }
         
         .category-icon.creational { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
-        .category-icon.structural { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); }
+        .category-icon.level1-viz-instructions { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); }
         .category-icon.behavioral { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); }
-        .category-icon.enterprise { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+        .category-icon.panel-header-centered { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
         
         .category-title {
             font-size: 1.25rem;
@@ -198,7 +224,7 @@
             color: var(--text-primary);
         }
         
-        .category-count {
+        .sts-category-icon-wrapper {
             font-size: 0.75rem;
             color: var(--text-secondary);
             background: var(--bg-secondary);
@@ -213,13 +239,13 @@
             line-height: 1.6;
         }
         
-        .pattern-chips {
+        .badge-patterns {
             display: flex;
             flex-wrap: wrap;
             gap: 0.5rem;
         }
         
-        .pattern-chip {
+        .badge-patterns {
             padding: 0.35rem 0.75rem;
             background: var(--bg-secondary);
             border: 1px solid var(--glass-border);
@@ -230,14 +256,14 @@
             transition: all var(--transition-fast);
         }
         
-        .pattern-chip:hover {
+        .badge-patterns:hover {
             background: var(--accent-primary);
             color: white;
             border-color: var(--accent-primary);
         }
         
         /* Pattern Detail Modal */
-        .pattern-modal {
+        .badge-patterns {
             display: none;
             position: fixed;
             top: 0;
@@ -251,11 +277,11 @@
             backdrop-filter: blur(10px);
         }
         
-        .pattern-modal.active {
+        .badge-patterns.active {
             display: block;
         }
         
-        .modal-content {
+        .glass-modal-overlay {
             max-width: 900px;
             margin: 0 auto;
             background: var(--glass-bg);
@@ -265,7 +291,7 @@
             position: relative;
         }
         
-        .modal-close {
+        .glass-modal-overlay {
             position: absolute;
             top: 1rem;
             right: 1rem;
@@ -277,11 +303,11 @@
             transition: color var(--transition-fast);
         }
         
-        .modal-close:hover {
+        .glass-modal-overlay:hover {
             color: var(--accent-primary);
         }
         
-        .modal-header {
+        .glass-modal-overlay {
             display: flex;
             align-items: center;
             gap: 1rem;
@@ -290,7 +316,7 @@
             border-bottom: 1px solid var(--glass-border);
         }
         
-        .modal-header h2 {
+        .glass-modal-overlay h2 {
             color: var(--text-primary);
             font-size: 1.75rem;
         }
@@ -304,30 +330,30 @@
         }
         
         .pattern-type-badge.creational { background: #10b981; color: white; }
-        .pattern-type-badge.structural { background: #3b82f6; color: white; }
+        .pattern-type-badge.level1-viz-instructions { background: #3b82f6; color: white; }
         .pattern-type-badge.behavioral { background: #8b5cf6; color: white; }
-        .pattern-type-badge.enterprise { background: #f59e0b; color: white; }
+        .pattern-type-badge.panel-header-centered { background: #f59e0b; color: white; }
         
-        .modal-body section {
+        .glass-modal-overlay section {
             margin-bottom: 1.5rem;
         }
         
-        .modal-body h3 {
+        .glass-modal-overlay h3 {
             color: var(--accent-primary);
             margin-bottom: 0.75rem;
             font-size: 1.1rem;
         }
         
-        .modal-body p, .modal-body li {
+        .glass-modal-overlay p, .glass-modal-overlay li {
             color: var(--text-secondary);
             line-height: 1.7;
         }
         
-        .modal-body ul {
+        .glass-modal-overlay ul {
             padding-left: 1.5rem;
         }
         
-        .modal-body li {
+        .glass-modal-overlay li {
             margin-bottom: 0.5rem;
         }
         
@@ -348,7 +374,7 @@
         }
         
         /* CORTEX Integration Section */
-        .cortex-integration {
+        .built-with-cortex-panel {
             background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(123, 97, 255, 0.1) 100%);
             border: 1px solid var(--accent-primary);
             border-radius: var(--radius-lg);
@@ -356,7 +382,7 @@
             margin-top: 1.5rem;
         }
         
-        .cortex-integration h4 {
+        .built-with-cortex-panel h4 {
             color: var(--accent-primary);
             margin-bottom: 0.75rem;
             display: flex;
@@ -364,7 +390,7 @@
             gap: 0.5rem;
         }
         
-        .cortex-integration p {
+        .built-with-cortex-panel p {
             color: var(--text-secondary);
             font-size: 0.9rem;
         }
@@ -403,12 +429,12 @@
         }
         
         /* Quick Reference Table */
-        .quick-reference {
+        .quick-links-section {
             overflow-x: auto;
             margin: 2rem 0;
         }
         
-        .quick-reference table {
+        .quick-links-section table {
             width: 100%;
             border-collapse: collapse;
             background: var(--glass-bg);
@@ -416,24 +442,24 @@
             overflow: hidden;
         }
         
-        .quick-reference th,
-        .quick-reference td {
+        .quick-links-section th,
+        .quick-links-section td {
             padding: 1rem;
             text-align: left;
             border-bottom: 1px solid var(--glass-border);
         }
         
-        .quick-reference th {
+        .quick-links-section th {
             background: var(--bg-secondary);
             color: var(--accent-primary);
             font-weight: 600;
         }
         
-        .quick-reference td {
+        .quick-links-section td {
             color: var(--text-secondary);
         }
         
-        .quick-reference tr:hover td {
+        .quick-links-section tr:hover td {
             background: rgba(0, 212, 255, 0.05);
         }
         
@@ -455,11 +481,11 @@
         
         /* Responsive */
         @media (max-width: 768px) {
-            .patterns-hero h1 {
+            .badge-patterns h1 {
                 font-size: 1.75rem;
             }
             
-            .categories-grid {
+            .sts-category-icon-wrapper {
                 grid-template-columns: 1fr;
             }
             
@@ -467,16 +493,16 @@
                 height: 350px;
             }
             
-            .modal-content {
+            .glass-modal-overlay {
                 padding: 1.5rem;
                 margin: 1rem;
             }
             
-            .pattern-tabs {
+            .badge-patterns {
                 gap: 0.5rem;
             }
             
-            .pattern-tab {
+            .badge-patterns {
                 padding: 0.5rem 1rem;
                 font-size: 0.875rem;
             }
@@ -501,7 +527,7 @@
 
     <!-- Breadcrumb Navigation -->
     <nav class="breadcrumb" aria-label="Breadcrumb">
-        <a href="../index.html"><i class="fas fa-home"></i> Home</a>
+        <a href="../index.html"><i class="pulse-glow-glass--fast fa-home"></i> Home</a>
         <span class="breadcrumb-separator">→</span>
         <a href="index.html">Knowledge Library</a>
         <span class="breadcrumb-separator">→</span>
@@ -518,10 +544,10 @@
     <!-- Main Content -->
     <main id="main-content" class="container">
         <!-- Hero Section -->
-        <section class="patterns-hero">
-            <h1><i class="fas fa-cubes"></i> Design Patterns Tutorial</h1>
+        <section class="badge-patterns">
+            <h1><i class="pulse-glow-glass--fast fa-cubes"></i> Design Patterns Tutorial</h1>
             <p class="hero-subtitle">
-                Gang of Four patterns with modern C# implementations • 23 Core Patterns + Enterprise Patterns
+                Gang of Four patterns with modern C# implementations • 23 Core Patterns + panel-header-centered Patterns
             </p>
             <p class="level2-text-muted-prose-alt">
                 Design patterns are reusable solutions to common problems in software design. 
@@ -531,7 +557,7 @@
 
         <!-- Search Bar -->
         <div class="search-container">
-            <i class="fas fa-search search-icon"></i>
+            <i class="pulse-glow-glass--fast fa-search search-icon"></i>
             <input type="search" 
                    id="pattern-search" 
                    class="search-input" 
@@ -540,42 +566,42 @@
         </div>
 
         <!-- Pattern Type Tabs -->
-        <div class="pattern-tabs" role="tablist">
-            <button class="pattern-tab active" data-filter="all" role="tab">
-                <i class="fas fa-layer-group"></i> All Patterns
+        <div class="badge-patterns" role="tablist">
+            <button class="badge-patterns active" data-filter="all" role="tab">
+                <i class="pulse-glow-glass--fast fa-layer-group"></i> All Patterns
             </button>
-            <button class="pattern-tab" data-filter="creational" role="tab">
-                <i class="fas fa-plus-circle"></i> Creational (5)
+            <button class="badge-patterns" data-filter="creational" role="tab">
+                <i class="pulse-glow-glass--fast fa-plus-circle"></i> Creational (5)
             </button>
-            <button class="pattern-tab" data-filter="structural" role="tab">
-                <i class="fas fa-sitemap"></i> Structural (7)
+            <button class="badge-patterns" data-filter="level1-viz-instructions" role="tab">
+                <i class="pulse-glow-glass--fast fa-sitemap"></i> level1-viz-instructions (7)
             </button>
-            <button class="pattern-tab" data-filter="behavioral" role="tab">
-                <i class="fas fa-exchange-alt"></i> Behavioral (11)
+            <button class="badge-patterns" data-filter="behavioral" role="tab">
+                <i class="pulse-glow-glass--fast fa-exchange-alt"></i> Behavioral (11)
             </button>
-            <button class="pattern-tab" data-filter="enterprise" role="tab">
-                <i class="fas fa-building"></i> Enterprise (2)
+            <button class="badge-patterns" data-filter="panel-header-centered" role="tab">
+                <i class="pulse-glow-glass--fast fa-building"></i> panel-header-centered (2)
             </button>
         </div>
 
         <!-- Interactive Pattern Map -->
-        <section class="map-section">
-            <h2><i class="fas fa-project-diagram"></i> Interactive Pattern Map</h2>
+        <section class="level1-map-container">
+            <h2><i class="pulse-glow-glass--fast fa-project-diagram"></i> Interactive Pattern Map</h2>
             <p class="level2-text-center-muted">
                 Click patterns to expand • Drag to explore • Click nodes for details
             </p>
-            <div class="map-controls">
-                <button class="map-btn active" data-view="categories">
-                    <i class="fas fa-th-large"></i> Categories
+            <div class="level1-map-container">
+                <button class="level1-map-container active" data-view="categories">
+                    <i class="pulse-glow-glass--fast fa-th-large"></i> Categories
                 </button>
-                <button class="map-btn" data-view="full">
-                    <i class="fas fa-sitemap"></i> Full Map
+                <button class="level1-map-container" data-view="full">
+                    <i class="pulse-glow-glass--fast fa-sitemap"></i> Full Map
                 </button>
-                <button class="map-btn" data-view="relationships">
-                    <i class="fas fa-link"></i> Relationships
+                <button class="level1-map-container" data-view="relationships">
+                    <i class="pulse-glow-glass--fast fa-link"></i> Relationships
                 </button>
-                <button class="map-btn" id="resetMapBtn">
-                    <i class="fas fa-redo-alt"></i> Reset
+                <button class="level1-map-container" id="resetMapBtn">
+                    <i class="pulse-glow-glass--fast fa-redo-alt"></i> Reset
                 </button>
             </div>
             <div id="patternMap"></div>
@@ -584,13 +610,13 @@
 
         <!-- OO Principles Section -->
         <section class="section">
-            <h2 class="section-title text-center"><i class="fas fa-key"></i> Core OO Principles</h2>
+            <h2 class="section-title text-center"><i class="pulse-glow-glass--fast fa-key"></i> Core OO Principles</h2>
             <p class="level2-text-center-muted-alt">
                 Two fundamental principles that underpin all Gang of Four patterns
             </p>
             <div class="principles-grid">
                 <div class="principle-card glass-card">
-                    <i class="fas fa-file-contract"></i>
+                    <i class="pulse-glow-glass--fast fa-file-contract"></i>
                     <h3>Program to an Interface</h3>
                     <p>
                         Program to an interface, not an implementation. Clients remain unaware of 
@@ -599,7 +625,7 @@
                     </p>
                 </div>
                 <div class="principle-card glass-card">
-                    <i class="fas fa-puzzle-piece"></i>
+                    <i class="pulse-glow-glass--fast fa-puzzle-piece"></i>
                     <h3>Favor Composition</h3>
                     <p>
                         Favor object composition over class inheritance. Composition (black-box reuse) 
@@ -612,114 +638,114 @@
 
         <!-- Pattern Categories -->
         <section class="section" id="pattern-categories">
-            <h2 class="section-title text-center"><i class="fas fa-boxes"></i> Pattern Categories</h2>
+            <h2 class="section-title text-center"><i class="pulse-glow-glass--fast fa-boxes"></i> Pattern Categories</h2>
             
-            <div class="categories-grid" id="categories-container">
+            <div class="sts-category-icon-wrapper" id="categories-container">
                 <!-- Creational Patterns -->
-                <article class="category-card" data-category="creational">
-                    <div class="category-header">
+                <article class="sts-category-icon-wrapper" data-category="creational">
+                    <div class="sts-category-icon-wrapper">
                         <div class="category-icon creational">
-                            <i class="fas fa-plus-circle"></i>
+                            <i class="pulse-glow-glass--fast fa-plus-circle"></i>
                         </div>
                         <div>
                             <h3 class="category-title">Creational Patterns</h3>
-                            <span class="category-count">5 patterns</span>
+                            <span class="sts-category-icon-wrapper">5 patterns</span>
                         </div>
                     </div>
                     <p class="category-description">
                         Deal with object creation mechanisms. Abstract the instantiation process 
                         to make your system independent of how objects are created, composed, and represented.
                     </p>
-                    <div class="pattern-chips">
-                        <span class="pattern-chip" data-pattern="singleton">Singleton</span>
-                        <span class="pattern-chip" data-pattern="factory-method">Factory Method</span>
-                        <span class="pattern-chip" data-pattern="abstract-factory">Abstract Factory</span>
-                        <span class="pattern-chip" data-pattern="builder">Builder</span>
-                        <span class="pattern-chip" data-pattern="prototype">Prototype</span>
+                    <div class="badge-patterns">
+                        <span class="badge-patterns" data-pattern="singleton">Singleton</span>
+                        <span class="badge-patterns" data-pattern="factory-method">Factory Method</span>
+                        <span class="badge-patterns" data-pattern="abstract-factory">Abstract Factory</span>
+                        <span class="badge-patterns" data-pattern="builder">Builder</span>
+                        <span class="badge-patterns" data-pattern="prototype">Prototype</span>
                     </div>
                 </article>
 
-                <!-- Structural Patterns -->
-                <article class="category-card" data-category="structural">
-                    <div class="category-header">
-                        <div class="category-icon structural">
-                            <i class="fas fa-sitemap"></i>
+                <!-- level1-viz-instructions Patterns -->
+                <article class="sts-category-icon-wrapper" data-category="level1-viz-instructions">
+                    <div class="sts-category-icon-wrapper">
+                        <div class="category-icon level1-viz-instructions">
+                            <i class="pulse-glow-glass--fast fa-sitemap"></i>
                         </div>
                         <div>
-                            <h3 class="category-title">Structural Patterns</h3>
-                            <span class="category-count">7 patterns</span>
+                            <h3 class="category-title">level1-viz-instructions Patterns</h3>
+                            <span class="sts-category-icon-wrapper">7 patterns</span>
                         </div>
                     </div>
                     <p class="category-description">
                         Deal with object composition. Concerned with how classes and objects are 
                         composed to form larger structures while keeping them flexible and efficient.
                     </p>
-                    <div class="pattern-chips">
-                        <span class="pattern-chip" data-pattern="adapter">Adapter</span>
-                        <span class="pattern-chip" data-pattern="bridge">Bridge</span>
-                        <span class="pattern-chip" data-pattern="composite">Composite</span>
-                        <span class="pattern-chip" data-pattern="decorator">Decorator</span>
-                        <span class="pattern-chip" data-pattern="facade">Facade</span>
-                        <span class="pattern-chip" data-pattern="flyweight">Flyweight</span>
-                        <span class="pattern-chip" data-pattern="proxy">Proxy</span>
+                    <div class="badge-patterns">
+                        <span class="badge-patterns" data-pattern="adapter">Adapter</span>
+                        <span class="badge-patterns" data-pattern="bridge">Bridge</span>
+                        <span class="badge-patterns" data-pattern="composite">Composite</span>
+                        <span class="badge-patterns" data-pattern="decorator">Decorator</span>
+                        <span class="badge-patterns" data-pattern="facade">Facade</span>
+                        <span class="badge-patterns" data-pattern="flyweight">Flyweight</span>
+                        <span class="badge-patterns" data-pattern="proxy">Proxy</span>
                     </div>
                 </article>
 
                 <!-- Behavioral Patterns -->
-                <article class="category-card" data-category="behavioral">
-                    <div class="category-header">
+                <article class="sts-category-icon-wrapper" data-category="behavioral">
+                    <div class="sts-category-icon-wrapper">
                         <div class="category-icon behavioral">
-                            <i class="fas fa-exchange-alt"></i>
+                            <i class="pulse-glow-glass--fast fa-exchange-alt"></i>
                         </div>
                         <div>
                             <h3 class="category-title">Behavioral Patterns</h3>
-                            <span class="category-count">11 patterns</span>
+                            <span class="sts-category-icon-wrapper">11 patterns</span>
                         </div>
                     </div>
                     <p class="category-description">
                         Define ways to communicate between classes or objects. Characterize complex 
                         control flow that's difficult to follow at runtime.
                     </p>
-                    <div class="pattern-chips">
-                        <span class="pattern-chip" data-pattern="chain-of-responsibility">Chain of Resp.</span>
-                        <span class="pattern-chip" data-pattern="command">Command</span>
-                        <span class="pattern-chip" data-pattern="interpreter">Interpreter</span>
-                        <span class="pattern-chip" data-pattern="iterator">Iterator</span>
-                        <span class="pattern-chip" data-pattern="mediator">Mediator</span>
-                        <span class="pattern-chip" data-pattern="memento">Memento</span>
-                        <span class="pattern-chip" data-pattern="observer">Observer</span>
-                        <span class="pattern-chip" data-pattern="state">State</span>
-                        <span class="pattern-chip" data-pattern="strategy">Strategy</span>
-                        <span class="pattern-chip" data-pattern="template-method">Template Method</span>
-                        <span class="pattern-chip" data-pattern="visitor">Visitor</span>
+                    <div class="badge-patterns">
+                        <span class="badge-patterns" data-pattern="chain-of-responsibility">Chain of Resp.</span>
+                        <span class="badge-patterns" data-pattern="command">Command</span>
+                        <span class="badge-patterns" data-pattern="interpreter">Interpreter</span>
+                        <span class="badge-patterns" data-pattern="iterator">Iterator</span>
+                        <span class="badge-patterns" data-pattern="mediator">Mediator</span>
+                        <span class="badge-patterns" data-pattern="memento">Memento</span>
+                        <span class="badge-patterns" data-pattern="observer">Observer</span>
+                        <span class="badge-patterns" data-pattern="state">State</span>
+                        <span class="badge-patterns" data-pattern="strategy">Strategy</span>
+                        <span class="badge-patterns" data-pattern="template-method">Template Method</span>
+                        <span class="badge-patterns" data-pattern="visitor">Visitor</span>
                     </div>
                 </article>
 
-                <!-- Enterprise Patterns -->
-                <article class="category-card" data-category="enterprise">
-                    <div class="category-header">
-                        <div class="category-icon enterprise">
-                            <i class="fas fa-building"></i>
+                <!-- panel-header-centered Patterns -->
+                <article class="sts-category-icon-wrapper" data-category="panel-header-centered">
+                    <div class="sts-category-icon-wrapper">
+                        <div class="category-icon panel-header-centered">
+                            <i class="pulse-glow-glass--fast fa-building"></i>
                         </div>
                         <div>
-                            <h3 class="category-title">Enterprise Patterns</h3>
-                            <span class="category-count">2 patterns</span>
+                            <h3 class="category-title">panel-header-centered Patterns</h3>
+                            <span class="sts-category-icon-wrapper">2 patterns</span>
                         </div>
                     </div>
                     <p class="category-description">
-                        Additional patterns commonly used in enterprise applications for data access 
+                        Additional patterns commonly used in panel-header-centered applications for data access 
                         and transaction management. Often built into modern frameworks like EF Core.
                     </p>
-                    <div class="pattern-chips">
-                        <span class="pattern-chip" data-pattern="repository">Repository</span>
-                        <span class="pattern-chip" data-pattern="unit-of-work">Unit of Work</span>
+                    <div class="badge-patterns">
+                        <span class="badge-patterns" data-pattern="repository">Repository</span>
+                        <span class="badge-patterns" data-pattern="unit-of-work">Unit of Work</span>
                     </div>
                 </article>
             </div>
 
             <!-- No Results State -->
             <div id="no-results" class="no-results" hidden>
-                <i class="fas fa-search"></i>
+                <i class="pulse-glow-glass--fast fa-search"></i>
                 <h3>No patterns found</h3>
                 <p>Try adjusting your search or filter criteria</p>
             </div>
@@ -727,11 +753,11 @@
 
         <!-- Quick Reference -->
         <section class="section">
-            <h2 class="section-title text-center"><i class="fas fa-bolt"></i> Quick Reference</h2>
+            <h2 class="section-title text-center"><i class="pulse-glow-glass--fast fa-bolt"></i> Quick Reference</h2>
             <p class="level2-text-center-muted-alt">
                 At-a-glance guide: which pattern solves which problem
             </p>
-            <div class="quick-reference">
+            <div class="quick-links-section">
                 <table>
                     <thead>
                         <tr>
@@ -743,73 +769,73 @@
                     <tbody>
                         <tr>
                             <td>Ensure only one instance of a class exists</td>
-                            <td><span class="pattern-chip" data-pattern="singleton">Singleton</span></td>
+                            <td><span class="badge-patterns" data-pattern="singleton">Singleton</span></td>
                             <td>Creational</td>
                         </tr>
                         <tr>
                             <td>Create objects without specifying exact class</td>
-                            <td><span class="pattern-chip" data-pattern="factory-method">Factory Method</span></td>
+                            <td><span class="badge-patterns" data-pattern="factory-method">Factory Method</span></td>
                             <td>Creational</td>
                         </tr>
                         <tr>
                             <td>Create families of related objects</td>
-                            <td><span class="pattern-chip" data-pattern="abstract-factory">Abstract Factory</span></td>
+                            <td><span class="badge-patterns" data-pattern="abstract-factory">Abstract Factory</span></td>
                             <td>Creational</td>
                         </tr>
                         <tr>
                             <td>Construct complex objects step by step</td>
-                            <td><span class="pattern-chip" data-pattern="builder">Builder</span></td>
+                            <td><span class="badge-patterns" data-pattern="builder">Builder</span></td>
                             <td>Creational</td>
                         </tr>
                         <tr>
                             <td>Make two incompatible interfaces work together</td>
-                            <td><span class="pattern-chip" data-pattern="adapter">Adapter</span></td>
-                            <td>Structural</td>
+                            <td><span class="badge-patterns" data-pattern="adapter">Adapter</span></td>
+                            <td>level1-viz-instructions</td>
                         </tr>
                         <tr>
                             <td>Add responsibilities to objects dynamically</td>
-                            <td><span class="pattern-chip" data-pattern="decorator">Decorator</span></td>
-                            <td>Structural</td>
+                            <td><span class="badge-patterns" data-pattern="decorator">Decorator</span></td>
+                            <td>level1-viz-instructions</td>
                         </tr>
                         <tr>
                             <td>Simplify a complex subsystem with unified interface</td>
-                            <td><span class="pattern-chip" data-pattern="facade">Facade</span></td>
-                            <td>Structural</td>
+                            <td><span class="badge-patterns" data-pattern="facade">Facade</span></td>
+                            <td>level1-viz-instructions</td>
                         </tr>
                         <tr>
                             <td>Represent part-whole hierarchies (trees)</td>
-                            <td><span class="pattern-chip" data-pattern="composite">Composite</span></td>
-                            <td>Structural</td>
+                            <td><span class="badge-patterns" data-pattern="composite">Composite</span></td>
+                            <td>level1-viz-instructions</td>
                         </tr>
                         <tr>
                             <td>Separate abstraction from implementation</td>
-                            <td><span class="pattern-chip" data-pattern="bridge">Bridge</span></td>
-                            <td>Structural</td>
+                            <td><span class="badge-patterns" data-pattern="bridge">Bridge</span></td>
+                            <td>level1-viz-instructions</td>
                         </tr>
                         <tr>
                             <td>Define a family of interchangeable algorithms</td>
-                            <td><span class="pattern-chip" data-pattern="strategy">Strategy</span></td>
+                            <td><span class="badge-patterns" data-pattern="strategy">Strategy</span></td>
                             <td>Behavioral</td>
                         </tr>
                         <tr>
                             <td>Allow object to alter behavior when state changes</td>
-                            <td><span class="pattern-chip" data-pattern="state">State</span></td>
+                            <td><span class="badge-patterns" data-pattern="state">State</span></td>
                             <td>Behavioral</td>
                         </tr>
                         <tr>
                             <td>Define one-to-many dependency between objects</td>
-                            <td><span class="pattern-chip" data-pattern="observer">Observer</span></td>
+                            <td><span class="badge-patterns" data-pattern="observer">Observer</span></td>
                             <td>Behavioral</td>
                         </tr>
                         <tr>
                             <td>Encapsulate requests as objects (undo/redo)</td>
-                            <td><span class="pattern-chip" data-pattern="command">Command</span></td>
+                            <td><span class="badge-patterns" data-pattern="command">Command</span></td>
                             <td>Behavioral</td>
                         </tr>
                         <tr>
                             <td>Manage transactions across multiple operations</td>
-                            <td><span class="pattern-chip" data-pattern="unit-of-work">Unit of Work</span></td>
-                            <td>Enterprise</td>
+                            <td><span class="badge-patterns" data-pattern="unit-of-work">Unit of Work</span></td>
+                            <td>panel-header-centered</td>
                         </tr>
                     </tbody>
                 </table>
@@ -818,8 +844,8 @@
 
         <!-- CORTEX Integration Callout -->
         <section class="section">
-            <div class="cortex-integration">
-                <h4><i class="fas fa-brain"></i> CORTEX Integration</h4>
+            <div class="built-with-cortex-panel">
+                <h4><i class="pulse-glow-glass--fast fa-brain"></i> CORTEX Integration</h4>
                 <p>
                     These patterns are wired into CORTEX for optimum design decisions. When planning 
                     new features, CORTEX considers applicable patterns based on the problem domain. 
@@ -830,16 +856,16 @@
     </main>
 
     <!-- Pattern Detail Modal -->
-    <div class="pattern-modal" id="pattern-modal" role="dialog" aria-modal="true">
-        <div class="modal-content">
-            <button class="modal-close" aria-label="Close modal">
-                <i class="fas fa-times"></i>
+    <div class="badge-patterns" id="badge-patterns" role="dialog" aria-modal="true">
+        <div class="glass-modal-overlay">
+            <button class="glass-modal-overlay" aria-label="Close modal">
+                <i class="pulse-glow-glass--fast fa-times"></i>
             </button>
-            <div class="modal-header">
+            <div class="glass-modal-overlay">
                 <h2 id="modal-title">Pattern Name</h2>
                 <span class="pattern-type-badge" id="modal-badge">Type</span>
             </div>
-            <div class="modal-body" id="modal-body">
+            <div class="glass-modal-overlay" id="glass-modal-overlay">
                 <!-- Content loaded dynamically -->
             </div>
         </div>
@@ -849,8 +875,8 @@
     <footer class="footer">
         <div class="container">
             <p>
-                <i class="fas fa-brain"></i> CORTEX Knowledge Library
-                <span class="footer-divider">|</span>
+                <i class="pulse-glow-glass--fast fa-brain"></i> CORTEX Knowledge Library
+                <span class="footer-bottom">|</span>
                 <span class="copyright">© 2024-2025 Asif Hussain. All rights reserved.</span>
             </p>
         </div>

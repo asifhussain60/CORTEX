@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Performance Optimization - Profiling, caching, load testing, and scalability strategies">
@@ -8,6 +33,7 @@
     <meta name="author" content="Asif Hussain">
     <title>Performance Optimization | CORTEX Knowledge</title>
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
@@ -25,14 +51,14 @@
     <section class="hero" id="main-content">
         <h1 class="hero-title">⚡ Performance Optimization</h1>
         <p class="hero-subtitle">Profiling, Caching, Load Testing, and Scalability</p>
-        <div class="file-metadata">
+        <div class="code-file">
             <span class="metadata-item">🚀 Speed</span>
             <span class="metadata-item">📊 Metrics</span>
             <span class="metadata-item">📅 Updated: Dec 2025</span>
         </div>
     </section>
 
-    <section class="section file-content">
+    <section class="section code-file">
         <div class="container">
             <!-- Overview -->
             <div id="overview" class="content-section">
@@ -42,12 +68,20 @@
                     
                     <div class="info-box info-box-primary">
                         <strong>Key Principles:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Measure First:</strong> Profile before optimizing</li>
-                            <li><strong>80/20 Rule:</strong> Focus on critical bottlenecks</li>
-                            <li><strong>Trade-offs:</strong> Balance speed vs complexity vs cost</li>
-                            <li><strong>User Experience:</strong> Perceived performance matters</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Measure First:</strong> Profile before optimizing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>80/20 Rule:</strong> Focus on critical bottlenecks</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Trade-offs:</strong> Balance speed vs complexity vs cost</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>User Experience:</strong> Perceived performance matters</div>
+    </div>
+</div>
                     </div>
 
                     <h3>Performance Optimization Landscape</h3>
@@ -96,17 +130,29 @@ graph TB
                             <h3>LCP</h3>
                             <p class="framework-subtitle">Largest Contentful Paint</p>
                             <h4>What It Measures</h4>
-                            <ul>
-                                <li>Loading performance</li>
-                                <li>Time to largest element</li>
-                                <li>Main content visibility</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Loading performance</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Time to largest element</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Main content visibility</div>
+    </div>
+</div>
                             <h4>Thresholds</h4>
-                            <ul>
-                                <li><strong>Good:</strong> ≤ 2.5s</li>
-                                <li><strong>Needs Improvement:</strong> 2.5s - 4.0s</li>
-                                <li><strong>Poor:</strong> > 4.0s</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Good:</strong> ≤ 2.5s</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Needs Improvement:</strong> 2.5s - 4.0s</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Poor:</strong> > 4.0s</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -114,17 +160,29 @@ graph TB
                             <h3>FID</h3>
                             <p class="framework-subtitle">First Input Delay</p>
                             <h4>What It Measures</h4>
-                            <ul>
-                                <li>Interactivity</li>
-                                <li>Response to user input</li>
-                                <li>Main thread availability</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Interactivity</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Response to user input</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Main thread availability</div>
+    </div>
+</div>
                             <h4>Thresholds</h4>
-                            <ul>
-                                <li><strong>Good:</strong> ≤ 100ms</li>
-                                <li><strong>Needs Improvement:</strong> 100ms - 300ms</li>
-                                <li><strong>Poor:</strong> > 300ms</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Good:</strong> ≤ 100ms</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Needs Improvement:</strong> 100ms - 300ms</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Poor:</strong> > 300ms</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -132,17 +190,29 @@ graph TB
                             <h3>CLS</h3>
                             <p class="framework-subtitle">Cumulative Layout Shift</p>
                             <h4>What It Measures</h4>
-                            <ul>
-                                <li>Visual stability</li>
-                                <li>Unexpected layout shifts</li>
-                                <li>Content jumping</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Visual stability</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Unexpected layout shifts</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Content jumping</div>
+    </div>
+</div>
                             <h4>Thresholds</h4>
-                            <ul>
-                                <li><strong>Good:</strong> ≤ 0.1</li>
-                                <li><strong>Needs Improvement:</strong> 0.1 - 0.25</li>
-                                <li><strong>Poor:</strong> > 0.25</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Good:</strong> ≤ 0.1</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Needs Improvement:</strong> 0.1 - 0.25</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Poor:</strong> > 0.25</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -202,57 +272,105 @@ graph TB
                             <span class="framework-panel-icon">⏱️</span>
                             <h3>CPU Profiling</h3>
                             <h4>What to Measure</h4>
-                            <ul>
-                                <li>Function execution time</li>
-                                <li>Call stack analysis</li>
-                                <li>Hot code paths</li>
-                                <li>CPU-bound operations</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Function execution time</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Call stack analysis</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Hot code paths</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">CPU-bound operations</div>
+    </div>
+</div>
                             <h4>Tools</h4>
-                            <ul>
-                                <li>Chrome DevTools Profiler</li>
-                                <li>Python: cProfile, py-spy</li>
-                                <li>Node.js: clinic.js</li>
-                                <li>Java: JProfiler, YourKit</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Chrome DevTools Profiler</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Python: cProfile, py-spy</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Node.js: clinic.js</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Java: JProfiler, YourKit</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">💾</span>
                             <h3>Memory Profiling</h3>
                             <h4>What to Measure</h4>
-                            <ul>
-                                <li>Heap allocations</li>
-                                <li>Memory leaks</li>
-                                <li>Garbage collection</li>
-                                <li>Object retention</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Heap allocations</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Memory leaks</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Garbage collection</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Object retention</div>
+    </div>
+</div>
                             <h4>Tools</h4>
-                            <ul>
-                                <li>Chrome DevTools Memory</li>
-                                <li>Python: memory_profiler</li>
-                                <li>Node.js: heapdump</li>
-                                <li>Java: Eclipse MAT</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Chrome DevTools Memory</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Python: memory_profiler</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Node.js: heapdump</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Java: Eclipse MAT</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🌐</span>
                             <h3>Network Profiling</h3>
                             <h4>What to Measure</h4>
-                            <ul>
-                                <li>Request waterfall</li>
-                                <li>Payload sizes</li>
-                                <li>Connection timing</li>
-                                <li>API latency</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Request waterfall</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Payload sizes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Connection timing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">API latency</div>
+    </div>
+</div>
                             <h4>Tools</h4>
-                            <ul>
-                                <li>Chrome DevTools Network</li>
-                                <li>Wireshark</li>
-                                <li>Postman</li>
-                                <li>New Relic, DataDog</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Chrome DevTools Network</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Wireshark</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Postman</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">New Relic, DataDog</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -294,17 +412,29 @@ flowchart TD
                             <h3>CDN Caching</h3>
                             <p class="framework-subtitle">Edge Network</p>
                             <h4>What to Cache</h4>
-                            <ul>
-                                <li>Static assets (JS, CSS, images)</li>
-                                <li>Media files (videos, audio)</li>
-                                <li>Public API responses</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Static assets (JS, CSS, images)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Media files (videos, audio)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Public API responses</div>
+    </div>
+</div>
                             <h4>Benefits</h4>
-                            <ul>
-                                <li>Reduced latency</li>
-                                <li>Offload origin server</li>
-                                <li>Global distribution</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Reduced latency</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Offload origin server</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Global distribution</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -312,18 +442,32 @@ flowchart TD
                             <h3>Application Cache</h3>
                             <p class="framework-subtitle">In-Memory Store</p>
                             <h4>What to Cache</h4>
-                            <ul>
-                                <li>Database query results</li>
-                                <li>Computed values</li>
-                                <li>Session data</li>
-                                <li>API responses</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Database query results</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Computed values</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Session data</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">API responses</div>
+    </div>
+</div>
                             <h4>Tools</h4>
-                            <ul>
-                                <li>Redis, Memcached</li>
-                                <li>In-process cache</li>
-                                <li>Application variables</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Redis, Memcached</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">In-process cache</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Application variables</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -331,17 +475,29 @@ flowchart TD
                             <h3>Browser Cache</h3>
                             <p class="framework-subtitle">Client-Side Storage</p>
                             <h4>What to Cache</h4>
-                            <ul>
-                                <li>Static resources</li>
-                                <li>API responses</li>
-                                <li>User preferences</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Static resources</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">API responses</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">User preferences</div>
+    </div>
+</div>
                             <h4>Mechanisms</h4>
-                            <ul>
-                                <li>HTTP Cache-Control</li>
-                                <li>Service Workers</li>
-                                <li>LocalStorage/IndexedDB</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">HTTP Cache-Control</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Service Workers</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">LocalStorage/IndexedDB</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -351,62 +507,106 @@ flowchart TD
                             <span class="framework-panel-icon">⏰</span>
                             <h3>Time-Based (TTL)</h3>
                             <h4>Strategy</h4>
-                            <ul>
-                                <li>Set expiration time</li>
-                                <li>Auto-refresh on expiry</li>
-                                <li>Simple to implement</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Set expiration time</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Auto-refresh on expiry</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Simple to implement</div>
+    </div>
+</div>
                             <h4>Use Cases</h4>
-                            <ul>
-                                <li>Slowly changing data</li>
-                                <li>Weather forecasts</li>
-                                <li>News articles</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Slowly changing data</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Weather forecasts</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">News articles</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🔔</span>
                             <h3>Event-Based</h3>
                             <h4>Strategy</h4>
-                            <ul>
-                                <li>Invalidate on data change</li>
-                                <li>Pub/sub notifications</li>
-                                <li>More complex</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Invalidate on data change</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Pub/sub notifications</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">More complex</div>
+    </div>
+</div>
                             <h4>Use Cases</h4>
-                            <ul>
-                                <li>Real-time data</li>
-                                <li>User profiles</li>
-                                <li>Inventory levels</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Real-time data</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">User profiles</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Inventory levels</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🔄</span>
                             <h3>Write-Through</h3>
                             <h4>Strategy</h4>
-                            <ul>
-                                <li>Update cache on write</li>
-                                <li>Cache always fresh</li>
-                                <li>Write penalty</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Update cache on write</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Cache always fresh</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Write penalty</div>
+    </div>
+</div>
                             <h4>Use Cases</h4>
-                            <ul>
-                                <li>Frequently read data</li>
-                                <li>Strong consistency needs</li>
-                                <li>Session storage</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Frequently read data</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Strong consistency needs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Session storage</div>
+    </div>
+</div>
                         </div>
                     </div>
 
                     <div class="info-box info-box-warning">
                         <strong>Cache Invalidation Challenges:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Thundering Herd:</strong> Many requests on cache miss - use locking</li>
-                            <li><strong>Cache Stampede:</strong> Simultaneous expiration - stagger TTLs</li>
-                            <li><strong>Stale Data:</strong> Outdated cache - use versioning or TTL</li>
-                            <li><strong>Cache Coherence:</strong> Distributed caches - use cache tags</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Thundering Herd:</strong> Many requests on cache miss - use locking</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Cache Stampede:</strong> Simultaneous expiration - stagger TTLs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Stale Data:</strong> Outdated cache - use versioning or TTL</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Cache Coherence:</strong> Distributed caches - use cache tags</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -422,51 +622,87 @@ flowchart TD
                             <span class="framework-panel-icon">📊</span>
                             <h3>Load Testing</h3>
                             <h4>Purpose</h4>
-                            <ul>
-                                <li>Test normal traffic patterns</li>
-                                <li>Verify performance targets</li>
-                                <li>Identify degradation points</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Test normal traffic patterns</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Verify performance targets</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Identify degradation points</div>
+    </div>
+</div>
                             <h4>Metrics</h4>
-                            <ul>
-                                <li>Response time (p50, p95, p99)</li>
-                                <li>Throughput (req/sec)</li>
-                                <li>Error rate</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Response time (p50, p95, p99)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Throughput (req/sec)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Error rate</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">⚡</span>
                             <h3>Stress Testing</h3>
                             <h4>Purpose</h4>
-                            <ul>
-                                <li>Test beyond capacity</li>
-                                <li>Find breaking point</li>
-                                <li>Observe failure modes</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Test beyond capacity</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Find breaking point</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Observe failure modes</div>
+    </div>
+</div>
                             <h4>Scenarios</h4>
-                            <ul>
-                                <li>Traffic spikes</li>
-                                <li>Black Friday sales</li>
-                                <li>Viral events</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Traffic spikes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Black Friday sales</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Viral events</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🔋</span>
                             <h3>Soak Testing</h3>
                             <h4>Purpose</h4>
-                            <ul>
-                                <li>Test sustained load</li>
-                                <li>Detect memory leaks</li>
-                                <li>Resource exhaustion</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Test sustained load</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Detect memory leaks</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Resource exhaustion</div>
+    </div>
+</div>
                             <h4>Duration</h4>
-                            <ul>
-                                <li>Hours to days</li>
-                                <li>Continuous monitoring</li>
-                                <li>Resource trends</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Hours to days</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Continuous monitoring</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Resource trends</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -548,53 +784,93 @@ sequenceDiagram
                             <span class="framework-panel-icon">📦</span>
                             <h3>Code Splitting</h3>
                             <h4>Techniques</h4>
-                            <ul>
-                                <li>Route-based splitting</li>
-                                <li>Component lazy loading</li>
-                                <li>Dynamic imports</li>
-                                <li>Vendor bundle separation</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Route-based splitting</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Component lazy loading</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Dynamic imports</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Vendor bundle separation</div>
+    </div>
+</div>
                             <h4>Benefits</h4>
-                            <ul>
-                                <li>Smaller initial bundle</li>
-                                <li>Faster page loads</li>
-                                <li>Better caching</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Smaller initial bundle</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Faster page loads</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Better caching</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🖼️</span>
                             <h3>Image Optimization</h3>
                             <h4>Techniques</h4>
-                            <ul>
-                                <li>Modern formats (WebP, AVIF)</li>
-                                <li>Responsive images (srcset)</li>
-                                <li>Lazy loading</li>
-                                <li>Compression</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Modern formats (WebP, AVIF)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Responsive images (srcset)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Lazy loading</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Compression</div>
+    </div>
+</div>
                             <h4>Tools</h4>
-                            <ul>
-                                <li>ImageOptim, TinyPNG</li>
-                                <li>Sharp, Pillow libraries</li>
-                                <li>CDN transforms</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">ImageOptim, TinyPNG</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Sharp, Pillow libraries</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">CDN transforms</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">⚡</span>
                             <h3>Critical CSS</h3>
                             <h4>Strategy</h4>
-                            <ul>
-                                <li>Inline above-fold CSS</li>
-                                <li>Defer non-critical CSS</li>
-                                <li>Reduce render-blocking</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Inline above-fold CSS</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Defer non-critical CSS</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Reduce render-blocking</div>
+    </div>
+</div>
                             <h4>Tools</h4>
-                            <ul>
-                                <li>Critical, PurgeCSS</li>
-                                <li>Lighthouse recommendations</li>
-                                <li>PostCSS plugins</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Critical, PurgeCSS</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Lighthouse recommendations</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">PostCSS plugins</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -604,51 +880,87 @@ sequenceDiagram
                             <span class="framework-panel-icon">🔄</span>
                             <h3>Async Processing</h3>
                             <h4>Patterns</h4>
-                            <ul>
-                                <li>Background jobs</li>
-                                <li>Message queues</li>
-                                <li>Event-driven architecture</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Background jobs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Message queues</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Event-driven architecture</div>
+    </div>
+</div>
                             <h4>Use Cases</h4>
-                            <ul>
-                                <li>Email sending</li>
-                                <li>Report generation</li>
-                                <li>Image processing</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Email sending</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Report generation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Image processing</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🔌</span>
                             <h3>Connection Pooling</h3>
                             <h4>Strategy</h4>
-                            <ul>
-                                <li>Reuse database connections</li>
-                                <li>Reduce connection overhead</li>
-                                <li>Configure pool size</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Reuse database connections</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Reduce connection overhead</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Configure pool size</div>
+    </div>
+</div>
                             <h4>Configuration</h4>
-                            <ul>
-                                <li>Min/max pool size</li>
-                                <li>Connection timeout</li>
-                                <li>Idle timeout</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Min/max pool size</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Connection timeout</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Idle timeout</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">📊</span>
                             <h3>Data Pagination</h3>
                             <h4>Techniques</h4>
-                            <ul>
-                                <li>Offset-based pagination</li>
-                                <li>Cursor-based pagination</li>
-                                <li>Infinite scroll</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Offset-based pagination</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Cursor-based pagination</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Infinite scroll</div>
+    </div>
+</div>
                             <h4>Benefits</h4>
-                            <ul>
-                                <li>Reduced payload size</li>
-                                <li>Faster response times</li>
-                                <li>Better UX</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Reduced payload size</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Faster response times</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Better UX</div>
+    </div>
+</div>
                         </div>
                     </div>
                 </div>
@@ -663,23 +975,39 @@ sequenceDiagram
                         <div class="framework-panel">
                             <span class="framework-panel-icon">📖</span>
                             <h3>Essential Books</h3>
-                            <ul>
-                                <li><strong>High Performance Browser Networking</strong> - Ilya Grigorik</li>
-                                <li><strong>Web Performance in Action</strong> - Jeremy Wagner</li>
-                                <li><strong>The Art of Scalability</strong> - Abbott & Fisher</li>
-                                <li><strong>Systems Performance</strong> - Brendan Gregg</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>High Performance Browser Networking</strong> - Ilya Grigorik</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Web Performance in Action</strong> - Jeremy Wagner</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>The Art of Scalability</strong> - Abbott & Fisher</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Systems Performance</strong> - Brendan Gregg</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🛠️</span>
                             <h3>Tools & Platforms</h3>
-                            <ul>
-                                <li><a href="https://developers.google.com/web/tools/lighthouse" target="_blank" rel="noopener">Lighthouse</a> - Performance auditing</li>
-                                <li><a href="https://k6.io/" target="_blank" rel="noopener">k6</a> - Load testing</li>
-                                <li><a href="https://www.webpagetest.org/" target="_blank" rel="noopener">WebPageTest</a> - Performance analysis</li>
-                                <li><a href="https://redis.io/" target="_blank" rel="noopener">Redis</a> - Caching solution</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><a href="https://developers.google.com/web/tools/lighthouse" target="_blank" rel="noopener">Lighthouse</a> - Performance auditing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://k6.io/" target="_blank" rel="noopener">k6</a> - Load testing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://www.webpagetest.org/" target="_blank" rel="noopener">WebPageTest</a> - Performance analysis</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://redis.io/" target="_blank" rel="noopener">Redis</a> - Caching solution</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">

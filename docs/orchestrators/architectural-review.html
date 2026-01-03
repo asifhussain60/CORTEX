@@ -1,24 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CORTEX Architectural Review Orchestrator - 6-phase analysis with 0-100 scoring for layer separation, SOLID compliance, and testability">
     <title>Architectural Review - CORTEX</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
         .mermaid { background: transparent; margin: 1.5rem 0; }
-        .diagram-card { margin-bottom: 2rem; }
-        .diagram-title { font-size: 1.1rem; color: var(--accent-primary); margin-bottom: 1rem; font-weight: 600; }
-        .score-dashboard { width: 100%; min-height: 300px; display: flex; justify-content: center; }
-        .scoring-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0; }
-        .scoring-card { padding: 1rem; background: rgba(26, 26, 46, 0.6); border-radius: 8px; text-align: center; }
-        .score-value { font-size: 2rem; font-weight: 700; }
-        .score-max { font-size: 1rem; color: #a0aec0; }
-        @media (max-width: 768px) { .scoring-grid { grid-template-columns: repeat(2, 1fr); } }
+        .architecture-diagram { margin-bottom: 2rem; }
+        .architecture-diagram { font-size: 1.1rem; color: var(--accent-primary); margin-bottom: 1rem; font-weight: 600; }
+        .level2-score-low { width: 100%; min-height: 300px; display: flex; justify-content: center; }
+        .level2-score-low { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0; }
+        .level2-score-low { padding: 1rem; background: rgba(26, 26, 46, 0.6); border-radius: 8px; text-align: center; }
+        .level2-score-low { font-size: 2rem; font-weight: 700; }
+        .level2-score-low { font-size: 1rem; color: #a0aec0; }
+        @media (max-width: 768px) { .level2-score-low { grid-template-columns: repeat(2, 1fr); } }
     </style>
 </head>
 <body>
@@ -27,10 +53,35 @@
     
     <!-- Level 1 Navigation Header -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../index.html" class="nav-link">
-                    <i class="fas fa-home"></i>
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../index.html" class="nav-link" mobile-nav-optimized>
+                    <i class="pulse-glow-glass--fast fa-home"></i>
                     <span>Home</span>
                 </a>
             </nav>
@@ -84,54 +135,54 @@
         </div>
         
         <!-- Score Dashboard -->
-        <section class="section-dashboard">
-            <div class="glass-card diagram-card">
+        <section class="level2-section-title-green">
+            <div class="glass-card architecture-diagram">
                 <h2><span>📊</span> Architecture Score Dashboard (D3.js)</h2>
-                <p class="diagram-title">Real-time scoring breakdown by category</p>
+                <p class="architecture-diagram">Real-time scoring breakdown by category</p>
                 
-                <div id="score-dashboard" class="score-dashboard"></div>
+                <div id="level2-score-low" class="level2-score-low"></div>
             </div>
         </section>
         
         <!-- Scoring Breakdown -->
-        <section class="section-scoring">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>🎯</span> Scoring Breakdown</h2>
                 
-                <div class="scoring-grid">
-                    <div class="scoring-card">
-                        <div class="score-value">25</div>
-                        <div class="score-max">/25 max</div>
+                <div class="level2-score-low">
+                    <div class="level2-score-low">
+                        <div class="level2-score-low">25</div>
+                        <div class="level2-score-low">/25 max</div>
                         <strong>Layer Separation</strong>
                         <p>-3 points per violation</p>
                     </div>
-                    <div class="scoring-card">
-                        <div class="score-value">15</div>
-                        <div class="score-max">/15 max</div>
+                    <div class="level2-score-low">
+                        <div class="level2-score-low">15</div>
+                        <div class="level2-score-low">/15 max</div>
                         <strong>Design Patterns</strong>
                         <p>Pattern usage & opportunities</p>
                     </div>
-                    <div class="scoring-card">
-                        <div class="score-value">20</div>
-                        <div class="score-max">/20 max</div>
+                    <div class="level2-score-low">
+                        <div class="level2-score-low">20</div>
+                        <div class="level2-score-low">/20 max</div>
                         <strong>Dependency Management</strong>
                         <p>Circular deps & coupling</p>
                     </div>
-                    <div class="scoring-card">
-                        <div class="score-value">15</div>
-                        <div class="score-max">/15 max</div>
+                    <div class="level2-score-low">
+                        <div class="level2-score-low">15</div>
+                        <div class="level2-score-low">/15 max</div>
                         <strong>SOLID Compliance</strong>
                         <p>5 principles check</p>
                     </div>
-                    <div class="scoring-card">
-                        <div class="score-value">25</div>
-                        <div class="score-max">/25 max</div>
+                    <div class="level2-score-low">
+                        <div class="level2-score-low">25</div>
+                        <div class="level2-score-low">/25 max</div>
                         <strong>Testability</strong>
                         <p>Coverage & test quality</p>
                     </div>
-                    <div class="scoring-card">
-                        <div class="score-value">100</div>
-                        <div class="score-max">TOTAL</div>
+                    <div class="level2-score-low">
+                        <div class="level2-score-low">100</div>
+                        <div class="level2-score-low">TOTAL</div>
                         <strong>Overall Score</strong>
                         <p>A ≥90, B ≥80, C ≥70, D ≥60</p>
                     </div>
@@ -140,10 +191,10 @@
         </section>
         
         <!-- 6-Phase Pipeline -->
-        <section class="section-pipeline">
-            <div class="glass-card diagram-card">
+        <section class="level2-section-title-green">
+            <div class="glass-card architecture-diagram">
                 <h2><span>🔄</span> 6-Phase Analysis Pipeline</h2>
-                <p class="diagram-title">Comprehensive architecture assessment workflow</p>
+                <p class="architecture-diagram">Comprehensive architecture assessment workflow</p>
                 
                 <div class="mermaid">
 flowchart TB
@@ -215,10 +266,10 @@ flowchart TB
         </section>
         
         <!-- Layer Hierarchy -->
-        <section class="section-layers">
-            <div class="glass-card diagram-card">
+        <section class="level2-section-title-green">
+            <div class="glass-card architecture-diagram">
                 <h2><span>🏛️</span> Layer Hierarchy & Dependencies</h2>
-                <p class="diagram-title">Valid layer dependencies (lower can depend on higher)</p>
+                <p class="architecture-diagram">Valid layer dependencies (lower can depend on higher)</p>
                 
                 <div class="mermaid">
 flowchart TB
@@ -251,10 +302,10 @@ flowchart TB
         </section>
         
         <!-- Data Model -->
-        <section class="section-datamodel">
-            <div class="glass-card diagram-card">
+        <section class="level2-section-title-green">
+            <div class="glass-card architecture-diagram">
                 <h2><span>🗃️</span> Analysis Data Model</h2>
-                <p class="diagram-title">Key data structures for architectural analysis</p>
+                <p class="architecture-diagram">Key data structures for architectural analysis</p>
                 
                 <div class="mermaid">
 classDiagram
@@ -318,7 +369,7 @@ classDiagram
         </section>
         
         <!-- Grade Scale -->
-        <section class="section-grades">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>🎓</span> Grade Scale & Interpretation</h2>
                 
@@ -368,10 +419,10 @@ classDiagram
         </section>
         
         <!-- SOLID Principles -->
-        <section class="section-solid">
-            <div class="glass-card diagram-card">
+        <section class="level2-section-title-green">
+            <div class="glass-card architecture-diagram">
                 <h2><span>⚡</span> SOLID Compliance Checks</h2>
-                <p class="diagram-title">Each principle contributes to the 15-point SOLID score</p>
+                <p class="architecture-diagram">Each principle contributes to the 15-point SOLID score</p>
                 
                 <div class="mermaid">
 mindmap
@@ -401,7 +452,7 @@ mindmap
         </section>
         
         <!-- Example Output -->
-        <section class="section-output">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>📋</span> Example Review Output</h2>
                 
@@ -472,7 +523,7 @@ mindmap
         </section>
         
         <!-- Related Features -->
-        <section class="section-related">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>🔗</span> Related Orchestrators</h2>
                 <div class="feature-grid feature-grid-3">
@@ -513,7 +564,7 @@ mindmap
         
         // D3.js Score Dashboard - Radial Bar Chart
         (function() {
-            const container = document.getElementById('score-dashboard');
+            const container = document.getElementById('level2-score-low');
             const width = Math.min(container.clientWidth, 600);
             const height = 300;
             const centerX = width / 2;
@@ -533,7 +584,7 @@ mindmap
             const grade = totalScore >= 90 ? 'A' : totalScore >= 80 ? 'B' : totalScore >= 70 ? 'C' : totalScore >= 60 ? 'D' : 'F';
             const gradeColor = grade === 'A' ? '#10b981' : grade === 'B' ? '#00d4ff' : grade === 'C' ? '#f59e0b' : '#ef4444';
             
-            const svg = d3.select('#score-dashboard')
+            const svg = d3.select('#level2-score-low')
                 .append('svg')
                 .attr('width', width)
                 .attr('height', height);

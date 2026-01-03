@@ -1,14 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Microservices Architecture - Patterns, resilience, security, and distributed system design">
+    <meta name="description" content="Microservices Architecture - Patterns, resilience, badge-security, and distributed system design">
     <meta name="keywords" content="microservices, distributed systems, architecture, resilience, patterns, event-driven, reactive systems">
     <meta name="author" content="Asif Hussain">
     <title>Microservices Architecture | CORTEX Knowledge</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
@@ -32,7 +58,7 @@
         
         .hub-node {
             cursor: pointer;
-            transition: all 0.3s ease;
+            transform-panels: all 0.3s ease;
         }
         
         .hub-node:hover {
@@ -42,7 +68,7 @@
         .spoke-line {
             stroke: rgba(0, 212, 255, 0.3);
             stroke-width: 2;
-            transition: stroke 0.3s ease;
+            transform-panels: stroke 0.3s ease;
         }
         
         .hub-node:hover ~ .spoke-line {
@@ -51,7 +77,7 @@
         
         .node-group {
             cursor: pointer;
-            transition: transform 0.3s ease;
+            transform-panels: transform 0.3s ease;
         }
         
         .node-group:hover {
@@ -59,7 +85,7 @@
         }
         
         .node-circle {
-            transition: all 0.3s ease;
+            transform-panels: all 0.3s ease;
             filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
         }
         
@@ -88,7 +114,7 @@
             fill: none;
             stroke: rgba(0, 212, 255, 0.3);
             stroke-width: 2;
-            transition: stroke 0.3s ease;
+            transform-panels: stroke 0.3s ease;
         }
         
         .link:hover {
@@ -109,7 +135,7 @@
             border: 1px solid var(--glass-border);
             border-radius: 16px;
             padding: 1.5rem;
-            transition: all 0.3s ease;
+            transform-panels: all 0.3s ease;
             text-decoration: none;
             display: block;
             position: relative;
@@ -125,7 +151,7 @@
             height: 4px;
             background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transform-panels: opacity 0.3s ease;
         }
         
         .topic-card:hover {
@@ -152,8 +178,8 @@
         
         .topic-card-icon.reactive { background: linear-gradient(135deg, #10b981, #059669); }
         .topic-card-icon.resilience { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
-        .topic-card-icon.security { background: linear-gradient(135deg, #ef4444, #dc2626); }
-        .topic-card-icon.transition { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .topic-card-icon.badge-security { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .topic-card-icon.transform-panels { background: linear-gradient(135deg, #f59e0b, #d97706); }
         
         .topic-card h3 {
             color: var(--text-primary);
@@ -186,28 +212,28 @@
         }
         
         /* Architecture Overview Section */
-        .architecture-overview {
+        .architecture-title-future {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1.5rem;
             margin: 2rem 0;
         }
         
-        .arch-pillar {
+        .architecture-title-future {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
             border-radius: 12px;
             padding: 1.5rem;
             text-align: center;
-            transition: all 0.3s ease;
+            transform-panels: all 0.3s ease;
         }
         
-        .arch-pillar:hover {
+        .architecture-title-future:hover {
             border-color: var(--accent-primary);
             transform: translateY(-2px);
         }
         
-        .arch-pillar-icon {
+        .architecture-title-future-icon {
             width: 64px;
             height: 64px;
             margin: 0 auto 1rem;
@@ -219,24 +245,24 @@
             color: #fff;
         }
         
-        .arch-pillar-icon.design { background: linear-gradient(135deg, #7b61ff, #5b45d9); }
-        .arch-pillar-icon.communication { background: linear-gradient(135deg, #00d4ff, #0095b8); }
-        .arch-pillar-icon.data { background: linear-gradient(135deg, #f59e0b, #d97706); }
-        .arch-pillar-icon.resilience { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .architecture-title-future-icon.design { background: linear-gradient(135deg, #7b61ff, #5b45d9); }
+        .architecture-title-future-icon.command-example { background: linear-gradient(135deg, #00d4ff, #0095b8); }
+        .architecture-title-future-icon.level1-domain-icon--data { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .architecture-title-future-icon.resilience { background: linear-gradient(135deg, #ef4444, #dc2626); }
         
-        .arch-pillar h4 {
+        .architecture-title-future h4 {
             color: var(--text-primary);
             font-size: 1.1rem;
             margin-bottom: 0.5rem;
         }
         
-        .arch-pillar p {
+        .architecture-title-future p {
             color: var(--text-secondary);
             font-size: 0.85rem;
         }
         
         /* D3 Legend */
-        .map-legend {
+        .level1-map-container {
             display: flex;
             flex-wrap: wrap;
             gap: 1rem;
@@ -255,7 +281,7 @@
             color: var(--text-secondary);
         }
         
-        .legend-dot {
+        .level2-legend-orange {
             width: 12px;
             height: 12px;
             border-radius: 50%;
@@ -288,13 +314,13 @@
                 grid-template-columns: 1fr;
             }
             
-            .architecture-overview {
+            .architecture-title-future {
                 grid-template-columns: 1fr 1fr;
             }
         }
         
         @media (max-width: 480px) {
-            .architecture-overview {
+            .architecture-title-future {
                 grid-template-columns: 1fr;
             }
             
@@ -310,7 +336,7 @@
 
     <!-- Breadcrumb Navigation -->
     <nav class="breadcrumb" aria-label="Breadcrumb">
-        <a href="../index.html"><i class="fas fa-home" aria-hidden="true"></i> Home</a>
+        <a href="../index.html"><i class="pulse-glow-glass--fast fa-home" aria-hidden="true"></i> Home</a>
         <span class="breadcrumb-separator">→</span>
         <a href="index.html">Knowledge Library</a>
         <span class="breadcrumb-separator">→</span>
@@ -327,19 +353,19 @@
     <main class="container" id="main-content">
         <!-- Hero Section -->
         <section class="hero">
-            <h1 class="hero-title"><i class="fas fa-cubes" aria-hidden="true"></i> Microservices Architecture</h1>
-            <p class="hero-subtitle">Distributed Systems, Resilience Patterns, Security Strategies &amp; Transition Techniques</p>
-            <div class="file-metadata">
-                <span class="metadata-item"><i class="fas fa-layer-group" aria-hidden="true"></i> 4 Deep-Dive Topics</span>
-                <span class="metadata-item"><i class="fas fa-network-wired" aria-hidden="true"></i> Distributed Systems</span>
-                <span class="metadata-item"><i class="fas fa-calendar-alt" aria-hidden="true"></i> Updated: Dec 2025</span>
+            <h1 class="hero-title"><i class="pulse-glow-glass--fast fa-cubes" aria-hidden="true"></i> Microservices Architecture</h1>
+            <p class="hero-subtitle">Distributed Systems, Resilience Patterns, badge-security Strategies &amp; transform-panels Techniques</p>
+            <div class="code-file">
+                <span class="metadata-item"><i class="pulse-glow-glass--fast fa-layer-group" aria-hidden="true"></i> 4 Deep-Dive Topics</span>
+                <span class="metadata-item"><i class="pulse-glow-glass--fast fa-network-wired" aria-hidden="true"></i> Distributed Systems</span>
+                <span class="metadata-item"><i class="pulse-glow-glass--fast fa-calendar-alt" aria-hidden="true"></i> Updated: Dec 2025</span>
             </div>
         </section>
 
         <!-- Microservices Architecture Landscape -->
         <section class="section">
             <div class="glass-card">
-                <h2 class="section-title"><i class="fas fa-project-diagram" aria-hidden="true"></i> Microservices Architecture Landscape</h2>
+                <h2 class="section-title"><i class="pulse-glow-glass--fast fa-project-diagram" aria-hidden="true"></i> Microservices Architecture Landscape</h2>
                 <p class="level2-text-muted-mb-lg">
                     Click on any topic node to explore detailed content. The tree shows the hierarchical structure of microservices concepts.
                 </p>
@@ -348,26 +374,26 @@
                     <!-- D3.js will render here -->
                 </div>
                 
-                <div class="map-legend">
+                <div class="level1-map-container">
                     <div class="legend-item">
-                        <span class="legend-dot" class="level2-badge-purple"></span>
+                        <span class="level2-legend-orange" class="level2-badge-purple"></span>
                         <span>Core Hub</span>
                     </div>
                     <div class="legend-item">
-                        <span class="legend-dot" class="level2-badge-green-alt"></span>
+                        <span class="level2-legend-orange" class="level2-badge-green-alt"></span>
                         <span>Reactive Systems</span>
                     </div>
                     <div class="legend-item">
-                        <span class="legend-dot" class="level2-badge-blue"></span>
+                        <span class="level2-legend-orange" class="level2-badge-blue"></span>
                         <span>Resilience Patterns</span>
                     </div>
                     <div class="legend-item">
-                        <span class="legend-dot level2-legend-red"></span>
-                        <span>Security Strategies</span>
+                        <span class="level2-legend-orange level2-legend-red"></span>
+                        <span>badge-security Strategies</span>
                     </div>
                     <div class="legend-item">
-                        <span class="legend-dot level2-legend-orange"></span>
-                        <span>Transition Strategies</span>
+                        <span class="level2-legend-orange level2-legend-orange"></span>
+                        <span>transform-panels Strategies</span>
                     </div>
                 </div>
             </div>
@@ -376,33 +402,33 @@
         <!-- Core Pillars -->
         <section class="section">
             <div class="glass-card">
-                <h2 class="section-title"><i class="fas fa-columns" aria-hidden="true"></i> Core Architecture Pillars</h2>
+                <h2 class="section-title"><i class="pulse-glow-glass--fast fa-columns" aria-hidden="true"></i> Core Architecture Pillars</h2>
                 
-                <div class="architecture-overview">
-                    <div class="arch-pillar">
-                        <div class="arch-pillar-icon design">
-                            <i class="fas fa-drafting-compass" aria-hidden="true"></i>
+                <div class="architecture-title-future">
+                    <div class="architecture-title-future">
+                        <div class="architecture-title-future-icon design">
+                            <i class="pulse-glow-glass--fast fa-drafting-compass" aria-hidden="true"></i>
                         </div>
                         <h4>Service Design</h4>
                         <p>Domain-Driven Design, Bounded Contexts, Service Boundaries</p>
                     </div>
-                    <div class="arch-pillar">
-                        <div class="arch-pillar-icon communication">
-                            <i class="fas fa-exchange-alt" aria-hidden="true"></i>
+                    <div class="architecture-title-future">
+                        <div class="architecture-title-future-icon command-example">
+                            <i class="pulse-glow-glass--fast fa-exchange-alt" aria-hidden="true"></i>
                         </div>
-                        <h4>Communication</h4>
+                        <h4>command-example</h4>
                         <p>REST, gRPC, Event-Driven, Message Queues, Service Mesh</p>
                     </div>
-                    <div class="arch-pillar">
-                        <div class="arch-pillar-icon data">
-                            <i class="fas fa-database" aria-hidden="true"></i>
+                    <div class="architecture-title-future">
+                        <div class="architecture-title-future-icon level1-domain-icon--data">
+                            <i class="pulse-glow-glass--fast fa-database" aria-hidden="true"></i>
                         </div>
-                        <h4>Data Management</h4>
+                        <h4>level1-domain-icon--data Management</h4>
                         <p>Database per Service, CQRS, Event Sourcing, Saga Pattern</p>
                     </div>
-                    <div class="arch-pillar">
-                        <div class="arch-pillar-icon resilience">
-                            <i class="fas fa-shield-alt" aria-hidden="true"></i>
+                    <div class="architecture-title-future">
+                        <div class="architecture-title-future-icon resilience">
+                            <i class="pulse-glow-glass--fast fa-shield-alt" aria-hidden="true"></i>
                         </div>
                         <h4>Resilience</h4>
                         <p>Circuit Breaker, Retry, Timeout, Bulkhead, Fallback</p>
@@ -414,7 +440,7 @@
         <!-- Topic Cards -->
         <section class="section">
             <div class="glass-card">
-                <h2 class="section-title"><i class="fas fa-book-open" aria-hidden="true"></i> Deep-Dive Topics</h2>
+                <h2 class="section-title"><i class="pulse-glow-glass--fast fa-book-open" aria-hidden="true"></i> Deep-Dive Topics</h2>
                 <p class="level2-text-muted-mb-lg">
                     Explore comprehensive guides on specialized microservices topics.
                 </p>
@@ -423,56 +449,56 @@
                     <!-- Developing Reactive Systems -->
                     <a href="microservices/developing-reactive-systems.md" class="topic-card">
                         <div class="topic-card-icon reactive">
-                            <i class="fas fa-bolt" aria-hidden="true"></i>
+                            <i class="pulse-glow-glass--fast fa-bolt" aria-hidden="true"></i>
                         </div>
                         <h3>Developing Reactive Systems</h3>
                         <p>Build scalable, fault-tolerant microservices using event-driven architecture, Kafka, webhooks, and reactive programming with Spring WebFlux.</p>
                         <div class="topic-card-meta">
-                            <span class="topic-card-badge"><i class="fas fa-stream" aria-hidden="true"></i> Event-Driven</span>
-                            <span class="topic-card-badge"><i class="fas fa-sync" aria-hidden="true"></i> Async</span>
-                            <span class="topic-card-badge"><i class="fas fa-database" aria-hidden="true"></i> Event Sourcing</span>
+                            <span class="topic-card-badge"><i class="pulse-glow-glass--fast fa-stream" aria-hidden="true"></i> Event-Driven</span>
+                            <span class="topic-card-badge"><i class="pulse-glow-glass--fast fa-sync" aria-hidden="true"></i> Async</span>
+                            <span class="topic-card-badge"><i class="pulse-glow-glass--fast fa-database" aria-hidden="true"></i> Event Sourcing</span>
                         </div>
                     </a>
                     
                     <!-- Resilience Patterns -->
                     <a href="microservices/resilience-patterns.html" class="topic-card">
                         <div class="topic-card-icon resilience">
-                            <i class="fas fa-heartbeat" aria-hidden="true"></i>
+                            <i class="pulse-glow-glass--fast fa-heartbeat" aria-hidden="true"></i>
                         </div>
                         <h3>Resilience Patterns</h3>
                         <p>Master Circuit Breaker, Retry with Exponential Backoff, Timeout, Bulkhead, and Fallback patterns for building robust distributed systems.</p>
                         <div class="topic-card-meta">
-                            <span class="topic-card-badge"><i class="fas fa-plug" aria-hidden="true"></i> Circuit Breaker</span>
-                            <span class="topic-card-badge"><i class="fas fa-redo" aria-hidden="true"></i> Retry</span>
-                            <span class="topic-card-badge"><i class="fas fa-ship" aria-hidden="true"></i> Bulkhead</span>
+                            <span class="topic-card-badge"><i class="pulse-glow-glass--fast fa-plug" aria-hidden="true"></i> Circuit Breaker</span>
+                            <span class="topic-card-badge"><i class="pulse-glow-glass--fast fa-redo" aria-hidden="true"></i> Retry</span>
+                            <span class="topic-card-badge"><i class="pulse-glow-glass--fast fa-ship" aria-hidden="true"></i> Bulkhead</span>
                         </div>
                     </a>
                     
-                    <!-- Security Strategies -->
-                    <a href="microservices/security-strategies.md" class="topic-card">
-                        <div class="topic-card-icon security">
-                            <i class="fas fa-lock" aria-hidden="true"></i>
+                    <!-- badge-security Strategies -->
+                    <a href="microservices/badge-security-strategies.md" class="topic-card">
+                        <div class="topic-card-icon badge-security">
+                            <i class="pulse-glow-glass--fast fa-lock" aria-hidden="true"></i>
                         </div>
-                        <h3>Security Strategies</h3>
-                        <p>Implement comprehensive security with mTLS, OAuth2, OpenID Connect, API Gateway patterns, and zero-trust architecture for microservices.</p>
+                        <h3>badge-security Strategies</h3>
+                        <p>Implement comprehensive badge-security with mTLS, OAuth2, OpenID Connect, API Gateway patterns, and zero-trust architecture for microservices.</p>
                         <div class="topic-card-meta">
-                            <span class="topic-card-badge"><i class="fas fa-key" aria-hidden="true"></i> mTLS</span>
-                            <span class="topic-card-badge"><i class="fas fa-user-shield" aria-hidden="true"></i> OAuth2</span>
-                            <span class="topic-card-badge"><i class="fas fa-network-wired" aria-hidden="true"></i> Service Mesh</span>
+                            <span class="topic-card-badge"><i class="pulse-glow-glass--fast fa-key" aria-hidden="true"></i> mTLS</span>
+                            <span class="topic-card-badge"><i class="pulse-glow-glass--fast fa-user-shield" aria-hidden="true"></i> OAuth2</span>
+                            <span class="topic-card-badge"><i class="pulse-glow-glass--fast fa-network-wired" aria-hidden="true"></i> Service Mesh</span>
                         </div>
                     </a>
                     
-                    <!-- Transition Strategies -->
-                    <a href="microservices/transition-strategies-techniques.md" class="topic-card">
-                        <div class="topic-card-icon transition">
-                            <i class="fas fa-random" aria-hidden="true"></i>
+                    <!-- transform-panels Strategies -->
+                    <a href="microservices/transform-panels-strategies-techniques.md" class="topic-card">
+                        <div class="topic-card-icon transform-panels">
+                            <i class="pulse-glow-glass--fast fa-random" aria-hidden="true"></i>
                         </div>
-                        <h3>Transition Strategies &amp; Techniques</h3>
+                        <h3>transform-panels Strategies &amp; Techniques</h3>
                         <p>Learn the Strangler Fig Pattern, Branch by Abstraction, Feature Toggles, and database decomposition for migrating from monolith to microservices.</p>
                         <div class="topic-card-meta">
-                            <span class="topic-card-badge"><i class="fas fa-code-branch" aria-hidden="true"></i> Strangler Pattern</span>
-                            <span class="topic-card-badge"><i class="fas fa-toggle-on" aria-hidden="true"></i> Feature Toggles</span>
-                            <span class="topic-card-badge"><i class="fas fa-sitemap" aria-hidden="true"></i> Decomposition</span>
+                            <span class="topic-card-badge"><i class="pulse-glow-glass--fast fa-code-branch" aria-hidden="true"></i> Strangler Pattern</span>
+                            <span class="topic-card-badge"><i class="pulse-glow-glass--fast fa-toggle-on" aria-hidden="true"></i> Feature Toggles</span>
+                            <span class="topic-card-badge"><i class="pulse-glow-glass--fast fa-sitemap" aria-hidden="true"></i> Decomposition</span>
                         </div>
                     </a>
                 </div>
@@ -482,18 +508,30 @@
         <!-- Key Principles Section -->
         <section class="section">
             <div class="glass-card">
-                <h2 class="section-title"><i class="fas fa-lightbulb" aria-hidden="true"></i> Key Principles</h2>
+                <h2 class="section-title"><i class="pulse-glow-glass--fast fa-lightbulb" aria-hidden="true"></i> Key Principles</h2>
                 
                 <div class="info-box info-box-primary">
-                    <strong><i class="fas fa-star" aria-hidden="true"></i> Microservices Fundamentals:</strong>
-                    <ul class="feature-list">
-                        <li><strong>Single Responsibility:</strong> Each service handles one business capability</li>
-                        <li><strong>Independence:</strong> Deploy, scale, and fail independently</li>
-                        <li><strong>Decentralization:</strong> Distributed data management and governance</li>
-                        <li><strong>Resilience:</strong> Design for failure with circuit breakers and retries</li>
-                        <li><strong>Observability:</strong> Metrics, logs, and distributed tracing</li>
-                        <li><strong>Automation:</strong> CI/CD pipelines and infrastructure as code</li>
-                    </ul>
+                    <strong><i class="pulse-glow-glass--fast fa-star" aria-hidden="true"></i> Microservices Fundamentals:</strong>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Single Responsibility:</strong> Each service handles one business capability</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Independence:</strong> Deploy, scale, and fail independently</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Decentralization:</strong> Distributed level1-domain-icon--data management and governance</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Resilience:</strong> Design for failure with circuit breakers and retries</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Observability:</strong> Metrics, logs, and distributed tracing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Automation:</strong> CI/CD pipelines and infrastructure as code</div>
+    </div>
+</div>
                 </div>
             </div>
         </section>
@@ -501,7 +539,7 @@
         <!-- Service Architecture Pattern Section -->
         <section class="section">
             <div class="glass-card">
-                <h2 class="section-title"><i class="fas fa-sitemap" aria-hidden="true"></i> Service Architecture Pattern</h2>
+                <h2 class="section-title"><i class="pulse-glow-glass--fast fa-sitemap" aria-hidden="true"></i> Service Architecture Pattern</h2>
                 <p class="level2-text-muted-mb">
                     Visual representation of a typical microservice internal architecture with layered design and event integration.
                 </p>
@@ -512,67 +550,115 @@
             </div>
         </section>
 
-        <!-- Communication Patterns -->
+        <!-- command-example Patterns -->
         <section class="section">
             <div class="glass-card">
-                <h2 class="section-title"><i class="fas fa-comments" aria-hidden="true"></i> Communication Patterns</h2>
+                <h2 class="section-title"><i class="pulse-glow-glass--fast fa-comments" aria-hidden="true"></i> command-example Patterns</h2>
                 
                 <div class="framework-grid">
                     <div class="framework-panel">
-                        <span class="framework-panel-icon"><i class="fas fa-globe" aria-hidden="true"></i></span>
+                        <span class="framework-panel-icon"><i class="pulse-glow-glass--fast fa-globe" aria-hidden="true"></i></span>
                         <h3>Synchronous</h3>
                         <h4>REST APIs</h4>
-                        <ul>
-                            <li>Request-response pattern</li>
-                            <li>HTTP/HTTPS protocols</li>
-                            <li>JSON data format</li>
-                            <li>OpenAPI specification</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Request-response pattern</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">HTTP/HTTPS protocols</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">JSON level1-domain-icon--data format</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">OpenAPI specification</div>
+    </div>
+</div>
                         <h4>gRPC</h4>
-                        <ul>
-                            <li>HTTP/2 based</li>
-                            <li>Protocol Buffers</li>
-                            <li>Bidirectional streaming</li>
-                            <li>High performance</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">HTTP/2 based</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Protocol Buffers</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Bidirectional streaming</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">High performance</div>
+    </div>
+</div>
                     </div>
                     
                     <div class="framework-panel">
-                        <span class="framework-panel-icon"><i class="fas fa-envelope" aria-hidden="true"></i></span>
+                        <span class="framework-panel-icon"><i class="pulse-glow-glass--fast fa-envelope" aria-hidden="true"></i></span>
                         <h3>Asynchronous</h3>
                         <h4>Event-Driven</h4>
-                        <ul>
-                            <li>Publish-Subscribe pattern</li>
-                            <li>Apache Kafka</li>
-                            <li>Event sourcing</li>
-                            <li>Loose coupling</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Publish-Subscribe pattern</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Apache Kafka</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Event sourcing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Loose coupling</div>
+    </div>
+</div>
                         <h4>Message Queues</h4>
-                        <ul>
-                            <li>Point-to-Point</li>
-                            <li>RabbitMQ, AWS SQS</li>
-                            <li>Guaranteed delivery</li>
-                            <li>Dead letter queues</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Point-to-Point</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">RabbitMQ, AWS SQS</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Guaranteed delivery</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Dead letter queues</div>
+    </div>
+</div>
                     </div>
                     
                     <div class="framework-panel">
-                        <span class="framework-panel-icon"><i class="fas fa-link" aria-hidden="true"></i></span>
+                        <span class="framework-panel-icon"><i class="pulse-glow-glass--fast fa-link" aria-hidden="true"></i></span>
                         <h3>Service Mesh</h3>
                         <h4>Capabilities</h4>
-                        <ul>
-                            <li>Traffic management</li>
-                            <li>Service discovery</li>
-                            <li>Load balancing</li>
-                            <li>Mutual TLS</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Traffic management</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Service discovery</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Load balancing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Mutual TLS</div>
+    </div>
+</div>
                         <h4>Popular Options</h4>
-                        <ul>
-                            <li>Istio</li>
-                            <li>Linkerd</li>
-                            <li>Consul Connect</li>
-                            <li>AWS App Mesh</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Istio</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Linkerd</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Consul Connect</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">AWS App Mesh</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -581,37 +667,55 @@
         <!-- Observability Section -->
         <section class="section">
             <div class="glass-card">
-                <h2 class="section-title"><i class="fas fa-eye" aria-hidden="true"></i> Observability Pillars</h2>
+                <h2 class="section-title"><i class="pulse-glow-glass--fast fa-eye" aria-hidden="true"></i> Observability Pillars</h2>
                 
                 <div class="framework-grid">
                     <div class="framework-panel">
-                        <span class="framework-panel-icon"><i class="fas fa-chart-bar" aria-hidden="true"></i></span>
+                        <span class="framework-panel-icon"><i class="pulse-glow-glass--fast fa-chart-bar" aria-hidden="true"></i></span>
                         <h3>Metrics</h3>
-                        <ul>
-                            <li><strong>RED Method:</strong> Rate, Errors, Duration</li>
-                            <li><strong>USE Method:</strong> Utilization, Saturation, Errors</li>
-                            <li><strong>Tools:</strong> Prometheus, Grafana</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>RED Method:</strong> Rate, Errors, Duration</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>USE Method:</strong> Utilization, Saturation, Errors</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Tools:</strong> Prometheus, Grafana</div>
+    </div>
+</div>
                     </div>
                     
                     <div class="framework-panel">
-                        <span class="framework-panel-icon"><i class="fas fa-file-alt" aria-hidden="true"></i></span>
+                        <span class="framework-panel-icon"><i class="pulse-glow-glass--fast fa-file-alt" aria-hidden="true"></i></span>
                         <h3>Logs</h3>
-                        <ul>
-                            <li><strong>Structured Logging:</strong> JSON format</li>
-                            <li><strong>Correlation IDs:</strong> Request tracing</li>
-                            <li><strong>Tools:</strong> ELK Stack, Loki</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Structured Logging:</strong> JSON format</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Correlation IDs:</strong> Request tracing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Tools:</strong> ELK Stack, Loki</div>
+    </div>
+</div>
                     </div>
                     
                     <div class="framework-panel">
-                        <span class="framework-panel-icon"><i class="fas fa-route" aria-hidden="true"></i></span>
+                        <span class="framework-panel-icon"><i class="pulse-glow-glass--fast fa-route" aria-hidden="true"></i></span>
                         <h3>Distributed Tracing</h3>
-                        <ul>
-                            <li><strong>Trace ID:</strong> End-to-end tracking</li>
-                            <li><strong>Span ID:</strong> Per-operation</li>
-                            <li><strong>Tools:</strong> Jaeger, Zipkin, OpenTelemetry</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Trace ID:</strong> End-to-end tracking</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Span ID:</strong> Per-operation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Tools:</strong> Jaeger, Zipkin, OpenTelemetry</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -620,33 +724,49 @@
         <!-- Resources Section -->
         <section class="section">
             <div class="glass-card">
-                <h2 class="section-title"><i class="fas fa-graduation-cap" aria-hidden="true"></i> Learning Resources</h2>
+                <h2 class="section-title"><i class="pulse-glow-glass--fast fa-graduation-cap" aria-hidden="true"></i> Learning Resources</h2>
                 
                 <div class="framework-grid">
                     <div class="framework-panel">
-                        <span class="framework-panel-icon"><i class="fas fa-book" aria-hidden="true"></i></span>
+                        <span class="framework-panel-icon"><i class="pulse-glow-glass--fast fa-book" aria-hidden="true"></i></span>
                         <h3>Essential Books</h3>
-                        <ul>
-                            <li><strong>Building Microservices</strong> - Sam Newman</li>
-                            <li><strong>Microservices Patterns</strong> - Chris Richardson</li>
-                            <li><strong>Domain-Driven Design</strong> - Eric Evans</li>
-                            <li><strong>Release It!</strong> - Michael Nygard</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Building Microservices</strong> - Sam Newman</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Microservices Patterns</strong> - Chris Richardson</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Domain-Driven Design</strong> - Eric Evans</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Release It!</strong> - Michael Nygard</div>
+    </div>
+</div>
                     </div>
                     
                     <div class="framework-panel">
-                        <span class="framework-panel-icon"><i class="fas fa-tools" aria-hidden="true"></i></span>
+                        <span class="framework-panel-icon"><i class="pulse-glow-glass--fast fa-tools" aria-hidden="true"></i></span>
                         <h3>Tools &amp; Frameworks</h3>
-                        <ul>
-                            <li><a href="https://kubernetes.io/" target="_blank" rel="noopener">Kubernetes</a> - Container orchestration</li>
-                            <li><a href="https://istio.io/" target="_blank" rel="noopener">Istio</a> - Service mesh</li>
-                            <li><a href="https://kafka.apache.org/" target="_blank" rel="noopener">Apache Kafka</a> - Event streaming</li>
-                            <li><a href="https://prometheus.io/" target="_blank" rel="noopener">Prometheus</a> - Monitoring</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><a href="https://kubernetes.io/" target="_blank" rel="noopener">Kubernetes</a> - Container orchestration</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://istio.io/" target="_blank" rel="noopener">Istio</a> - Service mesh</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://kafka.apache.org/" target="_blank" rel="noopener">Apache Kafka</a> - Event streaming</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://prometheus.io/" target="_blank" rel="noopener">Prometheus</a> - Monitoring</div>
+    </div>
+</div>
                     </div>
                     
                     <div class="framework-panel">
-                        <span class="framework-panel-icon"><i class="fas fa-globe" aria-hidden="true"></i></span>
+                        <span class="framework-panel-icon"><i class="pulse-glow-glass--fast fa-globe" aria-hidden="true"></i></span>
                         <h3>Online Resources</h3>
                         <ul>
                             <li><a href="https://microservices.io/patterns/" target="_blank" rel="noopener">Microservices.io Patterns</a></li>
@@ -663,8 +783,8 @@
         <div class="container">
             <p>&copy; 2025 CORTEX Knowledge Base. Created by Asif Hussain.</p>
             <p>
-                <a href="../index.html"><i class="fas fa-home" aria-hidden="true"></i> Home</a> |
-                <a href="index.html"><i class="fas fa-book" aria-hidden="true"></i> Knowledge Library</a> |
+                <a href="../index.html"><i class="pulse-glow-glass--fast fa-home" aria-hidden="true"></i> Home</a> |
+                <a href="index.html"><i class="pulse-glow-glass--fast fa-book" aria-hidden="true"></i> Knowledge Library</a> |
                 <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i> GitHub</a>
             </p>
         </div>
@@ -675,7 +795,7 @@
         // D3.js Hub-Spoke Knowledge Map
         // ============================================
         
-        // Hub-spoke data - 4 main pillars with their topics
+        // Hub-spoke level1-domain-icon--data - 4 main pillars with their topics
         const knowledgeData = [
             {
                 id: 'reactive',
@@ -696,20 +816,20 @@
                 topics: ['Circuit Breaker', 'Retry', 'Timeout', 'Bulkhead']
             },
             {
-                id: 'security',
-                name: 'Security Strategies',
+                id: 'badge-security',
+                name: 'badge-security Strategies',
                 icon: '🔐',
                 color: '#ef4444',
-                link: 'microservices/security-strategies.md',
+                link: 'microservices/badge-security-strategies.md',
                 angle: 180, // Bottom
                 topics: ['mTLS', 'OAuth2', 'API Gateway', 'Service Mesh']
             },
             {
-                id: 'transition',
-                name: 'Transition Strategies',
+                id: 'transform-panels',
+                name: 'transform-panels Strategies',
                 icon: '🔄',
                 color: '#f59e0b',
-                link: 'microservices/transition-strategies-techniques.md',
+                link: 'microservices/transform-panels-strategies-techniques.md',
                 angle: 270, // Left
                 topics: ['Strangler Fig', 'Feature Toggles', 'Database Split', 'Abstraction']
             }
@@ -934,7 +1054,7 @@
                 { id: 'boundary', label: 'Service Boundary', x: centerX, y: 100, isGroup: true, width: 200, height: 360 },
                 { id: 'api', label: 'API Layer', sublabel: 'REST/gRPC', x: centerX, y: 140, color: '#3b82f6', width: 100, height: 50 },
                 { id: 'business', label: 'Business Logic Layer', sublabel: 'Domain Models', x: centerX, y: 250, color: '#10b981', width: 130, height: 50 },
-                { id: 'data', label: 'Data Access Layer', sublabel: 'Repository Pattern', x: centerX, y: 350, color: '#f59e0b', width: 130, height: 50 },
+                { id: 'level1-domain-icon--data', label: 'level1-domain-icon--data Access Layer', sublabel: 'Repository Pattern', x: centerX, y: 350, color: '#f59e0b', width: 130, height: 50 },
                 { id: 'database', label: 'Service Database', x: centerX, y: 450, color: '#ef4444', width: 110, height: 40, isDatabase: true },
                 { id: 'messagebus', label: 'Message Bus', x: centerX + 120, y: 250, color: '#6b7280', width: 90, height: 36 }
             ];
@@ -978,8 +1098,8 @@
             const verticalConnections = [
                 { from: 'client', to: 'api' },
                 { from: 'api', to: 'business', labelLeft: 'Events', labelRight: 'Events' },
-                { from: 'business', to: 'data' },
-                { from: 'data', to: 'database' }
+                { from: 'business', to: 'level1-domain-icon--data' },
+                { from: 'level1-domain-icon--data', to: 'database' }
             ];
             
             verticalConnections.forEach(conn => {

@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CORTEX ADO Orchestrator - Autonomous Azure DevOps work item generation from plans">
@@ -8,6 +33,7 @@
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
 </head>
 <body>
     <!-- Skip Link -->
@@ -15,10 +41,35 @@
     
     <!-- Level 1 Navigation Header -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../index.html" class="nav-link">
-                    <i class="fas fa-home"></i>
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../index.html" class="nav-link" mobile-nav-optimized>
+                    <i class="pulse-glow-glass--fast fa-home"></i>
                     <span>Home</span>
                 </a>
             </nav>
@@ -72,7 +123,7 @@
         </div>
         
         <!-- Core Features -->
-        <section class="section-workflow">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>📋</span> Generated Work Item Types</h2>
                 
@@ -100,28 +151,40 @@
         </section>
         
         <!-- Key Capabilities -->
-        <section class="section-features">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>⚡</span> Key Capabilities</h2>
-                <ul class="feature-list">
-                    <li><strong>Manifest Integration:</strong> Reads directly from planning manifest YAML</li>
-                    <li><strong>Hierarchy Mapping:</strong> Automatically creates parent-child relationships</li>
-                    <li><strong>Acceptance Criteria:</strong> Converts DoD items to ADO acceptance criteria</li>
-                    <li><strong>Effort Estimation:</strong> Maps complexity tiers to story points</li>
-                    <li><strong>Tag Generation:</strong> Auto-generates tags from feature categories</li>
-                    <li><strong>Export Format:</strong> CSV or JSON ready for ADO import</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Manifest Integration:</strong> Reads directly from planning manifest YAML</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Hierarchy Mapping:</strong> Automatically creates parent-child relationships</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Acceptance Criteria:</strong> Converts DoD items to ADO acceptance criteria</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Effort Estimation:</strong> Maps complexity tiers to story points</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Tag Generation:</strong> Auto-generates tags from feature categories</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Export Format:</strong> CSV or JSON ready for ADO import</div>
+    </div>
+</div>
             </div>
         </section>
         
         <!-- Related Links -->
-        <section class="section-related">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>🔗</span> Related Documentation</h2>
-                <div class="related-links">
-                    <a href="planning-system.html" class="btn btn-outline">Planning System</a>
-                    <a href="ado-operations.html" class="btn btn-outline">ADO Operations</a>
-                    <a href="../features/planning-system.html" class="btn btn-outline">Planning Features</a>
+                <div class="level1-relationship-grid">
+                    <a href="planning-system.html" class="btn level1-btn-icon">Planning System</a>
+                    <a href="ado-operations.html" class="btn level1-btn-icon">ADO Operations</a>
+                    <a href="../features/planning-system.html" class="btn level1-btn-icon">Planning Features</a>
                 </div>
             </div>
         </section>

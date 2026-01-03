@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Design Patterns Learning Hub - Master Creational, Structural, Behavioral patterns with interactive examples">
@@ -8,7 +33,9 @@
     <meta name="author" content="Asif Hussain">
     <title>Design Patterns Learning Hub | CORTEX Best Practices</title>
     <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02">
-    <link rel="stylesheet" href="../assets/css/learning-hub.css?v=2026-01-02">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
+    
+    <link rel="stylesheet" href="../..../..../..../..../../assets/css/generated-classes.css"><link rel="stylesheet" href="../assets/css/learning-hub.css?v=2026-01-02">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
@@ -17,10 +44,35 @@
 
     <!-- Header Navigation -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../index.html" class="nav-link">
-                    <span class="nav-icon">🏠</span> Home
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../index.html" class="nav-link" mobile-nav-optimized>
+                    <span class="nav-content" mobile-nav-optimized>🏠</span> Home
                 </a>
             </nav>
         </div>
@@ -45,7 +97,7 @@
         <!-- Learning Path Roadmap -->
         <section class="learning-path-roadmap glass-card">
             <h4>🗺️ Your Design Patterns Mastery Journey</h4>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 Learn the 23 classic Gang of Four patterns plus modern architectural patterns. 
                 From Singleton to Strategy, understand when and how to apply each pattern with interactive examples.
             </p>
@@ -75,15 +127,15 @@ graph LR
         </section>
 
         <!-- Module Navigation Cards -->
-        <section style="margin-top: var(--spacing-3xl);">
-            <h2 style="color: var(--text-primary); margin-bottom: var(--spacing-xl); font-size: 2rem;">
+        <section class="inline-fix-1">
+            <h2 class="inline-fix-24">
                 📚 Interactive Learning Modules
             </h2>
             
-            <div class="module-nav-grid">
+            <div class="module-nav-grid" mobile-nav-optimized>
                 <!-- Module 1: Pattern Fundamentals -->
-                <a href="design-patterns/pattern-fundamentals.html" class="module-nav-card">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <a href="design-patterns/pattern-fundamentals.html" class="module-nav-card" mobile-nav-optimized>
+                    <div class="inline-fix-5">
                         <span class="module-number">Module 1</span>
                         <span class="difficulty-badge beginner">Beginner</span>
                     </div>
@@ -94,13 +146,13 @@ graph LR
                     </p>
                     <div class="module-footer">
                         <span class="time-estimate">⏱️ 35 minutes</span>
-                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                        <span class="inline-fix-4">Start →</span>
                     </div>
                 </a>
 
                 <!-- Module 2: Creational Patterns -->
-                <a href="design-patterns/creational-patterns.html" class="module-nav-card">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <a href="design-patterns/creational-patterns.html" class="module-nav-card" mobile-nav-optimized>
+                    <div class="inline-fix-5">
                         <span class="module-number">Module 2</span>
                         <span class="difficulty-badge beginner">Beginner</span>
                     </div>
@@ -111,13 +163,13 @@ graph LR
                     </p>
                     <div class="module-footer">
                         <span class="time-estimate">⏱️ 50 minutes</span>
-                        <span style="color: var(--hub-primary); font-weight: 600;">Continue →</span>
+                        <span class="inline-fix-4">Continue →</span>
                     </div>
                 </a>
 
                 <!-- Module 3: Structural Patterns -->
-                <a href="design-patterns/structural-patterns.html" class="module-nav-card">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <a href="design-patterns/structural-patterns.html" class="module-nav-card" mobile-nav-optimized>
+                    <div class="inline-fix-5">
                         <span class="module-number">Module 3</span>
                         <span class="difficulty-badge intermediate">Intermediate</span>
                     </div>
@@ -128,13 +180,13 @@ graph LR
                     </p>
                     <div class="module-footer">
                         <span class="time-estimate">⏱️ 45 minutes</span>
-                        <span style="color: var(--hub-primary); font-weight: 600;">Continue →</span>
+                        <span class="inline-fix-4">Continue →</span>
                     </div>
                 </a>
 
                 <!-- Module 4: Behavioral Patterns -->
-                <a href="design-patterns/behavioral-patterns.html" class="module-nav-card">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <a href="design-patterns/behavioral-patterns.html" class="module-nav-card" mobile-nav-optimized>
+                    <div class="inline-fix-5">
                         <span class="module-number">Module 4</span>
                         <span class="difficulty-badge intermediate">Intermediate</span>
                     </div>
@@ -145,13 +197,13 @@ graph LR
                     </p>
                     <div class="module-footer">
                         <span class="time-estimate">⏱️ 55 minutes</span>
-                        <span style="color: var(--hub-primary); font-weight: 600;">Continue →</span>
+                        <span class="inline-fix-4">Continue →</span>
                     </div>
                 </a>
 
                 <!-- Module 5: Anti-Patterns -->
-                <a href="design-patterns/anti-patterns.html" class="module-nav-card">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <a href="design-patterns/anti-patterns.html" class="module-nav-card" mobile-nav-optimized>
+                    <div class="inline-fix-5">
                         <span class="module-number">Module 5</span>
                         <span class="difficulty-badge advanced">Advanced</span>
                     </div>
@@ -162,13 +214,13 @@ graph LR
                     </p>
                     <div class="module-footer">
                         <span class="time-estimate">⏱️ 30 minutes</span>
-                        <span style="color: var(--hub-primary); font-weight: 600;">Continue →</span>
+                        <span class="inline-fix-4">Continue →</span>
                     </div>
                 </a>
 
                 <!-- Module 6: Real-World Applications -->
-                <a href="design-patterns/real-world-applications.html" class="module-nav-card">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <a href="design-patterns/real-world-applications.html" class="module-nav-card" mobile-nav-optimized>
+                    <div class="inline-fix-5">
                         <span class="module-number">Module 6</span>
                         <span class="difficulty-badge expert">Expert</span>
                     </div>
@@ -179,15 +231,15 @@ graph LR
                     </p>
                     <div class="module-footer">
                         <span class="time-estimate">⏱️ 25 minutes</span>
-                        <span style="color: var(--hub-primary); font-weight: 600;">Master →</span>
+                        <span class="inline-fix-4">Master →</span>
                     </div>
                 </a>
             </div>
         </section>
 
         <!-- Pattern Categories Visualization -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
-            <h3 style="color: var(--hub-primary); margin-bottom: var(--spacing-lg);">
+        <section class="glass-card" class="inline-fix-1">
+            <h3 class="inline-fix-78">
                 📦 Gang of Four Pattern Categories
             </h3>
             <div class="mermaid-container">
@@ -245,7 +297,7 @@ graph TD
     style B5 fill:#78350f,color:#fff
                 </pre>
             </div>
-            <p style="color: var(--text-secondary); margin-top: var(--spacing-lg); text-align: center;">
+            <p class="inline-fix-157">
                 Three main categories solving different architectural challenges.
             </p>
         </section>
@@ -253,27 +305,27 @@ graph TD
         <!-- Prerequisites Section -->
         <section class="prerequisites-section">
             <h4>📋 Prerequisites Tree</h4>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 Recommended knowledge before starting this learning path:
             </p>
-            <ul class="prerequisites-list">
-                <li>
-                    <strong>Object-Oriented Programming</strong>
-                    Solid understanding of classes, inheritance, polymorphism, and interfaces
-                </li>
-                <li>
-                    <strong>SOLID Principles</strong>
-                    Familiarity with Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion
-                </li>
-                <li>
-                    <strong>UML Diagrams</strong>
-                    Ability to read class diagrams and sequence diagrams
-                </li>
-                <li>
-                    <strong>Programming Experience</strong>
-                    Proficiency in at least one OOP language (C#, Java, Python, TypeScript)
-                </li>
-            </ul>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Object-Oriented Programming</strong>
+                    Solid understanding of classes, inheritance, polymorphism, and interfaces</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>SOLID Principles</strong>
+                    Familiarity with Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>UML Diagrams</strong>
+                    Ability to read class diagrams and sequence diagrams</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Programming Experience</strong>
+                    Proficiency in at least one OOP language (C#, Java, Python, TypeScript)</div>
+    </div>
+</div>
         </section>
 
         <!-- Quick Reference Glossary -->
@@ -332,18 +384,18 @@ graph TD
         </section>
 
         <!-- Learning Metrics Summary -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl); text-align: center; padding: var(--spacing-2xl);">
-            <h3 style="color: var(--hub-primary); margin-bottom: var(--spacing-lg);">
+        <section class="glass-card" class="inline-fix-111">
+            <h3 class="inline-fix-78">
                 🎓 Learning Path Completion
             </h3>
-            <div class="learning-metrics" style="justify-content: center;">
+            <div class="learning-metrics" class="inline-fix-109">
                 <span class="metric">📊 60 Total Quiz Questions</span>
                 <span class="metric">💻 12 Interactive Playgrounds</span>
                 <span class="metric">🏆 6 Progressive Challenges</span>
                 <span class="metric">⏱️ 4 Hours Total Time</span>
             </div>
-            <p style="color: var(--text-secondary); margin-top: var(--spacing-xl); max-width: 600px; margin-left: auto; margin-right: auto;">
-                Complete all modules to earn your <strong style="color: var(--hub-success);">Design Patterns Expert</strong> certification. 
+            <p class="inline-fix-123">
+                Complete all modules to earn your <strong class="inline-fix-113">Design Patterns Expert</strong> certification. 
                 Master all 23 GoF patterns plus modern architectural patterns.
             </p>
         </section>
@@ -353,7 +405,7 @@ graph TD
     <footer class="glass-footer">
         <div class="footer-content">
             <p>© 2026 Asif Hussain. All rights reserved.</p>
-            <nav class="footer-nav">
+            <nav class="footer-bottom">
                 <a href="https://github.com/asifhussain60/CORTEX" target="_blank">GitHub</a>
                 <a href="../index.html">Documentation</a>
             </nav>

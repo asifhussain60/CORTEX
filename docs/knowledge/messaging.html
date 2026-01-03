@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Message-Driven Architecture - Kafka, RabbitMQ, and event streaming patterns">
@@ -8,6 +33,7 @@
     <meta name="author" content="Asif Hussain">
     <title>Message-Driven Architecture | CORTEX Knowledge</title>
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
@@ -25,14 +51,14 @@
     <section class="hero" id="main-content">
         <h1 class="hero-title">📨 Message-Driven Architecture</h1>
         <p class="hero-subtitle">Kafka, RabbitMQ, Event Streaming, and Async Communication</p>
-        <div class="file-metadata">
+        <div class="code-file">
             <span class="metadata-item">🔄 Asynchronous</span>
             <span class="metadata-item">📡 Event Streaming</span>
             <span class="metadata-item">📅 Updated: Dec 2025</span>
         </div>
     </section>
 
-    <section class="section file-content">
+    <section class="section code-file">
         <div class="container">
             <!-- Overview -->
             <div id="overview" class="content-section">
@@ -42,12 +68,20 @@
                     
                     <div class="info-box info-box-primary">
                         <strong>Key Benefits:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Decoupling:</strong> Services don't need to know about each other</li>
-                            <li><strong>Scalability:</strong> Scale producers and consumers independently</li>
-                            <li><strong>Resilience:</strong> Messages buffered during service downtime</li>
-                            <li><strong>Flexibility:</strong> Easy to add new consumers without changes</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Decoupling:</strong> Services don't need to know about each other</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Scalability:</strong> Scale producers and consumers independently</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Resilience:</strong> Messages buffered during service downtime</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Flexibility:</strong> Easy to add new consumers without changes</div>
+    </div>
+</div>
                     </div>
 
                     <h3>Messaging Architecture Landscape</h3>
@@ -132,37 +166,63 @@ graph TB
                             <span class="framework-panel-icon">🗂️</span>
                             <h3>Core Concepts</h3>
                             <h4>Architecture</h4>
-                            <ul>
-                                <li><strong>Topics:</strong> Named streams of records</li>
-                                <li><strong>Partitions:</strong> Ordered, immutable sequences</li>
-                                <li><strong>Producers:</strong> Publish to topics</li>
-                                <li><strong>Consumers:</strong> Subscribe to topics</li>
-                                <li><strong>Consumer Groups:</strong> Load balancing</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Topics:</strong> Named streams of records</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Partitions:</strong> Ordered, immutable sequences</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Producers:</strong> Publish to topics</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Consumers:</strong> Subscribe to topics</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Consumer Groups:</strong> Load balancing</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">⚖️</span>
                             <h3>Partitioning</h3>
                             <h4>Key Strategies</h4>
-                            <ul>
-                                <li><strong>Key-Based:</strong> Same key → same partition</li>
-                                <li><strong>Round-Robin:</strong> Distribute evenly</li>
-                                <li><strong>Custom:</strong> Implement partitioner</li>
-                                <li><strong>Benefits:</strong> Parallelism + ordering</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Key-Based:</strong> Same key → same partition</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Round-Robin:</strong> Distribute evenly</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Custom:</strong> Implement partitioner</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Benefits:</strong> Parallelism + ordering</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">📦</span>
                             <h3>Consumer Groups</h3>
                             <h4>Scalability Pattern</h4>
-                            <ul>
-                                <li><strong>Load Balancing:</strong> Partition per consumer</li>
-                                <li><strong>Max Consumers:</strong> One per partition</li>
-                                <li><strong>Rebalancing:</strong> Auto partition reassignment</li>
-                                <li><strong>Isolation:</strong> Different apps = different groups</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Load Balancing:</strong> Partition per consumer</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Max Consumers:</strong> One per partition</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Rebalancing:</strong> Auto partition reassignment</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Isolation:</strong> Different apps = different groups</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -198,36 +258,60 @@ graph TB
                             <span class="framework-panel-icon">🔀</span>
                             <h3>Exchange Types</h3>
                             <h4>Routing Patterns</h4>
-                            <ul>
-                                <li><strong>Direct:</strong> Exact routing key match</li>
-                                <li><strong>Topic:</strong> Pattern matching (*.log.error)</li>
-                                <li><strong>Fanout:</strong> Broadcast to all queues</li>
-                                <li><strong>Headers:</strong> Route by message headers</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Direct:</strong> Exact routing key match</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Topic:</strong> Pattern matching (*.log.error)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Fanout:</strong> Broadcast to all queues</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Headers:</strong> Route by message headers</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">📬</span>
                             <h3>Queue Features</h3>
                             <h4>Advanced Capabilities</h4>
-                            <ul>
-                                <li><strong>Durable:</strong> Survive broker restarts</li>
-                                <li><strong>Priority:</strong> High-priority messages first</li>
-                                <li><strong>TTL:</strong> Message expiration</li>
-                                <li><strong>Dead Letter:</strong> Handle failed messages</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Durable:</strong> Survive broker restarts</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Priority:</strong> High-priority messages first</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>TTL:</strong> Message expiration</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Dead Letter:</strong> Handle failed messages</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">✅</span>
                             <h3>Acknowledgments</h3>
                             <h4>Delivery Confirmation</h4>
-                            <ul>
-                                <li><strong>Auto Ack:</strong> On delivery (at most once)</li>
-                                <li><strong>Manual Ack:</strong> After processing</li>
-                                <li><strong>Publisher Confirms:</strong> Broker received</li>
-                                <li><strong>Nack/Reject:</strong> Requeue or discard</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Auto Ack:</strong> On delivery (at most once)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Manual Ack:</strong> After processing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Publisher Confirms:</strong> Broker received</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Nack/Reject:</strong> Requeue or discard</div>
+    </div>
+</div>
                         </div>
                     </div>
                 </div>
@@ -245,18 +329,32 @@ graph TB
                             <h3>Publish-Subscribe</h3>
                             <p class="framework-subtitle">One-to-Many Communication</p>
                             <h4>Characteristics</h4>
-                            <ul>
-                                <li>Publisher sends to topic/exchange</li>
-                                <li>Multiple subscribers receive copy</li>
-                                <li>Decoupled producers/consumers</li>
-                                <li>Easy to add subscribers</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Publisher sends to topic/exchange</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Multiple subscribers receive copy</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Decoupled producers/consumers</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Easy to add subscribers</div>
+    </div>
+</div>
                             <h4>Use Cases</h4>
-                            <ul>
-                                <li>Event notifications</li>
-                                <li>Data replication</li>
-                                <li>Real-time updates</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Event notifications</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Data replication</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Real-time updates</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -264,18 +362,32 @@ graph TB
                             <h3>Point-to-Point</h3>
                             <p class="framework-subtitle">One-to-One Communication</p>
                             <h4>Characteristics</h4>
-                            <ul>
-                                <li>Producer sends to queue</li>
-                                <li>Single consumer processes message</li>
-                                <li>Load distribution</li>
-                                <li>Guaranteed processing</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Producer sends to queue</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Single consumer processes message</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Load distribution</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Guaranteed processing</div>
+    </div>
+</div>
                             <h4>Use Cases</h4>
-                            <ul>
-                                <li>Background jobs</li>
-                                <li>Work queues</li>
-                                <li>Task distribution</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Background jobs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Work queues</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Task distribution</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -283,18 +395,32 @@ graph TB
                             <h3>Request-Reply</h3>
                             <p class="framework-subtitle">Async RPC Pattern</p>
                             <h4>Characteristics</h4>
-                            <ul>
-                                <li>Client sends request to queue</li>
-                                <li>Server processes and replies</li>
-                                <li>Correlation ID links messages</li>
-                                <li>Reply-to queue for response</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Client sends request to queue</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Server processes and replies</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Correlation ID links messages</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Reply-to queue for response</div>
+    </div>
+</div>
                             <h4>Use Cases</h4>
-                            <ul>
-                                <li>Async API calls</li>
-                                <li>Long-running operations</li>
-                                <li>Distributed RPC</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Async API calls</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Long-running operations</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Distributed RPC</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -326,36 +452,60 @@ sequenceDiagram
                             <span class="framework-panel-icon">🎭</span>
                             <h3>Event Sourcing</h3>
                             <h4>Pattern</h4>
-                            <ul>
-                                <li>Store events, not state</li>
-                                <li>Rebuild state by replaying</li>
-                                <li>Complete audit trail</li>
-                                <li>Kafka ideal for this</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Store events, not state</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Rebuild state by replaying</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Complete audit trail</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Kafka ideal for this</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🔄</span>
                             <h3>CQRS with Messaging</h3>
                             <h4>Pattern</h4>
-                            <ul>
-                                <li>Commands to write queue</li>
-                                <li>Events to read models</li>
-                                <li>Eventual consistency</li>
-                                <li>Scale reads/writes separately</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Commands to write queue</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Events to read models</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Eventual consistency</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Scale reads/writes separately</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">📊</span>
                             <h3>Stream Processing</h3>
                             <h4>Pattern</h4>
-                            <ul>
-                                <li>Real-time data processing</li>
-                                <li>Kafka Streams / Flink</li>
-                                <li>Windowing operations</li>
-                                <li>Aggregations and joins</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Real-time data processing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Kafka Streams / Flink</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Windowing operations</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Aggregations and joins</div>
+    </div>
+</div>
                         </div>
                     </div>
                 </div>
@@ -373,24 +523,44 @@ sequenceDiagram
                             <h3>At Most Once</h3>
                             <p class="framework-subtitle">Fire and Forget</p>
                             <h4>Behavior</h4>
-                            <ul>
-                                <li>Message may be lost</li>
-                                <li>Never duplicated</li>
-                                <li>No acknowledgment</li>
-                                <li>Lowest latency</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Message may be lost</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Never duplicated</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">No acknowledgment</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Lowest latency</div>
+    </div>
+</div>
                             <h4>Implementation</h4>
-                            <ul>
-                                <li>Kafka: acks=0</li>
-                                <li>RabbitMQ: Auto-ack</li>
-                                <li>No retries</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Kafka: acks=0</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">RabbitMQ: Auto-ack</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">No retries</div>
+    </div>
+</div>
                             <h4>Use Cases</h4>
-                            <ul>
-                                <li>Metrics collection</li>
-                                <li>Logs (non-critical)</li>
-                                <li>Telemetry data</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Metrics collection</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Logs (non-critical)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Telemetry data</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -398,24 +568,44 @@ sequenceDiagram
                             <h3>At Least Once</h3>
                             <p class="framework-subtitle">Guaranteed Delivery</p>
                             <h4>Behavior</h4>
-                            <ul>
-                                <li>Message never lost</li>
-                                <li>May be duplicated</li>
-                                <li>Requires acknowledgment</li>
-                                <li>Requires idempotency</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Message never lost</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">May be duplicated</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Requires acknowledgment</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Requires idempotency</div>
+    </div>
+</div>
                             <h4>Implementation</h4>
-                            <ul>
-                                <li>Kafka: acks=all + retries</li>
-                                <li>RabbitMQ: Manual ack</li>
-                                <li>Retry on failure</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Kafka: acks=all + retries</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">RabbitMQ: Manual ack</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Retry on failure</div>
+    </div>
+</div>
                             <h4>Use Cases</h4>
-                            <ul>
-                                <li>Payment processing</li>
-                                <li>Order fulfillment</li>
-                                <li>Critical notifications</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Payment processing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Order fulfillment</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Critical notifications</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -423,24 +613,44 @@ sequenceDiagram
                             <h3>Exactly Once</h3>
                             <p class="framework-subtitle">Holy Grail</p>
                             <h4>Behavior</h4>
-                            <ul>
-                                <li>Message delivered once</li>
-                                <li>No loss, no duplication</li>
-                                <li>Complex implementation</li>
-                                <li>Performance overhead</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Message delivered once</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">No loss, no duplication</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Complex implementation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Performance overhead</div>
+    </div>
+</div>
                             <h4>Implementation</h4>
-                            <ul>
-                                <li>Kafka: Transactional API</li>
-                                <li>Idempotent producer</li>
-                                <li>Transaction coordinator</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Kafka: Transactional API</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Idempotent producer</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Transaction coordinator</div>
+    </div>
+</div>
                             <h4>Use Cases</h4>
-                            <ul>
-                                <li>Financial transactions</li>
-                                <li>Inventory management</li>
-                                <li>Audit trails</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Financial transactions</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Inventory management</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Audit trails</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -458,37 +668,47 @@ sequenceDiagram
                         <tbody>
                             <tr>
                                 <td>At Most Once</td>
-                                <td><span class="badge-high">Possible</span></td>
-                                <td><span class="badge-low">Never</span></td>
-                                <td><span class="badge-low">Lowest</span></td>
-                                <td><span class="badge-low">Simple</span></td>
+                                <td><span class="badge-security">Possible</span></td>
+                                <td><span class="badge-security">Never</span></td>
+                                <td><span class="badge-security">Lowest</span></td>
+                                <td><span class="badge-security">Simple</span></td>
                             </tr>
                             <tr>
                                 <td>At Least Once</td>
-                                <td><span class="badge-low">Never</span></td>
-                                <td><span class="badge-high">Possible</span></td>
-                                <td><span class="badge-medium">Medium</span></td>
-                                <td><span class="badge-medium">Moderate</span></td>
+                                <td><span class="badge-security">Never</span></td>
+                                <td><span class="badge-security">Possible</span></td>
+                                <td><span class="badge-security">Medium</span></td>
+                                <td><span class="badge-security">Moderate</span></td>
                             </tr>
                             <tr>
                                 <td>Exactly Once</td>
-                                <td><span class="badge-low">Never</span></td>
-                                <td><span class="badge-low">Never</span></td>
-                                <td><span class="badge-high">Highest</span></td>
-                                <td><span class="badge-high">Complex</span></td>
+                                <td><span class="badge-security">Never</span></td>
+                                <td><span class="badge-security">Never</span></td>
+                                <td><span class="badge-security">Highest</span></td>
+                                <td><span class="badge-security">Complex</span></td>
                             </tr>
                         </tbody>
                     </table>
 
                     <div class="info-box info-box-warning">
                         <strong>Idempotency is Critical:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Duplicate Detection:</strong> Track processed message IDs</li>
-                            <li><strong>Idempotent Operations:</strong> Same input = same result</li>
-                            <li><strong>Unique Keys:</strong> Use UUIDs or business keys</li>
-                            <li><strong>Database Constraints:</strong> Unique indexes prevent duplicates</li>
-                            <li><strong>At-Least-Once Default:</strong> Most systems use this + idempotency</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Duplicate Detection:</strong> Track processed message IDs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Idempotent Operations:</strong> Same input = same result</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Unique Keys:</strong> Use UUIDs or business keys</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Database Constraints:</strong> Unique indexes prevent duplicates</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>At-Least-Once Default:</strong> Most systems use this + idempotency</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -504,36 +724,60 @@ sequenceDiagram
                             <span class="framework-panel-icon">📋</span>
                             <h3>Schema Management</h3>
                             <h4>Best Practices</h4>
-                            <ul>
-                                <li><strong>Schema Registry:</strong> Centralized schema storage</li>
-                                <li><strong>Versioning:</strong> Backward/forward compatibility</li>
-                                <li><strong>Avro/Protobuf:</strong> Binary formats with schema</li>
-                                <li><strong>Evolution:</strong> Add fields, don't remove</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Schema Registry:</strong> Centralized schema storage</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Versioning:</strong> Backward/forward compatibility</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Avro/Protobuf:</strong> Binary formats with schema</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Evolution:</strong> Add fields, don't remove</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🔍</span>
                             <h3>Message Metadata</h3>
                             <h4>Include in Messages</h4>
-                            <ul>
-                                <li><strong>Correlation ID:</strong> Trace across services</li>
-                                <li><strong>Timestamp:</strong> Event time + processing time</li>
-                                <li><strong>Source:</strong> Originating service</li>
-                                <li><strong>Schema Version:</strong> Message format version</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Correlation ID:</strong> Trace across services</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Timestamp:</strong> Event time + processing time</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Source:</strong> Originating service</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Schema Version:</strong> Message format version</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">⚠️</span>
                             <h3>Error Handling</h3>
                             <h4>Strategies</h4>
-                            <ul>
-                                <li><strong>Dead Letter Queue:</strong> Failed message storage</li>
-                                <li><strong>Retry Policy:</strong> Exponential backoff</li>
-                                <li><strong>Max Attempts:</strong> Prevent infinite loops</li>
-                                <li><strong>Alerting:</strong> Monitor DLQ depth</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Dead Letter Queue:</strong> Failed message storage</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Retry Policy:</strong> Exponential backoff</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Max Attempts:</strong> Prevent infinite loops</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Alerting:</strong> Monitor DLQ depth</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -543,49 +787,85 @@ sequenceDiagram
                             <span class="framework-panel-icon">📦</span>
                             <h3>Batching</h3>
                             <h4>Kafka Producers</h4>
-                            <ul>
-                                <li>Batch multiple messages</li>
-                                <li>Reduce network overhead</li>
-                                <li>Trade latency for throughput</li>
-                                <li>Configure batch.size + linger.ms</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Batch multiple messages</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Reduce network overhead</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Trade latency for throughput</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Configure batch.size + linger.ms</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🗜️</span>
                             <h3>Compression</h3>
                             <h4>Message Size Reduction</h4>
-                            <ul>
-                                <li>Kafka: snappy, gzip, lz4, zstd</li>
-                                <li>RabbitMQ: gzip plugin</li>
-                                <li>Network bandwidth savings</li>
-                                <li>Storage savings</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Kafka: snappy, gzip, lz4, zstd</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">RabbitMQ: gzip plugin</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Network bandwidth savings</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Storage savings</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">⚖️</span>
                             <h3>Partitioning Strategy</h3>
                             <h4>Kafka Optimization</h4>
-                            <ul>
-                                <li>More partitions = more parallelism</li>
-                                <li>Key-based for ordering</li>
-                                <li>Avoid hot partitions</li>
-                                <li>Monitor lag per partition</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">More partitions = more parallelism</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Key-based for ordering</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Avoid hot partitions</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Monitor lag per partition</div>
+    </div>
+</div>
                         </div>
                     </div>
 
                     <div class="info-box info-box-success">
                         <strong>Production Checklist:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Monitoring:</strong> Message rates, lag, error rates</li>
-                            <li><strong>Alerting:</strong> Consumer lag > threshold, DLQ depth</li>
-                            <li><strong>Security:</strong> TLS encryption, SASL authentication</li>
-                            <li><strong>Backup:</strong> Kafka replication factor ≥ 3</li>
-                            <li><strong>Capacity Planning:</strong> Storage retention, throughput limits</li>
-                            <li><strong>Testing:</strong> Chaos testing, failure injection</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Monitoring:</strong> Message rates, lag, error rates</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Alerting:</strong> Consumer lag > threshold, DLQ depth</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Security:</strong> TLS encryption, SASL authentication</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Backup:</strong> Kafka replication factor ≥ 3</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Capacity Planning:</strong> Storage retention, throughput limits</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Testing:</strong> Chaos testing, failure injection</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -599,23 +879,39 @@ sequenceDiagram
                         <div class="framework-panel">
                             <span class="framework-panel-icon">📖</span>
                             <h3>Essential Books</h3>
-                            <ul>
-                                <li><strong>Kafka: The Definitive Guide</strong> - Narkhede, Shapira, Palino</li>
-                                <li><strong>RabbitMQ in Action</strong> - Alvaro Videla</li>
-                                <li><strong>Designing Event-Driven Systems</strong> - Ben Stopford</li>
-                                <li><strong>Enterprise Integration Patterns</strong> - Hohpe, Woolf</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Kafka: The Definitive Guide</strong> - Narkhede, Shapira, Palino</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>RabbitMQ in Action</strong> - Alvaro Videla</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Designing Event-Driven Systems</strong> - Ben Stopford</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Enterprise Integration Patterns</strong> - Hohpe, Woolf</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🛠️</span>
                             <h3>Tools & Platforms</h3>
-                            <ul>
-                                <li><a href="https://kafka.apache.org/" target="_blank" rel="noopener">Apache Kafka</a> - Event streaming platform</li>
-                                <li><a href="https://www.rabbitmq.com/" target="_blank" rel="noopener">RabbitMQ</a> - Message broker</li>
-                                <li><a href="https://nats.io/" target="_blank" rel="noopener">NATS</a> - Cloud-native messaging</li>
-                                <li><a href="https://www.confluent.io/product/confluent-platform/" target="_blank" rel="noopener">Confluent Platform</a> - Kafka distribution</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><a href="https://kafka.apache.org/" target="_blank" rel="noopener">Apache Kafka</a> - Event streaming platform</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://www.rabbitmq.com/" target="_blank" rel="noopener">RabbitMQ</a> - Message broker</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://nats.io/" target="_blank" rel="noopener">NATS</a> - Cloud-native messaging</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="https://www.confluent.io/product/confluent-platform/" target="_blank" rel="noopener">Confluent Platform</a> - Kafka distribution</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">

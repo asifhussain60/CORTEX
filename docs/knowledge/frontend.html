@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Frontend Development - React, Vue, Angular, TypeScript, Modern Web Development">
@@ -8,6 +33,7 @@
     <meta name="author" content="Asif Hussain">
     <title>Frontend Development | CORTEX Knowledge</title>
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
@@ -25,14 +51,14 @@
     <section class="hero" id="main-content">
         <h1 class="hero-title">⚛️ Frontend Development</h1>
         <p class="hero-subtitle">Modern Web Development with React, Vue, Angular, and TypeScript</p>
-        <div class="file-metadata">
+        <div class="code-file">
             <span class="metadata-item">📦 Web Development</span>
             <span class="metadata-item">🏷️ Frontend</span>
             <span class="metadata-item">📅 Updated: Dec 2025</span>
         </div>
     </section>
 
-    <section class="section file-content">
+    <section class="section code-file">
         <div class="container">
             <!-- Overview -->
             <div id="overview" class="content-section">
@@ -42,12 +68,20 @@
                     
                     <div class="info-box info-box-primary">
                         <strong>Core Frontend Technologies:</strong>
-                        <ul class="feature-list">
-                            <li><strong>HTML5:</strong> Semantic markup and modern web APIs</li>
-                            <li><strong>CSS3:</strong> Styling, animations, and responsive layouts</li>
-                            <li><strong>JavaScript/TypeScript:</strong> Application logic and interactivity</li>
-                            <li><strong>Frameworks:</strong> React, Vue, Angular for complex UIs</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>HTML5:</strong> Semantic markup and modern web APIs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>CSS3:</strong> Styling, animations, and responsive layouts</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>JavaScript/TypeScript:</strong> Application logic and interactivity</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Frameworks:</strong> React, Vue, Angular for complex UIs</div>
+    </div>
+</div>
                     </div>
 
                     <h3>Frontend Architecture Evolution</h3>
@@ -83,31 +117,61 @@ graph LR
                             <p class="framework-subtitle">Meta's Component-Based Library</p>
                             
                             <h4>Core Features</h4>
-                            <ul>
-                                <li><strong>Virtual DOM:</strong> Efficient UI updates through reconciliation</li>
-                                <li><strong>Component Model:</strong> Reusable, composable UI building blocks</li>
-                                <li><strong>Hooks:</strong> State and lifecycle management in functional components</li>
-                                <li><strong>Ecosystem:</strong> Rich third-party libraries and tools</li>
-                                <li><strong>JSX:</strong> JavaScript syntax extension for declarative UIs</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Virtual DOM:</strong> Efficient UI updates through reconciliation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Component Model:</strong> Reusable, composable UI building blocks</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Hooks:</strong> State and lifecycle management in functional components</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Ecosystem:</strong> Rich third-party libraries and tools</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>JSX:</strong> JavaScript syntax extension for declarative UIs</div>
+    </div>
+</div>
 
                             <h4>Best Practices</h4>
-                            <ul>
-                                <li>Use functional components with hooks</li>
-                                <li>Implement proper key props in lists</li>
-                                <li>Memoize expensive computations</li>
-                                <li>Split code with React.lazy()</li>
-                                <li>Use Context API judiciously</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Use functional components with hooks</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Implement proper key props in lists</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Memoize expensive computations</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Split code with React.lazy()</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use Context API judiciously</div>
+    </div>
+</div>
 
                             <h4>Ecosystem</h4>
-                            <ul>
-                                <li><strong>Next.js:</strong> Full-stack React framework</li>
-                                <li><strong>React Router:</strong> Client-side routing</li>
-                                <li><strong>React Query:</strong> Server state management</li>
-                                <li><strong>Redux Toolkit:</strong> Predictable state container</li>
-                                <li><strong>Styled Components:</strong> CSS-in-JS styling</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Next.js:</strong> Full-stack React framework</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>React Router:</strong> Client-side routing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>React Query:</strong> Server state management</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Redux Toolkit:</strong> Predictable state container</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Styled Components:</strong> CSS-in-JS styling</div>
+    </div>
+</div>
                         </div>
 
                         <!-- Vue.js Panel -->
@@ -117,31 +181,61 @@ graph LR
                             <p class="framework-subtitle">Progressive JavaScript Framework</p>
                             
                             <h4>Core Features</h4>
-                            <ul>
-                                <li><strong>Reactive System:</strong> Automatic dependency tracking and updates</li>
-                                <li><strong>Single File Components:</strong> Template, script, and style in one file</li>
-                                <li><strong>Composition API:</strong> Flexible component logic organization</li>
-                                <li><strong>Vue Router:</strong> Official routing solution</li>
-                                <li><strong>Pinia:</strong> Modern state management library</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Reactive System:</strong> Automatic dependency tracking and updates</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Single File Components:</strong> Template, script, and style in one file</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Composition API:</strong> Flexible component logic organization</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Vue Router:</strong> Official routing solution</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Pinia:</strong> Modern state management library</div>
+    </div>
+</div>
 
                             <h4>Best Practices</h4>
-                            <ul>
-                                <li>Use Composition API for complex logic</li>
-                                <li>Keep components single-responsibility</li>
-                                <li>Leverage computed properties</li>
-                                <li>Use scoped styles in SFCs</li>
-                                <li>Implement proper error boundaries</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Use Composition API for complex logic</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Keep components single-responsibility</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Leverage computed properties</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use scoped styles in SFCs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Implement proper error boundaries</div>
+    </div>
+</div>
 
                             <h4>Ecosystem</h4>
-                            <ul>
-                                <li><strong>Nuxt.js:</strong> Meta-framework for SSR and SSG</li>
-                                <li><strong>Pinia:</strong> Intuitive state management</li>
-                                <li><strong>Vuetify:</strong> Material Design component library</li>
-                                <li><strong>VueUse:</strong> Collection of composition utilities</li>
-                                <li><strong>Vite:</strong> Lightning-fast dev server and bundler</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Nuxt.js:</strong> Meta-framework for SSR and SSG</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Pinia:</strong> Intuitive state management</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Vuetify:</strong> Material Design component library</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>VueUse:</strong> Collection of composition utilities</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Vite:</strong> Lightning-fast dev server and bundler</div>
+    </div>
+</div>
                         </div>
 
                         <!-- Angular Panel -->
@@ -151,31 +245,61 @@ graph LR
                             <p class="framework-subtitle">Enterprise-Grade Framework</p>
                             
                             <h4>Core Features</h4>
-                            <ul>
-                                <li><strong>Full Framework:</strong> Batteries-included development platform</li>
-                                <li><strong>TypeScript First:</strong> Built with TypeScript from the ground up</li>
-                                <li><strong>Dependency Injection:</strong> Powerful DI system for services</li>
-                                <li><strong>RxJS Integration:</strong> Reactive programming with observables</li>
-                                <li><strong>CLI Tools:</strong> Comprehensive code generation and scaffolding</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Full Framework:</strong> Batteries-included development platform</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>TypeScript First:</strong> Built with TypeScript from the ground up</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Dependency Injection:</strong> Powerful DI system for services</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>RxJS Integration:</strong> Reactive programming with observables</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>CLI Tools:</strong> Comprehensive code generation and scaffolding</div>
+    </div>
+</div>
 
                             <h4>Best Practices</h4>
-                            <ul>
-                                <li>Follow Angular style guide strictly</li>
-                                <li>Use OnPush change detection</li>
-                                <li>Implement lazy loading for modules</li>
-                                <li>Leverage RxJS operators effectively</li>
-                                <li>Use standalone components (v14+)</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Follow Angular style guide strictly</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use OnPush change detection</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Implement lazy loading for modules</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Leverage RxJS operators effectively</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use standalone components (v14+)</div>
+    </div>
+</div>
 
                             <h4>Ecosystem</h4>
-                            <ul>
-                                <li><strong>Angular CLI:</strong> Powerful scaffolding and build tools</li>
-                                <li><strong>NgRx:</strong> Redux-inspired state management</li>
-                                <li><strong>Angular Material:</strong> Material Design components</li>
-                                <li><strong>Nx:</strong> Monorepo development tools</li>
-                                <li><strong>Universal:</strong> Server-side rendering solution</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Angular CLI:</strong> Powerful scaffolding and build tools</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>NgRx:</strong> Redux-inspired state management</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Angular Material:</strong> Material Design components</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Nx:</strong> Monorepo development tools</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Universal:</strong> Server-side rendering solution</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -232,13 +356,23 @@ graph LR
                             <p class="framework-subtitle">Advantages of Using TypeScript</p>
                             
                             <h4>Key Advantages</h4>
-                            <ul>
-                                <li><strong>Type Safety:</strong> Catch errors at compile time</li>
-                                <li><strong>Better Tooling:</strong> Enhanced IDE support and autocomplete</li>
-                                <li><strong>Self-Documenting:</strong> Types serve as inline documentation</li>
-                                <li><strong>Refactoring:</strong> Safe and confident code refactoring</li>
-                                <li><strong>Team Collaboration:</strong> Clear contracts between modules</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Type Safety:</strong> Catch errors at compile time</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Better Tooling:</strong> Enhanced IDE support and autocomplete</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Self-Documenting:</strong> Types serve as inline documentation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Refactoring:</strong> Safe and confident code refactoring</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Team Collaboration:</strong> Clear contracts between modules</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -247,28 +381,52 @@ graph LR
                             <p class="framework-subtitle">Essential TypeScript Type System</p>
                             
                             <h4>Type Categories</h4>
-                            <ul>
-                                <li><strong>Primitives:</strong> string, number, boolean</li>
-                                <li><strong>Arrays:</strong> string[], Array&lt;number&gt;</li>
-                                <li><strong>Objects:</strong> Interfaces and type aliases</li>
-                                <li><strong>Unions:</strong> string | number</li>
-                                <li><strong>Generics:</strong> Array&lt;T&gt;, Promise&lt;T&gt;</li>
-                                <li><strong>Utility Types:</strong> Partial, Pick, Omit</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Primitives:</strong> string, number, boolean</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Arrays:</strong> string[], Array&lt;number&gt;</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Objects:</strong> Interfaces and type aliases</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Unions:</strong> string | number</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Generics:</strong> Array&lt;T&gt;, Promise&lt;T&gt;</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Utility Types:</strong> Partial, Pick, Omit</div>
+    </div>
+</div>
                         </div>
                     </div>
 
                     <h3>TypeScript Best Practices</h3>
                     <div class="info-box info-box-success">
                         <strong>Effective TypeScript Usage:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Enable Strict Mode:</strong> Use "strict": true in tsconfig.json</li>
-                            <li><strong>Avoid 'any':</strong> Use unknown or proper types instead</li>
-                            <li><strong>Prefer Interfaces:</strong> Use interfaces for object shapes</li>
-                            <li><strong>Use Type Guards:</strong> Narrow types with typeof, instanceof</li>
-                            <li><strong>Leverage Inference:</strong> Let TypeScript infer types when obvious</li>
-                            <li><strong>Document Complex Types:</strong> Add JSDoc comments for clarity</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Enable Strict Mode:</strong> Use "strict": true in tsconfig.json</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Avoid 'any':</strong> Use unknown or proper types instead</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Prefer Interfaces:</strong> Use interfaces for object shapes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Use Type Guards:</strong> Narrow types with typeof, instanceof</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Leverage Inference:</strong> Let TypeScript infer types when obvious</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Document Complex Types:</strong> Add JSDoc comments for clarity</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -312,19 +470,33 @@ graph TB
                             <p class="framework-subtitle">Predictable State Container</p>
                             
                             <h4>Core Features</h4>
-                            <ul>
-                                <li><strong>Single Source:</strong> Centralized state tree</li>
-                                <li><strong>Immutable Updates:</strong> Immer-powered reducers</li>
-                                <li><strong>DevTools:</strong> Time-travel debugging</li>
-                                <li><strong>Middleware:</strong> Thunk, Saga for async</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Single Source:</strong> Centralized state tree</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Immutable Updates:</strong> Immer-powered reducers</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>DevTools:</strong> Time-travel debugging</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Middleware:</strong> Thunk, Saga for async</div>
+    </div>
+</div>
                             
                             <h4>Best For</h4>
-                            <ul>
-                                <li>Complex global state</li>
-                                <li>Large team applications</li>
-                                <li>Predictable state updates</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Complex global state</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Large team applications</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Predictable state updates</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -333,19 +505,33 @@ graph TB
                             <p class="framework-subtitle">Minimal State Management</p>
                             
                             <h4>Core Features</h4>
-                            <ul>
-                                <li><strong>Minimal:</strong> ~1KB bundle size</li>
-                                <li><strong>No Boilerplate:</strong> Simple API</li>
-                                <li><strong>No Providers:</strong> Direct store access</li>
-                                <li><strong>TypeScript:</strong> Excellent inference</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Minimal:</strong> ~1KB bundle size</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>No Boilerplate:</strong> Simple API</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>No Providers:</strong> Direct store access</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>TypeScript:</strong> Excellent inference</div>
+    </div>
+</div>
                             
                             <h4>Best For</h4>
-                            <ul>
-                                <li>Small to medium apps</li>
-                                <li>Simple state needs</li>
-                                <li>Performance-critical apps</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Small to medium apps</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Simple state needs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Performance-critical apps</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -354,19 +540,33 @@ graph TB
                             <p class="framework-subtitle">Server State Management</p>
                             
                             <h4>Core Features</h4>
-                            <ul>
-                                <li><strong>Server Cache:</strong> Automatic caching</li>
-                                <li><strong>Background Sync:</strong> Auto refetching</li>
-                                <li><strong>Optimistic UI:</strong> Instant feedback</li>
-                                <li><strong>Pagination:</strong> Infinite scroll support</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Server Cache:</strong> Automatic caching</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Background Sync:</strong> Auto refetching</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Optimistic UI:</strong> Instant feedback</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Pagination:</strong> Infinite scroll support</div>
+    </div>
+</div>
                             
                             <h4>Best For</h4>
-                            <ul>
-                                <li>API-driven applications</li>
-                                <li>Real-time data sync</li>
-                                <li>Complex data fetching</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">API-driven applications</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Real-time data sync</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Complex data fetching</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -378,32 +578,56 @@ graph TB
                             <p class="framework-subtitle">Built-in React State</p>
                             
                             <h4>Core Features</h4>
-                            <ul>
-                                <li><strong>Built-in:</strong> No dependencies</li>
-                                <li><strong>Simple:</strong> Provider/Consumer pattern</li>
-                                <li><strong>Lightweight:</strong> Good for themes, auth</li>
-                                <li><strong>Composable:</strong> Multiple contexts</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Built-in:</strong> No dependencies</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Simple:</strong> Provider/Consumer pattern</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Lightweight:</strong> Good for themes, auth</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Composable:</strong> Multiple contexts</div>
+    </div>
+</div>
                             
                             <h4>Best For</h4>
-                            <ul>
-                                <li>Small apps</li>
-                                <li>Theme/locale state</li>
-                                <li>Avoiding prop drilling</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Small apps</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Theme/locale state</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Avoiding prop drilling</div>
+    </div>
+</div>
                         </div>
                     </div>
 
                     <h3>Choosing State Management</h3>
                     <div class="info-box info-box-warning">
                         <strong>Decision Guide:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Local State:</strong> Simple component state → useState/useReducer</li>
-                            <li><strong>Shared State:</strong> Few components → Context API</li>
-                            <li><strong>Complex Client State:</strong> Large apps → Redux Toolkit or Zustand</li>
-                            <li><strong>Server State:</strong> API data → React Query or SWR</li>
-                            <li><strong>Form State:</strong> Forms → React Hook Form or Formik</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Local State:</strong> Simple component state → useState/useReducer</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Shared State:</strong> Few components → Context API</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Complex Client State:</strong> Large apps → Redux Toolkit or Zustand</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Server State:</strong> API data → React Query or SWR</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Form State:</strong> Forms → React Hook Form or Formik</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -453,19 +677,33 @@ graph TB
                             <p class="framework-subtitle">Reduce Initial Bundle Size</p>
                             
                             <h4>Techniques</h4>
-                            <ul>
-                                <li><strong>React.lazy():</strong> Component-level splitting</li>
-                                <li><strong>Dynamic Imports:</strong> Load modules on demand</li>
-                                <li><strong>Route-Based:</strong> Split by page routes</li>
-                                <li><strong>Vendor Chunks:</strong> Separate third-party code</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>React.lazy():</strong> Component-level splitting</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Dynamic Imports:</strong> Load modules on demand</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Route-Based:</strong> Split by page routes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Vendor Chunks:</strong> Separate third-party code</div>
+    </div>
+</div>
                             
                             <h4>Benefits</h4>
-                            <ul>
-                                <li>Faster initial page load</li>
-                                <li>Better browser caching</li>
-                                <li>Improved Time to Interactive</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Faster initial page load</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Better browser caching</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Improved Time to Interactive</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -474,19 +712,33 @@ graph TB
                             <p class="framework-subtitle">Optimize Component Updates</p>
                             
                             <h4>Techniques</h4>
-                            <ul>
-                                <li><strong>React.memo():</strong> Prevent unnecessary renders</li>
-                                <li><strong>useMemo:</strong> Cache expensive computations</li>
-                                <li><strong>useCallback:</strong> Stabilize function references</li>
-                                <li><strong>Virtual Scrolling:</strong> Render visible items only</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>React.memo():</strong> Prevent unnecessary renders</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>useMemo:</strong> Cache expensive computations</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>useCallback:</strong> Stabilize function references</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Virtual Scrolling:</strong> Render visible items only</div>
+    </div>
+</div>
                             
                             <h4>Benefits</h4>
-                            <ul>
-                                <li>Reduced CPU usage</li>
-                                <li>Smoother user interactions</li>
-                                <li>Better frame rates</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Reduced CPU usage</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Smoother user interactions</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Better frame rates</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -495,33 +747,59 @@ graph TB
                             <p class="framework-subtitle">Optimize Media & Resources</p>
                             
                             <h4>Techniques</h4>
-                            <ul>
-                                <li><strong>Modern Formats:</strong> WebP, AVIF images</li>
-                                <li><strong>Lazy Loading:</strong> Load images on scroll</li>
-                                <li><strong>Tree-Shaking:</strong> Remove unused code</li>
-                                <li><strong>Compression:</strong> Gzip, Brotli compression</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Modern Formats:</strong> WebP, AVIF images</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Lazy Loading:</strong> Load images on scroll</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Tree-Shaking:</strong> Remove unused code</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Compression:</strong> Gzip, Brotli compression</div>
+    </div>
+</div>
                             
                             <h4>Benefits</h4>
-                            <ul>
-                                <li>Smaller payload sizes</li>
-                                <li>Faster download times</li>
-                                <li>Better LCP scores</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Smaller payload sizes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Faster download times</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Better LCP scores</div>
+    </div>
+</div>
                         </div>
                     </div>
 
                     <h3>Performance Checklist</h3>
                     <div class="info-box info-box-primary">
                         <strong>Frontend Performance Best Practices:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Bundle Analysis:</strong> Use webpack-bundle-analyzer to identify large dependencies</li>
-                            <li><strong>Critical CSS:</strong> Inline critical styles, defer non-critical CSS</li>
-                            <li><strong>Prefetch/Preload:</strong> Preload critical resources, prefetch next routes</li>
-                            <li><strong>Service Workers:</strong> Cache assets for offline functionality</li>
-                            <li><strong>Debounce/Throttle:</strong> Limit expensive operations (scroll, resize)</li>
-                            <li><strong>Web Workers:</strong> Offload heavy computations to background threads</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Bundle Analysis:</strong> Use webpack-bundle-analyzer to identify large dependencies</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Critical CSS:</strong> Inline critical styles, defer non-critical CSS</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Prefetch/Preload:</strong> Preload critical resources, prefetch next routes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Service Workers:</strong> Cache assets for offline functionality</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Debounce/Throttle:</strong> Limit expensive operations (scroll, resize)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Web Workers:</strong> Offload heavy computations to background threads</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -556,19 +834,33 @@ graph TB
                             <p class="framework-subtitle">Component & Logic Testing</p>
                             
                             <h4>Popular Tools</h4>
-                            <ul>
-                                <li><strong>Jest:</strong> Popular JavaScript testing framework</li>
-                                <li><strong>Vitest:</strong> Vite-native unit test framework</li>
-                                <li><strong>Testing Library:</strong> User-centric testing utilities</li>
-                                <li><strong>Mock Service Worker:</strong> API mocking library</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Jest:</strong> Popular JavaScript testing framework</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Vitest:</strong> Vite-native unit test framework</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Testing Library:</strong> User-centric testing utilities</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Mock Service Worker:</strong> API mocking library</div>
+    </div>
+</div>
                             
                             <h4>Focus Areas</h4>
-                            <ul>
-                                <li>Component rendering</li>
-                                <li>User interactions</li>
-                                <li>Business logic</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Component rendering</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">User interactions</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Business logic</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -577,33 +869,59 @@ graph TB
                             <p class="framework-subtitle">End-to-End User Flows</p>
                             
                             <h4>Popular Tools</h4>
-                            <ul>
-                                <li><strong>Cypress:</strong> Developer-friendly E2E testing</li>
-                                <li><strong>Playwright:</strong> Cross-browser automation</li>
-                                <li><strong>Puppeteer:</strong> Chrome DevTools Protocol API</li>
-                                <li><strong>Selenium:</strong> Legacy browser automation</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Cypress:</strong> Developer-friendly E2E testing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Playwright:</strong> Cross-browser automation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Puppeteer:</strong> Chrome DevTools Protocol API</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Selenium:</strong> Legacy browser automation</div>
+    </div>
+</div>
                             
                             <h4>Focus Areas</h4>
-                            <ul>
-                                <li>Complete user journeys</li>
-                                <li>Cross-browser testing</li>
-                                <li>Integration scenarios</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Complete user journeys</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Cross-browser testing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Integration scenarios</div>
+    </div>
+</div>
                         </div>
                     </div>
 
                     <h3>Testing Best Practices</h3>
                     <div class="info-box info-box-success">
                         <strong>Effective Frontend Testing:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Test User Behavior:</strong> Focus on user interactions, not implementation</li>
-                            <li><strong>Avoid Snapshots:</strong> Prefer explicit assertions over snapshot tests</li>
-                            <li><strong>Mock External Services:</strong> Isolate components from API dependencies</li>
-                            <li><strong>Accessibility Testing:</strong> Use jest-axe or similar tools</li>
-                            <li><strong>Visual Regression:</strong> Catch unintended UI changes</li>
-                            <li><strong>Test Coverage:</strong> Aim for 70-80%, not 100%</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Test User Behavior:</strong> Focus on user interactions, not implementation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Avoid Snapshots:</strong> Prefer explicit assertions over snapshot tests</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Mock External Services:</strong> Isolate components from API dependencies</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Accessibility Testing:</strong> Use jest-axe or similar tools</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Visual Regression:</strong> Catch unintended UI changes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Test Coverage:</strong> Aim for 70-80%, not 100%</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -622,19 +940,33 @@ graph TB
                             <p class="framework-subtitle">Next Generation Frontend Tooling</p>
                             
                             <h4>Core Features</h4>
-                            <ul>
-                                <li><strong>Instant Start:</strong> Native ESM dev server</li>
-                                <li><strong>Lightning HMR:</strong> Fast hot module replacement</li>
-                                <li><strong>Framework Agnostic:</strong> React, Vue, Svelte</li>
-                                <li><strong>Modern:</strong> TypeScript out-of-the-box</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Instant Start:</strong> Native ESM dev server</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Lightning HMR:</strong> Fast hot module replacement</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Framework Agnostic:</strong> React, Vue, Svelte</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Modern:</strong> TypeScript out-of-the-box</div>
+    </div>
+</div>
                             
                             <h4>Best For</h4>
-                            <ul>
-                                <li>Modern web apps</li>
-                                <li>Fast development</li>
-                                <li>SPA and SSR projects</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Modern web apps</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Fast development</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">SPA and SSR projects</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -643,19 +975,33 @@ graph TB
                             <p class="framework-subtitle">Industry Standard Bundler</p>
                             
                             <h4>Core Features</h4>
-                            <ul>
-                                <li><strong>Mature:</strong> Battle-tested ecosystem</li>
-                                <li><strong>Configurable:</strong> Loaders and plugins</li>
-                                <li><strong>Code Splitting:</strong> Advanced chunking</li>
-                                <li><strong>Legacy Support:</strong> Wide compatibility</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Mature:</strong> Battle-tested ecosystem</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Configurable:</strong> Loaders and plugins</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Code Splitting:</strong> Advanced chunking</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Legacy Support:</strong> Wide compatibility</div>
+    </div>
+</div>
                             
                             <h4>Best For</h4>
-                            <ul>
-                                <li>Complex build needs</li>
-                                <li>Enterprise applications</li>
-                                <li>Legacy browser support</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Complex build needs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Enterprise applications</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Legacy browser support</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -664,19 +1010,33 @@ graph TB
                             <p class="framework-subtitle">Rust-Powered Bundler</p>
                             
                             <h4>Core Features</h4>
-                            <ul>
-                                <li><strong>Extreme Speed:</strong> 700x faster than Webpack</li>
-                                <li><strong>Incremental:</strong> Only rebuilds changes</li>
-                                <li><strong>Next.js Native:</strong> Built for Next.js 13+</li>
-                                <li><strong>Rust-Based:</strong> System-level performance</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Extreme Speed:</strong> 700x faster than Webpack</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Incremental:</strong> Only rebuilds changes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Next.js Native:</strong> Built for Next.js 13+</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Rust-Based:</strong> System-level performance</div>
+    </div>
+</div>
                             
                             <h4>Best For</h4>
-                            <ul>
-                                <li>Next.js projects</li>
-                                <li>Large monorepos</li>
-                                <li>Maximum build speed</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Next.js projects</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Large monorepos</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Maximum build speed</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -688,19 +1048,33 @@ graph TB
                             <p class="framework-subtitle">Ultra-Fast JavaScript Bundler</p>
                             
                             <h4>Core Features</h4>
-                            <ul>
-                                <li><strong>Blazing Fast:</strong> 10-100x faster</li>
-                                <li><strong>Go-Powered:</strong> Written in Go</li>
-                                <li><strong>TypeScript:</strong> Native TS support</li>
-                                <li><strong>Simple:</strong> Minimal configuration</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Blazing Fast:</strong> 10-100x faster</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Go-Powered:</strong> Written in Go</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>TypeScript:</strong> Native TS support</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Simple:</strong> Minimal configuration</div>
+    </div>
+</div>
                             
                             <h4>Best For</h4>
-                            <ul>
-                                <li>Library bundling</li>
-                                <li>Fast CI/CD builds</li>
-                                <li>Simple projects</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Library bundling</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Fast CI/CD builds</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Simple projects</div>
+    </div>
+</div>
                         </div>
                     </div>
 

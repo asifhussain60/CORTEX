@@ -1,24 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CORTEX Lens v3.0 - Admin dashboard parity with glassmorphism design, D3.js visualizations, and narrative story generation">
     <title>CORTEX Lens - CORTEX</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
         .mermaid { background: transparent; margin: 1.5rem 0; }
-        .diagram-card { margin-bottom: 2rem; }
-        .diagram-title { font-size: 1.1rem; color: var(--accent-primary); margin-bottom: 1rem; font-weight: 600; }
-        .tab-structure { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin: 1.5rem 0; }
-        .tab-item { padding: 1rem; background: rgba(26, 26, 46, 0.6); border-radius: 8px; text-align: center; border: 1px solid rgba(0, 212, 255, 0.3); }
-        .tab-item:hover { border-color: #00d4ff; }
+        .architecture-diagram { margin-bottom: 2rem; }
+        .architecture-diagram { font-size: 1.1rem; color: var(--accent-primary); margin-bottom: 1rem; font-weight: 600; }
+        .demo-tab-v-desc { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin: 1.5rem 0; }
+        .demo-tab-v-desc { padding: 1rem; background: rgba(26, 26, 46, 0.6); border-radius: 8px; text-align: center; border: 1px solid rgba(0, 212, 255, 0.3); }
+        .demo-tab-v-desc:hover { border-color: #00d4ff; }
         .force-graph { width: 100%; height: 450px; }
         .radar-chart { width: 100%; height: 400px; }
-        @media (max-width: 768px) { .tab-structure { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 768px) { .demo-tab-v-desc { grid-template-columns: repeat(2, 1fr); } }
     </style>
 </head>
 <body>
@@ -27,10 +53,35 @@
     
     <!-- Level 1 Navigation Header -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../index.html" class="nav-link">
-                    <i class="fas fa-home"></i>
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../index.html" class="nav-link" mobile-nav-optimized>
+                    <i class="pulse-glow-glass--fast fa-home"></i>
                     <span>Home</span>
                 </a>
             </nav>
@@ -86,47 +137,47 @@
         </div>
         
         <!-- 8-Tab Navigation Structure -->
-        <section class="section-tabs">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>📊</span> 8-Tab Dashboard Structure</h2>
                 
-                <div class="tab-structure">
-                    <div class="tab-item">
+                <div class="demo-tab-v-desc">
+                    <div class="demo-tab-v-desc">
                         <span>🏠</span>
                         <div>Overview</div>
                         <div>Health scores, key metrics</div>
                     </div>
-                    <div class="tab-item">
+                    <div class="demo-tab-v-desc">
                         <span>🏗️</span>
                         <div>Architecture</div>
                         <div>Structure, patterns</div>
                     </div>
-                    <div class="tab-item">
+                    <div class="demo-tab-v-desc">
                         <span>💻</span>
                         <div>Tech Stack</div>
                         <div>Languages, frameworks</div>
                     </div>
-                    <div class="tab-item">
+                    <div class="demo-tab-v-desc">
                         <span>🔒</span>
                         <div>Security</div>
                         <div>Vulnerabilities, compliance</div>
                     </div>
-                    <div class="tab-item">
+                    <div class="demo-tab-v-desc">
                         <span>📁</span>
                         <div>Code Org</div>
                         <div>Modules, coupling</div>
                     </div>
-                    <div class="tab-item">
+                    <div class="demo-tab-v-desc">
                         <span>📦</span>
                         <div>Vendors</div>
                         <div>Dependencies, licenses</div>
                     </div>
-                    <div class="tab-item">
+                    <div class="demo-tab-v-desc">
                         <span>🔄</span>
                         <div>Reconciliation</div>
                         <div>Drift, alignment</div>
                     </div>
-                    <div class="tab-item">
+                    <div class="demo-tab-v-desc">
                         <span>📖</span>
                         <div>Story</div>
                         <div>Narrative insights</div>
@@ -136,10 +187,10 @@
         </section>
         
         <!-- Narrative Generation Pipeline -->
-        <section class="section-narrative">
-            <div class="glass-card diagram-card">
+        <section class="level2-section-title-green">
+            <div class="glass-card architecture-diagram">
                 <h2><span>📝</span> Narrative Story Generation Pipeline</h2>
-                <p class="diagram-title">How raw analysis becomes compelling narrative</p>
+                <p class="architecture-diagram">How raw analysis becomes compelling narrative</p>
                 
                 <div class="mermaid">
 flowchart LR
@@ -200,7 +251,7 @@ flowchart LR
         </section>
         
         <!-- Repository Type Detection -->
-        <section class="section-templates">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>🎯</span> Adaptive Repository Templates</h2>
                 <p>CORTEX Lens automatically detects repository type and applies appropriate analysis:</p>
@@ -215,7 +266,7 @@ flowchart LR
                     </thead>
                     <tbody>
                         <tr>
-                            <td><span class="badge badge-primary">API Service</span></td>
+                            <td><span class="badge badge-security">API Service</span></td>
                             <td>FastAPI, Express, ASP.NET controllers</td>
                             <td>Endpoints, auth, rate limiting</td>
                         </tr>
@@ -230,7 +281,7 @@ flowchart LR
                             <td>Component tree, API integration</td>
                         </tr>
                         <tr>
-                            <td><span class="badge badge-danger">Library</span></td>
+                            <td><span class="badge badge-security">Library</span></td>
                             <td>setup.py, pyproject.toml, public exports</td>
                             <td>API surface, compatibility</td>
                         </tr>
@@ -250,20 +301,20 @@ flowchart LR
         </section>
         
         <!-- Force-Directed Dependency Graph -->
-        <section class="section-force">
-            <div class="glass-card diagram-card">
+        <section class="level2-section-title-green">
+            <div class="glass-card architecture-diagram">
                 <h2><span>🕸️</span> Module Dependency Graph (D3.js)</h2>
-                <p class="diagram-title">Interactive force-directed visualization of code dependencies</p>
+                <p class="architecture-diagram">Interactive force-directed visualization of code dependencies</p>
                 
                 <div id="dependency-graph" class="force-graph"></div>
             </div>
         </section>
         
         <!-- Analysis Phase Sequence -->
-        <section class="section-sequence">
-            <div class="glass-card diagram-card">
+        <section class="level2-section-title-green">
+            <div class="glass-card architecture-diagram">
                 <h2><span>🔄</span> Analysis Phase Sequence</h2>
-                <p class="diagram-title">Component interactions during lens analysis</p>
+                <p class="architecture-diagram">Component interactions during lens analysis</p>
                 
                 <div class="mermaid">
 sequenceDiagram
@@ -315,17 +366,17 @@ sequenceDiagram
         </section>
         
         <!-- Health Radar Chart -->
-        <section class="section-radar">
-            <div class="glass-card diagram-card">
+        <section class="level2-section-title-green">
+            <div class="glass-card architecture-diagram">
                 <h2><span>📈</span> Repository Health Radar (D3.js)</h2>
-                <p class="diagram-title">Multi-dimensional health assessment visualization</p>
+                <p class="architecture-diagram">Multi-dimensional health assessment visualization</p>
                 
                 <div id="health-radar" class="radar-chart"></div>
             </div>
         </section>
         
         <!-- Glassmorphism Design System -->
-        <section class="section-design">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>🎨</span> Glassmorphism Design System</h2>
                 
@@ -365,7 +416,7 @@ mindmap
         </section>
         
         <!-- Example Output -->
-        <section class="section-output">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>📋</span> Example Narrative Output</h2>
                 
@@ -406,7 +457,7 @@ Addressing the identified issues could:
         </section>
         
         <!-- Related Features -->
-        <section class="section-related">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>🔗</span> Related Orchestrators</h2>
                 <div class="feature-grid feature-grid-3">

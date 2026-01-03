@@ -1,24 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CORTEX Intelligent Dashboard - Auto-populate repository insights using AST analysis and reverse engineering">
     <title>Intelligent Dashboard - CORTEX</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
         .mermaid { background: transparent; margin: 1.5rem 0; }
-        .diagram-card { margin-bottom: 2rem; }
-        .diagram-title { font-size: 1.1rem; color: var(--accent-primary); margin-bottom: 1rem; font-weight: 600; }
-        .analyzer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0; }
-        .analyzer-card { padding: 1rem; background: rgba(26, 26, 46, 0.6); border-radius: 8px; border-left: 4px solid var(--accent-primary); }
+        .architecture-diagram { margin-bottom: 2rem; }
+        .architecture-diagram { font-size: 1.1rem; color: var(--accent-primary); margin-bottom: 1rem; font-weight: 600; }
+        .viz-analysis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0; }
+        .viz-analysis { padding: 1rem; background: rgba(26, 26, 46, 0.6); border-radius: 8px; border-left: 4px solid var(--accent-primary); }
         .pipeline-viz { width: 100%; height: 400px; }
         .cache-diagram { width: 100%; height: 350px; }
-        @media (max-width: 768px) { .analyzer-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) { .viz-analysis { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -27,10 +53,35 @@
     
     <!-- Glass Header Navigation -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../index.html" class="nav-link">
-                    <i class="fas fa-home"></i>
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../index.html" class="nav-link" mobile-nav-optimized>
+                    <i class="pulse-glow-glass--fast fa-home"></i>
                     <span>Home</span>
                 </a>
             </nav>
@@ -85,50 +136,74 @@
         </div>
         
         <!-- Language Analyzers -->
-        <section class="section-analyzers">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>🔬</span> Language-Specific AST Analyzers</h2>
                 
-                <div class="analyzer-grid">
-                    <div class="analyzer-card">
+                <div class="viz-analysis">
+                    <div class="viz-analysis">
                         <h3>🐍 Python Analyzer</h3>
                         <p>Confidence: <strong>90%</strong></p>
-                        <ul>
-                            <li>Code smell detection</li>
-                            <li>Docstring extraction</li>
-                            <li>Dependency analysis</li>
-                            <li>Class/method extraction</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Code smell detection</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Docstring extraction</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Dependency analysis</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Class/method extraction</div>
+    </div>
+</div>
                     </div>
-                    <div class="analyzer-card">
+                    <div class="viz-analysis">
                         <h3>🟨 JavaScript/TS</h3>
                         <p>Confidence: <strong>85%</strong></p>
-                        <ul>
-                            <li>JSDoc extraction</li>
-                            <li>Module dependencies</li>
-                            <li>React component tree</li>
-                            <li>Express routes</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">JSDoc extraction</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Module dependencies</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">React component tree</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Express routes</div>
+    </div>
+</div>
                     </div>
-                    <div class="analyzer-card">
+                    <div class="viz-analysis">
                         <h3>🟩 C# Analyzer</h3>
                         <p>Confidence: <strong>80%</strong></p>
-                        <ul>
-                            <li>XML doc extraction</li>
-                            <li>Class hierarchy</li>
-                            <li>ASP.NET controllers</li>
-                            <li>Entity Framework</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">XML doc extraction</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Class hierarchy</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">ASP.NET controllers</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Entity Framework</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
         </section>
         
         <!-- Analysis Pipeline -->
-        <section class="section-pipeline">
-            <div class="glass-card diagram-card">
+        <section class="level2-section-title-green">
+            <div class="glass-card architecture-diagram">
                 <h2><span>🔄</span> 4-Phase Analysis Pipeline</h2>
-                <p class="diagram-title">From raw files to dashboard-ready JSON</p>
+                <p class="architecture-diagram">From raw files to dashboard-ready JSON</p>
                 
                 <div class="mermaid">
 flowchart TD
@@ -199,10 +274,10 @@ flowchart TD
         </section>
         
         <!-- Pattern Detection -->
-        <section class="section-patterns">
-            <div class="glass-card diagram-card">
+        <section class="level2-section-title-green">
+            <div class="glass-card architecture-diagram">
                 <h2><span>🎯</span> API Endpoint Detection Patterns</h2>
-                <p class="diagram-title">How endpoints are discovered across languages</p>
+                <p class="architecture-diagram">How endpoints are discovered across languages</p>
                 
                 <div class="mermaid">
 flowchart LR
@@ -252,17 +327,17 @@ flowchart LR
         </section>
         
         <!-- Caching Strategy -->
-        <section class="section-cache">
-            <div class="glass-card diagram-card">
+        <section class="level2-section-title-green">
+            <div class="glass-card architecture-diagram">
                 <h2><span>💾</span> LRU Caching Strategy (D3.js)</h2>
-                <p class="diagram-title">How AST analysis results are cached for performance</p>
+                <p class="architecture-diagram">How AST analysis results are cached for performance</p>
                 
                 <div id="cache-diagram" class="cache-diagram"></div>
             </div>
         </section>
         
         <!-- Code Smell Detection -->
-        <section class="section-smells">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>👃</span> Code Smell Detection</h2>
                 
@@ -311,10 +386,10 @@ flowchart LR
         </section>
         
         <!-- Parallelization -->
-        <section class="section-parallel">
-            <div class="glass-card diagram-card">
+        <section class="level2-section-title-green">
+            <div class="glass-card architecture-diagram">
                 <h2><span>⚡</span> Parallel Processing Architecture</h2>
-                <p class="diagram-title">How files are analyzed concurrently</p>
+                <p class="architecture-diagram">How files are analyzed concurrently</p>
                 
                 <div class="mermaid">
 flowchart TD
@@ -369,7 +444,7 @@ flowchart TD
         </section>
         
         <!-- Example Output -->
-        <section class="section-output">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>📋</span> Example Dashboard Data Output</h2>
                 
@@ -418,7 +493,7 @@ flowchart TD
         </section>
         
         <!-- Related Features -->
-        <section class="section-related">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>🔗</span> Related Orchestrators</h2>
                 <div class="feature-grid feature-grid-3">

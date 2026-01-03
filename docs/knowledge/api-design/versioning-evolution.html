@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="API Versioning & Evolution - API Design Learning Module">
@@ -8,8 +33,11 @@
     <meta name="author" content="Asif Hussain">
     <title>API Versioning & Evolution | CORTEX Learning Hub</title>
     <link rel="stylesheet" href="../../assets/css/main.css?v=2026-01-02">
-    <link rel="stylesheet" href="../../assets/css/learning-hub.css?v=2026-01-02">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
+    
+    <link rel="stylesheet" href="../..../..../..../..../..../../assets/css/generated-classes.css"><link rel="stylesheet" href="../../assets/css/learning-hub.css?v=2026-01-02">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/editor/editor.main.css">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
@@ -18,14 +46,39 @@
 
     <!-- Header Navigation -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../../index.html" class="nav-link">
-                    <span class="nav-icon">🏠</span> Home
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../../index.html" class="nav-link" mobile-nav-optimized>
+                    <span class="nav-content" mobile-nav-optimized>🏠</span> Home
                 </a>
-                <span class="nav-separator">›</span>
-                <a href="../api-design-hub.html" class="nav-link">
-                    <span class="nav-icon">🌐</span> API Design
+                <span class="nav-content" mobile-nav-optimized>›</span>
+                <a href="../api-design-hub.html" class="nav-link" mobile-nav-optimized>
+                    <span class="nav-content" mobile-nav-optimized>🌐</span> API Design
                 </a>
             </nav>
         </div>
@@ -36,7 +89,7 @@
         <div class="module-header">
             <div class="breadcrumb">
                 <span class="difficulty-badge intermediate">Intermediate</span>
-                <span style="color: var(--text-secondary);">Module 3 of 4</span>
+                <span class="inline-fix-9">Module 3 of 4</span>
             </div>
             <h1 class="hero-title">🌐 API Versioning & Evolution</h1>
             <p class="hero-subtitle">Interactive learning with quizzes, code playgrounds, and challenges</p>
@@ -52,26 +105,36 @@
     <!-- Main Content -->
     <div class="container">
         <!-- Learning Objectives -->
-        <section class="glass-card" style="margin-top: var(--spacing-2xl);">
+        <section class="glass-card" class="inline-fix-14">
             <h2>🎓 Learning Objectives</h2>
-            <ul class="objective-list">
-                <li>Master API versioning strategies (URI, header, content negotiation)</li>
-                <li>Implement backward compatibility</li>
-                <li>Handle deprecation gracefully</li>
-                <li>Design evolution-friendly APIs</li>
-                <li>Manage breaking vs non-breaking changes</li>
-            </ul>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Master API versioning strategies (URI, header, content negotiation)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Implement backward compatibility</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Handle deprecation gracefully</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Design evolution-friendly APIs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Manage breaking vs non-breaking changes</div>
+    </div>
+</div>
         </section>
 
         <!-- Interactive Content Placeholder -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🔄 API Versioning Strategies</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 There are three main approaches to API versioning. Each has trade-offs in terms of implementation complexity, client adoption, and maintainability.
             </p>
             
             <!-- D3.js Versioning Strategy Comparison -->
-            <div id="versioning-strategies-viz" style="width: 100%; height: 400px; margin: var(--spacing-xl) 0;"></div>
+            <div id="versioning-strategies-viz" class="inline-fix-232"></div>
             
             <div class="mermaid-container">
                 <pre class="mermaid">
@@ -100,9 +163,9 @@ graph TB
         </section>
 
         <!-- Version Lifecycle & Deprecation -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>⏳ API Version Lifecycle & Deprecation</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 Managing the lifecycle of API versions requires careful planning and clear communication.
             </p>
             
@@ -126,86 +189,118 @@ gantt
                 </pre>
             </div>
             
-            <div style="margin-top: var(--spacing-xl); padding: var(--spacing-lg); background: rgba(239, 68, 68, 0.1); border-radius: 8px; border-left: 4px solid #ef4444;">
-                <h4 style="color: #ef4444; margin-bottom: var(--spacing-md);">⚠️ Deprecation Best Practices</h4>
-                <ul style="color: var(--text-secondary);">
-                    <li><strong>Announce Early:</strong> 6-12 months notice before sunset</li>
-                    <li><strong>Use Headers:</strong> <code>Sunset: Sat, 1 Jan 2026 00:00:00 GMT</code></li>
-                    <li><strong>Provide Migration Guide:</strong> Document breaking changes</li>
-                    <li><strong>Monitor Usage:</strong> Track adoption of new version</li>
-                    <li><strong>Graceful Shutdown:</strong> Return 410 Gone after sunset</li>
-                </ul>
+            <div class="inline-fix-267">
+                <h4 class="inline-fix-52">⚠️ Deprecation Best Practices</h4>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Announce Early:</strong> 6-12 months notice before sunset</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Use Headers:</strong> <code>Sunset: Sat, 1 Jan 2026 00:00:00 GMT</code></div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Provide Migration Guide:</strong> Document breaking changes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Monitor Usage:</strong> Track adoption of new version</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Graceful Shutdown:</strong> Return 410 Gone after sunset</div>
+    </div>
+</div>
             </div>
         </section>
 
         <!-- Breaking vs Non-Breaking Changes -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>⚡ Breaking vs Non-Breaking Changes</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 Understanding what constitutes a breaking change is critical for maintaining backward compatibility.
             </p>
             
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--spacing-lg);">
-                <div style="padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-radius: 8px; border: 1px solid #10b981;">
-                    <h4 style="color: #10b981; margin-bottom: var(--spacing-md);">✅ Non-Breaking Changes</h4>
-                    <ul style="color: var(--text-secondary); font-size: 0.9rem;">
-                        <li>Adding new endpoints</li>
-                        <li>Adding optional parameters</li>
-                        <li>Adding new response fields</li>
-                        <li>Expanding enum values</li>
-                        <li>Making required fields optional</li>
-                    </ul>
+            <div class="inline-fix-124">
+                <div class="inline-fix-18">
+                    <h4 class="inline-fix-44">✅ Non-Breaking Changes</h4>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Adding new endpoints</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Adding optional parameters</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Adding new response fields</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Expanding enum values</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Making required fields optional</div>
+    </div>
+</div>
                 </div>
                 
-                <div style="padding: var(--spacing-lg); background: rgba(239, 68, 68, 0.1); border-radius: 8px; border: 1px solid #ef4444;">
-                    <h4 style="color: #ef4444; margin-bottom: var(--spacing-md);">❌ Breaking Changes</h4>
-                    <ul style="color: var(--text-secondary); font-size: 0.9rem;">
-                        <li>Removing endpoints</li>
-                        <li>Removing request/response fields</li>
-                        <li>Changing field types</li>
-                        <li>Making optional fields required</li>
-                        <li>Changing authentication methods</li>
-                        <li>Removing enum values</li>
-                    </ul>
+                <div class="inline-fix-81">
+                    <h4 class="inline-fix-52">❌ Breaking Changes</h4>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Removing endpoints</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Removing request/response fields</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Changing field types</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Making optional fields required</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Changing authentication methods</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Removing enum values</div>
+    </div>
+</div>
                 </div>
             </div>
         </section>
 
         <!-- Versioning Strategies Comparison Table -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>📊 Strategy Comparison Matrix</h2>
-            <div style="overflow-x: auto;">
-                <table style="width: 100%; border-collapse: collapse; color: var(--text-secondary);">
+            <div class="inline-fix-299">
+                <table class="inline-fix-313">
                     <thead>
-                        <tr style="background: rgba(123, 97, 255, 0.1);">
-                            <th style="padding: var(--spacing-md); text-align: left; border-bottom: 2px solid var(--hub-primary);">Strategy</th>
-                            <th style="padding: var(--spacing-md); text-align: center; border-bottom: 2px solid var(--hub-primary);">Simplicity</th>
-                            <th style="padding: var(--spacing-md); text-align: center; border-bottom: 2px solid var(--hub-primary);">RESTful</th>
-                            <th style="padding: var(--spacing-md); text-align: center; border-bottom: 2px solid var(--hub-primary);">Cacheability</th>
-                            <th style="padding: var(--spacing-md); text-align: center; border-bottom: 2px solid var(--hub-primary);">Discovery</th>
+                        <tr class="inline-fix-189">
+                            <th class="inline-fix-312">Strategy</th>
+                            <th class="inline-fix-91">Simplicity</th>
+                            <th class="inline-fix-91">RESTful</th>
+                            <th class="inline-fix-91">Cacheability</th>
+                            <th class="inline-fix-91">Discovery</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
-                            <td style="padding: var(--spacing-md);"><strong>URI Versioning</strong></td>
-                            <td style="padding: var(--spacing-md); text-align: center;">⭐⭐⭐⭐⭐</td>
-                            <td style="padding: var(--spacing-md); text-align: center;">⭐⭐</td>
-                            <td style="padding: var(--spacing-md); text-align: center;">⭐⭐⭐⭐⭐</td>
-                            <td style="padding: var(--spacing-md); text-align: center;">⭐⭐⭐⭐</td>
+                        <tr class="inline-fix-161">
+                            <td class="inline-fix-120"><strong>URI Versioning</strong></td>
+                            <td class="inline-fix-47">⭐⭐⭐⭐⭐</td>
+                            <td class="inline-fix-47">⭐⭐</td>
+                            <td class="inline-fix-47">⭐⭐⭐⭐⭐</td>
+                            <td class="inline-fix-47">⭐⭐⭐⭐</td>
                         </tr>
-                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
-                            <td style="padding: var(--spacing-md);"><strong>Header Versioning</strong></td>
-                            <td style="padding: var(--spacing-md); text-align: center;">⭐⭐⭐⭐</td>
-                            <td style="padding: var(--spacing-md); text-align: center;">⭐⭐⭐⭐</td>
-                            <td style="padding: var(--spacing-md); text-align: center;">⭐⭐⭐</td>
-                            <td style="padding: var(--spacing-md); text-align: center;">⭐⭐⭐</td>
+                        <tr class="inline-fix-161">
+                            <td class="inline-fix-120"><strong>Header Versioning</strong></td>
+                            <td class="inline-fix-47">⭐⭐⭐⭐</td>
+                            <td class="inline-fix-47">⭐⭐⭐⭐</td>
+                            <td class="inline-fix-47">⭐⭐⭐</td>
+                            <td class="inline-fix-47">⭐⭐⭐</td>
                         </tr>
                         <tr>
-                            <td style="padding: var(--spacing-md);"><strong>Content Negotiation</strong></td>
-                            <td style="padding: var(--spacing-md); text-align: center;">⭐⭐</td>
-                            <td style="padding: var(--spacing-md); text-align: center;">⭐⭐⭐⭐⭐</td>
-                            <td style="padding: var(--spacing-md); text-align: center;">⭐⭐⭐⭐</td>
-                            <td style="padding: var(--spacing-md); text-align: center;">⭐⭐</td>
+                            <td class="inline-fix-120"><strong>Content Negotiation</strong></td>
+                            <td class="inline-fix-47">⭐⭐</td>
+                            <td class="inline-fix-47">⭐⭐⭐⭐⭐</td>
+                            <td class="inline-fix-47">⭐⭐⭐⭐</td>
+                            <td class="inline-fix-47">⭐⭐</td>
                         </tr>
                     </tbody>
                 </table>
@@ -213,9 +308,9 @@ gantt
         </section>
 
         <!-- Code Playground -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>💻 Code Playground: Implement Versioning Strategies</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 Implement all three versioning strategies in a single API. Toggle between approaches to see the differences.
             </p>
             
@@ -227,15 +322,15 @@ gantt
                 </div>
                 
                 <div class="tab-content active" id="uri">
-                    <div id="editor-uri" style="height: 450px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                    <div id="editor-uri" class="inline-fix-26"></div>
                 </div>
                 
                 <div class="tab-content" id="header">
-                    <div id="editor-header" style="height: 450px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                    <div id="editor-header" class="inline-fix-26"></div>
                 </div>
                 
                 <div class="tab-content" id="content">
-                    <div id="editor-content" style="height: 450px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                    <div id="editor-content" class="inline-fix-26"></div>
                 </div>
                 
                 <button class="run-code-btn" id="run-code">
@@ -250,77 +345,85 @@ gantt
         </section>
 
         <!-- Interactive Content Placeholder -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>📚 Module Content</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 This module includes:
             </p>
-            <ul style="list-style-type: none; padding-left: 0;">
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Interactive Visualizations:</strong> D3.js charts and Mermaid diagrams
-                </li>
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Code Playgrounds:</strong> Hands-on Monaco editor with live execution
-                </li>
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Knowledge Checks:</strong> Interactive quizzes with instant feedback
-                </li>
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Real-World Examples:</strong> Production-grade code samples
-                </li>
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Progressive Challenges:</strong> Apply what you've learned
-                </li>
-            </ul>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">✅ <strong>Interactive Visualizations:</strong> D3.js charts and Mermaid diagrams</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ <strong>Code Playgrounds:</strong> Hands-on Monaco editor with live execution</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ <strong>Knowledge Checks:</strong> Interactive quizzes with instant feedback</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ <strong>Real-World Examples:</strong> Production-grade code samples</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ <strong>Progressive Challenges:</strong> Apply what you've learned</div>
+    </div>
+</div>
         </section>
 
         <!-- Interactive Quiz Placeholder -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>✅ Knowledge Check: API Versioning Quiz</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 Test your understanding with 10 questions. Instant feedback provided!
             </p>
             <div class="quiz-container" id="quiz">
                 <!-- Quiz will be dynamically generated -->
             </div>
-            <div class="quiz-results" id="quiz-results" style="display: none;">
+            <div class="quiz-results" id="quiz-results" class="inline-fix-48">
                 <h3 id="score-display"></h3>
                 <div id="feedback-summary"></div>
-                <button class="retry-btn" id="retry-quiz" style="margin-top: var(--spacing-lg); padding: var(--spacing-md) var(--spacing-xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 8px; cursor: pointer;">
+                <button class="retry-btn" id="retry-quiz" class="inline-fix-77">
                     🔄 Retry Quiz
                 </button>
             </div>
         </section>
 
         <!-- Challenge Section -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🏆 Progressive Challenge</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 You're managing a public API with 10,000 active clients. Design a deprecation strategy for a breaking change:
             </p>
-            <ul style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
-                <li>Current: <code>GET /users</code> returns array of users</li>
-                <li>New: <code>GET /users</code> should return paginated response with metadata</li>
-                <li>Constraint: Cannot break existing clients</li>
-                <li>Goal: 90% adoption within 6 months</li>
-            </ul>
-            <div id="challenge-hint" style="padding: var(--spacing-lg); background: rgba(251, 191, 36, 0.1); border-radius: 8px; border-left: 4px solid #fbbf24; margin-bottom: var(--spacing-lg); display: none;">
-                <h4 style="color: #fbbf24; margin-bottom: var(--spacing-sm);">💡 Hint</h4>
-                <p style="color: var(--text-secondary);">
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Current: <code>GET /users</code> returns array of users</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">New: <code>GET /users</code> should return paginated response with metadata</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Constraint: Cannot break existing clients</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Goal: 90% adoption within 6 months</div>
+    </div>
+</div>
+            <div id="challenge-hint" class="inline-fix-135">
+                <h4 class="inline-fix-65">💡 Hint</h4>
+                <p class="inline-fix-9">
                     Consider using URI versioning (<code>/v2/users</code>) with a clear migration path. 
                     Add <code>Sunset</code> header to v1 responses. Provide detailed migration documentation.
                     Monitor v1 usage through analytics to track adoption rate.
                 </p>
             </div>
-            <button id="show-hint-btn" style="padding: var(--spacing-sm) var(--spacing-lg); background: rgba(251, 191, 36, 0.2); color: #fbbf24; border: 1px solid #fbbf24; border-radius: 8px; cursor: pointer; margin-right: var(--spacing-md);">
+            <button id="show-hint-btn" class="inline-fix-166">
                 💡 Show Hint
             </button>
-            <button id="show-solution-btn" style="padding: var(--spacing-sm) var(--spacing-lg); background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid #10b981; border-radius: 8px; cursor: pointer;">
+            <button id="show-solution-btn" class="inline-fix-102">
                 ✅ Show Solution
             </button>
-            <div id="challenge-solution" style="margin-top: var(--spacing-lg); display: none;">
-                <h4 style="color: var(--hub-primary); margin-bottom: var(--spacing-md);">Recommended Solution</h4>
-                <pre style="background: rgba(26, 31, 58, 0.8); padding: var(--spacing-lg); border-radius: 8px; overflow-x: auto; color: #e5e7eb;"><code># Phase 1: Introduce v2 (Month 1)
+            <div id="challenge-solution" class="inline-fix-74">
+                <h4 class="inline-fix-80">Recommended Solution</h4>
+                <pre class="inline-fix-71"><code># Phase 1: Introduce v2 (Month 1)
 GET /v2/users
 Response:
 {
@@ -356,9 +459,9 @@ Response: 410 Gone
         </section>
 
         <!-- Next Steps -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🚀 Next Steps</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 You've completed API Versioning & Evolution! Continue your learning journey:
             </p>
             <div class="next-module-cards">
@@ -375,11 +478,11 @@ Response: 410 Gone
     </div>
 
     <!-- Footer -->
-    <footer style="margin-top: var(--spacing-3xl); padding: var(--spacing-xl); text-align: center; color: var(--text-secondary);">
+    <footer class="inline-fix-17">
         <p>© 2026 Asif Hussain. All rights reserved.</p>
-        <p style="margin-top: var(--spacing-sm);">
-            <a href="../../index.html" style="color: var(--hub-primary);">Back to Home</a> • 
-            <a href="../api-design-hub.html" style="color: var(--hub-primary);">API Design Hub</a>
+        <p class="inline-fix-12">
+            <a href="../../index.html" class="inline-fix-10">Back to Home</a> • 
+            <a href="../api-design-hub.html" class="inline-fix-10">API Design Hub</a>
         </p>
     </footer>
 
@@ -763,22 +866,22 @@ Content-Type: application/vnd.api.v2+json
         function renderQuiz() {
             const quizContainer = document.getElementById('quiz');
             quizContainer.innerHTML = quizQuestions.map((q, index) => `
-                <div class="quiz-question" style="margin-bottom: var(--spacing-2xl); padding: var(--spacing-lg); background: rgba(26, 31, 58, 0.5); border-radius: 8px; border: 1px solid var(--module-border);">
-                    <h4 style="color: var(--text-primary); margin-bottom: var(--spacing-md);">Question ${index + 1}: ${q.question}</h4>
+                <div class="quiz-question" class="inline-fix-56">
+                    <h4 class="inline-fix-180">Question ${index + 1}: ${q.question}</h4>
                     <div class="quiz-options">
                         ${q.options.map((option, optIndex) => `
-                            <label style="display: block; padding: var(--spacing-sm); margin: var(--spacing-xs) 0; background: rgba(123, 97, 255, 0.1); border-radius: 6px; cursor: pointer; transition: all 0.3s;">
-                                <input type="radio" name="question-${index}" value="${optIndex}" style="margin-right: var(--spacing-sm);">
-                                <span style="color: var(--text-secondary);">${option}</span>
+                            <label class="inline-fix-152">
+                                <input type="radio" name="question-${index}" value="${optIndex}" class="inline-fix-54">
+                                <span class="inline-fix-9">${option}</span>
                             </label>
                         `).join('')}
                     </div>
-                    <div class="question-feedback" id="feedback-${index}" style="display: none; margin-top: var(--spacing-md); padding: var(--spacing-md); border-radius: 6px;"></div>
+                    <div class="faq-question" id="feedback-${index}" class="inline-fix-55"></div>
                 </div>
             `).join('');
             
             quizContainer.innerHTML += `
-                <button id="submit-quiz" style="padding: var(--spacing-md) var(--spacing-2xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600;">
+                <button id="submit-quiz" class="inline-fix-62">
                     Submit Quiz
                 </button>
             `;
@@ -800,12 +903,12 @@ Content-Type: application/vnd.api.v2+json
                         feedback.style.display = 'block';
                         feedback.style.background = 'rgba(16, 185, 129, 0.1)';
                         feedback.style.borderLeft = '4px solid #10b981';
-                        feedback.innerHTML = `<strong style="color: #10b981;">✅ Correct!</strong><br><span style="color: var(--text-secondary);">${q.explanation}</span>`;
+                        feedback.innerHTML = `<strong class="inline-fix-13">✅ Correct!</strong><br><span class="inline-fix-9">${q.explanation}</span>`;
                     } else {
                         feedback.style.display = 'block';
                         feedback.style.background = 'rgba(239, 68, 68, 0.1)';
                         feedback.style.borderLeft = '4px solid #ef4444';
-                        feedback.innerHTML = `<strong style="color: #ef4444;">❌ Incorrect</strong><br><span style="color: var(--text-secondary);">${q.explanation}</span>`;
+                        feedback.innerHTML = `<strong class="inline-fix-21">❌ Incorrect</strong><br><span class="inline-fix-9">${q.explanation}</span>`;
                     }
                 }
             });

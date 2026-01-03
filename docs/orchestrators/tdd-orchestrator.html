@@ -1,12 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CORTEX TDD Mastery - Enforced RED-GREEN-REFACTOR cycle with per-layer coverage validation">
     <title>TDD Mastery - CORTEX</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -69,7 +95,7 @@
         </div>
         
         <!-- RED-GREEN-REFACTOR -->
-        <section class="section-workflow">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>🔄</span> RED-GREEN-REFACTOR Cycle</h2>
                 
@@ -83,11 +109,17 @@
                             </div>
                         </div>
                         <p>Write tests that describe expected behavior. Tests must fail before any implementation code is written.</p>
-                        <ul class="feature-list">
-                            <li>Write test cases first</li>
-                            <li>Verify tests fail (no false positives)</li>
-                            <li>Document expected behavior</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Write test cases first</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Verify tests fail (no false positives)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Document expected behavior</div>
+    </div>
+</div>
                     </div>
                     
                     <div class="tier-card tier-3">
@@ -99,11 +131,17 @@
                             </div>
                         </div>
                         <p>Write minimal implementation code to make all tests pass. Focus on functionality, not elegance.</p>
-                        <ul class="feature-list">
-                            <li>Implement minimal code</li>
-                            <li>All tests must pass</li>
-                            <li>No new functionality without tests</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Implement minimal code</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">All tests must pass</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">No new functionality without tests</div>
+    </div>
+</div>
                     </div>
                     
                     <div class="tier-card tier-2">
@@ -115,18 +153,24 @@
                             </div>
                         </div>
                         <p>Improve code quality while keeping tests green. Remove duplication, improve naming, optimize.</p>
-                        <ul class="feature-list">
-                            <li>Remove code duplication</li>
-                            <li>Improve naming/structure</li>
-                            <li>Tests stay green</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Remove code duplication</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Improve naming/structure</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Tests stay green</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
         </section>
         
         <!-- 4-Layer Coverage -->
-        <section class="section-architecture">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>📊</span> 4-Layer Coverage Validation</h2>
                 <p>TDD Mastery validates coverage across all architectural layers:</p>
@@ -166,7 +210,7 @@
         </section>
         
         <!-- Technology Discovery -->
-        <section class="section-configuration">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>🔍</span> Adaptive Technology Discovery</h2>
                 <p>
@@ -177,19 +221,41 @@
                 <div class="card-grid-2">
                     <div>
                         <h3>Supported Technologies</h3>
-                        <ul class="feature-list">
-                            <li><strong>Python:</strong> pytest, unittest, coverage.py</li>
-                            <li><strong>JavaScript/TypeScript:</strong> Jest, Mocha, Jasmine</li>
-                            <li><strong>C#:</strong> xUnit, NUnit, MSTest</li>
-                            <li><strong>Java:</strong> JUnit, TestNG, Mockito</li>
-                            <li><strong>Go:</strong> testing package, testify</li>
-                            <li><strong>Ruby:</strong> RSpec, Minitest</li>
-                            <li><strong>PHP:</strong> PHPUnit</li>
-                            <li><strong>Rust:</strong> cargo test</li>
-                            <li><strong>Swift:</strong> XCTest</li>
-                            <li><strong>Kotlin:</strong> JUnit, KotlinTest</li>
-                            <li><strong>Scala:</strong> ScalaTest</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Python:</strong> pytest, unittest, coverage.py</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>JavaScript/TypeScript:</strong> Jest, Mocha, Jasmine</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>C#:</strong> xUnit, NUnit, MSTest</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Java:</strong> JUnit, TestNG, Mockito</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Go:</strong> testing package, testify</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Ruby:</strong> RSpec, Minitest</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>PHP:</strong> PHPUnit</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Rust:</strong> cargo test</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Swift:</strong> XCTest</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Kotlin:</strong> JUnit, KotlinTest</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Scala:</strong> ScalaTest</div>
+    </div>
+</div>
                     </div>
                     
                     <div>
@@ -207,7 +273,7 @@
         </section>
         
         <!-- Quality Scoring -->
-        <section class="section-architecture">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>📊</span> Code Quality Scoring (0-10)</h2>
                 <p>REFACTOR phase calculates a quality score based on multiple dimensions:</p>
@@ -215,31 +281,51 @@
                 <div class="card-grid-2">
                     <div>
                         <h3>Scoring Criteria</h3>
-                        <ul class="feature-list">
-                            <li><strong>Complexity (30%):</strong> Cyclomatic complexity per function (target: &lt;10)</li>
-                            <li><strong>SOLID Compliance (25%):</strong> Adherence to SOLID principles</li>
-                            <li><strong>Duplication (20%):</strong> DRY violations detected (target: 0%)</li>
-                            <li><strong>Naming (15%):</strong> Descriptive names, consistent conventions</li>
-                            <li><strong>Test Coverage (10%):</strong> Code coverage percentage (target: ≥80%)</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Complexity (30%):</strong> Cyclomatic complexity per function (target: &lt;10)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>SOLID Compliance (25%):</strong> Adherence to SOLID principles</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Duplication (20%):</strong> DRY violations detected (target: 0%)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Naming (15%):</strong> Descriptive names, consistent conventions</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Test Coverage (10%):</strong> Code coverage percentage (target: ≥80%)</div>
+    </div>
+</div>
                     </div>
                     
                     <div>
                         <h3>Score Interpretation</h3>
-                        <ul class="feature-list">
-                            <li><strong>9-10:</strong> Excellent - Production-ready, maintainable code</li>
-                            <li><strong>7-8:</strong> Good - Minor improvements recommended</li>
-                            <li><strong>5-6:</strong> Fair - Refactoring needed</li>
-                            <li><strong>3-4:</strong> Poor - Significant refactoring required</li>
-                            <li><strong>0-2:</strong> Critical - Major code quality issues</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>9-10:</strong> Excellent - Production-ready, maintainable code</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>7-8:</strong> Good - Minor improvements recommended</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>5-6:</strong> Fair - Refactoring needed</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>3-4:</strong> Poor - Significant refactoring required</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>0-2:</strong> Critical - Major code quality issues</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
         </section>
         
         <!-- Usage Examples -->
-        <section class="section-usage">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>💡</span> Usage Examples</h2>
                 
@@ -326,39 +412,59 @@ Retry REFACTOR phase with different approach? (yes/no)</code></pre>
         </section>
         
         <!-- Integration -->
-        <section class="section-integration">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>🔗</span> Ecosystem Integration</h2>
                 
                 <h3>Planning System Integration</h3>
                 <p>TDD Orchestrator is automatically integrated into all Planning System plans:</p>
-                <ul class="feature-list">
-                    <li><strong>Auto-TDD Injection:</strong> Planning System inserts TDD phases after design</li>
-                    <li><strong>Phase Gating:</strong> Implementation blocked until TDD phases complete</li>
-                    <li><strong>DoR/DoD Validation:</strong> TDD requirements validated at phase boundaries</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Auto-TDD Injection:</strong> Planning System inserts TDD phases after design</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Phase Gating:</strong> Implementation blocked until TDD phases complete</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>DoR/DoD Validation:</strong> TDD requirements validated at phase boundaries</div>
+    </div>
+</div>
                 
                 <h3>Git Checkpoint Integration</h3>
                 <p>Git checkpoints enable safe rollback at each phase:</p>
-                <ul class="feature-list">
-                    <li><strong>RED Checkpoint:</strong> Before implementation begins</li>
-                    <li><strong>GREEN Checkpoint:</strong> After tests pass</li>
-                    <li><strong>REFACTOR Checkpoint:</strong> After clean code improvements</li>
-                    <li><strong>Rollback Command:</strong> <code>rollback to [checkpoint]</code> reverts changes</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>RED Checkpoint:</strong> Before implementation begins</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>GREEN Checkpoint:</strong> After tests pass</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>REFACTOR Checkpoint:</strong> After clean code improvements</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Rollback Command:</strong> <code>rollback to [checkpoint]</code> reverts changes</div>
+    </div>
+</div>
                 
                 <h3>ADO Operations Integration</h3>
                 <p>Azure DevOps work items include TDD requirements:</p>
-                <ul class="feature-list">
-                    <li><strong>Story/Task Fields:</strong> RED phase, GREEN phase, REFACTOR phase guidance</li>
-                    <li><strong>Test Strategy:</strong> "RED → GREEN → REFACTOR" explicitly stated</li>
-                    <li><strong>Acceptance Criteria:</strong> Referenced in RED phase tests</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Story/Task Fields:</strong> RED phase, GREEN phase, REFACTOR phase guidance</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Test Strategy:</strong> "RED → GREEN → REFACTOR" explicitly stated</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Acceptance Criteria:</strong> Referenced in RED phase tests</div>
+    </div>
+</div>
             </div>
         </section>
         
         <!-- Enforcement -->
-        <section class="section-configuration">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>🛡️</span> SKULL Enforcement</h2>
                 
@@ -412,7 +518,7 @@ REFACTOR_PHASE_VALIDATION:
         </section>
         
         <!-- Performance -->
-        <section class="section-architecture">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>⚡</span> Performance Metrics</h2>
                 <div class="metrics-grid metrics-grid-3">
@@ -445,7 +551,7 @@ REFACTOR_PHASE_VALIDATION:
         </section>
         
         <!-- Related -->
-        <section class="section-integration">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2><span>🔗</span> Related Features</h2>
                 <div class="feature-grid feature-grid-3">

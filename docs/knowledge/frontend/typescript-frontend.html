@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="TypeScript for Frontend Development - Type Safety, Interfaces, Generics">
@@ -8,13 +33,14 @@
     <title>TypeScript Frontend - CORTEX Knowledge</title>
     <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
-        <button class="back-button" onclick="history.back()" aria-label="Go back">← Back</button>
+    <nav class="breadcrumb-separator sticky-nav" mobile-nav-optimized aria-label="Breadcrumb">
+        <button class="grid-background" onclick="history.back()" aria-label="Go back">← Back</button>
         <ol class="breadcrumb">
             <li><a href="../../index.html">Home</a></li>
             <li><a href="../index.html">Knowledge Library</a></li>
@@ -29,16 +55,16 @@
         </div>
         <h1 class="hero-title">📘 TypeScript for Frontend</h1>
         <p class="hero-subtitle">Type safety, interfaces, generics, and advanced TypeScript patterns</p>
-        <div class="file-metadata">
+        <div class="code-file">
             <span class="metadata-item">📦 22 Rules</span>
             <span class="metadata-item">🏷️ Frontend</span>
             <span class="metadata-item">📅 Updated: Dec 2025</span>
         </div>
     </section>
 
-    <aside class="toc-sidebar" aria-label="Table of contents">
+    <aside class="toc-link" aria-label="Table of contents">
         <h3>On This Page</h3>
-        <nav class="toc-nav">
+        <nav class="toc-nav" mobile-nav-optimized>
             <a href="#overview" class="toc-link">Overview</a>
             <a href="#types" class="toc-link">Type System</a>
             <a href="#interfaces" class="toc-link">Interfaces & Types</a>
@@ -48,7 +74,7 @@
         </nav>
     </aside>
 
-    <section class="section file-content">
+    <section class="section code-file">
         <div class="container">
             <div id="overview" class="content-section">
                 <div class="glass-card">
@@ -57,13 +83,23 @@
                     
                     <div class="info-box info-box-primary">
                         <strong>TypeScript Benefits:</strong>
-                        <ul>
-                            <li><strong>Type Safety:</strong> Catch errors before runtime</li>
-                            <li><strong>IntelliSense:</strong> Enhanced IDE autocomplete and documentation</li>
-                            <li><strong>Refactoring:</strong> Safer code changes with compiler checking</li>
-                            <li><strong>Self-Documentation:</strong> Types serve as inline documentation</li>
-                            <li><strong>Tooling:</strong> Better support for large codebases</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Type Safety:</strong> Catch errors before runtime</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>IntelliSense:</strong> Enhanced IDE autocomplete and documentation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Refactoring:</strong> Safer code changes with compiler checking</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Self-Documentation:</strong> Types serve as inline documentation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Tooling:</strong> Better support for large codebases</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -72,19 +108,19 @@
                 <div class="glass-card">
                     <h2>Type System Fundamentals</h2>
 
-                    <div class="rule-detail">
+                    <div class="rules-showcase">
                         <div class="rule-header-detail">
                             <h3>Avoid `any` Type</h3>
                             <span class="severity-badge severity-high">HIGH</span>
                         </div>
-                        <p class="rule-description">
+                        <p class="rules-showcase">
                             Using `any` defeats the purpose of TypeScript. Use `unknown` for truly unknown types and narrow with type guards.
                         </p>
 
                         <div class="code-comparison-grid">
                             <div class="code-example code-good">
                                 <h4>✅ Good - Use unknown with Type Guards</h4>
-                                <pre><code class="language-typescript">// Use unknown for truly unknown data
+                                <pre><code class="language-badge">// Use unknown for truly unknown data
 function processApiResponse(response: unknown) {
   if (typeof response === 'object' && response !== null) {
     if ('data' in response && 'status' in response) {
@@ -110,7 +146,7 @@ function isUser(obj: unknown): obj is User {
 
                             <div class="code-example code-bad">
                                 <h4>❌ Bad - Using any</h4>
-                                <pre><code class="language-typescript">// Loses all type safety
+                                <pre><code class="language-badge">// Loses all type safety
 function processData(data: any) {
   // No type checking - can cause runtime errors
   return data.value.toUpperCase();
@@ -121,18 +157,18 @@ function processData(data: any) {
                         </div>
                     </div>
 
-                    <div class="rule-detail">
+                    <div class="rules-showcase">
                         <div class="rule-header-detail">
                             <h3>Use Strict TypeScript Configuration</h3>
                             <span class="severity-badge severity-high">HIGH</span>
                         </div>
-                        <p class="rule-description">
+                        <p class="rules-showcase">
                             Enable strict mode in tsconfig.json for maximum type safety.
                         </p>
 
                         <div class="code-example code-good">
                             <h4>✅ Good - Strict Configuration</h4>
-                            <pre><code class="language-json">{
+                            <pre><code class="language-badge">{
   "compilerOptions": {
     "strict": true,
     "noImplicitAny": true,
@@ -157,19 +193,19 @@ function processData(data: any) {
                 <div class="glass-card">
                     <h2>Interfaces and Type Aliases</h2>
 
-                    <div class="rule-detail">
+                    <div class="rules-showcase">
                         <div class="rule-header-detail">
                             <h3>Prefer Interfaces for Object Shapes</h3>
                             <span class="severity-badge severity-medium">MEDIUM</span>
                         </div>
-                        <p class="rule-description">
+                        <p class="rules-showcase">
                             Use interfaces for object types - they're extendable and provide better error messages. Use type aliases for unions, intersections, and primitives.
                         </p>
 
                         <div class="code-comparison-grid">
                             <div class="code-example code-good">
                                 <h4>✅ Good - Interface Usage</h4>
-                                <pre><code class="language-typescript">// Interfaces for object shapes
+                                <pre><code class="language-badge">// Interfaces for object shapes
 interface User {
   id: string;
   name: string;
@@ -196,7 +232,7 @@ type AuthenticatedUser = User & {
 
                             <div class="code-example code-bad">
                                 <h4>❌ Bad - Type Alias for Objects</h4>
-                                <pre><code class="language-typescript">// Type alias harder to extend
+                                <pre><code class="language-badge">// Type alias harder to extend
 type User = {
   id: string;
   name: string;
@@ -210,18 +246,18 @@ type AdminUser = User & {
                         </div>
                     </div>
 
-                    <div class="rule-detail">
+                    <div class="rules-showcase">
                         <div class="rule-header-detail">
                             <h3>Use Discriminated Unions</h3>
                             <span class="severity-badge severity-high">HIGH</span>
                         </div>
-                        <p class="rule-description">
+                        <p class="rules-showcase">
                             Use discriminated unions with a common literal property for type-safe state management and exhaustive checking.
                         </p>
 
                         <div class="code-example code-good">
                             <h4>✅ Good - Discriminated Union</h4>
-                            <pre><code class="language-typescript">// Discriminated union with 'type' field
+                            <pre><code class="language-badge">// Discriminated union with 'type' field
 type ApiState =
   | { type: 'idle' }
   | { type: 'loading' }
@@ -255,18 +291,18 @@ function renderApiState(state: ApiState) {
                 <div class="glass-card">
                     <h2>Generics</h2>
 
-                    <div class="rule-detail">
+                    <div class="rules-showcase">
                         <div class="rule-header-detail">
                             <h3>Use Generics for Reusable Components</h3>
                             <span class="severity-badge severity-medium">MEDIUM</span>
                         </div>
-                        <p class="rule-description">
+                        <p class="rules-showcase">
                             Generics allow you to write flexible, type-safe, reusable code without sacrificing type checking.
                         </p>
 
                         <div class="code-example code-good">
                             <h4>✅ Good - Generic Components</h4>
-                            <pre><code class="language-typescript">// Generic async data hook
+                            <pre><code class="language-badge">// Generic async data hook
 interface AsyncData<T> {
   data: T | null;
   loading: boolean;
@@ -298,18 +334,18 @@ const { data, loading, error } = useAsync<User[]>(fetchUsers);
                         </div>
                     </div>
 
-                    <div class="rule-detail">
+                    <div class="rules-showcase">
                         <div class="rule-header-detail">
                             <h3>Constrain Generics with Extends</h3>
                             <span class="severity-badge severity-medium">MEDIUM</span>
                         </div>
-                        <p class="rule-description">
+                        <p class="rules-showcase">
                             Use generic constraints to ensure type parameters meet minimum requirements.
                         </p>
 
                         <div class="code-example code-good">
                             <h4>✅ Good - Generic Constraints</h4>
-                            <pre><code class="language-typescript">// Constrain to objects with 'id' property
+                            <pre><code class="language-badge">// Constrain to objects with 'id' property
 interface Identifiable {
   id: string;
 }
@@ -338,19 +374,19 @@ function getFirst<T>(arr: T[]): T | undefined {
                 <div class="glass-card">
                     <h2>React with TypeScript</h2>
 
-                    <div class="rule-detail">
+                    <div class="rules-showcase">
                         <div class="rule-header-detail">
                             <h3>Type React Component Props</h3>
                             <span class="severity-badge severity-high">HIGH</span>
                         </div>
-                        <p class="rule-description">
+                        <p class="rules-showcase">
                             Always define explicit prop types for React components using interfaces or type aliases.
                         </p>
 
                         <div class="code-comparison-grid">
                             <div class="code-example code-good">
                                 <h4>✅ Good - Typed Props</h4>
-                                <pre><code class="language-typescript">interface UserCardProps {
+                                <pre><code class="language-badge">interface UserCardProps {
   user: User;
   onEdit?: (userId: string) => void;
   className?: string;
@@ -379,7 +415,7 @@ const UserCard: React.FC<UserCardProps> = ({
 
                             <div class="code-example code-bad">
                                 <h4>❌ Bad - Untyped Props</h4>
-                                <pre><code class="language-javascript">// No type safety
+                                <pre><code class="language-badge">// No type safety
 const UserCard = ({ user, onEdit, className }) => {
   // What properties does user have?
   // What are the parameter types for onEdit?
@@ -389,18 +425,18 @@ const UserCard = ({ user, onEdit, className }) => {
                         </div>
                     </div>
 
-                    <div class="rule-detail">
+                    <div class="rules-showcase">
                         <div class="rule-header-detail">
                             <h3>Type React Hooks Properly</h3>
                             <span class="severity-badge severity-high">HIGH</span>
                         </div>
-                        <p class="rule-description">
+                        <p class="rules-showcase">
                             Explicitly type useState, useRef, and custom hooks for type safety.
                         </p>
 
                         <div class="code-example code-good">
                             <h4>✅ Good - Typed Hooks</h4>
-                            <pre><code class="language-typescript">// useState with explicit type
+                            <pre><code class="language-badge">// useState with explicit type
 const [user, setUser] = useState<User | null>(null);
 const [count, setCount] = useState<number>(0);
 
@@ -437,28 +473,28 @@ function useLocalStorage<T>(
                     <h2>Related Knowledge Files</h2>
                     <div class="related-files-grid">
                         <a href="react-best-practices.html" class="related-file-card">
-                            <span class="file-icon">⚛️</span>
+                            <span class="code-file">⚛️</span>
                             <div>
                                 <h4>React Best Practices</h4>
                                 <p>React patterns and conventions</p>
                             </div>
                         </a>
                         <a href="component-architecture.html" class="related-file-card">
-                            <span class="file-icon">🏗️</span>
+                            <span class="code-file">🏗️</span>
                             <div>
                                 <h4>Component Architecture</h4>
                                 <p>Component design patterns</p>
                             </div>
                         </a>
                         <a href="../api-design/graphql.html" class="related-file-card">
-                            <span class="file-icon">📊</span>
+                            <span class="code-file">📊</span>
                             <div>
                                 <h4>GraphQL with TypeScript</h4>
                                 <p>Type-safe API queries</p>
                             </div>
                         </a>
                         <a href="../testing/unit-testing.html" class="related-file-card">
-                            <span class="file-icon">🧪</span>
+                            <span class="code-file">🧪</span>
                             <div>
                                 <h4>Unit Testing</h4>
                                 <p>Testing TypeScript code</p>

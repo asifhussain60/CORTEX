@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="REST API Best Practices - Resource Design, HTTP Methods, Status Codes, HATEOAS">
@@ -8,13 +33,14 @@
     <title>REST API Best Practices - CORTEX Knowledge</title>
     <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
-        <button class="back-button" onclick="history.back()" aria-label="Go back">← Back</button>
+    <nav class="breadcrumb-separator sticky-nav" mobile-nav-optimized aria-label="Breadcrumb">
+        <button class="grid-background" onclick="history.back()" aria-label="Go back">← Back</button>
         <ol class="breadcrumb">
             <li><a href="../../index.html">Home</a></li>
             <li><a href="../index.html">Knowledge Library</a></li>
@@ -29,16 +55,16 @@
         </div>
         <h1 class="hero-title">🔌 REST API Best Practices</h1>
         <p class="hero-subtitle">Resource design, HTTP methods, status codes, versioning, and HATEOAS</p>
-        <div class="file-metadata">
+        <div class="code-file">
             <span class="metadata-item">📦 22 Rules</span>
             <span class="metadata-item">🏷️ API Design</span>
             <span class="metadata-item">📅 Updated: Dec 2025</span>
         </div>
     </section>
 
-    <aside class="toc-sidebar" aria-label="Table of contents">
+    <aside class="toc-link" aria-label="Table of contents">
         <h3>On This Page</h3>
-        <nav class="toc-nav">
+        <nav class="toc-nav" mobile-nav-optimized>
             <a href="#overview" class="toc-link">Overview</a>
             <a href="#resources" class="toc-link">Resource Design</a>
             <a href="#http-methods" class="toc-link">HTTP Methods</a>
@@ -49,7 +75,7 @@
         </nav>
     </aside>
 
-    <section class="section file-content">
+    <section class="section code-file">
         <div class="container">
             <div id="overview" class="content-section">
                 <div class="glass-card">
@@ -58,13 +84,23 @@
                     
                     <div class="info-box info-box-primary">
                         <strong>REST Principles:</strong>
-                        <ul>
-                            <li><strong>Resource-Based:</strong> APIs expose resources (nouns), not actions (verbs)</li>
-                            <li><strong>HTTP Methods:</strong> Use standard methods (GET, POST, PUT, DELETE, PATCH)</li>
-                            <li><strong>Stateless:</strong> Each request contains all necessary information</li>
-                            <li><strong>Cacheable:</strong> Responses indicate if they can be cached</li>
-                            <li><strong>Uniform Interface:</strong> Consistent patterns across all endpoints</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Resource-Based:</strong> APIs expose resources (nouns), not actions (verbs)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>HTTP Methods:</strong> Use standard methods (GET, POST, PUT, DELETE, PATCH)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Stateless:</strong> Each request contains all necessary information</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Cacheable:</strong> Responses indicate if they can be cached</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Uniform Interface:</strong> Consistent patterns across all endpoints</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -73,19 +109,19 @@
                 <div class="glass-card">
                     <h2>Resource Design</h2>
 
-                    <div class="rule-detail">
+                    <div class="rules-showcase">
                         <div class="rule-header-detail">
                             <h3>Use Nouns for Resource Names, Not Verbs</h3>
                             <span class="severity-badge severity-high">HIGH</span>
                         </div>
-                        <p class="rule-description">
+                        <p class="rules-showcase">
                             REST APIs expose resources (things) via URIs. Use HTTP methods to express actions on resources.
                         </p>
 
                         <div class="code-comparison-grid">
                             <div class="code-example code-good">
                                 <h4>✅ Good - Resource-Based URIs</h4>
-                                <pre><code class="language-http">GET    /api/users              # List users
+                                <pre><code class="language-badge">GET    /api/users              # List users
 GET    /api/users/123          # Get user by ID
 POST   /api/users              # Create user
 PUT    /api/users/123          # Update user
@@ -99,7 +135,7 @@ GET    /api/products/456       # Get product</code></pre>
 
                             <div class="code-example code-bad">
                                 <h4>❌ Bad - Verb-Based URIs</h4>
-                                <pre><code class="language-http">GET  /api/getUser?id=123
+                                <pre><code class="language-badge">GET  /api/getUser?id=123
 POST /api/createUser
 POST /api/updateUser
 POST /api/deleteUser
@@ -112,19 +148,19 @@ GET  /api/getUserOrders?userId=123
                         </div>
                     </div>
 
-                    <div class="rule-detail">
+                    <div class="rules-showcase">
                         <div class="rule-header-detail">
                             <h3>Use Plural Nouns for Collections</h3>
                             <span class="severity-badge severity-medium">MEDIUM</span>
                         </div>
-                        <p class="rule-description">
+                        <p class="rules-showcase">
                             Use plural nouns for collection resources for consistency. Single item is accessed via collection with ID.
                         </p>
 
                         <div class="code-comparison-grid">
                             <div class="code-example code-good">
                                 <h4>✅ Good - Plural Collections</h4>
-                                <pre><code class="language-http">GET  /api/users           # Collection
+                                <pre><code class="language-badge">GET  /api/users           # Collection
 GET  /api/users/123       # Item in collection
 GET  /api/orders          # Collection
 GET  /api/orders/789      # Item
@@ -137,7 +173,7 @@ GET  /api/orders/789      # Item
 
                             <div class="code-example code-bad">
                                 <h4>❌ Bad - Mixed Singular/Plural</h4>
-                                <pre><code class="language-http">GET /api/user/123         # Singular
+                                <pre><code class="language-badge">GET /api/user/123         # Singular
 GET /api/users            # Plural
 GET /api/order/789        # Singular
 GET /api/products         # Plural
@@ -147,18 +183,18 @@ GET /api/products         # Plural
                         </div>
                     </div>
 
-                    <div class="rule-detail">
+                    <div class="rules-showcase">
                         <div class="rule-header-detail">
                             <h3>Model Resource Relationships in URIs</h3>
                             <span class="severity-badge severity-medium">MEDIUM</span>
                         </div>
-                        <p class="rule-description">
+                        <p class="rules-showcase">
                             Express resource relationships through nested URIs when there's a clear parent-child relationship.
                         </p>
 
                         <div class="code-example code-good">
                             <h4>✅ Good - Nested Resources</h4>
-                            <pre><code class="language-http"># User's orders (parent-child relationship)
+                            <pre><code class="language-badge"># User's orders (parent-child relationship)
 GET    /api/users/123/orders
 POST   /api/users/123/orders
 GET    /api/users/123/orders/456
@@ -180,18 +216,18 @@ GET    /api/orders/456</code></pre>
                 <div class="glass-card">
                     <h2>HTTP Methods</h2>
 
-                    <div class="rule-detail">
+                    <div class="rules-showcase">
                         <div class="rule-header-detail">
                             <h3>Use HTTP Methods Correctly</h3>
                             <span class="severity-badge severity-high">HIGH</span>
                         </div>
-                        <p class="rule-description">
+                        <p class="rules-showcase">
                             Each HTTP method has specific semantics. GET is safe, PUT/DELETE are idempotent, POST is neither.
                         </p>
 
                         <div class="code-example code-good">
                             <h4>✅ Good - Correct Method Usage</h4>
-                            <pre><code class="language-javascript">// GET - Safe, idempotent, cacheable
+                            <pre><code class="language-badge">// GET - Safe, idempotent, cacheable
 app.get('/api/users/:id', async (req, res) => {
   const user = await db.users.findById(req.params.id);
   res.json(user);
@@ -230,27 +266,33 @@ app.delete('/api/users/:id', async (req, res) => {
 
                         <div class="info-box info-box-info">
                             <strong>Method Properties:</strong>
-                            <ul>
-                                <li><strong>Safe:</strong> No side effects (GET, HEAD, OPTIONS)</li>
-                                <li><strong>Idempotent:</strong> Multiple identical requests = same result (GET, PUT, DELETE, HEAD, OPTIONS)</li>
-                                <li><strong>POST:</strong> Not safe, not idempotent - creates new resources</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Safe:</strong> No side effects (GET, HEAD, OPTIONS)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Idempotent:</strong> Multiple identical requests = same result (GET, PUT, DELETE, HEAD, OPTIONS)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>POST:</strong> Not safe, not idempotent - creates new resources</div>
+    </div>
+</div>
                         </div>
                     </div>
 
-                    <div class="rule-detail">
+                    <div class="rules-showcase">
                         <div class="rule-header-detail">
                             <h3>Use PATCH for Partial Updates</h3>
                             <span class="severity-badge severity-medium">MEDIUM</span>
                         </div>
-                        <p class="rule-description">
+                        <p class="rules-showcase">
                             Use PATCH to update specific fields without sending entire resource. More efficient than PUT for partial updates.
                         </p>
 
                         <div class="code-comparison-grid">
                             <div class="code-example code-good">
                                 <h4>✅ Good - PATCH for Partial Update</h4>
-                                <pre><code class="language-http">PATCH /api/users/123
+                                <pre><code class="language-badge">PATCH /api/users/123
 Content-Type: application/json
 
 {
@@ -263,7 +305,7 @@ Content-Type: application/json
 
                             <div class="code-example code-bad">
                                 <h4>❌ Bad - PUT with Partial Data</h4>
-                                <pre><code class="language-http">PUT /api/users/123
+                                <pre><code class="language-badge">PUT /api/users/123
 Content-Type: application/json
 
 {
@@ -283,18 +325,18 @@ Content-Type: application/json
                 <div class="glass-card">
                     <h2>HTTP Status Codes</h2>
 
-                    <div class="rule-detail">
+                    <div class="rules-showcase">
                         <div class="rule-header-detail">
                             <h3>Return Appropriate Status Codes</h3>
                             <span class="severity-badge severity-high">HIGH</span>
                         </div>
-                        <p class="rule-description">
+                        <p class="rules-showcase">
                             Use standard HTTP status codes to communicate result. Don't return 200 OK for errors.
                         </p>
 
                         <div class="code-example code-good">
                             <h4>✅ Good - Correct Status Codes</h4>
-                            <pre><code class="language-typescript">// Success responses
+                            <pre><code class="language-badge">// Success responses
 app.post('/api/users', async (req, res) => {
   const user = await createUser(req.body);
   res.status(201).json(user);  // 201 Created
@@ -358,18 +400,38 @@ app.use((err, req, res, next) => {
 
                         <div class="info-box info-box-warning">
                             <strong>Common Status Codes:</strong>
-                            <ul>
-                                <li><strong>200 OK:</strong> Success</li>
-                                <li><strong>201 Created:</strong> Resource created (include Location header)</li>
-                                <li><strong>204 No Content:</strong> Success with no response body</li>
-                                <li><strong>400 Bad Request:</strong> Invalid input</li>
-                                <li><strong>401 Unauthorized:</strong> Authentication required</li>
-                                <li><strong>403 Forbidden:</strong> Authenticated but no permission</li>
-                                <li><strong>404 Not Found:</strong> Resource doesn't exist</li>
-                                <li><strong>409 Conflict:</strong> Request conflicts with current state</li>
-                                <li><strong>429 Too Many Requests:</strong> Rate limit exceeded</li>
-                                <li><strong>500 Internal Server Error:</strong> Server error</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>200 OK:</strong> Success</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>201 Created:</strong> Resource created (include Location header)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>204 No Content:</strong> Success with no response body</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>400 Bad Request:</strong> Invalid input</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>401 Unauthorized:</strong> Authentication required</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>403 Forbidden:</strong> Authenticated but no permission</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>404 Not Found:</strong> Resource doesn't exist</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>409 Conflict:</strong> Request conflicts with current state</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>429 Too Many Requests:</strong> Rate limit exceeded</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>500 Internal Server Error:</strong> Server error</div>
+    </div>
+</div>
                         </div>
                     </div>
                 </div>
@@ -379,18 +441,18 @@ app.use((err, req, res, next) => {
                 <div class="glass-card">
                     <h2>API Versioning</h2>
 
-                    <div class="rule-detail">
+                    <div class="rules-showcase">
                         <div class="rule-header-detail">
                             <h3>Version Your API</h3>
                             <span class="severity-badge severity-high">HIGH</span>
                         </div>
-                        <p class="rule-description">
+                        <p class="rules-showcase">
                             Use versioning to maintain backward compatibility while evolving the API. Common approaches: URI versioning, header versioning.
                         </p>
 
                         <div class="code-example code-good">
                             <h4>✅ Good - URI Versioning</h4>
-                            <pre><code class="language-http"># Version in URI (most common, explicit)
+                            <pre><code class="language-badge"># Version in URI (most common, explicit)
 GET /api/v1/users
 GET /api/v2/users
 
@@ -408,7 +470,7 @@ GET /api/users?version=2</code></pre>
 
                         <div class="code-example code-good">
                             <h4>✅ Good - Implementation</h4>
-                            <pre><code class="language-typescript">// Express with URI versioning
+                            <pre><code class="language-badge">// Express with URI versioning
 const v1Router = express.Router();
 const v2Router = express.Router();
 
@@ -449,18 +511,18 @@ app.use('/api/v2', v2Router);</code></pre>
                 <div class="glass-card">
                     <h2>Pagination & Filtering</h2>
 
-                    <div class="rule-detail">
+                    <div class="rules-showcase">
                         <div class="rule-header-detail">
                             <h3>Implement Pagination for Collections</h3>
                             <span class="severity-badge severity-high">HIGH</span>
                         </div>
-                        <p class="rule-description">
+                        <p class="rules-showcase">
                             Always paginate collection responses to prevent performance issues. Include metadata about pagination.
                         </p>
 
                         <div class="code-example code-good">
                             <h4>✅ Good - Pagination Response</h4>
-                            <pre><code class="language-http">GET /api/products?page=2&limit=20
+                            <pre><code class="language-badge">GET /api/products?page=2&limit=20
 
 HTTP/1.1 200 OK
 Content-Type: application/json
@@ -489,18 +551,18 @@ Link: </api/products?page=1&limit=20>; rel="first",
                         </div>
                     </div>
 
-                    <div class="rule-detail">
+                    <div class="rules-showcase">
                         <div class="rule-header-detail">
                             <h3>Support Filtering, Sorting, and Field Selection</h3>
                             <span class="severity-badge severity-medium">MEDIUM</span>
                         </div>
-                        <p class="rule-description">
+                        <p class="rules-showcase">
                             Allow clients to filter, sort, and select specific fields via query parameters for efficient data retrieval.
                         </p>
 
                         <div class="code-example code-good">
                             <h4>✅ Good - Query Parameters</h4>
-                            <pre><code class="language-http"># Filtering
+                            <pre><code class="language-badge"># Filtering
 GET /api/products?category=electronics&price_min=100&price_max=500
 
 # Sorting
@@ -517,7 +579,7 @@ GET /api/products?category=electronics&sort=-price&fields=id,name,price&page=1&l
 
                         <div class="code-example code-good">
                             <h4>✅ Implementation Example</h4>
-                            <pre><code class="language-typescript">app.get('/api/products', async (req, res) => {
+                            <pre><code class="language-badge">app.get('/api/products', async (req, res) => {
   const { 
     category, 
     price_min, 
@@ -576,28 +638,28 @@ GET /api/products?category=electronics&sort=-price&fields=id,name,price&page=1&l
                     <h2>Related Knowledge Files</h2>
                     <div class="related-files-grid">
                         <a href="graphql.html" class="related-file-card">
-                            <span class="file-icon">📊</span>
+                            <span class="code-file">📊</span>
                             <div>
                                 <h4>GraphQL Best Practices</h4>
                                 <p>Alternative API design approach</p>
                             </div>
                         </a>
                         <a href="api-gateway.html" class="related-file-card">
-                            <span class="file-icon">🚪</span>
+                            <span class="code-file">🚪</span>
                             <div>
                                 <h4>API Gateway</h4>
                                 <p>API management and routing</p>
                             </div>
                         </a>
                         <a href="../security/auth-authz.html" class="related-file-card">
-                            <span class="file-icon">🔐</span>
+                            <span class="code-file">🔐</span>
                             <div>
                                 <h4>Authentication & Authorization</h4>
                                 <p>Secure REST APIs</p>
                             </div>
                         </a>
                         <a href="../performance/caching-strategies.html" class="related-file-card">
-                            <span class="file-icon">💾</span>
+                            <span class="code-file">💾</span>
                             <div>
                                 <h4>Caching Strategies</h4>
                                 <p>HTTP caching for REST APIs</p>

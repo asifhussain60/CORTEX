@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CORTEX Penetration Testing - Ethical Hacking, Security Assessment, and Attack Simulation">
@@ -10,15 +35,41 @@
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo-64.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/main.css?v=4.0.0">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
     <!-- Glass Header (Level 1 - No Logo) -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../index.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../index.html" class="nav-link" mobile-nav-optimized><i class="pulse-glow-glass--fast fa-home"></i> Home</a>
             </nav>
         </div>
     </header>
@@ -27,7 +78,7 @@
     <section class="hero-section">
         <div class="hero-content">
             <div class="hero-icon">
-                <i class="fas fa-user-secret"></i>
+                <i class="pulse-glow-glass--fast fa-user-secret"></i>
             </div>
             <h1 class="hero-title">Penetration Testing</h1>
             <p class="hero-subtitle">
@@ -42,7 +93,7 @@
         <!-- Penetration Testing Methodology -->
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-route"></i>
+                <i class="pulse-glow-glass--fast fa-route"></i>
                 <h2 class="card-title">Penetration Testing Methodology</h2>
             </div>
             <p class="card-description">
@@ -71,7 +122,7 @@ flowchart LR
         <!-- Attack Chain Visualization -->
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-diagram-project"></i>
+                <i class="pulse-glow-glass--fast fa-diagram-project"></i>
                 <h2 class="card-title">Attack Chain Sequence</h2>
             </div>
             <p class="card-description">
@@ -113,7 +164,7 @@ sequenceDiagram
         <!-- Findings Severity Distribution -->
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-chart-pie"></i>
+                <i class="pulse-glow-glass--fast fa-chart-pie"></i>
                 <h2 class="card-title">Findings Severity Distribution</h2>
             </div>
             <p class="card-description">
@@ -126,7 +177,7 @@ sequenceDiagram
         <!-- Testing Phases -->
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-clipboard-list"></i>
+                <i class="pulse-glow-glass--fast fa-clipboard-list"></i>
                 <h2 class="card-title">Penetration Testing Phases</h2>
             </div>
             <div class="principles-grid">
@@ -196,49 +247,81 @@ sequenceDiagram
         <!-- Testing Types -->
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-layer-group"></i>
+                <i class="pulse-glow-glass--fast fa-layer-group"></i>
                 <h2 class="card-title">Penetration Testing Types</h2>
             </div>
-            <div class="standards-grid">
-                <div class="standard-card">
-                    <div class="standard-icon">🖤</div>
-                    <h3 class="standard-title">Black Box Testing</h3>
-                    <ul class="standard-list">
-                        <li><strong>No Prior Knowledge:</strong> Simulates external attacker with zero info</li>
-                        <li><strong>Realistic Approach:</strong> Tests actual attack surface visibility</li>
-                        <li><strong>Time-Intensive:</strong> Requires extensive reconnaissance</li>
-                        <li><strong>Best For:</strong> External network, public-facing applications</li>
-                    </ul>
+            <div class="level1-level1-standard-card">
+                <div class="level1-standard-card">
+                    <div class="level1-level1-standard-card">🖤</div>
+                    <h3 class="level1-level1-standard-card">Black Box Testing</h3>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>No Prior Knowledge:</strong> Simulates external attacker with zero info</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Realistic Approach:</strong> Tests actual attack surface visibility</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Time-Intensive:</strong> Requires extensive reconnaissance</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Best For:</strong> External network, public-facing applications</div>
+    </div>
+</div>
                 </div>
-                <div class="standard-card">
-                    <div class="standard-icon">⚪</div>
-                    <h3 class="standard-title">White Box Testing</h3>
-                    <ul class="standard-list">
-                        <li><strong>Full Disclosure:</strong> Complete access to source code, architecture</li>
-                        <li><strong>Comprehensive:</strong> Deep analysis of code and logic flaws</li>
-                        <li><strong>Time-Efficient:</strong> Faster identification of vulnerabilities</li>
-                        <li><strong>Best For:</strong> Code review, API testing, secure SDLC integration</li>
-                    </ul>
+                <div class="level1-standard-card">
+                    <div class="level1-level1-standard-card">⚪</div>
+                    <h3 class="level1-level1-standard-card">White Box Testing</h3>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Full Disclosure:</strong> Complete access to source code, architecture</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Comprehensive:</strong> Deep analysis of code and logic flaws</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Time-Efficient:</strong> Faster identification of vulnerabilities</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Best For:</strong> Code review, API testing, secure SDLC integration</div>
+    </div>
+</div>
                 </div>
-                <div class="standard-card">
-                    <div class="standard-icon">🩶</div>
-                    <h3 class="standard-title">Grey Box Testing</h3>
-                    <ul class="standard-list">
-                        <li><strong>Partial Knowledge:</strong> Limited credentials or documentation</li>
-                        <li><strong>Balanced Approach:</strong> Simulates insider or compromised user</li>
-                        <li><strong>Practical:</strong> Most common real-world testing scenario</li>
-                        <li><strong>Best For:</strong> Internal applications, hybrid environments</li>
-                    </ul>
+                <div class="level1-standard-card">
+                    <div class="level1-level1-standard-card">🩶</div>
+                    <h3 class="level1-level1-standard-card">Grey Box Testing</h3>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Partial Knowledge:</strong> Limited credentials or documentation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Balanced Approach:</strong> Simulates insider or compromised user</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Practical:</strong> Most common real-world testing scenario</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Best For:</strong> Internal applications, hybrid environments</div>
+    </div>
+</div>
                 </div>
-                <div class="standard-card">
-                    <div class="standard-icon">🔴</div>
-                    <h3 class="standard-title">Red Team Engagement</h3>
-                    <ul class="standard-list">
-                        <li><strong>Adversarial Simulation:</strong> Full-scope attack simulation</li>
-                        <li><strong>Objective-Driven:</strong> Achieve specific goals (e.g., exfiltrate data)</li>
-                        <li><strong>Social Engineering:</strong> Includes phishing, physical access</li>
-                        <li><strong>Best For:</strong> Mature security programs, compliance validation</li>
-                    </ul>
+                <div class="level1-standard-card">
+                    <div class="level1-level1-standard-card">🔴</div>
+                    <h3 class="level1-level1-standard-card">Red Team Engagement</h3>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Adversarial Simulation:</strong> Full-scope attack simulation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Objective-Driven:</strong> Achieve specific goals (e.g., exfiltrate data)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Social Engineering:</strong> Includes phishing, physical access</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Best For:</strong> Mature security programs, compliance validation</div>
+    </div>
+</div>
                 </div>
             </div>
         </article>
@@ -246,7 +329,7 @@ sequenceDiagram
         <!-- Tools & Techniques -->
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-toolbox"></i>
+                <i class="pulse-glow-glass--fast fa-toolbox"></i>
                 <h2 class="card-title">Penetration Testing Toolkit</h2>
             </div>
             <div class="code-example">
@@ -294,7 +377,7 @@ sequenceDiagram
         <!-- Best Practices -->
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-star"></i>
+                <i class="pulse-glow-glass--fast fa-star"></i>
                 <h2 class="card-title">Penetration Testing Best Practices</h2>
             </div>
             <div class="principles-grid">
@@ -352,24 +435,24 @@ sequenceDiagram
         <!-- Quick Links -->
         <article class="glass-card-display animation-t1">
             <div class="card-header-with-icon">
-                <i class="fas fa-link"></i>
+                <i class="pulse-glow-glass--fast fa-link"></i>
                 <h2 class="card-title">Related Resources</h2>
             </div>
             <div class="quick-links-grid">
                 <a href="threat-modeling.html" class="quick-link-card">
-                    <i class="fas fa-bullseye"></i>
+                    <i class="pulse-glow-glass--fast fa-bullseye"></i>
                     <span>Threat Modeling</span>
                 </a>
                 <a href="vulnerability-assessment.html" class="quick-link-card">
-                    <i class="fas fa-bug"></i>
+                    <i class="pulse-glow-glass--fast fa-bug"></i>
                     <span>Vulnerability Assessment</span>
                 </a>
                 <a href="incident-response.html" class="quick-link-card">
-                    <i class="fas fa-bell"></i>
+                    <i class="pulse-glow-glass--fast fa-bell"></i>
                     <span>Incident Response</span>
                 </a>
                 <a href="compliance.html" class="quick-link-card">
-                    <i class="fas fa-certificate"></i>
+                    <i class="pulse-glow-glass--fast fa-certificate"></i>
                     <span>Compliance Standards</span>
                 </a>
             </div>

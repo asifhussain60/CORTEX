@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Domain RAG Integration - Integrate retrieval with domain knowledge and multi-tenant patterns">
@@ -8,13 +33,14 @@
     <title>Domain RAG Integration - CORTEX Knowledge</title>
     <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
-        <button class="back-button" onclick="history.back()" aria-label="Go back">← Back</button>
+    <nav class="breadcrumb-separator sticky-nav" mobile-nav-optimized aria-label="Breadcrumb">
+        <button class="grid-background" onclick="history.back()" aria-label="Go back">← Back</button>
         <ol class="breadcrumb">
             <li><a href="../../index.html">Home</a></li>
             <li><a href="../index.html">Knowledge Library</a></li>
@@ -29,16 +55,16 @@
         </div>
         <h1 class="hero-title">🧩 Domain RAG Integration</h1>
         <p class="hero-subtitle">Integrate retrieval with domain knowledge and business logic</p>
-        <div class="file-metadata">
+        <div class="code-file">
             <span class="metadata-item">📦 20+ Patterns</span>
             <span class="metadata-item">🏷️ RAG & AI Domains</span>
             <span class="metadata-item">📅 Updated: Dec 2025</span>
         </div>
     </section>
 
-    <aside class="toc-sidebar" aria-label="Table of contents">
+    <aside class="toc-link" aria-label="Table of contents">
         <h3>On This Page</h3>
-        <nav class="toc-nav">
+        <nav class="toc-nav" mobile-nav-optimized>
             <a href="#overview" class="toc-link">Overview</a>
             <a href="#cortex" class="toc-link">CORTEX Integration</a>
             <a href="#patterns" class="toc-link">Domain Patterns</a>
@@ -48,7 +74,7 @@
         </nav>
     </aside>
 
-    <main class="file-content">
+    <main class="code-file">
         <section class="glass-card" id="overview">
             <h2>Domain RAG Integration</h2>
             <p>
@@ -58,12 +84,20 @@
             </p>
 
             <h3>Key Concepts</h3>
-            <ul class="feature-list">
-                <li><strong>Domain Knowledge Sources:</strong> Engineering practices, coding standards, design patterns</li>
-                <li><strong>Context-Aware Retrieval:</strong> Retrieve based on domain context (code review, generation, architecture)</li>
-                <li><strong>Multi-Tenant Isolation:</strong> Separate knowledge bases per tenant/organization</li>
-                <li><strong>Hierarchical Knowledge:</strong> General patterns → Domain-specific → Organization-specific</li>
-            </ul>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Domain Knowledge Sources:</strong> Engineering practices, coding standards, design patterns</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Context-Aware Retrieval:</strong> Retrieve based on domain context (code review, generation, architecture)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Multi-Tenant Isolation:</strong> Separate knowledge bases per tenant/organization</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Hierarchical Knowledge:</strong> General patterns → Domain-specific → Organization-specific</div>
+    </div>
+</div>
         </section>
 
         <section class="glass-card" id="cortex">
@@ -72,12 +106,12 @@
 
             <div class="rule-card">
                 <h3>Tier 0: Governance & Rules</h3>
-                <span class="badge badge-critical">CRITICAL</span>
+                <span class="badge badge-security">CRITICAL</span>
                 <p>Retrieve SKULL rules, brain protection rules, and governance policies.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Governance Retrieval</h4>
-                    <pre><code class="language-python">def retrieve_governance_rules(operation: str, vector_db):
+                    <pre><code class="language-badge">def retrieve_governance_rules(operation: str, vector_db):
     """
     Retrieve SKULL rules relevant to the operation.
     """
@@ -107,12 +141,12 @@ rules = retrieve_governance_rules(
 
             <div class="rule-card">
                 <h3>Tier 1: Working Memory</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Retrieve recent conversation context and active tasks.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Conversation Context Retrieval</h4>
-                    <pre><code class="language-python">def retrieve_conversation_context(user_query: str, session_id: str, vector_db):
+                    <pre><code class="language-badge">def retrieve_conversation_context(user_query: str, session_id: str, vector_db):
     """
     Retrieve relevant conversation history.
     """
@@ -142,12 +176,12 @@ context = retrieve_conversation_context(
 
             <div class="rule-card">
                 <h3>Tier 2: Knowledge Graph</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Retrieve design patterns, best practices, and learned lessons.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Pattern Retrieval</h4>
-                    <pre><code class="language-python">def retrieve_engineering_patterns(task: str, vector_db):
+                    <pre><code class="language-badge">def retrieve_engineering_patterns(task: str, vector_db):
     """
     Retrieve relevant engineering patterns and best practices.
     """
@@ -171,12 +205,12 @@ patterns = retrieve_engineering_patterns(
 
             <div class="rule-card">
                 <h3>Tier 3: Development Context</h3>
-                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <span class="badge badge-security">MEDIUM PRIORITY</span>
                 <p>Retrieve code metrics, hotspots, and project-specific context.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Development Context Retrieval</h4>
-                    <pre><code class="language-python">def retrieve_code_context(file_path: str, vector_db):
+                    <pre><code class="language-badge">def retrieve_code_context(file_path: str, vector_db):
     """
     Retrieve relevant code metrics and hotspot analysis.
     """
@@ -204,12 +238,12 @@ context = retrieve_code_context(
 
             <div class="rule-card">
                 <h3>Code Generation Pattern</h3>
-                <span class="badge badge-high">COMMON USE CASE</span>
+                <span class="badge badge-security">COMMON USE CASE</span>
                 <p>Retrieve engineering patterns, coding standards, and similar code before generation.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Code Generation with RAG</h4>
-                    <pre><code class="language-python">def generate_code_with_rag(user_request: str, vector_db, llm):
+                    <pre><code class="language-badge">def generate_code_with_rag(user_request: str, vector_db, llm):
     """
     Generate code using retrieved patterns and standards.
     """
@@ -276,12 +310,12 @@ code = generate_code_with_rag(
 
             <div class="rule-card">
                 <h3>Code Review Pattern</h3>
-                <span class="badge badge-high">QUALITY ASSURANCE</span>
+                <span class="badge badge-security">QUALITY ASSURANCE</span>
                 <p>Retrieve review checklists, security patterns, and best practices.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Code Review with RAG</h4>
-                    <pre><code class="language-python">def review_code_with_rag(code: str, language: str, vector_db, llm):
+                    <pre><code class="language-badge">def review_code_with_rag(code: str, language: str, vector_db, llm):
     """
     Review code using retrieved checklists and patterns.
     """
@@ -339,12 +373,12 @@ review = review_code_with_rag(
 
             <div class="rule-card">
                 <h3>Architecture Advice Pattern</h3>
-                <span class="badge badge-medium">STRATEGIC</span>
+                <span class="badge badge-security">STRATEGIC</span>
                 <p>Retrieve design patterns, architecture patterns, and anti-patterns.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Architecture Advice with RAG</h4>
-                    <pre><code class="language-python">def architecture_advice_with_rag(scenario: str, vector_db, llm):
+                    <pre><code class="language-badge">def architecture_advice_with_rag(scenario: str, vector_db, llm):
     """
     Provide architecture advice using retrieved patterns.
     """
@@ -398,12 +432,12 @@ advice = architecture_advice_with_rag(
 
             <div class="rule-card">
                 <h3>Namespace-Based Isolation</h3>
-                <span class="badge badge-high">SECURITY</span>
+                <span class="badge badge-security">SECURITY</span>
                 <p>Isolate tenant data using metadata filters.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Multi-Tenant Retrieval</h4>
-                    <pre><code class="language-python">def multi_tenant_retrieval(query: str, tenant_id: str, vector_db, top_k=5):
+                    <pre><code class="language-badge">def multi_tenant_retrieval(query: str, tenant_id: str, vector_db, top_k=5):
     """
     Retrieve knowledge scoped to specific tenant.
     """
@@ -443,11 +477,17 @@ results = multi_tenant_retrieval(
                 </div>
 
                 <h4>Knowledge Hierarchy</h4>
-                <ul class="feature-list">
-                    <li><strong>Shared:</strong> General best practices, language patterns</li>
-                    <li><strong>Tenant-Specific:</strong> Company standards, internal APIs, project context</li>
-                    <li><strong>Isolation:</strong> Tenant A cannot access Tenant B's knowledge</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Shared:</strong> General best practices, language patterns</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Tenant-Specific:</strong> Company standards, internal APIs, project context</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Isolation:</strong> Tenant A cannot access Tenant B's knowledge</div>
+    </div>
+</div>
             </div>
         </section>
 
@@ -456,21 +496,31 @@ results = multi_tenant_retrieval(
 
             <div class="rule-card">
                 <h3>Quality Metrics</h3>
-                <span class="badge badge-high">CONTINUOUS IMPROVEMENT</span>
+                <span class="badge badge-security">CONTINUOUS IMPROVEMENT</span>
                 <p>Track metrics to improve RAG system quality over time.</p>
                 
                 <h4>Key Metrics</h4>
-                <ul class="feature-list">
-                    <li><strong>Retrieval Precision:</strong> % of retrieved docs that are relevant (target: > 80%)</li>
-                    <li><strong>Retrieval Recall:</strong> % of relevant docs that are retrieved (target: > 70%)</li>
-                    <li><strong>Response Accuracy:</strong> Correctness of generated answers (human eval)</li>
-                    <li><strong>Citation Correctness:</strong> Citations match retrieved sources (target: > 95%)</li>
-                    <li><strong>Latency:</strong> End-to-end response time (target: < 3s)</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Retrieval Precision:</strong> % of retrieved docs that are relevant (target: > 80%)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Retrieval Recall:</strong> % of relevant docs that are retrieved (target: > 70%)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Response Accuracy:</strong> Correctness of generated answers (human eval)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Citation Correctness:</strong> Citations match retrieved sources (target: > 95%)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Latency:</strong> End-to-end response time (target: < 3s)</div>
+    </div>
+</div>
 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Metrics Collection</h4>
-                    <pre><code class="language-python">class RAGMetrics:
+                    <pre><code class="language-badge">class RAGMetrics:
     """Collect and track RAG system metrics."""
     
     def __init__(self, metrics_db):
@@ -527,12 +577,12 @@ print(f"Avg user rating: {weekly_metrics['avg_user_rating']}/5")
 
             <div class="rule-card">
                 <h3>A/B Testing</h3>
-                <span class="badge badge-medium">OPTIMIZATION</span>
+                <span class="badge badge-security">OPTIMIZATION</span>
                 <p>Test different retrieval strategies to find what works best.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ A/B Test Framework</h4>
-                    <pre><code class="language-python">import random
+                    <pre><code class="language-badge">import random
 
 def ab_test_retrieval(query: str, vector_db, variant="A"):
     """
@@ -564,19 +614,19 @@ analyze_ab_test(metrics_db, variants=["A", "B"])
 
         <section class="glass-card" id="related">
             <h2>Related Knowledge Files</h2>
-            <div class="related-grid">
-                <a href="embeddings-strategy.html" class="related-card">
-                    <span class="related-icon">🧠</span>
+            <div class="level1-relationship-grid">
+                <a href="embeddings-strategy.html" class="level1-relationship-grid">
+                    <span class="level1-relationship-grid">🧠</span>
                     <h3>Embeddings Strategy</h3>
                     <p>Generate domain-specific embeddings</p>
                 </a>
-                <a href="vector-database-guide.html" class="related-card">
-                    <span class="related-icon">🗄️</span>
+                <a href="vector-database-guide.html" class="level1-relationship-grid">
+                    <span class="level1-relationship-grid">🗄️</span>
                     <h3>Vector Database Guide</h3>
                     <p>Store domain knowledge efficiently</p>
                 </a>
-                <a href="retrieval-pipeline.html" class="related-card">
-                    <span class="related-icon">🔍</span>
+                <a href="retrieval-pipeline.html" class="level1-relationship-grid">
+                    <span class="level1-relationship-grid">🔍</span>
                     <h3>Retrieval Pipeline</h3>
                     <p>Build complete RAG retrieval systems</p>
                 </a>

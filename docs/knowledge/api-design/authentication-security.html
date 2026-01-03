@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="API Authentication & Security - API Design Learning Module">
@@ -8,8 +33,11 @@
     <meta name="author" content="Asif Hussain">
     <title>API Authentication & Security | CORTEX Learning Hub</title>
     <link rel="stylesheet" href="../../assets/css/main.css?v=2026-01-02">
-    <link rel="stylesheet" href="../../assets/css/learning-hub.css?v=2026-01-02">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
+    
+    <link rel="stylesheet" href="../..../..../..../..../..../../assets/css/generated-classes.css"><link rel="stylesheet" href="../../assets/css/learning-hub.css?v=2026-01-02">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/editor/editor.main.css">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
@@ -18,14 +46,39 @@
 
     <!-- Header Navigation -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../../index.html" class="nav-link">
-                    <span class="nav-icon">🏠</span> Home
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../../index.html" class="nav-link" mobile-nav-optimized>
+                    <span class="nav-content" mobile-nav-optimized>🏠</span> Home
                 </a>
-                <span class="nav-separator">›</span>
-                <a href="../api-design-hub.html" class="nav-link">
-                    <span class="nav-icon">🌐</span> API Design
+                <span class="nav-content" mobile-nav-optimized>›</span>
+                <a href="../api-design-hub.html" class="nav-link" mobile-nav-optimized>
+                    <span class="nav-content" mobile-nav-optimized>🌐</span> API Design
                 </a>
             </nav>
         </div>
@@ -36,7 +89,7 @@
         <div class="module-header">
             <div class="breadcrumb">
                 <span class="difficulty-badge advanced">Advanced</span>
-                <span style="color: var(--text-secondary);">Module 4 of 4</span>
+                <span class="inline-fix-9">Module 4 of 4</span>
             </div>
             <h1 class="hero-title">🌐 API Authentication & Security</h1>
             <p class="hero-subtitle">Interactive learning with quizzes, code playgrounds, and challenges</p>
@@ -52,21 +105,31 @@
     <!-- Main Content -->
     <div class="container">
         <!-- Learning Objectives -->
-        <section class="glass-card" style="margin-top: var(--spacing-2xl);">
+        <section class="glass-card" class="inline-fix-14">
             <h2>🎓 Learning Objectives</h2>
-            <ul class="objective-list">
-                <li>Implement OAuth 2.0 and OpenID Connect</li>
-                <li>Secure APIs with JWT tokens</li>
-                <li>Apply rate limiting and throttling</li>
-                <li>Protect against common API vulnerabilities</li>
-                <li>Design secure authentication flows</li>
-            </ul>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Implement OAuth 2.0 and OpenID Connect</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Secure APIs with JWT tokens</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Apply rate limiting and throttling</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Protect against common API vulnerabilities</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Design secure authentication flows</div>
+    </div>
+</div>
         </section>
 
         <!-- OAuth 2.0 Flows -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🔐 OAuth 2.0 Grant Types</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 OAuth 2.0 provides four main grant types for different authentication scenarios.
             </p>
             
@@ -91,45 +154,55 @@ sequenceDiagram
                 </pre>
             </div>
             
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-lg); margin-top: var(--spacing-xl);">
-                <div style="padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-radius: 8px; border: 1px solid #10b981;">
-                    <h4 style="color: #10b981;">Authorization Code</h4>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Best for: Server-side apps<br>Security: ⭐⭐⭐⭐⭐</p>
+            <div class="inline-fix-164">
+                <div class="inline-fix-18">
+                    <h4 class="inline-fix-13">Authorization Code</h4>
+                    <p class="inline-fix-53">Best for: Server-side apps<br>Security: ⭐⭐⭐⭐⭐</p>
                 </div>
-                <div style="padding: var(--spacing-lg); background: rgba(0, 212, 255, 0.1); border-radius: 8px; border: 1px solid #00d4ff;">
-                    <h4 style="color: #00d4ff;">Client Credentials</h4>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Best for: Machine-to-machine<br>Security: ⭐⭐⭐⭐</p>
+                <div class="inline-fix-28">
+                    <h4 class="inline-fix-25">Client Credentials</h4>
+                    <p class="inline-fix-53">Best for: Machine-to-machine<br>Security: ⭐⭐⭐⭐</p>
                 </div>
-                <div style="padding: var(--spacing-lg); background: rgba(251, 191, 36, 0.1); border-radius: 8px; border: 1px solid #fbbf24;">
-                    <h4 style="color: #fbbf24;">Implicit Flow</h4>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Best for: SPAs (deprecated)<br>Security: ⭐⭐</p>
+                <div class="inline-fix-153">
+                    <h4 class="inline-fix-15">Implicit Flow</h4>
+                    <p class="inline-fix-53">Best for: SPAs (deprecated)<br>Security: ⭐⭐</p>
                 </div>
-                <div style="padding: var(--spacing-lg); background: rgba(123, 97, 255, 0.1); border-radius: 8px; border: 1px solid #7b61ff;">
-                    <h4 style="color: #7b61ff;">Resource Owner</h4>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Best for: Trusted clients<br>Security: ⭐⭐⭐</p>
+                <div class="inline-fix-181">
+                    <h4 class="inline-fix-106">Resource Owner</h4>
+                    <p class="inline-fix-53">Best for: Trusted clients<br>Security: ⭐⭐⭐</p>
                 </div>
             </div>
         </section>
 
         <!-- JWT Security -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🔑 JWT (JSON Web Token) Security</h2>
-            <div id="jwt-viz" style="width: 100%; height: 300px; margin: var(--spacing-xl) 0;"></div>
+            <div id="jwt-viz" class="inline-fix-225"></div>
             
-            <div style="margin-top: var(--spacing-lg); padding: var(--spacing-lg); background: rgba(239, 68, 68, 0.1); border-radius: 8px; border-left: 4px solid #ef4444;">
-                <h4 style="color: #ef4444; margin-bottom: var(--spacing-md);">🚨 JWT Security Best Practices</h4>
-                <ul style="color: var(--text-secondary);">
-                    <li><strong>Use HTTPS:</strong> Always transmit tokens over encrypted connections</li>
-                    <li><strong>Short Expiry:</strong> Access tokens should expire in 15-60 minutes</li>
-                    <li><strong>Refresh Tokens:</strong> Use secure rotation for long-lived sessions</li>
-                    <li><strong>Validate Signature:</strong> Always verify JWT signature on server</li>
-                    <li><strong>Store Securely:</strong> Use httpOnly cookies, never localStorage</li>
-                </ul>
+            <div class="inline-fix-262">
+                <h4 class="inline-fix-52">🚨 JWT Security Best Practices</h4>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Use HTTPS:</strong> Always transmit tokens over encrypted connections</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Short Expiry:</strong> Access tokens should expire in 15-60 minutes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Refresh Tokens:</strong> Use secure rotation for long-lived sessions</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Validate Signature:</strong> Always verify JWT signature on server</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Store Securely:</strong> Use httpOnly cookies, never localStorage</div>
+    </div>
+</div>
             </div>
         </section>
 
         <!-- Rate Limiting -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>⚡ Rate Limiting Strategies</h2>
             <div class="mermaid-container">
                 <pre class="mermaid">
@@ -150,7 +223,7 @@ graph LR
         </section>
 
         <!-- Code Playgrounds -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>💻 Code Playground: JWT Authentication</h2>
             <div class="playground-container">
                 <div class="playground-tabs">
@@ -158,10 +231,10 @@ graph LR
                     <button class="tab-btn" data-tab="oauth">OAuth 2.0 Flow</button>
                 </div>
                 <div class="tab-content active" id="jwt">
-                    <div id="editor-jwt" style="height: 450px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                    <div id="editor-jwt" class="inline-fix-26"></div>
                 </div>
                 <div class="tab-content" id="oauth">
-                    <div id="editor-oauth" style="height: 450px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                    <div id="editor-oauth" class="inline-fix-26"></div>
                 </div>
                 <button class="run-code-btn" id="run-code"><span class="btn-icon">▶️</span> Run Code</button>
                 <div class="output-container" id="output">
@@ -172,33 +245,41 @@ graph LR
         </section>
 
         <!-- Interactive Quiz -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>✅ Knowledge Check: Security Quiz</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 Test your understanding with 10 questions. Instant feedback provided!
             </p>
             <div class="quiz-container" id="quiz"></div>
-            <div class="quiz-results" id="quiz-results" style="display: none;">
+            <div class="quiz-results" id="quiz-results" class="inline-fix-48">
                 <h3 id="score-display"></h3>
-                <button class="retry-btn" id="retry-quiz" style="margin-top: var(--spacing-lg); padding: var(--spacing-md) var(--spacing-xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 8px; cursor: pointer;">🔄 Retry Quiz</button>
+                <button class="retry-btn" id="retry-quiz" class="inline-fix-77">🔄 Retry Quiz</button>
             </div>
         </section>
 
         <!-- Challenge -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🏆 Security Challenge</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 Design a complete authentication system with JWT + Refresh tokens that handles:
             </p>
-            <ul style="color: var(--text-secondary);">
-                <li>Login with JWT access token (15 min expiry)</li>
-                <li>Refresh token rotation (7 day expiry)</li>
-                <li>Logout and token revocation</li>
-                <li>Rate limiting (100 requests/hour)</li>
-            </ul>
-            <button id="show-solution-btn" style="padding: var(--spacing-sm) var(--spacing-lg); background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid #10b981; border-radius: 8px; cursor: pointer; margin-top: var(--spacing-md);">✅ Show Solution</button>
-            <div id="challenge-solution" style="margin-top: var(--spacing-lg); display: none;">
-                <pre style="background: rgba(26, 31, 58, 0.8); padding: var(--spacing-lg); border-radius: 8px; overflow-x: auto; color: #e5e7eb;"><code># Complete JWT + Refresh Token System
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Login with JWT access token (15 min expiry)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Refresh token rotation (7 day expiry)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Logout and token revocation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Rate limiting (100 requests/hour)</div>
+    </div>
+</div>
+            <button id="show-solution-btn" class="inline-fix-160">✅ Show Solution</button>
+            <div id="challenge-solution" class="inline-fix-74">
+                <pre class="inline-fix-71"><code># Complete JWT + Refresh Token System
 
 POST /api/auth/login
 Request: {email, password}
@@ -227,9 +308,9 @@ X-RateLimit-Reset: 1640995200</code></pre>
         </section>
 
         <!-- Next Steps -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🚀 Next Steps</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 You've completed API Authentication & Security! Continue your learning journey:
             </p>
             <div class="next-module-cards">
@@ -246,11 +327,11 @@ X-RateLimit-Reset: 1640995200</code></pre>
     </div>
 
     <!-- Footer -->
-    <footer style="margin-top: var(--spacing-3xl); padding: var(--spacing-xl); text-align: center; color: var(--text-secondary);">
+    <footer class="inline-fix-17">
         <p>© 2026 Asif Hussain. All rights reserved.</p>
-        <p style="margin-top: var(--spacing-sm);">
-            <a href="../../index.html" style="color: var(--hub-primary);">Back to Home</a> • 
-            <a href="../api-design-hub.html" style="color: var(--hub-primary);">API Design Hub</a>
+        <p class="inline-fix-12">
+            <a href="../../index.html" class="inline-fix-10">Back to Home</a> • 
+            <a href="../api-design-hub.html" class="inline-fix-10">API Design Hub</a>
         </p>
     </footer>
 
@@ -263,7 +344,7 @@ X-RateLimit-Reset: 1640995200</code></pre>
         
         require.config({paths:{vs:'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs'}});require(['vs/editor/editor.main'],function(){const jwtCode=`import jwt\nfrom datetime import datetime, timedelta\n\nSECRET_KEY = "your-secret-key"\n\ndef generate_jwt(user_id):\n    payload = {\n        "sub": user_id,\n        "exp": datetime.utcnow() + timedelta(minutes=15),\n        "iat": datetime.utcnow()\n    }\n    token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")\n    return token\n\ndef verify_jwt(token):\n    try:\n        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])\n        return payload\n    except jwt.ExpiredSignatureError:\n        return {"error": "Token expired"}\n    except jwt.InvalidTokenError:\n        return {"error": "Invalid token"}\n\n# Usage\ntoken = generate_jwt(123)\nprint(f"Token: {token}")\nverified = verify_jwt(token)\nprint(f"Verified: {verified}")`;const oauthCode=`from flask import Flask, redirect, request\nimport requests\n\napp = Flask(__name__)\n\nCLIENT_ID = "your_client_id"\nCLIENT_SECRET = "your_client_secret"\nAUTHORIZE_URL = "https://oauth.example.com/authorize"\nTOKEN_URL = "https://oauth.example.com/token"\n\n@app.route('/login')\ndef login():\n    # Step 1: Redirect to OAuth provider\n    params = {\n        "client_id": CLIENT_ID,\n        "redirect_uri": "http://localhost:5000/callback",\n        "response_type": "code",\n        "scope": "read write"\n    }\n    return redirect(f"{AUTHORIZE_URL}?{urlencode(params)}")\n\n@app.route('/callback')\ndef callback():\n    # Step 2: Exchange code for token\n    code = request.args.get('code')\n    data = {\n        "grant_type": "authorization_code",\n        "code": code,\n        "redirect_uri": "http://localhost:5000/callback",\n        "client_id": CLIENT_ID,\n        "client_secret": CLIENT_SECRET\n    }\n    response = requests.post(TOKEN_URL, data=data)\n    tokens = response.json()\n    return tokens`;monaco.editor.create(document.getElementById('editor-jwt'),{value:jwtCode,language:'python',theme:'vs-dark',minimap:{enabled:false},fontSize:14});monaco.editor.create(document.getElementById('editor-oauth'),{value:oauthCode,language:'python',theme:'vs-dark',minimap:{enabled:false},fontSize:14});document.querySelectorAll('.tab-btn').forEach(btn=>btn.addEventListener('click',function(){document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));this.classList.add('active');document.getElementById(this.getAttribute('data-tab')).classList.add('active');}));document.getElementById('run-code').addEventListener('click',()=>{const output=document.getElementById('output-content');output.textContent=document.querySelector('.tab-content.active').id==='jwt'?`Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEyMywiZXhwIjoxNjQwOTk2MTAwLCJpYXQiOjE2NDA5OTUyMDB9.signature\n\nVerified: {'sub': 123, 'exp': 1640996100, 'iat': 1640995200}\n\n✅ JWT generated and verified successfully!`:`OAuth Flow:\n1. Redirecting to: https://oauth.example.com/authorize?client_id=...&redirect_uri=...\n2. User authorizes application\n3. Callback received with code: abc123xyz\n4. Exchanging code for tokens...\n5. Tokens received:\n{\n  "access_token": "eyJhbGc...",\n  "refresh_token": "xyz...",\n  "expires_in": 3600\n}\n\n✅ OAuth 2.0 flow completed!`;});});
         
-        const quiz=[{q:"Which OAuth 2.0 flow is most secure for server-side apps?",o:["Implicit","Authorization Code","Client Credentials","Password Grant"],c:1,e:"Authorization Code flow is the most secure with PKCE extension."},{q:"Where should JWT tokens be stored in browsers?",o:["localStorage","sessionStorage","httpOnly cookies","IndexedDB"],c:2,e:"httpOnly cookies prevent XSS attacks by making tokens inaccessible to JavaScript."},{q:"What is the recommended JWT access token expiry?",o:["24 hours","15-60 minutes","7 days","Never expire"],c:1,e:"Short-lived access tokens (15-60 min) limit exposure if compromised."},{q:"What HTTP status code indicates rate limit exceeded?",o:["403 Forbidden","401 Unauthorized","429 Too Many Requests","503 Service Unavailable"],c:2,e:"429 Too Many Requests is the standard code for rate limiting."},{q:"Which header contains the retry time for rate-limited requests?",o:["X-RateLimit-Reset","Retry-After","X-Retry-Time","Rate-Limit-Retry"],c:1,e:"Retry-After header tells clients when to retry after rate limit."},{q:"What does the 'aud' claim in JWT represent?",o:["Audience","Authentication","Authorization","Audit"],c:0,e:"The 'aud' (audience) claim identifies the recipients of the JWT."},{q:"Which algorithm should be used for JWT signing?",o:["MD5","SHA1","HS256 or RS256","Base64"],c:2,e:"HS256 (HMAC) or RS256 (RSA) are secure signing algorithms."},{q:"What is PKCE in OAuth 2.0?",o:["Password Key Code Exchange","Proof Key for Code Exchange","Public Key Certificate Exchange","Protected Key Code Encryption"],c:1,e:"PKCE (Proof Key for Code Exchange) prevents authorization code interception."},{q:"How should API keys be transmitted?",o:["In URL query parameters","In request headers","In request body","In cookies"],c:1,e:"API keys in headers avoid logging in URL and provide better security."},{q:"What is token rotation?",o:["Encrypting tokens","Issuing new refresh token on each use","Changing token algorithm","Compressing tokens"],c:1,e:"Token rotation issues new refresh tokens, invalidating old ones for better security."}];function renderQuiz(){document.getElementById('quiz').innerHTML=quiz.map((q,i)=>`<div class="quiz-question" style="margin-bottom:var(--spacing-2xl);padding:var(--spacing-lg);background:rgba(26,31,58,0.5);border-radius:8px;border:1px solid var(--module-border);"><h4 style="color:var(--text-primary);margin-bottom:var(--spacing-md);">Q${i+1}: ${q.q}</h4><div>${q.o.map((o,j)=>`<label style="display:block;padding:var(--spacing-sm);margin:var(--spacing-xs) 0;background:rgba(123,97,255,0.1);border-radius:6px;cursor:pointer;"><input type="radio" name="q-${i}" value="${j}" style="margin-right:var(--spacing-sm);"><span style="color:var(--text-secondary);">${o}</span></label>`).join('')}</div><div id="fb-${i}" style="display:none;margin-top:var(--spacing-md);padding:var(--spacing-md);border-radius:6px;"></div></div>`).join('')+`<button id="submit-quiz" style="padding:var(--spacing-md) var(--spacing-2xl);background:var(--hub-primary);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:16px;font-weight:600;">Submit Quiz</button>`;document.getElementById('submit-quiz').addEventListener('click',()=>{let c=0;quiz.forEach((q,i)=>{const s=document.querySelector(`input[name="q-${i}"]:checked`),f=document.getElementById(`fb-${i}`);if(s){const a=parseInt(s.value);if(a===q.c){c++;f.style.display='block';f.style.background='rgba(16,185,129,0.1)';f.style.borderLeft='4px solid #10b981';f.innerHTML=`<strong style="color:#10b981;">✅ Correct!</strong><br><span style="color:var(--text-secondary);">${q.e}</span>`;}else{f.style.display='block';f.style.background='rgba(239,68,68,0.1)';f.style.borderLeft='4px solid #ef4444';f.innerHTML=`<strong style="color:#ef4444;">❌ Incorrect</strong><br><span style="color:var(--text-secondary);">${q.e}</span>`;}}});const p=(c/quiz.length)*100,r=document.getElementById('quiz-results'),d=document.getElementById('score-display');r.style.display='block';d.textContent=`Score: ${c}/${quiz.length} (${p.toFixed(0)}%)`;d.style.color=p>=70?'#10b981':p>=50?'#fbbf24':'#ef4444';document.getElementById('submit-quiz').disabled=true;document.getElementById('submit-quiz').style.opacity='0.5';});}renderQuiz();document.getElementById('retry-quiz')?.addEventListener('click',()=>{document.getElementById('quiz-results').style.display='none';renderQuiz();});document.getElementById('show-solution-btn')?.addEventListener('click',function(){document.getElementById('challenge-solution').style.display='block';this.disabled=true;this.style.opacity='0.5';});
+        const quiz=[{q:"Which OAuth 2.0 flow is most secure for server-side apps?",o:["Implicit","Authorization Code","Client Credentials","Password Grant"],c:1,e:"Authorization Code flow is the most secure with PKCE extension."},{q:"Where should JWT tokens be stored in browsers?",o:["localStorage","sessionStorage","httpOnly cookies","IndexedDB"],c:2,e:"httpOnly cookies prevent XSS attacks by making tokens inaccessible to JavaScript."},{q:"What is the recommended JWT access token expiry?",o:["24 hours","15-60 minutes","7 days","Never expire"],c:1,e:"Short-lived access tokens (15-60 min) limit exposure if compromised."},{q:"What HTTP status code indicates rate limit exceeded?",o:["403 Forbidden","401 Unauthorized","429 Too Many Requests","503 Service Unavailable"],c:2,e:"429 Too Many Requests is the standard code for rate limiting."},{q:"Which header contains the retry time for rate-limited requests?",o:["X-RateLimit-Reset","Retry-After","X-Retry-Time","Rate-Limit-Retry"],c:1,e:"Retry-After header tells clients when to retry after rate limit."},{q:"What does the 'aud' claim in JWT represent?",o:["Audience","Authentication","Authorization","Audit"],c:0,e:"The 'aud' (audience) claim identifies the recipients of the JWT."},{q:"Which algorithm should be used for JWT signing?",o:["MD5","SHA1","HS256 or RS256","Base64"],c:2,e:"HS256 (HMAC) or RS256 (RSA) are secure signing algorithms."},{q:"What is PKCE in OAuth 2.0?",o:["Password Key Code Exchange","Proof Key for Code Exchange","Public Key Certificate Exchange","Protected Key Code Encryption"],c:1,e:"PKCE (Proof Key for Code Exchange) prevents authorization code interception."},{q:"How should API keys be transmitted?",o:["In URL query parameters","In request headers","In request body","In cookies"],c:1,e:"API keys in headers avoid logging in URL and provide better security."},{q:"What is token rotation?",o:["Encrypting tokens","Issuing new refresh token on each use","Changing token algorithm","Compressing tokens"],c:1,e:"Token rotation issues new refresh tokens, invalidating old ones for better security."}];function renderQuiz(){document.getElementById('quiz').innerHTML=quiz.map((q,i)=>`<div class="quiz-question" class="inline-fix-206"><h4 class="inline-fix-306">Q${i+1}: ${q.q}</h4><div>${q.o.map((o,j)=>`<label class="inline-fix-254"><input type="radio" name="q-${i}" value="${j}" class="inline-fix-325"><span class="inline-fix-127">${o}</span></label>`).join('')}</div><div id="fb-${i}" class="inline-fix-273"></div></div>`).join('')+`<button id="submit-quiz" class="inline-fix-229">Submit Quiz</button>`;document.getElementById('submit-quiz').addEventListener('click',()=>{let c=0;quiz.forEach((q,i)=>{const s=document.querySelector(`input[name="q-${i}"]:checked`),f=document.getElementById(`fb-${i}`);if(s){const a=parseInt(s.value);if(a===q.c){c++;f.style.display='block';f.style.background='rgba(16,185,129,0.1)';f.style.borderLeft='4px solid #10b981';f.innerHTML=`<strong class="inline-fix-297">✅ Correct!</strong><br><span class="inline-fix-127">${q.e}</span>`;}else{f.style.display='block';f.style.background='rgba(239,68,68,0.1)';f.style.borderLeft='4px solid #ef4444';f.innerHTML=`<strong class="inline-fix-298">❌ Incorrect</strong><br><span class="inline-fix-127">${q.e}</span>`;}}});const p=(c/quiz.length)*100,r=document.getElementById('quiz-results'),d=document.getElementById('score-display');r.style.display='block';d.textContent=`Score: ${c}/${quiz.length} (${p.toFixed(0)}%)`;d.style.color=p>=70?'#10b981':p>=50?'#fbbf24':'#ef4444';document.getElementById('submit-quiz').disabled=true;document.getElementById('submit-quiz').style.opacity='0.5';});}renderQuiz();document.getElementById('retry-quiz')?.addEventListener('click',()=>{document.getElementById('quiz-results').style.display='none';renderQuiz();});document.getElementById('show-solution-btn')?.addEventListener('click',function(){document.getElementById('challenge-solution').style.display='block';this.disabled=true;this.style.opacity='0.5';});
         
         window.addEventListener('load',()=>{createJWTViz();console.log("✅ API Authentication & Security module loaded!");});
     </script>

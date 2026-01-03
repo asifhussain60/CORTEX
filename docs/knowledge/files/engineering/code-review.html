@@ -1,44 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Code Review Best Practices | CORTEX Knowledge</title>
     <link rel="stylesheet" href="../../../assets/css/main.css">
+    <link rel="stylesheet" href="../../../assets/css/intentional-classes.css">
 </head>
 <body>
-    <header class="header-glass">
+    <header class="panel-header-centered">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="container">
             <nav class="breadcrumb">
-                <a href="../../../index.html" class="breadcrumb-link">Home</a>
+                <a href="../../../index.html" class="breadcrumb-separator">Home</a>
                 <span class="breadcrumb-separator">/</span>
-                <a href="../../index.html" class="breadcrumb-link">Knowledge Library</a>
+                <a href="../../index.html" class="breadcrumb-separator">Knowledge Library</a>
                 <span class="breadcrumb-separator">/</span>
-                <a href="../../engineering.html" class="breadcrumb-link">Engineering</a>
+                <a href="../../engineering.html" class="breadcrumb-separator">Engineering</a>
                 <span class="breadcrumb-separator">/</span>
                 <span class="breadcrumb-current">Code Review</span>
             </nav>
         </div>
     </header>
 
-    <main class="main-content">
+    <main class="level1-domain-icon--frontend">
         <section class="knowledge-file-hero">
             <div class="container">
                 <div class="hero-content">
                     <h1 class="hero-title">Code Review Best Practices</h1>
-                    <p class="hero-subtitle">Comprehensive Checklist for Security, Performance & Quality</p>
-                    <div class="hero-meta">
-                        <span class="meta-item"><i class="icon-category"></i> Engineering Excellence</span>
-                        <span class="meta-item"><i class="icon-version"></i> v1.0.0</span>
-                        <span class="meta-item"><i class="icon-scope"></i> Multi-Language</span>
+                    <p class="hero-subtitle">Comprehensive level1-check-icon-error for Security, Performance & Quality</p>
+                    <div class="btn-hero-story">
+                        <span class="metadata-grid"><i class="level1-integration-icon-container"></i> Engineering Excellence</span>
+                        <span class="metadata-grid"><i class="level1-integration-icon-container"></i> v1.0.0</span>
+                        <span class="metadata-grid"><i class="level1-integration-icon-container"></i> Multi-Language</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="tab-container">
+        <section class="demo-tab-v-desc">
             <div class="container">
-                <div class="tab-nav">
+                <div class="demo-tab-v-desc">
                     <button class="tab-button active" data-tab="overview">Overview</button>
                     <button class="tab-button" data-tab="content">Content</button>
                     <button class="tab-button" data-tab="examples">Examples</button>
@@ -48,10 +99,10 @@
                 <div class="tab-content active" id="overview">
                     <div class="content-section">
                         <h2 class="section-header">What is Code Review?</h2>
-                        <p class="section-text">
+                        <p class="level2-section-title-green">
                             Code review is systematic examination of source code to find and fix mistakes, improve quality, share knowledge, and maintain consistent coding standards across the team. It's one of the most effective quality assurance techniques in software engineering.
                         </p>
-                        <p class="section-text">
+                        <p class="level2-section-title-green">
                             A comprehensive code review examines security vulnerabilities, performance bottlenecks, readability issues, and maintainability concerns before code reaches production.
                         </p>
                     </div>
@@ -59,50 +110,92 @@
                     <div class="content-section">
                         <h2 class="section-header">Review Categories</h2>
                         <div class="review-category-grid">
-                            <div class="category-card critical">
-                                <h3 class="category-name">Security Review</h3>
-                                <p class="category-severity">CRITICAL</p>
-                                <ul class="category-checks">
-                                    <li>Input validation</li>
-                                    <li>Authentication & authorization</li>
-                                    <li>SQL injection prevention</li>
-                                    <li>XSS protection</li>
-                                    <li>Sensitive data exposure</li>
-                                    <li>Cryptography strength</li>
-                                </ul>
+                            <div class="sts-category-icon-wrapper critical">
+                                <h3 class="sts-category-icon-wrapper">Security Review</h3>
+                                <p class="sts-category-icon-wrapper">CRITICAL</p>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Input validation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Authentication & authorization</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">SQL injection prevention</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">XSS protection</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Sensitive data exposure</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Cryptography strength</div>
+    </div>
+</div>
                             </div>
-                            <div class="category-card high">
-                                <h3 class="category-name">Performance Review</h3>
-                                <p class="category-severity">HIGH</p>
-                                <ul class="category-checks">
-                                    <li>N+1 query detection</li>
-                                    <li>Algorithm efficiency</li>
-                                    <li>Resource leak prevention</li>
-                                    <li>Memory usage</li>
-                                    <li>Database optimization</li>
-                                </ul>
+                            <div class="sts-category-icon-wrapper high">
+                                <h3 class="sts-category-icon-wrapper">Performance Review</h3>
+                                <p class="sts-category-icon-wrapper">HIGH</p>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">N+1 query detection</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Algorithm efficiency</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Resource leak prevention</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Memory usage</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Database optimization</div>
+    </div>
+</div>
                             </div>
-                            <div class="category-card medium">
-                                <h3 class="category-name">Readability Review</h3>
-                                <p class="category-severity">MEDIUM</p>
-                                <ul class="category-checks">
-                                    <li>Naming clarity</li>
-                                    <li>Function length</li>
-                                    <li>Code duplication</li>
-                                    <li>Comment quality</li>
-                                    <li>Code organization</li>
-                                </ul>
+                            <div class="sts-category-icon-wrapper medium">
+                                <h3 class="sts-category-icon-wrapper">Readability Review</h3>
+                                <p class="sts-category-icon-wrapper">MEDIUM</p>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Naming clarity</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Function length</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Code duplication</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Comment quality</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Code organization</div>
+    </div>
+</div>
                             </div>
-                            <div class="category-card medium">
-                                <h3 class="category-name">Maintainability Review</h3>
-                                <p class="category-severity">MEDIUM</p>
-                                <ul class="category-checks">
-                                    <li>Error handling</li>
-                                    <li>Documentation</li>
-                                    <li>Test coverage</li>
-                                    <li>Dependency management</li>
-                                    <li>Code coupling</li>
-                                </ul>
+                            <div class="sts-category-icon-wrapper medium">
+                                <h3 class="sts-category-icon-wrapper">Maintainability Review</h3>
+                                <p class="sts-category-icon-wrapper">MEDIUM</p>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Error handling</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Documentation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Test coverage</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Dependency management</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Code coupling</div>
+    </div>
+</div>
                             </div>
                         </div>
                     </div>
@@ -113,32 +206,32 @@
                             <div class="process-step">
                                 <div class="step-number">1</div>
                                 <h3 class="step-title">Automated Checks</h3>
-                                <p class="step-desc">Linters, formatters, and static analysis tools run first</p>
+                                <p class="level1-step-title">Linters, formatters, and static analysis tools run first</p>
                             </div>
                             <div class="process-step">
                                 <div class="step-number">2</div>
                                 <h3 class="step-title">Security Scan</h3>
-                                <p class="step-desc">Check for vulnerabilities, secrets, and unsafe patterns</p>
+                                <p class="level1-step-title">Check for vulnerabilities, secrets, and unsafe patterns</p>
                             </div>
                             <div class="process-step">
                                 <div class="step-number">3</div>
                                 <h3 class="step-title">Performance Analysis</h3>
-                                <p class="step-desc">Identify N+1 queries, inefficient algorithms, resource leaks</p>
+                                <p class="level1-step-title">Identify N+1 queries, inefficient algorithms, resource leaks</p>
                             </div>
                             <div class="process-step">
                                 <div class="step-number">4</div>
                                 <h3 class="step-title">Readability Check</h3>
-                                <p class="step-desc">Assess naming, function length, duplication, clarity</p>
+                                <p class="level1-step-title">Assess naming, function length, duplication, clarity</p>
                             </div>
                             <div class="process-step">
                                 <div class="step-number">5</div>
                                 <h3 class="step-title">Maintainability Review</h3>
-                                <p class="step-desc">Evaluate error handling, docs, tests, dependencies</p>
+                                <p class="level1-step-title">Evaluate error handling, docs, tests, dependencies</p>
                             </div>
                             <div class="process-step">
                                 <div class="step-number">6</div>
                                 <h3 class="step-title">Approval</h3>
-                                <p class="step-desc">All checks pass, reviewers approve, code merges</p>
+                                <p class="level1-step-title">All checks pass, reviewers approve, code merges</p>
                             </div>
                         </div>
                     </div>
@@ -147,28 +240,28 @@
                         <h2 class="section-header">Review Best Practices</h2>
                         <div class="best-practices-grid">
                             <div class="practice-card">
-                                <h3 class="practice-name">Be Kind & Constructive</h3>
-                                <p class="practice-desc">Focus on the code, not the person. Suggest improvements, don't demand them.</p>
+                                <h3 class="practice-icon">Be Kind & Constructive</h3>
+                                <p class="practice-icon">Focus on the code, not the person. Suggest improvements, don't demand them.</p>
                             </div>
                             <div class="practice-card">
-                                <h3 class="practice-name">Review Small Changes</h3>
-                                <p class="practice-desc">Limit PRs to 200-400 lines. Larger changes miss defects.</p>
+                                <h3 class="practice-icon">Review Small Changes</h3>
+                                <p class="practice-icon">Limit PRs to 200-400 lines. Larger changes miss defects.</p>
                             </div>
                             <div class="practice-card">
-                                <h3 class="practice-name">Use Checklist</h3>
-                                <p class="practice-desc">Follow consistent review checklist for thoroughness.</p>
+                                <h3 class="practice-icon">Use level1-check-icon-error</h3>
+                                <p class="practice-icon">Follow consistent review level1-check-icon-error for thoroughness.</p>
                             </div>
                             <div class="practice-card">
-                                <h3 class="practice-name">Automate What You Can</h3>
-                                <p class="practice-desc">Let tools catch formatting, linting, and basic security issues.</p>
+                                <h3 class="practice-icon">Automate What You Can</h3>
+                                <p class="practice-icon">Let tools catch formatting, linting, and basic security issues.</p>
                             </div>
                             <div class="practice-card">
-                                <h3 class="practice-name">Review Tests Too</h3>
-                                <p class="practice-desc">Test code needs review just like production code.</p>
+                                <h3 class="practice-icon">Review Tests Too</h3>
+                                <p class="practice-icon">Test code needs review just like production code.</p>
                             </div>
                             <div class="practice-card">
-                                <h3 class="practice-name">Time-Box Reviews</h3>
-                                <p class="practice-desc">60-90 minutes maximum. Effectiveness drops after that.</p>
+                                <h3 class="practice-icon">Time-Box Reviews</h3>
+                                <p class="practice-icon">60-90 minutes maximum. Effectiveness drops after that.</p>
                             </div>
                         </div>
                     </div>
@@ -178,280 +271,452 @@
                     <div class="content-section">
                         <h2 class="section-header">Security Review</h2>
                         
-                        <div class="review-item">
-                            <h3 class="review-title">Input Validation</h3>
-                            <p class="review-severity">Severity: CRITICAL</p>
+                        <div class="flaw-preview">
+                            <h3 class="flaw-preview">Input Validation</h3>
+                            <p class="flaw-preview">Severity: CRITICAL</p>
                             
-                            <h4 class="subsection-header">Checklist</h4>
-                            <ul class="checklist">
-                                <li>All user inputs validated (type, format, range, length)</li>
-                                <li>Use allowlists, not blocklists</li>
-                                <li>Sanitize inputs to prevent SQL injection</li>
-                                <li>Sanitize inputs to prevent XSS</li>
-                                <li>Validate file uploads (type, size, content)</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">level1-check-icon-error</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">All user inputs validated (type, format, range, length)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use allowlists, not blocklists</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Sanitize inputs to prevent SQL injection</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Sanitize inputs to prevent XSS</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Validate file uploads (type, size, content)</div>
+    </div>
+</div>
 
-                            <h4 class="subsection-header">Detection Patterns</h4>
-                            <ul class="detection-list">
-                                <li><code>request.args.get()</code> without validation</li>
-                                <li>Raw SQL with string concatenation</li>
-                                <li><code>eval()</code> or <code>exec()</code> on user input</li>
-                                <li>Unvalidated file upload</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">Detection Patterns</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><code>request.args.get()</code> without validation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Raw SQL with string concatenation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>eval()</code> or <code>exec()</code> on user input</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Unvalidated file upload</div>
+    </div>
+</div>
 
-                            <h4 class="subsection-header">Tools</h4>
-                            <ul class="tool-list">
-                                <li><strong>Bandit:</strong> Python security linter</li>
-                                <li><strong>Semgrep:</strong> Multi-language static analysis</li>
-                                <li><strong>SonarQube:</strong> Comprehensive security scanner</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">Tools</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Bandit:</strong> Python security linter</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Semgrep:</strong> Multi-language static analysis</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>SonarQube:</strong> Comprehensive security scanner</div>
+    </div>
+</div>
                         </div>
 
-                        <div class="review-item">
-                            <h3 class="review-title">Authentication & Authorization</h3>
-                            <p class="review-severity">Severity: CRITICAL</p>
+                        <div class="flaw-preview">
+                            <h3 class="flaw-preview">Authentication & Authorization</h3>
+                            <p class="flaw-preview">Severity: CRITICAL</p>
                             
-                            <h4 class="subsection-header">Checklist</h4>
-                            <ul class="checklist">
-                                <li>Authentication required for all protected endpoints</li>
-                                <li>Authorization checks on every operation</li>
-                                <li>Role-based access control (RBAC) implemented</li>
-                                <li>Session management secure (timeouts, regeneration)</li>
-                                <li>Password policies enforced (length, complexity)</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">level1-check-icon-error</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Authentication required for all protected endpoints</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Authorization checks on every operation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Role-based access control (RBAC) implemented</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Session management secure (timeouts, regeneration)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Password policies enforced (length, complexity)</div>
+    </div>
+</div>
 
-                            <h4 class="subsection-header">Detection Patterns</h4>
-                            <ul class="detection-list">
-                                <li>API endpoint without <code>@login_required</code></li>
-                                <li>Sensitive operation without permission check</li>
-                                <li>Plain text passwords in database</li>
-                                <li>Weak hashing (MD5, SHA1)</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">Detection Patterns</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">API endpoint without <code>@login_required</code></div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Sensitive operation without permission check</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Plain text passwords in database</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Weak hashing (MD5, SHA1)</div>
+    </div>
+</div>
                         </div>
 
-                        <div class="review-item">
-                            <h3 class="review-title">Sensitive Data Exposure</h3>
-                            <p class="review-severity">Severity: CRITICAL</p>
+                        <div class="flaw-preview">
+                            <h3 class="flaw-preview">Sensitive Data Exposure</h3>
+                            <p class="flaw-preview">Severity: CRITICAL</p>
                             
-                            <h4 class="subsection-header">Checklist</h4>
-                            <ul class="checklist">
-                                <li>PII never logged (emails, SSNs, credit cards)</li>
-                                <li>Secrets not hardcoded (API keys, passwords)</li>
-                                <li>Error messages don't expose internal details</li>
-                                <li>Debug mode disabled in production</li>
-                                <li>Stack traces not exposed to users</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">level1-check-icon-error</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">PII never logged (emails, SSNs, credit cards)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Secrets not hardcoded (API keys, passwords)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Error messages don't expose internal details</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Debug mode disabled in production</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Stack traces not exposed to users</div>
+    </div>
+</div>
 
-                            <h4 class="subsection-header">Detection Patterns</h4>
-                            <ul class="detection-list">
-                                <li><code>logger.info</code> containing email, password, SSN, credit_card</li>
-                                <li>Hardcoded API_KEY, SECRET_KEY, PASSWORD</li>
-                                <li><code>DEBUG = True</code> in production config</li>
-                                <li>Exception details in API responses</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">Detection Patterns</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><code>logger.info</code> containing email, password, SSN, credit_card</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Hardcoded API_KEY, SECRET_KEY, PASSWORD</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>DEBUG = True</code> in production config</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Exception details in API responses</div>
+    </div>
+</div>
 
-                            <h4 class="subsection-header">Tools</h4>
-                            <ul class="tool-list">
+                            <h4 class="level1-subsection-title">Tools</h4>
+                            <ul class="visualization-tooltip">
                                 <li><strong>TruffleHog:</strong> Find secrets in git history</li>
                                 <li><strong>Detect-Secrets:</strong> Prevent secrets in commits</li>
                             </ul>
                         </div>
 
-                        <div class="review-item">
-                            <h3 class="review-title">Cryptography</h3>
-                            <p class="review-severity">Severity: HIGH</p>
+                        <div class="flaw-preview">
+                            <h3 class="flaw-preview">Cryptography</h3>
+                            <p class="flaw-preview">Severity: HIGH</p>
                             
-                            <h4 class="subsection-header">Checklist</h4>
-                            <ul class="checklist">
-                                <li>Use bcrypt/Argon2 for password hashing (NOT MD5/SHA1)</li>
-                                <li>Use secure random for tokens (<code>secrets.token_urlsafe</code>, NOT <code>random</code>)</li>
-                                <li>Encrypt sensitive data at rest (AES-256)</li>
-                                <li>Use TLS 1.2+ for data in transit</li>
-                                <li>Verify certificates in HTTPS requests</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">level1-check-icon-error</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Use bcrypt/Argon2 for password hashing (NOT MD5/SHA1)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use secure random for tokens (<code>secrets.token_urlsafe</code>, NOT <code>random</code>)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Encrypt sensitive data at rest (AES-256)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use TLS 1.2+ for data in transit</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Verify certificates in HTTPS requests</div>
+    </div>
+</div>
 
-                            <h4 class="subsection-header">Detection Patterns</h4>
-                            <ul class="detection-list">
-                                <li><code>hashlib.md5()</code> or <code>hashlib.sha1()</code> for passwords</li>
-                                <li><code>random.random()</code> for security tokens</li>
-                                <li><code>requests.get(..., verify=False)</code></li>
-                            </ul>
+                            <h4 class="level1-subsection-title">Detection Patterns</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><code>hashlib.md5()</code> or <code>hashlib.sha1()</code> for passwords</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>random.random()</code> for security tokens</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>requests.get(..., verify=False)</code></div>
+    </div>
+</div>
                         </div>
                     </div>
 
                     <div class="content-section">
                         <h2 class="section-header">Performance Review</h2>
                         
-                        <div class="review-item">
-                            <h3 class="review-title">N+1 Query Detection</h3>
-                            <p class="review-severity">Severity: HIGH</p>
+                        <div class="flaw-preview">
+                            <h3 class="flaw-preview">N+1 Query Detection</h3>
+                            <p class="flaw-preview">Severity: HIGH</p>
                             
-                            <h4 class="subsection-header">Checklist</h4>
-                            <ul class="checklist">
-                                <li>Use eager loading for related data (JOIN, includes, prefetch_related)</li>
-                                <li>Avoid queries inside loops</li>
-                                <li>Use batch queries where possible</li>
-                                <li>Profile database queries in dev environment</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">level1-check-icon-error</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Use eager loading for related data (JOIN, includes, prefetch_related)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Avoid queries inside loops</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use batch queries where possible</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Profile database queries in dev environment</div>
+    </div>
+</div>
 
-                            <h4 class="subsection-header">Detection Patterns</h4>
+                            <h4 class="level1-subsection-title">Detection Patterns</h4>
                             <ul class="detection-list">
                                 <li>For loop with database query inside</li>
                                 <li>ORM query without <code>.join()</code> or <code>.prefetch_related()</code></li>
                             </ul>
 
-                            <h4 class="subsection-header">Tools</h4>
-                            <ul class="tool-list">
+                            <h4 class="level1-subsection-title">Tools</h4>
+                            <ul class="visualization-tooltip">
                                 <li><strong>Django Silk:</strong> Profile Django queries</li>
                                 <li><strong>SQLAlchemy Echo:</strong> Log all queries</li>
                             </ul>
                         </div>
 
-                        <div class="review-item">
-                            <h3 class="review-title">Inefficient Algorithms</h3>
-                            <p class="review-severity">Severity: MEDIUM</p>
+                        <div class="flaw-preview">
+                            <h3 class="flaw-preview">Inefficient Algorithms</h3>
+                            <p class="flaw-preview">Severity: MEDIUM</p>
                             
-                            <h4 class="subsection-header">Checklist</h4>
-                            <ul class="checklist">
-                                <li>No nested loops over large datasets (O(n²) → O(n log n))</li>
-                                <li>Use appropriate data structures (dict for lookups, set for membership)</li>
-                                <li>Avoid repeated calculations (memoization)</li>
-                                <li>Profile hot paths with cProfile</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">level1-check-icon-error</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">No nested loops over large datasets (O(n²) → O(n log n))</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use appropriate data structures (dict for lookups, set for membership)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Avoid repeated calculations (memoization)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Profile hot paths with cProfile</div>
+    </div>
+</div>
 
-                            <h4 class="subsection-header">Detection Patterns</h4>
-                            <ul class="detection-list">
-                                <li>Nested for loops with list/array iteration</li>
-                                <li><code>if x in list:</code> for large lists (use set)</li>
-                                <li>Repeated function calls with same args</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">Detection Patterns</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Nested for loops with list/array iteration</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>if x in list:</code> for large lists (use set)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Repeated function calls with same args</div>
+    </div>
+</div>
 
-                            <h4 class="subsection-header">Tools</h4>
-                            <ul class="tool-list">
+                            <h4 class="level1-subsection-title">Tools</h4>
+                            <ul class="visualization-tooltip">
                                 <li><strong>cProfile:</strong> Python profiler</li>
                                 <li><strong>memory_profiler:</strong> Track memory usage</li>
                             </ul>
                         </div>
 
-                        <div class="review-item">
-                            <h3 class="review-title">Resource Leaks</h3>
-                            <p class="review-severity">Severity: HIGH</p>
+                        <div class="flaw-preview">
+                            <h3 class="flaw-preview">Resource Leaks</h3>
+                            <p class="flaw-preview">Severity: HIGH</p>
                             
-                            <h4 class="subsection-header">Checklist</h4>
-                            <ul class="checklist">
-                                <li>Always close files, DB connections, network sockets</li>
-                                <li>Use context managers (<code>with</code> statement)</li>
-                                <li>Dispose IDisposable objects in C#</li>
-                                <li>Close async resources with <code>async with</code></li>
-                            </ul>
+                            <h4 class="level1-subsection-title">level1-check-icon-error</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Always close files, DB connections, network sockets</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use context managers (<code>with</code> statement)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Dispose IDisposable objects in C#</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Close async resources with <code>async with</code></div>
+    </div>
+</div>
 
-                            <h4 class="subsection-header">Detection Patterns</h4>
-                            <ul class="detection-list">
-                                <li><code>open()</code> without <code>with</code> statement</li>
-                                <li>Database connection without try-finally or context manager</li>
-                                <li>New HttpClient() in method (should be static/singleton)</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">Detection Patterns</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><code>open()</code> without <code>with</code> statement</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Database connection without try-finally or context manager</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">New HttpClient() in method (should be static/singleton)</div>
+    </div>
+</div>
                         </div>
                     </div>
 
                     <div class="content-section">
                         <h2 class="section-header">Readability Review</h2>
                         
-                        <div class="review-item">
-                            <h3 class="review-title">Naming Clarity</h3>
-                            <p class="review-severity">Severity: MEDIUM</p>
+                        <div class="flaw-preview">
+                            <h3 class="flaw-preview">Naming Clarity</h3>
+                            <p class="flaw-preview">Severity: MEDIUM</p>
                             
-                            <h4 class="subsection-header">Checklist</h4>
-                            <ul class="checklist">
-                                <li>Variables: intention-revealing (<code>user_email</code>, NOT <code>e</code>)</li>
-                                <li>Functions: verb phrases (<code>get_user</code>, NOT <code>user</code>)</li>
-                                <li>Classes: noun phrases (<code>PaymentService</code>, NOT <code>Process</code>)</li>
-                                <li>Constants: SCREAMING_SNAKE_CASE (<code>MAX_RETRY_COUNT</code>)</li>
-                                <li>Avoid abbreviations unless domain-standard</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">level1-check-icon-error</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Variables: intention-revealing (<code>user_email</code>, NOT <code>e</code>)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Functions: verb phrases (<code>get_user</code>, NOT <code>user</code>)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Classes: noun phrases (<code>PaymentService</code>, NOT <code>Process</code>)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Constants: SCREAMING_SNAKE_CASE (<code>MAX_RETRY_COUNT</code>)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Avoid abbreviations unless domain-standard</div>
+    </div>
+</div>
 
-                            <h4 class="subsection-header">Detection Patterns</h4>
-                            <ul class="detection-list">
-                                <li>Single-letter variables (except i, j, k in loops)</li>
-                                <li>Abbreviations: usr, mgr, prc, tmp</li>
-                                <li>Vague names: data, info, manager, handler</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">Detection Patterns</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Single-letter variables (except i, j, k in loops)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Abbreviations: usr, mgr, prc, tmp</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Vague names: data, info, manager, handler</div>
+    </div>
+</div>
                         </div>
 
-                        <div class="review-item">
-                            <h3 class="review-title">Function Length & Complexity</h3>
-                            <p class="review-severity">Severity: MEDIUM</p>
+                        <div class="flaw-preview">
+                            <h3 class="flaw-preview">Function Length & Complexity</h3>
+                            <p class="flaw-preview">Severity: MEDIUM</p>
                             
-                            <h4 class="subsection-header">Checklist</h4>
-                            <ul class="checklist">
-                                <li>Max 20 lines per function (ideal: 10)</li>
-                                <li>Single responsibility (one reason to change)</li>
-                                <li>One level of abstraction per function</li>
-                                <li>Max 3 parameters (use objects for more)</li>
-                                <li>Cyclomatic complexity ≤ 10</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">level1-check-icon-error</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Max 20 lines per function (ideal: 10)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Single responsibility (one reason to change)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">One level of abstraction per function</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Max 3 parameters (use objects for more)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Cyclomatic complexity ≤ 10</div>
+    </div>
+</div>
 
-                            <h4 class="subsection-header">Tools</h4>
-                            <ul class="tool-list">
+                            <h4 class="level1-subsection-title">Tools</h4>
+                            <ul class="visualization-tooltip">
                                 <li><strong>Radon:</strong> Python complexity analyzer</li>
                                 <li><strong>McCabe:</strong> Complexity checker</li>
                             </ul>
                         </div>
 
-                        <div class="review-item">
-                            <h3 class="review-title">Code Duplication</h3>
-                            <p class="review-severity">Severity: MEDIUM</p>
+                        <div class="flaw-preview">
+                            <h3 class="flaw-preview">Code Duplication</h3>
+                            <p class="flaw-preview">Severity: MEDIUM</p>
                             
-                            <h4 class="subsection-header">Checklist</h4>
-                            <ul class="checklist">
-                                <li>Extract common logic into functions</li>
-                                <li>Use inheritance/composition for shared behavior</li>
-                                <li>Max 5 lines of duplicate code</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">level1-check-icon-error</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Extract common logic into functions</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use inheritance/composition for shared behavior</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Max 5 lines of duplicate code</div>
+    </div>
+</div>
 
-                            <h4 class="subsection-header">Tools</h4>
-                            <ul class="tool-list">
-                                <li><strong>Flake8-Duplication:</strong> Python duplication detector</li>
-                                <li><strong>Jscpd:</strong> Copy-paste detector</li>
-                                <li><strong>PMD:</strong> Java/C# duplication</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">Tools</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Flake8-Duplication:</strong> Python duplication detector</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Jscpd:</strong> Copy-paste detector</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>PMD:</strong> Java/C# duplication</div>
+    </div>
+</div>
                         </div>
                     </div>
 
                     <div class="content-section">
                         <h2 class="section-header">Maintainability Review</h2>
                         
-                        <div class="review-item">
-                            <h3 class="review-title">Error Handling</h3>
-                            <p class="review-severity">Severity: HIGH</p>
+                        <div class="flaw-preview">
+                            <h3 class="flaw-preview">Error Handling</h3>
+                            <p class="flaw-preview">Severity: HIGH</p>
                             
-                            <h4 class="subsection-header">Checklist</h4>
-                            <ul class="checklist">
-                                <li>No bare <code>except:</code> clauses (catch specific exceptions)</li>
-                                <li>Log errors with context before re-raising</li>
-                                <li>Don't return None on error (raise exception)</li>
-                                <li>Clean up resources in finally blocks</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">level1-check-icon-error</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">No bare <code>except:</code> clauses (catch specific exceptions)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Log errors with context before re-raising</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Don't return None on error (raise exception)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Clean up resources in finally blocks</div>
+    </div>
+</div>
 
-                            <h4 class="subsection-header">Detection Patterns</h4>
-                            <ul class="detection-list">
-                                <li><code>except: pass</code> # Swallowing exceptions</li>
-                                <li><code>except Exception:</code> # Too broad</li>
-                                <li><code>return None</code> # Ambiguous failure</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">Detection Patterns</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><code>except: pass</code> # Swallowing exceptions</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>except Exception:</code> # Too broad</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>return None</code> # Ambiguous failure</div>
+    </div>
+</div>
                         </div>
 
-                        <div class="review-item">
-                            <h3 class="review-title">Documentation</h3>
-                            <p class="review-severity">Severity: MEDIUM</p>
+                        <div class="flaw-preview">
+                            <h3 class="flaw-preview">Documentation</h3>
+                            <p class="flaw-preview">Severity: MEDIUM</p>
                             
-                            <h4 class="subsection-header">Checklist</h4>
-                            <ul class="checklist">
-                                <li>Public APIs have docstrings</li>
-                                <li>Complex logic has explanatory comments</li>
-                                <li>README updated for new features</li>
-                                <li>Architecture decisions documented (ADRs)</li>
-                            </ul>
+                            <h4 class="level1-subsection-title">level1-check-icon-error</h4>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Public APIs have docstrings</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Complex logic has explanatory comments</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">README updated for new features</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Architecture decisions documented (ADRs)</div>
+    </div>
+</div>
                         </div>
                     </div>
                 </div>
@@ -459,14 +724,14 @@
                 <div class="tab-content" id="examples">
                     <div class="content-section">
                         <h2 class="section-header">SQL Injection Prevention - Python</h2>
-                        <h3 class="example-header">❌ Security Violation</h3>
-                        <pre class="code-block"><code class="language-python"># ❌ CRITICAL: SQL injection vulnerability
+                        <h3 class="command-example">❌ Security Violation</h3>
+                        <pre class="code-block"><code class="language-badge"># ❌ CRITICAL: SQL injection vulnerability
 user_id = request.args.get('user_id')
 query = f"SELECT * FROM users WHERE id = {user_id}"
 cursor.execute(query)  # Attacker can inject: 1 OR 1=1</code></pre>
 
-                        <h3 class="example-header">✅ Secure Code</h3>
-                        <pre class="code-block"><code class="language-python"># ✅ Parameterized query prevents injection
+                        <h3 class="command-example">✅ Secure Code</h3>
+                        <pre class="code-block"><code class="language-badge"># ✅ Parameterized query prevents injection
 user_id = request.args.get('user_id')
 query = "SELECT * FROM users WHERE id = ?"
 cursor.execute(query, (user_id,))  # Safe!</code></pre>
@@ -474,8 +739,8 @@ cursor.execute(query, (user_id,))  # Safe!</code></pre>
 
                     <div class="content-section">
                         <h2 class="section-header">Weak Cryptography - Python</h2>
-                        <h3 class="example-header">❌ Security Violation</h3>
-                        <pre class="code-block"><code class="language-python"># ❌ HIGH: Weak hashing, insecure random
+                        <h3 class="command-example">❌ Security Violation</h3>
+                        <pre class="code-block"><code class="language-badge"># ❌ HIGH: Weak hashing, insecure random
 import hashlib
 import random
 
@@ -485,8 +750,8 @@ password_hash = hashlib.md5(password.encode()).hexdigest()
 # random is NOT cryptographically secure
 token = ''.join(random.choice(string.ascii_letters) for _ in range(32))</code></pre>
 
-                        <h3 class="example-header">✅ Secure Code</h3>
-                        <pre class="code-block"><code class="language-python"># ✅ Strong hashing, secure random
+                        <h3 class="command-example">✅ Secure Code</h3>
+                        <pre class="code-block"><code class="language-badge"># ✅ Strong hashing, secure random
 import secrets
 from werkzeug.security import generate_password_hash
 
@@ -499,15 +764,15 @@ token = secrets.token_urlsafe(32)</code></pre>
 
                     <div class="content-section">
                         <h2 class="section-header">N+1 Query Problem - Python</h2>
-                        <h3 class="example-header">❌ Performance Issue</h3>
-                        <pre class="code-block"><code class="language-python"># ❌ HIGH: N+1 query problem
+                        <h3 class="command-example">❌ Performance Issue</h3>
+                        <pre class="code-block"><code class="language-badge"># ❌ HIGH: N+1 query problem
 # 1 query to get users + N queries for orders
 users = User.query.all()  # 1 query
 for user in users:
     print(user.orders)  # N queries (1 per user!)</code></pre>
 
-                        <h3 class="example-header">✅ Optimized Code</h3>
-                        <pre class="code-block"><code class="language-python"># ✅ Eager loading - single query
+                        <h3 class="command-example">✅ Optimized Code</h3>
+                        <pre class="code-block"><code class="language-badge"># ✅ Eager loading - single query
 from sqlalchemy.orm import joinedload
 
 # 1 query total with JOIN
@@ -518,35 +783,35 @@ for user in users:
 
                     <div class="content-section">
                         <h2 class="section-header">Inefficient Algorithm - Python</h2>
-                        <h3 class="example-header">❌ Performance Issue</h3>
-                        <pre class="code-block"><code class="language-python"># ❌ MEDIUM: O(n²) complexity
+                        <h3 class="command-example">❌ Performance Issue</h3>
+                        <pre class="code-block"><code class="language-badge"># ❌ MEDIUM: O(n²) complexity
 matches = []
 for i in range(len(list1)):
     for j in range(len(list2)):
         if list1[i] == list2[j]:  # Nested loop is slow!
             matches.append(list1[i])</code></pre>
 
-                        <h3 class="example-header">✅ Optimized Code</h3>
-                        <pre class="code-block"><code class="language-python"># ✅ O(n) complexity with set
+                        <h3 class="command-example">✅ Optimized Code</h3>
+                        <pre class="code-block"><code class="language-badge"># ✅ O(n) complexity with set
 set2 = set(list2)  # O(n) to build set
 matches = [x for x in list1 if x in set2]  # O(n) lookup</code></pre>
                     </div>
 
                     <div class="content-section">
                         <h2 class="section-header">Resource Leak - Python & C#</h2>
-                        <h3 class="example-header">❌ Resource Leak</h3>
-                        <pre class="code-block"><code class="language-python"># ❌ Python: File not closed
+                        <h3 class="command-example">❌ Resource Leak</h3>
+                        <pre class="code-block"><code class="language-badge"># ❌ Python: File not closed
 f = open('file.txt')
 data = f.read()
 # f.close() missing! File handle leaks</code></pre>
 
-                        <h3 class="example-header">✅ Proper Resource Management</h3>
-                        <pre class="code-block"><code class="language-python"># ✅ Python: Context manager auto-closes
+                        <h3 class="command-example">✅ Proper Resource Management</h3>
+                        <pre class="code-block"><code class="language-badge"># ✅ Python: Context manager auto-closes
 with open('file.txt') as f:
     data = f.read()
 # File automatically closed</code></pre>
 
-                        <pre class="code-block"><code class="language-csharp">// ✅ C#: using statement disposes
+                        <pre class="code-block"><code class="language-badge">// ✅ C#: using statement disposes
 using (var conn = new SqlConnection(connectionString))
 {
     conn.Open();
@@ -556,8 +821,8 @@ using (var conn = new SqlConnection(connectionString))
 
                     <div class="content-section">
                         <h2 class="section-header">Poor Naming - Python</h2>
-                        <h3 class="example-header">❌ Readability Issue</h3>
-                        <pre class="code-block"><code class="language-python"># ❌ MEDIUM: Unclear names
+                        <h3 class="command-example">❌ Readability Issue</h3>
+                        <pre class="code-block"><code class="language-badge"># ❌ MEDIUM: Unclear names
 def proc(d):  # What does this do?
     r = []
     for i in d:
@@ -565,8 +830,8 @@ def proc(d):  # What does this do?
             r.append(i[0])
     return r</code></pre>
 
-                        <h3 class="example-header">✅ Clear Naming</h3>
-                        <pre class="code-block"><code class="language-python"># ✅ Self-documenting code
+                        <h3 class="command-example">✅ Clear Naming</h3>
+                        <pre class="code-block"><code class="language-badge"># ✅ Self-documenting code
 def filter_high_value_transactions(transactions):
     high_value_ids = []
     for transaction in transactions:
@@ -577,15 +842,15 @@ def filter_high_value_transactions(transactions):
 
                     <div class="content-section">
                         <h2 class="section-header">Poor Error Handling - Python</h2>
-                        <h3 class="example-header">❌ Maintainability Issue</h3>
-                        <pre class="code-block"><code class="language-python"># ❌ HIGH: Swallowing exceptions
+                        <h3 class="command-example">❌ Maintainability Issue</h3>
+                        <pre class="code-block"><code class="language-badge"># ❌ HIGH: Swallowing exceptions
 try:
     result = risky_operation()
 except:  # What went wrong? No one knows!
     pass</code></pre>
 
-                        <h3 class="example-header">✅ Proper Error Handling</h3>
-                        <pre class="code-block"><code class="language-python"># ✅ Specific exceptions with context
+                        <h3 class="command-example">✅ Proper Error Handling</h3>
+                        <pre class="code-block"><code class="language-badge"># ✅ Specific exceptions with context
 try:
     result = risky_operation()
 except ValueError as e:
@@ -600,15 +865,15 @@ except ConnectionError as e:
                 <div class="tab-content" id="cortex">
                     <div class="content-section">
                         <h2 class="section-header">Automated Code Review in CORTEX</h2>
-                        <p class="section-text">
+                        <p class="level2-section-title-green">
                             CORTEX provides intelligent code review agents that automatically scan pull requests for security, performance, readability, and maintainability issues.
                         </p>
                     </div>
 
                     <div class="content-section">
                         <h2 class="section-header">Code Review Orchestrator</h2>
-                        <div class="cortex-example">
-                            <pre class="code-block"><code class="language-python"># CORTEX Code Review System
+                        <div class="built-with-cortex-panel">
+                            <pre class="code-block"><code class="language-badge"># CORTEX Code Review System
 class CodeReviewOrchestrator:
     def review_pull_request(self, pr_id: str) -> ReviewResult:
         results = []
@@ -652,8 +917,8 @@ class CodeReviewOrchestrator:
 
                     <div class="content-section">
                         <h2 class="section-header">Security Review Agent</h2>
-                        <div class="cortex-example">
-                            <pre class="code-block"><code class="language-python"># Automated Security Scanning
+                        <div class="built-with-cortex-panel">
+                            <pre class="code-block"><code class="language-badge"># Automated Security Scanning
 class SecurityReviewAgent:
     def scan(self, pr_id: str) -> List[SecurityIssue]:
         issues = []
@@ -694,8 +959,8 @@ class SecurityReviewAgent:
 
                     <div class="content-section">
                         <h2 class="section-header">Performance Review Agent</h2>
-                        <div class="cortex-example">
-                            <pre class="code-block"><code class="language-python"># Automated Performance Analysis
+                        <div class="built-with-cortex-panel">
+                            <pre class="code-block"><code class="language-badge"># Automated Performance Analysis
 class PerformanceReviewAgent:
     def scan(self, pr_id: str) -> List[PerformanceIssue]:
         issues = []
@@ -757,7 +1022,7 @@ class PerformanceReviewAgent:
 
                     <div class="content-section">
                         <h2 class="section-header">Related Knowledge Files</h2>
-                        <div class="related-files">
+                        <div class="level1-relationship-grid">
                             <a href="clean-code.html" class="related-file-card">
                                 <h3 class="related-file-title">Clean Code</h3>
                                 <p class="related-file-desc">Principles that guide code quality during reviews</p>
@@ -781,15 +1046,15 @@ class PerformanceReviewAgent:
         </section>
     </main>
 
-    <footer class="footer-glass">
+    <footer class="footer-bottom">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3 class="footer-title">CORTEX Knowledge</h3>
-                    <p class="footer-text">Part of the CORTEX AI Assistant ecosystem</p>
+                    <h3 class="footer-bottom">CORTEX Knowledge</h3>
+                    <p class="footer-bottom">Part of the CORTEX AI Assistant ecosystem</p>
                 </div>
                 <div class="footer-section">
-                    <h3 class="footer-title">Quick Links</h3>
+                    <h3 class="footer-bottom">Quick Links</h3>
                     <ul class="footer-links">
                         <li><a href="../../index.html" class="footer-link">Knowledge Library</a></li>
                         <li><a href="../../engineering.html" class="footer-link">Engineering Category</a></li>
@@ -797,9 +1062,9 @@ class PerformanceReviewAgent:
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h3 class="footer-title">Tools</h3>
-                    <p class="footer-text">Bandit • Semgrep • SonarQube</p>
-                    <p class="footer-text">Radon • McCabe • cProfile</p>
+                    <h3 class="footer-bottom">Tools</h3>
+                    <p class="footer-bottom">Bandit • Semgrep • SonarQube</p>
+                    <p class="footer-bottom">Radon • McCabe • cProfile</p>
                 </div>
             </div>
             <div class="footer-bottom">

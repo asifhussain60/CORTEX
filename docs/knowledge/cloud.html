@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Cloud Computing - AWS, Azure, GCP, serverless, and cloud-native architecture">
@@ -8,6 +33,7 @@
     <meta name="author" content="Asif Hussain">
     <title>Cloud Computing | CORTEX Knowledge</title>
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
@@ -25,14 +51,14 @@
     <section class="hero" id="main-content">
         <h1 class="hero-title">☁️ Cloud Computing</h1>
         <p class="hero-subtitle">AWS, Azure, GCP, Serverless, and Cloud-Native Architecture</p>
-        <div class="file-metadata">
+        <div class="code-file">
             <span class="metadata-item">🌐 Cloud Platforms</span>
             <span class="metadata-item">🚀 Serverless</span>
             <span class="metadata-item">📅 Updated: Dec 2025</span>
         </div>
     </section>
 
-    <section class="section file-content">
+    <section class="section code-file">
         <div class="container">
             <!-- Overview -->
             <div id="overview" class="content-section">
@@ -42,12 +68,20 @@
                     
                     <div class="info-box info-box-primary">
                         <strong>Cloud Benefits:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Elasticity:</strong> Scale resources up or down dynamically</li>
-                            <li><strong>Cost Efficiency:</strong> Pay only for what you use</li>
-                            <li><strong>Global Reach:</strong> Deploy worldwide in minutes</li>
-                            <li><strong>Reliability:</strong> Built-in redundancy and failover</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Elasticity:</strong> Scale resources up or down dynamically</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Cost Efficiency:</strong> Pay only for what you use</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Global Reach:</strong> Deploy worldwide in minutes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Reliability:</strong> Built-in redundancy and failover</div>
+    </div>
+</div>
                     </div>
 
                     <h3>Cloud Service Models</h3>
@@ -146,12 +180,20 @@ graph TB
                             <h3>EC2</h3>
                             <p class="framework-subtitle">Elastic Compute Cloud</p>
                             <h4>Features</h4>
-                            <ul>
-                                <li>Virtual servers in the cloud</li>
-                                <li>Multiple instance types</li>
-                                <li>Auto Scaling groups</li>
-                                <li>Spot instances for cost savings</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Virtual servers in the cloud</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Multiple instance types</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Auto Scaling groups</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Spot instances for cost savings</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -159,12 +201,20 @@ graph TB
                             <h3>S3</h3>
                             <p class="framework-subtitle">Simple Storage Service</p>
                             <h4>Features</h4>
-                            <ul>
-                                <li>Object storage with 99.999999999% durability</li>
-                                <li>Storage classes (Standard, IA, Glacier)</li>
-                                <li>Versioning and lifecycle policies</li>
-                                <li>Static website hosting</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Object storage with 99.999999999% durability</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Storage classes (Standard, IA, Glacier)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Versioning and lifecycle policies</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Static website hosting</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
@@ -172,12 +222,20 @@ graph TB
                             <h3>Lambda</h3>
                             <p class="framework-subtitle">Serverless Compute</p>
                             <h4>Features</h4>
-                            <ul>
-                                <li>Run code without servers</li>
-                                <li>Event-driven execution</li>
-                                <li>Automatic scaling</li>
-                                <li>Pay per invocation</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Run code without servers</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Event-driven execution</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Automatic scaling</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Pay per invocation</div>
+    </div>
+</div>
                         </div>
                     </div>
                 </div>
@@ -194,36 +252,60 @@ graph TB
                             <span class="framework-panel-icon">🔄</span>
                             <h3>Event-Driven</h3>
                             <h4>Triggers</h4>
-                            <ul>
-                                <li>HTTP requests (API Gateway)</li>
-                                <li>File uploads (S3 events)</li>
-                                <li>Database changes (DynamoDB Streams)</li>
-                                <li>Scheduled tasks (CloudWatch Events)</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">HTTP requests (API Gateway)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">File uploads (S3 events)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Database changes (DynamoDB Streams)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Scheduled tasks (CloudWatch Events)</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🌐</span>
                             <h3>API Backend</h3>
                             <h4>Architecture</h4>
-                            <ul>
-                                <li>API Gateway + Lambda</li>
-                                <li>REST or GraphQL APIs</li>
-                                <li>JWT authentication</li>
-                                <li>DynamoDB for persistence</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">API Gateway + Lambda</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">REST or GraphQL APIs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">JWT authentication</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">DynamoDB for persistence</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🔄</span>
                             <h3>Stream Processing</h3>
                             <h4>Use Cases</h4>
-                            <ul>
-                                <li>Real-time analytics</li>
-                                <li>Log processing</li>
-                                <li>IoT data ingestion</li>
-                                <li>ETL pipelines</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Real-time analytics</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Log processing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">IoT data ingestion</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">ETL pipelines</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -253,22 +335,38 @@ sequenceDiagram
 
                     <div class="info-box info-box-success">
                         <strong>Serverless Benefits:</strong>
-                        <ul class="feature-list">
-                            <li><strong>No Server Management:</strong> Focus on code, not infrastructure</li>
-                            <li><strong>Auto Scaling:</strong> Handle traffic spikes automatically</li>
-                            <li><strong>Cost Efficient:</strong> Pay only for execution time</li>
-                            <li><strong>Faster Development:</strong> Reduced operational overhead</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>No Server Management:</strong> Focus on code, not infrastructure</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Auto Scaling:</strong> Handle traffic spikes automatically</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Cost Efficient:</strong> Pay only for execution time</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Faster Development:</strong> Reduced operational overhead</div>
+    </div>
+</div>
                     </div>
 
                     <div class="info-box info-box-warning">
                         <strong>Serverless Challenges:</strong>
-                        <ul class="feature-list">
-                            <li><strong>Cold Starts:</strong> Initial invocation latency</li>
-                            <li><strong>Execution Limits:</strong> Time and memory constraints</li>
-                            <li><strong>Vendor Lock-In:</strong> Platform-specific APIs</li>
-                            <li><strong>Debugging:</strong> Distributed tracing complexity</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Cold Starts:</strong> Initial invocation latency</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Execution Limits:</strong> Time and memory constraints</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Vendor Lock-In:</strong> Platform-specific APIs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Debugging:</strong> Distributed tracing complexity</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -284,36 +382,60 @@ sequenceDiagram
                             <span class="framework-panel-icon">📦</span>
                             <h3>Containerization</h3>
                             <h4>Benefits</h4>
-                            <ul>
-                                <li>Consistent environments</li>
-                                <li>Portable across clouds</li>
-                                <li>Efficient resource usage</li>
-                                <li>Fast deployments</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Consistent environments</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Portable across clouds</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Efficient resource usage</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Fast deployments</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🔄</span>
                             <h3>Microservices</h3>
                             <h4>Characteristics</h4>
-                            <ul>
-                                <li>Independent services</li>
-                                <li>API communication</li>
-                                <li>Separate databases</li>
-                                <li>Autonomous teams</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Independent services</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">API communication</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Separate databases</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Autonomous teams</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🔁</span>
                             <h3>CI/CD</h3>
                             <h4>Pipeline Stages</h4>
-                            <ul>
-                                <li>Automated testing</li>
-                                <li>Container builds</li>
-                                <li>Progressive deployment</li>
-                                <li>Automated rollback</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Automated testing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Container builds</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Progressive deployment</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Automated rollback</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -322,34 +444,58 @@ sequenceDiagram
                         <div class="framework-panel">
                             <span class="framework-panel-icon">1️⃣</span>
                             <h3>Factors 1-4</h3>
-                            <ul>
-                                <li><strong>Codebase:</strong> One codebase, many deploys</li>
-                                <li><strong>Dependencies:</strong> Explicitly declare</li>
-                                <li><strong>Config:</strong> Store in environment</li>
-                                <li><strong>Backing Services:</strong> Treat as attached resources</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Codebase:</strong> One codebase, many deploys</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Dependencies:</strong> Explicitly declare</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Config:</strong> Store in environment</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Backing Services:</strong> Treat as attached resources</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">2️⃣</span>
                             <h3>Factors 5-8</h3>
-                            <ul>
-                                <li><strong>Build, Release, Run:</strong> Separate stages</li>
-                                <li><strong>Processes:</strong> Stateless execution</li>
-                                <li><strong>Port Binding:</strong> Export via port</li>
-                                <li><strong>Concurrency:</strong> Scale via process model</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Build, Release, Run:</strong> Separate stages</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Processes:</strong> Stateless execution</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Port Binding:</strong> Export via port</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Concurrency:</strong> Scale via process model</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">3️⃣</span>
                             <h3>Factors 9-12</h3>
-                            <ul>
-                                <li><strong>Disposability:</strong> Fast startup/shutdown</li>
-                                <li><strong>Dev/Prod Parity:</strong> Keep similar</li>
-                                <li><strong>Logs:</strong> Treat as event streams</li>
-                                <li><strong>Admin Processes:</strong> Run as one-off</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Disposability:</strong> Fast startup/shutdown</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Dev/Prod Parity:</strong> Keep similar</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Logs:</strong> Treat as event streams</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Admin Processes:</strong> Run as one-off</div>
+    </div>
+</div>
                         </div>
                     </div>
                 </div>
@@ -366,36 +512,60 @@ sequenceDiagram
                             <span class="framework-panel-icon">💻</span>
                             <h3>Right-Sizing</h3>
                             <h4>Actions</h4>
-                            <ul>
-                                <li>Monitor resource utilization</li>
-                                <li>Match instance to workload</li>
-                                <li>Use burstable instances</li>
-                                <li>Downsize over-provisioned resources</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Monitor resource utilization</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Match instance to workload</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use burstable instances</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Downsize over-provisioned resources</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">📅</span>
                             <h3>Reserved Capacity</h3>
                             <h4>Commitment Options</h4>
-                            <ul>
-                                <li>1-year or 3-year terms</li>
-                                <li>Up to 75% savings</li>
-                                <li>Reserved Instances (AWS)</li>
-                                <li>Committed Use Discounts (GCP)</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">1-year or 3-year terms</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Up to 75% savings</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Reserved Instances (AWS)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Committed Use Discounts (GCP)</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">⏰</span>
                             <h3>Spot Instances</h3>
                             <h4>Best For</h4>
-                            <ul>
-                                <li>Batch processing</li>
-                                <li>CI/CD workers</li>
-                                <li>Big data analytics</li>
-                                <li>90% cost reduction</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Batch processing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">CI/CD workers</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Big data analytics</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">90% cost reduction</div>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -448,23 +618,39 @@ sequenceDiagram
                         <div class="framework-panel">
                             <span class="framework-panel-icon">📖</span>
                             <h3>Essential Books</h3>
-                            <ul>
-                                <li><strong>Cloud Native Patterns</strong> - Cornelia Davis</li>
-                                <li><strong>Architecting the Cloud</strong> - Michael J. Kavis</li>
-                                <li><strong>Serverless Architectures on AWS</strong> - Peter Sbarski</li>
-                                <li><strong>The Phoenix Project</strong> - Gene Kim</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Cloud Native Patterns</strong> - Cornelia Davis</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Architecting the Cloud</strong> - Michael J. Kavis</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Serverless Architectures on AWS</strong> - Peter Sbarski</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>The Phoenix Project</strong> - Gene Kim</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">
                             <span class="framework-panel-icon">🎓</span>
                             <h3>Certifications</h3>
-                            <ul>
-                                <li><strong>AWS:</strong> Solutions Architect, Developer</li>
-                                <li><strong>Azure:</strong> Administrator, Developer</li>
-                                <li><strong>GCP:</strong> Cloud Engineer, Architect</li>
-                                <li><strong>Kubernetes:</strong> CKA, CKAD, CKS</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>AWS:</strong> Solutions Architect, Developer</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Azure:</strong> Administrator, Developer</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>GCP:</strong> Cloud Engineer, Architect</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Kubernetes:</strong> CKA, CKAD, CKS</div>
+    </div>
+</div>
                         </div>
 
                         <div class="framework-panel">

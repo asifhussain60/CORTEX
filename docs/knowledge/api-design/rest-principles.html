@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="REST Principles & HATEOAS - API Design Learning Module">
@@ -8,8 +33,11 @@
     <meta name="author" content="Asif Hussain">
     <title>REST Principles & HATEOAS | CORTEX Learning Hub</title>
     <link rel="stylesheet" href="../../assets/css/main.css?v=2026-01-02">
-    <link rel="stylesheet" href="../../assets/css/learning-hub.css?v=2026-01-02">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
+    
+    <link rel="stylesheet" href="../..../..../..../..../..../../assets/css/generated-classes.css"><link rel="stylesheet" href="../../assets/css/learning-hub.css?v=2026-01-02">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/editor/editor.main.css">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
@@ -18,14 +46,39 @@
 
     <!-- Header Navigation -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../../index.html" class="nav-link">
-                    <span class="nav-icon">🏠</span> Home
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../../index.html" class="nav-link" mobile-nav-optimized>
+                    <span class="nav-content" mobile-nav-optimized>🏠</span> Home
                 </a>
-                <span class="nav-separator">›</span>
-                <a href="../api-design-hub.html" class="nav-link">
-                    <span class="nav-icon">🌐</span> API Design
+                <span class="nav-content" mobile-nav-optimized>›</span>
+                <a href="../api-design-hub.html" class="nav-link" mobile-nav-optimized>
+                    <span class="nav-content" mobile-nav-optimized>🌐</span> API Design
                 </a>
             </nav>
         </div>
@@ -36,7 +89,7 @@
         <div class="module-header">
             <div class="breadcrumb">
                 <span class="difficulty-badge intermediate">Intermediate</span>
-                <span style="color: var(--text-secondary);">Module 2 of 4</span>
+                <span class="inline-fix-9">Module 2 of 4</span>
             </div>
             <h1 class="hero-title">🌐 REST Principles & HATEOAS</h1>
             <p class="hero-subtitle">Interactive learning with quizzes, code playgrounds, and challenges</p>
@@ -52,28 +105,38 @@
     <!-- Main Content -->
     <div class="container">
         <!-- Learning Objectives -->
-        <section class="glass-card" style="margin-top: var(--spacing-2xl);">
+        <section class="glass-card" class="inline-fix-14">
             <h2>🎓 Learning Objectives</h2>
-            <ul class="objective-list">
-                <li>Understand Richardson Maturity Model levels</li>
-                <li>Implement HATEOAS (Hypermedia as the Engine of Application State)</li>
-                <li>Design self-documenting APIs with hypermedia links</li>
-                <li>Apply REST constraints in real-world scenarios</li>
-                <li>Handle resource relationships and nested endpoints</li>
-            </ul>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Understand Richardson Maturity Model levels</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Implement HATEOAS (Hypermedia as the Engine of Application State)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Design self-documenting APIs with hypermedia links</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Apply REST constraints in real-world scenarios</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Handle resource relationships and nested endpoints</div>
+    </div>
+</div>
         </section>
 
         <!-- Interactive Content Placeholder -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>📊 Richardson Maturity Model</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 The Richardson Maturity Model describes four levels of REST API maturity. Understanding these levels helps you design better APIs.
             </p>
             
             <!-- Interactive D3.js Visualization -->
-            <div id="rmm-visualization" style="width: 100%; height: 500px; margin: var(--spacing-xl) 0;"></div>
+            <div id="rmm-visualization" class="inline-fix-132"></div>
             
-            <div class="mermaid-container" style="margin-top: var(--spacing-2xl);">
+            <div class="mermaid-container" class="inline-fix-14">
                 <pre class="mermaid">
 graph TB
     L0["Level 0: The Swamp of POX<br/>(Plain Old XML)"]
@@ -106,9 +169,9 @@ graph TB
         </section>
 
         <!-- HATEOAS Deep Dive -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🔗 HATEOAS: Hypermedia as the Engine of Application State</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 HATEOAS is the constraint that distinguishes a true REST API. Clients discover available actions through hypermedia links.
             </p>
             
@@ -130,52 +193,60 @@ sequenceDiagram
                 </pre>
             </div>
             
-            <div style="margin-top: var(--spacing-xl); padding: var(--spacing-lg); background: rgba(123, 97, 255, 0.1); border-radius: 8px; border-left: 4px solid var(--hub-primary);">
-                <h4 style="color: var(--hub-primary); margin-bottom: var(--spacing-md);">💡 Key Benefits of HATEOAS</h4>
-                <ul style="color: var(--text-secondary);">
-                    <li><strong>Decoupling:</strong> Clients don't need to hardcode URLs</li>
-                    <li><strong>Discoverability:</strong> Available actions are self-documented</li>
-                    <li><strong>Evolvability:</strong> Server can change URLs without breaking clients</li>
-                    <li><strong>State Transitions:</strong> Links guide clients through workflows</li>
-                </ul>
+            <div class="inline-fix-228">
+                <h4 class="inline-fix-80">💡 Key Benefits of HATEOAS</h4>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Decoupling:</strong> Clients don't need to hardcode URLs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Discoverability:</strong> Available actions are self-documented</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Evolvability:</strong> Server can change URLs without breaking clients</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>State Transitions:</strong> Links guide clients through workflows</div>
+    </div>
+</div>
             </div>
         </section>
 
         <!-- REST Constraints -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🏛️ Six REST Constraints</h2>
-            <div class="constraints-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--spacing-lg); margin-top: var(--spacing-lg);">
-                <div style="padding: var(--spacing-lg); background: rgba(26, 31, 58, 0.5); border-radius: 8px; border: 1px solid var(--module-border);">
-                    <h4 style="color: var(--hub-primary);">1. Client-Server</h4>
-                    <p style="color: var(--text-secondary);">Separation of concerns between UI and data storage</p>
+            <div class="constraints-grid" class="inline-fix-275">
+                <div class="inline-fix-69">
+                    <h4 class="inline-fix-10">1. Client-Server</h4>
+                    <p class="inline-fix-9">Separation of concerns between UI and data storage</p>
                 </div>
-                <div style="padding: var(--spacing-lg); background: rgba(26, 31, 58, 0.5); border-radius: 8px; border: 1px solid var(--module-border);">
-                    <h4 style="color: var(--hub-primary);">2. Stateless</h4>
-                    <p style="color: var(--text-secondary);">Each request contains all necessary information</p>
+                <div class="inline-fix-69">
+                    <h4 class="inline-fix-10">2. Stateless</h4>
+                    <p class="inline-fix-9">Each request contains all necessary information</p>
                 </div>
-                <div style="padding: var(--spacing-lg); background: rgba(26, 31, 58, 0.5); border-radius: 8px; border: 1px solid var(--module-border);">
-                    <h4 style="color: var(--hub-primary);">3. Cacheable</h4>
-                    <p style="color: var(--text-secondary);">Responses explicitly indicate cacheability</p>
+                <div class="inline-fix-69">
+                    <h4 class="inline-fix-10">3. Cacheable</h4>
+                    <p class="inline-fix-9">Responses explicitly indicate cacheability</p>
                 </div>
-                <div style="padding: var(--spacing-lg); background: rgba(26, 31, 58, 0.5); border-radius: 8px; border: 1px solid var(--module-border);">
-                    <h4 style="color: var(--hub-primary);">4. Uniform Interface</h4>
-                    <p style="color: var(--text-secondary);">Consistent resource identification and manipulation</p>
+                <div class="inline-fix-69">
+                    <h4 class="inline-fix-10">4. Uniform Interface</h4>
+                    <p class="inline-fix-9">Consistent resource identification and manipulation</p>
                 </div>
-                <div style="padding: var(--spacing-lg); background: rgba(26, 31, 58, 0.5); border-radius: 8px; border: 1px solid var(--module-border);">
-                    <h4 style="color: var(--hub-primary);">5. Layered System</h4>
-                    <p style="color: var(--text-secondary);">Client cannot tell if connected directly to end server</p>
+                <div class="inline-fix-69">
+                    <h4 class="inline-fix-10">5. Layered System</h4>
+                    <p class="inline-fix-9">Client cannot tell if connected directly to end server</p>
                 </div>
-                <div style="padding: var(--spacing-lg); background: rgba(26, 31, 58, 0.5); border-radius: 8px; border: 1px solid var(--module-border);">
-                    <h4 style="color: var(--hub-primary);">6. Code-On-Demand (Optional)</h4>
-                    <p style="color: var(--text-secondary);">Server can extend client functionality with code</p>
+                <div class="inline-fix-69">
+                    <h4 class="inline-fix-10">6. Code-On-Demand (Optional)</h4>
+                    <p class="inline-fix-9">Server can extend client functionality with code</p>
                 </div>
             </div>
         </section>
 
         <!-- Code Playground -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>💻 Code Playground: Implement HATEOAS</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 Build a HATEOAS-compliant API that includes hypermedia links in responses.
             </p>
             
@@ -186,11 +257,11 @@ sequenceDiagram
                 </div>
                 
                 <div class="tab-content active" id="python">
-                    <div id="editor-python" style="height: 450px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                    <div id="editor-python" class="inline-fix-26"></div>
                 </div>
                 
                 <div class="tab-content" id="javascript">
-                    <div id="editor-javascript" style="height: 450px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                    <div id="editor-javascript" class="inline-fix-26"></div>
                 </div>
                 
                 <button class="run-code-btn" id="run-code">
@@ -205,75 +276,83 @@ sequenceDiagram
         </section>
 
         <!-- Interactive Content Placeholder -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>📚 Module Content</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 This module includes:
             </p>
-            <ul style="list-style-type: none; padding-left: 0;">
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Interactive Visualizations:</strong> D3.js charts and Mermaid diagrams
-                </li>
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Code Playgrounds:</strong> Hands-on Monaco editor with live execution
-                </li>
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Knowledge Checks:</strong> Interactive quizzes with instant feedback
-                </li>
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Real-World Examples:</strong> Production-grade code samples
-                </li>
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Progressive Challenges:</strong> Apply what you've learned
-                </li>
-            </ul>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">✅ <strong>Interactive Visualizations:</strong> D3.js charts and Mermaid diagrams</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ <strong>Code Playgrounds:</strong> Hands-on Monaco editor with live execution</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ <strong>Knowledge Checks:</strong> Interactive quizzes with instant feedback</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ <strong>Real-World Examples:</strong> Production-grade code samples</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ <strong>Progressive Challenges:</strong> Apply what you've learned</div>
+    </div>
+</div>
         </section>
 
         <!-- Interactive Quiz Placeholder -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>✅ Knowledge Check: REST & HATEOAS Quiz</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 Test your understanding with 10 questions. Instant feedback provided!
             </p>
             <div class="quiz-container" id="quiz">
                 <!-- Quiz will be dynamically generated -->
             </div>
-            <div class="quiz-results" id="quiz-results" style="display: none;">
+            <div class="quiz-results" id="quiz-results" class="inline-fix-48">
                 <h3 id="score-display"></h3>
                 <div id="feedback-summary"></div>
-                <button class="retry-btn" id="retry-quiz" style="margin-top: var(--spacing-lg); padding: var(--spacing-md) var(--spacing-xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 8px; cursor: pointer;">
+                <button class="retry-btn" id="retry-quiz" class="inline-fix-77">
                     🔄 Retry Quiz
                 </button>
             </div>
         </section>
 
         <!-- Challenge Section -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🏆 Progressive Challenge</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 Design a complete order management API with HATEOAS that supports:
             </p>
-            <ul style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
-                <li>Order creation with hypermedia links to payment and shipping</li>
-                <li>State transitions (pending → paid → shipped → delivered)</li>
-                <li>Dynamic links based on current order state</li>
-                <li>Proper HTTP status codes for each operation</li>
-            </ul>
-            <div id="challenge-hint" style="padding: var(--spacing-lg); background: rgba(251, 191, 36, 0.1); border-radius: 8px; border-left: 4px solid #fbbf24; margin-bottom: var(--spacing-lg); display: none;">
-                <h4 style="color: #fbbf24; margin-bottom: var(--spacing-sm);">💡 Hint</h4>
-                <p style="color: var(--text-secondary);">
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Order creation with hypermedia links to payment and shipping</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">State transitions (pending → paid → shipped → delivered)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Dynamic links based on current order state</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Proper HTTP status codes for each operation</div>
+    </div>
+</div>
+            <div id="challenge-hint" class="inline-fix-135">
+                <h4 class="inline-fix-65">💡 Hint</h4>
+                <p class="inline-fix-9">
                     Start with defining the Order resource with id, status, items, and total. 
                     Then add conditional _links based on status (e.g., only show "cancel" link if status is "pending").
                 </p>
             </div>
-            <button id="show-hint-btn" style="padding: var(--spacing-sm) var(--spacing-lg); background: rgba(251, 191, 36, 0.2); color: #fbbf24; border: 1px solid #fbbf24; border-radius: 8px; cursor: pointer; margin-right: var(--spacing-md);">
+            <button id="show-hint-btn" class="inline-fix-166">
                 💡 Show Hint
             </button>
-            <button id="show-solution-btn" style="padding: var(--spacing-sm) var(--spacing-lg); background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid #10b981; border-radius: 8px; cursor: pointer;">
+            <button id="show-solution-btn" class="inline-fix-102">
                 ✅ Show Solution
             </button>
-            <div id="challenge-solution" style="margin-top: var(--spacing-lg); display: none;">
-                <pre style="background: rgba(26, 31, 58, 0.8); padding: var(--spacing-lg); border-radius: 8px; overflow-x: auto; color: #e5e7eb;"><code>{
+            <div id="challenge-solution" class="inline-fix-74">
+                <pre class="inline-fix-71"><code>{
   "id": 456,
   "status": "pending",
   "items": [...],
@@ -301,9 +380,9 @@ sequenceDiagram
         </section>
 
         <!-- Next Steps -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🚀 Next Steps</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 You've completed REST Principles & HATEOAS! Continue your learning journey:
             </p>
             <div class="next-module-cards">
@@ -320,11 +399,11 @@ sequenceDiagram
     </div>
 
     <!-- Footer -->
-    <footer style="margin-top: var(--spacing-3xl); padding: var(--spacing-xl); text-align: center; color: var(--text-secondary);">
+    <footer class="inline-fix-17">
         <p>© 2026 Asif Hussain. All rights reserved.</p>
-        <p style="margin-top: var(--spacing-sm);">
-            <a href="../../index.html" style="color: var(--hub-primary);">Back to Home</a> • 
-            <a href="../api-design-hub.html" style="color: var(--hub-primary);">API Design Hub</a>
+        <p class="inline-fix-12">
+            <a href="../../index.html" class="inline-fix-10">Back to Home</a> • 
+            <a href="../api-design-hub.html" class="inline-fix-10">API Design Hub</a>
         </p>
     </footer>
 
@@ -654,22 +733,22 @@ console.log(JSON.stringify(user, null, 2));
         function renderQuiz() {
             const quizContainer = document.getElementById('quiz');
             quizContainer.innerHTML = quizQuestions.map((q, index) => `
-                <div class="quiz-question" style="margin-bottom: var(--spacing-2xl); padding: var(--spacing-lg); background: rgba(26, 31, 58, 0.5); border-radius: 8px; border: 1px solid var(--module-border);">
-                    <h4 style="color: var(--text-primary); margin-bottom: var(--spacing-md);">Question ${index + 1}: ${q.question}</h4>
+                <div class="quiz-question" class="inline-fix-56">
+                    <h4 class="inline-fix-180">Question ${index + 1}: ${q.question}</h4>
                     <div class="quiz-options">
                         ${q.options.map((option, optIndex) => `
-                            <label style="display: block; padding: var(--spacing-sm); margin: var(--spacing-xs) 0; background: rgba(123, 97, 255, 0.1); border-radius: 6px; cursor: pointer; transition: all 0.3s;">
-                                <input type="radio" name="question-${index}" value="${optIndex}" style="margin-right: var(--spacing-sm);">
-                                <span style="color: var(--text-secondary);">${option}</span>
+                            <label class="inline-fix-152">
+                                <input type="radio" name="question-${index}" value="${optIndex}" class="inline-fix-54">
+                                <span class="inline-fix-9">${option}</span>
                             </label>
                         `).join('')}
                     </div>
-                    <div class="question-feedback" id="feedback-${index}" style="display: none; margin-top: var(--spacing-md); padding: var(--spacing-md); border-radius: 6px;"></div>
+                    <div class="faq-question" id="feedback-${index}" class="inline-fix-55"></div>
                 </div>
             `).join('');
             
             quizContainer.innerHTML += `
-                <button id="submit-quiz" style="padding: var(--spacing-md) var(--spacing-2xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600;">
+                <button id="submit-quiz" class="inline-fix-62">
                     Submit Quiz
                 </button>
             `;
@@ -691,12 +770,12 @@ console.log(JSON.stringify(user, null, 2));
                         feedback.style.display = 'block';
                         feedback.style.background = 'rgba(16, 185, 129, 0.1)';
                         feedback.style.borderLeft = '4px solid #10b981';
-                        feedback.innerHTML = `<strong style="color: #10b981;">✅ Correct!</strong><br><span style="color: var(--text-secondary);">${q.explanation}</span>`;
+                        feedback.innerHTML = `<strong class="inline-fix-13">✅ Correct!</strong><br><span class="inline-fix-9">${q.explanation}</span>`;
                     } else {
                         feedback.style.display = 'block';
                         feedback.style.background = 'rgba(239, 68, 68, 0.1)';
                         feedback.style.borderLeft = '4px solid #ef4444';
-                        feedback.innerHTML = `<strong style="color: #ef4444;">❌ Incorrect</strong><br><span style="color: var(--text-secondary);">${q.explanation}</span>`;
+                        feedback.innerHTML = `<strong class="inline-fix-21">❌ Incorrect</strong><br><span class="inline-fix-9">${q.explanation}</span>`;
                     }
                 }
             });

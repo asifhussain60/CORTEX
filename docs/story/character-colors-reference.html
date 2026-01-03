@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CORTEX Character Colors - Quick Reference</title>
@@ -39,14 +64,14 @@
             background-clip: text;
         }
         
-        .subtitle {
+        .panel-subtitle-main {
             text-align: center;
             color: #9090ff;
             margin-bottom: 3rem;
             font-size: 1.1rem;
         }
         
-        .stats {
+        .stat-item {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
@@ -73,7 +98,7 @@
             font-size: 0.9rem;
         }
         
-        .characters {
+        .character-bio {
             display: grid;
             gap: 2rem;
         }
@@ -91,7 +116,7 @@
             box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
         }
         
-        .character-header {
+        .character-bio {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -105,7 +130,7 @@
             font-weight: bold;
         }
         
-        .character-count {
+        .character-bio {
             background: rgba(255, 255, 255, 0.1);
             padding: 0.5rem 1rem;
             border-radius: 20px;
@@ -113,14 +138,14 @@
             color: #9090ff;
         }
         
-        .character-info {
+        .character-bio {
             display: grid;
             grid-template-columns: auto 1fr;
             gap: 1rem;
             margin-bottom: 1.5rem;
         }
         
-        .info-label {
+        .level1-feature-icon-container--info {
             color: #9090ff;
             font-weight: 600;
         }
@@ -153,7 +178,7 @@
             font-size: 0.9rem;
         }
         
-        .verification-badge {
+        .severity-medium {
             display: inline-block;
             background: rgba(0, 212, 255, 0.2);
             color: #00d4ff;
@@ -167,13 +192,13 @@
 <body>
     <div class="container">
         <h1>🎨 CORTEX Character Colors</h1>
-        <p class="subtitle">Visual Dialogue Differentiation System</p>
+        <p class="panel-subtitle-main">Visual Dialogue Differentiation System</p>
         
         <div>
-            <span class="verification-badge">✅ VERIFIED - 99% Attribution Rate</span>
+            <span class="severity-medium">✅ VERIFIED - 99% Attribution Rate</span>
         </div>
         
-        <div class="stats">
+        <div class="stat-item">
             <div class="stat-card">
                 <div class="stat-number">1,250</div>
                 <div class="stat-label">Total Dialogues</div>
@@ -192,22 +217,22 @@
             </div>
         </div>
         
-        <div class="characters">
+        <div class="character-bio">
             <!-- Asif -->
             <div class="character-card">
-                <div class="character-header">
+                <div class="character-bio">
                     <div class="character-name">Asif Codenstein</div>
-                    <div class="character-count">1,213 dialogues (97.0%)</div>
+                    <div class="character-bio">1,213 dialogues (97.0%)</div>
                 </div>
-                <div class="character-info">
-                    <span class="info-label">Color:</span>
+                <div class="character-bio">
+                    <span class="level1-feature-icon-container--info">Color:</span>
                     <div>
                         <span class="color-swatch"></span>
                         <span>#00d4ff (Cyan)</span>
                     </div>
-                    <span class="info-label">Role:</span>
+                    <span class="level1-feature-icon-container--info">Role:</span>
                     <span>Protagonist, mad scientist, creator of CORTEX</span>
-                    <span class="info-label">Patterns:</span>
+                    <span class="level1-feature-icon-container--info">Patterns:</span>
                     <span>Asif said/muttered/observed, I/my/he/his, pronouns in narrative context</span>
                 </div>
                 <div class="sample-dialogue">
@@ -217,19 +242,19 @@
             
             <!-- Miss G -->
             <div class="character-card">
-                <div class="character-header">
+                <div class="character-bio">
                     <div class="character-name">Miss G</div>
-                    <div class="character-count">6 dialogues (0.5%)</div>
+                    <div class="character-bio">6 dialogues (0.5%)</div>
                 </div>
-                <div class="character-info">
-                    <span class="info-label">Color:</span>
+                <div class="character-bio">
+                    <span class="level1-feature-icon-container--info">Color:</span>
                     <div>
                         <span class="color-swatch"></span>
                         <span>#ba55d3 (Medium Orchid)</span>
                     </div>
-                    <span class="info-label">Role:</span>
+                    <span class="level1-feature-icon-container--info">Role:</span>
                     <span>Supportive inner voice, imaginary girlfriend construct</span>
-                    <span class="info-label">Patterns:</span>
+                    <span class="level1-feature-icon-container--info">Patterns:</span>
                     <span>Miss G said/asked, she/She/her/Her, voice over speaker</span>
                 </div>
                 <div class="sample-dialogue">
@@ -239,19 +264,19 @@
             
             <!-- CORTEX -->
             <div class="character-card">
-                <div class="character-header">
+                <div class="character-bio">
                     <div class="character-name">CORTEX</div>
-                    <div class="character-count">13 dialogues (1.0%)</div>
+                    <div class="character-bio">13 dialogues (1.0%)</div>
                 </div>
-                <div class="character-info">
-                    <span class="info-label">Color:</span>
+                <div class="character-bio">
+                    <span class="level1-feature-icon-container--info">Color:</span>
                     <div>
                         <span class="color-swatch"></span>
                         <span>#ff6b6b (Coral Red)</span>
                     </div>
-                    <span class="info-label">Role:</span>
+                    <span class="level1-feature-icon-container--info">Role:</span>
                     <span>System voice, the AI brain itself</span>
-                    <span class="info-label">Patterns:</span>
+                    <span class="level1-feature-icon-container--info">Patterns:</span>
                     <span>CORTEX, system voice, autonomous AI responses</span>
                 </div>
                 <div class="sample-dialogue">
@@ -261,19 +286,19 @@
             
             <!-- Copilot -->
             <div class="character-card">
-                <div class="character-header">
+                <div class="character-bio">
                     <div class="character-name">Copilot</div>
-                    <div class="character-count">Reserved (0 dialogues)</div>
+                    <div class="character-bio">Reserved (0 dialogues)</div>
                 </div>
-                <div class="character-info">
-                    <span class="info-label">Color:</span>
+                <div class="character-bio">
+                    <span class="level1-feature-icon-container--info">Color:</span>
                     <div>
                         <span class="color-swatch"></span>
                         <span>#7b61ff (Purple)</span>
                     </div>
-                    <span class="info-label">Role:</span>
+                    <span class="level1-feature-icon-container--info">Role:</span>
                     <span>AI assistant, GitHub Copilot enhanced with CORTEX</span>
-                    <span class="info-label">Patterns:</span>
+                    <span class="level1-feature-icon-container--info">Patterns:</span>
                     <span>Copilot said/responded, AI assistant attribution</span>
                 </div>
                 <div class="sample-dialogue">
@@ -283,19 +308,19 @@
             
             <!-- Client -->
             <div class="character-card">
-                <div class="character-header">
+                <div class="character-bio">
                     <div class="character-name">Client</div>
-                    <div class="character-count">6 dialogues (0.5%)</div>
+                    <div class="character-bio">6 dialogues (0.5%)</div>
                 </div>
-                <div class="character-info">
-                    <span class="info-label">Color:</span>
+                <div class="character-bio">
+                    <span class="level1-feature-icon-container--info">Color:</span>
                     <div>
                         <span class="color-swatch"></span>
                         <span>#ffb347 (Orange)</span>
                     </div>
-                    <span class="info-label">Role:</span>
-                    <span>External characters (business clients, users)</span>
-                    <span class="info-label">Patterns:</span>
+                    <span class="level1-feature-icon-container--info">Role:</span>
+                    <span>External character-bio (business clients, users)</span>
+                    <span class="level1-feature-icon-container--info">Patterns:</span>
                     <span>client asked/said, business context</span>
                 </div>
                 <div class="sample-dialogue">
@@ -305,19 +330,19 @@
             
             <!-- Mom -->
             <div class="character-card">
-                <div class="character-header">
+                <div class="character-bio">
                     <div class="character-name">Mom</div>
-                    <div class="character-count">Reserved (0 dialogues)</div>
+                    <div class="character-bio">Reserved (0 dialogues)</div>
                 </div>
-                <div class="character-info">
-                    <span class="info-label">Color:</span>
+                <div class="character-bio">
+                    <span class="level1-feature-icon-container--info">Color:</span>
                     <div>
                         <span class="color-swatch"></span>
                         <span>#ff69b4 (Hot Pink)</span>
                     </div>
-                    <span class="info-label">Role:</span>
+                    <span class="level1-feature-icon-container--info">Role:</span>
                     <span>Family members</span>
-                    <span class="info-label">Patterns:</span>
+                    <span class="level1-feature-icon-container--info">Patterns:</span>
                     <span>Mom said/asked, family context</span>
                 </div>
                 <div class="sample-dialogue">
@@ -327,19 +352,19 @@
             
             <!-- Default -->
             <div class="character-card">
-                <div class="character-header">
+                <div class="character-bio">
                     <div class="character-name">Default/Neutral</div>
-                    <div class="character-count">12 occurrences (1.0%)</div>
+                    <div class="character-bio">12 occurrences (1.0%)</div>
                 </div>
-                <div class="character-info">
-                    <span class="info-label">Color:</span>
+                <div class="character-bio">
+                    <span class="level1-feature-icon-container--info">Color:</span>
                     <div>
                         <span class="color-swatch"></span>
                         <span>#c8c8ff (Light Blue)</span>
                     </div>
-                    <span class="info-label">Role:</span>
+                    <span class="level1-feature-icon-container--info">Role:</span>
                     <span>Unattributed or neutral dialog (code snippets, technical content)</span>
-                    <span class="info-label">Usage:</span>
+                    <span class="level1-feature-icon-container--info">Usage:</span>
                     <span>Fallback for dialogues without clear character attribution</span>
                 </div>
                 <div class="sample-dialogue">

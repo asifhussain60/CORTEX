@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Infrastructure as Code - Terraform, CloudFormation, and IaC best practices">
@@ -8,13 +33,14 @@
     <title>Infrastructure as Code - CORTEX Knowledge</title>
     <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
-        <button class="back-button" onclick="history.back()" aria-label="Go back">← Back</button>
+    <nav class="breadcrumb-separator sticky-nav" mobile-nav-optimized aria-label="Breadcrumb">
+        <button class="grid-background" onclick="history.back()" aria-label="Go back">← Back</button>
         <ol class="breadcrumb">
             <li><a href="../../index.html">Home</a></li>
             <li><a href="../index.html">Knowledge Library</a></li>
@@ -29,16 +55,16 @@
         </div>
         <h1 class="hero-title">🏗️ Infrastructure as Code</h1>
         <p class="hero-subtitle">Automated infrastructure provisioning with Terraform and IaC tools</p>
-        <div class="file-metadata">
+        <div class="code-file">
             <span class="metadata-item">📦 45+ Rules</span>
             <span class="metadata-item">🏷️ DevOps</span>
             <span class="metadata-item">📅 Updated: Dec 2025</span>
         </div>
     </section>
 
-    <aside class="toc-sidebar" aria-label="Table of contents">
+    <aside class="toc-link" aria-label="Table of contents">
         <h3>On This Page</h3>
-        <nav class="toc-nav">
+        <nav class="toc-nav" mobile-nav-optimized>
             <a href="#overview" class="toc-link">Overview</a>
             <a href="#tools" class="toc-link">IaC Tools</a>
             <a href="#terraform" class="toc-link">Terraform</a>
@@ -48,7 +74,7 @@
         </nav>
     </aside>
 
-    <main class="file-content">
+    <main class="code-file">
         <section class="glass-card" id="overview">
             <h2>What is Infrastructure as Code?</h2>
             <p>
@@ -58,21 +84,39 @@
             </p>
 
             <h3>Core Principles</h3>
-            <ul class="feature-list">
-                <li><strong>Declarative:</strong> Define desired end state, tool figures out how to achieve it</li>
-                <li><strong>Idempotent:</strong> Running same code multiple times produces same result</li>
-                <li><strong>Version Controlled:</strong> Infrastructure definitions stored in Git</li>
-                <li><strong>Reproducible:</strong> Same code creates identical infrastructure every time</li>
-            </ul>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Declarative:</strong> Define desired end state, tool figures out how to achieve it</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Idempotent:</strong> Running same code multiple times produces same result</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Version Controlled:</strong> Infrastructure definitions stored in Git</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Reproducible:</strong> Same code creates identical infrastructure every time</div>
+    </div>
+</div>
 
             <h3>Key Benefits</h3>
-            <ul class="feature-list">
-                <li><strong>Speed:</strong> 10x faster environment creation (minutes vs hours/days)</li>
-                <li><strong>Consistency:</strong> Zero configuration drift across environments</li>
-                <li><strong>Reduced Risk:</strong> 60% reduction in infrastructure incidents</li>
-                <li><strong>Cost Optimization:</strong> 30-50% infrastructure cost savings</li>
-                <li><strong>Disaster Recovery:</strong> Recovery time reduced from days to hours</li>
-            </ul>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Speed:</strong> 10x faster environment creation (minutes vs hours/days)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Consistency:</strong> Zero configuration drift across environments</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Reduced Risk:</strong> 60% reduction in infrastructure incidents</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Cost Optimization:</strong> 30-50% infrastructure cost savings</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Disaster Recovery:</strong> Recovery time reduced from days to hours</div>
+    </div>
+</div>
         </section>
 
         <section class="glass-card" id="tools">
@@ -80,16 +124,24 @@
 
             <div class="rule-card">
                 <h3>Terraform (Recommended)</h3>
-                <span class="badge badge-high">MOST POPULAR</span>
+                <span class="badge badge-security">MOST POPULAR</span>
                 <p>Cloud-agnostic, declarative IaC tool with strong state management.</p>
                 
                 <h4>Strengths</h4>
-                <ul class="feature-list">
-                    <li>Cloud-agnostic (AWS, Azure, GCP, 3,000+ providers)</li>
-                    <li>Strong state management and plan/preview capabilities</li>
-                    <li>Large community and module registry</li>
-                    <li>HCL language is readable and maintainable</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Cloud-agnostic (AWS, Azure, GCP, 3,000+ providers)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Strong state management and plan/preview capabilities</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Large community and module registry</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">HCL language is readable and maintainable</div>
+    </div>
+</div>
 
                 <h4>Best For</h4>
                 <p>Multi-cloud environments, complex infrastructure, large teams</p>
@@ -97,35 +149,53 @@
 
             <div class="rule-card">
                 <h3>AWS CloudFormation</h3>
-                <span class="badge badge-medium">AWS-SPECIFIC</span>
+                <span class="badge badge-security">AWS-SPECIFIC</span>
                 <p>Native AWS IaC service with deep AWS integration.</p>
                 
                 <h4>Strengths</h4>
-                <ul class="feature-list">
-                    <li>Deep AWS integration, no additional tools needed</li>
-                    <li>Free (only pay for resources created)</li>
-                    <li>Automatic rollback on failures</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Deep AWS integration, no additional tools needed</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Free (only pay for resources created)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Automatic rollback on failures</div>
+    </div>
+</div>
 
                 <h4>Limitations</h4>
-                <ul class="feature-list">
-                    <li>AWS-only (vendor lock-in)</li>
-                    <li>YAML/JSON can be verbose</li>
-                    <li>No plan/preview (until recently with Change Sets)</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">AWS-only (vendor lock-in)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">YAML/JSON can be verbose</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">No plan/preview (until recently with Change Sets)</div>
+    </div>
+</div>
             </div>
 
             <div class="rule-card">
                 <h3>Pulumi</h3>
-                <span class="badge badge-medium">MODERN</span>
+                <span class="badge badge-security">MODERN</span>
                 <p>Use real programming languages (TypeScript, Python, C#, Go) for IaC.</p>
                 
                 <h4>Strengths</h4>
-                <ul class="feature-list">
-                    <li>Use familiar programming languages</li>
-                    <li>Strong typing, IDE support, unit testing</li>
-                    <li>Cloud-agnostic</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Use familiar programming languages</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Strong typing, IDE support, unit testing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Cloud-agnostic</div>
+    </div>
+</div>
 
                 <h4>Best For</h4>
                 <p>Teams preferring code over config, complex logic in infrastructure</p>
@@ -137,12 +207,12 @@
 
             <div class="rule-card">
                 <h3>Basic Terraform Structure</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Organize Terraform code into logical modules with clear separation of concerns.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Recommended Structure</h4>
-                    <pre><code class="language-hcl"># main.tf - Main resources
+                    <pre><code class="language-badge"># main.tf - Main resources
 resource "aws_vpc" "main" {
   cidr_block           = var.vpc_cidr
   enable_dns_hostnames = true
@@ -210,12 +280,12 @@ availability_zones = ["us-east-1a", "us-east-1b", "us-east-1c"]
 
             <div class="rule-card">
                 <h3>Module Organization</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Create reusable modules for common infrastructure patterns.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Module Structure</h4>
-                    <pre><code class="language-plaintext">terraform/
+                    <pre><code class="language-badge">terraform/
 ├── environments/
 │   ├── dev/
 │   │   ├── main.tf
@@ -245,9 +315,9 @@ availability_zones = ["us-east-1a", "us-east-1b", "us-east-1c"]
 </code></pre>
                 </div>
 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Using Modules</h4>
-                    <pre><code class="language-hcl"># environments/prod/main.tf
+                    <pre><code class="language-badge"># environments/prod/main.tf
 module "vpc" {
   source = "../../modules/vpc"
 
@@ -289,12 +359,12 @@ module "rds" {
 
             <div class="rule-card">
                 <h3>Terraform Workflow</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Follow standard Terraform workflow for safe infrastructure changes.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Standard Workflow</h4>
-                    <pre><code class="language-bash"># 1. Initialize (download providers, modules)
+                    <pre><code class="language-badge"># 1. Initialize (download providers, modules)
 terraform init
 
 # 2. Validate syntax
@@ -330,12 +400,12 @@ terraform destroy
 
             <div class="rule-card">
                 <h3>Never Hardcode Secrets</h3>
-                <span class="badge badge-high">CRITICAL</span>
+                <span class="badge badge-security">CRITICAL</span>
                 <p>Use secret managers, never commit secrets to version control.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Recommended - AWS Secrets Manager</h4>
-                    <pre><code class="language-hcl"># Retrieve secret from AWS Secrets Manager
+                    <pre><code class="language-badge"># Retrieve secret from AWS Secrets Manager
 data "aws_secretsmanager_secret_version" "db_password" {
   secret_id = "prod/database/password"
 }
@@ -351,9 +421,9 @@ resource "aws_db_instance" "main" {
 </code></pre>
                 </div>
 
-                <div class="example-section bad-example">
+                <div class="command-example bad-example">
                     <h4>❌ Avoid - Hardcoded Secrets</h4>
-                    <pre><code class="language-hcl"># NEVER DO THIS!
+                    <pre><code class="language-badge"># NEVER DO THIS!
 resource "aws_db_instance" "main" {
   username = "admin"
   password = "MySuper$ecretP@ssw0rd"  # Exposed in Git!
@@ -364,12 +434,12 @@ resource "aws_db_instance" "main" {
 
             <div class="rule-card">
                 <h3>Use Remote State</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Store Terraform state in remote backend for team collaboration and safety.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ S3 + DynamoDB Backend</h4>
-                    <pre><code class="language-hcl"># backend.tf
+                    <pre><code class="language-badge"># backend.tf
 terraform {
   backend "s3" {
     bucket         = "mycompany-terraform-state"
@@ -409,18 +479,18 @@ resource "aws_dynamodb_table" "terraform_lock" {
   }
 }
 </code></pre>
-                    <p class="example-note">✅ Benefits: Team collaboration, state locking, versioning, encryption.</p>
+                    <p class="command-example">✅ Benefits: Team collaboration, state locking, versioning, encryption.</p>
                 </div>
             </div>
 
             <div class="rule-card">
                 <h3>Tag Everything</h3>
-                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <span class="badge badge-security">MEDIUM PRIORITY</span>
                 <p>Consistent tagging enables cost allocation, automation, and resource management.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Standard Tags</h4>
-                    <pre><code class="language-hcl">locals {
+                    <pre><code class="language-badge">locals {
   common_tags = {
     Environment  = var.environment
     Project      = "MyProject"
@@ -450,12 +520,12 @@ resource "aws_instance" "web" {
 
             <div class="rule-card">
                 <h3>Use Workspaces for Environments</h3>
-                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <span class="badge badge-security">MEDIUM PRIORITY</span>
                 <p>Separate dev/staging/prod using Terraform workspaces or separate state files.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Workspaces</h4>
-                    <pre><code class="language-bash"># Create workspaces
+                    <pre><code class="language-badge"># Create workspaces
 terraform workspace new dev
 terraform workspace new staging
 terraform workspace new prod
@@ -486,28 +556,40 @@ resource "aws_instance" "web" {
 
             <div class="rule-card">
                 <h3>State File Security</h3>
-                <span class="badge badge-high">CRITICAL</span>
+                <span class="badge badge-security">CRITICAL</span>
                 <p>State files may contain sensitive data. Protect them carefully.</p>
                 
                 <h4>State File Protection</h4>
-                <ul class="feature-list">
-                    <li><strong>Never commit to Git:</strong> Add terraform.tfstate to .gitignore</li>
-                    <li><strong>Encrypt at rest:</strong> Use S3 encryption, Azure Storage encryption</li>
-                    <li><strong>Encrypt in transit:</strong> Use HTTPS/TLS for remote backends</li>
-                    <li><strong>Enable versioning:</strong> S3 versioning for state history</li>
-                    <li><strong>Restrict access:</strong> IAM policies, least privilege</li>
-                    <li><strong>Enable state locking:</strong> DynamoDB (AWS), Azure Blob lease</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Never commit to Git:</strong> Add terraform.tfstate to .gitignore</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Encrypt at rest:</strong> Use S3 encryption, Azure Storage encryption</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Encrypt in transit:</strong> Use HTTPS/TLS for remote backends</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Enable versioning:</strong> S3 versioning for state history</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Restrict access:</strong> IAM policies, least privilege</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Enable state locking:</strong> DynamoDB (AWS), Azure Blob lease</div>
+    </div>
+</div>
             </div>
 
             <div class="rule-card">
                 <h3>State Commands</h3>
-                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <span class="badge badge-security">MEDIUM PRIORITY</span>
                 <p>Useful Terraform state commands for debugging and migration.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>Common State Operations</h4>
-                    <pre><code class="language-bash"># List resources in state
+                    <pre><code class="language-badge"># List resources in state
 terraform state list
 
 # Show details of specific resource
@@ -534,19 +616,19 @@ terraform state push terraform.tfstate
 
         <section class="glass-card" id="related">
             <h2>Related Knowledge Files</h2>
-            <div class="related-grid">
-                <a href="cicd-pipelines.html" class="related-card">
-                    <span class="related-icon">⚙️</span>
+            <div class="level1-relationship-grid">
+                <a href="cicd-pipelines.html" class="level1-relationship-grid">
+                    <span class="level1-relationship-grid">⚙️</span>
                     <h3>CI/CD Pipelines</h3>
                     <p>Automate infrastructure deployments</p>
                 </a>
-                <a href="monitoring-observability.html" class="related-card">
-                    <span class="related-icon">📊</span>
+                <a href="monitoring-observability.html" class="level1-relationship-grid">
+                    <span class="level1-relationship-grid">📊</span>
                     <h3>Monitoring & Observability</h3>
                     <p>Monitor infrastructure health</p>
                 </a>
-                <a href="../cloud/aws-best-practices.html" class="related-card">
-                    <span class="related-icon">☁️</span>
+                <a href="../cloud/aws-best-practices.html" class="level1-relationship-grid">
+                    <span class="level1-relationship-grid">☁️</span>
                     <h3>AWS Best Practices</h3>
                     <p>Cloud infrastructure patterns</p>
                 </a>

@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Cryptography Essentials - Security Learning Module">
@@ -8,8 +33,11 @@
     <meta name="author" content="Asif Hussain">
     <title>Cryptography Essentials | CORTEX Learning Hub</title>
     <link rel="stylesheet" href="../../assets/css/main.css?v=2026-01-02">
-    <link rel="stylesheet" href="../../assets/css/learning-hub.css?v=2026-01-02">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
+    
+    <link rel="stylesheet" href="../..../..../..../..../..../../assets/css/generated-classes.css"><link rel="stylesheet" href="../../assets/css/learning-hub.css?v=2026-01-02">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/editor/editor.main.css">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
@@ -18,14 +46,39 @@
 
     <!-- Header Navigation -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../../index.html" class="nav-link">
-                    <span class="nav-icon">🏠</span> Home
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../../index.html" class="nav-link" mobile-nav-optimized>
+                    <span class="nav-content" mobile-nav-optimized>🏠</span> Home
                 </a>
-                <span class="nav-separator">›</span>
-                <a href="../security-hub.html" class="nav-link">
-                    <span class="nav-icon">🔐</span> Security
+                <span class="nav-content" mobile-nav-optimized>›</span>
+                <a href="../security-hub.html" class="nav-link" mobile-nav-optimized>
+                    <span class="nav-content" mobile-nav-optimized>🔐</span> Security
                 </a>
             </nav>
         </div>
@@ -36,7 +89,7 @@
         <div class="module-header">
             <div class="breadcrumb">
                 <span class="difficulty-badge intermediate">Intermediate</span>
-                <span style="color: var(--text-secondary);">Module 3 of 6</span>
+                <span class="inline-fix-9">Module 3 of 6</span>
             </div>
             <h1 class="hero-title">🔐 Cryptography Essentials</h1>
             <p class="hero-subtitle">Master encryption, hashing, TLS/SSL, and key management for secure applications</p>
@@ -52,52 +105,64 @@
     <!-- Main Content -->
     <div class="container">
         <!-- Learning Objectives -->
-        <section class="glass-card" style="margin-top: var(--spacing-2xl);">
+        <section class="glass-card" class="inline-fix-14">
             <h2>🎓 Learning Objectives</h2>
-            <ul class="objective-list">
-                <li><strong>Distinguish Encryption Types:</strong> Symmetric (AES) vs Asymmetric (RSA, ECC) and when to use each</li>
-                <li><strong>Implement Secure Hashing:</strong> bcrypt, Argon2, PBKDF2 for passwords; SHA-256/512 for integrity</li>
-                <li><strong>Configure TLS/SSL:</strong> Certificate management, cipher suites, perfect forward secrecy</li>
-                <li><strong>Generate Cryptographic Keys:</strong> Random number generation, key derivation, secure storage</li>
-                <li><strong>Avoid Crypto Pitfalls:</strong> ECB mode, hardcoded keys, weak algorithms, timing attacks</li>
-                <li><strong>Apply Best Practices:</strong> Key rotation, salt generation, IV randomness, authenticated encryption</li>
-            </ul>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Distinguish Encryption Types:</strong> Symmetric (AES) vs Asymmetric (RSA, ECC) and when to use each</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Implement Secure Hashing:</strong> bcrypt, Argon2, PBKDF2 for passwords; SHA-256/512 for integrity</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Configure TLS/SSL:</strong> Certificate management, cipher suites, perfect forward secrecy</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Generate Cryptographic Keys:</strong> Random number generation, key derivation, secure storage</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Avoid Crypto Pitfalls:</strong> ECB mode, hardcoded keys, weak algorithms, timing attacks</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Apply Best Practices:</strong> Key rotation, salt generation, IV randomness, authenticated encryption</div>
+    </div>
+</div>
         </section>
 
         <!-- Cryptographic Algorithms Comparison -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🔑 Cryptographic Algorithms: Strength vs Performance</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 Compare modern cryptographic algorithms by security strength and computational performance. 
                 Hover over bubbles for detailed information about each algorithm.
             </p>
             
-            <div class="visualization-container" id="crypto-algorithms-viz" style="width: 100%; height: 550px; margin-bottom: var(--spacing-2xl); border: 1px solid var(--module-border); border-radius: 8px; background: rgba(26, 31, 58, 0.3);"></div>
+            <div class="visualization-container" id="crypto-algorithms-viz" class="inline-fix-270"></div>
             
-            <div class="legend" style="display: flex; justify-content: center; gap: var(--spacing-xl); margin-top: var(--spacing-lg); flex-wrap: wrap;">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <div style="width: 16px; height: 16px; background: #10b981; border-radius: 50%;"></div>
-                    <span style="color: var(--text-secondary); font-size: 14px;">Hashing</span>
+            <div class="level2-legend-orange" class="inline-fix-220">
+                <div class="inline-fix-60">
+                    <div class="inline-fix-247"></div>
+                    <span class="inline-fix-61">Hashing</span>
                 </div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <div style="width: 16px; height: 16px; background: #7b61ff; border-radius: 50%;"></div>
-                    <span style="color: var(--text-secondary); font-size: 14px;">Symmetric Encryption</span>
+                <div class="inline-fix-60">
+                    <div class="inline-fix-256"></div>
+                    <span class="inline-fix-61">Symmetric Encryption</span>
                 </div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <div style="width: 16px; height: 16px; background: #00d4ff; border-radius: 50%;"></div>
-                    <span style="color: var(--text-secondary); font-size: 14px;">Asymmetric Encryption</span>
+                <div class="inline-fix-60">
+                    <div class="inline-fix-284"></div>
+                    <span class="inline-fix-61">Asymmetric Encryption</span>
                 </div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <div style="width: 16px; height: 16px; background: #fbbf24; border-radius: 50%;"></div>
-                    <span style="color: var(--text-secondary); font-size: 14px;">Password Hashing</span>
+                <div class="inline-fix-60">
+                    <div class="inline-fix-190"></div>
+                    <span class="inline-fix-61">Password Hashing</span>
                 </div>
             </div>
         </section>
 
         <!-- TLS/SSL Handshake -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🤝 TLS 1.3 Handshake: Secure Connection Establishment</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 The TLS handshake establishes encrypted communication between client and server. 
                 TLS 1.3 reduces latency with a 1-RTT (round-trip time) handshake.
             </p>
@@ -127,114 +192,148 @@ sequenceDiagram
     Note over Client,Server: Perfect Forward Secrecy:<br/>Ephemeral keys destroyed<br/>after session
             </div>
             
-            <div class="info-box" style="margin-top: var(--spacing-xl); padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-left: 4px solid #10b981; border-radius: 6px;">
-                <strong style="color: #10b981;">🔒 TLS 1.3 Security Improvements:</strong>
-                <ul style="margin-top: var(--spacing-sm); color: var(--text-secondary); line-height: 1.8;">
-                    <li><strong>Faster:</strong> 1-RTT handshake (TLS 1.2 required 2-RTT)</li>
-                    <li><strong>Removed Weak Ciphers:</strong> No RSA key exchange, RC4, DES, 3DES, MD5, SHA-1</li>
-                    <li><strong>Perfect Forward Secrecy:</strong> Mandatory ephemeral Diffie-Hellman</li>
-                    <li><strong>Encrypted Handshake:</strong> Certificate protected from passive eavesdropping</li>
-                    <li><strong>0-RTT Resumption:</strong> Optional early data for repeat connections</li>
-                </ul>
+            <div class="info-box" class="inline-fix-142">
+                <strong class="inline-fix-13">🔒 TLS 1.3 Security Improvements:</strong>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Faster:</strong> 1-RTT handshake (TLS 1.2 required 2-RTT)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Removed Weak Ciphers:</strong> No RSA key exchange, RC4, DES, 3DES, MD5, SHA-1</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Perfect Forward Secrecy:</strong> Mandatory ephemeral Diffie-Hellman</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Encrypted Handshake:</strong> Certificate protected from passive eavesdropping</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>0-RTT Resumption:</strong> Optional early data for repeat connections</div>
+    </div>
+</div>
             </div>
         </section>
 
         <!-- Symmetric vs Asymmetric Encryption -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>⚖️ Symmetric vs Asymmetric Encryption</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 Understand the trade-offs between encryption types to choose the right approach for your use case.
             </p>
             
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-xl); margin-top: var(--spacing-xl);">
-                <div style="padding: var(--spacing-xl); background: rgba(123, 97, 255, 0.1); border-radius: 12px; border: 2px solid var(--hub-primary);">
-                    <h3 style="color: var(--hub-primary); margin-bottom: var(--spacing-md); display: flex; align-items: center; gap: var(--spacing-sm);">
-                        <span style="font-size: 1.5rem;">🔐</span> Symmetric Encryption
+            <div class="inline-fix-115">
+                <div class="inline-fix-209">
+                    <h3 class="inline-fix-331">
+                        <span class="inline-fix-175">🔐</span> Symmetric Encryption
                     </h3>
-                    <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg); font-size: 0.95rem;">
+                    <p class="inline-fix-133">
                         Same key for encryption and decryption. Fast and efficient for large data.
                     </p>
                     
-                    <div style="margin-bottom: var(--spacing-lg);">
-                        <h4 style="color: var(--text-primary); font-size: 0.95rem; margin-bottom: var(--spacing-sm);">Algorithms:</h4>
-                        <ul style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8;">
-                            <li><strong>AES-256-GCM</strong> - Industry standard, authenticated encryption</li>
-                            <li><strong>ChaCha20-Poly1305</strong> - Fast on mobile, AEAD</li>
-                            <li><strong>AES-128-CBC</strong> - Legacy, requires separate HMAC</li>
-                        </ul>
+                    <div class="inline-fix-72">
+                        <h4 class="inline-fix-68">Algorithms:</h4>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>AES-256-GCM</strong> - Industry standard, authenticated encryption</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>ChaCha20-Poly1305</strong> - Fast on mobile, AEAD</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>AES-128-CBC</strong> - Legacy, requires separate HMAC</div>
+    </div>
+</div>
                     </div>
                     
-                    <div style="margin-bottom: var(--spacing-lg);">
-                        <h4 style="color: var(--text-primary); font-size: 0.95rem; margin-bottom: var(--spacing-sm);">Pros:</h4>
-                        <ul style="color: #10b981; font-size: 0.9rem; line-height: 1.8;">
-                            <li>✅ Extremely fast (hardware accelerated)</li>
-                            <li>✅ Low computational overhead</li>
-                            <li>✅ Suitable for large files, databases, disks</li>
-                        </ul>
+                    <div class="inline-fix-72">
+                        <h4 class="inline-fix-68">Pros:</h4>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">✅ Extremely fast (hardware accelerated)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Low computational overhead</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Suitable for large files, databases, disks</div>
+    </div>
+</div>
                     </div>
                     
                     <div>
-                        <h4 style="color: var(--text-primary); font-size: 0.95rem; margin-bottom: var(--spacing-sm);">Cons:</h4>
-                        <ul style="color: #ef4444; font-size: 0.9rem; line-height: 1.8;">
+                        <h4 class="inline-fix-68">Cons:</h4>
+                        <ul class="inline-fix-141">
                             <li>❌ Key distribution challenge (how to share key?)</li>
                             <li>❌ Same key for all operations (no non-repudiation)</li>
                         </ul>
                     </div>
                     
-                    <div style="margin-top: var(--spacing-lg); padding: var(--spacing-md); background: rgba(0, 0, 0, 0.3); border-radius: 6px;">
-                        <strong style="color: var(--hub-primary); font-size: 0.9rem;">Use Cases:</strong>
-                        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: var(--spacing-sm); line-height: 1.6;">
+                    <div class="inline-fix-150">
+                        <strong class="inline-fix-192">Use Cases:</strong>
+                        <p class="inline-fix-172">
                             File encryption, database encryption, disk encryption, VPN tunnels, session encryption after key exchange
                         </p>
                     </div>
                 </div>
                 
-                <div style="padding: var(--spacing-xl); background: rgba(0, 212, 255, 0.1); border-radius: 12px; border: 2px solid #00d4ff;">
-                    <h3 style="color: #00d4ff; margin-bottom: var(--spacing-md); display: flex; align-items: center; gap: var(--spacing-sm);">
-                        <span style="font-size: 1.5rem;">🔑</span> Asymmetric Encryption
+                <div class="inline-fix-326">
+                    <h3 class="inline-fix-217">
+                        <span class="inline-fix-175">🔑</span> Asymmetric Encryption
                     </h3>
-                    <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg); font-size: 0.95rem;">
+                    <p class="inline-fix-133">
                         Public key for encryption, private key for decryption. Solves key distribution.
                     </p>
                     
-                    <div style="margin-bottom: var(--spacing-lg);">
-                        <h4 style="color: var(--text-primary); font-size: 0.95rem; margin-bottom: var(--spacing-sm);">Algorithms:</h4>
-                        <ul style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8;">
-                            <li><strong>RSA-2048/4096</strong> - Widely supported, key exchange</li>
-                            <li><strong>ECC (P-256, P-384)</strong> - Smaller keys, same security</li>
-                            <li><strong>Ed25519</strong> - Fast signatures, modern</li>
-                        </ul>
+                    <div class="inline-fix-72">
+                        <h4 class="inline-fix-68">Algorithms:</h4>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>RSA-2048/4096</strong> - Widely supported, key exchange</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>ECC (P-256, P-384)</strong> - Smaller keys, same security</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Ed25519</strong> - Fast signatures, modern</div>
+    </div>
+</div>
                     </div>
                     
-                    <div style="margin-bottom: var(--spacing-lg);">
-                        <h4 style="color: var(--text-primary); font-size: 0.95rem; margin-bottom: var(--spacing-sm);">Pros:</h4>
-                        <ul style="color: #10b981; font-size: 0.9rem; line-height: 1.8;">
-                            <li>✅ No key distribution problem</li>
-                            <li>✅ Digital signatures (non-repudiation)</li>
-                            <li>✅ Key exchange without prior shared secret</li>
-                        </ul>
+                    <div class="inline-fix-72">
+                        <h4 class="inline-fix-68">Pros:</h4>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">✅ No key distribution problem</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Digital signatures (non-repudiation)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Key exchange without prior shared secret</div>
+    </div>
+</div>
                     </div>
                     
                     <div>
-                        <h4 style="color: var(--text-primary); font-size: 0.95rem; margin-bottom: var(--spacing-sm);">Cons:</h4>
-                        <ul style="color: #ef4444; font-size: 0.9rem; line-height: 1.8;">
+                        <h4 class="inline-fix-68">Cons:</h4>
+                        <ul class="inline-fix-141">
                             <li>❌ Very slow (100-1000x slower than symmetric)</li>
                             <li>❌ Large key sizes (RSA-2048 = 256 bytes)</li>
                         </ul>
                     </div>
                     
-                    <div style="margin-top: var(--spacing-lg); padding: var(--spacing-md); background: rgba(0, 0, 0, 0.3); border-radius: 6px;">
-                        <strong style="color: #00d4ff; font-size: 0.9rem;">Use Cases:</strong>
-                        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: var(--spacing-sm); line-height: 1.6;">
+                    <div class="inline-fix-150">
+                        <strong class="inline-fix-237">Use Cases:</strong>
+                        <p class="inline-fix-172">
                             TLS handshake, SSH key authentication, PGP email encryption, digital signatures, cryptocurrency wallets
                         </p>
                     </div>
                 </div>
             </div>
             
-            <div class="info-box" style="margin-top: var(--spacing-2xl); padding: var(--spacing-lg); background: rgba(123, 97, 255, 0.1); border-left: 4px solid var(--hub-primary); border-radius: 6px;">
-                <strong style="color: var(--hub-primary);">💡 Hybrid Encryption (Best of Both Worlds):</strong>
-                <p style="color: var(--text-secondary); margin-top: var(--spacing-sm); line-height: 1.7;">
+            <div class="info-box" class="inline-fix-226">
+                <strong class="inline-fix-10">💡 Hybrid Encryption (Best of Both Worlds):</strong>
+                <p class="inline-fix-330">
                     Real-world systems use <strong>hybrid encryption</strong>: Asymmetric encryption (RSA/ECDH) securely exchanges a random symmetric key (AES), 
                     then symmetric encryption handles bulk data. This is how TLS/SSL, PGP, and Signal protocol work.
                 </p>
@@ -242,159 +341,185 @@ sequenceDiagram
         </section>
 
         <!-- Interactive Content Placeholder -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>📚 Module Content</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 This module includes:
             </p>
-            <ul style="list-style-type: none; padding-left: 0;">
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Interactive Visualizations:</strong> D3.js charts and Mermaid diagrams
-                </li>
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Code Playgrounds:</strong> Hands-on Monaco editor with live execution
-                </li>
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Knowledge Checks:</strong> Interactive quizzes with instant feedback
-                </li>
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Real-World Examples:</strong> Production-grade code samples
-                </li>
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Progressive Challenges:</strong> Apply what you've learned
-                </li>
-            </ul>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">✅ <strong>Interactive Visualizations:</strong> D3.js charts and Mermaid diagrams</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ <strong>Code Playgrounds:</strong> Hands-on Monaco editor with live execution</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ <strong>Knowledge Checks:</strong> Interactive quizzes with instant feedback</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ <strong>Real-World Examples:</strong> Production-grade code samples</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ <strong>Progressive Challenges:</strong> Apply what you've learned</div>
+    </div>
+</div>
         </section>
 
         <!-- Password Hashing Playground -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>💻 Interactive Playground: Password Hashing</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 Explore secure password hashing with bcrypt, Argon2, and PBKDF2. Learn why never to use MD5/SHA-256 for passwords.
             </p>
             
-            <div class="playground-container" style="margin-top: var(--spacing-xl);">
-                <div class="playground-tabs" style="display: flex; gap: var(--spacing-sm); margin-bottom: var(--spacing-lg); border-bottom: 2px solid var(--module-border);">
-                    <button class="tab-btn active" data-tab="bcrypt-tab" style="padding: var(--spacing-md) var(--spacing-lg); background: transparent; border: none; color: var(--hub-primary); cursor: pointer; border-bottom: 2px solid var(--hub-primary); font-weight: 600;">bcrypt</button>
-                    <button class="tab-btn" data-tab="argon2-tab" style="padding: var(--spacing-md) var(--spacing-lg); background: transparent; border: none; color: var(--text-secondary); cursor: pointer; border-bottom: 2px solid transparent; font-weight: 600;">Argon2</button>
-                    <button class="tab-btn" data-tab="insecure-tab" style="padding: var(--spacing-md) var(--spacing-lg); background: transparent; border: none; color: var(--text-secondary); cursor: pointer; border-bottom: 2px solid transparent; font-weight: 600;">❌ Insecure</button>
+            <div class="playground-container" class="inline-fix-155">
+                <div class="playground-tabs" class="inline-fix-165">
+                    <button class="tab-btn active" data-tab="bcrypt-tab" class="inline-fix-131">bcrypt</button>
+                    <button class="tab-btn" data-tab="argon2-tab" class="inline-fix-84">Argon2</button>
+                    <button class="tab-btn" data-tab="insecure-tab" class="inline-fix-84">❌ Insecure</button>
                 </div>
                 
-                <div id="bcrypt-tab" class="tab-content" style="display: block;">
-                    <div id="bcrypt-editor" style="width: 100%; height: 400px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                <div id="bcrypt-tab" class="tab-content" class="inline-fix-137">
+                    <div id="bcrypt-editor" class="inline-fix-76"></div>
                 </div>
                 
-                <div id="argon2-tab" class="tab-content" style="display: none;">
-                    <div id="argon2-editor" style="width: 100%; height: 400px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                <div id="argon2-tab" class="tab-content" class="inline-fix-48">
+                    <div id="argon2-editor" class="inline-fix-76"></div>
                 </div>
                 
-                <div id="insecure-tab" class="tab-content" style="display: none;">
-                    <div id="insecure-editor" style="width: 100%; height: 400px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                <div id="insecure-tab" class="tab-content" class="inline-fix-48">
+                    <div id="insecure-editor" class="inline-fix-76"></div>
                 </div>
             </div>
         </section>
 
         <!-- AES Encryption Playground -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>💻 Interactive Playground: AES Encryption</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 Learn authenticated encryption with AES-GCM. See why ECB mode is insecure and how GCM provides both confidentiality and integrity.
             </p>
             
-            <div id="aes-encryption-editor" style="width: 100%; height: 500px; border: 1px solid var(--module-border); border-radius: 8px; margin-top: var(--spacing-lg);"></div>
+            <div id="aes-encryption-editor" class="inline-fix-112"></div>
         </section>
 
         <!-- Key Management Playground -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>💻 Interactive Playground: Key Management</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 Master cryptographic key generation, derivation (PBKDF2, HKDF), and secure storage. Never hardcode keys!
             </p>
             
-            <div id="key-management-editor" style="width: 100%; height: 500px; border: 1px solid var(--module-border); border-radius: 8px; margin-top: var(--spacing-lg);"></div>
+            <div id="key-management-editor" class="inline-fix-112"></div>
         </section>
 
         <!-- Cryptography Challenge -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🏆 Cryptography Challenge: Secure File Encryption System</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 Design a secure file encryption system using hybrid encryption (RSA + AES). 
                 Your implementation must handle key generation, encryption, decryption, and integrity verification.
             </p>
             
-            <div class="challenge-requirements" style="background: rgba(123, 97, 255, 0.1); padding: var(--spacing-lg); border-radius: 8px; border: 1px solid var(--module-border); margin-bottom: var(--spacing-xl);">
-                <h4 style="color: var(--hub-primary); margin-bottom: var(--spacing-md);">Requirements:</h4>
-                <ul style="color: var(--text-secondary); line-height: 1.8;">
-                    <li><strong>RSA Key Pair:</strong> Generate 2048-bit RSA keys for key exchange</li>
-                    <li><strong>AES-256-GCM:</strong> Symmetric encryption for file data with authenticated encryption</li>
-                    <li><strong>Random Session Key:</strong> Generate unique AES key per file (256 bits)</li>
-                    <li><strong>Hybrid Encryption:</strong> Encrypt file with AES, encrypt AES key with RSA public key</li>
-                    <li><strong>Integrity:</strong> GCM provides authentication tag, verify before decryption</li>
-                    <li><strong>Secure Random:</strong> Use secrets module for all random generation</li>
-                </ul>
+            <div class="challenge-container" class="inline-fix-158">
+                <h4 class="inline-fix-80">Requirements:</h4>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>RSA Key Pair:</strong> Generate 2048-bit RSA keys for key exchange</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>AES-256-GCM:</strong> Symmetric encryption for file data with authenticated encryption</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Random Session Key:</strong> Generate unique AES key per file (256 bits)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Hybrid Encryption:</strong> Encrypt file with AES, encrypt AES key with RSA public key</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Integrity:</strong> GCM provides authentication tag, verify before decryption</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Secure Random:</strong> Use secrets module for all random generation</div>
+    </div>
+</div>
             </div>
             
-            <div id="crypto-challenge-editor" style="width: 100%; height: 600px; border: 1px solid var(--module-border); border-radius: 8px; margin-bottom: var(--spacing-xl);"></div>
+            <div id="crypto-challenge-editor" class="inline-fix-168"></div>
             
-            <button id="show-crypto-solution" class="primary-btn" style="padding: var(--spacing-md) var(--spacing-2xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">🔓 Show Secure Solution</button>
+            <button id="show-crypto-solution" class="level1-text-primary" class="inline-fix-169">🔓 Show Secure Solution</button>
         </section>
 
         <!-- Solution Section -->
-        <section id="crypto-solution" class="glass-card" style="margin-top: var(--spacing-3xl); display: none;">
+        <section id="crypto-solution" class="glass-card" class="inline-fix-130">
             <h2>✅ Secure Hybrid Encryption Solution</h2>
             
-            <div class="solution-features" style="background: rgba(16, 185, 129, 0.1); padding: var(--spacing-lg); border-radius: 8px; border-left: 4px solid #10b981; margin-bottom: var(--spacing-xl);">
-                <h4 style="color: #10b981; margin-bottom: var(--spacing-md);">🔒 Security Features Implemented:</h4>
-                <ul style="color: var(--text-secondary); line-height: 1.8;">
-                    <li><strong>RSA-2048:</strong> Secure key exchange with OAEP padding</li>
-                    <li><strong>AES-256-GCM:</strong> Authenticated encryption (confidentiality + integrity)</li>
-                    <li><strong>Random Nonce:</strong> Unique 96-bit nonce per encryption</li>
-                    <li><strong>Session Keys:</strong> Fresh AES key per file, never reused</li>
-                    <li><strong>Authentication Tag:</strong> 128-bit GCM tag prevents tampering</li>
-                    <li><strong>Key Wrapping:</strong> RSA encrypts AES key using OAEP with SHA-256</li>
-                    <li><strong>Secure Storage:</strong> Keys stored in PEM format with password protection</li>
-                </ul>
+            <div class="solution-content" class="inline-fix-151">
+                <h4 class="inline-fix-44">🔒 Security Features Implemented:</h4>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>RSA-2048:</strong> Secure key exchange with OAEP padding</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>AES-256-GCM:</strong> Authenticated encryption (confidentiality + integrity)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Random Nonce:</strong> Unique 96-bit nonce per encryption</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Session Keys:</strong> Fresh AES key per file, never reused</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Authentication Tag:</strong> 128-bit GCM tag prevents tampering</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Key Wrapping:</strong> RSA encrypts AES key using OAEP with SHA-256</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Secure Storage:</strong> Keys stored in PEM format with password protection</div>
+    </div>
+</div>
             </div>
             
-            <div id="crypto-solution-editor" style="width: 100%; height: 700px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+            <div id="crypto-solution-editor" class="inline-fix-138"></div>
         </section>
 
         <!-- Quiz Section -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>✅ Knowledge Check: Cryptography Quiz</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 Test your understanding of encryption, hashing, TLS, and key management. 10 questions with instant feedback!
             </p>
             
             <div class="quiz-container" id="quiz">
-                <p style="color: var(--text-primary); text-align: center; padding: var(--spacing-3xl);">
+                <p class="inline-fix-39">
                     📝 Quiz loading...
                 </p>
             </div>
             
-            <div id="quiz-results" class="quiz-results" style="display: none; margin-top: var(--spacing-2xl); padding: var(--spacing-xl); background: rgba(123, 97, 255, 0.1); border-radius: 12px; border: 2px solid var(--hub-primary);">
+            <div id="quiz-results" class="quiz-results" class="inline-fix-173">
                 <div id="score-display"></div>
-                <button id="retry-quiz" class="secondary-btn" style="margin-top: var(--spacing-lg); padding: var(--spacing-md) var(--spacing-xl); background: rgba(123, 97, 255, 0.2); color: var(--hub-primary); border: 2px solid var(--hub-primary); border-radius: 8px; cursor: pointer; font-weight: 600;">🔄 Retry Quiz</button>
+                <button id="retry-quiz" class="bwc-panel-scan-line-secondary" class="inline-fix-170">🔄 Retry Quiz</button>
             </div>
         </section>
 
         <!-- Interactive Quiz Placeholder -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>✅ Knowledge Check: Quiz</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 Test your understanding with interactive questions. Instant feedback provided!
             </p>
             <div class="quiz-container" id="quiz">
-                <p style="color: var(--text-primary); text-align: center; padding: var(--spacing-3xl);">
+                <p class="inline-fix-39">
                     📝 Quiz system loading...
                 </p>
             </div>
         </section>
 
         <!-- Next Steps -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🚀 Next Steps</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 You've completed Cryptography Essentials! Continue your learning journey:
             </p>
             <div class="next-module-cards">
@@ -411,11 +536,11 @@ sequenceDiagram
     </div>
 
     <!-- Footer -->
-    <footer style="margin-top: var(--spacing-3xl); padding: var(--spacing-xl); text-align: center; color: var(--text-secondary);">
+    <footer class="inline-fix-17">
         <p>© 2026 Asif Hussain. All rights reserved.</p>
-        <p style="margin-top: var(--spacing-sm);">
-            <a href="../../index.html" style="color: var(--hub-primary);">Back to Home</a> • 
-            <a href="../security-hub.html" style="color: var(--hub-primary);">Security Hub</a>
+        <p class="inline-fix-12">
+            <a href="../../index.html" class="inline-fix-10">Back to Home</a> • 
+            <a href="../security-hub.html" class="inline-fix-10">Security Hub</a>
         </p>
     </footer>
 
@@ -656,7 +781,7 @@ sequenceDiagram
         const quizData = [
             {
                 question: "What is the primary difference between symmetric and asymmetric encryption?",
-                options: [
+                quiz-options: [
                     "Symmetric uses one key, asymmetric uses two keys",
                     "Symmetric is slower than asymmetric",
                     "Asymmetric cannot encrypt large files",
@@ -667,13 +792,13 @@ sequenceDiagram
             },
             {
                 question: "Which password hashing algorithm is recommended by OWASP for new projects?",
-                options: ["MD5", "SHA-256", "Argon2", "DES"],
+                quiz-options: ["MD5", "SHA-256", "Argon2", "DES"],
                 correct: 2,
                 explanation: "Argon2 won the Password Hashing Competition and is the most secure password hashing algorithm (memory-hard, side-channel resistant)."
             },
             {
                 question: "What does GCM mode provide that ECB mode does not?",
-                options: [
+                quiz-options: [
                     "Faster encryption speed",
                     "Authenticated encryption (confidentiality + integrity)",
                     "Smaller ciphertext size",
@@ -684,7 +809,7 @@ sequenceDiagram
             },
             {
                 question: "Why should you NEVER use MD5 for password hashing?",
-                options: [
+                quiz-options: [
                     "It's too slow for modern systems",
                     "It produces hashes that are too long",
                     "It's fast (enabling brute force) and has collision vulnerabilities",
@@ -695,7 +820,7 @@ sequenceDiagram
             },
             {
                 question: "What is the purpose of a salt in password hashing?",
-                options: [
+                quiz-options: [
                     "Make the hash computation faster",
                     "Ensure unique hashes for identical passwords (prevents rainbow tables)",
                     "Compress the hash output",
@@ -706,19 +831,19 @@ sequenceDiagram
             },
             {
                 question: "In TLS 1.3, what is the typical round-trip time (RTT) for a full handshake?",
-                options: ["0-RTT", "1-RTT", "2-RTT", "3-RTT"],
+                quiz-options: ["0-RTT", "1-RTT", "2-RTT", "3-RTT"],
                 correct: 1,
                 explanation: "TLS 1.3 achieves a 1-RTT handshake (down from 2-RTT in TLS 1.2), improving connection establishment speed."
             },
             {
                 question: "What is the recommended RSA key size for long-term security?",
-                options: ["1024 bits", "2048 bits", "3072+ bits", "512 bits"],
+                quiz-options: ["1024 bits", "2048 bits", "3072+ bits", "512 bits"],
                 correct: 2,
                 explanation: "NIST recommends 3072+ bits for RSA keys to be secure beyond 2030. 2048-bit is minimum for current use, 1024-bit is insecure."
             },
             {
                 question: "What does 'Perfect Forward Secrecy' (PFS) protect against?",
-                options: [
+                quiz-options: [
                     "SQL injection attacks",
                     "Compromise of past session keys even if long-term keys are stolen",
                     "Man-in-the-middle attacks",
@@ -729,13 +854,13 @@ sequenceDiagram
             },
             {
                 question: "Which algorithm is best for encrypting large files?",
-                options: ["RSA-2048", "AES-256-GCM", "bcrypt", "SHA-256"],
+                quiz-options: ["RSA-2048", "AES-256-GCM", "bcrypt", "SHA-256"],
                 correct: 1,
                 explanation: "AES-256-GCM is a fast symmetric algorithm ideal for large files. RSA is asymmetric (slow, small data only). bcrypt/SHA-256 are hashing."
             },
             {
                 question: "What is the purpose of PBKDF2 in key management?",
-                options: [
+                quiz-options: [
                     "Encrypt files directly",
                     "Derive cryptographic keys from passwords using key stretching",
                     "Generate random numbers",
@@ -755,15 +880,15 @@ sequenceDiagram
                 html += `
                     <div class="quiz-question" data-question="${idx}">
                         <p class="question-text"><strong>Question ${idx + 1}:</strong> ${q.question}</p>
-                        <div class="options">
-                            ${q.options.map((opt, i) => `
-                                <label class="option">
+                        <div class="quiz-options">
+                            ${q.quiz-options.map((opt, i) => `
+                                <label class="quiz-quiz-options">
                                     <input type="radio" name="q${idx}" value="${i}">
                                     <span>${opt}</span>
                                 </label>
                             `).join('')}
                         </div>
-                        <div class="question-feedback" id="feedback-${idx}" style="display:none;"></div>
+                        <div class="faq-question" id="feedback-${idx}" class="inline-fix-266"></div>
                     </div>
                 `;
             });
@@ -782,11 +907,11 @@ sequenceDiagram
                     
                     if (isCorrect) {
                         correct++;
-                        feedback.innerHTML = `<div style="color: var(--success-color); padding: 8px; background: rgba(16, 185, 129, 0.1); border-radius: 4px; margin-top: 8px;">
+                        feedback.innerHTML = `<div class="inline-fix-287">
                             ✅ Correct! ${q.explanation}
                         </div>`;
                     } else {
-                        feedback.innerHTML = `<div style="color: var(--error-color); padding: 8px; background: rgba(239, 68, 68, 0.1); border-radius: 4px; margin-top: 8px;">
+                        feedback.innerHTML = `<div class="inline-fix-268">
                             ❌ Incorrect. ${q.explanation}
                         </div>`;
                     }
@@ -817,13 +942,13 @@ sequenceDiagram
             
             const results = document.getElementById('quiz-results');
             results.innerHTML = `
-                <div style="text-align: center; padding: 24px; background: linear-gradient(135deg, rgba(123, 97, 255, 0.1), rgba(0, 212, 255, 0.1)); border-radius: 12px; margin-top: 20px;">
-                    <h3 style="color: ${color}; margin: 0 0 12px 0; font-size: 28px;">${grade}</h3>
-                    <p style="font-size: 20px; margin: 8px 0; color: var(--text-primary);">
-                        Score: <strong style="color: ${color};">${correct}/${quizData.length}</strong> 
+                <div class="inline-fix-195">
+                    <h3 class="inline-fix-194">${grade}</h3>
+                    <p class="inline-fix-281">
+                        Score: <strong class="inline-fix-231">${correct}/${quizData.length}</strong> 
                         (${percentage.toFixed(0)}%)
                     </p>
-                    <p style="color: var(--text-secondary); margin: 12px 0 0 0;">${message}</p>
+                    <p class="inline-fix-271">${message}</p>
                 </div>
             `;
             results.style.display = 'block';
@@ -833,7 +958,7 @@ sequenceDiagram
         document.getElementById('submit-quiz')?.addEventListener('click', submitQuiz);
         document.getElementById('retry-quiz')?.addEventListener('click', () => {
             document.querySelectorAll('input[type="radio"]').forEach(input => input.checked = false);
-            document.querySelectorAll('.question-feedback').forEach(fb => fb.style.display = 'none');
+            document.querySelectorAll('.faq-question').forEach(fb => fb.style.display = 'none');
             document.getElementById('quiz-results').style.display = 'none';
             document.querySelector('.quiz-section').scrollIntoView({ behavior: 'smooth' });
         });

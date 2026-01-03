@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Test Coverage Analysis - Testing Learning Module">
@@ -8,8 +33,11 @@
     <meta name="author" content="Asif Hussain">
     <title>Test Coverage Analysis | CORTEX Learning Hub</title>
     <link rel="stylesheet" href="../../assets/css/main.css?v=2026-01-02">
-    <link rel="stylesheet" href="../../assets/css/learning-hub.css?v=2026-01-02">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
+    
+    <link rel="stylesheet" href="../..../..../..../..../..../../assets/css/generated-classes.css"><link rel="stylesheet" href="../../assets/css/learning-hub.css?v=2026-01-02">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/editor/editor.main.css">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
@@ -18,14 +46,39 @@
 
     <!-- Header Navigation -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../../index.html" class="nav-link">
-                    <span class="nav-icon">🏠</span> Home
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../../index.html" class="nav-link" mobile-nav-optimized>
+                    <span class="nav-content" mobile-nav-optimized>🏠</span> Home
                 </a>
-                <span class="nav-separator">›</span>
-                <a href="../testing-hub.html" class="nav-link">
-                    <span class="nav-icon">🧪</span> Testing
+                <span class="nav-content" mobile-nav-optimized>›</span>
+                <a href="../testing-hub.html" class="nav-link" mobile-nav-optimized>
+                    <span class="nav-content" mobile-nav-optimized>🧪</span> Testing
                 </a>
             </nav>
         </div>
@@ -36,7 +89,7 @@
         <div class="module-header">
             <div class="breadcrumb">
                 <span class="difficulty-badge intermediate">Intermediate</span>
-                <span style="color: var(--text-secondary);">Module 4 of 5</span>
+                <span class="inline-fix-9">Module 4 of 5</span>
             </div>
             <h1 class="hero-title">📊 Test Coverage Analysis</h1>
             <p class="hero-subtitle">Master coverage metrics, quality indicators, and effective testing strategies</p>
@@ -52,49 +105,61 @@
     <!-- Main Content -->
     <div class="container">
         <!-- Learning Objectives -->
-        <section class="glass-card" style="margin-top: var(--spacing-2xl);">
+        <section class="glass-card" class="inline-fix-14">
             <h2>🎓 Learning Objectives</h2>
-            <ul class="objective-list">
-                <li>Understand coverage metrics: line, branch, function, path, and condition coverage</li>
-                <li>Use coverage tools effectively (pytest-cov, Istanbul, JaCoCo, Coverage.py)</li>
-                <li>Set meaningful coverage targets based on risk and criticality</li>
-                <li>Identify untested code paths and critical gaps</li>
-                <li>Avoid "coverage theater" - understand that 100% coverage ≠ quality</li>
-                <li>Integrate coverage analysis into CI/CD pipelines</li>
-            </ul>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Understand coverage metrics: line, branch, function, path, and condition coverage</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use coverage tools effectively (pytest-cov, Istanbul, JaCoCo, Coverage.py)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Set meaningful coverage targets based on risk and criticality</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Identify untested code paths and critical gaps</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Avoid "coverage theater" - understand that 100% coverage ≠ quality</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Integrate coverage analysis into CI/CD pipelines</div>
+    </div>
+</div>
         </section>
 
         <!-- Coverage Metrics Overview -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>📊 Coverage Metrics Explained</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 Different coverage metrics measure different aspects of test completeness. Understanding these metrics helps you identify gaps in your testing strategy.
             </p>
             
-            <div id="coverage-metrics-viz" style="width: 100%; height: 500px; margin: var(--spacing-xl) 0;"></div>
+            <div id="coverage-metrics-viz" class="inline-fix-132"></div>
             
-            <div class="metrics-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-lg); margin-top: var(--spacing-xl);">
-                <div class="metric-card" style="padding: var(--spacing-lg); background: rgba(123, 97, 255, 0.1); border-left: 4px solid #7b61ff; border-radius: 8px;">
-                    <h4 style="color: #7b61ff; margin-bottom: var(--spacing-sm);">📝 Line Coverage</h4>
-                    <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            <div class="metrics-grid" class="inline-fix-27">
+                <div class="metric-card" class="inline-fix-139">
+                    <h4 class="inline-fix-154">📝 Line Coverage</h4>
+                    <p class="inline-fix-6">
                         Percentage of executed code lines. <strong>Most common</strong>, but can miss untested branches.
                     </p>
                 </div>
-                <div class="metric-card" style="padding: var(--spacing-lg); background: rgba(0, 212, 255, 0.1); border-left: 4px solid #00d4ff; border-radius: 8px;">
-                    <h4 style="color: #00d4ff; margin-bottom: var(--spacing-sm);">🔀 Branch Coverage</h4>
-                    <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                <div class="metric-card" class="inline-fix-143">
+                    <h4 class="inline-fix-19">🔀 Branch Coverage</h4>
+                    <p class="inline-fix-6">
                         Measures if/else branches executed. <strong>More thorough</strong> than line coverage.
                     </p>
                 </div>
-                <div class="metric-card" style="padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-left: 4px solid #10b981; border-radius: 8px;">
-                    <h4 style="color: #10b981; margin-bottom: var(--spacing-sm);">🎯 Function Coverage</h4>
-                    <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                <div class="metric-card" class="inline-fix-167">
+                    <h4 class="inline-fix-22">🎯 Function Coverage</h4>
+                    <p class="inline-fix-6">
                         Percentage of functions called. <strong>Quick overview</strong> of untested modules.
                     </p>
                 </div>
-                <div class="metric-card" style="padding: var(--spacing-lg); background: rgba(251, 191, 36, 0.1); border-left: 4px solid #fbbf24; border-radius: 8px;">
-                    <h4 style="color: #fbbf24; margin-bottom: var(--spacing-sm);">🛤️ Path Coverage</h4>
-                    <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                <div class="metric-card" class="inline-fix-176">
+                    <h4 class="inline-fix-65">🛤️ Path Coverage</h4>
+                    <p class="inline-fix-6">
                         All possible execution paths. <strong>Most thorough</strong>, but exponentially complex.
                     </p>
                 </div>
@@ -102,42 +167,62 @@
         </section>
 
         <!-- Coverage vs Quality -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>⚖️ Coverage vs. Quality: The Reality</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 High coverage doesn't guarantee quality. Focus on meaningful tests that verify behavior, not just execution.
             </p>
             
-            <div id="quality-metrics-viz" style="width: 100%; height: 450px; margin: var(--spacing-xl) 0;"></div>
+            <div id="quality-metrics-viz" class="inline-fix-163"></div>
             
-            <div class="comparison-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-xl); margin-top: var(--spacing-xl);">
-                <div style="padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-radius: 8px;">
-                    <h4 style="color: #10b981; margin-bottom: var(--spacing-md);">✅ Do This</h4>
-                    <ul style="color: var(--text-secondary); line-height: 1.8;">
-                        <li>Test critical business logic thoroughly</li>
-                        <li>Focus on edge cases and error paths</li>
-                        <li>Write readable, maintainable tests</li>
-                        <li>Verify behavior, not implementation</li>
-                        <li>Use coverage to find gaps, not as a goal</li>
-                    </ul>
+            <div class="level1-comparison-box-error" class="inline-fix-115">
+                <div class="inline-fix-308">
+                    <h4 class="inline-fix-44">✅ Do This</h4>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Test critical business logic thoroughly</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Focus on edge cases and error paths</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Write readable, maintainable tests</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Verify behavior, not implementation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use coverage to find gaps, not as a goal</div>
+    </div>
+</div>
                 </div>
-                <div style="padding: var(--spacing-lg); background: rgba(239, 68, 68, 0.1); border-radius: 8px;">
-                    <h4 style="color: #ef4444; margin-bottom: var(--spacing-md);">❌ Avoid This</h4>
-                    <ul style="color: var(--text-secondary); line-height: 1.8;">
-                        <li>Chasing 100% coverage on all code</li>
-                        <li>Writing tests just to hit coverage targets</li>
-                        <li>Testing trivial getters/setters</li>
-                        <li>Ignoring test quality for quantity</li>
-                        <li>Treating coverage as a success metric</li>
-                    </ul>
+                <div class="inline-fix-185">
+                    <h4 class="inline-fix-52">❌ Avoid This</h4>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Chasing 100% coverage on all code</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Writing tests just to hit coverage targets</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Testing trivial getters/setters</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Ignoring test quality for quantity</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Treating coverage as a success metric</div>
+    </div>
+</div>
                 </div>
             </div>
         </section>
 
         <!-- Coverage Tools Comparison -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🛠️ Coverage Tools by Language</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 Each programming language has specialized coverage tools with unique features and integrations.
             </p>
             
@@ -177,44 +262,44 @@ graph TB
         </section>
 
         <!-- Interactive Playground: Coverage Analysis -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>💻 Code Playground: Coverage in Action</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 Explore different coverage scenarios and see how coverage metrics change based on test completeness.
             </p>
             
             <div class="playground-container">
-                <div class="tabs" style="display: flex; gap: var(--spacing-sm); margin-bottom: var(--spacing-md); border-bottom: 2px solid var(--module-border);">
-                    <button class="tab-btn active" data-tab="low-coverage" style="padding: var(--spacing-sm) var(--spacing-lg); background: transparent; border: none; color: var(--text-secondary); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s;">
+                <div class="demo-tabs-vertical" class="inline-fix-99">
+                    <button class="tab-btn active" data-tab="low-coverage" class="inline-fix-50">
                         Poor Coverage (40%)
                     </button>
-                    <button class="tab-btn" data-tab="good-coverage" style="padding: var(--spacing-sm) var(--spacing-lg); background: transparent; border: none; color: var(--text-secondary); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s;">
+                    <button class="tab-btn" data-tab="good-coverage" class="inline-fix-50">
                         Good Coverage (85%)
                     </button>
-                    <button class="tab-btn" data-tab="comprehensive" style="padding: var(--spacing-sm) var(--spacing-lg); background: transparent; border: none; color: var(--text-secondary); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s;">
+                    <button class="tab-btn" data-tab="comprehensive" class="inline-fix-50">
                         Comprehensive (95%)
                     </button>
                 </div>
                 
-                <div id="low-coverage" class="tab-content active" style="min-height: 400px;"></div>
-                <div id="good-coverage" class="tab-content" style="display: none; min-height: 400px;"></div>
-                <div id="comprehensive" class="tab-content" style="display: none; min-height: 400px;"></div>
+                <div id="low-coverage" class="tab-content active" class="inline-fix-93"></div>
+                <div id="good-coverage" class="tab-content" class="inline-fix-73"></div>
+                <div id="comprehensive" class="tab-content" class="inline-fix-73"></div>
                 
-                <button id="run-coverage" class="run-code-btn" style="margin-top: var(--spacing-md); padding: var(--spacing-sm) var(--spacing-xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                <button id="run-coverage" class="run-code-btn" class="inline-fix-265">
                     ▶ Run Coverage Analysis
                 </button>
                 
-                <div id="coverage-output" style="margin-top: var(--spacing-md); padding: var(--spacing-lg); background: rgba(26, 31, 58, 0.8); border-radius: 8px; border: 1px solid var(--module-border); display: none;">
-                    <h4 style="color: var(--hub-primary); margin-bottom: var(--spacing-sm);">Coverage Report:</h4>
-                    <pre id="coverage-content" style="color: var(--text-secondary); overflow-x: auto; margin: 0; font-size: 0.9rem; line-height: 1.6;"></pre>
+                <div id="coverage-output" class="inline-fix-242">
+                    <h4 class="inline-fix-174">Coverage Report:</h4>
+                    <pre id="coverage-content" class="inline-fix-290"></pre>
                 </div>
             </div>
         </section>
 
         <!-- Setting Coverage Targets -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🎯 Setting Meaningful Coverage Targets</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 Coverage targets should be risk-based and context-aware. Use these guidelines to set appropriate thresholds.
             </p>
             
@@ -239,82 +324,112 @@ graph LR
                 </pre>
             </div>
             
-            <div class="target-guidelines" style="margin-top: var(--spacing-xl); padding: var(--spacing-lg); background: rgba(0, 212, 255, 0.1); border-radius: 8px; border-left: 4px solid #00d4ff;">
-                <h4 style="color: #00d4ff; margin-bottom: var(--spacing-md);">💡 Industry Best Practices</h4>
-                <ul style="color: var(--text-secondary); line-height: 1.8;">
-                    <li><strong>Payment Processing:</strong> 95%+ with extensive edge case testing</li>
-                    <li><strong>Authentication/Authorization:</strong> 90%+ covering all permission scenarios</li>
-                    <li><strong>Core Business Logic:</strong> 85-90% with focus on critical paths</li>
-                    <li><strong>REST APIs:</strong> 80-85% covering happy and error paths</li>
-                    <li><strong>UI Components:</strong> 70-75% focusing on user interactions</li>
-                    <li><strong>Utilities/Helpers:</strong> 60-70% testing public interfaces</li>
-                </ul>
+            <div class="target-guidelines" class="inline-fix-177">
+                <h4 class="inline-fix-90">💡 Industry Best Practices</h4>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Payment Processing:</strong> 95%+ with extensive edge case testing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Authentication/Authorization:</strong> 90%+ covering all permission scenarios</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Core Business Logic:</strong> 85-90% with focus on critical paths</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>REST APIs:</strong> 80-85% covering happy and error paths</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>UI Components:</strong> 70-75% focusing on user interactions</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Utilities/Helpers:</strong> 60-70% testing public interfaces</div>
+    </div>
+</div>
             </div>
         </section>
 
         <!-- Interactive Quiz -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>✅ Knowledge Check: Coverage Quiz</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 Test your understanding of coverage metrics, quality indicators, and best practices.
             </p>
             <div class="quiz-container" id="quiz"></div>
             
-            <div id="quiz-results" class="quiz-results" style="display: none; margin-top: var(--spacing-xl); padding: var(--spacing-xl); background: rgba(123, 97, 255, 0.1); border-radius: 12px; text-align: center;">
+            <div id="quiz-results" class="quiz-results" class="inline-fix-108">
                 <div id="score-display"></div>
-                <button id="retry-quiz" style="margin-top: var(--spacing-lg); padding: var(--spacing-sm) var(--spacing-xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                <button id="retry-quiz" class="inline-fix-104">
                     🔄 Retry Quiz
                 </button>
             </div>
         </section>
 
         <!-- Progressive Challenge -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🏆 Challenge: Improve Test Coverage</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 You've inherited a codebase with 55% coverage. Analyze the coverage report and write tests to reach 85% while maintaining quality.
             </p>
             
-            <div class="challenge-scenario" style="padding: var(--spacing-lg); background: rgba(251, 191, 36, 0.1); border-radius: 8px; margin-bottom: var(--spacing-lg);">
-                <h4 style="color: #fbbf24; margin-bottom: var(--spacing-sm);">📋 Scenario</h4>
-                <p style="color: var(--text-secondary); line-height: 1.8;">
+            <div class="challenge-container" class="inline-fix-128">
+                <h4 class="inline-fix-65">📋 Scenario</h4>
+                <p class="inline-fix-34">
                     The <code>UserService</code> class handles user registration, authentication, and profile management. 
                     Current coverage is 55% with critical authentication logic untested. Your task:
                 </p>
-                <ul style="color: var(--text-secondary); margin-top: var(--spacing-sm);">
-                    <li>Identify untested paths in the coverage report</li>
-                    <li>Write tests for critical authentication flows</li>
-                    <li>Reach 85% coverage with meaningful assertions</li>
-                    <li>Avoid "coverage theater" - no empty tests!</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Identify untested paths in the coverage report</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Write tests for critical authentication flows</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Reach 85% coverage with meaningful assertions</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Avoid "coverage theater" - no empty tests!</div>
+    </div>
+</div>
             </div>
             
-            <button id="show-challenge-solution" class="show-solution-btn" style="padding: var(--spacing-sm) var(--spacing-xl); background: var(--hub-accent); color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+            <button id="show-challenge-solution" class="show-solution-btn" class="inline-fix-119">
                 💡 Show Solution
             </button>
             
-            <div id="challenge-solution" class="solution-container" style="display: none; margin-top: var(--spacing-lg); padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-radius: 8px; border-left: 4px solid #10b981;">
-                <h4 style="color: #10b981; margin-bottom: var(--spacing-md);">✅ Solution: Strategic Coverage Improvement</h4>
+            <div id="challenge-solution" class="solution-content" class="inline-fix-121">
+                <h4 class="inline-fix-44">✅ Solution: Strategic Coverage Improvement</h4>
                 
-                <div id="solution-editor" style="min-height: 500px; border: 1px solid var(--module-border); border-radius: 8px; overflow: hidden;"></div>
+                <div id="solution-editor" class="inline-fix-147"></div>
                 
-                <div style="margin-top: var(--spacing-lg); padding: var(--spacing-md); background: rgba(0, 212, 255, 0.1); border-radius: 6px;">
-                    <h5 style="color: #00d4ff; margin-bottom: var(--spacing-sm);">🎯 Key Improvements</h5>
-                    <ul style="color: var(--text-secondary); line-height: 1.8;">
-                        <li><strong>Authentication Edge Cases:</strong> Invalid tokens, expired sessions, missing credentials</li>
-                        <li><strong>Registration Validation:</strong> Duplicate emails, weak passwords, invalid formats</li>
-                        <li><strong>Error Handling:</strong> Database failures, network timeouts, external API errors</li>
-                        <li><strong>Branch Coverage:</strong> All if/else paths tested with assertions</li>
-                        <li><strong>Result:</strong> Coverage increased to 87% with high-quality, maintainable tests</li>
-                    </ul>
+                <div class="inline-fix-146">
+                    <h5 class="inline-fix-19">🎯 Key Improvements</h5>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Authentication Edge Cases:</strong> Invalid tokens, expired sessions, missing credentials</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Registration Validation:</strong> Duplicate emails, weak passwords, invalid formats</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Error Handling:</strong> Database failures, network timeouts, external API errors</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Branch Coverage:</strong> All if/else paths tested with assertions</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Result:</strong> Coverage increased to 87% with high-quality, maintainable tests</div>
+    </div>
+</div>
                 </div>
             </div>
         </section>
 
         <!-- Next Steps -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🚀 Next Steps</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 You've completed Test Coverage Analysis! Continue your learning journey:
             </p>
             <div class="next-module-cards">
@@ -331,11 +446,11 @@ graph LR
     </div>
 
     <!-- Footer -->
-    <footer style="margin-top: var(--spacing-3xl); padding: var(--spacing-xl); text-align: center; color: var(--text-secondary);">
+    <footer class="inline-fix-17">
         <p>© 2026 Asif Hussain. All rights reserved.</p>
-        <p style="margin-top: var(--spacing-sm);">
-            <a href="../../index.html" style="color: var(--hub-primary);">Back to Home</a> • 
-            <a href="../testing-hub.html" style="color: var(--hub-primary);">Testing Hub</a>
+        <p class="inline-fix-12">
+            <a href="../../index.html" class="inline-fix-10">Back to Home</a> • 
+            <a href="../testing-hub.html" class="inline-fix-10">Testing Hub</a>
         </p>
     </footer>
 
@@ -1273,24 +1388,24 @@ Test Quality Metrics:
         function renderQuiz() {
             const quizContainer = document.getElementById('quiz');
             quizContainer.innerHTML = quizData.map((item, index) => `
-                <div class="quiz-question" style="margin-bottom: var(--spacing-2xl); padding: var(--spacing-lg); background: rgba(26, 31, 58, 0.5); border-radius: 8px; border: 1px solid var(--module-border);">
-                    <h4 style="color: var(--text-primary); margin-bottom: var(--spacing-md); font-size: 1.1rem;">
+                <div class="quiz-question" class="inline-fix-56">
+                    <h4 class="inline-fix-66">
                         Question ${index + 1}: ${item.question}
                     </h4>
-                    <div class="options-container">
+                    <div class="quiz-options">
                         ${item.options.map((option, optIndex) => `
-                            <label class="quiz-option" style="display: block; padding: var(--spacing-md); margin: var(--spacing-sm) 0; background: rgba(123, 97, 255, 0.1); border: 2px solid transparent; border-radius: 8px; cursor: pointer; transition: all 0.2s ease;">
-                                <input type="radio" name="question-${index}" value="${optIndex}" style="margin-right: var(--spacing-sm);">
-                                <span style="color: var(--text-secondary);">${option}</span>
+                            <label class="quiz-option" class="inline-fix-63">
+                                <input type="radio" name="question-${index}" value="${optIndex}" class="inline-fix-54">
+                                <span class="inline-fix-9">${option}</span>
                             </label>
                         `).join('')}
                     </div>
-                    <div id="feedback-${index}" class="question-feedback" style="display: none; margin-top: var(--spacing-md); padding: var(--spacing-md); border-radius: 6px;"></div>
+                    <div id="feedback-${index}" class="faq-question" class="inline-fix-55"></div>
                 </div>
             `).join('');
             
             quizContainer.innerHTML += `
-                <button id="submit-quiz-btn" class="submit-quiz-btn" style="padding: var(--spacing-md) var(--spacing-2xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600;">
+                <button id="submit-quiz-btn" class="submit-quiz-btn" class="inline-fix-62">
                     📊 Submit Coverage Quiz
                 </button>
             `;
@@ -1337,24 +1452,24 @@ Test Quality Metrics:
                         feedback.style.background = 'rgba(16, 185, 129, 0.1)';
                         feedback.style.borderLeft = '4px solid #10b981';
                         feedback.innerHTML = `
-                            <strong style="color: #10b981;">✅ Correct!</strong><br>
-                            <span style="color: var(--text-secondary); font-size: 0.95rem;">${item.explanation}</span>
+                            <strong class="inline-fix-13">✅ Correct!</strong><br>
+                            <span class="inline-fix-6">${item.explanation}</span>
                         `;
                     } else {
                         feedback.style.display = 'block';
                         feedback.style.background = 'rgba(239, 68, 68, 0.1)';
                         feedback.style.borderLeft = '4px solid #ef4444';
                         feedback.innerHTML = `
-                            <strong style="color: #ef4444;">❌ Incorrect</strong><br>
-                            <span style="color: var(--text-secondary); font-size: 0.95rem;">The correct answer is: <strong>${item.options[item.correct]}</strong></span><br>
-                            <span style="color: var(--text-secondary); font-size: 0.95rem;">${item.explanation}</span>
+                            <strong class="inline-fix-21">❌ Incorrect</strong><br>
+                            <span class="inline-fix-6">The correct answer is: <strong>${item.options[item.correct]}</strong></span><br>
+                            <span class="inline-fix-6">${item.explanation}</span>
                         `;
                     }
                 } else {
                     feedback.style.display = 'block';
                     feedback.style.background = 'rgba(251, 191, 36, 0.1)';
                     feedback.style.borderLeft = '4px solid #fbbf24';
-                    feedback.innerHTML = `<strong style="color: #fbbf24;">⚠️ No answer selected</strong>`;
+                    feedback.innerHTML = `<strong class="inline-fix-15">⚠️ No answer selected</strong>`;
                 }
             });
             
@@ -1382,12 +1497,12 @@ Test Quality Metrics:
             }
             
             scoreDisplay.innerHTML = `
-                <div style="text-align: center;">
-                    <h3 style="color: ${color}; font-size: 2rem; margin-bottom: var(--spacing-sm);">${grade}</h3>
-                    <p style="font-size: 1.5rem; color: var(--text-primary); margin-bottom: var(--spacing-sm);">
+                <div class="inline-fix-16">
+                    <h3 class="inline-fix-58">${grade}</h3>
+                    <p class="inline-fix-59">
                         Score: ${correctCount}/${quizData.length} (${percentage.toFixed(0)}%)
                     </p>
-                    <p style="color: var(--text-secondary);">${message}</p>
+                    <p class="inline-fix-9">${message}</p>
                 </div>
             `;
             

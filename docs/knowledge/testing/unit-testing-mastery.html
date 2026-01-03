@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Unit Testing Mastery - Testing Learning Module">
@@ -8,8 +33,11 @@
     <meta name="author" content="Asif Hussain">
     <title>Unit Testing Mastery | CORTEX Learning Hub</title>
     <link rel="stylesheet" href="../../assets/css/main.css?v=2026-01-02">
-    <link rel="stylesheet" href="../../assets/css/learning-hub.css?v=2026-01-02">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
+    
+    <link rel="stylesheet" href="../..../..../..../..../..../../assets/css/generated-classes.css"><link rel="stylesheet" href="../../assets/css/learning-hub.css?v=2026-01-02">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/editor/editor.main.css">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
@@ -18,14 +46,39 @@
 
     <!-- Header Navigation -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../../index.html" class="nav-link">
-                    <span class="nav-icon">🏠</span> Home
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../../index.html" class="nav-link" mobile-nav-optimized>
+                    <span class="nav-content" mobile-nav-optimized>🏠</span> Home
                 </a>
-                <span class="nav-separator">›</span>
-                <a href="../testing-hub.html" class="nav-link">
-                    <span class="nav-icon">🧪</span> Testing
+                <span class="nav-content" mobile-nav-optimized>›</span>
+                <a href="../testing-hub.html" class="nav-link" mobile-nav-optimized>
+                    <span class="nav-content" mobile-nav-optimized>🧪</span> Testing
                 </a>
             </nav>
         </div>
@@ -36,7 +89,7 @@
         <div class="module-header">
             <div class="breadcrumb">
                 <span class="difficulty-badge beginner">Beginner</span>
-                <span style="color: var(--text-secondary);">Module 2 of 5</span>
+                <span class="inline-fix-9">Module 2 of 5</span>
             </div>
             <h1 class="hero-title">🧪 Unit Testing Mastery</h1>
             <p class="hero-subtitle">Interactive learning with quizzes, code playgrounds, and challenges</p>
@@ -52,30 +105,40 @@
     <!-- Main Content -->
     <div class="container">
         <!-- Learning Objectives -->
-        <section class="glass-card" style="margin-top: var(--spacing-2xl);">
+        <section class="glass-card" class="inline-fix-14">
             <h2>🎓 Learning Objectives</h2>
-            <ul class="objective-list">
-                <li>Master Arrange-Act-Assert (AAA) pattern for clear test structure</li>
-                <li>Write maintainable, self-documenting test code</li>
-                <li>Use test doubles effectively (mocks, stubs, fakes, spies)</li>
-                <li>Apply testing best practices and anti-patterns to avoid</li>
-                <li>Achieve meaningful code coverage with quality tests</li>
-            </ul>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Master Arrange-Act-Assert (AAA) pattern for clear test structure</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Write maintainable, self-documenting test code</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use test doubles effectively (mocks, stubs, fakes, spies)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Apply testing best practices and anti-patterns to avoid</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Achieve meaningful code coverage with quality tests</div>
+    </div>
+</div>
         </section>
 
         <!-- Test Pyramid -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🔺 The Test Pyramid</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 The test pyramid guides the optimal distribution of tests. Unit tests form the foundation, providing fast, reliable feedback.
             </p>
-            <div id="test-pyramid-viz" style="width: 100%; height: 500px; margin: var(--spacing-xl) 0; background: rgba(26, 31, 58, 0.5); border-radius: 12px; border: 1px solid var(--module-border);"></div>
+            <div id="test-pyramid-viz" class="inline-fix-122"></div>
         </section>
 
         <!-- AAA Pattern -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🎯 Arrange-Act-Assert (AAA) Pattern</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 The AAA pattern structures tests into three clear phases, making them easy to read and maintain.
             </p>
             
@@ -103,22 +166,22 @@ sequenceDiagram
                 </pre>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-lg); margin-top: var(--spacing-2xl);">
-                <div style="padding: var(--spacing-lg); background: rgba(123, 97, 255, 0.1); border-radius: 8px; border: 1px solid #7b61ff;">
-                    <h4 style="color: #7b61ff; margin-bottom: var(--spacing-md);">🔧 Arrange</h4>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+            <div class="inline-fix-162">
+                <div class="inline-fix-181">
+                    <h4 class="inline-fix-332">🔧 Arrange</h4>
+                    <p class="inline-fix-117">
                         Set up test conditions: create objects, configure mocks, prepare test data
                     </p>
                 </div>
-                <div style="padding: var(--spacing-lg); background: rgba(0, 212, 255, 0.1); border-radius: 8px; border: 1px solid #00d4ff;">
-                    <h4 style="color: #00d4ff; margin-bottom: var(--spacing-md);">⚡ Act</h4>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+                <div class="inline-fix-28">
+                    <h4 class="inline-fix-90">⚡ Act</h4>
+                    <p class="inline-fix-117">
                         Execute the specific behavior being tested (usually a single method call)
                     </p>
                 </div>
-                <div style="padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-radius: 8px; border: 1px solid #10b981;">
-                    <h4 style="color: #10b981; margin-bottom: var(--spacing-md);">✅ Assert</h4>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+                <div class="inline-fix-18">
+                    <h4 class="inline-fix-44">✅ Assert</h4>
+                    <p class="inline-fix-117">
                         Verify the result matches expectations and check for side effects
                     </p>
                 </div>
@@ -126,14 +189,14 @@ sequenceDiagram
         </section>
 
         <!-- Test Doubles -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🎭 Test Doubles: Mocks, Stubs, Fakes & Spies</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 Test doubles isolate the code under test by replacing real dependencies. Each type serves a specific purpose.
             </p>
-            <div id="test-doubles-comparison" style="width: 100%; height: 450px; margin: var(--spacing-xl) 0; background: rgba(26, 31, 58, 0.5); border-radius: 12px; border: 1px solid var(--module-border);"></div>
+            <div id="test-doubles-comparison" class="inline-fix-148"></div>
             
-            <div class="mermaid-container" style="margin-top: var(--spacing-2xl);">
+            <div class="mermaid-container" class="inline-fix-14">
                 <pre class="mermaid">
 graph TD
     TD[Test Double] --> Dummy[Dummy Object]
@@ -159,9 +222,9 @@ graph TD
         </section>
 
         <!-- Code Playground: AAA Pattern -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>💻 Code Playground: AAA Pattern in Action</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 See how the AAA pattern creates clear, maintainable tests with proper structure.
             </p>
             <div class="playground-container">
@@ -171,13 +234,13 @@ graph TD
                     <button class="tab-btn" data-tab="mocks">🎭 With Test Doubles</button>
                 </div>
                 <div class="tab-content active" id="bad">
-                    <div id="editor-bad" style="height: 450px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                    <div id="editor-bad" class="inline-fix-26"></div>
                 </div>
                 <div class="tab-content" id="good">
-                    <div id="editor-good" style="height: 450px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                    <div id="editor-good" class="inline-fix-26"></div>
                 </div>
                 <div class="tab-content" id="mocks">
-                    <div id="editor-mocks" style="height: 450px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                    <div id="editor-mocks" class="inline-fix-26"></div>
                 </div>
                 <button class="run-code-btn" id="run-code"><span class="btn-icon">▶️</span> Run Tests</button>
                 <div class="output-container" id="output">
@@ -188,85 +251,119 @@ graph TD
         </section>
 
         <!-- Best Practices -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>✨ Unit Testing Best Practices</h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--spacing-lg);">
-                <div style="padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-radius: 8px; border: 1px solid #10b981;">
-                    <h4 style="color: #10b981; margin-bottom: var(--spacing-md);">✅ Do This</h4>
-                    <ul style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8;">
-                        <li><strong>F.I.R.S.T Principles:</strong> Fast, Independent, Repeatable, Self-validating, Timely</li>
-                        <li><strong>One Assert:</strong> Test one thing per test method</li>
-                        <li><strong>Descriptive Names:</strong> <code>should_return_error_when_email_invalid()</code></li>
-                        <li><strong>Test Behavior:</strong> Focus on what, not how</li>
-                        <li><strong>Avoid Logic:</strong> No conditionals or loops in tests</li>
-                        <li><strong>Isolate Tests:</strong> No shared state between tests</li>
-                    </ul>
+            <div class="inline-fix-124">
+                <div class="inline-fix-18">
+                    <h4 class="inline-fix-44">✅ Do This</h4>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>F.I.R.S.T Principles:</strong> Fast, Independent, Repeatable, Self-validating, Timely</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>One Assert:</strong> Test one thing per test method</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Descriptive Names:</strong> <code>should_return_error_when_email_invalid()</code></div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Test Behavior:</strong> Focus on what, not how</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Avoid Logic:</strong> No conditionals or loops in tests</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Isolate Tests:</strong> No shared state between tests</div>
+    </div>
+</div>
                 </div>
-                <div style="padding: var(--spacing-lg); background: rgba(239, 68, 68, 0.1); border-radius: 8px; border: 1px solid #ef4444;">
-                    <h4 style="color: #ef4444; margin-bottom: var(--spacing-md);">❌ Avoid This</h4>
-                    <ul style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8;">
-                        <li><strong>Test Interdependence:</strong> Tests that depend on execution order</li>
-                        <li><strong>Testing Privates:</strong> Test public interface only</li>
-                        <li><strong>Over-Mocking:</strong> Mocking everything defeats the purpose</li>
-                        <li><strong>Brittle Tests:</strong> Tests that break with refactoring</li>
-                        <li><strong>Magic Numbers:</strong> Use named constants for test data</li>
-                        <li><strong>Test Code Duplication:</strong> Extract common setup to helper methods</li>
-                    </ul>
+                <div class="inline-fix-81">
+                    <h4 class="inline-fix-52">❌ Avoid This</h4>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Test Interdependence:</strong> Tests that depend on execution order</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Testing Privates:</strong> Test public interface only</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Over-Mocking:</strong> Mocking everything defeats the purpose</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Brittle Tests:</strong> Tests that break with refactoring</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Magic Numbers:</strong> Use named constants for test data</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Test Code Duplication:</strong> Extract common setup to helper methods</div>
+    </div>
+</div>
                 </div>
             </div>
         </section>
 
         <!-- Interactive Quiz -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>✅ Knowledge Check: Unit Testing Quiz</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 Test your understanding with 10 questions. Instant feedback provided!
             </p>
             <div class="quiz-container" id="quiz"></div>
-            <div class="quiz-results" id="quiz-results" style="display: none;">
+            <div class="quiz-results" id="quiz-results" class="inline-fix-48">
                 <h3 id="score-display"></h3>
-                <button class="retry-btn" id="retry-quiz" style="margin-top: var(--spacing-lg); padding: var(--spacing-md) var(--spacing-xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 8px; cursor: pointer;">🔄 Retry Quiz</button>
+                <button class="retry-btn" id="retry-quiz" class="inline-fix-77">🔄 Retry Quiz</button>
             </div>
         </section>
 
         <!-- Challenge -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🏆 Unit Testing Challenge</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 Write unit tests for a UserService class that handles user registration. Requirements:
             </p>
-            <ul style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
-                <li>Test email validation (reject invalid formats)</li>
-                <li>Test password strength requirements (min 8 chars, uppercase, number)</li>
-                <li>Mock the database repository</li>
-                <li>Verify database save is called with correct user data</li>
-                <li>Test duplicate email rejection</li>
-            </ul>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Test email validation (reject invalid formats)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Test password strength requirements (min 8 chars, uppercase, number)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Mock the database repository</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Verify database save is called with correct user data</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Test duplicate email rejection</div>
+    </div>
+</div>
             
-            <div class="challenge-hints" style="margin-bottom: var(--spacing-lg);">
-                <details style="margin: var(--spacing-sm) 0;">
-                    <summary style="cursor: pointer; color: var(--hub-primary); font-weight: 600;">💡 Hint 1: Test Structure</summary>
-                    <p style="color: var(--text-secondary); padding: var(--spacing-md); background: rgba(123, 97, 255, 0.1); border-radius: 6px; margin-top: var(--spacing-sm);">
+            <div class="challenge-container" class="inline-fix-72">
+                <details class="inline-fix-67">
+                    <summary class="inline-fix-70">💡 Hint 1: Test Structure</summary>
+                    <p class="inline-fix-75">
                         Use AAA pattern: Arrange (create UserService with mock repo), Act (call register), Assert (verify result and mock calls)
                     </p>
                 </details>
-                <details style="margin: var(--spacing-sm) 0;">
-                    <summary style="cursor: pointer; color: var(--hub-primary); font-weight: 600;">💡 Hint 2: Test Data</summary>
-                    <p style="color: var(--text-secondary); padding: var(--spacing-md); background: rgba(123, 97, 255, 0.1); border-radius: 6px; margin-top: var(--spacing-sm);">
+                <details class="inline-fix-67">
+                    <summary class="inline-fix-70">💡 Hint 2: Test Data</summary>
+                    <p class="inline-fix-75">
                         Create test cases: valid user, invalid email, weak password, duplicate email
                     </p>
                 </details>
-                <details style="margin: var(--spacing-sm) 0;">
-                    <summary style="cursor: pointer; color: var(--hub-primary); font-weight: 600;">💡 Hint 3: Mocking</summary>
-                    <p style="color: var(--text-secondary); padding: var(--spacing-md); background: rgba(123, 97, 255, 0.1); border-radius: 6px; margin-top: var(--spacing-sm);">
+                <details class="inline-fix-67">
+                    <summary class="inline-fix-70">💡 Hint 3: Mocking</summary>
+                    <p class="inline-fix-75">
                         Mock repository methods: find_by_email (returns None for new users), save (verifies correct data passed)
                     </p>
                 </details>
             </div>
             
-            <button id="show-solution-btn" style="padding: var(--spacing-sm) var(--spacing-lg); background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid #10b981; border-radius: 8px; cursor: pointer;">✅ Show Solution</button>
-            <div id="challenge-solution" style="margin-top: var(--spacing-lg); display: none;">
-                <pre style="background: rgba(26, 31, 58, 0.8); padding: var(--spacing-lg); border-radius: 8px; overflow-x: auto; color: #e5e7eb;"><code>import pytest
+            <button id="show-solution-btn" class="inline-fix-102">✅ Show Solution</button>
+            <div id="challenge-solution" class="inline-fix-74">
+                <pre class="inline-fix-71"><code>import pytest
 from unittest.mock import Mock, MagicMock
 
 class TestUserService:
@@ -343,9 +440,9 @@ class TestUserService:
         </section>
 
         <!-- Next Steps -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🚀 Next Steps</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 You've completed Unit Testing Mastery! Continue your learning journey:
             </p>
             <div class="next-module-cards">
@@ -362,11 +459,11 @@ class TestUserService:
     </div>
 
     <!-- Footer -->
-    <footer style="margin-top: var(--spacing-3xl); padding: var(--spacing-xl); text-align: center; color: var(--text-secondary);">
+    <footer class="inline-fix-17">
         <p>© 2026 Asif Hussain. All rights reserved.</p>
-        <p style="margin-top: var(--spacing-sm);">
-            <a href="../../index.html" style="color: var(--hub-primary);">Back to Home</a> • 
-            <a href="../testing-hub.html" style="color: var(--hub-primary);">Testing Hub</a>
+        <p class="inline-fix-12">
+            <a href="../../index.html" class="inline-fix-10">Back to Home</a> • 
+            <a href="../testing-hub.html" class="inline-fix-10">Testing Hub</a>
         </p>
     </footer>
 
@@ -890,24 +987,24 @@ def test_should_send_welcome_email_after_registration():
         function renderQuiz() {
             const quizContainer = document.getElementById('quiz');
             quizContainer.innerHTML = quizData.map((item, index) => `
-                <div class="quiz-question" style="margin-bottom: var(--spacing-2xl); padding: var(--spacing-lg); background: rgba(26, 31, 58, 0.5); border-radius: 8px; border: 1px solid var(--module-border);">
-                    <h4 style="color: var(--text-primary); margin-bottom: var(--spacing-md); font-size: 1.1rem;">
+                <div class="quiz-question" class="inline-fix-56">
+                    <h4 class="inline-fix-66">
                         Question ${index + 1}: ${item.question}
                     </h4>
-                    <div class="options-container">
+                    <div class="quiz-options">
                         ${item.options.map((option, optIndex) => `
-                            <label class="quiz-option" style="display: block; padding: var(--spacing-md); margin: var(--spacing-sm) 0; background: rgba(123, 97, 255, 0.1); border: 2px solid transparent; border-radius: 8px; cursor: pointer; transition: all 0.2s ease;">
-                                <input type="radio" name="question-${index}" value="${optIndex}" style="margin-right: var(--spacing-sm);">
-                                <span style="color: var(--text-secondary);">${option}</span>
+                            <label class="quiz-option" class="inline-fix-63">
+                                <input type="radio" name="question-${index}" value="${optIndex}" class="inline-fix-54">
+                                <span class="inline-fix-9">${option}</span>
                             </label>
                         `).join('')}
                     </div>
-                    <div id="feedback-${index}" class="question-feedback" style="display: none; margin-top: var(--spacing-md); padding: var(--spacing-md); border-radius: 6px;"></div>
+                    <div id="feedback-${index}" class="faq-question" class="inline-fix-55"></div>
                 </div>
             `).join('');
             
             quizContainer.innerHTML += `
-                <button id="submit-quiz-btn" class="submit-quiz-btn" style="padding: var(--spacing-md) var(--spacing-2xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600; transition: transform 0.2s ease;">
+                <button id="submit-quiz-btn" class="submit-quiz-btn" class="inline-fix-159">
                     📝 Submit Quiz
                 </button>
             `;
@@ -954,24 +1051,24 @@ def test_should_send_welcome_email_after_registration():
                         feedback.style.background = 'rgba(16, 185, 129, 0.1)';
                         feedback.style.borderLeft = '4px solid #10b981';
                         feedback.innerHTML = `
-                            <strong style="color: #10b981;">✅ Correct!</strong><br>
-                            <span style="color: var(--text-secondary); font-size: 0.95rem;">${item.explanation}</span>
+                            <strong class="inline-fix-13">✅ Correct!</strong><br>
+                            <span class="inline-fix-6">${item.explanation}</span>
                         `;
                     } else {
                         feedback.style.display = 'block';
                         feedback.style.background = 'rgba(239, 68, 68, 0.1)';
                         feedback.style.borderLeft = '4px solid #ef4444';
                         feedback.innerHTML = `
-                            <strong style="color: #ef4444;">❌ Incorrect</strong><br>
-                            <span style="color: var(--text-secondary); font-size: 0.95rem;">The correct answer is: <strong>${item.options[item.correct]}</strong></span><br>
-                            <span style="color: var(--text-secondary); font-size: 0.95rem;">${item.explanation}</span>
+                            <strong class="inline-fix-21">❌ Incorrect</strong><br>
+                            <span class="inline-fix-6">The correct answer is: <strong>${item.options[item.correct]}</strong></span><br>
+                            <span class="inline-fix-6">${item.explanation}</span>
                         `;
                     }
                 } else {
                     feedback.style.display = 'block';
                     feedback.style.background = 'rgba(251, 191, 36, 0.1)';
                     feedback.style.borderLeft = '4px solid #fbbf24';
-                    feedback.innerHTML = `<strong style="color: #fbbf24;">⚠️ No answer selected</strong>`;
+                    feedback.innerHTML = `<strong class="inline-fix-15">⚠️ No answer selected</strong>`;
                 }
             });
             
@@ -999,12 +1096,12 @@ def test_should_send_welcome_email_after_registration():
             }
             
             scoreDisplay.innerHTML = `
-                <div style="text-align: center;">
-                    <h3 style="color: ${color}; font-size: 2rem; margin-bottom: var(--spacing-sm);">${grade}</h3>
-                    <p style="font-size: 1.5rem; color: var(--text-primary); margin-bottom: var(--spacing-sm);">
+                <div class="inline-fix-16">
+                    <h3 class="inline-fix-58">${grade}</h3>
+                    <p class="inline-fix-59">
                         Score: ${correctCount}/${quizData.length} (${percentage.toFixed(0)}%)
                     </p>
-                    <p style="color: var(--text-secondary);">${message}</p>
+                    <p class="inline-fix-9">${message}</p>
                 </div>
             `;
             

@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="BDD & E2E Testing - Testing Learning Module">
@@ -8,8 +33,11 @@
     <meta name="author" content="Asif Hussain">
     <title>BDD & E2E Testing | CORTEX Learning Hub</title>
     <link rel="stylesheet" href="../../assets/css/main.css?v=2026-01-02">
-    <link rel="stylesheet" href="../../assets/css/learning-hub.css?v=2026-01-02">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
+    
+    <link rel="stylesheet" href="../..../..../..../..../..../../assets/css/generated-classes.css"><link rel="stylesheet" href="../../assets/css/learning-hub.css?v=2026-01-02">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/editor/editor.main.css">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
@@ -18,14 +46,39 @@
 
     <!-- Header Navigation -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../../index.html" class="nav-link">
-                    <span class="nav-icon">🏠</span> Home
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../../index.html" class="nav-link" mobile-nav-optimized>
+                    <span class="nav-content" mobile-nav-optimized>🏠</span> Home
                 </a>
-                <span class="nav-separator">›</span>
-                <a href="../testing-hub.html" class="nav-link">
-                    <span class="nav-icon">🧪</span> Testing
+                <span class="nav-content" mobile-nav-optimized>›</span>
+                <a href="../testing-hub.html" class="nav-link" mobile-nav-optimized>
+                    <span class="nav-content" mobile-nav-optimized>🧪</span> Testing
                 </a>
             </nav>
         </div>
@@ -36,7 +89,7 @@
         <div class="module-header">
             <div class="breadcrumb">
                 <span class="difficulty-badge intermediate">Intermediate</span>
-                <span style="color: var(--text-secondary);">Module 3 of 5</span>
+                <span class="inline-fix-9">Module 3 of 5</span>
             </div>
             <h1 class="hero-title">🎭 BDD & E2E Testing</h1>
             <p class="hero-subtitle">Interactive learning with quizzes, code playgrounds, and challenges</p>
@@ -52,21 +105,31 @@
     <!-- Main Content -->
     <div class="container">
         <!-- Learning Objectives -->
-        <section class="glass-card" style="margin-top: var(--spacing-2xl);">
+        <section class="glass-card" class="inline-fix-14">
             <h2>🎓 Learning Objectives</h2>
-            <ul class="objective-list">
-                <li>Understand Behavior-Driven Development (BDD) principles and benefits</li>
-                <li>Master Gherkin syntax (Given-When-Then) for readable scenarios</li>
-                <li>Implement end-to-end test automation with modern tools</li>
-                <li>Use Cucumber, Selenium, Cypress, and Playwright effectively</li>
-                <li>Balance unit, integration, and E2E tests in testing strategy</li>
-            </ul>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Understand Behavior-Driven Development (BDD) principles and benefits</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Master Gherkin syntax (Given-When-Then) for readable scenarios</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Implement end-to-end test automation with modern tools</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use Cucumber, Selenium, Cypress, and Playwright effectively</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Balance unit, integration, and E2E tests in testing strategy</div>
+    </div>
+</div>
         </section>
 
         <!-- BDD Workflow -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🔄 BDD Workflow: From Conversation to Automation</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 BDD bridges the gap between business stakeholders and technical teams through structured conversations and living documentation.
             </p>
             
@@ -87,34 +150,34 @@ graph LR
                 </pre>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-md); margin-top: var(--spacing-2xl);">
-                <div style="padding: var(--spacing-md); background: rgba(123, 97, 255, 0.1); border-radius: 6px; border-left: 4px solid #7b61ff;">
-                    <h5 style="color: #7b61ff; margin-bottom: var(--spacing-xs);">1. Discovery</h5>
-                    <p style="color: var(--text-secondary); font-size: 0.85rem;">Collaborative conversation about features and examples</p>
+            <div class="inline-fix-198">
+                <div class="inline-fix-251">
+                    <h5 class="inline-fix-263">1. Discovery</h5>
+                    <p class="inline-fix-79">Collaborative conversation about features and examples</p>
                 </div>
-                <div style="padding: var(--spacing-md); background: rgba(0, 212, 255, 0.1); border-radius: 6px; border-left: 4px solid #00d4ff;">
-                    <h5 style="color: #00d4ff; margin-bottom: var(--spacing-xs);">2. Formulation</h5>
-                    <p style="color: var(--text-secondary); font-size: 0.85rem;">Write scenarios in Gherkin (Given-When-Then)</p>
+                <div class="inline-fix-319">
+                    <h5 class="inline-fix-191">2. Formulation</h5>
+                    <p class="inline-fix-79">Write scenarios in Gherkin (Given-When-Then)</p>
                 </div>
-                <div style="padding: var(--spacing-md); background: rgba(16, 185, 129, 0.1); border-radius: 6px; border-left: 4px solid #10b981;">
-                    <h5 style="color: #10b981; margin-bottom: var(--spacing-xs);">3. Automation</h5>
-                    <p style="color: var(--text-secondary); font-size: 0.85rem;">Implement step definitions and automation code</p>
+                <div class="inline-fix-235">
+                    <h5 class="inline-fix-244">3. Automation</h5>
+                    <p class="inline-fix-79">Implement step definitions and automation code</p>
                 </div>
-                <div style="padding: var(--spacing-md); background: rgba(251, 191, 36, 0.1); border-radius: 6px; border-left: 4px solid #fbbf24;">
-                    <h5 style="color: #fbbf24; margin-bottom: var(--spacing-xs);">4. Execution</h5>
-                    <p style="color: var(--text-secondary); font-size: 0.85rem;">Run tests in CI/CD pipelines</p>
+                <div class="inline-fix-200">
+                    <h5 class="inline-fix-221">4. Execution</h5>
+                    <p class="inline-fix-79">Run tests in CI/CD pipelines</p>
                 </div>
-                <div style="padding: var(--spacing-md); background: rgba(239, 68, 68, 0.1); border-radius: 6px; border-left: 4px solid #ef4444;">
-                    <h5 style="color: #ef4444; margin-bottom: var(--spacing-xs);">5. Documentation</h5>
-                    <p style="color: var(--text-secondary); font-size: 0.85rem;">Scenarios become living, up-to-date documentation</p>
+                <div class="inline-fix-291">
+                    <h5 class="inline-fix-248">5. Documentation</h5>
+                    <p class="inline-fix-79">Scenarios become living, up-to-date documentation</p>
                 </div>
             </div>
         </section>
 
         <!-- Gherkin Syntax -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>📝 Gherkin Syntax: Given-When-Then</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 Gherkin provides a structured, human-readable language for describing application behavior that both business and technical teams understand.
             </p>
             
@@ -140,73 +203,97 @@ sequenceDiagram
                 </pre>
             </div>
 
-            <div style="margin-top: var(--spacing-2xl); padding: var(--spacing-lg); background: rgba(26, 31, 58, 0.5); border-radius: 8px; border: 1px solid var(--module-border);">
-                <pre style="margin: 0; color: #e5e7eb; font-family: 'Consolas', monospace; line-height: 1.8;"><code><span style="color: #7b61ff; font-weight: bold;">Feature:</span> Shopping Cart Management
-  <span style="color: #8b92a7;">As a customer</span>
-  <span style="color: #8b92a7;">I want to add products to my cart</span>
-  <span style="color: #8b92a7;">So that I can purchase multiple items together</span>
+            <div class="inline-fix-328">
+                <pre class="inline-fix-264"><code><span class="inline-fix-202">Feature:</span> Shopping Cart Management
+  <span class="inline-fix-114">As a customer</span>
+  <span class="inline-fix-114">I want to add products to my cart</span>
+  <span class="inline-fix-114">So that I can purchase multiple items together</span>
 
-  <span style="color: #00d4ff; font-weight: bold;">Scenario:</span> Add product to empty cart
-    <span style="color: #10b981; font-weight: bold;">Given</span> I am logged in as "john@example.com"
-    <span style="color: #10b981; font-weight: bold;">And</span> my cart is empty
-    <span style="color: #fbbf24; font-weight: bold;">When</span> I add "Laptop" to my cart
-    <span style="color: #ef4444; font-weight: bold;">Then</span> I should see 1 item in my cart
-    <span style="color: #ef4444; font-weight: bold;">And</span> the cart total should be "$999.99"</code></pre>
+  <span class="inline-fix-193">Scenario:</span> Add product to empty cart
+    <span class="inline-fix-149">Given</span> I am logged in as "john@example.com"
+    <span class="inline-fix-149">And</span> my cart is empty
+    <span class="inline-fix-304">When</span> I add "Laptop" to my cart
+    <span class="inline-fix-134">Then</span> I should see 1 item in my cart
+    <span class="inline-fix-134">And</span> the cart total should be "$999.99"</code></pre>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-lg); margin-top: var(--spacing-2xl);">
-                <div style="padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-radius: 8px; border: 1px solid #10b981;">
-                    <h4 style="color: #10b981; margin-bottom: var(--spacing-md);">📋 Given (Context)</h4>
-                    <ul style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8;">
-                        <li>Set up initial state</li>
-                        <li>Preconditions that must be true</li>
-                        <li>Example: "Given I am on the homepage"</li>
-                        <li>Can have multiple "And" clauses</li>
-                    </ul>
+            <div class="inline-fix-162">
+                <div class="inline-fix-18">
+                    <h4 class="inline-fix-44">📋 Given (Context)</h4>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Set up initial state</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Preconditions that must be true</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Example: "Given I am on the homepage"</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Can have multiple "And" clauses</div>
+    </div>
+</div>
                 </div>
-                <div style="padding: var(--spacing-lg); background: rgba(251, 191, 36, 0.1); border-radius: 8px; border: 1px solid #fbbf24;">
-                    <h4 style="color: #fbbf24; margin-bottom: var(--spacing-md);">⚡ When (Action)</h4>
-                    <ul style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8;">
-                        <li>The specific action or event</li>
-                        <li>What the user/system does</li>
-                        <li>Example: "When I click the login button"</li>
-                        <li>Should be a single key action</li>
-                    </ul>
+                <div class="inline-fix-153">
+                    <h4 class="inline-fix-334">⚡ When (Action)</h4>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">The specific action or event</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">What the user/system does</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Example: "When I click the login button"</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Should be a single key action</div>
+    </div>
+</div>
                 </div>
-                <div style="padding: var(--spacing-lg); background: rgba(239, 68, 68, 0.1); border-radius: 8px; border: 1px solid #ef4444;">
-                    <h4 style="color: #ef4444; margin-bottom: var(--spacing-md);">✅ Then (Outcome)</h4>
-                    <ul style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8;">
-                        <li>Expected observable results</li>
-                        <li>What should happen after action</li>
-                        <li>Example: "Then I should see my dashboard"</li>
-                        <li>Can verify multiple outcomes</li>
-                    </ul>
+                <div class="inline-fix-81">
+                    <h4 class="inline-fix-52">✅ Then (Outcome)</h4>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Expected observable results</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">What should happen after action</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Example: "Then I should see my dashboard"</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Can verify multiple outcomes</div>
+    </div>
+</div>
                 </div>
             </div>
         </section>
 
         <!-- E2E Testing Architecture -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🏗️ E2E Testing Architecture</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 End-to-end tests verify complete user workflows through all system layers, from UI to database.
             </p>
-            <div id="e2e-architecture-viz" style="width: 100%; height: 500px; margin: var(--spacing-xl) 0; background: rgba(26, 31, 58, 0.5); border-radius: 12px; border: 1px solid var(--module-border);"></div>
+            <div id="e2e-architecture-viz" class="inline-fix-122"></div>
         </section>
 
         <!-- Testing Tools Comparison -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🛠️ E2E Testing Tools Comparison</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 Modern E2E testing tools offer different approaches to test automation. Choose based on your needs.
             </p>
-            <div id="tools-comparison-viz" style="width: 100%; height: 450px; margin: var(--spacing-xl) 0; background: rgba(26, 31, 58, 0.5); border-radius: 12px; border: 1px solid var(--module-border);"></div>
+            <div id="tools-comparison-viz" class="inline-fix-148"></div>
         </section>
 
         <!-- Code Playground: Gherkin -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>💻 Code Playground: Gherkin Scenarios</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 Practice writing BDD scenarios in Gherkin for different user stories.
             </p>
             <div class="playground-container">
@@ -216,21 +303,21 @@ sequenceDiagram
                     <button class="tab-btn" data-tab="search">🔍 Search</button>
                 </div>
                 <div class="tab-content active" id="login">
-                    <div id="editor-login" style="height: 400px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                    <div id="editor-login" class="inline-fix-82"></div>
                 </div>
                 <div class="tab-content" id="cart">
-                    <div id="editor-cart" style="height: 400px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                    <div id="editor-cart" class="inline-fix-82"></div>
                 </div>
                 <div class="tab-content" id="search">
-                    <div id="editor-search" style="height: 400px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                    <div id="editor-search" class="inline-fix-82"></div>
                 </div>
             </div>
         </section>
 
         <!-- Code Playground: Cypress -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>💻 Code Playground: Cypress E2E Test</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 See how a Gherkin scenario translates to automated Cypress test code.
             </p>
             <div class="playground-container">
@@ -239,10 +326,10 @@ sequenceDiagram
                     <button class="tab-btn" data-tab="playwright">Playwright</button>
                 </div>
                 <div class="tab-content active" id="cypress">
-                    <div id="editor-cypress" style="height: 450px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                    <div id="editor-cypress" class="inline-fix-26"></div>
                 </div>
                 <div class="tab-content" id="playwright">
-                    <div id="editor-playwright" style="height: 450px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                    <div id="editor-playwright" class="inline-fix-26"></div>
                 </div>
                 <button class="run-code-btn" id="run-code"><span class="btn-icon">▶️</span> Run E2E Test</button>
                 <div class="output-container" id="output">
@@ -253,86 +340,122 @@ sequenceDiagram
         </section>
 
         <!-- Best Practices -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>✨ BDD & E2E Best Practices</h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--spacing-lg);">
-                <div style="padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-radius: 8px; border: 1px solid #10b981;">
-                    <h4 style="color: #10b981; margin-bottom: var(--spacing-md);">✅ Do This</h4>
-                    <ul style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8;">
-                        <li><strong>Focus on Business Value:</strong> Test user journeys that matter</li>
-                        <li><strong>Keep Scenarios Declarative:</strong> What, not how</li>
-                        <li><strong>Use Data Tables:</strong> For multiple examples efficiently</li>
-                        <li><strong>Maintain Test Independence:</strong> Each scenario runs alone</li>
-                        <li><strong>Parallelize Tests:</strong> Speed up CI/CD pipelines</li>
-                        <li><strong>Version with Code:</strong> Tests live in source control</li>
-                    </ul>
+            <div class="inline-fix-124">
+                <div class="inline-fix-18">
+                    <h4 class="inline-fix-44">✅ Do This</h4>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Focus on Business Value:</strong> Test user journeys that matter</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Keep Scenarios Declarative:</strong> What, not how</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Use Data Tables:</strong> For multiple examples efficiently</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Maintain Test Independence:</strong> Each scenario runs alone</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Parallelize Tests:</strong> Speed up CI/CD pipelines</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Version with Code:</strong> Tests live in source control</div>
+    </div>
+</div>
                 </div>
-                <div style="padding: var(--spacing-lg); background: rgba(239, 68, 68, 0.1); border-radius: 8px; border: 1px solid #ef4444;">
-                    <h4 style="color: #ef4444; margin-bottom: var(--spacing-md);">❌ Avoid This</h4>
-                    <ul style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8;">
-                        <li><strong>Testing Too Much:</strong> E2E tests are expensive, be selective</li>
-                        <li><strong>Implementation Details:</strong> Don't test how, test what</li>
-                        <li><strong>Brittle Selectors:</strong> Use stable test IDs, not CSS classes</li>
-                        <li><strong>No Waiting Strategy:</strong> Handle async properly</li>
-                        <li><strong>Ignoring Flakiness:</strong> Fix flaky tests immediately</li>
-                        <li><strong>Missing Recovery:</strong> Tests should clean up after themselves</li>
-                    </ul>
+                <div class="inline-fix-81">
+                    <h4 class="inline-fix-52">❌ Avoid This</h4>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Testing Too Much:</strong> E2E tests are expensive, be selective</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Implementation Details:</strong> Don't test how, test what</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Brittle Selectors:</strong> Use stable test IDs, not CSS classes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>No Waiting Strategy:</strong> Handle async properly</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Ignoring Flakiness:</strong> Fix flaky tests immediately</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Missing Recovery:</strong> Tests should clean up after themselves</div>
+    </div>
+</div>
                 </div>
             </div>
         </section>
 
         <!-- Interactive Quiz -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>✅ Knowledge Check: BDD & E2E Testing Quiz</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 Test your understanding with 10 questions. Instant feedback provided!
             </p>
             <div class="quiz-container" id="quiz"></div>
-            <div class="quiz-results" id="quiz-results" style="display: none;">
+            <div class="quiz-results" id="quiz-results" class="inline-fix-48">
                 <h3 id="score-display"></h3>
-                <button class="retry-btn" id="retry-quiz" style="margin-top: var(--spacing-lg); padding: var(--spacing-md) var(--spacing-xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 8px; cursor: pointer;">🔄 Retry Quiz</button>
+                <button class="retry-btn" id="retry-quiz" class="inline-fix-77">🔄 Retry Quiz</button>
             </div>
         </section>
 
         <!-- Challenge -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🏆 BDD & E2E Challenge</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 Write a complete BDD feature with scenarios for a user registration flow. Requirements:
             </p>
-            <ul style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
-                <li>Feature: User Registration</li>
-                <li>Scenario 1: Successful registration with valid data</li>
-                <li>Scenario 2: Registration fails with duplicate email</li>
-                <li>Scenario 3: Registration fails with weak password</li>
-                <li>Scenario 4: Registration succeeds and sends welcome email</li>
-                <li>Use proper Gherkin syntax (Given-When-Then)</li>
-            </ul>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Feature: User Registration</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Scenario 1: Successful registration with valid data</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Scenario 2: Registration fails with duplicate email</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Scenario 3: Registration fails with weak password</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Scenario 4: Registration succeeds and sends welcome email</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use proper Gherkin syntax (Given-When-Then)</div>
+    </div>
+</div>
             
-            <div class="challenge-hints" style="margin-bottom: var(--spacing-lg);">
-                <details style="margin: var(--spacing-sm) 0;">
-                    <summary style="cursor: pointer; color: var(--hub-primary); font-weight: 600;">💡 Hint 1: Feature Structure</summary>
-                    <p style="color: var(--text-secondary); padding: var(--spacing-md); background: rgba(123, 97, 255, 0.1); border-radius: 6px; margin-top: var(--spacing-sm);">
+            <div class="challenge-container" class="inline-fix-72">
+                <details class="inline-fix-67">
+                    <summary class="inline-fix-70">💡 Hint 1: Feature Structure</summary>
+                    <p class="inline-fix-75">
                         Start with Feature description, then list multiple Scenarios. Each scenario follows Given-When-Then structure.
                     </p>
                 </details>
-                <details style="margin: var(--spacing-sm) 0;">
-                    <summary style="cursor: pointer; color: var(--hub-primary); font-weight: 600;">💡 Hint 2: Context Setup</summary>
-                    <p style="color: var(--text-secondary); padding: var(--spacing-md); background: rgba(123, 97, 255, 0.1); border-radius: 6px; margin-top: var(--spacing-sm);">
+                <details class="inline-fix-67">
+                    <summary class="inline-fix-70">💡 Hint 2: Context Setup</summary>
+                    <p class="inline-fix-75">
                         Use "Given I am on the registration page" to set context. Add "And" clauses for additional preconditions.
                     </p>
                 </details>
-                <details style="margin: var(--spacing-sm) 0;">
-                    <summary style="cursor: pointer; color: var(--hub-primary); font-weight: 600;">💡 Hint 3: Verification</summary>
-                    <p style="color: var(--text-secondary); padding: var(--spacing-md); background: rgba(123, 97, 255, 0.1); border-radius: 6px; margin-top: var(--spacing-sm);">
+                <details class="inline-fix-67">
+                    <summary class="inline-fix-70">💡 Hint 3: Verification</summary>
+                    <p class="inline-fix-75">
                         "Then" clauses verify outcomes: "Then I should see a success message", "Then I should receive a welcome email"
                     </p>
                 </details>
             </div>
             
-            <button id="show-solution-btn" style="padding: var(--spacing-sm) var(--spacing-lg); background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid #10b981; border-radius: 8px; cursor: pointer;">✅ Show Solution</button>
-            <div id="challenge-solution" style="margin-top: var(--spacing-lg); display: none;">
-                <pre style="background: rgba(26, 31, 58, 0.8); padding: var(--spacing-lg); border-radius: 8px; overflow-x: auto; color: #e5e7eb;"><code>Feature: User Registration
+            <button id="show-solution-btn" class="inline-fix-102">✅ Show Solution</button>
+            <div id="challenge-solution" class="inline-fix-74">
+                <pre class="inline-fix-71"><code>Feature: User Registration
   As a new user
   I want to register for an account
   So that I can access the platform features
@@ -385,9 +508,9 @@ sequenceDiagram
         </section>
 
         <!-- Next Steps -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🚀 Next Steps</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 You've completed BDD & E2E Testing! Continue your learning journey:
             </p>
             <div class="next-module-cards">
@@ -404,11 +527,11 @@ sequenceDiagram
     </div>
 
     <!-- Footer -->
-    <footer style="margin-top: var(--spacing-3xl); padding: var(--spacing-xl); text-align: center; color: var(--text-secondary);">
+    <footer class="inline-fix-17">
         <p>© 2026 Asif Hussain. All rights reserved.</p>
-        <p style="margin-top: var(--spacing-sm);">
-            <a href="../../index.html" style="color: var(--hub-primary);">Back to Home</a> • 
-            <a href="../testing-hub.html" style="color: var(--hub-primary);">Testing Hub</a>
+        <p class="inline-fix-12">
+            <a href="../../index.html" class="inline-fix-10">Back to Home</a> • 
+            <a href="../testing-hub.html" class="inline-fix-10">Testing Hub</a>
         </p>
     </footer>
 
@@ -1003,24 +1126,24 @@ test.describe('Shopping Cart', () => {
         function renderQuiz() {
             const quizContainer = document.getElementById('quiz');
             quizContainer.innerHTML = quizData.map((item, index) => `
-                <div class="quiz-question" style="margin-bottom: var(--spacing-2xl); padding: var(--spacing-lg); background: rgba(26, 31, 58, 0.5); border-radius: 8px; border: 1px solid var(--module-border);">
-                    <h4 style="color: var(--text-primary); margin-bottom: var(--spacing-md); font-size: 1.1rem;">
+                <div class="quiz-question" class="inline-fix-56">
+                    <h4 class="inline-fix-66">
                         Question ${index + 1}: ${item.question}
                     </h4>
-                    <div class="options-container">
+                    <div class="quiz-options">
                         ${item.options.map((option, optIndex) => `
-                            <label class="quiz-option" style="display: block; padding: var(--spacing-md); margin: var(--spacing-sm) 0; background: rgba(123, 97, 255, 0.1); border: 2px solid transparent; border-radius: 8px; cursor: pointer; transition: all 0.2s ease;">
-                                <input type="radio" name="question-${index}" value="${optIndex}" style="margin-right: var(--spacing-sm);">
-                                <span style="color: var(--text-secondary);">${option}</span>
+                            <label class="quiz-option" class="inline-fix-63">
+                                <input type="radio" name="question-${index}" value="${optIndex}" class="inline-fix-54">
+                                <span class="inline-fix-9">${option}</span>
                             </label>
                         `).join('')}
                     </div>
-                    <div id="feedback-${index}" class="question-feedback" style="display: none; margin-top: var(--spacing-md); padding: var(--spacing-md); border-radius: 6px;"></div>
+                    <div id="feedback-${index}" class="faq-question" class="inline-fix-55"></div>
                 </div>
             `).join('');
             
             quizContainer.innerHTML += `
-                <button id="submit-quiz-btn" class="submit-quiz-btn" style="padding: var(--spacing-md) var(--spacing-2xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600;">
+                <button id="submit-quiz-btn" class="submit-quiz-btn" class="inline-fix-62">
                     📝 Submit Quiz
                 </button>
             `;
@@ -1067,24 +1190,24 @@ test.describe('Shopping Cart', () => {
                         feedback.style.background = 'rgba(16, 185, 129, 0.1)';
                         feedback.style.borderLeft = '4px solid #10b981';
                         feedback.innerHTML = `
-                            <strong style="color: #10b981;">✅ Correct!</strong><br>
-                            <span style="color: var(--text-secondary); font-size: 0.95rem;">${item.explanation}</span>
+                            <strong class="inline-fix-13">✅ Correct!</strong><br>
+                            <span class="inline-fix-6">${item.explanation}</span>
                         `;
                     } else {
                         feedback.style.display = 'block';
                         feedback.style.background = 'rgba(239, 68, 68, 0.1)';
                         feedback.style.borderLeft = '4px solid #ef4444';
                         feedback.innerHTML = `
-                            <strong style="color: #ef4444;">❌ Incorrect</strong><br>
-                            <span style="color: var(--text-secondary); font-size: 0.95rem;">The correct answer is: <strong>${item.options[item.correct]}</strong></span><br>
-                            <span style="color: var(--text-secondary); font-size: 0.95rem;">${item.explanation}</span>
+                            <strong class="inline-fix-21">❌ Incorrect</strong><br>
+                            <span class="inline-fix-6">The correct answer is: <strong>${item.options[item.correct]}</strong></span><br>
+                            <span class="inline-fix-6">${item.explanation}</span>
                         `;
                     }
                 } else {
                     feedback.style.display = 'block';
                     feedback.style.background = 'rgba(251, 191, 36, 0.1)';
                     feedback.style.borderLeft = '4px solid #fbbf24';
-                    feedback.innerHTML = `<strong style="color: #fbbf24;">⚠️ No answer selected</strong>`;
+                    feedback.innerHTML = `<strong class="inline-fix-15">⚠️ No answer selected</strong>`;
                 }
             });
             
@@ -1112,12 +1235,12 @@ test.describe('Shopping Cart', () => {
             }
             
             scoreDisplay.innerHTML = `
-                <div style="text-align: center;">
-                    <h3 style="color: ${color}; font-size: 2rem; margin-bottom: var(--spacing-sm);">${grade}</h3>
-                    <p style="font-size: 1.5rem; color: var(--text-primary); margin-bottom: var(--spacing-sm);">
+                <div class="inline-fix-16">
+                    <h3 class="inline-fix-58">${grade}</h3>
+                    <p class="inline-fix-59">
                         Score: ${correctCount}/${quizData.length} (${percentage.toFixed(0)}%)
                     </p>
-                    <p style="color: var(--text-secondary);">${message}</p>
+                    <p class="inline-fix-9">${message}</p>
                 </div>
             `;
             

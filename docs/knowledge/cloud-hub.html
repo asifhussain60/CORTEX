@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Cloud-Native Architecture Learning Hub - Master cloud patterns, microservices, and serverless through interactive modules">
@@ -8,7 +33,9 @@
     <meta name="author" content="Asif Hussain">
     <title>Cloud-Native Architecture Hub | CORTEX Best Practices</title>
     <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02">
-    <link rel="stylesheet" href="../assets/css/learning-hub.css?v=2026-01-02">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
+    
+    <link rel="stylesheet" href="../..../..../..../..../../assets/css/generated-classes.css"><link rel="stylesheet" href="../assets/css/learning-hub.css?v=2026-01-02">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
@@ -17,10 +44,35 @@
 
     <!-- Header Navigation -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../index.html" class="nav-link">
-                    <span class="nav-icon">🏠</span> Home
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../index.html" class="nav-link" mobile-nav-optimized>
+                    <span class="nav-content" mobile-nav-optimized>🏠</span> Home
                 </a>
             </nav>
         </div>
@@ -45,7 +97,7 @@
         <!-- Learning Path Roadmap -->
         <section class="learning-path-roadmap glass-card">
             <h4>🗺️ Your Learning Journey</h4>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 This curated path takes you from cloud fundamentals to advanced multi-cloud architectures. 
                 Master the Twelve-Factor App methodology, cloud-native patterns, and platform strategies.
             </p>
@@ -71,15 +123,15 @@ graph LR
         </section>
 
         <!-- Module Navigation Cards -->
-        <section style="margin-top: var(--spacing-3xl);">
-            <h2 style="color: var(--text-primary); margin-bottom: var(--spacing-xl); font-size: 2rem;">
+        <section class="inline-fix-1">
+            <h2 class="inline-fix-24">
                 📚 Interactive Learning Modules
             </h2>
             
-            <div class="module-nav-grid">
+            <div class="module-nav-grid" mobile-nav-optimized>
                 <!-- Module 1: Cloud Fundamentals -->
-                <a href="cloud/cloud-fundamentals.html" class="module-nav-card">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <a href="cloud/cloud-fundamentals.html" class="module-nav-card" mobile-nav-optimized>
+                    <div class="inline-fix-5">
                         <span class="module-number">Module 1</span>
                         <span class="difficulty-badge beginner">Beginner</span>
                     </div>
@@ -90,13 +142,13 @@ graph LR
                     </p>
                     <div class="module-footer">
                         <span class="time-estimate">⏱️ 35 minutes</span>
-                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                        <span class="inline-fix-4">Start →</span>
                     </div>
                 </a>
 
                 <!-- Module 2: Twelve-Factor App -->
-                <a href="cloud/twelve-factor-app.html" class="module-nav-card">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <a href="cloud/twelve-factor-app.html" class="module-nav-card" mobile-nav-optimized>
+                    <div class="inline-fix-5">
                         <span class="module-number">Module 2</span>
                         <span class="difficulty-badge intermediate">Intermediate</span>
                     </div>
@@ -107,13 +159,13 @@ graph LR
                     </p>
                     <div class="module-footer">
                         <span class="time-estimate">⏱️ 40 minutes</span>
-                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                        <span class="inline-fix-4">Start →</span>
                     </div>
                 </a>
 
                 <!-- Module 3: Cloud-Native Patterns -->
-                <a href="cloud/cloud-native-patterns.html" class="module-nav-card">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <a href="cloud/cloud-native-patterns.html" class="module-nav-card" mobile-nav-optimized>
+                    <div class="inline-fix-5">
                         <span class="module-number">Module 3</span>
                         <span class="difficulty-badge advanced">Advanced</span>
                     </div>
@@ -124,13 +176,13 @@ graph LR
                     </p>
                     <div class="module-footer">
                         <span class="time-estimate">⏱️ 45 minutes</span>
-                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                        <span class="inline-fix-4">Start →</span>
                     </div>
                 </a>
 
                 <!-- Module 4: Multi-Cloud Strategies -->
-                <a href="cloud/multi-cloud-strategies.html" class="module-nav-card">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <a href="cloud/multi-cloud-strategies.html" class="module-nav-card" mobile-nav-optimized>
+                    <div class="inline-fix-5">
                         <span class="module-number">Module 4</span>
                         <span class="difficulty-badge expert">Expert</span>
                     </div>
@@ -141,86 +193,110 @@ graph LR
                     </p>
                     <div class="module-footer">
                         <span class="time-estimate">⏱️ 40 minutes</span>
-                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                        <span class="inline-fix-4">Start →</span>
                     </div>
                 </a>
             </div>
         </section>
 
         <!-- Prerequisites & Recommendations -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>📋 Prerequisites & Recommendations</h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-lg); margin-top: var(--spacing-xl);">
-                <div style="padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-radius: 8px; border: 1px solid #10b981;">
-                    <h4 style="color: #10b981; margin-bottom: var(--spacing-sm);">✅ Recommended Background</h4>
-                    <ul style="color: var(--text-secondary); font-size: 0.95rem;">
-                        <li>Basic programming knowledge</li>
-                        <li>Understanding of web applications</li>
-                        <li>Familiarity with Linux/Unix commands</li>
-                        <li>No cloud experience required</li>
-                    </ul>
+            <div class="inline-fix-27">
+                <div class="inline-fix-18">
+                    <h4 class="inline-fix-22">✅ Recommended Background</h4>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Basic programming knowledge</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Understanding of web applications</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Familiarity with Linux/Unix commands</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">No cloud experience required</div>
+    </div>
+</div>
                 </div>
-                <div style="padding: var(--spacing-lg); background: rgba(0, 212, 255, 0.1); border-radius: 8px; border: 1px solid #00d4ff;">
-                    <h4 style="color: #00d4ff; margin-bottom: var(--spacing-sm);">🛠️ Tools You'll Use</h4>
-                    <ul style="color: var(--text-secondary); font-size: 0.95rem;">
-                        <li>AWS Free Tier (optional)</li>
-                        <li>Docker & Kubernetes</li>
-                        <li>Terraform (infrastructure as code)</li>
-                        <li>Interactive cloud simulations</li>
-                    </ul>
+                <div class="inline-fix-28">
+                    <h4 class="inline-fix-19">🛠️ Tools You'll Use</h4>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">AWS Free Tier (optional)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Docker & Kubernetes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Terraform (infrastructure as code)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Interactive cloud simulations</div>
+    </div>
+</div>
                 </div>
-                <div style="padding: var(--spacing-lg); background: rgba(139, 92, 246, 0.1); border-radius: 8px; border: 1px solid #8b5cf6;">
-                    <h4 style="color: #8b5cf6; margin-bottom: var(--spacing-sm);">🎯 What You'll Build</h4>
-                    <ul style="color: var(--text-secondary); font-size: 0.95rem;">
-                        <li>Twelve-Factor web application</li>
-                        <li>Microservices with service mesh</li>
-                        <li>Multi-cloud deployment pipeline</li>
-                        <li>Serverless event processor</li>
-                    </ul>
+                <div class="inline-fix-41">
+                    <h4 class="inline-fix-43">🎯 What You'll Build</h4>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Twelve-Factor web application</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Microservices with service mesh</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Multi-cloud deployment pipeline</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Serverless event processor</div>
+    </div>
+</div>
                 </div>
             </div>
         </section>
 
         <!-- Learning Outcomes -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🎓 Learning Outcomes</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+            <p class="inline-fix-2">
                 By completing this learning path, you'll be able to:
             </p>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-md);">
-                <div style="padding: var(--spacing-md); background: rgba(16, 185, 129, 0.05); border-left: 3px solid #10b981; border-radius: 4px;">
-                    <strong style="color: #10b981;">Cloud Provider Comparison</strong>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+            <div class="inline-fix-31">
+                <div class="inline-fix-20">
+                    <strong class="inline-fix-13">Cloud Provider Comparison</strong>
+                    <p class="inline-fix-8">
                         Choose between AWS, Azure, and GCP based on project requirements
                     </p>
                 </div>
-                <div style="padding: var(--spacing-md); background: rgba(0, 212, 255, 0.05); border-left: 3px solid #00d4ff; border-radius: 4px;">
-                    <strong style="color: #00d4ff;">Twelve-Factor Mastery</strong>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                <div class="inline-fix-33">
+                    <strong class="inline-fix-25">Twelve-Factor Mastery</strong>
+                    <p class="inline-fix-8">
                         Build scalable, maintainable cloud-native applications
                     </p>
                 </div>
-                <div style="padding: var(--spacing-md); background: rgba(139, 92, 246, 0.05); border-left: 3px solid #8b5cf6; border-radius: 4px;">
-                    <strong style="color: #8b5cf6;">Service Mesh Design</strong>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                <div class="inline-fix-29">
+                    <strong class="inline-fix-37">Service Mesh Design</strong>
+                    <p class="inline-fix-8">
                         Implement Istio, Linkerd, and service-to-service communication
                     </p>
                 </div>
-                <div style="padding: var(--spacing-md); background: rgba(251, 191, 36, 0.05); border-left: 3px solid #fbbf24; border-radius: 4px;">
-                    <strong style="color: #fbbf24;">Multi-Cloud Architecture</strong>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                <div class="inline-fix-38">
+                    <strong class="inline-fix-15">Multi-Cloud Architecture</strong>
+                    <p class="inline-fix-8">
                         Design portable apps that avoid vendor lock-in
                     </p>
                 </div>
-                <div style="padding: var(--spacing-md); background: rgba(239, 68, 68, 0.05); border-left: 3px solid #ef4444; border-radius: 4px;">
-                    <strong style="color: #ef4444;">Cost Optimization</strong>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                <div class="inline-fix-64">
+                    <strong class="inline-fix-21">Cost Optimization</strong>
+                    <p class="inline-fix-8">
                         Optimize cloud spending with right-sizing and reserved instances
                     </p>
                 </div>
-                <div style="padding: var(--spacing-md); background: rgba(16, 185, 129, 0.05); border-left: 3px solid #10b981; border-radius: 4px;">
-                    <strong style="color: #10b981;">Serverless Patterns</strong>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                <div class="inline-fix-20">
+                    <strong class="inline-fix-13">Serverless Patterns</strong>
+                    <p class="inline-fix-8">
                         Build event-driven apps with AWS Lambda, Azure Functions, Cloud Functions
                     </p>
                 </div>
@@ -228,24 +304,24 @@ graph LR
         </section>
 
         <!-- Related Learning Paths -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-1">
             <h2>🔗 Related Learning Paths</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+            <p class="inline-fix-3">
                 Expand your knowledge with these complementary paths:
             </p>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-lg);">
+            <div class="inline-fix-30">
                 <a href="containers-hub.html" class="related-path-card">
-                    <span class="path-icon">🐳</span>
+                    <span class="learning-path-roadmap">🐳</span>
                     <h5>Containers & Kubernetes</h5>
                     <p>Docker, K8s orchestration, Helm charts</p>
                 </a>
                 <a href="devops-hub.html" class="related-path-card">
-                    <span class="path-icon">🔄</span>
+                    <span class="learning-path-roadmap">🔄</span>
                     <h5>DevOps & CI/CD</h5>
                     <p>GitOps, infrastructure as code, deployment pipelines</p>
                 </a>
                 <a href="microservices-hub.html" class="related-path-card">
-                    <span class="path-icon">🔬</span>
+                    <span class="learning-path-roadmap">🔬</span>
                     <h5>Microservices Architecture</h5>
                     <p>Service decomposition, resilience, observability</p>
                 </a>
@@ -253,9 +329,9 @@ graph LR
         </section>
 
         <!-- Quick Links -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl); margin-bottom: var(--spacing-3xl);">
+        <section class="glass-card" class="inline-fix-40">
             <h2>📚 Additional Resources</h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-md); margin-top: var(--spacing-lg);">
+            <div class="inline-fix-32">
                 <a href="https://12factor.net/" target="_blank" rel="noopener" class="resource-link">
                     📖 Twelve-Factor App
                 </a>
@@ -273,11 +349,11 @@ graph LR
     </div>
 
     <!-- Footer -->
-    <footer style="padding: var(--spacing-2xl); text-align: center; color: var(--text-secondary); background: rgba(0, 0, 0, 0.3);">
+    <footer class="inline-fix-42">
         <p>© 2026 Asif Hussain. All rights reserved.</p>
-        <p style="margin-top: var(--spacing-sm);">
-            <a href="../index.html" style="color: var(--hub-primary); text-decoration: none;">Back to Home</a> • 
-            <a href="index.html" style="color: var(--hub-primary); text-decoration: none;">All Learning Paths</a>
+        <p class="inline-fix-12">
+            <a href="../index.html" class="inline-fix-11">Back to Home</a> • 
+            <a href="index.html" class="inline-fix-11">All Learning Paths</a>
         </p>
     </footer>
 

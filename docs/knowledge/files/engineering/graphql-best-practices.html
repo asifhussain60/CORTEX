@@ -1,44 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GraphQL Best Practices | CORTEX Knowledge</title>
     <link rel="stylesheet" href="../../../assets/css/main.css">
+    <link rel="stylesheet" href="../../../assets/css/intentional-classes.css">
 </head>
 <body>
-    <header class="header-glass">
+    <header class="panel-header-centered">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="container">
             <nav class="breadcrumb">
-                <a href="../../../index.html" class="breadcrumb-link">Home</a>
+                <a href="../../../index.html" class="breadcrumb-separator">Home</a>
                 <span class="breadcrumb-separator">/</span>
-                <a href="../../index.html" class="breadcrumb-link">Knowledge Library</a>
+                <a href="../../index.html" class="breadcrumb-separator">Knowledge Library</a>
                 <span class="breadcrumb-separator">/</span>
-                <a href="../../engineering.html" class="breadcrumb-link">Engineering</a>
+                <a href="../../engineering.html" class="breadcrumb-separator">Engineering</a>
                 <span class="breadcrumb-separator">/</span>
                 <span class="breadcrumb-current">GraphQL Best Practices</span>
             </nav>
         </div>
     </header>
 
-    <main class="main-content">
+    <main class="level1-domain-icon--frontend">
         <section class="knowledge-file-hero">
             <div class="container">
                 <div class="hero-content">
                     <h1 class="hero-title">GraphQL Best Practices</h1>
                     <p class="hero-subtitle">Design Efficient, Secure, and Scalable GraphQL APIs</p>
-                    <div class="hero-meta">
-                        <span class="meta-item"><i class="icon-category"></i> API Design Excellence</span>
-                        <span class="meta-item"><i class="icon-version"></i> v1.0.0</span>
-                        <span class="meta-item"><i class="icon-scope"></i> Production-Ready</span>
+                    <div class="btn-hero-story">
+                        <span class="metadata-grid"><i class="level1-integration-icon-container"></i> API Design Excellence</span>
+                        <span class="metadata-grid"><i class="level1-integration-icon-container"></i> v1.0.0</span>
+                        <span class="metadata-grid"><i class="level1-integration-icon-container"></i> Production-Ready</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="tab-container">
+        <section class="demo-tab-v-desc">
             <div class="container">
-                <div class="tab-nav">
+                <div class="demo-tab-v-desc">
                     <button class="tab-button active" data-tab="overview">Overview</button>
                     <button class="tab-button" data-tab="content">Content</button>
                     <button class="tab-button" data-tab="examples">Examples</button>
@@ -48,50 +99,76 @@
                 <div class="tab-content active" id="overview">
                     <div class="content-section">
                         <h2 class="section-header">What is GraphQL?</h2>
-                        <p class="section-text">
+                        <p class="level2-section-title-green">
                             GraphQL is a query language and runtime for APIs. Unlike REST, GraphQL lets clients request exactly the data they need in a single request. The strongly-typed schema serves as a contract between client and server, enabling powerful tooling and validation.
                         </p>
                     </div>
 
                     <div class="content-section">
                         <h2 class="section-header">GraphQL Core Principles</h2>
-                        <div class="principle-grid">
+                        <div class="principle-title">
                             <div class="principle-card">
-                                <h3 class="principle-name">Strongly Typed Schema</h3>
-                                <p class="principle-desc">Schema defines complete API contract with types</p>
-                                <ul class="benefit-list">
-                                    <li>Type safety at development time</li>
-                                    <li>Auto-generated documentation</li>
-                                    <li>Client code generation</li>
-                                    <li>Query validation before execution</li>
-                                </ul>
+                                <h3 class="principle-title">Strongly Typed Schema</h3>
+                                <p class="principle-title">Schema defines complete API contract with types</p>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Type safety at development time</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Auto-generated documentation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Client code generation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Query validation before execution</div>
+    </div>
+</div>
                             </div>
                             <div class="principle-card">
-                                <h3 class="principle-name">Client-Specified Queries</h3>
-                                <p class="principle-desc">Clients request exactly what they need</p>
-                                <ul class="benefit-list">
-                                    <li>No over-fetching or under-fetching</li>
-                                    <li>Single request for complex data</li>
-                                    <li>Reduced network overhead</li>
-                                </ul>
+                                <h3 class="principle-title">Client-Specified Queries</h3>
+                                <p class="principle-title">Clients request exactly what they need</p>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">No over-fetching or under-fetching</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Single request for complex data</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Reduced network overhead</div>
+    </div>
+</div>
                             </div>
                             <div class="principle-card">
-                                <h3 class="principle-name">Introspection</h3>
-                                <p class="principle-desc">Schema is queryable by clients</p>
-                                <ul class="benefit-list">
-                                    <li>Auto-generated documentation</li>
-                                    <li>GraphQL Playground/IDE support</li>
-                                    <li>Runtime schema validation</li>
-                                </ul>
+                                <h3 class="principle-title">Introspection</h3>
+                                <p class="principle-title">Schema is queryable by clients</p>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Auto-generated documentation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">GraphQL Playground/IDE support</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Runtime schema validation</div>
+    </div>
+</div>
                             </div>
                             <div class="principle-card">
-                                <h3 class="principle-name">Single Endpoint</h3>
-                                <p class="principle-desc">All queries go to /graphql</p>
-                                <ul class="benefit-list">
-                                    <li>Simplified routing</li>
-                                    <li>Easier caching strategies</li>
-                                    <li>Unified authentication</li>
-                                </ul>
+                                <h3 class="principle-title">Single Endpoint</h3>
+                                <p class="principle-title">All queries go to /graphql</p>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Simplified routing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Easier caching strategies</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Unified authentication</div>
+    </div>
+</div>
                             </div>
                         </div>
                     </div>
@@ -100,24 +177,24 @@
                         <h2 class="section-header">Schema Design Best Practices</h2>
                         <div class="naming-conventions">
                             <div class="naming-rule">
-                                <h3 class="rule-title">✅ Use PascalCase for Types</h3>
-                                <p class="rule-good"><strong>Good:</strong> <code>type UserProfile { ... }</code></p>
-                                <p class="rule-bad"><strong>Bad:</strong> <code>type user_profile { ... }</code></p>
+                                <h3 class="rules-showcase">✅ Use PascalCase for Types</h3>
+                                <p class="rules-showcase"><strong>Good:</strong> <code>type UserProfile { ... }</code></p>
+                                <p class="rules-showcase"><strong>Bad:</strong> <code>type user_profile { ... }</code></p>
                             </div>
                             <div class="naming-rule">
-                                <h3 class="rule-title">✅ Use camelCase for Fields</h3>
-                                <p class="rule-good"><strong>Good:</strong> <code>firstName: String</code></p>
-                                <p class="rule-bad"><strong>Bad:</strong> <code>first_name: String</code></p>
+                                <h3 class="rules-showcase">✅ Use camelCase for Fields</h3>
+                                <p class="rules-showcase"><strong>Good:</strong> <code>firstName: String</code></p>
+                                <p class="rules-showcase"><strong>Bad:</strong> <code>first_name: String</code></p>
                             </div>
                             <div class="naming-rule">
-                                <h3 class="rule-title">✅ Prefix Boolean Fields</h3>
-                                <p class="rule-good"><strong>Good:</strong> <code>isActive: Boolean, hasPermission: Boolean</code></p>
-                                <p class="rule-bad"><strong>Bad:</strong> <code>active: Boolean, permission: Boolean</code></p>
+                                <h3 class="rules-showcase">✅ Prefix Boolean Fields</h3>
+                                <p class="rules-showcase"><strong>Good:</strong> <code>isActive: Boolean, hasPermission: Boolean</code></p>
+                                <p class="rules-showcase"><strong>Bad:</strong> <code>active: Boolean, permission: Boolean</code></p>
                             </div>
                             <div class="naming-rule">
-                                <h3 class="rule-title">✅ Use Verbs for Mutations</h3>
-                                <p class="rule-good"><strong>Good:</strong> <code>createUser, updateProfile, deleteOrder</code></p>
-                                <p class="rule-bad"><strong>Bad:</strong> <code>user, profile, order</code></p>
+                                <h3 class="rules-showcase">✅ Use Verbs for Mutations</h3>
+                                <p class="rules-showcase"><strong>Good:</strong> <code>createUser, updateProfile, deleteOrder</code></p>
+                                <p class="rules-showcase"><strong>Bad:</strong> <code>user, profile, order</code></p>
                             </div>
                         </div>
                     </div>
@@ -125,51 +202,83 @@
                     <div class="content-section">
                         <h2 class="section-header">GraphQL Type System</h2>
                         <div class="type-system-grid">
-                            <div class="type-card">
-                                <h3 class="type-name">Object Types</h3>
-                                <p class="type-desc">Primary building blocks defining entities</p>
-                                <ul class="type-practices">
-                                    <li>Keep types focused and cohesive</li>
-                                    <li>Use interfaces for shared fields</li>
-                                    <li>Avoid deeply nested types (>3-4 levels)</li>
-                                    <li>Make fields nullable by default</li>
-                                </ul>
+                            <div class="tech-typescript">
+                                <h3 class="tech-typescript">Object Types</h3>
+                                <p class="tech-typescript">Primary building blocks defining entities</p>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Keep types focused and cohesive</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use interfaces for shared fields</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Avoid deeply nested types (>3-4 levels)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Make fields nullable by default</div>
+    </div>
+</div>
                             </div>
-                            <div class="type-card">
-                                <h3 class="type-name">Interfaces</h3>
-                                <p class="type-desc">Abstract types for polymorphism</p>
-                                <ul class="type-practices">
-                                    <li>Use for polymorphic responses (SearchResult)</li>
-                                    <li>Define shared fields (Node interface with id)</li>
-                                    <li>Enable type-safe union alternatives</li>
-                                </ul>
+                            <div class="tech-typescript">
+                                <h3 class="tech-typescript">Interfaces</h3>
+                                <p class="tech-typescript">Abstract types for polymorphism</p>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Use for polymorphic responses (SearchResult)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Define shared fields (Node interface with id)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Enable type-safe union alternatives</div>
+    </div>
+</div>
                             </div>
-                            <div class="type-card">
-                                <h3 class="type-name">Unions</h3>
-                                <p class="type-desc">Return one of multiple types</p>
-                                <ul class="type-practices">
-                                    <li>Search results with different types</li>
-                                    <li>Mutation results (success/error types)</li>
-                                    <li>Use when no shared fields needed</li>
-                                </ul>
+                            <div class="tech-typescript">
+                                <h3 class="tech-typescript">Unions</h3>
+                                <p class="tech-typescript">Return one of multiple types</p>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Search results with different types</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Mutation results (success/error types)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use when no shared fields needed</div>
+    </div>
+</div>
                             </div>
-                            <div class="type-card">
-                                <h3 class="type-name">Enums</h3>
-                                <p class="type-desc">Fixed set of values</p>
-                                <ul class="type-practices">
-                                    <li>Use UPPER_SNAKE_CASE for values</li>
-                                    <li>Never remove enum values (deprecate)</li>
-                                    <li>Perfect for status, roles, categories</li>
-                                </ul>
+                            <div class="tech-typescript">
+                                <h3 class="tech-typescript">Enums</h3>
+                                <p class="tech-typescript">Fixed set of values</p>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Use UPPER_SNAKE_CASE for values</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Never remove enum values (deprecate)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Perfect for status, roles, categories</div>
+    </div>
+</div>
                             </div>
-                            <div class="type-card">
-                                <h3 class="type-name">Input Types</h3>
-                                <p class="type-desc">Complex mutation arguments</p>
-                                <ul class="type-practices">
-                                    <li>Separate from output types</li>
-                                    <li>Use nullable fields for partial updates</li>
-                                    <li>Name with Input suffix</li>
-                                </ul>
+                            <div class="tech-typescript">
+                                <h3 class="tech-typescript">Input Types</h3>
+                                <p class="tech-typescript">Complex mutation arguments</p>
+                                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Separate from output types</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use nullable fields for partial updates</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Name with Input suffix</div>
+    </div>
+</div>
                             </div>
                         </div>
                     </div>
@@ -179,23 +288,23 @@
                         <div class="nullability-grid">
                             <div class="nullability-card">
                                 <code class="nullability-pattern">[Type!]!</code>
-                                <p class="pattern-meaning">Non-null list of non-null items</p>
-                                <p class="pattern-use">Required collection (e.g., permissions)</p>
+                                <p class="badge-patterns">Non-null list of non-null items</p>
+                                <p class="badge-patterns">Required collection (e.g., permissions)</p>
                             </div>
                             <div class="nullability-card">
                                 <code class="nullability-pattern">[Type!]</code>
-                                <p class="pattern-meaning">Nullable list of non-null items</p>
-                                <p class="pattern-use">Optional collection</p>
+                                <p class="badge-patterns">Nullable list of non-null items</p>
+                                <p class="badge-patterns">Optional collection</p>
                             </div>
                             <div class="nullability-card">
                                 <code class="nullability-pattern">[Type]!</code>
-                                <p class="pattern-meaning">Non-null list with nullable items</p>
-                                <p class="pattern-use">Rare - usually avoid</p>
+                                <p class="badge-patterns">Non-null list with nullable items</p>
+                                <p class="badge-patterns">Rare - usually avoid</p>
                             </div>
                             <div class="nullability-card">
                                 <code class="nullability-pattern">Type!</code>
-                                <p class="pattern-meaning">Non-null field</p>
-                                <p class="pattern-use">IDs, required business fields</p>
+                                <p class="badge-patterns">Non-null field</p>
+                                <p class="badge-patterns">IDs, required business fields</p>
                             </div>
                         </div>
                     </div>
@@ -206,9 +315,9 @@
                         <h2 class="section-header">Pagination Strategies</h2>
                         
                         <div class="pagination-strategy">
-                            <h3 class="strategy-name">Cursor-Based Pagination (Relay-Style)</h3>
-                            <p class="strategy-desc">Recommended for production GraphQL APIs</p>
-                            <pre class="code-block"><code class="language-graphql">type Query {
+                            <h3 class="orchestrator-viz-section">Cursor-Based Pagination (Relay-Style)</h3>
+                            <p class="orchestrator-viz-section">Recommended for production GraphQL APIs</p>
+                            <pre class="code-block"><code class="language-badge">type Query {
   users(first: Int, after: String, last: Int, before: String): UserConnection!
 }
 
@@ -229,17 +338,23 @@ type PageInfo {
   startCursor: String
   endCursor: String
 }</code></pre>
-                            <ul class="strategy-benefits">
-                                <li>✅ Handles inserts/deletes consistently</li>
-                                <li>✅ Works with infinite scroll</li>
-                                <li>✅ Standardized across industry (Relay spec)</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">✅ Handles inserts/deletes consistently</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Works with infinite scroll</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Standardized across industry (Relay spec)</div>
+    </div>
+</div>
                         </div>
 
                         <div class="pagination-strategy">
-                            <h3 class="strategy-name">Offset-Based Pagination</h3>
-                            <p class="strategy-desc">Simple page-based approach</p>
-                            <pre class="code-block"><code class="language-graphql">type Query {
+                            <h3 class="orchestrator-viz-section">Offset-Based Pagination</h3>
+                            <p class="orchestrator-viz-section">Simple page-based approach</p>
+                            <pre class="code-block"><code class="language-badge">type Query {
   users(page: Int = 1, perPage: Int = 10): UserPage!
 }
 
@@ -250,48 +365,72 @@ type UserPage {
   total: Int!
   hasMore: Boolean!
 }</code></pre>
-                            <ul class="strategy-benefits">
-                                <li>✅ Simple to implement</li>
-                                <li>✅ Familiar to developers</li>
-                                <li>❌ Performance issues with large offsets</li>
-                                <li>❌ Inconsistent with concurrent changes</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">✅ Simple to implement</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Familiar to developers</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">❌ Performance issues with large offsets</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">❌ Inconsistent with concurrent changes</div>
+    </div>
+</div>
                         </div>
                     </div>
 
                     <div class="content-section">
                         <h2 class="section-header">Query Optimization with DataLoader</h2>
-                        <p class="section-text">
+                        <p class="level2-section-title-green">
                             DataLoader solves the N+1 query problem by batching and caching data requests within a single GraphQL request.
                         </p>
                         
-                        <h3 class="subsection-header">N+1 Problem</h3>
-                        <p class="section-text">
+                        <h3 class="level1-subsection-title">N+1 Problem</h3>
+                        <p class="level2-section-title-green">
                             Without DataLoader, resolving a list of users and their orders results in 1 query for users + N queries for orders (one per user).
                         </p>
 
-                        <h3 class="subsection-header">DataLoader Solution</h3>
-                        <ul class="solution-steps">
-                            <li>Batch multiple requests for the same resource</li>
-                            <li>Execute single query for all needed items</li>
-                            <li>Cache results within request context</li>
-                            <li>Automatically deduplicate requests</li>
-                        </ul>
+                        <h3 class="level1-subsection-title">DataLoader Solution</h3>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Batch multiple requests for the same resource</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Execute single query for all needed items</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Cache results within request context</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Automatically deduplicate requests</div>
+    </div>
+</div>
 
-                        <h3 class="subsection-header">DataLoader Best Practices</h3>
-                        <ul class="best-practice-list">
-                            <li>Create one DataLoader per resource type</li>
-                            <li>Instantiate DataLoaders per-request (not globally)</li>
-                            <li>Use DataLoader for associations (user.orders)</li>
-                            <li>Profile queries to identify N+1 problems</li>
-                        </ul>
+                        <h3 class="level1-subsection-title">DataLoader Best Practices</h3>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Create one DataLoader per resource type</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Instantiate DataLoaders per-request (not globally)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use DataLoader for associations (user.orders)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Profile queries to identify N+1 problems</div>
+    </div>
+</div>
                     </div>
 
                     <div class="content-section">
                         <h2 class="section-header">Error Handling</h2>
                         
-                        <h3 class="subsection-header">GraphQL Error Response</h3>
-                        <pre class="code-block"><code class="language-json">{
+                        <h3 class="level1-subsection-title">GraphQL Error Response</h3>
+                        <pre class="code-block"><code class="language-badge">{
   "data": {
     "user": null
   },
@@ -309,65 +448,101 @@ type UserPage {
   ]
 }</code></pre>
 
-                        <h3 class="subsection-header">Error Handling Strategies</h3>
-                        <ul class="strategy-list">
-                            <li><strong>Field Errors:</strong> Return null for field, add error to errors array</li>
-                            <li><strong>Union Types:</strong> Return success or error type in union</li>
-                            <li><strong>Error Extensions:</strong> Add custom error codes and metadata</li>
-                            <li><strong>Partial Success:</strong> Return partial data when some fields fail</li>
-                        </ul>
+                        <h3 class="level1-subsection-title">Error Handling Strategies</h3>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Field Errors:</strong> Return null for field, add error to errors array</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Union Types:</strong> Return success or error type in union</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Error Extensions:</strong> Add custom error codes and metadata</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Partial Success:</strong> Return partial data when some fields fail</div>
+    </div>
+</div>
 
-                        <h3 class="subsection-header">Error Best Practices</h3>
-                        <ul class="best-practice-list">
-                            <li>Use custom error codes (NOT_FOUND, VALIDATION_ERROR, etc.)</li>
-                            <li>Include helpful context in extensions</li>
-                            <li>Never expose internal errors to clients</li>
-                            <li>Log full error details server-side</li>
-                            <li>Consider union types for expected errors</li>
-                        </ul>
+                        <h3 class="level1-subsection-title">Error Best Practices</h3>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Use custom error codes (NOT_FOUND, VALIDATION_ERROR, etc.)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Include helpful context in extensions</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Never expose internal errors to clients</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Log full error details server-side</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Consider union types for expected errors</div>
+    </div>
+</div>
                     </div>
 
                     <div class="content-section">
                         <h2 class="section-header">Security Best Practices</h2>
                         
-                        <h3 class="subsection-header">Query Depth Limiting</h3>
-                        <p class="section-text">Prevent deeply nested queries that could overload server:</p>
-                        <pre class="code-block"><code class="language-javascript">// Limit query depth to 5 levels
+                        <h3 class="level1-subsection-title">Query Depth Limiting</h3>
+                        <p class="level2-section-title-green">Prevent deeply nested queries that could overload server:</p>
+                        <pre class="code-block"><code class="language-badge">// Limit query depth to 5 levels
 const depthLimit = require('graphql-depth-limit');
 app.use('/graphql', graphqlHTTP({
   validationRules: [depthLimit(5)]
 }));</code></pre>
 
-                        <h3 class="subsection-header">Query Complexity Analysis</h3>
-                        <p class="section-text">Assign complexity costs to fields and limit total query complexity:</p>
-                        <pre class="code-block"><code class="language-graphql">type Query {
+                        <h3 class="level1-subsection-title">Query Complexity Analysis</h3>
+                        <p class="level2-section-title-green">Assign complexity costs to fields and limit total query complexity:</p>
+                        <pre class="code-block"><code class="language-badge">type Query {
   users(first: Int!): [User!]! # Complexity: first * 10
   user(id: ID!): User           # Complexity: 1
 }</code></pre>
 
-                        <h3 class="subsection-header">Rate Limiting</h3>
-                        <ul class="security-list">
-                            <li>Implement per-user rate limits</li>
-                            <li>Use query complexity for adaptive rate limiting</li>
-                            <li>Monitor expensive queries</li>
-                            <li>Consider GraphQL-specific rate limiting (not just HTTP)</li>
-                        </ul>
+                        <h3 class="level1-subsection-title">Rate Limiting</h3>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Implement per-user rate limits</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use query complexity for adaptive rate limiting</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Monitor expensive queries</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Consider GraphQL-specific rate limiting (not just HTTP)</div>
+    </div>
+</div>
 
-                        <h3 class="subsection-header">Authentication & Authorization</h3>
-                        <ul class="security-list">
-                            <li>Authenticate at HTTP layer (before GraphQL)</li>
-                            <li>Authorize at field level in resolvers</li>
-                            <li>Use directive-based authorization (@auth, @hasRole)</li>
-                            <li>Never expose unauthorized data (return null)</li>
-                            <li>Disable introspection in production</li>
-                        </ul>
+                        <h3 class="level1-subsection-title">Authentication & Authorization</h3>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Authenticate at HTTP layer (before GraphQL)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Authorize at field level in resolvers</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use directive-based authorization (@auth, @hasRole)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Never expose unauthorized data (return null)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Disable introspection in production</div>
+    </div>
+</div>
                     </div>
 
                     <div class="content-section">
                         <h2 class="section-header">Schema Evolution</h2>
                         
-                        <h3 class="subsection-header">Deprecation Over Breaking Changes</h3>
-                        <pre class="code-block"><code class="language-graphql">type User {
+                        <h3 class="level1-subsection-title">Deprecation Over Breaking Changes</h3>
+                        <pre class="code-block"><code class="language-badge">type User {
   # Deprecated field
   name: String @deprecated(reason: "Use firstName and lastName instead")
   
@@ -376,30 +551,48 @@ app.use('/graphql', graphqlHTTP({
   lastName: String
 }</code></pre>
 
-                        <h3 class="subsection-header">Versioning Strategies</h3>
-                        <ul class="strategy-list">
-                            <li><strong>Deprecation (Recommended):</strong> Mark old fields @deprecated, add new fields</li>
-                            <li><strong>Versioned Endpoints:</strong> /graphql/v1, /graphql/v2 (avoid if possible)</li>
-                            <li><strong>Field Aliases:</strong> Resolve same data with different field names</li>
-                        </ul>
+                        <h3 class="level1-subsection-title">Versioning Strategies</h3>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Deprecation (Recommended):</strong> Mark old fields @deprecated, add new fields</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Versioned Endpoints:</strong> /graphql/v1, /graphql/v2 (avoid if possible)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Field Aliases:</strong> Resolve same data with different field names</div>
+    </div>
+</div>
 
-                        <h3 class="subsection-header">Schema Evolution Best Practices</h3>
-                        <ul class="best-practice-list">
-                            <li>Never remove fields (deprecate instead)</li>
-                            <li>Add new fields as nullable</li>
-                            <li>Use @deprecated directive with reason</li>
-                            <li>Monitor deprecated field usage</li>
-                            <li>Communicate changes to clients early</li>
-                            <li>Maintain schema changelog</li>
-                        </ul>
+                        <h3 class="level1-subsection-title">Schema Evolution Best Practices</h3>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Never remove fields (deprecate instead)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Add new fields as nullable</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use @deprecated directive with reason</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Monitor deprecated field usage</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Communicate changes to clients early</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Maintain schema changelog</div>
+    </div>
+</div>
                     </div>
                 </div>
 
                 <div class="tab-content" id="examples">
                     <div class="content-section">
                         <h2 class="section-header">Schema Design Example</h2>
-                        <h3 class="example-header">Complete User Schema</h3>
-                        <pre class="code-block"><code class="language-graphql">type Query {
+                        <h3 class="command-example">Complete User Schema</h3>
+                        <pre class="code-block"><code class="language-badge">type Query {
   user(id: ID!): User
   users(first: Int, after: String): UserConnection!
 }
@@ -480,8 +673,8 @@ enum ErrorCode {
 
                     <div class="content-section">
                         <h2 class="section-header">Query Examples</h2>
-                        <h3 class="example-header">Basic Query</h3>
-                        <pre class="code-block"><code class="language-graphql">query GetUser {
+                        <h3 class="command-example">Basic Query</h3>
+                        <pre class="code-block"><code class="language-badge">query GetUser {
   user(id: "123") {
     id
     fullName
@@ -490,8 +683,8 @@ enum ErrorCode {
   }
 }</code></pre>
 
-                        <h3 class="example-header">Nested Query with Pagination</h3>
-                        <pre class="code-block"><code class="language-graphql">query GetUserWithOrders {
+                        <h3 class="command-example">Nested Query with Pagination</h3>
+                        <pre class="code-block"><code class="language-badge">query GetUserWithOrders {
   user(id: "123") {
     id
     fullName
@@ -513,8 +706,8 @@ enum ErrorCode {
   }
 }</code></pre>
 
-                        <h3 class="example-header">Mutation with Error Handling</h3>
-                        <pre class="code-block"><code class="language-graphql">mutation CreateUser {
+                        <h3 class="command-example">Mutation with Error Handling</h3>
+                        <pre class="code-block"><code class="language-badge">mutation CreateUser {
   createUser(input: {
     email: "john@example.com"
     firstName: "John"
@@ -537,8 +730,8 @@ enum ErrorCode {
 
                     <div class="content-section">
                         <h2 class="section-header">DataLoader Implementation - Python</h2>
-                        <h3 class="example-header">Batch Loading Function</h3>
-                        <pre class="code-block"><code class="language-python">from aiodataloader import DataLoader
+                        <h3 class="command-example">Batch Loading Function</h3>
+                        <pre class="code-block"><code class="language-badge">from aiodataloader import DataLoader
 
 class UserLoader(DataLoader):
     async def batch_load_fn(self, user_ids):
@@ -558,15 +751,15 @@ async def resolve_user(parent, info, id):
                 <div class="tab-content" id="cortex">
                     <div class="content-section">
                         <h2 class="section-header">GraphQL Schema Validation in CORTEX</h2>
-                        <p class="section-text">
+                        <p class="level2-section-title-green">
                             CORTEX includes intelligent agents that validate GraphQL schemas against best practices and detect anti-patterns.
                         </p>
                     </div>
 
                     <div class="content-section">
                         <h2 class="section-header">Schema Validator</h2>
-                        <div class="cortex-example">
-                            <pre class="code-block"><code class="language-python"># CORTEX GraphQL Schema Validator
+                        <div class="built-with-cortex-panel">
+                            <pre class="code-block"><code class="language-badge"># CORTEX GraphQL Schema Validator
 class GraphQLSchemaValidator:
     def validate_schema(self, schema: str) -> List[Violation]:
         violations = []
@@ -619,8 +812,8 @@ class GraphQLSchemaValidator:
 
                     <div class="content-section">
                         <h2 class="section-header">Query Complexity Analyzer</h2>
-                        <div class="cortex-example">
-                            <pre class="code-block"><code class="language-python"># CORTEX Query Complexity Analyzer
+                        <div class="built-with-cortex-panel">
+                            <pre class="code-block"><code class="language-badge"># CORTEX Query Complexity Analyzer
 class QueryComplexityAnalyzer:
     def analyze_complexity(self, query: str, schema: str) -> ComplexityReport:
         parsed_query = parse_query(query)
@@ -686,7 +879,7 @@ class QueryComplexityAnalyzer:
 
                     <div class="content-section">
                         <h2 class="section-header">Related Knowledge Files</h2>
-                        <div class="related-files">
+                        <div class="level1-relationship-grid">
                             <a href="rest-api-design.html" class="related-file-card">
                                 <h3 class="related-file-title">REST API Design</h3>
                                 <p class="related-file-desc">Alternative API design approach</p>
@@ -710,15 +903,15 @@ class QueryComplexityAnalyzer:
         </section>
     </main>
 
-    <footer class="footer-glass">
+    <footer class="footer-bottom">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3 class="footer-title">CORTEX Knowledge</h3>
-                    <p class="footer-text">Part of the CORTEX AI Assistant ecosystem</p>
+                    <h3 class="footer-bottom">CORTEX Knowledge</h3>
+                    <p class="footer-bottom">Part of the CORTEX AI Assistant ecosystem</p>
                 </div>
                 <div class="footer-section">
-                    <h3 class="footer-title">Quick Links</h3>
+                    <h3 class="footer-bottom">Quick Links</h3>
                     <ul class="footer-links">
                         <li><a href="../../index.html" class="footer-link">Knowledge Library</a></li>
                         <li><a href="../../engineering.html" class="footer-link">Engineering Category</a></li>
@@ -726,10 +919,10 @@ class QueryComplexityAnalyzer:
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h3 class="footer-title">Standards</h3>
-                    <p class="footer-text">GraphQL Specification</p>
-                    <p class="footer-text">Relay Cursor Connections</p>
-                    <p class="footer-text">DataLoader Pattern</p>
+                    <h3 class="footer-bottom">Standards</h3>
+                    <p class="footer-bottom">GraphQL Specification</p>
+                    <p class="footer-bottom">Relay Cursor Connections</p>
+                    <p class="footer-bottom">DataLoader Pattern</p>
                 </div>
             </div>
             <div class="footer-bottom">

@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="DDD Aggregates & Entities - Tactical Domain-Driven Design patterns for consistency boundaries">
@@ -8,13 +33,14 @@
     <title>Aggregates & Entities - CORTEX Knowledge</title>
     <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
-        <button class="back-button" onclick="history.back()" aria-label="Go back">← Back</button>
+    <nav class="breadcrumb-separator sticky-nav" mobile-nav-optimized aria-label="Breadcrumb">
+        <button class="grid-background" onclick="history.back()" aria-label="Go back">← Back</button>
         <ol class="breadcrumb">
             <li><a href="../../index.html">Home</a></li>
             <li><a href="../index.html">Knowledge Library</a></li>
@@ -29,16 +55,16 @@
         </div>
         <h1 class="hero-title">📐 Aggregates & Entities</h1>
         <p class="hero-subtitle">Tactical DDD patterns for consistency boundaries and domain models</p>
-        <div class="file-metadata">
+        <div class="code-file">
             <span class="metadata-item">📦 40+ Rules</span>
             <span class="metadata-item">🏷️ Domain-Driven Design</span>
             <span class="metadata-item">📅 Updated: Dec 2025</span>
         </div>
     </section>
 
-    <aside class="toc-sidebar" aria-label="Table of contents">
+    <aside class="toc-link" aria-label="Table of contents">
         <h3>On This Page</h3>
-        <nav class="toc-nav">
+        <nav class="toc-nav" mobile-nav-optimized>
             <a href="#overview" class="toc-link">Overview</a>
             <a href="#entities" class="toc-link">Entities</a>
             <a href="#value-objects" class="toc-link">Value Objects</a>
@@ -49,28 +75,42 @@
         </nav>
     </aside>
 
-    <main class="file-content">
+    <main class="code-file">
         <section class="glass-card" id="overview">
             <h2>Tactical DDD Building Blocks</h2>
             <p>
                 Tactical Domain-Driven Design provides building blocks for implementing domain models within bounded contexts. 
                 These patterns ensure data consistency, enforce business invariants, and create maintainable domain logic.
             </p>
-            <div class="info-banner">
+            <div class="level1-feature-icon-container--info">
                 <strong>💡 Key Benefit:</strong> Aggregates define consistency boundaries, ensuring all business rules 
                 are enforced atomically within transaction boundaries.
             </div>
             
             <h3>Core Building Blocks</h3>
-            <ul class="feature-list">
-                <li><strong>Entities:</strong> Objects with unique identity that persists over time</li>
-                <li><strong>Value Objects:</strong> Immutable objects defined by attributes, not identity</li>
-                <li><strong>Aggregates:</strong> Cluster of entities/value objects with consistency boundary</li>
-                <li><strong>Domain Events:</strong> Record of something significant that happened</li>
-                <li><strong>Repositories:</strong> Abstraction for accessing aggregates</li>
-                <li><strong>Domain Services:</strong> Stateless operations not belonging to entities</li>
-                <li><strong>Factories:</strong> Complex object creation logic</li>
-            </ul>
+            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Entities:</strong> Objects with unique identity that persists over time</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Value Objects:</strong> Immutable objects defined by attributes, not identity</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Aggregates:</strong> Cluster of entities/value objects with consistency boundary</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Domain Events:</strong> Record of something significant that happened</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Repositories:</strong> Abstraction for accessing aggregates</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Domain Services:</strong> Stateless operations not belonging to entities</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Factories:</strong> Complex object creation logic</div>
+    </div>
+</div>
         </section>
 
         <section class="glass-card" id="entities">
@@ -82,13 +122,13 @@
 
             <div class="rule-card">
                 <h3>Entity Identity Patterns</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Choose appropriate identity strategy based on your domain and infrastructure needs.</p>
                 
                 <h4>Strategy 1: GUID/UUID (Recommended for Distributed Systems)</h4>
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Recommended</h4>
-                    <pre><code class="language-csharp">public class Order : Entity
+                    <pre><code class="language-badge">public class Order : Entity
 {
     public Guid Id { get; private set; }
     public DateTime OrderDate { get; private set; }
@@ -108,8 +148,8 @@
                 </div>
 
                 <h4>Strategy 2: Database-Generated ID</h4>
-                <div class="example-section">
-                    <pre><code class="language-sql">-- SQL Server IDENTITY
+                <div class="command-example">
+                    <pre><code class="language-badge">-- SQL Server IDENTITY
 CREATE TABLE Orders (
     OrderId INT IDENTITY(1,1) PRIMARY KEY,
     CustomerId INT,
@@ -122,8 +162,8 @@ CREATE TABLE Orders (
                 </div>
 
                 <h4>Strategy 3: Natural Key</h4>
-                <div class="example-section">
-                    <pre><code class="language-csharp">public class Product : Entity
+                <div class="command-example">
+                    <pre><code class="language-badge">public class Product : Entity
 {
     public string SKU { get; private set; }  // Stock Keeping Unit
     
@@ -143,12 +183,12 @@ CREATE TABLE Orders (
 
             <div class="rule-card">
                 <h3>Entity Base Class Pattern</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Implement a base Entity class with identity-based equality comparison.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Recommended</h4>
-                    <pre><code class="language-csharp">public abstract class Entity
+                    <pre><code class="language-badge">public abstract class Entity
 {
     public Guid Id { get; protected set; }
     
@@ -204,12 +244,12 @@ CREATE TABLE Orders (
 
             <div class="rule-card">
                 <h3>Value Object Characteristics</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Value Objects must be immutable, have no identity, and implement value-based equality.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Recommended - Money Value Object</h4>
-                    <pre><code class="language-csharp">public sealed class Money : IEquatable&lt;Money&gt;
+                    <pre><code class="language-badge">public sealed class Money : IEquatable&lt;Money&gt;
 {
     public decimal Amount { get; }
     public string Currency { get; }
@@ -265,12 +305,12 @@ var finalPrice = price.Add(discount.Negate());
 
             <div class="rule-card">
                 <h3>When to Use Value Objects vs Entities</h3>
-                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <span class="badge badge-security">MEDIUM PRIORITY</span>
                 <p>Use value objects for concepts that have no meaningful identity.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>Examples</h4>
-                    <pre><code class="language-csharp">// VALUE OBJECTS (no identity needed)
+                    <pre><code class="language-badge">// VALUE OBJECTS (no identity needed)
 public class Address
 {
     public string Street { get; }
@@ -307,20 +347,30 @@ public class Customer : Entity
 
             <div class="rule-card">
                 <h3>Aggregate Rules</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Follow these rules to design effective aggregates that maintain consistency.</p>
                 
-                <ul class="feature-list">
-                    <li><strong>Rule 1:</strong> Protect business invariants inside aggregate boundaries</li>
-                    <li><strong>Rule 2:</strong> Design small aggregates for better performance</li>
-                    <li><strong>Rule 3:</strong> Reference other aggregates by ID only</li>
-                    <li><strong>Rule 4:</strong> Update one aggregate per transaction</li>
-                    <li><strong>Rule 5:</strong> Use eventual consistency between aggregates</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Rule 1:</strong> Protect business invariants inside aggregate boundaries</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Rule 2:</strong> Design small aggregates for better performance</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Rule 3:</strong> Reference other aggregates by ID only</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Rule 4:</strong> Update one aggregate per transaction</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Rule 5:</strong> Use eventual consistency between aggregates</div>
+    </div>
+</div>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Recommended - Order Aggregate</h4>
-                    <pre><code class="language-csharp">public class Order : Entity, IAggregateRoot
+                    <pre><code class="language-badge">public class Order : Entity, IAggregateRoot
 {
     // Aggregate root properties
     public Guid Id { get; private set; }
@@ -423,12 +473,12 @@ public class OrderItem : Entity
 
             <div class="rule-card">
                 <h3>Aggregate Size Guidelines</h3>
-                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <span class="badge badge-security">MEDIUM PRIORITY</span>
                 <p>Keep aggregates small to avoid performance and concurrency issues.</p>
                 
-                <div class="example-section bad-example">
+                <div class="command-example bad-example">
                     <h4>❌ Avoid - Aggregate Too Large</h4>
-                    <pre><code class="language-csharp">// BAD: Customer aggregate contains too much
+                    <pre><code class="language-badge">// BAD: Customer aggregate contains too much
 public class Customer : IAggregateRoot
 {
     public List&lt;Order&gt; Orders { get; set; }          // 1000s of orders
@@ -442,9 +492,9 @@ public class Customer : IAggregateRoot
 </code></pre>
                 </div>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Recommended - Right-Sized Aggregates</h4>
-                    <pre><code class="language-csharp">// GOOD: Separate aggregates with references by ID
+                    <pre><code class="language-badge">// GOOD: Separate aggregates with references by ID
 public class Customer : IAggregateRoot
 {
     public Guid Id { get; private set; }
@@ -474,12 +524,12 @@ public class Order : IAggregateRoot
 
             <div class="rule-card">
                 <h3>Repository Pattern</h3>
-                <span class="badge badge-high">HIGH PRIORITY</span>
+                <span class="badge badge-security">HIGH PRIORITY</span>
                 <p>Create one repository per aggregate root. Repositories work with complete aggregates, not fragments.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Recommended</h4>
-                    <pre><code class="language-csharp">// Repository interface (in domain layer)
+                    <pre><code class="language-badge">// Repository interface (in domain layer)
 public interface IOrderRepository
 {
     Task&lt;Order&gt; GetByIdAsync(Guid orderId);
@@ -540,12 +590,12 @@ public class OrderService
 
             <div class="rule-card">
                 <h3>Domain Event Pattern</h3>
-                <span class="badge badge-medium">MEDIUM PRIORITY</span>
+                <span class="badge badge-security">MEDIUM PRIORITY</span>
                 <p>Use domain events to maintain consistency across aggregate boundaries.</p>
                 
-                <div class="example-section">
+                <div class="command-example">
                     <h4>✅ Recommended</h4>
-                    <pre><code class="language-csharp">// Domain event
+                    <pre><code class="language-badge">// Domain event
 public class OrderSubmittedEvent : IDomainEvent
 {
     public Guid OrderId { get; }
@@ -593,19 +643,19 @@ public class InventoryService : IDomainEventHandler&lt;OrderSubmittedEvent&gt;
 
         <section class="glass-card" id="related">
             <h2>Related Knowledge Files</h2>
-            <div class="related-grid">
-                <a href="bounded-contexts.html" class="related-card">
-                    <span class="related-icon">🏗️</span>
+            <div class="level1-relationship-grid">
+                <a href="bounded-contexts.html" class="level1-relationship-grid">
+                    <span class="level1-relationship-grid">🏗️</span>
                     <h3>Bounded Contexts</h3>
                     <p>Strategic DDD patterns for context boundaries</p>
                 </a>
-                <a href="domain-events.html" class="related-card">
-                    <span class="related-icon">📡</span>
+                <a href="domain-events.html" class="level1-relationship-grid">
+                    <span class="level1-relationship-grid">📡</span>
                     <h3>Domain Events</h3>
                     <p>Event-driven architecture patterns</p>
                 </a>
-                <a href="../engineering/design-patterns.html" class="related-card">
-                    <span class="related-icon">🎨</span>
+                <a href="../engineering/design-patterns.html" class="level1-relationship-grid">
+                    <span class="level1-relationship-grid">🎨</span>
                     <h3>Design Patterns</h3>
                     <p>Gang of Four and enterprise patterns</p>
                 </a>

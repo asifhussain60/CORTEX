@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Resilience Patterns - Circuit Breaker, Retry, Timeout, Bulkhead, Fallback">
@@ -8,13 +33,14 @@
     <title>Resilience Patterns - CORTEX Knowledge</title>
     <link rel="icon" type="image/png" href="../../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/intentional-classes.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <nav class="breadcrumb-container sticky-nav" aria-label="Breadcrumb">
-        <button class="back-button" onclick="history.back()" aria-label="Go back">← Back</button>
+    <nav class="breadcrumb-separator sticky-nav" mobile-nav-optimized aria-label="Breadcrumb">
+        <button class="grid-background" onclick="history.back()" aria-label="Go back">← Back</button>
         <ol class="breadcrumb">
             <li><a href="../../index.html">Home</a></li>
             <li><a href="../index.html">Knowledge Library</a></li>
@@ -29,16 +55,16 @@
         </div>
         <h1 class="hero-title">🛡️ Resilience Patterns</h1>
         <p class="hero-subtitle">Circuit Breaker, Retry, Timeout, Bulkhead, and Fallback strategies</p>
-        <div class="file-metadata">
+        <div class="code-file">
             <span class="metadata-item">📦 20 Rules</span>
             <span class="metadata-item">🏷️ Microservices</span>
             <span class="metadata-item">📅 Updated: Dec 2025</span>
         </div>
     </section>
 
-    <aside class="toc-sidebar" aria-label="Table of contents">
+    <aside class="toc-link" aria-label="Table of contents">
         <h3>On This Page</h3>
-        <nav class="toc-nav">
+        <nav class="toc-nav" mobile-nav-optimized>
             <a href="#overview" class="toc-link">Overview</a>
             <a href="#circuit-breaker" class="toc-link">Circuit Breaker</a>
             <a href="#retry" class="toc-link">Retry Pattern</a>
@@ -49,7 +75,7 @@
         </nav>
     </aside>
 
-    <section class="section file-content">
+    <section class="section code-file">
         <div class="container">
             <div id="overview" class="content-section">
                 <div class="glass-card">
@@ -58,13 +84,23 @@
                     
                     <div class="info-box info-box-primary">
                         <strong>Core Resilience Principles:</strong>
-                        <ul>
-                            <li><strong>Fail Fast:</strong> Detect failures quickly and respond immediately</li>
-                            <li><strong>Fail Safe:</strong> Degrade gracefully rather than complete failure</li>
-                            <li><strong>Isolation:</strong> Prevent failures from spreading across services</li>
-                            <li><strong>Recovery:</strong> Automatically recover from transient failures</li>
-                            <li><strong>Monitoring:</strong> Observe and measure resilience metrics</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Fail Fast:</strong> Detect failures quickly and respond immediately</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Fail Safe:</strong> Degrade gracefully rather than complete failure</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Isolation:</strong> Prevent failures from spreading across services</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Recovery:</strong> Automatically recover from transient failures</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Monitoring:</strong> Observe and measure resilience metrics</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -73,19 +109,19 @@
                 <div class="glass-card">
                     <h2>Circuit Breaker Pattern</h2>
 
-                    <div class="rule-detail">
+                    <div class="rules-showcase">
                         <div class="rule-header-detail">
                             <h3>Implement Circuit Breaker for External Calls</h3>
                             <span class="severity-badge severity-high">HIGH</span>
                         </div>
-                        <p class="rule-description">
+                        <p class="rules-showcase">
                             Use circuit breaker to prevent repeated calls to a failing service. Circuit has three states: Closed (normal), Open (blocking calls), Half-Open (testing recovery).
                         </p>
 
                         <div class="code-comparison-grid">
                             <div class="code-example code-good">
                                 <h4>✅ Good - Circuit Breaker Implementation</h4>
-                                <pre><code class="language-python"># Using Polly library in .NET
+                                <pre><code class="language-badge"># Using Polly library in .NET
 from polly import CircuitBreakerPolicy
 import httpx
 
@@ -122,7 +158,7 @@ class PaymentService:
 
                             <div class="code-example code-bad">
                                 <h4>❌ Bad - No Circuit Breaker</h4>
-                                <pre><code class="language-python"># Keeps trying even when service is down
+                                <pre><code class="language-badge"># Keeps trying even when service is down
 class PaymentService:
     async def process_payment(self, payment_data):
         # No circuit breaker - will keep hammering
@@ -141,26 +177,32 @@ class PaymentService:
 
                         <div class="info-box info-box-warning">
                             <strong>Circuit Breaker States:</strong>
-                            <ul>
-                                <li><strong>Closed:</strong> Normal operation, tracking failures</li>
-                                <li><strong>Open:</strong> Fails fast without calling service (30s default)</li>
-                                <li><strong>Half-Open:</strong> Test with single call to check recovery</li>
-                            </ul>
+                            <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Closed:</strong> Normal operation, tracking failures</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Open:</strong> Fails fast without calling service (30s default)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Half-Open:</strong> Test with single call to check recovery</div>
+    </div>
+</div>
                         </div>
                     </div>
 
-                    <div class="rule-detail">
+                    <div class="rules-showcase">
                         <div class="rule-header-detail">
                             <h3>Configure Circuit Breaker Thresholds Appropriately</h3>
                             <span class="severity-badge severity-high">HIGH</span>
                         </div>
-                        <p class="rule-description">
+                        <p class="rules-showcase">
                             Set failure threshold based on service SLA and traffic patterns. Too sensitive trips unnecessarily, too lenient allows cascading failures.
                         </p>
 
                         <div class="code-example code-good">
                             <h4>✅ Good - Environment-Specific Configuration</h4>
-                            <pre><code class="language-yaml"># Circuit Breaker Configuration
+                            <pre><code class="language-badge"># Circuit Breaker Configuration
 circuit_breakers:
   payment_service:
     failure_threshold: 5        # Open after 5 failures
@@ -188,19 +230,19 @@ circuit_breakers:
                 <div class="glass-card">
                     <h2>Retry Pattern</h2>
 
-                    <div class="rule-detail">
+                    <div class="rules-showcase">
                         <div class="rule-header-detail">
                             <h3>Implement Exponential Backoff with Jitter</h3>
                             <span class="severity-badge severity-high">HIGH</span>
                         </div>
-                        <p class="rule-description">
+                        <p class="rules-showcase">
                             Use exponential backoff with random jitter to avoid thundering herd problem when service recovers.
                         </p>
 
                         <div class="code-comparison-grid">
                             <div class="code-example code-good">
                                 <h4>✅ Good - Exponential Backoff with Jitter</h4>
-                                <pre><code class="language-python">import asyncio
+                                <pre><code class="language-badge">import asyncio
 import random
 
 class RetryPolicy:
@@ -232,7 +274,7 @@ class RetryPolicy:
 
                             <div class="code-example code-bad">
                                 <h4>❌ Bad - Fixed Delay Retry</h4>
-                                <pre><code class="language-python"># Fixed delay causes thundering herd
+                                <pre><code class="language-badge"># Fixed delay causes thundering herd
 async def call_api_with_retry(url):
     for attempt in range(3):
         try:
@@ -245,18 +287,18 @@ async def call_api_with_retry(url):
                         </div>
                     </div>
 
-                    <div class="rule-detail">
+                    <div class="rules-showcase">
                         <div class="rule-header-detail">
                             <h3>Only Retry Transient Failures</h3>
                             <span class="severity-badge severity-high">HIGH</span>
                         </div>
-                        <p class="rule-description">
+                        <p class="rules-showcase">
                             Distinguish between transient (503, network timeout) and permanent failures (400, 404). Don't retry client errors.
                         </p>
 
                         <div class="code-example code-good">
                             <h4>✅ Good - Selective Retry</h4>
-                            <pre><code class="language-python">class SmartRetryPolicy:
+                            <pre><code class="language-badge">class SmartRetryPolicy:
     TRANSIENT_ERRORS = {
         408,  # Request Timeout
         429,  # Too Many Requests
@@ -286,19 +328,19 @@ async def call_api_with_retry(url):
                 <div class="glass-card">
                     <h2>Timeout Pattern</h2>
 
-                    <div class="rule-detail">
+                    <div class="rules-showcase">
                         <div class="rule-header-detail">
                             <h3>Set Explicit Timeouts for All External Calls</h3>
                             <span class="severity-badge severity-high">HIGH</span>
                         </div>
-                        <p class="rule-description">
+                        <p class="rules-showcase">
                             Never make external calls without timeouts. Set connection timeout and read timeout separately.
                         </p>
 
                         <div class="code-comparison-grid">
                             <div class="code-example code-good">
                                 <h4>✅ Good - Explicit Timeouts</h4>
-                                <pre><code class="language-python">import httpx
+                                <pre><code class="language-badge">import httpx
 
 # Configure timeouts explicitly
 timeout_config = httpx.Timeout(
@@ -320,7 +362,7 @@ response = await client.get(
 
                             <div class="code-example code-bad">
                                 <h4>❌ Bad - No Timeout</h4>
-                                <pre><code class="language-python"># Dangerous - can hang indefinitely
+                                <pre><code class="language-badge"># Dangerous - can hang indefinitely
 async with httpx.AsyncClient() as client:
     # No timeout specified
     response = await client.get(
@@ -338,18 +380,18 @@ async with httpx.AsyncClient() as client:
                 <div class="glass-card">
                     <h2>Bulkhead Pattern</h2>
 
-                    <div class="rule-detail">
+                    <div class="rules-showcase">
                         <div class="rule-header-detail">
                             <h3>Isolate Resource Pools</h3>
                             <span class="severity-badge severity-medium">MEDIUM</span>
                         </div>
-                        <p class="rule-description">
+                        <p class="rules-showcase">
                             Partition resources (threads, connections) to prevent one failing component from exhausting all resources.
                         </p>
 
                         <div class="code-example code-good">
                             <h4>✅ Good - Bulkhead Isolation</h4>
-                            <pre><code class="language-python">import asyncio
+                            <pre><code class="language-badge">import asyncio
 from asyncio import Semaphore
 
 class BulkheadExecutor:
@@ -382,18 +424,18 @@ class BulkheadExecutor:
                 <div class="glass-card">
                     <h2>Fallback Pattern</h2>
 
-                    <div class="rule-detail">
+                    <div class="rules-showcase">
                         <div class="rule-header-detail">
                             <h3>Provide Graceful Degradation</h3>
                             <span class="severity-badge severity-high">HIGH</span>
                         </div>
-                        <p class="rule-description">
+                        <p class="rules-showcase">
                             When primary service fails, return cached data, default values, or reduced functionality rather than complete failure.
                         </p>
 
                         <div class="code-example code-good">
                             <h4>✅ Good - Fallback Strategy</h4>
-                            <pre><code class="language-python">class ProductService:
+                            <pre><code class="language-badge">class ProductService:
     def __init__(self, cache, circuit_breaker):
         self.cache = cache
         self.circuit_breaker = circuit_breaker
@@ -432,28 +474,28 @@ class BulkheadExecutor:
                     <h2>Related Knowledge Files</h2>
                     <div class="related-files-grid">
                         <a href="service-mesh.html" class="related-file-card">
-                            <span class="file-icon">🕸️</span>
+                            <span class="code-file">🕸️</span>
                             <div>
                                 <h4>Service Mesh</h4>
                                 <p>Istio, Linkerd patterns</p>
                             </div>
                         </a>
                         <a href="../api-design/api-gateway.html" class="related-file-card">
-                            <span class="file-icon">🚪</span>
+                            <span class="code-file">🚪</span>
                             <div>
                                 <h4>API Gateway</h4>
                                 <p>Gateway resilience patterns</p>
                             </div>
                         </a>
                         <a href="../performance/caching-strategies.html" class="related-file-card">
-                            <span class="file-icon">💾</span>
+                            <span class="code-file">💾</span>
                             <div>
                                 <h4>Caching Strategies</h4>
                                 <p>Cache for fallback data</p>
                             </div>
                         </a>
                         <a href="../testing/chaos-engineering.html" class="related-file-card">
-                            <span class="file-icon">🔥</span>
+                            <span class="code-file">🔥</span>
                             <div>
                                 <h4>Chaos Engineering</h4>
                                 <p>Test resilience patterns</p>
