@@ -127,7 +127,7 @@ From Site Map audit (January 2, 2026):
 
 ---
 
-## 🎭 Master Orchestrator Detailed Architecture
+## 🎭 Master Orchestrator Detailed Architecture (v5.0)
 
 ### Component Breakdown
 
@@ -135,26 +135,45 @@ From Site Map audit (January 2, 2026):
 
 **File:** `src/cortex_agents/llm_intent_classifier.py`
 
-**Purpose:** Intelligent routing based on natural language understanding
+**Purpose:** Hybrid routing with pattern matching (90%+) and LLM fallback (10%)
 
-**Capabilities:**
-- Analyzes user intent using LLM (GPT-4/Claude)
-- Maps requests to orchestrator capabilities
-- Confidence scoring (HIGH/MEDIUM/LOW)
-- Fallback to keyword matching
+**v5.0 Architecture:**
+- **Primary:** Pattern-based routing via `master-orchestrator.yaml` (regex matching)
+- **Fallback:** LLM intent classification for ambiguous requests
+- **Confidence Scoring:** HIGH (≥0.8) = execute, MEDIUM (0.5-0.8) = confirm, LOW (<0.5) = fallback
 
-**Example Flow:**
+**Pattern Matching Examples:**
+```yaml
+routing_rules:
+  - pattern: "^/CORTEX Plan |^create a plan|^make a plan"
+    orchestrator: "planning_system"
+    confidence: 1.0
+    
+  - pattern: "^ado wizard "
+    orchestrator: "ado_conversational_wizard"
+    confidence: 1.0
+    
+  - pattern: "^ado story |^ado feature "
+    orchestrator: "ado_auto_generator"
+    confidence: 1.0
+```
+
+**LLM Classification Flow:**
 ```python
 # User: "I need to plan a new authentication feature"
 
+# Step 1: Pattern matching (checks master-orchestrator.yaml)
+pattern_result = pattern_router.match(user_request)  # No exact match
+
+# Step 2: LLM classification (fallback)
 classifier = LLMIntentClassifier()
 result = classifier.classify(user_request)
 
 # Result:
 {
-    "orchestrator": "planning_orchestrator",
+    "orchestrator": "planning_system",
     "confidence": 0.95,  # HIGH
-    "reasoning": "User explicitly mentions 'plan' + 'feature'",
+    "reasoning": "User mentions 'plan' + 'feature' (planning intent detected)",
     "parameters": {
         "feature_name": "authentication",
         "complexity": "TIER_3_DOCUMENTED"
@@ -162,42 +181,96 @@ result = classifier.classify(user_request)
 }
 ```
 
-#### 2. Master Orchestrator Coordinator
+---
 
-**File:** `src/orchestrators/master_orchestrator.py` (NEW - to be created)
+#### 2. Master Orchestrator Coordinator (NEW)
 
-**Responsibilities:**
+**File:** `src/orchestrators/master_orchestrator.py`
+
+**Purpose:** Centralized routing layer eliminating LLM-dependent brittleness
+
+**Core Components:**
 
 **A. Orchestrator Registry Management**
 ```python
 class MasterOrchestrator:
+    """
+    Master Orchestrator coordinates all specialized orchestrators.
+    
+    Architecture:
+    - Machine-readable routing (YAML config)
+    - State coordination (PlanningStateDB)
+    - Progress monitoring (real-time updates)
+    - Error recovery (checkpoints + rollback)
+    """
+    
     def __init__(self):
-        self.registry = {
-            "planning": PlanningOrchestrator,
-            "tdd": TDDOrchestrator,
-            "cleanup": CleanupOrchestrator,
-            "ado": ADOOrchestrator,
-            # ... all orchestrators
+        # Load registry from master-orchestrator.yaml
+        self.config = self.load_config("cortex-brain/config/master-orchestrator.yaml")
+        self.registry = self.build_registry()
+        self.db = PlanningStateDB()
+        
+    def build_registry(self) -> Dict[str, OrchestratorSpec]:
+        """
+        Build orchestrator registry from config.
+        
+        Registry Structure:
+        {
+            "planning_system": {
+                "class": "PlanningOrchestratorV5",
+                "module": "src.orchestrators.planning_orchestrator_v5",
+                "config": "cortex-brain/manifests/orchestrators/planning-system-5.0-manifest.yaml",
+                "type": "autonomous",
+                "dependencies": []
+            },
+            "ado_operations": {
+                "class": "AdoOrchestratorV2",
+                "module": "src.orchestrators.ado_orchestrator_v2",
+                "config": "cortex-brain/manifests/orchestrators/ado-operations-2.0-manifest.yaml",
+                "type": "autonomous",
+                "dependencies": ["planning_system"]  # Can invoke planning for complex features
+            }
         }
+        """
         
     def route_to_orchestrator(self, intent: Intent) -> OrchestratorResult:
         """
-        Route intent to appropriate orchestrator.
+        Route intent to appropriate orchestrator with full lifecycle management.
         
         Flow:
-        1. Load orchestrator class from registry
-        2. Instantiate with config + manifest
-        3. Execute with user parameters
-        4. Monitor progress and state
-        5. Handle errors and recovery
-        6. Return formatted result
+        1. Pattern matching (master-orchestrator.yaml)
+        2. LLM fallback if no pattern match (LLMIntentClassifier)
+        3. Load orchestrator class from registry
+        4. Check dependencies (invoke parent orchestrators if needed)
+        5. Instantiate with config + manifest
+        6. Register with Master Orchestrator (for callbacks)
+        7. Execute with progress tracking
+        8. Save execution state to database
+        9. Handle errors and recovery
+        10. Return formatted result
         """
-        orchestrator_class = self.registry[intent.orchestrator]
-        orchestrator = orchestrator_class(config=intent.config)
+        # Pattern matching
+        orchestrator_name = self.pattern_router.match(intent.raw_request)
         
-        # Execute with progress tracking
+        if not orchestrator_name:
+            # LLM fallback
+            orchestrator_name = self.llm_classifier.classify(intent.raw_request)
+        
+        # Load from registry
+        spec = self.registry[orchestrator_name]
+        orchestrator_class = self.load_class(spec.module, spec.class_name)
+        orchestrator = orchestrator_class(config=spec.config)
+        
+        # Register callbacks
+        orchestrator.master = self
+        orchestrator.execution_id = str(uuid.uuid4())
+        
+        # Execute with monitoring
         with self.progress_monitor(orchestrator):
             result = orchestrator.execute(intent.parameters)
+        
+        # Save state
+        self.db.save_execution_result(orchestrator.execution_id, result)
         
         return result
 ```
@@ -207,10 +280,12 @@ class MasterOrchestrator:
 # Database: cortex-brain/database/orchestration_state.db
 
 Tables:
-- orchestrator_executions (id, orchestrator, start_time, status, result)
-- phase_tracking (execution_id, phase_number, status, duration)
-- artifact_registry (execution_id, artifact_path, artifact_type)
-- error_log (execution_id, phase_id, error_type, stack_trace)
+- orchestrator_executions (id, orchestrator, start_time, end_time, status, result)
+- phase_tracking (execution_id, phase_number, phase_name, status, duration, artifacts)
+- artifact_registry (execution_id, artifact_path, artifact_type, size, checksum)
+- error_log (execution_id, phase_id, error_type, error_message, stack_trace)
+- checkpoints (execution_id, phase_id, snapshot_data, created_at)
+- orchestrator_dependencies (parent_execution_id, child_execution_id, dependency_type)
 ```
 
 **C. Progress Monitoring**
@@ -222,29 +297,77 @@ class ProgressMonitor:
     Features:
     - Phase completion tracking
     - Token usage monitoring
-    - Time estimation
+    - Time estimation (actual vs estimated)
     - Visual progress bars (maintenance-style)
+    - Cross-orchestrator coordination
     """
     
     def render_progress(self, orchestrator: BaseOrchestrator):
         """
-        Render progress in response format:
+        Render progress in response format (response-templates-v4.yaml):
         
         ## 🛡️🧠 CORTEX [Orchestrator] Execution
+        **Author:** Asif Hussain | **Execution ID:** abc-123-def
         
         **Overall Progress:** ████████░░ 80% 🔄 IN PROGRESS
         
-        | Phase | Progress | Duration | Status |
-        |-------|----------|----------|--------|
-        | Phase 1 | ██████████ | 2m 15s | ✅ Complete |
-        | Phase 2 | ████████░░ | 1m 30s | 🔄 In Progress |
-        | Phase 3 | ░░░░░░░░░░ | -- | ⏸️ Not Started |
+        | Phase | Name | Progress | Duration | Status |
+        |-------|------|----------|----------|--------|
+        | 1 | Context Discovery | ██████████ | 2m 15s | ✅ Complete |
+        | 2 | Governance Validation | ██████████ | 1m 45s | ✅ Complete |
+        | 3 | Architecture Analysis | ████████░░ | 1m 30s | 🔄 In Progress |
+        | 4 | Plan Generation | ░░░░░░░░░░ | -- | ⏸️ Not Started |
+        | 5 | Folder Creation | ░░░░░░░░░░ | -- | ⏸️ Not Started |
+        
+        **Next:** Analyzing architecture with governance constraints...
         """
 ```
 
-#### 3. Orchestrator Base Class (Enhanced)
+**D. Cross-Session Context Middleware (Phase 4.5 - COMPLETE)**
+```python
+class CrossSessionContextMiddleware:
+    """
+    Lightweight context injection from Tier 1 Working Memory.
+    
+    Features:
+    - Last 3 sessions metadata (<200 tokens)
+    - "continue" pattern detection → automatic routing
+    - Session tracking: orchestrator_used, primary_intent, artifacts_created
+    - 99.6% token efficiency (context only when needed)
+    
+    Integration:
+    User Input → Middleware (Tier 1 query) → Master Orchestrator → Orchestrator
+                      ↓ ("continue" detected)
+                  Route to last_orchestrator_used
+    """
+    
+    def inject_context(self, user_request: str) -> ContextInjection:
+        """
+        Query Tier 1 Working Memory for last 3 sessions.
+        
+        Returns:
+        {
+            "is_continuation": true,
+            "last_orchestrator": "planning_system",
+            "last_execution_id": "abc-123-def",
+            "session_metadata": [
+                {
+                    "session_id": "session-001",
+                    "orchestrator_used": "planning_system",
+                    "primary_intent": "plan authentication feature",
+                    "artifacts_created": ["00-master-plan.md", "context/discovery.md"],
+                    "status": "in_progress"
+                }
+            ]
+        }
+        """
+```
 
-**File:** `src/orchestrators/base/base_orchestrator.py`
+---
+
+#### 3. Orchestrator Base Class v4.1 (Enhanced)
+
+**File:** `src/orchestrators/base/base_orchestrator_v4_1.py`
 
 **Current Features:**
 - Standardized initialization
@@ -253,39 +376,114 @@ class ProgressMonitor:
 - Template management
 - Error handling
 
-**New Features (v4.1):**
+**v4.1 Enhancements (NEW):**
 ```python
-class BaseOrchestrator(ABC):
-    """Enhanced base with Master Orchestrator integration."""
+class BaseOrchestratorV4_1(ABC):
+    """
+    Enhanced base class with Master Orchestrator integration.
     
-    def __init__(self, config: Dict[str, Any]):
-        # ... existing initialization ...
+    Key Changes:
+    - Config-driven execution (no natural language interpretation)
+    - Master Orchestrator callbacks
+    - Database state tracking
+    - Progress reporting hooks
+    - Checkpoint/rollback support
+    """
+    
+    def __init__(self, config_path: str):
+        # Existing
+        self.workspace_root = self.detect_workspace()
+        self.brain_path = Path(self.workspace_root) / "cortex-brain"
         
-        # NEW: Master orchestrator registration
-        self.master = None  # Set by MasterOrchestrator
+        # NEW: Master Orchestrator integration
+        self.master = None  # Set by MasterOrchestrator.route_to_orchestrator()
         self.execution_id = str(uuid.uuid4())
+        self.db = PlanningStateDB()
         
-        # NEW: Progress callback
+        # NEW: Config loading (YAML only, no natural language)
+        self.config = self.load_config(config_path)
+        
+        # NEW: Progress callback hooks
+        self.on_phase_start = None
         self.on_phase_complete = None
         self.on_task_complete = None
         
-    def report_progress(self, phase: int, progress: float):
+    def execute(self, user_request: str) -> OrchestratorResult:
+        """
+        Execute orchestrator workflow (must be implemented by subclass).
+        
+        Flow:
+        1. Parse user request (extract parameters)
+        2. Create execution record in database
+        3. Execute phases sequentially
+        4. Report progress after each phase
+        5. Create checkpoints for resumability
+        6. Handle errors with rollback
+        7. Return formatted result
+        """
+        
+    def execute_phase(self, phase_config: dict) -> PhaseResult:
+        """
+        Execute a single phase with progress tracking.
+        
+        Args:
+            phase_config: Phase configuration from manifest (YAML)
+        
+        Returns:
+            PhaseResult with status, duration, artifacts
+        """
+        phase_id = self.db.start_phase(
+            execution_id=self.execution_id,
+            phase_number=phase_config["number"],
+            phase_name=phase_config["name"]
+        )
+        
+        try:
+            # Execute phase logic (implemented by subclass)
+            result = self._execute_phase_logic(phase_config)
+            
+            # Report progress to Master Orchestrator
+            self.report_progress(
+                phase=phase_config["number"],
+                progress=1.0,  # 100% complete
+                status="completed"
+            )
+            
+            # Create checkpoint
+            self.checkpoint(phase_id, result.data)
+            
+            self.db.complete_phase(phase_id, duration=result.duration)
+            return result
+            
+        except Exception as e:
+            self.db.fail_phase(phase_id, error=str(e))
+            raise
+        
+    def report_progress(self, phase: int, progress: float, status: str):
         """Report progress to master orchestrator."""
         if self.master:
             self.master.update_progress(
                 execution_id=self.execution_id,
                 phase=phase,
-                progress=progress
+                progress=progress,
+                status=status
             )
     
-    def checkpoint(self, phase: int, data: Dict):
-        """Save checkpoint to database."""
-        if self.master:
-            self.master.save_checkpoint(
-                execution_id=self.execution_id,
-                phase=phase,
-                data=data
-            )
+    def checkpoint(self, phase_id: str, data: Dict):
+        """Save checkpoint to database for resumability."""
+        self.db.create_snapshot(
+            execution_id=self.execution_id,
+            phase_id=phase_id,
+            snapshot_data=data
+        )
+    
+    def rollback_to_checkpoint(self, snapshot_id: str) -> bool:
+        """Rollback to previous checkpoint on error."""
+        snapshot = self.db.get_snapshot(snapshot_id)
+        if snapshot:
+            self.restore_state(snapshot.data)
+            return True
+        return False
 ```
 
 ---
@@ -294,62 +492,98 @@ class BaseOrchestrator(ABC):
 
 ### Category 1: Planning (🧠)
 
-#### 1.1 Planning System
-**File:** `src/orchestrators/planning_orchestrator.py`  
-**Manifest:** `cortex-brain/manifests/orchestrators/planning-system-4.0-manifest.yaml`  
-**Type:** 🛡️ AUTONOMOUS  
-**Status:** ✅ ACTIVE (v4.0.1)
+#### 1.1 Planning System v5 (PURE AUTONOMOUS)
+**File:** `src/orchestrators/planning_orchestrator_v5.py`  
+**Manifest:** `cortex-brain/manifests/orchestrators/planning-system-5.0-manifest.yaml`  
+**Type:** 🛡️ AUTONOMOUS (Config-Only)  
+**Status:** 🚧 IN DEVELOPMENT (v5.0 - Pure Autonomous Architecture)
 
-**Purpose:** Tiered planning system with intelligent routing, visual progress tracking, and token-optimized hierarchical structure
+**Purpose:** Pure autonomous planning with zero natural language in manifest, integrated with Tier 0 Governance, Tier 2 Knowledge Graphs, and AST-based context discovery
 
-**Key Features:**
-- 4-tier routing (INSTANT → LIGHTWEIGHT → DOCUMENTED → COMPLEX)
-- Pre-planning discovery (checks active/temp/completed folders)
-- Visual progress tracker (real-time during execution)
-- Hierarchical plan structure (master + sub-plans)
-- Token optimization (95% reduction)
+**v5.0 ENHANCEMENTS:**
+- ✨ **Zero Natural Language:** All execution logic in Python, manifest contains only configuration data
+- ✨ **Tier 0 Governance Integration:** Validates plans against `brain-protection-rules.yaml` (61 rules, 24 layers)
+- ✨ **Knowledge Graph Queries:** Leverages Tier 2 knowledge graphs for feature relationships, dependencies, and risks
+- ✨ **AST-Based Discovery:** Incremental AST builder for per-turn context gathering (559 lines)
+- ✨ **Master Orchestrator Integration:** Registered with Master Orchestrator for coordinated execution
+- ✨ **Cross-Session Context:** Integrates with Context Middleware for continuation intelligence
+- ✨ **SQLite State Tracking:** All phases tracked in PlanningStateDB with ACID transactions
+- ✨ **Resumable Plans:** Can resume from any phase using database snapshots
 
-**Phases:**
-1. **Phase -1:** Knowledge Library Consultation
-2. **Phase 0:** Discovery (check existing plans)
-3. **Phase 1:** Feature Analysis & Complexity Assessment
-4. **Phase 2:** Requirements Gathering (DoR compliance)
-5. **Phase 3:** Architecture Design
-6. **Phase 4:** Task Breakdown & Acceptance Criteria
-7. **Phase 5:** Test Strategy (TDD integration)
-8. **Phase 6:** Implementation Plan
-9. **Phase 7:** Risk Assessment
-10. **Phase 8:** REFACTOR Plan (SKULL enforcement)
+**New Execution Flow (10 Phases):**
+0. **Phase 0:** Context Discovery - AST parsing, workspace search, related files
+1. **Phase 1:** Governance Validation (NEW) - Tier 0 rules check, Tier 2 knowledge graph queries
+2. **Phase 2:** Architecture Analysis - with governance constraints applied
+3. **Phase 3:** Plan Generation - SKULL rules enforced, template-driven markdown
+4. **Phase 4:** Folder Creation - atomic filesystem operations (context/, artifacts/, reports/, tracking/)
+5. **Phase 5:** Validation - automated compliance checks, governance review
 
-**Level 2 Visualization:** Flowchart showing tier routing logic + phase progression
+**Governance Features:**
+- **tier0_instincts Enforcement:** TDD_ENFORCEMENT, INCREMENTAL_PLAN_GENERATION, DOCUMENT_ORGANIZATION
+- **Critical Path Protection:** Blocks modifications to `CORTEX/src/tier0/`, `.github/prompts/internal/`
+- **Knowledge Graph Context:** Provides related features, dependencies, historical risks automatically
+
+**Components:**
+- `planning_orchestrator_v5.py` - Pure Python implementation (732 lines)
+- `incremental_ast_builder.py` - Per-turn AST context building (559 lines)
+- `governance_integrator.py` - Tier 0 brain protection validation (NEW)
+- `knowledge_graph_query.py` - Tier 2 knowledge graph queries (NEW)
+
+**Level 2 Visualization:** 
+- Flowchart: 10-phase execution flow with governance gates
+- Sequence diagram: Tier 0 + Tier 2 integration pattern
+- State diagram: Plan lifecycle with checkpoints
 
 ---
 
-#### 1.2 ADO Orchestrator
-**File:** `src/orchestrators/ado/ado_orchestrator.py`  
-**Manifest:** `cortex-brain/manifests/orchestrators/ado-planning-manifest.yaml`  
-**Type:** 🛡️ AUTONOMOUS  
-**Status:** ✅ ACTIVE (v2.0)
+#### 1.2 ADO Orchestrator v2 (ENHANCED)
+**File:** `src/orchestrators/ado/ado_orchestrator_v2.py`  
+**Manifest:** `cortex-brain/manifests/orchestrators/ado-operations-2.0-manifest.yaml`  
+**Type:** 🛡️ AUTONOMOUS (Config-Only)  
+**Status:** 🚧 IN DEVELOPMENT (v2.0 - Pure Autonomous with Conversational Wizard)
 
-**Purpose:** Azure DevOps work item generation with DoR/DoD compliance
+**Purpose:** Azure DevOps work item generation with dual-mode operation: auto-generation + conversational wizard
 
-**Key Features:**
-- Story/Feature/Bug generation
-- Acceptance criteria auto-generation
-- Effort estimation (Story Points)
-- Sprint planning integration
-- ADO API integration
+**v2.0 ENHANCEMENTS:**
+- ✨ **Dual-Mode Operation:**
+  - **Auto Mode:** `ado story [feature]` - Full auto-generation (original 6-phase workflow)
+  - **Wizard Mode:** `ado wizard [feature]` - Multi-turn conversational wizard (NEW)
+- ✨ **Conversational Wizard:** 7-stage interactive workflow for complex requirements gathering
+- ✨ **Zero Natural Language Manifest:** Config-only YAML, all logic in Python
+- ✨ **Master Orchestrator Integration:** Pattern-based routing (`ado wizard` vs `ado story`)
+- ✨ **State Persistence:** Wizard state saved to database, resumable across sessions
+- ✨ **18x Faster:** Pure conversational (5s) vs browser SPA (36s+ with context switching)
 
-**Phases:**
+**Conversational Wizard Stages (NEW - Task 5.1a):**
+1. **Stage 1:** Work Item Type Selection (Story/Feature/Epic/Bug)
+2. **Stage 2:** Title + Description Gathering (multi-turn clarification)
+3. **Stage 3:** Acceptance Criteria Collection (iterative refinement)
+4. **Stage 4:** Dependencies Identification (related work items)
+5. **Stage 5:** Effort Estimation (Story Points with justification)
+6. **Stage 6:** Tags + Metadata (area path, iteration, priority)
+7. **Stage 7:** Review + Confirmation (preview before submission)
+
+**Auto-Generation Phases (Original):**
 1. **Phase 1:** Work Item Type Selection
 2. **Phase 2:** Requirements Analysis
 3. **Phase 3:** Acceptance Criteria Generation
 4. **Phase 4:** Effort Estimation
 5. **Phase 5:** Dependencies Mapping
 6. **Phase 6:** ADO Payload Generation
-7. **Phase 7:** Validation & Review
 
-**Level 2 Visualization:** Sequence diagram showing ADO API interaction
+**Architecture Decision (Conversational vs SPA):**
+- ❌ **Rejected:** Browser SPA with form UI (36s+, context switching, security risks, external server)
+- ✅ **Accepted:** Conversational wizard in chat (5s, no context loss, zero security risk, maintainable)
+
+**Components:**
+- `ado_orchestrator_v2.py` - Main orchestrator with mode detection
+- `ado_conversational_wizard.py` - Multi-turn wizard implementation (NEW)
+- `ado_auto_generator.py` - Original auto-generation workflow
+
+**Level 2 Visualization:** 
+- Flowchart: Dual-mode routing decision tree
+- Sequence diagram: Wizard stages with user interaction points
+- Comparison diagram: Conversational vs SPA architecture
 
 ---
 
