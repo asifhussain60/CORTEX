@@ -55,49 +55,290 @@
         <section class="glass-card" style="margin-top: var(--spacing-2xl);">
             <h2>🎓 Learning Objectives</h2>
             <ul class="objective-list">
-                <li>Master Arrange-Act-Assert (AAA) pattern</li>
-                <li>Write maintainable test code</li>
-                <li>Use test doubles (mocks, stubs, fakes)</li>
-                <li>Apply testing best practices</li>
-                <li>Achieve high code coverage</li>
+                <li>Master Arrange-Act-Assert (AAA) pattern for clear test structure</li>
+                <li>Write maintainable, self-documenting test code</li>
+                <li>Use test doubles effectively (mocks, stubs, fakes, spies)</li>
+                <li>Apply testing best practices and anti-patterns to avoid</li>
+                <li>Achieve meaningful code coverage with quality tests</li>
             </ul>
         </section>
 
-        <!-- Interactive Content Placeholder -->
+        <!-- Test Pyramid -->
         <section class="glass-card" style="margin-top: var(--spacing-3xl);">
-            <h2>📚 Module Content</h2>
+            <h2>🔺 The Test Pyramid</h2>
             <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
-                This module includes:
+                The test pyramid guides the optimal distribution of tests. Unit tests form the foundation, providing fast, reliable feedback.
             </p>
-            <ul style="list-style-type: none; padding-left: 0;">
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Interactive Visualizations:</strong> D3.js charts and Mermaid diagrams
-                </li>
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Code Playgrounds:</strong> Hands-on Monaco editor with live execution
-                </li>
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Knowledge Checks:</strong> Interactive quizzes with instant feedback
-                </li>
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Real-World Examples:</strong> Production-grade code samples
-                </li>
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Progressive Challenges:</strong> Apply what you've learned
-                </li>
-            </ul>
+            <div id="test-pyramid-viz" style="width: 100%; height: 500px; margin: var(--spacing-xl) 0; background: rgba(26, 31, 58, 0.5); border-radius: 12px; border: 1px solid var(--module-border);"></div>
         </section>
 
-        <!-- Interactive Quiz Placeholder -->
+        <!-- AAA Pattern -->
         <section class="glass-card" style="margin-top: var(--spacing-3xl);">
-            <h2>✅ Knowledge Check: Quiz</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
-                Test your understanding with interactive questions. Instant feedback provided!
+            <h2>🎯 Arrange-Act-Assert (AAA) Pattern</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                The AAA pattern structures tests into three clear phases, making them easy to read and maintain.
             </p>
-            <div class="quiz-container" id="quiz">
-                <p style="color: var(--text-primary); text-align: center; padding: var(--spacing-3xl);">
-                    📝 Quiz system loading...
-                </p>
+            
+            <div class="mermaid-container">
+                <pre class="mermaid">
+sequenceDiagram
+    participant Test as Test Method
+    participant SUT as System Under Test
+    participant Dep as Dependencies
+    
+    Note over Test: ARRANGE Phase
+    Test->>Dep: Set up test doubles
+    Test->>SUT: Create instance
+    Test->>Test: Prepare test data
+    
+    Note over Test: ACT Phase
+    Test->>SUT: Call method being tested
+    SUT->>Dep: Use dependencies
+    SUT-->>Test: Return result
+    
+    Note over Test: ASSERT Phase
+    Test->>Test: Verify expected outcome
+    Test->>Test: Check side effects
+    Test->>Dep: Verify interactions
+                </pre>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-lg); margin-top: var(--spacing-2xl);">
+                <div style="padding: var(--spacing-lg); background: rgba(123, 97, 255, 0.1); border-radius: 8px; border: 1px solid #7b61ff;">
+                    <h4 style="color: #7b61ff; margin-bottom: var(--spacing-md);">🔧 Arrange</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+                        Set up test conditions: create objects, configure mocks, prepare test data
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(0, 212, 255, 0.1); border-radius: 8px; border: 1px solid #00d4ff;">
+                    <h4 style="color: #00d4ff; margin-bottom: var(--spacing-md);">⚡ Act</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+                        Execute the specific behavior being tested (usually a single method call)
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-radius: 8px; border: 1px solid #10b981;">
+                    <h4 style="color: #10b981; margin-bottom: var(--spacing-md);">✅ Assert</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+                        Verify the result matches expectations and check for side effects
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Test Doubles -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🎭 Test Doubles: Mocks, Stubs, Fakes & Spies</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                Test doubles isolate the code under test by replacing real dependencies. Each type serves a specific purpose.
+            </p>
+            <div id="test-doubles-comparison" style="width: 100%; height: 450px; margin: var(--spacing-xl) 0; background: rgba(26, 31, 58, 0.5); border-radius: 12px; border: 1px solid var(--module-border);"></div>
+            
+            <div class="mermaid-container" style="margin-top: var(--spacing-2xl);">
+                <pre class="mermaid">
+graph TD
+    TD[Test Double] --> Dummy[Dummy Object]
+    TD --> Stub[Stub]
+    TD --> Fake[Fake]
+    TD --> Mock[Mock]
+    TD --> Spy[Spy]
+    
+    Dummy --> D1["Never used<br/>Just fills parameter lists"]
+    Stub --> S1["Returns canned responses<br/>No behavior verification"]
+    Fake --> F1["Working implementation<br/>Simplified for testing"]
+    Mock --> M1["Pre-programmed expectations<br/>Verifies behavior"]
+    Spy --> SP1["Wraps real object<br/>Records interactions"]
+    
+    style TD fill:#7b61ff,stroke:#9f87ff,color:#fff
+    style Dummy fill:#6b7280,stroke:#9ca3af,color:#fff
+    style Stub fill:#00d4ff,stroke:#67e8f9,color:#000
+    style Fake fill:#fbbf24,stroke:#fcd34d,color:#000
+    style Mock fill:#10b981,stroke:#34d399,color:#fff
+    style Spy fill:#ef4444,stroke:#f87171,color:#fff
+                </pre>
+            </div>
+        </section>
+
+        <!-- Code Playground: AAA Pattern -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>💻 Code Playground: AAA Pattern in Action</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                See how the AAA pattern creates clear, maintainable tests with proper structure.
+            </p>
+            <div class="playground-container">
+                <div class="playground-tabs">
+                    <button class="tab-btn active" data-tab="bad">❌ Bad Test</button>
+                    <button class="tab-btn" data-tab="good">✅ Good Test (AAA)</button>
+                    <button class="tab-btn" data-tab="mocks">🎭 With Test Doubles</button>
+                </div>
+                <div class="tab-content active" id="bad">
+                    <div id="editor-bad" style="height: 450px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                </div>
+                <div class="tab-content" id="good">
+                    <div id="editor-good" style="height: 450px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                </div>
+                <div class="tab-content" id="mocks">
+                    <div id="editor-mocks" style="height: 450px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                </div>
+                <button class="run-code-btn" id="run-code"><span class="btn-icon">▶️</span> Run Tests</button>
+                <div class="output-container" id="output">
+                    <h5>📤 Test Output</h5>
+                    <pre id="output-content">Click "Run Tests" to see results...</pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Best Practices -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>✨ Unit Testing Best Practices</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--spacing-lg);">
+                <div style="padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-radius: 8px; border: 1px solid #10b981;">
+                    <h4 style="color: #10b981; margin-bottom: var(--spacing-md);">✅ Do This</h4>
+                    <ul style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8;">
+                        <li><strong>F.I.R.S.T Principles:</strong> Fast, Independent, Repeatable, Self-validating, Timely</li>
+                        <li><strong>One Assert:</strong> Test one thing per test method</li>
+                        <li><strong>Descriptive Names:</strong> <code>should_return_error_when_email_invalid()</code></li>
+                        <li><strong>Test Behavior:</strong> Focus on what, not how</li>
+                        <li><strong>Avoid Logic:</strong> No conditionals or loops in tests</li>
+                        <li><strong>Isolate Tests:</strong> No shared state between tests</li>
+                    </ul>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(239, 68, 68, 0.1); border-radius: 8px; border: 1px solid #ef4444;">
+                    <h4 style="color: #ef4444; margin-bottom: var(--spacing-md);">❌ Avoid This</h4>
+                    <ul style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8;">
+                        <li><strong>Test Interdependence:</strong> Tests that depend on execution order</li>
+                        <li><strong>Testing Privates:</strong> Test public interface only</li>
+                        <li><strong>Over-Mocking:</strong> Mocking everything defeats the purpose</li>
+                        <li><strong>Brittle Tests:</strong> Tests that break with refactoring</li>
+                        <li><strong>Magic Numbers:</strong> Use named constants for test data</li>
+                        <li><strong>Test Code Duplication:</strong> Extract common setup to helper methods</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Quiz -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>✅ Knowledge Check: Unit Testing Quiz</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                Test your understanding with 10 questions. Instant feedback provided!
+            </p>
+            <div class="quiz-container" id="quiz"></div>
+            <div class="quiz-results" id="quiz-results" style="display: none;">
+                <h3 id="score-display"></h3>
+                <button class="retry-btn" id="retry-quiz" style="margin-top: var(--spacing-lg); padding: var(--spacing-md) var(--spacing-xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 8px; cursor: pointer;">🔄 Retry Quiz</button>
+            </div>
+        </section>
+
+        <!-- Challenge -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🏆 Unit Testing Challenge</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                Write unit tests for a UserService class that handles user registration. Requirements:
+            </p>
+            <ul style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                <li>Test email validation (reject invalid formats)</li>
+                <li>Test password strength requirements (min 8 chars, uppercase, number)</li>
+                <li>Mock the database repository</li>
+                <li>Verify database save is called with correct user data</li>
+                <li>Test duplicate email rejection</li>
+            </ul>
+            
+            <div class="challenge-hints" style="margin-bottom: var(--spacing-lg);">
+                <details style="margin: var(--spacing-sm) 0;">
+                    <summary style="cursor: pointer; color: var(--hub-primary); font-weight: 600;">💡 Hint 1: Test Structure</summary>
+                    <p style="color: var(--text-secondary); padding: var(--spacing-md); background: rgba(123, 97, 255, 0.1); border-radius: 6px; margin-top: var(--spacing-sm);">
+                        Use AAA pattern: Arrange (create UserService with mock repo), Act (call register), Assert (verify result and mock calls)
+                    </p>
+                </details>
+                <details style="margin: var(--spacing-sm) 0;">
+                    <summary style="cursor: pointer; color: var(--hub-primary); font-weight: 600;">💡 Hint 2: Test Data</summary>
+                    <p style="color: var(--text-secondary); padding: var(--spacing-md); background: rgba(123, 97, 255, 0.1); border-radius: 6px; margin-top: var(--spacing-sm);">
+                        Create test cases: valid user, invalid email, weak password, duplicate email
+                    </p>
+                </details>
+                <details style="margin: var(--spacing-sm) 0;">
+                    <summary style="cursor: pointer; color: var(--hub-primary); font-weight: 600;">💡 Hint 3: Mocking</summary>
+                    <p style="color: var(--text-secondary); padding: var(--spacing-md); background: rgba(123, 97, 255, 0.1); border-radius: 6px; margin-top: var(--spacing-sm);">
+                        Mock repository methods: find_by_email (returns None for new users), save (verifies correct data passed)
+                    </p>
+                </details>
+            </div>
+            
+            <button id="show-solution-btn" style="padding: var(--spacing-sm) var(--spacing-lg); background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid #10b981; border-radius: 8px; cursor: pointer;">✅ Show Solution</button>
+            <div id="challenge-solution" style="margin-top: var(--spacing-lg); display: none;">
+                <pre style="background: rgba(26, 31, 58, 0.8); padding: var(--spacing-lg); border-radius: 8px; overflow-x: auto; color: #e5e7eb;"><code>import pytest
+from unittest.mock import Mock, MagicMock
+
+class TestUserService:
+    def test_should_register_user_with_valid_data(self):
+        # ARRANGE
+        mock_repo = Mock()
+        mock_repo.find_by_email.return_value = None  # No existing user
+        service = UserService(mock_repo)
+        
+        # ACT
+        result = service.register("john@example.com", "SecurePass123")
+        
+        # ASSERT
+        assert result.success is True
+        mock_repo.save.assert_called_once()
+        saved_user = mock_repo.save.call_args[0][0]
+        assert saved_user.email == "john@example.com"
+    
+    def test_should_reject_invalid_email_format(self):
+        # ARRANGE
+        mock_repo = Mock()
+        service = UserService(mock_repo)
+        
+        # ACT
+        result = service.register("invalid-email", "SecurePass123")
+        
+        # ASSERT
+        assert result.success is False
+        assert "invalid email" in result.error.lower()
+        mock_repo.save.assert_not_called()
+    
+    def test_should_reject_weak_password(self):
+        # ARRANGE
+        mock_repo = Mock()
+        service = UserService(mock_repo)
+        
+        # ACT
+        result = service.register("john@example.com", "weak")
+        
+        # ASSERT
+        assert result.success is False
+        assert "password" in result.error.lower()
+        mock_repo.save.assert_not_called()
+    
+    def test_should_reject_duplicate_email(self):
+        # ARRANGE
+        mock_repo = Mock()
+        existing_user = User("john@example.com", "OldPass123")
+        mock_repo.find_by_email.return_value = existing_user
+        service = UserService(mock_repo)
+        
+        # ACT
+        result = service.register("john@example.com", "NewPass456")
+        
+        # ASSERT
+        assert result.success is False
+        assert "already exists" in result.error.lower()
+        mock_repo.save.assert_not_called()
+    
+    def test_should_hash_password_before_saving(self):
+        # ARRANGE
+        mock_repo = Mock()
+        mock_repo.find_by_email.return_value = None
+        service = UserService(mock_repo)
+        
+        # ACT
+        service.register("john@example.com", "PlainPassword123")
+        
+        # ASSERT
+        saved_user = mock_repo.save.call_args[0][0]
+        assert saved_user.password != "PlainPassword123"
+        assert len(saved_user.password) > 20  # Hashed passwords are longer</code></pre>
             </div>
         </section>
 
@@ -130,6 +371,7 @@
     </footer>
 
     <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
     <script>
         // Initialize Mermaid with dark theme
         mermaid.initialize({
@@ -145,7 +387,657 @@
             }
         });
         
-        console.log("✅ Unit Testing Mastery module loaded successfully!");
+        // D3.js Test Pyramid Visualization
+        function createTestPyramid() {
+            const container = document.getElementById('test-pyramid-viz');
+            const width = container.clientWidth;
+            const height = 500;
+            const margin = { top: 40, right: 40, bottom: 60, left: 40 };
+            
+            const svg = d3.select('#test-pyramid-viz')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            // Pyramid layers data
+            const layers = [
+                { 
+                    level: 'UI/E2E Tests', 
+                    percentage: 10, 
+                    count: '~50 tests',
+                    speed: 'Slow (minutes)',
+                    cost: 'High',
+                    color: '#ef4444',
+                    description: 'Test entire system through UI'
+                },
+                { 
+                    level: 'Integration Tests', 
+                    percentage: 20, 
+                    count: '~200 tests',
+                    speed: 'Medium (seconds)',
+                    cost: 'Medium',
+                    color: '#fbbf24',
+                    description: 'Test component interactions'
+                },
+                { 
+                    level: 'Unit Tests', 
+                    percentage: 70, 
+                    count: '~1000 tests',
+                    speed: 'Fast (milliseconds)',
+                    cost: 'Low',
+                    color: '#10b981',
+                    description: 'Test individual functions/classes'
+                }
+            ];
+            
+            const pyramidHeight = height - margin.top - margin.bottom;
+            const pyramidWidth = width - margin.left - margin.right;
+            
+            let currentY = margin.top;
+            
+            layers.forEach((layer, index) => {
+                const layerHeight = (layer.percentage / 100) * pyramidHeight;
+                const topWidth = pyramidWidth * (1 - (index * 0.25));
+                const bottomWidth = pyramidWidth * (1 - ((index + 1) * 0.25));
+                
+                const leftX = (width - topWidth) / 2;
+                const rightX = leftX + topWidth;
+                const bottomLeftX = (width - bottomWidth) / 2;
+                const bottomRightX = bottomLeftX + bottomWidth;
+                
+                // Draw trapezoid with animation
+                const trapezoid = svg.append('path')
+                    .attr('d', `M ${leftX} ${currentY} 
+                                L ${rightX} ${currentY} 
+                                L ${bottomRightX} ${currentY + layerHeight} 
+                                L ${bottomLeftX} ${currentY + layerHeight} Z`)
+                    .attr('fill', layer.color)
+                    .attr('opacity', 0)
+                    .attr('stroke', '#fff')
+                    .attr('stroke-width', 2)
+                    .style('cursor', 'pointer')
+                    .on('mouseover', function() {
+                        d3.select(this)
+                            .transition()
+                            .duration(200)
+                            .attr('opacity', 0.4);
+                    })
+                    .on('mouseout', function() {
+                        d3.select(this)
+                            .transition()
+                            .duration(200)
+                            .attr('opacity', 0.25);
+                    });
+                
+                trapezoid.transition()
+                    .duration(800)
+                    .delay(index * 300)
+                    .attr('opacity', 0.25);
+                
+                // Layer label
+                svg.append('text')
+                    .attr('x', width / 2)
+                    .attr('y', currentY + layerHeight / 2 - 10)
+                    .attr('text-anchor', 'middle')
+                    .attr('fill', '#fff')
+                    .attr('font-size', '18px')
+                    .attr('font-weight', 'bold')
+                    .attr('opacity', 0)
+                    .text(layer.level)
+                    .transition()
+                    .duration(500)
+                    .delay(index * 300 + 400)
+                    .attr('opacity', 1);
+                
+                // Percentage
+                svg.append('text')
+                    .attr('x', width / 2)
+                    .attr('y', currentY + layerHeight / 2 + 15)
+                    .attr('text-anchor', 'middle')
+                    .attr('fill', layer.color)
+                    .attr('font-size', '22px')
+                    .attr('font-weight', 'bold')
+                    .attr('opacity', 0)
+                    .text(`${layer.percentage}%`)
+                    .transition()
+                    .duration(500)
+                    .delay(index * 300 + 500)
+                    .attr('opacity', 1);
+                
+                // Count
+                svg.append('text')
+                    .attr('x', width / 2)
+                    .attr('y', currentY + layerHeight / 2 + 35)
+                    .attr('text-anchor', 'middle')
+                    .attr('fill', '#8b92a7')
+                    .attr('font-size', '13px')
+                    .attr('opacity', 0)
+                    .text(layer.count)
+                    .transition()
+                    .duration(500)
+                    .delay(index * 300 + 600)
+                    .attr('opacity', 1);
+                
+                // Speed/Cost info on sides
+                if (index === 0) {
+                    svg.append('text')
+                        .attr('x', 20)
+                        .attr('y', currentY + layerHeight / 2)
+                        .attr('fill', '#8b92a7')
+                        .attr('font-size', '11px')
+                        .text('⚠️ ' + layer.speed);
+                    
+                    svg.append('text')
+                        .attr('x', width - 20)
+                        .attr('y', currentY + layerHeight / 2)
+                        .attr('text-anchor', 'end')
+                        .attr('fill', '#8b92a7')
+                        .attr('font-size', '11px')
+                        .text('💰 ' + layer.cost);
+                }
+                
+                currentY += layerHeight;
+            });
+            
+            // Title
+            svg.append('text')
+                .attr('x', width / 2)
+                .attr('y', 25)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#7b61ff')
+                .attr('font-size', '16px')
+                .attr('font-weight', '600')
+                .text('Test Distribution: The Ideal Pyramid');
+            
+            // Bottom note
+            svg.append('text')
+                .attr('x', width / 2)
+                .attr('y', height - 20)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#6b7280')
+                .attr('font-size', '12px')
+                .text('70% unit tests provide fast, reliable feedback at low cost');
+        }
+        
+        // D3.js Test Doubles Comparison Chart
+        function createTestDoublesComparison() {
+            const container = document.getElementById('test-doubles-comparison');
+            const width = container.clientWidth;
+            const height = 450;
+            const margin = { top: 40, right: 120, bottom: 60, left: 60 };
+            
+            const svg = d3.select('#test-doubles-comparison')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            const chartWidth = width - margin.left - margin.right;
+            const chartHeight = height - margin.top - margin.bottom;
+            
+            const g = svg.append('g')
+                .attr('transform', `translate(${margin.left}, ${margin.top})`);
+            
+            // Test doubles comparison data
+            const doublesData = [
+                { type: 'Dummy', complexity: 1, verification: 0, use: 'Fill parameters', color: '#6b7280' },
+                { type: 'Stub', complexity: 2, verification: 1, use: 'Canned responses', color: '#00d4ff' },
+                { type: 'Fake', complexity: 4, verification: 2, use: 'Working impl', color: '#fbbf24' },
+                { type: 'Mock', complexity: 5, verification: 5, use: 'Behavior verify', color: '#10b981' },
+                { type: 'Spy', complexity: 4, verification: 4, use: 'Record calls', color: '#ef4444' }
+            ];
+            
+            // Scales
+            const xScale = d3.scaleBand()
+                .domain(doublesData.map(d => d.type))
+                .range([0, chartWidth])
+                .padding(0.3);
+            
+            const yScale = d3.scaleLinear()
+                .domain([0, 6])
+                .range([chartHeight, 0]);
+            
+            // Grid lines
+            g.append('g')
+                .attr('class', 'grid')
+                .call(d3.axisLeft(yScale)
+                    .ticks(6)
+                    .tickSize(-chartWidth)
+                    .tickFormat(''))
+                .selectAll('line')
+                .attr('stroke', '#2d3748')
+                .attr('stroke-opacity', 0.3)
+                .attr('stroke-dasharray', '2,2');
+            
+            g.select('.grid .domain').remove();
+            
+            // X-axis
+            g.append('g')
+                .attr('transform', `translate(0, ${chartHeight})`)
+                .call(d3.axisBottom(xScale))
+                .selectAll('text')
+                .attr('fill', '#8b92a7')
+                .style('font-size', '13px')
+                .style('font-weight', '600');
+            
+            // Y-axis
+            g.append('g')
+                .call(d3.axisLeft(yScale).ticks(6))
+                .selectAll('text')
+                .attr('fill', '#8b92a7')
+                .style('font-size', '12px');
+            
+            // Y-axis label
+            g.append('text')
+                .attr('transform', 'rotate(-90)')
+                .attr('x', -chartHeight / 2)
+                .attr('y', -45)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#8b92a7')
+                .attr('font-size', '12px')
+                .text('Complexity & Verification Level');
+            
+            // Draw grouped bars
+            const barWidth = xScale.bandwidth() / 2.2;
+            
+            doublesData.forEach((d, i) => {
+                const x = xScale(d.type);
+                
+                // Complexity bar
+                g.append('rect')
+                    .attr('x', x)
+                    .attr('y', chartHeight)
+                    .attr('width', barWidth)
+                    .attr('height', 0)
+                    .attr('fill', d.color)
+                    .attr('opacity', 0.7)
+                    .transition()
+                    .duration(800)
+                    .delay(i * 150)
+                    .attr('y', yScale(d.complexity))
+                    .attr('height', chartHeight - yScale(d.complexity));
+                
+                // Verification bar
+                g.append('rect')
+                    .attr('x', x + barWidth + 4)
+                    .attr('y', chartHeight)
+                    .attr('width', barWidth)
+                    .attr('height', 0)
+                    .attr('fill', d.color)
+                    .attr('opacity', 0.4)
+                    .attr('stroke', d.color)
+                    .attr('stroke-width', 2)
+                    .attr('stroke-dasharray', '4,2')
+                    .transition()
+                    .duration(800)
+                    .delay(i * 150 + 200)
+                    .attr('y', yScale(d.verification))
+                    .attr('height', chartHeight - yScale(d.verification));
+                
+                // Use case label
+                g.append('text')
+                    .attr('x', x + xScale.bandwidth() / 2)
+                    .attr('y', chartHeight + 35)
+                    .attr('text-anchor', 'middle')
+                    .attr('fill', '#6b7280')
+                    .attr('font-size', '10px')
+                    .attr('opacity', 0)
+                    .text(d.use)
+                    .transition()
+                    .duration(500)
+                    .delay(i * 150 + 400)
+                    .attr('opacity', 1);
+            });
+            
+            // Legend
+            const legend = svg.append('g')
+                .attr('transform', `translate(${width - margin.right + 10}, ${margin.top + 20})`);
+            
+            [
+                { label: 'Complexity', opacity: 0.7, dash: 'none' },
+                { label: 'Verification', opacity: 0.4, dash: '4,2' }
+            ].forEach((item, i) => {
+                const legendItem = legend.append('g')
+                    .attr('transform', `translate(0, ${i * 25})`);
+                
+                legendItem.append('rect')
+                    .attr('width', 20)
+                    .attr('height', 12)
+                    .attr('fill', '#7b61ff')
+                    .attr('opacity', item.opacity)
+                    .attr('stroke', item.dash !== 'none' ? '#7b61ff' : 'none')
+                    .attr('stroke-width', 2)
+                    .attr('stroke-dasharray', item.dash);
+                
+                legendItem.append('text')
+                    .attr('x', 28)
+                    .attr('y', 10)
+                    .attr('fill', '#8b92a7')
+                    .attr('font-size', '11px')
+                    .text(item.label);
+            });
+            
+            // Title
+            svg.append('text')
+                .attr('x', width / 2)
+                .attr('y', 20)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#7b61ff')
+                .attr('font-size', '14px')
+                .attr('font-weight', '600')
+                .text('Test Doubles Comparison: Complexity vs Verification Power');
+        }
+        
+        // Monaco Editor Setup
+        require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs' } });
+        require(['vs/editor/editor.main'], function() {
+            const badCode = `# BAD: Unclear test structure, multiple concerns
+def test_user():
+    u = User("test@test.com", "pass")
+    if u.email:
+        result = u.validate()
+        if result:
+            u.save()
+            users = User.all()
+            assert len(users) == 1
+    # What are we testing? Hard to tell!`;
+
+            const goodCode = `# GOOD: Clear AAA pattern
+def test_should_save_user_with_valid_email():
+    # ARRANGE
+    email = "john@example.com"
+    password = "SecurePass123"
+    user = User(email, password)
+    
+    # ACT
+    result = user.save()
+    
+    # ASSERT
+    assert result.success is True
+    assert user.id is not None
+    assert user.email == email`;
+
+            const mocksCode = `# WITH TEST DOUBLES: Isolate dependencies
+from unittest.mock import Mock
+
+def test_should_send_welcome_email_after_registration():
+    # ARRANGE
+    mock_email_service = Mock()
+    mock_db = Mock()
+    mock_db.save.return_value = True
+    
+    service = UserService(mock_db, mock_email_service)
+    user = User("john@example.com", "Pass123")
+    
+    # ACT
+    service.register(user)
+    
+    # ASSERT
+    mock_db.save.assert_called_once_with(user)
+    mock_email_service.send_welcome.assert_called_once_with(user.email)`;
+
+            monaco.editor.create(document.getElementById('editor-bad'), {
+                value: badCode,
+                language: 'python',
+                theme: 'vs-dark',
+                minimap: { enabled: false },
+                fontSize: 14,
+                readOnly: true
+            });
+
+            monaco.editor.create(document.getElementById('editor-good'), {
+                value: goodCode,
+                language: 'python',
+                theme: 'vs-dark',
+                minimap: { enabled: false },
+                fontSize: 14,
+                readOnly: true
+            });
+
+            monaco.editor.create(document.getElementById('editor-mocks'), {
+                value: mocksCode,
+                language: 'python',
+                theme: 'vs-dark',
+                minimap: { enabled: false },
+                fontSize: 14,
+                readOnly: true
+            });
+
+            // Tab switching
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', function() {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                document.getElementById(this.getAttribute('data-tab')).classList.add('active');
+            }));
+
+            // Run code button
+            document.getElementById('run-code').addEventListener('click', () => {
+                const tab = document.querySelector('.tab-content.active').id;
+                const output = document.getElementById('output-content');
+                const outputs = {
+                    bad: `Running test_user...\n\n❌ FAILED: Test unclear and brittle\n- Testing multiple things\n- Has conditional logic\n- Hard to debug when fails\n- Tightly coupled to implementation`,
+                    good: `Running test_should_save_user_with_valid_email...\n\n✅ PASSED in 0.002s\n\nClear structure:\n✓ Setup in ARRANGE phase\n✓ Single action in ACT phase\n✓ Clear assertions in ASSERT phase\n✓ Self-documenting test name`,
+                    mocks: `Running test_should_send_welcome_email_after_registration...\n\n✅ PASSED in 0.001s\n\nTest isolation achieved:\n✓ Database mocked (no real DB calls)\n✓ Email service mocked (no real emails)\n✓ Verified correct methods called\n✓ Fast execution (<1ms)`
+                };
+                output.textContent = outputs[tab];
+            });
+        });
+        
+        // Quiz Data
+        const quizData = [
+            {
+                question: "What does the AAA pattern stand for in unit testing?",
+                options: ["Assert-Act-Arrange", "Arrange-Act-Assert", "Act-Arrange-Assert", "Arrange-Assert-Act"],
+                correct: 1,
+                explanation: "AAA stands for Arrange-Act-Assert: set up test conditions, execute the behavior, verify the outcome."
+            },
+            {
+                question: "Which test double returns pre-programmed responses without behavior verification?",
+                options: ["Mock", "Stub", "Spy", "Fake"],
+                correct: 1,
+                explanation: "Stubs provide canned responses to calls but don't verify how they're used. Mocks verify behavior."
+            },
+            {
+                question: "What is the main principle behind F.I.R.S.T. tests?",
+                options: ["Fast, Independent, Repeatable, Self-validating, Timely", "First, Immediate, Reliable, Strong, Total", "Fast, Integrated, Reusable, Simple, Tested", "First, Important, Required, Systematic, Thorough"],
+                correct: 0,
+                explanation: "F.I.R.S.T. stands for Fast, Independent, Repeatable, Self-validating, Timely - key principles for effective unit tests."
+            },
+            {
+                question: "How many things should a single unit test verify?",
+                options: ["As many as possible", "At least 3", "Exactly one behavior", "2-3 related things"],
+                correct: 2,
+                explanation: "Each test should verify one specific behavior. Multiple asserts are OK if testing the same behavior."
+            },
+            {
+                question: "What should you test in unit tests?",
+                options: ["Private methods only", "Public interface/behavior", "Implementation details", "All methods equally"],
+                correct: 1,
+                explanation: "Test the public interface and observable behavior, not implementation details. This makes tests maintainable."
+            },
+            {
+                question: "What is a test double?",
+                options: ["Testing twice", "Two test methods", "A replacement for a real dependency", "Double the test coverage"],
+                correct: 2,
+                explanation: "Test doubles (mocks, stubs, fakes, spies) replace real dependencies to isolate the code under test."
+            },
+            {
+                question: "Which is a sign of a brittle test?",
+                options: ["Breaks with internal refactoring", "Tests public behavior", "Uses AAA pattern", "Has clear assertions"],
+                correct: 0,
+                explanation: "Brittle tests break when implementation changes even though behavior stays the same. Test behavior, not implementation."
+            },
+            {
+                question: "What percentage of tests should be unit tests according to the test pyramid?",
+                options: ["10%", "30%", "50%", "70%"],
+                correct: 3,
+                explanation: "The test pyramid recommends ~70% unit tests for fast, reliable feedback at low cost."
+            },
+            {
+                question: "When should you mock dependencies?",
+                options: ["Always mock everything", "Never use mocks", "When isolating the system under test", "Only for databases"],
+                correct: 2,
+                explanation: "Mock dependencies to isolate the code being tested, but avoid over-mocking which can make tests meaningless."
+            },
+            {
+                question: "What makes a good test name?",
+                options: ["Short: test1(), test2()", "Technical: testMethodA()", "Descriptive: should_reject_invalid_email()", "Generic: testUser()"],
+                correct: 2,
+                explanation: "Good test names describe what's being tested and expected outcome: should_reject_invalid_email() is self-documenting."
+            }
+        ];
+        
+        function renderQuiz() {
+            const quizContainer = document.getElementById('quiz');
+            quizContainer.innerHTML = quizData.map((item, index) => `
+                <div class="quiz-question" style="margin-bottom: var(--spacing-2xl); padding: var(--spacing-lg); background: rgba(26, 31, 58, 0.5); border-radius: 8px; border: 1px solid var(--module-border);">
+                    <h4 style="color: var(--text-primary); margin-bottom: var(--spacing-md); font-size: 1.1rem;">
+                        Question ${index + 1}: ${item.question}
+                    </h4>
+                    <div class="options-container">
+                        ${item.options.map((option, optIndex) => `
+                            <label class="quiz-option" style="display: block; padding: var(--spacing-md); margin: var(--spacing-sm) 0; background: rgba(123, 97, 255, 0.1); border: 2px solid transparent; border-radius: 8px; cursor: pointer; transition: all 0.2s ease;">
+                                <input type="radio" name="question-${index}" value="${optIndex}" style="margin-right: var(--spacing-sm);">
+                                <span style="color: var(--text-secondary);">${option}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                    <div id="feedback-${index}" class="question-feedback" style="display: none; margin-top: var(--spacing-md); padding: var(--spacing-md); border-radius: 6px;"></div>
+                </div>
+            `).join('');
+            
+            quizContainer.innerHTML += `
+                <button id="submit-quiz-btn" class="submit-quiz-btn" style="padding: var(--spacing-md) var(--spacing-2xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600; transition: transform 0.2s ease;">
+                    📝 Submit Quiz
+                </button>
+            `;
+            
+            document.querySelectorAll('.quiz-option').forEach(option => {
+                option.addEventListener('mouseenter', function() {
+                    this.style.borderColor = 'var(--hub-primary)';
+                    this.style.background = 'rgba(123, 97, 255, 0.2)';
+                });
+                option.addEventListener('mouseleave', function() {
+                    if (!this.querySelector('input').checked) {
+                        this.style.borderColor = 'transparent';
+                        this.style.background = 'rgba(123, 97, 255, 0.1)';
+                    }
+                });
+                option.addEventListener('click', function() {
+                    const questionContainer = this.closest('.quiz-question');
+                    questionContainer.querySelectorAll('.quiz-option').forEach(opt => {
+                        opt.style.borderColor = 'transparent';
+                        opt.style.background = 'rgba(123, 97, 255, 0.1)';
+                    });
+                    this.style.borderColor = 'var(--hub-primary)';
+                    this.style.background = 'rgba(123, 97, 255, 0.2)';
+                });
+            });
+            
+            document.getElementById('submit-quiz-btn').addEventListener('click', submitQuiz);
+        }
+        
+        function submitQuiz() {
+            let correctCount = 0;
+            
+            quizData.forEach((item, index) => {
+                const selectedOption = document.querySelector(`input[name="question-${index}"]:checked`);
+                const feedback = document.getElementById(`feedback-${index}`);
+                
+                if (selectedOption) {
+                    const answerIndex = parseInt(selectedOption.value);
+                    const isCorrect = answerIndex === item.correct;
+                    
+                    if (isCorrect) {
+                        correctCount++;
+                        feedback.style.display = 'block';
+                        feedback.style.background = 'rgba(16, 185, 129, 0.1)';
+                        feedback.style.borderLeft = '4px solid #10b981';
+                        feedback.innerHTML = `
+                            <strong style="color: #10b981;">✅ Correct!</strong><br>
+                            <span style="color: var(--text-secondary); font-size: 0.95rem;">${item.explanation}</span>
+                        `;
+                    } else {
+                        feedback.style.display = 'block';
+                        feedback.style.background = 'rgba(239, 68, 68, 0.1)';
+                        feedback.style.borderLeft = '4px solid #ef4444';
+                        feedback.innerHTML = `
+                            <strong style="color: #ef4444;">❌ Incorrect</strong><br>
+                            <span style="color: var(--text-secondary); font-size: 0.95rem;">The correct answer is: <strong>${item.options[item.correct]}</strong></span><br>
+                            <span style="color: var(--text-secondary); font-size: 0.95rem;">${item.explanation}</span>
+                        `;
+                    }
+                } else {
+                    feedback.style.display = 'block';
+                    feedback.style.background = 'rgba(251, 191, 36, 0.1)';
+                    feedback.style.borderLeft = '4px solid #fbbf24';
+                    feedback.innerHTML = `<strong style="color: #fbbf24;">⚠️ No answer selected</strong>`;
+                }
+            });
+            
+            const percentage = (correctCount / quizData.length) * 100;
+            const resultsContainer = document.getElementById('quiz-results');
+            const scoreDisplay = document.getElementById('score-display');
+            
+            let grade, color, message;
+            if (percentage >= 90) {
+                grade = 'Excellent!';
+                color = '#10b981';
+                message = 'Outstanding mastery of unit testing! 🏆';
+            } else if (percentage >= 70) {
+                grade = 'Good Job!';
+                color = '#00d4ff';
+                message = 'Solid understanding of unit testing concepts! 👍';
+            } else if (percentage >= 50) {
+                grade = 'Keep Learning';
+                color = '#fbbf24';
+                message = 'You\'re making progress. Review and try again! 📚';
+            } else {
+                grade = 'Needs Improvement';
+                color = '#ef4444';
+                message = 'Review the content before retrying. 💪';
+            }
+            
+            scoreDisplay.innerHTML = `
+                <div style="text-align: center;">
+                    <h3 style="color: ${color}; font-size: 2rem; margin-bottom: var(--spacing-sm);">${grade}</h3>
+                    <p style="font-size: 1.5rem; color: var(--text-primary); margin-bottom: var(--spacing-sm);">
+                        Score: ${correctCount}/${quizData.length} (${percentage.toFixed(0)}%)
+                    </p>
+                    <p style="color: var(--text-secondary);">${message}</p>
+                </div>
+            `;
+            
+            resultsContainer.style.display = 'block';
+            
+            const submitBtn = document.getElementById('submit-quiz-btn');
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.5';
+            submitBtn.style.cursor = 'not-allowed';
+            
+            resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        
+        document.getElementById('retry-quiz')?.addEventListener('click', () => {
+            document.getElementById('quiz-results').style.display = 'none';
+            renderQuiz();
+        });
+        
+        // Show solution button
+        document.getElementById('show-solution-btn')?.addEventListener('click', function() {
+            document.getElementById('challenge-solution').style.display = 'block';
+            this.disabled = true;
+            this.style.opacity = '0.5';
+            this.style.cursor = 'not-allowed';
+        });
+        
+        // Initialize on load
+        window.addEventListener('load', () => {
+            createTestPyramid();
+            createTestDoublesComparison();
+            renderQuiz();
+            console.log("✅ Unit Testing Mastery module with enhanced D3.js visualizations loaded!");
+        });
     </script>
 </body>
 </html>

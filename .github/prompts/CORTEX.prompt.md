@@ -128,8 +128,9 @@ LLM Classification → Keyword Regex → User Clarification
 | `refine`, `improve cortex`, `optimize code` | 📋 **Refinement (GUIDED)** | `refinement-orchestrator-manifest.yaml` | 7-phase improvement |
 | `refactor [artifact]`, `analyze [file]`, `optimize [file]` | 📋 **Refactor (GUIDED)** | `cortex-refactor.prompt.md` | Deep analysis + decomposition strategy |
 | `system maintenance`, `health check` | 📋 **Maintenance (GUIDED)** | Via `cortex-maintenance.prompt.md` | 11-phase health + auto-repair (modular v2.0) |
-| `cleanup cache`, `cleanup full`, `cleanup [type]` | � **Maintenance Phase 2** | Via `cortex-maintenance.prompt.md` | Cache clear, bloat removal (Phase 2) |
+| `cleanup cache`, `cleanup full`, `cleanup [type]` | 🛡️ **Maintenance Phase 2** | Via `cortex-maintenance.prompt.md` | Cache clear, bloat removal (Phase 2) |
 | `vacuum [path]`, `deep clean [path]`, `organize files` | 🛡️ **Vacuum (AUTONOMOUS)** | `cortex-vacuum.prompt.md` | Deep filesystem cleanup + reorganization |
+| `cleanup docs`, `organize docs`, `validate docs` | 📋 **Doc Cleanup (GUIDED)** | `cortex-doc-cleanup.prompt.md` | 6-phase docs cleanup + stub generation + sync |
 | `help`, `show commands` | **Help** | Template-based | Command list |
 
 **Manifest Path:** `cortex-brain/manifests/orchestrators/{manifest-file}`  
@@ -298,10 +299,11 @@ cortex-brain/                    src/
 | `/CORTEX Plan [feature]` | 🛡️ Create plan (uses Planning Orchestrator) |
 | `ado story [feature]` | 🛡️ Create ADO items (uses ADO Orchestrator) |
 | `vacuum [path]` | 🛡️ Deep filesystem cleanup + reorganization |
+| `cleanup docs` | 📋 6-phase docs cleanup + validation + sync |
 | `refactor [artifact]` | 📋 Deep analysis with bloat detection + decomposition |
 | `system maintenance` | 12-phase health pipeline |
 | `help` | Show all commands |
 
-**Resources:** `cortex-brain/response-templates-v4.yaml`, `brain-protection-rules.yaml`, `cortex-maintenance.prompt.md` (v2.0 modular), `cortex-vacuum.prompt.md`, `cortex-refactor.prompt.md`
+**Resources:** `cortex-brain/response-templates-v4.yaml`, `brain-protection-rules.yaml`, `cortex-maintenance.prompt.md` (v2.0 modular), `cortex-vacuum.prompt.md`, `cortex-refactor.prompt.md`, `cortex-doc-cleanup.prompt.md`
 
 **Anti-Bloat:** This file MUST stay under 250 lines (increased for LLM intent routing sections).

@@ -38,12 +38,12 @@
                 <span class="difficulty-badge intermediate">Intermediate</span>
                 <span style="color: var(--text-secondary);">Module 4 of 5</span>
             </div>
-            <h1 class="hero-title">🧪 Test Coverage Analysis</h1>
-            <p class="hero-subtitle">Interactive learning with quizzes, code playgrounds, and challenges</p>
+            <h1 class="hero-title">📊 Test Coverage Analysis</h1>
+            <p class="hero-subtitle">Master coverage metrics, quality indicators, and effective testing strategies</p>
             <div class="module-meta">
-                <span>⏱️ 30 minutes</span>
+                <span>⏱️ 35 minutes</span>
                 <span>📊 10 quiz questions</span>
-                <span>💻 1 code playground</span>
+                <span>💻 2 code playgrounds</span>
                 <span>🏆 1 challenge</span>
             </div>
         </div>
@@ -55,49 +55,259 @@
         <section class="glass-card" style="margin-top: var(--spacing-2xl);">
             <h2>🎓 Learning Objectives</h2>
             <ul class="objective-list">
-                <li>Understand coverage metrics (line, branch, path)</li>
-                <li>Use coverage tools (pytest-cov, Istanbul, JaCoCo)</li>
-                <li>Set meaningful coverage targets</li>
-                <li>Identify untested code paths</li>
-                <li>Avoid coverage theater (100% != quality)</li>
+                <li>Understand coverage metrics: line, branch, function, path, and condition coverage</li>
+                <li>Use coverage tools effectively (pytest-cov, Istanbul, JaCoCo, Coverage.py)</li>
+                <li>Set meaningful coverage targets based on risk and criticality</li>
+                <li>Identify untested code paths and critical gaps</li>
+                <li>Avoid "coverage theater" - understand that 100% coverage ≠ quality</li>
+                <li>Integrate coverage analysis into CI/CD pipelines</li>
             </ul>
         </section>
 
-        <!-- Interactive Content Placeholder -->
+        <!-- Coverage Metrics Overview -->
         <section class="glass-card" style="margin-top: var(--spacing-3xl);">
-            <h2>📚 Module Content</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
-                This module includes:
-            </p>
-            <ul style="list-style-type: none; padding-left: 0;">
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Interactive Visualizations:</strong> D3.js charts and Mermaid diagrams
-                </li>
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Code Playgrounds:</strong> Hands-on Monaco editor with live execution
-                </li>
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Knowledge Checks:</strong> Interactive quizzes with instant feedback
-                </li>
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Real-World Examples:</strong> Production-grade code samples
-                </li>
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Progressive Challenges:</strong> Apply what you've learned
-                </li>
-            </ul>
-        </section>
-
-        <!-- Interactive Quiz Placeholder -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
-            <h2>✅ Knowledge Check: Quiz</h2>
+            <h2>📊 Coverage Metrics Explained</h2>
             <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
-                Test your understanding with interactive questions. Instant feedback provided!
+                Different coverage metrics measure different aspects of test completeness. Understanding these metrics helps you identify gaps in your testing strategy.
             </p>
-            <div class="quiz-container" id="quiz">
-                <p style="color: var(--text-primary); text-align: center; padding: var(--spacing-3xl);">
-                    📝 Quiz system loading...
+            
+            <div id="coverage-metrics-viz" style="width: 100%; height: 500px; margin: var(--spacing-xl) 0;"></div>
+            
+            <div class="metrics-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-lg); margin-top: var(--spacing-xl);">
+                <div class="metric-card" style="padding: var(--spacing-lg); background: rgba(123, 97, 255, 0.1); border-left: 4px solid #7b61ff; border-radius: 8px;">
+                    <h4 style="color: #7b61ff; margin-bottom: var(--spacing-sm);">📝 Line Coverage</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                        Percentage of executed code lines. <strong>Most common</strong>, but can miss untested branches.
+                    </p>
+                </div>
+                <div class="metric-card" style="padding: var(--spacing-lg); background: rgba(0, 212, 255, 0.1); border-left: 4px solid #00d4ff; border-radius: 8px;">
+                    <h4 style="color: #00d4ff; margin-bottom: var(--spacing-sm);">🔀 Branch Coverage</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                        Measures if/else branches executed. <strong>More thorough</strong> than line coverage.
+                    </p>
+                </div>
+                <div class="metric-card" style="padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-left: 4px solid #10b981; border-radius: 8px;">
+                    <h4 style="color: #10b981; margin-bottom: var(--spacing-sm);">🎯 Function Coverage</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                        Percentage of functions called. <strong>Quick overview</strong> of untested modules.
+                    </p>
+                </div>
+                <div class="metric-card" style="padding: var(--spacing-lg); background: rgba(251, 191, 36, 0.1); border-left: 4px solid #fbbf24; border-radius: 8px;">
+                    <h4 style="color: #fbbf24; margin-bottom: var(--spacing-sm);">🛤️ Path Coverage</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                        All possible execution paths. <strong>Most thorough</strong>, but exponentially complex.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Coverage vs Quality -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>⚖️ Coverage vs. Quality: The Reality</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                High coverage doesn't guarantee quality. Focus on meaningful tests that verify behavior, not just execution.
+            </p>
+            
+            <div id="quality-metrics-viz" style="width: 100%; height: 450px; margin: var(--spacing-xl) 0;"></div>
+            
+            <div class="comparison-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-xl); margin-top: var(--spacing-xl);">
+                <div style="padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-radius: 8px;">
+                    <h4 style="color: #10b981; margin-bottom: var(--spacing-md);">✅ Do This</h4>
+                    <ul style="color: var(--text-secondary); line-height: 1.8;">
+                        <li>Test critical business logic thoroughly</li>
+                        <li>Focus on edge cases and error paths</li>
+                        <li>Write readable, maintainable tests</li>
+                        <li>Verify behavior, not implementation</li>
+                        <li>Use coverage to find gaps, not as a goal</li>
+                    </ul>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(239, 68, 68, 0.1); border-radius: 8px;">
+                    <h4 style="color: #ef4444; margin-bottom: var(--spacing-md);">❌ Avoid This</h4>
+                    <ul style="color: var(--text-secondary); line-height: 1.8;">
+                        <li>Chasing 100% coverage on all code</li>
+                        <li>Writing tests just to hit coverage targets</li>
+                        <li>Testing trivial getters/setters</li>
+                        <li>Ignoring test quality for quantity</li>
+                        <li>Treating coverage as a success metric</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Coverage Tools Comparison -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🛠️ Coverage Tools by Language</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                Each programming language has specialized coverage tools with unique features and integrations.
+            </p>
+            
+            <div class="mermaid-container">
+                <pre class="mermaid">
+graph TB
+    subgraph Python["🐍 Python"]
+        PytestCov["pytest-cov<br/>pytest integration"]
+        CoveragePy["Coverage.py<br/>standalone tool"]
+        Codecov["Codecov<br/>cloud reporting"]
+    end
+    
+    subgraph JavaScript["📜 JavaScript"]
+        Istanbul["Istanbul/nyc<br/>Node.js standard"]
+        Jest["Jest<br/>built-in coverage"]
+        Cypress["Cypress<br/>E2E coverage"]
+    end
+    
+    subgraph Java["☕ Java"]
+        JaCoCo["JaCoCo<br/>bytecode analysis"]
+        Cobertura["Cobertura<br/>XML reports"]
+        Clover["Clover<br/>Atlassian tool"]
+    end
+    
+    subgraph CSharp[".NET"]
+        Coverlet["Coverlet<br/>cross-platform"]
+        DotCover["dotCover<br/>JetBrains"]
+        NCover["NCover<br/>commercial"]
+    end
+    
+    style Python fill:#7b61ff,stroke:#fff,color:#fff
+    style JavaScript fill:#00d4ff,stroke:#fff,color:#000
+    style Java fill:#10b981,stroke:#fff,color:#fff
+    style CSharp fill:#fbbf24,stroke:#fff,color:#000
+                </pre>
+            </div>
+        </section>
+
+        <!-- Interactive Playground: Coverage Analysis -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>💻 Code Playground: Coverage in Action</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                Explore different coverage scenarios and see how coverage metrics change based on test completeness.
+            </p>
+            
+            <div class="playground-container">
+                <div class="tabs" style="display: flex; gap: var(--spacing-sm); margin-bottom: var(--spacing-md); border-bottom: 2px solid var(--module-border);">
+                    <button class="tab-btn active" data-tab="low-coverage" style="padding: var(--spacing-sm) var(--spacing-lg); background: transparent; border: none; color: var(--text-secondary); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s;">
+                        Poor Coverage (40%)
+                    </button>
+                    <button class="tab-btn" data-tab="good-coverage" style="padding: var(--spacing-sm) var(--spacing-lg); background: transparent; border: none; color: var(--text-secondary); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s;">
+                        Good Coverage (85%)
+                    </button>
+                    <button class="tab-btn" data-tab="comprehensive" style="padding: var(--spacing-sm) var(--spacing-lg); background: transparent; border: none; color: var(--text-secondary); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s;">
+                        Comprehensive (95%)
+                    </button>
+                </div>
+                
+                <div id="low-coverage" class="tab-content active" style="min-height: 400px;"></div>
+                <div id="good-coverage" class="tab-content" style="display: none; min-height: 400px;"></div>
+                <div id="comprehensive" class="tab-content" style="display: none; min-height: 400px;"></div>
+                
+                <button id="run-coverage" class="run-code-btn" style="margin-top: var(--spacing-md); padding: var(--spacing-sm) var(--spacing-xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                    ▶ Run Coverage Analysis
+                </button>
+                
+                <div id="coverage-output" style="margin-top: var(--spacing-md); padding: var(--spacing-lg); background: rgba(26, 31, 58, 0.8); border-radius: 8px; border: 1px solid var(--module-border); display: none;">
+                    <h4 style="color: var(--hub-primary); margin-bottom: var(--spacing-sm);">Coverage Report:</h4>
+                    <pre id="coverage-content" style="color: var(--text-secondary); overflow-x: auto; margin: 0; font-size: 0.9rem; line-height: 1.6;"></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Setting Coverage Targets -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🎯 Setting Meaningful Coverage Targets</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                Coverage targets should be risk-based and context-aware. Use these guidelines to set appropriate thresholds.
+            </p>
+            
+            <div class="mermaid-container">
+                <pre class="mermaid">
+graph LR
+    Code[Code Type] --> Critical{Critical<br/>Business Logic?}
+    Critical -->|Yes| High["🔴 90-95%<br/>payment, auth, data"]
+    Critical -->|No| Medium{Frequently<br/>Changed?}
+    Medium -->|Yes| ModHigh["🟡 80-85%<br/>features, APIs"]
+    Medium -->|No| Low{User<br/>Facing?}
+    Low -->|Yes| Mod["🟢 70-75%<br/>UI, formatting"]
+    Low -->|No| Min["⚪ 50-60%<br/>utils, config"]
+    
+    style Critical fill:#ef4444,stroke:#fff,color:#fff
+    style Medium fill:#fbbf24,stroke:#000,color:#000
+    style Low fill:#10b981,stroke:#fff,color:#fff
+    style High fill:#ef4444,stroke:#fff,color:#fff
+    style ModHigh fill:#fbbf24,stroke:#000,color:#000
+    style Mod fill:#10b981,stroke:#fff,color:#fff
+    style Min fill:#6b7280,stroke:#fff,color:#fff
+                </pre>
+            </div>
+            
+            <div class="target-guidelines" style="margin-top: var(--spacing-xl); padding: var(--spacing-lg); background: rgba(0, 212, 255, 0.1); border-radius: 8px; border-left: 4px solid #00d4ff;">
+                <h4 style="color: #00d4ff; margin-bottom: var(--spacing-md);">💡 Industry Best Practices</h4>
+                <ul style="color: var(--text-secondary); line-height: 1.8;">
+                    <li><strong>Payment Processing:</strong> 95%+ with extensive edge case testing</li>
+                    <li><strong>Authentication/Authorization:</strong> 90%+ covering all permission scenarios</li>
+                    <li><strong>Core Business Logic:</strong> 85-90% with focus on critical paths</li>
+                    <li><strong>REST APIs:</strong> 80-85% covering happy and error paths</li>
+                    <li><strong>UI Components:</strong> 70-75% focusing on user interactions</li>
+                    <li><strong>Utilities/Helpers:</strong> 60-70% testing public interfaces</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Interactive Quiz -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>✅ Knowledge Check: Coverage Quiz</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                Test your understanding of coverage metrics, quality indicators, and best practices.
+            </p>
+            <div class="quiz-container" id="quiz"></div>
+            
+            <div id="quiz-results" class="quiz-results" style="display: none; margin-top: var(--spacing-xl); padding: var(--spacing-xl); background: rgba(123, 97, 255, 0.1); border-radius: 12px; text-align: center;">
+                <div id="score-display"></div>
+                <button id="retry-quiz" style="margin-top: var(--spacing-lg); padding: var(--spacing-sm) var(--spacing-xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                    🔄 Retry Quiz
+                </button>
+            </div>
+        </section>
+
+        <!-- Progressive Challenge -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🏆 Challenge: Improve Test Coverage</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                You've inherited a codebase with 55% coverage. Analyze the coverage report and write tests to reach 85% while maintaining quality.
+            </p>
+            
+            <div class="challenge-scenario" style="padding: var(--spacing-lg); background: rgba(251, 191, 36, 0.1); border-radius: 8px; margin-bottom: var(--spacing-lg);">
+                <h4 style="color: #fbbf24; margin-bottom: var(--spacing-sm);">📋 Scenario</h4>
+                <p style="color: var(--text-secondary); line-height: 1.8;">
+                    The <code>UserService</code> class handles user registration, authentication, and profile management. 
+                    Current coverage is 55% with critical authentication logic untested. Your task:
                 </p>
+                <ul style="color: var(--text-secondary); margin-top: var(--spacing-sm);">
+                    <li>Identify untested paths in the coverage report</li>
+                    <li>Write tests for critical authentication flows</li>
+                    <li>Reach 85% coverage with meaningful assertions</li>
+                    <li>Avoid "coverage theater" - no empty tests!</li>
+                </ul>
+            </div>
+            
+            <button id="show-challenge-solution" class="show-solution-btn" style="padding: var(--spacing-sm) var(--spacing-xl); background: var(--hub-accent); color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                💡 Show Solution
+            </button>
+            
+            <div id="challenge-solution" class="solution-container" style="display: none; margin-top: var(--spacing-lg); padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-radius: 8px; border-left: 4px solid #10b981;">
+                <h4 style="color: #10b981; margin-bottom: var(--spacing-md);">✅ Solution: Strategic Coverage Improvement</h4>
+                
+                <div id="solution-editor" style="min-height: 500px; border: 1px solid var(--module-border); border-radius: 8px; overflow: hidden;"></div>
+                
+                <div style="margin-top: var(--spacing-lg); padding: var(--spacing-md); background: rgba(0, 212, 255, 0.1); border-radius: 6px;">
+                    <h5 style="color: #00d4ff; margin-bottom: var(--spacing-sm);">🎯 Key Improvements</h5>
+                    <ul style="color: var(--text-secondary); line-height: 1.8;">
+                        <li><strong>Authentication Edge Cases:</strong> Invalid tokens, expired sessions, missing credentials</li>
+                        <li><strong>Registration Validation:</strong> Duplicate emails, weak passwords, invalid formats</li>
+                        <li><strong>Error Handling:</strong> Database failures, network timeouts, external API errors</li>
+                        <li><strong>Branch Coverage:</strong> All if/else paths tested with assertions</li>
+                        <li><strong>Result:</strong> Coverage increased to 87% with high-quality, maintainable tests</li>
+                    </ul>
+                </div>
             </div>
         </section>
 
@@ -130,8 +340,9 @@
     </footer>
 
     <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
     <script>
-        // Initialize Mermaid with dark theme
+        // Initialize Mermaid
         mermaid.initialize({
             startOnLoad: true,
             theme: 'dark',
@@ -145,7 +356,1070 @@
             }
         });
         
-        console.log("✅ Test Coverage Analysis module loaded successfully!");
+        // D3.js Coverage Metrics Visualization
+        function createCoverageMetrics() {
+            const container = document.getElementById('coverage-metrics-viz');
+            const width = container.clientWidth;
+            const height = 500;
+            const margin = { top: 40, right: 120, bottom: 60, left: 80 };
+            
+            const svg = d3.select('#coverage-metrics-viz')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            const chartWidth = width - margin.left - margin.right;
+            const chartHeight = height - margin.top - margin.bottom;
+            
+            const g = svg.append('g')
+                .attr('transform', `translate(${margin.left}, ${margin.top})`);
+            
+            // Sample project coverage data
+            const data = [
+                { metric: 'Line', value: 85, color: '#7b61ff', description: 'Lines executed' },
+                { metric: 'Branch', value: 72, color: '#00d4ff', description: 'If/else paths' },
+                { metric: 'Function', value: 90, color: '#10b981', description: 'Functions called' },
+                { metric: 'Statement', value: 83, color: '#fbbf24', description: 'Statements run' }
+            ];
+            
+            // Scales
+            const xScale = d3.scaleBand()
+                .domain(data.map(d => d.metric))
+                .range([0, chartWidth])
+                .padding(0.3);
+            
+            const yScale = d3.scaleLinear()
+                .domain([0, 100])
+                .range([chartHeight, 0]);
+            
+            // Grid
+            g.append('g')
+                .attr('class', 'grid')
+                .call(d3.axisLeft(yScale)
+                    .ticks(10)
+                    .tickSize(-chartWidth)
+                    .tickFormat(''))
+                .selectAll('line')
+                .attr('stroke', '#2d3748')
+                .attr('stroke-opacity', 0.3);
+            
+            g.select('.grid .domain').remove();
+            
+            // Target line at 80%
+            g.append('line')
+                .attr('x1', 0)
+                .attr('x2', chartWidth)
+                .attr('y1', yScale(80))
+                .attr('y2', yScale(80))
+                .attr('stroke', '#10b981')
+                .attr('stroke-width', 2)
+                .attr('stroke-dasharray', '5,5')
+                .attr('opacity', 0.6);
+            
+            g.append('text')
+                .attr('x', chartWidth - 5)
+                .attr('y', yScale(80) - 8)
+                .attr('text-anchor', 'end')
+                .attr('fill', '#10b981')
+                .attr('font-size', '12px')
+                .text('Target: 80%');
+            
+            // Axes
+            g.append('g')
+                .attr('transform', `translate(0, ${chartHeight})`)
+                .call(d3.axisBottom(xScale))
+                .selectAll('text')
+                .attr('fill', '#8b92a7')
+                .style('font-size', '13px')
+                .style('font-weight', '600');
+            
+            g.append('g')
+                .call(d3.axisLeft(yScale).ticks(10).tickFormat(d => d + '%'))
+                .selectAll('text')
+                .attr('fill', '#8b92a7')
+                .style('font-size', '12px');
+            
+            // Bars with animation
+            data.forEach((d, i) => {
+                const bar = g.append('rect')
+                    .attr('x', xScale(d.metric))
+                    .attr('y', chartHeight)
+                    .attr('width', xScale.bandwidth())
+                    .attr('height', 0)
+                    .attr('fill', d.color)
+                    .attr('opacity', 0.8)
+                    .attr('rx', 4);
+                
+                bar.transition()
+                    .duration(1000)
+                    .delay(i * 150)
+                    .attr('y', yScale(d.value))
+                    .attr('height', chartHeight - yScale(d.value));
+                
+                bar.on('mouseover', function() {
+                    d3.select(this).attr('opacity', 1);
+                })
+                .on('mouseout', function() {
+                    d3.select(this).attr('opacity', 0.8);
+                });
+                
+                // Value labels
+                g.append('text')
+                    .attr('x', xScale(d.metric) + xScale.bandwidth() / 2)
+                    .attr('y', chartHeight)
+                    .attr('text-anchor', 'middle')
+                    .attr('fill', d.color)
+                    .attr('font-size', '18px')
+                    .attr('font-weight', 'bold')
+                    .attr('opacity', 0)
+                    .text(d.value + '%')
+                    .transition()
+                    .duration(600)
+                    .delay(i * 150 + 800)
+                    .attr('y', yScale(d.value) - 10)
+                    .attr('opacity', 1);
+            });
+            
+            // Title
+            svg.append('text')
+                .attr('x', width / 2)
+                .attr('y', 20)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#7b61ff')
+                .attr('font-size', '16px')
+                .attr('font-weight', '600')
+                .text('Project Coverage Metrics: Multi-Dimensional View');
+            
+            // Y-axis label
+            svg.append('text')
+                .attr('transform', 'rotate(-90)')
+                .attr('x', -height / 2)
+                .attr('y', 20)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#8b92a7')
+                .attr('font-size', '12px')
+                .text('Coverage %');
+        }
+        
+        // D3.js Quality Metrics Comparison
+        function createQualityMetrics() {
+            const container = document.getElementById('quality-metrics-viz');
+            const width = container.clientWidth;
+            const height = 450;
+            const margin = { top: 40, right: 150, bottom: 60, left: 60 };
+            
+            const svg = d3.select('#quality-metrics-viz')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            const chartWidth = width - margin.left - margin.right;
+            const chartHeight = height - margin.top - margin.bottom;
+            
+            const g = svg.append('g')
+                .attr('transform', `translate(${margin.left}, ${margin.top})`);
+            
+            // Data: Coverage vs Quality over project timeline
+            const timeData = [
+                { month: 'Jan', coverage: 45, quality: 70, bugs: 25 },
+                { month: 'Feb', coverage: 55, quality: 72, bugs: 22 },
+                { month: 'Mar', coverage: 68, quality: 75, bugs: 18 },
+                { month: 'Apr', coverage: 75, quality: 78, bugs: 15 },
+                { month: 'May', coverage: 82, quality: 82, bugs: 12 },
+                { month: 'Jun', coverage: 88, quality: 85, bugs: 10 }
+            ];
+            
+            // Scales
+            const xScale = d3.scaleBand()
+                .domain(timeData.map(d => d.month))
+                .range([0, chartWidth])
+                .padding(0.1);
+            
+            const yScale = d3.scaleLinear()
+                .domain([0, 100])
+                .range([chartHeight, 0]);
+            
+            // Grid
+            g.append('g')
+                .attr('class', 'grid')
+                .call(d3.axisLeft(yScale)
+                    .ticks(10)
+                    .tickSize(-chartWidth)
+                    .tickFormat(''))
+                .selectAll('line')
+                .attr('stroke', '#2d3748')
+                .attr('stroke-opacity', 0.3);
+            
+            g.select('.grid .domain').remove();
+            
+            // Axes
+            g.append('g')
+                .attr('transform', `translate(0, ${chartHeight})`)
+                .call(d3.axisBottom(xScale))
+                .selectAll('text')
+                .attr('fill', '#8b92a7')
+                .style('font-size', '12px');
+            
+            g.append('g')
+                .call(d3.axisLeft(yScale).ticks(10))
+                .selectAll('text')
+                .attr('fill', '#8b92a7')
+                .style('font-size', '11px');
+            
+            // Line generators
+            const coverageLine = d3.line()
+                .x(d => xScale(d.month) + xScale.bandwidth() / 2)
+                .y(d => yScale(d.coverage))
+                .curve(d3.curveMonotoneX);
+            
+            const qualityLine = d3.line()
+                .x(d => xScale(d.month) + xScale.bandwidth() / 2)
+                .y(d => yScale(d.quality))
+                .curve(d3.curveMonotoneX);
+            
+            // Coverage line
+            const coveragePath = g.append('path')
+                .datum(timeData)
+                .attr('fill', 'none')
+                .attr('stroke', '#7b61ff')
+                .attr('stroke-width', 3)
+                .attr('d', coverageLine);
+            
+            const coverageLength = coveragePath.node().getTotalLength();
+            coveragePath
+                .attr('stroke-dasharray', coverageLength + ' ' + coverageLength)
+                .attr('stroke-dashoffset', coverageLength)
+                .transition()
+                .duration(2000)
+                .attr('stroke-dashoffset', 0);
+            
+            // Quality line
+            const qualityPath = g.append('path')
+                .datum(timeData)
+                .attr('fill', 'none')
+                .attr('stroke', '#10b981')
+                .attr('stroke-width', 3)
+                .attr('d', qualityLine);
+            
+            const qualityLength = qualityPath.node().getTotalLength();
+            qualityPath
+                .attr('stroke-dasharray', qualityLength + ' ' + qualityLength)
+                .attr('stroke-dashoffset', qualityLength)
+                .transition()
+                .duration(2000)
+                .delay(300)
+                .attr('stroke-dashoffset', 0);
+            
+            // Data points
+            timeData.forEach((d, i) => {
+                // Coverage points
+                g.append('circle')
+                    .attr('cx', xScale(d.month) + xScale.bandwidth() / 2)
+                    .attr('cy', yScale(d.coverage))
+                    .attr('r', 0)
+                    .attr('fill', '#7b61ff')
+                    .transition()
+                    .duration(400)
+                    .delay(2000 + i * 100)
+                    .attr('r', 5);
+                
+                // Quality points
+                g.append('circle')
+                    .attr('cx', xScale(d.month) + xScale.bandwidth() / 2)
+                    .attr('cy', yScale(d.quality))
+                    .attr('r', 0)
+                    .attr('fill', '#10b981')
+                    .transition()
+                    .duration(400)
+                    .delay(2300 + i * 100)
+                    .attr('r', 5);
+            });
+            
+            // Legend
+            const legend = svg.append('g')
+                .attr('transform', `translate(${width - margin.right + 20}, ${margin.top + 20})`);
+            
+            const legendData = [
+                { label: 'Coverage %', color: '#7b61ff' },
+                { label: 'Code Quality', color: '#10b981' }
+            ];
+            
+            legendData.forEach((item, i) => {
+                const legendItem = legend.append('g')
+                    .attr('transform', `translate(0, ${i * 25})`);
+                
+                legendItem.append('line')
+                    .attr('x1', 0)
+                    .attr('x2', 30)
+                    .attr('y1', 0)
+                    .attr('y2', 0)
+                    .attr('stroke', item.color)
+                    .attr('stroke-width', 3);
+                
+                legendItem.append('text')
+                    .attr('x', 40)
+                    .attr('y', 5)
+                    .attr('fill', '#8b92a7')
+                    .attr('font-size', '12px')
+                    .text(item.label);
+            });
+            
+            // Title
+            svg.append('text')
+                .attr('x', width / 2)
+                .attr('y', 20)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#7b61ff')
+                .attr('font-size', '14px')
+                .attr('font-weight', '600')
+                .text('Coverage vs. Quality: Correlation Over Time');
+        }
+        
+        // Monaco Editor Setup
+        require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs' } });
+        require(['vs/editor/editor.main'], function() {
+            const lowCoverage = `# user_service.py - Poor Coverage Example (40%)
+class UserService:
+    def register(self, email, password):
+        # Only happy path tested
+        if self.user_exists(email):
+            return {"error": "User exists"}
+        
+        # UNTESTED: Password validation
+        if len(password) < 8:
+            return {"error": "Password too short"}
+        
+        # UNTESTED: Database error handling
+        try:
+            self.db.create_user(email, password)
+            return {"success": True}
+        except Exception as e:
+            return {"error": str(e)}
+    
+    def login(self, email, password):
+        # UNTESTED: Entire authentication method
+        user = self.db.get_user(email)
+        if not user or not user.check_password(password):
+            return {"error": "Invalid credentials"}
+        return {"token": self.generate_token(user)}
+
+# Test file - minimal coverage
+def test_register_success():
+    service = UserService()
+    result = service.register("new@example.com", "password123")
+    assert result["success"] == True
+
+# Missing tests:
+# ❌ Duplicate email registration
+# ❌ Weak password validation
+# ❌ Database failures
+# ❌ Login functionality (0% coverage!)`;
+
+            const goodCoverage = `# user_service.py - Good Coverage Example (85%)
+class UserService:
+    def register(self, email, password):
+        if self.user_exists(email):
+            return {"error": "User exists"}
+        
+        if len(password) < 8:
+            return {"error": "Password too short"}
+        
+        try:
+            self.db.create_user(email, password)
+            return {"success": True}
+        except Exception as e:
+            return {"error": str(e)}
+    
+    def login(self, email, password):
+        user = self.db.get_user(email)
+        if not user or not user.check_password(password):
+            return {"error": "Invalid credentials"}
+        return {"token": self.generate_token(user)}
+
+# Test file - comprehensive
+def test_register_success():
+    service = UserService()
+    result = service.register("new@example.com", "SecurePass123")
+    assert result["success"] == True
+
+def test_register_duplicate_email():
+    # Test error path
+    service = UserService()
+    service.register("existing@example.com", "password123")
+    result = service.register("existing@example.com", "password456")
+    assert "User exists" in result["error"]
+
+def test_register_weak_password():
+    # Test validation
+    service = UserService()
+    result = service.register("new@example.com", "short")
+    assert "too short" in result["error"]
+
+def test_register_database_error():
+    # Test exception handling
+    service = UserService()
+    service.db = MockDBWithError()
+    result = service.register("test@example.com", "password123")
+    assert "error" in result
+
+def test_login_success():
+    service = UserService()
+    result = service.login("user@example.com", "correctpass")
+    assert "token" in result
+
+def test_login_invalid_credentials():
+    service = UserService()
+    result = service.login("user@example.com", "wrongpass")
+    assert "Invalid credentials" in result["error"]
+
+# Coverage: 85% - Most paths covered!`;
+
+            const comprehensive = `# user_service.py - Comprehensive Coverage (95%)
+class UserService:
+    def register(self, email, password):
+        # Validate email format
+        if not self._is_valid_email(email):
+            return {"error": "Invalid email format"}
+        
+        if self.user_exists(email):
+            return {"error": "User already exists"}
+        
+        # Strong password requirements
+        if len(password) < 8:
+            return {"error": "Password must be at least 8 characters"}
+        if not any(c.isupper() for c in password):
+            return {"error": "Password must contain uppercase"}
+        if not any(c.isdigit() for c in password):
+            return {"error": "Password must contain number"}
+        
+        try:
+            self.db.create_user(email, self._hash_password(password))
+            self._send_welcome_email(email)
+            return {"success": True, "user_id": self.db.last_insert_id()}
+        except DatabaseError as e:
+            self._log_error(f"DB error during registration: {e}")
+            return {"error": "Registration failed. Try again."}
+        except EmailError as e:
+            # User created but email failed - still success
+            return {"success": True, "warning": "Email not sent"}
+    
+    def login(self, email, password):
+        if not email or not password:
+            return {"error": "Email and password required"}
+        
+        user = self.db.get_user(email)
+        if not user:
+            return {"error": "Invalid credentials"}
+        
+        if user.is_locked():
+            return {"error": "Account locked. Contact support."}
+        
+        if not user.check_password(password):
+            self._increment_failed_attempts(user)
+            return {"error": "Invalid credentials"}
+        
+        self._reset_failed_attempts(user)
+        token = self.generate_token(user)
+        return {"success": True, "token": token, "user": user.to_dict()}
+
+# Comprehensive test suite
+import pytest
+
+def test_register_success():
+    service = UserService()
+    result = service.register("new@example.com", "SecurePass123")
+    assert result["success"] == True
+    assert "user_id" in result
+
+def test_register_invalid_email():
+    service = UserService()
+    result = service.register("invalid-email", "SecurePass123")
+    assert "Invalid email" in result["error"]
+
+def test_register_duplicate():
+    service = UserService()
+    service.register("dup@example.com", "SecurePass123")
+    result = service.register("dup@example.com", "SecurePass456")
+    assert "already exists" in result["error"]
+
+def test_register_weak_password_length():
+    service = UserService()
+    result = service.register("test@example.com", "short")
+    assert "at least 8" in result["error"]
+
+def test_register_password_no_uppercase():
+    service = UserService()
+    result = service.register("test@example.com", "lowercase123")
+    assert "uppercase" in result["error"]
+
+def test_register_password_no_number():
+    service = UserService()
+    result = service.register("test@example.com", "NoNumbers")
+    assert "number" in result["error"]
+
+def test_register_database_error():
+    service = UserService()
+    service.db = MockDBWithError()
+    result = service.register("test@example.com", "SecurePass123")
+    assert "failed" in result["error"]
+
+def test_register_email_send_failure():
+    service = UserService()
+    service._send_welcome_email = mock_email_error
+    result = service.register("test@example.com", "SecurePass123")
+    assert result["success"] == True
+    assert "Email not sent" in result.get("warning", "")
+
+def test_login_success():
+    service = UserService()
+    result = service.login("user@example.com", "ValidPass123")
+    assert result["success"] == True
+    assert "token" in result
+    assert "user" in result
+
+def test_login_missing_credentials():
+    service = UserService()
+    assert "required" in service.login("", "pass")["error"]
+    assert "required" in service.login("email", "")["error"]
+
+def test_login_user_not_found():
+    service = UserService()
+    result = service.login("nonexistent@example.com", "anypass")
+    assert "Invalid credentials" in result["error"]
+
+def test_login_account_locked():
+    service = UserService()
+    user = service.db.get_user("locked@example.com")
+    user.lock_account()
+    result = service.login("locked@example.com", "correctpass")
+    assert "locked" in result["error"]
+
+def test_login_wrong_password():
+    service = UserService()
+    result = service.login("user@example.com", "wrongpassword")
+    assert "Invalid credentials" in result["error"]
+
+def test_login_increments_failed_attempts():
+    service = UserService()
+    service.login("user@example.com", "wrong1")
+    service.login("user@example.com", "wrong2")
+    user = service.db.get_user("user@example.com")
+    assert user.failed_attempts == 2
+
+# Coverage Report: 95%
+# Lines: 142/150 (94.7%)
+# Branches: 38/40 (95.0%)
+# Functions: 12/12 (100%)`;
+
+            monaco.editor.create(document.getElementById('low-coverage'), {
+                value: lowCoverage,
+                language: 'python',
+                theme: 'vs-dark',
+                minimap: { enabled: false },
+                fontSize: 13,
+                readOnly: true
+            });
+
+            monaco.editor.create(document.getElementById('good-coverage'), {
+                value: goodCoverage,
+                language: 'python',
+                theme: 'vs-dark',
+                minimap: { enabled: false },
+                fontSize: 13,
+                readOnly: true
+            });
+
+            monaco.editor.create(document.getElementById('comprehensive'), {
+                value: comprehensive,
+                language: 'python',
+                theme: 'vs-dark',
+                minimap: { enabled: false },
+                fontSize: 13,
+                readOnly: true,
+                lineNumbers: 'on'
+            });
+
+            // Solution editor
+            const solutionCode = `# Complete test suite for UserService - 87% coverage
+import pytest
+from unittest.mock import Mock, patch
+from user_service import UserService, DatabaseError, EmailError
+
+class TestUserRegistration:
+    """Test registration with all edge cases"""
+    
+    def setup_method(self):
+        self.service = UserService()
+        self.service.db = Mock()
+    
+    def test_successful_registration(self):
+        """Happy path: valid email and password"""
+        self.service.db.create_user.return_value = 123
+        result = self.service.register("newuser@example.com", "SecurePass123")
+        
+        assert result["success"] == True
+        assert result["user_id"] == 123
+        self.service.db.create_user.assert_called_once()
+    
+    def test_duplicate_email_rejected(self):
+        """Duplicate registration prevented"""
+        self.service.user_exists = Mock(return_value=True)
+        result = self.service.register("existing@example.com", "AnyPass123")
+        
+        assert "error" in result
+        assert "already exists" in result["error"].lower()
+        self.service.db.create_user.assert_not_called()
+    
+    def test_weak_password_rejected(self):
+        """Password validation: length"""
+        result = self.service.register("user@example.com", "short")
+        
+        assert "error" in result
+        assert "8 characters" in result["error"]
+    
+    def test_password_missing_uppercase(self):
+        """Password validation: uppercase requirement"""
+        result = self.service.register("user@example.com", "lowercase123")
+        
+        assert "error" in result
+        assert "uppercase" in result["error"].lower()
+    
+    def test_password_missing_number(self):
+        """Password validation: number requirement"""
+        result = self.service.register("user@example.com", "NoNumbers!")
+        
+        assert "error" in result
+        assert "number" in result["error"].lower()
+    
+    def test_database_failure_handled(self):
+        """Database error handling"""
+        self.service.db.create_user.side_effect = DatabaseError("Connection lost")
+        result = self.service.register("user@example.com", "SecurePass123")
+        
+        assert "error" in result
+        assert "failed" in result["error"].lower()
+    
+    def test_email_failure_graceful(self):
+        """Email sending failure doesn't block registration"""
+        self.service._send_welcome_email = Mock(side_effect=EmailError())
+        result = self.service.register("user@example.com", "SecurePass123")
+        
+        assert result["success"] == True
+        assert "warning" in result  # Email not sent but user created
+
+
+class TestUserLogin:
+    """Test authentication with security checks"""
+    
+    def setup_method(self):
+        self.service = UserService()
+        self.service.db = Mock()
+        self.mock_user = Mock()
+        self.mock_user.check_password.return_value = True
+        self.mock_user.is_locked.return_value = False
+    
+    def test_successful_login(self):
+        """Happy path: valid credentials"""
+        self.service.db.get_user.return_value = self.mock_user
+        self.service.generate_token = Mock(return_value="jwt_token_123")
+        
+        result = self.service.login("user@example.com", "ValidPass123")
+        
+        assert result["success"] == True
+        assert result["token"] == "jwt_token_123"
+        assert "user" in result
+    
+    def test_missing_email(self):
+        """Missing credentials: email"""
+        result = self.service.login("", "password")
+        
+        assert "error" in result
+        assert "required" in result["error"].lower()
+    
+    def test_missing_password(self):
+        """Missing credentials: password"""
+        result = self.service.login("user@example.com", "")
+        
+        assert "error" in result
+        assert "required" in result["error"].lower()
+    
+    def test_user_not_found(self):
+        """Non-existent user"""
+        self.service.db.get_user.return_value = None
+        result = self.service.login("ghost@example.com", "anypass")
+        
+        assert "error" in result
+        assert "invalid" in result["error"].lower()
+    
+    def test_locked_account(self):
+        """Account locked after failed attempts"""
+        self.mock_user.is_locked.return_value = True
+        self.service.db.get_user.return_value = self.mock_user
+        
+        result = self.service.login("locked@example.com", "correctpass")
+        
+        assert "error" in result
+        assert "locked" in result["error"].lower()
+    
+    def test_wrong_password(self):
+        """Invalid password"""
+        self.mock_user.check_password.return_value = False
+        self.service.db.get_user.return_value = self.mock_user
+        
+        result = self.service.login("user@example.com", "wrongpass")
+        
+        assert "error" in result
+        assert "invalid" in result["error"].lower()
+    
+    def test_failed_attempts_incremented(self):
+        """Track failed login attempts"""
+        self.mock_user.check_password.return_value = False
+        self.service.db.get_user.return_value = self.mock_user
+        
+        self.service.login("user@example.com", "wrong1")
+        self.service.login("user@example.com", "wrong2")
+        
+        assert self.service._increment_failed_attempts.call_count == 2
+    
+    def test_failed_attempts_reset_on_success(self):
+        """Reset counter on successful login"""
+        self.service.db.get_user.return_value = self.mock_user
+        
+        self.service.login("user@example.com", "correctpass")
+        
+        self.service._reset_failed_attempts.assert_called_once_with(self.mock_user)
+
+
+# Run coverage: pytest --cov=user_service --cov-report=html
+# Result: 87% coverage with meaningful tests
+# Line: 131/150 (87.3%)
+# Branch: 34/38 (89.5%)
+# All critical paths tested!`;
+
+            monaco.editor.create(document.getElementById('solution-editor'), {
+                value: solutionCode,
+                language: 'python',
+                theme: 'vs-dark',
+                minimap: { enabled: true },
+                fontSize: 13,
+                readOnly: true,
+                lineNumbers: 'on'
+            });
+
+            // Tab switching
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', function() {
+                const container = this.closest('.playground-container');
+                container.querySelectorAll('.tab-btn').forEach(b => {
+                    b.classList.remove('active');
+                    b.style.borderBottomColor = 'transparent';
+                    b.style.color = 'var(--text-secondary)';
+                });
+                container.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+                
+                this.classList.add('active');
+                this.style.borderBottomColor = 'var(--hub-primary)';
+                this.style.color = 'var(--hub-primary)';
+                document.getElementById(this.getAttribute('data-tab')).style.display = 'block';
+            }));
+
+            // Run coverage button
+            document.getElementById('run-coverage')?.addEventListener('click', () => {
+                const activeTab = document.querySelector('.tab-content[style*="display: block"]').id;
+                const output = document.getElementById('coverage-output');
+                const content = document.getElementById('coverage-content');
+                
+                const reports = {
+                    'low-coverage': `Coverage Report: user_service.py
+====================================
+Lines:      60/150     40.0%  ⚠️
+Branches:   12/38      31.6%  ❌
+Functions:  2/12       16.7%  ❌
+
+Untested Functions:
+  ❌ login()                    0% coverage
+  ❌ _is_valid_email()          0% coverage
+  ❌ _hash_password()           0% coverage
+  ❌ generate_token()           0% coverage
+  ❌ _send_welcome_email()      0% coverage
+
+Critical Gaps:
+  🔴 Authentication logic completely untested
+  🔴 Password validation missing branch coverage
+  🔴 Error handling paths not executed
+  🔴 Email validation not covered
+
+Recommendation: Write tests for authentication and error paths`,
+                    'good-coverage': `Coverage Report: user_service.py
+====================================
+Lines:      127/150    84.7%  ✅
+Branches:   32/38      84.2%  ✅
+Functions:  10/12      83.3%  ✅
+
+Coverage by Function:
+  ✅ register()                 95% (19/20 lines)
+  ✅ login()                    88% (15/17 lines)
+  ✅ user_exists()              100% (3/3 lines)
+  ✅ _is_valid_email()          90% (9/10 lines)
+  ⚠️  _hash_password()          75% (6/8 lines)
+  ✅ generate_token()           100% (12/12 lines)
+
+Untested Branches:
+  ⚠️  Email service timeout (rare edge case)
+  ⚠️  Database connection pool exhausted
+
+Quality: High - Tests verify behavior, not just execution
+Recommendation: Add tests for service timeout scenarios`,
+                    'comprehensive': `Coverage Report: user_service.py
+====================================
+Lines:      142/150    94.7%  🏆
+Branches:   38/40      95.0%  🏆
+Functions:  12/12      100%   🏆
+
+Coverage by Function:
+  ✅ register()                 98% (44/45 lines)
+  ✅ login()                    97% (29/30 lines)
+  ✅ user_exists()              100% (3/3 lines)
+  ✅ _is_valid_email()          100% (10/10 lines)
+  ✅ _hash_password()           100% (8/8 lines)
+  ✅ generate_token()           100% (12/12 lines)
+  ✅ _send_welcome_email()      90% (9/10 lines)
+  ✅ _increment_failed_attempts() 100% (5/5 lines)
+  ✅ _reset_failed_attempts()   100% (4/4 lines)
+
+Untested Paths (acceptable):
+  ⚪ Logging internal error (infrastructure)
+  ⚪ Metrics collection fallback (non-critical)
+
+Test Quality Metrics:
+  ✅ All critical paths tested
+  ✅ Edge cases covered (locked accounts, missing data)
+  ✅ Error handling verified
+  ✅ Security checks validated
+  ✅ Tests are readable and maintainable
+
+🏆 EXCELLENT: Comprehensive coverage with high-quality tests!`
+                };
+                
+                content.textContent = reports[activeTab];
+                output.style.display = 'block';
+                output.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            });
+        });
+        
+        // Quiz Data
+        const quizData = [
+            {
+                question: "What does 'line coverage' measure?",
+                options: ["Number of test files", "Percentage of code lines executed during tests", "Number of functions", "Test execution time"],
+                correct: 1,
+                explanation: "Line coverage measures the percentage of source code lines that are executed when tests run."
+            },
+            {
+                question: "Why is branch coverage more thorough than line coverage?",
+                options: ["It runs faster", "It tests if/else decision paths, not just lines", "It's easier to implement", "It requires fewer tests"],
+                correct: 1,
+                explanation: "Branch coverage ensures both 'true' and 'false' branches of conditionals are tested, catching logic errors line coverage might miss."
+            },
+            {
+                question: "What is 'coverage theater'?",
+                options: ["Testing in production", "Achieving high coverage without meaningful tests", "Code review meetings", "Performance testing"],
+                correct: 1,
+                explanation: "'Coverage theater' means writing tests solely to increase coverage metrics without actually verifying behavior or quality."
+            },
+            {
+                question: "What's a reasonable coverage target for critical payment processing code?",
+                options: ["50%", "70%", "90-95%", "100% always"],
+                correct: 2,
+                explanation: "Critical code like payment processing should have 90-95% coverage with thorough edge case and error path testing."
+            },
+            {
+                question: "Which coverage tool is standard for Node.js projects?",
+                options: ["JaCoCo", "Coverage.py", "Istanbul/nyc", "Cobertura"],
+                correct: 2,
+                explanation: "Istanbul (nyc) is the most commonly used coverage tool for Node.js and JavaScript projects."
+            },
+            {
+                question: "What should you do when you find code with 0% coverage?",
+                options: ["Delete it immediately", "Ignore it if it works", "Assess criticality before writing tests", "Always write tests to reach 100%"],
+                correct: 2,
+                explanation: "Not all code needs the same coverage level. Assess the code's criticality, complexity, and risk before deciding on test investment."
+            },
+            {
+                question: "Why might 100% coverage still have bugs?",
+                options: ["Coverage tools are inaccurate", "Tests don't verify correct behavior, only execution", "Compilers introduce bugs", "Coverage metrics are fake"],
+                correct: 1,
+                explanation: "High coverage only means code was executed, not that it was tested for correct behavior, edge cases, or integration issues."
+            },
+            {
+                question: "What is path coverage?",
+                options: ["Directory structure testing", "Testing all possible execution paths through code", "File system permissions", "Import path validation"],
+                correct: 1,
+                explanation: "Path coverage measures whether all possible execution paths (combinations of branches) have been tested, which is very thorough but complex."
+            },
+            {
+                question: "How should coverage reports be used in CI/CD?",
+                options: ["Block all PRs below 100%", "Use as quality indicator, not absolute gate", "Ignore them completely", "Only run on Fridays"],
+                correct: 1,
+                explanation: "Coverage is a useful quality indicator and gap-finder, but shouldn't be a rigid gate. Context and test quality matter more than raw numbers."
+            },
+            {
+                question: "What's the best approach when coverage drops after refactoring?",
+                options: ["Panic and revert", "Analyze which paths lost coverage and add targeted tests", "Lower the coverage threshold", "Delete the tests"],
+                correct: 1,
+                explanation: "Refactoring can reveal previously hidden code paths. Analyze the coverage diff to identify gaps and write targeted tests."
+            }
+        ];
+        
+        function renderQuiz() {
+            const quizContainer = document.getElementById('quiz');
+            quizContainer.innerHTML = quizData.map((item, index) => `
+                <div class="quiz-question" style="margin-bottom: var(--spacing-2xl); padding: var(--spacing-lg); background: rgba(26, 31, 58, 0.5); border-radius: 8px; border: 1px solid var(--module-border);">
+                    <h4 style="color: var(--text-primary); margin-bottom: var(--spacing-md); font-size: 1.1rem;">
+                        Question ${index + 1}: ${item.question}
+                    </h4>
+                    <div class="options-container">
+                        ${item.options.map((option, optIndex) => `
+                            <label class="quiz-option" style="display: block; padding: var(--spacing-md); margin: var(--spacing-sm) 0; background: rgba(123, 97, 255, 0.1); border: 2px solid transparent; border-radius: 8px; cursor: pointer; transition: all 0.2s ease;">
+                                <input type="radio" name="question-${index}" value="${optIndex}" style="margin-right: var(--spacing-sm);">
+                                <span style="color: var(--text-secondary);">${option}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                    <div id="feedback-${index}" class="question-feedback" style="display: none; margin-top: var(--spacing-md); padding: var(--spacing-md); border-radius: 6px;"></div>
+                </div>
+            `).join('');
+            
+            quizContainer.innerHTML += `
+                <button id="submit-quiz-btn" class="submit-quiz-btn" style="padding: var(--spacing-md) var(--spacing-2xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600;">
+                    📊 Submit Coverage Quiz
+                </button>
+            `;
+            
+            document.querySelectorAll('.quiz-option').forEach(option => {
+                option.addEventListener('mouseenter', function() {
+                    this.style.borderColor = 'var(--hub-primary)';
+                    this.style.background = 'rgba(123, 97, 255, 0.2)';
+                });
+                option.addEventListener('mouseleave', function() {
+                    if (!this.querySelector('input').checked) {
+                        this.style.borderColor = 'transparent';
+                        this.style.background = 'rgba(123, 97, 255, 0.1)';
+                    }
+                });
+                option.addEventListener('click', function() {
+                    const questionContainer = this.closest('.quiz-question');
+                    questionContainer.querySelectorAll('.quiz-option').forEach(opt => {
+                        opt.style.borderColor = 'transparent';
+                        opt.style.background = 'rgba(123, 97, 255, 0.1)';
+                    });
+                    this.style.borderColor = 'var(--hub-primary)';
+                    this.style.background = 'rgba(123, 97, 255, 0.2)';
+                });
+            });
+            
+            document.getElementById('submit-quiz-btn').addEventListener('click', submitQuiz);
+        }
+        
+        function submitQuiz() {
+            let correctCount = 0;
+            
+            quizData.forEach((item, index) => {
+                const selectedOption = document.querySelector(`input[name="question-${index}"]:checked`);
+                const feedback = document.getElementById(`feedback-${index}`);
+                
+                if (selectedOption) {
+                    const answerIndex = parseInt(selectedOption.value);
+                    const isCorrect = answerIndex === item.correct;
+                    
+                    if (isCorrect) {
+                        correctCount++;
+                        feedback.style.display = 'block';
+                        feedback.style.background = 'rgba(16, 185, 129, 0.1)';
+                        feedback.style.borderLeft = '4px solid #10b981';
+                        feedback.innerHTML = `
+                            <strong style="color: #10b981;">✅ Correct!</strong><br>
+                            <span style="color: var(--text-secondary); font-size: 0.95rem;">${item.explanation}</span>
+                        `;
+                    } else {
+                        feedback.style.display = 'block';
+                        feedback.style.background = 'rgba(239, 68, 68, 0.1)';
+                        feedback.style.borderLeft = '4px solid #ef4444';
+                        feedback.innerHTML = `
+                            <strong style="color: #ef4444;">❌ Incorrect</strong><br>
+                            <span style="color: var(--text-secondary); font-size: 0.95rem;">The correct answer is: <strong>${item.options[item.correct]}</strong></span><br>
+                            <span style="color: var(--text-secondary); font-size: 0.95rem;">${item.explanation}</span>
+                        `;
+                    }
+                } else {
+                    feedback.style.display = 'block';
+                    feedback.style.background = 'rgba(251, 191, 36, 0.1)';
+                    feedback.style.borderLeft = '4px solid #fbbf24';
+                    feedback.innerHTML = `<strong style="color: #fbbf24;">⚠️ No answer selected</strong>`;
+                }
+            });
+            
+            const percentage = (correctCount / quizData.length) * 100;
+            const resultsContainer = document.getElementById('quiz-results');
+            const scoreDisplay = document.getElementById('score-display');
+            
+            let grade, color, message;
+            if (percentage >= 90) {
+                grade = 'Excellent!';
+                color = '#10b981';
+                message = 'Outstanding mastery of coverage concepts! 🏆';
+            } else if (percentage >= 70) {
+                grade = 'Good Job!';
+                color = '#00d4ff';
+                message = 'Solid understanding of coverage analysis! 👍';
+            } else if (percentage >= 50) {
+                grade = 'Keep Learning';
+                color = '#fbbf24';
+                message = 'Review coverage metrics and try again! 📚';
+            } else {
+                grade = 'Needs Improvement';
+                color = '#ef4444';
+                message = 'Study the material before retrying. 💪';
+            }
+            
+            scoreDisplay.innerHTML = `
+                <div style="text-align: center;">
+                    <h3 style="color: ${color}; font-size: 2rem; margin-bottom: var(--spacing-sm);">${grade}</h3>
+                    <p style="font-size: 1.5rem; color: var(--text-primary); margin-bottom: var(--spacing-sm);">
+                        Score: ${correctCount}/${quizData.length} (${percentage.toFixed(0)}%)
+                    </p>
+                    <p style="color: var(--text-secondary);">${message}</p>
+                </div>
+            `;
+            
+            resultsContainer.style.display = 'block';
+            
+            const submitBtn = document.getElementById('submit-quiz-btn');
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.5';
+            submitBtn.style.cursor = 'not-allowed';
+            
+            resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        
+        document.getElementById('retry-quiz')?.addEventListener('click', () => {
+            document.getElementById('quiz-results').style.display = 'none';
+            renderQuiz();
+        });
+        
+        document.getElementById('show-challenge-solution')?.addEventListener('click', function() {
+            document.getElementById('challenge-solution').style.display = 'block';
+            this.disabled = true;
+            this.style.opacity = '0.5';
+            this.style.cursor = 'not-allowed';
+        });
+        
+        // Initialize
+        window.addEventListener('load', () => {
+            createCoverageMetrics();
+            createQualityMetrics();
+            renderQuiz();
+            console.log("✅ Test Coverage Analysis module loaded!");
+        });
     </script>
 </body>
 </html>

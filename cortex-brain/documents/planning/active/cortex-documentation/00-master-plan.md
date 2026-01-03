@@ -1,7 +1,7 @@
 # 🗺️ CORTEX Documentation Site - Master Specifications (INDEX)
 
-**Version:** 4.1.0 | **Status:** 🎯 MODULAR + v5.0 READY  
-**Author:** Asif Hussain | **Last Updated:** January 2, 2026  
+**Version:** 4.1.1 | **Status:** 🎯 SYNCED + CURRENT  
+**Author:** Asif Hussain | **Last Updated:** January 3, 2026  
 **Copyright © 2026 Asif Hussain. All rights reserved.**
 
 ---
@@ -180,20 +180,25 @@ Original v3.3.0 moved to: `cortex-brain/archives/Level1-spec-v3.3.0.md`
 
 ## 📚 Document Overview
 
-**Current State:** 65 Level 1 pages across 9 tiles (6 standard + 3 multi-panels)  
-**v5.0 State:** 65 Level 1 + 23 Level 2 pages (Planning v5: 10 phases, ADO v2: 13 pages)
+**Current State:** 311 HTML files (151 active + 160 stubs) across 10 tiles (7 standard + 3 multi-panels)  
+**Level 1 Status:** 62/62 complete (100%)  
+**Level 2 Status:** 22/80 implemented (28%), 58 have stub pages (100% stub coverage)
 
-**Standard Tiles (Level 1 Only):**
-- Architecture: 5 pages (Score: 45) - 4-Tier Brain + Tier 0 Governance | Token Optimization: 1 page (Score: 25) - 97% reduction, $8.6K savings
-- Best Practices: 17 pages (Score: 35) - 35 guidelines | Toolkit Manager: 1 page (Score: 20) - Master Orchestrator routing
-- CORTEX Lens: 1 page (Score: 30) - AST analysis, reverse engineering | Getting Started: 2 pages (Score: 15) - 5-minute setup
+**Standard Tiles (Level 1 + Level 2):**
+- Architecture: 10 pages (Score: 45) - 3 active, 2 archived (brain-tiers, development-context), 5 stubs (four-tier-brain, orchestrator-ecosystem, agent-system, working-memory, multi-repo)
+- Token Optimization: 1 page (Score: 25) - 97% reduction, $8.6K savings
+- Best Practices Hub: 17 Level 1 hubs + 80 Level 2 modules (Score: 35) - 22 implemented, 58 stubs (55 learning hours)
+- Toolkit Manager: 1 page (Score: 20) - Master Orchestrator routing
+- CORTEX Lens: 1 page (Score: 30) - AST analysis, reverse engineering
+- Getting Started: 5 pages (Score: 15) - 2 active (index, tutorial), 3 stubs (multi-repo-setup, first-commands, deployment)
+- Story: 15 pages - 1 viewer, 1 stub index, 14 chapters archived (pending navigation integration)
 
 **Multi-Panel Tiles:**
-- **Security:** 13 Level 1 pages (Score: 55, 54% complete)
-- **Orchestrators (Basic):** 14 Level 1 pages (Score: 75, current state)
-- **Planning v5:** 1 Level 1 + 10 Level 2 pages (Score: 195, comprehensive viz)
-- **ADO v2:** 1 Level 1 + 13 Level 2 pages (Score: 178, wizard + auto-gen)
-- **Sharpen The Saw:** 6 Level 1 pages (Score: 40, 100% complete)
+- **Security:** 16 pages (Score: 55) - 10 active, 6 stubs, 1 stub for index (63% complete)
+- **Orchestrators:** 22 pages (Score: 75) - 20 active, 2 stubs (91% complete)
+- **Sharpen The Saw:** 6 pages (Score: 40) - 6/6 complete (100%)
+
+**v5.0 Planned:** Planning v5 (10 Level 2 pages, Score: 195) + ADO v2 (13 Level 2 pages, Score: 178) with comprehensive visualizations
 
 **Complexity Formula:** `Score = (Viz × 10) + (Mermaid × 5) + (D3.js × 1) + (Interactive × 3) + (Data × 8) + (Animations × 4)`
 

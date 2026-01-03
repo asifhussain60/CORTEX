@@ -67,11 +67,11 @@
         <section class="glass-card" style="margin-top: var(--spacing-3xl);">
             <h2>🔄 The RED-GREEN-REFACTOR Cycle</h2>
             <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
-                TDD follows a simple three-step cycle that ensures code correctness and design quality.
+                TDD follows a simple three-step cycle that ensures code correctness and design quality. This D3.js visualization shows the continuous flow of the TDD process.
             </p>
-            <div id="tdd-cycle-viz" style="width: 100%; height: 450px; margin: var(--spacing-xl) 0;"></div>
+            <div id="tdd-cycle-viz" style="width: 100%; height: 500px; margin: var(--spacing-xl) 0; background: rgba(26, 31, 58, 0.5); border-radius: 12px; border: 1px solid var(--module-border);"></div>
             
-            <div class="mermaid-container">
+            <div class="mermaid-container" style="margin-top: var(--spacing-2xl);">
                 <pre class="mermaid">
 stateDiagram-v2
     [*] --> RED: Write Failing Test
@@ -145,27 +145,35 @@ flowchart TD
         <!-- Benefits & Pitfalls -->
         <section class="glass-card" style="margin-top: var(--spacing-3xl);">
             <h2>⚖️ TDD Benefits vs Common Pitfalls</h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--spacing-lg);">
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                Understanding both the advantages and common mistakes helps you maximize TDD effectiveness.
+            </p>
+            
+            <!-- Benefits Timeline Visualization -->
+            <h3 style="color: var(--text-primary); margin: var(--spacing-2xl) 0 var(--spacing-lg);">📈 TDD Benefits Timeline</h3>
+            <div id="benefits-timeline-viz" style="width: 100%; height: 400px; margin: var(--spacing-xl) 0; background: rgba(26, 31, 58, 0.5); border-radius: 12px; border: 1px solid var(--module-border);"></div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--spacing-lg); margin-top: var(--spacing-2xl);">
                 <div style="padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-radius: 8px; border: 1px solid #10b981;">
                     <h4 style="color: #10b981; margin-bottom: var(--spacing-md);">✅ Key Benefits</h4>
                     <ul style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8;">
-                        <li>Better design through test-first thinking</li>
-                        <li>Living documentation of requirements</li>
-                        <li>Higher confidence in changes</li>
-                        <li>Early bug detection</li>
-                        <li>Reduced debugging time</li>
-                        <li>Regression safety net</li>
+                        <li><strong>Better Design:</strong> Test-first thinking leads to cleaner interfaces</li>
+                        <li><strong>Living Documentation:</strong> Tests describe expected behavior</li>
+                        <li><strong>Confidence:</strong> Safe refactoring with regression protection</li>
+                        <li><strong>Early Detection:</strong> Bugs caught immediately, not in production</li>
+                        <li><strong>Reduced Debugging:</strong> Less time hunting for issues</li>
+                        <li><strong>Safety Net:</strong> Prevent regressions when adding features</li>
                     </ul>
                 </div>
                 <div style="padding: var(--spacing-lg); background: rgba(239, 68, 68, 0.1); border-radius: 8px; border: 1px solid #ef4444;">
                     <h4 style="color: #ef4444; margin-bottom: var(--spacing-md);">⚠️ Common Pitfalls</h4>
                     <ul style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8;">
-                        <li>Writing tests after code (not TDD!)</li>
-                        <li>Testing implementation details</li>
-                        <li>Over-mocking dependencies</li>
-                        <li>Skipping refactor step</li>
-                        <li>Writing overly complex tests</li>
-                        <li>Not running tests frequently</li>
+                        <li><strong>Tests After Code:</strong> Loses design benefits (not TDD!)</li>
+                        <li><strong>Testing Implementation:</strong> Brittle tests that break easily</li>
+                        <li><strong>Over-Mocking:</strong> Tests don't reflect real behavior</li>
+                        <li><strong>Skipping Refactor:</strong> Technical debt accumulates</li>
+                        <li><strong>Complex Tests:</strong> Tests harder to maintain than code</li>
+                        <li><strong>Infrequent Runs:</strong> Delayed feedback, harder debugging</li>
                     </ul>
                 </div>
             </div>
@@ -305,13 +313,668 @@ def reverse(s):
     <script>
         mermaid.initialize({startOnLoad:true,theme:'dark',themeVariables:{primaryColor:'#7b61ff',primaryTextColor:'#fff',primaryBorderColor:'#fff',lineColor:'#00d4ff',secondaryColor:'#1a1f3a',tertiaryColor:'#2a2f4a'}});
         
-        function createTDDCycleViz(){const w=document.getElementById('tdd-cycle-viz').clientWidth,h=450,svg=d3.select('#tdd-cycle-viz').append('svg').attr('width',w).attr('height',h);const cycle=[{phase:'RED',x:w*0.25,y:h*0.3,color:'#ef4444',desc:'Write Failing Test',icon:'❌'},{phase:'GREEN',x:w*0.75,y:h*0.3,color:'#10b981',desc:'Pass Test',icon:'✅'},{phase:'REFACTOR',x:w*0.5,y:h*0.7,color:'#00d4ff',desc:'Improve Design',icon:'♻️'}];cycle.forEach((p,i)=>{const g=svg.append('g').attr('transform',`translate(${p.x},${p.y})`);g.append('circle').attr('r',80).attr('fill',p.color).attr('opacity',0.2).attr('stroke',p.color).attr('stroke-width',3);g.append('text').attr('text-anchor','middle').attr('y',-10).attr('fill','#fff').attr('font-size','32px').text(p.icon);g.append('text').attr('text-anchor','middle').attr('y',20).attr('fill',p.color).attr('font-size','18px').attr('font-weight','bold').text(p.phase);g.append('text').attr('text-anchor','middle').attr('y',100).attr('fill','#8b92a7').attr('font-size','12px').text(p.desc);if(i<2){g.append('line').attr('x1',80).attr('y1',0).attr('x2',w*0.5-80-p.x).attr('y2',0).attr('stroke',p.color).attr('stroke-width',2).attr('marker-end','url(#arrow)');}});svg.append('defs').append('marker').attr('id','arrow').attr('viewBox','0 0 10 10').attr('refX',5).attr('refY',5).attr('markerWidth',6).attr('markerHeight',6).attr('orient','auto-start-reverse').append('path').attr('d','M 0 0 L 10 5 L 0 10 z').attr('fill','#7b61ff');}
+        // D3.js Benefits Timeline Visualization
+        function createBenefitsTimeline() {
+            const container = document.getElementById('benefits-timeline-viz');
+            const width = container.clientWidth;
+            const height = 400;
+            const margin = { top: 30, right: 30, bottom: 50, left: 60 };
+            
+            const svg = d3.select('#benefits-timeline-viz')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            const chartWidth = width - margin.left - margin.right;
+            const chartHeight = height - margin.top - margin.bottom;
+            
+            const g = svg.append('g')
+                .attr('transform', `translate(${margin.left}, ${margin.top})`);
+            
+            // Timeline data: benefits accumulated over time
+            const timelineData = [
+                { phase: 'Day 1', immediate: 20, design: 30, confidence: 10, bugs: 15, label: 'Start' },
+                { phase: 'Week 1', immediate: 35, design: 50, confidence: 25, bugs: 40, label: 'Week 1' },
+                { phase: 'Month 1', immediate: 45, design: 70, confidence: 50, bugs: 65, label: 'Month 1' },
+                { phase: 'Month 3', immediate: 55, design: 85, confidence: 75, bugs: 80, label: 'Month 3' },
+                { phase: 'Month 6', immediate: 65, design: 95, confidence: 90, bugs: 90, label: 'Month 6' },
+                { phase: 'Year 1', immediate: 70, design: 100, confidence: 95, bugs: 95, label: 'Year 1' }
+            ];
+            
+            const benefits = [
+                { key: 'design', label: 'Better Design', color: '#00d4ff' },
+                { key: 'bugs', label: 'Bug Prevention', color: '#10b981' },
+                { key: 'confidence', label: 'Refactor Confidence', color: '#7b61ff' },
+                { key: 'immediate', label: 'Immediate Feedback', color: '#fbbf24' }
+            ];
+            
+            // Scales
+            const xScale = d3.scaleBand()
+                .domain(timelineData.map(d => d.phase))
+                .range([0, chartWidth])
+                .padding(0.3);
+            
+            const yScale = d3.scaleLinear()
+                .domain([0, 100])
+                .range([chartHeight, 0]);
+            
+            // X-axis
+            g.append('g')
+                .attr('transform', `translate(0, ${chartHeight})`)
+                .call(d3.axisBottom(xScale).tickFormat(d => {
+                    const item = timelineData.find(t => t.phase === d);
+                    return item ? item.label : d;
+                }))
+                .selectAll('text')
+                .attr('fill', '#8b92a7')
+                .style('font-size', '12px');
+            
+            g.select('.domain').attr('stroke', '#4a5568');
+            g.selectAll('.tick line').attr('stroke', '#4a5568');
+            
+            // Y-axis
+            g.append('g')
+                .call(d3.axisLeft(yScale).ticks(5).tickFormat(d => d + '%'))
+                .selectAll('text')
+                .attr('fill', '#8b92a7')
+                .style('font-size', '12px');
+            
+            g.select('.domain').attr('stroke', '#4a5568');
+            g.selectAll('.tick line').attr('stroke', '#4a5568');
+            
+            // Grid lines
+            g.append('g')
+                .attr('class', 'grid')
+                .call(d3.axisLeft(yScale)
+                    .ticks(5)
+                    .tickSize(-chartWidth)
+                    .tickFormat(''))
+                .selectAll('line')
+                .attr('stroke', '#2d3748')
+                .attr('stroke-opacity', 0.3)
+                .attr('stroke-dasharray', '2,2');
+            
+            g.select('.grid .domain').remove();
+            
+            // Draw lines for each benefit
+            benefits.forEach((benefit, benefitIndex) => {
+                const line = d3.line()
+                    .x(d => xScale(d.phase) + xScale.bandwidth() / 2)
+                    .y(d => yScale(d[benefit.key]))
+                    .curve(d3.curveMonotoneX);
+                
+                const path = g.append('path')
+                    .datum(timelineData)
+                    .attr('class', `line-${benefit.key}`)
+                    .attr('fill', 'none')
+                    .attr('stroke', benefit.color)
+                    .attr('stroke-width', 3)
+                    .attr('opacity', 0.8)
+                    .attr('d', line);
+                
+                // Animate line drawing
+                const totalLength = path.node().getTotalLength();
+                path
+                    .attr('stroke-dasharray', totalLength + ' ' + totalLength)
+                    .attr('stroke-dashoffset', totalLength)
+                    .transition()
+                    .duration(2000)
+                    .delay(benefitIndex * 300)
+                    .attr('stroke-dashoffset', 0)
+                    .ease(d3.easeCubicInOut);
+                
+                // Add data points
+                g.selectAll(`.dot-${benefit.key}`)
+                    .data(timelineData)
+                    .enter()
+                    .append('circle')
+                    .attr('class', `dot-${benefit.key}`)
+                    .attr('cx', d => xScale(d.phase) + xScale.bandwidth() / 2)
+                    .attr('cy', d => yScale(d[benefit.key]))
+                    .attr('r', 0)
+                    .attr('fill', benefit.color)
+                    .attr('stroke', '#fff')
+                    .attr('stroke-width', 2)
+                    .style('cursor', 'pointer')
+                    .on('mouseover', function(event, d) {
+                        d3.select(this)
+                            .transition()
+                            .duration(200)
+                            .attr('r', 8);
+                        
+                        // Show tooltip
+                        const tooltip = g.append('g')
+                            .attr('class', 'tooltip-group')
+                            .attr('transform', `translate(${xScale(d.phase) + xScale.bandwidth() / 2}, ${yScale(d[benefit.key]) - 20})`);
+                        
+                        tooltip.append('rect')
+                            .attr('x', -40)
+                            .attr('y', -25)
+                            .attr('width', 80)
+                            .attr('height', 20)
+                            .attr('fill', 'rgba(26, 31, 58, 0.95)')
+                            .attr('stroke', benefit.color)
+                            .attr('stroke-width', 1)
+                            .attr('rx', 4);
+                        
+                        tooltip.append('text')
+                            .attr('text-anchor', 'middle')
+                            .attr('y', -11)
+                            .attr('fill', benefit.color)
+                            .attr('font-size', '13px')
+                            .attr('font-weight', 'bold')
+                            .text(`${d[benefit.key]}%`);
+                    })
+                    .on('mouseout', function() {
+                        d3.select(this)
+                            .transition()
+                            .duration(200)
+                            .attr('r', 5);
+                        
+                        g.selectAll('.tooltip-group').remove();
+                    })
+                    .transition()
+                    .duration(500)
+                    .delay((d, i) => benefitIndex * 300 + i * 150)
+                    .attr('r', 5);
+            });
+            
+            // Legend
+            const legend = svg.append('g')
+                .attr('class', 'legend')
+                .attr('transform', `translate(${width - margin.right - 180}, ${margin.top})`);
+            
+            benefits.forEach((benefit, i) => {
+                const legendItem = legend.append('g')
+                    .attr('transform', `translate(0, ${i * 25})`)
+                    .style('cursor', 'pointer')
+                    .on('mouseover', function() {
+                        g.selectAll(`.line-${benefit.key}, .dot-${benefit.key}`)
+                            .transition()
+                            .duration(200)
+                            .attr('opacity', 1)
+                            .attr('stroke-width', 4);
+                    })
+                    .on('mouseout', function() {
+                        g.selectAll(`.line-${benefit.key}`)
+                            .transition()
+                            .duration(200)
+                            .attr('opacity', 0.8)
+                            .attr('stroke-width', 3);
+                        g.selectAll(`.dot-${benefit.key}`)
+                            .transition()
+                            .duration(200)
+                            .attr('opacity', 1);
+                    });
+                
+                legendItem.append('line')
+                    .attr('x1', 0)
+                    .attr('y1', 0)
+                    .attr('x2', 20)
+                    .attr('y2', 0)
+                    .attr('stroke', benefit.color)
+                    .attr('stroke-width', 3);
+                
+                legendItem.append('circle')
+                    .attr('cx', 10)
+                    .attr('cy', 0)
+                    .attr('r', 4)
+                    .attr('fill', benefit.color);
+                
+                legendItem.append('text')
+                    .attr('x', 28)
+                    .attr('y', 4)
+                    .attr('fill', '#8b92a7')
+                    .attr('font-size', '12px')
+                    .text(benefit.label);
+            });
+            
+            // Title
+            svg.append('text')
+                .attr('x', width / 2)
+                .attr('y', 15)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#7b61ff')
+                .attr('font-size', '14px')
+                .attr('font-weight', '600')
+                .text('TDD Value Accumulation Over Time');
+        }
+        
+        // D3.js TDD Cycle Visualization with Animation
+        function createTDDCycleViz() {
+            const container = document.getElementById('tdd-cycle-viz');
+            const width = container.clientWidth;
+            const height = 500;
+            
+            const svg = d3.select('#tdd-cycle-viz')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            // Define arrow markers
+            const defs = svg.append('defs');
+            
+            ['#ef4444', '#10b981', '#00d4ff'].forEach((color, i) => {
+                defs.append('marker')
+                    .attr('id', `arrow-${i}`)
+                    .attr('viewBox', '0 0 10 10')
+                    .attr('refX', 8)
+                    .attr('refY', 5)
+                    .attr('markerWidth', 6)
+                    .attr('markerHeight', 6)
+                    .attr('orient', 'auto-start-reverse')
+                    .append('path')
+                    .attr('d', 'M 0 0 L 10 5 L 0 10 z')
+                    .attr('fill', color);
+            });
+            
+            // TDD cycle phases
+            const phases = [
+                { id: 'red', label: 'RED', x: width * 0.25, y: height * 0.3, color: '#ef4444', icon: '❌', 
+                  desc: 'Write Failing Test', details: 'Define expected behavior' },
+                { id: 'green', label: 'GREEN', x: width * 0.75, y: height * 0.3, color: '#10b981', icon: '✅', 
+                  desc: 'Make Test Pass', details: 'Write minimal code' },
+                { id: 'refactor', label: 'REFACTOR', x: width * 0.5, y: height * 0.7, color: '#00d4ff', icon: '♻️', 
+                  desc: 'Improve Design', details: 'Clean up & optimize' }
+            ];
+            
+            // Curved paths between phases
+            const connections = [
+                { from: phases[0], to: phases[1], color: '#ef4444', marker: 0 },
+                { from: phases[1], to: phases[2], color: '#10b981', marker: 1 },
+                { from: phases[2], to: phases[0], color: '#00d4ff', marker: 2 }
+            ];
+            
+            // Draw curved connections
+            const linkGenerator = d3.linkVertical()
+                .x(d => d.x)
+                .y(d => d.y);
+            
+            connections.forEach((conn, idx) => {
+                const path = svg.append('path')
+                    .attr('d', () => {
+                        if (idx === 2) {
+                            // Return path (refactor to red)
+                            const midX = (conn.from.x + conn.to.x) / 2;
+                            return `M ${conn.from.x} ${conn.from.y + 70}
+                                    Q ${midX - 100} ${height * 0.55} ${conn.to.x - 70} ${conn.to.y + 30}`;
+                        } else {
+                            // Forward paths
+                            const midY = (conn.from.y + conn.to.y) / 2;
+                            return `M ${conn.from.x + 70} ${conn.from.y + 20}
+                                    Q ${(conn.from.x + conn.to.x) / 2} ${midY + 50} ${conn.to.x - 70} ${conn.to.y + 20}`;
+                        }
+                    })
+                    .attr('stroke', conn.color)
+                    .attr('stroke-width', 3)
+                    .attr('fill', 'none')
+                    .attr('opacity', 0.6)
+                    .attr('marker-end', `url(#arrow-${conn.marker})`)
+                    .attr('stroke-dasharray', function() { return this.getTotalLength(); })
+                    .attr('stroke-dashoffset', function() { return this.getTotalLength(); });
+                
+                // Animate path drawing
+                path.transition()
+                    .duration(2000)
+                    .delay(idx * 700)
+                    .attr('stroke-dashoffset', 0)
+                    .ease(d3.easeCubicInOut);
+            });
+            
+            // Draw phase circles with animation
+            const phaseGroups = svg.selectAll('.phase-group')
+                .data(phases)
+                .enter()
+                .append('g')
+                .attr('class', 'phase-group')
+                .attr('transform', d => `translate(${d.x}, ${d.y})`)
+                .style('cursor', 'pointer')
+                .on('mouseover', function(event, d) {
+                    d3.select(this).select('.phase-circle')
+                        .transition()
+                        .duration(200)
+                        .attr('r', 95)
+                        .attr('opacity', 0.3);
+                    
+                    d3.select(this).select('.phase-label')
+                        .transition()
+                        .duration(200)
+                        .attr('font-size', '22px');
+                })
+                .on('mouseout', function(event, d) {
+                    d3.select(this).select('.phase-circle')
+                        .transition()
+                        .duration(200)
+                        .attr('r', 85)
+                        .attr('opacity', 0.2);
+                    
+                    d3.select(this).select('.phase-label')
+                        .transition()
+                        .duration(200)
+                        .attr('font-size', '20px');
+                });
+            
+            // Phase circle background
+            phaseGroups.append('circle')
+                .attr('class', 'phase-circle')
+                .attr('r', 0)
+                .attr('fill', d => d.color)
+                .attr('opacity', 0.2)
+                .attr('stroke', d => d.color)
+                .attr('stroke-width', 3)
+                .transition()
+                .duration(800)
+                .delay((d, i) => i * 300)
+                .attr('r', 85);
+            
+            // Phase icon
+            phaseGroups.append('text')
+                .attr('class', 'phase-icon')
+                .attr('text-anchor', 'middle')
+                .attr('y', -15)
+                .attr('fill', '#fff')
+                .attr('font-size', '36px')
+                .attr('opacity', 0)
+                .text(d => d.icon)
+                .transition()
+                .duration(500)
+                .delay((d, i) => i * 300 + 400)
+                .attr('opacity', 1);
+            
+            // Phase label
+            phaseGroups.append('text')
+                .attr('class', 'phase-label')
+                .attr('text-anchor', 'middle')
+                .attr('y', 25)
+                .attr('fill', d => d.color)
+                .attr('font-size', '20px')
+                .attr('font-weight', 'bold')
+                .attr('opacity', 0)
+                .text(d => d.label)
+                .transition()
+                .duration(500)
+                .delay((d, i) => i * 300 + 500)
+                .attr('opacity', 1);
+            
+            // Phase description
+            phaseGroups.append('text')
+                .attr('class', 'phase-desc')
+                .attr('text-anchor', 'middle')
+                .attr('y', 110)
+                .attr('fill', '#8b92a7')
+                .attr('font-size', '13px')
+                .attr('opacity', 0)
+                .text(d => d.desc)
+                .transition()
+                .duration(500)
+                .delay((d, i) => i * 300 + 600)
+                .attr('opacity', 1);
+            
+            // Phase details
+            phaseGroups.append('text')
+                .attr('class', 'phase-details')
+                .attr('text-anchor', 'middle')
+                .attr('y', 128)
+                .attr('fill', '#6b7280')
+                .attr('font-size', '11px')
+                .attr('opacity', 0)
+                .text(d => d.details)
+                .transition()
+                .duration(500)
+                .delay((d, i) => i * 300 + 700)
+                .attr('opacity', 1);
+            
+            // Add central "TDD Cycle" label
+            svg.append('text')
+                .attr('text-anchor', 'middle')
+                .attr('x', width / 2)
+                .attr('y', height * 0.5)
+                .attr('fill', '#7b61ff')
+                .attr('font-size', '16px')
+                .attr('font-weight', '600')
+                .attr('opacity', 0)
+                .text('TDD Cycle')
+                .transition()
+                .duration(500)
+                .delay(1500)
+                .attr('opacity', 0.7);
+            
+            svg.append('text')
+                .attr('text-anchor', 'middle')
+                .attr('x', width / 2)
+                .attr('y', height * 0.5 + 20)
+                .attr('fill', '#6b7280')
+                .attr('font-size', '12px')
+                .attr('opacity', 0)
+                .text('Continuous Improvement Loop')
+                .transition()
+                .duration(500)
+                .delay(1600)
+                .attr('opacity', 0.6);
+        }
         
         require.config({paths:{vs:'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs'}});require(['vs/editor/editor.main'],function(){const testCode=`# RED: Write test first (it will fail)\nimport pytest\n\ndef test_calculator_add():\n    calc = Calculator()\n    result = calc.add(2, 3)\n    assert result == 5, "2 + 3 should equal 5"\n\ndef test_calculator_subtract():\n    calc = Calculator()\n    result = calc.subtract(5, 3)\n    assert result == 2, "5 - 3 should equal 2"\n\n# Run tests: pytest test_calculator.py\n# Expected: FAIL (Calculator class doesn't exist yet)`;const implCode=`# GREEN: Write minimum code to pass\nclass Calculator:\n    def add(self, a, b):\n        return a + b\n    \n    def subtract(self, a, b):\n        return a - b\n\n# Run tests: pytest test_calculator.py\n# Expected: PASS (tests now pass with minimal implementation)`;const refactorCode=`# REFACTOR: Improve design while keeping tests green\nfrom typing import Union\n\nclass Calculator:\n    """A simple calculator with basic operations.\"\"\"\n    \n    def add(self, a: Union[int, float], b: Union[int, float]) -> Union[int, float]:\n        \"\"\"Add two numbers.\"\"\"\n        return self._validate_and_operate(a, b, lambda x, y: x + y)\n    \n    def subtract(self, a: Union[int, float], b: Union[int, float]) -> Union[int, float]:\n        \"\"\"Subtract b from a.\"\"\"\n        return self._validate_and_operate(a, b, lambda x, y: x - y)\n    \n    def _validate_and_operate(self, a, b, operation):\n        \"\"\"Validate inputs and perform operation.\"\"\"\n        if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):\n            raise TypeError("Operands must be numbers")\n        return operation(a, b)\n\n# Run tests: pytest test_calculator.py\n# Expected: PASS (tests still pass after refactoring)`;monaco.editor.create(document.getElementById('editor-test'),{value:testCode,language:'python',theme:'vs-dark',minimap:{enabled:false},fontSize:14});monaco.editor.create(document.getElementById('editor-impl'),{value:implCode,language:'python',theme:'vs-dark',minimap:{enabled:false},fontSize:14});monaco.editor.create(document.getElementById('editor-refactor'),{value:refactorCode,language:'python',theme:'vs-dark',minimap:{enabled:false},fontSize:14});document.querySelectorAll('.tab-btn').forEach(btn=>btn.addEventListener('click',function(){document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));this.classList.add('active');document.getElementById(this.getAttribute('data-tab')).classList.add('active');}));document.getElementById('run-code').addEventListener('click',()=>{const tab=document.querySelector('.tab-content.active').id,output=document.getElementById('output-content'),outputs={test:`Running tests...\n\ntest_calculator.py::test_calculator_add FAILED\ntest_calculator.py::test_calculator_subtract FAILED\n\nERROR: NameError: name 'Calculator' is not defined\n\n❌ RED phase: Tests fail as expected (no implementation yet)`,impl:`Running tests...\n\ntest_calculator.py::test_calculator_add PASSED\ntest_calculator.py::test_calculator_subtract PASSED\n\n2 passed in 0.03s\n\n✅ GREEN phase: All tests pass!`,refactor:`Running tests...\n\ntest_calculator.py::test_calculator_add PASSED\ntest_calculator.py::test_calculator_subtract PASSED\n\n2 passed in 0.03s\n\n♻️ REFACTOR phase: Tests still pass after refactoring!\nCode is cleaner, more maintainable, and well-documented.`};output.textContent=outputs[tab];});});
         
-        const quiz=[{q:"What is the first step in the TDD cycle?",o:["Write implementation","Write failing test","Refactor code","Run all tests"],c:1,e:"TDD starts with writing a failing test that defines the desired behavior."},{q:"What does RED represent in TDD?",o:["Error message","Failing test","Critical bug","Stopped process"],c:1,e:"RED means the test fails, which is expected before implementation."},{q:"When should you refactor in TDD?",o:["Before writing tests","After tests pass","Only when code is broken","Never"],c:1,e:"Refactor after tests pass (GREEN) to improve design while maintaining correctness."},{q:"What is the main benefit of writing tests first?",o:["Faster coding","Better design","More code","Fewer features"],c:1,e:"Test-first drives better design by forcing you to think about usage before implementation."},{q:"What makes a good TDD test?",o:["Tests implementation details","Tests behavior","As long as possible","Tests multiple things"],c:1,e:"Good tests focus on behavior (what), not implementation (how)."},{q:"How much code should you write in the GREEN phase?",o:["Perfect solution immediately","Minimum to pass test","Complete feature","Production-ready code"],c:1,e:"Write the minimum code needed to pass the test, then refactor."},{q:"What is a common TDD pitfall?",o:["Writing too many tests","Testing behavior","Writing tests after code","Refactoring"],c:2,e:"Writing tests after code is not TDD - tests must come first."},{q:"Why run tests frequently in TDD?",o:["To waste time","Immediate feedback","Slow down development","Confuse developers"],c:1,e:"Frequent test runs provide immediate feedback and catch regressions quickly."},{q:"What should you do if a test passes immediately?",o:["Celebrate","Delete the test","Check if test is valid","Write more code"],c:2,e:"If a test passes without new code, it might not be testing anything new."},{q:"What is the purpose of the REFACTOR phase?",o:["Add features","Improve code quality","Make tests fail","Delete code"],c:1,e:"Refactoring improves design and removes duplication while keeping tests green."}];function renderQuiz(){document.getElementById('quiz').innerHTML=quiz.map((q,i)=>`<div class="quiz-question" style="margin-bottom:var(--spacing-2xl);padding:var(--spacing-lg);background:rgba(26,31,58,0.5);border-radius:8px;border:1px solid var(--module-border);"><h4 style="color:var(--text-primary);margin-bottom:var(--spacing-md);">Q${i+1}: ${q.q}</h4><div>${q.o.map((o,j)=>`<label style="display:block;padding:var(--spacing-sm);margin:var(--spacing-xs) 0;background:rgba(123,97,255,0.1);border-radius:6px;cursor:pointer;"><input type="radio" name="q-${i}" value="${j}" style="margin-right:var(--spacing-sm);"><span style="color:var(--text-secondary);">${o}</span></label>`).join('')}</div><div id="fb-${i}" style="display:none;margin-top:var(--spacing-md);padding:var(--spacing-md);border-radius:6px;"></div></div>`).join('')+`<button id="submit-quiz" style="padding:var(--spacing-md) var(--spacing-2xl);background:var(--hub-primary);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:16px;font-weight:600;">Submit Quiz</button>`;document.getElementById('submit-quiz').addEventListener('click',()=>{let c=0;quiz.forEach((q,i)=>{const s=document.querySelector(`input[name="q-${i}"]:checked`),f=document.getElementById(`fb-${i}`);if(s){const a=parseInt(s.value);if(a===q.c){c++;f.style.display='block';f.style.background='rgba(16,185,129,0.1)';f.style.borderLeft='4px solid #10b981';f.innerHTML=`<strong style="color:#10b981;">✅ Correct!</strong><br><span style="color:var(--text-secondary);">${q.e}</span>`;}else{f.style.display='block';f.style.background='rgba(239,68,68,0.1)';f.style.borderLeft='4px solid #ef4444';f.innerHTML=`<strong style="color:#ef4444;">❌ Incorrect</strong><br><span style="color:var(--text-secondary);">${q.e}</span>`;}}});const p=(c/quiz.length)*100,r=document.getElementById('quiz-results'),d=document.getElementById('score-display');r.style.display='block';d.textContent=`Score: ${c}/${quiz.length} (${p.toFixed(0)}%)`;d.style.color=p>=70?'#10b981':p>=50?'#fbbf24':'#ef4444';document.getElementById('submit-quiz').disabled=true;document.getElementById('submit-quiz').style.opacity='0.5';});}renderQuiz();document.getElementById('retry-quiz')?.addEventListener('click',()=>{document.getElementById('quiz-results').style.display='none';renderQuiz();});document.getElementById('show-solution-btn')?.addEventListener('click',function(){document.getElementById('challenge-solution').style.display='block';this.disabled=true;this.style.opacity='0.5';});
+        const quizData = [
+            {
+                question: "What is the first step in the TDD cycle?",
+                options: ["Write implementation code", "Write a failing test", "Refactor existing code", "Run all tests"],
+                correct: 1,
+                explanation: "TDD starts with writing a failing test that defines the desired behavior before any implementation code exists."
+            },
+            {
+                question: "What does RED represent in the TDD cycle?",
+                options: ["Critical error", "Failing test (expected)", "Code review needed", "Deployment blocked"],
+                correct: 1,
+                explanation: "RED means the test fails, which is expected and desired before writing the implementation code."
+            },
+            {
+                question: "When should you refactor in TDD?",
+                options: ["Before writing tests", "After tests pass (GREEN phase)", "Only when code is broken", "Before deployment only"],
+                correct: 1,
+                explanation: "Refactor after tests pass (GREEN) to improve design while maintaining correctness through continuous test validation."
+            },
+            {
+                question: "What is the main benefit of writing tests first?",
+                options: ["Faster coding speed", "Better software design", "More lines of code", "Fewer code reviews"],
+                correct: 1,
+                explanation: "Test-first drives better design by forcing you to think about usage, interfaces, and behavior before implementation details."
+            },
+            {
+                question: "What makes a good TDD test?",
+                options: ["Tests implementation details", "Tests observable behavior", "As long as possible", "Tests multiple features"],
+                correct: 1,
+                explanation: "Good tests focus on observable behavior (what the code does) rather than implementation details (how it does it)."
+            },
+            {
+                question: "How much code should you write in the GREEN phase?",
+                options: ["Perfect solution immediately", "Minimum code to pass the test", "Complete feature with all edge cases", "Production-ready code"],
+                correct: 1,
+                explanation: "Write the minimum code needed to pass the test, then refactor. This prevents over-engineering and keeps focus narrow."
+            },
+            {
+                question: "What is a common TDD pitfall to avoid?",
+                options: ["Writing too many small tests", "Testing behavior instead of implementation", "Writing tests after implementation code", "Refactoring frequently"],
+                correct: 2,
+                explanation: "Writing tests after code is not TDD and loses the design benefits. Tests must come first to drive the design."
+            },
+            {
+                question: "Why run tests frequently in TDD?",
+                options: ["To slow down development", "Immediate feedback on changes", "To impress management", "Tests are decorative"],
+                correct: 1,
+                explanation: "Frequent test runs provide immediate feedback, catch regressions quickly, and build confidence in changes."
+            },
+            {
+                question: "What should you do if a new test passes immediately without writing code?",
+                options: ["Celebrate success", "Delete the redundant test", "Verify the test is actually testing new behavior", "Write more implementation"],
+                correct: 2,
+                explanation: "If a test passes without new code, it might not be testing anything new or might be testing the wrong thing."
+            },
+            {
+                question: "What is the purpose of the REFACTOR phase?",
+                options: ["Add new features", "Improve code quality without changing behavior", "Make tests fail", "Delete unnecessary code"],
+                correct: 1,
+                explanation: "Refactoring improves design, removes duplication, and enhances maintainability while keeping all tests green."
+            }
+        ];
         
-        window.addEventListener('load',()=>{createTDDCycleViz();console.log("✅ TDD Fundamentals module loaded!");});
+        function renderQuiz() {
+            const quizContainer = document.getElementById('quiz');
+            quizContainer.innerHTML = quizData.map((item, index) => `
+                <div class="quiz-question" style="margin-bottom: var(--spacing-2xl); padding: var(--spacing-lg); background: rgba(26, 31, 58, 0.5); border-radius: 8px; border: 1px solid var(--module-border);">
+                    <h4 style="color: var(--text-primary); margin-bottom: var(--spacing-md); font-size: 1.1rem;">
+                        Question ${index + 1}: ${item.question}
+                    </h4>
+                    <div class="options-container">
+                        ${item.options.map((option, optIndex) => `
+                            <label class="quiz-option" style="display: block; padding: var(--spacing-md); margin: var(--spacing-sm) 0; background: rgba(123, 97, 255, 0.1); border: 2px solid transparent; border-radius: 8px; cursor: pointer; transition: all 0.2s ease;">
+                                <input type="radio" name="question-${index}" value="${optIndex}" style="margin-right: var(--spacing-sm);">
+                                <span style="color: var(--text-secondary);">${option}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                    <div id="feedback-${index}" class="question-feedback" style="display: none; margin-top: var(--spacing-md); padding: var(--spacing-md); border-radius: 6px;"></div>
+                </div>
+            `).join('');
+            
+            quizContainer.innerHTML += `
+                <button id="submit-quiz-btn" class="submit-quiz-btn" style="padding: var(--spacing-md) var(--spacing-2xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600; transition: transform 0.2s ease;">
+                    📝 Submit Quiz
+                </button>
+            `;
+            
+            // Add hover effects to options
+            document.querySelectorAll('.quiz-option').forEach(option => {
+                option.addEventListener('mouseenter', function() {
+                    this.style.borderColor = 'var(--hub-primary)';
+                    this.style.background = 'rgba(123, 97, 255, 0.2)';
+                });
+                option.addEventListener('mouseleave', function() {
+                    if (!this.querySelector('input').checked) {
+                        this.style.borderColor = 'transparent';
+                        this.style.background = 'rgba(123, 97, 255, 0.1)';
+                    }
+                });
+                option.addEventListener('click', function() {
+                    const questionContainer = this.closest('.quiz-question');
+                    questionContainer.querySelectorAll('.quiz-option').forEach(opt => {
+                        opt.style.borderColor = 'transparent';
+                        opt.style.background = 'rgba(123, 97, 255, 0.1)';
+                    });
+                    this.style.borderColor = 'var(--hub-primary)';
+                    this.style.background = 'rgba(123, 97, 255, 0.2)';
+                });
+            });
+            
+            document.getElementById('submit-quiz-btn').addEventListener('click', submitQuiz);
+        }
+        
+        function submitQuiz() {
+            let correctCount = 0;
+            
+            quizData.forEach((item, index) => {
+                const selectedOption = document.querySelector(`input[name="question-${index}"]:checked`);
+                const feedback = document.getElementById(`feedback-${index}`);
+                
+                if (selectedOption) {
+                    const answerIndex = parseInt(selectedOption.value);
+                    const isCorrect = answerIndex === item.correct;
+                    
+                    if (isCorrect) {
+                        correctCount++;
+                        feedback.style.display = 'block';
+                        feedback.style.background = 'rgba(16, 185, 129, 0.1)';
+                        feedback.style.borderLeft = '4px solid #10b981';
+                        feedback.innerHTML = `
+                            <strong style="color: #10b981;">✅ Correct!</strong><br>
+                            <span style="color: var(--text-secondary); font-size: 0.95rem;">${item.explanation}</span>
+                        `;
+                    } else {
+                        feedback.style.display = 'block';
+                        feedback.style.background = 'rgba(239, 68, 68, 0.1)';
+                        feedback.style.borderLeft = '4px solid #ef4444';
+                        feedback.innerHTML = `
+                            <strong style="color: #ef4444;">❌ Incorrect</strong><br>
+                            <span style="color: var(--text-secondary); font-size: 0.95rem;">The correct answer is: <strong>${item.options[item.correct]}</strong></span><br>
+                            <span style="color: var(--text-secondary); font-size: 0.95rem;">${item.explanation}</span>
+                        `;
+                    }
+                } else {
+                    feedback.style.display = 'block';
+                    feedback.style.background = 'rgba(251, 191, 36, 0.1)';
+                    feedback.style.borderLeft = '4px solid #fbbf24';
+                    feedback.innerHTML = `
+                        <strong style="color: #fbbf24;">⚠️ No answer selected</strong>
+                    `;
+                }
+            });
+            
+            // Show results
+            const percentage = (correctCount / quizData.length) * 100;
+            const resultsContainer = document.getElementById('quiz-results');
+            const scoreDisplay = document.getElementById('score-display');
+            
+            let grade, color, message;
+            if (percentage >= 90) {
+                grade = 'Excellent!';
+                color = '#10b981';
+                message = 'Outstanding mastery of TDD fundamentals! 🏆';
+            } else if (percentage >= 70) {
+                grade = 'Good Job!';
+                color = '#00d4ff';
+                message = 'Solid understanding of TDD concepts! 👍';
+            } else if (percentage >= 50) {
+                grade = 'Keep Learning';
+                color = '#fbbf24';
+                message = 'You\'re making progress. Review the material and try again! 📚';
+            } else {
+                grade = 'Needs Improvement';
+                color = '#ef4444';
+                message = 'Consider reviewing the content before retrying. 💪';
+            }
+            
+            scoreDisplay.innerHTML = `
+                <div style="text-align: center;">
+                    <h3 style="color: ${color}; font-size: 2rem; margin-bottom: var(--spacing-sm);">${grade}</h3>
+                    <p style="font-size: 1.5rem; color: var(--text-primary); margin-bottom: var(--spacing-sm);">
+                        Score: ${correctCount}/${quizData.length} (${percentage.toFixed(0)}%)
+                    </p>
+                    <p style="color: var(--text-secondary);">${message}</p>
+                </div>
+            `;
+            
+            resultsContainer.style.display = 'block';
+            
+            // Disable submit button
+            const submitBtn = document.getElementById('submit-quiz-btn');
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.5';
+            submitBtn.style.cursor = 'not-allowed';
+            
+            // Scroll to results
+            resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        
+        document.getElementById('retry-quiz')?.addEventListener('click', () => {
+            document.getElementById('quiz-results').style.display = 'none';
+            renderQuiz();
+        });
+        
+        window.addEventListener('load', () => {
+            createBenefitsTimeline();
+            createTDDCycleViz();
+            renderQuiz();
+            
+            // Show solution button handler
+            document.getElementById('show-solution-btn')?.addEventListener('click', function() {
+                document.getElementById('challenge-solution').style.display = 'block';
+                this.disabled = true;
+                this.style.opacity = '0.5';
+                this.style.cursor = 'not-allowed';
+            });
+            
+            console.log("✅ TDD Fundamentals module with enhanced D3.js visualizations loaded!");
+        });
     </script>
 </body>
 </html>

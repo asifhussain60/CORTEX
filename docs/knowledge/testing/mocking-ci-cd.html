@@ -38,12 +38,12 @@
                 <span class="difficulty-badge advanced">Advanced</span>
                 <span style="color: var(--text-secondary);">Module 5 of 5</span>
             </div>
-            <h1 class="hero-title">🧪 Mocking & CI/CD Integration</h1>
-            <p class="hero-subtitle">Interactive learning with quizzes, code playgrounds, and challenges</p>
+            <h1 class="hero-title">🔗 Mocking & CI/CD Integration</h1>
+            <p class="hero-subtitle">Master test doubles, isolation strategies, and automated testing pipelines</p>
             <div class="module-meta">
-                <span>⏱️ 30 minutes</span>
+                <span>⏱️ 35 minutes</span>
                 <span>📊 10 quiz questions</span>
-                <span>💻 1 code playground</span>
+                <span>💻 3 code playgrounds</span>
                 <span>🏆 1 challenge</span>
             </div>
         </div>
@@ -55,49 +55,208 @@
         <section class="glass-card" style="margin-top: var(--spacing-2xl);">
             <h2>🎓 Learning Objectives</h2>
             <ul class="objective-list">
-                <li>Master mocking frameworks (unittest.mock, Jest, Mockito)</li>
-                <li>Integrate tests into CI/CD pipelines</li>
-                <li>Run tests in parallel for speed</li>
-                <li>Handle test data and fixtures</li>
-                <li>Monitor test health and flakiness</li>
+                <li>Master mocking frameworks: unittest.mock (Python), Jest (JavaScript), Mockito (Java)</li>
+                <li>Understand test double patterns: Mocks, Stubs, Spies, Fakes, Dummies</li>
+                <li>Integrate tests into CI/CD pipelines (GitHub Actions, GitLab CI, Jenkins)</li>
+                <li>Optimize test execution with parallelization and caching strategies</li>
+                <li>Handle test data, fixtures, and database seeding effectively</li>
+                <li>Monitor test health, flakiness, and execution trends</li>
             </ul>
         </section>
 
-        <!-- Interactive Content Placeholder -->
+        <!-- CI/CD Pipeline Visualization -->
         <section class="glass-card" style="margin-top: var(--spacing-3xl);">
-            <h2>📚 Module Content</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
-                This module includes:
-            </p>
-            <ul style="list-style-type: none; padding-left: 0;">
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Interactive Visualizations:</strong> D3.js charts and Mermaid diagrams
-                </li>
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Code Playgrounds:</strong> Hands-on Monaco editor with live execution
-                </li>
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Knowledge Checks:</strong> Interactive quizzes with instant feedback
-                </li>
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Real-World Examples:</strong> Production-grade code samples
-                </li>
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Progressive Challenges:</strong> Apply what you've learned
-                </li>
-            </ul>
-        </section>
-
-        <!-- Interactive Quiz Placeholder -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
-            <h2>✅ Knowledge Check: Quiz</h2>
+            <h2>🔄 CI/CD Test Pipeline</h2>
             <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
-                Test your understanding with interactive questions. Instant feedback provided!
+                Modern CI/CD pipelines run tests automatically on every commit, providing rapid feedback and preventing regressions.
             </p>
-            <div class="quiz-container" id="quiz">
-                <p style="color: var(--text-primary); text-align: center; padding: var(--spacing-3xl);">
-                    📝 Quiz system loading...
+            
+            <div class="mermaid-container">
+                <pre class="mermaid">
+graph LR
+    A[Developer Push] --> B[CI Triggered]
+    B --> C{Parallel Jobs}
+    
+    C --> D1[Lint & Format]
+    C --> D2[Unit Tests]
+    C --> D3[Integration Tests]
+    C --> D4[E2E Tests]
+    
+    D1 --> E1[ESLint/Black]
+    D2 --> E2[Jest/Pytest<br/>Coverage: 85%]
+    D3 --> E3[API Tests<br/>DB Fixtures]
+    D4 --> E4[Cypress<br/>Parallel: 4x]
+    
+    E1 --> F{All Pass?}
+    E2 --> F
+    E3 --> F
+    E4 --> F
+    
+    F -->|Yes| G[Build Artifacts]
+    F -->|No| H[❌ Block Merge]
+    
+    G --> I[Deploy Staging]
+    I --> J[Smoke Tests]
+    J --> K[✅ Merge to Main]
+    
+    H --> L[Notify Developer]
+    
+    style A fill:#7b61ff,stroke:#fff,color:#fff
+    style K fill:#10b981,stroke:#fff,color:#fff
+    style H fill:#ef4444,stroke:#fff,color:#fff
+    style F fill:#fbbf24,stroke:#000,color:#000
+                </pre>
+            </div>
+            
+            <div style="margin-top: var(--spacing-xl); padding: var(--spacing-lg); background: rgba(0, 212, 255, 0.1); border-radius: 8px; border-left: 4px solid #00d4ff;">
+                <h4 style="color: #00d4ff; margin-bottom: var(--spacing-md);">💡 Pipeline Best Practices</h4>
+                <ul style="color: var(--text-secondary); line-height: 1.8;">
+                    <li><strong>Fast Feedback:</strong> Run unit tests first (1-3 minutes)</li>
+                    <li><strong>Parallel Execution:</strong> Split E2E tests across multiple runners</li>
+                    <li><strong>Caching:</strong> Cache dependencies (npm_modules, .venv) for speed</li>
+                    <li><strong>Fail Fast:</strong> Stop pipeline on first critical failure</li>
+                    <li><strong>Retry Flaky Tests:</strong> Auto-retry E2E tests up to 2 times</li>
+                    <li><strong>Coverage Gates:</strong> Require 80%+ coverage to merge</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Mocking Strategies -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🎭 Mock Strategies Comparison</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                Different test double patterns serve different purposes. Choose the right strategy for your testing scenario.
+            </p>
+            
+            <div id="mock-strategies-viz" style="width: 100%; height: 450px; margin: var(--spacing-xl) 0;"></div>
+            
+            <div class="strategies-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-lg); margin-top: var(--spacing-xl);">
+                <div style="padding: var(--spacing-lg); background: rgba(123, 97, 255, 0.1); border-left: 4px solid #7b61ff; border-radius: 8px;">
+                    <h4 style="color: #7b61ff; margin-bottom: var(--spacing-sm);">🎯 Mock</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                        Verifies behavior by tracking method calls. <strong>Use for:</strong> Testing interactions.
+                    </p>
+                    <code style="display: block; margin-top: var(--spacing-sm); padding: var(--spacing-sm); background: rgba(0,0,0,0.3); border-radius: 4px; color: #00d4ff; font-size: 0.85rem;">mock.method.assert_called_once()</code>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(0, 212, 255, 0.1); border-left: 4px solid #00d4ff; border-radius: 8px;">
+                    <h4 style="color: #00d4ff; margin-bottom: var(--spacing-sm);">📝 Stub</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                        Returns predefined data. <strong>Use for:</strong> Testing with controlled inputs.
+                    </p>
+                    <code style="display: block; margin-top: var(--spacing-sm); padding: var(--spacing-sm); background: rgba(0,0,0,0.3); border-radius: 4px; color: #00d4ff; font-size: 0.85rem;">stub.get_user() → {id: 1}</code>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-left: 4px solid #10b981; border-radius: 8px;">
+                    <h4 style="color: #10b981; margin-bottom: var(--spacing-sm);">🕵️ Spy</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                        Wraps real object, records calls. <strong>Use for:</strong> Partial mocking.
+                    </p>
+                    <code style="display: block; margin-top: var(--spacing-sm); padding: var(--spacing-sm); background: rgba(0,0,0,0.3); border-radius: 4px; color: #00d4ff; font-size: 0.85rem;">spy.on(obj, 'method')</code>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(251, 191, 36, 0.1); border-left: 4px solid #fbbf24; border-radius: 8px;">
+                    <h4 style="color: #fbbf24; margin-bottom: var(--spacing-sm);">🏗️ Fake</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                        Working implementation (in-memory DB). <strong>Use for:</strong> Complex logic.
+                    </p>
+                    <code style="display: block; margin-top: var(--spacing-sm); padding: var(--spacing-sm); background: rgba(0,0,0,0.3); border-radius: 4px; color: #00d4ff; font-size: 0.85rem;">FakeDatabase()</code>
+                </div>
+            </div>
+        </section>
+
+        <!-- Code Playground: Python Mocking -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>💻 Playground: Python unittest.mock</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                Explore mocking patterns in Python using the unittest.mock library.
+            </p>
+            
+            <div class="playground-container">
+                <div class="tabs" style="display: flex; gap: var(--spacing-sm); margin-bottom: var(--spacing-md); border-bottom: 2px solid var(--module-border);">
+                    <button class="tab-btn active" data-tab="mock-basics" style="padding: var(--spacing-sm) var(--spacing-lg); background: transparent; border: none; color: var(--text-secondary); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s;">
+                        Mock Basics
+                    </button>
+                    <button class="tab-btn" data-tab="patch-decorator" style="padding: var(--spacing-sm) var(--spacing-lg); background: transparent; border: none; color: var(--text-secondary); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s;">
+                        @patch Decorator
+                    </button>
+                    <button class="tab-btn" data-tab="side-effects" style="padding: var(--spacing-sm) var(--spacing-lg); background: transparent; border: none; color: var(--text-secondary); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s;">
+                        Side Effects
+                    </button>
+                </div>
+                
+                <div id="mock-basics" class="tab-content active" style="min-height: 400px;"></div>
+                <div id="patch-decorator" class="tab-content" style="display: none; min-height: 400px;"></div>
+                <div id="side-effects" class="tab-content" style="display: none; min-height: 400px;"></div>
+            </div>
+        </section>
+
+        <!-- GitHub Actions Example -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>⚙️ GitHub Actions: Complete Test Workflow</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                Production-ready CI configuration with parallel test execution, caching, and coverage reporting.
+            </p>
+            
+            <div id="github-actions-editor" style="min-height: 500px; border: 1px solid var(--module-border); border-radius: 8px; overflow: hidden;"></div>
+        </section>
+
+        <!-- Interactive Quiz -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>✅ Knowledge Check: Mocking & CI/CD Quiz</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                Test your understanding of mocking strategies, test doubles, and CI/CD integration.
+            </p>
+            <div class="quiz-container" id="quiz"></div>
+            
+            <div id="quiz-results" class="quiz-results" style="display: none; margin-top: var(--spacing-xl); padding: var(--spacing-xl); background: rgba(123, 97, 255, 0.1); border-radius: 12px; text-align: center;">
+                <div id="score-display"></div>
+                <button id="retry-quiz" style="margin-top: var(--spacing-lg); padding: var(--spacing-sm) var(--spacing-xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                    🔄 Retry Quiz
+                </button>
+            </div>
+        </section>
+
+        <!-- Progressive Challenge -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🏆 Challenge: Complete CI/CD Setup</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                Your team needs a complete CI/CD pipeline with unit tests, E2E tests, coverage reporting, and deployment to staging.
+            </p>
+            
+            <div class="challenge-scenario" style="padding: var(--spacing-lg); background: rgba(251, 191, 36, 0.1); border-radius: 8px; margin-bottom: var(--spacing-lg);">
+                <h4 style="color: #fbbf24; margin-bottom: var(--spacing-sm);">📋 Requirements</h4>
+                <p style="color: var(--text-secondary); line-height: 1.8;">
+                    Set up a GitHub Actions workflow that:
                 </p>
+                <ul style="color: var(--text-secondary); margin-top: var(--spacing-sm); line-height: 1.8;">
+                    <li>Runs on every PR and push to main</li>
+                    <li>Executes unit tests with 80%+ coverage requirement</li>
+                    <li>Runs E2E tests in parallel (4 runners)</li>
+                    <li>Caches dependencies for faster builds</li>
+                    <li>Uploads coverage reports to Codecov</li>
+                    <li>Deploys to staging only if all tests pass</li>
+                    <li>Sends Slack notification on failure</li>
+                </ul>
+            </div>
+            
+            <button id="show-cicd-solution" class="show-solution-btn" style="padding: var(--spacing-sm) var(--spacing-xl); background: var(--hub-accent); color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                💡 Show Solution
+            </button>
+            
+            <div id="cicd-solution" class="solution-container" style="display: none; margin-top: var(--spacing-lg); padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-radius: 8px; border-left: 4px solid #10b981;">
+                <h4 style="color: #10b981; margin-bottom: var(--spacing-md);">✅ Solution: Production-Ready CI/CD Pipeline</h4>
+                
+                <div id="solution-workflow-editor" style="min-height: 600px; border: 1px solid var(--module-border); border-radius: 8px; overflow: hidden;"></div>
+                
+                <div style="margin-top: var(--spacing-lg); padding: var(--spacing-md); background: rgba(0, 212, 255, 0.1); border-radius: 6px;">
+                    <h5 style="color: #00d4ff; margin-bottom: var(--spacing-sm);">🎯 Key Features</h5>
+                    <ul style="color: var(--text-secondary); line-height: 1.8;">
+                        <li><strong>Matrix Strategy:</strong> Test on Python 3.9, 3.10, 3.11 in parallel</li>
+                        <li><strong>Dependency Caching:</strong> pip cache reduces install time from 2min to 20s</li>
+                        <li><strong>Parallel E2E:</strong> 4 sharded Cypress runners complete in 3 minutes instead of 12</li>
+                        <li><strong>Coverage Enforcement:</strong> Fails if coverage drops below 80%</li>
+                        <li><strong>Conditional Deployment:</strong> Staging deploy only on main branch success</li>
+                        <li><strong>Notifications:</strong> Slack alerts with build status and logs</li>
+                    </ul>
+                </div>
             </div>
         </section>
 
@@ -134,8 +293,9 @@
     </footer>
 
     <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
     <script>
-        // Initialize Mermaid with dark theme
+        // Initialize Mermaid
         mermaid.initialize({
             startOnLoad: true,
             theme: 'dark',
@@ -149,7 +309,853 @@
             }
         });
         
-        console.log("✅ Mocking & CI/CD Integration module loaded successfully!");
+        // D3.js Mock Strategies Comparison
+        function createMockStrategies() {
+            const container = document.getElementById('mock-strategies-viz');
+            const width = container.clientWidth;
+            const height = 450;
+            const margin = { top: 40, right: 140, bottom: 60, left: 70 };
+            
+            const svg = d3.select('#mock-strategies-viz')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            const chartWidth = width - margin.left - margin.right;
+            const chartHeight = height - margin.top - margin.bottom;
+            
+            const g = svg.append('g')
+                .attr('transform', `translate(${margin.left}, ${margin.top})`);
+            
+            // Mock strategies data
+            const strategies = [
+                { name: 'Mock', complexity: 6, verification: 9, isolation: 9, color: '#7b61ff' },
+                { name: 'Stub', complexity: 3, verification: 2, isolation: 8, color: '#00d4ff' },
+                { name: 'Spy', complexity: 7, verification: 8, isolation: 5, color: '#10b981' },
+                { name: 'Fake', complexity: 9, verification: 4, isolation: 7, color: '#fbbf24' },
+                { name: 'Dummy', complexity: 1, verification: 1, isolation: 3, color: '#ef4444' }
+            ];
+            
+            const metrics = ['Complexity', 'Verification', 'Isolation'];
+            const metricKeys = ['complexity', 'verification', 'isolation'];
+            
+            // Scales
+            const xScale = d3.scaleBand()
+                .domain(metrics)
+                .range([0, chartWidth])
+                .padding(0.2);
+            
+            const yScale = d3.scaleLinear()
+                .domain([0, 10])
+                .range([chartHeight, 0]);
+            
+            // Grid
+            g.append('g')
+                .attr('class', 'grid')
+                .call(d3.axisLeft(yScale)
+                    .ticks(10)
+                    .tickSize(-chartWidth)
+                    .tickFormat(''))
+                .selectAll('line')
+                .attr('stroke', '#2d3748')
+                .attr('stroke-opacity', 0.3);
+            
+            g.select('.grid .domain').remove();
+            
+            // Axes
+            g.append('g')
+                .attr('transform', `translate(0, ${chartHeight})`)
+                .call(d3.axisBottom(xScale))
+                .selectAll('text')
+                .attr('fill', '#8b92a7')
+                .style('font-size', '13px')
+                .style('font-weight', '600');
+            
+            g.append('g')
+                .call(d3.axisLeft(yScale).ticks(10))
+                .selectAll('text')
+                .attr('fill', '#8b92a7')
+                .style('font-size', '11px');
+            
+            // Grouped bars
+            metrics.forEach((metric, metricIndex) => {
+                const metricKey = metricKeys[metricIndex];
+                const barWidth = xScale.bandwidth() / strategies.length;
+                
+                strategies.forEach((strategy, stratIndex) => {
+                    g.append('rect')
+                        .attr('x', xScale(metric) + stratIndex * barWidth)
+                        .attr('y', chartHeight)
+                        .attr('width', barWidth * 0.85)
+                        .attr('height', 0)
+                        .attr('fill', strategy.color)
+                        .attr('opacity', 0.8)
+                        .on('mouseover', function() {
+                            d3.select(this).attr('opacity', 1);
+                            g.append('text')
+                                .attr('class', 'hover-label')
+                                .attr('x', xScale(metric) + stratIndex * barWidth + barWidth / 2)
+                                .attr('y', yScale(strategy[metricKey]) - 10)
+                                .attr('text-anchor', 'middle')
+                                .attr('fill', strategy.color)
+                                .attr('font-size', '12px')
+                                .attr('font-weight', 'bold')
+                                .text(`${strategy.name}: ${strategy[metricKey]}/10`);
+                        })
+                        .on('mouseout', function() {
+                            d3.select(this).attr('opacity', 0.8);
+                            g.selectAll('.hover-label').remove();
+                        })
+                        .transition()
+                        .duration(800)
+                        .delay(metricIndex * 200 + stratIndex * 100)
+                        .attr('y', yScale(strategy[metricKey]))
+                        .attr('height', chartHeight - yScale(strategy[metricKey]));
+                });
+            });
+            
+            // Legend
+            const legend = svg.append('g')
+                .attr('transform', `translate(${width - margin.right + 10}, ${margin.top})`);
+            
+            strategies.forEach((strategy, i) => {
+                const legendItem = legend.append('g')
+                    .attr('transform', `translate(0, ${i * 22})`);
+                
+                legendItem.append('rect')
+                    .attr('width', 14)
+                    .attr('height', 14)
+                    .attr('fill', strategy.color)
+                    .attr('rx', 2);
+                
+                legendItem.append('text')
+                    .attr('x', 20)
+                    .attr('y', 11)
+                    .attr('fill', '#8b92a7')
+                    .attr('font-size', '12px')
+                    .text(strategy.name);
+            });
+            
+            // Title
+            svg.append('text')
+                .attr('x', width / 2)
+                .attr('y', 20)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#7b61ff')
+                .attr('font-size', '14px')
+                .attr('font-weight', '600')
+                .text('Test Double Comparison: Complexity vs Verification Power');
+        }
+        
+        // Monaco Editor Setup
+        require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs' } });
+        require(['vs/editor/editor.main'], function() {
+            const mockBasicsCode = `# Python unittest.mock Basics
+from unittest.mock import Mock, MagicMock
+
+# Create a simple mock
+user_service = Mock()
+
+# Configure return value
+user_service.get_user.return_value = {"id": 1, "name": "Alice"}
+
+# Call the mock
+result = user_service.get_user(1)
+print(result)  # {'id': 1, 'name': 'Alice'}
+
+# Verify method was called
+user_service.get_user.assert_called_once()
+user_service.get_user.assert_called_with(1)
+
+# Check call count
+print(user_service.get_user.call_count)  # 1
+
+# Mock with side effects
+email_service = Mock()
+email_service.send_email.return_value = True
+
+# Test code that uses the mock
+def register_user(user_data, email_service):
+    # ... registration logic ...
+    email_service.send_email(user_data['email'], 'Welcome!')
+    return {"success": True}
+
+result = register_user({"email": "test@example.com"}, email_service)
+email_service.send_email.assert_called_once_with(
+    "test@example.com", 
+    "Welcome!"
+)
+
+# MagicMock for magic methods
+mock_list = MagicMock()
+mock_list.__len__.return_value = 5
+print(len(mock_list))  # 5
+
+mock_dict = MagicMock()
+mock_dict.__getitem__.return_value = 'value'
+print(mock_dict['key'])  # 'value'
+
+# Attribute access
+api_client = Mock()
+api_client.auth.token = "abc123"
+print(api_client.auth.token)  # abc123`;
+
+            const patchDecoratorCode = `# @patch Decorator for Dependency Injection
+from unittest.mock import patch, Mock
+import pytest
+
+# Module to test
+# payment_service.py
+import stripe
+from email_service import send_receipt
+
+class PaymentService:
+    def process_payment(self, user_id, amount):
+        # Call external Stripe API
+        charge = stripe.Charge.create(
+            amount=amount * 100,
+            currency="usd",
+            customer=user_id
+        )
+        
+        # Send email receipt
+        send_receipt(user_id, charge.id)
+        
+        return {"success": True, "charge_id": charge.id}
+
+# Test with @patch decorator
+@patch('payment_service.send_receipt')
+@patch('payment_service.stripe.Charge.create')
+def test_payment_success(mock_stripe, mock_email):
+    # Configure mocks
+    mock_stripe.return_value = Mock(id='ch_123')
+    mock_email.return_value = True
+    
+    # Test the service
+    service = PaymentService()
+    result = service.process_payment('user_1', 100)
+    
+    # Assertions
+    assert result["success"] == True
+    assert result["charge_id"] == "ch_123"
+    
+    # Verify Stripe was called correctly
+    mock_stripe.assert_called_once_with(
+        amount=10000,
+        currency="usd",
+        customer="user_1"
+    )
+    
+    # Verify email was sent
+    mock_email.assert_called_once_with('user_1', 'ch_123')
+
+# Context manager style
+def test_payment_with_context_manager():
+    with patch('payment_service.stripe.Charge.create') as mock_stripe:
+        mock_stripe.return_value = Mock(id='ch_456')
+        
+        service = PaymentService()
+        result = service.process_payment('user_2', 50)
+        
+        assert result["charge_id"] == "ch_456"
+        mock_stripe.assert_called_once()
+
+# Patch object method
+def test_payment_with_patch_object():
+    service = PaymentService()
+    
+    with patch.object(service, 'process_payment', return_value={"success": True}):
+        result = service.process_payment('user_3', 75)
+        assert result["success"] == True`;
+
+            const sideEffectsCode = `# Side Effects: Exceptions, Multiple Returns, Dynamic Behavior
+from unittest.mock import Mock, patch
+import pytest
+
+# 1. Raising Exceptions
+def test_api_timeout():
+    api_client = Mock()
+    api_client.fetch_data.side_effect = TimeoutError("API timeout")
+    
+    with pytest.raises(TimeoutError):
+        api_client.fetch_data()
+
+# 2. Multiple Return Values
+def test_retry_logic():
+    api_client = Mock()
+    api_client.fetch_data.side_effect = [
+        TimeoutError("First attempt failed"),
+        TimeoutError("Second attempt failed"),
+        {"data": "Success on third try"}
+    ]
+    
+    # Retry logic
+    for attempt in range(3):
+        try:
+            result = api_client.fetch_data()
+            break
+        except TimeoutError:
+            if attempt == 2:
+                raise
+    
+    assert result["data"] == "Success on third try"
+    assert api_client.fetch_data.call_count == 3
+
+# 3. Dynamic Side Effects (Functions)
+def test_database_insert():
+    def generate_id(*args, **kwargs):
+        # Return different IDs based on input
+        return {"id": hash(args[0]) % 1000}
+    
+    db_mock = Mock()
+    db_mock.insert.side_effect = generate_id
+    
+    result1 = db_mock.insert("Alice")
+    result2 = db_mock.insert("Bob")
+    
+    assert result1["id"] != result2["id"]
+
+# 4. Conditional Behavior
+def validate_user(username):
+    if len(username) < 3:
+        raise ValueError("Username too short")
+    return True
+
+def test_conditional_validation():
+    validator = Mock()
+    validator.validate.side_effect = validate_user
+    
+    # Valid username
+    assert validator.validate("Alice") == True
+    
+    # Invalid username
+    with pytest.raises(ValueError):
+        validator.validate("Al")
+
+# 5. Realistic API Simulation
+@patch('requests.get')
+def test_api_with_realistic_response(mock_get):
+    def api_response(url, **kwargs):
+        if '/users/' in url:
+            return Mock(
+                status_code=200,
+                json=lambda: {"id": 1, "name": "Alice"}
+            )
+        elif '/posts/' in url:
+            return Mock(
+                status_code=200,
+                json=lambda: {"id": 10, "title": "Hello"}
+            )
+        else:
+            return Mock(status_code=404)
+    
+    mock_get.side_effect = api_response
+    
+    # Test different endpoints
+    user_response = mock_get('https://api.example.com/users/1')
+    assert user_response.status_code == 200
+    assert user_response.json()["name"] == "Alice"
+    
+    post_response = mock_get('https://api.example.com/posts/10')
+    assert post_response.json()["title"] == "Hello"
+    
+    error_response = mock_get('https://api.example.com/invalid')
+    assert error_response.status_code == 404`;
+
+            const githubActionsYaml = `# .github/workflows/test.yml
+name: Comprehensive Test Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+env:
+  PYTHON_VERSION: '3.11'
+  NODE_VERSION: '18'
+
+jobs:
+  # Job 1: Linting and Formatting
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: \${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install black flake8 isort mypy
+      
+      - name: Run Black
+        run: black --check .
+      
+      - name: Run Flake8
+        run: flake8 . --max-line-length=100
+      
+      - name: Run isort
+        run: isort --check-only .
+      
+      - name: Type checking with mypy
+        run: mypy src/
+
+  # Job 2: Unit Tests with Coverage
+  unit-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.10', '3.11']
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python \${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: \${{ matrix.python-version }}
+          cache: 'pip'
+      
+      - name: Cache pip dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: \${{ runner.os }}-pip-\${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            \${{ runner.os }}-pip-
+      
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest pytest-cov pytest-xdist
+      
+      - name: Run unit tests with coverage
+        run: |
+          pytest tests/unit -v --cov=src --cov-report=xml --cov-report=term -n auto
+      
+      - name: Check coverage threshold
+        run: |
+          coverage report --fail-under=80
+      
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage.xml
+          flags: unittests
+          name: codecov-\${{ matrix.python-version }}
+
+  # Job 3: Integration Tests
+  integration-tests:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      
+      redis:
+        image: redis:7
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: \${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest pytest-asyncio
+      
+      - name: Run database migrations
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
+        run: |
+          python manage.py migrate
+      
+      - name: Run integration tests
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
+          REDIS_URL: redis://localhost:6379
+        run: |
+          pytest tests/integration -v --maxfail=3
+
+  # Job 4: E2E Tests (Parallel)
+  e2e-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        shard: [1, 2, 3, 4]
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: \${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run Cypress E2E tests (Shard \${{ matrix.shard }}/4)
+        uses: cypress-io/github-action@v5
+        with:
+          start: npm start
+          wait-on: 'http://localhost:3000'
+          record: true
+          parallel: true
+          group: 'E2E Tests'
+          ci-build-id: \${{ github.run_id }}
+        env:
+          CYPRESS_RECORD_KEY: \${{ secrets.CYPRESS_RECORD_KEY }}
+      
+      - name: Upload test artifacts
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: cypress-screenshots-\${{ matrix.shard }}
+          path: cypress/screenshots
+          retention-days: 7
+
+  # Job 5: Deploy to Staging
+  deploy-staging:
+    needs: [lint, unit-tests, integration-tests, e2e-tests]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Deploy to Heroku Staging
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: \${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: "myapp-staging"
+          heroku_email: \${{ secrets.HEROKU_EMAIL }}
+      
+      - name: Run smoke tests
+        run: |
+          curl --fail https://myapp-staging.herokuapp.com/health || exit 1
+
+  # Job 6: Notify on Failure
+  notify:
+    needs: [lint, unit-tests, integration-tests, e2e-tests]
+    runs-on: ubuntu-latest
+    if: failure()
+    
+    steps:
+      - name: Send Slack notification
+        uses: 8398a7/action-slack@v3
+        with:
+          status: \${{ job.status }}
+          text: 'Pipeline failed! Check: \${{ github.server_url }}/\${{ github.repository }}/actions/runs/\${{ github.run_id }}'
+          webhook_url: \${{ secrets.SLACK_WEBHOOK }}
+        env:
+          SLACK_WEBHOOK_URL: \${{ secrets.SLACK_WEBHOOK }}`;
+
+            const solutionWorkflowYaml = githubActionsYaml; // Same comprehensive workflow
+
+            monaco.editor.create(document.getElementById('mock-basics'), {
+                value: mockBasicsCode,
+                language: 'python',
+                theme: 'vs-dark',
+                minimap: { enabled: false },
+                fontSize: 13,
+                readOnly: true
+            });
+
+            monaco.editor.create(document.getElementById('patch-decorator'), {
+                value: patchDecoratorCode,
+                language: 'python',
+                theme: 'vs-dark',
+                minimap: { enabled: false },
+                fontSize: 13,
+                readOnly: true
+            });
+
+            monaco.editor.create(document.getElementById('side-effects'), {
+                value: sideEffectsCode,
+                language: 'python',
+                theme: 'vs-dark',
+                minimap: { enabled: false },
+                fontSize: 13,
+                readOnly: true
+            });
+
+            monaco.editor.create(document.getElementById('github-actions-editor'), {
+                value: githubActionsYaml,
+                language: 'yaml',
+                theme: 'vs-dark',
+                minimap: { enabled: true },
+                fontSize: 13,
+                readOnly: true,
+                lineNumbers: 'on'
+            });
+
+            monaco.editor.create(document.getElementById('solution-workflow-editor'), {
+                value: solutionWorkflowYaml,
+                language: 'yaml',
+                theme: 'vs-dark',
+                minimap: { enabled: true },
+                fontSize: 13,
+                readOnly: true,
+                lineNumbers: 'on'
+            });
+
+            // Tab switching
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', function() {
+                const container = this.closest('.playground-container');
+                container.querySelectorAll('.tab-btn').forEach(b => {
+                    b.classList.remove('active');
+                    b.style.borderBottomColor = 'transparent';
+                    b.style.color = 'var(--text-secondary)';
+                });
+                container.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+                
+                this.classList.add('active');
+                this.style.borderBottomColor = 'var(--hub-primary)';
+                this.style.color = 'var(--hub-primary)';
+                document.getElementById(this.getAttribute('data-tab')).style.display = 'block';
+            }));
+        });
+        
+        // Quiz Data
+        const quizData = [
+            {
+                question: "What is the difference between a Mock and a Stub?",
+                options: ["No difference", "Mock verifies behavior, Stub returns data", "Stub is faster", "Mock is for JavaScript only"],
+                correct: 1,
+                explanation: "A Mock verifies that methods were called correctly (behavior verification), while a Stub simply returns predefined data without verification."
+            },
+            {
+                question: "When should you use a Spy instead of a Mock?",
+                options: ["Never", "When you need partial mocking of real objects", "Only in Python", "For performance testing"],
+                correct: 1,
+                explanation: "Spies wrap real objects and record calls while still executing the real implementation, useful for partial mocking scenarios."
+            },
+            {
+                question: "What's the main advantage of running tests in parallel in CI/CD?",
+                options: ["Better code quality", "Faster feedback (reduced execution time)", "Lower cost", "Easier debugging"],
+                correct: 1,
+                explanation: "Parallel test execution significantly reduces total execution time, providing faster feedback to developers (e.g., 12 minutes → 3 minutes with 4 runners)."
+            },
+            {
+                question: "What does side_effect do in unittest.mock?",
+                options: ["Causes bugs", "Allows exceptions, multiple returns, or dynamic behavior", "Slows down tests", "Only works with @patch"],
+                correct: 1,
+                explanation: "side_effect allows mocks to raise exceptions, return different values on successive calls, or execute custom functions for dynamic behavior."
+            },
+            {
+                question: "Why cache dependencies in CI/CD pipelines?",
+                options: ["Required by CI", "Reduces install time from ~2min to ~20s", "For security", "Better test coverage"],
+                correct: 1,
+                explanation: "Caching dependencies (pip, npm) dramatically reduces installation time, speeding up the entire pipeline by reusing previously downloaded packages."
+            },
+            {
+                question: "What's a 'Fake' in testing terminology?",
+                options: ["A broken test", "A working implementation with shortcuts (e.g., in-memory DB)", "Same as Mock", "JavaScript only"],
+                correct: 1,
+                explanation: "A Fake is a working implementation that takes shortcuts for testing purposes, like an in-memory database instead of PostgreSQL."
+            },
+            {
+                question: "When should E2E tests run in a CI pipeline?",
+                options: ["Before unit tests", "In parallel with unit tests", "After unit and integration tests pass", "Never in CI"],
+                correct: 2,
+                explanation: "E2E tests are slowest and most expensive, so run them after faster unit/integration tests pass to fail fast and save resources."
+            },
+            {
+                question: "What's the purpose of @patch decorator?",
+                options: ["Fix bugs", "Replace dependencies with mocks during tests", "Speed up code", "Format code"],
+                correct: 1,
+                explanation: "The @patch decorator replaces real dependencies (APIs, databases) with mocks for the duration of a test, enabling isolated testing."
+            },
+            {
+                question: "What's a reasonable coverage threshold for CI/CD gates?",
+                options: ["100% always", "80-85% for most projects", "No threshold needed", "50%"],
+                correct: 1,
+                explanation: "80-85% is a practical threshold that catches regressions without forcing coverage theater. Critical code may need 90%+."
+            },
+            {
+                question: "How do you handle flaky E2E tests in CI?",
+                options: ["Delete them", "Auto-retry up to 2-3 times", "Ignore failures", "Run them manually"],
+                correct: 1,
+                explanation: "Auto-retry flaky E2E tests (2-3 attempts) to handle transient issues like network delays, while investigating and fixing the root cause."
+            }
+        ];
+        
+        function renderQuiz() {
+            const quizContainer = document.getElementById('quiz');
+            quizContainer.innerHTML = quizData.map((item, index) => `
+                <div class="quiz-question" style="margin-bottom: var(--spacing-2xl); padding: var(--spacing-lg); background: rgba(26, 31, 58, 0.5); border-radius: 8px; border: 1px solid var(--module-border);">
+                    <h4 style="color: var(--text-primary); margin-bottom: var(--spacing-md); font-size: 1.1rem;">
+                        Question ${index + 1}: ${item.question}
+                    </h4>
+                    <div class="options-container">
+                        ${item.options.map((option, optIndex) => `
+                            <label class="quiz-option" style="display: block; padding: var(--spacing-md); margin: var(--spacing-sm) 0; background: rgba(123, 97, 255, 0.1); border: 2px solid transparent; border-radius: 8px; cursor: pointer; transition: all 0.2s ease;">
+                                <input type="radio" name="question-${index}" value="${optIndex}" style="margin-right: var(--spacing-sm);">
+                                <span style="color: var(--text-secondary);">${option}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                    <div id="feedback-${index}" class="question-feedback" style="display: none; margin-top: var(--spacing-md); padding: var(--spacing-md); border-radius: 6px;"></div>
+                </div>
+            `).join('');
+            
+            quizContainer.innerHTML += `
+                <button id="submit-quiz-btn" class="submit-quiz-btn" style="padding: var(--spacing-md) var(--spacing-2xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600;">
+                    🔗 Submit Quiz
+                </button>
+            `;
+            
+            document.querySelectorAll('.quiz-option').forEach(option => {
+                option.addEventListener('mouseenter', function() {
+                    this.style.borderColor = 'var(--hub-primary)';
+                    this.style.background = 'rgba(123, 97, 255, 0.2)';
+                });
+                option.addEventListener('mouseleave', function() {
+                    if (!this.querySelector('input').checked) {
+                        this.style.borderColor = 'transparent';
+                        this.style.background = 'rgba(123, 97, 255, 0.1)';
+                    }
+                });
+                option.addEventListener('click', function() {
+                    const questionContainer = this.closest('.quiz-question');
+                    questionContainer.querySelectorAll('.quiz-option').forEach(opt => {
+                        opt.style.borderColor = 'transparent';
+                        opt.style.background = 'rgba(123, 97, 255, 0.1)';
+                    });
+                    this.style.borderColor = 'var(--hub-primary)';
+                    this.style.background = 'rgba(123, 97, 255, 0.2)';
+                });
+            });
+            
+            document.getElementById('submit-quiz-btn').addEventListener('click', submitQuiz);
+        }
+        
+        function submitQuiz() {
+            let correctCount = 0;
+            
+            quizData.forEach((item, index) => {
+                const selectedOption = document.querySelector(`input[name="question-${index}"]:checked`);
+                const feedback = document.getElementById(`feedback-${index}`);
+                
+                if (selectedOption) {
+                    const answerIndex = parseInt(selectedOption.value);
+                    const isCorrect = answerIndex === item.correct;
+                    
+                    if (isCorrect) {
+                        correctCount++;
+                        feedback.style.display = 'block';
+                        feedback.style.background = 'rgba(16, 185, 129, 0.1)';
+                        feedback.style.borderLeft = '4px solid #10b981';
+                        feedback.innerHTML = `
+                            <strong style="color: #10b981;">✅ Correct!</strong><br>
+                            <span style="color: var(--text-secondary); font-size: 0.95rem;">${item.explanation}</span>
+                        `;
+                    } else {
+                        feedback.style.display = 'block';
+                        feedback.style.background = 'rgba(239, 68, 68, 0.1)';
+                        feedback.style.borderLeft = '4px solid #ef4444';
+                        feedback.innerHTML = `
+                            <strong style="color: #ef4444;">❌ Incorrect</strong><br>
+                            <span style="color: var(--text-secondary); font-size: 0.95rem;">The correct answer is: <strong>${item.options[item.correct]}</strong></span><br>
+                            <span style="color: var(--text-secondary); font-size: 0.95rem;">${item.explanation}</span>
+                        `;
+                    }
+                } else {
+                    feedback.style.display = 'block';
+                    feedback.style.background = 'rgba(251, 191, 36, 0.1)';
+                    feedback.style.borderLeft = '4px solid #fbbf24';
+                    feedback.innerHTML = `<strong style="color: #fbbf24;">⚠️ No answer selected</strong>`;
+                }
+            });
+            
+            const percentage = (correctCount / quizData.length) * 100;
+            const resultsContainer = document.getElementById('quiz-results');
+            const scoreDisplay = document.getElementById('score-display');
+            
+            let grade, color, message;
+            if (percentage >= 90) {
+                grade = 'Excellent!';
+                color = '#10b981';
+                message = 'Outstanding mastery of mocking & CI/CD! 🏆';
+            } else if (percentage >= 70) {
+                grade = 'Good Job!';
+                color = '#00d4ff';
+                message = 'Solid understanding of test automation! 👍';
+            } else if (percentage >= 50) {
+                grade = 'Keep Learning';
+                color = '#fbbf24';
+                message = 'Review mocking patterns and CI/CD concepts! 📚';
+            } else {
+                grade = 'Needs Improvement';
+                color = '#ef4444';
+                message = 'Study the material before retrying. 💪';
+            }
+            
+            scoreDisplay.innerHTML = `
+                <div style="text-align: center;">
+                    <h3 style="color: ${color}; font-size: 2rem; margin-bottom: var(--spacing-sm);">${grade}</h3>
+                    <p style="font-size: 1.5rem; color: var(--text-primary); margin-bottom: var(--spacing-sm);">
+                        Score: ${correctCount}/${quizData.length} (${percentage.toFixed(0)}%)
+                    </p>
+                    <p style="color: var(--text-secondary);">${message}</p>
+                </div>
+            `;
+            
+            resultsContainer.style.display = 'block';
+            
+            const submitBtn = document.getElementById('submit-quiz-btn');
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.5';
+            submitBtn.style.cursor = 'not-allowed';
+            
+            resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        
+        document.getElementById('retry-quiz')?.addEventListener('click', () => {
+            document.getElementById('quiz-results').style.display = 'none';
+            renderQuiz();
+        });
+        
+        document.getElementById('show-cicd-solution')?.addEventListener('click', function() {
+            document.getElementById('cicd-solution').style.display = 'block';
+            this.disabled = true;
+            this.style.opacity = '0.5';
+            this.style.cursor = 'not-allowed';
+        });
+        
+        // Initialize
+        window.addEventListener('load', () => {
+            createMockStrategies();
+            renderQuiz();
+            console.log("✅ Mocking & CI/CD Integration module loaded!");
+        });
     </script>
 </body>
 </html>
