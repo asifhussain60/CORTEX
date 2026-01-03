@@ -271,9 +271,9 @@ class TestAutonomousExecution:
         # This test will validate that RED phase can execute fully autonomously
         # once the TDD orchestrator v2 is implemented
         
-        from src.orchestrators.tdd.tdd_orchestrator import TDDOrchestrator
+        from src.orchestrators.tdd.tdd_orchestrator_v2 import TDDOrchestratorV2
         
-        orchestrator = TDDOrchestrator(workspace_root=mock_workspace)
+        orchestrator = TDDOrchestratorV2(workspace_root=mock_workspace)
         
         result = orchestrator.execute_red_phase(
             feature_description="user login functionality",
@@ -291,9 +291,9 @@ class TestAutonomousExecution:
     
     def test_green_phase_executes_autonomously(self, mock_workspace):
         """TDD-AUTO-2: GREEN phase implements code without Copilot interaction."""
-        from src.orchestrators.tdd.tdd_orchestrator import TDDOrchestrator
+        from src.orchestrators.tdd.tdd_orchestrator_v2 import TDDOrchestratorV2
         
-        orchestrator = TDDOrchestrator(workspace_root=mock_workspace)
+        orchestrator = TDDOrchestratorV2(workspace_root=mock_workspace)
         
         # First run RED phase
         orchestrator.execute_red_phase(
@@ -313,9 +313,9 @@ class TestAutonomousExecution:
     
     def test_refactor_phase_executes_autonomously(self, mock_workspace):
         """TDD-AUTO-3: REFACTOR phase improves code without Copilot interaction."""
-        from src.orchestrators.tdd.tdd_orchestrator import TDDOrchestrator
+        from src.orchestrators.tdd.tdd_orchestrator_v2 import TDDOrchestratorV2
         
-        orchestrator = TDDOrchestrator(workspace_root=mock_workspace)
+        orchestrator = TDDOrchestratorV2(workspace_root=mock_workspace)
         
         # Run full cycle: RED → GREEN → REFACTOR
         orchestrator.execute_red_phase("user login", "tests/test_login.py")
@@ -332,9 +332,9 @@ class TestAutonomousExecution:
     
     def test_full_tdd_cycle_autonomous(self, mock_workspace):
         """TDD-AUTO-4: Full RED→GREEN→REFACTOR cycle executes autonomously."""
-        from src.orchestrators.tdd.tdd_orchestrator import TDDOrchestrator
+        from src.orchestrators.tdd.tdd_orchestrator_v2 import TDDOrchestratorV2
         
-        orchestrator = TDDOrchestrator(workspace_root=mock_workspace)
+        orchestrator = TDDOrchestratorV2(workspace_root=mock_workspace)
         
         result = orchestrator.execute_full_cycle(
             feature_description="user registration with email validation",
@@ -356,9 +356,9 @@ class TestStatePersistence:
     
     def test_state_saved_after_red_phase(self, mock_workspace):
         """TDD-STATE-1: State is persisted after RED phase completion."""
-        from src.orchestrators.tdd.tdd_orchestrator import TDDOrchestrator
+        from src.orchestrators.tdd.tdd_orchestrator_v2 import TDDOrchestratorV2
         
-        orchestrator = TDDOrchestrator(workspace_root=mock_workspace)
+        orchestrator = TDDOrchestratorV2(workspace_root=mock_workspace)
         result = orchestrator.execute_red_phase("user login", "tests/test_login.py")
         
         # Verify state file created
@@ -380,9 +380,9 @@ class TestStatePersistence:
     
     def test_state_loaded_for_green_phase(self, mock_workspace):
         """TDD-STATE-2: State is loaded when resuming GREEN phase."""
-        from src.orchestrators.tdd.tdd_orchestrator import TDDOrchestrator
+        from src.orchestrators.tdd.tdd_orchestrator_v2 import TDDOrchestratorV2
         
-        orchestrator = TDDOrchestrator(workspace_root=mock_workspace)
+        orchestrator = TDDOrchestratorV2(workspace_root=mock_workspace)
         
         # Execute RED phase
         red_result = orchestrator.execute_red_phase("user login", "tests/test_login.py")
@@ -401,9 +401,9 @@ class TestStatePersistence:
     
     def test_state_includes_continuation_prompt(self, mock_workspace):
         """TDD-STATE-3: State includes continuation prompt for next phase."""
-        from src.orchestrators.tdd.tdd_orchestrator import TDDOrchestrator
+        from src.orchestrators.tdd.tdd_orchestrator_v2 import TDDOrchestratorV2
         
-        orchestrator = TDDOrchestrator(workspace_root=mock_workspace)
+        orchestrator = TDDOrchestratorV2(workspace_root=mock_workspace)
         result = orchestrator.execute_red_phase("user login", "tests/test_login.py")
         
         assert 'continuation_prompt' in result
@@ -447,9 +447,9 @@ class TestErrorHandling:
     
     def test_orchestrator_handles_missing_test_file(self, mock_workspace):
         """TDD-ERR-3: Orchestrator handles missing test file gracefully."""
-        from src.orchestrators.tdd.tdd_orchestrator import TDDOrchestrator
+        from src.orchestrators.tdd.tdd_orchestrator_v2 import TDDOrchestratorV2
         
-        orchestrator = TDDOrchestrator(workspace_root=mock_workspace)
+        orchestrator = TDDOrchestratorV2(workspace_root=mock_workspace)
         
         with pytest.raises(FileNotFoundError):
             orchestrator.execute_green_phase(
@@ -459,9 +459,9 @@ class TestErrorHandling:
     
     def test_orchestrator_validates_coverage_threshold(self, mock_workspace):
         """TDD-ERR-4: Orchestrator validates coverage threshold is met."""
-        from src.orchestrators.tdd.tdd_orchestrator import TDDOrchestrator
+        from src.orchestrators.tdd.tdd_orchestrator_v2 import TDDOrchestratorV2
         
-        orchestrator = TDDOrchestrator(workspace_root=mock_workspace)
+        orchestrator = TDDOrchestratorV2(workspace_root=mock_workspace)
         
         result = orchestrator.execute_green_phase(
             test_path="tests/test_login.py",
