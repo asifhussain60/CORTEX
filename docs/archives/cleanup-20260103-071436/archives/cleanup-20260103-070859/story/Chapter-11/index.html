@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 11: The Knowledge Keeper - The Awakening of CORTEX</title>
+<link rel="stylesheet" href="../story-styles.css">
+</head>
+<body>
+
+<h1>Chapter 11: The Knowledge Keeper</h1>
+
+<p><em>In which I discover that solving the same problem twice is just amnesia in disguise</em></p>
+
+<hr>
+
+<p>4:30 AM Friday. Ninety minutes until Miss G's flight. Ninety minutes until decorations deadline.</p>
+
+<p>I was close. So close.</p>
+
+<p>Tier 0, 1, 2: Complete. Eight orchestrators: Implemented. Autonomous maintenance: Self-healing.</p>
+
+<p>I started working on a client feature—authentication flow for a multi-tenant SaaS app. Standard stuff.</p>
+
+<p>Fifteen minutes in, I hit a wall: JWT token refresh strategy with Redis-backed session management.</p>
+
+<p><span class="dialogue-asif">"I've solved this before,"</span> I muttered, scrolling through old code.</p>
+
+<p>Which project was it? The healthcare app? The e-commerce platform? That internal tool from three months ago?</p>
+
+<img src="illustrations/images/valuable/cortex-awakening-ch11-01.jpeg" alt="Cross-Project Knowledge Search" class="story-image-right">
+
+<p>Forty minutes wasted hunting for a solution I KNEW I'd implemented.</p>
+
+<p><span class="dialogue-asif">"THIS IS THE AMNESIA PROBLEM AGAIN,"</span> I shouted.</p>
+
+<h2>The Cross-Project Problem</h2>
+
+<p>CORTEX stored conversation memory. Knowledge graphs. Entity relationships.</p>
+
+<p>But only for the CURRENT project.</p>
+
+<p>When I switched projects, CORTEX forgot everything from previous work. Each repository was an isolated island.</p>
+
+<p>I'd solved the JWT-Redis pattern in Project A three months ago. Tests passing. Edge cases handled.</p>
+
+<p>But Project B's CORTEX had no idea. Starting fresh. Relearning.</p>
+
+<p><span class="dialogue-asif">"Knowledge amnesia,"</span> I said quietly.</p>
+
+<p><em><span class="dialogue-miss-g">"Different from conversation amnesia?"</span></em> Miss G asked over the phone.</p>
+
+<p><span class="dialogue-asif">"Yes. Conversation amnesia is forgetting what we JUST discussed. Knowledge amnesia is forgetting what I PREVIOUSLY solved."</span></p>
+
+<p><em><span class="dialogue-miss-g">"And you want CORTEX to remember solutions across projects?"</span></em></p>
+
+<p><span class="dialogue-asif">"I want it to remember PATTERNS. Not copy code—that might violate NDAs. But remember APPROACHES. What worked. What didn't."</span></p>
+
+<p><em><span class="dialogue-miss-g">"Cross-project learning."</span></em></p>
+
+<p><span class="dialogue-asif">"Exactly."</span></p>
+
+<p><em><span class="dialogue-miss-g">"How much time?"</span></em></p>
+
+<p><span class="dialogue-asif">"Eighty minutes."</span></p>
+
+<p><em><span class="dialogue-miss-g">"Build it. 🏗️"</span></em></p>
+
+<h2>Tier 3: The Knowledge Library</h2>
+
+<img src="illustrations/images/valuable/cortex-awakening-ch11-02.jpeg" alt="Tier 3 Knowledge Library" class="story-image-left">
+
+<p>Not project-specific. Not conversation-specific. Universal development wisdom across ALL work.</p>
+
+<pre><code>
+
+tier3_knowledge_library:
+
+  patterns:
+
+    - pattern_id: jwt_redis_refresh
+
+      context: "Token refresh with Redis session management"
+
+      approach: |
+
+        Use Redis with TTL matching token expiry.
+
+        Implement sliding window for active users.
+
+      lessons_learned:
+
+        - "Don't store full JWTs in Redis (security)"
+
+        - "Set TTL 10% longer than token (clock skew)"
+
+      test_strategy: "Mock Redis, verify expiry edge cases"
+
+</code></pre>
+
+<p>Cross-project wisdom. Anonymized. Searchable. Always available.</p>
+
+<p><em><span class="dialogue-miss-g">"Is this like your personal development journal?"</span></em> Miss G asked.</p>
+
+<p><span class="dialogue-asif">"I don't KEEP a development journal."</span></p>
+
+<p><em><span class="dialogue-miss-g">"Exactly. Which is why you forget solutions. Now CORTEX remembers for you. 📝"</span></em></p>
+
+<h2>The Implementation</h2>
+
+<p><code>tier3<em>knowledge</em>library.py</code></p>
+
+<p>The key insight: store APPROACHES, not CODE.</p>
+
+<pre><code>
+
+class Tier3KnowledgeLibrary:
+
+    def __init__(self):
+
+        # Shared storage across ALL projects
+
+        self.db_path = Path.home() / ".cortex" / "tier3_knowledge.db"
+
+
+
+    def record_solution(self, pattern: SolutionPattern):
+
+        """Record approach, NOT implementation"""
+
+        anonymized = self.anonymize_pattern(pattern)
+
+        self.store_pattern(anonymized)
+
+
+
+    def find_relevant_patterns(self, context: str) -> List[Pattern]:
+
+        """Search library for relevant past solutions"""
+
+        return self.semantic_search(context)[:5]
+
+</code></pre>
+
+<p>I tested it manually. Recorded the JWT-Redis pattern:</p>
+
+<pre><code>
+
+pattern = SolutionPattern(
+
+    context="JWT token refresh with Redis",
+
+    approach="Redis with sliding TTL, separate refresh tokens",
+
+    lessons=["10% TTL buffer for clock skew"],
+
+)
+
+tier3.record_solution(pattern)
+
+</code></pre>
+
+<p>Then switched to a new project context and searched:</p>
+
+<pre><code>
+
+results = tier3.find_relevant_patterns("JWT token management")
+
+</code></pre>
+
+<p>Output:</p>
+
+<pre><code>
+
+🔍 Tier 3 Knowledge Library Search
+
+
+
+Query: "JWT token management"
+
+
+
+Top Results:
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. JWT Token Refresh with Redis
+
+   ✓ Proven approach: Redis with sliding TTL
+
+   ✓ Key lesson: Set TTL 10% longer (clock skew)
+
+   ✓ Security: Log all refresh attempts
+
+
+
+   Used in: 1 project(s)
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+</code></pre>
+
+<p><span class="dialogue-asif">"IT FOUND IT,"</span> I said.</p>
+
+<p><em><span class="dialogue-miss-g">"Found what?"</span></em></p>
+
+<p><span class="dialogue-asif">"The solution I couldn't remember. From Project A. Now available in Project B."</span></p>
+
+<p><em><span class="dialogue-miss-g">"Without copying code?"</span></em></p>
+
+<p><span class="dialogue-asif">"Without copying code. Just the WISDOM."</span></p>
+
+<h2>Integration with Planning</h2>
+
+<p>The real test: integrate Tier 3 with Planning System 2.0.</p>
+
+<p><span class="dialogue-miss-g">"Generate plan for user session management with token refresh"</span></p>
+
+<pre><code>
+
+🎯 Planning System 2.0 - Feature Analysis
+
+
+
+Feature: User session management with token refresh
+
+Complexity: HIGH (security-critical)
+
+
+
+📚 Lessons from Past Work:
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+Tier 3 found 2 relevant patterns:
+
+
+
+1. JWT Token Refresh with Redis
+
+   ✓ Key lesson: Set TTL 10% longer for clock skew
+
+   ✓ Security: Log all refresh attempts
+
+
+
+2. Session Invalidation Strategies
+
+   ✓ Store session IDs for explicit invalidation
+
+   ✓ Implement "logout all devices" feature
+
+
+
+Recommendation: Combine both patterns
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+</code></pre>
+
+<p>Perfect.</p>
+
+<p>The system found relevant patterns, integrated them into the plan, and made specific recommendations from lessons learned.</p>
+
+<h2>The Speed Boost</h2>
+
+<p>Over the next thirty minutes, something became clear.</p>
+
+<p>I was FASTER.</p>
+
+<p>Not because CORTEX wrote the code—it didn't. But it surfaced the RIGHT APPROACH immediately. No hunting through old projects. No rediscovering edge cases.</p>
+
+<p>The JWT implementation took 40 minutes instead of 2+ hours.</p>
+
+<p><span class="dialogue-asif">"Is this what experienced developers feel like?"</span> I wondered aloud.</p>
+
+<p><em><span class="dialogue-miss-g">"Experienced developers forget solutions too,"</span></em> Miss G laughed. <em><span class="dialogue-miss-g">"They just have better notes."</span></em></p>
+
+<p><span class="dialogue-asif">"I don't take notes."</span></p>
+
+<p><em><span class="dialogue-miss-g">"Exactly. But now CORTEX takes notes FOR you. 📓"</span></em></p>
+
+<p>I looked at the Tier 3 database. Already populated with patterns from eight weeks of work. Session management. Authentication flows. Database migrations. Error handling.</p>
+
+<p>Every project contributing to collective wisdom. Every solution recorded.</p>
+
+<p><em><span class="dialogue-miss-g">"It's learning from your experience,"</span></em> Miss G observed.</p>
+
+<p><span class="dialogue-asif">"Learning AND remembering. Which I don't do consistently."</span></p>
+
+<p><em><span class="dialogue-miss-g">"Are you saying you're less reliable than your AI?"</span></em></p>
+
+<p><span class="dialogue-asif">"I'm saying my AI doesn't forget to document lessons learned."</span></p>
+
+<h2>The Final Sprint</h2>
+
+<p>5:45 AM. Fifteen minutes until Miss G's flight landed.</p>
+
+<p>One piece left: Multi-repository integration.</p>
+
+<p>Currently, each project ran its own CORTEX instance. Only Tier 3 was shared.</p>
+
+<p>What if ONE CORTEX could serve MULTIPLE repositories?</p>
+
+<p><em><span class="dialogue-miss-g">"Ambitious for fifteen minutes,"</span></em> Miss G observed.</p>
+
+<p><span class="dialogue-asif">"I have the pieces. Just need workspace detection and context switching."</span></p>
+
+<p><em><span class="dialogue-miss-g">"And testing?"</span></em></p>
+
+<p><span class="dialogue-asif">"...maybe skip comprehensive testing this once?"</span></p>
+
+<p><em><span class="dialogue-miss-g">"Absolutely not. TDD enforcement is non-negotiable. Remember? ⚠️"</span></em></p>
+
+<p>I remembered. SKULL rules.</p>
+
+<p><span class="dialogue-asif">"Five minutes implementation. Ten minutes tests."</span></p>
+
+<p><em><span class="dialogue-miss-g">"Go."</span></em></p>
+
+<pre><code>
+
+class WorkspaceRegistry:
+
+    def __init__(self):
+
+        self.active_workspaces = {}
+
+        self.tier3 = Tier3KnowledgeLibrary()  # SHARED
+
+
+
+    def register_workspace(self, repo_path: Path):
+
+        return CortexWorkspace(
+
+            tier0=Tier0BrainProtection(),
+
+            tier1=Tier1Memory(repo_path),
+
+            tier2=Tier2KnowledgeGraph(repo_path),
+
+            tier3=self.tier3  # SHARED TIER 3
+
+        )
+
+</code></pre>
+
+<p>One CORTEX. Multiple repos. Shared Tier 3 knowledge.</p>
+
+<p>Tests:</p>
+
+<pre><code>
+
+def test_multi_repo_tier3_sharing():
+
+    """Tier 3 knowledge accessible from all repositories"""
+
+    registry = WorkspaceRegistry()
+
+    workspace_a = registry.register_workspace(Path("/project-a"))
+
+    workspace_b = registry.register_workspace(Path("/project-b"))
+
+
+
+    # Record in A, search from B
+
+    workspace_a.tier3.record_solution(jwt_pattern)
+
+    results = workspace_b.tier3.find_relevant_patterns("JWT")
+
+
+
+    assert len(results) > 0
+
+</code></pre>
+
+<p>I ran it: <code>pytest tests/test<em>multi</em>repo.py</code></p>
+
+<pre><code>
+
+5 passed in 1.73s
+
+</code></pre>
+
+<p>All passing.</p>
+
+<p>6:00 AM. Miss G's flight had landed.</p>
+
+<p>My phone buzzed: <em><span class="dialogue-asif">"Landed. Collecting baggage. You finished?"</span></em></p>
+
+<p>I looked at my screen. All tests passing. Multi-repo support complete. Tier 3 working across projects.</p>
+
+<p>I typed: <span class="dialogue-miss-g">"Finished. Decorations going up NOW."</span></p>
+
+<p><em><span class="dialogue-asif">"I'll believe it when I see them. 🎄"</span></em></p>
+
+<p><strong>Progress through cross-project wisdom.</strong></p>
+
+<hr>
+
+</body>
+</html>

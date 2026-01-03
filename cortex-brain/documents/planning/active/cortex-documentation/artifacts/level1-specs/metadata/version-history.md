@@ -1,6 +1,6 @@
 # Version History - Level 1 Specification
 
-**Document:** Level1-spec.md  
+**Document:** 00-master-plan.md  
 **Current Version:** 4.0.0 (Modular)
 
 ---

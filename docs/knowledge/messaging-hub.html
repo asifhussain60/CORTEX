@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Messaging & Event-Driven Architecture Learning Hub - Master Kafka, RabbitMQ, and event streaming">
+    <meta name="keywords" content="kafka, rabbitmq, event-driven, messaging, event sourcing, cqrs, learning path">
+    <meta name="author" content="Asif Hussain">
+    <title>Messaging & Event-Driven Hub | CORTEX Best Practices</title>
+    <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02">
+    <link rel="stylesheet" href="../assets/css/learning-hub.css?v=2026-01-02">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header class="glass-header">
+        <div class="header-content">
+            <nav class="header-nav">
+                <a href="../index.html" class="nav-link">
+                    <span class="nav-icon">🏠</span> Home
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero learning-module-hero" id="main-content">
+        <div class="module-header">
+            <h1 class="hero-title">📨 Messaging & Event-Driven Hub</h1>
+            <p class="hero-subtitle">Master Kafka, RabbitMQ, Event Sourcing, and CQRS for Scalable Systems</p>
+            <div class="module-meta">
+                <span>⏱️ 4 modules • 2.5 hours</span>
+                <span>📊 4 quizzes (40 questions)</span>
+                <span>💻 6 code playgrounds</span>
+                <span>🏆 4 progressive challenges</span>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <section class="learning-path-roadmap glass-card">
+            <h4>🗺️ Your Learning Journey</h4>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                From message queue fundamentals to advanced event streaming architectures. Learn Apache Kafka, 
+                RabbitMQ, and build scalable event-driven systems with CQRS and event sourcing.
+            </p>
+
+            <div class="mermaid-container">
+                <pre class="mermaid">
+graph LR
+    START["🚀 Start Here"] --> M1["Module 1<br/>Messaging Fundamentals<br/>⏱️ 35 min"]
+    M1 --> M2["Module 2<br/>Kafka Streams<br/>⏱️ 40 min"]
+    M2 --> M3["Module 3<br/>Event Sourcing<br/>⏱️ 40 min"]
+    M3 --> M4["Module 4<br/>CQRS Pattern<br/>⏱️ 35 min"]
+    M4 --> CERT["🏆 Event-Driven<br/>Architect"]
+
+    style START fill:#00d4ff,stroke:#fff,stroke-width:2px,color:#000
+    style M1 fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
+    style M2 fill:#fbbf24,stroke:#fcd34d,stroke-width:2px,color:#000
+    style M3 fill:#f97316,stroke:#fb923c,stroke-width:2px,color:#fff
+    style M4 fill:#8b5cf6,stroke:#a78bfa,stroke-width:2px,color:#fff
+    style CERT fill:#00ff88,stroke:#fff,stroke-width:3px,color:#000
+                </pre>
+            </div>
+        </section>
+
+        <section style="margin-top: var(--spacing-3xl);">
+            <h2 style="color: var(--text-primary); margin-bottom: var(--spacing-xl); font-size: 2rem;">
+                📚 Interactive Learning Modules
+            </h2>
+            
+            <div class="module-nav-grid">
+                <a href="messaging/fundamentals.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 1</span>
+                        <span class="difficulty-badge beginner">Beginner</span>
+                    </div>
+                    <h5>🎯 Messaging Fundamentals</h5>
+                    <p class="module-description">
+                        Understand queues, topics, exchanges, and pub/sub patterns. Learn RabbitMQ AMQP protocol 
+                        and message delivery guarantees (at-least-once, exactly-once).
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 35 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                    </div>
+                </a>
+
+                <a href="messaging/kafka-streams.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 2</span>
+                        <span class="difficulty-badge intermediate">Intermediate</span>
+                    </div>
+                    <h5>🌊 Apache Kafka & Streaming</h5>
+                    <p class="module-description">
+                        Master Kafka producers, consumers, partitions, and consumer groups. Build real-time 
+                        stream processing with Kafka Streams and ksqlDB.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 40 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                    </div>
+                </a>
+
+                <a href="messaging/event-sourcing.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 3</span>
+                        <span class="difficulty-badge advanced">Advanced</span>
+                    </div>
+                    <h5>⚡ Event Sourcing</h5>
+                    <p class="module-description">
+                        Implement event stores, projections, and temporal queries. Learn how to rebuild state 
+                        from events and handle schema evolution.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 40 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                    </div>
+                </a>
+
+                <a href="messaging/cqrs-pattern.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 4</span>
+                        <span class="difficulty-badge expert">Expert</span>
+                    </div>
+                    <h5>🔄 CQRS (Command Query Separation)</h5>
+                    <p class="module-description">
+                        Separate read and write models for optimal performance. Build command handlers, read 
+                        models, and projections for scalable systems.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 35 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>📋 Prerequisites & Recommendations</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-lg); margin-top: var(--spacing-xl);">
+                <div style="padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-radius: 8px; border: 1px solid #10b981;">
+                    <h4 style="color: #10b981; margin-bottom: var(--spacing-sm);">✅ Recommended Background</h4>
+                    <ul style="color: var(--text-secondary); font-size: 0.95rem;">
+                        <li>Understanding of async programming</li>
+                        <li>Basic distributed systems knowledge</li>
+                        <li>REST API experience</li>
+                        <li>No messaging experience required</li>
+                    </ul>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(0, 212, 255, 0.1); border-radius: 8px; border: 1px solid #00d4ff;">
+                    <h4 style="color: #00d4ff; margin-bottom: var(--spacing-sm);">🛠️ Tools You'll Use</h4>
+                    <ul style="color: var(--text-secondary); font-size: 0.95rem;">
+                        <li>Apache Kafka & Kafka Streams</li>
+                        <li>RabbitMQ (AMQP broker)</li>
+                        <li>EventStoreDB</li>
+                        <li>Docker for local setup</li>
+                    </ul>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(139, 92, 246, 0.1); border-radius: 8px; border: 1px solid #8b5cf6;">
+                    <h4 style="color: #8b5cf6; margin-bottom: var(--spacing-sm);">🎯 What You'll Build</h4>
+                    <ul style="color: var(--text-secondary); font-size: 0.95rem;">
+                        <li>Kafka real-time analytics pipeline</li>
+                        <li>Event-sourced order system</li>
+                        <li>CQRS-based microservice</li>
+                        <li>Message-driven architecture</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🎓 Learning Outcomes</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                By completing this learning path, you'll be able to:
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-md);">
+                <div style="padding: var(--spacing-md); background: rgba(16, 185, 129, 0.05); border-left: 3px solid #10b981; border-radius: 4px;">
+                    <strong style="color: #10b981;">Message Queues</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Design reliable messaging with RabbitMQ and delivery guarantees
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-md); background: rgba(0, 212, 255, 0.05); border-left: 3px solid #00d4ff; border-radius: 4px;">
+                    <strong style="color: #00d4ff;">Kafka Expertise</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Build real-time stream processing with Kafka Streams
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-md); background: rgba(139, 92, 246, 0.05); border-left: 3px solid #8b5cf6; border-radius: 4px;">
+                    <strong style="color: #8b5cf6;">Event Sourcing</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Implement complete audit trails with event stores
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-md); background: rgba(251, 191, 36, 0.05); border-left: 3px solid #fbbf24; border-radius: 4px;">
+                    <strong style="color: #fbbf24;">CQRS Pattern</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Separate read/write models for optimal performance
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🔗 Related Learning Paths</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                Expand your knowledge with these complementary paths:
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-lg);">
+                <a href="microservices-hub.html" class="related-path-card">
+                    <span class="path-icon">🔬</span>
+                    <h5>Microservices Architecture</h5>
+                    <p>Service communication, distributed systems</p>
+                </a>
+                <a href="ddd-hub.html" class="related-path-card">
+                    <span class="path-icon">🏗️</span>
+                    <h5>Domain-Driven Design</h5>
+                    <p>Domain events, bounded contexts</p>
+                </a>
+                <a href="devops-hub.html" class="related-path-card">
+                    <span class="path-icon">🔄</span>
+                    <h5>DevOps & CI/CD</h5>
+                    <p>Deployment pipelines, monitoring</p>
+                </a>
+            </div>
+        </section>
+
+        <section class="glass-card" style="margin-top: var(--spacing-3xl); margin-bottom: var(--spacing-3xl);">
+            <h2>📚 Additional Resources</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-md); margin-top: var(--spacing-lg);">
+                <a href="https://kafka.apache.org/documentation/" target="_blank" rel="noopener" class="resource-link">
+                    📖 Kafka Documentation
+                </a>
+                <a href="https://www.rabbitmq.com/tutorials" target="_blank" rel="noopener" class="resource-link">
+                    📖 RabbitMQ Tutorials
+                </a>
+                <a href="https://www.eventstore.com/" target="_blank" rel="noopener" class="resource-link">
+                    📖 EventStoreDB
+                </a>
+                <a href="https://microservices.io/patterns/data/cqrs.html" target="_blank" rel="noopener" class="resource-link">
+                    📖 CQRS Pattern
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <footer style="padding: var(--spacing-2xl); text-align: center; color: var(--text-secondary); background: rgba(0, 0, 0, 0.3);">
+        <p>© 2026 Asif Hussain. All rights reserved.</p>
+        <p style="margin-top: var(--spacing-sm);">
+            <a href="../index.html" style="color: var(--hub-primary); text-decoration: none;">Back to Home</a> • 
+            <a href="index.html" style="color: var(--hub-primary); text-decoration: none;">All Learning Paths</a>
+        </p>
+    </footer>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true, 
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#10b981',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#fff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#8b5cf6',
+                tertiaryColor: '#fbbf24'
+            }
+        });
+    </script>
+</body>
+</html>

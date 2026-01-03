@@ -3,1095 +3,807 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="CORTEX Knowledge-Driven Code - 35 best practice libraries that CORTEX consults when writing code">
-    <meta name="keywords" content="CORTEX, knowledge library, best practices, code generation, software craft">
+    <meta name="description" content="CORTEX Best Practices - 35 Guidelines for Implementation across Frontend, Backend, Data, Cloud, and Software Craft">
+    <meta name="keywords" content="CORTEX, best practices, guidelines, software craft, code quality">
     <meta name="author" content="Asif Hussain">
-    <title>CORTEX Knowledge-Driven Code</title>
+    <title>Best Practices | CORTEX 4.0</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
-    <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="stylesheet" href="../assets/css/knowledge.css">
+    <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02-v4">
+    <link rel="stylesheet" href="../assets/css/learning-hub.css?v=2026-01-02">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-
-    <!-- Breadcrumb Navigation (Top) -->
-    <nav class="breadcrumb" aria-label="Breadcrumb">
-        <a href="../index.html">Home</a>
-        <span class="breadcrumb-separator">→</span>
-        <span class="breadcrumb-current">Knowledge Library</span>
-    </nav>
-
-    <!-- Hero Section with Logo and Title Row -->
-    <section class="hero" id="main-content">
-        <div class="level1-hero-header">
-            <!-- Logo -->
-            <a href="../index.html">
-                <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="level1-hero-logo animation-t1">
-            </a>
-            <!-- Title and Metadata -->
-            <div class="level1-hero-content">
-                <h1 class="hero-title level1-hero-title">📚 Knowledge-Driven Code</h1>
-                <p class="hero-subtitle level1-hero-subtitle">35 best practice libraries that CORTEX consults when implementing code</p>
-                <div class="file-metadata">
-                    <span class="metadata-item">📖 35 Best Practices</span>
-                    <span class="metadata-item">🏗️ 16 Categories</span>
-                    <span class="metadata-item">🌐 5 Domain Groups</span>
-                    <span class="metadata-item">📅 Updated: Dec 2025</span>
-                </div>
-            </div>
+    <!-- Glass Header Navigation -->
+    <header class="glass-header">
+        <div class="header-content">
+            <nav class="header-nav">
+                <a href="../index.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+            </nav>
         </div>
-    </section>
-
-    <!-- Interactive Knowledge Map -->
-    <section class="orchestrator-viz-section level1-section-spacing-lg">
-        <div class="glass-card">
-            <h2 class="section-title"><i class="fas fa-project-diagram" aria-hidden="true"></i> Interactive Knowledge Map</h2>
-            <p class="level1-viz-instructions">
-                Click any domain to navigate to detailed content. Topics orbit around each domain.
-            </p>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="container" id="main-content">
+        <!-- Page Title Card -->
+        <div class="glass-card-display animation-t1">
+            <div class="page-title-section">
+                <h1 class="page-title">
+                    <i class="fas fa-book"></i>
+                    CORTEX Best Practices
+                </h1>
+                <p class="page-subtitle">80 Interactive Learning Modules · 55 Hours · 17 Domain Hubs · 35 Core Guidelines</p>
+            </div>
             
-            <div id="knowledgeMapMain" class="level1-map-container"></div>
+            <div class="metadata-grid">
+                <div class="metadata-item">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>35 Guidelines</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-file-alt"></i>
+                    <span>17 Domain Pages</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-layer-group"></i>
+                    <span>5 Categories</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-brain"></i>
+                    <span>Tier 2 Knowledge</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Score: 35</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Updated: Jan 2026</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Executive Summary -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-clipboard-list"></i>
+                What Are CORTEX Best Practices?
+            </h2>
             
-            <div class="map-legend level1-map-legend">
-                <div class="legend-item level1-legend-item">
-                    <span class="level1-legend-dot level1-legend-dot--hub"></span>
-                    <span>Central Hub</span>
-                </div>
-                <div class="legend-item level1-legend-item">
-                    <span class="level1-legend-dot level1-legend-dot--frontend"></span>
-                    <span>Frontend & UI</span>
-                </div>
-                <div class="legend-item level1-legend-item">
-                    <span class="level1-legend-dot level1-legend-dot--backend"></span>
-                    <span>Backend & APIs</span>
-                </div>
-                <div class="legend-item level1-legend-item">
-                    <span class="level1-legend-dot level1-legend-dot--data"></span>
-                    <span>Data & Storage</span>
-                </div>
-                <div class="legend-item level1-legend-item">
-                    <span class="level1-legend-dot level1-legend-dot--cloud"></span>
-                    <span>Cloud & Infra</span>
-                </div>
-                <div class="legend-item level1-legend-item">
-                    <span class="level1-legend-dot level1-legend-dot--craft"></span>
-                    <span>Software Craft</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Quick Stats Section -->
-    <section class="section">
-        <div class="container">
-            <h2 class="section-title text-center">Knowledge Library Statistics</h2>
-            <div class="metrics-grid-4">
-                <div class="glass-card metric-card">
-                    <div class="metric-value">35</div>
-                    <div class="metric-label">Best Practice Files</div>
-                </div>
-                <div class="glass-card metric-card">
-                    <div class="metric-value">16</div>
-                    <div class="metric-label">Categories</div>
-                </div>
-                <div class="glass-card metric-card">
-                    <div class="metric-value">5</div>
-                    <div class="metric-label">Domain Groups</div>
-                </div>
-                <div class="glass-card metric-card">
-                    <div class="metric-value">500+</div>
-                    <div class="metric-label">Best Practice Rules</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Search Section -->
-    <section class="section">
-        <div class="container">
-            <div class="search-container">
-                <input 
-                    type="search" 
-                    id="knowledge-search" 
-                    class="search-input" 
-                    placeholder="🔍 Search domains, categories, or knowledge files..."
-                    aria-label="Search knowledge library"
-                >
-            </div>
-        </div>
-    </section>
-
-    <!-- Domain Overview Section -->
-    <section class="section">
-        <div class="container">
-            <h2 class="section-title text-center">Knowledge Domains</h2>
+            <p class="intro-text">CORTEX maintains a <strong>comprehensive knowledge library</strong> of 35 best practice guidelines that inform every line of code it generates. These guidelines are stored in <strong>Tier 2 Knowledge Graph</strong> and automatically consulted during implementation, ensuring consistent quality across all domains.</p>
             
-            <div class="domain-grid" id="domain-grid">
-                <!-- Domain 1: Frontend & UI -->
-                <article class="domain-card glass-card" data-domain="frontend-ui">
-                    <div class="domain-header">
-                        <div class="level1-domain-icon-container level1-domain-icon-container--frontend">
-                            <i class="fas fa-palette level1-domain-icon level1-domain-icon--frontend"></i>
-                        </div>
-                        <div class="domain-title-group">
-                            <h3 class="domain-title">Frontend & UI</h3>
-                            <span class="domain-file-count">14 files</span>
-                        </div>
-                    </div>
-                    <p class="domain-description">
-                        User interface development, frontend frameworks, and user experience design
-                    </p>
-                    <div class="category-preview">
-                        <a href="frontend.html" class="category-chip" data-category="frontend">
-                            <i class="fas fa-laptop-code"></i> Frontend
-                        </a>
-                        <a href="ui-ux.html" class="category-chip" data-category="ui-ux">
-                            <i class="fas fa-paint-brush"></i> UI/UX
-                        </a>
-                        <a href="mobile.html" class="category-chip" data-category="mobile">
-                            <i class="fas fa-mobile-alt"></i> Mobile
-                        </a>
-                    </div>
-                    <div class="domain-footer">
-                        <span class="domain-topics">React • Angular • Vue • TypeScript • Mobile</span>
-                    </div>
-                </article>
-
-                <!-- Domain 2: Backend & APIs -->
-                <article class="domain-card glass-card" data-domain="backend-apis">
-                    <div class="domain-header">
-                        <div class="level1-domain-icon-container level1-domain-icon-container--backend">
-                            <i class="fas fa-plug level1-domain-icon level1-domain-icon--backend"></i>
-                        </div>
-                        <div class="domain-title-group">
-                            <h3 class="domain-title">Backend & APIs</h3>
-                            <span class="domain-file-count">12 files</span>
-                        </div>
-                    </div>
-                    <p class="domain-description">
-                        API design, microservices architecture, and messaging patterns
-                    </p>
-                    <div class="category-preview">
-                        <a href="api-design.html" class="category-chip" data-category="api-design">
-                            <i class="fas fa-plug"></i> API Design
-                        </a>
-                        <a href="microservices.html" class="category-chip" data-category="microservices">
-                            <i class="fas fa-cogs"></i> Microservices
-                        </a>
-                        <a href="messaging.html" class="category-chip" data-category="messaging">
-                            <i class="fas fa-envelope"></i> Messaging
-                        </a>
-                    </div>
-                    <div class="domain-footer">
-                        <span class="domain-topics">REST • GraphQL • gRPC • Event-Driven • Resilience</span>
-                    </div>
-                </article>
-
-                <!-- Domain 3: Data & Storage -->
-                <article class="domain-card glass-card" data-domain="data-storage">
-                    <div class="domain-header">
-                        <div class="level1-domain-icon-container level1-domain-icon-container--data">
-                            <i class="fas fa-database level1-domain-icon level1-domain-icon--data"></i>
-                        </div>
-                        <div class="domain-title-group">
-                            <h3 class="domain-title">Data & Storage</h3>
-                            <span class="domain-file-count">9 files</span>
-                        </div>
-                    </div>
-                    <p class="domain-description">
-                        Database patterns, performance optimization, and caching strategies
-                    </p>
-                    <div class="category-preview">
-                        <a href="database.html" class="category-chip" data-category="database">
-                            <i class="fas fa-database"></i> Databases
-                        </a>
-                        <a href="performance.html" class="category-chip" data-category="performance">
-                            <i class="fas fa-bolt"></i> Performance
-                        </a>
-                    </div>
-                    <div class="domain-footer">
-                        <span class="domain-topics">SQL • NoSQL • Redis • Caching • Optimization</span>
-                    </div>
-                </article>
-
-                <!-- Domain 4: Infrastructure & Cloud -->
-                <article class="domain-card glass-card" data-domain="infrastructure-cloud">
-                    <div class="domain-header">
-                        <div class="level1-domain-icon-container level1-domain-icon-container--cloud">
-                            <i class="fas fa-cloud level1-domain-icon level1-domain-icon--cloud"></i>
-                        </div>
-                        <div class="domain-title-group">
-                            <h3 class="domain-title">Infrastructure & Cloud</h3>
-                            <span class="domain-file-count">10 files</span>
-                        </div>
-                    </div>
-                    <p class="domain-description">
-                        Cloud platforms, containers, orchestration, and DevOps practices
-                    </p>
-                    <div class="category-preview">
-                        <a href="cloud.html" class="category-chip" data-category="cloud">
-                            <i class="fas fa-cloud"></i> Cloud
-                        </a>
-                        <a href="containers.html" class="category-chip" data-category="containers">
-                            <i class="fas fa-cube"></i> Containers
-                        </a>
-                        <a href="devops.html" class="category-chip" data-category="devops">
-                            <i class="fas fa-rocket"></i> DevOps
-                        </a>
-                    </div>
-                    <div class="domain-footer">
-                        <span class="domain-topics">AWS • Azure • Docker • Kubernetes • CI/CD</span>
-                    </div>
-                </article>
-
-                <!-- Domain 5: Software Craft -->
-                <article class="domain-card glass-card" data-domain="software-craft">
-                    <div class="domain-header">
-                        <div class="level1-domain-icon-container level1-domain-icon-container--craft">
-                            <i class="fas fa-layer-group level1-domain-icon level1-domain-icon--craft"></i>
-                        </div>
-                        <div class="domain-title-group">
-                            <h3 class="domain-title">Software Craft</h3>
-                            <span class="domain-file-count">20 files</span>
-                        </div>
-                    </div>
-                    <p class="domain-description">
-                        Engineering practices, design patterns, testing, security, and DDD
-                    </p>
-                    <div class="category-preview">
-                        <a href="engineering.html" class="category-chip" data-category="engineering">
-                            <i class="fas fa-tools"></i> Engineering
-                        </a>
-                        <a href="design-patterns.html" class="category-chip" data-category="design-patterns">
-                            <i class="fas fa-drafting-compass"></i> Design Patterns
-                        </a>
-                        <a href="ddd.html" class="category-chip" data-category="ddd">
-                            <i class="fas fa-project-diagram"></i> DDD
-                        </a>
-                        <a href="security.html" class="category-chip" data-category="security">
-                            <i class="fas fa-shield-alt"></i> Security
-                        </a>
-                        <a href="testing.html" class="category-chip" data-category="testing">
-                            <i class="fas fa-check-double"></i> Testing
-                        </a>
-                        <a href="rag-domains.html" class="category-chip" data-category="rag-domains">
-                            <i class="fas fa-brain"></i> RAG
-                        </a>
-                    </div>
-                    <div class="domain-footer">
-                        <span class="domain-topics">Clean Code • SOLID • TDD • Security • Patterns</span>
-                    </div>
-                </article>
-            </div>
-
-            <!-- Empty State (hidden by default) -->
-            <div id="empty-state" class="empty-state" hidden>
-                <div class="empty-state-icon">🔍</div>
-                <h3>No results found</h3>
-                <p>Try adjusting your search terms</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Category Relationships Section (Lazy Loaded) -->
-    <section class="section section-alt">
-        <div class="container">
-            <h2 class="section-title text-center">Category Relationships</h2>
-            <p class="text-center level1-text-intro">
-                Explore how different knowledge categories interconnect
-            </p>
-            
-            <div class="lazy-container" data-lazy-load="d3-diagram">
-                <!-- Skeleton Loader -->
-                <div class="skeleton-loader">
-                    <div class="skeleton-pulse"></div>
-                    <p class="level1-text-center-muted">
-                        Loading diagram...
-                    </p>
+            <div class="highlight-box">
+                <div class="highlight-icon">
+                    <i class="fas fa-lightbulb"></i>
                 </div>
+                <div class="highlight-content">
+                    <h3>Key Benefits</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i><strong>Consistent Quality:</strong> Every implementation follows proven patterns</li>
+                        <li><i class="fas fa-check-circle"></i><strong>Domain Expertise:</strong> Specialized guidelines for Frontend, Backend, Data, Cloud, Craft</li>
+                        <li><i class="fas fa-check-circle"></i><strong>Automatic Enforcement:</strong> CORTEX consults guidelines without prompting</li>
+                        <li><i class="fas fa-check-circle"></i><strong>Living Documentation:</strong> Guidelines evolve with industry best practices</li>
+                        <li><i class="fas fa-check-circle"></i><strong>Knowledge Graph Integration:</strong> Semantic relationships between practices</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Learning Paths -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-route"></i>
+                Featured Learning Paths
+            </h2>
+            
+            <p class="intro-text">Follow curated learning journeys with 80+ interactive modules spanning 55 hours of comprehensive training. Each path combines theory, practice, and real-world examples.</p>
+            
+            <div class="masonry-grid">
+                <!-- API Design Track -->
+                <a href="api-design-hub.html" class="glass-card-clickable animation-t1">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <i class="fas fa-code-branch"></i>
+                    </div>
+                    <h3 class="card-title">API Design Mastery</h3>
+                    <p class="card-description">Master REST principles, versioning strategies, authentication patterns, and real-world API design decisions.</p>
+                    <div class="card-stats">
+                        <span class="stat-item"><i class="fas fa-graduation-cap"></i> 5 Modules</span>
+                        <span class="stat-item"><i class="fas fa-clock"></i> 3.5 Hours</span>
+                        <span class="stat-item"><i class="fas fa-chart-line"></i> Beginner → Expert</span>
+                    </div>
+                    <div class="card-features">
+                        <span class="feature-badge"><i class="fas fa-project-diagram"></i> 6 Visualizations</span>
+                        <span class="feature-badge"><i class="fas fa-code"></i> 6 Playgrounds</span>
+                        <span class="feature-badge"><i class="fas fa-question-circle"></i> 50 Quizzes</span>
+                    </div>
+                    <div class="card-badge badge-api">API Design</div>
+                </a>
+
+                <!-- Testing Track -->
+                <a href="testing-hub.html" class="glass-card-clickable animation-t1">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <i class="fas fa-vial"></i>
+                    </div>
+                    <h3 class="card-title">Testing Excellence</h3>
+                    <p class="card-description">From TDD fundamentals to E2E testing, coverage analysis, mocking strategies, and CI/CD integration.</p>
+                    <div class="card-stats">
+                        <span class="stat-item"><i class="fas fa-graduation-cap"></i> 5 Modules</span>
+                        <span class="stat-item"><i class="fas fa-clock"></i> 3 Hours</span>
+                        <span class="stat-item"><i class="fas fa-chart-line"></i> Beginner → Advanced</span>
+                    </div>
+                    <div class="card-features">
+                        <span class="feature-badge"><i class="fas fa-project-diagram"></i> 8 Visualizations</span>
+                        <span class="feature-badge"><i class="fas fa-code"></i> 8 Playgrounds</span>
+                        <span class="feature-badge"><i class="fas fa-question-circle"></i> 50 Quizzes</span>
+                    </div>
+                    <div class="card-badge badge-testing">Testing</div>
+                </a>
+
+                <!-- Security Track -->
+                <a href="security-hub.html" class="glass-card-clickable animation-t1">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="card-title">Security Essentials</h3>
+                    <p class="card-description">OWASP Top 10, authentication/authorization, cryptography, secure coding, threat modeling, and incident response.</p>
+                    <div class="card-stats">
+                        <span class="stat-item"><i class="fas fa-graduation-cap"></i> 6 Modules</span>
+                        <span class="stat-item"><i class="fas fa-clock"></i> 4 Hours</span>
+                        <span class="stat-item"><i class="fas fa-chart-line"></i> Beginner → Expert</span>
+                    </div>
+                    <div class="card-features">
+                        <span class="feature-badge"><i class="fas fa-project-diagram"></i> 9 Visualizations</span>
+                        <span class="feature-badge"><i class="fas fa-code"></i> 7 Playgrounds</span>
+                        <span class="feature-badge"><i class="fas fa-question-circle"></i> 60 Quizzes</span>
+                    </div>
+                    <div class="card-badge badge-security">Security</div>
+                </a>
+
+                <!-- Design Patterns Track -->
+                <a href="design-patterns-hub.html" class="glass-card-clickable animation-t1">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <i class="fas fa-drafting-compass"></i>
+                    </div>
+                    <h3 class="card-title">Design Patterns Deep Dive</h3>
+                    <p class="card-description">Pattern fundamentals, creational/structural/behavioral patterns, anti-patterns, and real-world applications.</p>
+                    <div class="card-stats">
+                        <span class="stat-item"><i class="fas fa-graduation-cap"></i> 6 Modules</span>
+                        <span class="stat-item"><i class="fas fa-clock"></i> 4 Hours</span>
+                        <span class="stat-item"><i class="fas fa-chart-line"></i> Beginner → Expert</span>
+                    </div>
+                    <div class="card-features">
+                        <span class="feature-badge"><i class="fas fa-project-diagram"></i> 12 Visualizations</span>
+                        <span class="feature-badge"><i class="fas fa-code"></i> 12 Playgrounds</span>
+                        <span class="feature-badge"><i class="fas fa-question-circle"></i> 60 Quizzes</span>
+                    </div>
+                    <div class="card-badge badge-patterns">Design Patterns</div>
+                </a>
+            </div>
+
+            <div class="highlight-box" style="margin-top: var(--space-xl); background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%); border-left: 4px solid #10b981;">
+                <div class="highlight-icon" style="color: #10b981;">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="highlight-content">
+                    <h3 style="color: #10b981;">All 17 Domain Hubs Now Available!</h3>
+                    <p style="margin-bottom: var(--space-md);">Phase 2 & 3 learning paths are complete with 13 additional domains:</p>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-sm);">
+                        <div><i class="fas fa-database"></i> <a href="database-hub.html" style="color: var(--hub-primary); text-decoration: none;"><strong>Database Design</strong></a> (5 modules)</div>
+                        <div><i class="fas fa-cloud"></i> <a href="cloud-hub.html" style="color: var(--hub-primary); text-decoration: none;"><strong>Cloud Architecture</strong></a> (4 modules)</div>
+                        <div><i class="fas fa-infinity"></i> <a href="devops-hub.html" style="color: var(--hub-primary); text-decoration: none;"><strong>DevOps & CI/CD</strong></a> (5 modules)</div>
+                        <div><i class="fas fa-network-wired"></i> <a href="microservices-hub.html" style="color: var(--hub-primary); text-decoration: none;"><strong>Microservices</strong></a> (5 modules)</div>
+                        <div><i class="fas fa-cube"></i> <a href="ddd-hub.html" style="color: var(--hub-primary); text-decoration: none;"><strong>Domain-Driven Design</strong></a> (6 modules)</div>
+                        <div><i class="fas fa-code"></i> <a href="software-engineering-hub.html" style="color: var(--hub-primary); text-decoration: none;"><strong>Software Engineering</strong></a> (4 modules)</div>
+                        <div><i class="fas fa-laptop-code"></i> <a href="frontend-hub.html" style="color: var(--hub-primary); text-decoration: none;"><strong>Frontend Development</strong></a> (5 modules)</div>
+                        <div><i class="fas fa-bolt"></i> <a href="performance-hub.html" style="color: var(--hub-primary); text-decoration: none;"><strong>Performance Engineering</strong></a> (5 modules)</div>
+                        <div><i class="fas fa-mobile-alt"></i> <a href="mobile-hub.html" style="color: var(--hub-primary); text-decoration: none;"><strong>Mobile Development</strong></a> (4 modules)</div>
+                        <div><i class="fas fa-comments"></i> <a href="messaging-hub.html" style="color: var(--hub-primary); text-decoration: none;"><strong>Messaging & Events</strong></a> (4 modules)</div>
+                        <div><i class="fas fa-robot"></i> <a href="rag-hub.html" style="color: var(--hub-primary); text-decoration: none;"><strong>RAG Domains</strong></a> (3 modules)</div>
+                        <div><i class="fas fa-paint-brush"></i> <a href="ui-ux-hub.html" style="color: var(--hub-primary); text-decoration: none;"><strong>UI/UX Design</strong></a> (4 modules)</div>
+                        <div><i class="fas fa-docker"></i> <a href="containers-hub.html" style="color: var(--hub-primary); text-decoration: none;"><strong>Containers & K8s</strong></a> (4 modules)</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5 Major Categories -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-th-large"></i>
+                Five Major Categories
+            </h2>
+            
+            <p class="intro-text">Best practices are organized into 5 major categories covering the complete software development lifecycle.</p>
+            
+            <div class="diagram-container">
+                <div class="mermaid">
+graph TB
+    CORTEX["🧠 CORTEX<br/>Knowledge Library<br/><small>35 Guidelines</small>"]
+    
+    CORTEX --> Frontend["🎨 Frontend & UI<br/><small>6 Guidelines</small>"]
+    CORTEX --> Backend["⚙️ Backend & APIs<br/><small>8 Guidelines</small>"]
+    CORTEX --> Data["💾 Data & Storage<br/><small>7 Guidelines</small>"]
+    CORTEX --> Cloud["☁️ Cloud & Infrastructure<br/><small>6 Guidelines</small>"]
+    CORTEX --> Craft["🛠️ Software Craft<br/><small>8 Guidelines</small>"]
+    
+    Frontend --> F1["React Best Practices"]
+    Frontend --> F2["Accessibility Standards"]
+    Frontend --> F3["UI/UX Patterns"]
+    
+    Backend --> B1["REST API Design"]
+    Backend --> B2["Authentication"]
+    Backend --> B3["Error Handling"]
+    
+    Data --> D1["Database Design"]
+    Data --> D2["Data Modeling"]
+    Data --> D3["Query Optimization"]
+    
+    Cloud --> C1["Docker Practices"]
+    Cloud --> C2["CI/CD Pipelines"]
+    Cloud --> C3["Monitoring"]
+    
+    Craft --> S1["SOLID Principles"]
+    Craft --> S2["Clean Code"]
+    Craft --> S3["Testing Strategies"]
+    
+    style CORTEX fill:#7b61ff,stroke:#9f87ff,stroke-width:3px,color:#fff
+    style Frontend fill:#e91e63,stroke:#f06292,stroke-width:2px,color:#fff
+    style Backend fill:#4caf50,stroke:#81c784,stroke-width:2px,color:#fff
+    style Data fill:#ff9800,stroke:#ffb74d,stroke-width:2px,color:#fff
+    style Cloud fill:#9c27b0,stroke:#ba68c8,stroke-width:2px,color:#fff
+    style Craft fill:#f44336,stroke:#e57373,stroke-width:2px,color:#fff
+                </div>
+            </div>
+        </section>
+
+        <!-- Category Breakdown -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-list"></i>
+                Complete Guidelines Index
+            </h2>
+            
+            <!-- Frontend & UI -->
+            <div class="category-section">
+                <h3 class="category-title">
+                    <i class="fas fa-palette"></i>
+                    Frontend & UI (6 Guidelines)
+                </h3>
                 
-                <!-- D3 Diagram Container (hidden initially) -->
-                <div class="lazy-content" hidden>
-                    <div id="d3-diagram" class="d3-diagram-container"></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <script>
-        // Search Functionality
-        const searchInput = document.getElementById('knowledge-search');
-        const domainGrid = document.getElementById('domain-grid');
-        const emptyState = document.getElementById('empty-state');
-        const domainCards = document.querySelectorAll('.domain-card');
-
-        searchInput.addEventListener('input', debounce(handleSearch, 300));
-
-        function handleSearch(e) {
-            const searchTerm = e.target.value.toLowerCase().trim();
-            
-            if (!searchTerm) {
-                // Show all domains
-                domainCards.forEach(card => card.hidden = false);
-                emptyState.hidden = true;
-                return;
-            }
-
-            let visibleCount = 0;
-
-            domainCards.forEach(card => {
-                const domainTitle = card.querySelector('.domain-title').textContent.toLowerCase();
-                const domainDescription = card.querySelector('.domain-description').textContent.toLowerCase();
-                const domainTopics = card.querySelector('.domain-topics').textContent.toLowerCase();
-                const categoryChips = Array.from(card.querySelectorAll('.category-chip'))
-                    .map(chip => chip.textContent.toLowerCase())
-                    .join(' ');
-
-                const matches = domainTitle.includes(searchTerm) ||
-                               domainDescription.includes(searchTerm) ||
-                               domainTopics.includes(searchTerm) ||
-                               categoryChips.includes(searchTerm);
-
-                if (matches) {
-                    card.hidden = false;
-                    visibleCount++;
+                <div class="masonry-grid">
+                    <div class="glass-card-display animation-t1">
+                        <div class="card-icon frontend-icon">
+                            <i class="fab fa-react"></i>
+                        </div>
+                        <h4 class="card-title">React Best Practices</h4>
+                        <p class="card-description">Component lifecycle, hooks patterns, state management, and performance optimization.</p>
+                        <div class="card-badge badge-frontend">Frontend</div>
+                    </div>
                     
-                    // Highlight matching text (simple implementation)
-                    highlightSearchTerm(card, searchTerm);
-                } else {
-                    card.hidden = true;
-                }
-            });
-
-            // Show/hide empty state
-            emptyState.hidden = visibleCount > 0;
-        }
-
-        function highlightSearchTerm(card, term) {
-            // Remove previous highlights
-            card.querySelectorAll('.highlight').forEach(el => {
-                el.classList.remove('highlight');
-            });
-
-            // Add highlight class (CSS handles styling)
-            if (term.length > 2) {
-                const textElements = card.querySelectorAll('.domain-title, .domain-description, .category-chip, .domain-topics');
-                textElements.forEach(el => {
-                    if (el.textContent.toLowerCase().includes(term)) {
-                        el.classList.add('highlight');
-                    }
-                });
-            }
-        }
-
-        function debounce(func, wait) {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func.apply(this, args);
-                };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-            };
-        }
-
-        // Lazy Load D3 Diagram
-        const lazyObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const container = entry.target;
-                    loadD3Diagram(container);
-                    lazyObserver.unobserve(container);
-                }
-            });
-        }, {
-            rootMargin: '100px'
-        });
-
-        const lazyContainer = document.querySelector('[data-lazy-load="d3-diagram"]');
-        if (lazyContainer) {
-            lazyObserver.observe(lazyContainer);
-        }
-
-        function loadD3Diagram(container) {
-            // Hide skeleton
-            const skeleton = container.querySelector('.skeleton-loader');
-            const content = container.querySelector('.lazy-content');
-            
-            skeleton.hidden = true;
-            content.hidden = false;
-
-            // Create simple network diagram showing category relationships
-            const diagramContainer = document.getElementById('d3-diagram');
-            
-            // Simple HTML-based diagram (D3.js can be added later)
-            diagramContainer.innerHTML = `
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; padding: 2rem;">
-                    <div class="relationship-node">
-                        <div class="relationship-icon"><i class="fas fa-laptop-code" style="color: #2196F3;"></i></div>
-                        <div>Frontend</div>
-                        <div class="relationship-connections">→ Testing, Performance</div>
+                    <div class="glass-card-display animation-t1">
+                        <div class="card-icon frontend-icon">
+                            <i class="fas fa-universal-access"></i>
+                        </div>
+                        <h4 class="card-title">Accessibility (WCAG 2.1)</h4>
+                        <p class="card-description">ARIA labels, keyboard navigation, screen reader compatibility, color contrast.</p>
+                        <div class="card-badge badge-frontend">Frontend</div>
                     </div>
-                    <div class="relationship-node">
-                        <div class="relationship-icon"><i class="fas fa-plug" style="color: #4CAF50;"></i></div>
-                        <div>API Design</div>
-                        <div class="relationship-connections">→ Security, Testing</div>
+                    
+                    <div class="glass-card-display animation-t1">
+                        <div class="card-icon frontend-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h4 class="card-title">Responsive Design</h4>
+                        <p class="card-description">Mobile-first approach, breakpoints, flexbox/grid, touch targets.</p>
+                        <div class="card-badge badge-frontend">Frontend</div>
                     </div>
-                    <div class="relationship-node">
-                        <div class="relationship-icon"><i class="fas fa-cogs" style="color: #4CAF50;"></i></div>
-                        <div>Microservices</div>
-                        <div class="relationship-connections">→ Cloud, Containers</div>
+                    
+                    <div class="glass-card-display animation-t1">
+                        <div class="card-icon frontend-icon">
+                            <i class="fas fa-paint-brush"></i>
+                        </div>
+                        <h4 class="card-title">CSS Architecture</h4>
+                        <p class="card-description">BEM methodology, CSS modules, utility classes, design tokens.</p>
+                        <div class="card-badge badge-frontend">Frontend</div>
                     </div>
-                    <div class="relationship-node">
-                        <div class="relationship-icon"><i class="fas fa-database" style="color: #FF9800;"></i></div>
-                        <div>Databases</div>
-                        <div class="relationship-connections">→ Performance, Security</div>
+                    
+                    <div class="glass-card-display animation-t1">
+                        <div class="card-icon frontend-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <h4 class="card-title">Performance Optimization</h4>
+                        <p class="card-description">Code splitting, lazy loading, image optimization, caching strategies.</p>
+                        <div class="card-badge badge-frontend">Frontend</div>
                     </div>
-                    <div class="relationship-node">
-                        <div class="relationship-icon"><i class="fas fa-cloud" style="color: #9C27B0;"></i></div>
-                        <div>Cloud</div>
-                        <div class="relationship-connections">→ DevOps, Containers</div>
-                    </div>
-                    <div class="relationship-node">
-                        <div class="relationship-icon"><i class="fas fa-tools" style="color: #F44336;"></i></div>
-                        <div>Engineering</div>
-                        <div class="relationship-connections">→ All Categories</div>
+                    
+                    <div class="glass-card-display animation-t1">
+                        <div class="card-icon frontend-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h4 class="card-title">Frontend Security</h4>
+                        <p class="card-description">XSS prevention, CSP headers, CORS policies, secure storage.</p>
+                        <div class="card-badge badge-frontend">Frontend</div>
                     </div>
                 </div>
-            `;
-        }
+            </div>
 
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
-    </script>
+            <!-- Backend & APIs -->
+            <div class="category-section">
+                <h3 class="category-title">
+                    <i class="fas fa-server"></i>
+                    Backend & APIs (8 Guidelines)
+                </h3>
+                
+                <div class="masonry-grid">
+                    <div class="glass-card-display animation-t1">
+                        <div class="card-icon backend-icon">
+                            <i class="fas fa-plug"></i>
+                        </div>
+                        <h4 class="card-title">REST API Design</h4>
+                        <p class="card-description">RESTful principles, resource naming, HTTP methods, status codes.</p>
+                        <div class="card-badge badge-backend">Backend</div>
+                    </div>
+                    
+                    <div class="glass-card-display animation-t1">
+                        <div class="card-icon backend-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <h4 class="card-title">Authentication & Authorization</h4>
+                        <p class="card-description">JWT tokens, OAuth 2.0, RBAC, session management.</p>
+                        <div class="card-badge badge-backend">Backend</div>
+                    </div>
+                    
+                    <div class="glass-card-display animation-t1">
+                        <div class="card-icon backend-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <h4 class="card-title">Error Handling</h4>
+                        <p class="card-description">Consistent error responses, logging, retry strategies, circuit breakers.</p>
+                        <div class="card-badge badge-backend">Backend</div>
+                    </div>
+                    
+                    <div class="glass-card-display animation-t1">
+                        <div class="card-icon backend-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h4 class="card-title">API Versioning</h4>
+                        <p class="card-description">URI versioning, header-based, deprecation strategies.</p>
+                        <div class="card-badge badge-backend">Backend</div>
+                    </div>
+                    
+                    <div class="glass-card-display animation-t1">
+                        <div class="card-icon backend-icon">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <h4 class="card-title">Rate Limiting</h4>
+                        <p class="card-description">Token bucket, sliding window, distributed rate limiting.</p>
+                        <div class="card-badge badge-backend">Backend</div>
+                    </div>
+                    
+                    <div class="glass-card-display animation-t1">
+                        <div class="card-icon backend-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <h4 class="card-title">API Documentation</h4>
+                        <p class="card-description">OpenAPI/Swagger, interactive docs, examples, versioning.</p>
+                        <div class="card-badge badge-backend">Backend</div>
+                    </div>
+                    
+                    <div class="glass-card-display animation-t1">
+                        <div class="card-icon backend-icon">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                        <h4 class="card-title">Health Checks</h4>
+                        <p class="card-description">Liveness, readiness, dependency checks, graceful shutdown.</p>
+                        <div class="card-badge badge-backend">Backend</div>
+                    </div>
+                    
+                    <div class="glass-card-display animation-t1">
+                        <div class="card-icon backend-icon">
+                            <i class="fas fa-stream"></i>
+                        </div>
+                        <h4 class="card-title">Microservices Patterns</h4>
+                        <p class="card-description">Service discovery, API gateway, event-driven architecture.</p>
+                        <div class="card-badge badge-backend">Backend</div>
+                    </div>
+                </div>
+            </div>
 
-    <style>
-        /* Domain Grid */
-        .domain-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-        }
+            <!-- Data & Storage -->
+            <div class="category-section">
+                <h3 class="category-title">
+                    <i class="fas fa-database"></i>
+                    Data & Storage (7 Guidelines)
+                </h3>
+                
+                <div class="masonry-grid">
+                    <div class="glass-card-display animation-t1">
+                        <div class="card-icon data-icon">
+                            <i class="fas fa-table"></i>
+                        </div>
+                        <h4 class="card-title">Database Design</h4>
+                        <p class="card-description">Normalization, indexing strategies, schema evolution.</p>
+                        <div class="card-badge badge-data">Data</div>
+                    </div>
+                    
+                    <div class="glass-card-display animation-t1">
+                        <div class="card-icon data-icon">
+                            <i class="fas fa-project-diagram"></i>
+                        </div>
+                        <h4 class="card-title">Data Modeling</h4>
+                        <p class="card-description">Entity relationships, domain-driven design, bounded contexts.</p>
+                        <div class="card-badge badge-data">Data</div>
+                    </div>
+                    
+                    <div class="glass-card-display animation-t1">
+                        <div class="card-icon data-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h4 class="card-title">Query Optimization</h4>
+                        <p class="card-description">Index usage, query plans, N+1 prevention, caching.</p>
+                        <div class="card-badge badge-data">Data</div>
+                    </div>
+                    
+                    <div class="glass-card-display animation-t1">
+                        <div class="card-icon data-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <h4 class="card-title">Data Migration</h4>
+                        <p class="card-description">Version control, rollback strategies, zero-downtime migrations.</p>
+                        <div class="card-badge badge-data">Data</div>
+                    </div>
+                    
+                    <div class="glass-card-display animation-t1">
+                        <div class="card-icon data-icon">
+                            <i class="fas fa-save"></i>
+                        </div>
+                        <h4 class="card-title">Backup & Recovery</h4>
+                        <p class="card-description">Automated backups, point-in-time recovery, disaster recovery.</p>
+                        <div class="card-badge badge-data">Data</div>
+                    </div>
+                    
+                    <div class="glass-card-display animation-t1">
+                        <div class="card-icon data-icon">
+                            <i class="fas fa-key"></i>
+                        </div>
+                        <h4 class="card-title">Data Security</h4>
+                        <p class="card-description">Encryption at rest/transit, PII handling, GDPR compliance.</p>
+                        <div class="card-badge badge-data">Data</div>
+                    </div>
+                    
+                    <div class="glass-card-display animation-t1">
+                        <div class="card-icon data-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h4 class="card-title">Data Validation</h4>
+                        <p class="card-description">Input sanitization, type checking, constraint enforcement.</p>
+                        <div class="card-badge badge-data">Data</div>
+                    </div>
+                </div>
+            </div>
 
-        /* Domain Card */
-        .domain-card {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            transition: transform var(--transition-base), border-color var(--transition-base);
-            cursor: pointer;
-        }
+            <!-- Cloud & Infrastructure -->
+            <div class="category-section">
+                <h3 class="category-title">
+                    <i class="fas fa-cloud"></i>
+                    Cloud & Infrastructure (6 Guidelines)
+                </h3>
+                
+                <div class="masonry-grid">
+                    <a href="containers.html" class="glass-card-display animation-t1" style="text-decoration: none;">
+                        <div class="card-icon cloud-icon">
+                            <i class="fab fa-docker"></i>
+                        </div>
+                        <h4 class="card-title">Docker Best Practices</h4>
+                        <p class="card-description">Multi-stage builds, layer caching, security scanning, minimal images.</p>
+                        <div class="card-badge badge-cloud">Cloud</div>
+                    </a>
+                    
+                    <a href="devops.html" class="glass-card-display animation-t1" style="text-decoration: none;">
+                        <div class="card-icon cloud-icon">
+                            <i class="fas fa-infinity"></i>
+                        </div>
+                        <h4 class="card-title">CI/CD Pipelines</h4>
+                        <p class="card-description">Automated testing, deployment strategies, rollback mechanisms.</p>
+                        <div class="card-badge badge-cloud">Cloud</div>
+                    </a>
+                    
+                    <a href="cloud.html" class="glass-card-display animation-t1" style="text-decoration: none;">
+                        <div class="card-icon cloud-icon">
+                            <i class="fas fa-chart-area"></i>
+                        </div>
+                        <h4 class="card-title">Monitoring & Observability</h4>
+                        <p class="card-description">Metrics, logs, traces, alerting, dashboards.</p>
+                        <div class="card-badge badge-cloud">Cloud</div>
+                    </a>
+                    
+                    <a href="cloud.html" class="glass-card-display animation-t1" style="text-decoration: none;">
+                        <div class="card-icon cloud-icon">
+                            <i class="fas fa-balance-scale"></i>
+                        </div>
+                        <h4 class="card-title">Infrastructure as Code</h4>
+                        <p class="card-description">Terraform, CloudFormation, version control, state management.</p>
+                        <div class="card-badge badge-cloud">Cloud</div>
+                    </a>
+                    
+                    <a href="cloud.html" class="glass-card-display animation-t1" style="text-decoration: none;">
+                        <div class="card-icon cloud-icon">
+                            <i class="fas fa-expand-arrows-alt"></i>
+                        </div>
+                        <h4 class="card-title">Auto-Scaling</h4>
+                        <p class="card-description">Horizontal/vertical scaling, metrics-based, cost optimization.</p>
+                        <div class="card-badge badge-cloud">Cloud</div>
+                    </a>
+                    
+                    <a href="cloud.html" class="glass-card-display animation-t1" style="text-decoration: none;">
+                        <div class="card-icon cloud-icon">
+                            <i class="fas fa-shield-virus"></i>
+                        </div>
+                        <h4 class="card-title">Cloud Security</h4>
+                        <p class="card-description">IAM policies, network security, secrets management, compliance.</p>
+                        <div class="card-badge badge-cloud">Cloud</div>
+                    </a>
+                </div>
+            </div>
 
-        .domain-card:hover {
-            transform: translateY(-8px);
-            border-color: var(--accent-primary);
-        }
+            <!-- Software Craft -->
+            <div class="category-section">
+                <h3 class="category-title">
+                    <i class="fas fa-tools"></i>
+                    Software Craft (8 Guidelines)
+                </h3>
+                
+                <div class="masonry-grid">
+                    <a href="engineering.html" class="glass-card-display animation-t1" style="text-decoration: none;">
+                        <div class="card-icon craft-icon">
+                            <i class="fas fa-cube"></i>
+                        </div>
+                        <h4 class="card-title">SOLID Principles</h4>
+                        <p class="card-description">Single Responsibility, Open/Closed, Liskov, Interface Segregation, Dependency Inversion.</p>
+                        <div class="card-badge badge-craft">Craft</div>
+                    </a>
+                    
+                    <a href="engineering.html" class="glass-card-display animation-t1" style="text-decoration: none;">
+                        <div class="card-icon craft-icon">
+                            <i class="fas fa-broom"></i>
+                        </div>
+                        <h4 class="card-title">Clean Code</h4>
+                        <p class="card-description">Meaningful names, small functions, DRY principle, code comments.</p>
+                        <div class="card-badge badge-craft">Craft</div>
+                    </a>
+                    
+                    <a href="testing.html" class="glass-card-display animation-t1" style="text-decoration: none;">
+                        <div class="card-icon craft-icon">
+                            <i class="fas fa-vial"></i>
+                        </div>
+                        <h4 class="card-title">Testing Strategies</h4>
+                        <p class="card-description">Unit, integration, e2e tests, TDD, test coverage, mocking.</p>
+                        <div class="card-badge badge-craft">Craft</div>
+                    </a>
+                    
+                    <a href="design-patterns.html" class="glass-card-display animation-t1" style="text-decoration: none;">
+                        <div class="card-icon craft-icon">
+                            <i class="fas fa-sitemap"></i>
+                        </div>
+                        <h4 class="card-title">Design Patterns</h4>
+                        <p class="card-description">Creational, structural, behavioral patterns, anti-patterns to avoid.</p>
+                        <div class="card-badge badge-craft">Craft</div>
+                    </a>
+                    
+                    <a href="engineering.html" class="glass-card-display animation-t1" style="text-decoration: none;">
+                        <div class="card-icon craft-icon">
+                            <i class="fas fa-code-branch"></i>
+                        </div>
+                        <h4 class="card-title">Git Workflow</h4>
+                        <p class="card-description">Branch strategy, commit messages, pull requests, code review.</p>
+                        <div class="card-badge badge-craft">Craft</div>
+                    </a>
+                    
+                    <a href="engineering.html" class="glass-card-display animation-t1" style="text-decoration: none;">
+                        <div class="card-icon craft-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <h4 class="card-title">Documentation</h4>
+                        <p class="card-description">README, API docs, architecture decision records, inline comments.</p>
+                        <div class="card-badge badge-craft">Craft</div>
+                    </a>
+                    
+                    <a href="engineering.html" class="glass-card-display animation-t1" style="text-decoration: none;">
+                        <div class="card-icon craft-icon">
+                            <i class="fas fa-recycle"></i>
+                        </div>
+                        <h4 class="card-title">Refactoring</h4>
+                        <p class="card-description">Code smells, refactoring techniques, incremental improvements.</p>
+                        <div class="card-badge badge-craft">Craft</div>
+                    </div>
+                    
+                    <div class="glass-card-display animation-t1">
+                        <div class="card-icon craft-icon">
+                            <i class="fas fa-users-cog"></i>
+                        </div>
+                        <h4 class="card-title">Code Review</h4>
+                        <p class="card-description">Review checklist, feedback techniques, automated checks, team standards.</p>
+                        <div class="card-badge badge-craft">Craft</div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        /* Domain Header */
-        .domain-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
+        <!-- How CORTEX Uses Guidelines -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-brain"></i>
+                How CORTEX Consults Guidelines
+            </h2>
+            
+            <p class="intro-text">Guidelines are integrated into <strong>Tier 2 Knowledge Graph</strong> with semantic relationships. CORTEX automatically queries relevant guidelines during code generation based on context.</p>
+            
+            <div class="diagram-container">
+                <div class="mermaid">
+sequenceDiagram
+    participant User
+    participant CORTEX
+    participant T2 as Tier 2 Knowledge Graph
+    participant Guidelines as Best Practice Files
+    
+    User->>CORTEX: Request code implementation
+    CORTEX->>CORTEX: Analyze context (language, domain, task)
+    CORTEX->>T2: Query relevant guidelines
+    T2->>Guidelines: Fetch React + API + Testing patterns
+    Guidelines-->>T2: Return best practices
+    T2-->>CORTEX: Provide context-aware guidelines
+    CORTEX->>CORTEX: Generate code following guidelines
+    CORTEX-->>User: Implementation with quality enforced
+                </div>
+            </div>
+            
+            <div class="two-column-grid">
+                <div class="info-box">
+                    <h3>Automatic Consultation</h3>
+                    <ul class="feature-list-compact">
+                        <li>No manual prompting required</li>
+                        <li>Context-aware guideline selection</li>
+                        <li>Semantic relationship traversal</li>
+                        <li>Multi-guideline synthesis</li>
+                    </ul>
+                </div>
+                
+                <div class="info-box">
+                    <h3>Tier 2 Integration</h3>
+                    <ul class="feature-list-compact">
+                        <li>35 guidelines stored as nodes</li>
+                        <li>Relationships mapped semantically</li>
+                        <li>Query patterns learned over time</li>
+                        <li>Continuous graph enrichment</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
 
-        .domain-icon {
-            font-size: 2.4rem;
-            flex-shrink: 0;
-        }
+        <!-- Statistics -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-chart-pie"></i>
+                Knowledge Library Statistics
+            </h2>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <div class="metric-value">35</div>
+                    <div class="metric-label">Total Guidelines</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="metric-value">17</div>
+                    <div class="metric-label">Domain Pages</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <div class="metric-value">5</div>
+                    <div class="metric-label">Major Categories</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="metric-value">Tier 2</div>
+                    <div class="metric-label">Storage Location</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="metric-value">100%</div>
+                    <div class="metric-label">Auto-Consulted</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <div class="metric-value">Living</div>
+                    <div class="metric-label">Documentation</div>
+                </div>
+            </div>
+        </section>
 
-        .domain-title-group {
-            flex: 1;
-        }
+        <!-- Related Resources -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-link"></i>
+                Related Resources
+            </h2>
+            
+            <div class="reference-grid">
+                <div class="reference-section">
+                    <h3>Storage Location</h3>
+                    <ul class="reference-list">
+                        <li><code>cortex-brain/tier2/knowledge-graph.yaml</code></li>
+                        <li><code>cortex-brain/knowledge-library/</code></li>
+                        <li>35 best practice markdown files</li>
+                    </ul>
+                </div>
+                
+                <div class="reference-section">
+                    <h3>Integration</h3>
+                    <ul class="reference-list">
+                        <li>Tier 2 Knowledge Graph queries</li>
+                        <li>Semantic relationship traversal</li>
+                        <li>Context-aware guideline selection</li>
+                    </ul>
+                </div>
+                
+                <div class="reference-section">
+                    <h3>Related Documentation</h3>
+                    <ul class="reference-list">
+                        <li><a href="../architecture/index.html">Architecture Overview</a></li>
+                        <li><a href="../orchestrators/index.html">Orchestrators</a></li>
+                        <li><a href="../token-optimization/index.html">Token Optimization</a></li>
+                    </ul>
+                </div>
+                
+                <div class="reference-section">
+                    <h3>Sharpen The Saw</h3>
+                    <ul class="reference-list">
+                        <li><a href="../sharpen-the-saw/security.html">Security Best Practices</a></li>
+                        <li><a href="../sharpen-the-saw/solid.html">SOLID Principles</a></li>
+                        <li><a href="../sharpen-the-saw/testing.html">Testing Strategies</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
 
-        .domain-title {
-            margin: 0;
-            font-size: 1.375rem;
-            color: var(--accent-primary);
-        }
+    </main>
 
-        .domain-file-count {
-            display: inline-block;
-            margin-top: 0.25rem;
-            padding: 0.25rem 0.5rem;
-            background: rgba(0, 212, 255, 0.2);
-            color: var(--accent-primary);
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        /* Domain Description */
-        .domain-description {
-            color: var(--text-secondary);
-            line-height: 1.6;
-            margin: 0;
-        }
-
-        /* Category Preview */
-        .category-preview {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .category-chip {
-            display: inline-flex;
-            align-items: center;
-            padding: 0.5rem 1rem;
-            background: rgba(26, 31, 58, 0.7);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            color: var(--text-primary);
-            font-size: 0.875rem;
-            text-decoration: none;
-            transition: all var(--transition-base);
-        }
-
-        .category-chip:hover {
-            background: rgba(0, 212, 255, 0.2);
-            border-color: var(--accent-primary);
-            transform: translateY(-2px);
-        }
-
-        /* Domain Footer */
-        .domain-footer {
-            padding-top: 1rem;
-            border-top: 1px solid var(--glass-border);
-        }
-
-        .domain-topics {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            font-style: italic;
-        }
-
-        /* Search Container */
-        .search-container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 1rem 1.5rem;
-            background: var(--glass-bg);
-            border: 2px solid var(--glass-border);
-            border-radius: 50px;
-            color: var(--text-primary);
-            font-size: 1rem;
-            transition: all var(--transition-base);
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
-        }
-
-        .search-input::placeholder {
-            color: var(--text-secondary);
-        }
-
-        /* Highlight Search Results */
-        .highlight {
-            background: rgba(0, 212, 255, 0.2);
-            padding: 0.125rem 0.25rem;
-            border-radius: 4px;
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 4rem 2rem;
-        }
-
-        .empty-state-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            opacity: 0.5;
-        }
-
-        .empty-state h3 {
-            color: var(--text-primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .empty-state p {
-            color: var(--text-secondary);
-        }
-
-        /* Skeleton Loader */
-        .skeleton-loader {
-            padding: 3rem;
-            text-align: center;
-        }
-
-        .skeleton-pulse {
-            width: 100%;
-            height: 400px;
-            background: linear-gradient(
-                90deg,
-                rgba(255, 255, 255, 0.05) 0%,
-                rgba(255, 255, 255, 0.1) 50%,
-                rgba(255, 255, 255, 0.05) 100%
-            );
-            background-size: 200% 100%;
-            animation: pulse 1.5s infinite;
-            border-radius: 16px;
-        }
-
-        @keyframes pulse {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-
-        /* D3 Diagram */
-        .d3-diagram-container {
-            min-height: 400px;
-            background: rgba(26, 31, 58, 0.5);
-            border-radius: 16px;
-            padding: 2rem;
-        }
-
-        .relationship-node {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 1.5rem;
-            text-align: center;
-            transition: all var(--transition-base);
-        }
-
-        .relationship-node:hover {
-            transform: translateY(-4px);
-            border-color: var(--accent-primary);
-        }
-
-        .relationship-icon {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .relationship-connections {
-            margin-top: 0.5rem;
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-        }
-
-        /* Metric Card */
-        .metric-card {
-            text-align: center;
-            padding: 2rem;
-        }
-
-        .metric-value {
-            font-size: 3rem;
-            font-weight: 700;
-            color: var(--accent-primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .metric-label {
-            color: var(--text-secondary);
-            font-size: 1rem;
-        }
-
-        /* Mobile Optimizations */
-        @media (max-width: 767px) {
-            .domain-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-
-            .domain-icon {
-                font-size: 2rem;
-            }
-
-            .domain-title {
-                font-size: 1.25rem;
-            }
-
-            .category-preview {
-                gap: 0.375rem;
-            }
-
-            .category-chip {
-                padding: 0.375rem 0.75rem;
-                font-size: 0.8125rem;
-            }
-
-            .metric-value {
-                font-size: 2.5rem;
-            }
-
-            .metrics-grid-4 {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        /* Tablet */
-        @media (min-width: 768px) and (max-width: 1023px) {
-            .domain-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        /* Desktop */
-        @media (min-width: 1024px) {
-            .domain-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-
-            .back-button {
-                display: none;
-            }
-        }
-    </style>
-
+    <!-- Initialize Mermaid -->
     <script>
-    // ============================================
-    // D3.js Hub-Spoke Knowledge Map (Radial Layout)
-    // ============================================
-    
-    // Hub-spoke data - 5 main domains with their topics
-    const knowledgeData = [
-        {
-            id: 'frontend-ui',
-            name: 'Frontend & UI',
-            icon: '🎨',
-            color: '#2196F3',
-            angle: 0, // Top
-            topics: [
-                { name: 'Frontend', url: 'frontend.html' },
-                { name: 'UI/UX', url: 'ui-ux.html' },
-                { name: 'Mobile', url: 'mobile.html' }
-            ]
-        },
-        {
-            id: 'backend-apis',
-            name: 'Backend & APIs',
-            icon: '🔌',
-            color: '#4CAF50',
-            angle: 72, // 360/5 = 72 degrees apart
-            topics: [
-                { name: 'API Design', url: 'api-design.html' },
-                { name: 'Microservices', url: 'microservices.html' },
-                { name: 'Messaging', url: 'messaging.html' }
-            ]
-        },
-        {
-            id: 'data-storage',
-            name: 'Data & Storage',
-            icon: '🗄️',
-            color: '#FF9800',
-            angle: 144,
-            topics: [
-                { name: 'Database', url: 'database.html' },
-                { name: 'Performance', url: 'performance.html' }
-            ]
-        },
-        {
-            id: 'cloud-infra',
-            name: 'Cloud & Infrastructure',
-            icon: '☁️',
-            color: '#9C27B0',
-            angle: 216,
-            topics: [
-                { name: 'Cloud', url: 'cloud.html' },
-                { name: 'Containers', url: 'containers.html' },
-                { name: 'DevOps', url: 'devops.html' }
-            ]
-        },
-        {
-            id: 'craft-quality',
-            name: 'Software Craft',
-            icon: '🎯',
-            color: '#F44336',
-            angle: 288,
-            topics: [
-                { name: 'Engineering', url: 'engineering.html' },
-                { name: 'Design Patterns', url: 'design-patterns.html' },
-                { name: 'DDD', url: 'ddd.html' },
-                { name: 'Security', url: 'security.html' },
-                { name: 'Testing', url: 'testing.html' }
-            ]
-        }
-    ];
-    
-    function renderKnowledgeMap() {
-        const container = document.getElementById('knowledgeMapMain');
-        const width = container.clientWidth;
-        const height = 580;
-        const centerX = width / 2;
-        const centerY = height / 2;
-        const hubRadius = 75;
-        const spokeDistance = Math.min(width, height) * 0.30;
-        
-        container.innerHTML = '';
-        
-        const svg = d3.select('#knowledgeMapMain')
-            .append('svg')
-            .attr('width', width)
-            .attr('height', height)
-            .attr('viewBox', `0 0 ${width} ${height}`)
-            .style('background', 'rgba(0, 0, 0, 0.3)')
-            .style('border-radius', '12px');
-        
-        // Glow filter
-        const defs = svg.append('defs');
-        const filter = defs.append('filter')
-            .attr('id', 'glow')
-            .attr('x', '-50%')
-            .attr('y', '-50%')
-            .attr('width', '200%')
-            .attr('height', '200%');
-        filter.append('feGaussianBlur').attr('stdDeviation', '4').attr('result', 'coloredBlur');
-        const feMerge = filter.append('feMerge');
-        feMerge.append('feMergeNode').attr('in', 'coloredBlur');
-        feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
-        
-        // Hub gradient
-        const hubGradient = defs.append('radialGradient')
-            .attr('id', 'hubGradient');
-        hubGradient.append('stop').attr('offset', '0%').attr('stop-color', '#9b7dff');
-        hubGradient.append('stop').attr('offset', '100%').attr('stop-color', '#6b4ed8');
-        
-        // Draw connecting lines first (behind nodes)
-        knowledgeData.forEach(domain => {
-            const angleRad = (domain.angle - 90) * Math.PI / 180;
-            const endX = centerX + Math.cos(angleRad) * spokeDistance;
-            const endY = centerY + Math.sin(angleRad) * spokeDistance;
-            
-            svg.append('line')
-                .attr('x1', centerX)
-                .attr('y1', centerY)
-                .attr('x2', endX)
-                .attr('y2', endY)
-                .attr('stroke', domain.color)
-                .attr('stroke-width', 3)
-                .attr('stroke-opacity', 0.4);
-        });
-        
-        // Draw decorative orbit rings
-        [spokeDistance * 0.5, spokeDistance].forEach((r, i) => {
-            svg.append('circle')
-                .attr('cx', centerX)
-                .attr('cy', centerY)
-                .attr('r', r)
-                .attr('fill', 'none')
-                .attr('stroke', 'rgba(0, 212, 255, 0.15)')
-                .attr('stroke-width', 1)
-                .attr('stroke-dasharray', i === 0 ? '5,5' : 'none');
-        });
-        
-        // Central hub
-        const hubGroup = svg.append('g')
-            .attr('transform', `translate(${centerX}, ${centerY})`);
-        
-        // Hub glow circle
-        hubGroup.append('circle')
-            .attr('r', hubRadius + 10)
-            .attr('fill', 'rgba(123, 97, 255, 0.2)')
-            .attr('filter', 'url(#glow)');
-        
-        // Hub main circle
-        hubGroup.append('circle')
-            .attr('r', hubRadius)
-            .attr('fill', 'url(#hubGradient)')
-            .attr('stroke', 'rgba(123, 97, 255, 0.6)')
-            .attr('stroke-width', 2);
-        
-        // Hub icon
-        hubGroup.append('text')
-            .attr('text-anchor', 'middle')
-            .attr('dy', -10)
-            .attr('font-size', '32px')
-            .text('📚');
-        
-        // Hub label
-        hubGroup.append('text')
-            .attr('text-anchor', 'middle')
-            .attr('dy', 18)
-            .attr('fill', '#fff')
-            .attr('font-size', '12px')
-            .attr('font-weight', '700')
-            .text('Knowledge');
-        
-        hubGroup.append('text')
-            .attr('text-anchor', 'middle')
-            .attr('dy', 34)
-            .attr('fill', 'rgba(255,255,255,0.8)')
-            .attr('font-size', '11px')
-            .text('Library');
-        
-        // Draw domain nodes
-        knowledgeData.forEach(domain => {
-            const angleRad = (domain.angle - 90) * Math.PI / 180;
-            const x = centerX + Math.cos(angleRad) * spokeDistance;
-            const y = centerY + Math.sin(angleRad) * spokeDistance;
-            
-            const nodeGroup = svg.append('g')
-                .attr('class', 'hub-node')
-                .attr('transform', `translate(${x}, ${y})`)
-                .style('cursor', 'pointer');
-            
-            // Node background glow
-            nodeGroup.append('circle')
-                .attr('r', 55)
-                .attr('fill', domain.color)
-                .attr('opacity', 0.15)
-                .attr('filter', 'url(#glow)');
-            
-            // Node main circle
-            nodeGroup.append('circle')
-                .attr('r', 48)
-                .attr('fill', domain.color)
-                .attr('stroke', 'rgba(255,255,255,0.3)')
-                .attr('stroke-width', 2)
-                .attr('class', 'domain-circle');
-            
-            // Node icon
-            nodeGroup.append('text')
-                .attr('text-anchor', 'middle')
-                .attr('dy', -5)
-                .attr('font-size', '24px')
-                .text(domain.icon);
-            
-            // Node label (split into lines if needed)
-            const nameParts = domain.name.split(' ');
-            if (nameParts.length <= 2) {
-                nameParts.forEach((part, i) => {
-                    nodeGroup.append('text')
-                        .attr('text-anchor', 'middle')
-                        .attr('dy', 15 + (i * 12))
-                        .attr('fill', '#fff')
-                        .attr('font-size', '10px')
-                        .attr('font-weight', '600')
-                        .text(part);
-                });
-            } else {
-                // For longer names, combine first two words
-                nodeGroup.append('text')
-                    .attr('text-anchor', 'middle')
-                    .attr('dy', 15)
-                    .attr('fill', '#fff')
-                    .attr('font-size', '9px')
-                    .attr('font-weight', '600')
-                    .text(nameParts.slice(0, 2).join(' '));
-                if (nameParts.length > 2) {
-                    nodeGroup.append('text')
-                        .attr('text-anchor', 'middle')
-                        .attr('dy', 27)
-                        .attr('fill', '#fff')
-                        .attr('font-size', '9px')
-                        .attr('font-weight', '600')
-                        .text(nameParts.slice(2).join(' '));
-                }
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#7b61ff',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#9f87ff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#10b981',
+                tertiaryColor: '#f59e0b'
             }
-            
-            // Topic pills around each domain
-            const topicRadius = 82;
-            const topicSpread = 45; // degrees spread
-            domain.topics.forEach((topic, i) => {
-                const topicCount = domain.topics.length;
-                const startAngle = domain.angle - topicSpread;
-                const angleStep = topicCount > 1 ? (topicSpread * 2) / (topicCount - 1) : 0;
-                const topicAngle = topicCount > 1 
-                    ? (startAngle + (i * angleStep) - 90) * Math.PI / 180
-                    : (domain.angle - 90) * Math.PI / 180;
-                
-                const tx = Math.cos(topicAngle) * topicRadius;
-                const ty = Math.sin(topicAngle) * topicRadius;
-                
-                // Topic pill
-                const pillGroup = nodeGroup.append('g')
-                    .attr('transform', `translate(${tx}, ${ty})`)
-                    .style('cursor', 'pointer')
-                    .on('click', (e) => {
-                        e.stopPropagation();
-                        window.location.href = topic.url;
-                    })
-                    .on('mouseover', function() {
-                        d3.select(this).select('rect')
-                            .transition().duration(200)
-                            .attr('stroke-width', 2)
-                            .attr('stroke', '#fff');
-                    })
-                    .on('mouseout', function() {
-                        d3.select(this).select('rect')
-                            .transition().duration(200)
-                            .attr('stroke-width', 1)
-                            .attr('stroke', domain.color);
-                    });
-                
-                const textWidth = topic.name.length * 6.5 + 16;
-                
-                pillGroup.append('rect')
-                    .attr('x', -textWidth/2)
-                    .attr('y', -11)
-                    .attr('width', textWidth)
-                    .attr('height', 22)
-                    .attr('rx', 11)
-                    .attr('fill', 'rgba(0,0,0,0.6)')
-                    .attr('stroke', domain.color)
-                    .attr('stroke-width', 1);
-                
-                pillGroup.append('text')
-                    .attr('text-anchor', 'middle')
-                    .attr('dy', 4)
-                    .attr('fill', '#fff')
-                    .attr('font-size', '10px')
-                    .attr('font-weight', '500')
-                    .text(topic.name);
-            });
-            
-            // Click handler for domain node - navigate to first topic or show info
-            nodeGroup.on('click', function(e) {
-                // Navigate to the first topic as the main entry point
-                if (domain.topics.length > 0) {
-                    window.location.href = domain.topics[0].url;
-                }
-            })
-            .on('mouseover', function() {
-                d3.select(this).select('.domain-circle')
-                    .transition().duration(200)
-                    .attr('r', 52)
-                    .attr('stroke-width', 3);
-            })
-            .on('mouseout', function() {
-                d3.select(this).select('.domain-circle')
-                    .transition().duration(200)
-                    .attr('r', 48)
-                    .attr('stroke-width', 2);
-            });
         });
-    }
-    
-    // Initialize on load
-    document.addEventListener('DOMContentLoaded', () => {
-        renderKnowledgeMap();
-    });
-    
-    // Re-render on resize (debounced)
-    let resizeTimeout;
-    window.addEventListener('resize', () => {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(() => {
-            renderKnowledgeMap();
-        }, 250);
-    });
     </script>
 </body>
 </html>

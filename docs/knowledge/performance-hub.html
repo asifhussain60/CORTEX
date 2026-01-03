@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Performance Engineering Learning Hub - Master optimization, profiling, and scalability patterns">
+    <meta name="keywords" content="performance, optimization, profiling, caching, scalability, learning path">
+    <meta name="author" content="Asif Hussain">
+    <title>Performance Engineering Hub | CORTEX Best Practices</title>
+    <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02">
+    <link rel="stylesheet" href="../assets/css/learning-hub.css?v=2026-01-02">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header class="glass-header">
+        <div class="header-content">
+            <nav class="header-nav">
+                <a href="../index.html" class="nav-link">
+                    <span class="nav-icon">🏠</span> Home
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero learning-module-hero" id="main-content">
+        <div class="module-header">
+            <h1 class="hero-title">⚡ Performance Engineering Hub</h1>
+            <p class="hero-subtitle">Master Profiling, Caching Strategies, Load Testing, and Scalability Patterns</p>
+            <div class="module-meta">
+                <span>⏱️ 5 modules • 3 hours</span>
+                <span>📊 5 quizzes (50 questions)</span>
+                <span>💻 7 code playgrounds</span>
+                <span>🏆 5 progressive challenges</span>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <section class="learning-path-roadmap glass-card">
+            <h4>🗺️ Your Learning Journey</h4>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                From profiling fundamentals to advanced optimization techniques. Learn caching strategies, 
+                load testing, database tuning, and how to scale systems for millions of users.
+            </p>
+
+            <div class="mermaid-container">
+                <pre class="mermaid">
+graph LR
+    START["🚀 Start Here"] --> M1["Module 1<br/>Profiling<br/>⏱️ 35 min"]
+    M1 --> M2["Module 2<br/>Caching Strategies<br/>⏱️ 40 min"]
+    M2 --> M3["Module 3<br/>Database Optimization<br/>⏱️ 40 min"]
+    M3 --> M4["Module 4<br/>Load Testing<br/>⏱️ 35 min"]
+    M4 --> M5["Module 5<br/>Scalability Patterns<br/>⏱️ 30 min"]
+    M5 --> CERT["🏆 Performance<br/>Engineer"]
+
+    style START fill:#00d4ff,stroke:#fff,stroke-width:2px,color:#000
+    style M1 fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
+    style M2 fill:#fbbf24,stroke:#fcd34d,stroke-width:2px,color:#000
+    style M3 fill:#fbbf24,stroke:#fcd34d,stroke-width:2px,color:#000
+    style M4 fill:#f97316,stroke:#fb923c,stroke-width:2px,color:#fff
+    style M5 fill:#8b5cf6,stroke:#a78bfa,stroke-width:2px,color:#fff
+    style CERT fill:#00ff88,stroke:#fff,stroke-width:3px,color:#000
+                </pre>
+            </div>
+        </section>
+
+        <section style="margin-top: var(--spacing-3xl);">
+            <h2 style="color: var(--text-primary); margin-bottom: var(--spacing-xl); font-size: 2rem;">
+                📚 Interactive Learning Modules
+            </h2>
+            
+            <div class="module-nav-grid">
+                <a href="performance/profiling-monitoring.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 1</span>
+                        <span class="difficulty-badge beginner">Beginner</span>
+                    </div>
+                    <h5>🔍 Profiling & Monitoring</h5>
+                    <p class="module-description">
+                        Master CPU profiling, memory analysis, and APM tools. Learn flame graphs, allocation 
+                        tracing, and how to identify performance bottlenecks.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 35 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                    </div>
+                </a>
+
+                <a href="performance/caching-strategies.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 2</span>
+                        <span class="difficulty-badge intermediate">Intermediate</span>
+                    </div>
+                    <h5>💾 Caching Strategies</h5>
+                    <p class="module-description">
+                        Deep dive into Redis, Memcached, CDN caching, and cache invalidation patterns. 
+                        Learn cache-aside, write-through, and distributed caching.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 40 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                    </div>
+                </a>
+
+                <a href="performance/database-optimization.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 3</span>
+                        <span class="difficulty-badge intermediate">Intermediate</span>
+                    </div>
+                    <h5>🗄️ Database Optimization</h5>
+                    <p class="module-description">
+                        Master query optimization, indexing strategies, connection pooling, and database sharding. 
+                        Learn EXPLAIN plans and N+1 query prevention.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 40 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                    </div>
+                </a>
+
+                <a href="performance/load-testing.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 4</span>
+                        <span class="difficulty-badge advanced">Advanced</span>
+                    </div>
+                    <h5>📊 Load Testing & Benchmarking</h5>
+                    <p class="module-description">
+                        Learn JMeter, k6, Gatling, and Artillery for performance testing. Design realistic load 
+                        scenarios, analyze results, and set SLAs.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 35 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                    </div>
+                </a>
+
+                <a href="performance/scalability-patterns.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 5</span>
+                        <span class="difficulty-badge expert">Expert</span>
+                    </div>
+                    <h5>🚀 Scalability Patterns</h5>
+                    <p class="module-description">
+                        Master horizontal scaling, load balancing, sharding, and CDN strategies. Learn auto-scaling, 
+                        rate limiting, and capacity planning.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 30 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>📋 Prerequisites & Recommendations</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-lg); margin-top: var(--spacing-xl);">
+                <div style="padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-radius: 8px; border: 1px solid #10b981;">
+                    <h4 style="color: #10b981; margin-bottom: var(--spacing-sm);">✅ Recommended Background</h4>
+                    <ul style="color: var(--text-secondary); font-size: 0.95rem;">
+                        <li>Backend development experience</li>
+                        <li>Understanding of databases</li>
+                        <li>Basic networking knowledge</li>
+                        <li>Familiarity with web architecture</li>
+                    </ul>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(0, 212, 255, 0.1); border-radius: 8px; border: 1px solid #00d4ff;">
+                    <h4 style="color: #00d4ff; margin-bottom: var(--spacing-sm);">🛠️ Tools You'll Use</h4>
+                    <ul style="color: var(--text-secondary); font-size: 0.95rem;">
+                        <li>Profiling tools (pprof, py-spy)</li>
+                        <li>Redis / Memcached</li>
+                        <li>k6 / JMeter (load testing)</li>
+                        <li>APM tools (New Relic, DataDog)</li>
+                    </ul>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(139, 92, 246, 0.1); border-radius: 8px; border: 1px solid #8b5cf6;">
+                    <h4 style="color: #8b5cf6; margin-bottom: var(--spacing-sm);">🎯 What You'll Build</h4>
+                    <ul style="color: var(--text-secondary); font-size: 0.95rem;">
+                        <li>Multi-tier caching system</li>
+                        <li>Optimized database queries</li>
+                        <li>Load testing suite</li>
+                        <li>Auto-scaling infrastructure</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🎓 Learning Outcomes</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                By completing this learning path, you'll be able to:
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-md);">
+                <div style="padding: var(--spacing-md); background: rgba(16, 185, 129, 0.05); border-left: 3px solid #10b981; border-radius: 4px;">
+                    <strong style="color: #10b981;">Performance Profiling</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Identify bottlenecks with CPU, memory, and I/O profiling
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-md); background: rgba(0, 212, 255, 0.05); border-left: 3px solid #00d4ff; border-radius: 4px;">
+                    <strong style="color: #00d4ff;">Caching Mastery</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Implement multi-tier caching with Redis and CDNs
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-md); background: rgba(139, 92, 246, 0.05); border-left: 3px solid #8b5cf6; border-radius: 4px;">
+                    <strong style="color: #8b5cf6;">Database Tuning</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Optimize queries with indexes and EXPLAIN analysis
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-md); background: rgba(251, 191, 36, 0.05); border-left: 3px solid #fbbf24; border-radius: 4px;">
+                    <strong style="color: #fbbf24;">Load Testing</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Design and execute comprehensive performance tests
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-md); background: rgba(239, 68, 68, 0.05); border-left: 3px solid #ef4444; border-radius: 4px;">
+                    <strong style="color: #ef4444;">Scalability Design</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Architect systems to scale horizontally and vertically
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🔗 Related Learning Paths</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                Expand your knowledge with these complementary paths:
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-lg);">
+                <a href="database-hub.html" class="related-path-card">
+                    <span class="path-icon">🗄️</span>
+                    <h5>Database Design</h5>
+                    <p>SQL optimization, indexing strategies</p>
+                </a>
+                <a href="cloud-hub.html" class="related-path-card">
+                    <span class="path-icon">☁️</span>
+                    <h5>Cloud-Native Architecture</h5>
+                    <p>Auto-scaling, serverless, CDN</p>
+                </a>
+                <a href="devops-hub.html" class="related-path-card">
+                    <span class="path-icon">🔄</span>
+                    <h5>DevOps & Monitoring</h5>
+                    <p>Observability, SRE practices</p>
+                </a>
+            </div>
+        </section>
+
+        <section class="glass-card" style="margin-top: var(--spacing-3xl); margin-bottom: var(--spacing-3xl);">
+            <h2>📚 Additional Resources</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-md); margin-top: var(--spacing-lg);">
+                <a href="https://web.dev/fast/" target="_blank" rel="noopener" class="resource-link">
+                    📖 Web Performance Guide
+                </a>
+                <a href="https://redis.io/docs/manual/patterns/" target="_blank" rel="noopener" class="resource-link">
+                    📖 Redis Caching Patterns
+                </a>
+                <a href="https://k6.io/docs/" target="_blank" rel="noopener" class="resource-link">
+                    📖 k6 Load Testing
+                </a>
+                <a href="https://www.brendangregg.com/perf.html" target="_blank" rel="noopener" class="resource-link">
+                    📖 Brendan Gregg's Perf
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <footer style="padding: var(--spacing-2xl); text-align: center; color: var(--text-secondary); background: rgba(0, 0, 0, 0.3);">
+        <p>© 2026 Asif Hussain. All rights reserved.</p>
+        <p style="margin-top: var(--spacing-sm);">
+            <a href="../index.html" style="color: var(--hub-primary); text-decoration: none;">Back to Home</a> • 
+            <a href="index.html" style="color: var(--hub-primary); text-decoration: none;">All Learning Paths</a>
+        </p>
+    </footer>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true, 
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#10b981',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#fff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#8b5cf6',
+                tertiaryColor: '#fbbf24'
+            }
+        });
+    </script>
+</body>
+</html>

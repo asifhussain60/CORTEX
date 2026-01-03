@@ -102,10 +102,10 @@ LLM Classification → Keyword Regex → User Clarification
 |--------------|------|-------------|-------------------|
 | Planning System | 🛡️ AUTONOMOUS | Route intent → Load manifest → STOP | Execute planning workflow (folder creation, context gathering, plan generation) |
 | ADO Operations | 🛡️ AUTONOMOUS | Route intent → Load manifest → STOP | Generate work items, acceptance criteria, estimation |
-| Vacuum v2 | 🛡️ AUTONOMOUS | Route intent → Load manifest → STOP | Deep filesystem cleanup (10 categories, duplicates, orphans, transactional operations) |
-| Cleanup v2 | 🛡️ AUTONOMOUS | Route intent → Load rules → STOP | Selective cleanup (cache, logs, artifacts, full, git) |
+| Vacuum | 🛡️ AUTONOMOUS | Route intent → Load manifest → STOP | Deep filesystem cleanup, reorganization, validation |
 | TDD Mastery | 📋 GUIDED | Route intent → Read manifest → Execute steps | CORTEX follows TDD workflow instructions |
 | Debug Orchestrator | 📋 GUIDED | Route intent → Read manifest → Execute steps | CORTEX performs debugging analysis |
+| Cleanup | 🛡️ AUTONOMOUS | Route intent → Load rules → STOP | Execute cleanup logic (cache, bloat, temp files) |
 
 **Key Distinction:**
 - 🛡️ **AUTONOMOUS**: Has Python implementation, self-executing
@@ -128,8 +128,9 @@ LLM Classification → Keyword Regex → User Clarification
 | `refine`, `improve cortex`, `optimize code` | 📋 **Refinement (GUIDED)** | `refinement-orchestrator-manifest.yaml` | 7-phase improvement |
 | `refactor [artifact]`, `analyze [file]`, `optimize [file]` | 📋 **Refactor (GUIDED)** | `cortex-refactor.prompt.md` | Deep analysis + decomposition strategy |
 | `system maintenance`, `health check` | 📋 **Maintenance (GUIDED)** | Via `cortex-maintenance.prompt.md` | 11-phase health + auto-repair (modular v2.0) |
-| `cleanup cache`, `cleanup logs`, `cleanup artifacts`, `cleanup full`, `cleanup git` | 🛡️ **Cleanup v2 (AUTONOMOUS)** | `cleanup-orchestrator-v2.yaml` | Selective cleanup modes (10s-180s, 250MB-7.5GB freed) |
-| `vacuum [path]`, `deep clean [path]`, `organize files [path]` | 🛡️ **Vacuum v2 (AUTONOMOUS)** | `vacuum-orchestrator-v2.yaml` | Deep filesystem cleanup (10 categories, duplicates, orphans, transactional) |
+| `cleanup cache`, `cleanup full`, `cleanup [type]` | 🛡️ **Maintenance Phase 2** | Via `cortex-maintenance.prompt.md` | Cache clear, bloat removal (Phase 2) |
+| `vacuum [path]`, `deep clean [path]`, `organize files` | 🛡️ **Vacuum (AUTONOMOUS)** | `cortex-vacuum.prompt.md` | Deep filesystem cleanup + reorganization |
+| `cleanup docs`, `organize docs`, `validate docs` | 📋 **Doc Cleanup (GUIDED)** | `cortex-doc-cleanup.prompt.md` | 6-phase docs cleanup + stub generation + sync |
 | `help`, `show commands` | **Help** | Template-based | Command list |
 
 **Manifest Path:** `cortex-brain/manifests/orchestrators/{manifest-file}`  
@@ -195,100 +196,6 @@ When Planning System is engaged (🛡️), `00-master-plan.md` MUST include:
 4. **copilot_instructions Block** - `response_template`, `tdd_enforcement`, `final_refactor_required`
 
 **Reference:** `planning-system-4.0-manifest.yaml` lines 118-157, 639-677
-
----
-
-## 🔗 Cross-Session Context Awareness
-
-**Status:** ✅ ACTIVE (Phase 4.5 + Option B) - Master Orchestrator integrated with Tier 1 Working Memory + Project Tracking
-
-**Two-Tier Continuation System:**
-
-### Tier 1: Orchestrator Session Continuation (High Priority)
-For short-term work resumption (TDD, Debug, ADO sessions).
-
-**How It Works:**
-1. User says "continue", "resume", "keep going", or "next phase"
-2. `CrossSessionContextMiddleware` detects continuation pattern
-3. Queries Tier 1 for last 3 orchestrator session metadata
-4. Injects <200 tokens of lightweight context
-5. Master Orchestrator routes to last-used orchestrator automatically
-
-**Example Flow:**
-```
-Session 1: User says "run tests for auth module" → TDD Master executes
-           → Session metadata recorded in Tier 1
-
-Session 2: User says "continue" → Middleware queries Tier 1
-           → Finds last orchestrator: tdd_master
-           → Master Orchestrator routes to TDD Master
-           → Resumes test execution
-```
-
-**Context Injected:**
-```json
-{
-  "recent_activity": [{
-    "session_id": "session-20260102-101500",
-    "orchestrator": "tdd_master",
-    "intent": "run tests for auth module",
-    "artifacts": ["test_results.json"],
-    "timestamp": "2026-01-02T10:15:00Z"
-  }],
-  "continuation_detected": true,
-  "continuation_type": "orchestrator_session",
-  "context_source": "tier1_working_memory"
-}
-```
-
-### Tier 2: Project-Level Continuation (Fallback)
-For long-term planning work resumption when no active orchestrator session.
-
-**How It Works:**
-1. User says "continue" (no active orchestrator session found)
-2. Middleware queries Tier 1 for active planning project
-3. Retrieves lightweight project context (<200 tokens)
-4. Master Orchestrator routes to Planning Orchestrator v5
-5. Planning resumes from last completed phase/task
-
-**Example Flow:**
-```
-Session 1: User completes "Phase 5.1a: ADO Wizard Enhancement"
-           → Planning Orchestrator writes project state to Tier 1
-           → Project: cortex-v5-refactor, progress: 40%, next: Task 5.1
-
-Session 2 (hours later): User says "continue" → Middleware finds:
-           → No recent orchestrator session
-           → Active project: cortex-v5-refactor (40% complete)
-           → Routes to Planning v5 with project context
-           → Planning resumes at Task 5.1
-```
-
-**Context Injected:**
-```json
-{
-  "active_project": {
-    "project_id": "cortex-v5-holistic-refactor",
-    "plan_name": "CORTEX v5 Holistic Refactor",
-    "current_phase": "Phase 5",
-    "current_task": "Task 5.1",
-    "last_completed": "Phase 5.1a",
-    "progress": 40,
-    "next_action": "/CORTEX Plan ADO Orchestrator v2 Migration",
-    "orchestrator": "planning_v5"
-  },
-  "continuation_detected": true,
-  "continuation_type": "active_project",
-  "context_source": "tier1_project_tracker"
-}
-```
-
-**Priority Logic:**
-- Orchestrator sessions (Tier 1) override project context (Tier 2)
-- If both exist, orchestrator session wins
-- Token Efficiency: 200 tokens (metadata) vs 50,000 tokens (full conversation) = **99.6% reduction**
-
-**Orchestrators Tracked:** All orchestrators (Planning, ADO, Vacuum, Cleanup, TDD, Debug, Sanitization, Refinement)
 
 ---
 
@@ -392,10 +299,11 @@ cortex-brain/                    src/
 | `/CORTEX Plan [feature]` | 🛡️ Create plan (uses Planning Orchestrator) |
 | `ado story [feature]` | 🛡️ Create ADO items (uses ADO Orchestrator) |
 | `vacuum [path]` | 🛡️ Deep filesystem cleanup + reorganization |
+| `cleanup docs` | 📋 6-phase docs cleanup + validation + sync |
 | `refactor [artifact]` | 📋 Deep analysis with bloat detection + decomposition |
 | `system maintenance` | 12-phase health pipeline |
 | `help` | Show all commands |
 
-**Resources:** `cortex-brain/response-templates-v4.yaml`, `brain-protection-rules.yaml`, `cortex-maintenance.prompt.md` (v2.0 modular), `cortex-vacuum.prompt.md`, `cortex-refactor.prompt.md`
+**Resources:** `cortex-brain/response-templates-v4.yaml`, `brain-protection-rules.yaml`, `cortex-maintenance.prompt.md` (v2.0 modular), `cortex-vacuum.prompt.md`, `cortex-refactor.prompt.md`, `cortex-doc-cleanup.prompt.md`
 
 **Anti-Bloat:** This file MUST stay under 250 lines (increased for LLM intent routing sections).

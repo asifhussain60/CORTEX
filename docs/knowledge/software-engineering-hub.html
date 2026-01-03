@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Software Engineering Learning Hub - Master SOLID principles, clean code, and professional practices">
+    <meta name="keywords" content="software engineering, solid principles, clean code, refactoring, learning path">
+    <meta name="author" content="Asif Hussain">
+    <title>Software Engineering Hub | CORTEX Best Practices</title>
+    <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02">
+    <link rel="stylesheet" href="../assets/css/learning-hub.css?v=2026-01-02">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header class="glass-header">
+        <div class="header-content">
+            <nav class="header-nav">
+                <a href="../index.html" class="nav-link">
+                    <span class="nav-icon">🏠</span> Home
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero learning-module-hero" id="main-content">
+        <div class="module-header">
+            <h1 class="hero-title">⚙️ Software Engineering Hub</h1>
+            <p class="hero-subtitle">Master SOLID Principles, Clean Code, Refactoring, and Professional Practices</p>
+            <div class="module-meta">
+                <span>⏱️ 4 modules • 2.5 hours</span>
+                <span>📊 4 quizzes (40 questions)</span>
+                <span>💻 5 code playgrounds</span>
+                <span>🏆 4 progressive challenges</span>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <section class="learning-path-roadmap glass-card">
+            <h4>🗺️ Your Learning Journey</h4>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                From foundational SOLID principles to advanced refactoring techniques. Learn how to write 
+                maintainable, testable code following Uncle Bob's Clean Code philosophy.
+            </p>
+
+            <div class="mermaid-container">
+                <pre class="mermaid">
+graph LR
+    START["🚀 Start Here"] --> M1["Module 1<br/>SOLID Principles<br/>⏱️ 40 min"]
+    M1 --> M2["Module 2<br/>Clean Code<br/>⏱️ 35 min"]
+    M2 --> M3["Module 3<br/>Refactoring<br/>⏱️ 40 min"]
+    M3 --> M4["Module 4<br/>Code Reviews<br/>⏱️ 35 min"]
+    M4 --> CERT["🏆 Software<br/>Craftsperson"]
+
+    style START fill:#00d4ff,stroke:#fff,stroke-width:2px,color:#000
+    style M1 fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
+    style M2 fill:#fbbf24,stroke:#fcd34d,stroke-width:2px,color:#000
+    style M3 fill:#f97316,stroke:#fb923c,stroke-width:2px,color:#fff
+    style M4 fill:#8b5cf6,stroke:#a78bfa,stroke-width:2px,color:#fff
+    style CERT fill:#00ff88,stroke:#fff,stroke-width:3px,color:#000
+                </pre>
+            </div>
+        </section>
+
+        <section style="margin-top: var(--spacing-3xl);">
+            <h2 style="color: var(--text-primary); margin-bottom: var(--spacing-xl); font-size: 2rem;">
+                📚 Interactive Learning Modules
+            </h2>
+            
+            <div class="module-nav-grid">
+                <a href="software-engineering/solid-principles.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 1</span>
+                        <span class="difficulty-badge beginner">Beginner</span>
+                    </div>
+                    <h5>🎯 SOLID Principles</h5>
+                    <p class="module-description">
+                        Master Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, 
+                        and Dependency Inversion with interactive examples.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 40 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                    </div>
+                </a>
+
+                <a href="software-engineering/clean-code.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 2</span>
+                        <span class="difficulty-badge intermediate">Intermediate</span>
+                    </div>
+                    <h5>✨ Clean Code Practices</h5>
+                    <p class="module-description">
+                        Learn meaningful names, small functions, error handling, and comment philosophy. 
+                        Transform messy code into clean, readable masterpieces.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 35 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                    </div>
+                </a>
+
+                <a href="software-engineering/refactoring.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 3</span>
+                        <span class="difficulty-badge advanced">Advanced</span>
+                    </div>
+                    <h5>🔧 Refactoring Techniques</h5>
+                    <p class="module-description">
+                        Master Martin Fowler's refactoring catalog. Learn Extract Method, Replace Conditional 
+                        with Polymorphism, and 20+ essential refactoring patterns.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 40 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                    </div>
+                </a>
+
+                <a href="software-engineering/code-reviews.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 4</span>
+                        <span class="difficulty-badge expert">Expert</span>
+                    </div>
+                    <h5>👥 Code Review Excellence</h5>
+                    <p class="module-description">
+                        Learn effective peer review strategies, constructive feedback techniques, and how to 
+                        build a culture of continuous improvement in your team.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 35 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>📋 Prerequisites & Recommendations</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-lg); margin-top: var(--spacing-xl);">
+                <div style="padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-radius: 8px; border: 1px solid #10b981;">
+                    <h4 style="color: #10b981; margin-bottom: var(--spacing-sm);">✅ Recommended Background</h4>
+                    <ul style="color: var(--text-secondary); font-size: 0.95rem;">
+                        <li>Basic programming in any language</li>
+                        <li>Understanding of OOP concepts</li>
+                        <li>Experience writing functions</li>
+                        <li>Willingness to improve code quality</li>
+                    </ul>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(0, 212, 255, 0.1); border-radius: 8px; border: 1px solid #00d4ff;">
+                    <h4 style="color: #00d4ff; margin-bottom: var(--spacing-sm);">🛠️ Tools You'll Use</h4>
+                    <ul style="color: var(--text-secondary); font-size: 0.95rem;">
+                        <li>Static analysis tools (SonarQube)</li>
+                        <li>Linters (ESLint, Pylint)</li>
+                        <li>Refactoring IDE features</li>
+                        <li>Code review platforms</li>
+                    </ul>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(139, 92, 246, 0.1); border-radius: 8px; border: 1px solid #8b5cf6;">
+                    <h4 style="color: #8b5cf6; margin-bottom: var(--spacing-sm);">🎯 What You'll Build</h4>
+                    <ul style="color: var(--text-secondary); font-size: 0.95rem;">
+                        <li>SOLID-compliant class library</li>
+                        <li>Refactored legacy codebase</li>
+                        <li>Clean code examples portfolio</li>
+                        <li>Code review checklist</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🎓 Learning Outcomes</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                By completing this learning path, you'll be able to:
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-md);">
+                <div style="padding: var(--spacing-md); background: rgba(16, 185, 129, 0.05); border-left: 3px solid #10b981; border-radius: 4px;">
+                    <strong style="color: #10b981;">SOLID Mastery</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Apply all five SOLID principles to design maintainable systems
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-md); background: rgba(0, 212, 255, 0.05); border-left: 3px solid #00d4ff; border-radius: 4px;">
+                    <strong style="color: #00d4ff;">Clean Code</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Write self-documenting code with meaningful names and functions
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-md); background: rgba(139, 92, 246, 0.05); border-left: 3px solid #8b5cf6; border-radius: 4px;">
+                    <strong style="color: #8b5cf6;">Refactoring Skills</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Transform legacy code safely using proven refactoring patterns
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-md); background: rgba(251, 191, 36, 0.05); border-left: 3px solid #fbbf24; border-radius: 4px;">
+                    <strong style="color: #fbbf24;">Code Review Excellence</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Provide constructive feedback and mentor junior developers
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🔗 Related Learning Paths</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                Expand your knowledge with these complementary paths:
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-lg);">
+                <a href="design-patterns-hub.html" class="related-path-card">
+                    <span class="path-icon">🎨</span>
+                    <h5>Design Patterns</h5>
+                    <p>GoF patterns, architectural patterns</p>
+                </a>
+                <a href="testing-hub.html" class="related-path-card">
+                    <span class="path-icon">🧪</span>
+                    <h5>Testing Best Practices</h5>
+                    <p>TDD, unit testing, test doubles</p>
+                </a>
+                <a href="ddd-hub.html" class="related-path-card">
+                    <span class="path-icon">🏗️</span>
+                    <h5>Domain-Driven Design</h5>
+                    <p>Strategic design, bounded contexts</p>
+                </a>
+            </div>
+        </section>
+
+        <section class="glass-card" style="margin-top: var(--spacing-3xl); margin-bottom: var(--spacing-3xl);">
+            <h2>📚 Additional Resources</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-md); margin-top: var(--spacing-lg);">
+                <a href="https://cleancoders.com/" target="_blank" rel="noopener" class="resource-link">
+                    📖 Clean Coders
+                </a>
+                <a href="https://refactoring.guru/" target="_blank" rel="noopener" class="resource-link">
+                    📖 Refactoring Guru
+                </a>
+                <a href="https://martinfowler.com/articles/refactoring-2nd-ed.html" target="_blank" rel="noopener" class="resource-link">
+                    📖 Refactoring Book
+                </a>
+                <a href="https://www.sonarsource.com/learn/clean-code/" target="_blank" rel="noopener" class="resource-link">
+                    📖 SonarSource Clean Code
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <footer style="padding: var(--spacing-2xl); text-align: center; color: var(--text-secondary); background: rgba(0, 0, 0, 0.3);">
+        <p>© 2026 Asif Hussain. All rights reserved.</p>
+        <p style="margin-top: var(--spacing-sm);">
+            <a href="../index.html" style="color: var(--hub-primary); text-decoration: none;">Back to Home</a> • 
+            <a href="index.html" style="color: var(--hub-primary); text-decoration: none;">All Learning Paths</a>
+        </p>
+    </footer>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true, 
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#10b981',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#fff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#8b5cf6',
+                tertiaryColor: '#fbbf24'
+            }
+        });
+    </script>
+</body>
+</html>

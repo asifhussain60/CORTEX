@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="API Authentication & Security - API Design Learning Module">
+    <meta name="keywords" content="api-design, API Authentication & Security, learning, tutorial">
+    <meta name="author" content="Asif Hussain">
+    <title>API Authentication & Security | CORTEX Learning Hub</title>
+    <link rel="stylesheet" href="../../assets/css/main.css?v=2026-01-02">
+    <link rel="stylesheet" href="../../assets/css/learning-hub.css?v=2026-01-02">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/editor/editor.main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Header Navigation -->
+    <header class="glass-header">
+        <div class="header-content">
+            <nav class="header-nav">
+                <a href="../../index.html" class="nav-link">
+                    <span class="nav-icon">🏠</span> Home
+                </a>
+                <span class="nav-separator">›</span>
+                <a href="../api-design-hub.html" class="nav-link">
+                    <span class="nav-icon">🌐</span> API Design
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Module Hero -->
+    <section class="module-hero" id="main-content">
+        <div class="module-header">
+            <div class="breadcrumb">
+                <span class="difficulty-badge advanced">Advanced</span>
+                <span style="color: var(--text-secondary);">Module 4 of 4</span>
+            </div>
+            <h1 class="hero-title">🌐 API Authentication & Security</h1>
+            <p class="hero-subtitle">Interactive learning with quizzes, code playgrounds, and challenges</p>
+            <div class="module-meta">
+                <span>⏱️ 50 minutes</span>
+                <span>📊 10 quiz questions</span>
+                <span>💻 2 code playgrounds</span>
+                <span>🏆 1 challenge</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Learning Objectives -->
+        <section class="glass-card" style="margin-top: var(--spacing-2xl);">
+            <h2>🎓 Learning Objectives</h2>
+            <ul class="objective-list">
+                <li>Implement OAuth 2.0 and OpenID Connect</li>
+                <li>Secure APIs with JWT tokens</li>
+                <li>Apply rate limiting and throttling</li>
+                <li>Protect against common API vulnerabilities</li>
+                <li>Design secure authentication flows</li>
+            </ul>
+        </section>
+
+        <!-- OAuth 2.0 Flows -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🔐 OAuth 2.0 Grant Types</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                OAuth 2.0 provides four main grant types for different authentication scenarios.
+            </p>
+            
+            <div class="mermaid-container">
+                <pre class="mermaid">
+sequenceDiagram
+    participant User
+    participant Client
+    participant AuthServer
+    participant ResourceServer
+    
+    Note over User,ResourceServer: Authorization Code Flow (Most Secure)
+    User->>Client: 1. Click Login
+    Client->>AuthServer: 2. Redirect to /authorize
+    AuthServer->>User: 3. Login page
+    User->>AuthServer: 4. Enter credentials
+    AuthServer->>Client: 5. Authorization code
+    Client->>AuthServer: 6. Exchange code for token
+    AuthServer->>Client: 7. Access token + Refresh token
+    Client->>ResourceServer: 8. Request with Bearer token
+    ResourceServer->>Client: 9. Protected resource
+                </pre>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-lg); margin-top: var(--spacing-xl);">
+                <div style="padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-radius: 8px; border: 1px solid #10b981;">
+                    <h4 style="color: #10b981;">Authorization Code</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Best for: Server-side apps<br>Security: ⭐⭐⭐⭐⭐</p>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(0, 212, 255, 0.1); border-radius: 8px; border: 1px solid #00d4ff;">
+                    <h4 style="color: #00d4ff;">Client Credentials</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Best for: Machine-to-machine<br>Security: ⭐⭐⭐⭐</p>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(251, 191, 36, 0.1); border-radius: 8px; border: 1px solid #fbbf24;">
+                    <h4 style="color: #fbbf24;">Implicit Flow</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Best for: SPAs (deprecated)<br>Security: ⭐⭐</p>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(123, 97, 255, 0.1); border-radius: 8px; border: 1px solid #7b61ff;">
+                    <h4 style="color: #7b61ff;">Resource Owner</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Best for: Trusted clients<br>Security: ⭐⭐⭐</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- JWT Security -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🔑 JWT (JSON Web Token) Security</h2>
+            <div id="jwt-viz" style="width: 100%; height: 300px; margin: var(--spacing-xl) 0;"></div>
+            
+            <div style="margin-top: var(--spacing-lg); padding: var(--spacing-lg); background: rgba(239, 68, 68, 0.1); border-radius: 8px; border-left: 4px solid #ef4444;">
+                <h4 style="color: #ef4444; margin-bottom: var(--spacing-md);">🚨 JWT Security Best Practices</h4>
+                <ul style="color: var(--text-secondary);">
+                    <li><strong>Use HTTPS:</strong> Always transmit tokens over encrypted connections</li>
+                    <li><strong>Short Expiry:</strong> Access tokens should expire in 15-60 minutes</li>
+                    <li><strong>Refresh Tokens:</strong> Use secure rotation for long-lived sessions</li>
+                    <li><strong>Validate Signature:</strong> Always verify JWT signature on server</li>
+                    <li><strong>Store Securely:</strong> Use httpOnly cookies, never localStorage</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Rate Limiting -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>⚡ Rate Limiting Strategies</h2>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+graph LR
+    Request["Incoming Request"] --> Check["Check Rate Limit"]
+    Check --> Allowed{"Limit Exceeded?"}
+    Allowed -->|No| Process["Process Request"]
+    Allowed -->|Yes| Reject["429 Too Many Requests"]
+    Process --> Response["Return Response"]
+    Reject --> Headers["X-RateLimit-Limit<br/>X-RateLimit-Remaining<br/>Retry-After"]
+    
+    style Request fill:#7b61ff,stroke:#9f87ff,color:#fff
+    style Allowed fill:#fbbf24,stroke:#fcd34d,color:#000
+    style Process fill:#10b981,stroke:#34d399,color:#fff
+    style Reject fill:#ef4444,stroke:#f87171,color:#fff
+                </pre>
+            </div>
+        </section>
+
+        <!-- Code Playgrounds -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>💻 Code Playground: JWT Authentication</h2>
+            <div class="playground-container">
+                <div class="playground-tabs">
+                    <button class="tab-btn active" data-tab="jwt">JWT Generation</button>
+                    <button class="tab-btn" data-tab="oauth">OAuth 2.0 Flow</button>
+                </div>
+                <div class="tab-content active" id="jwt">
+                    <div id="editor-jwt" style="height: 450px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                </div>
+                <div class="tab-content" id="oauth">
+                    <div id="editor-oauth" style="height: 450px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                </div>
+                <button class="run-code-btn" id="run-code"><span class="btn-icon">▶️</span> Run Code</button>
+                <div class="output-container" id="output">
+                    <h5>📤 Output</h5>
+                    <pre id="output-content">Click "Run Code" to test authentication...</pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Quiz -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>✅ Knowledge Check: Security Quiz</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                Test your understanding with 10 questions. Instant feedback provided!
+            </p>
+            <div class="quiz-container" id="quiz"></div>
+            <div class="quiz-results" id="quiz-results" style="display: none;">
+                <h3 id="score-display"></h3>
+                <button class="retry-btn" id="retry-quiz" style="margin-top: var(--spacing-lg); padding: var(--spacing-md) var(--spacing-xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 8px; cursor: pointer;">🔄 Retry Quiz</button>
+            </div>
+        </section>
+
+        <!-- Challenge -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🏆 Security Challenge</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                Design a complete authentication system with JWT + Refresh tokens that handles:
+            </p>
+            <ul style="color: var(--text-secondary);">
+                <li>Login with JWT access token (15 min expiry)</li>
+                <li>Refresh token rotation (7 day expiry)</li>
+                <li>Logout and token revocation</li>
+                <li>Rate limiting (100 requests/hour)</li>
+            </ul>
+            <button id="show-solution-btn" style="padding: var(--spacing-sm) var(--spacing-lg); background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid #10b981; border-radius: 8px; cursor: pointer; margin-top: var(--spacing-md);">✅ Show Solution</button>
+            <div id="challenge-solution" style="margin-top: var(--spacing-lg); display: none;">
+                <pre style="background: rgba(26, 31, 58, 0.8); padding: var(--spacing-lg); border-radius: 8px; overflow-x: auto; color: #e5e7eb;"><code># Complete JWT + Refresh Token System
+
+POST /api/auth/login
+Request: {email, password}
+Response: {
+  "access_token": "eyJhbGc...",
+  "refresh_token": "xyz...",
+  "expires_in": 900
+}
+
+POST /api/auth/refresh
+Request: {refresh_token}
+Response: {
+  "access_token": "new_token...",
+  "refresh_token": "new_refresh..."
+}
+
+POST /api/auth/logout
+Request: {refresh_token}
+Response: {"message": "Logged out successfully"}
+
+Rate Limiting Headers:
+X-RateLimit-Limit: 100
+X-RateLimit-Remaining: 75
+X-RateLimit-Reset: 1640995200</code></pre>
+            </div>
+        </section>
+
+        <!-- Next Steps -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🚀 Next Steps</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                You've completed API Authentication & Security! Continue your learning journey:
+            </p>
+            <div class="next-module-cards">
+                <a href="real-world-case-studies.html" class="next-module-card">
+                    <span class="module-icon">📖</span>
+                    <div>
+                        <h5>Module 5: Real-World API Case Studies</h5>
+                        <p>Expert • 60 minutes</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer style="margin-top: var(--spacing-3xl); padding: var(--spacing-xl); text-align: center; color: var(--text-secondary);">
+        <p>© 2026 Asif Hussain. All rights reserved.</p>
+        <p style="margin-top: var(--spacing-sm);">
+            <a href="../../index.html" style="color: var(--hub-primary);">Back to Home</a> • 
+            <a href="../api-design-hub.html" style="color: var(--hub-primary);">API Design Hub</a>
+        </p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
+    <script>
+        mermaid.initialize({startOnLoad:true,theme:'dark',themeVariables:{primaryColor:'#7b61ff',primaryTextColor:'#fff',primaryBorderColor:'#fff',lineColor:'#00d4ff',secondaryColor:'#1a1f3a',tertiaryColor:'#2a2f4a'}});
+        
+        function createJWTViz(){const w=document.getElementById('jwt-viz').clientWidth,h=300,svg=d3.select('#jwt-viz').append('svg').attr('width',w).attr('height',h);const parts=[{name:'Header',x:w*0.2,y:150,color:'#00d4ff',data:'{alg:HS256,typ:JWT}'},{name:'Payload',x:w*0.5,y:150,color:'#10b981',data:'{sub:123,exp:1234567890}'},{name:'Signature',x:w*0.8,y:150,color:'#ef4444',data:'HMACSHA256(...)'}];parts.forEach(p=>{const g=svg.append('g').attr('transform',`translate(${p.x},${p.y})`);g.append('rect').attr('x',-60).attr('y',-40).attr('width',120).attr('height',80).attr('fill',p.color).attr('opacity',0.2).attr('stroke',p.color).attr('stroke-width',2).attr('rx',8);g.append('text').attr('text-anchor','middle').attr('y',-10).attr('fill',p.color).attr('font-size','14px').attr('font-weight','bold').text(p.name);g.append('text').attr('text-anchor','middle').attr('y',15).attr('fill','#fff').attr('font-size','10px').text(p.data);});}
+        
+        require.config({paths:{vs:'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs'}});require(['vs/editor/editor.main'],function(){const jwtCode=`import jwt\nfrom datetime import datetime, timedelta\n\nSECRET_KEY = "your-secret-key"\n\ndef generate_jwt(user_id):\n    payload = {\n        "sub": user_id,\n        "exp": datetime.utcnow() + timedelta(minutes=15),\n        "iat": datetime.utcnow()\n    }\n    token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")\n    return token\n\ndef verify_jwt(token):\n    try:\n        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])\n        return payload\n    except jwt.ExpiredSignatureError:\n        return {"error": "Token expired"}\n    except jwt.InvalidTokenError:\n        return {"error": "Invalid token"}\n\n# Usage\ntoken = generate_jwt(123)\nprint(f"Token: {token}")\nverified = verify_jwt(token)\nprint(f"Verified: {verified}")`;const oauthCode=`from flask import Flask, redirect, request\nimport requests\n\napp = Flask(__name__)\n\nCLIENT_ID = "your_client_id"\nCLIENT_SECRET = "your_client_secret"\nAUTHORIZE_URL = "https://oauth.example.com/authorize"\nTOKEN_URL = "https://oauth.example.com/token"\n\n@app.route('/login')\ndef login():\n    # Step 1: Redirect to OAuth provider\n    params = {\n        "client_id": CLIENT_ID,\n        "redirect_uri": "http://localhost:5000/callback",\n        "response_type": "code",\n        "scope": "read write"\n    }\n    return redirect(f"{AUTHORIZE_URL}?{urlencode(params)}")\n\n@app.route('/callback')\ndef callback():\n    # Step 2: Exchange code for token\n    code = request.args.get('code')\n    data = {\n        "grant_type": "authorization_code",\n        "code": code,\n        "redirect_uri": "http://localhost:5000/callback",\n        "client_id": CLIENT_ID,\n        "client_secret": CLIENT_SECRET\n    }\n    response = requests.post(TOKEN_URL, data=data)\n    tokens = response.json()\n    return tokens`;monaco.editor.create(document.getElementById('editor-jwt'),{value:jwtCode,language:'python',theme:'vs-dark',minimap:{enabled:false},fontSize:14});monaco.editor.create(document.getElementById('editor-oauth'),{value:oauthCode,language:'python',theme:'vs-dark',minimap:{enabled:false},fontSize:14});document.querySelectorAll('.tab-btn').forEach(btn=>btn.addEventListener('click',function(){document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));this.classList.add('active');document.getElementById(this.getAttribute('data-tab')).classList.add('active');}));document.getElementById('run-code').addEventListener('click',()=>{const output=document.getElementById('output-content');output.textContent=document.querySelector('.tab-content.active').id==='jwt'?`Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEyMywiZXhwIjoxNjQwOTk2MTAwLCJpYXQiOjE2NDA5OTUyMDB9.signature\n\nVerified: {'sub': 123, 'exp': 1640996100, 'iat': 1640995200}\n\n✅ JWT generated and verified successfully!`:`OAuth Flow:\n1. Redirecting to: https://oauth.example.com/authorize?client_id=...&redirect_uri=...\n2. User authorizes application\n3. Callback received with code: abc123xyz\n4. Exchanging code for tokens...\n5. Tokens received:\n{\n  "access_token": "eyJhbGc...",\n  "refresh_token": "xyz...",\n  "expires_in": 3600\n}\n\n✅ OAuth 2.0 flow completed!`;});});
+        
+        const quiz=[{q:"Which OAuth 2.0 flow is most secure for server-side apps?",o:["Implicit","Authorization Code","Client Credentials","Password Grant"],c:1,e:"Authorization Code flow is the most secure with PKCE extension."},{q:"Where should JWT tokens be stored in browsers?",o:["localStorage","sessionStorage","httpOnly cookies","IndexedDB"],c:2,e:"httpOnly cookies prevent XSS attacks by making tokens inaccessible to JavaScript."},{q:"What is the recommended JWT access token expiry?",o:["24 hours","15-60 minutes","7 days","Never expire"],c:1,e:"Short-lived access tokens (15-60 min) limit exposure if compromised."},{q:"What HTTP status code indicates rate limit exceeded?",o:["403 Forbidden","401 Unauthorized","429 Too Many Requests","503 Service Unavailable"],c:2,e:"429 Too Many Requests is the standard code for rate limiting."},{q:"Which header contains the retry time for rate-limited requests?",o:["X-RateLimit-Reset","Retry-After","X-Retry-Time","Rate-Limit-Retry"],c:1,e:"Retry-After header tells clients when to retry after rate limit."},{q:"What does the 'aud' claim in JWT represent?",o:["Audience","Authentication","Authorization","Audit"],c:0,e:"The 'aud' (audience) claim identifies the recipients of the JWT."},{q:"Which algorithm should be used for JWT signing?",o:["MD5","SHA1","HS256 or RS256","Base64"],c:2,e:"HS256 (HMAC) or RS256 (RSA) are secure signing algorithms."},{q:"What is PKCE in OAuth 2.0?",o:["Password Key Code Exchange","Proof Key for Code Exchange","Public Key Certificate Exchange","Protected Key Code Encryption"],c:1,e:"PKCE (Proof Key for Code Exchange) prevents authorization code interception."},{q:"How should API keys be transmitted?",o:["In URL query parameters","In request headers","In request body","In cookies"],c:1,e:"API keys in headers avoid logging in URL and provide better security."},{q:"What is token rotation?",o:["Encrypting tokens","Issuing new refresh token on each use","Changing token algorithm","Compressing tokens"],c:1,e:"Token rotation issues new refresh tokens, invalidating old ones for better security."}];function renderQuiz(){document.getElementById('quiz').innerHTML=quiz.map((q,i)=>`<div class="quiz-question" style="margin-bottom:var(--spacing-2xl);padding:var(--spacing-lg);background:rgba(26,31,58,0.5);border-radius:8px;border:1px solid var(--module-border);"><h4 style="color:var(--text-primary);margin-bottom:var(--spacing-md);">Q${i+1}: ${q.q}</h4><div>${q.o.map((o,j)=>`<label style="display:block;padding:var(--spacing-sm);margin:var(--spacing-xs) 0;background:rgba(123,97,255,0.1);border-radius:6px;cursor:pointer;"><input type="radio" name="q-${i}" value="${j}" style="margin-right:var(--spacing-sm);"><span style="color:var(--text-secondary);">${o}</span></label>`).join('')}</div><div id="fb-${i}" style="display:none;margin-top:var(--spacing-md);padding:var(--spacing-md);border-radius:6px;"></div></div>`).join('')+`<button id="submit-quiz" style="padding:var(--spacing-md) var(--spacing-2xl);background:var(--hub-primary);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:16px;font-weight:600;">Submit Quiz</button>`;document.getElementById('submit-quiz').addEventListener('click',()=>{let c=0;quiz.forEach((q,i)=>{const s=document.querySelector(`input[name="q-${i}"]:checked`),f=document.getElementById(`fb-${i}`);if(s){const a=parseInt(s.value);if(a===q.c){c++;f.style.display='block';f.style.background='rgba(16,185,129,0.1)';f.style.borderLeft='4px solid #10b981';f.innerHTML=`<strong style="color:#10b981;">✅ Correct!</strong><br><span style="color:var(--text-secondary);">${q.e}</span>`;}else{f.style.display='block';f.style.background='rgba(239,68,68,0.1)';f.style.borderLeft='4px solid #ef4444';f.innerHTML=`<strong style="color:#ef4444;">❌ Incorrect</strong><br><span style="color:var(--text-secondary);">${q.e}</span>`;}}});const p=(c/quiz.length)*100,r=document.getElementById('quiz-results'),d=document.getElementById('score-display');r.style.display='block';d.textContent=`Score: ${c}/${quiz.length} (${p.toFixed(0)}%)`;d.style.color=p>=70?'#10b981':p>=50?'#fbbf24':'#ef4444';document.getElementById('submit-quiz').disabled=true;document.getElementById('submit-quiz').style.opacity='0.5';});}renderQuiz();document.getElementById('retry-quiz')?.addEventListener('click',()=>{document.getElementById('quiz-results').style.display='none';renderQuiz();});document.getElementById('show-solution-btn')?.addEventListener('click',function(){document.getElementById('challenge-solution').style.display='block';this.disabled=true;this.style.opacity='0.5';});
+        
+        window.addEventListener('load',()=>{createJWTViz();console.log("✅ API Authentication & Security module loaded!");});
+    </script>
+</body>
+</html>

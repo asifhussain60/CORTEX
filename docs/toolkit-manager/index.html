@@ -3,529 +3,524 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="CORTEX Toolkit Manager - Intelligent Tool Orchestration Layer with Security, Recovery, and Audit capabilities">
-    <meta name="keywords" content="CORTEX, toolkit, orchestration, tools, automation, security">
+    <meta name="description" content="CORTEX Toolkit Manager - Master Orchestrator Routing Layer with Pattern-Based + LLM Hybrid Intelligence">
+    <meta name="keywords" content="CORTEX, toolkit, orchestrator, routing, LLM classification">
     <meta name="author" content="Asif Hussain">
     <title>Toolkit Manager | CORTEX 4.0</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02-v4">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-    <style>
-        /* D3.js Architecture Visualization */
-        #architecture-viz {
-            width: 100%;
-            height: 560px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 16px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        #architecture-viz svg {
-            display: block;
-            margin: 0 auto;
-        }
-
-        .component-node {
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .spoke-line {
-            stroke: rgba(0, 212, 255, 0.4);
-            stroke-width: 2;
-            stroke-dasharray: 5,5;
-        }
-
-        /* D3 Tooltip */
-        .d3-tooltip {
-            position: absolute;
-            background: rgba(26, 31, 58, 0.95);
-            border: 1px solid var(--accent-primary);
-            border-radius: 8px;
-            padding: 12px 16px;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-            z-index: 1000;
-            max-width: 280px;
-            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.3);
-        }
-
-        .d3-tooltip h4 {
-            margin: 0 0 8px 0;
-            color: var(--accent-primary);
-            font-size: 1rem;
-        }
-
-        .d3-tooltip p {
-            margin: 0;
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            line-height: 1.5;
-        }
-
-        .d3-tooltip ul {
-            margin: 8px 0 0 0;
-            padding-left: 1rem;
-            color: var(--text-secondary);
-            font-size: 0.8rem;
-        }
-
-        /* Component Cards */
-        .toolkit-category-card {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            padding: 2rem 1.5rem;
-            min-height: 280px;
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .toolkit-category-card .feature-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2));
-            width: 70px;
-            height: 70px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--accent-primary);
-            transition: all 0.3s ease;
-        }
-
-        .toolkit-category-card:hover .feature-icon {
-            transform: scale(1.1);
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.3), rgba(123, 97, 255, 0.3));
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
-        }
-
-        .toolkit-category-card .feature-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .toolkit-category-card .feature-description {
-            color: var(--text-secondary);
-            line-height: 1.6;
-            font-size: 0.9rem;
-            flex-grow: 1;
-            margin-bottom: 0.75rem;
-        }
-
-        .toolkit-category-card .feature-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.4rem;
-            justify-content: center;
-        }
-
-        .toolkit-category-card .tag {
-            background: rgba(0, 212, 255, 0.15);
-            color: var(--accent-primary);
-            padding: 0.2rem 0.6rem;
-            border-radius: 9999px;
-            font-size: 0.7rem;
-            font-weight: 500;
-            border: 1px solid rgba(0, 212, 255, 0.3);
-        }
-
-        .glass-card.card-link.toolkit-category-card:hover {
-            transform: translateY(-8px);
-            border-color: var(--accent-primary);
-            box-shadow: 0 12px 40px rgba(0, 212, 255, 0.25), 0 0 0 1px rgba(0, 212, 255, 0.3);
-        }
-
-        /* Mermaid container */
-        .mermaid-container {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 2rem;
-            border-radius: 12px;
-            margin: 1.5rem 0;
-            overflow-x: auto;
-            text-align: center;
-        }
-
-        /* Stats tiles */
-        .stat-tile {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 1.5rem;
-            text-align: center;
-            transition: all 0.2s ease;
-        }
-
-        .stat-tile:hover {
-            border-color: var(--accent-primary);
-            box-shadow: 0 4px 16px rgba(0, 212, 255, 0.2);
-        }
-
-        .stat-value {
-            font-size: 2.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #00d4ff, #7b61ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .stat-label {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-top: 0.5rem;
-        }
-
-        /* Code panel */
-        .code-panel {
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--glass-border);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 1rem 0;
-            overflow-x: auto;
-        }
-
-        .code-panel pre {
-            margin: 0;
-            font-family: 'Monaco', 'Courier New', monospace;
-            font-size: 0.875rem;
-            line-height: 1.6;
-        }
-
-        .code-panel .keyword { color: #7b61ff; }
-        .code-panel .string { color: #f59e0b; }
-        .code-panel .function { color: #00d4ff; }
-        .code-panel .comment { color: #6b7280; }
-
-        @media (max-width: 768px) {
-            #architecture-viz { height: 450px; }
-        }
-    </style>
 </head>
 <body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-
-    <!-- Breadcrumb Navigation -->
-    <nav class="breadcrumb" aria-label="Breadcrumb">
-        <a href="../index.html">Home</a>
-        <span class="breadcrumb-separator">→</span>
-        <span class="breadcrumb-current">Toolkit Manager</span>
-    </nav>
-
-    <!-- Hero Section (Level 1 Standard) -->
-    <section class="hero" id="main-content">
-        <div style="display: flex; align-items: center; justify-content: center; gap: 2.5rem; flex-wrap: wrap; margin-bottom: 2rem;">
-            <a href="../index.html">
-                <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" style="width: 200px; height: 200px; filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.5)); transition: filter 0.2s ease-in-out;">
-            </a>
-            <div style="text-align: center;">
-                <h1 class="hero-title" style="margin-bottom: 0.5rem;"><i class="fas fa-tools"></i> Toolkit Manager</h1>
-                <p class="hero-subtitle" style="margin-bottom: 1rem;">Intelligent Tool Orchestration Layer for CORTEX</p>
-                <div class="file-metadata">
-                    <span class="metadata-item"><i class="fas fa-shield-alt"></i> Secure Execution</span>
-                    <span class="metadata-item"><i class="fas fa-undo-alt"></i> Checkpoint Recovery</span>
-                    <span class="metadata-item"><i class="fas fa-history"></i> Audit Logging</span>
-                    <span class="metadata-item"><i class="fas fa-calendar-alt"></i> Updated: Dec 2025</span>
+    <!-- Glass Header Navigation -->
+    <header class="glass-header">
+        <div class="header-content">
+            <nav class="header-nav">
+                <a href="../index.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="container" id="main-content">
+        <!-- Page Title Card -->
+        <div class="glass-card-display animation-t1">
+            <div class="page-title-section">
+                <h1 class="page-title">
+                    <i class="fas fa-toolbox"></i>
+                    CORTEX Toolkit Manager
+                </h1>
+                <p class="page-subtitle">Master Orchestrator Routing Layer · Pattern-Based + LLM Hybrid Intelligence</p>
+            </div>
+            
+            <div class="metadata-grid">
+                <div class="metadata-item">
+                    <i class="fas fa-sitemap"></i>
+                    <span>8 Orchestrators</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-cogs"></i>
+                    <span>Hybrid Routing</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-brain"></i>
+                    <span>LLM Fallback</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-route"></i>
+                    <span>Intent Classification</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Score: 20</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Updated: Jan 2026</span>
                 </div>
             </div>
         </div>
-    </section>
 
-    <section class="section file-content">
-        <div class="container">
-
-            <!-- Statistics Panel -->
-            <div class="glass-card" style="padding: 2.5rem; margin-bottom: 2rem;">
-                <h2 class="section-title" style="margin-bottom: 1.5rem;"><i class="fas fa-chart-bar" aria-hidden="true"></i> Toolkit Statistics</h2>
-                <div class="metrics-grid-4">
-                    <div class="stat-tile">
-                        <div class="stat-value">35+</div>
-                        <div class="stat-label">Tools</div>
-                    </div>
-                    <div class="stat-tile">
-                        <div class="stat-value">329</div>
-                        <div class="stat-label">Tests</div>
-                    </div>
-                    <div class="stat-tile">
-                        <div class="stat-value">10</div>
-                        <div class="stat-label">Categories</div>
-                    </div>
-                    <div class="stat-tile">
-                        <div class="stat-value">8</div>
-                        <div class="stat-label">Components</div>
-                    </div>
+        <!-- Executive Summary -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-book-open"></i>
+                What Is Toolkit Manager?
+            </h2>
+            
+            <p class="intro-text">Toolkit Manager is CORTEX's <strong>Master Orchestrator Routing Layer</strong> that intelligently routes user requests to the appropriate specialized orchestrator. It uses a <strong>hybrid approach</strong>: fast pattern-based matching for exact intents, with LLM classification fallback for ambiguous requests.</p>
+            
+            <div class="highlight-box">
+                <div class="highlight-icon">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <div class="highlight-content">
+                    <h3>Key Features</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i><strong>Hybrid Routing:</strong> Pattern matching (fast) + LLM classification (intelligent)</li>
+                        <li><i class="fas fa-check-circle"></i><strong>8 Orchestrators:</strong> Planning, TDD, ADO, Sanitization, Maintenance, Refinement, Vision, Diagnostics</li>
+                        <li><i class="fas fa-check-circle"></i><strong>Zero Ambiguity:</strong> LLM fallback resolves unclear intents</li>
+                        <li><i class="fas fa-check-circle"></i><strong>Autonomous Handoff:</strong> 🛡️ orchestrators execute independently</li>
+                        <li><i class="fas fa-check-circle"></i><strong>Manifest-Driven:</strong> Orchestrator definitions stored in YAML</li>
+                    </ul>
                 </div>
             </div>
+        </section>
 
-            <!-- D3.js Interactive Architecture -->
-            <div class="glass-card" style="padding: 2.5rem; margin-bottom: 2rem;">
-                <h2 class="section-title" style="margin-bottom: 0.75rem;"><i class="fas fa-project-diagram" aria-hidden="true"></i> Architecture Overview</h2>
-                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 1.5rem;">Interactive hub-spoke visualization. Hover over components for details.</p>
-                <div id="architecture-viz"></div>
-                <div class="d3-tooltip" id="tooltip"></div>
-            </div>
-
-            <!-- Execution Pipeline (Mermaid) -->
-            <div class="glass-card" style="padding: 2.5rem; margin-bottom: 2rem;">
-                <h2 class="section-title" style="margin-bottom: 0.75rem;"><i class="fas fa-route" aria-hidden="true"></i> Execution Pipeline</h2>
-                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 1.5rem;">Tool execution flows through validation, security, and audit layers.</p>
-                <div class="mermaid-container">
-                    <pre class="mermaid">
-flowchart LR
-    subgraph Input["📥 Input Layer"]
-        REQ[Request Analyzer]
-        DUP[Duplication Check]
-    end
+        <!-- Routing Architecture -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-project-diagram"></i>
+                Hybrid Routing Architecture
+            </h2>
+            
+            <p class="intro-text">Toolkit Manager uses a 2-phase routing strategy: <strong>Pattern-Based Matching</strong> (90% of requests) and <strong>LLM Intent Classification</strong> (10% fallback for ambiguous cases).</p>
+            
+            <div class="diagram-container">
+                <div class="mermaid">
+graph TB
+    User["👤 User Request"]
+    TM["🎛️ Toolkit Manager<br/><small>Master Orchestrator</small>"]
+    Pattern["📋 Pattern Matcher<br/><small>Regex + Keyword</small>"]
+    LLM["🧠 LLM Classifier<br/><small>GPT-4o Fallback</small>"]
     
-    subgraph Validation["🛡️ Validation Layer"]
-        GATE[GateKeeper]
-        SEC[Security Guard]
-    end
+    User --> TM
+    TM --> Pattern
+    Pattern -->|"Exact Match<br/>(90%)"| Route
+    Pattern -->|"No Match<br/>(10%)"| LLM
+    LLM --> Route
     
-    subgraph Execution["⚡ Execution Layer"]
-        DEP[Dependency Manager]
-        ENG[Execution Engine]
-        REC[Recovery Manager]
-    end
+    Route["🔀 Route to Orchestrator"]
     
-    subgraph Output["📤 Output Layer"]
-        AUD[Audit Logger]
-        RES[Result Handler]
-    end
+    Route --> Planning["🛡️ Planning"]
+    Route --> TDD["📋 TDD"]
+    Route --> ADO["🛡️ ADO"]
+    Route --> Sanitize["📋 Sanitize"]
+    Route --> Maintain["📋 Maintain"]
+    Route --> Refine["📋 Refine"]
+    Route --> Vision["🔍 Vision"]
+    Route --> Diag["🩺 Diagnostics"]
     
-    REQ --> DUP
-    DUP --> GATE
-    GATE --> SEC
-    SEC --> DEP
-    DEP --> ENG
-    ENG --> REC
-    REC --> AUD
-    AUD --> RES
-    
-    style REQ fill:#3b82f6,stroke:#60a5fa,color:#fff
-    style DUP fill:#3b82f6,stroke:#60a5fa,color:#fff
-    style GATE fill:#10b981,stroke:#34d399,color:#fff
-    style SEC fill:#10b981,stroke:#34d399,color:#fff
-    style DEP fill:#7b61ff,stroke:#9f87ff,color:#fff
-    style ENG fill:#7b61ff,stroke:#9f87ff,color:#fff
-    style REC fill:#7b61ff,stroke:#9f87ff,color:#fff
-    style AUD fill:#f59e0b,stroke:#fbbf24,color:#fff
-    style RES fill:#f59e0b,stroke:#fbbf24,color:#fff
-                    </pre>
+    style TM fill:#7b61ff,stroke:#9f87ff,stroke-width:3px,color:#fff
+    style Pattern fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
+    style LLM fill:#f59e0b,stroke:#fbbf24,stroke-width:2px,color:#fff
+    style Route fill:#ef4444,stroke:#f87171,stroke-width:2px,color:#fff
+    style Planning fill:#e91e63,stroke:#f06292,stroke-width:2px,color:#fff
+    style ADO fill:#e91e63,stroke:#f06292,stroke-width:2px,color:#fff
                 </div>
             </div>
+        </section>
 
-            <!-- Core Components Grid -->
-            <div id="components" class="content-section">
-                <h2 class="section-title"><i class="fas fa-cubes" aria-hidden="true"></i> Core Components</h2>
+        <!-- 8 Orchestrators -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-layer-group"></i>
+                8 Specialized Orchestrators
+            </h2>
+            
+            <p class="intro-text">Each orchestrator handles a specific workflow domain. <strong>🛡️ AUTONOMOUS</strong> orchestrators execute independently, while <strong>📋 GUIDED</strong> orchestrators provide manifest instructions.</p>
+            
+            <div class="masonry-grid">
+                <!-- Planning -->
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon planning-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <h4 class="card-title">🛡️ Planning System</h4>
+                    <p class="card-description">4-folder structure: <code>requirements/</code>, <code>architecture/</code>, <code>implementation/</code>, <code>validation/</code>. Full autonomous execution.</p>
+                    <div class="card-stats">
+                        <span class="stat-item"><i class="fas fa-folder"></i> 4 Folders</span>
+                        <span class="stat-item"><i class="fas fa-shield-alt"></i> AUTONOMOUS</span>
+                    </div>
+                </div>
                 
-                <div class="feature-grid feature-grid-4">
-                    <div class="glass-card card-link toolkit-category-card">
-                        <span class="feature-icon"><i class="fas fa-shield-alt"></i></span>
-                        <h3 class="feature-title">GateKeeper</h3>
-                        <p class="feature-description">Pre-execution validation ensuring safe tool operations</p>
-                        <div class="feature-tags">
-                            <span class="tag">Validation</span>
-                            <span class="tag">Platform Check</span>
-                            <span class="tag">Rate Limit</span>
-                        </div>
+                <!-- TDD -->
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon tdd-icon">
+                        <i class="fas fa-vial"></i>
                     </div>
-
-                    <div class="glass-card card-link toolkit-category-card">
-                        <span class="feature-icon"><i class="fas fa-search-plus"></i></span>
-                        <h3 class="feature-title">Request Analyzer</h3>
-                        <p class="feature-description">Semantic analysis preventing duplicate tool creation</p>
-                        <div class="feature-tags">
-                            <span class="tag">Similarity</span>
-                            <span class="tag">Jaccard</span>
-                            <span class="tag">Overlap</span>
-                        </div>
-                    </div>
-
-                    <div class="glass-card card-link toolkit-category-card">
-                        <span class="feature-icon"><i class="fas fa-undo-alt"></i></span>
-                        <h3 class="feature-title">Recovery Manager</h3>
-                        <p class="feature-description">Checkpoint and rollback for destructive operations</p>
-                        <div class="feature-tags">
-                            <span class="tag">Checkpoints</span>
-                            <span class="tag">Snapshots</span>
-                            <span class="tag">Rollback</span>
-                        </div>
-                    </div>
-
-                    <div class="glass-card card-link toolkit-category-card">
-                        <span class="feature-icon"><i class="fas fa-project-diagram"></i></span>
-                        <h3 class="feature-title">Dependency Manager</h3>
-                        <p class="feature-description">Tool dependency graph with validation</p>
-                        <div class="feature-tags">
-                            <span class="tag">Graph</span>
-                            <span class="tag">Circular DFS</span>
-                            <span class="tag">Topological</span>
-                        </div>
-                    </div>
-
-                    <div class="glass-card card-link toolkit-category-card">
-                        <span class="feature-icon"><i class="fas fa-lock"></i></span>
-                        <h3 class="feature-title">Security Guard</h3>
-                        <p class="feature-description">Input sanitization and threat detection</p>
-                        <div class="feature-tags">
-                            <span class="tag">Injection</span>
-                            <span class="tag">XSS</span>
-                            <span class="tag">Traversal</span>
-                        </div>
-                    </div>
-
-                    <div class="glass-card card-link toolkit-category-card">
-                        <span class="feature-icon"><i class="fas fa-history"></i></span>
-                        <h3 class="feature-title">Audit Logger</h3>
-                        <p class="feature-description">Tamper-evident execution logging</p>
-                        <div class="feature-tags">
-                            <span class="tag">JSONL</span>
-                            <span class="tag">Chain Hash</span>
-                            <span class="tag">Stats</span>
-                        </div>
-                    </div>
-
-                    <div class="glass-card card-link toolkit-category-card">
-                        <span class="feature-icon"><i class="fas fa-file-code"></i></span>
-                        <h3 class="feature-title">Manifest Schema v2</h3>
-                        <p class="feature-description">Enhanced tool definitions with capabilities</p>
-                        <div class="feature-tags">
-                            <span class="tag">JSON Schema</span>
-                            <span class="tag">Lifecycle</span>
-                            <span class="tag">Migration</span>
-                        </div>
-                    </div>
-
-                    <div class="glass-card card-link toolkit-category-card">
-                        <span class="feature-icon"><i class="fas fa-clipboard-check"></i></span>
-                        <h3 class="feature-title">Tool Auditor</h3>
-                        <p class="feature-description">Toolkit analysis and consolidation</p>
-                        <div class="feature-tags">
-                            <span class="tag">Overlap</span>
-                            <span class="tag">Orphan</span>
-                            <span class="tag">Coverage</span>
-                        </div>
+                    <h4 class="card-title">📋 TDD Orchestrator</h4>
+                    <p class="card-description">RED→GREEN→REFACTOR cycle enforcement. Tests must fail before implementation (SKULL rule).</p>
+                    <div class="card-stats">
+                        <span class="stat-item"><i class="fas fa-sync-alt"></i> 3 Phases</span>
+                        <span class="stat-item"><i class="fas fa-book"></i> GUIDED</span>
                     </div>
                 </div>
-            </div>
-
-            <!-- Quick Start Code -->
-            <div class="glass-card" style="padding: 2.5rem; margin: 2rem 0;">
-                <h2 class="section-title" style="margin-bottom: 0.75rem;"><i class="fas fa-code" aria-hidden="true"></i> Quick Start</h2>
-                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 1.5rem;">Get started with Toolkit Manager in just a few lines of Python.</p>
                 
-                <div class="code-panel">
-                    <pre><code><span class="comment"># Basic Usage</span>
-<span class="keyword">from</span> core.toolkit_manager <span class="keyword">import</span> ToolkitManager, ExecutionContext
-
-<span class="comment"># Initialize</span>
-manager = <span class="function">ToolkitManager</span>()
-
-<span class="comment"># Execute a tool (async)</span>
-result = <span class="keyword">await</span> manager.<span class="function">execute</span>(<span class="string">'align'</span>, [<span class="string">'--check-only'</span>])
-
-<span class="comment"># Check result</span>
-<span class="keyword">if</span> result.success:
-    <span class="function">print</span>(result.stdout)
-<span class="keyword">else</span>:
-    <span class="function">print</span>(<span class="string">f"Error: {result.error}"</span>)</code></pre>
+                <!-- ADO -->
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon ado-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <h4 class="card-title">🛡️ ADO Operations</h4>
+                    <p class="card-description">Azure DevOps work item generation (Stories, Features, Epics). Full autonomous execution with API integration.</p>
+                    <div class="card-stats">
+                        <span class="stat-item"><i class="fas fa-plug"></i> API Driven</span>
+                        <span class="stat-item"><i class="fas fa-shield-alt"></i> AUTONOMOUS</span>
+                    </div>
                 </div>
-
-                <div class="code-panel">
-                    <pre><code><span class="comment"># With Dry Run and Checkpoint</span>
-context = <span class="function">ExecutionContext</span>(
-    tool=<span class="string">"cleanup"</span>,
-    args=[<span class="string">"--all"</span>],
-    dry_run=<span class="keyword">True</span>,           <span class="comment"># Preview without executing</span>
-    checkpoint_enabled=<span class="keyword">True</span>  <span class="comment"># Auto-checkpoint for rollback</span>
-)
-
-result = <span class="keyword">await</span> manager.<span class="function">execute</span>(<span class="string">"cleanup"</span>, [<span class="string">"--all"</span>], context)</code></pre>
-                </div>
-            </div>
-
-            <!-- Tool Categories Table -->
-            <div class="glass-card" style="padding: 2.5rem; margin: 2rem 0;">
-                <h2 class="section-title" style="margin-bottom: 0.75rem;"><i class="fas fa-th-large" aria-hidden="true"></i> Tool Categories</h2>
-                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 1.5rem;">35+ tools organized into 10 functional categories.</p>
                 
-                <div style="overflow-x: auto;">
-                    <table style="width: 100%; border-collapse: collapse;">
-                        <thead>
-                            <tr style="background: rgba(0, 212, 255, 0.1);">
-                                <th style="padding: 1rem; text-align: left; color: var(--accent-primary); border-bottom: 1px solid var(--glass-border);">Category</th>
-                                <th style="padding: 1rem; text-align: center; color: var(--accent-primary); border-bottom: 1px solid var(--glass-border);">Tools</th>
-                                <th style="padding: 1rem; text-align: left; color: var(--accent-primary); border-bottom: 1px solid var(--glass-border);">Description</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr style="border-bottom: 1px solid var(--glass-border);"><td style="padding: 0.75rem 1rem;"><strong style="color: var(--text-primary);">brain_operations</strong></td><td style="padding: 0.75rem 1rem; text-align: center; color: var(--accent-primary);">4</td><td style="padding: 0.75rem 1rem; color: var(--text-secondary);">CORTEX brain tier operations (align, healthcheck, optimize, cleanup)</td></tr>
-                            <tr style="border-bottom: 1px solid var(--glass-border);"><td style="padding: 0.75rem 1rem;"><strong style="color: var(--text-primary);">operations</strong></td><td style="padding: 0.75rem 1rem; text-align: center; color: var(--accent-primary);">3</td><td style="padding: 0.75rem 1rem; color: var(--text-secondary);">System operations and orchestration (review, deploy, sanitize)</td></tr>
-                            <tr style="border-bottom: 1px solid var(--glass-border);"><td style="padding: 0.75rem 1rem;"><strong style="color: var(--text-primary);">planning</strong></td><td style="padding: 0.75rem 1rem; text-align: center; color: var(--accent-primary);">3</td><td style="padding: 0.75rem 1rem; color: var(--text-secondary);">Planning and ADO management (plan, ado, planning-file-manager)</td></tr>
-                            <tr style="border-bottom: 1px solid var(--glass-border);"><td style="padding: 0.75rem 1rem;"><strong style="color: var(--text-primary);">analytics</strong></td><td style="padding: 0.75rem 1rem; text-align: center; color: var(--accent-primary);">4</td><td style="padding: 0.75rem 1rem; color: var(--text-secondary);">Analysis and reporting (profile, metrics, visualize, uml)</td></tr>
-                            <tr style="border-bottom: 1px solid var(--glass-border);"><td style="padding: 0.75rem 1rem;"><strong style="color: var(--text-primary);">documentation</strong></td><td style="padding: 0.75rem 1rem; text-align: center; color: var(--accent-primary);">7</td><td style="padding: 0.75rem 1rem; color: var(--text-secondary);">Documentation generation (docs-generate, html-generator, etc.)</td></tr>
-                            <tr style="border-bottom: 1px solid var(--glass-border);"><td style="padding: 0.75rem 1rem;"><strong style="color: var(--text-primary);">testing</strong></td><td style="padding: 0.75rem 1rem; text-align: center; color: var(--accent-primary);">3</td><td style="padding: 0.75rem 1rem; color: var(--text-secondary);">Testing utilities (validate, test-performance, verify-no-mocks)</td></tr>
-                            <tr style="border-bottom: 1px solid var(--glass-border);"><td style="padding: 0.75rem 1rem;"><strong style="color: var(--text-primary);">migration</strong></td><td style="padding: 0.75rem 1rem; text-align: center; color: var(--accent-primary);">2</td><td style="padding: 0.75rem 1rem; color: var(--text-secondary);">Database and schema migration (schema-migrate, version-detect)</td></tr>
-                            <tr style="border-bottom: 1px solid var(--glass-border);"><td style="padding: 0.75rem 1rem;"><strong style="color: var(--text-primary);">maintenance</strong></td><td style="padding: 0.75rem 1rem; text-align: center; color: var(--accent-primary);">4</td><td style="padding: 0.75rem 1rem; color: var(--text-secondary);">Maintenance tools (cleanup-temp, detect-duplicates, full-cleanup)</td></tr>
-                            <tr style="border-bottom: 1px solid var(--glass-border);"><td style="padding: 0.75rem 1rem;"><strong style="color: var(--text-primary);">generators</strong></td><td style="padding: 0.75rem 1rem; text-align: center; color: var(--accent-primary);">5</td><td style="padding: 0.75rem 1rem; color: var(--text-secondary);">Code and specification generators (extract-schemas, etc.)</td></tr>
-                            <tr><td style="padding: 0.75rem 1rem;"><strong style="color: var(--text-primary);">utilities</strong></td><td style="padding: 0.75rem 1rem; text-align: center; color: var(--accent-primary);">4</td><td style="padding: 0.75rem 1rem; color: var(--text-secondary);">General utility tools (token-calculator, version-manager, etc.)</td></tr>
-                        </tbody>
-                    </table>
+                <!-- Sanitization -->
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon sanitize-icon">
+                        <i class="fas fa-broom"></i>
+                    </div>
+                    <h4 class="card-title">📋 Sanitization</h4>
+                    <p class="card-description">5-phase cleanup: credentials, PII, hardcoded values, sensitive paths, API keys. Makes code generic.</p>
+                    <div class="card-stats">
+                        <span class="stat-item"><i class="fas fa-list-ol"></i> 5 Phases</span>
+                        <span class="stat-item"><i class="fas fa-book"></i> GUIDED</span>
+                    </div>
                 </div>
-            </div>
-
-            <!-- Quick Actions -->
-            <div class="glass-card" style="padding: 2.5rem; margin: 2rem 0;">
-                <h2 class="section-title" style="margin-bottom: 0.75rem;"><i class="fas fa-bolt" aria-hidden="true"></i> Quick Actions</h2>
-                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2rem;">Explore resources and dive into the implementation.</p>
                 
-                <div class="metrics-grid-3">
-                    <a href="https://github.com/asifhussain60/CORTEX/tree/CORTEX-4.0/cortex-toolkit/core" target="_blank" rel="noopener" style="background: rgba(0, 0, 0, 0.2); border: 1px solid var(--glass-border); border-radius: 12px; padding: 1.5rem; text-align: center; text-decoration: none; transition: all 0.2s ease;">
-                        <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                            <i class="fab fa-github" style="font-size: 1.5rem; color: var(--accent-primary);"></i>
-                        </div>
-                        <h4 style="color: var(--text-primary); margin-bottom: 0.5rem;">View Source</h4>
-                        <p style="color: var(--text-secondary); font-size: 0.85rem;">Browse implementation on GitHub</p>
-                    </a>
-
-                    <a href="https://github.com/asifhussain60/CORTEX/blob/CORTEX-4.0/cortex-toolkit/docs/toolkit-manager-guide.md" target="_blank" rel="noopener" style="background: rgba(0, 0, 0, 0.2); border: 1px solid var(--glass-border); border-radius: 12px; padding: 1.5rem; text-align: center; text-decoration: none; transition: all 0.2s ease;">
-                        <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                            <i class="fas fa-book" style="font-size: 1.5rem; color: var(--success);"></i>
-                        </div>
-                        <h4 style="color: var(--text-primary); margin-bottom: 0.5rem;">Documentation</h4>
-                        <p style="color: var(--text-secondary); font-size: 0.85rem;">Full developer guide</p>
-                    </a>
-
-                    <a href="../index.html" style="background: rgba(0, 0, 0, 0.2); border: 1px solid var(--glass-border); border-radius: 12px; padding: 1.5rem; text-align: center; text-decoration: none; transition: all 0.2s ease;">
-                        <div style="width: 50px; height: 50px; margin: 0 auto 1rem auto; background: linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(0, 212, 255, 0.2)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                            <i class="fas fa-home" style="font-size: 1.5rem; color: var(--accent-secondary);"></i>
-                        </div>
-                        <h4 style="color: var(--text-primary); margin-bottom: 0.5rem;">Back to Home</h4>
-                        <p style="color: var(--text-secondary); font-size: 0.85rem;">Return to CORTEX dashboard</p>
-                    </a>
+                <!-- Maintenance -->
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon maintain-icon">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <h4 class="card-title">📋 Maintenance</h4>
+                    <p class="card-description">12-phase health check pipeline: duplicates, dead code, complexity, test gaps, docs, dependencies.</p>
+                    <div class="card-stats">
+                        <span class="stat-item"><i class="fas fa-list-ol"></i> 12 Phases</span>
+                        <span class="stat-item"><i class="fas fa-book"></i> GUIDED</span>
+                    </div>
+                </div>
+                
+                <!-- Refinement -->
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon refine-icon">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <h4 class="card-title">📋 Refinement</h4>
+                    <p class="card-description">7-phase improvement: code quality, performance, security, accessibility, testing, docs, architecture.</p>
+                    <div class="card-stats">
+                        <span class="stat-item"><i class="fas fa-list-ol"></i> 7 Phases</span>
+                        <span class="stat-item"><i class="fas fa-book"></i> GUIDED</span>
+                    </div>
+                </div>
+                
+                <!-- Vision -->
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon vision-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h4 class="card-title">🔍 Vision API</h4>
+                    <p class="card-description">Auto-engages when images attached. Analyzes screenshots, diagrams, UI mockups, error messages.</p>
+                    <div class="card-stats">
+                        <span class="stat-item"><i class="fas fa-image"></i> Auto-Trigger</span>
+                        <span class="stat-item"><i class="fas fa-robot"></i> MIDDLEWARE</span>
+                    </div>
+                </div>
+                
+                <!-- Diagnostics -->
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon diag-icon">
+                        <i class="fas fa-stethoscope"></i>
+                    </div>
+                    <h4 class="card-title">🩺 Diagnostics</h4>
+                    <p class="card-description">System health checks: brain integrity, orchestrator status, agent connectivity, knowledge graph validation.</p>
+                    <div class="card-stats">
+                        <span class="stat-item"><i class="fas fa-clipboard-check"></i> Health</span>
+                        <span class="stat-item"><i class="fas fa-book"></i> GUIDED</span>
+                    </div>
                 </div>
             </div>
+        </section>
 
-        </div>
-    </section>
+        <!-- Routing Decision Flow -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-route"></i>
+                Routing Decision Flow
+            </h2>
+            
+            <p class="intro-text">Step-by-step process of how Toolkit Manager routes user requests to orchestrators.</p>
+            
+            <div class="diagram-container">
+                <div class="mermaid">
+sequenceDiagram
+    participant User
+    participant TM as Toolkit Manager
+    participant PM as Pattern Matcher
+    participant LLM as LLM Classifier
+    participant Orch as Orchestrator
+    
+    User->>TM: Submit request
+    TM->>PM: Check pattern database
+    
+    alt Exact Pattern Match
+        PM-->>TM: Match found (Planning)
+        TM->>Orch: Route to Planning 🛡️
+        Orch-->>User: Execute autonomously
+    else No Exact Match
+        PM-->>TM: No match, trigger LLM
+        TM->>LLM: Classify intent
+        LLM-->>TM: Intent: Maintenance
+        TM->>Orch: Route to Maintenance 📋
+        Orch-->>User: Provide guided manifest
+    end
+                </div>
+            </div>
+            
+            <div class="two-column-grid">
+                <div class="info-box">
+                    <h3>Pattern-Based (Fast)</h3>
+                    <ul class="feature-list-compact">
+                        <li>Regex keyword matching</li>
+                        <li>Exact phrase detection</li>
+                        <li>90% of requests</li>
+                        <li>Sub-millisecond routing</li>
+                    </ul>
+                </div>
+                
+                <div class="info-box">
+                    <h3>LLM Classification (Intelligent)</h3>
+                    <ul class="feature-list-compact">
+                        <li>GPT-4o semantic analysis</li>
+                        <li>Context-aware reasoning</li>
+                        <li>10% fallback cases</li>
+                        <li>200-500ms latency</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
 
-    <a href="#main-content" class="back-to-top" aria-label="Back to top">↑</a>
+        <!-- Intent Patterns -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-list-alt"></i>
+                Intent Pattern Examples
+            </h2>
+            
+            <p class="intro-text">Common user request patterns and their orchestrator routing.</p>
+            
+            <div class="pattern-grid">
+                <div class="pattern-card">
+                    <div class="pattern-header">
+                        <i class="fas fa-project-diagram"></i>
+                        <span>Planning</span>
+                    </div>
+                    <ul class="pattern-list">
+                        <li>"plan", "create a plan", "make a plan"</li>
+                        <li>"plan this feature", "help me plan"</li>
+                    </ul>
+                </div>
+                
+                <div class="pattern-card">
+                    <div class="pattern-header">
+                        <i class="fas fa-vial"></i>
+                        <span>TDD</span>
+                    </div>
+                    <ul class="pattern-list">
+                        <li>"tdd", "start tdd", "run tests"</li>
+                        <li>"test-driven development", "red green refactor"</li>
+                    </ul>
+                </div>
+                
+                <div class="pattern-card">
+                    <div class="pattern-header">
+                        <i class="fas fa-tasks"></i>
+                        <span>ADO</span>
+                    </div>
+                    <ul class="pattern-list">
+                        <li>"ado", "ado story", "ado feature"</li>
+                        <li>"create work item", "azure devops"</li>
+                    </ul>
+                </div>
+                
+                <div class="pattern-card">
+                    <div class="pattern-header">
+                        <i class="fas fa-broom"></i>
+                        <span>Sanitization</span>
+                    </div>
+                    <ul class="pattern-list">
+                        <li>"sanitize", "make generic", "remove credentials"</li>
+                        <li>"clean up secrets", "scrub PII"</li>
+                    </ul>
+                </div>
+                
+                <div class="pattern-card">
+                    <div class="pattern-header">
+                        <i class="fas fa-heartbeat"></i>
+                        <span>Maintenance</span>
+                    </div>
+                    <ul class="pattern-list">
+                        <li>"maintenance", "health check", "system check"</li>
+                        <li>"find issues", "clean codebase"</li>
+                    </ul>
+                </div>
+                
+                <div class="pattern-card">
+                    <div class="pattern-header">
+                        <i class="fas fa-magic"></i>
+                        <span>Refinement</span>
+                    </div>
+                    <ul class="pattern-list">
+                        <li>"refine", "improve", "optimize"</li>
+                        <li>"make it better", "enhance code"</li>
+                    </ul>
+                </div>
+                
+                <div class="pattern-card">
+                    <div class="pattern-header">
+                        <i class="fas fa-eye"></i>
+                        <span>Vision</span>
+                    </div>
+                    <ul class="pattern-list">
+                        <li>Auto-triggers on image attachment</li>
+                        <li>No user prompt required</li>
+                    </ul>
+                </div>
+                
+                <div class="pattern-card">
+                    <div class="pattern-header">
+                        <i class="fas fa-stethoscope"></i>
+                        <span>Diagnostics</span>
+                    </div>
+                    <ul class="pattern-list">
+                        <li>"diagnostics", "system status", "check health"</li>
+                        <li>"brain integrity", "validate system"</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
 
+        <!-- Manifest Storage -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-database"></i>
+                Manifest-Driven Architecture
+            </h2>
+            
+            <p class="intro-text">All orchestrator definitions are stored as YAML manifests in <code>cortex-brain/manifests/orchestrators/</code>. This enables version control, easy updates, and declarative orchestrator definitions.</p>
+            
+            <div class="code-block">
+                <div class="code-header">
+                    <span>Example: Planning Orchestrator Manifest</span>
+                    <i class="fas fa-file-code"></i>
+                </div>
+                <pre><code>name: planning-system
+version: 4.0.0
+type: AUTONOMOUS
+trigger_patterns:
+  - "plan"
+  - "create a plan"
+  - "make a plan"
+  - "plan this"
+hand_off_template: autonomous_execution_progress
+phases:
+  - requirements_analysis
+  - architecture_design
+  - implementation_plan
+  - validation_strategy
+output_structure:
+  folders:
+    - requirements/
+    - architecture/
+    - implementation/
+    - validation/</code></pre>
+            </div>
+            
+            <div class="two-column-grid">
+                <div class="info-box">
+                    <h3>Manifest Benefits</h3>
+                    <ul class="feature-list-compact">
+                        <li>Version-controlled definitions</li>
+                        <li>Easy orchestrator updates</li>
+                        <li>Declarative configuration</li>
+                        <li>No code changes needed</li>
+                    </ul>
+                </div>
+                
+                <div class="info-box">
+                    <h3>Manifest Location</h3>
+                    <ul class="feature-list-compact">
+                        <li><code>cortex-brain/manifests/orchestrators/</code></li>
+                        <li>8 YAML files (one per orchestrator)</li>
+                        <li>Loaded at runtime</li>
+                        <li>Hot-reload supported</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Related Resources -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-link"></i>
+                Related Resources
+            </h2>
+            
+            <div class="reference-grid">
+                <div class="reference-section">
+                    <h3>Implementation</h3>
+                    <ul class="reference-list">
+                        <li><code>src/operations/toolkit_manager.py</code></li>
+                        <li><code>src/cortex_agents/llm_intent_classifier.py</code></li>
+                        <li><code>src/orchestrators/</code> (8 orchestrators)</li>
+                    </ul>
+                </div>
+                
+                <div class="reference-section">
+                    <h3>Manifests</h3>
+                    <ul class="reference-list">
+                        <li><code>cortex-brain/manifests/orchestrators/</code></li>
+                        <li>planning-system-4.0-manifest.yaml</li>
+                        <li>tdd-orchestrator-manifest.yaml</li>
+                        <li>...all 8 orchestrators</li>
+                    </ul>
+                </div>
+                
+                <div class="reference-section">
+                    <h3>Related Documentation</h3>
+                    <ul class="reference-list">
+                        <li><a href="../architecture/index.html">Architecture Overview</a></li>
+                        <li><a href="../orchestrators/index.html">Orchestrators</a></li>
+                        <li><a href="../token-optimization/index.html">Token Optimization</a></li>
+                    </ul>
+                </div>
+                
+                <div class="reference-section">
+                    <h3>Configuration</h3>
+                    <ul class="reference-list">
+                        <li><code>.github/prompts/CORTEX.prompt.md</code></li>
+                        <li><code>cortex-brain/operations-config.yaml</code></li>
+                        <li><code>cortex.config.json</code></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Initialize Mermaid -->
     <script>
-        // Initialize Mermaid
-        mermaid.initialize({
+        mermaid.initialize({ 
             startOnLoad: true,
             theme: 'dark',
             themeVariables: {
@@ -533,106 +528,9 @@ result = <span class="keyword">await</span> manager.<span class="function">execu
                 primaryTextColor: '#fff',
                 primaryBorderColor: '#9f87ff',
                 lineColor: '#00d4ff',
-                secondaryColor: '#1a1f3a',
-                tertiaryColor: '#0a0e27',
-                background: 'transparent'
-            },
-            flowchart: { htmlLabels: true, curve: 'basis', padding: 20 }
-        });
-
-        // D3.js Hub-Spoke Architecture
-        const components = [
-            { id: 'gatekeeper', name: 'GateKeeper', icon: '\uf3ed', color: '#10b981', angle: 0, description: 'Pre-execution validation ensuring safe tool operations', features: ['Tool existence verification', 'Platform compatibility', 'Argument sanitization', 'Rate limiting'] },
-            { id: 'analyzer', name: 'Request Analyzer', icon: '\uf002', color: '#3b82f6', angle: 45, description: 'Semantic analysis preventing duplicate tool creation', features: ['Capability matching', 'Jaccard similarity', 'Overlap detection'] },
-            { id: 'recovery', name: 'Recovery Manager', icon: '\uf2ea', color: '#7b61ff', angle: 90, description: 'Checkpoint and rollback for destructive operations', features: ['Auto checkpoints', 'State snapshots', 'One-click rollback'] },
-            { id: 'dependency', name: 'Dependency Manager', icon: '\uf542', color: '#f59e0b', angle: 135, description: 'Tool dependency graph with validation', features: ['Graph building', 'Circular detection', 'Topological ordering'] },
-            { id: 'security', name: 'Security Guard', icon: '\uf023', color: '#ef4444', angle: 180, description: 'Input sanitization and threat detection', features: ['Shell injection blocking', 'Path traversal', 'SQL/XSS detection'] },
-            { id: 'audit', name: 'Audit Logger', icon: '\uf1da', color: '#06b6d4', angle: 225, description: 'Tamper-evident execution logging', features: ['JSONL format', 'Chain hash integrity', 'Query & reporting'] },
-            { id: 'manifest', name: 'Manifest Schema', icon: '\uf1c9', color: '#8b5cf6', angle: 270, description: 'Enhanced tool definitions with capabilities', features: ['JSON Schema validation', 'Capability keywords', 'Lifecycle tracking'] },
-            { id: 'auditor', name: 'Tool Auditor', icon: '\uf0ea', color: '#ec4899', angle: 315, description: 'Toolkit analysis and consolidation', features: ['Overlap detection', 'Orphan finding', 'Coverage analysis'] }
-        ];
-
-        function createArchitectureViz() {
-            const container = document.getElementById('architecture-viz');
-            const tooltip = document.getElementById('tooltip');
-            const width = container.clientWidth;
-            const height = 560;
-            const centerX = width / 2;
-            const centerY = height / 2;
-            const hubRadius = 65;
-            const spokeDistance = Math.min(width * 0.35, 200);
-
-            container.innerHTML = '';
-
-            const svg = d3.select(container).append('svg').attr('width', width).attr('height', height).attr('viewBox', `0 0 ${width} ${height}`);
-
-            const defs = svg.append('defs');
-            const filter = defs.append('filter').attr('id', 'glow').attr('x', '-50%').attr('y', '-50%').attr('width', '200%').attr('height', '200%');
-            filter.append('feGaussianBlur').attr('stdDeviation', '4').attr('result', 'coloredBlur');
-            const feMerge = filter.append('feMerge');
-            feMerge.append('feMergeNode').attr('in', 'coloredBlur');
-            feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
-
-            const hubGradient = defs.append('radialGradient').attr('id', 'hubGradient');
-            hubGradient.append('stop').attr('offset', '0%').attr('stop-color', '#00d4ff');
-            hubGradient.append('stop').attr('offset', '100%').attr('stop-color', '#7b61ff');
-
-            components.forEach(comp => {
-                const angleRad = (comp.angle - 90) * Math.PI / 180;
-                const x = centerX + Math.cos(angleRad) * spokeDistance;
-                const y = centerY + Math.sin(angleRad) * spokeDistance;
-                svg.append('line').attr('class', 'spoke-line').attr('x1', centerX).attr('y1', centerY).attr('x2', x).attr('y2', y);
-            });
-
-            const hubGroup = svg.append('g').attr('class', 'hub-node').attr('transform', `translate(${centerX}, ${centerY})`);
-            hubGroup.append('circle').attr('r', hubRadius).attr('fill', 'url(#hubGradient)').attr('filter', 'url(#glow)');
-            hubGroup.append('text').attr('text-anchor', 'middle').attr('dy', '-0.3em').attr('fill', '#fff').attr('font-size', '14px').attr('font-weight', '700').text('TOOLKIT');
-            hubGroup.append('text').attr('text-anchor', 'middle').attr('dy', '1em').attr('fill', '#fff').attr('font-size', '14px').attr('font-weight', '700').text('MANAGER');
-
-            const iconMap = { '\uf3ed': 'shield-alt', '\uf002': 'search', '\uf2ea': 'undo-alt', '\uf542': 'project-diagram', '\uf023': 'lock', '\uf1da': 'history', '\uf1c9': 'file-code', '\uf0ea': 'clipboard-check' };
-
-            components.forEach(comp => {
-                const angleRad = (comp.angle - 90) * Math.PI / 180;
-                const x = centerX + Math.cos(angleRad) * spokeDistance;
-                const y = centerY + Math.sin(angleRad) * spokeDistance;
-
-                const nodeGroup = svg.append('g').attr('class', 'component-node').attr('transform', `translate(${x}, ${y})`)
-                    .on('mouseover', function(event) {
-                        d3.select(this).select('circle').transition().duration(200).attr('r', 48);
-                        tooltip.innerHTML = `<h4><i class="fas fa-${iconMap[comp.icon] || 'circle'}"></i> ${comp.name}</h4><p>${comp.description}</p><ul>${comp.features.map(f => `<li>${f}</li>`).join('')}</ul>`;
-                        tooltip.style.opacity = 1;
-                        tooltip.style.left = (event.pageX + 15) + 'px';
-                        tooltip.style.top = (event.pageY - 10) + 'px';
-                    })
-                    .on('mousemove', function(event) {
-                        tooltip.style.left = (event.pageX + 15) + 'px';
-                        tooltip.style.top = (event.pageY - 10) + 'px';
-                    })
-                    .on('mouseout', function() {
-                        d3.select(this).select('circle').transition().duration(200).attr('r', 42);
-                        tooltip.style.opacity = 0;
-                    });
-
-                nodeGroup.append('circle').attr('r', 42).attr('fill', comp.color).attr('fill-opacity', 0.2).attr('stroke', comp.color).attr('stroke-width', 2).attr('filter', 'url(#glow)');
-                nodeGroup.append('text').attr('text-anchor', 'middle').attr('dy', '-0.2em').attr('fill', comp.color).attr('font-family', 'Font Awesome 6 Free').attr('font-weight', '900').attr('font-size', '18px').text(comp.icon);
-                nodeGroup.append('text').attr('text-anchor', 'middle').attr('dy', '3.5em').attr('fill', '#fff').attr('font-size', '11px').attr('font-weight', '600').text(comp.name);
-            });
-        }
-
-        createArchitectureViz();
-        window.addEventListener('resize', createArchitectureViz);
-
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            });
-        });
-
-        const backToTop = document.querySelector('.back-to-top');
-        window.addEventListener('scroll', () => {
-            backToTop.style.display = window.scrollY > 300 ? 'flex' : 'none';
+                secondaryColor: '#10b981',
+                tertiaryColor: '#f59e0b'
+            }
         });
     </script>
 </body>

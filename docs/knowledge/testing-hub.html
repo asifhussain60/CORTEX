@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Testing Learning Hub - Master TDD, BDD, E2E, and test automation through interactive modules">
+    <meta name="keywords" content="testing, tdd, bdd, test automation, unit testing, learning path">
+    <meta name="author" content="Asif Hussain">
+    <title>Testing Learning Hub | CORTEX Best Practices</title>
+    <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02">
+    <link rel="stylesheet" href="../assets/css/learning-hub.css?v=2026-01-02">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Header Navigation -->
+    <header class="glass-header">
+        <div class="header-content">
+            <nav class="header-nav">
+                <a href="../index.html" class="nav-link">
+                    <span class="nav-icon">🏠</span> Home
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero learning-module-hero" id="main-content">
+        <div class="module-header">
+            <h1 class="hero-title">🧪 Testing Learning Hub</h1>
+            <p class="hero-subtitle">Master TDD, BDD, E2E Testing, and Test Automation from Ground Up</p>
+            <div class="module-meta">
+                <span>⏱️ 5 modules • 3 hours</span>
+                <span>📊 5 quizzes (50 questions)</span>
+                <span>💻 8 code playgrounds</span>
+                <span>🏆 5 progressive challenges</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Learning Path Roadmap -->
+        <section class="learning-path-roadmap glass-card">
+            <h4>🗺️ Your Testing Mastery Journey</h4>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                Transform from writing basic tests to building comprehensive test automation strategies. 
+                Learn the RED-GREEN-REFACTOR cycle, behavior-driven development, and testing pyramid architecture.
+            </p>
+
+            <!-- Visual Journey Map (Mermaid) -->
+            <div class="mermaid-container">
+                <pre class="mermaid">
+graph LR
+    START["🚀 Begin Testing"] --> M1["Module 1<br/>TDD Fundamentals<br/>⏱️ 35 min"]
+    M1 --> M2["Module 2<br/>Unit Testing<br/>⏱️ 40 min"]
+    M2 --> M3["Module 3<br/>BDD & E2E<br/>⏱️ 45 min"]
+    M3 --> M4["Module 4<br/>Test Coverage<br/>⏱️ 30 min"]
+    M4 --> M5["Module 5<br/>Mocking & CI/CD<br/>⏱️ 30 min"]
+    M5 --> CERT["🏆 Testing<br/>Expert"]
+
+    style START fill:#00d4ff,stroke:#fff,stroke-width:2px,color:#000
+    style M1 fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
+    style M2 fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
+    style M3 fill:#fbbf24,stroke:#fcd34d,stroke-width:2px,color:#000
+    style M4 fill:#fbbf24,stroke:#fcd34d,stroke-width:2px,color:#000
+    style M5 fill:#f97316,stroke:#fb923c,stroke-width:2px,color:#fff
+    style CERT fill:#00ff88,stroke:#fff,stroke-width:3px,color:#000
+                </pre>
+            </div>
+        </section>
+
+        <!-- Module Navigation Cards -->
+        <section style="margin-top: var(--spacing-3xl);">
+            <h2 style="color: var(--text-primary); margin-bottom: var(--spacing-xl); font-size: 2rem;">
+                📚 Interactive Learning Modules
+            </h2>
+            
+            <div class="module-nav-grid">
+                <!-- Module 1: TDD Fundamentals -->
+                <a href="testing/tdd-fundamentals.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 1</span>
+                        <span class="difficulty-badge beginner">Beginner</span>
+                    </div>
+                    <h5>🎯 Test-Driven Development</h5>
+                    <p class="module-description">
+                        Master the RED-GREEN-REFACTOR cycle. Write tests first, see them fail, 
+                        implement code to pass, then refactor with confidence.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 35 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                    </div>
+                </a>
+
+                <!-- Module 2: Unit Testing Mastery -->
+                <a href="testing/unit-testing-mastery.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 2</span>
+                        <span class="difficulty-badge beginner">Beginner</span>
+                    </div>
+                    <h5>🔬 Unit Testing Best Practices</h5>
+                    <p class="module-description">
+                        Write isolated, fast, and maintainable unit tests. Learn AAA pattern 
+                        (Arrange-Act-Assert) and test naming conventions.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 40 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Continue →</span>
+                    </div>
+                </a>
+
+                <!-- Module 3: BDD & E2E Testing -->
+                <a href="testing/bdd-e2e-testing.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 3</span>
+                        <span class="difficulty-badge intermediate">Intermediate</span>
+                    </div>
+                    <h5>🎭 Behavior-Driven Development</h5>
+                    <p class="module-description">
+                        Write Given-When-Then scenarios with Cucumber/SpecFlow. 
+                        Build end-to-end tests that stakeholders can understand.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 45 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Continue →</span>
+                    </div>
+                </a>
+
+                <!-- Module 4: Test Coverage Analysis -->
+                <a href="testing/test-coverage-analysis.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 4</span>
+                        <span class="difficulty-badge intermediate">Intermediate</span>
+                    </div>
+                    <h5>📊 Test Coverage & Quality</h5>
+                    <p class="module-description">
+                        Measure code coverage, understand branch vs. line coverage. 
+                        Balance coverage metrics with meaningful test quality.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 30 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Continue →</span>
+                    </div>
+                </a>
+
+                <!-- Module 5: Mocking & CI/CD Integration -->
+                <a href="testing/mocking-ci-cd.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 5</span>
+                        <span class="difficulty-badge advanced">Advanced</span>
+                    </div>
+                    <h5>🤖 Mocking & CI/CD Automation</h5>
+                    <p class="module-description">
+                        Master mocking frameworks, test doubles, and stubs. 
+                        Integrate tests into CI/CD pipelines with automated reporting.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 30 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Master →</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Testing Pyramid Visualization -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h3 style="color: var(--hub-primary); margin-bottom: var(--spacing-lg);">
+                🔺 The Testing Pyramid
+            </h3>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+graph TD
+    A["🖥️ E2E Tests<br/>Slow • Expensive • Fragile<br/>10% of test suite"]
+    B["🔌 Integration Tests<br/>Medium speed • Moderate cost<br/>20% of test suite"]
+    C["⚡ Unit Tests<br/>Fast • Cheap • Stable<br/>70% of test suite"]
+    
+    A --> B
+    B --> C
+    
+    style A fill:#f97316,stroke:#fb923c,stroke-width:2px,color:#fff
+    style B fill:#fbbf24,stroke:#fcd34d,stroke-width:2px,color:#000
+    style C fill:#10b981,stroke:#34d399,stroke-width:3px,color:#fff
+                </pre>
+            </div>
+            <p style="color: var(--text-secondary); margin-top: var(--spacing-lg); text-align: center;">
+                Build a solid foundation with fast unit tests, moderate integration tests, and minimal E2E tests.
+            </p>
+        </section>
+
+        <!-- Prerequisites Section -->
+        <section class="prerequisites-section">
+            <h4>📋 Prerequisites Tree</h4>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                Recommended knowledge before starting this learning path:
+            </p>
+            <ul class="prerequisites-list">
+                <li>
+                    <strong>Programming Fundamentals</strong>
+                    Proficiency in at least one programming language (Python, C#, JavaScript, Java)
+                </li>
+                <li>
+                    <strong>Object-Oriented Concepts</strong>
+                    Understanding of classes, methods, interfaces, and dependency injection
+                </li>
+                <li>
+                    <strong>Version Control (Git)</strong>
+                    Basic Git commands for committing code and working with branches
+                </li>
+                <li>
+                    <strong>Development Environment</strong>
+                    Familiarity with IDE/editor and running code locally
+                </li>
+            </ul>
+        </section>
+
+        <!-- Quick Reference Glossary -->
+        <section class="quick-reference-section">
+            <h4>📖 Quick Reference Glossary</h4>
+            <div class="glossary-grid">
+                <div class="glossary-term">
+                    <dt>TDD</dt>
+                    <dd>Test-Driven Development - writing tests before implementation code</dd>
+                </div>
+                <div class="glossary-term">
+                    <dt>BDD</dt>
+                    <dd>Behavior-Driven Development - tests written in natural language scenarios</dd>
+                </div>
+                <div class="glossary-term">
+                    <dt>AAA Pattern</dt>
+                    <dd>Arrange-Act-Assert - structure for organizing test code</dd>
+                </div>
+                <div class="glossary-term">
+                    <dt>Mocking</dt>
+                    <dd>Creating fake objects to isolate code under test from dependencies</dd>
+                </div>
+                <div class="glossary-term">
+                    <dt>Code Coverage</dt>
+                    <dd>Percentage of code executed by automated tests</dd>
+                </div>
+                <div class="glossary-term">
+                    <dt>Test Double</dt>
+                    <dd>Generic term for mocks, stubs, fakes, and spies</dd>
+                </div>
+                <div class="glossary-term">
+                    <dt>Integration Test</dt>
+                    <dd>Tests verifying multiple components working together</dd>
+                </div>
+                <div class="glossary-term">
+                    <dt>E2E Test</dt>
+                    <dd>End-to-End tests simulating real user workflows</dd>
+                </div>
+                <div class="glossary-term">
+                    <dt>Test Fixture</dt>
+                    <dd>Fixed state used as baseline for running tests</dd>
+                </div>
+                <div class="glossary-term">
+                    <dt>Assertion</dt>
+                    <dd>Statement verifying expected outcome matches actual result</dd>
+                </div>
+                <div class="glossary-term">
+                    <dt>Regression Test</dt>
+                    <dd>Tests ensuring new changes don't break existing functionality</dd>
+                </div>
+                <div class="glossary-term">
+                    <dt>Test Runner</dt>
+                    <dd>Tool that executes tests and reports results (pytest, Jest, xUnit)</dd>
+                </div>
+            </div>
+        </section>
+
+        <!-- Learning Metrics Summary -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl); text-align: center; padding: var(--spacing-2xl);">
+            <h3 style="color: var(--hub-primary); margin-bottom: var(--spacing-lg);">
+                🎓 Learning Path Completion
+            </h3>
+            <div class="learning-metrics" style="justify-content: center;">
+                <span class="metric">📊 50 Total Quiz Questions</span>
+                <span class="metric">💻 8 Interactive Playgrounds</span>
+                <span class="metric">🏆 5 Progressive Challenges</span>
+                <span class="metric">⏱️ 3 Hours Total Time</span>
+            </div>
+            <p style="color: var(--text-secondary); margin-top: var(--spacing-xl); max-width: 600px; margin-left: auto; margin-right: auto;">
+                Complete all modules to earn your <strong style="color: var(--hub-success);">Testing Expert</strong> certification. 
+                Master TDD, BDD, and test automation strategies.
+            </p>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="glass-footer">
+        <div class="footer-content">
+            <p>© 2026 Asif Hussain. All rights reserved.</p>
+            <nav class="footer-nav">
+                <a href="https://github.com/asifhussain60/CORTEX" target="_blank">GitHub</a>
+                <a href="../index.html">Documentation</a>
+            </nav>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#7b61ff',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#9f87ff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#1a1f3a',
+                tertiaryColor: '#0a0e27'
+            }
+        });
+
+        // Track module clicks for analytics
+        document.querySelectorAll('.module-nav-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                const moduleName = this.querySelector('h5').textContent;
+                console.log('Module clicked:', moduleName);
+            });
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

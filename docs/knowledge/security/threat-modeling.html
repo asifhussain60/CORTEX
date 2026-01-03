@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Threat Modeling - Security Learning Module">
+    <meta name="keywords" content="security, Threat Modeling, learning, tutorial">
+    <meta name="author" content="Asif Hussain">
+    <title>Threat Modeling | CORTEX Learning Hub</title>
+    <link rel="stylesheet" href="../../assets/css/main.css?v=2026-01-02">
+    <link rel="stylesheet" href="../../assets/css/learning-hub.css?v=2026-01-02">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/editor/editor.main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Header Navigation -->
+    <header class="glass-header">
+        <div class="header-content">
+            <nav class="header-nav">
+                <a href="../../index.html" class="nav-link">
+                    <span class="nav-icon">🏠</span> Home
+                </a>
+                <span class="nav-separator">›</span>
+                <a href="../security-hub.html" class="nav-link">
+                    <span class="nav-icon">🔐</span> Security
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Module Hero -->
+    <section class="module-hero" id="main-content">
+        <div class="module-header">
+            <div class="breadcrumb">
+                <span class="difficulty-badge advanced">Advanced</span>
+                <span style="color: var(--text-secondary);">Module 5 of 6</span>
+            </div>
+            <h1 class="hero-title">🔐 Threat Modeling</h1>
+            <p class="hero-subtitle">Interactive learning with quizzes, code playgrounds, and challenges</p>
+            <div class="module-meta">
+                <span>⏱️ 45 minutes</span>
+                <span>📊 10 quiz questions</span>
+                <span>💻 1 code playground</span>
+                <span>🏆 1 challenge</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Learning Objectives -->
+        <section class="glass-card" style="margin-top: var(--spacing-2xl);">
+            <h2>🎓 Learning Objectives</h2>
+            <ul class="objective-list">
+                <li>Understand STRIDE methodology</li>
+                <li>Identify threats systematically</li>
+                <li>Create data flow diagrams</li>
+                <li>Prioritize security risks</li>
+                <li>Design security controls proactively</li>
+            </ul>
+        </section>
+
+        <!-- Interactive Content Placeholder -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>📚 Module Content</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                This module includes:
+            </p>
+            <ul style="list-style-type: none; padding-left: 0;">
+                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
+                    ✅ <strong>Interactive Visualizations:</strong> D3.js charts and Mermaid diagrams
+                </li>
+                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
+                    ✅ <strong>Code Playgrounds:</strong> Hands-on Monaco editor with live execution
+                </li>
+                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
+                    ✅ <strong>Knowledge Checks:</strong> Interactive quizzes with instant feedback
+                </li>
+                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
+                    ✅ <strong>Real-World Examples:</strong> Production-grade code samples
+                </li>
+                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
+                    ✅ <strong>Progressive Challenges:</strong> Apply what you've learned
+                </li>
+            </ul>
+        </section>
+
+        <!-- Interactive Quiz Placeholder -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>✅ Knowledge Check: Quiz</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                Test your understanding with interactive questions. Instant feedback provided!
+            </p>
+            <div class="quiz-container" id="quiz">
+                <p style="color: var(--text-primary); text-align: center; padding: var(--spacing-3xl);">
+                    📝 Quiz system loading...
+                </p>
+            </div>
+        </section>
+
+        <!-- Next Steps -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🚀 Next Steps</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                You've completed Threat Modeling! Continue your learning journey:
+            </p>
+            <div class="next-module-cards">
+                <a href="incident-response.html" class="next-module-card">
+                    <span class="module-icon">📖</span>
+                    <div>
+                        <h5>Module 6: Security Incident Response</h5>
+                        <p>Expert • 25 minutes</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer style="margin-top: var(--spacing-3xl); padding: var(--spacing-xl); text-align: center; color: var(--text-secondary);">
+        <p>© 2026 Asif Hussain. All rights reserved.</p>
+        <p style="margin-top: var(--spacing-sm);">
+            <a href="../../index.html" style="color: var(--hub-primary);">Back to Home</a> • 
+            <a href="../security-hub.html" style="color: var(--hub-primary);">Security Hub</a>
+        </p>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Initialize Mermaid with dark theme
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#7b61ff',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#fff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#1a1f3a',
+                tertiaryColor: '#2a2f4a'
+            }
+        });
+        
+        console.log("✅ Threat Modeling module loaded successfully!");
+    </script>
+</body>
+</html>

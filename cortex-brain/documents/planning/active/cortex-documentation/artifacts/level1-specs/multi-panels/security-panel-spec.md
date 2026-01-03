@@ -1346,7 +1346,7 @@ Write-Host "Checking for T1 animation classes..."
 ## 📝 Version History
 
 **v3.5.0** (January 2, 2026) - Extracted Comprehensive Specification
-- Extracted complete Security Multi-Panel specification from Level1-spec.md
+- Extracted complete Security Multi-Panel specification from 00-master-plan.md
 - Created standalone document with all 13 page specifications
 - Includes all Mermaid diagrams, D3.js visualization specs
 - Added implementation priorities and quality checklists

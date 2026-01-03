@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Microservices Architecture Learning Hub - Master distributed systems, service mesh, and resilience patterns">
+    <meta name="keywords" content="microservices, distributed systems, service mesh, saga pattern, circuit breaker, learning path">
+    <meta name="author" content="Asif Hussain">
+    <title>Microservices Architecture Hub | CORTEX Best Practices</title>
+    <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02">
+    <link rel="stylesheet" href="../assets/css/learning-hub.css?v=2026-01-02">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header class="glass-header">
+        <div class="header-content">
+            <nav class="header-nav">
+                <a href="../index.html" class="nav-link">
+                    <span class="nav-icon">🏠</span> Home
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero learning-module-hero" id="main-content">
+        <div class="module-header">
+            <h1 class="hero-title">🔬 Microservices Architecture Hub</h1>
+            <p class="hero-subtitle">Master Distributed Systems, Service Mesh, Saga Patterns, and Resilience Engineering</p>
+            <div class="module-meta">
+                <span>⏱️ 5 modules • 3.5 hours</span>
+                <span>📊 5 quizzes (50 questions)</span>
+                <span>💻 7 code playgrounds</span>
+                <span>🏆 5 progressive challenges</span>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <section class="learning-path-roadmap glass-card">
+            <h4>🗺️ Your Learning Journey</h4>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                From monolith decomposition to advanced distributed system patterns. Learn service mesh, 
+                circuit breakers, saga patterns, and observability in production microservices.
+            </p>
+
+            <div class="mermaid-container">
+                <pre class="mermaid">
+graph LR
+    START["🚀 Start Here"] --> M1["Module 1<br/>Fundamentals<br/>⏱️ 40 min"]
+    M1 --> M2["Module 2<br/>Service Mesh<br/>⏱️ 45 min"]
+    M2 --> M3["Module 3<br/>Saga Patterns<br/>⏱️ 45 min"]
+    M3 --> M4["Module 4<br/>Circuit Breaker<br/>⏱️ 40 min"]
+    M4 --> M5["Module 5<br/>Observability<br/>⏱️ 50 min"]
+    M5 --> CERT["🏆 Certified<br/>Microservices Architect"]
+
+    style START fill:#00d4ff,stroke:#fff,stroke-width:2px,color:#000
+    style M1 fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
+    style M2 fill:#fbbf24,stroke:#fcd34d,stroke-width:2px,color:#000
+    style M3 fill:#f97316,stroke:#fb923c,stroke-width:2px,color:#fff
+    style M4 fill:#f97316,stroke:#fb923c,stroke-width:2px,color:#fff
+    style M5 fill:#8b5cf6,stroke:#a78bfa,stroke-width:2px,color:#fff
+    style CERT fill:#00ff88,stroke:#fff,stroke-width:3px,color:#000
+                </pre>
+            </div>
+        </section>
+
+        <section style="margin-top: var(--spacing-3xl);">
+            <h2 style="color: var(--text-primary); margin-bottom: var(--spacing-xl); font-size: 2rem;">
+                📚 Interactive Learning Modules
+            </h2>
+            
+            <div class="module-nav-grid">
+                <a href="microservices/fundamentals.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 1</span>
+                        <span class="difficulty-badge beginner">Beginner</span>
+                    </div>
+                    <h5>🎯 Microservices Fundamentals</h5>
+                    <p class="module-description">
+                        Decompose monoliths into microservices. Learn bounded contexts, service boundaries, 
+                        and communication patterns (sync vs async).
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 40 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                    </div>
+                </a>
+
+                <a href="microservices/service-mesh.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 2</span>
+                        <span class="difficulty-badge intermediate">Intermediate</span>
+                    </div>
+                    <h5>🕸️ Service Mesh (Istio, Linkerd)</h5>
+                    <p class="module-description">
+                        Master service-to-service communication with Istio and Linkerd. Learn traffic management, 
+                        mutual TLS, and observability sidecars.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 45 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                    </div>
+                </a>
+
+                <a href="microservices/saga-patterns.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 3</span>
+                        <span class="difficulty-badge advanced">Advanced</span>
+                    </div>
+                    <h5>🔄 Saga & Distributed Transactions</h5>
+                    <p class="module-description">
+                        Implement choreography and orchestration sagas. Handle distributed transactions without 
+                        2PC using compensating transactions and event sourcing.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 45 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                    </div>
+                </a>
+
+                <a href="microservices/circuit-breaker.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 4</span>
+                        <span class="difficulty-badge advanced">Advanced</span>
+                    </div>
+                    <h5>⚡ Circuit Breaker & Resilience</h5>
+                    <p class="module-description">
+                        Build resilient services with circuit breakers, retries, bulkheads, and rate limiters. 
+                        Learn Netflix Hystrix and Resilience4j patterns.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 40 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                    </div>
+                </a>
+
+                <a href="microservices/observability.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 5</span>
+                        <span class="difficulty-badge expert">Expert</span>
+                    </div>
+                    <h5>🔍 Distributed Tracing & Observability</h5>
+                    <p class="module-description">
+                        Master OpenTelemetry, Jaeger, and distributed tracing. Implement correlation IDs, 
+                        service maps, and dependency analysis for complex systems.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 50 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>📋 Prerequisites & Recommendations</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-lg); margin-top: var(--spacing-xl);">
+                <div style="padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-radius: 8px; border: 1px solid #10b981;">
+                    <h4 style="color: #10b981; margin-bottom: var(--spacing-sm);">✅ Recommended Background</h4>
+                    <ul style="color: var(--text-secondary); font-size: 0.95rem;">
+                        <li>Experience with monolithic applications</li>
+                        <li>Understanding of REST APIs</li>
+                        <li>Basic knowledge of Docker</li>
+                        <li>Familiarity with async messaging</li>
+                    </ul>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(0, 212, 255, 0.1); border-radius: 8px; border: 1px solid #00d4ff;">
+                    <h4 style="color: #00d4ff; margin-bottom: var(--spacing-sm);">🛠️ Tools You'll Use</h4>
+                    <ul style="color: var(--text-secondary); font-size: 0.95rem;">
+                        <li>Kubernetes & Istio</li>
+                        <li>RabbitMQ / Kafka (messaging)</li>
+                        <li>Resilience4j (circuit breakers)</li>
+                        <li>Jaeger (distributed tracing)</li>
+                    </ul>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(139, 92, 246, 0.1); border-radius: 8px; border: 1px solid #8b5cf6;">
+                    <h4 style="color: #8b5cf6; margin-bottom: var(--spacing-sm);">🎯 What You'll Build</h4>
+                    <ul style="color: var(--text-secondary); font-size: 0.95rem;">
+                        <li>E-commerce microservices system</li>
+                        <li>Service mesh with Istio</li>
+                        <li>Saga-based order processing</li>
+                        <li>Distributed tracing dashboard</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🎓 Learning Outcomes</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                By completing this learning path, you'll be able to:
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-md);">
+                <div style="padding: var(--spacing-md); background: rgba(16, 185, 129, 0.05); border-left: 3px solid #10b981; border-radius: 4px;">
+                    <strong style="color: #10b981;">Service Decomposition</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Break monoliths into independently deployable microservices
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-md); background: rgba(0, 212, 255, 0.05); border-left: 3px solid #00d4ff; border-radius: 4px;">
+                    <strong style="color: #00d4ff;">Service Mesh Mastery</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Manage service communication with Istio traffic policies
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-md); background: rgba(139, 92, 246, 0.05); border-left: 3px solid #8b5cf6; border-radius: 4px;">
+                    <strong style="color: #8b5cf6;">Distributed Transactions</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Implement saga patterns for cross-service consistency
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-md); background: rgba(251, 191, 36, 0.05); border-left: 3px solid #fbbf24; border-radius: 4px;">
+                    <strong style="color: #fbbf24;">Resilience Engineering</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Build fault-tolerant systems with circuit breakers and bulkheads
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-md); background: rgba(239, 68, 68, 0.05); border-left: 3px solid #ef4444; border-radius: 4px;">
+                    <strong style="color: #ef4444;">Observability</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Debug distributed systems with tracing and service maps
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-md); background: rgba(16, 185, 129, 0.05); border-left: 3px solid #10b981; border-radius: 4px;">
+                    <strong style="color: #10b981;">Communication Patterns</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Choose between REST, gRPC, and event-driven messaging
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🔗 Related Learning Paths</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                Expand your knowledge with these complementary paths:
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-lg);">
+                <a href="messaging-hub.html" class="related-path-card">
+                    <span class="path-icon">📨</span>
+                    <h5>Messaging & Event-Driven</h5>
+                    <p>Kafka, RabbitMQ, event sourcing, CQRS</p>
+                </a>
+                <a href="api-design-hub.html" class="related-path-card">
+                    <span class="path-icon">🌐</span>
+                    <h5>API Design Patterns</h5>
+                    <p>REST, GraphQL, gRPC, API gateways</p>
+                </a>
+                <a href="ddd-hub.html" class="related-path-card">
+                    <span class="path-icon">🏗️</span>
+                    <h5>Domain-Driven Design</h5>
+                    <p>Bounded contexts, aggregates, domain events</p>
+                </a>
+            </div>
+        </section>
+
+        <section class="glass-card" style="margin-top: var(--spacing-3xl); margin-bottom: var(--spacing-3xl);">
+            <h2>📚 Additional Resources</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-md); margin-top: var(--spacing-lg);">
+                <a href="https://microservices.io/patterns/" target="_blank" rel="noopener" class="resource-link">
+                    📖 Microservices Patterns
+                </a>
+                <a href="https://istio.io/latest/docs/" target="_blank" rel="noopener" class="resource-link">
+                    📖 Istio Service Mesh
+                </a>
+                <a href="https://www.jaegertracing.io/docs/" target="_blank" rel="noopener" class="resource-link">
+                    📖 Jaeger Tracing Guide
+                </a>
+                <a href="https://resilience4j.readme.io/" target="_blank" rel="noopener" class="resource-link">
+                    📖 Resilience4j Patterns
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <footer style="padding: var(--spacing-2xl); text-align: center; color: var(--text-secondary); background: rgba(0, 0, 0, 0.3);">
+        <p>© 2026 Asif Hussain. All rights reserved.</p>
+        <p style="margin-top: var(--spacing-sm);">
+            <a href="../index.html" style="color: var(--hub-primary); text-decoration: none;">Back to Home</a> • 
+            <a href="index.html" style="color: var(--hub-primary); text-decoration: none;">All Learning Paths</a>
+        </p>
+    </footer>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true, 
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#10b981',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#fff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#8b5cf6',
+                tertiaryColor: '#fbbf24'
+            }
+        });
+    </script>
+</body>
+</html>

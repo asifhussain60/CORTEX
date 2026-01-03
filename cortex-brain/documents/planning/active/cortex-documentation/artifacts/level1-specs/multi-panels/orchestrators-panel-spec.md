@@ -3,7 +3,7 @@
 **Version:** 1.0.0  
 **Date:** January 2, 2026  
 **Author:** Asif Hussain  
-**Source:** Level1-spec.md (Orchestrators Discovery Analysis)  
+**Source:** 00-master-plan.md (Orchestrators Discovery Analysis)  
 **Status:** Complete - 16 existing, 1 missing, 5 unlinked (107% coverage)
 
 ---
@@ -737,7 +737,7 @@ lineColor: #00d4ff         /* Cyan connections */
 
 ### Primary Specifications
 
-- **Level1-spec.md:** Complete multi-panel documentation specification
+- **00-master-plan.md:** Complete multi-panel documentation specification
 - **orchestrators-documentation-discovery-2026-01-01.md:** Discovery analysis report
 - **brain-protection-rules.yaml:** CORTEX quality standards
 - **response-templates-v4.yaml:** Template standards
@@ -754,7 +754,7 @@ lineColor: #00d4ff         /* Cyan connections */
 ## 📝 Version History
 
 **v1.0.0** (January 2, 2026) - Initial Extraction
-- Extracted complete orchestrators specification from Level1-spec.md
+- Extracted complete orchestrators specification from 00-master-plan.md
 - Documented all 5 categories with 19 pages
 - Included complexity analysis and rankings
 - Detailed orphan cleanup strategy

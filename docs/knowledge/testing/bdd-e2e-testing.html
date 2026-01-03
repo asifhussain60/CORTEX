@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="BDD & E2E Testing - Testing Learning Module">
+    <meta name="keywords" content="testing, BDD & E2E Testing, learning, tutorial">
+    <meta name="author" content="Asif Hussain">
+    <title>BDD & E2E Testing | CORTEX Learning Hub</title>
+    <link rel="stylesheet" href="../../assets/css/main.css?v=2026-01-02">
+    <link rel="stylesheet" href="../../assets/css/learning-hub.css?v=2026-01-02">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/editor/editor.main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Header Navigation -->
+    <header class="glass-header">
+        <div class="header-content">
+            <nav class="header-nav">
+                <a href="../../index.html" class="nav-link">
+                    <span class="nav-icon">🏠</span> Home
+                </a>
+                <span class="nav-separator">›</span>
+                <a href="../testing-hub.html" class="nav-link">
+                    <span class="nav-icon">🧪</span> Testing
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Module Hero -->
+    <section class="module-hero" id="main-content">
+        <div class="module-header">
+            <div class="breadcrumb">
+                <span class="difficulty-badge intermediate">Intermediate</span>
+                <span style="color: var(--text-secondary);">Module 3 of 5</span>
+            </div>
+            <h1 class="hero-title">🎭 BDD & E2E Testing</h1>
+            <p class="hero-subtitle">Interactive learning with quizzes, code playgrounds, and challenges</p>
+            <div class="module-meta">
+                <span>⏱️ 45 minutes</span>
+                <span>📊 10 quiz questions</span>
+                <span>💻 3 code playgrounds</span>
+                <span>🏆 1 challenge</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Learning Objectives -->
+        <section class="glass-card" style="margin-top: var(--spacing-2xl);">
+            <h2>🎓 Learning Objectives</h2>
+            <ul class="objective-list">
+                <li>Understand Behavior-Driven Development (BDD) principles and benefits</li>
+                <li>Master Gherkin syntax (Given-When-Then) for readable scenarios</li>
+                <li>Implement end-to-end test automation with modern tools</li>
+                <li>Use Cucumber, Selenium, Cypress, and Playwright effectively</li>
+                <li>Balance unit, integration, and E2E tests in testing strategy</li>
+            </ul>
+        </section>
+
+        <!-- BDD Workflow -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🔄 BDD Workflow: From Conversation to Automation</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                BDD bridges the gap between business stakeholders and technical teams through structured conversations and living documentation.
+            </p>
+            
+            <div class="mermaid-container">
+                <pre class="mermaid">
+graph LR
+    A[Discovery<br/>Conversation] --> B[Formulation<br/>Gherkin]
+    B --> C[Automation<br/>Step Defs]
+    C --> D[Execution<br/>CI/CD]
+    D --> E[Living<br/>Documentation]
+    E -.Feedback.-> A
+    
+    style A fill:#7b61ff,stroke:#9f87ff,color:#fff
+    style B fill:#00d4ff,stroke:#67e8f9,color:#000
+    style C fill:#10b981,stroke:#34d399,color:#fff
+    style D fill:#fbbf24,stroke:#fcd34d,color:#000
+    style E fill:#ef4444,stroke:#f87171,color:#fff
+                </pre>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-md); margin-top: var(--spacing-2xl);">
+                <div style="padding: var(--spacing-md); background: rgba(123, 97, 255, 0.1); border-radius: 6px; border-left: 4px solid #7b61ff;">
+                    <h5 style="color: #7b61ff; margin-bottom: var(--spacing-xs);">1. Discovery</h5>
+                    <p style="color: var(--text-secondary); font-size: 0.85rem;">Collaborative conversation about features and examples</p>
+                </div>
+                <div style="padding: var(--spacing-md); background: rgba(0, 212, 255, 0.1); border-radius: 6px; border-left: 4px solid #00d4ff;">
+                    <h5 style="color: #00d4ff; margin-bottom: var(--spacing-xs);">2. Formulation</h5>
+                    <p style="color: var(--text-secondary); font-size: 0.85rem;">Write scenarios in Gherkin (Given-When-Then)</p>
+                </div>
+                <div style="padding: var(--spacing-md); background: rgba(16, 185, 129, 0.1); border-radius: 6px; border-left: 4px solid #10b981;">
+                    <h5 style="color: #10b981; margin-bottom: var(--spacing-xs);">3. Automation</h5>
+                    <p style="color: var(--text-secondary); font-size: 0.85rem;">Implement step definitions and automation code</p>
+                </div>
+                <div style="padding: var(--spacing-md); background: rgba(251, 191, 36, 0.1); border-radius: 6px; border-left: 4px solid #fbbf24;">
+                    <h5 style="color: #fbbf24; margin-bottom: var(--spacing-xs);">4. Execution</h5>
+                    <p style="color: var(--text-secondary); font-size: 0.85rem;">Run tests in CI/CD pipelines</p>
+                </div>
+                <div style="padding: var(--spacing-md); background: rgba(239, 68, 68, 0.1); border-radius: 6px; border-left: 4px solid #ef4444;">
+                    <h5 style="color: #ef4444; margin-bottom: var(--spacing-xs);">5. Documentation</h5>
+                    <p style="color: var(--text-secondary); font-size: 0.85rem;">Scenarios become living, up-to-date documentation</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gherkin Syntax -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>📝 Gherkin Syntax: Given-When-Then</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                Gherkin provides a structured, human-readable language for describing application behavior that both business and technical teams understand.
+            </p>
+            
+            <div class="mermaid-container">
+                <pre class="mermaid">
+sequenceDiagram
+    participant User as 👤 User
+    participant System as 💻 System
+    participant Backend as 🔧 Backend
+    
+    Note over User,Backend: GIVEN (Initial Context)
+    User->>System: User is logged in
+    System->>Backend: Session valid
+    
+    Note over User,Backend: WHEN (Action/Event)
+    User->>System: Clicks "Add to Cart"
+    System->>Backend: POST /cart/items
+    
+    Note over User,Backend: THEN (Expected Outcome)
+    Backend-->>System: 201 Created
+    System-->>User: Item added confirmation
+    User->>User: Cart count increases
+                </pre>
+            </div>
+
+            <div style="margin-top: var(--spacing-2xl); padding: var(--spacing-lg); background: rgba(26, 31, 58, 0.5); border-radius: 8px; border: 1px solid var(--module-border);">
+                <pre style="margin: 0; color: #e5e7eb; font-family: 'Consolas', monospace; line-height: 1.8;"><code><span style="color: #7b61ff; font-weight: bold;">Feature:</span> Shopping Cart Management
+  <span style="color: #8b92a7;">As a customer</span>
+  <span style="color: #8b92a7;">I want to add products to my cart</span>
+  <span style="color: #8b92a7;">So that I can purchase multiple items together</span>
+
+  <span style="color: #00d4ff; font-weight: bold;">Scenario:</span> Add product to empty cart
+    <span style="color: #10b981; font-weight: bold;">Given</span> I am logged in as "john@example.com"
+    <span style="color: #10b981; font-weight: bold;">And</span> my cart is empty
+    <span style="color: #fbbf24; font-weight: bold;">When</span> I add "Laptop" to my cart
+    <span style="color: #ef4444; font-weight: bold;">Then</span> I should see 1 item in my cart
+    <span style="color: #ef4444; font-weight: bold;">And</span> the cart total should be "$999.99"</code></pre>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-lg); margin-top: var(--spacing-2xl);">
+                <div style="padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-radius: 8px; border: 1px solid #10b981;">
+                    <h4 style="color: #10b981; margin-bottom: var(--spacing-md);">📋 Given (Context)</h4>
+                    <ul style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8;">
+                        <li>Set up initial state</li>
+                        <li>Preconditions that must be true</li>
+                        <li>Example: "Given I am on the homepage"</li>
+                        <li>Can have multiple "And" clauses</li>
+                    </ul>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(251, 191, 36, 0.1); border-radius: 8px; border: 1px solid #fbbf24;">
+                    <h4 style="color: #fbbf24; margin-bottom: var(--spacing-md);">⚡ When (Action)</h4>
+                    <ul style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8;">
+                        <li>The specific action or event</li>
+                        <li>What the user/system does</li>
+                        <li>Example: "When I click the login button"</li>
+                        <li>Should be a single key action</li>
+                    </ul>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(239, 68, 68, 0.1); border-radius: 8px; border: 1px solid #ef4444;">
+                    <h4 style="color: #ef4444; margin-bottom: var(--spacing-md);">✅ Then (Outcome)</h4>
+                    <ul style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8;">
+                        <li>Expected observable results</li>
+                        <li>What should happen after action</li>
+                        <li>Example: "Then I should see my dashboard"</li>
+                        <li>Can verify multiple outcomes</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- E2E Testing Architecture -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🏗️ E2E Testing Architecture</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                End-to-end tests verify complete user workflows through all system layers, from UI to database.
+            </p>
+            <div id="e2e-architecture-viz" style="width: 100%; height: 500px; margin: var(--spacing-xl) 0; background: rgba(26, 31, 58, 0.5); border-radius: 12px; border: 1px solid var(--module-border);"></div>
+        </section>
+
+        <!-- Testing Tools Comparison -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🛠️ E2E Testing Tools Comparison</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                Modern E2E testing tools offer different approaches to test automation. Choose based on your needs.
+            </p>
+            <div id="tools-comparison-viz" style="width: 100%; height: 450px; margin: var(--spacing-xl) 0; background: rgba(26, 31, 58, 0.5); border-radius: 12px; border: 1px solid var(--module-border);"></div>
+        </section>
+
+        <!-- Code Playground: Gherkin -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>💻 Code Playground: Gherkin Scenarios</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                Practice writing BDD scenarios in Gherkin for different user stories.
+            </p>
+            <div class="playground-container">
+                <div class="playground-tabs">
+                    <button class="tab-btn active" data-tab="login">🔐 Login</button>
+                    <button class="tab-btn" data-tab="cart">🛒 Shopping Cart</button>
+                    <button class="tab-btn" data-tab="search">🔍 Search</button>
+                </div>
+                <div class="tab-content active" id="login">
+                    <div id="editor-login" style="height: 400px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                </div>
+                <div class="tab-content" id="cart">
+                    <div id="editor-cart" style="height: 400px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                </div>
+                <div class="tab-content" id="search">
+                    <div id="editor-search" style="height: 400px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Code Playground: Cypress -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>💻 Code Playground: Cypress E2E Test</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                See how a Gherkin scenario translates to automated Cypress test code.
+            </p>
+            <div class="playground-container">
+                <div class="playground-tabs">
+                    <button class="tab-btn active" data-tab="cypress">Cypress</button>
+                    <button class="tab-btn" data-tab="playwright">Playwright</button>
+                </div>
+                <div class="tab-content active" id="cypress">
+                    <div id="editor-cypress" style="height: 450px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                </div>
+                <div class="tab-content" id="playwright">
+                    <div id="editor-playwright" style="height: 450px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                </div>
+                <button class="run-code-btn" id="run-code"><span class="btn-icon">▶️</span> Run E2E Test</button>
+                <div class="output-container" id="output">
+                    <h5>📤 Test Output</h5>
+                    <pre id="output-content">Click "Run E2E Test" to see results...</pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Best Practices -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>✨ BDD & E2E Best Practices</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--spacing-lg);">
+                <div style="padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-radius: 8px; border: 1px solid #10b981;">
+                    <h4 style="color: #10b981; margin-bottom: var(--spacing-md);">✅ Do This</h4>
+                    <ul style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8;">
+                        <li><strong>Focus on Business Value:</strong> Test user journeys that matter</li>
+                        <li><strong>Keep Scenarios Declarative:</strong> What, not how</li>
+                        <li><strong>Use Data Tables:</strong> For multiple examples efficiently</li>
+                        <li><strong>Maintain Test Independence:</strong> Each scenario runs alone</li>
+                        <li><strong>Parallelize Tests:</strong> Speed up CI/CD pipelines</li>
+                        <li><strong>Version with Code:</strong> Tests live in source control</li>
+                    </ul>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(239, 68, 68, 0.1); border-radius: 8px; border: 1px solid #ef4444;">
+                    <h4 style="color: #ef4444; margin-bottom: var(--spacing-md);">❌ Avoid This</h4>
+                    <ul style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8;">
+                        <li><strong>Testing Too Much:</strong> E2E tests are expensive, be selective</li>
+                        <li><strong>Implementation Details:</strong> Don't test how, test what</li>
+                        <li><strong>Brittle Selectors:</strong> Use stable test IDs, not CSS classes</li>
+                        <li><strong>No Waiting Strategy:</strong> Handle async properly</li>
+                        <li><strong>Ignoring Flakiness:</strong> Fix flaky tests immediately</li>
+                        <li><strong>Missing Recovery:</strong> Tests should clean up after themselves</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Quiz -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>✅ Knowledge Check: BDD & E2E Testing Quiz</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                Test your understanding with 10 questions. Instant feedback provided!
+            </p>
+            <div class="quiz-container" id="quiz"></div>
+            <div class="quiz-results" id="quiz-results" style="display: none;">
+                <h3 id="score-display"></h3>
+                <button class="retry-btn" id="retry-quiz" style="margin-top: var(--spacing-lg); padding: var(--spacing-md) var(--spacing-xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 8px; cursor: pointer;">🔄 Retry Quiz</button>
+            </div>
+        </section>
+
+        <!-- Challenge -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🏆 BDD & E2E Challenge</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                Write a complete BDD feature with scenarios for a user registration flow. Requirements:
+            </p>
+            <ul style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                <li>Feature: User Registration</li>
+                <li>Scenario 1: Successful registration with valid data</li>
+                <li>Scenario 2: Registration fails with duplicate email</li>
+                <li>Scenario 3: Registration fails with weak password</li>
+                <li>Scenario 4: Registration succeeds and sends welcome email</li>
+                <li>Use proper Gherkin syntax (Given-When-Then)</li>
+            </ul>
+            
+            <div class="challenge-hints" style="margin-bottom: var(--spacing-lg);">
+                <details style="margin: var(--spacing-sm) 0;">
+                    <summary style="cursor: pointer; color: var(--hub-primary); font-weight: 600;">💡 Hint 1: Feature Structure</summary>
+                    <p style="color: var(--text-secondary); padding: var(--spacing-md); background: rgba(123, 97, 255, 0.1); border-radius: 6px; margin-top: var(--spacing-sm);">
+                        Start with Feature description, then list multiple Scenarios. Each scenario follows Given-When-Then structure.
+                    </p>
+                </details>
+                <details style="margin: var(--spacing-sm) 0;">
+                    <summary style="cursor: pointer; color: var(--hub-primary); font-weight: 600;">💡 Hint 2: Context Setup</summary>
+                    <p style="color: var(--text-secondary); padding: var(--spacing-md); background: rgba(123, 97, 255, 0.1); border-radius: 6px; margin-top: var(--spacing-sm);">
+                        Use "Given I am on the registration page" to set context. Add "And" clauses for additional preconditions.
+                    </p>
+                </details>
+                <details style="margin: var(--spacing-sm) 0;">
+                    <summary style="cursor: pointer; color: var(--hub-primary); font-weight: 600;">💡 Hint 3: Verification</summary>
+                    <p style="color: var(--text-secondary); padding: var(--spacing-md); background: rgba(123, 97, 255, 0.1); border-radius: 6px; margin-top: var(--spacing-sm);">
+                        "Then" clauses verify outcomes: "Then I should see a success message", "Then I should receive a welcome email"
+                    </p>
+                </details>
+            </div>
+            
+            <button id="show-solution-btn" style="padding: var(--spacing-sm) var(--spacing-lg); background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid #10b981; border-radius: 8px; cursor: pointer;">✅ Show Solution</button>
+            <div id="challenge-solution" style="margin-top: var(--spacing-lg); display: none;">
+                <pre style="background: rgba(26, 31, 58, 0.8); padding: var(--spacing-lg); border-radius: 8px; overflow-x: auto; color: #e5e7eb;"><code>Feature: User Registration
+  As a new user
+  I want to register for an account
+  So that I can access the platform features
+
+  Background:
+    Given I am on the registration page
+    And the registration form is displayed
+
+  Scenario: Successful registration with valid credentials
+    Given I have not registered before
+    When I enter email "john.doe@example.com"
+    And I enter password "SecurePass123!"
+    And I enter password confirmation "SecurePass123!"
+    And I click the "Register" button
+    Then I should see a success message "Registration successful!"
+    And I should be redirected to the dashboard
+    And I should receive a welcome email
+
+  Scenario: Registration fails with duplicate email
+    Given a user with email "existing@example.com" already exists
+    When I enter email "existing@example.com"
+    And I enter password "SecurePass123!"
+    And I enter password confirmation "SecurePass123!"
+    And I click the "Register" button
+    Then I should see an error message "Email already registered"
+    And I should remain on the registration page
+    And no welcome email should be sent
+
+  Scenario: Registration fails with weak password
+    When I enter email "jane@example.com"
+    And I enter password "weak"
+    And I enter password confirmation "weak"
+    And I click the "Register" button
+    Then I should see an error message "Password must be at least 8 characters"
+    And I should remain on the registration page
+
+  Scenario Outline: Password validation rules
+    When I enter email "test@example.com"
+    And I enter password "<password>"
+    And I click the "Register" button
+    Then I should see "<error_message>"
+
+    Examples:
+      | password    | error_message                           |
+      | abc123      | Password must be at least 8 characters  |
+      | abcdefgh    | Password must contain uppercase letter  |
+      | ABCDEFGH    | Password must contain lowercase letter  |
+      | AbcdEfgh    | Password must contain a number          |</code></pre>
+            </div>
+        </section>
+
+        <!-- Next Steps -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🚀 Next Steps</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                You've completed BDD & E2E Testing! Continue your learning journey:
+            </p>
+            <div class="next-module-cards">
+                <a href="test-coverage-analysis.html" class="next-module-card">
+                    <span class="module-icon">📖</span>
+                    <div>
+                        <h5>Module 4: Test Coverage Analysis</h5>
+                        <p>Intermediate • 30 minutes</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer style="margin-top: var(--spacing-3xl); padding: var(--spacing-xl); text-align: center; color: var(--text-secondary);">
+        <p>© 2026 Asif Hussain. All rights reserved.</p>
+        <p style="margin-top: var(--spacing-sm);">
+            <a href="../../index.html" style="color: var(--hub-primary);">Back to Home</a> • 
+            <a href="../testing-hub.html" style="color: var(--hub-primary);">Testing Hub</a>
+        </p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#7b61ff',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#fff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#1a1f3a',
+                tertiaryColor: '#2a2f4a'
+            }
+        });
+        
+        // D3.js E2E Architecture Visualization
+        function createE2EArchitecture() {
+            const container = document.getElementById('e2e-architecture-viz');
+            const width = container.clientWidth;
+            const height = 500;
+            
+            const svg = d3.select('#e2e-architecture-viz')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            // Architecture layers
+            const layers = [
+                { name: 'E2E Test Runner', y: 60, color: '#7b61ff', items: ['Cypress', 'Playwright', 'Selenium'] },
+                { name: 'Browser Automation', y: 150, color: '#00d4ff', items: ['Chrome', 'Firefox', 'Safari'] },
+                { name: 'Frontend (UI)', y: 240, color: '#10b981', items: ['React', 'Vue', 'Angular'] },
+                { name: 'API Layer', y: 330, color: '#fbbf24', items: ['REST', 'GraphQL', 'WebSocket'] },
+                { name: 'Backend Services', y: 420, color: '#ef4444', items: ['Auth', 'Business Logic', 'Data'] }
+            ];
+            
+            layers.forEach((layer, index) => {
+                // Layer rectangle
+                const layerGroup = svg.append('g');
+                
+                layerGroup.append('rect')
+                    .attr('x', 50)
+                    .attr('y', layer.y - 30)
+                    .attr('width', width - 100)
+                    .attr('height', 60)
+                    .attr('fill', layer.color)
+                    .attr('opacity', 0)
+                    .attr('rx', 8)
+                    .transition()
+                    .duration(600)
+                    .delay(index * 150)
+                    .attr('opacity', 0.2);
+                
+                // Layer name
+                layerGroup.append('text')
+                    .attr('x', 70)
+                    .attr('y', layer.y - 5)
+                    .attr('fill', layer.color)
+                    .attr('font-size', '16px')
+                    .attr('font-weight', 'bold')
+                    .attr('opacity', 0)
+                    .text(layer.name)
+                    .transition()
+                    .duration(400)
+                    .delay(index * 150 + 300)
+                    .attr('opacity', 1);
+                
+                // Layer items
+                const itemSpacing = (width - 200) / layer.items.length;
+                layer.items.forEach((item, i) => {
+                    layerGroup.append('text')
+                        .attr('x', 200 + i * itemSpacing)
+                        .attr('y', layer.y + 10)
+                        .attr('fill', '#8b92a7')
+                        .attr('font-size', '13px')
+                        .attr('text-anchor', 'middle')
+                        .attr('opacity', 0)
+                        .text(item)
+                        .transition()
+                        .duration(400)
+                        .delay(index * 150 + 400 + i * 100)
+                        .attr('opacity', 1);
+                });
+                
+                // Connection arrows
+                if (index < layers.length - 1) {
+                    svg.append('line')
+                        .attr('x1', width / 2)
+                        .attr('y1', layer.y + 35)
+                        .attr('x2', width / 2)
+                        .attr('y2', layers[index + 1].y - 35)
+                        .attr('stroke', '#6b7280')
+                        .attr('stroke-width', 2)
+                        .attr('stroke-dasharray', '5,5')
+                        .attr('opacity', 0.5)
+                        .attr('marker-end', 'url(#arrow-gray)');
+                }
+            });
+            
+            // Arrow marker
+            svg.append('defs').append('marker')
+                .attr('id', 'arrow-gray')
+                .attr('viewBox', '0 0 10 10')
+                .attr('refX', 5)
+                .attr('refY', 5)
+                .attr('markerWidth', 6)
+                .attr('markerHeight', 6)
+                .attr('orient', 'auto-start-reverse')
+                .append('path')
+                .attr('d', 'M 0 0 L 10 5 L 0 10 z')
+                .attr('fill', '#6b7280');
+            
+            // Title
+            svg.append('text')
+                .attr('x', width / 2)
+                .attr('y', 25)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#7b61ff')
+                .attr('font-size', '16px')
+                .attr('font-weight', '600')
+                .text('E2E Test Coverage: Full Stack Verification');
+        }
+        
+        // D3.js Tools Comparison
+        function createToolsComparison() {
+            const container = document.getElementById('tools-comparison-viz');
+            const width = container.clientWidth;
+            const height = 450;
+            const margin = { top: 40, right: 140, bottom: 60, left: 60 };
+            
+            const svg = d3.select('#tools-comparison-viz')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            const chartWidth = width - margin.left - margin.right;
+            const chartHeight = height - margin.top - margin.bottom;
+            
+            const g = svg.append('g')
+                .attr('transform', `translate(${margin.left}, ${margin.top})`);
+            
+            // Tools data
+            const tools = [
+                { name: 'Cypress', speed: 8, reliability: 9, ease: 9, features: 8, color: '#10b981' },
+                { name: 'Playwright', speed: 9, reliability: 9, ease: 8, features: 9, color: '#00d4ff' },
+                { name: 'Selenium', speed: 6, reliability: 7, ease: 6, features: 7, color: '#fbbf24' },
+                { name: 'Puppeteer', speed: 8, reliability: 8, ease: 7, features: 7, color: '#7b61ff' },
+                { name: 'TestCafe', speed: 7, reliability: 8, ease: 8, features: 7, color: '#ef4444' }
+            ];
+            
+            const categories = ['Speed', 'Reliability', 'Ease of Use', 'Features'];
+            const metrics = ['speed', 'reliability', 'ease', 'features'];
+            
+            // Scales
+            const xScale = d3.scaleBand()
+                .domain(categories)
+                .range([0, chartWidth])
+                .padding(0.2);
+            
+            const yScale = d3.scaleLinear()
+                .domain([0, 10])
+                .range([chartHeight, 0]);
+            
+            // Grid
+            g.append('g')
+                .attr('class', 'grid')
+                .call(d3.axisLeft(yScale)
+                    .ticks(10)
+                    .tickSize(-chartWidth)
+                    .tickFormat(''))
+                .selectAll('line')
+                .attr('stroke', '#2d3748')
+                .attr('stroke-opacity', 0.3);
+            
+            g.select('.grid .domain').remove();
+            
+            // Axes
+            g.append('g')
+                .attr('transform', `translate(0, ${chartHeight})`)
+                .call(d3.axisBottom(xScale))
+                .selectAll('text')
+                .attr('fill', '#8b92a7')
+                .style('font-size', '12px');
+            
+            g.append('g')
+                .call(d3.axisLeft(yScale).ticks(10))
+                .selectAll('text')
+                .attr('fill', '#8b92a7')
+                .style('font-size', '11px');
+            
+            // Bars grouped by tool
+            categories.forEach((category, catIndex) => {
+                const metricKey = metrics[catIndex];
+                const barWidth = xScale.bandwidth() / tools.length;
+                
+                tools.forEach((tool, toolIndex) => {
+                    g.append('rect')
+                        .attr('x', xScale(category) + toolIndex * barWidth)
+                        .attr('y', chartHeight)
+                        .attr('width', barWidth * 0.9)
+                        .attr('height', 0)
+                        .attr('fill', tool.color)
+                        .attr('opacity', 0.8)
+                        .on('mouseover', function() {
+                            d3.select(this).attr('opacity', 1);
+                            
+                            // Tooltip
+                            g.append('text')
+                                .attr('class', 'tooltip-text')
+                                .attr('x', xScale(category) + toolIndex * barWidth + barWidth / 2)
+                                .attr('y', yScale(tool[metricKey]) - 10)
+                                .attr('text-anchor', 'middle')
+                                .attr('fill', tool.color)
+                                .attr('font-size', '13px')
+                                .attr('font-weight', 'bold')
+                                .text(`${tool.name}: ${tool[metricKey]}/10`);
+                        })
+                        .on('mouseout', function() {
+                            d3.select(this).attr('opacity', 0.8);
+                            g.selectAll('.tooltip-text').remove();
+                        })
+                        .transition()
+                        .duration(800)
+                        .delay(catIndex * 200 + toolIndex * 100)
+                        .attr('y', yScale(tool[metricKey]))
+                        .attr('height', chartHeight - yScale(tool[metricKey]));
+                });
+            });
+            
+            // Legend
+            const legend = svg.append('g')
+                .attr('transform', `translate(${width - margin.right + 10}, ${margin.top})`);
+            
+            tools.forEach((tool, i) => {
+                const legendItem = legend.append('g')
+                    .attr('transform', `translate(0, ${i * 22})`);
+                
+                legendItem.append('rect')
+                    .attr('width', 14)
+                    .attr('height', 14)
+                    .attr('fill', tool.color)
+                    .attr('rx', 2);
+                
+                legendItem.append('text')
+                    .attr('x', 20)
+                    .attr('y', 11)
+                    .attr('fill', '#8b92a7')
+                    .attr('font-size', '12px')
+                    .text(tool.name);
+            });
+            
+            // Title
+            svg.append('text')
+                .attr('x', width / 2)
+                .attr('y', 20)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#7b61ff')
+                .attr('font-size', '14px')
+                .attr('font-weight', '600')
+                .text('E2E Testing Tools: Feature Comparison');
+        }
+        
+        // Monaco Editor Setup
+        require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs' } });
+        require(['vs/editor/editor.main'], function() {
+            const loginGherkin = `Feature: User Login
+  As a registered user
+  I want to log into my account
+  So that I can access my personalized dashboard
+
+  Scenario: Successful login with valid credentials
+    Given I am on the login page
+    And I am not logged in
+    When I enter username "john@example.com"
+    And I enter password "SecurePass123"
+    And I click the "Login" button
+    Then I should see my dashboard
+    And I should see a welcome message "Welcome back, John!"
+    And my session should be active
+
+  Scenario: Login fails with invalid password
+    Given I am on the login page
+    When I enter username "john@example.com"
+    And I enter password "wrongpassword"
+    And I click the "Login" button
+    Then I should see an error "Invalid credentials"
+    And I should remain on the login page
+    And I should not be logged in`;
+
+            const cartGherkin = `Feature: Shopping Cart Management
+  As a customer
+  I want to manage items in my cart
+  So that I can purchase products
+
+  Scenario: Add product to empty cart
+    Given I am logged in
+    And my cart is empty
+    And I am viewing product "Laptop Pro"
+    When I click "Add to Cart"
+    Then I should see 1 item in my cart
+    And the cart total should be "$1,299.99"
+    And I should see a confirmation "Item added to cart"
+
+  Scenario: Remove item from cart
+    Given I am logged in
+    And I have "Laptop Pro" in my cart
+    When I click "Remove" next to "Laptop Pro"
+    Then my cart should be empty
+    And the cart total should be "$0.00"
+
+  Scenario: Apply discount code
+    Given I am logged in
+    And I have items worth "$1000" in my cart
+    When I enter discount code "SAVE20"
+    And I click "Apply"
+    Then the discount should be "$200"
+    And the cart total should be "$800"`;
+
+            const searchGherkin = `Feature: Product Search
+  As a customer
+  I want to search for products
+  So that I can find what I'm looking for
+
+  Scenario: Search returns relevant results
+    Given I am on the homepage
+    When I enter "laptop" in the search box
+    And I press Enter
+    Then I should see at least 5 products
+    And all products should contain "laptop" in their name or description
+    And products should be sorted by relevance
+
+  Scenario: Search with filters
+    Given I searched for "laptop"
+    And I see 20 results
+    When I select price range "$500-$1000"
+    And I select brand "Apple"
+    Then I should see only laptops between $500 and $1000
+    And all results should be from Apple
+    And the result count should update
+
+  Scenario: No results found
+    Given I am on the homepage
+    When I search for "xyznonexistent123"
+    Then I should see "No results found"
+    And I should see search suggestions
+    And I should see popular products`;
+
+            const cypressCode = `// Cypress E2E Test for Shopping Cart
+describe('Shopping Cart', () => {
+  beforeEach(() => {
+    // Reset application state
+    cy.task('db:seed');
+    
+    // Login before each test
+    cy.visit('/login');
+    cy.get('[data-testid="email"]').type('john@example.com');
+    cy.get('[data-testid="password"]').type('SecurePass123');
+    cy.get('[data-testid="login-btn"]').click();
+    
+    // Wait for dashboard
+    cy.url().should('include', '/dashboard');
+  });
+
+  it('should add product to empty cart', () => {
+    // Navigate to product
+    cy.visit('/products/laptop-pro');
+    
+    // Verify cart is empty
+    cy.get('[data-testid="cart-count"]').should('have.text', '0');
+    
+    // Add to cart
+    cy.get('[data-testid="add-to-cart-btn"]').click();
+    
+    // Verify cart updated
+    cy.get('[data-testid="cart-count"]').should('have.text', '1');
+    cy.get('[data-testid="cart-total"]').should('contain', '$1,299.99');
+    
+    // Verify confirmation message
+    cy.get('[data-testid="notification"]')
+      .should('be.visible')
+      .and('contain', 'Item added to cart');
+  });
+
+  it('should remove item from cart', () => {
+    // Add item first
+    cy.visit('/products/laptop-pro');
+    cy.get('[data-testid="add-to-cart-btn"]').click();
+    
+    // Go to cart
+    cy.get('[data-testid="cart-icon"]').click();
+    cy.url().should('include', '/cart');
+    
+    // Remove item
+    cy.get('[data-testid="remove-item-btn"]').first().click();
+    
+    // Verify cart empty
+    cy.get('[data-testid="cart-empty-message"]')
+      .should('be.visible')
+      .and('contain', 'Your cart is empty');
+    cy.get('[data-testid="cart-total"]').should('contain', '$0.00');
+  });
+});`;
+
+            const playwrightCode = `// Playwright E2E Test for Shopping Cart
+import { test, expect } from '@playwright/test';
+
+test.describe('Shopping Cart', () => {
+  test.beforeEach(async ({ page }) => {
+    // Login
+    await page.goto('/login');
+    await page.fill('[data-testid="email"]', 'john@example.com');
+    await page.fill('[data-testid="password"]', 'SecurePass123');
+    await page.click('[data-testid="login-btn"]');
+    
+    // Wait for navigation
+    await expect(page).toHaveURL(/.*dashboard/);
+  });
+
+  test('should add product to empty cart', async ({ page }) => {
+    // Navigate to product
+    await page.goto('/products/laptop-pro');
+    
+    // Verify cart is empty
+    const cartCount = page.locator('[data-testid="cart-count"]');
+    await expect(cartCount).toHaveText('0');
+    
+    // Add to cart
+    await page.click('[data-testid="add-to-cart-btn"]');
+    
+    // Verify cart updated
+    await expect(cartCount).toHaveText('1');
+    await expect(page.locator('[data-testid="cart-total"]'))
+      .toContainText('$1,299.99');
+    
+    // Verify confirmation
+    await expect(page.locator('[data-testid="notification"]'))
+      .toBeVisible();
+    await expect(page.locator('[data-testid="notification"]'))
+      .toContainText('Item added to cart');
+  });
+
+  test('should handle network failures gracefully', async ({ page }) => {
+    // Simulate network failure
+    await page.route('**/api/cart/*', route => route.abort());
+    
+    await page.goto('/products/laptop-pro');
+    await page.click('[data-testid="add-to-cart-btn"]');
+    
+    // Verify error handling
+    await expect(page.locator('[data-testid="error-message"]'))
+      .toBeVisible();
+    await expect(page.locator('[data-testid="error-message"]'))
+      .toContainText('Network error');
+  });
+});`;
+
+            monaco.editor.create(document.getElementById('editor-login'), {
+                value: loginGherkin,
+                language: 'gherkin',
+                theme: 'vs-dark',
+                minimap: { enabled: false },
+                fontSize: 13,
+                lineNumbers: 'on',
+                readOnly: true
+            });
+
+            monaco.editor.create(document.getElementById('editor-cart'), {
+                value: cartGherkin,
+                language: 'gherkin',
+                theme: 'vs-dark',
+                minimap: { enabled: false },
+                fontSize: 13,
+                readOnly: true
+            });
+
+            monaco.editor.create(document.getElementById('editor-search'), {
+                value: searchGherkin,
+                language: 'gherkin',
+                theme: 'vs-dark',
+                minimap: { enabled: false },
+                fontSize: 13,
+                readOnly: true
+            });
+
+            monaco.editor.create(document.getElementById('editor-cypress'), {
+                value: cypressCode,
+                language: 'javascript',
+                theme: 'vs-dark',
+                minimap: { enabled: false },
+                fontSize: 13,
+                readOnly: true
+            });
+
+            monaco.editor.create(document.getElementById('editor-playwright'), {
+                value: playwrightCode,
+                language: 'javascript',
+                theme: 'vs-dark',
+                minimap: { enabled: false },
+                fontSize: 13,
+                readOnly: true
+            });
+
+            // Tab switching
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', function() {
+                const container = this.closest('.playground-container');
+                container.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                container.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                container.querySelector('#' + this.getAttribute('data-tab')).classList.add('active');
+            }));
+
+            // Run code button
+            document.getElementById('run-code')?.addEventListener('click', () => {
+                const tab = document.querySelector('#output').closest('.glass-card').querySelector('.tab-content.active').id;
+                const output = document.getElementById('output-content');
+                const outputs = {
+                    cypress: `Running Cypress tests...\n\n  Shopping Cart\n    ✓ should add product to empty cart (1.2s)\n    ✓ should remove item from cart (0.8s)\n\n  2 passing (2s)\n\n✅ All E2E tests passed!\nCoverage: User flows verified end-to-end`,
+                    playwright: `Running Playwright tests...\n\n  Shopping Cart\n    ✓ should add product to empty cart (892ms)\n    ✓ should handle network failures gracefully (654ms)\n\n  2 passed (1.5s)\n\n✅ All tests passed!\nTest artifacts saved to /test-results`
+                };
+                output.textContent = outputs[tab] || 'Select a test framework tab';
+            });
+        });
+        
+        // Quiz Data
+        const quizData = [
+            {
+                question: "What does BDD stand for?",
+                options: ["Bug-Driven Development", "Behavior-Driven Development", "Backend Development Design", "Binary Data Debugging"],
+                correct: 1,
+                explanation: "BDD (Behavior-Driven Development) focuses on defining application behavior through examples that stakeholders understand."
+            },
+            {
+                question: "In Gherkin, what does 'Given' represent?",
+                options: ["The action taken", "The expected outcome", "The initial context/preconditions", "The test data"],
+                correct: 2,
+                explanation: "'Given' sets up the initial context and preconditions before the action occurs."
+            },
+            {
+                question: "Which tool is specifically designed for modern web E2E testing with time-travel debugging?",
+                options: ["Selenium", "Cypress", "JUnit", "Postman"],
+                correct: 1,
+                explanation: "Cypress is built specifically for modern web testing and includes time-travel debugging, automatic waiting, and excellent developer experience."
+            },
+            {
+                question: "What is the main advantage of writing tests in Gherkin?",
+                options: ["Faster execution", "Non-technical stakeholders can read them", "Smaller file size", "Better performance"],
+                correct: 1,
+                explanation: "Gherkin's plain language syntax allows business stakeholders, QA, and developers to understand test scenarios without technical knowledge."
+            },
+            {
+                question: "Where should E2E tests focus their effort?",
+                options: ["Testing every possible combination", "Critical user journeys and happy paths", "Unit-level logic", "Database queries"],
+                correct: 1,
+                explanation: "E2E tests are expensive, so focus on critical user journeys that provide the most business value."
+            },
+            {
+                question: "What percentage of tests should be E2E according to the test pyramid?",
+                options: ["70%", "50%", "20%", "10%"],
+                correct: 3,
+                explanation: "The test pyramid recommends ~10% E2E tests at the top, as they're slow and expensive to maintain."
+            },
+            {
+                question: "What is 'Then' used for in Gherkin?",
+                options: ["Setting up context", "Performing an action", "Verifying expected outcomes", "Adding test data"],
+                correct: 2,
+                explanation: "'Then' clauses verify the expected observable outcomes after the action has been performed."
+            },
+            {
+                question: "What is a key best practice for E2E test selectors?",
+                options: ["Use CSS class names", "Use stable data-testid attributes", "Use element positions", "Use random IDs"],
+                correct: 1,
+                explanation: "Use stable `data-testid` attributes rather than CSS classes or positions which can change frequently."
+            },
+            {
+                question: "What makes E2E tests 'flaky'?",
+                options: ["Poor test data", "Timing issues and race conditions", "Too many assertions", "Long test names"],
+                correct: 1,
+                explanation: "Flaky tests often result from timing issues, race conditions, or async operations not being handled properly."
+            },
+            {
+                question: "What is Playwright's key advantage over Selenium?",
+                options: ["Older technology", "Multi-browser support with modern API", "Only works in Chrome", "No JavaScript support"],
+                correct: 1,
+                explanation: "Playwright provides modern API, built-in waiting, auto-retries, and excellent multi-browser support including WebKit."
+            }
+        ];
+        
+        function renderQuiz() {
+            const quizContainer = document.getElementById('quiz');
+            quizContainer.innerHTML = quizData.map((item, index) => `
+                <div class="quiz-question" style="margin-bottom: var(--spacing-2xl); padding: var(--spacing-lg); background: rgba(26, 31, 58, 0.5); border-radius: 8px; border: 1px solid var(--module-border);">
+                    <h4 style="color: var(--text-primary); margin-bottom: var(--spacing-md); font-size: 1.1rem;">
+                        Question ${index + 1}: ${item.question}
+                    </h4>
+                    <div class="options-container">
+                        ${item.options.map((option, optIndex) => `
+                            <label class="quiz-option" style="display: block; padding: var(--spacing-md); margin: var(--spacing-sm) 0; background: rgba(123, 97, 255, 0.1); border: 2px solid transparent; border-radius: 8px; cursor: pointer; transition: all 0.2s ease;">
+                                <input type="radio" name="question-${index}" value="${optIndex}" style="margin-right: var(--spacing-sm);">
+                                <span style="color: var(--text-secondary);">${option}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                    <div id="feedback-${index}" class="question-feedback" style="display: none; margin-top: var(--spacing-md); padding: var(--spacing-md); border-radius: 6px;"></div>
+                </div>
+            `).join('');
+            
+            quizContainer.innerHTML += `
+                <button id="submit-quiz-btn" class="submit-quiz-btn" style="padding: var(--spacing-md) var(--spacing-2xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600;">
+                    📝 Submit Quiz
+                </button>
+            `;
+            
+            document.querySelectorAll('.quiz-option').forEach(option => {
+                option.addEventListener('mouseenter', function() {
+                    this.style.borderColor = 'var(--hub-primary)';
+                    this.style.background = 'rgba(123, 97, 255, 0.2)';
+                });
+                option.addEventListener('mouseleave', function() {
+                    if (!this.querySelector('input').checked) {
+                        this.style.borderColor = 'transparent';
+                        this.style.background = 'rgba(123, 97, 255, 0.1)';
+                    }
+                });
+                option.addEventListener('click', function() {
+                    const questionContainer = this.closest('.quiz-question');
+                    questionContainer.querySelectorAll('.quiz-option').forEach(opt => {
+                        opt.style.borderColor = 'transparent';
+                        opt.style.background = 'rgba(123, 97, 255, 0.1)';
+                    });
+                    this.style.borderColor = 'var(--hub-primary)';
+                    this.style.background = 'rgba(123, 97, 255, 0.2)';
+                });
+            });
+            
+            document.getElementById('submit-quiz-btn').addEventListener('click', submitQuiz);
+        }
+        
+        function submitQuiz() {
+            let correctCount = 0;
+            
+            quizData.forEach((item, index) => {
+                const selectedOption = document.querySelector(`input[name="question-${index}"]:checked`);
+                const feedback = document.getElementById(`feedback-${index}`);
+                
+                if (selectedOption) {
+                    const answerIndex = parseInt(selectedOption.value);
+                    const isCorrect = answerIndex === item.correct;
+                    
+                    if (isCorrect) {
+                        correctCount++;
+                        feedback.style.display = 'block';
+                        feedback.style.background = 'rgba(16, 185, 129, 0.1)';
+                        feedback.style.borderLeft = '4px solid #10b981';
+                        feedback.innerHTML = `
+                            <strong style="color: #10b981;">✅ Correct!</strong><br>
+                            <span style="color: var(--text-secondary); font-size: 0.95rem;">${item.explanation}</span>
+                        `;
+                    } else {
+                        feedback.style.display = 'block';
+                        feedback.style.background = 'rgba(239, 68, 68, 0.1)';
+                        feedback.style.borderLeft = '4px solid #ef4444';
+                        feedback.innerHTML = `
+                            <strong style="color: #ef4444;">❌ Incorrect</strong><br>
+                            <span style="color: var(--text-secondary); font-size: 0.95rem;">The correct answer is: <strong>${item.options[item.correct]}</strong></span><br>
+                            <span style="color: var(--text-secondary); font-size: 0.95rem;">${item.explanation}</span>
+                        `;
+                    }
+                } else {
+                    feedback.style.display = 'block';
+                    feedback.style.background = 'rgba(251, 191, 36, 0.1)';
+                    feedback.style.borderLeft = '4px solid #fbbf24';
+                    feedback.innerHTML = `<strong style="color: #fbbf24;">⚠️ No answer selected</strong>`;
+                }
+            });
+            
+            const percentage = (correctCount / quizData.length) * 100;
+            const resultsContainer = document.getElementById('quiz-results');
+            const scoreDisplay = document.getElementById('score-display');
+            
+            let grade, color, message;
+            if (percentage >= 90) {
+                grade = 'Excellent!';
+                color = '#10b981';
+                message = 'Outstanding mastery of BDD & E2E testing! 🏆';
+            } else if (percentage >= 70) {
+                grade = 'Good Job!';
+                color = '#00d4ff';
+                message = 'Solid understanding of E2E concepts! 👍';
+            } else if (percentage >= 50) {
+                grade = 'Keep Learning';
+                color = '#fbbf24';
+                message = 'Review the content and try again! 📚';
+            } else {
+                grade = 'Needs Improvement';
+                color = '#ef4444';
+                message = 'Study the material before retrying. 💪';
+            }
+            
+            scoreDisplay.innerHTML = `
+                <div style="text-align: center;">
+                    <h3 style="color: ${color}; font-size: 2rem; margin-bottom: var(--spacing-sm);">${grade}</h3>
+                    <p style="font-size: 1.5rem; color: var(--text-primary); margin-bottom: var(--spacing-sm);">
+                        Score: ${correctCount}/${quizData.length} (${percentage.toFixed(0)}%)
+                    </p>
+                    <p style="color: var(--text-secondary);">${message}</p>
+                </div>
+            `;
+            
+            resultsContainer.style.display = 'block';
+            
+            const submitBtn = document.getElementById('submit-quiz-btn');
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.5';
+            submitBtn.style.cursor = 'not-allowed';
+            
+            resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        
+        document.getElementById('retry-quiz')?.addEventListener('click', () => {
+            document.getElementById('quiz-results').style.display = 'none';
+            renderQuiz();
+        });
+        
+        document.getElementById('show-solution-btn')?.addEventListener('click', function() {
+            document.getElementById('challenge-solution').style.display = 'block';
+            this.disabled = true;
+            this.style.opacity = '0.5';
+            this.style.cursor = 'not-allowed';
+        });
+        
+        // Initialize
+        window.addEventListener('load', () => {
+            createE2EArchitecture();
+            createToolsComparison();
+            renderQuiz();
+            console.log("✅ BDD & E2E Testing module loaded with visualizations!");
+        });
+    </script>
+</body>
+</html>

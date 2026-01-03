@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Database Design Learning Hub - Master SQL, NoSQL, and data modeling through interactive modules">
+    <meta name="keywords" content="database design, sql, nosql, data modeling, cap theorem, learning path">
+    <meta name="author" content="Asif Hussain">
+    <title>Database Design Learning Hub | CORTEX Best Practices</title>
+    <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02">
+    <link rel="stylesheet" href="../assets/css/learning-hub.css?v=2026-01-02">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Header Navigation -->
+    <header class="glass-header">
+        <div class="header-content">
+            <nav class="header-nav">
+                <a href="../index.html" class="nav-link">
+                    <span class="nav-icon">🏠</span> Home
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero learning-module-hero" id="main-content">
+        <div class="module-header">
+            <h1 class="hero-title">🗄️ Database Design Learning Hub</h1>
+            <p class="hero-subtitle">Master SQL, NoSQL, and Distributed Data Systems from Beginner to Expert</p>
+            <div class="module-meta">
+                <span>⏱️ 5 modules • 3 hours</span>
+                <span>📊 5 quizzes (50 questions)</span>
+                <span>💻 7 code playgrounds</span>
+                <span>🏆 5 progressive challenges</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Learning Path Roadmap -->
+        <section class="learning-path-roadmap glass-card">
+            <h4>🗺️ Your Learning Journey</h4>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                This curated path takes you from SQL fundamentals to advanced distributed database patterns. 
+                Master relational and non-relational systems, CAP theorem trade-offs, and replication strategies.
+            </p>
+
+            <!-- Visual Journey Map (Mermaid) -->
+            <div class="mermaid-container">
+                <pre class="mermaid">
+graph LR
+    START["🚀 Start Here"] --> M1["Module 1<br/>SQL Fundamentals<br/>⏱️ 35 min"]
+    M1 --> M2["Module 2<br/>NoSQL Patterns<br/>⏱️ 40 min"]
+    M2 --> M3["Module 3<br/>CAP Theorem<br/>⏱️ 35 min"]
+    M3 --> M4["Module 4<br/>ACID Transactions<br/>⏱️ 35 min"]
+    M4 --> M5["Module 5<br/>Replication<br/>⏱️ 45 min"]
+    M5 --> CERT["🏆 Certified<br/>Database Architect"]
+
+    style START fill:#00d4ff,stroke:#fff,stroke-width:2px,color:#000
+    style M1 fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
+    style M2 fill:#fbbf24,stroke:#fcd34d,stroke-width:2px,color:#000
+    style M3 fill:#fbbf24,stroke:#fcd34d,stroke-width:2px,color:#000
+    style M4 fill:#f97316,stroke:#fb923c,stroke-width:2px,color:#fff
+    style M5 fill:#f97316,stroke:#fb923c,stroke-width:2px,color:#fff
+    style CERT fill:#00ff88,stroke:#fff,stroke-width:3px,color:#000
+                </pre>
+            </div>
+        </section>
+
+        <!-- Module Navigation Cards -->
+        <section style="margin-top: var(--spacing-3xl);">
+            <h2 style="color: var(--text-primary); margin-bottom: var(--spacing-xl); font-size: 2rem;">
+                📚 Interactive Learning Modules
+            </h2>
+            
+            <div class="module-nav-grid">
+                <!-- Module 1: SQL Fundamentals -->
+                <a href="database/sql-fundamentals.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 1</span>
+                        <span class="difficulty-badge beginner">Beginner</span>
+                    </div>
+                    <h5>🎯 SQL Fundamentals</h5>
+                    <p class="module-description">
+                        Master SELECT, JOIN, and aggregate queries. Learn normalization, indexes, and query optimization. 
+                        Build your first relational schema with hands-on exercises.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 35 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                    </div>
+                </a>
+
+                <!-- Module 2: NoSQL Patterns -->
+                <a href="database/nosql-patterns.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 2</span>
+                        <span class="difficulty-badge intermediate">Intermediate</span>
+                    </div>
+                    <h5>📊 NoSQL Patterns</h5>
+                    <p class="module-description">
+                        Explore document, key-value, column-family, and graph databases. Compare MongoDB, Redis, Cassandra, 
+                        and Neo4j with practical use cases and query patterns.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 40 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                    </div>
+                </a>
+
+                <!-- Module 3: CAP Theorem -->
+                <a href="database/cap-theorem.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 3</span>
+                        <span class="difficulty-badge intermediate">Intermediate</span>
+                    </div>
+                    <h5>⚖️ CAP Theorem</h5>
+                    <p class="module-description">
+                        Understand Consistency, Availability, and Partition tolerance trade-offs. Learn when to choose CP vs AP 
+                        systems with real-world distributed database examples.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 35 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                    </div>
+                </a>
+
+                <!-- Module 4: ACID Transactions -->
+                <a href="database/acid-transactions.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 4</span>
+                        <span class="difficulty-badge advanced">Advanced</span>
+                    </div>
+                    <h5>🔒 ACID Transactions</h5>
+                    <p class="module-description">
+                        Deep dive into transaction isolation levels, deadlocks, and concurrency control. Implement optimistic 
+                        and pessimistic locking patterns with interactive examples.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 35 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                    </div>
+                </a>
+
+                <!-- Module 5: Replication Strategies -->
+                <a href="database/replication-strategies.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 5</span>
+                        <span class="difficulty-badge advanced">Advanced</span>
+                    </div>
+                    <h5>🔄 Replication Strategies</h5>
+                    <p class="module-description">
+                        Master leader-follower, multi-leader, and leaderless replication. Learn conflict resolution, eventual 
+                        consistency, and consensus algorithms (Raft, Paxos).
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 45 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Prerequisites & Recommendations -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>📋 Prerequisites & Recommendations</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-lg); margin-top: var(--spacing-xl);">
+                <div style="padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-radius: 8px; border: 1px solid #10b981;">
+                    <h4 style="color: #10b981; margin-bottom: var(--spacing-sm);">✅ Recommended Background</h4>
+                    <ul style="color: var(--text-secondary); font-size: 0.95rem;">
+                        <li>Basic programming knowledge</li>
+                        <li>Understanding of data structures</li>
+                        <li>Familiarity with command line</li>
+                        <li>No prior database experience needed</li>
+                    </ul>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(0, 212, 255, 0.1); border-radius: 8px; border: 1px solid #00d4ff;">
+                    <h4 style="color: #00d4ff; margin-bottom: var(--spacing-sm);">🛠️ Tools You'll Use</h4>
+                    <ul style="color: var(--text-secondary); font-size: 0.95rem;">
+                        <li>PostgreSQL (SQL exercises)</li>
+                        <li>MongoDB (document database)</li>
+                        <li>Redis (key-value store)</li>
+                        <li>Interactive SQL playground</li>
+                    </ul>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(139, 92, 246, 0.1); border-radius: 8px; border: 1px solid #8b5cf6;">
+                    <h4 style="color: #8b5cf6; margin-bottom: var(--spacing-sm);">🎯 What You'll Build</h4>
+                    <ul style="color: var(--text-secondary); font-size: 0.95rem;">
+                        <li>E-commerce product catalog</li>
+                        <li>Distributed social media feed</li>
+                        <li>Transaction processing system</li>
+                        <li>Replicated key-value store</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Learning Outcomes -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🎓 Learning Outcomes</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                By completing this learning path, you'll be able to:
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-md);">
+                <div style="padding: var(--spacing-md); background: rgba(16, 185, 129, 0.05); border-left: 3px solid #10b981; border-radius: 4px;">
+                    <strong style="color: #10b981;">SQL Mastery</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Write complex queries with joins, subqueries, and window functions
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-md); background: rgba(0, 212, 255, 0.05); border-left: 3px solid #00d4ff; border-radius: 4px;">
+                    <strong style="color: #00d4ff;">NoSQL Selection</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Choose the right database type for your application needs
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-md); background: rgba(139, 92, 246, 0.05); border-left: 3px solid #8b5cf6; border-radius: 4px;">
+                    <strong style="color: #8b5cf6;">Distributed Systems</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Design databases that scale across multiple nodes
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-md); background: rgba(251, 191, 36, 0.05); border-left: 3px solid #fbbf24; border-radius: 4px;">
+                    <strong style="color: #fbbf24;">Data Modeling</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Create efficient schemas for relational and document databases
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-md); background: rgba(239, 68, 68, 0.05); border-left: 3px solid #ef4444; border-radius: 4px;">
+                    <strong style="color: #ef4444;">Performance Tuning</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Optimize queries with indexes, partitioning, and caching
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-md); background: rgba(16, 185, 129, 0.05); border-left: 3px solid #10b981; border-radius: 4px;">
+                    <strong style="color: #10b981;">Consistency Patterns</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Implement eventual consistency and conflict resolution strategies
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Related Learning Paths -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🔗 Related Learning Paths</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                Expand your knowledge with these complementary paths:
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-lg);">
+                <a href="microservices-hub.html" class="related-path-card">
+                    <span class="path-icon">🔬</span>
+                    <h5>Microservices Architecture</h5>
+                    <p>Database-per-service, saga patterns, event sourcing</p>
+                </a>
+                <a href="cloud-hub.html" class="related-path-card">
+                    <span class="path-icon">☁️</span>
+                    <h5>Cloud-Native Patterns</h5>
+                    <p>Managed databases, serverless, cloud storage</p>
+                </a>
+                <a href="performance-hub.html" class="related-path-card">
+                    <span class="path-icon">⚡</span>
+                    <h5>Performance Engineering</h5>
+                    <p>Caching strategies, query optimization, scaling</p>
+                </a>
+            </div>
+        </section>
+
+        <!-- Quick Links -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl); margin-bottom: var(--spacing-3xl);">
+            <h2>📚 Additional Resources</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-md); margin-top: var(--spacing-lg);">
+                <a href="https://use-the-index-luke.com/" target="_blank" rel="noopener" class="resource-link">
+                    📖 SQL Indexing Guide
+                </a>
+                <a href="https://martin.kleppmann.com/2015/05/11/please-stop-calling-databases-cp-or-ap.html" target="_blank" rel="noopener" class="resource-link">
+                    📖 CAP Theorem Explained
+                </a>
+                <a href="https://www.mongodb.com/docs/manual/" target="_blank" rel="noopener" class="resource-link">
+                    📖 MongoDB Documentation
+                </a>
+                <a href="https://www.postgresql.org/docs/" target="_blank" rel="noopener" class="resource-link">
+                    📖 PostgreSQL Docs
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer style="padding: var(--spacing-2xl); text-align: center; color: var(--text-secondary); background: rgba(0, 0, 0, 0.3);">
+        <p>© 2026 Asif Hussain. All rights reserved.</p>
+        <p style="margin-top: var(--spacing-sm);">
+            <a href="../index.html" style="color: var(--hub-primary); text-decoration: none;">Back to Home</a> • 
+            <a href="index.html" style="color: var(--hub-primary); text-decoration: none;">All Learning Paths</a>
+        </p>
+    </footer>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true, 
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#10b981',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#fff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#8b5cf6',
+                tertiaryColor: '#fbbf24'
+            }
+        });
+
+        console.log("✅ Database Design Learning Hub loaded!");
+    </script>
+</body>
+</html>

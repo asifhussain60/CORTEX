@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brain Tiers - CORTEX Architecture</title>
+    <link href="../assets/images/CORTEX-logo.png" rel="icon" type="image/png">
+    <link href="../assets/css/variables.css" rel="stylesheet">
+    <link href="../assets/css/main.css" rel="stylesheet">
+    <link href="../assets/css/glass-patterns.css" rel="stylesheet">
+    <link href="../assets/css/micro-interactions.css" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
+    <style>
+        body { background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #2a2f4a 100%); min-height: 100vh; }
+        .architecture-page { max-width: 1400px; margin: 0 auto; padding: var(--spacing-2xl) var(--spacing-lg); }
+        .breadcrumb { display: flex; align-items: center; gap: var(--spacing-sm); margin-bottom: var(--spacing-xl); font-size: var(--font-sm); color: var(--text-muted); }
+        .breadcrumb a { color: var(--accent-primary); text-decoration: none; transition: color 0.2s ease; }
+        .breadcrumb-separator { color: var(--text-muted); }
+        .page-header { text-align: center; margin-bottom: var(--spacing-3xl); }
+        .page-title { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: var(--spacing-md); }
+        .page-subtitle { color: var(--text-secondary); font-size: var(--font-lg); max-width: 800px; margin: 0 auto; }
+        .viz-container { background: var(--glass-bg); backdrop-filter: blur(var(--glass-blur)); border-radius: var(--radius-xl); border: 1px solid var(--border-primary); padding: var(--spacing-2xl); margin-bottom: var(--spacing-2xl); box-shadow: var(--glass-shadow); }
+        #brain-tiers-viz { width: 100%; height: 600px; }
+        .nav-footer { display: flex; justify-content: center; margin-top: var(--spacing-3xl); }
+        .nav-link { padding: var(--spacing-md) var(--spacing-xl); background: var(--glass-bg); border: 1px solid var(--border-primary); border-radius: var(--radius-md); color: var(--text-primary); text-decoration: none; transition: all 0.2s ease; }
+        .nav-link:hover { background: rgba(0, 212, 255, 0.1); border-color: var(--accent-primary); transform: translateY(-2px); }
+    </style>
+</head>
+<body>
+    <div class="architecture-page">
+        <nav class="breadcrumb">
+            <a href="../index.html">Home</a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="index.html">Architecture</a>
+            <span class="breadcrumb-separator">/</span>
+            <span>Brain Tiers</span>
+        </nav>
+        <header class="page-header">
+            <h1 class="page-title">🏗️ Brain Tiers</h1>
+            <p class="page-subtitle">4-tier governance hierarchy from immutable rules (Tier 0) through working memory (Tier 1), knowledge graph (Tier 2), to development context (Tier 3)</p>
+        </header>
+        <div class="viz-container">
+            <div id="brain-tiers-viz"></div>
+        </div>
+        <nav class="nav-footer">
+            <a href="index.html" class="nav-link">← Back to Architecture</a>
+        </nav>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const width = document.getElementById('brain-tiers-viz').clientWidth;
+            const height = 600;
+            const svg = d3.select('#brain-tiers-viz').append('svg').attr('width', width).attr('height', height);
+            const sankey = d3.sankey().nodeWidth(15).nodePadding(40).extent([[20, 20], [width - 20, height - 20]]);
+            const data = {
+                nodes: [
+                    { name: 'Tier 0: Governance' },
+                    { name: 'Tier 1: Working Memory' },
+                    { name: 'Tier 2: Knowledge Graph' },
+                    { name: 'Tier 3: Dev Context' },
+                    { name: 'SKULL Rules' },
+                    { name: 'Conversations' },
+                    { name: 'Patterns' },
+                    { name: 'Context Files' }
+                ],
+                links: [
+                    { source: 0, target: 1, value: 20 },
+                    { source: 0, target: 4, value: 15 },
+                    { source: 1, target: 2, value: 25 },
+                    { source: 1, target: 5, value: 15 },
+                    { source: 2, target: 3, value: 30 },
+                    { source: 2, target: 6, value: 20 },
+                    { source: 3, target: 7, value: 25 }
+                ]
+            };
+            const { nodes, links } = sankey(data);
+            svg.append('g').selectAll('rect').data(nodes).join('rect').attr('x', d => d.x0).attr('y', d => d.y0).attr('height', d => d.y1 - d.y0).attr('width', d => d.x1 - d.x0).attr('fill', '#00d4ff').attr('opacity', 0.7).on('mouseover', function() { d3.select(this).transition().duration(200).attr('opacity', 1); }).on('mouseout', function() { d3.select(this).transition().duration(200).attr('opacity', 0.7); });
+            svg.append('g').selectAll('path').data(links).join('path').attr('d', d3.sankeyLinkHorizontal()).attr('stroke', d => d3.interpolateRgb('#00d4ff', '#8b5cf6')(d.index / links.length)).attr('stroke-width', d => Math.max(1, d.width)).attr('fill', 'none').attr('opacity', 0.3);
+            svg.append('g').selectAll('text').data(nodes).join('text').attr('x', d => d.x0 < width / 2 ? d.x1 + 6 : d.x0 - 6).attr('y', d => (d.y1 + d.y0) / 2).attr('dy', '0.35em').attr('text-anchor', d => d.x0 < width / 2 ? 'start' : 'end').text(d => d.name).attr('fill', '#ffffff').attr('font-size', '14px');
+        });
+    </script>
+</body>
+</html>
