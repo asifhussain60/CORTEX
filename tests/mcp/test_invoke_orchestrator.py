@@ -8,6 +8,7 @@ Author: Asif Hussain
 Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
+import sys
 import pytest
 import yaml
 import tempfile
@@ -25,26 +26,32 @@ from src.mcp.tools.invoke_orchestrator import (
 class TestGetRegistry:
     """Test registry initialization."""
     
-    @patch('src.mcp.tools.invoke_orchestrator.OrchestratorRegistry')
-    def test_get_registry_initializes_once(self, mock_registry_class):
+    def test_get_registry_initializes_once(self):
         """Registry initializes only once (singleton pattern)."""
-        # Reset global registry
-        import src.mcp.tools.invoke_orchestrator as orch_module
+        # Get the real module (not the exported function)
+        orch_module = sys.modules['src.mcp.tools.invoke_orchestrator']
+        original_registry = orch_module._registry
         orch_module._registry = None
         
-        mock_instance = Mock()
-        mock_registry_class.return_value = mock_instance
-        
-        # First call initializes
-        registry1 = get_registry()
-        assert registry1 == mock_instance
-        
-        # Second call returns same instance
-        registry2 = get_registry()
-        assert registry2 == mock_instance
-        
-        # Registry class only called once
-        assert mock_registry_class.call_count == 1
+        try:
+            # Patch at module level
+            with patch.object(orch_module, 'OrchestratorRegistry') as mock_registry_class:
+                mock_instance = Mock()
+                mock_registry_class.return_value = mock_instance
+                
+                # First call initializes
+                registry1 = get_registry()
+                assert registry1 == mock_instance
+                
+                # Second call returns same instance
+                registry2 = get_registry()
+                assert registry2 == mock_instance
+                
+                # Registry class only called once
+                assert mock_registry_class.call_count == 1
+        finally:
+            # Restore original registry
+            orch_module._registry = original_registry
 
 
 class TestInvokeOrchestrator:
@@ -53,10 +60,21 @@ class TestInvokeOrchestrator:
     @pytest.fixture
     def mock_registry(self):
         """Create mock registry."""
-        with patch('src.mcp.tools.invoke_orchestrator.get_registry') as mock_get:
+        # Get the real module (not the exported function)
+        orch_module = sys.modules['src.mcp.tools.invoke_orchestrator']
+        original_registry = orch_module._registry
+        
+        # Reset to None to allow patching
+        orch_module._registry = None
+        
+        # Patch get_registry at the module level where it's actually used
+        with patch.object(orch_module, 'get_registry') as mock_get:
             registry = Mock()
             mock_get.return_value = registry
             yield registry
+        
+        # Restore original state
+        orch_module._registry = original_registry
     
     def test_invoke_nonexistent_orchestrator(self, mock_registry):
         """Invoke orchestrator that doesn't exist."""
@@ -205,7 +223,8 @@ class TestInvokeOrchestrator:
     
     def test_invoke_registry_initialization_failure(self):
         """Handle registry initialization failure."""
-        with patch('src.mcp.tools.invoke_orchestrator.get_registry') as mock_get:
+        orch_module = sys.modules['src.mcp.tools.invoke_orchestrator']
+        with patch.object(orch_module, 'get_registry') as mock_get:
             mock_get.side_effect = FileNotFoundError("Config not found")
             
             result = invoke_orchestrator("planning_system", "Test request")
@@ -244,56 +263,60 @@ class TestReloadRegistry:
 class TestListOrchestrators:
     """Test list_orchestrators function."""
     
-    @patch('src.mcp.tools.invoke_orchestrator.get_registry')
-    def test_list_success(self, mock_get):
+    def test_list_success(self):
         """Successfully list orchestrators."""
         from src.mcp.registry import OrchestratorDefinition
         
-        mock_registry = Mock()
-        mock_registry.list_orchestrators.return_value = ["planning_system", "ado_operations"]
-        mock_registry.get_statistics.return_value = {
-            "total": 2,
-            "autonomous": 2,
-            "guided": 0
-        }
+        orch_module = sys.modules['src.mcp.tools.invoke_orchestrator']
         
-        def mock_get_definition(name):
-            if name == "planning_system":
-                return OrchestratorDefinition(
-                    name="planning_system",
-                    class_name="PlanningOrchestratorV5",
-                    module_path="src.orchestrators.planning_v5",
-                    config_path="test.yaml",
-                    type="autonomous",
-                    description="Planning system v5"
-                )
-            elif name == "ado_operations":
-                return OrchestratorDefinition(
-                    name="ado_operations",
-                    class_name="AdoOrchestratorV2",
-                    module_path="src.orchestrators.ado_v2",
-                    config_path="test.yaml",
-                    type="autonomous",
-                    description="ADO operations"
-                )
-        
-        mock_registry.get = mock_get_definition
-        mock_get.return_value = mock_registry
-        
-        result = list_orchestrators()
-        
-        assert result["status"] == "success"
-        assert "orchestrators" in result
-        assert "planning_system" in result["orchestrators"]
-        assert result["orchestrators"]["planning_system"]["type"] == "autonomous"
-        assert "statistics" in result
+        with patch.object(orch_module, 'get_registry') as mock_get:
+            mock_registry = Mock()
+            mock_registry.list_orchestrators.return_value = ["planning_system", "ado_operations"]
+            mock_registry.get_statistics.return_value = {
+                "total": 2,
+                "autonomous": 2,
+                "guided": 0
+            }
+            
+            def mock_get_definition(name):
+                if name == "planning_system":
+                    return OrchestratorDefinition(
+                        name="planning_system",
+                        class_name="PlanningOrchestratorV5",
+                        module_path="src.orchestrators.planning_v5",
+                        config_path="test.yaml",
+                        type="autonomous",
+                        description="Planning system v5"
+                    )
+                elif name == "ado_operations":
+                    return OrchestratorDefinition(
+                        name="ado_operations",
+                        class_name="AdoOrchestratorV2",
+                        module_path="src.orchestrators.ado_v2",
+                        config_path="test.yaml",
+                        type="autonomous",
+                        description="ADO operations"
+                    )
+            
+            mock_registry.get = mock_get_definition
+            mock_get.return_value = mock_registry
+            
+            result = list_orchestrators()
+            
+            assert result["status"] == "success"
+            assert "orchestrators" in result
+            assert "planning_system" in result["orchestrators"]
+            assert result["orchestrators"]["planning_system"]["type"] == "autonomous"
+            assert "statistics" in result
     
-    @patch('src.mcp.tools.invoke_orchestrator.get_registry')
-    def test_list_failure(self, mock_get):
+    def test_list_failure(self):
         """Handle list failure."""
-        mock_get.side_effect = Exception("Registry unavailable")
+        orch_module = sys.modules['src.mcp.tools.invoke_orchestrator']
         
-        result = list_orchestrators()
-        
-        assert result["status"] == "error"
-        assert "Failed to list" in result["error"]
+        with patch.object(orch_module, 'get_registry') as mock_get:
+            mock_get.side_effect = Exception("Registry unavailable")
+            
+            result = list_orchestrators()
+            
+            assert result["status"] == "error"
+            assert "Failed to list" in result["error"]
