@@ -157,12 +157,12 @@ class SanitizationOrchestrator(BaseOrchestrator):
         reporter: ReportGenerator instance for audit reports
     """
     
-    def __init__(self, target_directory: str, cortex_root: Optional[str] = None, dry_run: bool = False):
+    def __init__(self, target_directory: Optional[str] = None, cortex_root: Optional[str] = None, dry_run: bool = False):
         """
         Initialize Sanitization Orchestrator
         
         Args:
-            target_directory: Path to directory to sanitize
+            target_directory: Path to directory to sanitize (defaults to current directory)
             cortex_root: Path to CORTEX root (auto-detected if None)
             dry_run: If True, simulate without modifying files
         """
@@ -176,6 +176,8 @@ class SanitizationOrchestrator(BaseOrchestrator):
         super().__init__(config=config)
         
         # Sanitization-specific initialization
+        if target_directory is None:
+            target_directory = "."
         self.target = Path(target_directory)
         self.dry_run = dry_run
         

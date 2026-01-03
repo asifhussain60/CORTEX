@@ -58,11 +58,16 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
     def __init__(
         self,
         config_path: str,
-        state_db: PlanningStateDB,
+        state_db: Optional[PlanningStateDB] = None,
         plan_id: Optional[str] = None,
         template_dir: Optional[str] = None
     ):
         """Initialize Planning Orchestrator v5."""
+        # Initialize database if not provided
+        if state_db is None:
+            db_path = "cortex-brain/database/planning_state.db"
+            state_db = PlanningStateDB(db_path=db_path)
+        
         super().__init__(config_path, state_db, plan_id, template_dir)
         
         self.logger.info("PlanningOrchestratorV5 initialized")
@@ -660,6 +665,32 @@ Check `tracking/progress-tracker.json` for current status.
         
         return [str(f) for f in folders]
     
+    def _format_file_list(self, required_files: List[str], missing_files: List[str]) -> str:
+        """Format file list for validation report (Python 3.9 compatible)."""
+        lines = []
+        for f in required_files:
+            status = '✅' if f not in missing_files else '❌'
+            lines.append(f"- {status} {f}")
+        return '\n'.join(lines)
+    
+    def _format_folder_list(self, required_folders: List[str], missing_folders: List[str]) -> str:
+        """Format folder list for validation report (Python 3.9 compatible)."""
+        lines = []
+        for f in required_folders:
+            status = '✅' if f not in missing_folders else '❌'
+            lines.append(f"- {status} {f}/")
+        return '\n'.join(lines)
+    
+    def _format_validation_issues(self, missing_files: List[str], missing_folders: List[str]) -> str:
+        """Format validation issues for report (Python 3.9 compatible)."""
+        if missing_files or missing_folders:
+            issues = []
+            for item in missing_files + missing_folders:
+                issues.append(f'- Missing: {item}')
+            return '### Issues\n' + '\n'.join(issues)
+        else:
+            return '### Result\nAll validation checks passed!'
+    
     def _validate_plan(self, feature_name: str, **kwargs) -> List[str]:
         """
         Validate generated plan.
@@ -704,17 +735,17 @@ Check `tracking/progress-tracker.json` for current status.
 **Status:** {"✅ PASSED" if validation_passed else "❌ FAILED"}
 
 ### Required Files
-{chr(10).join(f"- {'✅' if f not in missing_files else '❌'} {f}" for f in required_files)}
+{self._format_file_list(required_files, missing_files)}
 
 ### Required Folders
-{chr(10).join(f"- {'✅' if f not in missing_folders else '❌'} {f}/" for f in required_folders)}
+{self._format_folder_list(required_folders, missing_folders)}
 
 ### Summary
 - Total checks: {len(required_files) + len(required_folders)}
 - Passed: {len(required_files) + len(required_folders) - len(missing_files) - len(missing_folders)}
 - Failed: {len(missing_files) + len(missing_folders)}
 
-{'### Issues\n' + chr(10).join(f'- Missing: {item}' for item in missing_files + missing_folders) if missing_files or missing_folders else '### Result\nAll validation checks passed!'}
+{self._format_validation_issues(missing_files, missing_folders)}
 """
         
         report_path = plan_dir / "reports" / "validation-report.md"

@@ -4,8 +4,10 @@
 
 schema_version: "5.0"
 version: "2.0.0"
-orchestrator: ado_orchestrator_v2
-type: autonomous
+orchestrator:
+  name: "ado_orchestrator_v2"
+  version: "2.0.0"
+  type: "autonomous"
 base_class: BaseOrchestratorV4_1
 
 # ==================================================

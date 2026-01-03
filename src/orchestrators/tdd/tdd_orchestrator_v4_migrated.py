@@ -168,9 +168,9 @@ class TDDOrchestrator(BaseOrchestrator):
     
     def __init__(
         self,
-        brain_connector,
-        knowledge_graph,
-        mcp_gateway,
+        brain_connector=None,
+        knowledge_graph=None,
+        mcp_gateway=None,
         logger: Optional[logging.Logger] = None,
         config: Optional[Dict[str, Any]] = None
     ):
@@ -178,9 +178,9 @@ class TDDOrchestrator(BaseOrchestrator):
         Initialize TDD Orchestrator with BaseOrchestrator integration.
         
         Args:
-            brain_connector: Connection to CORTEX brain
-            knowledge_graph: Knowledge graph for pattern learning
-            mcp_gateway: MCP gateway for external tool access
+            brain_connector: Connection to CORTEX brain (creates stub if None)
+            knowledge_graph: Knowledge graph for pattern learning (creates stub if None)
+            mcp_gateway: MCP gateway for external tool access (creates stub if None)
             logger: Optional logger instance
             config: Optional configuration with:
                 - execution_mode: AUTONOMOUS, CHECKPOINT, or INTERACTIVE
@@ -191,6 +191,14 @@ class TDDOrchestrator(BaseOrchestrator):
                 - enable_learning: Enable agent learning engine (default: True)
                 - enable_context_validation: Enable pre-execution validation (default: True)
         """
+        # Create stub dependencies if not provided (for instantiation validation)
+        if brain_connector is None:
+            brain_connector = type('StubBrainConnector', (), {})()
+        if knowledge_graph is None:
+            knowledge_graph = type('StubKnowledgeGraph', (), {})()
+        if mcp_gateway is None:
+            mcp_gateway = type('StubMCPGateway', (), {})()
+        
         super().__init__(
             name="tdd",
             logger=logger,
