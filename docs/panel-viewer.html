@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a:not(.glass-card):not(.level0-tile), 
+button, 
+[role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Panel Viewer - Interactive Glassmorphism Design System with Token Renaming">
+    <meta name="author" content="Asif Hussain">
+    <title>CORTEX Panel Viewer - Glassmorphism Design System</title>
+    <link rel="icon" type="image/png" href="assets/images/CORTEX-logo-64.png">
+    
+    <!-- Design System CSS - Same as other docs pages -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/main.css?v=4.0.1">
+    <link rel="stylesheet" href="assets/css/glass-design-tokens.css">
+    <link rel="stylesheet" href="assets/css/glass-named-panels.css">
+    <link rel="stylesheet" href="assets/css/intentional-classes.css">
+    
+    <!-- Viewer-Specific CSS -->
+    <link rel="stylesheet" href="assets/css/panel-viewer.css">
+    
+    <!-- Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Token Renaming Panel Styles */
+        .token-rename-panel {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.5);
+            z-index: 10001;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        
+        .token-rename-panel.active {
+            right: 0;
+        }
+        
+        .token-rename-panel__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .token-rename-panel__title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .token-rename-panel__close {
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.25rem;
+            transition: color 0.2s ease;
+        }
+        
+        .token-rename-panel__close:hover {
+            color: #fff;
+        }
+        
+        .token-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .token-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+        
+        .token-item__label {
+            display: block;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .token-item__input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            padding: 0.5rem;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            transition: border-color 0.2s ease;
+        }
+        
+        .token-item__input:focus {
+            outline: none;
+            border-color: rgba(99, 179, 237, 0.6);
+        }
+        
+        .token-rename-panel__actions {
+            position: sticky;
+            bottom: 0;
+            background: rgba(10, 14, 39, 0.95);
+            padding: 1.5rem 0 0;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn-generate-prompt {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .btn-generate-prompt:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-generate-prompt:active {
+            transform: translateY(0);
+        }
+        
+        .rename-toggle-btn {
+            position: fixed;
+            top: 120px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            z-index: 9999;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .rename-toggle-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        
+        .prompt-output {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            background: rgba(10, 14, 39, 0.98);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 2rem;
+            z-index: 10002;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+        }
+        
+        .prompt-output.active {
+            display: block;
+        }
+        
+        .prompt-output__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .prompt-output__title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .prompt-output__close {
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        
+        .prompt-output__close:hover {
+            color: #fff;
+        }
+        
+        .prompt-output__content {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1.5rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            color: #fff;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 50vh;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+        }
+        
+        .prompt-output__actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn-copy-prompt {
+            flex: 1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        
+        .btn-copy-prompt:hover {
+            transform: translateY(-2px);
+        }
+        
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 10000;
+        }
+        
+        .overlay.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="viewer-background"></div>
+    
+    <!-- Rename Mode Indicator -->
+    <div id="rename-mode-banner" style="display: none; position: fixed; top: 80px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 0.75rem 2rem; border-radius: 8px; z-index: 9998; font-weight: 600; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);">
+        ✏️ Edit Mode Active - Click panel names to rename
+    </div>
+    
+    <!-- Panel Rename Panel (Right Side) - HIDDEN, using inline editing -->
+    <div class="token-rename-panel" id="token-rename-panel" style="display: none !important;">
+    </div>
+    
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
+    
+    <!-- Generate Prompt Button (Fixed Bottom Right) -->
+    <button id="generate-prompt-floating" style="display: none; position: fixed; bottom: 30px; right: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 12px; padding: 1rem 2rem; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5); z-index: 9998; transition: transform 0.2s ease;">
+        📋 Generate CORTEX Prompt
+    </button>
+    
+    <!-- Prompt Output Modal -->
+    <div class="prompt-output" id="prompt-output">
+        <div class="prompt-output__header">
+            <h3 class="prompt-output__title">📋 CORTEX Panel Rename Prompt</h3>
+            <button class="prompt-output__close" id="prompt-close">×</button>
+        </div>
+        <div class="prompt-output__content" id="prompt-content"></div>
+        <div class="prompt-output__actions">
+            <button class="btn-copy-prompt" id="copy-prompt-btn">
+                📄 Copy to Clipboard
+            </button>
+        </div>
+    </div>
+    
+    <!-- Main container -->
+    <div class="viewer-container">
+        <!-- Header -->
+        <header class="viewer-header">
+            <div class="viewer-header__brand">
+                <img src="assets/images/CORTEX-logo-128.png" alt="CORTEX Logo" class="viewer-logo" />
+                <div class="viewer-header__text">
+                    <h1 class="viewer-header__title">CORTEX Panel Viewer</h1>
+                    <p class="viewer-header__subtitle">Interactive Glassmorphism Design System</p>
+                </div>
+            </div>
+            
+            <div class="viewer-header__controls">
+                <!-- Theme toggle -->
+                <button id="theme-toggle" class="viewer-control-btn" title="Toggle background theme">
+                    <span class="icon">🌓</span>
+                    <span class="label">Theme</span>
+                </button>
+                
+                <!-- Responsive mode toggle -->
+                <div class="viewer-responsive-toggle">
+                    <button data-mode="desktop" class="viewer-responsive-btn viewer-responsive-btn--active" title="Desktop view">
+                        <span class="icon">🖥️</span>
+                    </button>
+                    <button data-mode="tablet" class="viewer-responsive-btn" title="Tablet view">
+                        <span class="icon">📱</span>
+                    </button>
+                    <button data-mode="mobile" class="viewer-responsive-btn" title="Mobile view">
+                        <span class="icon">📱</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Two-column layout -->
+        <div class="viewer-layout">
+            <!-- LEFT COLUMN: Panel selector -->
+            <aside class="viewer-sidebar">
+                <div class="viewer-sidebar__header">
+                    <div>
+                        <h2 class="viewer-sidebar__title">Panel Library</h2>
+                        <span class="viewer-sidebar__count">11 Panels</span>
+                    </div>
+                    <button class="rename-toggle-btn" id="rename-toggle-btn" title="Toggle Edit Mode" style="position: static; margin-left: auto;">
+                        ✏️
+                    </button>
+                </div>
+                
+                <nav class="viewer-panel-list">
+                    <!-- Panel 1: Tetris -->
+                    <button class="viewer-panel-item viewer-panel-item--active" data-panel="tetris">
+                        <div class="viewer-panel-item__thumbnail">
+                            <div class="thumbnail-preview panel-tetris-preview">
+                                <div class="mini-tile"></div>
+                                <div class="mini-tile"></div>
+                                <div class="mini-tile"></div>
+                                <div class="mini-tile"></div>
+                            </div>
+                        </div>
+                        <div class="viewer-panel-item__info">
+                            <h3 class="viewer-panel-item__name">Tetris (Multi-Panel)</h3>
+                            <p class="viewer-panel-item__class">panel-tetris</p>
+                            <p class="viewer-panel-item__desc">Security/Orchestrators/STS tetris cards WITH glassmorphism wrapper overlay</p>
+                            <div class="viewer-panel-item__meta">
+                                <span class="meta-tag" style="background: #00d4ff; color: #000; font-weight: 700;">🎯 TETRIS1</span>
+                                <span class="meta-tag">Wrapper: YES</span>
+                                <span class="meta-tag">6+ tiles</span>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <!-- Panel 2: Intro -->
+                    <button class="viewer-panel-item" data-panel="intro">
+                        <div class="viewer-panel-item__thumbnail">
+                            <div class="thumbnail-preview panel-intro-preview">
+                                <div class="mini-text"></div>
+                                <div class="mini-text mini-text--sm"></div>
+                            </div>
+                        </div>
+                        <div class="viewer-panel-item__info">
+                            <h3 class="viewer-panel-item__name">Intro</h3>
+                            <p class="viewer-panel-item__class">panel-intro</p>
+                            <p class="viewer-panel-item__desc">Hero description card</p>
+                            <div class="viewer-panel-item__meta">
+                                <span class="meta-tag">Centered</span>
+                                <span class="meta-tag">CTA</span>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <!-- Panel 3: Compact Cards -->
+                    <button class="viewer-panel-item" data-panel="compact-cards">
+                        <div class="viewer-panel-item__thumbnail">
+                            <div class="thumbnail-preview panel-compact-preview">
+                                <div class="mini-card"></div>
+                                <div class="mini-card"></div>
+                                <div class="mini-card"></div>
+                            </div>
+                        </div>
+                        <div class="viewer-panel-item__info">
+                            <h3 class="viewer-panel-item__name">Compact Cards</h3>
+                            <p class="viewer-panel-item__class">panel-compact-cards</p>
+                            <p class="viewer-panel-item__desc">Horizontal feature row</p>
+                            <div class="viewer-panel-item__meta">
+                                <span class="meta-tag">5-6 cards</span>
+                                <span class="meta-tag">Row</span>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <!-- Panel 4: Grid Cards -->
+                    <button class="viewer-panel-item" data-panel="grid-cards">
+                        <div class="viewer-panel-item__thumbnail">
+                            <div class="thumbnail-preview panel-grid-preview">
+                                <div class="mini-grid-card"></div>
+                                <div class="mini-grid-card"></div>
+                                <div class="mini-grid-card"></div>
+                                <div class="mini-grid-card"></div>
+                            </div>
+                        </div>
+                        <div class="viewer-panel-item__info">
+                            <h3 class="viewer-panel-item__name">Grid Cards</h3>
+                            <p class="viewer-panel-item__class">panel-grid-cards</p>
+                            <p class="viewer-panel-item__desc">Detailed grid layout</p>
+                            <div class="viewer-panel-item__meta">
+                                <span class="meta-tag">2x3 grid</span>
+                                <span class="meta-tag">Badges</span>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <!-- Panel 5: Hero Glass -->
+                    <button class="viewer-panel-item" data-panel="hero-glass">
+                        <div class="viewer-panel-item__thumbnail">
+                            <div class="thumbnail-preview panel-hero-preview">
+                                <div class="mini-hero-text"></div>
+                            </div>
+                        </div>
+                        <div class="viewer-panel-item__info">
+                            <h3 class="viewer-panel-item__name">Hero Glass</h3>
+                            <p class="viewer-panel-item__class">panel-hero-glass</p>
+                            <p class="viewer-panel-item__desc">Full-width hero section</p>
+                            <div class="viewer-panel-item__meta">
+                                <span class="meta-tag">Landing</span>
+                                <span class="meta-tag">Full-width</span>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <!-- Panel 6: Sidebar Glass -->
+                    <button class="viewer-panel-item" data-panel="sidebar-glass">
+                        <div class="viewer-panel-item__thumbnail">
+                            <div class="thumbnail-preview panel-sidebar-preview">
+                                <div class="mini-nav"></div>
+                                <div class="mini-nav"></div>
+                                <div class="mini-nav"></div>
+                            </div>
+                        </div>
+                        <div class="viewer-panel-item__info">
+                            <h3 class="viewer-panel-item__name">Sidebar Glass</h3>
+                            <p class="viewer-panel-item__class">panel-sidebar-glass</p>
+                            <p class="viewer-panel-item__desc">Navigation panel</p>
+                            <div class="viewer-panel-item__meta">
+                                <span class="meta-tag">Vertical</span>
+                                <span class="meta-tag">Sticky</span>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <!-- Panel 7: Modal Glass -->
+                    <button class="viewer-panel-item" data-panel="modal-glass">
+                        <div class="viewer-panel-item__thumbnail">
+                            <div class="thumbnail-preview panel-modal-preview">
+                                <div class="mini-modal"></div>
+                            </div>
+                        </div>
+                        <div class="viewer-panel-item__info">
+                            <h3 class="viewer-panel-item__name">Modal Glass</h3>
+                            <p class="viewer-panel-item__class">panel-modal-glass</p>
+                            <p class="viewer-panel-item__desc">Overlay dialogs</p>
+                            <div class="viewer-panel-item__meta">
+                                <span class="meta-tag">Centered</span>
+                                <span class="meta-tag">Backdrop</span>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <!-- Panel 8: Toast Glass -->
+                    <button class="viewer-panel-item" data-panel="toast-glass">
+                        <div class="viewer-panel-item__thumbnail">
+                            <div class="thumbnail-preview panel-toast-preview">
+                                <div class="mini-toast"></div>
+                            </div>
+                        </div>
+                        <div class="viewer-panel-item__info">
+                            <h3 class="viewer-panel-item__name">Toast Glass</h3>
+                            <p class="viewer-panel-item__class">panel-toast-glass</p>
+                            <p class="viewer-panel-item__desc">Notifications/alerts</p>
+                            <div class="viewer-panel-item__meta">
+                                <span class="meta-tag">4 variants</span>
+                                <span class="meta-tag">Auto-dismiss</span>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <!-- Panel 9: Blob Glass -->
+                    <button class="viewer-panel-item" data-panel="blob-glass">
+                        <div class="viewer-panel-item__thumbnail">
+                            <div class="thumbnail-preview panel-blob-preview">
+                                <div class="mini-blob"></div>
+                            </div>
+                        </div>
+                        <div class="viewer-panel-item__info">
+                            <h3 class="viewer-panel-item__name">Blob Glass</h3>
+                            <p class="viewer-panel-item__class">panel-blob-glass</p>
+                            <p class="viewer-panel-item__desc">Decorative shapes</p>
+                            <div class="viewer-panel-item__meta">
+                                <span class="meta-tag">Organic</span>
+                                <span class="meta-tag">Morphing</span>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <!-- Panel 10: Neon Glass -->
+                    <button class="viewer-panel-item" data-panel="neon-glass">
+                        <div class="viewer-panel-item__thumbnail">
+                            <div class="thumbnail-preview panel-neon-preview">
+                                <div class="mini-neon"></div>
+                            </div>
+                        </div>
+                        <div class="viewer-panel-item__info">
+                            <h3 class="viewer-panel-item__name">Neon Glass</h3>
+                            <p class="viewer-panel-item__class">panel-neon-glass</p>
+                            <p class="viewer-panel-item__desc">Accent with glow</p>
+                            <div class="viewer-panel-item__meta">
+                                <span class="meta-tag">CTA</span>
+                                <span class="meta-tag">Glowing</span>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <!-- Panel 11: Agent Showcase -->
+                    <button class="viewer-panel-item" data-panel="agent-showcase">
+                        <div class="viewer-panel-item__thumbnail">
+                            <div class="thumbnail-preview panel-agent-preview">
+                                <div class="mini-agent-grid">
+                                    <div class="mini-agent-card"></div>
+                                    <div class="mini-agent-card"></div>
+                                    <div class="mini-agent-card"></div>
+                                    <div class="mini-agent-card"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="viewer-panel-item__info">
+                            <h3 class="viewer-panel-item__name">Agent Showcase (Architecture)</h3>
+                            <p class="viewer-panel-item__class">panel-agent-showcase</p>
+                            <p class="viewer-panel-item__desc">Architecture page feature tiles WITHOUT glassmorphism wrapper overlay</p>
+                            <div class="viewer-panel-item__meta">
+                                <span class="meta-tag" style="background: #a855f7; color: #fff; font-weight: 700;">🎯 TETRIS2</span>
+                                <span class="meta-tag">Wrapper: NO</span>
+                                <span class="meta-tag">2x2 grid</span>
+                            </div>
+                        </div>
+                    </button>
+                </nav>
+            </aside>
+            
+            <!-- RIGHT COLUMN: Live preview -->
+            <main class="viewer-preview">
+                <!-- Preview header -->
+                <div class="viewer-preview__header">
+                    <div class="viewer-preview__title-group">
+                        <h2 class="viewer-preview__title" id="preview-title">panel-tetris</h2>
+                        <button id="copy-class-btn" class="viewer-copy-btn" title="Copy class name">
+                            <span class="icon">📋</span>
+                            <span class="label">Copy</span>
+                        </button>
+                    </div>
+                    
+                    <div class="viewer-preview__meta" id="preview-meta">
+                        <span class="meta-item">
+                            <span class="meta-label">Tokens:</span>
+                            <span class="meta-value" id="token-count">8</span>
+                        </span>
+                        <span class="meta-item">
+                            <span class="meta-label">Type:</span>
+                            <span class="meta-value" id="panel-type">Layout</span>
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- Preview viewport -->
+                <div class="viewer-preview__viewport" id="preview-viewport">
+                    <div class="viewer-preview__content" id="preview-content">
+                        <!-- Dynamic panel preview will be inserted here -->
+                    </div>
+                </div>
+                
+                <!-- Code inspector -->
+                <div class="viewer-code-inspector">
+                    <div class="viewer-code-tabs">
+                        <button class="viewer-code-tab viewer-code-tab--active" data-tab="html">HTML</button>
+                        <button class="viewer-code-tab" data-tab="css">CSS Tokens</button>
+                    </div>
+                    
+                    <div class="viewer-code-content">
+                        <pre class="viewer-code-block viewer-code-block--active" id="code-html"><code></code></pre>
+                        <pre class="viewer-code-block" id="code-css"><code></code></pre>
+                    </div>
+                    
+                    <button id="copy-code-btn" class="viewer-copy-code-btn" title="Copy code">
+                        <span class="icon">📄</span>
+                        <span class="label">Copy Code</span>
+                    </button>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <!-- Toast notification (for copy feedback) -->
+    <div id="toast-notification" class="viewer-toast" style="display: none;">
+        <span class="viewer-toast__icon">✅</span>
+        <span class="viewer-toast__message">Copied to clipboard!</span>
+    </div>
+    
+    <!-- JavaScript -->
+    <script src="assets/js/panel-viewer.js"></script>
+</body>
+</html>

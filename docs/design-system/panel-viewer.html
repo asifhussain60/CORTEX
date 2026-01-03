@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX Panel Viewer - Glassmorphism Design System</title>
+    
+    <!-- Design System CSS -->
+    <link rel="stylesheet" href="../assets/css/glass-design-tokens.css">
+    <link rel="stylesheet" href="../assets/css/glass-named-panels.css">
+    
+    <!-- Viewer-Specific CSS -->
+    <link rel="stylesheet" href="assets/panel-viewer.css">
+    
+    <!-- Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Background gradient -->
+    <div class="viewer-background"></div>
+    
+    <!-- Main container -->
+    <div class="viewer-container">
+        <!-- Header -->
+        <header class="viewer-header">
+            <div class="viewer-header__brand">
+                <h1 class="viewer-header__title">🎨 CORTEX Panel Viewer</h1>
+                <p class="viewer-header__subtitle">Interactive Glassmorphism Design System</p>
+            </div>
+            
+            <div class="viewer-header__controls">
+                <!-- Theme toggle -->
+                <button id="theme-toggle" class="viewer-control-btn" title="Toggle background theme">
+                    <span class="icon">🌓</span>
+                    <span class="label">Theme</span>
+                </button>
+                
+                <!-- Responsive mode toggle -->
+                <div class="viewer-responsive-toggle">
+                    <button data-mode="desktop" class="viewer-responsive-btn viewer-responsive-btn--active" title="Desktop view">
+                        <span class="icon">🖥️</span>
+                    </button>
+                    <button data-mode="tablet" class="viewer-responsive-btn" title="Tablet view">
+                        <span class="icon">📱</span>
+                    </button>
+                    <button data-mode="mobile" class="viewer-responsive-btn" title="Mobile view">
+                        <span class="icon">📱</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Two-column layout -->
+        <div class="viewer-layout">
+            <!-- LEFT COLUMN: Panel selector -->
+            <aside class="viewer-sidebar">
+                <div class="viewer-sidebar__header">
+                    <h2 class="viewer-sidebar__title">Panel Library</h2>
+                    <span class="viewer-sidebar__count">10 Panels</span>
+                </div>
+                
+                <nav class="viewer-panel-list">
+                    <!-- Panel 1: Tetris -->
+                    <button class="viewer-panel-item viewer-panel-item--active" data-panel="tetris">
+                        <div class="viewer-panel-item__thumbnail">
+                            <div class="thumbnail-preview panel-tetris-preview">
+                                <div class="mini-tile"></div>
+                                <div class="mini-tile"></div>
+                                <div class="mini-tile"></div>
+                                <div class="mini-tile"></div>
+                            </div>
+                        </div>
+                        <div class="viewer-panel-item__info">
+                            <h3 class="viewer-panel-item__name">panel-tetris</h3>
+                            <p class="viewer-panel-item__desc">Dashboard metrics grid</p>
+                            <div class="viewer-panel-item__meta">
+                                <span class="meta-tag">6+ tiles</span>
+                                <span class="meta-tag">Grid</span>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <!-- Panel 2: Intro -->
+                    <button class="viewer-panel-item" data-panel="intro">
+                        <div class="viewer-panel-item__thumbnail">
+                            <div class="thumbnail-preview panel-intro-preview">
+                                <div class="mini-text"></div>
+                                <div class="mini-text mini-text--sm"></div>
+                            </div>
+                        </div>
+                        <div class="viewer-panel-item__info">
+                            <h3 class="viewer-panel-item__name">panel-intro</h3>
+                            <p class="viewer-panel-item__desc">Hero description card</p>
+                            <div class="viewer-panel-item__meta">
+                                <span class="meta-tag">Centered</span>
+                                <span class="meta-tag">CTA</span>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <!-- Panel 3: Compact Cards -->
+                    <button class="viewer-panel-item" data-panel="compact-cards">
+                        <div class="viewer-panel-item__thumbnail">
+                            <div class="thumbnail-preview panel-compact-preview">
+                                <div class="mini-card"></div>
+                                <div class="mini-card"></div>
+                                <div class="mini-card"></div>
+                            </div>
+                        </div>
+                        <div class="viewer-panel-item__info">
+                            <h3 class="viewer-panel-item__name">panel-compact-cards</h3>
+                            <p class="viewer-panel-item__desc">Horizontal feature row</p>
+                            <div class="viewer-panel-item__meta">
+                                <span class="meta-tag">5-6 cards</span>
+                                <span class="meta-tag">Row</span>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <!-- Panel 4: Grid Cards -->
+                    <button class="viewer-panel-item" data-panel="grid-cards">
+                        <div class="viewer-panel-item__thumbnail">
+                            <div class="thumbnail-preview panel-grid-preview">
+                                <div class="mini-grid-card"></div>
+                                <div class="mini-grid-card"></div>
+                                <div class="mini-grid-card"></div>
+                                <div class="mini-grid-card"></div>
+                            </div>
+                        </div>
+                        <div class="viewer-panel-item__info">
+                            <h3 class="viewer-panel-item__name">panel-grid-cards</h3>
+                            <p class="viewer-panel-item__desc">Detailed grid layout</p>
+                            <div class="viewer-panel-item__meta">
+                                <span class="meta-tag">2x3 grid</span>
+                                <span class="meta-tag">Badges</span>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <!-- Panel 5: Hero Glass -->
+                    <button class="viewer-panel-item" data-panel="hero-glass">
+                        <div class="viewer-panel-item__thumbnail">
+                            <div class="thumbnail-preview panel-hero-preview">
+                                <div class="mini-hero-text"></div>
+                            </div>
+                        </div>
+                        <div class="viewer-panel-item__info">
+                            <h3 class="viewer-panel-item__name">panel-hero-glass</h3>
+                            <p class="viewer-panel-item__desc">Full-width hero section</p>
+                            <div class="viewer-panel-item__meta">
+                                <span class="meta-tag">Landing</span>
+                                <span class="meta-tag">Full-width</span>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <!-- Panel 6: Sidebar Glass -->
+                    <button class="viewer-panel-item" data-panel="sidebar-glass">
+                        <div class="viewer-panel-item__thumbnail">
+                            <div class="thumbnail-preview panel-sidebar-preview">
+                                <div class="mini-nav"></div>
+                                <div class="mini-nav"></div>
+                                <div class="mini-nav"></div>
+                            </div>
+                        </div>
+                        <div class="viewer-panel-item__info">
+                            <h3 class="viewer-panel-item__name">panel-sidebar-glass</h3>
+                            <p class="viewer-panel-item__desc">Navigation panel</p>
+                            <div class="viewer-panel-item__meta">
+                                <span class="meta-tag">Vertical</span>
+                                <span class="meta-tag">Sticky</span>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <!-- Panel 7: Modal Glass -->
+                    <button class="viewer-panel-item" data-panel="modal-glass">
+                        <div class="viewer-panel-item__thumbnail">
+                            <div class="thumbnail-preview panel-modal-preview">
+                                <div class="mini-modal"></div>
+                            </div>
+                        </div>
+                        <div class="viewer-panel-item__info">
+                            <h3 class="viewer-panel-item__name">panel-modal-glass</h3>
+                            <p class="viewer-panel-item__desc">Overlay dialogs</p>
+                            <div class="viewer-panel-item__meta">
+                                <span class="meta-tag">Centered</span>
+                                <span class="meta-tag">Backdrop</span>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <!-- Panel 8: Toast Glass -->
+                    <button class="viewer-panel-item" data-panel="toast-glass">
+                        <div class="viewer-panel-item__thumbnail">
+                            <div class="thumbnail-preview panel-toast-preview">
+                                <div class="mini-toast"></div>
+                            </div>
+                        </div>
+                        <div class="viewer-panel-item__info">
+                            <h3 class="viewer-panel-item__name">panel-toast-glass</h3>
+                            <p class="viewer-panel-item__desc">Notifications/alerts</p>
+                            <div class="viewer-panel-item__meta">
+                                <span class="meta-tag">4 variants</span>
+                                <span class="meta-tag">Auto-dismiss</span>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <!-- Panel 9: Blob Glass -->
+                    <button class="viewer-panel-item" data-panel="blob-glass">
+                        <div class="viewer-panel-item__thumbnail">
+                            <div class="thumbnail-preview panel-blob-preview">
+                                <div class="mini-blob"></div>
+                            </div>
+                        </div>
+                        <div class="viewer-panel-item__info">
+                            <h3 class="viewer-panel-item__name">panel-blob-glass</h3>
+                            <p class="viewer-panel-item__desc">Decorative shapes</p>
+                            <div class="viewer-panel-item__meta">
+                                <span class="meta-tag">Organic</span>
+                                <span class="meta-tag">Morphing</span>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <!-- Panel 10: Neon Glass -->
+                    <button class="viewer-panel-item" data-panel="neon-glass">
+                        <div class="viewer-panel-item__thumbnail">
+                            <div class="thumbnail-preview panel-neon-preview">
+                                <div class="mini-neon"></div>
+                            </div>
+                        </div>
+                        <div class="viewer-panel-item__info">
+                            <h3 class="viewer-panel-item__name">panel-neon-glass</h3>
+                            <p class="viewer-panel-item__desc">Accent with glow</p>
+                            <div class="viewer-panel-item__meta">
+                                <span class="meta-tag">CTA</span>
+                                <span class="meta-tag">Glowing</span>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <!-- Panel 11: Agent Showcase -->
+                    <button class="viewer-panel-item" data-panel="agent-showcase">
+                        <div class="viewer-panel-item__thumbnail">
+                            <div class="thumbnail-preview panel-agent-preview">
+                                <div class="mini-agent-grid">
+                                    <div class="mini-agent-card"></div>
+                                    <div class="mini-agent-card"></div>
+                                    <div class="mini-agent-card"></div>
+                                    <div class="mini-agent-card"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="viewer-panel-item__info">
+                            <h3 class="viewer-panel-item__name">panel-agent-showcase</h3>
+                            <p class="viewer-panel-item__desc">Agent capabilities</p>
+                            <div class="viewer-panel-item__meta">
+                                <span class="meta-tag">2x2 grid</span>
+                                <span class="meta-tag">Agents</span>
+                            </div>
+                        </div>
+                    </button>
+                </nav>
+            </aside>
+            
+            <!-- RIGHT COLUMN: Live preview -->
+            <main class="viewer-preview">
+                <!-- Preview header -->
+                <div class="viewer-preview__header">
+                    <div class="viewer-preview__title-group">
+                        <h2 class="viewer-preview__title" id="preview-title">panel-tetris</h2>
+                        <button id="copy-class-btn" class="viewer-copy-btn" title="Copy class name">
+                            <span class="icon">📋</span>
+                            <span class="label">Copy</span>
+                        </button>
+                    </div>
+                    
+                    <div class="viewer-preview__meta" id="preview-meta">
+                        <span class="meta-item">
+                            <span class="meta-label">Tokens:</span>
+                            <span class="meta-value" id="token-count">8</span>
+                        </span>
+                        <span class="meta-item">
+                            <span class="meta-label">Type:</span>
+                            <span class="meta-value" id="panel-type">Layout</span>
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- Preview viewport -->
+                <div class="viewer-preview__viewport" id="preview-viewport">
+                    <div class="viewer-preview__content" id="preview-content">
+                        <!-- Dynamic panel preview will be inserted here -->
+                    </div>
+                </div>
+                
+                <!-- Code inspector -->
+                <div class="viewer-code-inspector">
+                    <div class="viewer-code-tabs">
+                        <button class="viewer-code-tab viewer-code-tab--active" data-tab="html">HTML</button>
+                        <button class="viewer-code-tab" data-tab="css">CSS Tokens</button>
+                    </div>
+                    
+                    <div class="viewer-code-content">
+                        <pre class="viewer-code-block viewer-code-block--active" id="code-html"><code></code></pre>
+                        <pre class="viewer-code-block" id="code-css"><code></code></pre>
+                    </div>
+                    
+                    <button id="copy-code-btn" class="viewer-copy-code-btn" title="Copy code">
+                        <span class="icon">📄</span>
+                        <span class="label">Copy Code</span>
+                    </button>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <!-- Toast notification (for copy feedback) -->
+    <div id="toast-notification" class="viewer-toast" style="display: none;">
+        <span class="viewer-toast__icon">✅</span>
+        <span class="viewer-toast__message">Copied to clipboard!</span>
+    </div>
+    
+    <!-- JavaScript -->
+    <script src="assets/panel-viewer.js"></script>
+</body>
+</html>

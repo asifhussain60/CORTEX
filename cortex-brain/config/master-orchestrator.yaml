@@ -140,6 +140,23 @@ routing_rules:
         - "Checkpoint rollback"
         - "CORTEX brain protection"
   
+  # Panel Styling (NEW - Phase 6)
+  # Natural language glassmorphism styling commands
+  - pattern: "^(style|make .+ look like|use .+ panel|apply .+ to).*$"
+    orchestrator: "panel_styler"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 57
+    metadata:
+      description: "Natural language glassmorphism panel styling"
+      autonomous: false
+      version: "1.0"
+      features:
+        - "11 named panel styles"
+        - "'style X like Y' parsing"
+        - "HTML/CSS preview generation"
+        - "BEM class name resolution"
+  
   # Refinement - DISABLED: orchestrator not yet registered
   # - pattern: "^(refine|improve|optimize).*$"
   #   orchestrator: "refinement_orchestrator"

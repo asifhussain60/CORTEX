@@ -67,11 +67,11 @@
     --color-green-alpha-08: rgba(0, 255, 136, 0.08);
     
     /* Glass Backgrounds */
-    --glass-dark-primary: rgba(10, 14, 39, 0.8);
-    --glass-dark-secondary: rgba(26, 31, 58, 0.8);
-    --glass-dark-tertiary: rgba(10, 14, 39, 0.7);
-    --glass-dark-quaternary: rgba(10, 14, 39, 0.6);
-    --glass-dark-quinary: rgba(10, 14, 39, 0.4);
+    --glass-dark-primary: rgba(10, 14, 39, 0.4);
+    --glass-dark-secondary: rgba(26, 31, 58, 0.3);
+    --glass-dark-tertiary: rgba(10, 14, 39, 0.3);
+    --glass-dark-quaternary: rgba(10, 14, 39, 0.25);
+    --glass-dark-quinary: rgba(10, 14, 39, 0.2);
     
     /* White/Transparent variants */
     --white-alpha-02: rgba(255, 255, 255, 0.02);
@@ -108,15 +108,54 @@
     padding: 0 var(--spacing-md);
 }
 
-/* Main Panel Wrapper */
+/* Main Panel Wrapper - Glassmorphism v4.0 Standard */
 .main-panel-wrapper {
-    background: linear-gradient(135deg, var(--color-purple-alpha-15), var(--color-cyan-alpha-10));
-    border: 1px solid var(--color-purple-alpha-40);
+    /* Layer 1: Frosted background with gradient */
+    position: relative;
+    background: var(--glass-bg-base);
+    backdrop-filter: blur(var(--glass-blur-md)) saturate(180%);
+    -webkit-backdrop-filter: blur(var(--glass-blur-md)) saturate(180%);
+    
+    /* Gradient border */
+    border: var(--glass-border-width-md) solid;
+    border-image: var(--glass-gradient-border) 1;
+    
+    /* Depth shadows */
+    box-shadow: var(--shadow-glass-md);
+    
     border-radius: var(--radius-lg);
     padding: var(--space-2xl);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    box-shadow: var(--shadow-panel);
+    
+    /* GPU acceleration */
+    transform: translateZ(0);
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    
+    transition: var(--transition-glass);
+}
+
+/* Layer 2: Inner glow (light source simulation) */
+.main-panel-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40%;
+    background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.15) 0%,
+        transparent 100%
+    );
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Ensure content appears above inner glow */
+.main-panel-wrapper > * {
+    position: relative;
+    z-index: 2;
 }
 
 .panel-header-centered {
@@ -195,6 +234,8 @@
     text-align: center;
     transition: var(--transition-panel);
     min-height: 380px;
+    overflow: hidden;
+    position: relative;
 }
 
 .category-subpanel.single-tag {
@@ -284,30 +325,30 @@
     width: 100%;
     align-content: start;
     min-height: clamp(150px, 36cqi, 210px); /* Ensure minimum height for sparse panels */
+    overflow: hidden;
+    position: relative;
 }
 
 .category-tag {
-    background: var(--glass-bg, rgba(26, 31, 58, 0.7));
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
-    border-radius: var(--radius-lg, 16px);
-    box-shadow: var(--shadow, 0 8px 32px rgba(0, 0, 0, 0.37));
-    color: var(--text-primary, rgba(255, 255, 255, 0.95));
+    background: linear-gradient(135deg, var(--color-cyan-alpha-10), var(--color-purple-alpha-15));
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    color: rgba(255, 255, 255, 0.95);
     padding: clamp(0.5rem, 2cqi, 1rem) clamp(0.5rem, 1.5cqi, 0.875rem);
-    font-size: clamp(0.75rem, 2.5cqi + 0.2rem, 1.1rem);
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    cursor: pointer;
+    line-height: 1.2;
     position: relative;
     overflow: hidden;
+    font-size: clamp(0.75rem, 2.5cqi + 0.2rem, 1rem);
+    font-weight: 600;
+    text-align: center;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    text-align: center;
-    line-height: 1.2;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* Icon-only mode for smaller screens */
@@ -341,180 +382,125 @@
 .category-tag::before {
     content: '';
     position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(
-        45deg,
-        transparent 30%,
-        rgba(255, 255, 255, 0.05) 50%,
-        transparent 70%
-    );
-    animation: glassReflection 8s ease-in-out infinite;
-    pointer-events: none;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, var(--white-alpha-20), transparent);
+    transition: left 0.5s ease;
 }
 
-@keyframes glassReflection {
-    0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
-    50% { transform: translate(-30%, -30%) rotate(180deg); }
+.category-tag::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.category-tag:hover::before {
+    left: 100%;
 }
 
 .category-tag:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg, 0 20px 48px rgba(0, 0, 0, 0.5));
+    background: linear-gradient(135deg, var(--color-cyan-alpha-20), var(--color-purple-alpha-15));
     border-color: rgba(0, 212, 255, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 212, 255, 0.2);
+    transform: translateY(-2px);
+    color: rgba(255, 255, 255, 0.95);
 }
 
-/* Color Variations for Security Panel - Enhanced Glass Effect */
+/* Color Variations for Security Panel */
 #security-panel .category-subpanel:nth-of-type(1) .category-tag:nth-child(2) {
-    background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(192, 132, 252, 0.05));
-    border-color: rgba(168, 85, 247, 0.3);
-}
-
-#security-panel .category-subpanel:nth-of-type(1) .category-tag:nth-child(2):hover {
-    background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(192, 132, 252, 0.1));
-    border-color: rgba(168, 85, 247, 0.5);
+    background: linear-gradient(135deg, rgba(123, 97, 255, 0.08), rgba(186, 85, 211, 0.08));
+    border-color: rgba(123, 97, 255, 0.15);
+    color: rgba(186, 85, 211, 0.9);
 }
 
 #security-panel .category-subpanel:nth-of-type(1) .category-tag:nth-child(3) {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(52, 211, 153, 0.05));
-    border-color: rgba(16, 185, 129, 0.3);
-}
-
-#security-panel .category-subpanel:nth-of-type(1) .category-tag:nth-child(3):hover {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(52, 211, 153, 0.1));
-    border-color: rgba(16, 185, 129, 0.5);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(52, 211, 153, 0.08));
+    border-color: rgba(16, 185, 129, 0.15);
+    color: rgba(52, 211, 153, 0.9);
 }
 
 #security-panel .category-subpanel:nth-of-type(2) .category-tag:nth-child(1) {
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(129, 140, 248, 0.05));
-    border-color: rgba(99, 102, 241, 0.3);
-}
-
-#security-panel .category-subpanel:nth-of-type(2) .category-tag:nth-child(1):hover {
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(129, 140, 248, 0.1));
-    border-color: rgba(99, 102, 241, 0.5);
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.08), rgba(99, 102, 241, 0.08));
+    border-color: rgba(79, 70, 229, 0.15);
+    color: rgba(129, 140, 248, 0.9);
 }
 
 #security-panel .category-subpanel:nth-of-type(2) .category-tag:nth-child(2) {
-    background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(244, 114, 182, 0.05));
-    border-color: rgba(236, 72, 153, 0.3);
-}
-
-#security-panel .category-subpanel:nth-of-type(2) .category-tag:nth-child(2):hover {
-    background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(244, 114, 182, 0.1));
-    border-color: rgba(236, 72, 153, 0.5);
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.08), rgba(244, 114, 182, 0.08));
+    border-color: rgba(236, 72, 153, 0.15);
+    color: rgba(244, 114, 182, 0.9);
 }
 
 #security-panel .category-subpanel:nth-of-type(2) .category-tag:nth-child(3) {
-    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.05));
-    border-color: rgba(245, 158, 11, 0.3);
-}
-
-#security-panel .category-subpanel:nth-of-type(2) .category-tag:nth-child(3):hover {
-    background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(251, 191, 36, 0.1));
-    border-color: rgba(245, 158, 11, 0.5);
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(251, 191, 36, 0.08));
+    border-color: rgba(245, 158, 11, 0.15);
+    color: rgba(251, 191, 36, 0.9);
 }
 
 #security-panel .category-subpanel:nth-of-type(3) .category-tag:nth-child(1) {
-    background: linear-gradient(135deg, rgba(20, 184, 166, 0.1), rgba(45, 212, 191, 0.05));
-    border-color: rgba(20, 184, 166, 0.3);
-}
-
-#security-panel .category-subpanel:nth-of-type(3) .category-tag:nth-child(1):hover {
-    background: linear-gradient(135deg, rgba(20, 184, 166, 0.15), rgba(45, 212, 191, 0.1));
-    border-color: rgba(20, 184, 166, 0.5);
+    background: linear-gradient(135deg, rgba(20, 184, 166, 0.08), rgba(0, 212, 255, 0.08));
+    border-color: rgba(20, 184, 166, 0.15);
+    color: rgba(20, 184, 166, 0.9);
 }
 
 #security-panel .category-subpanel:nth-of-type(3) .category-tag:nth-child(2) {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(52, 211, 153, 0.05));
-    border-color: rgba(16, 185, 129, 0.3);
-}
-
-#security-panel .category-subpanel:nth-of-type(3) .category-tag:nth-child(2):hover {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(52, 211, 153, 0.1));
-    border-color: rgba(16, 185, 129, 0.5);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(52, 211, 153, 0.08));
+    border-color: rgba(16, 185, 129, 0.15);
+    color: rgba(52, 211, 153, 0.9);
 }
 
 #security-panel .category-subpanel:nth-of-type(3) .category-tag:nth-child(3) {
-    background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(192, 132, 252, 0.05));
-    border-color: rgba(168, 85, 247, 0.3);
-}
-
-#security-panel .category-subpanel:nth-of-type(3) .category-tag:nth-child(3):hover {
-    background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(192, 132, 252, 0.1));
-    border-color: rgba(168, 85, 247, 0.5);
+    background: linear-gradient(135deg, rgba(123, 97, 255, 0.08), rgba(186, 85, 211, 0.08));
+    border-color: rgba(123, 97, 255, 0.15);
+    color: rgba(186, 85, 211, 0.9);
 }
 
 #security-panel .category-subpanel:nth-of-type(4) .category-tag:nth-child(1) {
-    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.05));
-    border-color: rgba(245, 158, 11, 0.3);
-}
-
-#security-panel .category-subpanel:nth-of-type(4) .category-tag:nth-child(1):hover {
-    background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(251, 191, 36, 0.1));
-    border-color: rgba(245, 158, 11, 0.5);
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(251, 191, 36, 0.08));
+    border-color: rgba(245, 158, 11, 0.15);
+    color: rgba(251, 191, 36, 0.9);
 }
 
 #security-panel .category-subpanel:nth-of-type(4) .category-tag:nth-child(2) {
-    background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(244, 114, 182, 0.05));
-    border-color: rgba(236, 72, 153, 0.3);
-}
-
-#security-panel .category-subpanel:nth-of-type(4) .category-tag:nth-child(2):hover {
-    background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(244, 114, 182, 0.1));
-    border-color: rgba(236, 72, 153, 0.5);
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.08), rgba(244, 114, 182, 0.08));
+    border-color: rgba(236, 72, 153, 0.15);
+    color: rgba(244, 114, 182, 0.9);
 }
 
 #security-panel .category-subpanel:nth-of-type(4) .category-tag:nth-child(3) {
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(129, 140, 248, 0.05));
-    border-color: rgba(99, 102, 241, 0.3);
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.08), rgba(99, 102, 241, 0.08));
+    border-color: rgba(79, 70, 229, 0.15);
+    color: rgba(129, 140, 248, 0.9);
 }
 
-#security-panel .category-subpanel:nth-of-type(4) .category-tag:nth-child(3):hover {
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(129, 140, 248, 0.1));
-    border-color: rgba(99, 102, 241, 0.5);
-}
-
-/* Orchestrators & STS Panel Colors - Enhanced Glass Effect */
+/* Orchestrators & STS Panel Colors */
 #orchestrators-panel .category-tag:nth-child(2),
 #sts-panel .category-tag:nth-child(2) {
-    background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(192, 132, 252, 0.05));
-    border-color: rgba(168, 85, 247, 0.3);
-}
-
-#orchestrators-panel .category-tag:nth-child(2):hover,
-#sts-panel .category-tag:nth-child(2):hover {
-    background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(192, 132, 252, 0.1));
-    border-color: rgba(168, 85, 247, 0.5);
+    background: linear-gradient(135deg, rgba(123, 97, 255, 0.08), rgba(186, 85, 211, 0.08));
+    border-color: rgba(123, 97, 255, 0.15);
+    color: rgba(186, 85, 211, 0.9);
 }
 
 #orchestrators-panel .category-tag:nth-child(3),
 #sts-panel .category-tag:nth-child(3) {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(52, 211, 153, 0.05));
-    border-color: rgba(16, 185, 129, 0.3);
-}
-
-#orchestrators-panel .category-tag:nth-child(3):hover,
-#sts-panel .category-tag:nth-child(3):hover {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(52, 211, 153, 0.1));
-    border-color: rgba(16, 185, 129, 0.5);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(52, 211, 153, 0.08));
+    border-color: rgba(16, 185, 129, 0.15);
+    color: rgba(52, 211, 153, 0.9);
 }
 
 #orchestrators-panel .category-tag:nth-child(4),
 #sts-panel .category-tag:nth-child(4) {
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(129, 140, 248, 0.05));
-    border-color: rgba(99, 102, 241, 0.3);
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.08), rgba(99, 102, 241, 0.08));
+    border-color: rgba(79, 70, 229, 0.15);
+    color: rgba(129, 140, 248, 0.9);
 }
-
-#orchestrators-panel .category-tag:nth-child(4):hover,
-#sts-panel .category-tag:nth-child(4):hover {
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(129, 140, 248, 0.1));
-    border-color: rgba(99, 102, 241, 0.5);
-}
-
-/* Remove old hover state override */
 
 /* Tetris/Masonry Layouts for Security Panel */
 

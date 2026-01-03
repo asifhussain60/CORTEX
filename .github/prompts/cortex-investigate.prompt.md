@@ -1,7 +1,7 @@
-# CORTEX Investigation Orchestrator - Root Cause Analysis & Systematic Fixes
+# CORTEX Investigation Orchestrator - Root Cause Analysis & Holistic Architecture Review
 
-**Purpose:** Deep investigation system for finding root causes, fixing at architecture level, and wiring everything into Master Orchestrator  
-**Version:** 1.0.0  
+**Purpose:** Deep investigation system for finding root causes, fixing at architecture level, holistic architecture review against acceptance criteria, and wiring everything into Master Orchestrator  
+**Version:** 2.0.0  
 **Author:** Asif Hussain
 
 ---
@@ -11,11 +11,95 @@
 **Name:** Investigation Orchestrator  
 **Type:** 🛡️ AUTONOMOUS (Python-based)  
 **Trigger Patterns:**
-- `investigate [issue description]`
-- `find root cause of [issue]`
-- `why is [feature] breaking?`
-- `debug architecture [problem]`
-- `fix brittleness in [system]`
+- `investigate [issue description]` - Specific issue investigation
+- `find root cause of [issue]` - Targeted root cause analysis
+- `why is [feature] breaking?` - Feature-specific debugging
+- `debug architecture [problem]` - Architecture-level debugging
+- `fix brittleness in [system]` - System fragility analysis
+- `investigate` (NO arguments) - **Holistic architecture review mode**
+
+**Priority:** 8 (High - executes before most orchestrators)
+
+---
+
+## 🔍 Dual Operation Modes
+
+### Mode 1: Targeted Investigation (WITH user prompt)
+Traditional root cause analysis for specific issues (detailed in phases below).
+
+### Mode 2: Holistic Architecture Review (NO user prompt)
+**AUTOMATIC TRIGGER:** When `investigate` is invoked without arguments, perform comprehensive architecture review.
+
+**Full Specification:** See `cortex-investigate-holistic-review.prompt.md` for complete holistic review phases (H1-H6).
+
+**Quick Summary:**
+- **Phase H1:** Plan alignment review against `cortex-v5-holistic-refactor` + acceptance criteria
+- **Phase H2:** 11-dimension gap analysis (edge cases, failure modes, security, performance, etc.)
+- **Phase H3:** Robustness assessment (brittle patterns, robust alternatives, smarter solutions)
+- **Phase H4:** Implementation roadmap (prioritized P0/P1/P2/P3 fixes with effort estimates)
+- **Phase H5:** Automated fixes (quick wins, config hardening, test coverage)
+- **Phase H6:** Executive report (stakeholder summary + presentation)
+
+**Output:** 4,300+ lines of documentation in `cortex-brain/documents/investigations/holistic-review-{timestamp}/`
+
+---
+
+## 🔍 Dual Operation Modes
+
+### Mode 1: Targeted Investigation (WITH user prompt)
+Traditional root cause analysis for specific issues (original behavior).
+
+### Mode 2: Holistic Architecture Review (NO user prompt)
+**AUTOMATIC TRIGGER:** When `investigate` is invoked without arguments, perform comprehensive architecture review.
+
+**Holistic Review Scope:**
+1. **Plan Alignment Review**
+   - Load `cortex-brain/documents/planning/active/cortex-v5-holistic-refactor/00-master-plan.md`
+   - Load `cortex-brain/documents/planning/active/cortex-v5-holistic-refactor/artifacts/final-acceptance-criteria-link.md`
+   - Review acceptance criteria (`cortex-brain/documents/planning/FINAL-ACCEPTANCE-CRITERIA.md`)
+   - Identify gaps between planned vs implemented architecture
+
+2. **Gap Analysis Dimensions**
+   - ⚠️ **Missing Edge Cases** - Unhandled scenarios, boundary conditions
+   - 🔥 **Failure Modes** - Single points of failure, graceful degradation gaps
+   - ⚡ **Race Conditions** - Concurrency issues, state management conflicts
+   - 🚀 **Integration & Deployment Pitfalls** - Deployment risks, rollout gaps
+   - 🔒 **Security Vulnerabilities** - Auth gaps, injection risks, data exposure
+   - 🐌 **Performance Bottlenecks** - Slow queries, memory leaks, N+1 problems
+   - 📈 **Scalability Limits** - Hard limits, resource constraints
+   - ⏮️ **Rollback & Recovery** - Backup strategies, disaster recovery
+   - ✅ **Data Integrity & Validation** - Schema validation, constraint enforcement
+   - 📦 **Dependency Risks** - Version conflicts, supply chain risks
+   - 🛠️ **Maintainability Issues** - Technical debt, code duplication, documentation gaps
+
+3. **Acceptance Criteria Validation**
+   - Bootstrap Phase (Phases 0-4.5) - Master Orchestrator, Planning v5, Context Middleware
+   - Migration Phase (Phases 5-9) - ADO, Vacuum, TDD, SKULL compliance
+   - REFACTOR Phase (Phase 10) - Cleanup tasks, orphaned code detection
+   - Performance Benchmarks - Latency targets, token limits
+   - SKULL Compliance - TDD enforcement, Git isolation, Knowledge Library integration
+
+4. **Robustness Assessment**
+   - Evaluate current architecture against production-grade standards
+   - Identify brittle patterns requiring refactoring
+   - Recommend robust alternatives with trade-off analysis
+   - Propose smarter, future-proof solutions
+
+**Holistic Review Output:**
+```
+cortex-brain/documents/investigations/holistic-review-{timestamp}/
+├── architecture/
+│   ├── gap-analysis-matrix.md (11-dimension analysis)
+│   ├── acceptance-criteria-scorecard.md (plan validation)
+│   └── robustness-assessment.md (production-readiness)
+├── recommendations/
+│   ├── high-priority-fixes.md (critical gaps)
+│   ├── architecture-enhancements.md (robust alternatives)
+│   └── smarter-solutions.md (future-proof improvements)
+└── reports/
+    ├── holistic-review-executive-summary.md
+    └── implementation-roadmap.md (prioritized fixes)
+```
 
 **Priority:** 8 (High - executes before most orchestrators)
 
@@ -52,6 +136,18 @@
 ---
 
 ## 🔍 Investigation Phases
+
+### Phase Selection Logic
+
+**IF user_prompt PROVIDED:**
+  → Execute **Targeted Investigation** (Phases 1-6 below)
+
+**IF user_prompt EMPTY/NULL:**
+  → Execute **Holistic Architecture Review** (Phases H1-H6)
+
+---
+
+## 📋 Mode 1: Targeted Investigation Phases
 
 ### Phase 1: DISCOVER (30% of time)
 **Goal:** Understand the issue completely
@@ -332,14 +428,16 @@ class ResponseMiddleware:
 
 ## 📋 Output Documents
 
-### Always Created
+### Mode 1: Targeted Investigation
+
+**Always Created:**
 1. **investigation-context-{timestamp}.json** - All gathered context
 2. **root-cause-analysis-{timestamp}.md** - Full analysis
 3. **architecture-enhancement-proposal-{timestamp}.md** - Solution design
 4. **validation-report-{timestamp}.md** - Testing results
 5. **investigation-complete-{timestamp}.md** - Final summary
 
-### Location
+**Location:**
 ```
 cortex-brain/documents/investigations/{issue-slug}/
 ├── architecture/
@@ -361,9 +459,20 @@ cortex-brain/documents/investigations/{issue-slug}/
     └── similar-issues-identified.md
 ```
 
+### Mode 2: Holistic Architecture Review
+
+**Always Created:**
+1. **plan-alignment-scorecard-{timestamp}.md** (800+ lines)
+2. **gap-analysis-matrix-{timestamp}.md** (1500+ lines)
+3. **robustness-assessment-{timestamp}.md** (1000+ lines)
+4. **implementation-roadmap-{timestamp}.md** (600+ lines)
+5. **holistic-review-executive-summary-{timestamp}.md** (400+ lines)
+
+**Location:** See `cortex-investigate-holistic-review.prompt.md` for full structure
+
 ---
 
-## 🎯 Response Template
+## 🎯 Response Template (Mode 1: Targeted Investigation)
 
 ### Header (ALWAYS)
 ```markdown

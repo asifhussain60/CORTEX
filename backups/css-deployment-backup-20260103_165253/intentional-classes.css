@@ -1,0 +1,1700 @@
+/* Glassmorphism-compliant styles for intentional classes - 2026-01-03 09:33:38 */
+
+.agent-planning {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.agent-strategy {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.antipattern-detail {
+    padding: var(--space-md);
+    background: var(--glass-lighter);
+    border-radius: var(--radius-md);
+}
+
+.antipattern-header {
+    background: var(--glass-light);
+    padding: var(--space-md);
+    border-left: 3px solid var(--danger);
+    margin-bottom: var(--space-sm);
+}
+
+.antipattern-list {
+    display: grid;
+    gap: var(--space-md);
+}
+
+.antipattern-name {
+    font-weight: 600;
+    color: var(--danger);
+    font-size: 1.1rem;
+}
+
+.antipattern-severity {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.bad-example {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.behavioral {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.burger-icon {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.burger-line {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.burger-menu {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.cache-diagram {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.calc-section {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.color-swatch {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.cons-section {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.consequence-list {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.constraint-card {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.constraint-desc {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.constraint-grid {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.constraint-name {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.constraints-grid {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.creational {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.csv-columns {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.csv-sample {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.design {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.detection-card {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.detection-grid {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.detection-list {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.detection-method {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-bell {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-bolt {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-book {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-bookmark {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-boxes {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-brain {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-broom {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-bug {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-building {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-bullseye {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-calculator {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-certificate {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-check {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-chess {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-clock {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-cloud {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-code {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-cog {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-cogs {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-columns {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-comments {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-compress {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-copy {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-crosshairs {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-cube {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-cubes {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-cut {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-database {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-debug {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-docker {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-download {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-envelope {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-eraser {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-eye {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-feather {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-fire {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-folder {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-gem {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-github {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-globe {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-hammer {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-heartbeat {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-history {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-home {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-image {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-infinity {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-key {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-keyboard {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-language {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-lightbulb {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-link {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-list {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-lock {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-magic {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-map {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-memory {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-microscope {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-microsoft {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-minimize {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-palette {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-percent {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-percentage {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-play {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-plug {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-python {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-random {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-react {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-recycle {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-redo {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-robot {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-rocket {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-route {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-save {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-search {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-server {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-ship {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-signal {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-sitemap {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-snowflake {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-star {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-stethoscope {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-stopwatch {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-stream {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-sync {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-table {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-tag {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-tags {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-tasks {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-terminal {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-times {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-toolbox {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-tools {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-trophy {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-undo {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-vial {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fa-wrench {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.fab {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.filter-btn {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.force-graph {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.gate-card {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.gate-grid {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.gate-status {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.guide-header {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.guide-list {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.guide-section {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.guideline-list {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.heuristic-list {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.hierarchy-description {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.hierarchy-item {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.mechanics-list {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.method-card {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.method-delete {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.method-get {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.method-name {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.method-patch {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.method-post {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.method-properties {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.method-purpose {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.method-put {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.method-status {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.mode-badge {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.mode-card {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.mode-description {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.mode-features {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.mode-header {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.mode-icon {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.mode-timing {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.modern-alternative {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.naming-conventions {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.naming-rule {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.naming-rules {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.no-results {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.nullability-card {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.nullability-grid {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.nullability-pattern {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.pagination-pattern {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.pagination-strategy {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.point-item {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.process-step {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.process-steps {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.query-card {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.query-desc {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.query-examples {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.query-prompt {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.radar-chart {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.reactive {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.reason-card {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.reason-desc {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.reason-grid {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.reason-title {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.resilience {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.resource-link {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.resource-links {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.safety-card {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.safety-grid {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.sample-dialogue {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.sankey-container {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.sticky-nav {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.stub-card {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.stub-category {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.stub-container {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.stub-icon {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.stub-message {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.stub-metadata {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.stub-title {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.symptom-list {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.target-guidelines {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.topic-card {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.treemap-container {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.trigger-card {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.trigger-grid {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.usage-avoid {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.usage-card {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.usage-grid {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.usage-title {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.usage-when {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.violation-list {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+.vulnerability-grid {
+    /* Generic glassmorphism style */
+    padding: var(--space-md);
+    background: var(--glass-light);
+    border-radius: var(--radius-md);
+}
+
+/* Token Optimization Tetris Layout */
+.token-metrics-tetris {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, auto);
+    gap: 0.75rem;
+    margin-top: var(--spacing-xl, 2rem);
+    container-type: inline-size;
+}
+
+.token-metric-tile {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(0.5rem, 2cqi, 1rem);
+    padding: clamp(1rem, 3cqi, 2rem);
+    background: var(--glass-bg, rgba(26, 31, 58, 0.7));
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+    border-radius: var(--radius-lg, 16px);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    text-align: center;
+    box-shadow: var(--shadow, 0 8px 32px rgba(0, 0, 0, 0.37));
+}
+
+.token-metric-tile::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.05) 50%,
+        transparent 70%
+    );
+    animation: glassReflectionFast 8s ease-in-out infinite;
+    pointer-events: none;
+}
+
+.token-metric-tile:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg, 0 20px 48px rgba(0, 0, 0, 0.5));
+    border-color: rgba(0, 212, 255, 0.3);
+}
+
+@keyframes glassReflectionFast {
+    0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
+    50% { transform: translate(-30%, -30%) rotate(180deg); }
+}
+
+.token-metric-tile i {
+    font-size: clamp(1.5rem, 4cqi + 0.5rem, 2.5rem);
+    opacity: 0.9;
+    transition: transform 0.3s ease;
+    color: var(--accent-primary, #00d4ff);
+    width: clamp(40px, 8cqi, 60px);
+    height: clamp(40px, 8cqi, 60px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md, 12px);
+}
+
+.token-metric-tile:hover i {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.token-metric-tile .metric-value {
+    font-size: clamp(1.25rem, 4cqi + 0.5rem, 2rem);
+    font-weight: 700;
+    color: var(--accent-primary, #00d4ff);
+    margin: 0;
+    line-height: 1;
+}
+
+.token-metric-tile .metric-label {
+    font-size: clamp(0.7rem, 2cqi + 0.2rem, 0.875rem);
+    color: var(--text-secondary, rgba(255, 255, 255, 0.7));
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0;
+}
+
+/* Tetris Layout Patterns - Asymmetric Grid */
+.tile-reduction {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+.tile-savings {
+    grid-column: span 1;
+    grid-row: span 2;
+}
+
+.tile-architecture {
+    grid-column: span 2;
+    grid-row: span 1;
+}
+
+.tile-access {
+    grid-column: span 1;
+    grid-row: span 1;
+}
+
+.tile-score {
+    grid-column: span 1;
+    grid-row: span 1;
+}
+
+.tile-updated {
+    grid-column: span 2;
+    grid-row: span 1;
+}
+
+/* Color Variations with Icon Backgrounds */
+.tile-reduction i {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.tile-reduction {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.05));
+}
+
+.tile-reduction:hover {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(220, 38, 38, 0.1));
+    border-color: rgba(239, 68, 68, 0.4);
+}
+
+.tile-savings i {
+    background: linear-gradient(135deg, #10b981, #34d399);
+}
+
+.tile-savings {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05));
+}
+
+.tile-savings:hover {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.1));
+    border-color: rgba(16, 185, 129, 0.4);
+}
+
+.tile-architecture i {
+    background: linear-gradient(135deg, #3b82f6, #60a5fa);
+}
+
+.tile-architecture {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.05));
+}
+
+.tile-architecture:hover {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(37, 99, 235, 0.1));
+    border-color: rgba(59, 130, 246, 0.4);
+}
+
+.tile-access i {
+    background: linear-gradient(135deg, #f59e0b, #fbbf24);
+}
+
+.tile-access {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.05));
+}
+
+.tile-access:hover {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(217, 119, 6, 0.1));
+    border-color: rgba(245, 158, 11, 0.4);
+}
+
+.tile-score i {
+    background: linear-gradient(135deg, #a855f7, #9333ea);
+}
+
+.tile-score {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(147, 51, 234, 0.05));
+}
+
+.tile-score:hover {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(147, 51, 234, 0.1));
+    border-color: rgba(168, 85, 247, 0.4);
+}
+
+.tile-updated i {
+    background: linear-gradient(135deg, #ec4899, #db2777);
+}
+
+.tile-updated {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(219, 39, 119, 0.05));
+}
+
+.tile-updated:hover {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(219, 39, 119, 0.1));
+    border-color: rgba(236, 72, 153, 0.4);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .token-metrics-tetris {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+    }
+    
+    .tile-reduction,
+    .tile-savings,
+    .tile-architecture,
+    .tile-access,
+    .tile-score,
+    .tile-updated {
+        grid-column: span 1;
+        grid-row: span 1;
+    }
+}
+
+/* ============================================
+   ARCHIVE NOTICE (Intentional Styling)
+   ============================================ */
+.archive-notice {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 152, 0, 0.1));
+    border-left: 4px solid #FFC107;
+}
+
+.archive-notice-content {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.archive-notice i {
+    color: #FFC107;
+}
+
+.archive-link {
+    color: #FFC107;
+    text-decoration: underline;
+}
+
+.archive-link:hover {
+    color: #FFD54F;
+}
