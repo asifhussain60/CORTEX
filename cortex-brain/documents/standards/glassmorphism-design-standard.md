@@ -42,7 +42,19 @@ This standard defines **modern glassmorphism patterns** for CORTEX documentation
 
 ## 🚀 Quick Reference
 
-### Pattern Decision Matrix
+### Content-Driven Layout Decision Matrix
+
+**⚠️ CRITICAL:** Choose layout based on content volume, not arbitrary preferences.
+
+| Content Metric | Layout Choice | Rationale |
+|----------------|---------------|-----------|
+| **3-5 items, <50 chars each** | 3-column grid | Short labels, horizontal space efficient |
+| **3-5 items, 50-150 chars each** | 2-column grid | Medium content needs breathing room |
+| **4+ items, >150 chars each** | 2-column grid | Long descriptions require vertical space |
+| **Single-line labels** | Horizontal flex | Quick scan, icon+title inline |
+| **Multi-line descriptions** | Vertical stack | Left-aligned text, icon+title centered |
+
+### Visual Pattern Decision Matrix
 
 | Question | Answer → Pattern |
 |----------|------------------|
@@ -51,6 +63,9 @@ This standard defines **modern glassmorphism patterns** for CORTEX documentation
 | Are subpanel links single or multiple? | Single → `.single-tag` compact / Multiple → default height |
 | Is element clickable? | YES → `.glass-card-clickable` + `.animation-t1` / NO → `.glass-card-display` |
 | What page level? | Level 0 → T3 animations OK / Level 1 → T1 only / NO Level 2 |
+| List vs Cards? | **Always prefer cards** over bullet lists for visual prominence |
+| Icon placement? | **Centered with title** for short content / **Inline left** for long content |
+| Description length? | <100 chars → center / **>100 chars → left-align** |
 
 ### Critical CSS Classes
 
@@ -59,13 +74,12 @@ This standard defines **modern glassmorphism patterns** for CORTEX documentation
 | `.glass-card-clickable` | Interactive tiles/cards | Navigational elements, buttons |
 | `.glass-card-display` | Static content cards | Information display, non-interactive panels |
 | `.animation-t1` | Subtle hover effects | ALL Level 1 pages (required) |
-| `.main-panel-wrapper` | Multi-panel wrapper | Security, Orchestrators, STS tiles |
-| `.category-panels-grid` | Grid container | Multi-panel layouts |
-| `.grid-3x2` | 3x2 layout modifier | 6-panel grids (STS) |
-| `.grid-2x3` | 2x3 layout modifier | 5-panel grids (Orchestrators) |
-| `.category-subpanel` | Individual category panel | Within multi-panel grids |
-| `.single-tag` | Compact subpanel | Single-link categories |
-| `.category-tag` | Clickable link in subpanel | Action links within panels |
+| `.principle-card-grid` | 2-3 column card grid | Principle/feature showcases |
+| `.capability-tiles` | Vertical card stack | Detailed capabilities with long descriptions |
+| `.capability-tile` | Individual capability card | Left border accent, icon+text |
+| `.tier-header` | Inline icon+title | Horizontal flex layout |
+| `.two-column-grid` | 2-column responsive grid | 4-6 items with medium-long content |
+| `.orchestrator-tags` | Horizontal pill layout | Tags, labels, categories |
 
 ### Spacing Quick Reference
 
@@ -168,6 +182,10 @@ Is it Level 0 (Home)?
 10. **Responsive Mandatory** - Mobile-first design (375px base, 768px tablet, 1440px desktop)
 11. **Proper Spacing** - Minimum 1.5rem (24px) vertical gap between stacked cards/panels (v4.0.1)
 12. **Cross-Document Consistency** - Align with Level1-spec.md for implementation details (v4.0.2)
+13. **Cards Over Bullets** - Prefer styled card tiles over bullet lists for visual prominence (v4.1.3)
+14. **Content-Driven Layouts** - Choose grid columns (2 vs 3) based on description length, not preference (v4.1.3)
+15. **Smart Icon Placement** - Centered for short content (<100 chars), inline-left for long content (v4.1.3)
+16. **Left-Align Long Text** - Descriptions >100 characters must be left-justified for readability (v4.1.3)
 
 ---
 
@@ -3131,6 +3149,168 @@ const simulation = d3.forceSimulation(nodes)
 
 ---
 
+### Pattern D: Principle Card Grid (2-Column, Centered Icons, Left-Aligned Text)
+
+**Replaces:** Bullet lists with check icons  
+**Visual Impact:** Prominent card grid with centered icons and professional left-aligned descriptions
+
+**When to Use:**
+- 3-5 key principles, features, or architectural concepts
+- Medium-length descriptions (50-150 characters)
+- Need visual prominence and scannability
+- Content spans multiple lines
+
+**⚠️ CRITICAL RULE:** Use **2-column layout** for descriptions >100 characters. 3-column only for short labels.
+
+**HTML Structure:**
+```html
+<!-- 2-Column Grid for Medium-Long Content -->
+<div class="principle-card-grid columns-2">
+    <div class="principle-card">
+        <div class="principle-icon">
+            <i class="fas fa-shield-alt"></i>
+        </div>
+        <h3 class="principle-title">Brain Protection First</h3>
+        <p class="principle-description">
+            Tier 0 SKULL rules enforce safety at governance layer
+        </p>
+    </div>
+    <!-- Repeat 3-5 cards -->
+</div>
+```
+
+**CSS Requirements:**
+```css
+/* 2-Column Grid (DEFAULT for medium-long content) */
+.principle-card-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+    margin: var(--spacing-xl) 0;
+}
+
+/* 3-Column Override (ONLY for short labels <50 chars) */
+.principle-card-grid.columns-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.principle-card {
+    padding: var(--spacing-xl);
+    background: rgba(26, 31, 58, 0.6);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.principle-card:hover {
+    border-color: var(--accent-primary);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* Icon: Always Centered */
+.principle-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto var(--spacing-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 212, 255, 0.15);
+    border-radius: var(--radius-full);
+}
+
+.principle-icon i {
+    font-size: 1.75rem;
+    color: var(--accent-primary);
+}
+
+/* Title: Always Centered */
+.principle-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+    text-align: center;
+}
+
+/* Description: LEFT-ALIGNED for readability */
+.principle-description {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    text-align: left; /* CRITICAL: Multi-line text must be left-aligned */
+}
+```
+
+**Layout Decision Logic:**
+```javascript
+// Determine columns based on description length
+const cards = document.querySelectorAll('.principle-card');
+const avgLength = Array.from(cards)
+    .map(card => card.querySelector('.principle-description').textContent.length)
+    .reduce((a, b) => a + b) / cards.length;
+
+const grid = document.querySelector('.principle-card-grid');
+if (avgLength > 100) {
+    grid.classList.add('columns-2'); // Long descriptions
+} else if (avgLength > 50) {
+    grid.classList.add('columns-2'); // Medium descriptions (SAFEST)
+} else {
+    grid.classList.add('columns-3'); // Short labels only
+}
+```
+
+**Visual Elements:**
+1. **Icon Circle:**
+   - 60px diameter
+   - Centered above title
+   - Accent color background (15% opacity)
+   - 1.75rem icon size
+
+2. **Title:**
+   - 1.125rem font size
+   - Centered text
+   - 600 weight
+   - 8px margin below
+
+3. **Description:**
+   - **LEFT-ALIGNED** (not centered) for multi-line readability
+   - 0.9375rem font size
+   - 1.6 line-height for comfortable reading
+   - Secondary color for hierarchy
+
+**Animation Tier:** T1 Subtle
+- Hover: Lift (-4px) + border glow + shadow
+- Duration: 200ms ease
+- No infinite animations
+
+**Responsive Breakpoints:**
+- Desktop (1440px+): 2 columns (3 only if short content)
+- Tablet (768px-1439px): 2 columns
+- Mobile (<768px): 1 column
+
+**Examples:**
+
+**✅ CORRECT (2-column for long content):**
+```
+Card 1: "Tier 0 SKULL rules enforce safety at governance layer" (55 chars)
+Card 2: "TDD mandatory for all production code (RED→GREEN→REFACTOR)" (60 chars)
+→ Average: 57.5 chars → 2 columns
+```
+
+**❌ WRONG (3-column for long content):**
+```
+Card 1: "Tier 0 SKULL rules enforce..." (text cramped)
+Card 2: "TDD mandatory for all..." (text cramped)
+→ 3 columns causes line wrapping and poor readability
+```
+
+**Reference Implementation:** `docs/architecture/index.html` (Executive Summary - Key Architectural Principles)
+
+---
+
 ### Pattern C: Simplified 2-Column Tier Layout
 
 **Replaces:** 4-column masonry grids with excessive text  
@@ -3268,6 +3448,21 @@ const simulation = d3.forceSimulation(nodes)
 ---
 
 ## 📄 Version History
+
+### v4.1.4 (January 3, 2026) - Content-Driven Layout Intelligence
+- 🎯 **BREAKING:** Added Content-Driven Layout Decision Matrix (choose 2 vs 3 columns by content length)
+- 🎯 **BREAKING:** Core Principle #13-16 - Cards over bullets, smart icon placement, left-align long text
+- ✨ **NEW:** Pattern D - Principle Card Grid (2-column with centered icons, left-aligned descriptions)
+- ✨ Added intelligent column selection algorithm (avgLength >100 chars → 2 columns)
+- 📚 Updated Quick Reference with content metrics and layout rationale
+- 📚 Added icon placement rules: centered for short content, inline-left for long content
+- 📚 Added text alignment rules: descriptions >100 chars MUST be left-aligned
+- 📚 Added visual pattern decision matrix expansion (list vs cards, icon placement, description length)
+- 🎨 Emphasized "Always prefer cards over bullet lists" philosophy
+- 🎨 Added CSS for `.principle-card-grid`, `.principle-card`, `.principle-icon`
+- 🎯 Reference implementation: `docs/architecture/index.html` (Executive Summary + Tier Deep Dive)
+- ⚠️ CRITICAL: 2-column is SAFEST default for 50-150 char descriptions
+
 ### v4.1.3 (January 3, 2026) - Simplified Layout Patterns
 - ✨ **NEW:** Pattern C - Simplified 2-Column Tier Layout
 - ✨ Inline icon+title header (horizontal flex, not stacked)
