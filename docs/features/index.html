@@ -1,12 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Features | CORTEX - Enterprise Development Intelligence</title>
     <meta name="description" content="Explore CORTEX's powerful features including Planning System, TDD Orchestration, Dashboard System, and intelligent automation">
     <meta name="keywords" content="CORTEX features, AI development tools, planning system, TDD, dashboard, automation">
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" href="../assets/images/CORTEX-logo.png" type="image/png">
 </head>
@@ -29,7 +55,7 @@
             <div class="level1-hero-content">
                 <h1 class="hero-title level1-hero-title">✨ CORTEX Features</h1>
                 <p class="hero-subtitle level1-hero-subtitle">Powerful AI-driven capabilities that transform your development workflow</p>
-                <div class="file-metadata">
+                <div class="code-file">
                     <span class="metadata-item">🎯 Planning System</span>
                     <span class="metadata-item">✅ TDD Orchestration</span>
                     <span class="metadata-item">📊 Dashboard System</span>
@@ -46,7 +72,7 @@
         <section class="section">
             <div class="glass-card">
                 <h2 class="level1-section-header">
-                    <i class="fas fa-bullseye level1-section-header-icon"></i>
+                    <i class="pulse-glow-glass--fast fa-bullseye level1-section-header-icon"></i>
                     What Are CORTEX Features?
                 </h2>
                 <p class="level1-intro-text">
@@ -64,13 +90,13 @@
 
         <!-- Core Features -->
         <section class="section">
-            <h2 class="section-title"><i class="fas fa-rocket" aria-hidden="true"></i> Core Features</h2>
+            <h2 class="section-title"><i class="pulse-glow-glass--fast fa-rocket" aria-hidden="true"></i> Core Features</h2>
             
             <div class="feature-grid feature-grid-3">
                 <!-- Planning System -->
                 <a href="planning-system.html" class="glass-card feature-card level1-feature-card-link animation-t1">
                     <div class="level1-feature-icon-container level1-feature-icon-container--primary">
-                        <i class="fas fa-clipboard-list level1-feature-icon-lg level1-feature-icon--primary"></i>
+                        <i class="pulse-glow-glass--fast fa-clipboard-list level1-feature-icon-lg level1-feature-icon--primary"></i>
                     </div>
                     <h3 class="level1-feature-title">Planning System</h3>
                     <p class="level1-feature-subtitle">Strategic Feature Planning</p>
@@ -78,18 +104,26 @@
                         Transform vague requirements into crystal-clear, executable plans with automatic DoR/DoD validation, 
                         multi-phase project detection, and test case generation.
                     </p>
-                    <ul class="level1-feature-list">
-                        <li class="level1-feature-list-item"><i class="fas fa-check level1-check-icon"></i>4-folder structured planning</li>
-                        <li class="level1-feature-list-item"><i class="fas fa-check level1-check-icon"></i>DoR/DoD compliance checks</li>
-                        <li class="level1-feature-list-item"><i class="fas fa-check level1-check-icon"></i>Automatic TDD integration</li>
-                        <li class="level1-feature-list-item"><i class="fas fa-check level1-check-icon"></i>Phase-based execution</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check level1-check-icon"></i>4-folder structured planning</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check level1-check-icon"></i>DoR/DoD compliance checks</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check level1-check-icon"></i>Automatic TDD integration</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check level1-check-icon"></i>Phase-based execution</div>
+    </div>
+</div>
                 </a>
 
                 <!-- TDD Orchestrator -->
                 <a href="../orchestrators/tdd-orchestrator.html" class="glass-card feature-card level1-feature-card-link animation-t1">
                     <div class="level1-feature-icon-container level1-feature-icon-container--success">
-                        <i class="fas fa-vial" class="level1-feature-icon-lg level1-feature-icon--success"></i>
+                        <i class="pulse-glow-glass--fast fa-vial" class="level1-feature-icon-lg level1-feature-icon--success"></i>
                     </div>
                     <h3 class="level1-feature-title">TDD Orchestration</h3>
                     <p class="level1-feature-subtitle">Test-Driven Development Mastery</p>
@@ -97,18 +131,26 @@
                         Enforce RED→GREEN→REFACTOR discipline with automated test generation, continuous validation, 
                         and intelligent refactoring suggestions.
                     </p>
-                    <ul class="level1-feature-list">
-                        <li class="level1-feature-list-item"><i class="fas fa-check" class="level1-check-icon"></i>Automated test scaffolding</li>
-                        <li class="level1-feature-list-item"><i class="fas fa-check" class="level1-check-icon"></i>RED phase enforcement</li>
-                        <li class="level1-feature-list-item"><i class="fas fa-check" class="level1-check-icon"></i>Coverage tracking</li>
-                        <li class="level1-feature-list-item"><i class="fas fa-check" class="level1-check-icon"></i>Refactoring guidance</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check" class="level1-check-icon"></i>Automated test scaffolding</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check" class="level1-check-icon"></i>RED phase enforcement</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check" class="level1-check-icon"></i>Coverage tracking</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check" class="level1-check-icon"></i>Refactoring guidance</div>
+    </div>
+</div>
                 </a>
 
                 <!-- Dashboard System -->
                 <a href="dashboard-system.html" class="glass-card feature-card" class="level1-feature-card-link animation-t1">
                     <div class="level1-feature-icon-container level1-feature-icon-container--purple">
-                        <i class="fas fa-search-plus" class="level1-feature-icon-lg level1-feature-icon--purple"></i>
+                        <i class="pulse-glow-glass--fast fa-search-plus" class="level1-feature-icon-lg level1-feature-icon--purple"></i>
                     </div>
                     <h3 class="level1-feature-title">CORTEX LENS</h3>
                     <p class="level1-feature-subtitle">Real-Time Dashboard System</p>
@@ -116,25 +158,33 @@
                         Beautiful glassmorphism dashboards with D3.js visualizations providing real-time insights into 
                         orchestrators, system health, and development metrics.
                     </p>
-                    <ul class="level1-feature-list">
-                        <li class="level1-feature-list-item"><i class="fas fa-check" class="level1-check-icon"></i>Interactive D3.js charts</li>
-                        <li class="level1-feature-list-item"><i class="fas fa-check" class="level1-check-icon"></i>Real-time metrics</li>
-                        <li class="level1-feature-list-item"><i class="fas fa-check" class="level1-check-icon"></i>System health monitoring</li>
-                        <li class="level1-feature-list-item"><i class="fas fa-check" class="level1-check-icon"></i>Glassmorphism design</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check" class="level1-check-icon"></i>Interactive D3.js charts</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check" class="level1-check-icon"></i>Real-time metrics</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check" class="level1-check-icon"></i>System health monitoring</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check" class="level1-check-icon"></i>Glassmorphism design</div>
+    </div>
+</div>
                 </a>
             </div>
         </section>
 
         <!-- Intelligence & Automation -->
         <section class="section">
-            <h2 class="section-title"><i class="fas fa-brain" aria-hidden="true"></i> Intelligence & Automation</h2>
+            <h2 class="section-title"><i class="pulse-glow-glass--fast fa-brain" aria-hidden="true"></i> Intelligence & Automation</h2>
             
             <div class="feature-grid feature-grid-3">
                 <!-- Holistic Discovery -->
                 <a href="holistic-discovery.html" class="glass-card feature-card" class="level1-feature-card-link animation-t1">
                     <div class="level1-feature-icon-container level1-feature-icon-container--info">
-                        <i class="fas fa-search" class="level1-feature-icon-lg level1-feature-icon--info"></i>
+                        <i class="pulse-glow-glass--fast fa-search" class="level1-feature-icon-lg level1-feature-icon--info"></i>
                     </div>
                     <h3 class="level1-feature-title">Holistic Discovery</h3>
                     <p class="level1-feature-subtitle">Prevent Code Duplication</p>
@@ -142,18 +192,26 @@
                         Search-before-create enforcement that scans your entire codebase before generating new code, 
                         preventing duplication and maintaining architectural consistency.
                     </p>
-                    <ul class="level1-feature-list">
-                        <li class="level1-feature-list-item"><i class="fas fa-check" class="level1-check-icon"></i>Semantic code search</li>
-                        <li class="level1-feature-list-item"><i class="fas fa-check" class="level1-check-icon"></i>Pattern detection</li>
-                        <li class="level1-feature-list-item"><i class="fas fa-check" class="level1-check-icon"></i>Architecture analysis</li>
-                        <li class="level1-feature-list-item"><i class="fas fa-check" class="level1-check-icon"></i>Duplicate prevention</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check" class="level1-check-icon"></i>Semantic code search</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check" class="level1-check-icon"></i>Pattern detection</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check" class="level1-check-icon"></i>Architecture analysis</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check" class="level1-check-icon"></i>Duplicate prevention</div>
+    </div>
+</div>
                 </a>
 
                 <!-- Response Templates -->
                 <a href="response-templates.html" class="glass-card feature-card" class="level1-feature-card-link animation-t1">
                     <div class="level1-feature-icon-container level1-feature-icon-container--mixed">
-                        <i class="fas fa-comment-dots" class="level1-feature-icon-lg level1-feature-icon--primary"></i>
+                        <i class="pulse-glow-glass--fast fa-comment-dots" class="level1-feature-icon-lg level1-feature-icon--primary"></i>
                     </div>
                     <h3 class="level1-feature-title">Response Templates</h3>
                     <p class="level1-feature-subtitle">Adaptive Communication</p>
@@ -161,18 +219,26 @@
                         Dynamic response formatting that scales from instant answers to comprehensive documentation, 
                         with consistent branding and context-aware detail levels.
                     </p>
-                    <ul class="level1-feature-list">
-                        <li class="level1-feature-list-item"><i class="fas fa-check" class="level1-check-icon"></i>5 complexity tiers</li>
-                        <li class="level1-feature-list-item"><i class="fas fa-check" class="level1-check-icon"></i>Consistent formatting</li>
-                        <li class="level1-feature-list-item"><i class="fas fa-check" class="level1-check-icon"></i>Brand compliance</li>
-                        <li class="level1-feature-list-item"><i class="fas fa-check" class="level1-check-icon"></i>Context scaling</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check" class="level1-check-icon"></i>5 complexity tiers</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check" class="level1-check-icon"></i>Consistent formatting</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check" class="level1-check-icon"></i>Brand compliance</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check" class="level1-check-icon"></i>Context scaling</div>
+    </div>
+</div>
                 </a>
 
                 <!-- Token Optimization -->
                 <a href="token-optimization.html" class="glass-card feature-card" class="level1-feature-card-link animation-t1">
                     <div class="level1-feature-icon-container level1-feature-icon-container--warning">
-                        <i class="fas fa-bolt" class="level1-feature-icon-lg level1-feature-icon--warning"></i>
+                        <i class="pulse-glow-glass--fast fa-bolt" class="level1-feature-icon-lg level1-feature-icon--warning"></i>
                     </div>
                     <h3 class="level1-feature-title">Token Optimization</h3>
                     <p class="level1-feature-subtitle">Efficient Context Management</p>
@@ -180,25 +246,33 @@
                         Intelligent token usage that maximizes context quality while minimizing costs through smart 
                         summarization, caching, and context pruning.
                     </p>
-                    <ul class="level1-feature-list">
-                        <li class="level1-feature-list-item"><i class="fas fa-check" class="level1-check-icon"></i>Context compression</li>
-                        <li class="level1-feature-list-item"><i class="fas fa-check" class="level1-check-icon"></i>Smart summarization</li>
-                        <li class="level1-feature-list-item"><i class="fas fa-check" class="level1-check-icon"></i>Cache utilization</li>
-                        <li class="level1-feature-list-item"><i class="fas fa-check" class="level1-check-icon"></i>Cost tracking</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check" class="level1-check-icon"></i>Context compression</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check" class="level1-check-icon"></i>Smart summarization</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check" class="level1-check-icon"></i>Cache utilization</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="pulse-glow-glass--fast fa-check" class="level1-check-icon"></i>Cost tracking</div>
+    </div>
+</div>
                 </a>
             </div>
         </section>
 
         <!-- System Operations -->
         <section class="section">
-            <h2 class="section-title"><i class="fas fa-tools" aria-hidden="true"></i> System Operations</h2>
+            <h2 class="section-title"><i class="pulse-glow-glass--fast fa-tools" aria-hidden="true"></i> System Operations</h2>
             
             <div class="feature-grid feature-grid-2">
                 <!-- Sanitization Engine -->
                 <a href="../orchestrators/sanitization-engine.html" class="glass-card feature-card" class="level1-feature-card-link animation-t1">
                     <div class="level1-feature-icon-container level1-feature-icon-container--success">
-                        <i class="fas fa-broom" class="level1-feature-icon-lg level1-feature-icon--success"></i>
+                        <i class="pulse-glow-glass--fast fa-broom" class="level1-feature-icon-lg level1-feature-icon--success"></i>
                     </div>
                     <h3 class="level1-feature-title">Sanitization Engine</h3>
                     <p class="level1-feature-subtitle">Code Privacy & Security</p>
@@ -206,18 +280,26 @@
                         5-phase automated sanitization that removes sensitive data, PII, and proprietary information 
                         while maintaining code functionality and architectural integrity.
                     </p>
-                    <ul class="level1-feature-list">
-                        <li class="level1-feature-list-item">✓ PII detection & removal</li>
-                        <li class="level1-feature-list-item">✓ Secret redaction</li>
-                        <li class="level1-feature-list-item">✓ Generic naming</li>
-                        <li class="level1-feature-list-item">✓ Compliance validation</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">✓ PII detection & removal</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✓ Secret redaction</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✓ Generic naming</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✓ Compliance validation</div>
+    </div>
+</div>
                 </a>
 
                 <!-- Git Operations -->
                 <a href="git-operations.html" class="glass-card feature-card" class="level1-feature-card-link animation-t1">
                     <div class="level1-feature-icon-container level1-feature-icon-container--primary">
-                        <i class="fas fa-code-branch" class="level1-feature-icon-lg level1-feature-icon--primary"></i>
+                        <i class="pulse-glow-glass--fast fa-code-branch" class="level1-feature-icon-lg level1-feature-icon--primary"></i>
                     </div>
                     <h3 class="level1-feature-title">Git Operations</h3>
                     <p class="level1-feature-subtitle--no-center">Intelligent Version Control</p>
@@ -225,12 +307,20 @@
                         Smart Git workflow automation with checkpoint creation, branch management, and commit 
                         message generation following conventional commit standards.
                     </p>
-                    <ul class="level1-feature-list">
-                        <li class="level1-feature-list-item">✓ Auto checkpoints</li>
-                        <li class="level1-feature-list-item">✓ Branch strategies</li>
-                        <li class="level1-feature-list-item">✓ Commit templates</li>
-                        <li class="level1-feature-list-item">✓ Rollback safety</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">✓ Auto checkpoints</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✓ Branch strategies</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✓ Commit templates</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✓ Rollback safety</div>
+    </div>
+</div>
                 </a>
             </div>
         </section>
@@ -240,7 +330,7 @@
             <div class="glass-card">
                 <h2 class="level1-integration-header">
                     <div class="level1-integration-icon-container level1-integration-icon-container--primary">
-                        <i class="fas fa-link" class="level1-integration-icon level1-feature-icon--primary"></i>
+                        <i class="pulse-glow-glass--fast fa-link" class="level1-integration-icon level1-feature-icon--primary"></i>
                     </div>
                     Integration Ecosystem
                 </h2>
@@ -275,7 +365,7 @@
             <div class="glass-card">
                 <h2 class="level1-integration-header">
                     <div class="level1-integration-icon-container level1-integration-icon-container--warning">
-                        <i class="fas fa-lightbulb" class="level1-integration-icon level1-feature-icon--warning"></i>
+                        <i class="pulse-glow-glass--fast fa-lightbulb" class="level1-integration-icon level1-feature-icon--warning"></i>
                     </div>
                     Why CORTEX Features Matter
                 </h2>
@@ -283,21 +373,37 @@
                 <div class="metrics-grid-2">
                     <div class="level1-benefit-content">
                         <h3 class="level1-benefit-title">For Development Teams</h3>
-                        <ul class="level1-benefit-list">
-                            <li class="level1-benefit-list-item"><strong class="level1-benefit-arrow">→</strong> <strong>Faster Delivery:</strong> Automated planning and TDD reduce cycle time</li>
-                            <li class="level1-benefit-list-item"><strong class="level1-benefit-arrow">→</strong> <strong>Higher Quality:</strong> Enforced standards prevent technical debt</li>
-                            <li class="level1-benefit-list-item"><strong class="level1-benefit-arrow">→</strong> <strong>Better Collaboration:</strong> Shared context and knowledge graphs</li>
-                            <li class="level1-benefit-list-item"><strong class="level1-benefit-arrow">→</strong> <strong>Less Cognitive Load:</strong> AI handles routine tasks</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong class="level1-benefit-arrow">→</strong> <strong>Faster Delivery:</strong> Automated planning and TDD reduce cycle time</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong class="level1-benefit-arrow">→</strong> <strong>Higher Quality:</strong> Enforced standards prevent technical debt</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong class="level1-benefit-arrow">→</strong> <strong>Better Collaboration:</strong> Shared context and knowledge graphs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong class="level1-benefit-arrow">→</strong> <strong>Less Cognitive Load:</strong> AI handles routine tasks</div>
+    </div>
+</div>
                     </div>
                     <div class="level1-benefit-content">
                         <h3 class="level1-benefit-title">For Business Value</h3>
-                        <ul class="level1-benefit-list">
-                            <li class="level1-benefit-list-item"><strong class="level1-benefit-arrow">→</strong> <strong>Predictable Outcomes:</strong> Structured workflows ensure consistency</li>
-                            <li class="level1-benefit-list-item"><strong class="level1-benefit-arrow">→</strong> <strong>Reduced Risk:</strong> Automated testing and validation</li>
-                            <li class="level1-benefit-list-item"><strong class="level1-benefit-arrow">→</strong> <strong>Scalable Processes:</strong> Reusable patterns and templates</li>
-                            <li class="level1-benefit-list-item"><strong class="level1-benefit-arrow">→</strong> <strong>Real-Time Visibility:</strong> Dashboard insights for stakeholders</li>
-                        </ul>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong class="level1-benefit-arrow">→</strong> <strong>Predictable Outcomes:</strong> Structured workflows ensure consistency</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong class="level1-benefit-arrow">→</strong> <strong>Reduced Risk:</strong> Automated testing and validation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong class="level1-benefit-arrow">→</strong> <strong>Scalable Processes:</strong> Reusable patterns and templates</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong class="level1-benefit-arrow">→</strong> <strong>Real-Time Visibility:</strong> Dashboard insights for stakeholders</div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -312,15 +418,15 @@
                 </p>
                 <div class="level1-cta-buttons">
                     <a href="../orchestrators/index.html" class="btn-hero btn-hero-primary level1-btn-hero level1-btn-hero--primary animation-t2">
-                        <i class="fas fa-crosshairs level1-btn-icon"></i>
+                        <i class="pulse-glow-glass--fast fa-crosshairs level1-btn-icon"></i>
                         <span>View Orchestrators</span>
                     </a>
                     <a href="../getting-started/index.html" class="btn-hero btn-hero-secondary level1-btn-hero level1-btn-hero--secondary animation-t2">
-                        <i class="fas fa-rocket level1-btn-icon"></i>
+                        <i class="pulse-glow-glass--fast fa-rocket level1-btn-icon"></i>
                         <span>Getting Started</span>
                     </a>
                     <a href="../architecture/index.html" class="btn-hero btn-hero-secondary level1-btn-hero level1-btn-hero--secondary animation-t2">
-                        <i class="fas fa-layer-group level1-btn-icon"></i>
+                        <i class="pulse-glow-glass--fast fa-layer-group level1-btn-icon"></i>
                         <span>Architecture</span>
                     </a>
                 </div>

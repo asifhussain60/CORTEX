@@ -481,12 +481,6 @@
     font-size: 1.25rem;
 }
 
-.status-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
 .status-list li {
     padding: var(--spacing-sm) 0;
     color: var(--text-secondary);
@@ -1003,6 +997,97 @@
 .glass-card-clickable:hover .feature-badge {
     background: rgba(123, 97, 255, 0.25);
     border-color: rgba(123, 97, 255, 0.5);
+}
+
+/* ============================================
+   GLASSMORPHISM COMPLIANCE - ZERO INLINE STYLES
+   ============================================ */
+
+/* Section Spacing (replaces inline style="margin-top") */
+.section-top-3xl {
+    margin-top: var(--spacing-3xl);
+}
+
+/* Text Color Classes (replaces inline style="color") */
+.text-hub-primary {
+    color: var(--hub-primary);
+}
+
+.text-hub-success {
+    color: var(--hub-success);
+}
+
+/* Description Text */
+.roadmap-description {
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-xl);
+}
+
+/* Section Title */
+.section-title-primary {
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-xl);
+    font-size: 2rem;
+}
+
+.section-title-hub {
+    color: var(--hub-primary);
+    margin-bottom: var(--spacing-lg);
+}
+
+/* Module Card Header (flex layout for badge positioning) */
+.module-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+/* Module Link Accent */
+.module-link-accent {
+    color: var(--hub-primary);
+    font-weight: 600;
+}
+
+/* Pyramid Description */
+.pyramid-description {
+    color: var(--text-secondary);
+    margin-top: var(--spacing-lg);
+    text-align: center;
+}
+
+/* Prerequisites Description */
+.prerequisites-description {
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-lg);
+}
+
+/* Learning Path Center */
+.learning-path-center {
+    text-align: center;
+    padding: var(--spacing-2xl);
+}
+
+.learning-path-center .section-title-hub {
+    margin-bottom: var(--spacing-lg);
+}
+
+.learning-metrics-center {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-lg);
+    flex-wrap: wrap;
+}
+
+.completion-description {
+    color: var(--text-secondary);
+    margin-top: var(--spacing-xl);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.completion-description strong {
+    color: var(--hub-success);
 }
 
 /* Responsive Design for Learning Path Cards */

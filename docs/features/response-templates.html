@@ -1,10 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
 <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
 <title>Response Template System - CORTEX</title>
 <link href="../assets/css/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
 <link href="../assets/images/CORTEX-logo.png" rel="icon" type="image/png">
 </head>
 <body>
@@ -75,12 +102,20 @@
 ### 🔍 Next Steps
 {EXACTLY ONE actionable next step OR completion message}</pre>
 <p><strong>Rules:</strong></p>
-<ul>
-<li>✅ H2 with 🧠, adaptive content depth based on complexity</li>
-<li>✅ Author line + one <code>---</code> separator</li>
-<li>✅ Response scales: instant → comprehensive based on task</li>
-<li>❌ NO extra separators, NO code unless requested</li>
-</ul>
+<div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">✅ H2 with 🧠, adaptive content depth based on complexity</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Author line + one <code>---</code> separator</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Response scales: instant → comprehensive based on task</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">❌ NO extra separators, NO code unless requested</div>
+    </div>
+</div>
 <!-- Template Categories -->
 <section class="section">
 <div class="container">
@@ -92,24 +127,32 @@
 <span class="collapsible-icon">▼</span>
 </div>
 <div class="collapsible-content glass-card-flat">
-<ul>
-<li>
-<strong>planning:</strong> Interactive planning with DoR/DoD compliance</li>
-<li>
-<strong>architecture_planning:</strong> System architecture design</li>
-<li>
-<strong>feature_planning:</strong> New feature specification</li>
-<li>
-<strong>interactive_planning:</strong> Multi-turn planning conversations</li>
-<li>
-<strong>refactoring_planning:</strong> Code restructuring plans</li>
-<li>
-<strong>ado_agent:</strong> Azure DevOps work item creation</li>
-<li>
-<strong>ado_epic:</strong> Epic-level planning</li>
-<li>
-<strong>migration_planning:</strong> Data/system migrations</li>
-</ul>
+<div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>planning:</strong> Interactive planning with DoR/DoD compliance</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>architecture_planning:</strong> System architecture design</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>feature_planning:</strong> New feature specification</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>interactive_planning:</strong> Multi-turn planning conversations</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>refactoring_planning:</strong> Code restructuring plans</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>ado_agent:</strong> Azure DevOps work item creation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>ado_epic:</strong> Epic-level planning</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>migration_planning:</strong> Data/system migrations</div>
+    </div>
+</div>
 <!-- Development Templates -->
 <div class="collapsible">
 <div class="collapsible-header glass-card">
@@ -117,20 +160,26 @@
 <span class="collapsible-icon">▼</span>
 </div>
 <div class="collapsible-content glass-card-flat">
-<ul>
-<li>
-<strong>tdd-mastery:</strong> Test-driven development guidance</li>
-<li>
-<strong>code-review:</strong> Architectural code reviews</li>
-<li>
-<strong>debugging:</strong> Bug investigation and resolution</li>
-<li>
-<strong>test-failure:</strong> Test failure analysis</li>
-<li>
-<strong>cache-implementation:</strong> Caching strategy guidance</li>
-<li>
-<strong>api-documentation:</strong> API reference generation</li>
-</ul>
+<div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>tdd-mastery:</strong> Test-driven development guidance</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>code-review:</strong> Architectural code reviews</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>debugging:</strong> Bug investigation and resolution</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>test-failure:</strong> Test failure analysis</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>cache-implementation:</strong> Caching strategy guidance</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>api-documentation:</strong> API reference generation</div>
+    </div>
+</div>
 <!-- Operations Templates -->
 <div class="collapsible">
 <div class="collapsible-header glass-card">
@@ -138,22 +187,29 @@
 <span class="collapsible-icon">▼</span>
 </div>
 <div class="collapsible-content glass-card-flat">
-<ul>
-<li>
-<strong>realignment:</strong> System alignment and fixes</li>
-<li>
-<strong>cleanup-operation:</strong> Code cleanup and organization</li>
-<li>
-<strong>optimize-token-efficiency:</strong> Performance optimization</li>
-<li>
-<strong>status-check:</strong> System health validation</li>
-<li>
-<strong>deployment-validation:</strong> Production deployment</li>
-<li>
-<strong>git-checkpoint:</strong> Git checkpoint creation</li>
-<li>
-<strong>rollback-recovery:</strong> Rollback procedures</li>
-</ul>
+<div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>realignment:</strong> System alignment and fixes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>cleanup-operation:</strong> Code cleanup and organization</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>optimize-token-efficiency:</strong> Performance optimization</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>status-check:</strong> System health validation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>deployment-validation:</strong> Production deployment</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>git-checkpoint:</strong> Git checkpoint creation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>rollback-recovery:</strong> Rollback procedures</div>
+    </div>
+</div>
 <!-- User Support Templates -->
 <div class="collapsible">
 <div class="collapsible-header glass-card">
@@ -161,16 +217,20 @@
 <span class="collapsible-icon">▼</span>
 </div>
 <div class="collapsible-content glass-card-flat">
-<ul>
-<li>
-<strong>help:</strong> Command reference and assistance</li>
-<li>
-<strong>resume-conversation:</strong> Session restoration</li>
-<li>
-<strong>error-recovery:</strong> Error handling guidance</li>
-<li>
-<strong>onboarding:</strong> New user setup</li>
-</ul>
+<div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>help:</strong> Command reference and assistance</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>resume-conversation:</strong> Session restoration</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>error-recovery:</strong> Error handling guidance</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>onboarding:</strong> New user setup</div>
+    </div>
+</div>
 <!-- Special Templates -->
 <div class="collapsible">
 <div class="collapsible-header glass-card">
@@ -178,16 +238,20 @@
 <span class="collapsible-icon">▼</span>
 </div>
 <div class="collapsible-content glass-card-flat">
-<ul>
-<li>
-<strong>fallback:</strong> Handles unmapped operations</li>
-<li>
-<strong>introduction-leadership:</strong> Executive presentation</li>
-<li>
-<strong>introduction-engineers:</strong> Technical deep-dive</li>
-<li>
-<strong>business-value:</strong> ROI and value proposition</li>
-</ul>
+<div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>fallback:</strong> Handles unmapped operations</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>introduction-leadership:</strong> Executive presentation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>introduction-engineers:</strong> Technical deep-dive</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>business-value:</strong> ROI and value proposition</div>
+    </div>
+</div>
 <!-- Interaction Modes -->
 <section class="section">
 <div class="container">
@@ -203,34 +267,58 @@
 <p>
 <strong>For:</strong> Users who know CORTEX well and want minimal guidance
                         </p>
-<ul>
-<li>Concise responses by default</li>
-<li>Action-focused, minimal explanations</li>
-<li>No "Challenge" section unless critical</li>
-<li>Compact format preferred</li>
-</ul>
+<div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Concise responses by default</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Action-focused, minimal explanations</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">No "Challenge" section unless critical</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Compact format preferred</div>
+    </div>
+</div>
 <div>
 <h4>🎓 Guided Mode (Standard Users)</h4>
 <p>
 <strong>For:</strong> Users learning CORTEX or working on unfamiliar features
                         </p>
-<ul>
-<li>Balanced detail level</li>
-<li>Explanations for why decisions made</li>
-<li>Step-by-step guidance when needed</li>
-<li>Links to documentation</li>
-</ul>
+<div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Balanced detail level</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Explanations for why decisions made</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Step-by-step guidance when needed</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Links to documentation</div>
+    </div>
+</div>
 <div>
 <h4>📚 Detailed Mode (Learning/Onboarding)</h4>
 <p>
 <strong>For:</strong> New users or complex operations requiring deep explanation
                         </p>
-<ul>
-<li>Comprehensive explanations</li>
-<li>Educational context and rationale</li>
-<li>Examples and code snippets</li>
-<li>Best practices and pitfalls</li>
-</ul>
+<div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Comprehensive explanations</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Educational context and rationale</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Examples and code snippets</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Best practices and pitfalls</div>
+    </div>
+</div>
 <!-- Auto-Selection Logic -->
 <section class="section">
 <div class="container">
@@ -281,13 +369,23 @@
 3. Mode: User history → Guided mode
 4. Result: planning template + detailed DoR/DoD + TDD integration</pre>
 <p><strong>Response includes:</strong></p>
-<ul>
-<li>✅ Understanding & Scope - Feature requirements parsed</li>
-<li>✅ Approach & Considerations - Security complexity acknowledged</li>
-<li>✅ Response - Incremental phases with DoR/DoD gates</li>
-<li>✅ Impact & Changes - Files to be created, tests required</li>
-<li>✅ Next Steps - Phase 1 tasks with acceptance criteria</li>
-</ul>
+<div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">✅ Understanding & Scope - Feature requirements parsed</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Approach & Considerations - Security complexity acknowledged</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Response - Incremental phases with DoR/DoD gates</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Impact & Changes - Files to be created, tests required</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✅ Next Steps - Phase 1 tasks with acceptance criteria</div>
+    </div>
+</div>
 <!-- Benefits -->
 <section class="section">
 <div class="container">
@@ -342,18 +440,23 @@
 <p>
 <strong>Template system components:</strong>
 </p>
-<ul>
-<li>
-<code>cortex-brain/response-templates.yaml</code> - 29 templates (14,718 lines)</li>
-<li>
-<code>cortex-brain/response-profile-variants.yaml</code> - Interaction modes (395 lines)</li>
-<li>
-<code>cortex-brain/response-routing-rules.yaml</code> - Template selection logic</li>
-<li>
-<code>cortex-brain/multilingual-templates.yaml</code> - Language support</li>
-<li>
-<code>src/response_templates/</code> - Template rendering engine</li>
-</ul>
+<div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><code>cortex-brain/response-templates.yaml</code> - 29 templates (14,718 lines)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>cortex-brain/response-profile-variants.yaml</code> - Interaction modes (395 lines)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>cortex-brain/response-routing-rules.yaml</code> - Template selection logic</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>cortex-brain/multilingual-templates.yaml</code> - Language support</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>src/response_templates/</code> - Template rendering engine</div>
+    </div>
+</div>
 <p>
                     Templates use Jinja2-style variable substitution and support conditional sections based on 
                     operation context, user mode, and response requirements.

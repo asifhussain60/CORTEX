@@ -519,11 +519,6 @@
     margin-bottom: 0.5rem;
 }
 
-.skeleton-glass--text-sm {
-    height: 0.75rem;
-    width: 80%;
-}
-
 .skeleton-glass--text-lg {
     height: 1.5rem;
     width: 60%;
@@ -538,12 +533,6 @@
 .skeleton-glass--card {
     height: 200px;
     border-radius: var(--radius-lg, 16px);
-}
-
-.skeleton-glass--btn {
-    height: 44px;
-    width: 120px;
-    border-radius: var(--radius-sm, 8px);
 }
 
 /* ============================================

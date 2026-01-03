@@ -947,11 +947,7 @@
     border-color: rgba(249, 115, 22, 0.5);
 }
 
-.sts-category-card.sts-testing {
-    border-color: rgba(123, 97, 255, 0.3);
-}
-
-.sts-category-card.sts-testing:hover {
+.sts-category-card.sts-category-card.sts-testing:hover {
     background: rgba(123, 97, 255, 0.1);
     border-color: rgba(123, 97, 255, 0.5);
 }

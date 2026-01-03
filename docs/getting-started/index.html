@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Getting Started with CORTEX - 5-Minute Setup Guide for Installation and First Steps">
@@ -9,6 +34,7 @@
     <title>Getting Started | CORTEX 4.0</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02-v4">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
@@ -16,10 +42,35 @@
 <body>
     <!-- Glass Header Navigation -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../index.html" class="nav-link">
-                    <i class="fas fa-home"></i>
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../index.html" class="nav-link" mobile-nav-optimized>
+                    <i class="pulse-glow-glass--fast fa-home"></i>
                     <span>Home</span>
                 </a>
             </nav>
@@ -32,7 +83,7 @@
         <div class="glass-card-display animation-t1">
             <div class="page-title-section">
                 <h1 class="page-title">
-                    <i class="fas fa-rocket"></i>
+                    <i class="pulse-glow-glass--fast fa-rocket"></i>
                     Getting Started with CORTEX
                 </h1>
                 <p class="page-subtitle">5-Minute Setup Guide · Installation · Configuration · First Steps</p>
@@ -40,27 +91,27 @@
             
             <div class="metadata-grid">
                 <div class="metadata-item">
-                    <i class="fas fa-clock"></i>
+                    <i class="pulse-glow-glass--fast fa-clock"></i>
                     <span>5 Minutes</span>
                 </div>
                 <div class="metadata-item">
-                    <i class="fas fa-download"></i>
+                    <i class="pulse-glow-glass--fast fa-download"></i>
                     <span>3 Commands</span>
                 </div>
                 <div class="metadata-item">
-                    <i class="fas fa-cogs"></i>
+                    <i class="pulse-glow-glass--fast fa-cogs"></i>
                     <span>Zero Config</span>
                 </div>
                 <div class="metadata-item">
-                    <i class="fas fa-check-circle"></i>
+                    <i class="pulse-glow-glass--fast fa-check-circle"></i>
                     <span>Quick Start</span>
                 </div>
                 <div class="metadata-item">
-                    <i class="fas fa-chart-bar"></i>
+                    <i class="pulse-glow-glass--fast fa-chart-bar"></i>
                     <span>Score: 15</span>
                 </div>
                 <div class="metadata-item">
-                    <i class="fas fa-calendar-alt"></i>
+                    <i class="pulse-glow-glass--fast fa-calendar-alt"></i>
                     <span>Updated: Jan 2026</span>
                 </div>
             </div>
@@ -69,7 +120,7 @@
         <!-- Quick Start Overview -->
         <section class="glass-card-display animation-t1">
             <h2 class="section-title">
-                <i class="fas fa-bolt"></i>
+                <i class="pulse-glow-glass--fast fa-bolt"></i>
                 Quick Start (3 Commands)
             </h2>
             
@@ -78,7 +129,7 @@
             <div class="code-block">
                 <div class="code-header">
                     <span>Installation Commands</span>
-                    <i class="fas fa-terminal"></i>
+                    <i class="pulse-glow-glass--fast fa-terminal"></i>
                 </div>
                 <pre><code># 1. Clone the repository
 git clone https://github.com/your-org/CORTEX.git
@@ -92,7 +143,7 @@ python -m cortex</code></pre>
             </div>
             
             <div class="success-banner">
-                <i class="fas fa-check-circle"></i>
+                <i class="pulse-glow-glass--fast fa-check-circle"></i>
                 <span>✅ That's it! CORTEX is now running and integrated with GitHub Copilot.</span>
             </div>
         </section>
@@ -100,7 +151,7 @@ python -m cortex</code></pre>
         <!-- Setup Flow -->
         <section class="glass-card-display animation-t1">
             <h2 class="section-title">
-                <i class="fas fa-stream"></i>
+                <i class="pulse-glow-glass--fast fa-stream"></i>
                 Setup Flow
             </h2>
             
@@ -127,7 +178,7 @@ graph LR
         <!-- Prerequisites -->
         <section class="glass-card-display animation-t1">
             <h2 class="section-title">
-                <i class="fas fa-clipboard-check"></i>
+                <i class="pulse-glow-glass--fast fa-clipboard-check"></i>
                 Prerequisites
             </h2>
             
@@ -175,7 +226,7 @@ graph LR
         <!-- Installation Steps -->
         <section class="glass-card-display animation-t1">
             <h2 class="section-title">
-                <i class="fas fa-list-ol"></i>
+                <i class="pulse-glow-glass--fast fa-list-ol"></i>
                 Detailed Installation Steps
             </h2>
             
@@ -188,10 +239,10 @@ graph LR
                     <div class="code-snippet">
                         <code>git clone https://github.com/your-org/CORTEX.git</code>
                         <button class="copy-button" onclick="navigator.clipboard.writeText('git clone https://github.com/your-org/CORTEX.git')">
-                            <i class="fas fa-copy"></i>
+                            <i class="pulse-glow-glass--fast fa-copy"></i>
                         </button>
                     </div>
-                    <p class="step-note"><i class="fas fa-info-circle"></i> This creates a <code>CORTEX/</code> directory with all source files.</p>
+                    <p class="step-note"><i class="pulse-glow-glass--fast fa-info-circle"></i> This creates a <code>CORTEX/</code> directory with all source files.</p>
                 </div>
             </div>
             
@@ -204,7 +255,7 @@ graph LR
                     <div class="code-snippet">
                         <code>cd CORTEX</code>
                         <button class="copy-button" onclick="navigator.clipboard.writeText('cd CORTEX')">
-                            <i class="fas fa-copy"></i>
+                            <i class="pulse-glow-glass--fast fa-copy"></i>
                         </button>
                     </div>
                 </div>
@@ -219,10 +270,10 @@ graph LR
                     <div class="code-snippet">
                         <code>pip install -r requirements.txt</code>
                         <button class="copy-button" onclick="navigator.clipboard.writeText('pip install -r requirements.txt')">
-                            <i class="fas fa-copy"></i>
+                            <i class="pulse-glow-glass--fast fa-copy"></i>
                         </button>
                     </div>
-                    <p class="step-note"><i class="fas fa-info-circle"></i> This installs all core dependencies. Optional dependencies in <code>optional-requirements.txt</code>.</p>
+                    <p class="step-note"><i class="pulse-glow-glass--fast fa-info-circle"></i> This installs all core dependencies. Optional dependencies in <code>optional-requirements.txt</code>.</p>
                 </div>
             </div>
             
@@ -235,10 +286,10 @@ graph LR
                     <div class="code-snippet">
                         <code>python -m cortex --version</code>
                         <button class="copy-button" onclick="navigator.clipboard.writeText('python -m cortex --version')">
-                            <i class="fas fa-copy"></i>
+                            <i class="pulse-glow-glass--fast fa-copy"></i>
                         </button>
                     </div>
-                    <p class="step-note"><i class="fas fa-check-circle"></i> Should output: <code>CORTEX 4.0.0</code></p>
+                    <p class="step-note"><i class="pulse-glow-glass--fast fa-check-circle"></i> Should output: <code>CORTEX 4.0.0</code></p>
                 </div>
             </div>
             
@@ -251,10 +302,10 @@ graph LR
                     <div class="code-snippet">
                         <code>code .</code>
                         <button class="copy-button" onclick="navigator.clipboard.writeText('code .')">
-                            <i class="fas fa-copy"></i>
+                            <i class="pulse-glow-glass--fast fa-copy"></i>
                         </button>
                     </div>
-                    <p class="step-note"><i class="fas fa-info-circle"></i> VS Code will automatically detect <code>.github/copilot-instructions.md</code></p>
+                    <p class="step-note"><i class="pulse-glow-glass--fast fa-info-circle"></i> VS Code will automatically detect <code>.github/copilot-instructions.md</code></p>
                 </div>
             </div>
         </section>
@@ -262,7 +313,7 @@ graph LR
         <!-- First Steps -->
         <section class="glass-card-display animation-t1">
             <h2 class="section-title">
-                <i class="fas fa-play"></i>
+                <i class="pulse-glow-glass--fast fa-play"></i>
                 First Steps
             </h2>
             
@@ -271,7 +322,7 @@ graph LR
             <div class="first-steps-grid">
                 <div class="command-card">
                     <div class="command-icon">
-                        <i class="fas fa-hand-sparkles"></i>
+                        <i class="pulse-glow-glass--fast fa-hand-sparkles"></i>
                     </div>
                     <h4 class="command-title">Say Hello</h4>
                     <div class="command-text">
@@ -282,7 +333,7 @@ graph LR
                 
                 <div class="command-card">
                     <div class="command-icon">
-                        <i class="fas fa-question-circle"></i>
+                        <i class="pulse-glow-glass--fast fa-question-circle"></i>
                     </div>
                     <h4 class="command-title">See All Commands</h4>
                     <div class="command-text">
@@ -293,7 +344,7 @@ graph LR
                 
                 <div class="command-card">
                     <div class="command-icon">
-                        <i class="fas fa-project-diagram"></i>
+                        <i class="pulse-glow-glass--fast fa-project-diagram"></i>
                     </div>
                     <h4 class="command-title">Create Your First Plan</h4>
                     <div class="command-text">
@@ -304,7 +355,7 @@ graph LR
                 
                 <div class="command-card">
                     <div class="command-icon">
-                        <i class="fas fa-heartbeat"></i>
+                        <i class="pulse-glow-glass--fast fa-heartbeat"></i>
                     </div>
                     <h4 class="command-title">Run System Check</h4>
                     <div class="command-text">
@@ -318,7 +369,7 @@ graph LR
         <!-- Configuration (Optional) -->
         <section class="glass-card-display animation-t1">
             <h2 class="section-title">
-                <i class="fas fa-cog"></i>
+                <i class="pulse-glow-glass--fast fa-cog"></i>
                 Configuration (Optional)
             </h2>
             
@@ -327,7 +378,7 @@ graph LR
             <div class="code-block">
                 <div class="code-header">
                     <span>cortex.config.json</span>
-                    <i class="fas fa-file-code"></i>
+                    <i class="pulse-glow-glass--fast fa-file-code"></i>
                 </div>
                 <pre><code>{
   "brain": {
@@ -373,14 +424,14 @@ graph LR
         <!-- Troubleshooting -->
         <section class="glass-card-display animation-t1">
             <h2 class="section-title">
-                <i class="fas fa-wrench"></i>
+                <i class="pulse-glow-glass--fast fa-wrench"></i>
                 Troubleshooting
             </h2>
             
             <div class="troubleshooting-grid">
                 <div class="issue-card">
                     <div class="issue-header">
-                        <i class="fas fa-exclamation-triangle"></i>
+                        <i class="pulse-glow-glass--fast fa-exclamation-triangle"></i>
                         <span>Python Not Found</span>
                     </div>
                     <p class="issue-description"><strong>Problem:</strong> <code>python: command not found</code></p>
@@ -389,7 +440,7 @@ graph LR
                 
                 <div class="issue-card">
                     <div class="issue-header">
-                        <i class="fas fa-exclamation-triangle"></i>
+                        <i class="pulse-glow-glass--fast fa-exclamation-triangle"></i>
                         <span>GitHub Copilot Not Responding</span>
                     </div>
                     <p class="issue-description"><strong>Problem:</strong> CORTEX commands not recognized</p>
@@ -398,7 +449,7 @@ graph LR
                 
                 <div class="issue-card">
                     <div class="issue-header">
-                        <i class="fas fa-exclamation-triangle"></i>
+                        <i class="pulse-glow-glass--fast fa-exclamation-triangle"></i>
                         <span>Dependencies Failing</span>
                     </div>
                     <p class="issue-description"><strong>Problem:</strong> <code>pip install</code> errors</p>
@@ -407,7 +458,7 @@ graph LR
                 
                 <div class="issue-card">
                     <div class="issue-header">
-                        <i class="fas fa-exclamation-triangle"></i>
+                        <i class="pulse-glow-glass--fast fa-exclamation-triangle"></i>
                         <span>Permission Denied</span>
                     </div>
                     <p class="issue-description"><strong>Problem:</strong> Permission errors during installation</p>
@@ -419,31 +470,31 @@ graph LR
         <!-- Next Steps -->
         <section class="glass-card-display animation-t1">
             <h2 class="section-title">
-                <i class="fas fa-arrow-right"></i>
+                <i class="pulse-glow-glass--fast fa-arrow-right"></i>
                 Next Steps
             </h2>
             
             <div class="next-steps-grid">
                 <div class="next-step-card">
-                    <i class="fas fa-book"></i>
+                    <i class="pulse-glow-glass--fast fa-book"></i>
                     <h4>Explore Documentation</h4>
                     <p>Read through <a href="../index.html">KEY FEATURES</a> to understand CORTEX capabilities.</p>
                 </div>
                 
                 <div class="next-step-card">
-                    <i class="fas fa-brain"></i>
+                    <i class="pulse-glow-glass--fast fa-brain"></i>
                     <h4>Understand Architecture</h4>
                     <p>Learn about the <a href="../architecture/index.html">4-Tier Brain System</a> and Tier 0 Governance.</p>
                 </div>
                 
                 <div class="next-step-card">
-                    <i class="fas fa-code"></i>
+                    <i class="pulse-glow-glass--fast fa-code"></i>
                     <h4>Try Orchestrators</h4>
                     <p>Test all <a href="../orchestrators/index.html">8 orchestrators</a>: Planning, TDD, ADO, Maintenance, etc.</p>
                 </div>
                 
                 <div class="next-step-card">
-                    <i class="fas fa-chart-line"></i>
+                    <i class="pulse-glow-glass--fast fa-chart-line"></i>
                     <h4>Review Metrics</h4>
                     <p>Check <a href="../token-optimization/index.html">Token Optimization</a> to see 97% reduction results.</p>
                 </div>
@@ -453,13 +504,13 @@ graph LR
         <!-- Support -->
         <section class="glass-card-display animation-t1">
             <h2 class="section-title">
-                <i class="fas fa-life-ring"></i>
+                <i class="pulse-glow-glass--fast fa-life-ring"></i>
                 Need Help?
             </h2>
             
             <div class="support-grid">
                 <div class="support-card">
-                    <i class="fas fa-book-open"></i>
+                    <i class="pulse-glow-glass--fast fa-book-open"></i>
                     <h4>Documentation</h4>
                     <p>Complete docs in <code>docs/</code> directory</p>
                 </div>
@@ -471,13 +522,13 @@ graph LR
                 </div>
                 
                 <div class="support-card">
-                    <i class="fas fa-comments"></i>
+                    <i class="pulse-glow-glass--fast fa-comments"></i>
                     <h4>Discussions</h4>
                     <p>Join GitHub Discussions forum</p>
                 </div>
                 
                 <div class="support-card">
-                    <i class="fas fa-envelope"></i>
+                    <i class="pulse-glow-glass--fast fa-envelope"></i>
                     <h4>Contact</h4>
                     <p>Email: support@cortex.dev</p>
                 </div>

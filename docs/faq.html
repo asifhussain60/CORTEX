@@ -1,10 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FAQ - CORTEX</title>
     <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <link rel="icon" type="image/png" href="assets/images/CORTEX-logo.png">
 </head>
 <body>
@@ -61,11 +87,17 @@
                 </div>
                 <div class="collapsible-content glass-card-flat">
                     <p>CORTEX is an AI-powered development assistant that enhances GitHub Copilot with long-term memory, strategic planning, and architectural intelligence. It's designed for:</p>
-                    <ul>
-                        <li><strong>Software Engineers</strong> - TDD workflows, code quality, automated testing</li>
-                        <li><strong>Tech Leads</strong> - Architecture reviews, planning systems, team coordination</li>
-                        <li><strong>Product Managers</strong> - ADO integration, progress tracking, feature planning</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Software Engineers</strong> - TDD workflows, code quality, automated testing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Tech Leads</strong> - Architecture reviews, planning systems, team coordination</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Product Managers</strong> - ADO integration, progress tracking, feature planning</div>
+    </div>
+</div>
                     <p><a href="index.html">Learn more about CORTEX →</a></p>
                 </div>
             </div>
@@ -95,13 +127,23 @@
                 </div>
                 <div class="collapsible-content glass-card-flat">
                     <p><strong>Key differences:</strong></p>
-                    <ul>
-                        <li><strong>Memory:</strong> GitHub Copilot has no persistence; CORTEX has 70-conversation FIFO working memory</li>
-                        <li><strong>Planning:</strong> Copilot provides single-turn suggestions; CORTEX creates multi-phase strategic plans</li>
-                        <li><strong>TDD:</strong> Copilot requires manual RED-GREEN-REFACTOR; CORTEX enforces TDD workflow</li>
-                        <li><strong>Architecture:</strong> Copilot has no context preservation; CORTEX uses knowledge graph + dev context</li>
-                        <li><strong>Safety:</strong> Copilot can suggest unsafe code; CORTEX has SKULL brain protection</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Memory:</strong> GitHub Copilot has no persistence; CORTEX has 70-conversation FIFO working memory</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Planning:</strong> Copilot provides single-turn suggestions; CORTEX creates multi-phase strategic plans</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>TDD:</strong> Copilot requires manual RED-GREEN-REFACTOR; CORTEX enforces TDD workflow</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Architecture:</strong> Copilot has no context preservation; CORTEX uses knowledge graph + dev context</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Safety:</strong> Copilot can suggest unsafe code; CORTEX has SKULL brain protection</div>
+    </div>
+</div>
                     <p><a href="story/index.html">Read the origin story →</a></p>
                 </div>
             </div>
@@ -113,12 +155,20 @@
                 </div>
                 <div class="collapsible-content glass-card-flat">
                     <p><strong>No!</strong> CORTEX uses a template-based response system. Just say commands in Copilot Chat:</p>
-                    <ul>
-                        <li><code>plan user authentication</code> - Start planning workflow</li>
-                        <li><code>start tdd</code> - Begin TDD cycle</li>
-                        <li><code>system maintenance</code> - Run system maintenance</li>
-                        <li><code>help</code> - See all commands</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><code>plan user authentication</code> - Start planning workflow</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>start tdd</code> - Begin TDD cycle</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>system maintenance</code> - Run system maintenance</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>help</code> - See all commands</div>
+    </div>
+</div>
                     <p>Python execution is only needed for advanced admin operations.</p>
                 </div>
             </div>
@@ -130,16 +180,32 @@
                 </div>
                 <div class="collapsible-content glass-card-flat">
                     <p><strong>Core commands:</strong></p>
-                    <ul>
-                        <li><code>help</code> - Show all available commands</li>
-                        <li><code>plan [feature]</code> - Create feature plan with auto-TDD</li>
-                        <li><code>start tdd</code> - Begin TDD workflow</li>
-                        <li><code>execute all phases autonomously</code> - Auto-execute plan</li>
-                        <li><code>plan ado</code> - Generate ADO work items</li>
-                        <li><code>sanitize [directory]</code> - Clean sensitive data</li>
-                        <li><code>system maintenance</code> - Run 7-phase maintenance</li>
-                        <li><code>refine</code> - Holistic system refinement</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><code>help</code> - Show all available commands</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>plan [feature]</code> - Create feature plan with auto-TDD</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>start tdd</code> - Begin TDD workflow</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>execute all phases autonomously</code> - Auto-execute plan</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>plan ado</code> - Generate ADO work items</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>sanitize [directory]</code> - Clean sensitive data</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>system maintenance</code> - Run 7-phase maintenance</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>refine</code> - Holistic system refinement</div>
+    </div>
+</div>
                     <p><a href="features/index.html">All features →</a></p>
                 </div>
             </div>
@@ -151,11 +217,17 @@
                 </div>
                 <div class="collapsible-content glass-card-flat">
                     <p><strong>Yes!</strong> Phase 11 Multi-Repo Architecture supports 1:∞ scaling:</p>
-                    <ul>
-                        <li><strong>Workspace Detection:</strong> Auto-detects repository context</li>
-                        <li><strong>Tier 3 Segmentation:</strong> Separate dev context per repo</li>
-                        <li><strong>Git Isolation:</strong> CORTEX code never mixed with user repos</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Workspace Detection:</strong> Auto-detects repository context</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Tier 3 Segmentation:</strong> Separate dev context per repo</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Git Isolation:</strong> CORTEX code never mixed with user repos</div>
+    </div>
+</div>
                     <p><a href="getting-started/multi-repo-setup.html">Multi-repo guide →</a></p>
                 </div>
             </div>
@@ -174,12 +246,20 @@
                 </div>
                 <div class="collapsible-content glass-card-flat">
                     <p>CORTEX uses a 4-tier brain system for intelligent memory management:</p>
-                    <ul>
-                        <li><strong>Tier 0:</strong> Governance (SKULL rules, brain protection)</li>
-                        <li><strong>Tier 1:</strong> Working memory (70-conversation FIFO, &lt;100ms access)</li>
-                        <li><strong>Tier 2:</strong> Knowledge graph (pattern learning, relationships)</li>
-                        <li><strong>Tier 3:</strong> Development context (metrics, hotspots, per-repo)</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Tier 0:</strong> Governance (SKULL rules, brain protection)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Tier 1:</strong> Working memory (70-conversation FIFO, &lt;100ms access)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Tier 2:</strong> Knowledge graph (pattern learning, relationships)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Tier 3:</strong> Development context (metrics, hotspots, per-repo)</div>
+    </div>
+</div>
                     <p><a href="architecture/four-tier-brain.html">Architecture details →</a></p>
                 </div>
             </div>
@@ -191,13 +271,23 @@
                 </div>
                 <div class="collapsible-content glass-card-flat">
                     <p>Orchestrators are multi-phase workflows that coordinate complex operations:</p>
-                    <ul>
-                        <li><strong>Planning System:</strong> Multi-phase feature planning with auto-TDD</li>
-                        <li><strong>TDD Orchestrator:</strong> RED-GREEN-REFACTOR enforcement</li>
-                        <li><strong>System Maintenance:</strong> 7-phase health and optimization</li>
-                        <li><strong>Code Sanitization:</strong> 5-phase sensitive data removal</li>
-                        <li><strong>System Refinement:</strong> 7-phase holistic improvement</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Planning System:</strong> Multi-phase feature planning with auto-TDD</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>TDD Orchestrator:</strong> RED-GREEN-REFACTOR enforcement</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>System Maintenance:</strong> 7-phase health and optimization</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Code Sanitization:</strong> 5-phase sensitive data removal</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>System Refinement:</strong> 7-phase holistic improvement</div>
+    </div>
+</div>
                     <p><a href="architecture/orchestrator-ecosystem.html">Orchestrator ecosystem →</a></p>
                 </div>
             </div>
@@ -225,12 +315,20 @@
                 </div>
                 <div class="collapsible-content glass-card-flat">
                     <p>SKULL (Systematic Knowledge-driven Universal Logic Library) enforces safety rules:</p>
-                    <ul>
-                        <li><strong>TDD_ENFORCEMENT:</strong> RED→GREEN→REFACTOR mandatory</li>
-                        <li><strong>HOLISTIC_CODE_DISCOVERY:</strong> Search before create (prevent duplication)</li>
-                        <li><strong>REFACTOR_CODE_CLEANUP:</strong> Remove orphaned/duplicate code</li>
-                        <li><strong>GIT_ISOLATION:</strong> CORTEX code never in user repos</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>TDD_ENFORCEMENT:</strong> RED→GREEN→REFACTOR mandatory</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>HOLISTIC_CODE_DISCOVERY:</strong> Search before create (prevent duplication)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>REFACTOR_CODE_CLEANUP:</strong> Remove orphaned/duplicate code</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>GIT_ISOLATION:</strong> CORTEX code never in user repos</div>
+    </div>
+</div>
                     <p><a href="architecture/skull-protection.html">SKULL rules →</a></p>
                 </div>
             </div>
@@ -242,12 +340,20 @@
                 </div>
                 <div class="collapsible-content glass-card-flat">
                     <p>Tier 1 working memory uses a 70-conversation FIFO queue:</p>
-                    <ul>
-                        <li><strong>Storage:</strong> JSON Lines format in <code>conversation-context.jsonl</code></li>
-                        <li><strong>Retention:</strong> Last 70 conversations preserved</li>
-                        <li><strong>Performance:</strong> Sub-100ms retrieval with smart indexing</li>
-                        <li><strong>Cleanup:</strong> Automatic FIFO eviction when limit reached</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Storage:</strong> JSON Lines format in <code>conversation-context.jsonl</code></div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Retention:</strong> Last 70 conversations preserved</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Performance:</strong> Sub-100ms retrieval with smart indexing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Cleanup:</strong> Automatic FIFO eviction when limit reached</div>
+    </div>
+</div>
                     <p><a href="architecture/working-memory.html">Working memory details →</a></p>
                 </div>
             </div>
@@ -266,12 +372,20 @@
                 </div>
                 <div class="collapsible-content glass-card-flat">
                     <p>The Planning System creates multi-phase feature plans with automatic TDD integration:</p>
-                    <ul>
-                        <li><strong>Auto-Complexity Detection:</strong> Routes HIGH→incremental, LOW→skeleton</li>
-                        <li><strong>DoR/DoD Compliance:</strong> Definition of Ready/Done enforcement</li>
-                        <li><strong>TDD Integration:</strong> Automatic test-first workflow</li>
-                        <li><strong>Manifest-Driven:</strong> YAML-based plan structure</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Auto-Complexity Detection:</strong> Routes HIGH→incremental, LOW→skeleton</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>DoR/DoD Compliance:</strong> Definition of Ready/Done enforcement</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>TDD Integration:</strong> Automatic test-first workflow</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Manifest-Driven:</strong> YAML-based plan structure</div>
+    </div>
+</div>
                     <p><a href="features/planning-system.html">Planning System guide →</a></p>
                 </div>
             </div>
@@ -283,12 +397,20 @@
                 </div>
                 <div class="collapsible-content glass-card-flat">
                     <p>TDD Mastery enforces test-driven development workflow:</p>
-                    <ul>
-                        <li><strong>RED Phase:</strong> Write failing tests first (validated)</li>
-                        <li><strong>GREEN Phase:</strong> Implement minimum code to pass</li>
-                        <li><strong>REFACTOR Phase:</strong> Clean up with tests passing</li>
-                        <li><strong>Tech Discovery:</strong> Supports 11+ languages/frameworks</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>RED Phase:</strong> Write failing tests first (validated)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>GREEN Phase:</strong> Implement minimum code to pass</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>REFACTOR Phase:</strong> Clean up with tests passing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Tech Discovery:</strong> Supports 11+ languages/frameworks</div>
+    </div>
+</div>
                     <p><a href="features/tdd-mastery.html">TDD workflow →</a></p>
                 </div>
             </div>
@@ -300,12 +422,20 @@
                 </div>
                 <div class="collapsible-content glass-card-flat">
                     <p>ADO Operations creates Azure DevOps work items:</p>
-                    <ul>
-                        <li><strong>Story/Feature/Task:</strong> Formatted output ready for ADO</li>
-                        <li><strong>Planning Integration:</strong> Uses Planning System manifest structure</li>
-                        <li><strong>Completion Summaries:</strong> Generate work completion reports</li>
-                        <li><strong>Code Reviews:</strong> AI-assisted review comments</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Story/Feature/Task:</strong> Formatted output ready for ADO</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Planning Integration:</strong> Uses Planning System manifest structure</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Completion Summaries:</strong> Generate work completion reports</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Code Reviews:</strong> AI-assisted review comments</div>
+    </div>
+</div>
                     <p><a href="features/ado-operations.html">ADO Operations guide →</a></p>
                 </div>
             </div>
@@ -317,12 +447,20 @@
                 </div>
                 <div class="collapsible-content glass-card-flat">
                     <p>Code Sanitization removes company-specific data for safe sharing:</p>
-                    <ul>
-                        <li><strong>5 Phases:</strong> Analyze → Mapping → Transform → Validate → Report</li>
-                        <li><strong>Smart Detection:</strong> Identifies company names, domains, secrets</li>
-                        <li><strong>Build Validation:</strong> Ensures code still compiles/tests after sanitization</li>
-                        <li><strong>Reversible:</strong> Mapping file allows reconstruction</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>5 Phases:</strong> Analyze → Mapping → Transform → Validate → Report</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Smart Detection:</strong> Identifies company names, domains, secrets</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Build Validation:</strong> Ensures code still compiles/tests after sanitization</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Reversible:</strong> Mapping file allows reconstruction</div>
+    </div>
+</div>
                     <p><a href="technical/orchestrators/code-sanitization.html">Sanitization guide →</a></p>
                 </div>
             </div>
@@ -381,12 +519,20 @@
                 </div>
                 <div class="collapsible-content glass-card-flat">
                     <p>SKULL brain protection enforces safety rules at Tier 0:</p>
-                    <ul>
-                        <li><strong>TDD Enforcement:</strong> Tests must fail before implementation</li>
-                        <li><strong>Code Discovery:</strong> Search before creating (prevent duplication)</li>
-                        <li><strong>Cleanup Enforcement:</strong> Remove orphaned code during refactor</li>
-                        <li><strong>Git Isolation:</strong> CORTEX code never commits to user repos</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>TDD Enforcement:</strong> Tests must fail before implementation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Code Discovery:</strong> Search before creating (prevent duplication)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Cleanup Enforcement:</strong> Remove orphaned code during refactor</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Git Isolation:</strong> CORTEX code never commits to user repos</div>
+    </div>
+</div>
                 </div>
             </div>
 
@@ -397,12 +543,20 @@
                 </div>
                 <div class="collapsible-content glass-card-flat">
                     <p><strong>Yes!</strong> All CORTEX data stays local:</p>
-                    <ul>
-                        <li><strong>No cloud uploads:</strong> Brain data stored on your machine</li>
-                        <li><strong>Git isolation:</strong> CORTEX never commits to user repos</li>
-                        <li><strong>Sanitization:</strong> Clean sensitive data before sharing</li>
-                        <li><strong>Local execution:</strong> Python commands run locally</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>No cloud uploads:</strong> Brain data stored on your machine</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Git isolation:</strong> CORTEX never commits to user repos</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Sanitization:</strong> Clean sensitive data before sharing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Local execution:</strong> Python commands run locally</div>
+    </div>
+</div>
                 </div>
             </div>
 
@@ -413,12 +567,20 @@
                 </div>
                 <div class="collapsible-content glass-card-flat">
                     <p>SKULL GIT_ISOLATION_ENFORCEMENT prevents mixing codebases:</p>
-                    <ul>
-                        <li><strong>CORTEX tests:</strong> Always in <code>CORTEX/tests/</code></li>
-                        <li><strong>User app tests:</strong> Always in <code>UserApp/tests/</code></li>
-                        <li><strong>Pre-commit validation:</strong> Blocks cross-contamination</li>
-                        <li><strong>Workspace detection:</strong> Auto-detects correct context</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>CORTEX tests:</strong> Always in <code>CORTEX/tests/</code></div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>User app tests:</strong> Always in <code>UserApp/tests/</code></div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Pre-commit validation:</strong> Blocks cross-contamination</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Workspace detection:</strong> Auto-detects correct context</div>
+    </div>
+</div>
                 </div>
             </div>
 
@@ -429,12 +591,20 @@
                 </div>
                 <div class="collapsible-content glass-card-flat">
                     <p><strong>No!</strong> CORTEX has multiple safety mechanisms:</p>
-                    <ul>
-                        <li><strong>Git Checkpoints:</strong> Auto-commits before major operations</li>
-                        <li><strong>Rollback Support:</strong> Undo changes with <code>rollback</code> command</li>
-                        <li><strong>Dry-Run Mode:</strong> Preview changes before applying</li>
-                        <li><strong>User Confirmation:</strong> Destructive operations require approval</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Git Checkpoints:</strong> Auto-commits before major operations</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Rollback Support:</strong> Undo changes with <code>rollback</code> command</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Dry-Run Mode:</strong> Preview changes before applying</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>User Confirmation:</strong> Destructive operations require approval</div>
+    </div>
+</div>
                 </div>
             </div>
 
@@ -445,12 +615,20 @@
                 </div>
                 <div class="collapsible-content glass-card-flat">
                     <p>Definition of Ready (DoR) and Definition of Done (DoD) ensure quality:</p>
-                    <ul>
-                        <li><strong>DoR:</strong> Requirements clear, acceptance criteria defined, testable</li>
-                        <li><strong>DoD:</strong> Code complete, tests passing, documented, reviewed</li>
-                        <li><strong>Enforcement:</strong> Planning System validates at each phase gate</li>
-                        <li><strong>Compliance:</strong> Tracked in plan manifests</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>DoR:</strong> Requirements clear, acceptance criteria defined, testable</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>DoD:</strong> Code complete, tests passing, documented, reviewed</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Enforcement:</strong> Planning System validates at each phase gate</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Compliance:</strong> Tracked in plan manifests</div>
+    </div>
+</div>
                 </div>
             </div>
         </div>
@@ -559,12 +737,20 @@ system maintenance</code></pre>
                 </div>
                 <div class="collapsible-content glass-card-flat">
                     <p><strong>Performance metrics:</strong></p>
-                    <ul>
-                        <li><strong>Working Memory:</strong> &lt; 100ms retrieval (70 conversations)</li>
-                        <li><strong>Template Responses:</strong> Instant (no Python execution)</li>
-                        <li><strong>Planning System:</strong> &lt; 5 seconds for 8-phase plan</li>
-                        <li><strong>System Maintenance:</strong> &lt; 5 minutes for full 7-phase cycle</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Working Memory:</strong> &lt; 100ms retrieval (70 conversations)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Template Responses:</strong> Instant (no Python execution)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Planning System:</strong> &lt; 5 seconds for 8-phase plan</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>System Maintenance:</strong> &lt; 5 minutes for full 7-phase cycle</div>
+    </div>
+</div>
                 </div>
             </div>
 
@@ -575,12 +761,20 @@ system maintenance</code></pre>
                 </div>
                 <div class="collapsible-content glass-card-flat">
                     <p><strong>Typical usage:</strong></p>
-                    <ul>
-                        <li><strong>CORTEX codebase:</strong> ~50MB</li>
-                        <li><strong>Brain storage:</strong> 100-500MB (depends on usage)</li>
-                        <li><strong>Logs/metrics:</strong> 50-100MB</li>
-                        <li><strong>Total:</strong> ~500MB average</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>CORTEX codebase:</strong> ~50MB</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Brain storage:</strong> 100-500MB (depends on usage)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Logs/metrics:</strong> 50-100MB</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Total:</strong> ~500MB average</div>
+    </div>
+</div>
                     <p>Run <code>cleanup</code> regularly to remove obsolete files.</p>
                 </div>
             </div>
@@ -592,13 +786,23 @@ system maintenance</code></pre>
                 </div>
                 <div class="collapsible-content glass-card-flat">
                     <p><strong>Optimization tips:</strong></p>
-                    <ul>
-                        <li>Run <code>system maintenance</code> weekly</li>
-                        <li>Keep working memory under 70 conversations</li>
-                        <li>Use <code>cleanup</code> to remove obsolete files</li>
-                        <li>Vacuum databases periodically</li>
-                        <li>Archive old plans to <code>cortex-brain/archive/</code></li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Run <code>system maintenance</code> weekly</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Keep working memory under 70 conversations</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Use <code>cleanup</code> to remove obsolete files</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Vacuum databases periodically</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Archive old plans to <code>cortex-brain/archive/</code></div>
+    </div>
+</div>
                 </div>
             </div>
         </div>
@@ -635,12 +839,20 @@ pytest tests/test_orchestrator.py</code></pre>
                 </div>
                 <div class="collapsible-content glass-card-flat">
                     <p>SKULL TDD_ENFORCEMENT ensures test-driven development:</p>
-                    <ul>
-                        <li><strong>RED Phase:</strong> Write failing tests first (validated by CORTEX)</li>
-                        <li><strong>GREEN Phase:</strong> Implement minimum code to pass</li>
-                        <li><strong>REFACTOR Phase:</strong> Clean up with all tests passing</li>
-                        <li><strong>Validation:</strong> Each phase must complete before next</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>RED Phase:</strong> Write failing tests first (validated by CORTEX)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>GREEN Phase:</strong> Implement minimum code to pass</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>REFACTOR Phase:</strong> Clean up with all tests passing</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Validation:</strong> Each phase must complete before next</div>
+    </div>
+</div>
                     <p><a href="features/tdd-mastery.html">TDD workflow →</a></p>
                 </div>
             </div>
@@ -652,12 +864,20 @@ pytest tests/test_orchestrator.py</code></pre>
                 </div>
                 <div class="collapsible-content glass-card-flat">
                     <p><strong>RED_PHASE_VALIDATION:</strong></p>
-                    <ul>
-                        <li>Runs tests after RED phase generation</li>
-                        <li>Verifies tests fail with expected errors</li>
-                        <li>Blocks GREEN phase if tests pass (indicates test issues)</li>
-                        <li>Provides feedback on test quality</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Runs tests after RED phase generation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Verifies tests fail with expected errors</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Blocks GREEN phase if tests pass (indicates test issues)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Provides feedback on test quality</div>
+    </div>
+</div>
                 </div>
             </div>
 
@@ -668,12 +888,20 @@ pytest tests/test_orchestrator.py</code></pre>
                 </div>
                 <div class="collapsible-content glass-card-flat">
                     <p><strong>Current coverage:</strong></p>
-                    <ul>
-                        <li><strong>Orchestrators:</strong> 85%+ coverage</li>
-                        <li><strong>Brain tiers:</strong> 90%+ coverage</li>
-                        <li><strong>Agents:</strong> 80%+ coverage</li>
-                        <li><strong>Overall:</strong> Target 80%+ coverage</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Orchestrators:</strong> 85%+ coverage</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Brain tiers:</strong> 90%+ coverage</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Agents:</strong> 80%+ coverage</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Overall:</strong> Target 80%+ coverage</div>
+    </div>
+</div>
                     <p>Run <code>pytest --cov=src tests/</code> to see current metrics.</p>
                 </div>
             </div>
@@ -692,12 +920,20 @@ pytest tests/test_orchestrator.py</code></pre>
                 </div>
                 <div class="collapsible-content glass-card-flat">
                     <p><strong>Documentation locations:</strong></p>
-                    <ul>
-                        <li><strong>Website:</strong> <a href="https://asifhussain60.github.io/CORTEX/">asifhussain60.github.io/CORTEX</a></li>
-                        <li><strong>GitHub:</strong> <a href="https://github.com/asifhussain60/CORTEX">github.com/asifhussain60/CORTEX</a></li>
-                        <li><strong>Brain docs:</strong> <code>cortex-brain/documents/</code></li>
-                        <li><strong>Learning paths:</strong> <code>cortex-brain/documents/learning-paths/</code></li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Website:</strong> <a href="https://asifhussain60.github.io/CORTEX/">asifhussain60.github.io/CORTEX</a></div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>GitHub:</strong> <a href="https://github.com/asifhussain60/CORTEX">github.com/asifhussain60/CORTEX</a></div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Brain docs:</strong> <code>cortex-brain/documents/</code></div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Learning paths:</strong> <code>cortex-brain/documents/learning-paths/</code></div>
+    </div>
+</div>
                 </div>
             </div>
 
@@ -708,12 +944,20 @@ pytest tests/test_orchestrator.py</code></pre>
                 </div>
                 <div class="collapsible-content glass-card-flat">
                     <p><strong>Learning resources:</strong></p>
-                    <ul>
-                        <li><a href="getting-started/tutorial.html">Interactive Tutorial</a> - 45-60 minute walkthrough</li>
-                        <li><a href="getting-started/first-commands.html">First Commands</a> - Essential operations</li>
-                        <li><a href="story/index.html">Origin Story</a> - How CORTEX was created</li>
-                        <li><code>cortex-brain/documents/learning-paths/</code> - Practice exercises</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><a href="getting-started/tutorial.html">Interactive Tutorial</a> - 45-60 minute walkthrough</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="getting-started/first-commands.html">First Commands</a> - Essential operations</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="story/index.html">Origin Story</a> - How CORTEX was created</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>cortex-brain/documents/learning-paths/</code> - Practice exercises</div>
+    </div>
+</div>
                 </div>
             </div>
 
@@ -742,12 +986,20 @@ pytest tests/test_orchestrator.py</code></pre>
                 </div>
                 <div class="collapsible-content glass-card-flat">
                     <p><strong>Support options:</strong></p>
-                    <ul>
-                        <li><strong>In-app:</strong> Say <code>help</code> in Copilot Chat</li>
-                        <li><strong>GitHub Issues:</strong> Report bugs or request features</li>
-                        <li><strong>Documentation:</strong> Comprehensive guides at <a href="https://asifhussain60.github.io/CORTEX/">asifhussain60.github.io/CORTEX</a></li>
-                        <li><strong>FAQ:</strong> This page!</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>In-app:</strong> Say <code>help</code> in Copilot Chat</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>GitHub Issues:</strong> Report bugs or request features</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Documentation:</strong> Comprehensive guides at <a href="https://asifhussain60.github.io/CORTEX/">asifhussain60.github.io/CORTEX</a></div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>FAQ:</strong> This page!</div>
+    </div>
+</div>
                 </div>
             </div>
         </div>

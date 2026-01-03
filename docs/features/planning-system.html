@@ -1,10 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Planning System - CORTEX Features</title>
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <link rel="icon" href="../assets/images/CORTEX-logo.png" type="image/png">
 </head>
 <body>
@@ -43,7 +69,7 @@
                     <div class="icon">📋</div>
                     <div>
                         <h1>Planning System</h1>
-                        <p class="subtitle">Intelligent Feature Planning with TDD Integration</p>
+                        <p class="panel-subtitle-main">Intelligent Feature Planning with TDD Integration</p>
                     </div>
                 </div>
                 
@@ -52,22 +78,22 @@
                     <div class="metric-card">
                         <div class="metric-value">4</div>
                         <div class="metric-label">Core Phases</div>
-                        <div class="metric-sublabel">Structured Workflow</div>
+                        <div class="metric-highlight">Structured Workflow</div>
                     </div>
                     <div class="metric-card">
                         <div class="metric-value">4</div>
                         <div class="metric-label">Complexity Tiers</div>
-                        <div class="metric-sublabel">Auto-Detected</div>
+                        <div class="metric-highlight">Auto-Detected</div>
                     </div>
                     <div class="metric-card">
                         <div class="metric-value">100%</div>
                         <div class="metric-label">TDD Coverage</div>
-                        <div class="metric-sublabel">Tier 2+</div>
+                        <div class="metric-highlight">Tier 2+</div>
                     </div>
                     <div class="metric-card">
                         <div class="metric-value">40%</div>
                         <div class="metric-label">Time Saved</div>
-                        <div class="metric-sublabel">vs Manual Planning</div>
+                        <div class="metric-highlight">vs Manual Planning</div>
                     </div>
                 </div>
             </div>
@@ -176,7 +202,7 @@
                 <p><strong>User Request:</strong> "Create a user authentication system with OAuth2"</p>
                 <p><strong>System Response:</strong></p>
                 <ol class="feature-list">
-                    <li><strong>Phase 1 (Classification):</strong> Detects <span class="badge badge-danger">Tier 4: COMPLEX</span> 
+                    <li><strong>Phase 1 (Classification):</strong> Detects <span class="badge badge-security">Tier 4: COMPLEX</span> 
                     — multiple components, external OAuth2 provider integration, security concerns, 20+ implementation steps</li>
                     <li><strong>Phase 2 (Discovery):</strong> Searches cortex-brain/documents/planning/ for existing OAuth2 plans, 
                     finds none, proceeds with new plan creation</li>

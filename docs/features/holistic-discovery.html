@@ -1,10 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
 <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
 <title>Holistic Code Discovery - CORTEX</title>
 <link href="../assets/css/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
 <link href="../assets/images/CORTEX-logo.png" rel="icon" type="image/png">
 </head>
 <body>
@@ -91,28 +118,40 @@ def read_configuration(config_path):
 <div class="collapsible-content glass-card-flat">
 <p><strong>Purpose:</strong> Find similar functionality regardless of naming</p>
 <p><strong>How it works:</strong></p>
-<ul>
-<li>
-<strong>Natural Language Query:</strong> Describe what you want to implement</li>
-<li>
-<strong>Semantic Matching:</strong> AI finds code with similar intent/purpose</li>
-<li>
-<strong>Cross-File Search:</strong> Searches entire codebase, not just current module</li>
-<li>
-<strong>Context-Aware:</strong> Understands synonyms and related concepts</li>
-</ul>
+<div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Natural Language Query:</strong> Describe what you want to implement</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Semantic Matching:</strong> AI finds code with similar intent/purpose</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Cross-File Search:</strong> Searches entire codebase, not just current module</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Context-Aware:</strong> Understands synonyms and related concepts</div>
+    </div>
+</div>
 <p><strong>Example queries:</strong></p>
 <pre>semantic_search("parse configuration file yaml")
 semantic_search("authenticate user with token")
 semantic_search("validate email address format")
 semantic_search("convert markdown to html")</pre>
 <p><strong>What it finds:</strong></p>
-<ul>
-<li>Functions with similar behavior</li>
-<li>Classes providing related functionality</li>
-<li>Utility modules with overlapping purpose</li>
-<li>Documentation comments describing similar goals</li>
-</ul>
+<div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Functions with similar behavior</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Classes providing related functionality</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Utility modules with overlapping purpose</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Documentation comments describing similar goals</div>
+    </div>
+</div>
 <!-- Step 2: Grep Search -->
 <div class="collapsible">
 <div class="collapsible-header glass-card">
@@ -122,28 +161,40 @@ semantic_search("convert markdown to html")</pre>
 <div class="collapsible-content glass-card-flat">
 <p><strong>Purpose:</strong> Find functions/classes with similar keywords in names</p>
 <p><strong>How it works:</strong></p>
-<ul>
-<li>
-<strong>Regex Patterns:</strong> Search for naming patterns across codebase</li>
-<li>
-<strong>Fast & Precise:</strong> Text-based matching for exact keyword hits</li>
-<li>
-<strong>Case-Insensitive:</strong> Finds PascalCase, camelCase, snake_case variations</li>
-<li>
-<strong>Multi-Language:</strong> Works across Python, C#, JavaScript, etc.</li>
-</ul>
+<div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Regex Patterns:</strong> Search for naming patterns across codebase</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Fast & Precise:</strong> Text-based matching for exact keyword hits</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Case-Insensitive:</strong> Finds PascalCase, camelCase, snake_case variations</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Multi-Language:</strong> Works across Python, C#, JavaScript, etc.</div>
+    </div>
+</div>
 <p><strong>Example patterns:</strong></p>
 <pre>grep_search("def.*config|class.*Config", isRegexp=true)
 grep_search("authenticate|verify.*token", isRegexp=true)
 grep_search("parse|load|read.*yaml", isRegexp=true)
 grep_search("validate.*email", isRegexp=true)</pre>
 <p><strong>What it finds:</strong></p>
-<ul>
-<li>Functions with keywords in names (e.g., <code>parse_config</code>, <code>load_config</code>)</li>
-<li>Classes with related names (e.g., <code>ConfigParser</code>, <code>ConfigLoader</code>)</li>
-<li>Variables and constants with similar naming</li>
-<li>Import statements for related modules</li>
-</ul>
+<div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Functions with keywords in names (e.g., <code>parse_config</code>, <code>load_config</code>)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Classes with related names (e.g., <code>ConfigParser</code>, <code>ConfigLoader</code>)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Variables and constants with similar naming</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Import statements for related modules</div>
+    </div>
+</div>
 <!-- Step 3: Usage Analysis -->
 <div class="collapsible">
 <div class="collapsible-header glass-card">
@@ -153,27 +204,39 @@ grep_search("validate.*email", isRegexp=true)</pre>
 <div class="collapsible-content glass-card-flat">
 <p><strong>Purpose:</strong> Understand how existing implementations are used</p>
 <p><strong>How it works:</strong></p>
-<ul>
-<li>
-<strong>Call Site Analysis:</strong> Finds all locations where function is called</li>
-<li>
-<strong>Usage Patterns:</strong> Shows how callers use the function (parameters, return values)</li>
-<li>
-<strong>Dependency Graph:</strong> Maps what depends on what</li>
-<li>
-<strong>Impact Assessment:</strong> Helps decide reuse vs enhance vs create new</li>
-</ul>
+<div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Call Site Analysis:</strong> Finds all locations where function is called</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Usage Patterns:</strong> Shows how callers use the function (parameters, return values)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Dependency Graph:</strong> Maps what depends on what</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Impact Assessment:</strong> Helps decide reuse vs enhance vs create new</div>
+    </div>
+</div>
 <p><strong>Example queries:</strong></p>
 <pre>list_code_usages("ConfigParser")
 list_code_usages("authenticate_user")
 list_code_usages("parse_yaml")</pre>
 <p><strong>What it reveals:</strong></p>
-<ul>
-<li>How many call sites exist (usage frequency)</li>
-<li>What parameters are commonly passed</li>
-<li>What modules depend on this function</li>
-<li>Whether it's safe to modify (impact radius)</li>
-</ul>
+<div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">How many call sites exist (usage frequency)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">What parameters are commonly passed</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">What modules depend on this function</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Whether it's safe to modify (impact radius)</div>
+    </div>
+</div>
 <!-- Step 4: Decision Matrix -->
 <div class="collapsible">
 <div class="collapsible-header glass-card">
@@ -250,11 +313,17 @@ list_code_usages("load_yaml_config")
                     
                     </p>
 <p><strong>Enforcement triggers:</strong></p>
-<ul>
-<li>Keywords: "implement", "create function", "add method", "new class"</li>
-<li>Scope: Intent analysis, implementation phase detection</li>
-<li>Validation: Semantic search + grep search + usage analysis must run</li>
-</ul>
+<div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Keywords: "implement", "create function", "add method", "new class"</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Scope: Intent analysis, implementation phase detection</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Validation: Semantic search + grep search + usage analysis must run</div>
+    </div>
+</div>
 <!-- Real-World Results -->
 <section class="section">
 <div class="container">

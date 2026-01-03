@@ -1,10 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
 <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
 <title>Git Operations - CORTEX</title>
 <link href="../assets/css/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
 <link href="../assets/images/CORTEX-logo.png" rel="icon" type="image/png">
 </head>
 <body>
@@ -66,17 +93,20 @@
 <div class="collapsible-content glass-card-flat">
 <p><strong>Purpose:</strong> Absolute separation between CORTEX internal code and user application code</p>
 <p><strong>How it works:</strong></p>
-<ul>
-<li>
-<strong>CORTEX Repository:</strong> All CORTEX code lives in <code>/PROJECTS/CORTEX/</code>
-</li>
-<li>
-<strong>User Repositories:</strong> Application code lives in separate repos (e.g., <code>/PROJECTS/MyApp/</code>)</li>
-<li>
-<strong>Zero Cross-Contamination:</strong> CORTEX never commits to user repos, users never commit to CORTEX</li>
-<li>
-<strong>Brain Protector Validation:</strong> All git operations validated against isolation rules</li>
-</ul>
+<div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>CORTEX Repository:</strong> All CORTEX code lives in <code>/PROJECTS/CORTEX/</code></div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>User Repositories:</strong> Application code lives in separate repos (e.g., <code>/PROJECTS/MyApp/</code>)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Zero Cross-Contamination:</strong> CORTEX never commits to user repos, users never commit to CORTEX</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Brain Protector Validation:</strong> All git operations validated against isolation rules</div>
+    </div>
+</div>
 <p><strong>Protected paths:</strong></p>
 <pre>CORTEX Critical Paths (never touch user code):
 ├── src/tier0/ (governance)
@@ -99,16 +129,20 @@ User Application Paths (CORTEX never commits here):
 <div class="collapsible-content glass-card-flat">
 <p><strong>Purpose:</strong> Safety net for rollback before high-risk operations</p>
 <p><strong>When checkpoints are created:</strong></p>
-<ul>
-<li>
-<strong>Before System Maintenance:</strong> Checkpoint before cleanup phase</li>
-<li>
-<strong>Before Refactoring:</strong> Checkpoint before code restructuring</li>
-<li>
-<strong>Before Major Changes:</strong> Architecture updates, migrations</li>
-<li>
-<strong>Before Pull Operations:</strong> Safety net before merging remote changes</li>
-</ul>
+<div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Before System Maintenance:</strong> Checkpoint before cleanup phase</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Before Refactoring:</strong> Checkpoint before code restructuring</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Before Major Changes:</strong> Architecture updates, migrations</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Before Pull Operations:</strong> Safety net before merging remote changes</div>
+    </div>
+</div>
 <p><strong>Checkpoint format:</strong></p>
 <pre>git commit -m "checkpoint: Pre-cleanup safety checkpoint"
 git tag checkpoint-20251210-143000</pre>
@@ -128,16 +162,20 @@ git show checkpoint-20251210-143000</pre>
 <div class="collapsible-content glass-card-flat">
 <p><strong>Purpose:</strong> Auto-generate descriptive commit messages from changes</p>
 <p><strong>What CORTEX analyzes:</strong></p>
-<ul>
-<li>
-<strong>Changed Files:</strong> Identifies modules, components, features affected</li>
-<li>
-<strong>Change Type:</strong> feat (new), fix (bug), refactor, docs, test, chore</li>
-<li>
-<strong>Scope:</strong> Component or module name (e.g., <code>dashboard</code>, <code>tdd</code>)</li>
-<li>
-<strong>Impact:</strong> Breaking changes, deprecations, migrations</li>
-</ul>
+<div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Changed Files:</strong> Identifies modules, components, features affected</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Change Type:</strong> feat (new), fix (bug), refactor, docs, test, chore</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Scope:</strong> Component or module name (e.g., <code>dashboard</code>, <code>tdd</code>)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Impact:</strong> Breaking changes, deprecations, migrations</div>
+    </div>
+</div>
 <p><strong>Conventional Commits format:</strong></p>
 <pre>feat(dashboard): Add Use Cases tab with role capabilities matrix
 
@@ -149,12 +187,20 @@ git show checkpoint-20251210-143000</pre>
 Progress: Dashboard v3 integration layer complete
 Tests: 13/13 passing (100%)</pre>
 <p><strong>Benefits:</strong></p>
-<ul>
-<li>Consistent commit history</li>
-<li>Easy to generate changelogs</li>
-<li>Clear what changed and why</li>
-<li>Searchable by scope/type</li>
-</ul>
+<div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Consistent commit history</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Easy to generate changelogs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Clear what changed and why</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Searchable by scope/type</div>
+    </div>
+</div>
 <!-- Dirty State Prevention -->
 <div class="collapsible">
 <div class="collapsible-header glass-card">
@@ -164,16 +210,20 @@ Tests: 13/13 passing (100%)</pre>
 <div class="collapsible-content glass-card-flat">
 <p><strong>Purpose:</strong> Block development work when uncommitted changes exist</p>
 <p><strong>What's blocked:</strong></p>
-<ul>
-<li>
-<strong>New Feature Development:</strong> Can't start planning with dirty state</li>
-<li>
-<strong>System Maintenance:</strong> Maintenance requires clean working tree</li>
-<li>
-<strong>Refactoring:</strong> Can't refactor with uncommitted changes</li>
-<li>
-<strong>Major Operations:</strong> Migrations, deployments require clean state</li>
-</ul>
+<div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>New Feature Development:</strong> Can't start planning with dirty state</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>System Maintenance:</strong> Maintenance requires clean working tree</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Refactoring:</strong> Can't refactor with uncommitted changes</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Major Operations:</strong> Migrations, deployments require clean state</div>
+    </div>
+</div>
 <p><strong>Brain Protector response:</strong></p>
 <pre>🚨 BLOCKED: PREVENT_DIRTY_STATE_WORK
 
@@ -210,16 +260,20 @@ refactor/orchestrator-cleanup
 docs/api-reference-update
 test/tdd-coverage-improvement</pre>
 <p><strong>Branch operations:</strong></p>
-<ul>
-<li>
-<strong>Auto-create:</strong> CORTEX creates feature branches for planning sessions</li>
-<li>
-<strong>Safe Switching:</strong> Validates clean state before checkout</li>
-<li>
-<strong>Merge Protection:</strong> Prevents merging with failing tests</li>
-<li>
-<strong>Branch Cleanup:</strong> Prunes merged/stale branches</li>
-</ul>
+<div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Auto-create:</strong> CORTEX creates feature branches for planning sessions</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Safe Switching:</strong> Validates clean state before checkout</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Merge Protection:</strong> Prevents merging with failing tests</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Branch Cleanup:</strong> Prunes merged/stale branches</div>
+    </div>
+</div>
 <!-- SKULL Protection -->
 <section class="section">
 <div class="container">
@@ -285,16 +339,20 @@ test/tdd-coverage-improvement</pre>
 <p>
 <strong>User actions that trigger git operations:</strong>
 </p>
-<ul>
-<li>
-<code>system maintenance</code> - Creates checkpoint before cleanup</li>
-<li>
-<code>plan [feature]</code> - Validates clean state, creates feature branch</li>
-<li>
-<code>execute all phases autonomously</code> - Commits after each phase</li>
-<li>
-<code>deploy</code> - Creates deployment tag</li>
-</ul>
+<div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><code>system maintenance</code> - Creates checkpoint before cleanup</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>plan [feature]</code> - Validates clean state, creates feature branch</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>execute all phases autonomously</code> - Commits after each phase</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>deploy</code> - Creates deployment tag</div>
+    </div>
+</div>
 <p>
                     All git operations are logged and validated by Brain Protector for compliance.
 

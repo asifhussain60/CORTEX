@@ -1,12 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CORTEX Token Optimization - Reduce AI costs by 40% with intelligent response templates and tiered output">
     <title>Token Optimization - CORTEX</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
 </head>
 <body>
     <!-- Skip Link -->
@@ -73,7 +99,7 @@
         </div>
         
         <!-- How It Works -->
-        <section class="section-overview">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2>🏗️ How It Works</h2>
                 <p>
@@ -136,7 +162,7 @@
         </section>
         
         <!-- Response Templates -->
-        <section class="section-workflow">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2>📝 62 Pre-Optimized Templates</h2>
                 <p>
@@ -189,36 +215,36 @@
         </section>
         
         <!-- Anti-Bloat Rules -->
-        <section class="section-architecture">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2>🛡️ Anti-Bloat Enforcement</h2>
                 <p>
                     CORTEX enforces strict anti-bloat rules to prevent response inflation:
                 </p>
                 
-                <ul class="feature-list">
-                    <li>
-                        <strong>Single Next Action:</strong> Only the highest-value next step is shown, 
-                        never multiple "you could also" suggestions
-                    </li>
-                    <li>
-                        <strong>No Redundant Headers:</strong> Header already conveys context—body doesn't repeat it
-                    </li>
-                    <li>
-                        <strong>Pseudo-code by Default:</strong> Full code only when explicitly requested
-                    </li>
-                    <li>
-                        <strong>Completion Detection:</strong> "All work complete" replaces next steps when done
-                    </li>
-                    <li>
-                        <strong>Dynamic Sections:</strong> Only sections that add value appear in output
-                    </li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Single Next Action:</strong> Only the highest-value next step is shown, 
+                        never multiple "you could also" suggestions</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>No Redundant Headers:</strong> Header already conveys context—body doesn't repeat it</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Pseudo-code by Default:</strong> Full code only when explicitly requested</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Completion Detection:</strong> "All work complete" replaces next steps when done</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Dynamic Sections:</strong> Only sections that add value appear in output</div>
+    </div>
+</div>
             </div>
         </section>
         
         <!-- Example Comparison -->
-        <section class="section-usage">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2>📊 Before vs. After</h2>
                 
@@ -270,7 +296,7 @@ src/:
         </section>
         
         <!-- Configuration -->
-        <section class="section-configuration">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2>⚙️ Configuration</h2>
                 <p>
@@ -299,7 +325,7 @@ src/:
         </section>
         
         <!-- Related Features -->
-        <section class="section-integration">
+        <section class="level2-section-title-green">
             <div class="glass-card">
                 <h2>🔗 Related Features</h2>
                 <div class="feature-grid feature-grid-3">

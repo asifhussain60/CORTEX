@@ -1,10 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Tutorial - CORTEX</title>
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
 </head>
 <body>
@@ -53,15 +79,29 @@
             <h2>What You'll Learn</h2>
             <div class="glass-card">
                 <p>This tutorial covers CORTEX fundamentals through hands-on practice:</p>
-                <ul>
-                    <li><strong>Lesson 1:</strong> Setup and first commands</li>
-                    <li><strong>Lesson 2:</strong> Working with the Four-Tier Brain</li>
-                    <li><strong>Lesson 3:</strong> Planning System and feature planning</li>
-                    <li><strong>Lesson 4:</strong> TDD Mastery workflow</li>
-                    <li><strong>Lesson 5:</strong> ADO Operations and Azure DevOps integration</li>
-                    <li><strong>Lesson 6:</strong> System Maintenance and health monitoring</li>
-                    <li><strong>Lesson 7:</strong> Advanced features and orchestrators</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Lesson 1:</strong> Setup and first commands</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Lesson 2:</strong> Working with the Four-Tier Brain</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Lesson 3:</strong> Planning System and feature planning</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Lesson 4:</strong> TDD Mastery workflow</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Lesson 5:</strong> ADO Operations and Azure DevOps integration</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Lesson 6:</strong> System Maintenance and health monitoring</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Lesson 7:</strong> Advanced features and orchestrators</div>
+    </div>
+</div>
             </div>
         </div>
     </section>
@@ -106,11 +146,17 @@ cd CORTEX</code></pre>
                     <p><strong>Expected response:</strong> CORTEX command reference with available operations</p>
                     
                     <p><strong>Try these commands:</strong></p>
-                    <ul>
-                        <li><code>healthcheck</code> - Check system health</li>
-                        <li><code>introduce yourself</code> - Learn about CORTEX</li>
-                        <li><code>help planning</code> - Planning System commands</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><code>healthcheck</code> - Check system health</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>introduce yourself</code> - Learn about CORTEX</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>help planning</code> - Planning System commands</div>
+    </div>
+</div>
                 </div>
             </div>
         </div>
@@ -128,12 +174,20 @@ cd CORTEX</code></pre>
                 </div>
                 <div class="collapsible-content glass-card-flat">
                     <p>CORTEX uses a 4-tier brain for intelligent memory management:</p>
-                    <ul>
-                        <li><strong>Tier 0:</strong> Governance (SKULL rules)</li>
-                        <li><strong>Tier 1:</strong> Working memory (70-conversation FIFO)</li>
-                        <li><strong>Tier 2:</strong> Knowledge graph (patterns and relationships)</li>
-                        <li><strong>Tier 3:</strong> Development context (metrics and hotspots)</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Tier 0:</strong> Governance (SKULL rules)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Tier 1:</strong> Working memory (70-conversation FIFO)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Tier 2:</strong> Knowledge graph (patterns and relationships)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Tier 3:</strong> Development context (metrics and hotspots)</div>
+    </div>
+</div>
                     
                     <p><strong>Try it:</strong></p>
                     <pre><code>Tell me about the Four-Tier Brain</code></pre>
@@ -191,11 +245,17 @@ cd CORTEX</code></pre>
                     <pre><code>start tdd email validation</code></pre>
                     
                     <p><strong>The cycle:</strong></p>
-                    <ul>
-                        <li><strong>RED:</strong> Write failing tests (CORTEX validates they fail)</li>
-                        <li><strong>GREEN:</strong> Implement minimal code (CORTEX checks coverage ≥80%)</li>
-                        <li><strong>REFACTOR:</strong> Clean code (CORTEX scores quality 0-10)</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>RED:</strong> Write failing tests (CORTEX validates they fail)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>GREEN:</strong> Implement minimal code (CORTEX checks coverage ≥80%)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>REFACTOR:</strong> Clean code (CORTEX scores quality 0-10)</div>
+    </div>
+</div>
                     
                     <p><strong>Git checkpoints:</strong> Automatic commits at each phase for safe rollback</p>
                     
@@ -220,14 +280,26 @@ cd CORTEX</code></pre>
                     <pre><code>plan ado story user authentication</code></pre>
                     
                     <p><strong>Output includes:</strong></p>
-                    <ul>
-                        <li>Story title and description</li>
-                        <li>Acceptance criteria</li>
-                        <li>TDD requirements (RED-GREEN-REFACTOR)</li>
-                        <li>Tasks with effort estimates</li>
-                        <li>Definition of Ready (DoR)</li>
-                        <li>Definition of Done (DoD)</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Story title and description</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Acceptance criteria</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">TDD requirements (RED-GREEN-REFACTOR)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Tasks with effort estimates</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Definition of Ready (DoR)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Definition of Done (DoD)</div>
+    </div>
+</div>
                     
                     <p><strong>Generate completion summary:</strong></p>
                     <pre><code>generate ado summary for story 12345</code></pre>
@@ -365,13 +437,23 @@ cd CORTEX</code></pre>
             <div class="glass-card">
                 <p><strong>You've completed the tutorial! Here's what to explore next:</strong></p>
                 
-                <ul>
-                    <li><a href="first-commands.html">First Commands Reference</a> - Quick command guide</li>
-                    <li><a href="../architecture/index.html">Architecture Deep Dive</a> - System design</li>
-                    <li><a href="../features/index.html">Features Overview</a> - All CORTEX capabilities</li>
-                    <li><a href="../technical/orchestrators/index.html">Orchestrators</a> - Workflow documentation</li>
-                    <li><a href="../faq.html">FAQ</a> - Common questions</li>
-                </ul>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><a href="first-commands.html">First Commands Reference</a> - Quick command guide</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="../architecture/index.html">Architecture Deep Dive</a> - System design</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="../features/index.html">Features Overview</a> - All CORTEX capabilities</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="../technical/orchestrators/index.html">Orchestrators</a> - Workflow documentation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><a href="../faq.html">FAQ</a> - Common questions</div>
+    </div>
+</div>
                 
                 <p><strong>Practice exercises:</strong> <code>cortex-brain/documents/learning-paths/CORTEX-4.0-PRACTICE-EXERCISES.md</code></p>
             </div>

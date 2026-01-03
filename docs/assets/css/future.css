@@ -136,13 +136,6 @@ body {
     display: block;
 }
 
-.vision-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 15px;
-    color: var(--text-primary);
-}
-
 .vision-description {
     font-size: 1rem;
     line-height: 1.7;
@@ -178,13 +171,6 @@ body {
     width: 2px;
     background: linear-gradient(180deg, var(--future-primary), var(--future-accent));
     transform: translateX(-50%);
-}
-
-.timeline-item {
-    position: relative;
-    margin-bottom: 60px;
-    display: flex;
-    align-items: center;
 }
 
 .timeline-item:nth-child(odd) {
@@ -337,10 +323,6 @@ body {
         grid-template-columns: 1fr;
     }
     
-    .timeline-item {
-        flex-direction: column !important;
-    }
-    
     .timeline-content {
         width: 100%;
     }
@@ -486,12 +468,6 @@ body {
     margin-bottom: 8px;
     color: rgba(255, 255, 255, 0.7);
     font-size: 14px;
-}
-
-.status-indicator {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
 }
 
 .status-progress {
@@ -844,8 +820,7 @@ body {
 /* Frappe Gantt overrides */
 .gantt-wrapper .gantt-container { background: transparent; }
 .gantt-wrapper .grid-background { fill: rgba(255, 255, 255, 0.02); }
-.gantt-wrapper .grid-header { fill: rgba(255, 255, 255, 0.05); }
-.gantt-wrapper .grid-row { fill: transparent; }
+.gantt-wrapper .gantt-wrapper .grid-row { fill: transparent; }
 .gantt-wrapper .grid-row:nth-child(even) { fill: rgba(255, 255, 255, 0.02); }
 .gantt-wrapper .row-line { stroke: rgba(255, 255, 255, 0.1); }
 .gantt-wrapper .tick { stroke: rgba(255, 255, 255, 0.1); }
@@ -867,7 +842,6 @@ body {
 .popup-label { color: rgba(255, 255, 255, 0.6); font-weight: 500; }
 .popup-footer { padding: 8px 15px; border-top: 1px solid rgba(255, 255, 255, 0.1); font-size: 11px; color: rgba(255, 255, 255, 0.5); text-align: center; }
 
-.status-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: capitalize; }
 .status-badge.status-in-progress { background: var(--future-warning); color: #1e1e2e; }
 .status-badge.status-completed { background: var(--future-success); color: #1e1e2e; }
 .status-badge.status-planned { background: var(--future-primary); color: white; }
@@ -1560,12 +1534,6 @@ body {
     margin: 0;
 }
 
-.timeline-arrow {
-    color: var(--future-accent);
-    font-size: 32px;
-    font-weight: 700;
-}
-
 .timeline-cta {
     text-align: center;
 }
@@ -1598,12 +1566,6 @@ body {
     margin-bottom: 10px;
 }
 
-.impact-label {
-    color: white;
-    font-size: 16px;
-    font-weight: 500;
-}
-
 @media (max-width: 1024px) {
     .architecture-comparison {
         grid-template-columns: 1fr;
@@ -1633,10 +1595,6 @@ body {
     
     .timeline-preview {
         flex-direction: column;
-    }
-    
-    .timeline-arrow {
-        transform: rotate(90deg);
     }
     
     .metrics-grid, .impact-grid {

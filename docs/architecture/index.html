@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CORTEX Architecture - 4-Tier Brain System with Tier 0 Governance, Agent Intelligence, and Orchestrator Ecosystem">
@@ -9,6 +34,7 @@
     <title>Architecture | CORTEX 4.0</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02-v4">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
@@ -16,10 +42,35 @@
 <body>
     <!-- Glass Header Navigation -->
     <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
         <div class="header-content">
-            <nav class="header-nav">
-                <a href="../index.html" class="nav-link">
-                    <i class="fas fa-home"></i>
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../index.html" class="nav-link" mobile-nav-optimized>
+                    <i class="pulse-glow-glass--fast fa-home"></i>
                     <span>Home</span>
                 </a>
             </nav>
@@ -32,7 +83,7 @@
         <div class="glass-card-display animation-t1">
             <div class="page-title-section">
                 <h1 class="page-title">
-                    <i class="fas fa-sitemap"></i>
+                    <i class="pulse-glow-glass--fast fa-sitemap"></i>
                     CORTEX Architecture
                 </h1>
                 <p class="page-subtitle">4-Tier Brain System + Tier 0 Governance + Agent Intelligence + Orchestrator Ecosystem</p>
@@ -44,7 +95,7 @@
         <!-- Executive Summary -->
         <section class="glass-card-display animation-t1">
             <h2 class="section-title">
-                <i class="fas fa-clipboard-list"></i>
+                <i class="pulse-glow-glass--fast fa-clipboard-list"></i>
                 Executive Summary
             </h2>
             
@@ -52,14 +103,14 @@
             
             <!-- Key Architectural Principles (2-Column Card Grid) -->
             <h3 class="principles-header">
-                <i class="fas fa-key"></i> Key Architectural Principles
+                <i class="pulse-glow-glass--fast fa-key"></i> Key Architectural Principles
             </h3>
             
             <div class="principle-card-grid columns-2">
                 <!-- Principle 1: Brain Protection -->
                 <div class="principle-card">
                     <div class="principle-icon">
-                        <i class="fas fa-shield-alt"></i>
+                        <i class="pulse-glow-glass--fast fa-shield-alt"></i>
                     </div>
                     <h4 class="principle-title">Brain Protection First</h4>
                     <p class="principle-description">
@@ -70,7 +121,7 @@
                 <!-- Principle 2: TDD -->
                 <div class="principle-card">
                     <div class="principle-icon">
-                        <i class="fas fa-check-double"></i>
+                        <i class="pulse-glow-glass--fast fa-check-double"></i>
                     </div>
                     <h4 class="principle-title">Test-Driven Development</h4>
                     <p class="principle-description">
@@ -81,7 +132,7 @@
                 <!-- Principle 3: Git Isolation -->
                 <div class="principle-card">
                     <div class="principle-icon">
-                        <i class="fas fa-code-branch"></i>
+                        <i class="pulse-glow-glass--fast fa-code-branch"></i>
                     </div>
                     <h4 class="principle-title">Git Isolation</h4>
                     <p class="principle-description">
@@ -92,7 +143,7 @@
                 <!-- Principle 4: Context Preservation -->
                 <div class="principle-card">
                     <div class="principle-icon">
-                        <i class="fas fa-brain"></i>
+                        <i class="pulse-glow-glass--fast fa-brain"></i>
                     </div>
                     <h4 class="principle-title">Context Preservation</h4>
                     <p class="principle-description">
@@ -103,7 +154,7 @@
                 <!-- Principle 5: Agent Specialization -->
                 <div class="principle-card">
                     <div class="principle-icon">
-                        <i class="fas fa-robot"></i>
+                        <i class="pulse-glow-glass--fast fa-robot"></i>
                     </div>
                     <h4 class="principle-title">Agent Specialization</h4>
                     <p class="principle-description">
@@ -116,7 +167,7 @@
         <!-- System Architecture Diagram -->
         <section class="glass-card-display animation-t1">
             <h2 class="section-title">
-                <i class="fas fa-project-diagram"></i>
+                <i class="pulse-glow-glass--fast fa-project-diagram"></i>
                 System Architecture Overview
             </h2>
             
@@ -166,14 +217,14 @@ graph TB
         <!-- Four-Tier Brain Architecture -->
         <section class="glass-card-display animation-t1">
             <h2 class="section-title">
-                <i class="fas fa-brain"></i>
+                <i class="pulse-glow-glass--fast fa-brain"></i>
                 Four-Tier Brain Architecture
             </h2>
             
             <p class="intro-text">The brain is organized into four hierarchical tiers, each serving a distinct purpose in memory management and intelligence. <strong>Tier 0 Governance</strong> validates all operations, ensuring SKULL rules are enforced. Data flows from governance through working memory to long-term pattern storage.</p>
             
             <!-- Brain Data Flow Diagram -->
-            <h3 class="subsection-title">Brain Data Flow</h3>
+            <h3 class="level1-subsection-title">Brain Data Flow</h3>
             <div class="diagram-container">
                 <div class="mermaid">
 graph TB
@@ -203,7 +254,7 @@ graph TB
         <!-- Tier Details (2-Column Layout) -->
         <section class="glass-card-display animation-t1">
             <h2 class="section-title">
-                <i class="fas fa-layer-group"></i>
+                <i class="pulse-glow-glass--fast fa-layer-group"></i>
                 Tier Deep Dive
             </h2>
             
@@ -211,8 +262,8 @@ graph TB
                 <!-- Tier 0: SKULL Governance -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="tier-header">
-                        <div class="card-icon tier0-icon">
-                            <i class="fas fa-shield-alt"></i>
+                        <div class="card-icon tier-icon">
+                            <i class="pulse-glow-glass--fast fa-shield-alt"></i>
                         </div>
                         <div>
                             <h3 class="card-title">Tier 0: SKULL Governance</h3>
@@ -222,28 +273,28 @@ graph TB
                     
                     <div class="capability-tiles">
                         <div class="capability-tile">
-                            <i class="fas fa-check-circle"></i>
+                            <i class="pulse-glow-glass--fast fa-check-circle"></i>
                             <div>
                                 <strong>TDD_ENFORCEMENT</strong>
                                 <span>RED→GREEN→REFACTOR mandatory</span>
                             </div>
                         </div>
                         <div class="capability-tile">
-                            <i class="fas fa-search"></i>
+                            <i class="pulse-glow-glass--fast fa-search"></i>
                             <div>
                                 <strong>HOLISTIC_DISCOVERY</strong>
                                 <span>Search before create</span>
                             </div>
                         </div>
                         <div class="capability-tile">
-                            <i class="fas fa-broom"></i>
+                            <i class="pulse-glow-glass--fast fa-broom"></i>
                             <div>
                                 <strong>REFACTOR_CLEANUP</strong>
                                 <span>Remove orphaned code</span>
                             </div>
                         </div>
                         <div class="capability-tile">
-                            <i class="fas fa-code-branch"></i>
+                            <i class="pulse-glow-glass--fast fa-code-branch"></i>
                             <div>
                                 <strong>GIT_ISOLATION</strong>
                                 <span>CORTEX/user repo separation</span>
@@ -255,8 +306,8 @@ graph TB
                 <!-- Tier 1: Working Memory -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="tier-header">
-                        <div class="card-icon tier1-icon">
-                            <i class="fas fa-memory"></i>
+                        <div class="card-icon tier-icon">
+                            <i class="pulse-glow-glass--fast fa-memory"></i>
                         </div>
                         <div>
                             <h3 class="card-title">Tier 1: Working Memory</h3>
@@ -266,28 +317,28 @@ graph TB
                     
                     <div class="capability-tiles">
                         <div class="capability-tile">
-                            <i class="fas fa-clock"></i>
+                            <i class="pulse-glow-glass--fast fa-clock"></i>
                             <div>
                                 <strong>Sub-100ms Retrieval</strong>
                                 <span>Fast access to recent context</span>
                             </div>
                         </div>
                         <div class="capability-tile">
-                            <i class="fas fa-database"></i>
+                            <i class="pulse-glow-glass--fast fa-database"></i>
                             <div>
                                 <strong>70 Conversations</strong>
                                 <span>FIFO buffer with auto-eviction</span>
                             </div>
                         </div>
                         <div class="capability-tile">
-                            <i class="fas fa-file-code"></i>
+                            <i class="pulse-glow-glass--fast fa-file-code"></i>
                             <div>
                                 <strong>JSON Lines Format</strong>
                                 <span>Efficient structured storage</span>
                             </div>
                         </div>
                         <div class="capability-tile">
-                            <i class="fas fa-comments"></i>
+                            <i class="pulse-glow-glass--fast fa-comments"></i>
                             <div>
                                 <strong>Session Context</strong>
                                 <span>Current conversation state</span>
@@ -299,8 +350,8 @@ graph TB
                 <!-- Tier 2: Knowledge Graph -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="tier-header">
-                        <div class="card-icon tier2-icon">
-                            <i class="fas fa-project-diagram"></i>
+                        <div class="card-icon tier-icon">
+                            <i class="pulse-glow-glass--fast fa-project-diagram"></i>
                         </div>
                         <div>
                             <h3 class="card-title">Tier 2: Knowledge Graph</h3>
@@ -310,28 +361,28 @@ graph TB
                     
                     <div class="capability-tiles">
                         <div class="capability-tile">
-                            <i class="fas fa-brain"></i>
+                            <i class="pulse-glow-glass--fast fa-brain"></i>
                             <div>
                                 <strong>Pattern Recognition</strong>
                                 <span>Learn from past interactions</span>
                             </div>
                         </div>
                         <div class="capability-tile">
-                            <i class="fas fa-sitemap"></i>
+                            <i class="pulse-glow-glass--fast fa-sitemap"></i>
                             <div>
                                 <strong>Relationship Mapping</strong>
                                 <span>Dependencies & connections</span>
                             </div>
                         </div>
                         <div class="capability-tile">
-                            <i class="fas fa-lightbulb"></i>
+                            <i class="pulse-glow-glass--fast fa-lightbulb"></i>
                             <div>
                                 <strong>Semantic Inference</strong>
                                 <span>Understand codebase context</span>
                             </div>
                         </div>
                         <div class="capability-tile">
-                            <i class="fas fa-chart-line"></i>
+                            <i class="pulse-glow-glass--fast fa-chart-line"></i>
                             <div>
                                 <strong>Continuous Learning</strong>
                                 <span>Evolves with usage</span>
@@ -343,8 +394,8 @@ graph TB
                 <!-- Tier 3: Development Context -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="tier-header">
-                        <div class="card-icon tier3-icon">
-                            <i class="fas fa-chart-line"></i>
+                        <div class="card-icon tier-icon">
+                            <i class="pulse-glow-glass--fast fa-chart-line"></i>
                         </div>
                         <div>
                             <h3 class="card-title">Tier 3: Development Context</h3>
@@ -354,28 +405,28 @@ graph TB
                     
                     <div class="capability-tiles">
                         <div class="capability-tile">
-                            <i class="fas fa-tachometer-alt"></i>
+                            <i class="pulse-glow-glass--fast fa-tachometer-alt"></i>
                             <div>
                                 <strong>Quality Metrics</strong>
                                 <span>Coverage, complexity, velocity</span>
                             </div>
                         </div>
                         <div class="capability-tile">
-                            <i class="fas fa-bug"></i>
+                            <i class="pulse-glow-glass--fast fa-bug"></i>
                             <div>
                                 <strong>Issue Patterns</strong>
                                 <span>Common problems & solutions</span>
                             </div>
                         </div>
                         <div class="capability-tile">
-                            <i class="fas fa-layer-group"></i>
+                            <i class="pulse-glow-glass--fast fa-layer-group"></i>
                             <div>
                                 <strong>Tech Stack Analysis</strong>
                                 <span>Languages & frameworks used</span>
                             </div>
                         </div>
                         <div class="capability-tile">
-                            <i class="fas fa-history"></i>
+                            <i class="pulse-glow-glass--fast fa-history"></i>
                             <div>
                                 <strong>Evolution Tracking</strong>
                                 <span>Codebase growth over time</span>
@@ -389,7 +440,7 @@ graph TB
         <!-- Agent System -->
         <section class="glass-card-display animation-t1">
             <h2 class="section-title">
-                <i class="fas fa-robot"></i>
+                <i class="pulse-glow-glass--fast fa-robot"></i>
                 Specialist Agent System
             </h2>
             
@@ -400,7 +451,7 @@ graph TB
                 <div class="glass-card-clickable animation-t1">
                     <div class="tier-header">
                         <div class="card-icon agent-planning">
-                            <i class="fas fa-tasks"></i>
+                            <i class="pulse-glow-glass--fast fa-tasks"></i>
                         </div>
                         <div>
                             <h3 class="card-title">Planning Agent</h3>
@@ -410,28 +461,28 @@ graph TB
                     
                     <div class="capability-tiles">
                         <div class="capability-tile">
-                            <i class="fas fa-puzzle-piece"></i>
+                            <i class="pulse-glow-glass--fast fa-puzzle-piece"></i>
                             <div>
                                 <strong>Task Decomposition</strong>
                                 <span>Break complex tasks into phases</span>
                             </div>
                         </div>
                         <div class="capability-tile">
-                            <i class="fas fa-stream"></i>
+                            <i class="pulse-glow-glass--fast fa-stream"></i>
                             <div>
                                 <strong>Dependency Sequencing</strong>
                                 <span>Logical workflow ordering</span>
                             </div>
                         </div>
                         <div class="capability-tile">
-                            <i class="fas fa-stopwatch"></i>
+                            <i class="pulse-glow-glass--fast fa-stopwatch"></i>
                             <div>
                                 <strong>Effort Estimation</strong>
                                 <span>Duration & resource planning</span>
                             </div>
                         </div>
                         <div class="capability-tile">
-                            <i class="fas fa-exclamation-triangle"></i>
+                            <i class="pulse-glow-glass--fast fa-exclamation-triangle"></i>
                             <div>
                                 <strong>Risk Identification</strong>
                                 <span>Detect blockers early</span>
@@ -440,7 +491,7 @@ graph TB
                     </div>
                     
                     <div class="used-by-section">
-                        <h4><i class="fas fa-cogs"></i> Used By</h4>
+                        <h4><i class="pulse-glow-glass--fast fa-cogs"></i> Used By</h4>
                         <div class="orchestrator-tags">
                             <span class="orch-tag">Planning System</span>
                             <span class="orch-tag">ADO Orchestrator</span>
@@ -453,7 +504,7 @@ graph TB
                 <div class="glass-card-clickable animation-t1">
                     <div class="tier-header">
                         <div class="card-icon agent-strategy">
-                            <i class="fas fa-chess"></i>
+                            <i class="pulse-glow-glass--fast fa-chess"></i>
                         </div>
                         <div>
                             <h3 class="card-title">Strategic Reasoning Agent</h3>
@@ -463,28 +514,28 @@ graph TB
                     
                     <div class="capability-tiles">
                         <div class="capability-tile">
-                            <i class="fas fa-sitemap"></i>
+                            <i class="pulse-glow-glass--fast fa-sitemap"></i>
                             <div>
                                 <strong>Architecture Analysis</strong>
                                 <span>System design evaluation</span>
                             </div>
                         </div>
                         <div class="capability-tile">
-                            <i class="fas fa-drafting-compass"></i>
+                            <i class="pulse-glow-glass--fast fa-drafting-compass"></i>
                             <div>
                                 <strong>Design Patterns</strong>
                                 <span>Best practice recommendations</span>
                             </div>
                         </div>
                         <div class="capability-tile">
-                            <i class="fas fa-bug"></i>
+                            <i class="pulse-glow-glass--fast fa-bug"></i>
                             <div>
                                 <strong>Code Smell Detection</strong>
                                 <span>Identify anti-patterns</span>
                             </div>
                         </div>
                         <div class="capability-tile">
-                            <i class="fas fa-magic"></i>
+                            <i class="pulse-glow-glass--fast fa-magic"></i>
                             <div>
                                 <strong>Refactoring Strategies</strong>
                                 <span>Improvement recommendations</span>
@@ -493,7 +544,7 @@ graph TB
                     </div>
                     
                     <div class="used-by-section">
-                        <h4><i class="fas fa-cogs"></i> Used By</h4>
+                        <h4><i class="pulse-glow-glass--fast fa-cogs"></i> Used By</h4>
                         <div class="orchestrator-tags">
                             <span class="orch-tag">Architectural Review</span>
                             <span class="orch-tag">Refinement Orchestrator</span>
@@ -507,7 +558,7 @@ graph TB
         <!-- Orchestrator Ecosystem -->
         <section class="glass-card-display animation-t1">
             <h2 class="section-title">
-                <i class="fas fa-cogs"></i>
+                <i class="pulse-glow-glass--fast fa-cogs"></i>
                 Orchestrator Ecosystem
             </h2>
             
@@ -517,81 +568,81 @@ graph TB
                 <!-- Planning System -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon">
-                        <i class="fas fa-project-diagram"></i>
+                        <i class="pulse-glow-glass--fast fa-project-diagram"></i>
                     </div>
                     <h3 class="card-title">Planning System</h3>
                     <p class="card-description">Autonomous 10-phase planning with context gathering, knowledge graph reasoning, and AST analysis.</p>
-                    <div class="card-badge badge-autonomous">AUTONOMOUS</div>
+                    <div class="card-badge badge-security">AUTONOMOUS</div>
                 </div>
 
                 <!-- TDD Orchestrator -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon">
-                        <i class="fas fa-check-double"></i>
+                        <i class="pulse-glow-glass--fast fa-check-double"></i>
                     </div>
                     <h3 class="card-title">TDD Orchestrator</h3>
                     <p class="card-description">Enforces RED→GREEN→REFACTOR cycle with test generation, implementation, and cleanup.</p>
-                    <div class="card-badge badge-guided">GUIDED</div>
+                    <div class="card-badge badge-security">GUIDED</div>
                 </div>
 
                 <!-- ADO Operations -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon">
-                        <i class="fas fa-clipboard-check"></i>
+                        <i class="pulse-glow-glass--fast fa-clipboard-check"></i>
                     </div>
                     <h3 class="card-title">ADO Operations</h3>
                     <p class="card-description">Dual-mode work item generation (7-stage wizard + 6-phase auto-gen) with CSV export.</p>
-                    <div class="card-badge badge-autonomous">AUTONOMOUS</div>
+                    <div class="card-badge badge-security">AUTONOMOUS</div>
                 </div>
 
                 <!-- Debug Orchestrator -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon">
-                        <i class="fas fa-bug"></i>
+                        <i class="pulse-glow-glass--fast fa-bug"></i>
                     </div>
                     <h3 class="card-title">Debug Orchestrator</h3>
                     <p class="card-description">Root cause analysis with template-based debugging and fix verification loops.</p>
-                    <div class="card-badge badge-guided">GUIDED</div>
+                    <div class="card-badge badge-security">GUIDED</div>
                 </div>
 
                 <!-- Maintenance -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon">
-                        <i class="fas fa-wrench"></i>
+                        <i class="pulse-glow-glass--fast fa-wrench"></i>
                     </div>
                     <h3 class="card-title">Maintenance</h3>
                     <p class="card-description">12-phase health pipeline with auto-repair, bloat detection, and system optimization.</p>
-                    <div class="card-badge badge-guided">GUIDED</div>
+                    <div class="card-badge badge-security">GUIDED</div>
                 </div>
 
                 <!-- Sanitization -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon">
-                        <i class="fas fa-user-secret"></i>
+                        <i class="pulse-glow-glass--fast fa-user-secret"></i>
                     </div>
                     <h3 class="card-title">Sanitization</h3>
                     <p class="card-description">5-phase anonymization workflow removing PII, credentials, and proprietary information.</p>
-                    <div class="card-badge badge-guided">GUIDED</div>
+                    <div class="card-badge badge-security">GUIDED</div>
                 </div>
 
                 <!-- Refinement -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon">
-                        <i class="fas fa-magic"></i>
+                        <i class="pulse-glow-glass--fast fa-magic"></i>
                     </div>
                     <h3 class="card-title">Refinement</h3>
                     <p class="card-description">7-phase improvement orchestrator for code quality, architecture, and documentation.</p>
-                    <div class="card-badge badge-guided">GUIDED</div>
+                    <div class="card-badge badge-security">GUIDED</div>
                 </div>
 
                 <!-- CORTEX Lens -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon">
-                        <i class="fas fa-search-plus"></i>
+                        <i class="pulse-glow-glass--fast fa-search-plus"></i>
                     </div>
                     <h3 class="card-title">CORTEX Lens</h3>
                     <p class="card-description">AST analysis and reverse engineering dashboard with interactive visualizations.</p>
-                    <div class="card-badge badge-guided">GUIDED</div>
+                    <div class="card-badge badge-security">GUIDED</div>
                 </div>
             </div>
         </section>
@@ -599,7 +650,7 @@ graph TB
         <!-- Integration & Data Flow -->
         <section class="glass-card-display animation-t1">
             <h2 class="section-title">
-                <i class="fas fa-exchange-alt"></i>
+                <i class="pulse-glow-glass--fast fa-exchange-alt"></i>
                 Integration & Data Flow
             </h2>
             
@@ -639,14 +690,14 @@ sequenceDiagram
         <!-- Performance Metrics -->
         <section class="glass-card-display animation-t1">
             <h2 class="section-title">
-                <i class="fas fa-tachometer-alt"></i>
+                <i class="pulse-glow-glass--fast fa-tachometer-alt"></i>
                 Performance Metrics
             </h2>
             
             <div class="metrics-grid">
                 <div class="metric-card">
                     <div class="metric-icon">
-                        <i class="fas fa-clock"></i>
+                        <i class="pulse-glow-glass--fast fa-clock"></i>
                     </div>
                     <div class="metric-value">&lt; 100ms</div>
                     <div class="metric-label">Tier 1 Retrieval</div>
@@ -654,7 +705,7 @@ sequenceDiagram
                 
                 <div class="metric-card">
                     <div class="metric-icon">
-                        <i class="fas fa-database"></i>
+                        <i class="pulse-glow-glass--fast fa-database"></i>
                     </div>
                     <div class="metric-value">70</div>
                     <div class="metric-label">FIFO Buffer Size</div>
@@ -662,7 +713,7 @@ sequenceDiagram
                 
                 <div class="metric-card">
                     <div class="metric-icon">
-                        <i class="fas fa-shield-alt"></i>
+                        <i class="pulse-glow-glass--fast fa-shield-alt"></i>
                     </div>
                     <div class="metric-value">100%</div>
                     <div class="metric-label">SKULL Enforcement</div>
@@ -670,7 +721,7 @@ sequenceDiagram
                 
                 <div class="metric-card">
                     <div class="metric-icon">
-                        <i class="fas fa-robot"></i>
+                        <i class="pulse-glow-glass--fast fa-robot"></i>
                     </div>
                     <div class="metric-value">2</div>
                     <div class="metric-label">Specialist Agents</div>
@@ -678,7 +729,7 @@ sequenceDiagram
                 
                 <div class="metric-card">
                     <div class="metric-icon">
-                        <i class="fas fa-cogs"></i>
+                        <i class="pulse-glow-glass--fast fa-cogs"></i>
                     </div>
                     <div class="metric-value">8</div>
                     <div class="metric-label">Orchestrators</div>
@@ -686,7 +737,7 @@ sequenceDiagram
                 
                 <div class="metric-card">
                     <div class="metric-icon">
-                        <i class="fas fa-layer-group"></i>
+                        <i class="pulse-glow-glass--fast fa-layer-group"></i>
                     </div>
                     <div class="metric-value">4</div>
                     <div class="metric-label">Brain Tiers</div>
@@ -697,19 +748,27 @@ sequenceDiagram
         <!-- Quick Reference -->
         <section class="glass-card-display animation-t1">
             <h2 class="section-title">
-                <i class="fas fa-bookmark"></i>
+                <i class="pulse-glow-glass--fast fa-bookmark"></i>
                 Quick Reference
             </h2>
             
             <div class="reference-grid">
                 <div class="reference-section">
                     <h3>Brain Storage Locations</h3>
-                    <ul class="reference-list">
-                        <li><code>cortex-brain/brain-protection-rules.yaml</code> - Tier 0 SKULL</li>
-                        <li><code>cortex-brain/tier1/working-memory.jsonl</code> - Tier 1</li>
-                        <li><code>cortex-brain/tier2/knowledge-graph.yaml</code> - Tier 2</li>
-                        <li><code>cortex-brain/tier3/development-context.yaml</code> - Tier 3</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><code>cortex-brain/brain-protection-rules.yaml</code> - Tier 0 SKULL</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>cortex-brain/tier1/working-memory.jsonl</code> - Tier 1</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>cortex-brain/tier2/knowledge-graph.yaml</code> - Tier 2</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>cortex-brain/tier3/development-context.yaml</code> - Tier 3</div>
+    </div>
+</div>
                 </div>
                 
                 <div class="reference-section">
@@ -722,11 +781,17 @@ sequenceDiagram
                 
                 <div class="reference-section">
                     <h3>Orchestrator Manifests</h3>
-                    <ul class="reference-list">
-                        <li><code>cortex-brain/manifests/orchestrators/</code></li>
-                        <li>8 production orchestrators</li>
-                        <li>Autonomous + Guided execution modes</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><code>cortex-brain/manifests/orchestrators/</code></div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">8 production orchestrators</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Autonomous + Guided execution modes</div>
+    </div>
+</div>
                 </div>
                 
                 <div class="reference-section">

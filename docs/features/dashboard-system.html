@@ -1,10 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CORTEX LENS - Dashboard System</title>
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <link rel="icon" href="../assets/images/CORTEX-logo.png" type="image/png">
 </head>
 <body>
@@ -35,22 +61,22 @@
                     <div class="metric-card">
                         <div class="metric-value">D3.js</div>
                         <div class="metric-label">Visualizations</div>
-                        <div class="metric-sublabel">Interactive Charts</div>
+                        <div class="metric-highlight">Interactive Charts</div>
                     </div>
                     <div class="metric-card">
                         <div class="metric-value">17</div>
                         <div class="metric-label">Orchestrators</div>
-                        <div class="metric-sublabel">Tracked</div>
+                        <div class="metric-highlight">Tracked</div>
                     </div>
                     <div class="metric-card">
                         <div class="metric-value">Real-Time</div>
                         <div class="metric-label">Updates</div>
-                        <div class="metric-sublabel">Live Metrics</div>
+                        <div class="metric-highlight">Live Metrics</div>
                     </div>
                     <div class="metric-card">
                         <div class="metric-value">Glassmorphism</div>
                         <div class="metric-label">Design</div>
-                        <div class="metric-sublabel">Modern UI</div>
+                        <div class="metric-highlight">Modern UI</div>
                     </div>
                 </div>
             </div>
@@ -259,32 +285,56 @@
             <div>
                 <div class="glass-card">
                     <h3>Frontend</h3>
-                    <ul>
-                        <li><strong>HTML5:</strong> Semantic structure, accessibility</li>
-                        <li><strong>CSS3:</strong> Custom properties, grid, flexbox</li>
-                        <li><strong>JavaScript ES6+:</strong> Interactive features</li>
-                        <li><strong>D3.js v7:</strong> Data visualizations</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>HTML5:</strong> Semantic structure, accessibility</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>CSS3:</strong> Custom properties, grid, flexbox</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>JavaScript ES6+:</strong> Interactive features</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>D3.js v7:</strong> Data visualizations</div>
+    </div>
+</div>
                 </div>
 
                 <div class="glass-card">
                     <h3>Design Assets</h3>
-                    <ul>
-                        <li><strong>main.css:</strong> 27KB design system</li>
-                        <li><strong>CSS Variables:</strong> Consistent theming</li>
-                        <li><strong>Glass Components:</strong> Reusable cards</li>
-                        <li><strong>Color Palette:</strong> Category-specific</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>main.css:</strong> 27KB design system</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>CSS Variables:</strong> Consistent theming</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Glass Components:</strong> Reusable cards</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Color Palette:</strong> Category-specific</div>
+    </div>
+</div>
                 </div>
 
                 <div class="glass-card">
                     <h3>Deployment</h3>
-                    <ul>
-                        <li><strong>Static HTML:</strong> No build step required</li>
-                        <li><strong>Local Server:</strong> Python HTTP server</li>
-                        <li><strong>GitHub Pages:</strong> Automated deployment</li>
-                        <li><strong>CDN:</strong> D3.js from cdn.jsdelivr.net</li>
-                    </ul>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Static HTML:</strong> No build step required</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Local Server:</strong> Python HTTP server</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>GitHub Pages:</strong> Automated deployment</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>CDN:</strong> D3.js from cdn.jsdelivr.net</div>
+    </div>
+</div>
                 </div>
             </div>
         </div>
