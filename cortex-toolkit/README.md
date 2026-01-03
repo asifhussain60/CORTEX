@@ -200,6 +200,7 @@ System operations and orchestration.
 
 | Tool | Command | Description |
 |------|---------|-------------|
+| docs-organizer | `cortex-docs-organizer` | Documentation structure cleanup and link validation |
 | review | `cortex-review` | Code review orchestration |
 | deploy | `cortex-deploy` | Deployment to publish directory |
 | sanitize | `cortex-sanitize` | Code sanitization for sharing |

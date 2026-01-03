@@ -2,7 +2,7 @@
 
 **Version:** 1.0.0 | **Status:** 🔴 CRITICAL VIOLATIONS  
 **Author:** Asif Hussain | **Report Date:** January 2, 2026  
-**Audit Scope:** Level 0 Home Page Compliance with Level1-spec.md + Glassmorphism v4.0.1  
+**Audit Scope:** Level 0 Home Page Compliance with 00-master-plan.md + Glassmorphism v4.0.1  
 **Copyright © 2026 Asif Hussain. All rights reserved.**
 
 ---
@@ -557,7 +557,7 @@ fi
 ## 📚 References
 
 **Standards Documents:**
-1. **Level1-spec.md** → `cortex-brain/documents/planning/active/cortex-documentation/artifacts/Level1-spec.md`
+1. **00-master-plan.md** → `cortex-brain/documents/planning/active/cortex-documentation/artifacts/00-master-plan.md`
 2. **Design Standards** → `cortex-brain/documents/planning/active/cortex-documentation/artifacts/level1-specs/core/design-standards.md`
 3. **Glassmorphism v4.0.1** → `cortex-brain/documents/standards/glassmorphism-design-standard.md`
 4. **Sitemap (Compliance Audit)** → `cortex-brain/documents/planning/active/cortex-documentation/artifacts/sitemapd.md`

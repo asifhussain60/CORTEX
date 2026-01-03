@@ -1,8 +1,30 @@
 # 🎨 Glassmorphism Design Standard
 
-**Version:** 4.0.2 | **Status:** ✅ PRODUCTION  
-**Author:** Asif Hussain | **Last Updated:** January 1, 2026  
+**Version:** 4.1.1 | **Status:** ✅ PRODUCTION + SYNCED  
+**Author:** Asif Hussain | **Last Updated:** January 3, 2026  
 **Copyright © 2026 Asif Hussain. All rights reserved.**
+
+---
+
+## 🔄 Latest Updates (January 3, 2026)
+
+**Sync with Current Implementation:**
+- ✅ Updated scope to reflect 7 feature tiles + 3 multi-panel tiles
+- ✅ Corrected Orchestrators panel to 6 categories (added Upgrades)
+- ✅ Confirmed all 17 Best Practices hubs complete
+- ✅ Updated cache-busting versions to 2026-01-03
+- ✅ Added learning-hub.css to version tracking
+- ✅ Aligned with cleaned root directory structure
+- ✅ Synced with docs-sitemap.md and 00-master-plan.md
+
+**Current State:**
+- Total HTML files: 311 (151 active pages + 160 stub pages)
+- Level 1 pages: 62/62 complete (100%)
+- Level 2 modules: 22/80 implemented (28%), 58 remaining have stub pages (100% stub coverage)
+- Security panel: 10/16 complete (63% - 6 stubs)
+- Orchestrators panel: 20/22 complete (91% - 2 stubs)
+- Story chapters: 14/15 archived (pending navigation integration)
+- Architecture: 3/10 complete (30% - 2 archived, 5 stubs)
 
 ---
 
@@ -12,7 +34,8 @@ This standard defines **modern glassmorphism patterns** for CORTEX documentation
 
 **Target:** HTML documentation, dashboards, STS showcases, interactive visualizations  
 **Compatibility:** Chrome 90+, Firefox 88+, Safari 14+, Edge 90+  
-**Reference Implementation:** See `/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/documents/planning/active/cortex-documentation/artifacts/Level1-spec.md` for detailed page specifications.
+**Reference Implementation:** See `00-master-plan.md` for detailed page specifications  
+**Comprehensive Spec Guide:** See `integrate-this.md` for D3.js/Mermaid/Acceptance Criteria requirements
 
 **⚠️ Animation Philosophy (v4.0.0):**
 - **Subtle & Modern:** All animations designed to be non-distracting
@@ -22,16 +45,21 @@ This standard defines **modern glassmorphism patterns** for CORTEX documentation
 - **Consistent Styling:** Clear visual differentiation between interactive and display elements
 - **⛔ NO Dramatic Animations:** borderGlowSweep, blobMorph, and other T3 effects ONLY on Level 0 (Home page)
 
-**Scope:** Applies to ALL 9 CORTEX home page tiles and their hierarchies:
-1. 🧠 Architecture → SKULL, Knowledge Graph, Brain Tiers, Context
-2. 🛡️ Security → 13 pages across 4 categories (Protection, Assessment, Compliance, Response)
-3. 🎯 Orchestrators → 19 pages across 5 categories (Planning, Execution, System, Analysis, Debug)
-4. 💰 Token Optimization → Analysis, Strategies, Savings
-5. 🔧 Sharpen The Saw → 6 best practice pages (Security, SOLID, Code Quality, Performance, Testing, Docs)
-6. 📚 CORTEX Best Practices → 35 Guidelines
-7. 🛠️ Toolkit Manager → Discovery, Orchestration, Integration
-8. 🔍 CORTEX LENS → AST, Reverse Engineering, Intelligence
-9. 🚀 Get Started → Installation, Configuration, First Steps
+**Scope:** Applies to ALL 7 CORTEX home page feature tiles plus 3 multi-panel tiles:
+
+**7 Feature Tiles:**
+1. 🧠 Architecture → 10 pages (3 active + 2 archived + 5 stubs: index, skull-protection, knowledge-graph; brain-tiers/development-context archived; four-tier-brain, orchestrator-ecosystem, agent-system, working-memory, multi-repo stubs)
+2. 💰 Token Optimization → 1 page (97% reduction, $8.6K savings)
+3. 📚 Best Practices Learning Hub → 17 Level 1 hubs + 80 Level 2 modules (22 implemented, 58 stubs, 55 learning hours)
+4. 🛠️ Toolkit Manager → 1 page (Master Orchestrator routing)
+5. 🔍 CORTEX Lens → 1 page (AST analysis, reverse engineering)
+6. 🚀 Getting Started → 5 pages (2 active: index, tutorial; 3 stubs: multi-repo-setup, first-commands, deployment)
+7. 📖 The Awakening (Story) → 15 pages (viewer + 1 stub index; 14 chapters archived pending navigation integration)
+
+**3 Multi-Panel Tiles:**
+8. 🛡️ Security → 16 pages across 4 categories (10 active + 6 stubs; 1 stub for index; 63% complete)
+9. 🎯 Orchestrators → 22 pages across 6 categories (20 active + 2 stubs; 91% complete)
+10. 🔧 Sharpen The Saw → 6 pages across 6 categories (6/6 complete - 100%)
 
 ---
 
@@ -62,6 +90,36 @@ This standard defines **modern glassmorphism patterns** for CORTEX documentation
 | `.single-tag` | Compact subpanel | Single-link categories |
 | `.category-tag` | Clickable link in subpanel | Action links within panels |
 
+### Masonry Card Link Naming Convention (v4.0.5)
+
+**Problem:** Long link text ("Planning System", "ADO Orchestrator", "Cleanup Orchestrator") creates visual congestion in masonry cards.
+
+**Solution:** Use concise, 1-2 word names that preserve clarity:
+
+| Full Name | Short Name | Context |
+|-----------|------------|----------|
+| Planning System | Planning | Planning category |
+| ADO Orchestrator | ADO | Planning category |
+| ADO Operations | ADO Ops | Planning category |
+| ADO Planning | ADO Plan | Planning category |
+| TDD Orchestrator | TDD | Execution category |
+| Execution Orchestrator | Execution | Execution category |
+| Cleanup Orchestrator | Cleanup | System category |
+| Sanitization | Sanitize | System category |
+| System Integrity | Integrity | System category |
+| Git Checkpoint | Checkpoint | System category |
+| Refinement | Refine | Analysis category |
+| CORTEX Lens | Lens | Analysis category |
+| Architectural Review | Arch Review | Analysis category |
+| Debug Orchestrator | Debug | Debug category |
+| Rollback Orchestrator | Rollback | Debug category |
+
+**Rules:**
+- **1-2 words maximum** for card link text
+- **Keep icon + short name** (e.g., `🔧 Debug` not `🔧 Debug Orchestrator`)
+- **Full names reserved for:** Page titles, headers, breadcrumbs
+- **Consistency:** Same short name across all references within masonry cards
+
 ### Spacing Quick Reference
 
 | Element Type | Property | Value | Use Case |
@@ -84,20 +142,42 @@ Is it Level 0 (Home)?
 
 ---
 
-## 🏗️ View Hierarchy (SIMPLIFIED: 2-Level Max)
+## 🏗️ View Hierarchy (Level 0 → Level 1 → Level 2)
 
-**Architecture:** `Level 0 (Home) → Level 1 Detail Pages`
+**Architecture:** `Level 0 (Home) → Level 1 (Detail Pages) → Level 2 (Phase Deep-Dives)`
 
-**⛔ NO Level 2 PAGES:** Discovery analysis confirms all content fits within Level 1. Use expandable sections, tabs, or modals for deeper content within pages.
+**Complexity Analysis (January 2, 2026):** Using formula `Score = (Viz Containers × 10) + (Mermaid × 5) + (D3.js × 1) + (Interactive × 3) + (Data Sources × 8) + (Animations × 4)`
+
+**Current 9 Tiles (Basic Implementation):**
+- Architecture: 45 | Token Optimization: 25 | Best Practices: 35
+- Toolkit Manager: 20 | CORTEX Lens: 30 | Getting Started: 15
+- Security: 55 | Orchestrators: 75 | Sharpen The Saw: 40
+
+**v5.0 Enhancements (With Comprehensive Visualizations):**
+- Planning System v5: **195** (10 phases → Level 2 required)
+- ADO Orchestrator v2: **178** (13 pages → Level 2 required)
+- Other orchestrators: 50-90 (Level 1 sufficient)
+
+**Threshold Rules:**
+- **Score 0-49:** Simple → Level 1 only (1-2 visualizations)
+- **Score 50-99:** Complex → Level 1 only (3-5 visualizations)
+- **Score 100+:** Very Complex → Level 1 + Level 2 breakdown (6-12 D3.js + 4-8 Mermaid)
+
+**Design Decision:** Planning v5 and ADO v2 require Level 2 phase pages due to comprehensive interactive visualizations. All other tiles remain Level 1.
 
 **Level 0 Tile Patterns:**
 
-| Tile | Pattern | Grid Layout | Pages | Rationale |
-|------|---------|-------------|-------|-----------|
-| **Security** | Multi-Panel | 2x2 (4 subpanels) | 13 | 4 categories require visual separation |
-| **Orchestrators** | Multi-Panel | 2x3 (5 subpanels) | 19 | 5 categories, most complex tile |
-| **Sharpen The Saw** | Multi-Panel | 3x2 (6 subpanels) | 6 | 6 single-link categories, compact layout |
-| **All Others** | Standard Tile | N/A | 3-35 | Simple structure, direct navigation |
+| Tile | Pattern | Grid Layout | L1 Pages | Score | Level 2? | L2 Pages | Rationale |
+|------|---------|-------------|----------|-------|----------|----------|-----------||
+| **Architecture** | Standard | N/A | 5 | 45 | ❌ NO | 0 | 4-Tier Brain + Tier 0 Governance |
+| **Token Optimization** | Standard | N/A | 1 | 25 | ❌ NO | 0 | 97% reduction, $8.6K savings |
+| **Best Practices** | Learning Hub | N/A | 17 hubs | 380 | ✅ YES | 80 modules | All 17 hubs complete, 22/80 modules created |
+| **Toolkit Manager** | Standard | N/A | 1 | 20 | ❌ NO | 0 | Master Orchestrator routing |
+| **CORTEX Lens** | Standard | N/A | 1 | 30 | ❌ NO | 0 | AST analysis, reverse engineering |
+| **Getting Started** | Standard | N/A | 2 | 15 | ❌ NO | 0 | 5-minute setup (index + tutorial) |
+| **Security** | Multi-Panel | 2x2 | 13 | 55 | ❌ NO | 0 | 4 categories, 7/13 complete (54%) |
+| **Orchestrators** | Multi-Panel | 2x3 | 16 | 75 | ❌ NO | 0 | 6 categories, 16/16 complete (100%) |
+| **Sharpen The Saw** | Multi-Panel | 3x2 | 6 | 40 | ❌ NO | 0 | 6 pages complete (100%)
 
 ### Multi-Panel Pattern (3 Tiles Only)
 
@@ -133,7 +213,94 @@ Is it Level 0 (Home)?
 - `.single-tag` - Compact styling for single-link panels
 - `.category-tag` - Clickable link within subpanel
 
-### Standard Tile Pattern (6 Tiles)
+### Learning Hub Pattern (Best Practices Only)
+
+**When to Use:** Best Practices tile (pedagogical content with interactive learning modules)
+
+**Architecture:** Level 0 → Level 1 (Domain Hubs) → Level 2 (Learning Modules)
+
+**Level 1 Structure (17 Domain Hubs - ALL COMPLETE January 2, 2026):**
+
+**Phase 1 (4 hubs):** api-design-hub, testing-hub, security-hub, design-patterns-hub  
+**Phase 2 (4 hubs):** database-hub, cloud-hub, devops-hub, microservices-hub  
+**Phase 3 (9 hubs):** ddd-hub, software-engineering-hub, frontend-hub, messaging-hub, mobile-hub, performance-hub, rag-hub, ui-ux-hub, containers-hub
+
+```html
+<!-- Domain hub with learning path navigation -->
+<article class="glass-card-clickable animation-t1 learning-hub-card">
+    <div class="card-icon">🎓</div>
+    <h3>API Design Learning Path</h3>
+    <p>5 modules • 3.5 hours • Beginner to Expert</p>
+    <div class="learning-metrics">
+        <span class="metric">📊 5 Quizzes</span>
+        <span class="metric">💻 6 Playgrounds</span>
+        <span class="metric">🏆 4 Challenges</span>
+    </div>
+</article>
+```
+
+**Level 2 Structure (80 Learning Modules):**
+```html
+<!-- Interactive learning module page -->
+<section class="learning-module-hero">
+    <div class="module-header">
+        <span class="difficulty-badge beginner">Beginner</span>
+        <h1>API Design Fundamentals</h1>
+        <div class="module-meta">
+            <span>⏱️ 30 minutes</span>
+            <span>📝 10 quiz questions</span>
+            <span>💻 1 code playground</span>
+        </div>
+    </div>
+</section>
+
+<section class="learning-content">
+    <!-- D3.js interactive visualization -->
+    <div class="visualization-container" id="http-method-tree"></div>
+    
+    <!-- Mermaid diagram -->
+    <div class="mermaid-diagram">
+        <!-- Request/response lifecycle -->
+    </div>
+    
+    <!-- Code playground -->
+    <div class="code-playground">
+        <div class="editor-container" id="monaco-editor"></div>
+        <button class="run-code-btn">Run Code</button>
+        <div class="output-container"></div>
+    </div>
+    
+    <!-- Quiz section -->
+    <div class="quiz-container">
+        <!-- Interactive quiz questions -->
+    </div>
+    
+    <!-- Challenge section -->
+    <div class="challenge-container">
+        <h3>🏆 Challenge: Design Your First API</h3>
+        <!-- Progressive challenge content -->
+    </div>
+</section>
+```
+
+**CSS Classes:**
+- `.learning-hub-card` - Domain hub card on Level 1
+- `.learning-metrics` - Metrics display (quizzes, playgrounds, challenges)
+- `.learning-module-hero` - Module hero section with metadata
+- `.difficulty-badge` - Badge showing module difficulty (beginner/intermediate/advanced/expert)
+- `.module-meta` - Time, quiz count, playground count
+- `.visualization-container` - D3.js chart container
+- `.code-playground` - Monaco editor integration
+- `.quiz-container` - Interactive quiz section
+- `.challenge-container` - Progressive challenge section
+
+**Difficulty Badge Colors:**
+- `.difficulty-badge.beginner` - Green (`#10b981`)
+- `.difficulty-badge.intermediate` - Yellow (`#fbbf24`)
+- `.difficulty-badge.advanced` - Orange (`#f97316`)
+- `.difficulty-badge.expert` - Purple (`#8b5cf6`)
+
+### Standard Tile Pattern (5 Tiles)
 
 **When to Use:** Architecture, Token Optimization, Best Practices, Toolkit Manager, CORTEX Lens, Get Started
 
@@ -146,6 +313,89 @@ Is it Level 0 (Home)?
     <p>CORTEX brain structure and cognitive framework</p>
 </article>
 ```
+
+---
+
+## 🧭 Navigation Pattern Rules (v4.0.4)
+
+**Architecture:** Hierarchical navigation based on page level.
+
+### Navigation by Level
+
+| Level | Navigation Links | Example |
+|-------|------------------|---------|
+| **Level 0** (Home) | Logo + Feature links + GitHub | `docs/index.html` |
+| **Level 1** (Detail) | Home only | `docs/sts/solid.html`, `docs/orchestrators/planning-system.html` |
+
+**Note:** Level 2 removed from architecture. All content fits within Level 1 after complexity analysis.
+
+### Level 1 Navigation (Detail Pages)
+
+**Rule:** Show ONLY the Home link. No intermediate hub pages.
+
+**Examples:**
+- ✅ `docs/sts/solid.html` → Home only (NO "STS Showcase" link)
+- ✅ `docs/security/access-control.html` → Home only
+- ✅ `docs/orchestrators/planning-system.html` → Home only (no phase pages = no Level 2)
+- ✅ `docs/orchestrators/planning-v5.html` → Home only (has 10 phase pages in Level 2)
+
+**HTML Pattern:**
+```html
+<header class="glass-header">
+    <div class="header-content">
+        <nav class="header-nav">
+            <a href="../index.html" class="nav-link">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+        </nav>
+    </div>
+</header>
+```
+
+### Level 2 Navigation (Phase/Deep-Dive Pages)
+
+**Rule:** Show Home link AND parent Level 1 link.
+
+**Examples:**
+- ✅ `docs/orchestrators/planning-v5/phase-1-governance-validation.html`
+  - Home → `../../index.html`
+  - Planning System → `../planning-system.html`
+- ✅ `docs/orchestrators/ado-v2/wizard-stage-1-work-item-type.html`
+  - Home → `../../index.html`
+  - ADO Orchestrator → `../ado-orchestrator.html`
+
+**HTML Pattern:**
+```html
+<header class="glass-header">
+    <div class="header-content">
+        <nav class="header-nav">
+            <a href="../../index.html" class="nav-link">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="../planning-system.html" class="nav-link">
+                <i class="fas fa-arrow-left"></i>
+                <span>Planning System</span>
+            </a>
+        </nav>
+    </div>
+</header>
+```
+
+### ❌ Navigation Anti-Patterns
+
+| Violation | Wrong | Correct |
+|-----------|-------|---------|
+| **Intermediate hub links** | Level 1 shows "STS Showcase" link | Level 1 shows Home only |
+| **Breadcrumbs on Level 1** | Home > Category > Page | Home only |
+| **Logo on Level 1** | Logo + nav on detail page | Nav only (no logo) |
+
+**Rationale:**
+- Level 0 (Home) serves as the central navigation hub
+- Multi-panel tiles on Level 0 eliminate need for intermediate hub pages
+- Direct navigation improves UX and reduces cognitive load
+- NO Level 2 pages required after complexity analysis (all tiles <100 score)
 
 ---
 
@@ -162,7 +412,152 @@ Is it Level 0 (Home)?
 9. **NO Inline Styles** - All styling via CSS classes (zero tolerance for `style=""` attributes)
 10. **Responsive Mandatory** - Mobile-first design (375px base, 768px tablet, 1440px desktop)
 11. **Proper Spacing** - Minimum 1.5rem (24px) vertical gap between stacked cards/panels (v4.0.1)
-12. **Cross-Document Consistency** - Align with Level1-spec.md for implementation details (v4.0.2)
+12. **Cross-Document Consistency** - Align with 00-master-plan.md for implementation details (v4.0.2)
+13. **Cache-Busting Required** - All CSS/JS links must include version query params (v4.0.4)
+
+---
+
+## 🔄 Cache-Busting Strategy (v4.0.4)
+
+**Problem:** Browser caching prevents users from seeing updated CSS/JS changes.  
+**Solution:** Version query parameters force browser to reload updated assets.
+
+### Implementation Pattern
+
+**Format:** `?v=YYYY-MM-DD-vN`
+- `YYYY-MM-DD`: Date of last modification
+- `vN`: Incremental version within same day (v1, v2, v3...)
+
+**Examples:**
+```html
+<!-- Initial release -->
+<link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02">
+<link rel="stylesheet" href="../assets/css/sts.css?v=2026-01-02">
+
+<!-- Same-day update (increment version) -->
+<link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02-v2">
+<link rel="stylesheet" href="../assets/css/sts.css?v=2026-01-02-v2">
+
+<!-- Next day (reset to base version) -->
+<link rel="stylesheet" href="../assets/css/main.css?v=2026-01-03">
+<link rel="stylesheet" href="../assets/css/sts.css?v=2026-01-03">
+```
+
+### When to Update
+
+**Update version parameter when:**
+- ✅ CSS file modified (styling changes)
+- ✅ JavaScript file modified (behavior changes)
+- ✅ Major design system updates
+- ✅ Bug fixes affecting visual appearance
+
+**No update needed for:**
+- ❌ HTML-only changes (no CSS/JS modified)
+- ❌ Content updates (text, images)
+- ❌ Backend logic changes
+
+### Consistency Rules
+
+1. **Same version across page group** - All STS pages use same `sts.css` version
+2. **Increment together** - If `main.css` and `sts.css` both change, increment both
+3. **Document in commits** - Git commit message should note version bump
+4. **Update all pages** - When CSS changes, update ALL pages using that stylesheet
+
+**Current Versions (January 3, 2026):**
+- `main.css`: `?v=2026-01-03`
+- `sts.css`: `?v=2026-01-03`
+- `learning-hub.css`: `?v=2026-01-03` (NEW - 1,030+ lines for interactive learning modules)
+- `index-multipanel.css`: `?v=2026-01-03`
+
+---
+
+## 📊 VISUALIZATION REQUIREMENTS (v4.1.0 - COMPREHENSIVE)
+
+**Purpose:** Ensure Level 1 pages include impressive, high-value interactive visualizations.
+
+**Reference:** Full implementation guide in `integrate-this.md` (1,625 lines with complete D3.js/Mermaid code)
+
+### D3.js Interactive Charts (6-12 per Level 1 page for scores >50)
+
+**Required Chart Types:**
+- **Timeline:** Session history, event sequences, orchestrator execution flow
+- **Force Graph:** Dependency networks, orchestrator relationships, knowledge graph
+- **Heatmap:** Usage patterns, token optimization opportunities, activity matrices
+- **Bar/Line Charts:** Metrics over time, performance trends, adoption rates
+- **Sankey Diagram:** Flow analysis, token usage breakdown, data pipelines
+- **Radial Tree:** Hierarchy visualization, brain tier structure, file relationships
+
+**Standards:**
+- D3.js v7.x required
+- Container: `<div id="chart-name-viz"></div>`
+- Responsive: 375px/768px/1440px breakpoints
+- Performance: <2s render, <100ms interaction
+- Accessibility: ARIA labels, keyboard navigation, reduced-motion support
+- Full implementation code (not placeholders)
+
+**Example (Session Timeline - see integrate-this.md lines 300-500 for full code):**
+```javascript
+class SessionTimeline {
+    constructor(containerId, data) { /* 200+ lines */ }
+    // Horizontal timeline with session markers, continuation arrows
+    // Hover tooltips, click expand, zoom/pan controls
+}
+```
+
+### Mermaid Diagrams (4-8 per Level 1 page for scores >50)
+
+**Required Diagram Types:**
+- **Sequence:** Workflow steps, API interactions, cross-session context flow
+- **Flowchart:** Decision trees, process flows, orchestrator routing logic
+- **State Machine:** Lifecycle transitions, planning phases, execution states
+- **C4 Context:** System architecture, integration points, external dependencies
+- **ER Diagram:** Database schema, knowledge graph structure, entity relationships
+- **Gantt Chart:** Project timeline, phase breakdown, milestone tracking
+
+**Standards:**
+- Container: `<div class="mermaid-container"><pre class="mermaid">...</pre></div>`
+- Theme: CORTEX dark theme (CSS variables)
+- Responsive: Horizontal scroll for large diagrams
+- Full Mermaid code (40-80 lines per diagram)
+
+**Example (see integrate-this.md lines 720-850 for full code):**
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant C as Copilot Chat
+    participant M as Master Orchestrator
+    [50+ lines showing continuation detection flow]
+```
+
+### Acceptance Criteria (Required for All Level 1 Specs)
+
+**Template Structure:**
+```markdown
+### Acceptance Criteria
+
+#### Success Conditions
+- [ ] SC-1: [Specific deliverable] exists and passes validation
+- [ ] SC-2: [Performance metric] meets or exceeds target (<2s render)
+- [ ] SC-3: [Integration test] passes with 100% success rate
+
+#### Validation Gates
+- **Gate 1 (Entry):** Prerequisites met, dependencies resolved
+- **Gate 2 (Mid-Phase):** 50% tasks complete, no blocking issues
+- **Gate 3 (Exit):** All tasks complete, tests passing, docs updated
+
+#### Rollback Triggers
+- **Critical:** [Condition requiring immediate rollback]
+- **High Priority:** [Fix within 24h]
+- **Medium Priority:** [Fix within 48h]
+```
+
+**Test Coverage Categories:**
+- Functional (5-10 per feature) → Unit + Integration tests
+- Performance (3-5 per feature) → Benchmark tests (<2s render, <100ms interaction)
+- Visual (6-8 per feature) → Visual regression (Percy/Chromatic)
+- Accessibility (5-7 per feature) → WCAG 2.1 AA (axe DevTools)
+
+**See `integrate-this.md` for complete methodology, full code examples, and 15+ visualization patterns.**
 
 ---
 
@@ -229,6 +624,215 @@ Is it Level 0 (Home)?
 
 ---
 
+## 🎨 D3.js & Mermaid Visualization Standards (v4.0.5)
+
+**Purpose:** Define standards for interactive data visualizations in CORTEX documentation.
+
+**Scope:** Level 1 detail pages with complex features requiring visual explanations.
+
+### Visualization Decision Matrix
+
+| Feature Complexity | D3.js Charts | Mermaid Diagrams | Total Visualizations |
+|--------------------|--------------|------------------|----------------------|
+| **Simple** (0-49) | 1-2 | 2-3 | 3-5 |
+| **Complex** (50-99) | 3-5 | 4-6 | 7-11 |
+| **Very Complex** (100-199) | 6-10 | 6-10 | 12-20 |
+| **Extreme** (200+) | 10+ | 8+ | 18+ (Level 2 required) |
+
+### D3.js Interactive Charts
+
+**Supported Chart Types:**
+
+| Chart Type | Use Case | Complexity | Interactivity |
+|------------|----------|------------|---------------|
+| **Timeline** | Session history, event sequences | 15-25 | Hover tooltips, click expand, zoom/pan |
+| **Force Graph** | Dependency networks, relationships | 20-35 | Drag nodes, highlight connections, filter |
+| **Heatmap** | Usage patterns, token optimization | 15-30 | Hover details, color scale legend |
+| **Bar Chart** | Metrics comparison, performance | 10-20 | Hover values, click drill-down |
+| **Line Chart** | Trends over time, progress tracking | 12-22 | Hover data points, zoom range |
+| **Sankey Diagram** | Flow analysis, data pipelines | 25-40 | Hover flow values, click node details |
+
+### D3.js CSS Integration
+
+**Required CSS Classes:**
+
+```css
+/* D3.js Visualization Containers */
+.viz-container {
+    width: 100%;
+    min-height: 300px;
+    margin-bottom: var(--space-lg);
+    padding: var(--space-md);
+    background: rgba(10, 14, 39, 0.6);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+.viz-tooltip {
+    position: absolute;
+    padding: var(--space-sm);
+    background: rgba(10, 14, 39, 0.95);
+    border: 1px solid var(--accent-primary);
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.viz-tooltip.visible {
+    opacity: 1;
+}
+
+/* D3.js Chart Elements */
+.viz-container svg {
+    width: 100%;
+    height: auto;
+}
+
+.viz-container .axis-time,
+.viz-container .axis-value {
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+}
+
+.viz-container .session-marker,
+.viz-container .node-circle {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.viz-container .session-marker:hover,
+.viz-container .node-circle:hover {
+    filter: drop-shadow(0 0 8px var(--accent-primary));
+    transform: scale(1.2);
+}
+
+.viz-container .network-link,
+.viz-container .continuation-arrow {
+    stroke: var(--accent-tertiary);
+    stroke-opacity: 0.6;
+    transition: stroke-opacity 0.3s ease;
+}
+
+.viz-container .dimmed {
+    opacity: 0.2;
+}
+```
+
+### Mermaid Diagram Standards
+
+**Supported Diagram Types:**
+
+| Diagram Type | Use Case | Complexity | When to Use |
+|--------------|----------|------------|-------------|
+| **Sequence** | Workflow steps, API interactions | 5-10 | Cross-component communication |
+| **Flowchart** | Decision trees, process flows | 5-12 | Conditional logic, branching paths |
+| **State Machine** | Lifecycle states, transitions | 5-8 | Status tracking, phase progression |
+| **C4 Context** | System architecture, boundaries | 8-15 | High-level system overview |
+| **ER Diagram** | Database schema, relationships | 6-12 | Data model documentation |
+| **Gantt Chart** | Project timeline, dependencies | 8-14 | Phase planning, milestone tracking |
+
+### Mermaid CSS Integration
+
+**Required CSS Classes:**
+
+```css
+/* Mermaid Diagram Container */
+.mermaid-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: var(--space-lg);
+    padding: var(--space-lg);
+    background: rgba(10, 14, 39, 0.4);
+    border-radius: var(--radius-lg);
+    overflow-x: auto;
+}
+
+.mermaid {
+    max-width: 800px;
+    width: 100%;
+}
+
+/* Mermaid Theme Variables */
+:root {
+    --mermaid-primary-color: #00d4ff;
+    --mermaid-secondary-color: #7b61ff;
+    --mermaid-tertiary-color: #ff6b9d;
+    --mermaid-background: rgba(10, 14, 39, 0.8);
+    --mermaid-text-color: #e5e7eb;
+    --mermaid-line-color: rgba(0, 212, 255, 0.4);
+}
+```
+
+### Visualization Performance Rules
+
+**Critical Performance Metrics:**
+
+| Metric | Threshold | Violation Action |
+|--------|-----------|------------------|
+| **Initial Render** | <2s for 100 data points | Optimize data processing |
+| **Interaction Response** | <100ms hover, <300ms click | Debounce/throttle events |
+| **Memory Usage** | <50MB for 500 data points | Implement data pagination |
+| **Frame Rate** | 60fps during animations | Use CSS transforms (GPU) |
+| **Bundle Size** | <100KB for D3.js modules | Import only needed modules |
+
+### Accessibility Requirements
+
+**WCAG 2.1 AA Compliance:**
+
+- ✅ **ARIA Labels:** All SVG elements must have descriptive labels
+- ✅ **Keyboard Navigation:** All interactive elements accessible via Tab/Enter
+- ✅ **Color Contrast:** Minimum 4.5:1 for text, 3:1 for UI elements
+- ✅ **Screen Reader:** Provide text alternatives for visual data
+- ✅ **Focus Indicators:** Visible focus outline (2px solid accent color)
+- ✅ **Reduced Motion:** Respect `prefers-reduced-motion` media query
+
+**Example Implementation:**
+
+```javascript
+// Accessibility-compliant D3.js chart
+svg.append('title')
+    .text('Session History Timeline - Shows orchestrator sessions over time');
+
+svg.selectAll('.session-marker')
+    .attr('role', 'button')
+    .attr('aria-label', d => `${d.orchestrator} session at ${d.timestamp}`)
+    .attr('tabindex', '0')
+    .on('keydown', (event, d) => {
+        if (event.key === 'Enter') {
+            expandSession(d);
+        }
+    });
+
+// Respect reduced motion preference
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    // Disable animations
+    simulation.stop();
+}
+```
+
+### Validation Checklist
+
+**Before deploying visualizations:**
+
+- [ ] D3.js version specified (v7.x)
+- [ ] Container has unique ID (`id="chart-name-viz"`)
+- [ ] CSS classes exist in `main.css` (no inline styles)
+- [ ] Responsive breakpoints tested (375px, 768px, 1440px)
+- [ ] Performance benchmarks met (<2s render, <100ms interaction)
+- [ ] ARIA labels on all interactive elements
+- [ ] Keyboard navigation works (Tab, Enter, Arrow keys)
+- [ ] Reduced motion preference respected
+- [ ] Tooltips positioned correctly (no overflow)
+- [ ] Color contrast validated (4.5:1 minimum)
+- [ ] Mermaid diagrams render correctly in all browsers
+- [ ] Documentation includes full code examples
+
+---
+
 ## 🎨 Header & Footer Standardization
 
 ### Required Structure
@@ -254,16 +858,66 @@ Is it Level 0 (Home)?
 </header>
 ```
 
-#### Level 1 & Level 2 Glass Header (NO LOGO - Home Link Only)
+#### Level 1 Glass Header (NO LOGO - Home Link Only)
+
+**Navigation Rule:** Level 1 pages show ONLY the Home link.
+
 ```html
 <header class="glass-header">
     <div class="header-content">
         <nav class="header-nav">
-            <a href="../index.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
+            <a href="../index.html" class="nav-link">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
         </nav>
     </div>
 </header>
 ```
+
+**Examples:**
+- `docs/sts/solid.html` - Only Home link
+- `docs/security/access-control.html` - Only Home link
+- `docs/orchestrators/planning-system.html` - Only Home link
+
+#### Level 2 Glass Header (NO LOGO - Home + Parent Level 1 Link)
+
+**Navigation Rule:** Level 2 pages show Home link AND parent Level 1 link.
+
+```html
+<header class="glass-header">
+    <div class="header-content">
+        <nav class="header-nav">
+            <a href="../../index.html" class="nav-link">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="../planning-system.html" class="nav-link">
+                <i class="fas fa-arrow-left"></i>
+                <span>Planning System</span>
+            </a>
+        </nav>
+    </div>
+</header>
+```
+
+**Examples:**
+- `docs/orchestrators/planning-v5/phase-1-governance-validation.html`
+  - Home link → `../../index.html`
+  - Parent link → `../planning-system.html` (Planning System)
+- `docs/orchestrators/ado-v2/wizard-stage-1-work-item-type.html`
+  - Home link → `../../index.html`
+  - Parent link → `../ado-orchestrator.html` (ADO Orchestrator)
+- `docs/orchestrators/tdd/phase-1-red.html`
+  - Home link → `../../index.html`
+  - Parent link → `../tdd-orchestrator.html` (TDD Orchestrator)
+
+**⚠️ CRITICAL RULES:**
+- ❌ **NO intermediate hub pages** (e.g., NO "STS Showcase" link on STS detail pages)
+- ❌ **NO breadcrumbs** (use simple back links on Level 2 only)
+- ❌ **NO logo** on Level 1 or Level 2 pages
+- ✅ **Level 1:** Home only
+- ✅ **Level 2:** Home + Parent Level 1
 
 #### Glass Footer
 ```html
@@ -684,6 +1338,108 @@ When simplifying dramatic animations:
 }
 /* Remove ::after with borderGlowSweep entirely */
 ```
+
+---
+
+## 🎨 Refactor Explanation Box Color System (STS Pages)
+
+**Purpose:** Standardized 3-color variation system for Problem/Fix/Result boxes across all Sharpen The Saw (STS) showcase pages.
+
+**Scope:** Security, SOLID, Code Quality, Performance, Testing, Documentation pages
+
+### Color Palette
+
+All STS pages use the same 3-color system for `.refactor-explanation` boxes:
+
+| Box | Label | Color | RGB | Usage |
+|-----|-------|-------|-----|-------|
+| **1st** | PROBLEM | Cyan/Blue | `rgba(0, 150, 199, 0.1)` | #00d4ff accent |
+| **2nd** | FIX | Green | `rgba(16, 185, 129, 0.1)` | #10b981 accent |
+| **3rd** | RESULT | Purple | `rgba(139, 92, 246, 0.1)` | #8b5cf6 accent |
+
+### Implementation Pattern
+
+**HTML Structure:**
+```html
+<div class="refactor-explanation">
+    <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
+    <ul>
+        <li><strong>Problem:</strong> Description of the issue</li>
+        <li><strong>Fix:</strong> Solution approach</li>
+        <li><strong>Result:</strong> Outcome and benefits</li>
+    </ul>
+</div>
+```
+
+**CSS Implementation:**
+```css
+/* Box 1: Problem (Cyan) */
+.refactor-explanation li:nth-child(1) {
+    background: rgba(0, 150, 199, 0.1);
+    border: 1px solid rgba(0, 150, 199, 0.3);
+}
+
+.refactor-explanation li:nth-child(1):hover {
+    background: rgba(0, 150, 199, 0.15);
+    border-color: rgba(0, 150, 199, 0.5);
+    transform: translateY(-2px);
+}
+
+.refactor-explanation li:nth-child(1) strong {
+    color: #00d4ff;
+}
+
+/* Box 2: Fix (Green) */
+.refactor-explanation li:nth-child(2) {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.refactor-explanation li:nth-child(2):hover {
+    background: rgba(16, 185, 129, 0.15);
+    border-color: rgba(16, 185, 129, 0.5);
+    transform: translateY(-2px);
+}
+
+.refactor-explanation li:nth-child(2) strong {
+    color: #10b981;
+}
+
+/* Box 3: Result (Purple) */
+.refactor-explanation li:nth-child(3) {
+    background: rgba(139, 92, 246, 0.1);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.refactor-explanation li:nth-child(3):hover {
+    background: rgba(139, 92, 246, 0.15);
+    border-color: rgba(139, 92, 246, 0.5);
+    transform: translateY(-2px);
+}
+
+.refactor-explanation li:nth-child(3) strong {
+    color: #8b5cf6;
+}
+```
+
+### Design Principles
+
+1. **Consistency Across Pages:** Same 3 colors used on all STS pages (Security, SOLID, Code Quality, Performance, Testing, Docs)
+2. **Visual Hierarchy:** Color-coded boxes create clear Problem → Fix → Result flow
+3. **T1 Animations:** Subtle hover effects (lift + border glow) on all boxes
+4. **Accessibility:** High contrast ratios for text readability
+5. **Responsive:** 3-column grid on desktop, single column on mobile (<1024px)
+
+### Pages Using This System
+
+- `docs/sts/security.html` - Security vulnerabilities showcase
+- `docs/sts/solid.html` - SOLID principles showcase
+- `docs/sts/code-quality.html` - Code quality patterns
+- `docs/sts/performance.html` - Performance optimization
+- `docs/sts/testing.html` - Testing strategies
+- `docs/sts/documentation.html` - Documentation standards
+
+**File Location:** `docs/assets/css/sts.css` (lines 485-545)
 
 ---
 
@@ -1398,7 +2154,99 @@ document.querySelectorAll('.morph-card').forEach(card => {
 - **Security:** Treemap (vulnerabilities)
 - **Documentation:** Bar chart (doc coverage)
 
-### Pattern 11: Best Practices Guideline Cards
+---
+
+### Pattern 11: STS Refactor Explanation Cards (v4.0.3 - NEW)
+
+**Use Case:** Before/After code comparison sections in STS showcase pages  
+**Purpose:** Transform vertical bullet lists into horizontal card grids for better visual hierarchy
+
+**HTML Structure:**
+```html
+<div class="refactor-explanation">
+    <h4><i class="fas fa-lightbulb"></i> How This Was Refactored</h4>
+    <ul>
+        <li>
+            <strong>Vulnerability:</strong> String concatenation allows attackers to inject malicious SQL
+        </li>
+        <li>
+            <strong>Fix:</strong> Parameterized queries separate data from SQL commands
+        </li>
+        <li>
+            <strong>Result:</strong> User input is treated as data, never as executable code
+        </li>
+    </ul>
+</div>
+```
+
+**CSS Implementation (docs/assets/css/sts.css):**
+```css
+.refactor-explanation ul {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 0.75rem;
+}
+
+.refactor-explanation li {
+    padding: 1rem;
+    background: rgba(0, 212, 255, 0.05);
+    border: 1px solid rgba(0, 212, 255, 0.15);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.refactor-explanation li:hover {
+    background: rgba(0, 212, 255, 0.08);
+    border-color: rgba(0, 212, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.refactor-explanation li strong {
+    color: var(--sts-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+```
+
+**Responsive:** Single column on mobile (<1024px)
+
+---
+
+### Pattern 12: STS Code Panel Styling (v4.0.3 - NEW)
+
+**Use Case:** Before/After code comparison panels  
+**Purpose:** Retro console aesthetic with improved readability
+
+**Background Colors:**
+```css
+:root {
+    --sts-bg-primary: #1a1f3a;          /* Lightened from #0a0e27 */
+    --sts-bg-secondary: #2a2f4a;        /* Gradient midpoint */
+    --sts-glass-bg: rgba(36, 41, 68, 0.8);  /* Lighter glass panels */
+    --sts-code-bg: #0a0a0a;             /* Slightly lighter than #000 */
+}
+```
+
+**Code Font Styling:**
+```css
+.panel code {
+    font-family: 'Courier New', 'Courier', monospace;  /* Retro console */
+    font-size: 0.9375rem;        /* 15px - Increased by 15% */
+    line-height: 1.6;            /* Better spacing */
+    letter-spacing: 0.02em;      /* Clarity */
+}
+```
+
+**Design Principles:**
+- Retro console aesthetic (Courier New font)
+- 50% brighter background (#1a1f3a vs #0a0e27)
+- 15% larger font size (0.9375rem vs 0.8125rem)
+- Fixed C# badge duplication (removed ::before pseudo-elements)
+
+---
+
+### Pattern 13: Best Practices Guideline Cards
 
 **Use Cases:** 35 guidelines organized into 3 Level 2 pages
 
@@ -2868,17 +3716,61 @@ document.documentElement.style.setProperty('--glass-bg', 'rgba(26, 31, 58, 0.6)'
 
 ---
 
+## 🎓 Learning Hub Standards & Validation (v5.0)
+
+### Learning Module Requirements
+
+**Every Level 2 learning module MUST include:**
+
+1. **Module Header** - Difficulty badge, title, metadata (time, quiz count, playground count)
+2. **Interactive Visualization** - 1-2 D3.js charts
+3. **Conceptual Diagram** - 1-2 Mermaid diagrams
+4. **Code Playground** - Monaco editor with runtime
+5. **Assessment** - 5-15 quiz questions
+6. **Challenge** - Progressive hands-on exercise
+7. **Real-World Examples** - 2-3 production analyses
+
+### Validation Checklist
+
+**Level 2 Module Validation:**
+- [ ] Difficulty badge present
+- [ ] D3.js loads within 2 seconds
+- [ ] Mermaid renders correctly
+- [ ] Monaco editor functional
+- [ ] Quiz answers configured
+- [ ] Challenge tests work
+- [ ] Navigation links functional
+
+### Performance Requirements
+
+- Module page load: <2 seconds
+- D3.js render: <1 second
+- Code execution: <1 second
+- WCAG 2.1 AA compliance
+
+---
+
 ## 📄 Version History
+
+### v5.0.0 (January 2, 2026) - Learning Hub Architecture
+- 🎓 **NEW:** Best Practices Learning Hub (80 interactive modules)
+- 🎓 **NEW:** Learning module standards and validation
+- 🎓 **NEW:** Code playground requirements (Monaco + Pyodide/QuickJS)
+- 🎓 **NEW:** Quiz and challenge system standards
+- ✨ Updated complexity scoring for pedagogical content
+- ✨ Added Learning Hub Pattern (distinct from Standard/Multi-Panel)
+- 📚 Updated scope: 209 total pages (was 129)
+
 ### v4.0.2 (January 1, 2026) - Major Optimization
 - 🎯 **BREAKING:** Simplified hierarchy to Level 0 → Level 1 only (removed Level 2 references)
 - 🎯 **OPTIMIZATION:** Removed 177 lines of redundant spacing documentation
 - ✨ **NEW:** Added Quick Reference section with decision matrices and class tables
-- ✨ **NEW:** Added cross-reference to Level1-spec.md for implementation details
+- ✨ **NEW:** Added cross-reference to 00-master-plan.md for implementation details
 - 🔄 **REFACTOR:** Consolidated spacing rules into single section at top (v4.0.1 content)
 - 🔄 **REFACTOR:** Simplified multi-panel pattern descriptions (removed redundancy)
 - 📚 **CLARITY:** Updated Core Principle #8 (2-level → simplified hierarchy)
 - 📚 **CLARITY:** Updated Core Principle #12 (added cross-document consistency)
-- 📚 **CONSISTENCY:** Aligned all terminology with Level1-spec.md (Level 1 Detail Pages)
+- 📚 **CONSISTENCY:** Aligned all terminology with 00-master-plan.md (Level 1 Detail Pages)
 - 🐛 **FIX:** Corrected copyright year (2025 → 2026)
 
 

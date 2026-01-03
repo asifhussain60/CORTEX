@@ -194,7 +194,7 @@ Level 0 (index.html with masonry tiles) → Level 1 Detail Pages (security/*.htm
 2. **Enhance 4 Existing Pages:**
    - **Phase 4:** owasp.html, vulnerability-assessment.html, penetration-testing.html, compliance.html
 
-3. **Update Level1-spec.md:**
+3. **Update 00-master-plan.md:**
    - ✅ Corrected sitemap hierarchy
    - ✅ Removed misleading "Level 2" references
    - ✅ Added complexity analysis data
@@ -261,7 +261,7 @@ Level 0 (index.html with masonry tiles) → Level 1 Detail Pages (security/*.htm
 
 ## 📝 Files Updated
 
-1. **Level1-spec.md** (Primary Specification)
+1. **00-master-plan.md** (Primary Specification)
    - Updated sitemap section (lines 25-90)
    - Added discovery analysis report (new section)
    - Corrected implementation priorities (lines 1070-1125)
@@ -277,7 +277,7 @@ Level 0 (index.html with masonry tiles) → Level 1 Detail Pages (security/*.htm
 
 ## 🔗 References
 
-- **Spec:** `/cortex-brain/documents/planning/active/cortex-documentation/artifacts/Level1-spec.md`
+- **Spec:** `/cortex-brain/documents/planning/active/cortex-documentation/artifacts/00-master-plan.md`
 - **Site:** http://localhost:8000/index.html
 - **Analysis Tool:** Toolkit Manager Discovery + Python complexity analysis
 - **Standards:** Glassmorphism v4.0.1, CORTEX Design System v4.0

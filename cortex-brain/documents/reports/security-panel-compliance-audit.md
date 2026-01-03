@@ -3,7 +3,7 @@
 **Audit Date:** January 2, 2026  
 **Auditor:** GitHub Copilot (Claude Sonnet 4.5)  
 **Scope:** Security Multi-Panel HTML Files (13 pages)  
-**Standards:** Glassmorphism Design Standard v4.0.1 + Level1-spec.md  
+**Standards:** Glassmorphism Design Standard v4.0.1 + 00-master-plan.md  
 **Status:** 🔴 **54% Compliant** (7/13 files)
 
 ---
@@ -27,7 +27,7 @@ A comprehensive compliance audit was conducted on all 13 HTML files within the S
 
 ### ✅ COMPLIANT FILES (7 files - 54%)
 
-These files fully adhere to Glassmorphism v4.0.1 and Level1-spec requirements:
+These files fully adhere to Glassmorphism v4.0.1 and 00-master-plan requirements:
 
 | # | File | Size | Compliance Notes |
 |---|------|------|------------------|
@@ -386,7 +386,7 @@ Target: 100% compliance by EOW (End of Week)
    - Key Rules: Level 0 logo, Level 1 no logo, T1 animations only
 
 2. **Level 1 Page Specification**
-   - Location: `cortex-brain/documents/planning/active/cortex-documentation/artifacts/Level1-spec.md`
+   - Location: `cortex-brain/documents/planning/active/cortex-documentation/artifacts/00-master-plan.md`
    - Section: "SECURITY MULTI-PANEL" (lines 40-100)
    - Key Requirements: glass-header, hero-section, T1 animations
 

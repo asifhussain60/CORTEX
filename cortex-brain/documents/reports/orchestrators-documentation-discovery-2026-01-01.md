@@ -362,7 +362,7 @@ complexity_score = (
 
 ## 📝 Files Updated
 
-1. **Level1-spec.md** (Primary Specification)
+1. **00-master-plan.md** (Primary Specification)
    - Added Orchestrators discovery analysis section
    - Documented 5 categories, 15 linked pages, 5 orphans
    - Provided recommendations and implementation roadmap
@@ -378,7 +378,7 @@ complexity_score = (
 
 ## 🔗 References
 
-- **Spec:** `/cortex-brain/documents/planning/active/cortex-documentation/artifacts/Level1-spec.md`
+- **Spec:** `/cortex-brain/documents/planning/active/cortex-documentation/artifacts/00-master-plan.md`
 - **Site:** http://localhost:8000/index.html
 - **Analysis Tool:** Toolkit Manager Discovery + Python complexity analysis
 - **Standards:** Glassmorphism v4.0.1, CORTEX Design System v4.0

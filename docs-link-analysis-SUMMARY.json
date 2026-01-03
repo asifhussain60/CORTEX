@@ -1,0 +1,230 @@
+{
+  "statistics": {
+    "total_files": 393,
+    "total_html_files": 199,
+    "linked_html_files": 331,
+    "unlinked_html_files": -132,
+    "root_level_files": 15,
+    "root_level_linked": 3,
+    "root_level_unlinked": 12
+  },
+  "root_files": {
+    "all": [
+      ".deployment-trigger",
+      ".nojekyll",
+      ".trigger",
+      "404.md",
+      "DEPLOYMENT.md",
+      "QUICK-LAUNCH.md",
+      "README.md",
+      "dashboard-diagnostic.html",
+      "faq.html",
+      "index.html",
+      "search-index.json",
+      "sitemap.html",
+      "test-tabs.html",
+      "testing-planning-orchestrator.md",
+      "visual-differentiation-demo.html"
+    ],
+    "linked": [
+      "faq.html",
+      "index.html",
+      "sitemap.html"
+    ],
+    "unlinked": [
+      ".deployment-trigger",
+      ".nojekyll",
+      ".trigger",
+      "404.md",
+      "DEPLOYMENT.md",
+      "QUICK-LAUNCH.md",
+      "README.md",
+      "dashboard-diagnostic.html",
+      "search-index.json",
+      "test-tabs.html",
+      "testing-planning-orchestrator.md",
+      "visual-differentiation-demo.html"
+    ]
+  },
+  "suggested_moves": [
+    {
+      "current": "visual-differentiation-demo.html",
+      "suggested": "prototypes/visual-differentiation-demo.html",
+      "reason": "Unlinked root-level file"
+    },
+    {
+      "current": "testing-planning-orchestrator.md",
+      "suggested": "testing/testing-planning-orchestrator.md",
+      "reason": "Unlinked root-level file"
+    },
+    {
+      "current": "dashboard-diagnostic.html",
+      "suggested": "development/dashboard-diagnostic.html",
+      "reason": "Unlinked root-level file"
+    },
+    {
+      "current": "test-tabs.html",
+      "suggested": "testing/test-tabs.html",
+      "reason": "Unlinked root-level file"
+    },
+    {
+      "current": "search-index.json",
+      "suggested": "development/search-index.json",
+      "reason": "Unlinked root-level file"
+    }
+  ],
+  "orphaned_html_files": [
+    "architecture/brain-tiers.html",
+    "architecture/index-old.html",
+    "best-practices/index.html",
+    "cortex-lens-output/index.html",
+    "cortex-lens-output/mock-landing/tests/test-runner.html",
+    "future/index.html",
+    "getting-started/index-old.html",
+    "knowledge/database/oracle-best-practices.html",
+    "knowledge/ddd/ddd-fundamentals.html",
+    "knowledge/index-old.html",
+    "knowledge/testing/tdd.html",
+    "lens/index-old.html",
+    "orchestrators/onboarding-orchestrator.html",
+    "prototypes/home-redesign-v2.html",
+    "prototypes/mega-menu-prototype.html",
+    "roi-calculator/index.html",
+    "story/Chapter-01/index.html",
+    "story/Chapter-02/index.html",
+    "story/Chapter-03/index.html",
+    "story/Chapter-04/index.html",
+    "story/Chapter-05/index.html",
+    "story/Chapter-06/index.html",
+    "story/Chapter-07/index.html",
+    "story/Chapter-08/index.html",
+    "story/Chapter-09/index.html",
+    "story/Chapter-10/index.html",
+    "story/Chapter-11/index.html",
+    "story/Chapter-12/index.html",
+    "story/Chapter-13/index.html",
+    "story/Prologue/index.html",
+    "story/tests/index.html",
+    "technical/orchestrators/ado-planning.html",
+    "technical/orchestrators/architectural-review.html",
+    "technical/security/dashboard.html",
+    "token-optimization/index-old.html",
+    "toolkit-manager/index-old.html",
+    "validation/index.html"
+  ],
+  "orphaned_count_total": 37,
+  "hub_pages": [
+    [
+      "index.html",
+      273
+    ],
+    [
+      "knowledge/index.html",
+      93
+    ],
+    [
+      "knowledge/engineering.html",
+      25
+    ],
+    [
+      "architecture/index.html",
+      22
+    ],
+    [
+      "knowledge/design-patterns-hub.html",
+      19
+    ],
+    [
+      "knowledge/security-hub.html",
+      18
+    ],
+    [
+      "knowledge/api-design-hub.html",
+      18
+    ],
+    [
+      "orchestrators/index.html",
+      17
+    ],
+    [
+      "knowledge/testing-hub.html",
+      17
+    ],
+    [
+      "features/index.html",
+      14
+    ],
+    [
+      "orchestrators/planning-system.html",
+      12
+    ],
+    [
+      "orchestrators/tdd-orchestrator.html",
+      10
+    ],
+    [
+      "getting-started/index.html",
+      8
+    ],
+    [
+      "token-optimization/index.html",
+      8
+    ],
+    [
+      "security/compliance.html",
+      7
+    ],
+    [
+      "orchestrators/cortex-lens.html",
+      7
+    ],
+    [
+      "governance/skull-rulebook.html",
+      7
+    ],
+    [
+      "knowledge/cloud.html",
+      7
+    ],
+    [
+      "documentation.html",
+      7
+    ],
+    [
+      "security/threat-modeling.html",
+      6
+    ]
+  ],
+  "index_direct_links": [
+    "architecture/index.html",
+    "assets/css/index-multipanel.css",
+    "assets/css/main.css",
+    "assets/images/Awakening-200.png",
+    "assets/images/Awakening-200.png",
+    "assets/images/CORTEX-logo-128.png",
+    "assets/images/CORTEX-logo-512.png",
+    "assets/images/CORTEX-logo-512.png",
+    "assets/images/CORTEX-logo-64.png",
+    "assets/js/css-layout-validator.js",
+    "faq.html",
+    "features/index.html",
+    "getting-started/index.html",
+    "governance/skull-rulebook.html",
+    "knowledge/index.html",
+    "learning-paths/index.html",
+    "lens/index.html",
+    "orchestrators/ado-operations.html",
+    "orchestrators/ado-orchestrator.html",
+    "orchestrators/ado-planning.html",
+    "orchestrators/architectural-review.html",
+    "orchestrators/cleanup-orchestrator.html",
+    "orchestrators/cortex-lens.html",
+    "orchestrators/debug-orchestrator.html",
+    "orchestrators/execution-orchestrator.html",
+    "orchestrators/git-checkpoint.html",
+    "orchestrators/planning-system.html",
+    "orchestrators/refinement-orchestrator.html",
+    "orchestrators/rollback-orchestrator.html",
+    "orchestrators/sanitization-orchestrator.html"
+  ]
+}
