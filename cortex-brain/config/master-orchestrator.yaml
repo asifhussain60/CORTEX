@@ -63,15 +63,21 @@ routing_rules:
       mode: "auto"
       version: "2.0"
   
-  # Sanitization
-  - pattern: "^(sanitize|make generic|anonymize).*$"
-    orchestrator: "sanitization_orchestrator"
+  # Sanitization v2 - AUTONOMOUS (NEW)
+  - pattern: "^(sanitize|remove sensitive data|clean sensitive info|anonymize|redact|sanitization).*$"
+    orchestrator: "sanitization_v2"
     confidence: 1.0
     match_type: "regex"
     priority: 40
     metadata:
-      description: "Code and content sanitization"
-      autonomous: false
+      description: "Sanitization v2 - autonomous sensitive data removal"
+      autonomous: true
+      version: "2.0"
+      features:
+        - "30+ consolidated patterns"
+        - "Holistic review engine"
+        - "99.6% token efficiency"
+        - "Priority-based matching"
   
   # Maintenance - DISABLED: orchestrator not yet registered
   # - pattern: "^(maintenance|health check|system health).*$"

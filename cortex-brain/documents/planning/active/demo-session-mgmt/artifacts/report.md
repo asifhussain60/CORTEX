@@ -1,3 +1,0 @@
-# Demo Report
-
-Sample content.
