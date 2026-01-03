@@ -25,9 +25,9 @@ folder_structure:
       description: "Progress tracker and state snapshots"
   
   required_files:
-    - path: "00-master-plan.md"
+    - path: "00-{plan-name}.md"
       type: "plan"
-      description: "Master plan document"
+      description: "Master plan document with meaningful name (e.g., 00-glassmorphism.md)"
     - path: "README.md"
       type: "documentation"
       description: "Quick start guide"
@@ -108,7 +108,8 @@ templates:
   
   files:
     - name: "master-plan.jinja2"
-      output: "00-master-plan.md"
+      output: "00-{plan-name}.md"
+      description: "Meaningful filename derived from plan folder name (max 22 chars)"
       required_vars:
         - "feature_name"
         - "plan_id"
@@ -138,7 +139,7 @@ templates:
 # Validation rules
 validation:
   required_files:
-    - "00-master-plan.md"
+    - "00-*.md"  # Master plan with meaningful name
     - "README.md"
     - "tracking/progress-tracker.json"
     - "tracking/CONTINUATION-PROMPT.md"

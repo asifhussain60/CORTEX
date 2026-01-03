@@ -67,7 +67,6 @@ class PlanFolderManager:
     REQUIRED_SUBFOLDERS = ["context", "reports", "artifacts", "tracking", "execution"]
     
     # File naming conventions
-    MASTER_PLAN_NAME = "00-master-plan.md"
     TEMP_PLAN_NAME = "11-temp-planning-session.md"
     TRACKER_NAME = "tracking/progress-tracker.json"
     README_NAME = "README.md"
@@ -83,6 +82,41 @@ class PlanFolderManager:
         self.planning_root = self.project_root / "cortex-brain" / "documents" / "planning"
         
         logger.info(f"📁 PlanFolderManager initialized: {self.planning_root}")
+    
+    def _generate_master_plan_filename(self, plan_id: str) -> str:
+        """
+        Generate meaningful master plan filename from plan ID.
+        
+        Args:
+            plan_id: Plan identifier (e.g., "glassmorphism-css-standardization")
+        
+        Returns:
+            Master plan filename (e.g., "00-glassmorphism.md")
+        
+        Example:
+            >>> manager._generate_master_plan_filename("vacuum-v2-migration")
+            "00-vacuum-v2.md"
+        """
+        # Max 22 chars total - 3 for "00-" - 3 for ".md" = 16 chars for name
+        max_name_length = 16
+        
+        # Split on hyphens
+        parts = plan_id.split('-')
+        
+        # Take first part + version/type suffix if exists
+        short_name = parts[0]
+        
+        for part in parts[1:]:
+            if part in ['v1', 'v2', 'v3', 'v4', 'v5', 'migration', 'refactor', 'system']:
+                if len(short_name + '-' + part) <= max_name_length:
+                    short_name = f"{short_name}-{part}"
+                break
+        
+        # Truncate if needed
+        if len(short_name) > max_name_length:
+            short_name = short_name[:max_name_length].rstrip('-')
+        
+        return f"00-{short_name}.md"
     
     def create_plan_folder(
         self,
@@ -168,23 +202,25 @@ class PlanFolderManager:
             logger.debug(f"  📂 Created: {subfolder}/")
     
     def _initialize_tracker(
-        self,
-        plan_folder: Path,
-        plan_id: str,
-        title: str,
-        complexity_tier: int,
-        metadata: Optional[Dict[str, Any]]
-    ) -> None:
-        """Initialize progress-tracker.json."""
-        tracker_path = plan_folder / self.TRACKER_NAME
+        tier_names = {1: "INSTANT", 2: "LIGHTWEIGHT", 3: "DOCUMENTED", 4: "COMPLEX"}
+        tier_name = tier_names.get(complexity_tier, "UNKNOWN")
         
-        tracker_data = {
-            "plan_id": plan_id,
-            "title": title,
-            "complexity_tier": complexity_tier,
-            "created_at": datetime.now().isoformat(),
-            "status": "planning",
-            "phases": [],
+        master_plan_filename = self._generate_master_plan_filename(plan_id)
+        
+        readme_content = f"""# {title}
+
+**Plan ID:** {plan_id}  
+**Status:** {status}  
+**Complexity:** Tier {complexity_tier} ({tier_name})  
+**Created:** {datetime.now().strftime("%B %d, %Y")}
+
+---
+
+## 📁 Folder Structure
+
+```
+{plan_id}/
+├── {master_plan_filename}           # Human-readable master plan
             "metadata": metadata or {}
         }
         
@@ -230,13 +266,13 @@ class PlanFolderManager:
 │   └── generated-files/        # Supporting artifacts
 └── context/
     └── requirements.md          # Context documents
-```
-
 ---
 
 ## 🎯 Quick Reference
 
-- **Master Plan:** [`00-master-plan.md`](./00-master-plan.md)
+- **Master Plan:** [`{master_plan_filename}`](./{master_plan_filename})
+- **Progress Tracker:** [`tracking/progress-tracker.json`](./tracking/progress-tracker.json)
+- **Execution YAML:** [`execution/00-master-plan.yaml`](./execution/00-master-plan.yaml)
 - **Progress Tracker:** [`tracking/progress-tracker.json`](./tracking/progress-tracker.json)
 - **Execution YAML:** [`execution/00-master-plan.yaml`](./execution/00-master-plan.yaml)
 

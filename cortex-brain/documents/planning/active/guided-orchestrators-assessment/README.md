@@ -49,7 +49,7 @@ This plan assesses FOUR GUIDED orchestrators (TDD, Debug, Sanitization, Refineme
 
 ```
 guided-orchestrators-assessment/
-├── 00-master-plan.md             # This file's companion (detailed phase breakdown)
+├── 00-guided-orch.md             # This file's companion (detailed phase breakdown)
 ├── README.md                      # This file (quick reference)
 ├── context/                       # Analysis documents
 │   ├── tdd-orchestrator-analysis.md
@@ -149,7 +149,7 @@ Migration plans use Planning v5 structure:
 ---
 
 **Quick Reference:**
-- **Master Plan:** `00-master-plan.md` (detailed phase breakdown)
+- **Master Plan:** `00-guided-orch.md` (detailed phase breakdown)
 - **Progress Tracker:** `tracking/progress-tracker.json` (machine-readable metadata)
 - **TDD Discussion:** `artifacts/tdd-stakeholder-discussion.md` (created in Phase 1)
 - **Consolidated Recommendations:** `artifacts/consolidated-recommendations.md` (created in Phase 5)
