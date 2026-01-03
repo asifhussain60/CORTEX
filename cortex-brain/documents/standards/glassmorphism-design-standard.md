@@ -2873,7 +2873,276 @@ document.documentElement.style.setProperty('--glass-bg', 'rgba(26, 31, 58, 0.6)'
 
 ---
 
+## 📊 Interactive Visualizations (D3.js Patterns)
+
+**Version:** 4.1.2 | **Added:** January 3, 2026
+
+### Purpose
+
+This section defines **D3.js visualization patterns** that enhance glassmorphism UI with interactive data representations. Used when static lists or grids lack visual impact.
+
+**Use Cases:**
+- Architecture diagrams (force-directed graphs)
+- Principle showcases (interactive card grids)
+- System relationships (node-link diagrams)
+- Metric dashboards (animated charts)
+
+**Reference Implementation:** `docs/architecture/index.html` (Principles + Architecture Overview)
+
+---
+
+### Pattern A: Interactive Principle Cards (D3.js Grid)
+
+**Replaces:** Bullet lists with icons  
+**Visual Impact:** Cards with hover glow, lift effects, and color-coded icons
+
+**When to Use:**
+- 3-6 key principles or features
+- Each principle has icon, title, and description
+- Need prominent visual presentation
+- Touch-friendly interactions required
+
+**HTML Structure:**
+```html
+<div class="principles-header">
+    <h3><i class="fas fa-key"></i> Key Architectural Principles</h3>
+</div>
+<div id="principles-viz" class="d3-viz-container"></div>
+```
+
+**JavaScript Implementation:**
+```javascript
+// Data structure
+const principles = [
+    {
+        id: 'protection',
+        icon: '\uf3ed', // FontAwesome unicode
+        title: 'Brain Protection First',
+        description: 'Tier 0 SKULL rules enforce safety at governance layer',
+        color: '#ef4444'
+    },
+    // ... more principles
+];
+
+// Render cards in responsive 3-column grid
+const cardWidth = Math.min(280, (containerWidth - 80) / 3);
+const cardHeight = 180;
+
+// Card interactions: hover → glow + lift (-4px translateY)
+// Touch targets: 280x180px minimum
+```
+
+**CSS Requirements:**
+```css
+.d3-viz-container {
+    width: 100%;
+    min-height: 400px;
+    background: rgba(10, 14, 39, 0.2);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-xl);
+}
+
+.principles-header h3 {
+    font-size: 1.5rem;
+    color: var(--accent-primary);
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+```
+
+**Animation Tier:** T1 Subtle
+- Hover: Card lift (-4px) + glow (0.4 opacity) + stroke width increase
+- Duration: 200ms ease
+- No infinite animations
+
+**Responsive Breakpoints:**
+- Desktop (1440px+): 3 cards per row
+- Tablet (768px-1439px): 2 cards per row
+- Mobile (<768px): 1 card per row
+
+**Accessibility:**
+- SVG `<title>` elements for screen readers
+- Keyboard focus states (outline: 2px solid)
+- Touch targets: 180px height minimum
+
+---
+
+### Pattern B: Force-Directed Architecture Graph
+
+**Replaces:** Static stat grids or Mermaid diagrams  
+**Visual Impact:** Interactive node-link diagram with drag, hover, and legend
+
+**When to Use:**
+- System architecture overview (10-20 components)
+- Complex relationships between entities
+- Need interactive exploration (drag nodes)
+- Showcase technical complexity visually
+
+**HTML Structure:**
+```html
+<div id="architecture-overview" class="d3-viz-container architecture-graph"></div>
+```
+
+**JavaScript Implementation:**
+```javascript
+// Node types with visual encoding
+const nodes = [
+    { id: 'cortex', label: 'CORTEX', icon: '\uf49e', size: 60, color: '#7b61ff', type: 'core' },
+    { id: 't0', label: 'Tier 0\nSKULL', icon: '\uf3ed', size: 45, color: '#ef4444', type: 'brain' },
+    // ... brain tiers, agents, orchestrators
+];
+
+// Force simulation with collision detection
+const simulation = d3.forceSimulation(nodes)
+    .force('link', d3.forceLink(links).distance(120))
+    .force('charge', d3.forceManyBody().strength(-400))
+    .force('center', d3.forceCenter(width / 2, height / 2))
+    .force('collision', d3.forceCollide().radius(d => d.size + 10));
+
+// Hover: Node glow (0.4 opacity) + stroke width increase (3px → 5px)
+// Drag: Update fx/fy positions, restart simulation
+```
+
+**CSS Requirements:**
+```css
+.d3-viz-container.architecture-graph {
+    min-height: 500px;
+    padding: 0;
+    background: rgba(10, 14, 39, 0.2);
+}
+
+#architecture-overview .node circle {
+    stroke: currentColor;
+    stroke-width: 3px;
+    transition: stroke-width 0.2s ease;
+}
+
+#architecture-overview .node:hover circle {
+    stroke-width: 5px;
+}
+```
+
+**Visual Elements:**
+1. **Nodes:**
+   - Core: 60px diameter, center position
+   - Brain Tiers: 45px diameter, color-coded (T0: red, T1: green, T2: blue, T3: orange)
+   - Agents: 40px diameter, cyan/purple gradient
+   - Orchestrators: 35px diameter, teal/green shades
+
+2. **Links:**
+   - Gradient strokes (purple → cyan)
+   - 2px width, 0.4 opacity
+   - Dynamic positions (updates on simulation tick)
+
+3. **Labels:**
+   - Multi-line support (split on `\n`)
+   - 11px font size, white text
+   - Positioned below node (y = size + 18px)
+
+4. **Legend:**
+   - Bottom-left corner (20px from edges)
+   - 4 categories with color circles
+   - 12px font, gray text
+
+**Animation Tier:** T1 Subtle
+- Hover: Glow effect + stroke width increase
+- Drag: Smooth position updates (no snapping)
+- Simulation: Automatic stabilization after drag
+
+**Responsive Breakpoints:**
+- Desktop (1440px+): 500px height
+- Tablet (768px-1439px): 400px height
+- Mobile (<768px): 350px height, smaller node sizes
+
+**Performance:**
+- 10-20 nodes: Smooth (60fps)
+- 20-50 nodes: Good (45fps)
+- 50+ nodes: Use clustering or filtering
+
+**Accessibility:**
+- Keyboard drag: Arrow keys move focused node
+- Screen reader: SVG `<title>` for each node/link
+- Focus states: 2px outline on focused nodes
+
+---
+
+### Pattern Selection Guide
+
+| Scenario | Pattern | Rationale |
+|----------|---------|-----------|
+| 3-6 features/principles | **Interactive Cards (A)** | Prominent showcase, touch-friendly |
+| 10-20 system components | **Force Graph (B)** | Complex relationships, exploration |
+| <3 items | Standard bullet list | Overkill for D3.js |
+| 20+ items | Hierarchical tree or clustering | Force graph too crowded |
+| Static content | Mermaid diagram | No interactivity needed |
+
+---
+
+### Implementation Checklist
+
+**Before adding D3.js visualization:**
+1. ✅ Is dataset complex enough? (3+ items minimum)
+2. ✅ Does interactivity add value? (vs static image)
+3. ✅ Are touch targets 44px+ for mobile?
+4. ✅ Is page loading <3s with D3.js?
+5. ✅ Does visualization scale to mobile?
+
+**Required files:**
+- `docs/assets/js/{page-name}-viz.js` - D3.js implementation
+- `docs/assets/css/main.css` - Visualization-specific CSS
+- CDN: `<script src="https://d3js.org/d3.v7.min.js"></script>`
+
+**Color Palette:**
+- Core System: `#7b61ff` (purple)
+- Brain Tiers: `#ef4444` (red), `#10b981` (green), `#3b82f6` (blue), `#f59e0b` (orange)
+- Agents: `#06b6d4` (cyan), `#8b5cf6` (purple)
+- Orchestrators: `#14b8a6` (teal), `#10b981` (green)
+
+**Font Awesome Icons:**
+- Use unicode characters in D3.js text elements
+- Font family: `'Font Awesome 6 Free'`, weight: `900`
+- Example: `\uf49e` = brain icon
+
+---
+
+### Testing Requirements
+
+**Browser Compatibility:**
+- Chrome 90+, Firefox 88+, Safari 14+, Edge 90+
+- Test touch interactions on iOS/Android
+
+**Performance Metrics:**
+- Initial render: <500ms
+- Hover response: <50ms
+- Drag smoothness: 45fps minimum
+
+**Responsive Testing:**
+- 375px mobile (iPhone SE)
+- 768px tablet (iPad)
+- 1440px desktop
+
+**Accessibility:**
+- Keyboard navigation: Tab + arrow keys
+- Screen reader: NVDA/JAWS/VoiceOver
+- Color contrast: WCAG 2.1 AA (4.5:1 minimum)
+
+---
+
 ## 📄 Version History
+### v4.1.2 (January 3, 2026) - D3.js Visualization Patterns
+- ✨ **NEW:** Added interactive D3.js visualization patterns section
+- ✨ **NEW:** Pattern A - Interactive Principle Cards (3-column grid with hover effects)
+- ✨ **NEW:** Pattern B - Force-Directed Architecture Graph (node-link diagram)
+- 📚 Added implementation checklists and testing requirements
+- 📚 Added color palette and icon references for D3.js
+- 📚 Added responsive breakpoints for visualizations
+- 📚 Added accessibility requirements (keyboard nav, screen readers, WCAG 2.1 AA)
+- 📚 Added pattern selection guide (when to use D3.js vs static)
+- 🎯 Reference implementation: `docs/architecture/index.html`
+
 ### v4.0.2 (January 1, 2026) - Major Optimization
 - 🎯 **BREAKING:** Simplified hierarchy to Level 0 → Level 1 only (removed Level 2 references)
 - 🎯 **OPTIMIZATION:** Removed 177 lines of redundant spacing documentation
