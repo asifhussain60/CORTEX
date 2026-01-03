@@ -1,18 +1,25 @@
 # 🎨 Glassmorphism Design Standard
 
-**Version:** 4.1.1 | **Status:** ✅ PRODUCTION  
-**Author:** Asif Hussain | **Last Updated:** January 3, 2026 (Statistics Corrected)  
+**Version:** 4.2.0 | **Status:** ✅ PRODUCTION  
+**Author:** Asif Hussain | **Last Updated:** January 3, 2026 (CSS Quality Rules Added)  
 **Copyright © 2026 Asif Hussain. All rights reserved.**
 
 ---
 
 ## 📋 Purpose
 
-This standard defines **modern glassmorphism patterns** for CORTEX documentation and UI components, incorporating **cutting-edge 2025 design techniques** including multi-layer depth, dynamic lighting, micro-interactions, and performance optimization.
+This standard defines **modern glassmorphism patterns** for CORTEX documentation and UI components, incorporating **cutting-edge 2025 design techniques** including multi-layer depth, dynamic lighting, micro-interactions, performance optimization, and **CSS quality enforcement**.
 
 **Target:** HTML documentation, dashboards, STS showcases, interactive visualizations  
 **Compatibility:** Chrome 90+, Firefox 88+, Safari 14+, Edge 90+  
 **Reference Implementation:** See `/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/documents/planning/active/cortex-documentation/artifacts/Level1-spec.md` for detailed page specifications.
+
+**✨ NEW in v4.2.0: CSS Quality Rules**
+- **Zero Duplicates:** Enforce no exact/partial duplicate CSS rules (<2% redundancy)
+- **100% Usage:** All CSS classes must be used in HTML (unused classes = dead code)
+- **Zero Missing:** All HTML class attributes must have CSS definitions
+- **Mobile-First:** A+ grade (95%+) mobile-friendliness mandatory
+- **Toolkit Enforcement:** Automated validation via `validate-css-*.ps1` scripts
 
 **⚠️ Animation Philosophy (v4.0.0):**
 - **Subtle & Modern:** All animations designed to be non-distracting
@@ -186,6 +193,170 @@ Is it Level 0 (Home)?
 14. **Content-Driven Layouts** - Choose grid columns (2 vs 3) based on description length, not preference (v4.1.3)
 15. **Smart Icon Placement** - Centered for short content (<100 chars), inline-left for long content (v4.1.3)
 16. **Left-Align Long Text** - Descriptions >100 characters must be left-justified for readability (v4.1.3)
+17. **Zero CSS Duplicates** - Exact/partial duplicate CSS rules forbidden (<2% redundancy tolerance) (v4.2.0)
+18. **100% CSS Usage** - Unused CSS classes = dead code, must be removed (v4.2.0)
+19. **Zero Missing CSS** - All HTML class attributes must have CSS definitions (v4.2.0)
+20. **Mobile-First Compliance** - A+ grade (95%+) mobile-friendliness score mandatory (v4.2.0)
+
+---
+
+## 🎨 CSS Quality Rules (v4.2.0 - MANDATORY)
+
+**Problem:** CSS bloat, duplicates, unused classes, missing definitions, and poor mobile responsiveness degrade performance and maintainability.  
+**Solution:** Automated validation via toolkit scripts enforcing quality thresholds.
+
+### Rule 1: Zero CSS Duplicates
+
+**Threshold:** <2% redundancy (exact + partial + scattered duplicates)
+
+**Categories:**
+- **Exact Duplicates:** Same selector, same properties (DELETE immediately)
+- **Partial Duplicates:** Same selector, overlapping properties (MERGE)
+- **Scattered Patterns:** Same property:value repeated (EXTRACT to utility class)
+
+**Validation:**
+```powershell
+.\cortex-toolkit\validate-css-duplicates.ps1 -Detailed -ThresholdPercentage 2
+```
+
+**Action:**
+- **CRITICAL:** Delete exact duplicates within 24 hours
+- **HIGH:** Merge partial duplicates within 1 week
+- **MEDIUM:** Extract scattered patterns within 2 weeks
+
+**Example Violation:**
+```css
+/* main.css:8695 */
+.principle-card {
+    background: rgba(0, 0, 0, 0.3);
+    padding: var(--spacing-lg);
+}
+
+/* main.css:8772 - DUPLICATE */
+.principle-card {
+    background: rgba(0, 0, 0, 0.3);
+    padding: var(--spacing-lg);
+}
+```
+
+**Fix:** Delete second instance (lines saved: 5)
+
+---
+
+### Rule 2: 100% CSS Usage
+
+**Threshold:** <5% unused CSS classes
+
+**Definition:** CSS class defined in `.css` files but NEVER used in `.html` files = dead code
+
+**Validation:**
+```powershell
+.\cortex-toolkit\validate-css-usage.ps1 -IncludeOrphans -StrictMode
+```
+
+**Action:**
+- **CRITICAL:** Delete unused classes with >6 months no usage
+- **HIGH:** Archive unused classes with <6 months no usage
+- **MEDIUM:** Document intentionally unused utility classes
+
+**Example Violation:**
+```css
+/* main.css:5420 */
+.legacy-nav-item {  /* NEVER USED IN HTML */
+    color: white;
+}
+```
+
+**Fix:** Delete class (lines saved: 8)
+
+---
+
+### Rule 3: Zero Missing CSS
+
+**Threshold:** 0 missing CSS classes (100% HTML-CSS alignment)
+
+**Definition:** HTML `class="..."` attribute referencing CSS class that doesn't exist = broken styling
+
+**Validation:**
+```powershell
+.\cortex-toolkit\validate-css-usage.ps1 -DetectCompound -StrictMode
+```
+
+**Action:**
+- **CRITICAL:** Fix within 24 hours (broken styling blocks users)
+- **Compound Selectors:** Verify `.parent.child` patterns exist
+
+**Example Violation:**
+```html
+<!-- architecture/index.html:58 -->
+<div class="principle-card-grid columns-2">  <!-- columns-2 NOT DEFINED -->
+```
+
+**Fix:** Add `.principle-card-grid.columns-2 { grid-template-columns: repeat(2, 1fr); }`
+
+---
+
+### Rule 4: Mobile-First Compliance
+
+**Threshold:** A+ grade (95%+ mobile-friendliness score)
+
+**Components (weighted):**
+- **Viewport Meta Tag:** 30% weight (100% required)
+- **Responsive CSS:** 30% weight (media queries @ 375px, 768px, 1440px)
+- **Touch Targets:** 20% weight (44px × 44px minimum)
+- **Grid Systems:** 20% weight (mobile breakpoints required)
+
+**Validation:**
+```powershell
+.\cortex-toolkit\validate-responsive-design.ps1 -IncludeTouchTargets -StrictMode -StandardBreakpoints
+```
+
+**Action:**
+- **CRITICAL:** Add viewport meta tag to ALL HTML files
+- **HIGH:** Add mobile breakpoints to ALL grid systems
+- **MEDIUM:** Increase touch target sizes to 44px minimum
+- **LOW:** Standardize breakpoints (remove 900px, 1200px non-standard)
+
+**Example Violation:**
+```html
+<!-- Missing viewport meta tag -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!-- ❌ NO VIEWPORT TAG -->
+</head>
+```
+
+**Fix:** Add `<meta name="viewport" content="width=device-width, initial-scale=1.0">`
+
+---
+
+### Enforcement Pipeline
+
+**Pre-Commit Validation:**
+1. Run `validate-css-duplicates.ps1` → PASS <2% redundancy
+2. Run `validate-css-usage.ps1` → PASS 0 missing classes
+3. Run `validate-responsive-design.ps1` → PASS A+ grade (95%+)
+
+**CI/CD Integration:**
+```powershell
+# Run all CSS quality checks
+$duplicate = .\cortex-toolkit\validate-css-duplicates.ps1 -ThresholdPercentage 2
+$usage = .\cortex-toolkit\validate-css-usage.ps1 -StrictMode
+$responsive = .\cortex-toolkit\validate-responsive-design.ps1 -StrictMode
+
+if ($duplicate.ExitCode -ne 0 -or $usage.ExitCode -ne 0 -or $responsive.ExitCode -ne 0) {
+    Write-Error "CSS Quality Validation FAILED"
+    exit 1
+}
+```
+
+**Monthly Audits:**
+- Generate comprehensive CSS quality reports
+- Track redundancy trends over time
+- Identify top CSS bloat contributors
+- Set reduction targets (e.g., reduce main.css from 10,505 to <9,000 lines)
 
 ---
 

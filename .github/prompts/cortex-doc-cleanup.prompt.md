@@ -20,12 +20,13 @@ Automated documentation cleanup orchestrator that organizes the `docs/` folder, 
 
 | Pattern | Action |
 |---------|--------|
-| `cleanup docs`, `organize docs` | Run full cleanup pipeline (all 7 phases) |
+| `cleanup docs`, `organize docs` | Run full cleanup pipeline (all 11 phases) |
 | `validate docs`, `check docs` | Validation only (dry run) |
 | `create stubs`, `generate stubs` | Stub page generation only |
 | `sync docs`, `update sitemap` | Sync documentation master files |
 | `align v5 docs`, `v5 alignment` | Identify v5.0 architecture gaps + update docs |
 | `generate visual sitemap` | Create visual-only node hierarchy map |
+| `validate css quality`, `check css` | CSS quality validation (duplicates, usage, responsive) |
 
 ---
 
@@ -489,7 +490,452 @@ Verify all 4 files show:
 
 ---
 
-### Phase 8: Final Validation Report 📊
+### Phase 8: CSS Duplicate Detection 🔍
+
+**Purpose:** Identify duplicate CSS rules across all stylesheets to eliminate redundancy
+
+**Steps:**
+1. Scan all CSS files in `docs/assets/css/` recursively
+2. Parse CSS rules and extract selectors + property blocks
+3. Detect duplicates:
+   - **Exact Duplicates:** Same selector, same properties/values
+   - **Partial Duplicates:** Same selector, overlapping properties
+   - **Scattered Duplicates:** Same properties across different files
+4. Generate duplicate report with consolidation recommendations
+
+**Duplicate Categories:**
+
+**Type 1: Exact Duplicates (CRITICAL)**
+```css
+/* File: main.css (Line 100) */
+.principle-card {
+    background: rgba(0, 0, 0, 0.3);
+    padding: var(--spacing-lg);
+}
+
+/* File: main.css (Line 8772) - DUPLICATE */
+.principle-card {
+    background: rgba(0, 0, 0, 0.3);
+    padding: var(--spacing-lg);
+}
+```
+
+**Type 2: Partial Duplicates (HIGH)**
+```css
+/* File: main.css (Line 200) */
+.principle-icon {
+    font-size: 2.5rem;
+    color: var(--accent-primary);
+}
+
+/* File: main.css (Line 8790) - PARTIAL OVERLAP */
+.principle-icon {
+    width: 60px;  /* NEW PROPERTY */
+    height: 60px; /* NEW PROPERTY */
+    font-size: 2.5rem; /* DUPLICATE */
+    color: var(--accent-primary); /* DUPLICATE */
+}
+```
+
+**Type 3: Scattered Rules (MEDIUM)**
+```css
+/* File: main.css */
+.card-a { transition: all 0.2s ease; }
+
+/* File: learning-hub.css */
+.card-b { transition: all 0.2s ease; } /* SAME PROPERTY, EXTRACT TO UTILITY CLASS */
+```
+
+**Detection Algorithm:**
+1. Parse all CSS files using CSS parser
+2. Build selector → properties hashmap
+3. Compare hashmaps across files
+4. Flag duplicates by type (Exact/Partial/Scattered)
+5. Calculate redundancy percentage: `(duplicate_lines / total_css_lines) * 100`
+
+**Output Report:**
+```json
+{
+  "scan_timestamp": "2026-01-03T12:00:00Z",
+  "files_scanned": 8,
+  "total_css_lines": 10505,
+  "duplicate_analysis": {
+    "exact_duplicates": {
+      "count": 12,
+      "lines_wasted": 156,
+      "percentage": 1.48,
+      "instances": [
+        {
+          "selector": ".principle-card",
+          "file1": "main.css:8695",
+          "file2": "main.css:8772",
+          "properties": ["background", "padding", "border-radius"],
+          "action": "DELETE file2 instance (legacy rule)"
+        }
+      ]
+    },
+    "partial_duplicates": {
+      "count": 8,
+      "overlapping_lines": 94,
+      "percentage": 0.89,
+      "instances": [
+        {
+          "selector": ".principle-icon",
+          "file1": "main.css:8714",
+          "file2": "main.css:8790",
+          "overlap": ["font-size", "color"],
+          "unique_in_file2": ["width", "height", "margin"],
+          "action": "MERGE into file1, delete file2"
+        }
+      ]
+    },
+    "scattered_duplicates": {
+      "count": 23,
+      "consolidation_potential": 187,
+      "percentage": 1.78,
+      "patterns": [
+        {
+          "property": "transition: all 0.2s ease",
+          "occurrences": 15,
+          "files": ["main.css", "learning-hub.css", "security.css"],
+          "action": "EXTRACT to .transition-base utility class"
+        }
+      ]
+    }
+  },
+  "total_redundancy": {
+    "lines": 437,
+    "percentage": 4.16,
+    "savings_potential": "~450 lines, 12KB reduction"
+  },
+  "recommendations": [
+    "Delete 12 exact duplicate rules (156 lines)",
+    "Merge 8 partial duplicates (94 lines consolidated)",
+    "Extract 23 scattered patterns to utility classes (187 lines → 23 lines)"
+  ]
+}
+```
+
+**Tools:**
+```powershell
+.\cortex-toolkit\validate-css-duplicates.ps1 -Detailed
+```
+
+**Success Criteria:**
+- All CSS files scanned
+- Duplicates categorized by type
+- JSON report generated
+- Redundancy percentage < 5%
+
+---
+
+### Phase 9: CSS Usage Validation 🔗
+
+**Purpose:** Find unused CSS classes and missing CSS classes to ensure 100% alignment between HTML and CSS
+
+**Steps:**
+1. **Extract CSS Classes from Stylesheets:**
+   - Parse all `.css` files in `docs/assets/css/`
+   - Build comprehensive class registry: `{class_name: [file, line_number]}`
+   - Count total CSS classes defined
+
+2. **Extract CSS Classes from HTML:**
+   - Parse all `.html` files in `docs/` (exclude `archives/`, `cortex-lens-output/`)
+   - Extract all `class="..."` attributes
+   - Handle multi-class attributes: `class="glass-card animation-t1"` → `["glass-card", "animation-t1"]`
+   - Build HTML class registry: `{class_name: [file, line_number, usage_count]}`
+
+3. **Cross-Reference Analysis:**
+   - **Unused CSS Classes:** In CSS but NOT in HTML (dead code)
+   - **Missing CSS Classes:** In HTML but NOT in CSS (broken styling)
+   - **Orphaned Classes:** Defined but never referenced
+
+**Detection Categories:**
+
+**Type 1: Unused CSS Classes (Dead Code)**
+```css
+/* main.css:5420 */
+.legacy-nav-item {  /* NEVER USED IN HTML */
+    color: white;
+}
+```
+
+**Type 2: Missing CSS Classes (Broken Styling)**
+```html
+<!-- architecture/index.html:53 -->
+<div class="principle-card-grid columns-2">  <!-- columns-2 NOT DEFINED IN CSS -->
+```
+
+**Type 3: Orphaned Utility Classes**
+```css
+/* main.css:3200 */
+.mt-4 { margin-top: 1rem; } /* DEFINED BUT NEVER USED */
+```
+
+**Analysis Output:**
+```json
+{
+  "scan_timestamp": "2026-01-03T12:00:00Z",
+  "css_analysis": {
+    "total_classes_defined": 1247,
+    "total_files_scanned": 8,
+    "classes_by_file": {
+      "main.css": 892,
+      "learning-hub.css": 156,
+      "security.css": 89
+    }
+  },
+  "html_analysis": {
+    "total_html_files": 339,
+    "total_class_usages": 4821,
+    "unique_classes_used": 1089
+  },
+  "unused_css_classes": {
+    "count": 158,
+    "percentage": 12.67,
+    "instances": [
+      {
+        "class": ".legacy-nav-item",
+        "file": "main.css",
+        "line": 5420,
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH"
+      },
+      {
+        "class": ".tier-grid-4col",
+        "file": "main.css",
+        "line": 6820,
+        "action": "ARCHIVE (replaced by .two-column-grid)",
+        "confidence": "HIGH"
+      }
+    ]
+  },
+  "missing_css_classes": {
+    "count": 23,
+    "severity": "HIGH",
+    "instances": [
+      {
+        "class": ".columns-2",
+        "used_in": [
+          "architecture/index.html:58",
+          "security/index.html:124"
+        ],
+        "action": "VERIFY: Check if .principle-card-grid.columns-2 selector exists",
+        "note": "May be compound selector issue"
+      }
+    ]
+  },
+  "recommendations": [
+    "Delete 158 unused CSS classes (estimated 1200 lines, 8KB)",
+    "Fix 23 missing CSS classes (broken styling)",
+    "Consider CSS purge tool for automatic cleanup"
+  ]
+}
+```
+
+**Compound Selector Detection:**
+- `.principle-card-grid.columns-2` (CSS) vs `columns-2` (HTML) → NOT missing, part of compound selector
+- `.glass-card.animation-t1` (CSS) vs `animation-t1` (HTML) → Validate compound usage
+
+**Tools:**
+```powershell
+.\cortex-toolkit\validate-css-usage.ps1 -IncludeOrphans -DetectCompound
+```
+
+**Success Criteria:**
+- All CSS classes catalogued
+- All HTML class usages extracted
+- Cross-reference complete
+- Missing classes < 1%
+- Unused classes identified with confidence scores
+
+---
+
+### Phase 10: Responsive Design Validation 📱
+
+**Purpose:** Ensure all HTML views are mobile-friendly and responsive per glassmorphism standard
+
+**Steps:**
+1. **Extract Responsive Requirements from Standard:**
+   - Read `glassmorphism-design-standard.md`
+   - Extract breakpoints: 375px (mobile), 768px (tablet), 1440px (desktop)
+   - Extract mandatory responsive patterns:
+     - Mobile-first CSS approach
+     - `<meta name="viewport" content="width=device-width, initial-scale=1.0">`
+     - Media queries: `@media (max-width: 768px)`
+     - Grid collapsing: 3-col → 2-col → 1-col
+     - Touch-friendly tap targets (44px minimum)
+
+2. **Scan HTML Files for Responsive Compliance:**
+   - Validate viewport meta tag presence
+   - Check for responsive CSS includes
+   - Detect fixed-width elements (anti-pattern)
+   - Validate grid systems use responsive classes
+
+3. **Scan CSS Files for Media Queries:**
+   - Count media queries per file
+   - Validate breakpoint consistency (768px, 1440px)
+   - Check mobile-first ordering (base → tablet → desktop)
+   - Detect missing responsive rules for key components
+
+**Validation Checks:**
+
+**Check 1: Viewport Meta Tag (CRITICAL)**
+```html
+<!-- MISSING = FAIL -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!-- ❌ NO VIEWPORT TAG -->
+</head>
+
+<!-- VALID = PASS -->
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+```
+
+**Check 2: Fixed-Width Anti-Patterns**
+```css
+/* ❌ FAIL: Fixed width breaks mobile */
+.container {
+    width: 1200px; /* NO max-width, will overflow on mobile */
+}
+
+/* ✅ PASS: Responsive width */
+.container {
+    max-width: 1400px;
+    width: 100%;
+    padding: 0 var(--spacing-md);
+}
+```
+
+**Check 3: Grid Responsiveness**
+```css
+/* ❌ FAIL: No mobile breakpoint */
+.principle-card-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    /* NO @media rules = broken on mobile */
+}
+
+/* ✅ PASS: Responsive grid */
+.principle-card-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Desktop */
+}
+
+@media (max-width: 768px) {
+    .principle-card-grid {
+        grid-template-columns: 1fr; /* Mobile: single column */
+    }
+}
+```
+
+**Check 4: Touch Target Size**
+```css
+/* ❌ FAIL: Too small for mobile touch */
+.nav-link {
+    padding: 0.25rem 0.5rem; /* ~8px × 16px = too small */
+}
+
+/* ✅ PASS: Touch-friendly */
+.nav-link {
+    padding: 0.75rem 1rem; /* 44px minimum height */
+}
+```
+
+**Validation Output:**
+```json
+{
+  "scan_timestamp": "2026-01-03T12:00:00Z",
+  "responsive_analysis": {
+    "total_html_files": 339,
+    "viewport_compliance": {
+      "files_with_viewport": 312,
+      "files_missing_viewport": 27,
+      "compliance_rate": 92.04,
+      "failing_files": [
+        "architecture/tier-deep-dive.html",
+        "security/compliance-dashboard.html"
+      ]
+    },
+    "css_media_queries": {
+      "total_media_queries": 187,
+      "breakpoints_used": ["375px", "768px", "1024px", "1440px"],
+      "non_standard_breakpoints": ["900px", "1200px"],
+      "mobile_first_violations": 12
+    },
+    "fixed_width_violations": {
+      "count": 8,
+      "instances": [
+        {
+          "file": "main.css",
+          "line": 3420,
+          "selector": ".legacy-container",
+          "issue": "width: 1200px (no max-width)",
+          "action": "REPLACE with max-width + width: 100%"
+        }
+      ]
+    },
+    "grid_responsive_issues": {
+      "count": 14,
+      "instances": [
+        {
+          "selector": ".feature-grid",
+          "file": "main.css:5620",
+          "issue": "No mobile breakpoint (@media max-width: 768px)",
+          "action": "ADD mobile grid-template-columns: 1fr"
+        }
+      ]
+    },
+    "touch_target_violations": {
+      "count": 23,
+      "instances": [
+        {
+          "selector": ".category-tag",
+          "file": "main.css:4820",
+          "current_size": "32px × 28px",
+          "required_size": "44px × 44px",
+          "action": "INCREASE padding to 0.75rem 1rem"
+        }
+      ]
+    }
+  },
+  "mobile_friendliness_score": {
+    "viewport_meta": 92.04,
+    "responsive_css": 88.12,
+    "touch_targets": 93.21,
+    "grid_systems": 85.67,
+    "overall_score": 89.76,
+    "grade": "B+ (Target: A+ = 95%)"
+  },
+  "recommendations": [
+    "Add viewport meta tags to 27 HTML files",
+    "Fix 8 fixed-width containers (replace with max-width)",
+    "Add mobile breakpoints to 14 grid systems",
+    "Increase touch target size for 23 interactive elements",
+    "Standardize breakpoints (remove 900px, 1200px)"
+  ]
+}
+```
+
+**Tools:**
+```powershell
+.\cortex-toolkit\validate-responsive-design.ps1 -IncludeTouchTargets -StrictMode
+```
+
+**Success Criteria:**
+- Viewport meta tag: 100% compliance
+- Responsive CSS: >95% coverage
+- Touch targets: >95% compliant (44px minimum)
+- Grid systems: 100% responsive
+- Overall mobile-friendliness score: A (95%+)
+
+---
+
+### Phase 11: Final Validation Report 📊
 
 **Purpose:** Generate comprehensive report of all changes
 
@@ -502,26 +948,34 @@ Verify all 4 files show:
    - Broken links (before → after)
    - Missing assets (CSS/JS/Images)
 
-2. **v5.0 Architecture Alignment**
+2. **CSS Quality Metrics** ✨ NEW
+   - Duplicate CSS rules (exact/partial/scattered)
+   - Redundancy percentage
+   - Unused CSS classes count
+   - Missing CSS classes count
+   - Mobile-friendliness score (A-F grade)
+   - Responsive compliance rate
+
+3. **v5.0 Architecture Alignment**
    - Gap analysis matrix
    - Master files updated (4/4)
    - Version increments applied
    - Consistency validation passed
 
-3. **Consistency Check**
+4. **Consistency Check**
    - docs-sitemap.md status
    - glassmorphism-design-standard.md version + status
    - 00-master-plan.md version + status
    - executive-summary.md status
    - All files synced? (Yes/No)
 
-4. **Visual Sitemap**
+5. **Visual Sitemap**
    - ASCII tree generated: Yes/No
    - Total nodes represented: 339
    - Hierarchy levels: 0 → 1 → 2 → 3
 
-5. **Next Actions**
-   - Priority 1 tasks (HIGH) - v5.0 architecture documentation
+6. **Next Actions**
+   - Priority 1 tasks (HIGH) - CSS quality fixes, v5.0 architecture documentation
    - Priority 2 tasks (MEDIUM)
    - Priority 3 tasks (LOW)
 
@@ -545,6 +999,30 @@ Verify all 4 files show:
   ADO v2 Level 2: 1/14 (7%) - Hub active, 13 feature stubs
   Total v5.0 Pages: 28 (all stubs pending implementation)
 
+🎨 CSS Quality Analysis:
+  Total CSS Files: 8 (10,505 lines)
+  Duplicate Rules: 43 (437 lines, 4.16% redundancy)
+    - Exact Duplicates: 12 (156 lines)
+    - Partial Duplicates: 8 (94 lines)
+    - Scattered Patterns: 23 (187 lines)
+  
+  CSS Classes: 1,247 defined | 1,089 used
+    - Unused Classes: 158 (12.67%) → DELETE
+    - Missing Classes: 23 (HIGH severity) → FIX
+  
+  Mobile-Friendliness: B+ (89.76% score)
+    - Viewport Meta Tags: 92.04% ⚠️ (27 files missing)
+    - Responsive CSS: 88.12% ⚠️ (14 grids need breakpoints)
+    - Touch Targets: 93.21% ⚠️ (23 elements too small)
+    - Grid Systems: 85.67% ⚠️ (8 fixed-width violations)
+  
+  PRIORITY FIXES:
+    - ❌ Fix 23 missing CSS classes (broken styling)
+    - ❌ Add viewport meta tags to 27 HTML files
+    - ❌ Delete 12 exact duplicate CSS rules (156 lines saved)
+    - ❌ Add mobile breakpoints to 14 grid systems
+    - ❌ Merge 8 partial duplicate rules (consolidation)
+
 🔄 v5.0 Architecture Alignment:
   Gap Analysis: ✅ COMPLETE (28 components identified)
   Master Files Updated: ✅ 4/4 (all synced)
@@ -565,21 +1043,31 @@ Verify all 4 files show:
   Status Icons: ✅ (active), 🚧 (stub), ⏭️ (archived)
 
 📋 Next Actions (Prioritized):
-  PRIORITY 1 (HIGH): v5.0 Architecture Documentation
+  PRIORITY 1 (HIGH): CSS Quality Fixes + v5.0 Architecture
+    - Fix 23 missing CSS classes (broken styling) - 2 hours
+    - Delete 12 exact duplicate CSS rules (156 lines) - 1 hour
+    - Add viewport meta tags to 27 HTML files - 1 hour
+    - Add mobile breakpoints to 14 grid systems - 2 hours
     - Master Orchestrator Hub (5 pages, 80 hours)
     - Planning v5 Level 2 (10 pages)
     - ADO v2 Level 2 (13 pages)
   
-  PRIORITY 2 (MEDIUM): Story Chapter Integration
+  PRIORITY 2 (MEDIUM): CSS Optimization + Story Chapter Integration
+    - Merge 8 partial duplicate CSS rules - 2 hours
+    - Delete 158 unused CSS classes (1,200 lines) - 3 hours
+    - Increase touch target size for 23 elements - 2 hours
     - Restore 14 archived chapters
   
-  PRIORITY 3 (LOW): Security Panel Completion
+  PRIORITY 3 (LOW): CSS Refactoring + Security Panel
+    - Extract 23 scattered patterns to utility classes - 4 hours
+    - Standardize breakpoints (remove 900px, 1200px) - 1 hour
     - Implement 6 stub pages
 
 ========================================
 ✅ ALL DOCUMENTATION FILES CONSISTENT
 ✅ V5.0 ARCHITECTURE ALIGNED
 ✅ VISUAL SITEMAP GENERATED
+✅ CSS QUALITY ANALYSIS COMPLETE
 ========================================
 ```
 
@@ -597,10 +1085,16 @@ Verify all 4 files show:
 Invoke-CortexToolkit -Tool "docs-organizer" -Mode "DryRun"
 Invoke-CortexToolkit -Tool "create-stub-pages"
 Invoke-CortexToolkit -Tool "generate-visual-sitemap"
+Invoke-CortexToolkit -Tool "validate-css-duplicates" -Mode "Detailed"
+Invoke-CortexToolkit -Tool "validate-css-usage" -Mode "IncludeOrphans"
+Invoke-CortexToolkit -Tool "validate-responsive-design" -Mode "StrictMode"
 
 # Direct execution (fallback)
 .\cortex-toolkit\docs-organizer.ps1 -DryRun
 .\cortex-toolkit\create-stub-pages.ps1
+.\cortex-toolkit\validate-css-duplicates.ps1 -Detailed
+.\cortex-toolkit\validate-css-usage.ps1 -IncludeOrphans -DetectCompound
+.\cortex-toolkit\validate-responsive-design.ps1 -IncludeTouchTargets -StrictMode
 ```
 
 **Benefits:**
@@ -608,6 +1102,7 @@ Invoke-CortexToolkit -Tool "generate-visual-sitemap"
 - Error handling with rollback capability
 - Progress tracking with timestamps
 - Execution history for auditing
+- Unified JSON report format across all tools
 
 ---
 
@@ -715,6 +1210,190 @@ Invoke-CortexToolkit -Tool "generate-visual-sitemap"
 - Proper hierarchy (L0 → L1 → L2 → L3)
 - Status icons accurate
 - Metadata included
+
+---
+
+### validate-css-duplicates.ps1 ✨ NEW
+
+**Location:** `cortex-toolkit/validate-css-duplicates.ps1`  
+**Version:** 1.0.0  
+**Lines:** 450+
+
+**Purpose:** Detect exact, partial, and scattered CSS duplicates across all stylesheets
+
+**Key Functions:**
+- `Parse-CssFile` - Extract selectors and property blocks
+- `Build-SelectorHashMap` - Create selector → properties mapping
+- `Compare-CssRules` - Detect duplicate patterns
+- `Calculate-Redundancy` - Compute redundancy percentage
+- `Generate-ConsolidationPlan` - Recommend fixes
+
+**Parameters:**
+- `-Detailed` - Include all duplicate instances in report
+- `-ThresholdPercentage` - Set redundancy alert threshold (default: 5%)
+- `-ExcludeFiles` - Skip specific CSS files
+- `-OutputFormat` - JSON or HTML report
+
+**Detection Algorithm:**
+1. Parse all CSS files in `docs/assets/css/`
+2. Extract selector → properties as key-value pairs
+3. Compare all selectors across files
+4. Flag exact matches (100% duplicate)
+5. Flag partial matches (>50% property overlap)
+6. Flag scattered patterns (same property repeated)
+7. Calculate redundancy: `(duplicate_lines / total_css_lines) * 100`
+
+**Output:** JSON report in `cortex-brain/documents/reports/css-duplicates-{timestamp}.json`
+
+**Example Usage:**
+```powershell
+.\cortex-toolkit\validate-css-duplicates.ps1 -Detailed -ThresholdPercentage 3
+```
+
+**Success Criteria:**
+- All CSS files parsed without errors
+- Duplicates categorized by type (Exact/Partial/Scattered)
+- Redundancy percentage calculated
+- Consolidation recommendations generated
+
+---
+
+### validate-css-usage.ps1 ✨ NEW
+
+**Location:** `cortex-toolkit/validate-css-usage.ps1`  
+**Version:** 1.0.0  
+**Lines:** 500+
+
+**Purpose:** Find unused CSS classes and missing CSS classes for 100% HTML-CSS alignment
+
+**Key Functions:**
+- `Extract-CssClasses` - Parse CSS selectors and build class registry
+- `Extract-HtmlClasses` - Parse HTML `class="..."` attributes
+- `Cross-Reference-Classes` - Match HTML classes to CSS definitions
+- `Detect-CompoundSelectors` - Handle `.parent.child` patterns
+- `Calculate-UsageRate` - Compute CSS utilization percentage
+
+**Parameters:**
+- `-IncludeOrphans` - Include unused CSS classes in report
+- `-DetectCompound` - Validate compound selector usage (`.glass-card.animation-t1`)
+- `-ExcludePatterns` - Skip CSS classes matching regex (e.g., utility classes)
+- `-StrictMode` - Fail on any missing CSS class
+
+**Analysis Process:**
+1. **CSS Registry Build:**
+   - Parse all `.css` files in `docs/assets/css/`
+   - Extract class selectors: `.class-name`, `.parent .child`, `.compound.selector`
+   - Build map: `{class: {file, line, compound_parent}}`
+
+2. **HTML Registry Build:**
+   - Parse all `.html` files in `docs/` (exclude archives)
+   - Extract `class="..."` attributes
+   - Handle multi-class: `class="card hover active"` → `["card", "hover", "active"]`
+   - Build map: `{class: [{file, line, usage_count}]}`
+
+3. **Cross-Reference:**
+   - **Unused CSS:** Classes in CSS but NOT in HTML (dead code)
+   - **Missing CSS:** Classes in HTML but NOT in CSS (broken styling)
+   - **Compound Validation:** `.columns-2` in HTML → verify `.principle-card-grid.columns-2` exists
+
+**Output:** JSON report in `cortex-brain/documents/reports/css-usage-{timestamp}.json`
+
+**Example Usage:**
+```powershell
+.\cortex-toolkit\validate-css-usage.ps1 -IncludeOrphans -DetectCompound -StrictMode
+```
+
+**Success Criteria:**
+- CSS class registry complete (1,247 classes)
+- HTML class usage complete (1,089 unique classes)
+- Cross-reference accurate (compound selectors handled)
+- Missing classes < 1%
+- Unused classes identified with confidence scores
+
+---
+
+### validate-responsive-design.ps1 ✨ NEW
+
+**Location:** `cortex-toolkit\validate-responsive-design.ps1`  
+**Version:** 1.0.0  
+**Lines:** 600+
+
+**Purpose:** Ensure all HTML views are mobile-friendly and responsive per glassmorphism standard
+
+**Key Functions:**
+- `Test-ViewportMetaTag` - Check for viewport meta tag in HTML
+- `Test-FixedWidthViolations` - Detect fixed-width anti-patterns in CSS
+- `Test-MediaQueries` - Validate breakpoint consistency (375px, 768px, 1440px)
+- `Test-TouchTargets` - Measure interactive element sizes (44px minimum)
+- `Test-GridResponsiveness` - Check grid systems have mobile breakpoints
+- `Calculate-MobileFriendlinessScore` - Compute overall score (A-F grade)
+
+**Parameters:**
+- `-IncludeTouchTargets` - Validate touch target sizes
+- `-StrictMode` - Fail if score < 95%
+- `-ExcludePages` - Skip specific HTML files
+- `-StandardBreakpoints` - Enforce 375px, 768px, 1440px only
+
+**Validation Checks:**
+
+**1. Viewport Meta Tag (Critical)**
+- Scan all HTML `<head>` sections
+- Required: `<meta name="viewport" content="width=device-width, initial-scale=1.0">`
+- Missing = automatic FAIL
+
+**2. Fixed-Width Violations**
+- Scan CSS for `width: XXXpx` without `max-width`
+- Flag containers with fixed widths > 768px
+- Recommend `max-width` + `width: 100%` pattern
+
+**3. Media Query Analysis**
+- Extract all `@media` rules from CSS
+- Validate breakpoints match standard (375px, 768px, 1440px)
+- Flag non-standard breakpoints (900px, 1200px)
+- Check mobile-first ordering (base → tablet → desktop)
+
+**4. Grid Responsiveness**
+- Find all `display: grid` rules
+- Verify each grid has mobile breakpoint (`@media max-width: 768px`)
+- Check for `grid-template-columns: 1fr` on mobile
+
+**5. Touch Target Size**
+- Measure padding/height of interactive elements:
+  - `.nav-link`, `.btn`, `.category-tag`, `.glass-card-clickable`
+- Required: 44px × 44px minimum (Apple/Google standard)
+- Flag violations with recommended padding
+
+**Scoring Algorithm:**
+```javascript
+viewport_score = (files_with_viewport / total_files) * 100
+responsive_css_score = (components_with_breakpoints / total_components) * 100
+touch_target_score = (compliant_targets / total_targets) * 100
+grid_score = (responsive_grids / total_grids) * 100
+
+overall_score = (viewport_score * 0.3) + 
+                (responsive_css_score * 0.3) + 
+                (touch_target_score * 0.2) + 
+                (grid_score * 0.2)
+
+grade = overall_score >= 95 ? 'A+' :
+        overall_score >= 90 ? 'A' :
+        overall_score >= 85 ? 'B+' :
+        overall_score >= 80 ? 'B' : 'C'
+```
+
+**Output:** JSON report in `cortex-brain/documents/reports/responsive-design-{timestamp}.json`
+
+**Example Usage:**
+```powershell
+.\cortex-toolkit\validate-responsive-design.ps1 -IncludeTouchTargets -StrictMode -StandardBreakpoints
+```
+
+**Success Criteria:**
+- Viewport meta tag: 100% compliance
+- Responsive CSS: >95% coverage
+- Touch targets: >95% compliant (44px minimum)
+- Grid systems: 100% responsive
+- Overall score: A (95%+)
 
 ---
 
