@@ -1,8 +1,71 @@
 # 🗺️ CORTEX Documentation Site - Master Specifications (INDEX)
 
-**Version:** 4.2.0 | **Status:** 🎯 EFFICIENCY-OPTIMIZED  
-**Author:** Asif Hussain | **Last Updated:** January 3, 2026 (Priority Reordering)  
+**Version:** 4.2.1 | **Status:** 🎯 EFFICIENCY-OPTIMIZED + DESIGN-LOCKED  
+**Author:** Asif Hussain | **Last Updated:** January 3, 2026 (Glassmorphism Compliance Added)  
 **Copyright © 2026 Asif Hussain. All rights reserved.**
+
+---
+
+## 🚨 MANDATORY DESIGN COMPLIANCE (READ FIRST)
+
+**⛔ CRITICAL: ALL implementations MUST follow glassmorphism-design-standard.md v4.1.1**
+
+**Reference File:** `cortex-brain/documents/standards/glassmorphism-design-standard.md`
+
+### 100% Compliance Requirements (NON-NEGOTIABLE)
+
+| Rule | Requirement | Enforcement |
+|------|-------------|-------------|
+| **1. Zero Inline Styles** | NO `style=""` attributes anywhere | ❌ FORBIDDEN |
+| **2. Animation Tier** | Level 0 (Home) → T3 allowed / Level 1+ → T1 ONLY | 🎯 MANDATORY |
+| **3. Clickable Elements** | `.glass-card-clickable` + `.animation-t1` + glow + lift + pointer | ✅ REQUIRED |
+| **4. Display Elements** | `.glass-card-display` + static reflection + default cursor | ✅ REQUIRED |
+| **5. Multi-Panel Grids** | 4 categories → 2x2 / 5 categories → 2x3 / 6 categories → 3x2 | 📐 STRICT |
+| **6. Spacing** | Cards: `var(--space-lg)` / Grids: `var(--space-lg)` gap / Sections: `var(--space-2xl)` | 📏 MANDATORY |
+| **7. Responsive** | 375px mobile / 768px tablet / 1440px desktop breakpoints | 📱 REQUIRED |
+| **8. Accessibility** | WCAG 2.1 AA / ARIA labels / keyboard navigation / reduced motion | ♿ MANDATORY |
+
+### Quick Reference Decision Tree
+
+```
+Creating a page?
+├── Is it Level 0 (Home)?
+│   ├── YES → T3 animations allowed (dramatic effects OK)
+│   └── NO → T1 animations ONLY (subtle lift + glow)
+├── Is element clickable?
+│   ├── YES → .glass-card-clickable + .animation-t1 + cursor: pointer
+│   └── NO → .glass-card-display + cursor: default
+└── Multi-panel needed (4+ categories)?
+    ├── 4 categories → .grid-2x2 (Security)
+    ├── 5 categories → .grid-2x3 (Orchestrators)
+    └── 6 categories → .grid-3x2 (Sharpen The Saw)
+```
+
+### Pre-Implementation Checklist
+
+**BEFORE writing ANY HTML/CSS, confirm:**
+- [ ] Read `glassmorphism-design-standard.md` sections relevant to page type
+- [ ] Identified correct pattern (Standard Tile vs Multi-Panel)
+- [ ] Selected correct CSS classes (`.glass-card-clickable` vs `.glass-card-display`)
+- [ ] Confirmed animation tier (T1 for Level 1+, T3 for Level 0 only)
+- [ ] Planned responsive breakpoints (375px, 768px, 1440px)
+- [ ] Verified zero inline styles policy
+
+**AFTER implementation, validate:**
+- [ ] Zero inline `style=""` attributes (search codebase)
+- [ ] All clickable elements have `.animation-t1` + pointer cursor
+- [ ] All display elements have `.glass-card-display` + default cursor
+- [ ] Spacing uses CSS variables (`var(--space-lg)`, etc.)
+- [ ] Responsive design tested at all 3 breakpoints
+- [ ] ARIA labels on all interactive elements
+
+**Validation Command:**
+```bash
+# Check for forbidden inline styles
+grep -r 'style="' docs/**/*.html
+
+# Expected output: No matches (clean)
+```
 
 ---
 
@@ -75,7 +138,24 @@ Master specification for CORTEX documentation site across Level 1 pages and Leve
 
 ### Multi-Panel Specifications (PRIORITY ORDER)
 
+**🚨 ALL MULTI-PANEL IMPLEMENTATIONS:** Must follow `glassmorphism-design-standard.md` Multi-Panel Pattern
+- **Reference:** Lines 105-158 (Multi-Panel Pattern section)
+- **Grid Rules:** 4 categories → 2x2 / 5 categories → 2x3 / 6 categories → 3x2
+- **CSS Structure:** `.main-panel-wrapper` (display card) + `.category-panels-grid` + grid modifier
+- **Animation:** T1 ONLY for Level 1 pages (`.animation-t1` on `.category-tag` links)
+
+---
+
 **🥇 PRIORITY #1: Orchestrators Multi-Panel** → `level1-specs/multi-panels/orchestrators-panel-spec.md`
+
+**🎨 Glassmorphism Compliance:**
+- **Pattern:** Multi-Panel (2x3 grid) - `glassmorphism-design-standard.md` lines 105-158
+- **Grid Class:** `.grid-2x3` (5 categories: Planning, Execution, System, Analysis, Debug)
+- **Wrapper:** `.glass-card-display .main-panel-wrapper` (non-clickable outer card)
+- **Links:** `.category-tag .animation-t1` (clickable with T1 hover effects)
+- **Spacing:** `gap: var(--space-lg)` between all panels
+
+**Technical Details:**
 - **Pages:** 22 (20 active, 2 stubs) - includes Master Orchestrator Hub (NEW v5.0)
 - **Categories:** 5 (Planning, Execution, System, Analysis, Debug)
 - **Orphans:** 5 pages need integration (cortex-debug.html, cortex-onboarding.html, etc.)
@@ -84,7 +164,18 @@ Master specification for CORTEX documentation site across Level 1 pages and Leve
 - **Value/Effort:** **9.0** (HIGHEST)
 - **Next:** Integrate orphans + add Master Hub visualizations
 
+---
+
 **🥈 PRIORITY #2: Best Practices Learning Hub** → `level1-specs/learning-hub/best-practices-learning-spec.md`
+
+**🎨 Glassmorphism Compliance:**
+- **Pattern:** Standard Tile + Guideline Cards - `glassmorphism-design-standard.md` lines 1415-1497
+- **Tile Class:** `.glass-card-clickable .animation-t1` (domain hub navigation)
+- **Guideline Cards:** `.guideline-card` (display cards with glass reflection)
+- **Code Blocks:** `background: rgba(0, 0, 0, 0.3)` with proper padding
+- **Spacing:** `margin-bottom: var(--space-lg)` between stacked guideline cards
+
+**Technical Details:**
 - **Level 1 Pages:** 17 (domain hubs)
 - **Level 2 Pages:** 80 (interactive learning modules) - 22 implemented, 58 stubs
 - **Structure:** 3-6 modules per domain (Beginner → Expert)
@@ -95,7 +186,18 @@ Master specification for CORTEX documentation site across Level 1 pages and Leve
 - **Value/Effort:** **8.5** (Phase 1), **7.2** (Phase 2)
 - **Strategic Value:** Junior developer training platform, onboarding acceleration
 
+---
+
 **#3: Security Multi-Panel** → `level1-specs/multi-panels/security-panel-spec.md`
+
+**🎨 Glassmorphism Compliance:**
+- **Pattern:** Multi-Panel (2x2 grid) - `glassmorphism-design-standard.md` lines 105-158
+- **Grid Class:** `.category-panels-grid` (default 2x2 for 4 categories)
+- **Categories:** Protection, Assessment, Compliance, Response
+- **Wrapper:** `.glass-card-display .main-panel-wrapper`
+- **Links:** `.category-tag .animation-t1`
+
+**Technical Details:**
 - **Pages:** 16 (10 active, 6 stubs) - includes stub index
 - **Categories:** 4 (Protection, Assessment, Compliance, Response)
 - **Visualizations:** 26+ (Mermaid + D3.js)
@@ -104,7 +206,18 @@ Master specification for CORTEX documentation site across Level 1 pages and Leve
 - **Value/Effort:** **4.6** (DEFERRED)
 - **Next:** Strategic planning after Learning Hub complete
 
+---
+
 **#4: Sharpen The Saw Multi-Panel** → `level1-specs/multi-panels/sharpen-saw-panel-spec.md`
+
+**🎨 Glassmorphism Compliance:**
+- **Pattern:** Multi-Panel (3x2 grid) - `glassmorphism-design-standard.md` lines 160-168
+- **Grid Class:** `.grid-3x2` (6 categories in 3 columns × 2 rows)
+- **Single-Link Optimization:** `.single-tag` compact styling (each category has 1 link)
+- **Categories:** Security, SOLID, Code Quality, Performance, Testing, Documentation
+- **Spacing:** `row-gap: var(--space-lg)` to prevent cramped rows
+
+**Technical Details:**
 - **Pages:** 6 (6 existing, 100% complete)
 - **Categories:** 6 (Security, SOLID, Code Quality, Performance, Testing, Documentation)
 - **Status:** 🟢 100% complete - MAINTENANCE ONLY
@@ -133,12 +246,20 @@ Master specification for CORTEX documentation site across Level 1 pages and Leve
 
 **Goal:** 73% → 91% completion in 10 hours
 
+**🚨 DESIGN COMPLIANCE:** Follow `glassmorphism-design-standard.md` v4.1.1
+- **Pattern:** Multi-Panel (2x3 grid for 5 categories)
+- **CSS Classes:** `.main-panel-wrapper`, `.category-panels-grid`, `.grid-2x3`
+- **Animation:** T1 ONLY (clickable: glow + lift / display: static)
+- **Spacing:** `gap: var(--space-lg)` (24px between panels)
+- **Zero inline styles:** ALL styling via CSS classes
+
 **Workflow:**
-1. Load Executive Summary → Orchestrators Panel Spec
-2. Integrate 5 orphan pages into navigation
-3. Add Master Orchestrator Hub (v5.0) with Pattern Router, State Manager, Execution Engine
-4. Validate glassmorphism compliance (zero inline styles, T1 animations)
-5. Run automated validation script
+1. **READ FIRST:** `glassmorphism-design-standard.md` (Multi-Panel Pattern section)
+2. Load Executive Summary → Orchestrators Panel Spec
+3. Integrate 5 orphan pages into navigation
+4. Add Master Orchestrator Hub (v5.0) with Pattern Router, State Manager, Execution Engine
+5. **VALIDATE:** Zero inline styles, T1 animations, responsive design (375px/768px/1440px)
+6. Run automated validation script
 
 **Expected Outcome:** Fully navigable 22-page orchestrator ecosystem with v5.0 Master Hub
 
@@ -146,12 +267,20 @@ Master specification for CORTEX documentation site across Level 1 pages and Leve
 
 **Goal:** 28% → 50% completion (implement 22 high-impact modules)
 
+**🚨 DESIGN COMPLIANCE:** Follow `glassmorphism-design-standard.md` v4.1.1
+- **Pattern:** Standard Tile + Best Practices Guideline Cards
+- **CSS Classes:** `.glass-card-clickable`, `.animation-t1`, `.guideline-card`
+- **Animation:** T1 ONLY (0.2-0.3s transitions, subtle lift on hover)
+- **Spacing:** `margin-bottom: var(--space-lg)` between stacked cards
+- **Accessibility:** ARIA labels, keyboard navigation, WCAG 2.1 AA
+
 **Workflow:**
-1. Load Executive Summary → Best Practices Learning Spec
-2. Identify 22 highest-value modules (Python, Testing, Security, Performance)
-3. Implement D3.js visualizations + code playgrounds
-4. Add quizzes + challenges
-5. Validate glassmorphism + responsive design
+1. **READ FIRST:** `glassmorphism-design-standard.md` (Pattern 11: Best Practices Guideline Cards)
+2. Load Executive Summary → Best Practices Learning Spec
+3. Identify 22 highest-value modules (Python, Testing, Security, Performance)
+4. Implement D3.js visualizations + code playgrounds (following design standard patterns)
+5. Add quizzes + challenges with `.glass-card-clickable` styling
+6. **VALIDATE:** Responsive design, zero inline styles, T1 animations only
 
 **Expected Outcome:** Functional junior developer training platform (50% coverage)
 
@@ -159,17 +288,29 @@ Master specification for CORTEX documentation site across Level 1 pages and Leve
 
 **Goal:** 50% → 100% completion (implement remaining 36 modules)
 
+**🚨 DESIGN COMPLIANCE:** Follow `glassmorphism-design-standard.md` v4.1.1
+- **Consistency:** Match Phase 1 patterns (Standard Tile + Guideline Cards)
+- **Advanced Visuals:** D3.js charts following glassmorphism patterns
+- **Performance:** <2s render, <100ms interaction, GPU acceleration
+- **Mobile-first:** 375px base with responsive breakpoints
+
 **Workflow:**
-1. Complete remaining stub modules across all 17 domains
-2. Add advanced visualizations (Sankey, Force Graphs, Heatmaps)
-3. Implement progress tracking + gamification
-4. Full validation + performance testing
+1. **REFERENCE:** Phase 1 implementations for consistency
+2. Complete remaining stub modules across all 17 domains
+3. Add advanced visualizations (Sankey, Force Graphs, Heatmaps) with glassmorphism styling
+4. Implement progress tracking + gamification (`.glass-card-clickable` for interactive elements)
+5. **VALIDATE:** Full validation + performance testing + accessibility audit
 
 **Expected Outcome:** Complete 80-module learning platform (55 learning hours)
 
 ### Priority #4: Security Pages (DEFERRED - 54h)
 
 **Goal:** 54% → 100% completion
+
+**🚨 DESIGN COMPLIANCE:** Follow `glassmorphism-design-standard.md` v4.1.1
+- **Pattern:** Multi-Panel (2x2 grid for 4 categories)
+- **CSS Classes:** `.main-panel-wrapper`, `.category-panels-grid` (default 2x2)
+- **Categories:** Protection, Assessment, Compliance, Response
 
 **Workflow:** Defer until Learning Hub complete (better ROI)
 
@@ -426,10 +567,147 @@ Every Level 1 spec MUST include:
 - [ ] All visualizations have full D3.js/Mermaid code
 - [ ] Acceptance criteria include all 4 categories (functional, performance, visual, accessibility)
 - [ ] Performance benchmarks specified (<2s render, <100ms interaction)
-- [ ] Glassmorphism compliance validated (zero inline styles)
+- [ ] **🚨 GLASSMORPHISM COMPLIANCE** validated (see checklist below)
 - [ ] Responsive design tested (375px, 768px, 1440px)
 - [ ] ARIA labels on all interactive elements
 - [ ] Deployment checklist includes rollback procedure
+
+---
+
+## 🎨 GLASSMORPHISM VALIDATION CHECKLIST (MANDATORY)
+
+**Reference:** `cortex-brain/documents/standards/glassmorphism-design-standard.md` v4.1.1
+
+### Pre-Deployment Validation (RUN BEFORE EVERY COMMIT)
+
+#### 1. Zero Inline Styles (CRITICAL)
+```bash
+# Search for forbidden inline styles
+grep -r 'style="' docs/**/*.html
+
+# Expected: No matches found (0 results)
+# If matches found: Remove ALL inline styles, use CSS classes instead
+```
+
+#### 2. CSS Class Validation
+
+**Clickable Elements:**
+- [ ] All navigational cards use `.glass-card-clickable`
+- [ ] All clickable elements have `.animation-t1`
+- [ ] All links in multi-panels use `.category-tag .animation-t1`
+- [ ] Hover effects: glow border + `translateY(-2px)` lift
+- [ ] Cursor: `pointer` on hover
+
+**Display Elements:**
+- [ ] All info panels use `.glass-card-display`
+- [ ] Multi-panel wrappers use `.main-panel-wrapper`
+- [ ] No hover lift effects on display cards
+- [ ] Cursor: `default` (no pointer)
+
+**Multi-Panel Grids:**
+- [ ] 4 categories → `.category-panels-grid` (default 2x2)
+- [ ] 5 categories → `.category-panels-grid .grid-2x3`
+- [ ] 6 categories → `.category-panels-grid .grid-3x2`
+
+#### 3. Animation Tier Compliance
+
+**Level 0 (Home Page):**
+- [ ] T3 animations allowed (borderGlowSweep, blobMorph OK)
+- [ ] Dramatic effects on hero sections only
+
+**Level 1+ (All Detail Pages):**
+- [ ] T1 animations ONLY (0.2-0.3s transitions)
+- [ ] NO borderGlowSweep animations
+- [ ] NO infinite keyframe animations on clickable elements
+- [ ] NO blobMorph effects
+- [ ] Simple hover: `transform: translateY(-2px)` + border glow
+
+#### 4. Spacing Validation
+
+**Stacked Cards:**
+- [ ] `margin-bottom: var(--space-lg)` between consecutive cards
+- [ ] Minimum 24px vertical gap
+
+**Multi-Panel Grids:**
+- [ ] `gap: var(--space-lg)` between all panels
+- [ ] `row-gap: var(--space-lg)` for 3x2 grids (prevents cramped rows)
+
+**Sections:**
+- [ ] `margin-bottom: var(--space-2xl)` after major sections
+- [ ] `margin-bottom: var(--space-3xl)` after key features
+
+#### 5. Responsive Design Validation
+
+**Mobile (375px):**
+- [ ] Single column layouts
+- [ ] Touch-friendly 44px minimum tap targets
+- [ ] Stacked navigation
+- [ ] Reduced `gap: var(--space-md)` for tighter spacing
+
+**Tablet (768px):**
+- [ ] 2-column grids for multi-panels (or 3 columns for 3x2)
+- [ ] Horizontal navigation
+- [ ] Expanded spacing
+
+**Desktop (1440px):**
+- [ ] Full grid layouts (2x2, 2x3, 3x2)
+- [ ] Maximum content width: 1400px
+- [ ] Wider gaps: `var(--space-2xl)` or `var(--space-3xl)`
+
+#### 6. Accessibility Validation
+
+- [ ] ARIA labels on all interactive elements
+- [ ] Keyboard navigation works (Tab, Enter, Escape)
+- [ ] Focus states visible (2px solid accent outline)
+- [ ] Reduced motion support: `@media (prefers-reduced-motion: reduce)`
+- [ ] Color contrast ≥4.5:1 for text (WCAG 2.1 AA)
+- [ ] Screen reader tested (NVDA/JAWS)
+
+#### 7. Performance Validation
+
+- [ ] D3.js visualizations render <2s
+- [ ] Hover interactions respond <100ms
+- [ ] GPU acceleration enabled (`will-change: transform`)
+- [ ] Lazy loading for off-screen images
+- [ ] No layout shift (CLS score <0.1)
+
+### Automated Validation Script
+
+```bash
+# Run from project root
+cd d:/PROJECTS/CORTEX
+
+# Check inline styles (must return 0 results)
+echo "=== Checking for inline styles ==="
+grep -r 'style="' docs/**/*.html | wc -l
+
+# Check T1 animation usage on Level 1 pages
+echo "=== Validating animation tiers ==="
+grep -r "animation-t1" docs/**/*.html | grep -v "docs/index.html" | wc -l
+
+# Check responsive breakpoints
+echo "=== Validating responsive CSS ==="
+grep -r "@media (min-width: 768px)" docs/assets/css/*.css | wc -l
+grep -r "@media (min-width: 1440px)" docs/assets/css/*.css | wc -l
+
+# Validate spacing variables
+echo "=== Checking spacing variables ==="
+grep -r "var(--space-lg)" docs/assets/css/*.css | wc -l
+grep -r "var(--space-2xl)" docs/assets/css/*.css | wc -l
+
+echo "=== Validation Complete ==="
+```
+
+### Common Violations & Fixes
+
+| Violation | Wrong | Correct |
+|-----------|-------|---------|
+| Inline styles | `<div style="color: red">` | `<div class="text-error">` |
+| Wrong animation tier | `.glass-card::after { animation: borderGlowSweep... }` (Level 1) | Remove animation, use T1 hover only |
+| Wrong card class | `<div class="glass-card">` (ambiguous) | `<div class="glass-card-clickable">` or `.glass-card-display` |
+| Missing grid modifier | `.category-panels-grid` (5 categories) | `.category-panels-grid .grid-2x3` |
+| Hard-coded spacing | `margin-bottom: 24px` | `margin-bottom: var(--space-lg)` |
+| Missing hover cursor | `.nav-link:hover {}` | `.nav-link:hover { cursor: pointer; }` |
 
 ---
 
