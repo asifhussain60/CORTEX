@@ -143,147 +143,187 @@ graph TB
             </div>
         </section>
 
-        <!-- Tier Details (Masonry Grid) -->
+        <!-- Tier Details (2-Column Layout) -->
         <section class="glass-card-display animation-t1">
             <h2 class="section-title">
                 <i class="fas fa-layer-group"></i>
                 Tier Deep Dive
             </h2>
             
-            <div class="masonry-grid">
+            <div class="two-column-grid">
                 <!-- Tier 0: SKULL Governance -->
                 <div class="glass-card-clickable animation-t1">
-                    <div class="card-icon tier0-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3 class="card-title">Tier 0: SKULL Governance</h3>
-                    <p class="card-subtitle">Brain Protection & Safety Validation</p>
-                    
-                    <div class="card-section">
-                        <h4>Purpose</h4>
-                        <ul class="feature-list-compact">
-                            <li>Validates all operations before execution</li>
-                            <li>Enforces SKULL brain protection rules</li>
-                            <li>Prevents code duplication and anti-patterns</li>
-                            <li>First line of defense for brain integrity</li>
-                        </ul>
+                    <div class="tier-header">
+                        <div class="card-icon tier0-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div>
+                            <h3 class="card-title">Tier 0: SKULL Governance</h3>
+                            <p class="card-subtitle">Brain Protection & Safety Validation</p>
+                        </div>
                     </div>
                     
-                    <div class="card-section">
-                        <h4>SKULL Rules</h4>
-                        <ul class="feature-list-compact">
-                            <li><strong>TDD_ENFORCEMENT:</strong> RED→GREEN→REFACTOR mandatory</li>
-                            <li><strong>HOLISTIC_DISCOVERY:</strong> Search before create</li>
-                            <li><strong>REFACTOR_CLEANUP:</strong> Remove orphaned code</li>
-                            <li><strong>GIT_ISOLATION:</strong> CORTEX/user repo separation</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="card-section">
-                        <h4>Storage</h4>
-                        <code class="code-inline">cortex-brain/brain-protection-rules.yaml</code>
+                    <div class="capability-tiles">
+                        <div class="capability-tile">
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <strong>TDD_ENFORCEMENT</strong>
+                                <span>RED→GREEN→REFACTOR mandatory</span>
+                            </div>
+                        </div>
+                        <div class="capability-tile">
+                            <i class="fas fa-search"></i>
+                            <div>
+                                <strong>HOLISTIC_DISCOVERY</strong>
+                                <span>Search before create</span>
+                            </div>
+                        </div>
+                        <div class="capability-tile">
+                            <i class="fas fa-broom"></i>
+                            <div>
+                                <strong>REFACTOR_CLEANUP</strong>
+                                <span>Remove orphaned code</span>
+                            </div>
+                        </div>
+                        <div class="capability-tile">
+                            <i class="fas fa-code-branch"></i>
+                            <div>
+                                <strong>GIT_ISOLATION</strong>
+                                <span>CORTEX/user repo separation</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Tier 1: Working Memory -->
                 <div class="glass-card-clickable animation-t1">
-                    <div class="card-icon tier1-icon">
-                        <i class="fas fa-memory"></i>
-                    </div>
-                    <h3 class="card-title">Tier 1: Working Memory</h3>
-                    <p class="card-subtitle">70-Conversation FIFO Buffer</p>
-                    
-                    <div class="card-section">
-                        <h4>Purpose</h4>
-                        <ul class="feature-list-compact">
-                            <li>Recent conversation history with fast access</li>
-                            <li>Sub-100ms retrieval performance</li>
-                            <li>Context for current session</li>
-                            <li>FIFO buffer prevents unbounded growth</li>
-                        </ul>
+                    <div class="tier-header">
+                        <div class="card-icon tier1-icon">
+                            <i class="fas fa-memory"></i>
+                        </div>
+                        <div>
+                            <h3 class="card-title">Tier 1: Working Memory</h3>
+                            <p class="card-subtitle">70-Conversation FIFO Buffer</p>
+                        </div>
                     </div>
                     
-                    <div class="card-section">
-                        <h4>Capabilities</h4>
-                        <ul class="feature-list-compact">
-                            <li><strong>Retention:</strong> Last 70 conversations</li>
-                            <li><strong>Format:</strong> JSON Lines (JSONL)</li>
-                            <li><strong>Cleanup:</strong> Automatic FIFO eviction</li>
-                            <li><strong>Performance:</strong> &lt; 100ms retrieval</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="card-section">
-                        <h4>Storage</h4>
-                        <code class="code-inline">cortex-brain/tier1/working-memory.jsonl</code>
+                    <div class="capability-tiles">
+                        <div class="capability-tile">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <strong>Sub-100ms Retrieval</strong>
+                                <span>Fast access to recent context</span>
+                            </div>
+                        </div>
+                        <div class="capability-tile">
+                            <i class="fas fa-database"></i>
+                            <div>
+                                <strong>70 Conversations</strong>
+                                <span>FIFO buffer with auto-eviction</span>
+                            </div>
+                        </div>
+                        <div class="capability-tile">
+                            <i class="fas fa-file-code"></i>
+                            <div>
+                                <strong>JSON Lines Format</strong>
+                                <span>Efficient structured storage</span>
+                            </div>
+                        </div>
+                        <div class="capability-tile">
+                            <i class="fas fa-comments"></i>
+                            <div>
+                                <strong>Session Context</strong>
+                                <span>Current conversation state</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Tier 2: Knowledge Graph -->
                 <div class="glass-card-clickable animation-t1">
-                    <div class="card-icon tier2-icon">
-                        <i class="fas fa-project-diagram"></i>
-                    </div>
-                    <h3 class="card-title">Tier 2: Knowledge Graph</h3>
-                    <p class="card-subtitle">Pattern Learning & Relationships</p>
-                    
-                    <div class="card-section">
-                        <h4>Purpose</h4>
-                        <ul class="feature-list-compact">
-                            <li>Long-term pattern recognition</li>
-                            <li>Relationship mapping between concepts</li>
-                            <li>Learning from past interactions</li>
-                            <li>Semantic understanding of codebase</li>
-                        </ul>
+                    <div class="tier-header">
+                        <div class="card-icon tier2-icon">
+                            <i class="fas fa-project-diagram"></i>
+                        </div>
+                        <div>
+                            <h3 class="card-title">Tier 2: Knowledge Graph</h3>
+                            <p class="card-subtitle">Pattern Learning & Relationships</p>
+                        </div>
                     </div>
                     
-                    <div class="card-section">
-                        <h4>Capabilities</h4>
-                        <ul class="feature-list-compact">
-                            <li><strong>Nodes:</strong> Files, functions, concepts</li>
-                            <li><strong>Edges:</strong> Dependencies, relationships</li>
-                            <li><strong>Inference:</strong> Pattern detection</li>
-                            <li><strong>Evolution:</strong> Continuous learning</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="card-section">
-                        <h4>Storage</h4>
-                        <code class="code-inline">cortex-brain/tier2/knowledge-graph.yaml</code>
+                    <div class="capability-tiles">
+                        <div class="capability-tile">
+                            <i class="fas fa-brain"></i>
+                            <div>
+                                <strong>Pattern Recognition</strong>
+                                <span>Learn from past interactions</span>
+                            </div>
+                        </div>
+                        <div class="capability-tile">
+                            <i class="fas fa-sitemap"></i>
+                            <div>
+                                <strong>Relationship Mapping</strong>
+                                <span>Dependencies & connections</span>
+                            </div>
+                        </div>
+                        <div class="capability-tile">
+                            <i class="fas fa-lightbulb"></i>
+                            <div>
+                                <strong>Semantic Inference</strong>
+                                <span>Understand codebase context</span>
+                            </div>
+                        </div>
+                        <div class="capability-tile">
+                            <i class="fas fa-chart-line"></i>
+                            <div>
+                                <strong>Continuous Learning</strong>
+                                <span>Evolves with usage</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Tier 3: Development Context -->
                 <div class="glass-card-clickable animation-t1">
-                    <div class="card-icon tier3-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3 class="card-title">Tier 3: Development Context</h3>
-                    <p class="card-subtitle">Per-Repo Metrics & Analytics</p>
-                    
-                    <div class="card-section">
-                        <h4>Purpose</h4>
-                        <ul class="feature-list-compact">
-                            <li>Repository-specific development patterns</li>
-                            <li>Code quality metrics and trends</li>
-                            <li>Team velocity and productivity</li>
-                            <li>Technology stack preferences</li>
-                        </ul>
+                    <div class="tier-header">
+                        <div class="card-icon tier3-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div>
+                            <h3 class="card-title">Tier 3: Development Context</h3>
+                            <p class="card-subtitle">Per-Repo Metrics & Analytics</p>
+                        </div>
                     </div>
                     
-                    <div class="card-section">
-                        <h4>Capabilities</h4>
-                        <ul class="feature-list-compact">
-                            <li><strong>Metrics:</strong> Coverage, complexity, velocity</li>
-                            <li><strong>Patterns:</strong> Common issues, solutions</li>
-                            <li><strong>Tech Stack:</strong> Languages, frameworks</li>
-                            <li><strong>History:</strong> Evolution over time</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="card-section">
-                        <h4>Storage</h4>
-                        <code class="code-inline">cortex-brain/tier3/development-context.yaml</code>
+                    <div class="capability-tiles">
+                        <div class="capability-tile">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <div>
+                                <strong>Quality Metrics</strong>
+                                <span>Coverage, complexity, velocity</span>
+                            </div>
+                        </div>
+                        <div class="capability-tile">
+                            <i class="fas fa-bug"></i>
+                            <div>
+                                <strong>Issue Patterns</strong>
+                                <span>Common problems & solutions</span>
+                            </div>
+                        </div>
+                        <div class="capability-tile">
+                            <i class="fas fa-layer-group"></i>
+                            <div>
+                                <strong>Tech Stack Analysis</strong>
+                                <span>Languages & frameworks used</span>
+                            </div>
+                        </div>
+                        <div class="capability-tile">
+                            <i class="fas fa-history"></i>
+                            <div>
+                                <strong>Evolution Tracking</strong>
+                                <span>Codebase growth over time</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -298,83 +338,110 @@ graph TB
             
             <p class="intro-text">CORTEX employs <strong>two specialist agents</strong> that work within orchestrators to provide domain-specific intelligence. Each agent has dedicated capabilities and integrates with the 4-tier brain for context and memory.</p>
             
-            <!-- Agent Architecture Diagram -->
-            <div class="diagram-container">
-                <div class="mermaid">
-graph LR
-    Orchestrator["⚙️ Orchestrator<br/>(Planning, TDD, etc.)"]
-    
-    Orchestrator --> PlanningAgent["📋 Planning Agent<br/>Task Decomposition"]
-    Orchestrator --> StrategyAgent["🔍 Strategic Agent<br/>Architecture Analysis"]
-    
-    PlanningAgent --> Brain["🧠 4-Tier Brain<br/>Memory Access"]
-    StrategyAgent --> Brain
-    
-    Brain --> T1["💾 Tier 1"]
-    Brain --> T2["🕸️ Tier 2"]
-    Brain --> T3["📊 Tier 3"]
-    
-    style Orchestrator fill:#f59e0b,stroke:#fbbf24,stroke-width:2px,color:#fff
-    style PlanningAgent fill:#3b82f6,stroke:#60a5fa,stroke-width:2px,color:#fff
-    style StrategyAgent fill:#7b61ff,stroke:#9f87ff,stroke-width:2px,color:#fff
-    style Brain fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
-                </div>
-            </div>
-            
             <div class="two-column-grid">
                 <!-- Planning Agent -->
                 <div class="glass-card-clickable animation-t1">
-                    <div class="card-icon agent-planning">
-                        <i class="fas fa-tasks"></i>
-                    </div>
-                    <h3 class="card-title">Planning Agent</h3>
-                    <p class="card-subtitle">Task Decomposition & Workflow Design</p>
-                    
-                    <div class="card-section">
-                        <h4>Capabilities</h4>
-                        <ul class="feature-list-compact">
-                            <li>Break complex tasks into phases</li>
-                            <li>Sequence dependencies logically</li>
-                            <li>Estimate effort and duration</li>
-                            <li>Identify risks and blockers</li>
-                        </ul>
+                    <div class="tier-header">
+                        <div class="card-icon agent-planning">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <div>
+                            <h3 class="card-title">Planning Agent</h3>
+                            <p class="card-subtitle">Task Decomposition & Workflow Design</p>
+                        </div>
                     </div>
                     
-                    <div class="card-section">
-                        <h4>Used By</h4>
-                        <ul class="feature-list-compact">
-                            <li>Planning System (primary)</li>
-                            <li>ADO Orchestrator</li>
-                            <li>Execution Orchestrator</li>
-                        </ul>
+                    <div class="capability-tiles">
+                        <div class="capability-tile">
+                            <i class="fas fa-puzzle-piece"></i>
+                            <div>
+                                <strong>Task Decomposition</strong>
+                                <span>Break complex tasks into phases</span>
+                            </div>
+                        </div>
+                        <div class="capability-tile">
+                            <i class="fas fa-stream"></i>
+                            <div>
+                                <strong>Dependency Sequencing</strong>
+                                <span>Logical workflow ordering</span>
+                            </div>
+                        </div>
+                        <div class="capability-tile">
+                            <i class="fas fa-stopwatch"></i>
+                            <div>
+                                <strong>Effort Estimation</strong>
+                                <span>Duration & resource planning</span>
+                            </div>
+                        </div>
+                        <div class="capability-tile">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <div>
+                                <strong>Risk Identification</strong>
+                                <span>Detect blockers early</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="used-by-section">
+                        <h4><i class="fas fa-cogs"></i> Used By</h4>
+                        <div class="orchestrator-tags">
+                            <span class="orch-tag">Planning System</span>
+                            <span class="orch-tag">ADO Orchestrator</span>
+                            <span class="orch-tag">Execution Orchestrator</span>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Strategic Agent -->
                 <div class="glass-card-clickable animation-t1">
-                    <div class="card-icon agent-strategy">
-                        <i class="fas fa-chess"></i>
-                    </div>
-                    <h3 class="card-title">Strategic Reasoning Agent</h3>
-                    <p class="card-subtitle">Architecture Analysis & Design Patterns</p>
-                    
-                    <div class="card-section">
-                        <h4>Capabilities</h4>
-                        <ul class="feature-list-compact">
-                            <li>Analyze system architecture</li>
-                            <li>Suggest design patterns</li>
-                            <li>Identify code smells</li>
-                            <li>Recommend refactoring strategies</li>
-                        </ul>
+                    <div class="tier-header">
+                        <div class="card-icon agent-strategy">
+                            <i class="fas fa-chess"></i>
+                        </div>
+                        <div>
+                            <h3 class="card-title">Strategic Reasoning Agent</h3>
+                            <p class="card-subtitle">Architecture Analysis & Design Patterns</p>
+                        </div>
                     </div>
                     
-                    <div class="card-section">
-                        <h4>Used By</h4>
-                        <ul class="feature-list-compact">
-                            <li>Architectural Review</li>
-                            <li>Refinement Orchestrator</li>
-                            <li>CORTEX Lens</li>
-                        </ul>
+                    <div class="capability-tiles">
+                        <div class="capability-tile">
+                            <i class="fas fa-sitemap"></i>
+                            <div>
+                                <strong>Architecture Analysis</strong>
+                                <span>System design evaluation</span>
+                            </div>
+                        </div>
+                        <div class="capability-tile">
+                            <i class="fas fa-drafting-compass"></i>
+                            <div>
+                                <strong>Design Patterns</strong>
+                                <span>Best practice recommendations</span>
+                            </div>
+                        </div>
+                        <div class="capability-tile">
+                            <i class="fas fa-bug"></i>
+                            <div>
+                                <strong>Code Smell Detection</strong>
+                                <span>Identify anti-patterns</span>
+                            </div>
+                        </div>
+                        <div class="capability-tile">
+                            <i class="fas fa-magic"></i>
+                            <div>
+                                <strong>Refactoring Strategies</strong>
+                                <span>Improvement recommendations</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="used-by-section">
+                        <h4><i class="fas fa-cogs"></i> Used By</h4>
+                        <div class="orchestrator-tags">
+                            <span class="orch-tag">Architectural Review</span>
+                            <span class="orch-tag">Refinement Orchestrator</span>
+                            <span class="orch-tag">CORTEX Lens</span>
+                        </div>
                     </div>
                 </div>
             </div>

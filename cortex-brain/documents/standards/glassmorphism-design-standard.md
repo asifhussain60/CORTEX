@@ -3131,7 +3131,153 @@ const simulation = d3.forceSimulation(nodes)
 
 ---
 
+### Pattern C: Simplified 2-Column Tier Layout
+
+**Replaces:** 4-column masonry grids with excessive text  
+**Visual Impact:** Clean 2-column layout with inline icons and card capabilities
+
+**When to Use:**
+- 4 related components/tiers with detailed information
+- Need horizontal icon+title layout (not stacked)
+- Card-based capability lists (not bullets)
+- Reduce visual verbosity
+
+**HTML Structure:**
+```html
+<div class="two-column-grid">
+    <div class="glass-card-clickable animation-t1">
+        <!-- Inline Icon + Title Header -->
+        <div class="tier-header">
+            <div class="card-icon tier0-icon">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <div>
+                <h3 class="card-title">Tier 0: SKULL Governance</h3>
+                <p class="card-subtitle">Brain Protection & Safety Validation</p>
+            </div>
+        </div>
+        
+        <!-- Card-based Capabilities (not bullets) -->
+        <div class="capability-tiles">
+            <div class="capability-tile">
+                <i class="fas fa-check-circle"></i>
+                <div>
+                    <strong>TDD_ENFORCEMENT</strong>
+                    <span>RED→GREEN→REFACTOR mandatory</span>
+                </div>
+            </div>
+            <!-- More tiles... -->
+        </div>
+    </div>
+</div>
+```
+
+**CSS Requirements:**
+```css
+/* Inline Icon + Title Header */
+.tier-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.tier-header .card-icon {
+    flex-shrink: 0;
+}
+
+.tier-header > div {
+    flex: 1;
+}
+
+/* Card-based Capability Tiles */
+.capability-tiles {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+}
+
+.capability-tile {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: rgba(10, 14, 39, 0.4);
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--accent-primary);
+    transition: all 0.2s ease;
+}
+
+.capability-tile:hover {
+    background: rgba(10, 14, 39, 0.6);
+    transform: translateX(4px);
+}
+
+.capability-tile > i {
+    font-size: 1.25rem;
+    color: var(--accent-primary);
+    flex-shrink: 0;
+}
+
+.capability-tile strong {
+    display: block;
+    color: var(--text-primary);
+    font-size: 0.9375rem;
+}
+
+.capability-tile span {
+    display: block;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+```
+
+**Visual Elements:**
+1. **Header:**
+   - Icon (40-60px circle) + Title + Subtitle in horizontal flex
+   - Icon floats left, text fills remaining space
+   - 16px gap between icon and text
+
+2. **Capability Tiles:**
+   - Each tile is a mini card with left border accent
+   - Icon (20px) + Text (title + description)
+   - Hover: Slide right 4px + darken background
+   - 3px left border (accent color)
+
+3. **Used By Section:**
+   - Horizontal tag layout (not bullets)
+   - Pills with accent background/border
+   - Hover: Lift 1px + brighten
+
+**Animation Tier:** T1 Subtle
+- Hover: Tile slide right (4px) + background transition
+- Duration: 200ms ease
+- No infinite animations
+
+**Responsive Breakpoints:**
+- Desktop (1440px+): 2 columns
+- Tablet (768px-1439px): 2 columns (narrower)
+- Mobile (<768px): 1 column, smaller padding
+
+**Advantages Over 4-Column:**
+- 50% less visual clutter
+- Easier to scan (2 columns vs 4)
+- Inline icons improve readability
+- Card tiles feel more modern than bullets
+
+---
+
 ## 📄 Version History
+### v4.1.3 (January 3, 2026) - Simplified Layout Patterns
+- ✨ **NEW:** Pattern C - Simplified 2-Column Tier Layout
+- ✨ Inline icon+title header (horizontal flex, not stacked)
+- ✨ Card-based capability tiles (replaces bullet lists)
+- ✨ "Used By" section with pill tags (not bullets)
+- 📚 Added CSS for `.tier-header`, `.capability-tiles`, `.capability-tile`
+- 📚 Added hover effects: slide right (4px) + background darken
+- 📚 Responsive: 2-col desktop, 1-col mobile
+- 🎯 Reference implementation: `docs/architecture/index.html` (Tier Deep Dive + Agent System)
+
 ### v4.1.2 (January 3, 2026) - D3.js Visualization Patterns
 - ✨ **NEW:** Added interactive D3.js visualization patterns section
 - ✨ **NEW:** Pattern A - Interactive Principle Cards (3-column grid with hover effects)
