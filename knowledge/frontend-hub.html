@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Frontend Development Learning Hub - Master React, Vue, state management, and modern UI patterns">
+    <meta name="keywords" content="frontend, react, vue, state management, modern web development, learning path">
+    <meta name="author" content="Asif Hussain">
+    <title>Frontend Development Hub | CORTEX Best Practices</title>
+    <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02">
+    <link rel="stylesheet" href="../assets/css/learning-hub.css?v=2026-01-02">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header class="glass-header">
+        <div class="header-content">
+            <nav class="header-nav">
+                <a href="../index.html" class="nav-link">
+                    <span class="nav-icon">🏠</span> Home
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero learning-module-hero" id="main-content">
+        <div class="module-header">
+            <h1 class="hero-title">🎨 Frontend Development Hub</h1>
+            <p class="hero-subtitle">Master React, Vue, State Management, Performance Optimization, and Modern UI Patterns</p>
+            <div class="module-meta">
+                <span>⏱️ 5 modules • 3 hours</span>
+                <span>📊 5 quizzes (50 questions)</span>
+                <span>💻 8 code playgrounds</span>
+                <span>🏆 5 progressive challenges</span>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <section class="learning-path-roadmap glass-card">
+            <h4>🗺️ Your Learning Journey</h4>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                From modern JavaScript frameworks to advanced state management and performance optimization. 
+                Build production-ready web applications with React, Vue, and cutting-edge frontend patterns.
+            </p>
+
+            <div class="mermaid-container">
+                <pre class="mermaid">
+graph LR
+    START["🚀 Start Here"] --> M1["Module 1<br/>React Fundamentals<br/>⏱️ 40 min"]
+    M1 --> M2["Module 2<br/>Vue Essentials<br/>⏱️ 35 min"]
+    M2 --> M3["Module 3<br/>State Management<br/>⏱️ 40 min"]
+    M3 --> M4["Module 4<br/>Performance<br/>⏱️ 35 min"]
+    M4 --> M5["Module 5<br/>Component Patterns<br/>⏱️ 30 min"]
+    M5 --> CERT["🏆 Frontend<br/>Expert"]
+
+    style START fill:#00d4ff,stroke:#fff,stroke-width:2px,color:#000
+    style M1 fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
+    style M2 fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
+    style M3 fill:#fbbf24,stroke:#fcd34d,stroke-width:2px,color:#000
+    style M4 fill:#f97316,stroke:#fb923c,stroke-width:2px,color:#fff
+    style M5 fill:#8b5cf6,stroke:#a78bfa,stroke-width:2px,color:#fff
+    style CERT fill:#00ff88,stroke:#fff,stroke-width:3px,color:#000
+                </pre>
+            </div>
+        </section>
+
+        <section style="margin-top: var(--spacing-3xl);">
+            <h2 style="color: var(--text-primary); margin-bottom: var(--spacing-xl); font-size: 2rem;">
+                📚 Interactive Learning Modules
+            </h2>
+            
+            <div class="module-nav-grid">
+                <a href="frontend/react-fundamentals.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 1</span>
+                        <span class="difficulty-badge beginner">Beginner</span>
+                    </div>
+                    <h5>⚛️ React Fundamentals</h5>
+                    <p class="module-description">
+                        Master React Hooks (useState, useEffect, useContext), component composition, and modern 
+                        React patterns with hands-on exercises.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 40 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                    </div>
+                </a>
+
+                <a href="frontend/vue-essentials.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 2</span>
+                        <span class="difficulty-badge beginner">Beginner</span>
+                    </div>
+                    <h5>🖼️ Vue 3 Essentials</h5>
+                    <p class="module-description">
+                        Learn Composition API, reactive data, computed properties, and Vue Router. Build 
+                        interactive SPAs with Vue's elegant syntax.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 35 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                    </div>
+                </a>
+
+                <a href="frontend/state-management.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 3</span>
+                        <span class="difficulty-badge intermediate">Intermediate</span>
+                    </div>
+                    <h5>🗄️ State Management (Redux/Zustand)</h5>
+                    <p class="module-description">
+                        Master Redux Toolkit, Zustand, and Context API. Learn when to use global vs local state, 
+                        and implement efficient state updates.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 40 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                    </div>
+                </a>
+
+                <a href="frontend/performance-optimization.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 4</span>
+                        <span class="difficulty-badge advanced">Advanced</span>
+                    </div>
+                    <h5>⚡ Performance Optimization</h5>
+                    <p class="module-description">
+                        Learn code splitting, lazy loading, memoization (useMemo, React.memo), virtual scrolling, 
+                        and Core Web Vitals optimization.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 35 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                    </div>
+                </a>
+
+                <a href="frontend/component-patterns.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 5</span>
+                        <span class="difficulty-badge expert">Expert</span>
+                    </div>
+                    <h5>🧩 Advanced Component Patterns</h5>
+                    <p class="module-description">
+                        Master render props, compound components, controlled/uncontrolled components, and custom 
+                        hooks for reusable component architectures.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 30 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>📋 Prerequisites & Recommendations</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-lg); margin-top: var(--spacing-xl);">
+                <div style="padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-radius: 8px; border: 1px solid #10b981;">
+                    <h4 style="color: #10b981; margin-bottom: var(--spacing-sm);">✅ Recommended Background</h4>
+                    <ul style="color: var(--text-secondary); font-size: 0.95rem;">
+                        <li>JavaScript ES6+ (async/await, modules)</li>
+                        <li>HTML5 and CSS3 fundamentals</li>
+                        <li>Basic understanding of DOM</li>
+                        <li>No framework experience required</li>
+                    </ul>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(0, 212, 255, 0.1); border-radius: 8px; border: 1px solid #00d4ff;">
+                    <h4 style="color: #00d4ff; margin-bottom: var(--spacing-sm);">🛠️ Tools You'll Use</h4>
+                    <ul style="color: var(--text-secondary); font-size: 0.95rem;">
+                        <li>React 18+ / Vue 3+</li>
+                        <li>Redux Toolkit / Zustand</li>
+                        <li>Vite (build tool)</li>
+                        <li>Chrome DevTools Performance</li>
+                    </ul>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(139, 92, 246, 0.1); border-radius: 8px; border: 1px solid #8b5cf6;">
+                    <h4 style="color: #8b5cf6; margin-bottom: var(--spacing-sm);">🎯 What You'll Build</h4>
+                    <ul style="color: var(--text-secondary); font-size: 0.95rem;">
+                        <li>Task management SPA (React)</li>
+                        <li>E-commerce dashboard (Vue)</li>
+                        <li>Optimized data grid (virtual scroll)</li>
+                        <li>Reusable component library</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🎓 Learning Outcomes</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                By completing this learning path, you'll be able to:
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-md);">
+                <div style="padding: var(--spacing-md); background: rgba(16, 185, 129, 0.05); border-left: 3px solid #10b981; border-radius: 4px;">
+                    <strong style="color: #10b981;">React Mastery</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Build complex React apps with hooks, context, and modern patterns
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-md); background: rgba(0, 212, 255, 0.05); border-left: 3px solid #00d4ff; border-radius: 4px;">
+                    <strong style="color: #00d4ff;">Vue Expertise</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Leverage Composition API and Vue's reactivity system
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-md); background: rgba(139, 92, 246, 0.05); border-left: 3px solid #8b5cf6; border-radius: 4px;">
+                    <strong style="color: #8b5cf6;">State Management</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Manage complex application state with Redux or Zustand
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-md); background: rgba(251, 191, 36, 0.05); border-left: 3px solid #fbbf24; border-radius: 4px;">
+                    <strong style="color: #fbbf24;">Performance Tuning</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Optimize bundle size, rendering, and Core Web Vitals
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-md); background: rgba(239, 68, 68, 0.05); border-left: 3px solid #ef4444; border-radius: 4px;">
+                    <strong style="color: #ef4444;">Component Design</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Create reusable components with advanced patterns
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🔗 Related Learning Paths</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                Expand your knowledge with these complementary paths:
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-lg);">
+                <a href="ui-ux-hub.html" class="related-path-card">
+                    <span class="path-icon">🎨</span>
+                    <h5>UI/UX Design</h5>
+                    <p>Accessibility, design systems, usability</p>
+                </a>
+                <a href="performance-hub.html" class="related-path-card">
+                    <span class="path-icon">⚡</span>
+                    <h5>Performance Engineering</h5>
+                    <p>Web vitals, optimization, monitoring</p>
+                </a>
+                <a href="testing-hub.html" class="related-path-card">
+                    <span class="path-icon">🧪</span>
+                    <h5>Testing Best Practices</h5>
+                    <p>Jest, Testing Library, E2E tests</p>
+                </a>
+            </div>
+        </section>
+
+        <section class="glass-card" style="margin-top: var(--spacing-3xl); margin-bottom: var(--spacing-3xl);">
+            <h2>📚 Additional Resources</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-md); margin-top: var(--spacing-lg);">
+                <a href="https://react.dev/" target="_blank" rel="noopener" class="resource-link">
+                    📖 React Documentation
+                </a>
+                <a href="https://vuejs.org/guide/" target="_blank" rel="noopener" class="resource-link">
+                    📖 Vue 3 Guide
+                </a>
+                <a href="https://redux-toolkit.js.org/" target="_blank" rel="noopener" class="resource-link">
+                    📖 Redux Toolkit
+                </a>
+                <a href="https://web.dev/vitals/" target="_blank" rel="noopener" class="resource-link">
+                    📖 Core Web Vitals
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <footer style="padding: var(--spacing-2xl); text-align: center; color: var(--text-secondary); background: rgba(0, 0, 0, 0.3);">
+        <p>© 2026 Asif Hussain. All rights reserved.</p>
+        <p style="margin-top: var(--spacing-sm);">
+            <a href="../index.html" style="color: var(--hub-primary); text-decoration: none;">Back to Home</a> • 
+            <a href="index.html" style="color: var(--hub-primary); text-decoration: none;">All Learning Paths</a>
+        </p>
+    </footer>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true, 
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#10b981',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#fff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#8b5cf6',
+                tertiaryColor: '#fbbf24'
+            }
+        });
+    </script>
+</body>
+</html>

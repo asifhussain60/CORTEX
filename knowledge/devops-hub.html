@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="DevOps & CI/CD Learning Hub - Master continuous integration, deployment, and GitOps workflows">
+    <meta name="keywords" content="devops, ci/cd, gitops, infrastructure as code, sre, learning path">
+    <meta name="author" content="Asif Hussain">
+    <title>DevOps & CI/CD Learning Hub | CORTEX Best Practices</title>
+    <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02">
+    <link rel="stylesheet" href="../assets/css/learning-hub.css?v=2026-01-02">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header class="glass-header">
+        <div class="header-content">
+            <nav class="header-nav">
+                <a href="../index.html" class="nav-link">
+                    <span class="nav-icon">🏠</span> Home
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero learning-module-hero" id="main-content">
+        <div class="module-header">
+            <h1 class="hero-title">🔄 DevOps & CI/CD Learning Hub</h1>
+            <p class="hero-subtitle">Master Continuous Integration, GitOps, Infrastructure as Code, and SRE Practices</p>
+            <div class="module-meta">
+                <span>⏱️ 5 modules • 3 hours</span>
+                <span>📊 5 quizzes (50 questions)</span>
+                <span>💻 6 code playgrounds</span>
+                <span>🏆 5 progressive challenges</span>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <section class="learning-path-roadmap glass-card">
+            <h4>🗺️ Your Learning Journey</h4>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                From CI/CD fundamentals to advanced GitOps and SRE practices. Learn Jenkins, GitHub Actions, 
+                Terraform, and monitoring strategies used by leading tech companies.
+            </p>
+
+            <div class="mermaid-container">
+                <pre class="mermaid">
+graph LR
+    START["🚀 Start Here"] --> M1["Module 1<br/>CI/CD Fundamentals<br/>⏱️ 35 min"]
+    M1 --> M2["Module 2<br/>GitOps Workflows<br/>⏱️ 40 min"]
+    M2 --> M3["Module 3<br/>Infrastructure as Code<br/>⏱️ 40 min"]
+    M3 --> M4["Module 4<br/>Monitoring & Observability<br/>⏱️ 35 min"]
+    M4 --> M5["Module 5<br/>SRE Practices<br/>⏱️ 40 min"]
+    M5 --> CERT["🏆 Certified<br/>DevOps Engineer"]
+
+    style START fill:#00d4ff,stroke:#fff,stroke-width:2px,color:#000
+    style M1 fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
+    style M2 fill:#fbbf24,stroke:#fcd34d,stroke-width:2px,color:#000
+    style M3 fill:#fbbf24,stroke:#fcd34d,stroke-width:2px,color:#000
+    style M4 fill:#f97316,stroke:#fb923c,stroke-width:2px,color:#fff
+    style M5 fill:#8b5cf6,stroke:#a78bfa,stroke-width:2px,color:#fff
+    style CERT fill:#00ff88,stroke:#fff,stroke-width:3px,color:#000
+                </pre>
+            </div>
+        </section>
+
+        <section style="margin-top: var(--spacing-3xl);">
+            <h2 style="color: var(--text-primary); margin-bottom: var(--spacing-xl); font-size: 2rem;">
+                📚 Interactive Learning Modules
+            </h2>
+            
+            <div class="module-nav-grid">
+                <a href="devops/ci-cd-fundamentals.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 1</span>
+                        <span class="difficulty-badge beginner">Beginner</span>
+                    </div>
+                    <h5>🎯 CI/CD Fundamentals</h5>
+                    <p class="module-description">
+                        Understand continuous integration and deployment pipelines. Learn Jenkins, GitHub Actions, 
+                        and GitLab CI with hands-on pipeline creation.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 35 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                    </div>
+                </a>
+
+                <a href="devops/gitops-workflows.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 2</span>
+                        <span class="difficulty-badge intermediate">Intermediate</span>
+                    </div>
+                    <h5>🔀 GitOps Workflows</h5>
+                    <p class="module-description">
+                        Master declarative infrastructure with ArgoCD and Flux. Learn pull-based deployments, 
+                        automated rollbacks, and GitOps best practices.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 40 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                    </div>
+                </a>
+
+                <a href="devops/infrastructure-as-code.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 3</span>
+                        <span class="difficulty-badge intermediate">Intermediate</span>
+                    </div>
+                    <h5>🏗️ Infrastructure as Code</h5>
+                    <p class="module-description">
+                        Deep dive into Terraform, Pulumi, and CloudFormation. Learn state management, modules, 
+                        and multi-cloud provisioning patterns.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 40 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                    </div>
+                </a>
+
+                <a href="devops/monitoring-observability.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 4</span>
+                        <span class="difficulty-badge advanced">Advanced</span>
+                    </div>
+                    <h5>📊 Monitoring & Observability</h5>
+                    <p class="module-description">
+                        Implement Prometheus, Grafana, and ELK stack. Master metrics, logs, traces (OpenTelemetry), 
+                        and SLI/SLO definitions.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 35 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                    </div>
+                </a>
+
+                <a href="devops/sre-practices.html" class="module-nav-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="module-number">Module 5</span>
+                        <span class="difficulty-badge expert">Expert</span>
+                    </div>
+                    <h5>🛡️ SRE Best Practices</h5>
+                    <p class="module-description">
+                        Learn Site Reliability Engineering from Google. Implement error budgets, toil reduction, 
+                        incident response, and postmortem culture.
+                    </p>
+                    <div class="module-footer">
+                        <span class="time-estimate">⏱️ 40 minutes</span>
+                        <span style="color: var(--hub-primary); font-weight: 600;">Start →</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>📋 Prerequisites & Recommendations</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-lg); margin-top: var(--spacing-xl);">
+                <div style="padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-radius: 8px; border: 1px solid #10b981;">
+                    <h4 style="color: #10b981; margin-bottom: var(--spacing-sm);">✅ Recommended Background</h4>
+                    <ul style="color: var(--text-secondary); font-size: 0.95rem;">
+                        <li>Basic programming skills</li>
+                        <li>Understanding of Git workflows</li>
+                        <li>Linux/Unix command line basics</li>
+                        <li>No DevOps experience required</li>
+                    </ul>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(0, 212, 255, 0.1); border-radius: 8px; border: 1px solid #00d4ff;">
+                    <h4 style="color: #00d4ff; margin-bottom: var(--spacing-sm);">🛠️ Tools You'll Use</h4>
+                    <ul style="color: var(--text-secondary); font-size: 0.95rem;">
+                        <li>GitHub Actions / GitLab CI</li>
+                        <li>Docker & Kubernetes</li>
+                        <li>Terraform & Ansible</li>
+                        <li>Prometheus & Grafana</li>
+                    </ul>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(139, 92, 246, 0.1); border-radius: 8px; border: 1px solid #8b5cf6;">
+                    <h4 style="color: #8b5cf6; margin-bottom: var(--spacing-sm);">🎯 What You'll Build</h4>
+                    <ul style="color: var(--text-secondary); font-size: 0.95rem;">
+                        <li>Complete CI/CD pipeline</li>
+                        <li>GitOps deployment workflow</li>
+                        <li>Multi-cloud infrastructure (IaC)</li>
+                        <li>Observability stack</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🎓 Learning Outcomes</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                By completing this learning path, you'll be able to:
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-md);">
+                <div style="padding: var(--spacing-md); background: rgba(16, 185, 129, 0.05); border-left: 3px solid #10b981; border-radius: 4px;">
+                    <strong style="color: #10b981;">Pipeline Automation</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Build automated CI/CD pipelines with testing, security scanning, and deployments
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-md); background: rgba(0, 212, 255, 0.05); border-left: 3px solid #00d4ff; border-radius: 4px;">
+                    <strong style="color: #00d4ff;">GitOps Implementation</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Deploy applications declaratively with automated sync and rollback
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-md); background: rgba(139, 92, 246, 0.05); border-left: 3px solid #8b5cf6; border-radius: 4px;">
+                    <strong style="color: #8b5cf6;">Infrastructure Provisioning</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Manage infrastructure as code across AWS, Azure, and GCP
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-md); background: rgba(251, 191, 36, 0.05); border-left: 3px solid #fbbf24; border-radius: 4px;">
+                    <strong style="color: #fbbf24;">Observability Stack</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Implement comprehensive monitoring with metrics, logs, and traces
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-md); background: rgba(239, 68, 68, 0.05); border-left: 3px solid #ef4444; border-radius: 4px;">
+                    <strong style="color: #ef4444;">SRE Principles</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Apply error budgets, SLOs, and incident management practices
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-md); background: rgba(16, 185, 129, 0.05); border-left: 3px solid #10b981; border-radius: 4px;">
+                    <strong style="color: #10b981;">Security Integration</strong>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: var(--spacing-xs);">
+                        Embed security scanning and compliance checks in pipelines
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🔗 Related Learning Paths</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                Expand your knowledge with these complementary paths:
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-lg);">
+                <a href="containers-hub.html" class="related-path-card">
+                    <span class="path-icon">🐳</span>
+                    <h5>Containers & Kubernetes</h5>
+                    <p>Docker orchestration, Helm, service mesh</p>
+                </a>
+                <a href="cloud-hub.html" class="related-path-card">
+                    <span class="path-icon">☁️</span>
+                    <h5>Cloud-Native Architecture</h5>
+                    <p>Twelve-factor apps, serverless, multi-cloud</p>
+                </a>
+                <a href="security-hub.html" class="related-path-card">
+                    <span class="path-icon">🔐</span>
+                    <h5>Security Best Practices</h5>
+                    <p>DevSecOps, security scanning, compliance</p>
+                </a>
+            </div>
+        </section>
+
+        <section class="glass-card" style="margin-top: var(--spacing-3xl); margin-bottom: var(--spacing-3xl);">
+            <h2>📚 Additional Resources</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-md); margin-top: var(--spacing-lg);">
+                <a href="https://sre.google/" target="_blank" rel="noopener" class="resource-link">
+                    📖 Google SRE Book
+                </a>
+                <a href="https://www.terraform.io/docs" target="_blank" rel="noopener" class="resource-link">
+                    📖 Terraform Documentation
+                </a>
+                <a href="https://argo-cd.readthedocs.io/" target="_blank" rel="noopener" class="resource-link">
+                    📖 ArgoCD GitOps Guide
+                </a>
+                <a href="https://prometheus.io/docs/" target="_blank" rel="noopener" class="resource-link">
+                    📖 Prometheus Monitoring
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <footer style="padding: var(--spacing-2xl); text-align: center; color: var(--text-secondary); background: rgba(0, 0, 0, 0.3);">
+        <p>© 2026 Asif Hussain. All rights reserved.</p>
+        <p style="margin-top: var(--spacing-sm);">
+            <a href="../index.html" style="color: var(--hub-primary); text-decoration: none;">Back to Home</a> • 
+            <a href="index.html" style="color: var(--hub-primary); text-decoration: none;">All Learning Paths</a>
+        </p>
+    </footer>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true, 
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#10b981',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#fff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#8b5cf6',
+                tertiaryColor: '#fbbf24'
+            }
+        });
+    </script>
+</body>
+</html>

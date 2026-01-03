@@ -35,16 +35,16 @@
     <section class="module-hero" id="main-content">
         <div class="module-header">
             <div class="breadcrumb">
-                <span class="difficulty-badge beginner">Beginner</span>
+                <span class="difficulty-badge intermediate">Intermediate</span>
                 <span style="color: var(--text-secondary);">Module 2 of 6</span>
             </div>
             <h1 class="hero-title">🔐 Authentication & Authorization</h1>
-            <p class="hero-subtitle">Interactive learning with quizzes, code playgrounds, and challenges</p>
+            <p class="hero-subtitle">Master OAuth 2.0, JWT tokens, session management, and access control patterns</p>
             <div class="module-meta">
-                <span>⏱️ 50 minutes</span>
+                <span>⏱️ 60 minutes</span>
                 <span>📊 10 quiz questions</span>
-                <span>💻 1 code playground</span>
-                <span>🏆 1 challenge</span>
+                <span>💻 3 code playgrounds</span>
+                <span>🏆 1 security challenge</span>
             </div>
         </div>
     </section>
@@ -55,49 +55,303 @@
         <section class="glass-card" style="margin-top: var(--spacing-2xl);">
             <h2>🎓 Learning Objectives</h2>
             <ul class="objective-list">
-                <li>Implement secure authentication flows</li>
-                <li>Use OAuth 2.0 and OpenID Connect</li>
-                <li>Design role-based access control (RBAC)</li>
-                <li>Apply attribute-based access control (ABAC)</li>
-                <li>Prevent session hijacking and fixation</li>
+                <li><strong>Differentiate Authentication vs Authorization:</strong> Understand "who are you" vs "what can you do"</li>
+                <li><strong>Implement OAuth 2.0 Flows:</strong> Authorization Code, Client Credentials, PKCE extensions</li>
+                <li><strong>Secure JWT Token Handling:</strong> Generation, validation, refresh strategies, and expiration</li>
+                <li><strong>Design Access Control:</strong> RBAC (role-based), ABAC (attribute-based), and hybrid models</li>
+                <li><strong>Prevent Session Attacks:</strong> Hijacking, fixation, replay attacks, and secure storage</li>
+                <li><strong>Apply Security Best Practices:</strong> MFA, password policies, audit logging, and least privilege</li>
             </ul>
         </section>
 
-        <!-- Interactive Content Placeholder -->
+        <!-- OAuth 2.0 Flows Visualization -->
         <section class="glass-card" style="margin-top: var(--spacing-3xl);">
-            <h2>📚 Module Content</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
-                This module includes:
-            </p>
-            <ul style="list-style-type: none; padding-left: 0;">
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Interactive Visualizations:</strong> D3.js charts and Mermaid diagrams
-                </li>
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Code Playgrounds:</strong> Hands-on Monaco editor with live execution
-                </li>
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Knowledge Checks:</strong> Interactive quizzes with instant feedback
-                </li>
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Real-World Examples:</strong> Production-grade code samples
-                </li>
-                <li style="padding: var(--spacing-sm); color: var(--text-primary);">
-                    ✅ <strong>Progressive Challenges:</strong> Apply what you've learned
-                </li>
-            </ul>
-        </section>
-
-        <!-- Interactive Quiz Placeholder -->
-        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
-            <h2>✅ Knowledge Check: Quiz</h2>
+            <h2>🔄 OAuth 2.0 Authorization Flows</h2>
             <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
-                Test your understanding with interactive questions. Instant feedback provided!
+                OAuth 2.0 provides multiple authorization flows (grant types) for different scenarios. 
+                Hover over flow bars to see use cases and security characteristics.
             </p>
+            
+            <div class="visualization-container" id="oauth-flows-viz" style="width: 100%; height: 500px; margin-bottom: var(--spacing-2xl); border: 1px solid var(--module-border); border-radius: 8px; background: rgba(26, 31, 58, 0.3);"></div>
+            
+            <div class="legend" style="display: flex; justify-content: center; gap: var(--spacing-lg); margin-top: var(--spacing-lg); flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="width: 16px; height: 16px; background: #10b981; border-radius: 4px;"></div>
+                    <span style="color: var(--text-secondary); font-size: 14px;">Recommended</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="width: 16px; height: 16px; background: #fbbf24; border-radius: 4px;"></div>
+                    <span style="color: var(--text-secondary); font-size: 14px;">Limited Use</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="width: 16px; height: 16px; background: #ef4444; border-radius: 4px;"></div>
+                    <span style="color: var(--text-secondary); font-size: 14px;">Deprecated</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Authorization Code Flow Sequence -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>📨 Authorization Code Flow (PKCE)</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                The most secure OAuth 2.0 flow for web and mobile apps. PKCE (Proof Key for Code Exchange) prevents authorization code interception attacks.
+            </p>
+            
+            <div class="mermaid">
+sequenceDiagram
+    actor User
+    participant Client as Client App
+    participant AuthServer as Authorization Server
+    participant API as Resource Server
+    
+    Note over User,API: Step 1: Initiate Authorization
+    User->>Client: Click "Login with OAuth"
+    Client->>Client: Generate code_verifier<br/>(random string)
+    Client->>Client: Generate code_challenge<br/>(SHA256 hash of verifier)
+    Client->>AuthServer: Authorization Request<br/>+ client_id<br/>+ redirect_uri<br/>+ code_challenge
+    
+    Note over User,API: Step 2: User Consent
+    AuthServer->>User: Login + Consent Screen
+    User->>AuthServer: Approve Permissions
+    
+    Note over User,API: Step 3: Authorization Code
+    AuthServer->>Client: Redirect with code<br/>(temporary, 1-time use)
+    
+    Note over User,API: Step 4: Token Exchange
+    Client->>AuthServer: POST /token<br/>+ code<br/>+ code_verifier<br/>+ client_id
+    AuthServer->>AuthServer: Verify code_challenge<br/>matches code_verifier
+    AuthServer->>Client: Access Token<br/>+ Refresh Token<br/>+ ID Token (OpenID)
+    
+    Note over User,API: Step 5: Access Resources
+    Client->>API: GET /api/resource<br/>Authorization: Bearer {token}
+    API->>API: Validate Token
+    API->>Client: Protected Resource Data
+            </div>
+            
+            <div class="info-box" style="margin-top: var(--spacing-xl); padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-left: 4px solid #10b981; border-radius: 6px;">
+                <strong style="color: #10b981;">🔒 PKCE Security Benefits:</strong>
+                <ul style="margin-top: var(--spacing-sm); color: var(--text-secondary);">
+                    <li>Protects against authorization code interception attacks</li>
+                    <li>No client secret required (safe for mobile/SPA apps)</li>
+                    <li>Code verifier never transmitted over network before token exchange</li>
+                    <li>Authorization server validates challenge matches verifier</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- JWT Token Lifecycle -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🎫 JWT Token Lifecycle</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                JSON Web Tokens (JWT) are self-contained tokens that encode user identity and claims. 
+                Understand generation, validation, refresh, and expiration patterns.
+            </p>
+            
+            <div class="mermaid">
+stateDiagram-v2
+    [*] --> Issued: User Authenticates
+    Issued --> Active: Token Valid
+    Active --> Active: API Requests<br/>(Verify Signature)
+    Active --> NearExpiry: 80% of lifetime
+    NearExpiry --> Refreshed: Refresh Token Used
+    Refreshed --> Active: New Access Token
+    Active --> Expired: Lifetime Exceeded
+    Expired --> Revoked: User Logs Out
+    NearExpiry --> Expired: Not Refreshed
+    Revoked --> [*]: Token Blacklisted
+    Expired --> [*]: Token Invalid
+    
+    note right of Issued
+        Access Token: 15-60 min
+        Refresh Token: 7-30 days
+        ID Token: Same as access
+    end note
+    
+    note right of Active
+        Every API request:
+        1. Verify signature
+        2. Check expiration
+        3. Validate claims
+    end note
+            </div>
+            
+            <div class="info-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-lg); margin-top: var(--spacing-xl);">
+                <div style="padding: var(--spacing-lg); background: rgba(123, 97, 255, 0.1); border-radius: 8px; border: 1px solid var(--module-border);">
+                    <h4 style="color: var(--hub-primary); margin-bottom: var(--spacing-sm);">Access Token</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5;">
+                        <strong>Lifetime:</strong> 15-60 minutes<br>
+                        <strong>Purpose:</strong> Authorize API requests<br>
+                        <strong>Storage:</strong> Memory (never localStorage)<br>
+                        <strong>Contains:</strong> User ID, roles, permissions
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(0, 212, 255, 0.1); border-radius: 8px; border: 1px solid var(--module-border);">
+                    <h4 style="color: #00d4ff; margin-bottom: var(--spacing-sm);">Refresh Token</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5;">
+                        <strong>Lifetime:</strong> 7-30 days<br>
+                        <strong>Purpose:</strong> Obtain new access token<br>
+                        <strong>Storage:</strong> HttpOnly cookie<br>
+                        <strong>Contains:</strong> User ID, token family
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-lg); background: rgba(16, 185, 129, 0.1); border-radius: 8px; border: 1px solid var(--module-border);">
+                    <h4 style="color: #10b981; margin-bottom: var(--spacing-sm);">ID Token</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5;">
+                        <strong>Lifetime:</strong> Same as access token<br>
+                        <strong>Purpose:</strong> Prove user identity<br>
+                        <strong>Storage:</strong> Memory or session<br>
+                        <strong>Contains:</strong> Name, email, profile data
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- RBAC vs ABAC Comparison -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>👥 Access Control Models: RBAC vs ABAC</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                Choose between Role-Based Access Control (RBAC) and Attribute-Based Access Control (ABAC) based on your application's complexity and requirements.
+            </p>
+            
+            <div class="visualization-container" id="rbac-abac-comparison" style="width: 100%; height: 450px; margin-bottom: var(--spacing-2xl); border: 1px solid var(--module-border); border-radius: 8px; background: rgba(26, 31, 58, 0.3);"></div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-xl); margin-top: var(--spacing-xl);">
+                <div style="padding: var(--spacing-lg); background: rgba(123, 97, 255, 0.1); border-radius: 8px; border: 1px solid var(--module-border);">
+                    <h4 style="color: var(--hub-primary); margin-bottom: var(--spacing-md);">🎯 RBAC Example</h4>
+                    <pre style="background: rgba(0,0,0,0.3); padding: var(--spacing-md); border-radius: 6px; overflow-x: auto;"><code style="color: #10b981; font-size: 13px;">{
+  "user": "alice@company.com",
+  "roles": ["editor", "viewer"],
+  "permissions": {
+    "editor": ["read", "write", "delete"],
+    "viewer": ["read"]
+  }
+}
+
+// Simple check:
+if (user.roles.includes("editor")) {
+  allowAccess();
+}</code></pre>
+                </div>
+                
+                <div style="padding: var(--spacing-lg); background: rgba(0, 212, 255, 0.1); border-radius: 8px; border: 1px solid var(--module-border);">
+                    <h4 style="color: #00d4ff; margin-bottom: var(--spacing-md);">🎯 ABAC Example</h4>
+                    <pre style="background: rgba(0,0,0,0.3); padding: var(--spacing-md); border-radius: 6px; overflow-x: auto;"><code style="color: #00d4ff; font-size: 13px;">{
+  "user": {"dept": "finance", "level": 3},
+  "resource": {"type": "report", "dept": "finance"},
+  "environment": {"time": "09:00", "ip": "10.0.0.5"},
+  "action": "read"
+}
+
+// Complex policy:
+if (user.dept === resource.dept &&
+    user.level >= 2 &&
+    environment.time >= "09:00") {
+  allowAccess();
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- JWT & Session Management Playground -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>💻 Interactive Playground: JWT Generation & Validation</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                Explore JWT token creation, validation, and common pitfalls. Switch between secure and insecure implementations.
+            </p>
+            
+            <div class="playground-container" style="margin-top: var(--spacing-xl);">
+                <div class="playground-tabs" style="display: flex; gap: var(--spacing-sm); margin-bottom: var(--spacing-lg); border-bottom: 2px solid var(--module-border);">
+                    <button class="tab-btn active" data-tab="jwt-generation" style="padding: var(--spacing-md) var(--spacing-lg); background: transparent; border: none; color: var(--hub-primary); cursor: pointer; border-bottom: 2px solid var(--hub-primary); font-weight: 600;">JWT Generation</button>
+                    <button class="tab-btn" data-tab="jwt-validation" style="padding: var(--spacing-md) var(--spacing-lg); background: transparent; border: none; color: var(--text-secondary); cursor: pointer; border-bottom: 2px solid transparent; font-weight: 600;">JWT Validation</button>
+                    <button class="tab-btn" data-tab="session-mgmt" style="padding: var(--spacing-md) var(--spacing-lg); background: transparent; border: none; color: var(--text-secondary); cursor: pointer; border-bottom: 2px solid transparent; font-weight: 600;">Session Management</button>
+                </div>
+                
+                <div id="jwt-generation" class="tab-content" style="display: block;">
+                    <div id="jwt-generation-editor" style="width: 100%; height: 400px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                </div>
+                
+                <div id="jwt-validation" class="tab-content" style="display: none;">
+                    <div id="jwt-validation-editor" style="width: 100%; height: 400px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                </div>
+                
+                <div id="session-mgmt" class="tab-content" style="display: none;">
+                    <div id="session-mgmt-editor" style="width: 100%; height: 400px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RBAC Implementation Playground -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>💻 Interactive Playground: RBAC Implementation</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                Build a complete role-based access control system with hierarchical roles, permission inheritance, and dynamic checks.
+            </p>
+            
+            <div id="rbac-playground-editor" style="width: 100%; height: 500px; border: 1px solid var(--module-border); border-radius: 8px; margin-top: var(--spacing-lg);"></div>
+        </section>
+
+        <!-- Challenge: Multi-Factor Authentication -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>🏆 Security Challenge: Implement Multi-Factor Authentication</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                Design a secure MFA system that combines password + TOTP (Time-based One-Time Password). 
+                Your implementation must prevent common attacks and follow OWASP guidelines.
+            </p>
+            
+            <div class="challenge-requirements" style="background: rgba(123, 97, 255, 0.1); padding: var(--spacing-lg); border-radius: 8px; border: 1px solid var(--module-border); margin-bottom: var(--spacing-xl);">
+                <h4 style="color: var(--hub-primary); margin-bottom: var(--spacing-md);">Requirements:</h4>
+                <ul style="color: var(--text-secondary); line-height: 1.8;">
+                    <li><strong>Password Validation:</strong> Hash with bcrypt, enforce strong password policy (12+ chars, mixed case, special chars)</li>
+                    <li><strong>TOTP Generation:</strong> Generate time-based codes (30-second window, 6 digits, SHA-256)</li>
+                    <li><strong>Rate Limiting:</strong> Max 5 failed attempts per 15 minutes, exponential backoff</li>
+                    <li><strong>Session Management:</strong> Secure tokens, HttpOnly cookies, CSRF protection</li>
+                    <li><strong>Audit Logging:</strong> Track all auth events (success, failures, lockouts)</li>
+                    <li><strong>Backup Codes:</strong> Generate 10 single-use recovery codes (SHA-256 hashed)</li>
+                </ul>
+            </div>
+            
+            <div id="mfa-challenge-editor" style="width: 100%; height: 600px; border: 1px solid var(--module-border); border-radius: 8px; margin-bottom: var(--spacing-xl);"></div>
+            
+            <button id="show-mfa-solution" class="primary-btn" style="padding: var(--spacing-md) var(--spacing-2xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">🔓 Show Secure Solution</button>
+        </section>
+
+        <!-- Solution Section -->
+        <section id="mfa-solution" class="glass-card" style="margin-top: var(--spacing-3xl); display: none;">
+            <h2>✅ Secure MFA Solution</h2>
+            
+            <div class="solution-vulnerabilities" style="background: rgba(16, 185, 129, 0.1); padding: var(--spacing-lg); border-radius: 8px; border-left: 4px solid #10b981; margin-bottom: var(--spacing-xl);">
+                <h4 style="color: #10b981; margin-bottom: var(--spacing-md);">🔒 Security Features Implemented:</h4>
+                <ul style="color: var(--text-secondary); line-height: 1.8;">
+                    <li><strong>Password Security:</strong> Bcrypt with 12 rounds, strong policy enforcement, no plaintext storage</li>
+                    <li><strong>TOTP Security:</strong> SHA-256 HMAC, 30-second window, base32 secret encoding</li>
+                    <li><strong>Rate Limiting:</strong> Token bucket algorithm, IP + user tracking, progressive delays</li>
+                    <li><strong>Session Security:</strong> Cryptographically random tokens, HttpOnly+Secure cookies, SameSite=Strict</li>
+                    <li><strong>Audit Trail:</strong> Structured logging with timestamps, IP addresses, user agents</li>
+                    <li><strong>Recovery Codes:</strong> Cryptographically random, SHA-256 hashed, single-use enforcement</li>
+                    <li><strong>Timing Attack Prevention:</strong> Constant-time comparisons for all sensitive operations</li>
+                    <li><strong>Account Lockout:</strong> Temporary lockout after 5 failures, automatic unlock after 15 minutes</li>
+                </ul>
+            </div>
+            
+            <div id="mfa-solution-editor" style="width: 100%; height: 700px; border: 1px solid var(--module-border); border-radius: 8px;"></div>
+        </section>
+
+        <!-- Quiz Section -->
+        <section class="glass-card" style="margin-top: var(--spacing-3xl);">
+            <h2>✅ Knowledge Check: Authentication & Authorization Quiz</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                Test your understanding of OAuth 2.0, JWT, RBAC/ABAC, and session security. 10 questions with instant feedback!
+            </p>
+            
             <div class="quiz-container" id="quiz">
                 <p style="color: var(--text-primary); text-align: center; padding: var(--spacing-3xl);">
-                    📝 Quiz system loading...
+                    📝 Quiz loading...
                 </p>
+            </div>
+            
+            <div id="quiz-results" class="quiz-results" style="display: none; margin-top: var(--spacing-2xl); padding: var(--spacing-xl); background: rgba(123, 97, 255, 0.1); border-radius: 12px; border: 2px solid var(--hub-primary);">
+                <div id="score-display"></div>
+                <button id="retry-quiz" class="secondary-btn" style="margin-top: var(--spacing-lg); padding: var(--spacing-md) var(--spacing-xl); background: rgba(123, 97, 255, 0.2); color: var(--hub-primary); border: 2px solid var(--hub-primary); border-radius: 8px; cursor: pointer; font-weight: 600;">🔄 Retry Quiz</button>
             </div>
         </section>
 
@@ -130,8 +384,9 @@
     </footer>
 
     <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
     <script>
-        // Initialize Mermaid with dark theme
+        // Initialize Mermaid
         mermaid.initialize({
             startOnLoad: true,
             theme: 'dark',
@@ -145,7 +400,1670 @@
             }
         });
         
-        console.log("✅ Authentication & Authorization module loaded successfully!");
+        // D3.js OAuth 2.0 Flows Visualization
+        function createOAuthFlowsViz() {
+            const container = document.getElementById('oauth-flows-viz');
+            const width = container.clientWidth;
+            const height = 500;
+            const margin = { top: 40, right: 250, bottom: 60, left: 200 };
+            
+            const svg = d3.select('#oauth-flows-viz')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            const chartWidth = width - margin.left - margin.right;
+            const chartHeight = height - margin.top - margin.bottom;
+            
+            const g = svg.append('g')
+                .attr('transform', `translate(${margin.left}, ${margin.top})`);
+            
+            const flows = [
+                { 
+                    name: 'Authorization Code + PKCE', 
+                    security: 95, 
+                    color: '#10b981',
+                    useCase: 'Web apps, SPAs, mobile apps',
+                    status: 'Recommended',
+                    details: 'Most secure. PKCE prevents code interception.'
+                },
+                { 
+                    name: 'Client Credentials', 
+                    security: 85, 
+                    color: '#10b981',
+                    useCase: 'Server-to-server, machine-to-machine',
+                    status: 'Recommended',
+                    details: 'No user interaction. Service accounts only.'
+                },
+                { 
+                    name: 'Device Code', 
+                    security: 80, 
+                    color: '#10b981',
+                    useCase: 'IoT devices, smart TVs, CLI tools',
+                    status: 'Recommended',
+                    details: 'User authenticates on separate device.'
+                },
+                { 
+                    name: 'Refresh Token', 
+                    security: 75, 
+                    color: '#fbbf24',
+                    useCase: 'Renewing expired access tokens',
+                    status: 'Limited Use',
+                    details: 'Must be stored securely. Use rotation.'
+                },
+                { 
+                    name: 'Resource Owner Password', 
+                    security: 40, 
+                    color: '#ef4444',
+                    useCase: 'Legacy migration only',
+                    status: 'Deprecated',
+                    details: 'Client sees user password. Avoid!'
+                },
+                { 
+                    name: 'Implicit Flow', 
+                    security: 30, 
+                    color: '#ef4444',
+                    useCase: 'None - use Auth Code + PKCE',
+                    status: 'Deprecated',
+                    details: 'Token exposed in URL. Insecure!'
+                }
+            ];
+            
+            const yScale = d3.scaleBand()
+                .domain(flows.map(d => d.name))
+                .range([0, chartHeight])
+                .padding(0.3);
+            
+            const xScale = d3.scaleLinear()
+                .domain([0, 100])
+                .range([0, chartWidth]);
+            
+            // Grid lines
+            g.append('g')
+                .attr('class', 'grid')
+                .call(d3.axisBottom(xScale)
+                    .ticks(10)
+                    .tickSize(chartHeight)
+                    .tickFormat(''))
+                .selectAll('line')
+                .attr('stroke', '#2d3748')
+                .attr('stroke-opacity', 0.3);
+            
+            g.select('.grid .domain').remove();
+            
+            // Y axis
+            g.append('g')
+                .call(d3.axisLeft(yScale))
+                .selectAll('text')
+                .attr('fill', '#8b92a7')
+                .style('font-size', '13px')
+                .style('font-weight', '600');
+            
+            // X axis
+            g.append('g')
+                .attr('transform', `translate(0, ${chartHeight})`)
+                .call(d3.axisBottom(xScale).ticks(10))
+                .selectAll('text')
+                .attr('fill', '#8b92a7')
+                .style('font-size', '12px');
+            
+            // Bars
+            flows.forEach((flow, i) => {
+                const bar = g.append('rect')
+                    .attr('x', 0)
+                    .attr('y', yScale(flow.name))
+                    .attr('width', 0)
+                    .attr('height', yScale.bandwidth())
+                    .attr('fill', flow.color)
+                    .attr('opacity', 0.8)
+                    .attr('rx', 6);
+                
+                bar.transition()
+                    .duration(1000)
+                    .delay(i * 150)
+                    .attr('width', xScale(flow.security));
+                
+                bar.on('mouseover', function() {
+                    d3.select(this).attr('opacity', 1);
+                    
+                    const tooltip = g.append('g').attr('class', 'tooltip-flow');
+                    
+                    const boxWidth = 280;
+                    const boxHeight = 90;
+                    const boxX = xScale(flow.security) + 10;
+                    const boxY = yScale(flow.name) - 20;
+                    
+                    tooltip.append('rect')
+                        .attr('x', boxX)
+                        .attr('y', boxY)
+                        .attr('width', boxWidth)
+                        .attr('height', boxHeight)
+                        .attr('fill', '#1a1f3a')
+                        .attr('stroke', flow.color)
+                        .attr('stroke-width', 2)
+                        .attr('rx', 8);
+                    
+                    tooltip.append('text')
+                        .attr('x', boxX + 10)
+                        .attr('y', boxY + 20)
+                        .attr('fill', flow.color)
+                        .attr('font-size', '14px')
+                        .attr('font-weight', 'bold')
+                        .text(`${flow.status}: ${flow.security}% Secure`);
+                    
+                    tooltip.append('text')
+                        .attr('x', boxX + 10)
+                        .attr('y', boxY + 40)
+                        .attr('fill', '#8b92a7')
+                        .attr('font-size', '12px')
+                        .text(`Use: ${flow.useCase}`);
+                    
+                    const words = flow.details.split(' ');
+                    let line = '';
+                    let lineNum = 0;
+                    words.forEach(word => {
+                        const testLine = line + word + ' ';
+                        if (testLine.length > 35 && line !== '') {
+                            tooltip.append('text')
+                                .attr('x', boxX + 10)
+                                .attr('y', boxY + 58 + lineNum * 14)
+                                .attr('fill', '#8b92a7')
+                                .attr('font-size', '11px')
+                                .text(line);
+                            line = word + ' ';
+                            lineNum++;
+                        } else {
+                            line = testLine;
+                        }
+                    });
+                    if (line) {
+                        tooltip.append('text')
+                            .attr('x', boxX + 10)
+                            .attr('y', boxY + 58 + lineNum * 14)
+                            .attr('fill', '#8b92a7')
+                            .attr('font-size', '11px')
+                            .text(line);
+                    }
+                })
+                .on('mouseout', function() {
+                    d3.select(this).attr('opacity', 0.8);
+                    g.selectAll('.tooltip-flow').remove();
+                });
+                
+                // Security score labels
+                g.append('text')
+                    .attr('x', 0)
+                    .attr('y', yScale(flow.name) + yScale.bandwidth() / 2)
+                    .attr('text-anchor', 'start')
+                    .attr('fill', flow.color)
+                    .attr('font-size', '16px')
+                    .attr('font-weight', 'bold')
+                    .attr('opacity', 0)
+                    .attr('dy', '0.35em')
+                    .text(`${flow.security}%`)
+                    .transition()
+                    .duration(600)
+                    .delay(i * 150 + 800)
+                    .attr('x', xScale(flow.security) + 10)
+                    .attr('opacity', 1);
+            });
+            
+            // Title
+            svg.append('text')
+                .attr('x', width / 2)
+                .attr('y', 20)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#7b61ff')
+                .attr('font-size', '16px')
+                .attr('font-weight', '600')
+                .text('OAuth 2.0 Flows: Security Comparison');
+            
+            // X-axis label
+            svg.append('text')
+                .attr('x', width / 2)
+                .attr('y', height - 10)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#8b92a7')
+                .attr('font-size', '12px')
+                .text('Security Score (0-100)');
+        }
+        
+        // Initialize visualization
+        window.addEventListener('load', () => {
+            createOAuthFlowsViz();
+            createRBACvABACComparison();
+            console.log("✅ OAuth flows visualization loaded!");
+        });
+        
+        // D3.js RBAC vs ABAC Comparison
+        function createRBACvABACComparison() {
+            const container = document.getElementById('rbac-abac-comparison');
+            const width = container.clientWidth;
+            const height = 450;
+            const margin = { top: 40, right: 150, bottom: 60, left: 120 };
+            
+            const svg = d3.select('#rbac-abac-comparison')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            const chartWidth = width - margin.left - margin.right;
+            const chartHeight = height - margin.top - margin.bottom;
+            
+            const g = svg.append('g')
+                .attr('transform', `translate(${margin.left}, ${margin.top})`);
+            
+            const criteria = [
+                { name: 'Simplicity', rbac: 90, abac: 40 },
+                { name: 'Flexibility', rbac: 50, abac: 95 },
+                { name: 'Fine-Grained Control', rbac: 40, abac: 95 },
+                { name: 'Performance', rbac: 85, abac: 65 },
+                { name: 'Ease of Maintenance', rbac: 80, abac: 50 },
+                { name: 'Context-Awareness', rbac: 20, abac: 90 },
+                { name: 'Scalability', rbac: 60, abac: 85 }
+            ];
+            
+            const yScale = d3.scaleBand()
+                .domain(criteria.map(d => d.name))
+                .range([0, chartHeight])
+                .padding(0.3);
+            
+            const xScale = d3.scaleLinear()
+                .domain([0, 100])
+                .range([0, chartWidth]);
+            
+            // Grid
+            g.append('g')
+                .attr('class', 'grid')
+                .call(d3.axisBottom(xScale)
+                    .ticks(10)
+                    .tickSize(chartHeight)
+                    .tickFormat(''))
+                .selectAll('line')
+                .attr('stroke', '#2d3748')
+                .attr('stroke-opacity', 0.3);
+            
+            g.select('.grid .domain').remove();
+            
+            // Axes
+            g.append('g')
+                .call(d3.axisLeft(yScale))
+                .selectAll('text')
+                .attr('fill', '#8b92a7')
+                .style('font-size', '13px')
+                .style('font-weight', '600');
+            
+            g.append('g')
+                .attr('transform', `translate(0, ${chartHeight})`)
+                .call(d3.axisBottom(xScale).ticks(10))
+                .selectAll('text')
+                .attr('fill', '#8b92a7')
+                .style('font-size', '12px');
+            
+            const barHeight = yScale.bandwidth() / 2 - 2;
+            
+            // RBAC bars
+            criteria.forEach((item, i) => {
+                const bar = g.append('rect')
+                    .attr('x', 0)
+                    .attr('y', yScale(item.name))
+                    .attr('width', 0)
+                    .attr('height', barHeight)
+                    .attr('fill', '#7b61ff')
+                    .attr('opacity', 0.8)
+                    .attr('rx', 4);
+                
+                bar.transition()
+                    .duration(1000)
+                    .delay(i * 100)
+                    .attr('width', xScale(item.rbac));
+                
+                bar.on('mouseover', function() {
+                    d3.select(this).attr('opacity', 1);
+                })
+                .on('mouseout', function() {
+                    d3.select(this).attr('opacity', 0.8);
+                });
+                
+                g.append('text')
+                    .attr('x', 0)
+                    .attr('y', yScale(item.name) + barHeight / 2)
+                    .attr('text-anchor', 'start')
+                    .attr('fill', '#7b61ff')
+                    .attr('font-size', '13px')
+                    .attr('font-weight', 'bold')
+                    .attr('opacity', 0)
+                    .attr('dy', '0.35em')
+                    .text(item.rbac)
+                    .transition()
+                    .duration(600)
+                    .delay(i * 100 + 800)
+                    .attr('x', xScale(item.rbac) + 8)
+                    .attr('opacity', 1);
+            });
+            
+            // ABAC bars
+            criteria.forEach((item, i) => {
+                const bar = g.append('rect')
+                    .attr('x', 0)
+                    .attr('y', yScale(item.name) + barHeight + 2)
+                    .attr('width', 0)
+                    .attr('height', barHeight)
+                    .attr('fill', '#00d4ff')
+                    .attr('opacity', 0.8)
+                    .attr('rx', 4);
+                
+                bar.transition()
+                    .duration(1000)
+                    .delay(i * 100 + 50)
+                    .attr('width', xScale(item.abac));
+                
+                bar.on('mouseover', function() {
+                    d3.select(this).attr('opacity', 1);
+                })
+                .on('mouseout', function() {
+                    d3.select(this).attr('opacity', 0.8);
+                });
+                
+                g.append('text')
+                    .attr('x', 0)
+                    .attr('y', yScale(item.name) + barHeight + 2 + barHeight / 2)
+                    .attr('text-anchor', 'start')
+                    .attr('fill', '#00d4ff')
+                    .attr('font-size', '13px')
+                    .attr('font-weight', 'bold')
+                    .attr('opacity', 0)
+                    .attr('dy', '0.35em')
+                    .text(item.abac)
+                    .transition()
+                    .duration(600)
+                    .delay(i * 100 + 850)
+                    .attr('x', xScale(item.abac) + 8)
+                    .attr('opacity', 1);
+            });
+            
+            // Legend
+            const legend = svg.append('g')
+                .attr('transform', `translate(${width - margin.right + 20}, ${margin.top})`);
+            
+            legend.append('rect')
+                .attr('x', 0)
+                .attr('y', 0)
+                .attr('width', 20)
+                .attr('height', 20)
+                .attr('fill', '#7b61ff')
+                .attr('rx', 4);
+            
+            legend.append('text')
+                .attr('x', 28)
+                .attr('y', 15)
+                .attr('fill', '#7b61ff')
+                .attr('font-size', '14px')
+                .attr('font-weight', '600')
+                .text('RBAC');
+            
+            legend.append('rect')
+                .attr('x', 0)
+                .attr('y', 35)
+                .attr('width', 20)
+                .attr('height', 20)
+                .attr('fill', '#00d4ff')
+                .attr('rx', 4);
+            
+            legend.append('text')
+                .attr('x', 28)
+                .attr('y', 50)
+                .attr('fill', '#00d4ff')
+                .attr('font-size', '14px')
+                .attr('font-weight', '600')
+                .text('ABAC');
+            
+            // Title
+            svg.append('text')
+                .attr('x', width / 2)
+                .attr('y', 20)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#7b61ff')
+                .attr('font-size', '16px')
+                .attr('font-weight', '600')
+                .text('RBAC vs ABAC: Feature Comparison');
+            
+            // X-axis label
+            svg.append('text')
+                .attr('x', width / 2)
+                .attr('y', height - 10)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#8b92a7')
+                .attr('font-size', '12px')
+                .text('Score (0-100)');
+        }
+        
+        // Monaco Editor Setup
+        require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs' } });
+        require(['vs/editor/editor.main'], function() {
+            const jwtGenerationCode = `# Secure JWT Token Generation
+import jwt
+import secrets
+from datetime import datetime, timedelta
+from typing import Dict, Any
+
+class JWTManager:
+    def __init__(self, secret_key: str, algorithm: str = 'HS256'):
+        """
+        Initialize JWT manager with secure secret key.
+        
+        Args:
+            secret_key: Cryptographically random secret (min 256 bits)
+            algorithm: Signing algorithm (HS256, RS256, etc.)
+        """
+        if len(secret_key) < 32:
+            raise ValueError("Secret key must be at least 32 bytes")
+        
+        self.secret_key = secret_key
+        self.algorithm = algorithm
+    
+    def generate_access_token(
+        self, 
+        user_id: str, 
+        roles: list[str],
+        expiry_minutes: int = 15
+    ) -> str:
+        """
+        Generate short-lived access token.
+        
+        ✅ Best Practices:
+        - Short expiration (15-60 minutes)
+        - Minimal claims (user_id, roles)
+        - Signed with strong algorithm
+        - Include iat (issued at) for replay detection
+        """
+        now = datetime.utcnow()
+        payload = {
+            'sub': user_id,  # Subject (user ID)
+            'roles': roles,  # User roles
+            'iat': now,  # Issued at
+            'exp': now + timedelta(minutes=expiry_minutes),  # Expiration
+            'jti': secrets.token_urlsafe(16)  # Unique token ID (prevents replay)
+        }
+        
+        token = jwt.encode(payload, self.secret_key, algorithm=self.algorithm)
+        return token
+    
+    def generate_refresh_token(
+        self, 
+        user_id: str,
+        expiry_days: int = 30
+    ) -> str:
+        """
+        Generate long-lived refresh token.
+        
+        ✅ Best Practices:
+        - Longer expiration (7-30 days)
+        - Minimal claims (only user_id)
+        - Store in HttpOnly cookie
+        - Implement token rotation
+        """
+        now = datetime.utcnow()
+        payload = {
+            'sub': user_id,
+            'type': 'refresh',
+            'iat': now,
+            'exp': now + timedelta(days=expiry_days),
+            'jti': secrets.token_urlsafe(32)  # Longer ID for refresh tokens
+        }
+        
+        token = jwt.encode(payload, self.secret_key, algorithm=self.algorithm)
+        return token
+
+# Usage Example
+secret = secrets.token_urlsafe(32)  # 256-bit random secret
+jwt_manager = JWTManager(secret)
+
+# Generate tokens
+access_token = jwt_manager.generate_access_token(
+    user_id='user_12345',
+    roles=['user', 'editor'],
+    expiry_minutes=30
+)
+
+refresh_token = jwt_manager.generate_refresh_token(
+    user_id='user_12345',
+    expiry_days=14
+)
+
+print(f"Access Token: {access_token[:50]}...")
+print(f"Refresh Token: {refresh_token[:50]}...")
+print("\\n✅ Tokens generated securely with unique JTI!")`;
+
+            const jwtValidationCode = `# Secure JWT Token Validation
+import jwt
+from jwt.exceptions import (
+    InvalidTokenError, 
+    ExpiredSignatureError,
+    InvalidSignatureError
+)
+from datetime import datetime
+from typing import Optional, Dict, Any
+import redis
+
+class JWTValidator:
+    def __init__(self, secret_key: str, algorithm: str = 'HS256'):
+        self.secret_key = secret_key
+        self.algorithm = algorithm
+        self.redis_client = redis.Redis(host='localhost', port=6379, db=0)
+    
+    def validate_access_token(self, token: str) -> Optional[Dict[str, Any]]:
+        """
+        Validate access token with comprehensive security checks.
+        
+        ✅ Security Checks:
+        1. Signature verification
+        2. Expiration validation
+        3. Token blacklist check (for logout)
+        4. Claims validation
+        """
+        try:
+            # Decode and verify signature
+            payload = jwt.decode(
+                token, 
+                self.secret_key, 
+                algorithms=[self.algorithm],
+                options={
+                    'verify_signature': True,
+                    'verify_exp': True,
+                    'require': ['sub', 'exp', 'iat', 'jti']
+                }
+            )
+            
+            # Check if token is blacklisted (revoked)
+            jti = payload.get('jti')
+            if self.is_token_blacklisted(jti):
+                print("❌ Token has been revoked (logout)")
+                return None
+            
+            # Validate issued-at time (prevent backdated tokens)
+            iat = payload.get('iat')
+            if iat and datetime.fromtimestamp(iat) > datetime.utcnow():
+                print("❌ Token issued in the future (invalid)")
+                return None
+            
+            # All checks passed
+            print("✅ Token valid!")
+            return payload
+            
+        except ExpiredSignatureError:
+            print("❌ Token expired - use refresh token to get new access token")
+            return None
+            
+        except InvalidSignatureError:
+            print("❌ Token signature invalid - possible tampering!")
+            return None
+            
+        except InvalidTokenError as e:
+            print(f"❌ Invalid token: {str(e)}")
+            return None
+    
+    def is_token_blacklisted(self, jti: str) -> bool:
+        """
+        Check if token JTI is in blacklist (logout/revoke).
+        Uses Redis for fast lookups.
+        """
+        return self.redis_client.exists(f"blacklist:{jti}") > 0
+    
+    def blacklist_token(self, jti: str, expiry_seconds: int):
+        """
+        Add token to blacklist (for logout).
+        TTL matches token expiration - auto-cleanup.
+        """
+        self.redis_client.setex(
+            f"blacklist:{jti}",
+            expiry_seconds,
+            "revoked"
+        )
+        print(f"✅ Token {jti[:16]}... blacklisted")
+    
+    def refresh_access_token(self, refresh_token: str) -> Optional[str]:
+        """
+        Use refresh token to get new access token.
+        
+        ✅ Token Rotation:
+        - Validate refresh token
+        - Generate new access token
+        - Optionally rotate refresh token
+        """
+        try:
+            payload = jwt.decode(
+                refresh_token,
+                self.secret_key,
+                algorithms=[self.algorithm]
+            )
+            
+            if payload.get('type') != 'refresh':
+                print("❌ Not a refresh token")
+                return None
+            
+            # Check blacklist
+            if self.is_token_blacklisted(payload['jti']):
+                print("❌ Refresh token revoked")
+                return None
+            
+            # Generate new access token
+            user_id = payload['sub']
+            new_access = jwt.encode({
+                'sub': user_id,
+                'roles': ['user'],  # Fetch from database
+                'iat': datetime.utcnow(),
+                'exp': datetime.utcnow() + timedelta(minutes=30),
+                'jti': secrets.token_urlsafe(16)
+            }, self.secret_key, algorithm=self.algorithm)
+            
+            print("✅ New access token generated!")
+            return new_access
+            
+        except Exception as e:
+            print(f"❌ Refresh failed: {str(e)}")
+            return None
+
+# Example: Validate tokens
+validator = JWTValidator(secret_key="your-256-bit-secret")
+
+# Validate access token
+token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+payload = validator.validate_access_token(token)
+
+if payload:
+    print(f"User ID: {payload['sub']}")
+    print(f"Roles: {payload['roles']}")`;
+
+            const sessionManagementCode = `# Secure Session Management
+import secrets
+import hashlib
+from datetime import datetime, timedelta
+from typing import Optional, Dict
+import redis
+
+class SessionManager:
+    """
+    Secure session management with Redis backend.
+    
+    ✅ Security Features:
+    - Cryptographically random session IDs
+    - HttpOnly + Secure + SameSite cookies
+    - Session rotation on privilege escalation
+    - Automatic expiration and cleanup
+    - IP address binding (optional)
+    - User agent validation
+    """
+    
+    def __init__(self, redis_client: redis.Redis):
+        self.redis = redis_client
+        self.session_lifetime = 3600  # 1 hour
+        self.max_sessions_per_user = 5  # Limit concurrent sessions
+    
+    def create_session(
+        self, 
+        user_id: str,
+        ip_address: str,
+        user_agent: str
+    ) -> str:
+        """
+        Create new secure session.
+        
+        Returns: Session ID (to be stored in HttpOnly cookie)
+        """
+        # Generate cryptographically random session ID
+        session_id = secrets.token_urlsafe(32)  # 256 bits
+        
+        # Hash IP and user agent for validation
+        security_hash = hashlib.sha256(
+            f"{ip_address}:{user_agent}".encode()
+        ).hexdigest()
+        
+        session_data = {
+            'user_id': user_id,
+            'created_at': datetime.utcnow().isoformat(),
+            'last_activity': datetime.utcnow().isoformat(),
+            'security_hash': security_hash,
+            'csrf_token': secrets.token_urlsafe(32)
+        }
+        
+        # Store in Redis with expiration
+        self.redis.setex(
+            f"session:{session_id}",
+            self.session_lifetime,
+            json.dumps(session_data)
+        )
+        
+        # Track user's active sessions
+        self.redis.sadd(f"user_sessions:{user_id}", session_id)
+        
+        # Enforce max sessions per user
+        self._enforce_session_limit(user_id)
+        
+        print(f"✅ Session created: {session_id[:16]}...")
+        return session_id
+    
+    def validate_session(
+        self,
+        session_id: str,
+        ip_address: str,
+        user_agent: str
+    ) -> Optional[Dict]:
+        """
+        Validate session with security checks.
+        
+        ✅ Checks:
+        1. Session exists and not expired
+        2. IP address matches (prevents session hijacking)
+        3. User agent matches (additional security)
+        4. Update last activity timestamp
+        """
+        session_key = f"session:{session_id}"
+        session_data = self.redis.get(session_key)
+        
+        if not session_data:
+            print("❌ Session not found or expired")
+            return None
+        
+        session = json.loads(session_data)
+        
+        # Verify IP and user agent
+        security_hash = hashlib.sha256(
+            f"{ip_address}:{user_agent}".encode()
+        ).hexdigest()
+        
+        if session['security_hash'] != security_hash:
+            print("❌ Security validation failed (IP/UA mismatch)")
+            print("   Possible session hijacking attempt!")
+            self.destroy_session(session_id, session['user_id'])
+            return None
+        
+        # Update last activity (refresh expiration)
+        session['last_activity'] = datetime.utcnow().isoformat()
+        self.redis.setex(
+            session_key,
+            self.session_lifetime,
+            json.dumps(session)
+        )
+        
+        print("✅ Session valid and refreshed")
+        return session
+    
+    def rotate_session(
+        self,
+        old_session_id: str,
+        user_id: str,
+        ip_address: str,
+        user_agent: str
+    ) -> str:
+        """
+        Rotate session ID after privilege escalation.
+        
+        Use after:
+        - Login
+        - Password change
+        - MFA verification
+        - Role/permission changes
+        """
+        # Get old session data
+        old_data = self.redis.get(f"session:{old_session_id}")
+        if not old_data:
+            return self.create_session(user_id, ip_address, user_agent)
+        
+        # Destroy old session
+        self.destroy_session(old_session_id, user_id)
+        
+        # Create new session
+        new_session_id = self.create_session(user_id, ip_address, user_agent)
+        
+        print(f"✅ Session rotated: {old_session_id[:16]}... → {new_session_id[:16]}...")
+        return new_session_id
+    
+    def destroy_session(self, session_id: str, user_id: str):
+        """Destroy session (logout)."""
+        self.redis.delete(f"session:{session_id}")
+        self.redis.srem(f"user_sessions:{user_id}", session_id)
+        print(f"✅ Session destroyed: {session_id[:16]}...")
+    
+    def destroy_all_user_sessions(self, user_id: str):
+        """Destroy all sessions for user (security incident response)."""
+        session_ids = self.redis.smembers(f"user_sessions:{user_id}")
+        for session_id in session_ids:
+            self.redis.delete(f"session:{session_id}")
+        self.redis.delete(f"user_sessions:{user_id}")
+        print(f"✅ All sessions destroyed for user: {user_id}")
+    
+    def _enforce_session_limit(self, user_id: str):
+        """Enforce maximum concurrent sessions per user."""
+        session_ids = list(self.redis.smembers(f"user_sessions:{user_id}"))
+        if len(session_ids) > self.max_sessions_per_user:
+            # Remove oldest session
+            oldest = session_ids[0]
+            self.destroy_session(oldest, user_id)
+
+# Flask Cookie Configuration (example)
+SESSION_COOKIE_CONFIG = {
+    'key': 'session_id',
+    'httponly': True,  # Prevent JavaScript access (XSS protection)
+    'secure': True,    # HTTPS only
+    'samesite': 'Strict',  # CSRF protection
+    'max_age': 3600,   # 1 hour
+    'domain': '.example.com',  # Subdomain sharing
+    'path': '/'
+}
+
+# Usage
+redis_client = redis.Redis()
+session_mgr = SessionManager(redis_client)
+
+# Create session on login
+session_id = session_mgr.create_session(
+    user_id='user_12345',
+    ip_address='192.168.1.100',
+    user_agent='Mozilla/5.0...'
+)
+
+# Set secure cookie
+response.set_cookie(**SESSION_COOKIE_CONFIG, value=session_id)`;
+
+            monaco.editor.create(document.getElementById('jwt-generation-editor'), {
+                value: jwtGenerationCode,
+                language: 'python',
+                theme: 'vs-dark',
+                minimap: { enabled: false },
+                fontSize: 13,
+                readOnly: true
+            });
+
+            monaco.editor.create(document.getElementById('jwt-validation-editor'), {
+                value: jwtValidationCode,
+                language: 'python',
+                theme: 'vs-dark',
+                minimap: { enabled: false },
+                fontSize: 13,
+                readOnly: true
+            });
+
+            monaco.editor.create(document.getElementById('session-mgmt-editor'), {
+                value: sessionManagementCode,
+                language: 'python',
+                theme: 'vs-dark',
+                minimap: { enabled: false },
+                fontSize: 13,
+                readOnly: true
+            });
+            
+            // RBAC Playground Code
+            const rbacPlaygroundCode = `# Complete RBAC (Role-Based Access Control) Implementation
+from typing import List, Dict, Set
+from enum import Enum
+from dataclasses import dataclass
+
+class Permission(Enum):
+    """Define all system permissions"""
+    READ = "read"
+    WRITE = "write"
+    DELETE = "delete"
+    ADMIN = "admin"
+    APPROVE = "approve"
+    MANAGE_USERS = "manage_users"
+
+@dataclass
+class Role:
+    """Role with hierarchical permissions"""
+    name: str
+    permissions: Set[Permission]
+    inherits_from: List[str] = None  # Role hierarchy
+    
+    def has_permission(self, permission: Permission) -> bool:
+        return permission in self.permissions
+
+class RBACSystem:
+    """
+    Production-grade RBAC implementation.
+    
+    ✅ Features:
+    - Role hierarchy and inheritance
+    - Dynamic permission checks
+    - User-role assignments
+    - Resource-level permissions
+    - Audit logging
+    """
+    
+    def __init__(self):
+        self.roles: Dict[str, Role] = {}
+        self.user_roles: Dict[str, Set[str]] = {}
+        self.role_hierarchy: Dict[str, Set[str]] = {}
+        self._define_default_roles()
+    
+    def _define_default_roles(self):
+        """Define standard role hierarchy"""
+        # Admin: All permissions
+        self.define_role("admin", {
+            Permission.READ, Permission.WRITE, Permission.DELETE,
+            Permission.ADMIN, Permission.APPROVE, Permission.MANAGE_USERS
+        })
+        
+        # Editor: Read, write, delete
+        self.define_role("editor", {
+            Permission.READ, Permission.WRITE, Permission.DELETE
+        })
+        
+        # Viewer: Read only
+        self.define_role("viewer", {Permission.READ})
+        
+        # Approver: Read + approve
+        self.define_role("approver", {Permission.READ, Permission.APPROVE})
+        
+        # Role hierarchy: admin > editor > viewer
+        self.set_role_hierarchy("admin", ["editor", "approver"])
+        self.set_role_hierarchy("editor", ["viewer"])
+    
+    def define_role(self, name: str, permissions: Set[Permission]):
+        """Define new role with permissions"""
+        self.roles[name] = Role(name=name, permissions=permissions)
+        print(f"✅ Role '{name}' defined with {len(permissions)} permissions")
+    
+    def set_role_hierarchy(self, parent_role: str, child_roles: List[str]):
+        """
+        Set role inheritance.
+        Parent role inherits all child permissions.
+        """
+        if parent_role not in self.role_hierarchy:
+            self.role_hierarchy[parent_role] = set()
+        self.role_hierarchy[parent_role].update(child_roles)
+        print(f"✅ Role '{parent_role}' inherits from: {', '.join(child_roles)}")
+    
+    def assign_role(self, user_id: str, role_name: str):
+        """Assign role to user"""
+        if role_name not in self.roles:
+            raise ValueError(f"Role '{role_name}' not defined")
+        
+        if user_id not in self.user_roles:
+            self.user_roles[user_id] = set()
+        
+        self.user_roles[user_id].add(role_name)
+        print(f"✅ Role '{role_name}' assigned to user '{user_id}'")
+    
+    def revoke_role(self, user_id: str, role_name: str):
+        """Remove role from user"""
+        if user_id in self.user_roles:
+            self.user_roles[user_id].discard(role_name)
+            print(f"✅ Role '{role_name}' revoked from user '{user_id}'")
+    
+    def get_user_permissions(self, user_id: str) -> Set[Permission]:
+        """
+        Get all permissions for user (including inherited).
+        """
+        all_permissions = set()
+        
+        user_role_names = self.user_roles.get(user_id, set())
+        
+        for role_name in user_role_names:
+            # Add direct permissions
+            role = self.roles.get(role_name)
+            if role:
+                all_permissions.update(role.permissions)
+            
+            # Add inherited permissions
+            all_permissions.update(self._get_inherited_permissions(role_name))
+        
+        return all_permissions
+    
+    def _get_inherited_permissions(self, role_name: str) -> Set[Permission]:
+        """Recursively get permissions from child roles"""
+        inherited = set()
+        
+        child_roles = self.role_hierarchy.get(role_name, set())
+        for child_role in child_roles:
+            child = self.roles.get(child_role)
+            if child:
+                inherited.update(child.permissions)
+                # Recursive inheritance
+                inherited.update(self._get_inherited_permissions(child_role))
+        
+        return inherited
+    
+    def has_permission(self, user_id: str, permission: Permission) -> bool:
+        """
+        Check if user has specific permission.
+        
+        Use this in authorization decorators/middleware.
+        """
+        user_permissions = self.get_user_permissions(user_id)
+        has_perm = permission in user_permissions
+        
+        if has_perm:
+            print(f"✅ User '{user_id}' has permission: {permission.value}")
+        else:
+            print(f"❌ User '{user_id}' denied permission: {permission.value}")
+        
+        return has_perm
+    
+    def check_access(
+        self,
+        user_id: str,
+        resource_type: str,
+        action: Permission,
+        resource_owner: str = None
+    ) -> bool:
+        """
+        Advanced access check with resource ownership.
+        
+        Examples:
+        - Users can edit their own posts
+        - Admins can edit any post
+        - Editors can edit published posts
+        """
+        # Check base permission
+        if not self.has_permission(user_id, action):
+            return False
+        
+        # Resource ownership check
+        if resource_owner and user_id == resource_owner:
+            print(f"✅ User is resource owner - access granted")
+            return True
+        
+        # Admin bypass
+        if self.has_permission(user_id, Permission.ADMIN):
+            print(f"✅ Admin privilege - access granted")
+            return True
+        
+        return True
+
+
+# ===== USAGE EXAMPLES =====
+
+# Initialize RBAC system
+rbac = RBACSystem()
+
+# Create users with roles
+rbac.assign_role("alice", "admin")
+rbac.assign_role("bob", "editor")
+rbac.assign_role("charlie", "viewer")
+
+print("\\n--- Permission Checks ---")
+
+# Check permissions
+rbac.has_permission("alice", Permission.DELETE)  # ✅ Admin has all
+rbac.has_permission("bob", Permission.WRITE)     # ✅ Editor can write
+rbac.has_permission("charlie", Permission.DELETE)  # ❌ Viewer cannot delete
+
+print("\\n--- Role Hierarchy in Action ---")
+# Bob (editor) inherits viewer permissions
+bob_perms = rbac.get_user_permissions("bob")
+print(f"Bob's permissions: {[p.value for p in bob_perms]}")
+
+print("\\n--- Resource Ownership ---")
+# Check if user can delete their own resource
+rbac.check_access("charlie", "post", Permission.DELETE, resource_owner="charlie")
+
+# Decorator pattern for Flask/FastAPI
+def require_permission(permission: Permission):
+    def decorator(func):
+        def wrapper(user_id: str, *args, **kwargs):
+            if not rbac.has_permission(user_id, permission):
+                raise PermissionError(f"Permission denied: {permission.value}")
+            return func(user_id, *args, **kwargs)
+        return wrapper
+    return decorator
+
+@require_permission(Permission.DELETE)
+def delete_resource(user_id: str, resource_id: str):
+    print(f"🗑️ Resource {resource_id} deleted by {user_id}")
+
+# Try to delete
+try:
+    delete_resource("bob", "post_123")  # ✅ Editor can delete
+    delete_resource("charlie", "post_456")  # ❌ Viewer cannot delete
+except PermissionError as e:
+    print(f"❌ {e}")`;
+
+            monaco.editor.create(document.getElementById('rbac-playground-editor'), {
+                value: rbacPlaygroundCode,
+                language: 'python',
+                theme: 'vs-dark',
+                minimap: { enabled: true },
+                fontSize: 13,
+                readOnly: true
+            });
+            
+            // MFA Challenge Code (vulnerable implementation)
+            const mfaChallengeCode = `# INSECURE MFA - Find 11+ Security Vulnerabilities!
+from flask import Flask, request, jsonify, session
+import sqlite3, time, hmac, hashlib
+
+app = Flask(__name__)
+app.secret_key = "mysecret123"  # Issue #1
+
+def generate_totp(secret: str) -> str:
+    counter = int(time.time() / 30)
+    msg = counter.to_bytes(8, byteorder='big')
+    hash_value = hmac.new(secret.encode(), msg, hashlib.md5).digest()  # Issue #2
+    offset = hash_value[-1] & 0x0f
+    binary = int.from_bytes(hash_value[offset:offset+4], byteorder='big') & 0x7fffffff
+    return str(binary % 1000000).zfill(6)
+
+@app.route('/register', methods=['POST'])
+def register():
+    username = request.json['username']
+    password = request.json['password']
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)",
+                   (username, password))  # Issue #3
+    secret = "USER" + username + "SECRET"  # Issue #4
+    cursor.execute("UPDATE users SET totp_secret = ? WHERE username = ?",
+                   (secret, username))
+    conn.commit()
+    conn.close()
+    return jsonify({"secret": secret})
+
+@app.route('/login', methods=['POST'])
+def login():
+    username = request.json['username']
+    password = request.json['password']
+    totp_code = request.json.get('totp_code', '')
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    query = f"SELECT * FROM users WHERE username='{username}' AND password='{password}'"  # Issue #5
+    cursor.execute(query)
+    user = cursor.fetchone()
+    if not user:
+        return jsonify({"error": "Invalid"}), 401
+    # Issue #6: No rate limiting!
+    totp_secret = user[3]
+    expected = generate_totp(totp_secret)
+    if totp_code == expected:  # Issue #7: Timing attack
+        session['user_id'] = user[0]  # Issue #8
+        return jsonify({"token": "simple_token"})  # Issue #9
+    return jsonify({"error": "Invalid"}), 401
+
+if __name__ == '__main__':
+    app.run(debug=True)  # Issue #10`;
+
+            monaco.editor.create(document.getElementById('mfa-challenge-editor'), {
+                value: mfaChallengeCode,
+                language: 'python',
+                theme: 'vs-dark',
+                minimap: { enabled: true },
+                fontSize: 13,
+                readOnly: true
+            });
+            
+            // MFA Solution Code (secure implementation - load after solution button clicked)
+            const mfaSolutionCode = `# SECURE MFA Implementation - All Vulnerabilities Fixed
+from flask import Flask, request, jsonify
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+import sqlite3, bcrypt, pyotp, secrets, hashlib, hmac, logging
+from datetime import datetime, timedelta
+
+app = Flask(__name__)
+# ✅ Fix #1: Strong random secret from environment
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')  # 256-bit from env
+if not app.config['SECRET_KEY'] or len(app.config['SECRET_KEY']) < 32:
+    raise ValueError("SECRET_KEY must be 32+ bytes")
+
+# ✅ Fix #6: Rate limiting
+limiter = Limiter(app, key_func=get_remote_address,
+                  default_limits=["100 per hour"])
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# ✅ Fix #2: Use SHA-256 for TOTP (pyotp handles this)
+def generate_totp_secret() -> str:
+    """Generate cryptographically random TOTP secret"""
+    return pyotp.random_base32()  # 160-bit random
+
+@app.route('/register', methods=['POST'])
+@limiter.limit("5 per hour")
+def register():
+    username = request.json.get('username', '').strip()
+    password = request.json.get('password', '')
+    
+    if not username or not password:
+        return jsonify({"error": "All fields required"}), 400
+    
+    # ✅ Fix #3: Hash password with bcrypt
+    password_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt(12))
+    
+    # ✅ Fix #4: Cryptographically random TOTP secret
+    totp_secret = generate_totp_secret()
+    
+    try:
+        conn = sqlite3.connect('users.db')
+        cursor = conn.cursor()
+        cursor.execute(
+            "INSERT INTO users (username, password_hash, totp_secret, created_at) VALUES (?, ?, ?, ?)",
+            (username, password_hash, totp_secret, datetime.utcnow())
+        )
+        conn.commit()
+        conn.close()
+        
+        # Generate QR code URI
+        totp_uri = pyotp.totp.TOTP(totp_secret).provisioning_uri(
+            name=username,
+            issuer_name="SecureApp"
+        )
+        
+        logger.info(f"User registered: {username}")
+        return jsonify({"totp_uri": totp_uri, "secret": totp_secret}), 201
+        
+    except sqlite3.IntegrityError:
+        return jsonify({"error": "Username exists"}), 400
+
+@app.route('/login', methods=['POST'])
+@limiter.limit("5 per 15 minutes")  # ✅ Fix #6: Strict rate limiting
+def login():
+    username = request.json.get('username', '').strip()
+    password = request.json.get('password', '')
+    totp_code = request.json.get('totp_code', '').strip()
+    
+    if not username or not password or not totp_code:
+        return jsonify({"error": "All fields required"}), 400
+    
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    
+    # ✅ Fix #5: Parameterized query (no SQL injection)
+    cursor.execute(
+        "SELECT id, username, password_hash, totp_secret, failed_attempts, locked_until FROM users WHERE username = ?",
+        (username,)
+    )
+    user = cursor.fetchone()
+    
+    if not user:
+        logger.warning(f"Login failed: unknown user {username}")
+        return jsonify({"error": "Invalid credentials"}), 401
+    
+    user_id, username, password_hash, totp_secret, failed_attempts, locked_until = user
+    
+    # Check account lockout
+    if locked_until and datetime.fromisoformat(locked_until) > datetime.utcnow():
+        logger.warning(f"Login attempt on locked account: {username}")
+        return jsonify({"error": "Account temporarily locked"}), 403
+    
+    # ✅ Constant-time password comparison
+    if not bcrypt.checkpw(password.encode(), password_hash):
+        # Increment failed attempts
+        failed_attempts += 1
+        locked_until = None
+        if failed_attempts >= 5:
+            locked_until = (datetime.utcnow() + timedelta(minutes=15)).isoformat()
+            logger.warning(f"Account locked: {username} (5 failures)")
+        
+        cursor.execute(
+            "UPDATE users SET failed_attempts = ?, locked_until = ? WHERE id = ?",
+            (failed_attempts, locked_until, user_id)
+        )
+        conn.commit()
+        conn.close()
+        return jsonify({"error": "Invalid credentials"}), 401
+    
+    # ✅ Fix #7: Constant-time TOTP comparison
+    totp = pyotp.TOTP(totp_secret)
+    if not totp.verify(totp_code, valid_window=1):  # Allow 1 time step tolerance
+        failed_attempts += 1
+        cursor.execute(
+            "UPDATE users SET failed_attempts = ? WHERE id = ?",
+            (failed_attempts, user_id)
+        )
+        conn.commit()
+        conn.close()
+        logger.warning(f"TOTP failed: {username}")
+        return jsonify({"error": "Invalid TOTP code"}), 401
+    
+    # ✅ Fix #8 & #9: Generate secure JWT token (not simple string)
+    import jwt
+    token = jwt.encode({
+        'sub': user_id,
+        'username': username,
+        'iat': datetime.utcnow(),
+        'exp': datetime.utcnow() + timedelta(hours=1),
+        'jti': secrets.token_urlsafe(16)
+    }, app.config['SECRET_KEY'], algorithm='HS256')
+    
+    # Reset failed attempts
+    cursor.execute("UPDATE users SET failed_attempts = 0, locked_until = NULL WHERE id = ?", (user_id,))
+    conn.commit()
+    conn.close()
+    
+    logger.info(f"Login success: {username}")
+    return jsonify({"token": token, "expires_in": 3600}), 200
+
+@app.route('/generate-backup-codes', methods=['POST'])
+@limiter.limit("1 per day")
+def generate_backup_codes():
+    # Validate JWT token first
+    token = request.headers.get('Authorization', '').replace('Bearer ', '')
+    try:
+        payload = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
+        user_id = payload['sub']
+    except:
+        return jsonify({"error": "Unauthorized"}), 401
+    
+    # ✅ Generate cryptographically random backup codes
+    backup_codes = [secrets.token_urlsafe(12) for _ in range(10)]
+    
+    # ✅ Hash backup codes before storage
+    hashed_codes = [
+        hashlib.sha256(code.encode()).hexdigest()
+        for code in backup_codes
+    ]
+    
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    cursor.execute(
+        "UPDATE users SET backup_codes = ? WHERE id = ?",
+        (','.join(hashed_codes), user_id)
+    )
+    conn.commit()
+    conn.close()
+    
+    logger.info(f"Backup codes generated: user {user_id}")
+    # Return plaintext codes ONCE (user must save them)
+    return jsonify({"backup_codes": backup_codes}), 200
+
+# ✅ Fix #10: Never run debug mode in production
+if __name__ == '__main__':
+    app.run(debug=False, ssl_context='adhoc')  # HTTPS only`;
+
+            monaco.editor.create(document.getElementById('mfa-solution-editor'), {
+                value: mfaSolutionCode,
+                language: 'python',
+                theme: 'vs-dark',
+                minimap: { enabled: true },
+                fontSize: 13,
+                readOnly: true
+            });
+            
+            // Show solution handler
+            document.getElementById('show-mfa-solution')?.addEventListener('click', function() {
+                document.getElementById('mfa-solution').style.display = 'block';
+                this.disabled = true;
+                this.style.opacity = '0.5';
+                this.style.cursor = 'not-allowed';
+                document.getElementById('mfa-solution').scrollIntoView({ behavior: 'smooth' });
+            });
+
+            // Tab switching
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', function() {
+                const container = this.closest('.playground-container');
+                container.querySelectorAll('.tab-btn').forEach(b => {
+                    b.classList.remove('active');
+                    b.style.borderBottomColor = 'transparent';
+                    b.style.color = 'var(--text-secondary)';
+                });
+                container.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none';
+                
+                this.classList.add('active');
+                this.style.borderBottomColor = 'var(--hub-primary)';
+                this.style.color = 'var(--hub-primary)';
+                document.getElementById(this.getAttribute('data-tab')).style.display = 'block';
+            }));
+            
+            console.log("✅ Monaco editors initialized!");
+        });
+        
+        // Quiz Data
+        const quizData = [
+            {
+                question: "What is the difference between authentication and authorization?",
+                options: [
+                    "Authentication is who you are; authorization is what you can do",
+                    "They are the same thing",
+                    "Authorization happens before authentication",
+                    "Authentication requires a password; authorization doesn't"
+                ],
+                correct: 0,
+                explanation: "Authentication verifies identity ('who are you?'), while authorization determines permissions ('what can you do?'). They are sequential: authenticate first, then authorize."
+            },
+            {
+                question: "Which OAuth 2.0 flow is most secure for mobile and web apps?",
+                options: [
+                    "Implicit Flow",
+                    "Resource Owner Password",
+                    "Authorization Code + PKCE",
+                    "Client Credentials"
+                ],
+                correct: 2,
+                explanation: "Authorization Code + PKCE is the most secure. PKCE (Proof Key for Code Exchange) prevents authorization code interception attacks and doesn't require client secrets."
+            },
+            {
+                question: "What is the recommended lifetime for an access token?",
+                options: [
+                    "1 year",
+                    "15-60 minutes",
+                    "24 hours",
+                    "Never expires"
+                ],
+                correct: 1,
+                explanation: "Access tokens should be short-lived (15-60 minutes) to limit exposure if compromised. Use refresh tokens for longer sessions."
+            },
+            {
+                question: "How should JWT tokens be stored in a web browser?",
+                options: [
+                    "localStorage",
+                    "sessionStorage",
+                    "Memory (JavaScript variable)",
+                    "Cookies with document.cookie"
+                ],
+                correct: 2,
+                explanation: "Store access tokens in memory (JavaScript variables) to prevent XSS attacks. Refresh tokens should use HttpOnly cookies. Never use localStorage/sessionStorage for sensitive tokens."
+            },
+            {
+                question: "What does RBAC stand for and how does it work?",
+                options: [
+                    "Role-Based Access Control: permissions assigned to users directly",
+                    "Role-Based Access Control: permissions assigned to roles, users get roles",
+                    "Rule-Based Access Control: complex rules determine access",
+                    "Resource-Based Access Control: resources control their own access"
+                ],
+                correct: 1,
+                explanation: "RBAC assigns permissions to roles (e.g., 'editor' role has read/write). Users are assigned roles and inherit those permissions. Simpler than assigning permissions directly to users."
+            },
+            {
+                question: "What is PKCE and why is it important?",
+                options: [
+                    "Password Key Cipher Encryption for secure passwords",
+                    "Proof Key for Code Exchange: prevents authorization code interception",
+                    "Public Key Certificate Exchange for SSL",
+                    "Protected Key Cache Encryption for token storage"
+                ],
+                correct: 1,
+                explanation: "PKCE (Proof Key for Code Exchange) protects the OAuth authorization code flow. The client generates a code_verifier and sends a code_challenge. The authorization server verifies they match, preventing code interception attacks."
+            },
+            {
+                question: "Which HTTP headers make cookies secure?",
+                options: [
+                    "HttpOnly, Secure, SameSite=Strict",
+                    "CORS, Content-Type, Accept",
+                    "Authorization, Bearer, Token",
+                    "Cache-Control, Expires, Pragma"
+                ],
+                correct: 0,
+                explanation: "HttpOnly prevents JavaScript access (XSS protection), Secure ensures HTTPS-only transmission, and SameSite=Strict prevents CSRF attacks by blocking cross-site cookie sending."
+            },
+            {
+                question: "What is the primary advantage of ABAC over RBAC?",
+                options: [
+                    "ABAC is simpler to implement",
+                    "ABAC provides fine-grained, context-aware access control",
+                    "ABAC is faster to evaluate",
+                    "ABAC doesn't require a database"
+                ],
+                correct: 1,
+                explanation: "ABAC (Attribute-Based Access Control) uses attributes (user department, resource type, time of day, IP address) for fine-grained, context-aware decisions. More flexible than RBAC but more complex."
+            },
+            {
+                question: "How should TOTP (Time-based One-Time Password) secrets be generated?",
+                options: [
+                    "Username + fixed string",
+                    "SHA-256 hash of email",
+                    "Cryptographically random (secrets.token_urlsafe)",
+                    "Sequential numbers"
+                ],
+                correct: 2,
+                explanation: "TOTP secrets must be cryptographically random (e.g., secrets.token_urlsafe() or pyotp.random_base32()). Predictable secrets defeat the purpose of MFA."
+            },
+            {
+                question: "What is session rotation and when should it occur?",
+                options: [
+                    "Rotating encryption keys every hour",
+                    "Generating new session ID after login, password change, or privilege escalation",
+                    "Moving sessions between servers for load balancing",
+                    "Deleting old sessions after 30 days"
+                ],
+                correct: 1,
+                explanation: "Session rotation generates a new session ID after security-sensitive events (login, password change, MFA verification, role changes) to prevent session fixation attacks."
+            }
+        ];
+        
+        function renderQuiz() {
+            const quizContainer = document.getElementById('quiz');
+            quizContainer.innerHTML = quizData.map((item, index) => `
+                <div class="quiz-question" style="margin-bottom: var(--spacing-2xl); padding: var(--spacing-lg); background: rgba(26, 31, 58, 0.5); border-radius: 8px; border: 1px solid var(--module-border);">
+                    <h4 style="color: var(--text-primary); margin-bottom: var(--spacing-md); font-size: 1.1rem;">
+                        Question ${index + 1}: ${item.question}
+                    </h4>
+                    <div class="options-container">
+                        ${item.options.map((option, optIndex) => `
+                            <label class="quiz-option" style="display: block; padding: var(--spacing-md); margin: var(--spacing-sm) 0; background: rgba(123, 97, 255, 0.1); border: 2px solid transparent; border-radius: 8px; cursor: pointer; transition: all 0.2s ease;">
+                                <input type="radio" name="question-${index}" value="${optIndex}" style="margin-right: var(--spacing-sm);">
+                                <span style="color: var(--text-secondary);">${option}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                    <div id="feedback-${index}" class="question-feedback" style="display: none; margin-top: var(--spacing-md); padding: var(--spacing-md); border-radius: 6px;"></div>
+                </div>
+            `).join('');
+            
+            quizContainer.innerHTML += `
+                <button id="submit-quiz-btn" class="submit-quiz-btn" style="padding: var(--spacing-md) var(--spacing-2xl); background: var(--hub-primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600;">
+                    🔐 Submit Authentication Quiz
+                </button>
+            `;
+            
+            document.querySelectorAll('.quiz-option').forEach(option => {
+                option.addEventListener('mouseenter', function() {
+                    this.style.borderColor = 'var(--hub-primary)';
+                    this.style.background = 'rgba(123, 97, 255, 0.2)';
+                });
+                option.addEventListener('mouseleave', function() {
+                    if (!this.querySelector('input').checked) {
+                        this.style.borderColor = 'transparent';
+                        this.style.background = 'rgba(123, 97, 255, 0.1)';
+                    }
+                });
+                option.addEventListener('click', function() {
+                    const questionContainer = this.closest('.quiz-question');
+                    questionContainer.querySelectorAll('.quiz-option').forEach(opt => {
+                        opt.style.borderColor = 'transparent';
+                        opt.style.background = 'rgba(123, 97, 255, 0.1)';
+                    });
+                    this.style.borderColor = 'var(--hub-primary)';
+                    this.style.background = 'rgba(123, 97, 255, 0.2)';
+                });
+            });
+            
+            document.getElementById('submit-quiz-btn').addEventListener('click', submitQuiz);
+        }
+        
+        function submitQuiz() {
+            let correctCount = 0;
+            
+            quizData.forEach((item, index) => {
+                const selectedOption = document.querySelector(`input[name="question-${index}"]:checked`);
+                const feedback = document.getElementById(`feedback-${index}`);
+                
+                if (selectedOption) {
+                    const answerIndex = parseInt(selectedOption.value);
+                    const isCorrect = answerIndex === item.correct;
+                    
+                    if (isCorrect) {
+                        correctCount++;
+                        feedback.style.display = 'block';
+                        feedback.style.background = 'rgba(16, 185, 129, 0.1)';
+                        feedback.style.borderLeft = '4px solid #10b981';
+                        feedback.innerHTML = `
+                            <strong style="color: #10b981;">✅ Correct!</strong><br>
+                            <span style="color: var(--text-secondary); font-size: 0.95rem;">${item.explanation}</span>
+                        `;
+                    } else {
+                        feedback.style.display = 'block';
+                        feedback.style.background = 'rgba(239, 68, 68, 0.1)';
+                        feedback.style.borderLeft = '4px solid #ef4444';
+                        feedback.innerHTML = `
+                            <strong style="color: #ef4444;">❌ Incorrect</strong><br>
+                            <span style="color: var(--text-secondary); font-size: 0.95rem;">The correct answer is: <strong>${item.options[item.correct]}</strong></span><br>
+                            <span style="color: var(--text-secondary); font-size: 0.95rem;">${item.explanation}</span>
+                        `;
+                    }
+                } else {
+                    feedback.style.display = 'block';
+                    feedback.style.background = 'rgba(251, 191, 36, 0.1)';
+                    feedback.style.borderLeft = '4px solid #fbbf24';
+                    feedback.innerHTML = `<strong style="color: #fbbf24;">⚠️ No answer selected</strong>`;
+                }
+            });
+            
+            const percentage = (correctCount / quizData.length) * 100;
+            const resultsContainer = document.getElementById('quiz-results');
+            const scoreDisplay = document.getElementById('score-display');
+            
+            let grade, color, message;
+            if (percentage >= 90) {
+                grade = 'Security Expert!';
+                color = '#10b981';
+                message = 'Outstanding authentication knowledge! 🏆';
+            } else if (percentage >= 70) {
+                grade = 'Well Done!';
+                color = '#00d4ff';
+                message = 'Strong grasp of auth concepts! 👍';
+            } else if (percentage >= 50) {
+                grade = 'Keep Learning';
+                color = '#fbbf24';
+                message = 'Review OAuth, JWT, and RBAC! 📚';
+            } else {
+                grade = 'Needs Review';
+                color = '#ef4444';
+                message = 'Study the material before retrying. 💪';
+            }
+            
+            scoreDisplay.innerHTML = `
+                <div style="text-align: center;">
+                    <h3 style="color: ${color}; font-size: 2rem; margin-bottom: var(--spacing-sm);">${grade}</h3>
+                    <p style="font-size: 1.5rem; color: var(--text-primary); margin-bottom: var(--spacing-sm);">
+                        Score: ${correctCount}/${quizData.length} (${percentage.toFixed(0)}%)
+                    </p>
+                    <p style="color: var(--text-secondary);">${message}</p>
+                </div>
+            `;
+            
+            resultsContainer.style.display = 'block';
+            
+            const submitBtn = document.getElementById('submit-quiz-btn');
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.5';
+            submitBtn.style.cursor = 'not-allowed';
+            
+            resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        
+        document.getElementById('retry-quiz')?.addEventListener('click', () => {
+            document.getElementById('quiz-results').style.display = 'none';
+            renderQuiz();
+        });
+        
+        // Initialize
+        window.addEventListener('load', () => {
+            createOAuthFlowsViz();
+            createRBACvABACComparison();
+            renderQuiz();
+            console.log("✅ Authentication & Authorization module fully loaded!");
+        });
     </script>
 </body>
 </html>
