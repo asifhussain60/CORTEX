@@ -1,18 +1,18 @@
 # 📁 CORTEX Documentation Cleanup Orchestrator
 
-**Version:** 1.0.0 | **Status:** ✅ PRODUCTION  
-**Author:** Asif Hussain | **Created:** January 3, 2026  
+**Version:** 2.0.0 | **Status:** ✅ PRODUCTION  
+**Author:** Asif Hussain | **Created:** January 3, 2026 | **Updated:** January 3, 2026  
 **Copyright © 2026 Asif Hussain. All rights reserved.**
 
 ---
 
 ## 🎯 Purpose
 
-Automated documentation cleanup orchestrator that organizes the `docs/` folder, validates all links, creates stub pages for missing content, and ensures documentation consistency across master files.
+Automated documentation cleanup orchestrator that organizes the `docs/` folder, validates all links, creates stub pages for missing content, ensures documentation consistency across master files, and generates visual-only site hierarchy maps.
 
 **Target:** CORTEX documentation site (`docs/` folder)  
-**Scope:** File organization, link validation, stub generation, documentation synchronization  
-**Tools:** PowerShell automation scripts (`docs-organizer.ps1`, `create-stub-pages.ps1`)
+**Scope:** File organization, link validation, stub generation, documentation synchronization, v5.0 architecture alignment, visual sitemap generation  
+**Tools:** PowerShell automation scripts (`docs-organizer.ps1`, `create-stub-pages.ps1`) + Toolkit Manager integration
 
 ---
 
@@ -20,10 +20,12 @@ Automated documentation cleanup orchestrator that organizes the `docs/` folder, 
 
 | Pattern | Action |
 |---------|--------|
-| `cleanup docs`, `organize docs` | Run full cleanup pipeline |
+| `cleanup docs`, `organize docs` | Run full cleanup pipeline (all 7 phases) |
 | `validate docs`, `check docs` | Validation only (dry run) |
 | `create stubs`, `generate stubs` | Stub page generation only |
 | `sync docs`, `update sitemap` | Sync documentation master files |
+| `align v5 docs`, `v5 alignment` | Identify v5.0 architecture gaps + update docs |
+| `generate visual sitemap` | Create visual-only node hierarchy map |
 
 ---
 
@@ -199,10 +201,11 @@ Automated documentation cleanup orchestrator that organizes the `docs/` folder, 
 
 #### ✅ docs-sitemap.md
 **Update (if changed):**
-- Total HTML files count
-- Stub pages created count
+- Total HTML files count (311 → 339 with v5.0)
+- Stub pages created count (160 → 188 with v5.0)
 - Archived files count
 - Progress summary per category
+- v5.0 architecture pages (Master Orchestrator Hub, Planning v5, ADO v2)
 - Key achievements section
 - Next actions (priorities)
 
@@ -211,50 +214,282 @@ Automated documentation cleanup orchestrator that organizes the `docs/` folder, 
 
 #### ✅ glassmorphism-design-standard.md
 **Update (if changed):**
-- Scope section (7 feature tiles + 3 multi-panel tiles)
-- Architecture pages count (active vs archived vs stubs)
-- Security panel pages count
-- Orchestrators panel pages count
+- Scope section (9 tiles + v5.0 architecture components)
+- Orchestrators panel count (22 → 51 pages with v5.0)
+- Master Orchestrator Hub (5 pages)
+- Planning v5 Level 2 (11 pages)
+- ADO v2 Level 2 (14 pages)
 - Current state statistics
 - Cache-busting versions
 
 **Version Rules:**
-- Increment patch version (e.g., 4.1.1 → 4.1.2) for scope updates
+- Increment patch version (e.g., 4.1.0 → 4.1.1) for scope updates
 - Update "Last Updated" date
 - Add sync note in "Latest Updates" section
 
 #### ✅ 00-master-plan.md
 **Update (if changed):**
-- Total HTML files (active + stubs)
+- Total HTML files (311 → 339 with v5.0)
 - Level 1 status (should always be 62/62 = 100%)
 - Level 2 status (implemented vs stubs)
+- v5.0 Architecture Pages section (Master Orchestrator Hub + Planning v5 + ADO v2)
 - Standard tiles scope
 - Multi-panel tiles scope
+- Orchestrators panel (22 → 51 pages)
 - Version and sync status
 
 #### ✅ executive-summary.md
 **Update (if changed):**
 - Page status summary table
-- Implementation priorities
+- Implementation priorities (v5.0 architecture as Priority 1)
 - Completion status by multi-panel
-- Security/Orchestrators/STS page counts
+- Orchestrators page counts (22 → 51)
+- Master Orchestrator Hub status
+- Planning v5 / ADO v2 Level 2 status
 
 **Consistency Validation:**
-- All 4 files show same total file counts
-- All 4 files show same stub page counts
+- All 4 files show same total file counts (339 HTML files with v5.0)
+- All 4 files show same stub page counts (188 with v5.0)
 - All 4 files show same completion percentages
+- All 4 files include v5.0 architecture pages (Master Orchestrator Hub + Planning v5 + ADO v2)
+- Orchestrators panel shows 51 pages (20 active + 28 v5.0 stubs + 2 legacy stubs)
 - No references to archived files (unless marked "archived")
 - No references to "missing" files (should be "stubs")
 
 **Success Criteria:**
-- All 4 files updated with current state
+- All 4 files updated with current state + v5.0 architecture
 - No conflicting information across files
 - Versions incremented appropriately
 - "Last Updated" dates match
+- v5.0 architecture properly documented (28 new pages)
 
 ---
 
-### Phase 6: Final Validation Report 📊
+### Phase 6: v5.0 Architecture Alignment 🔄
+
+**Purpose:** Identify documentation gaps between current docs and v5.0 refactor plan, update master files
+
+**Methodology (Repeatable Process):**
+
+**Step 1: Holistic Plan Review**
+1. Read `cortex-brain/documents/planning/active/cortex-v5-holistic-refactor/00-MASTER-PLAN-V5.md`
+2. Read `cortex-brain/documents/planning/active/cortex-v5-holistic-refactor/artifacts/final-acceptance-criteria-link.md`
+3. Extract v5.0 architecture components:
+   - Master Orchestrator Hub (Pattern Router, State Manager, Execution Engine, LLM Fallback)
+   - Planning v5 Level 2 structure (10 phase pages)
+   - ADO v2 Level 2 structure (13 feature pages)
+   - Cross-Session Context Middleware
+   - MCP Tool Infrastructure
+   - State Database (SQLite)
+
+**Step 2: Current Documentation Inventory**
+1. Scan `docs/` folder for existing v5.0 component pages
+2. Use `grep_search` to find mentions of:
+   - "Master Orchestrator"
+   - "Pattern Router"
+   - "Cross-Session Context"
+   - "Planning v5"
+   - "ADO v2"
+3. Identify gaps: mentioned but not documented vs. fully missing
+
+**Step 3: Gap Analysis**
+Create gap matrix:
+```
+Component | Mentioned | Documented | Gap Type | Priority
+----------|-----------|------------|----------|----------
+Master Orch Hub | Yes (3 pages) | No (stub) | HIGH | P1
+Pattern Router | No | No | HIGH | P1
+State Manager | No | No | HIGH | P1
+Execution Engine | No | No | HIGH | P1
+LLM Fallback | Yes (toolkit) | Partial | MEDIUM | P1
+Planning v5 L2 | Yes (1 hub) | Partial | HIGH | P1
+ADO v2 L2 | Yes (1 hub) | Partial | HIGH | P1
+```
+
+**Step 4: Master File Updates**
+Update 4 master documentation files with v5.0 architecture:
+
+1. **glassmorphism-design-standard.md:**
+   - Add v5.0 scope section
+   - Update Orchestrators panel count (20 → 51 pages)
+   - Add Master Orchestrator Hub (5 pages)
+   - Add Planning v5 Level 2 (11 pages)
+   - Add ADO v2 Level 2 (14 pages)
+   - Increment version (e.g., 4.0.2 → 4.1.0)
+
+2. **00-master-plan.md:**
+   - Add v5.0 Architecture Pages section
+   - Update total HTML files (311 → 339)
+   - Update Orchestrators panel (22 → 51 pages)
+   - List all 28 new stub pages
+   - Increment version
+
+3. **docs-sitemap.md:**
+   - Add Master Orchestrator Hub section (5 pages)
+   - Add Planning v5 Level 2 section (10 pages)
+   - Add ADO v2 Level 2 section (13 pages)
+   - Update progress summary (339 files, 188 stubs)
+   - Add v5.0 to Priority 1 next actions
+
+4. **executive-summary.md:**
+   - Add v5.0 architecture to Priority 1
+   - Update Orchestrators panel status (39%)
+   - Add Master Orchestrator Hub status (0/5)
+   - Add Planning v5 / ADO v2 status
+
+**Step 5: Consistency Validation**
+Verify all 4 files show:
+- Same total file counts (339 HTML files)
+- Same stub counts (188 stubs)
+- Same v5.0 page counts (28 new pages)
+- Same Orchestrators panel count (51 pages)
+- No conflicting information
+
+**Tools:**
+- `read_file` - Read plan files
+- `grep_search` - Find component mentions
+- `multi_replace_string_in_file` - Update master files
+- `semantic_search` - Find related content
+
+**Output:**
+- Updated glassmorphism-design-standard.md (v4.1.0+)
+- Updated 00-master-plan.md (v4.1.2+)
+- Updated docs-sitemap.md
+- Updated executive-summary.md
+- Gap analysis matrix in validation report
+
+**Success Criteria:**
+- ✅ All v5.0 components identified
+- ✅ Gap matrix complete with priorities
+- ✅ All 4 master files updated
+- ✅ Version increments applied
+- ✅ Consistency validated
+
+---
+
+### Phase 7: Visual Sitemap Generation 🗺️
+
+**Purpose:** Generate visual-only node hierarchy showing site structure (NOT for status tracking)
+
+**Output Format:**
+```
+📁 VISUAL SITE MAP - NODE HIERARCHY
+
+🏠 docs/index.html (Level 0 - Home)
+|
+├─📚 BEST PRACTICES LEARNING HUB (Score: 380 - Level 2 Required)
+│  ├─ knowledge/index.html (Hub Home)
+│  │
+│  ├─ PHASE 1: HIGH-VALUE DOMAINS (4/4 hubs)
+│  │  |
+│  │  ├─🌐 API Design (3.5 hours, 50 quizzes)
+│  │  │  ├─ knowledge/api-design-hub.html (L1 Hub)
+│  │  │  └─ Level 2 Modules (5):
+│  │  │     ├─ fundamentals.html (Beginner, 30min)
+│  │  │     ├─ rest-principles.html (Intermediate, 45min)
+│  │  │     ├─ versioning-evolution.html (Intermediate, 40min)
+│  │  │     ├─ authentication-security.html (Advanced, 50min)
+│  │  │     └─ real-world-case-studies.html (Expert, 60min)
+│  │  │
+│  │  ├─🧪 Testing (3 hours, 50 quizzes)
+│  │  │  ├─ knowledge/testing-hub.html (L1 Hub)
+│  │  │  └─ Level 2 Modules (5): ...
+│  │  │
+│  │  ├─🔐 Security (4 hours, 70 quizzes)
+│  │  │  └─ ...
+│  │  │
+│  │  └─🎨 Design Patterns (4.5 hours, 60 quizzes)
+│  │     └─ ...
+│  │
+│  ├─ PHASE 2: FOUNDATIONS (4/4 hubs)
+│  │  └─ ...
+│  │
+│  └─ PHASE 3: ADVANCED (9/9 hubs)
+│     └─ ...
+│
+├─🎯 ORCHESTRATORS PANEL (2x3 Grid - 51 pages)
+│  ├─ orchestrators/index.html (Grid Navigation)
+│  │
+│  ├─ PLANNING (5 pages + v5.0 Level 2)
+│  │  ├─ planning-system.html
+│  │  ├─ ado-orchestrator.html
+│  │  ├─ cleanup-orchestrator.html
+│  │  ├─ planning-v5.html (L1 Hub)
+│  │  │  └─ Level 2: 10 Phase Pages
+│  │  │     ├─ phase-0-foundation.html
+│  │  │     ├─ phase-1-mcp-tools.html
+│  │  │     └─ ...
+│  │  └─ ado-v2.html (L1 Hub)
+│  │     └─ Level 2: 13 Feature Pages
+│  │        ├─ wizard-interface.html
+│  │        ├─ work-item-generation.html
+│  │        └─ ...
+│  │
+│  ├─ EXECUTION (3 pages)
+│  │  └─ ...
+│  │
+│  ├─ SYSTEM (5 pages)
+│  │  └─ ...
+│  │
+│  ├─ ANALYSIS (3 pages)
+│  │  └─ ...
+│  │
+│  ├─ DEBUG (2 pages)
+│  │  └─ ...
+│  │
+│  └─🆕 MASTER ORCHESTRATOR HUB (v5.0 - NEW)
+│     ├─ master-orchestrator.html (L1 Hub)
+│     └─ Components (4):
+│        ├─ pattern-router.html
+│        ├─ state-manager.html
+│        ├─ execution-engine.html
+│        └─ llm-fallback.html
+│
+├─🛡️ SECURITY PANEL (2x2 Grid - 16 pages)
+│  └─ ...
+│
+├─🔧 SHARPEN THE SAW (3x2 Grid - 6 pages)
+│  └─ ...
+│
+├─🧠 ARCHITECTURE (10 pages)
+│  └─ ...
+│
+├─💰 TOKEN OPTIMIZATION (1 page)
+│  └─ ...
+│
+├─🛠️ TOOLKIT MANAGER (1 page)
+│  └─ ...
+│
+├─🔍 CORTEX LENS (1 page)
+│  └─ ...
+│
+└─🚀 GETTING STARTED (5 pages)
+   └─ ...
+```
+
+**Generation Steps:**
+1. Parse `docs/` folder structure recursively
+2. Build tree representation with proper indentation
+3. Use ASCII box-drawing characters: `├─`, `│`, `└─`
+4. Show page counts, complexity scores, learning hours
+5. Indicate status with icons: ✅ (active), 🚧 (stub), ⏭️ (archived)
+6. Group by Level 0 → Level 1 → Level 2 hierarchy
+7. Add metadata (scores, module counts, time estimates)
+
+**Output File:** `cortex-brain/documents/planning/active/cortex-documentation/artifacts/docs-sitemap.md`
+
+**⚠️ CRITICAL:** The visual hierarchy is embedded in docs-sitemap.md (VISUAL ONLY) - shows node structure, NOT for tracking implementation progress.
+
+**Success Criteria:**
+- ✅ Visual hierarchy embedded in docs-sitemap.md
+- ✅ All pages represented in ASCII tree
+- ✅ Proper indentation (Level 0 → 1 → 2 → 3)
+- ✅ Status icons accurate
+- ✅ Metadata included (page counts, active/stub breakdown)
+
+---
+
+### Phase 8: Final Validation Report 📊
 
 **Purpose:** Generate comprehensive report of all changes
 
@@ -267,15 +502,26 @@ Automated documentation cleanup orchestrator that organizes the `docs/` folder, 
    - Broken links (before → after)
    - Missing assets (CSS/JS/Images)
 
-2. **Consistency Check**
+2. **v5.0 Architecture Alignment**
+   - Gap analysis matrix
+   - Master files updated (4/4)
+   - Version increments applied
+   - Consistency validation passed
+
+3. **Consistency Check**
    - docs-sitemap.md status
    - glassmorphism-design-standard.md version + status
    - 00-master-plan.md version + status
    - executive-summary.md status
    - All files synced? (Yes/No)
 
-3. **Next Actions**
-   - Priority 1 tasks (HIGH)
+4. **Visual Sitemap**
+   - ASCII tree generated: Yes/No
+   - Total nodes represented: 339
+   - Hierarchy levels: 0 → 1 → 2 → 3
+
+5. **Next Actions**
+   - Priority 1 tasks (HIGH) - v5.0 architecture documentation
    - Priority 2 tasks (MEDIUM)
    - Priority 3 tasks (LOW)
 
@@ -286,27 +532,84 @@ Automated documentation cleanup orchestrator that organizes the `docs/` folder, 
 ========================================
 
 📁 Validation Statistics:
-  Total HTML Files: {count}
-  Active Pages: {count}
-  Stub Pages: {count}
-  Archived Files: {count}
+  Total HTML Files: 339 (311 pre-v5.0 + 28 v5.0 architecture)
+  Active Pages: 151
+  Stub Pages: 188 (160 legacy + 28 v5.0)
+  Archived Files: 42
   Broken Links: {count} (many stub→future content)
   Missing Images: {count}
 
+🆕 v5.0 Architecture Pages:
+  Master Orchestrator Hub: 0/5 (0%) - All stubs
+  Planning v5 Level 2: 1/11 (9%) - Hub active, 10 phase stubs
+  ADO v2 Level 2: 1/14 (7%) - Hub active, 13 feature stubs
+  Total v5.0 Pages: 28 (all stubs pending implementation)
+
+🔄 v5.0 Architecture Alignment:
+  Gap Analysis: ✅ COMPLETE (28 components identified)
+  Master Files Updated: ✅ 4/4 (all synced)
+  Version Increments: ✅ Applied (glassmorphism v4.1.0, master-plan v4.1.2)
+  Consistency Validation: ✅ PASSED (all files show 339 pages, 188 stubs)
+
 ✅ Consistency Check:
-  1. docs-sitemap.md - ✅ SYNCED ({date})
-  2. glassmorphism-design-standard.md v{version} - ✅ SYNCED ({date})
-  3. 00-master-plan.md v{version} - ✅ SYNCED ({date})
-  4. executive-summary.md v{version} - ✅ SYNCED ({date})
+  1. docs-sitemap.md - ✅ SYNCED ({date}) + v5.0 architecture added
+  2. glassmorphism-design-standard.md v{version} - ✅ SYNCED ({date}) + v5.0 scope
+  3. 00-master-plan.md v{version} - ✅ SYNCED ({date}) + v5.0 pages
+  4. executive-summary.md v{version} - ✅ SYNCED ({date}) + v5.0 priorities
+
+🗺️ Visual Sitemap:
+  ASCII Tree Generated: ✅ YES
+  Location: Embedded in docs-sitemap.md (Complete Visual Site Hierarchy section)
+  Total Nodes: 347 pages
+  Hierarchy Levels: Level 0 → Level 1 → Level 2 → Level 3
+  Status Icons: ✅ (active), 🚧 (stub), ⏭️ (archived)
+
+📋 Next Actions (Prioritized):
+  PRIORITY 1 (HIGH): v5.0 Architecture Documentation
+    - Master Orchestrator Hub (5 pages, 80 hours)
+    - Planning v5 Level 2 (10 pages)
+    - ADO v2 Level 2 (13 pages)
+  
+  PRIORITY 2 (MEDIUM): Story Chapter Integration
+    - Restore 14 archived chapters
+  
+  PRIORITY 3 (LOW): Security Panel Completion
+    - Implement 6 stub pages
 
 ========================================
 ✅ ALL DOCUMENTATION FILES CONSISTENT
+✅ V5.0 ARCHITECTURE ALIGNED
+✅ VISUAL SITEMAP GENERATED
 ========================================
 ```
 
 ---
 
 ## 🛠️ Tools Reference
+
+### Toolkit Manager Integration
+
+**Invocation:** All PowerShell scripts executed via Toolkit Manager for consistent logging and error handling.
+
+**Usage Pattern:**
+```powershell
+# Via Toolkit Manager (preferred)
+Invoke-CortexToolkit -Tool "docs-organizer" -Mode "DryRun"
+Invoke-CortexToolkit -Tool "create-stub-pages"
+Invoke-CortexToolkit -Tool "generate-visual-sitemap"
+
+# Direct execution (fallback)
+.\cortex-toolkit\docs-organizer.ps1 -DryRun
+.\cortex-toolkit\create-stub-pages.ps1
+```
+
+**Benefits:**
+- Centralized logging to `cortex-brain/documents/reports/`
+- Error handling with rollback capability
+- Progress tracking with timestamps
+- Execution history for auditing
+
+---
 
 ### docs-organizer.ps1
 
@@ -367,6 +670,54 @@ Automated documentation cleanup orchestrator that organizes the `docs/` folder, 
 
 ---
 
+### generate-visual-sitemap.ps1 (NEW)
+
+**Location:** `cortex-toolkit/generate-visual-sitemap.ps1`  
+**Version:** 1.0.0  
+**Purpose:** Generate visual-only ASCII tree showing node hierarchy
+
+**Key Functions:**
+- `Build-SiteTree` - Recursively parse docs folder
+- `Format-TreeNode` - Generate ASCII box-drawing characters
+- `Get-NodeStatus` - Determine status icon (✅/🚧/⏭️)
+- `Add-NodeMetadata` - Include scores, counts, times
+- `Export-TreeStructure` - Write to text file
+
+**Parameters:**
+- `-OutputPath` - Custom output location (default: `cortex-brain/documents/planning/active/cortex-documentation/artifacts/docs-sitemap.md`)
+- `-MaxDepth` - Maximum tree depth (default: 4)
+- `-IncludeMetadata` - Show scores/counts/times (default: true)
+- `-EmbedMode` - Embeds visual tree into existing docs-sitemap.md (default: true)
+
+**Output Format:**
+```
+📁 VISUAL SITE MAP - NODE HIERARCHY
+
+🏠 docs/index.html (Level 0 - Home)
+|
+├─📚 BEST PRACTICES (Score: 380)
+│  ├─ knowledge/index.html
+│  │
+│  ├─ PHASE 1 (4/4 hubs)
+│  │  ├─🌐 API Design (3.5h, 50 quizzes)
+│  │  │  ├─ api-design-hub.html (L1)
+│  │  │  └─ Level 2 (5 modules)
+│  │  │     ├─ fundamentals.html
+│  │  │     └─ ...
+│  │  └─ ...
+│  └─ ...
+└─ ...
+```
+
+**Success Criteria:**
+- ASCII tree renders correctly
+- All 339 pages represented
+- Proper hierarchy (L0 → L1 → L2 → L3)
+- Status icons accurate
+- Metadata included
+
+---
+
 ## 🛡️ Brain Protection (SKULL)
 
 ### HOLISTIC_DISCOVERY
@@ -408,7 +759,15 @@ Automated documentation cleanup orchestrator that organizes the `docs/` folder, 
 ### Full Cleanup Pipeline
 ```
 User: "cleanup docs"
-CORTEX: Runs all 6 phases sequentially
+CORTEX: Runs all 8 phases sequentially
+  - Phase 1: Pre-Flight Validation
+  - Phase 2: File Organization
+  - Phase 3: Stub Page Generation
+  - Phase 4: Link Validation
+  - Phase 5: Documentation Synchronization
+  - Phase 6: v5.0 Architecture Alignment
+  - Phase 7: Visual Sitemap Generation
+  - Phase 8: Final Validation Report
 ```
 
 ### Validation Only
@@ -429,29 +788,56 @@ User: "sync docs"
 CORTEX: Runs Phase 5 (Documentation Synchronization) only
 ```
 
+### v5.0 Architecture Alignment Only
+```
+User: "align v5 docs"
+CORTEX: Runs Phase 6 (v5.0 Architecture Alignment) only
+  - Reads v5.0 refactor plan
+  - Identifies documentation gaps
+  - Updates 4 master files
+  - Validates consistency
+```
+
+### Visual Sitemap Generation Only
+```
+User: "generate visual sitemap"
+CORTEX: Runs Phase 7 (Visual Sitemap Generation) only
+  - Parses docs folder
+  - Builds ASCII tree
+  - Embeds into docs-sitemap.md
+```
+
 ---
 
 ## ✅ Success Criteria
 
 **Phase Completion:**
-- ✅ All 6 phases execute without errors
+- ✅ All 8 phases execute without errors
 - ✅ Root directory cleaned (5 essential files only)
 - ✅ Orphaned files archived
 - ✅ Stub pages created for all broken links
 - ✅ All 4 master documentation files synced
+- ✅ v5.0 architecture gaps identified and documented
+- ✅ Visual sitemap generated (ASCII tree format)
 
 **Quality Metrics:**
 - ✅ Broken links reduced by >80% (mostly stub→future content remains)
 - ✅ No missing CSS/JS files (validation passes)
 - ✅ All stub pages follow glassmorphism v4.1.1 standards
 - ✅ No conflicting information across master files
+- ✅ v5.0 architecture properly documented (28 new pages)
+- ✅ Visual sitemap shows complete hierarchy (339 nodes)
 
 **Final State:**
 - `docs/` folder organized and clean
-- 311 HTML files (151 active + 160 stubs)
+- 339 HTML files (151 active + 188 stubs)
+  - Legacy: 311 files (151 active + 160 stubs)
+  - v5.0 Architecture: 28 files (0 active + 28 stubs)
 - 42 orphaned files archived
 - 169 broken links (mostly legitimate WIP)
 - 4 master documentation files in sync
+- v5.0 architecture fully documented with stub pages
+- Visual sitemap generated in `cortex-brain/documents/planning/active/cortex-documentation/artifacts/visual-site-hierarchy.txt`
 
 ---
 
@@ -465,12 +851,17 @@ CORTEX: Runs Phase 5 (Documentation Synchronization) only
 - `cortex-brain/documents/standards/glassmorphism-design-standard.md` v4.1.1
 
 **Master Plans:**
-- `cortex-brain/documents/planning/active/cortex-documentation/00-master-plan.md` v4.1.1
-- `cortex-brain/documents/planning/active/cortex-documentation/artifacts/docs-sitemap.md`
+- `cortex-brain/documents/planning/active/cortex-documentation/00-master-plan.md` v4.1.2
+- `cortex-brain/documents/planning/active/cortex-documentation/artifacts/docs-sitemap.md` (VISUAL ONLY)
 - `cortex-brain/documents/planning/active/cortex-documentation/artifacts/level1-specs/core/executive-summary.md` v4.0.0
+- `cortex-brain/documents/planning/active/cortex-v5-holistic-refactor/00-MASTER-PLAN-V5.md` (v5.0 architecture source)
+- `cortex-brain/documents/planning/active/cortex-v5-holistic-refactor/artifacts/final-acceptance-criteria-link.md`
 
 **Brain Protection:**
 - `cortex-brain/brain-protection-rules.yaml` (SKULL rules)
+
+**Visual Outputs:**
+- `cortex-brain/documents/planning/active/cortex-documentation/artifacts/docs-sitemap.md` (contains embedded ASCII tree hierarchy)
 
 ---
 
@@ -479,6 +870,8 @@ CORTEX: Runs Phase 5 (Documentation Synchronization) only
 **When to Run:**
 - After adding new documentation pages
 - After major refactoring of `docs/` structure
+- After v5.0 architecture changes (Master Orchestrator, Planning v5, ADO v2)
+- When holistic plan updates require documentation alignment
 - Monthly (scheduled cleanup)
 - Before major releases
 
@@ -486,10 +879,44 @@ CORTEX: Runs Phase 5 (Documentation Synchronization) only
 - Stub exclusion patterns (if new archived sections added)
 - Master file sync logic (if new documentation files added)
 - Validation rules (if new asset types introduced)
+- v5.0 alignment logic (if new architecture components added)
+- Visual sitemap formatting (if hierarchy levels change)
 
 **Version History:**
+- v2.0.0 (Jan 3, 2026): Added Phase 6 (v5.0 alignment), Phase 7 (visual sitemap), Toolkit Manager integration
 - v1.0.0 (Jan 3, 2026): Initial release with 6-phase pipeline
 
 ---
 
-**Anti-Bloat:** This prompt should not exceed 500 lines. All implementation details are in the PowerShell scripts themselves.
+## 📖 Session Learnings (January 3, 2026)
+
+**Investigative Work Completed:**
+1. ✅ Holistic review of v5.0 refactor plan (00-MASTER-PLAN-V5.md, final-acceptance-criteria-link.md)
+2. ✅ Documentation gap analysis (Master Orchestrator Hub, Planning v5, ADO v2)
+3. ✅ Updated 4 master files (glassmorphism v4.1.0, master-plan v4.1.2, docs-sitemap, executive-summary)
+4. ✅ Identified 28 new v5.0 stub pages across 3 categories
+5. ✅ Validated consistency across all master documentation files
+
+**Key Findings:**
+- Master Orchestrator Hub: Mentioned in 3 pages, NOT documented (5 pages needed)
+- Planning v5: 1 Level 1 hub exists, needs 10 Level 2 phase pages
+- ADO v2: 1 Level 1 hub exists, needs 13 Level 2 feature pages
+- Total documentation gap: 28 pages, 80+ hours of work, Priority 1
+
+**Repeatable Process:**
+Phase 6 methodology can be applied to ANY future holistic plan alignment:
+1. Read active plan (cortex-v5-holistic-refactor, future plans)
+2. Inventory current docs (grep_search for component mentions)
+3. Gap analysis (mentioned vs. documented matrix)
+4. Update 4 master files (glassmorphism, master-plan, sitemap, executive-summary)
+5. Validate consistency (all files show same counts)
+
+**Visual Sitemap Rationale:**
+- docs-sitemap.md was too instructional (progress tracking, status updates)
+- User requested pure visual hierarchy: Root → L1 → L2 → L3
+- ASCII tree format shows structure without implementation details
+- Separates "what exists" (tree) from "what's done" (status tracking)
+
+---
+
+**Anti-Bloat:** This prompt should not exceed 650 lines. All implementation details are in the PowerShell scripts themselves.

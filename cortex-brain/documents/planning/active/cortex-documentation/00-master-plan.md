@@ -1,7 +1,7 @@
 # 🗺️ CORTEX Documentation Site - Master Specifications (INDEX)
 
-**Version:** 4.1.1 | **Status:** 🎯 SYNCED + CURRENT  
-**Author:** Asif Hussain | **Last Updated:** January 3, 2026  
+**Version:** 4.1.3 | **Status:** 🎯 SYNCED + CURRENT  
+**Author:** Asif Hussain | **Last Updated:** January 3, 2026 (Statistics Corrected)  
 **Copyright © 2026 Asif Hussain. All rights reserved.**
 
 ---
@@ -12,6 +12,8 @@ Master specification for CORTEX documentation site across Level 1 pages and Leve
 
 **OLD (v3.3.0):** Single file (1,682 lines) ❌ BLOAT  
 **NEW (v4.1.0):** Index + 10 modular specs (180 lines) + v5.0 Level 2 architecture ✅ OPTIMIZED
+
+**Current State (v4.1.3):** 347 HTML files total (187 active + 160 stubs)
 
 **Key Benefits:**
 - ✅ **89% size reduction** in main index file
@@ -182,21 +184,27 @@ Original v3.3.0 moved to: `cortex-brain/archives/Level1-spec-v3.3.0.md`
 
 **Current State:** 311 HTML files (151 active + 160 stubs) across 10 tiles (7 standard + 3 multi-panels)  
 **Level 1 Status:** 62/62 complete (100%)  
-**Level 2 Status:** 22/80 implemented (28%), 58 have stub pages (100% stub coverage)
+**Level 2 Status:** 22/80 implemented (28%), 58 have stub pages (100% stub coverage)  
+**v5.0 Architecture (NEW):** Master Orchestrator Hub + Planning v5 (10 Level 2 pages) + ADO v2 (13 Level 2 pages) - 24 pages total
 
 **Standard Tiles (Level 1 + Level 2):**
 - Architecture: 10 pages (Score: 45) - 3 active, 2 archived (brain-tiers, development-context), 5 stubs (four-tier-brain, orchestrator-ecosystem, agent-system, working-memory, multi-repo)
-- Token Optimization: 1 page (Score: 25) - 97% reduction, $8.6K savings
+- Token Optimization: 1 page (Score: 25) - 97% reduction, $8.6K savings, Cross-Session Context integration
 - Best Practices Hub: 17 Level 1 hubs + 80 Level 2 modules (Score: 35) - 22 implemented, 58 stubs (55 learning hours)
-- Toolkit Manager: 1 page (Score: 20) - Master Orchestrator routing
+- Toolkit Manager: 1 page (Score: 20) - Master Orchestrator routing layer, Pattern Matching, LLM Fallback
 - CORTEX Lens: 1 page (Score: 30) - AST analysis, reverse engineering
 - Getting Started: 5 pages (Score: 15) - 2 active (index, tutorial), 3 stubs (multi-repo-setup, first-commands, deployment)
 - Story: 15 pages - 1 viewer, 1 stub index, 14 chapters archived (pending navigation integration)
 
 **Multi-Panel Tiles:**
 - **Security:** 16 pages (Score: 55) - 10 active, 6 stubs, 1 stub for index (63% complete)
-- **Orchestrators:** 22 pages (Score: 75) - 20 active, 2 stubs (91% complete)
+- **Orchestrators:** 22 pages (Score: 75) - 20 active, 2 stubs (91% complete) + **Master Orchestrator Hub (NEW - v5.0)**
 - **Sharpen The Saw:** 6 pages (Score: 40) - 6/6 complete (100%)
+
+**v5.0 Architecture Pages (NEW - High Priority):**
+- **Master Orchestrator Hub:** 1 Level 1 page + 4 component deep-dives (Pattern Router, State Manager, Execution Engine, LLM Fallback) - Score: 120
+- **Planning v5 (Level 2):** 1 Level 1 hub + 10 phase pages (Phase 0-4 Bootstrap, Phase 5-9 Migration, Phase 10 Refactor) - Score: 195
+- **ADO v2 (Level 2):** 1 Level 1 hub + 13 feature pages (Wizard, Work Items, Sprints, Vision API, Templates, etc.) - Score: 178
 
 **v5.0 Planned:** Planning v5 (10 Level 2 pages, Score: 195) + ADO v2 (13 Level 2 pages, Score: 178) with comprehensive visualizations
 
