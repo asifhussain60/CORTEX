@@ -161,15 +161,28 @@ def invoke_orchestrator(
             f"Orchestrator '{orchestrator_name}' completed in {execution_time:.2f}s"
         )
         
+        # Handle OrchestratorResult object (has .data attribute) or dict
+        if hasattr(result, 'data'):
+            result_data = result.data or {}
+            artifacts = result_data.get("artifacts", [])
+            summary = result.message or "Execution completed"
+            metadata = result_data
+        else:
+            # Legacy dict format
+            result_data = result or {}
+            artifacts = result_data.get("artifacts", [])
+            summary = result_data.get("summary", "Execution completed")
+            metadata = result_data.get("metadata", {})
+        
         # Format result
         return {
             "status": "success",
             "orchestrator": orchestrator_name,
             "execution_time": execution_time,
-            "artifacts": result.get("artifacts", []),
-            "summary": result.get("summary", "Execution completed"),
-            "progress": result.get("progress", {}),
-            "metadata": result.get("metadata", {})
+            "artifacts": artifacts,
+            "summary": summary,
+            "progress": result_data.get("progress", {}),
+            "metadata": metadata
         }
         
     except Exception as e:

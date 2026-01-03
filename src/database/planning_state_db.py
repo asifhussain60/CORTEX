@@ -306,6 +306,109 @@ class PlanningStateDB:
         return bool(row["can_retry"]) if row else False
     
     # ========================================
+    # Convenience Methods (for BaseOrchestrator v4.1)
+    # ========================================
+    
+    def record_phase_start(
+        self,
+        plan_id: str,
+        phase_number: int,
+        name: str,
+        config: Optional[Dict[str, Any]] = None
+    ) -> str:
+        """
+        Create and start a phase in one operation.
+        
+        Convenience method for BaseOrchestrator v4.1 compatibility.
+        
+        Args:
+            plan_id: Plan identifier
+            phase_number: Phase sequence number
+            name: Phase name
+            config: Phase configuration
+        
+        Returns:
+            phase_id: Created phase identifier
+        """
+        phase_id = self.create_phase(
+            plan_id=plan_id,
+            phase_number=phase_number,
+            name=name,
+            config=config
+        )
+        self.start_phase(phase_id)
+        return phase_id
+    
+    def record_phase_completion(
+        self,
+        phase_id: str,
+        artifacts: Optional[List[str]] = None,
+        metadata: Optional[Dict[str, Any]] = None
+    ) -> bool:
+        """
+        Complete a phase and record artifacts.
+        
+        Convenience method for BaseOrchestrator v4.1 compatibility.
+        
+        Args:
+            phase_id: Phase identifier
+            artifacts: List of artifact paths
+            metadata: Additional metadata
+        
+        Returns:
+            bool: Success status
+        """
+        result = {
+            "artifacts": artifacts or [],
+            "metadata": metadata or {}
+        }
+        return self.complete_phase(phase_id, result)
+    
+    def update_plan_status(self, plan_id: str, status: str, error_message: Optional[str] = None) -> bool:
+        """
+        Update plan status.
+        
+        Convenience method for BaseOrchestrator v4.1 compatibility.
+        
+        Args:
+            plan_id: Plan identifier
+            status: New status ('in_progress', 'completed', 'failed')
+            error_message: Optional error message for failed status
+        
+        Returns:
+            bool: Success status
+        """
+        if status == 'in_progress':
+            return self.start_plan(plan_id)
+        elif status == 'completed':
+            return self.complete_plan(plan_id)
+        elif status == 'failed':
+            return self.fail_plan(plan_id, error_message or "Unknown error")
+        else:
+            self.logger.warning(f"Unknown status: {status}")
+            return False
+    
+    def get_plan_progress(self, plan_id: str) -> List[Dict[str, Any]]:
+        """
+        Get plan progress as list of phases.
+        
+        Convenience method for BaseOrchestrator v4.1 compatibility.
+        Returns list format expected by check_token_usage().
+        
+        Args:
+            plan_id: Plan identifier
+        
+        Returns:
+            list: List of phase dictionaries with status information
+        """
+        status = self.get_plan_status(plan_id)
+        if "error" in status:
+            return []
+        
+        # Return phases list from status
+        return status.get("phases", [])
+    
+    # ========================================
     # Task Operations
     # ========================================
     

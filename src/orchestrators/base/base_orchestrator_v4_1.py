@@ -273,10 +273,11 @@ class BaseOrchestratorV4_1(ABC):
         
         self.logger.info(f"Starting Phase {phase_number}: {phase_name}")
         
-        # Create phase in database
-        phase_id = self.state_db.start_phase(
+        # Create and start phase in database
+        phase_id = self.state_db.record_phase_start(
             plan_id=self.plan_id,
             phase_number=phase_number,
+            name=phase_name,
             config=phase_config
         )
         self.current_phase_id = phase_id
