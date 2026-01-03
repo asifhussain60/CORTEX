@@ -1,0 +1,417 @@
+# Sanitization Orchestrator v2 Configuration
+# 
+# Config-driven autonomous execution for code sanitization with:
+# - 5-phase workflow (ANALYZE → MAPPING → TRANSFORM → VALIDATE → COMPLETE)
+# - Risk-based approval workflow
+# - Transactional safety with rollback
+# - Progressive analysis optimization
+#
+# Author: Asif Hussain
+# Copyright © 2025-2026 Asif Hussain. All rights reserved.
+
+schema_version: "4.1.0"  # BaseOrchestrator v4.1 compatibility
+
+orchestrator:
+  name: "Sanitization Orchestrator v2"
+  version: "2.0.0"
+  type: "autonomous"
+  description: "Autonomous code sanitization with transactional safety and risk-based approvals"
+  
+  # Orchestrator metadata
+  metadata:
+    author: "Asif Hussain"
+    created: "2026-01-03"
+    last_updated: "2026-01-03"
+    requires_state: true
+    supports_dry_run: true
+    supports_rollback: true
+
+# Execution configuration
+execution:
+  # Default dry-run mode (safety first)
+  default_dry_run: true
+  
+  # Token warning threshold (80k)
+  token_warning_threshold: 80000
+  
+  # Phase timeout (seconds)
+  phase_timeout: 3600  # 1 hour per phase
+  
+  # Checkpoint interval (for long-running transforms)
+  checkpoint_interval: 100  # Create checkpoint every 100 files
+  
+  # Parallel processing
+  parallel_enabled: false  # Disabled for safety (enable in future)
+  max_workers: 4
+
+# Phase configuration
+phases:
+  - id: "phase_1_analyze"
+    name: "ANALYZE"
+    description: "Scan codebase, extract terminology, classify risk"
+    enabled: true
+    timeout: 1800  # 30 minutes
+    retry_on_failure: false
+    
+  - id: "phase_2_mapping"
+    name: "MAPPING"
+    description: "Generate transformation mappings and get approvals"
+    enabled: true
+    timeout: 1800
+    retry_on_failure: false
+    
+  - id: "phase_3_transform"
+    name: "TRANSFORM"
+    description: "Apply transformations with transactional safety"
+    enabled: true
+    timeout: 3600  # 1 hour for large codebases
+    retry_on_failure: false
+    requires_checkpoint: true
+    
+  - id: "phase_4_validate"
+    name: "VALIDATE"
+    description: "Run builds and tests to verify correctness"
+    enabled: true
+    timeout: 3600
+    retry_on_failure: true
+    max_retries: 2
+    rollback_on_failure: true
+    
+  - id: "phase_5_complete"
+    name: "COMPLETE"
+    description: "Generate reports and finalize"
+    enabled: true
+    timeout: 600  # 10 minutes
+    retry_on_failure: false
+
+# Analysis engine configuration
+analysis:
+  # File processing
+  file_processing:
+    # Maximum file size to analyze (MB)
+    max_file_size_mb: 50
+    
+    # Skip files larger than this (MB)
+    skip_large_files_mb: 100
+    
+    # Exclusion patterns (glob format)
+    exclusions:
+      - pattern: "**/node_modules/**"
+        reason: "Node.js dependencies"
+      - pattern: "**/.git/**"
+        reason: "Git metadata"
+      - pattern: "**/venv/**"
+        reason: "Python virtual environment"
+      - pattern: "**/dist/**"
+        reason: "Build output"
+      - pattern: "**/build/**"
+        reason: "Build artifacts"
+      - pattern: "**/__pycache__/**"
+        reason: "Python cache"
+      - pattern: "**/*.pyc"
+        reason: "Python bytecode"
+      - pattern: "**/bin/**"
+        reason: "Binary files"
+      - pattern: "**/obj/**"
+        reason: "Object files"
+    
+    # Supported file extensions
+    supported_extensions:
+      code:
+        - ".py"
+        - ".js"
+        - ".ts"
+        - ".jsx"
+        - ".tsx"
+        - ".cs"
+        - ".java"
+        - ".go"
+        - ".rs"
+        - ".rb"
+        - ".php"
+      config:
+        - ".yaml"
+        - ".yml"
+        - ".json"
+        - ".toml"
+        - ".ini"
+        - ".conf"
+      docs:
+        - ".md"
+        - ".rst"
+        - ".txt"
+  
+  # Progressive analysis strategy
+  progressive_analysis:
+    enabled: true
+    
+    # Phase 1: Quick scan (no file content read)
+    quick_scan:
+      enabled: true
+      group_by_size: true
+      group_by_extension: true
+    
+    # Phase 2: Selective parsing (code files only)
+    selective_parse:
+      enabled: true
+      max_file_size_mb: 10
+      skip_large_binaries: true
+    
+    # Phase 3: Deep analysis (high-risk only)
+    deep_analysis:
+      enabled: false  # Disabled by default
+      high_risk_only: true
+  
+  # AST parsing (for code structure analysis)
+  ast_parsing:
+    enabled: false  # TODO: Implement in Phase 3
+    cache_duration_hours: 24
+    parse_timeout_seconds: 30
+  
+  # Sensitive data detection
+  sensitive_data_detection:
+    enabled: true
+    patterns:
+      - type: "connection_string"
+        pattern: "(?i)(connectionstring|connection\\s*string)\\s*[=:]\\s*[\"']([^\"']+)[\"']"
+      - type: "api_key"
+        pattern: "(?i)(api[_-]?key|apikey)\\s*[=:]\\s*[\"']([^\"']+)[\"']"
+      - type: "password"
+        pattern: "(?i)(password|pwd)\\s*[=:]\\s*[\"']([^\"']+)[\"']"
+      - type: "email"
+        pattern: "\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b"
+
+# Risk classification configuration
+risk_classification:
+  # 5-level taxonomy
+  levels:
+    - level: "SAFE"
+      priority: 0
+      auto_approve: true
+      description: "Safe transformations (comments, logs, temp files)"
+    
+    - level: "LOW"
+      priority: 1
+      auto_approve: true
+      description: "Low-risk transformations (local variables, private methods)"
+    
+    - level: "MEDIUM"
+      priority: 2
+      auto_approve: false
+      description: "Medium-risk transformations (public methods, config changes)"
+    
+    - level: "HIGH"
+      priority: 3
+      auto_approve: false
+      description: "High-risk transformations (APIs, recently modified files)"
+    
+    - level: "CRITICAL"
+      priority: 4
+      auto_approve: false
+      description: "Critical transformations (git files, entry points, uncommitted changes)"
+  
+  # Classification rules
+  rules:
+    # File-based classification
+    critical_patterns:
+      - ".git/**"
+      - ".gitignore"
+      - "requirements.txt"
+      - "package.json"
+      - "README.md"
+      - "LICENSE"
+    
+    # Time-based rules
+    recently_modified_hours: 24  # Files modified in last 24h = HIGH risk
+    
+    # Git integration
+    uncommitted_changes_critical: true  # Uncommitted = CRITICAL
+  
+  # Auto-approval thresholds
+  auto_approval:
+    target_percentage: 70  # Target: auto-approve 60-80% of transformations
+    safe_threshold: 100    # Auto-approve 100% of SAFE
+    low_threshold: 100     # Auto-approve 100% of LOW
+    medium_threshold: 0    # Require approval for MEDIUM
+    high_threshold: 0      # Require approval for HIGH
+    critical_threshold: 0  # Require approval for CRITICAL
+
+# Mapping engine configuration
+mapping:
+  # Generic term generation
+  generic_naming:
+    prefix: "Generic"
+    counter_start: 1
+    counter_padding: 3  # e.g., "Generic001", "Generic002"
+  
+  # Namespace transformations
+  namespace_mapping:
+    enabled: true
+    preserve_structure: true  # Maintain hierarchy in transformed namespaces
+  
+  # Approval workflow
+  approval:
+    batch_approval_enabled: true  # Allow approving multiple mappings at once
+    interactive_mode: true        # Prompt for approvals (vs. auto-file-based)
+
+# Transformer engine configuration
+transformation:
+  # Transaction settings
+  transaction:
+    enabled: true
+    acid_compliant: true
+    create_checkpoints: true
+    verify_integrity: true
+  
+  # Checkpoint settings
+  checkpoint:
+    hash_algorithm: "sha256"
+    chunk_size_kb: 64  # 64 KB chunks for hashing
+    quick_hash_kb: 8   # 8 KB for quick hash
+  
+  # File operations
+  file_operations:
+    preserve_permissions: true
+    preserve_timestamps: false  # Update timestamps on transform
+    backup_before_transform: true
+  
+  # Rollback settings
+  rollback:
+    enabled: true
+    lifo_order: true  # Last-In-First-Out rollback
+    verify_after_rollback: true
+
+# Validator engine configuration
+validation:
+  # Build system detection
+  build_systems:
+    - name: "pip"
+      detect_files: ["requirements.txt", "setup.py", "pyproject.toml"]
+      build_command: "pip install -e ."
+      test_command: "pytest"
+    
+    - name: "npm"
+      detect_files: ["package.json"]
+      build_command: "npm install"
+      test_command: "npm test"
+    
+    - name: "maven"
+      detect_files: ["pom.xml"]
+      build_command: "mvn clean install"
+      test_command: "mvn test"
+    
+    - name: "dotnet"
+      detect_files: ["*.csproj", "*.sln"]
+      build_command: "dotnet build"
+      test_command: "dotnet test"
+  
+  # Validation strategy
+  strategy:
+    build_required: true
+    tests_required: false  # Optional: run tests if available
+    compare_with_baseline: false  # Optional: compare results with original
+  
+  # Timeout settings
+  timeout:
+    build_timeout_seconds: 1800   # 30 minutes
+    test_timeout_seconds: 3600    # 1 hour
+
+# Report generator configuration
+reporting:
+  # Output formats
+  formats:
+    - type: "markdown"
+      enabled: true
+      filename: "sanitization-report.md"
+    
+    - type: "json"
+      enabled: true
+      filename: "sanitization-manifest.json"
+    
+    - type: "html"
+      enabled: false
+      filename: "sanitization-report.html"
+  
+  # Report sections
+  sections:
+    - name: "Executive Summary"
+      enabled: true
+    - name: "Analysis Results"
+      enabled: true
+    - name: "Transformation Mappings"
+      enabled: true
+    - name: "Validation Results"
+      enabled: true
+    - name: "Risk Distribution"
+      enabled: true
+    - name: "Diff Summary"
+      enabled: true
+  
+  # Diff settings
+  diff:
+    enabled: true
+    context_lines: 3
+    max_diff_size_kb: 500  # Truncate large diffs
+
+# Template configuration
+templates:
+  base_path: "cortex-brain/templates"
+  
+  # Template files
+  templates:
+    - name: "sanitization_report"
+      file: "sanitization/sanitization-report.md.j2"
+    - name: "mapping_manifest"
+      file: "sanitization/mapping-manifest.json.j2"
+    - name: "phase_summary"
+      file: "sanitization/phase-summary.md.j2"
+
+# Logging configuration
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  
+  # Log files
+  files:
+    main_log: "logs/sanitization-orchestrator-v2.log"
+    error_log: "logs/sanitization-errors.log"
+    audit_log: "logs/sanitization-audit.log"
+  
+  # Rotation
+  rotation:
+    enabled: true
+    max_bytes: 10485760  # 10 MB
+    backup_count: 5
+
+# Database configuration (state persistence)
+database:
+  # PlanningStateDB settings
+  path: "cortex-brain/database/cortex.db"
+  
+  # Session retention
+  retention:
+    keep_sessions_days: 30
+    archive_old_sessions: true
+
+# Performance optimization
+performance:
+  # Caching
+  cache:
+    enabled: true
+    cache_dir: "cortex-brain/cache/sanitization"
+    cache_duration_hours: 24
+  
+  # Memory limits
+  memory:
+    max_file_cache_mb: 100
+    max_total_memory_mb: 1000
+
+# Security settings
+security:
+  # Prevent accidental data exposure
+  sensitive_data_masking: true
+  
+  # Git integration
+  git_safety:
+    check_uncommitted_changes: true
+    prevent_transform_uncommitted: true
