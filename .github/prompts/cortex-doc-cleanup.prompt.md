@@ -1313,28 +1313,24 @@ docs/architecture/deep-dive/tier-analysis/details.html  <!-- ❌ Level 3 forbidd
   Status Icons: ✅ (active), 🚧 (stub), ⏭️ (archived)
 
 📋 Next Actions (Prioritized):
-  PRIORITY 1 (CRITICAL): Glassmorphism Compliance Fixes
+  PRIORITY 1 (HIGH): CSS Quality Fixes + v5.0 Architecture
     - Fix 23 missing CSS classes (broken styling) - 2 hours
-    - Add viewport meta tags to 27 HTML files - 1 hour
     - Delete 12 exact duplicate CSS rules (156 lines) - 1 hour
-    
-  PRIORITY 2 (HIGH): CSS Quality + Mobile Optimization
+    - Add viewport meta tags to 27 HTML files - 1 hour
     - Add mobile breakpoints to 14 grid systems - 2 hours
-    - Fix 8 spacing violations (use CSS variables) - 1 hour
-    - Merge 8 partial duplicate CSS rules - 2 hours
-    - Increase touch target size for 23 elements - 2 hours
-    
-  PRIORITY 3 (MEDIUM): CSS Refactoring + v5.0 Architecture
-    - Delete 158 unused CSS classes (1,200 lines) - 3 hours
-    - Replace 3 bullet lists with card layouts - 1 hour
-    - Extract 23 scattered patterns to utility classes - 4 hours
     - Master Orchestrator Hub (5 pages, 80 hours)
     - Planning v5 Level 2 (10 pages)
     - ADO v2 Level 2 (13 pages)
   
-  PRIORITY 4 (LOW): Story Chapter Integration + Security Panel
-    - Standardize breakpoints (remove 900px, 1200px) - 1 hour
+  PRIORITY 2 (MEDIUM): CSS Optimization + Story Chapter Integration
+    - Merge 8 partial duplicate CSS rules - 2 hours
+    - Delete 158 unused CSS classes (1,200 lines) - 3 hours
+    - Increase touch target size for 23 elements - 2 hours
     - Restore 14 archived chapters
+  
+  PRIORITY 3 (LOW): CSS Refactoring + Security Panel
+    - Extract 23 scattered patterns to utility classes - 4 hours
+    - Standardize breakpoints (remove 900px, 1200px) - 1 hour
     - Implement 6 stub pages
 
 ========================================
@@ -1342,7 +1338,6 @@ docs/architecture/deep-dive/tier-analysis/details.html  <!-- ❌ Level 3 forbidd
 ✅ V5.0 ARCHITECTURE ALIGNED
 ✅ VISUAL SITEMAP GENERATED
 ✅ CSS QUALITY ANALYSIS COMPLETE
-✅ GLASSMORPHISM COMPLIANCE VALIDATED
 ========================================
 ```
 

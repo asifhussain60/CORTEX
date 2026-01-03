@@ -166,13 +166,19 @@ $exactDuplicates = @()
 $partialDuplicates = @()
 $scatteredPatterns = @{}
 
-$selectorKeys = $allSelectors.Keys
+$selectorKeys = @($allSelectors.Keys)  # Convert to array
+Write-Host "🔍 Comparing $($selectorKeys.Count) selectors..." -ForegroundColor Gray
+
 for ($i = 0; $i -lt $selectorKeys.Count; $i++) {
     $key1 = $selectorKeys[$i]
+    if (-not $allSelectors.ContainsKey($key1)) { continue }
+    
     $selector1 = ($key1 -split ':')[1]
     
     for ($j = $i + 1; $j -lt $selectorKeys.Count; $j++) {
         $key2 = $selectorKeys[$j]
+        if (-not $allSelectors.ContainsKey($key2)) { continue }
+        
         $selector2 = ($key2 -split ':')[1]
         
         # Check if same selector name

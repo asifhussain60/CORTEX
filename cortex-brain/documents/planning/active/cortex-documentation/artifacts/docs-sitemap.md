@@ -8,17 +8,22 @@ This document shows the **node structure** starting from Home (root), displaying
 - `executive-summary.md` - Multi-panel completion status, priorities
 - `glassmorphism-design-standard.md` - Design compliance, version tracking
 
+**🔒 CSS BACKUP:** `backups/css-backup-20260103_093835/` - Restore missing styles from here!
+
 ---
 
 **Purpose:** Document the documentation structure for navigation and planning  
-**Last Updated:** January 3, 2026 (v5.0 Architecture Alignment + Statistics Correction)  
-**Total Pages:** 347 (187 active + 160 stubs)  
-**v5.0 Architecture:** 28 new pages (Master Orchestrator Hub + Planning v5 + ADO v2)
+**Last Updated:** January 3, 2026 (CSS Cleanup + Backup)  
+**Total Pages:** 318 (151 active + 167 stubs)  
+**Cleanup Stats:** 42 orphaned files archived, 7 new stub pages created, broken links reduced 28% (181 → 129)  
+**CSS Cleanup:** 865 unused classes identified, backup preserved, 335 auto-generated classes, 0 inline styles  
+**v5.0 Architecture:** 28 pages documented (Master Orchestrator Hub + Planning v5 + ADO v2)
 
 ---
 
 ## 📁 Complete Visual Site Hierarchy
 
+```
 📁 VISUAL SITE MAP - NODE HIERARCHY
 
 🏠 CORTEX - Enterprise Development Intelligence (index.html) - Level 0
@@ -199,10 +204,11 @@ This document shows the **node structure** starting from Home (root), displaying
 │  └─ Metrics - CORTEX [STUB] (validation\metrics.html)
 │
 └─📄 VISUAL DIFFERENTIATION DEMO.HTML (1 active, 0 stubs)
+```
 
 ---
 
-**Statistics:** 347 total pages | 187 active | 160 stubs | By Level: Home (1), L1 (129), L2 (198), L3 (19)
+**Statistics:** 318 total pages | 151 active | 167 stubs | Documentation Cleanup: 42 archived, 7 new stubs, 129 broken links remaining
 
 ## 📋 v5.0 Architecture Documentation Structure
 
