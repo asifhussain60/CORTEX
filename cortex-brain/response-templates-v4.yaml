@@ -1447,16 +1447,47 @@ anti_bloat:
 
 named_templates:
   autonomous_execution_progress:
-    description: "Enhanced progress template for autonomous plan execution with visual Unicode progress bars"
+    description: "Progress template for autonomous execution with CONCISE mode (default) for accessibility"
     tier: "TIER 3"
     orchestrator_engaged: true
+    default_mode: "concise"  # NEW: Accessibility-first
+    
+    modes:
+      concise:
+        description: "Minimal updates for accessibility (WCAG-aligned cognitive load management)"
+        use_when: "default for all autonomous execution"
+        display_policy:
+          phase_start: "Show phase name + overall progress bar only"
+          task_completion: "SILENT - no user output"
+          phase_completion: "Show completed phase + next phase (3 lines)"
+          overall_completion: "Summary table (≤40 lines)"
+        format: |
+          ## 🛡️🧠 CORTEX: {{phase_name}}
+          `{{overall_bar}}` **{{overall_percentage}}%**
+          
+          {{#if phase_completed}}
+          ✅ {{completed_phase}} complete
+          **Next:** {{next_phase}}
+          {{/if}}
+      
+      verbose:
+        description: "Full progress details (debugging/user-requested)"
+        use_when: "user explicitly requests detailed output OR debugging mode enabled"
+        display_policy:
+          phase_start: "Show complete phase table"
+          task_completion: "Show task name + checkmark"
+          phase_completion: "Show complete phase table"
+          overall_completion: "Full completion report (no limit)"
+    
     display_moments:
-      - "beginning": "Show complete phase table"
-      - "phase_completion": "Show overall progress and next phase"
-      - "overall_completion": "Show complete phase table"
+      - "beginning": "Show phase table (verbose) OR progress bar (concise)"
+      - "phase_completion": "Show next phase name (concise) OR full table (verbose)"
+      - "overall_completion": "Show summary (both modes, different detail levels)"
+    
+    # VERBOSE mode format (original)
     format: |
       ## 🛡️🧠 CORTEX Plan Execution
-      **Author:** Asif Hussain | **Plan:** {{plan_name}} | **Orchestrator:** Planning System 4.0 ✅
+      **Author:** Asif Hussain | **Plan:** {{plan_name}} | **Orchestrator:** Planning System 5.0 ✅
       
       ---
       
@@ -1492,11 +1523,16 @@ named_templates:
       **Open in Editor:** [{{plan_filename}}]({{plan_path}})
       
       **Next:** {{next_action}}
+    
     context_needed: true
     metadata:
       category: planning
       operation: autonomous_execution
     response_type: adaptive
+    accessibility:
+      wcag_level: "AA"
+      cognitive_load: "minimized"
+      default_verbosity: "low"
     progress_helpers:
       description: "Use TemplateRenderer helper methods for progress bar generation"
       methods:

@@ -100,6 +100,21 @@ Defer to `CORTEX.prompt.md` for full spec. Summary:
 
 ---
 
+## ♿ Accessibility Rules (WCAG AA-Aligned)
+
+| Rule | Enforcement |
+|------|-------------|
+| **COGNITIVE_LOAD** | Autonomous execution: 1 update per phase (not per task) |
+| **SILENT_TASKS** | Task completion narration hidden from user |
+| **CONCISE_DEFAULT** | Use concise mode unless user requests verbose/detailed |
+| **PROGRESS_FREQUENCY** | Update only at: phase start, phase completion, overall completion |
+| **SUMMARY_CAP** | Completion summaries ≤40 lines (readability) |
+| **NO_NARRATION** | Eliminate "Now I'll...", "Perfect!", "Excellent!" commentary |
+
+**Reference:** `response-templates-v4.yaml` (concise mode configurations)
+
+---
+
 ## 📁 Document Organization
 
 **⛔ FORBIDDEN:** Root-level docs  
