@@ -70,7 +70,7 @@ button, a, input, select, textarea, [role="button"] {
         <div class="header-content">
             <nav class="header-nav" mobile-nav-optimized>
                 <a href="../index.html" class="nav-link" mobile-nav-optimized>
-                    <i class="pulse-glow-glass--fast fa-home"></i>
+                    <i class="fas fa-home pulse-glow-glass--fast"></i>
                     <span>Home</span>
                 </a>
             </nav>
@@ -79,7 +79,7 @@ button, a, input, select, textarea, [role="button"] {
 
     <main class="sts-main">
         <section class="sts-hero">
-            <h1><i class="pulse-glow-glass--fast fa-drafting-compass"></i> SOLID Principles Applied</h1>
+            <h1><i class="fas fa-drafting-compass pulse-glow-glass--fast"></i> SOLID Principles Applied</h1>
             <p class="hero-subtitle">Watch CORTEX refactor code to follow clean architecture patterns</p>
             <div class="sts-metrics">
                 <div class="metric-card"><div class="metric-value">5</div><div class="metric-label">Violations</div></div>
@@ -91,11 +91,11 @@ button, a, input, select, textarea, [role="button"] {
         <!-- SRP - C# -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="pulse-glow-glass--fast fa-cube"></i> Single Responsibility Principle</h3>
+                <h3><i class="fas fa-cube pulse-glow-glass--fast"></i> Single Responsibility Principle</h3>
                 <span class="language-badge csharp">C#</span>
             </div>
             <div class="refactor-explanation">
-                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <h4><i class="fas fa-lightbulb pulse-glow-glass--fast"></i> How This Was Refactored</h4>
                 <div class="capability-tiles">
     <div class="glass-card">
         <div class="card-body"><strong>Problem:</strong> One class handling user data, validation, email, and database operations</div>
@@ -110,7 +110,7 @@ button, a, input, select, textarea, [role="button"] {
             </div>
             <div class="comparison-container">
                 <div class="panel before-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Multiple Responsibilities</div>
+                    <div class="panel-header"><i class="fas fa-times-circle pulse-glow-glass--fast"></i> Before: Multiple Responsibilities</div>
                     <pre><code class="language-badge">public class UserManager
 {
     public void CreateUser(string name, string email)
@@ -131,7 +131,7 @@ button, a, input, select, textarea, [role="button"] {
 }</code></pre>
                 </div>
                 <div class="panel after-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-check-circle"></i> After: Single Responsibility</div>
+                    <div class="panel-header"><i class="fas fa-check-circle pulse-glow-glass--fast"></i> After: Single Responsibility</div>
                     <pre><code class="language-badge">public class UserService
 {
     private readonly IUserValidator _validator;
@@ -157,11 +157,11 @@ button, a, input, select, textarea, [role="button"] {
         <!-- OCP - TypeScript -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="pulse-glow-glass--fast fa-lock-open"></i> Open/Closed Principle</h3>
+                <h3><i class="fas fa-lock-open pulse-glow-glass--fast"></i> Open/Closed Principle</h3>
                 <span class="language-badge typescript">TypeScript</span>
             </div>
             <div class="refactor-explanation">
-                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <h4><i class="fas fa-lightbulb pulse-glow-glass--fast"></i> How This Was Refactored</h4>
                 <div class="capability-tiles">
     <div class="glass-card">
         <div class="card-body"><strong>Problem:</strong> Adding new payment types requires modifying existing code</div>
@@ -176,7 +176,7 @@ button, a, input, select, textarea, [role="button"] {
             </div>
             <div class="comparison-container">
                 <div class="panel before-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Modification Required</div>
+                    <div class="panel-header"><i class="fas fa-times-circle pulse-glow-glass--fast"></i> Before: Modification Required</div>
                     <pre><code class="language-badge">class PaymentProcessor {
   process(type: string, amount: number): void {
     if (type === 'credit') {
@@ -193,7 +193,7 @@ button, a, input, select, textarea, [role="button"] {
 }</code></pre>
                 </div>
                 <div class="panel after-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-check-circle"></i> After: Extension Only</div>
+                    <div class="panel-header"><i class="fas fa-check-circle pulse-glow-glass--fast"></i> After: Extension Only</div>
                     <pre><code class="language-badge">interface PaymentStrategy {
   process(amount: number): Promise&lt;PaymentResult&gt;;
 }
@@ -218,11 +218,11 @@ class PaymentProcessor {
         <!-- ISP - Angular -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="pulse-glow-glass--fast fa-puzzle-piece"></i> Interface Segregation Principle</h3>
+                <h3><i class="fas fa-puzzle-piece pulse-glow-glass--fast"></i> Interface Segregation Principle</h3>
                 <span class="language-badge angular">Angular</span>
             </div>
             <div class="refactor-explanation">
-                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <h4><i class="fas fa-lightbulb pulse-glow-glass--fast"></i> How This Was Refactored</h4>
                 <div class="capability-tiles">
     <div class="glass-card">
         <div class="card-body"><strong>Problem:</strong> Fat interface forces classes to implement unused methods</div>
@@ -237,7 +237,7 @@ class PaymentProcessor {
             </div>
             <div class="comparison-container">
                 <div class="panel before-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Fat Interface</div>
+                    <div class="panel-header"><i class="fas fa-times-circle pulse-glow-glass--fast"></i> Before: Fat Interface</div>
                     <pre><code class="language-badge">interface IWorker {
   work(): void;
   eat(): void;
@@ -256,7 +256,7 @@ class Robot implements IWorker {
 }</code></pre>
                 </div>
                 <div class="panel after-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-check-circle"></i> After: Segregated Interfaces</div>
+                    <div class="panel-header"><i class="fas fa-check-circle pulse-glow-glass--fast"></i> After: Segregated Interfaces</div>
                     <pre><code class="language-badge">interface Workable { work(): void; }
 interface Feedable { eat(): void; }
 interface Restable { sleep(): void; }
@@ -281,11 +281,11 @@ class Robot implements Workable, Meetable {
         <!-- DIP - C# -->
         <section class="comparison-section">
             <div class="section-header">
-                <h3><i class="pulse-glow-glass--fast fa-exchange-alt"></i> Dependency Inversion Principle</h3>
+                <h3><i class="fas fa-exchange-alt pulse-glow-glass--fast"></i> Dependency Inversion Principle</h3>
                 <span class="language-badge csharp">C#</span>
             </div>
             <div class="refactor-explanation">
-                <h4><i class="pulse-glow-glass--fast fa-lightbulb"></i> How This Was Refactored</h4>
+                <h4><i class="fas fa-lightbulb pulse-glow-glass--fast"></i> How This Was Refactored</h4>
                 <div class="capability-tiles">
     <div class="glass-card">
         <div class="card-body"><strong>Problem:</strong> High-level module directly depends on low-level implementation</div>
@@ -300,7 +300,7 @@ class Robot implements Workable, Meetable {
             </div>
             <div class="comparison-container">
                 <div class="panel before-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-times-circle"></i> Before: Direct Dependency</div>
+                    <div class="panel-header"><i class="fas fa-times-circle pulse-glow-glass--fast"></i> Before: Direct Dependency</div>
                     <pre><code class="language-badge">public class OrderService
 {
     private SqlDatabase _database = new SqlDatabase();
@@ -315,7 +315,7 @@ class Robot implements Workable, Meetable {
 }</code></pre>
                 </div>
                 <div class="panel after-panel">
-                    <div class="panel-header"><i class="pulse-glow-glass--fast fa-check-circle"></i> After: Abstraction Dependency</div>
+                    <div class="panel-header"><i class="fas fa-check-circle pulse-glow-glass--fast"></i> After: Abstraction Dependency</div>
                     <pre><code class="language-badge">public class OrderService
 {
     private readonly IOrderRepository _repository;
