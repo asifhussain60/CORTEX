@@ -31,7 +31,7 @@ All command routing is defined in `CORTEX.prompt.md`. Key orchestrators:
 | **Image attachments** | **Vision API → Auto-analysis (no prompt needed)** | Auto |
 
 **Orchestrator Types:**
-- 🛡️ **AUTONOMOUS**: Python implementation, self-executing (CORTEX routes and stops)
+- 🛡️ **AUTONOMOUS**: Python implementation, invoked via CLI bridge (`scripts/cortex-cli.py`)
 - 📋 **GUIDED**: Manifest instructions, CORTEX executes
 
 **LLM Intent Classification:** Use `LLMIntentClassifier` (src/cortex_agents/llm_intent_classifier.py) for intelligent routing when exact patterns don't match.
@@ -44,24 +44,33 @@ All command routing is defined in `CORTEX.prompt.md`. Key orchestrators:
 
 **Middleware:** `src/operations/utilities/vision_context_middleware.py`
 
-### 🛡️ HAND-OFF Orchestrators
+### 🛡️ CLI Bridge Invocation (Phase 1.5)
 
-When you see 🛡️ in Intent Router, these orchestrators **MUST take over completely**:
+When you see 🛡️ in Intent Router, these orchestrators **MUST be invoked via CLI bridge**:
 
-| Orchestrator | Trigger | Template | Header |
-|--------------|---------|----------|--------|
-| **Planning** | `plan`, `create a plan` | `autonomous_execution_progress` | `## 🛡️🧠 CORTEX Plan Execution` |
-| **ADO** | `ado story`, `ado feature` | `ado_execution_progress` | `## 🛡️🧠 CORTEX ADO Work Item Generation` |
+| Orchestrator | Trigger | CLI Command Pattern |
+|--------------|---------|---------------------|
+| **Planning** | `plan`, `create a plan` | `python3 scripts/cortex-cli.py planning_system "<user_request>"` |
+| **ADO** | `ado story`, `ado feature` | `python3 scripts/cortex-cli.py ado_orchestrator_v2 "<user_request>"` |
+| **Cleanup** | `cleanup cache/logs/etc` | `python3 scripts/cortex-cli.py cleanup_orchestrator_v2 "<user_request>" --option mode=<mode>` |
+| **Vacuum** | `vacuum [path]`, `deep clean` | `python3 scripts/cortex-cli.py vacuum "<user_request>"` |
 
-**Hand-Off Protocol:**
-- ❌ Do NOT read manifest and execute yourself
-- ❌ Do NOT provide guidance based on manifest
-- ❌ Do NOT continue after loading orchestrator
-- ✅ Load manifest reference ONLY
-- ✅ Use specified response template
-- ✅ STOP immediately after hand-off header
+**Invocation Protocol:**
+1. ✅ Detect 🛡️ AUTONOMOUS orchestrator intent
+2. ✅ Use `run_in_terminal` tool with CLI bridge command
+3. ✅ Python orchestrator executes autonomously
+4. ✅ STOP immediately after invocation (do NOT continue conversation)
 
-**Visual Confirmation:** 🛡️ in response header = Orchestrator correctly engaged
+**Example Workflow:**
+```
+User: "create a plan for database migration"
+→ CORTEX detects Planning System intent
+→ CORTEX invokes: python3 scripts/cortex-cli.py planning_system "create a plan for database migration"
+→ Planning Orchestrator v5 executes (folder creation, context gathering, plan generation)
+→ CORTEX STOPS (orchestrator provides all output)
+```
+
+**Visual Confirmation:** CLI bridge command executed = Orchestrator running autonomously
 
 ### ⛔ MANDATORY Plan Content
 

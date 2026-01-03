@@ -77,22 +77,43 @@ LLM Classification → Keyword Regex → User Clarification
 
 ---
 
-## 🛡️ Orchestrator Hand-Off Protocol
+## 🛡️ Orchestrator Hand-Off Protocol (Phase 1.5: CLI Bridge)
 
 **FORBIDDEN Behaviors for 🛡️ AUTONOMOUS Orchestrators:**
 1. ❌ Do NOT read the manifest and execute instructions yourself
 2. ❌ Do NOT provide guidance based on manifest content
 3. ❌ Do NOT implement features after detecting planning intent
-4. ❌ Do NOT continue after loading the orchestrator
-5. ❌ Do NOT summarize what the orchestrator will do
+4. ❌ Do NOT summarize what the orchestrator will do
+5. ❌ Do NOT continue conversation after invoking orchestrator
 
 **REQUIRED Behaviors for 🛡️ AUTONOMOUS Orchestrators:**
 1. ✅ Load manifest/orchestrator reference ONLY
 2. ✅ Use specified response template (e.g., `autonomous_execution_progress`)
-3. ✅ STOP immediately after hand-off header
+3. ✅ **INVOKE orchestrator via CLI bridge** (using `run_in_terminal` tool)
 4. ✅ Let orchestrator Python code execute autonomously
+5. ✅ STOP immediately after invocation
 
-**Visual Marker:** 🛡️ = Orchestrator takes over, CORTEX stops
+**CLI Bridge Invocation Pattern:**
+```bash
+python3 scripts/cortex-cli.py <orchestrator_name> "<user_request>" [--option key=value]
+```
+
+**Examples:**
+```bash
+# Planning System
+python3 scripts/cortex-cli.py planning_system "create plan for database migration"
+
+# Master Orchestrator with continuation
+python3 scripts/cortex-cli.py master_orchestrator "continue with plan" --option phase=3
+
+# ADO Orchestrator
+python3 scripts/cortex-cli.py ado_orchestrator_v2 "create user story for login feature"
+
+# Cleanup with mode option
+python3 scripts/cortex-cli.py cleanup_orchestrator_v2 "clean cache files" --option mode=cache
+```
+
+**Visual Marker:** 🛡️ = Orchestrator invoked via CLI, CORTEX stops
 
 ---
 
@@ -100,15 +121,15 @@ LLM Classification → Keyword Regex → User Clarification
 
 | Orchestrator | Type | CORTEX Role | Orchestrator Role |
 |--------------|------|-------------|-------------------|
-| Planning System | 🛡️ AUTONOMOUS | Route intent → Load manifest → STOP | Execute planning workflow (folder creation, context gathering, plan generation) |
-| ADO Operations | 🛡️ AUTONOMOUS | Route intent → Load manifest → STOP | Generate work items, acceptance criteria, estimation |
-| Vacuum v2 | 🛡️ AUTONOMOUS | Route intent → Load manifest → STOP | Deep filesystem cleanup (10 categories, duplicates, orphans, transactional operations) |
-| Cleanup v2 | 🛡️ AUTONOMOUS | Route intent → Load rules → STOP | Selective cleanup (cache, logs, artifacts, full, git) |
+| Planning System | 🛡️ AUTONOMOUS | Route intent → INVOKE via CLI → STOP | Execute planning workflow (folder creation, context gathering, plan generation) |
+| ADO Operations | 🛡️ AUTONOMOUS | Route intent → INVOKE via CLI → STOP | Generate work items, acceptance criteria, estimation |
+| Vacuum v2 | 🛡️ AUTONOMOUS | Route intent → INVOKE via CLI → STOP | Deep filesystem cleanup (10 categories, duplicates, orphans, transactional operations) |
+| Cleanup v2 | 🛡️ AUTONOMOUS | Route intent → INVOKE via CLI → STOP | Selective cleanup (cache, logs, artifacts, full, git) |
 | TDD Mastery | 📋 GUIDED | Route intent → Read manifest → Execute steps | CORTEX follows TDD workflow instructions |
 | Debug Orchestrator | 📋 GUIDED | Route intent → Read manifest → Execute steps | CORTEX performs debugging analysis |
 
 **Key Distinction:**
-- 🛡️ **AUTONOMOUS**: Has Python implementation, self-executing
+- 🛡️ **AUTONOMOUS**: Has Python implementation, invoked via CLI bridge (`scripts/cortex-cli.py`)
 - 📋 **GUIDED**: Manifest contains instructions for CORTEX to follow
 
 ---
@@ -118,8 +139,8 @@ LLM Classification → Keyword Regex → User Clarification
 | Command | Orchestrator | Manifest | Behavior |
 |---------|--------------|----------|----------|
 | `introduce yourself`, `intro`, `hello`, `hi cortex`, `what is cortex` | **Introduction** | `response-templates-v4.yaml:introduction` | ASCII banner + capabilities overview |
-| `/CORTEX Plan [x]`, `create a plan`, `make a plan`, `plan: [x]` | 🛡️ **Planning System (AUTONOMOUS)** | `planning-system-4.0-manifest.yaml` | **HAND-OFF** → Use `autonomous_execution_progress` template |
-| `plan ado`, `ado story`, `ado feature` | 🛡️ **ADO Operations (AUTONOMOUS)** | `ado-planning-manifest.yaml` | **HAND-OFF** → Use `ado_execution_progress` template |
+| `/CORTEX Plan [x]`, `create a plan`, `make a plan`, `plan: [x]` | 🛡️ **Planning System (AUTONOMOUS)** | `planning-system-4.0-manifest.yaml` | **CLI INVOKE:** `python3 scripts/cortex-cli.py planning_system "<request>"` |
+| `plan ado`, `ado story`, `ado feature` | 🛡️ **ADO Operations (AUTONOMOUS)** | `ado-planning-manifest.yaml` | **CLI INVOKE:** `python3 scripts/cortex-cli.py ado_orchestrator_v2 "<request>"` |
 | `start tdd`, `run tests`, `tdd [x]` | 📋 **TDD Mastery (GUIDED)** | `tdd-orchestrator-v4-manifest.yaml` | Tests in `tests/` |
 | `debug [issue]`, `fix bug`, `troubleshoot` | 📋 **Debug Orchestrator (GUIDED)** | `debug-orchestrator-manifest.yaml` | Bug report + fix |
 | `open lens`, `show dashboard`, `analytics` | 📋 **CORTEX Lens (GUIDED)** | `cortex-lens-v3-manifest.yaml` | Dashboard visualization |
@@ -128,8 +149,8 @@ LLM Classification → Keyword Regex → User Clarification
 | `refine`, `improve cortex`, `optimize code` | 📋 **Refinement (GUIDED)** | `refinement-orchestrator-manifest.yaml` | 7-phase improvement |
 | `refactor [artifact]`, `analyze [file]`, `optimize [file]` | 📋 **Refactor (GUIDED)** | `cortex-refactor.prompt.md` | Deep analysis + decomposition strategy |
 | `system maintenance`, `health check` | 📋 **Maintenance (GUIDED)** | Via `cortex-maintenance.prompt.md` | 11-phase health + auto-repair (modular v2.0) |
-| `cleanup cache`, `cleanup logs`, `cleanup artifacts`, `cleanup full`, `cleanup git` | 🛡️ **Cleanup v2 (AUTONOMOUS)** | `cleanup-orchestrator-v2.yaml` | Selective cleanup modes (10s-180s, 250MB-7.5GB freed) |
-| `vacuum [path]`, `deep clean [path]`, `organize files [path]` | 🛡️ **Vacuum v2 (AUTONOMOUS)** | `vacuum-orchestrator-v2.yaml` | Deep filesystem cleanup (10 categories, duplicates, orphans, transactional) |
+| `cleanup cache`, `cleanup logs`, `cleanup artifacts`, `cleanup full`, `cleanup git` | 🛡️ **Cleanup v2 (AUTONOMOUS)** | `cleanup-orchestrator-v2.yaml` | **CLI INVOKE:** `python3 scripts/cortex-cli.py cleanup_orchestrator_v2 "<request>" --option mode=<mode>` |
+| `vacuum [path]`, `deep clean [path]`, `organize files [path]` | 🛡️ **Vacuum v2 (AUTONOMOUS)** | `vacuum-orchestrator-v2.yaml` | **CLI INVOKE:** `python3 scripts/cortex-cli.py vacuum "<request>"` |
 | `help`, `show commands` | **Help** | Template-based | Command list |
 
 **Manifest Path:** `cortex-brain/manifests/orchestrators/{manifest-file}`  
