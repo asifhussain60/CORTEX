@@ -28,26 +28,276 @@ button, a, input, select, textarea, [role="button"] {
 </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ado Planning - Orchestrators - CORTEX</title>
+    <meta name="description" content="CORTEX ADO Planning - Azure DevOps integration with CORTEX Planning System">
+    <title>ADO Planning - CORTEX</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/variables.css?v=2026-01-03">
     <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-03">
     <link rel="stylesheet" href="../assets/css/intentional-classes.css">
-    <style>
-        .stub-container {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-        }
+</head>
+<body>
+    <!-- Skip Link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Level 1 Navigation Header -->
+    <header class="glass-header">
+        <div class="header-content">
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../index.html" class="nav-link" mobile-nav-optimized>
+                    <i class="fas fa-home pulse-glow-glass--fast"></i>
+                    <span>Home</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="container" id="main-content">
+        <!-- Main Content Card -->
+        <div class="glass-card">
+            <h1>📋 ADO Planning</h1>
+            
+            <!-- Intro Description -->
+            <p>
+                Deep integration between CORTEX Planning System and Azure DevOps. ADO Planning extends 
+                the Planning System's 4-tier architecture with automated work item generation, smart 
+                acceptance criteria mapping, and bidirectional synchronization—transforming planning 
+                manifests into production-ready ADO backlogs with full traceability.
+            </p>
+            
+            <!-- Key Metrics -->
+            <div class="metrics-grid metrics-grid-4">
+                <div class="metric-card glass-card">
+                    <div class="metric-value">6</div>
+                    <div class="metric-label">Execution Phases</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">3</div>
+                    <div class="metric-label">Work Item Types</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">100%</div>
+                    <div class="metric-label">DoR/DoD Integration</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">Auto</div>
+                    <div class="metric-label">Story Point Mapping</div>
+                </div>
+            </div>
+            
+            <!-- Command -->
+            <div class="command-card">
+                <code class="command-syntax">plan ado [feature-name]</code>
+                <p class="command-description">
+                    Generates ADO work items from a planning manifest with full Planning System integration.
+                </p>
+                <div class="command-example">
+                    plan ado user-authentication-system
+                </div>
+            </div>
+        </div>
         
-        .stub-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 3rem;
+        <!-- 6 Phase Workflow -->
+        <section class="level2-section-title-green">
+            <div class="glass-card">
+                <h2><span>📋</span> The 6-Phase ADO Workflow</h2>
+                
+                <div class="workflow-phases">
+                    <div class="phase-card">
+                        <span class="phase-number">1</span>
+                        <span class="phase-icon">🔍</span>
+                        <div class="phase-title">Discovery</div>
+                        <p class="phase-description">Load planning manifest, validate structure, detect work items</p>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-number">2</span>
+                        <span class="phase-icon">✅</span>
+                        <div class="phase-title">Validation</div>
+                        <p class="phase-description">Verify DoR/DoD compliance, check acceptance criteria, validate estimates</p>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-number">3</span>
+                        <span class="phase-icon">🏗️</span>
+                        <div class="phase-title">Generation</div>
+                        <p class="phase-description">Create ADO work items (Epics → Features → Stories → Tasks)</p>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-number">4</span>
+                        <span class="phase-icon">👁️</span>
+                        <div class="phase-title">Approval</div>
+                        <p class="phase-description">Present work items for review, handle modifications</p>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-number">5</span>
+                        <span class="phase-icon">🚀</span>
+                        <div class="phase-title">Execution</div>
+                        <p class="phase-description">Push work items to Azure DevOps via REST API</p>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-number">6</span>
+                        <span class="phase-icon">📊</span>
+                        <div class="phase-title">Completion</div>
+                        <p class="phase-description">Generate reports, update tracking, sync bidirectional links</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Planning System Integration -->
+        <section class="level2-section-title-green">
+            <div class="glass-card">
+                <h2><span>🧠</span> Planning System Integration</h2>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>4-Tier Classification:</strong> Maps plan complexity to ADO work item hierarchy</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>DoR Validation:</strong> Ensures all work items meet Definition of Ready criteria</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>DoD Mapping:</strong> Converts Definition of Done to ADO acceptance criteria</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Historical Context:</strong> Uses past patterns to improve work item estimates</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>TDD Integration:</strong> Links test requirements to ADO task definitions</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Visual Progress:</strong> Real-time progress bars with work item metrics</div>
+    </div>
+</div>
+            </div>
+        </section>
+        
+        <!-- Work Item Mapping -->
+        <section class="level2-section-title-green">
+            <div class="glass-card">
+                <h2><span>🎯</span> Work Item Type Mapping</h2>
+                
+                <div class="guideline-card">
+                    <h3>Epics (Tier 4)</h3>
+                    <p><strong>Source:</strong> TIER 4 (COMPLEX) planning manifests</p>
+                    <p><strong>Attributes:</strong></p>
+                    <ul>
+                        <li><strong>Title:</strong> Plan name with feature prefix</li>
+                        <li><strong>Description:</strong> Executive summary from manifest</li>
+                        <li><strong>Story Points:</strong> Aggregated from all child features</li>
+                        <li><strong>Tags:</strong> complexity-tier-4, category tags from manifest</li>
+                        <li><strong>State:</strong> New → Active based on plan phase</li>
+                    </ul>
+                </div>
+                
+                <div class="guideline-card">
+                    <h3>Features (Tier 3)</h3>
+                    <p><strong>Source:</strong> TIER 3 (MODERATE) manifests or Tier 4 sub-features</p>
+                    <p><strong>Attributes:</strong></p>
+                    <ul>
+                        <li><strong>Title:</strong> Feature name from manifest phase</li>
+                        <li><strong>Description:</strong> Phase objectives and deliverables</li>
+                        <li><strong>Acceptance Criteria:</strong> Mapped from phase DoD</li>
+                        <li><strong>Story Points:</strong> Sum of child user stories</li>
+                        <li><strong>Parent Link:</strong> Epic (if Tier 4 plan)</li>
+                    </ul>
+                </div>
+                
+                <div class="guideline-card">
+                    <h3>User Stories (Tier 2)</h3>
+                    <p><strong>Source:</strong> TIER 2 (SIMPLE) manifests or Tier 3/4 tasks</p>
+                    <p><strong>Attributes:</strong></p>
+                    <ul>
+                        <li><strong>Title:</strong> User story format: "As a [role], I want [goal]"</li>
+                        <li><strong>Description:</strong> Detailed requirements from manifest tasks</li>
+                        <li><strong>Acceptance Criteria:</strong> Checklist from DoD items</li>
+                        <li><strong>Story Points:</strong> Fibonacci scale (1/2/3/5/8/13)</li>
+                        <li><strong>Parent Link:</strong> Feature (if Tier 3/4 plan)</li>
+                    </ul>
+                </div>
+                
+                <div class="guideline-card">
+                    <h3>Tasks (All Tiers)</h3>
+                    <p><strong>Source:</strong> Implementation subtasks from manifest</p>
+                    <p><strong>Attributes:</strong></p>
+                    <ul>
+                        <li><strong>Title:</strong> Technical task description</li>
+                        <li><strong>Description:</strong> Implementation details, file paths</li>
+                        <li><strong>Remaining Work:</strong> Hours estimate from manifest</li>
+                        <li><strong>Activity:</strong> Development/Testing/Documentation</li>
+                        <li><strong>Parent Link:</strong> User Story</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Visual Progress Tracking -->
+        <section class="level2-section-title-green">
+            <div class="glass-card">
+                <h2><span>📊</span> Real-Time Progress Tracking</h2>
+                
+                <p>ADO Planning includes mandatory visual progress tracking after every phase:</p>
+                
+                <div class="code-example">
+                    <pre><code>### 📊 ADO WORK ITEM GENERATION STATUS
+
+**Overall Progress:** `████████░░░░░░░░░░░░` **40%** 🔄 In Progress
+
+| Phase | Progress | Status |
+|-------|----------|--------|
+| Phase 1 - DISCOVERY | `██████████` | 100% ✅ Complete |
+| Phase 2 - VALIDATION | `██████████` | 100% ✅ Complete |
+| Phase 3 - GENERATION | `████████░░` | 80% 🔄 In Progress |
+| Phase 4 - APPROVAL | `░░░░░░░░░░` | 0% ⏳ Pending |
+| Phase 5 - EXECUTION | `░░░░░░░░░░` | 0% ⏳ Pending |
+| Phase 6 - COMPLETION | `░░░░░░░░░░` | 0% ⏳ Pending |
+
+📊 **Work Items:** 12/15 created | **Story Points:** 89 | **Status:** Generating Stories</code></pre>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Configuration -->
+        <section class="level2-section-title-green">
+            <div class="glass-card">
+                <h2><span>⚙️</span> Configuration</h2>
+                
+                <div class="guideline-card">
+                    <h3>ADO Planning Manifest</h3>
+                    <p><strong>Location:</strong> <code>cortex-brain/manifests/orchestrators/ado-planning-manifest.yaml</code></p>
+                    <p><strong>Inherits From:</strong> <code>planning-system-manifest.yaml</code></p>
+                    <div class="code-example">
+                        <pre><code>metadata:
+  orchestrator_name: "ado_planning_orchestrator"
+  version: "3.0.0"
+  inherits_from: "planning-system-manifest.yaml"
+  integration_status: "Phase 6 Complete"
+
+requirements:
+  - Acceptance Criteria Approval Gate
+  - Interactive DoR Workflow
+  - Contextual Review Integration
+  - SWAG Estimation via Swagger
+  - Visual Progress Rendering</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Related Links -->
+        <section class="level2-section-title-green">
+            <div class="glass-card">
+                <h2><span>🔗</span> Related Documentation</h2>
+                <div class="level1-relationship-grid">
+                    <a href="ado-orchestrator.html" class="btn level1-btn-icon">ADO Orchestrator</a>
+                    <a href="planning-system.html" class="btn level1-btn-icon">Planning System</a>
+                    <a href="ado-operations.html" class="btn level1-btn-icon">ADO Operations</a>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>
             max-width: 600px;
             text-align: center;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);

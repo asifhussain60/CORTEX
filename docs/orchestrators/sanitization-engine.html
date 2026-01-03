@@ -28,26 +28,253 @@ button, a, input, select, textarea, [role="button"] {
 </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sanitization Engine - Orchestrators - CORTEX</title>
+    <meta name="description" content="CORTEX Sanitization Engine - Modular engine architecture for code sanitization">
+    <title>Sanitization Engine - CORTEX</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/variables.css?v=2026-01-03">
     <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-03">
     <link rel="stylesheet" href="../assets/css/intentional-classes.css">
-    <style>
-        .stub-container {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-        }
+</head>
+<body>
+    <!-- Skip Link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Level 1 Navigation Header -->
+    <header class="glass-header">
+        <div class="header-content">
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../index.html" class="nav-link" mobile-nav-optimized>
+                    <i class="fas fa-home pulse-glow-glass--fast"></i>
+                    <span>Home</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="container" id="main-content">
+        <!-- Main Content Card -->
+        <div class="glass-card">
+            <h1>⚙️ Sanitization Engine</h1>
+            
+            <!-- Intro Description -->
+            <p>
+                The technical backbone of CORTEX's sanitization capabilities. Built on a modular 
+                engine-based architecture, each specialized engine handles a distinct phase of the 
+                sanitization pipeline—from AST-based code analysis to transactional transformations 
+                and build validation—ensuring safe, reliable code sanitization at enterprise scale.
+            </p>
+            
+            <!-- Key Metrics -->
+            <div class="metrics-grid metrics-grid-4">
+                <div class="metric-card glass-card">
+                    <div class="metric-value">5</div>
+                    <div class="metric-label">Specialized Engines</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">70%</div>
+                    <div class="metric-label">Code Reuse</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">AST</div>
+                    <div class="metric-label">Progressive Parsing</div>
+                </div>
+                <div class="metric-card glass-card">
+                    <div class="metric-value">Atomic</div>
+                    <div class="metric-label">Transactions</div>
+                </div>
+            </div>
+        </div>
         
-        .stub-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 3rem;
+        <!-- Engine Architecture -->
+        <section class="level2-section-title-green">
+            <div class="glass-card">
+                <h2><span>🏗️</span> Engine Architecture</h2>
+                
+                <div class="workflow-phases">
+                    <div class="phase-card">
+                        <span class="phase-number">1</span>
+                        <span class="phase-icon">🔍</span>
+                        <div class="phase-title">Code Analyzer Engine</div>
+                        <p class="phase-description">AST parsing, term extraction, risk classification with caching</p>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-number">2</span>
+                        <span class="phase-icon">🗺️</span>
+                        <div class="phase-title">Mapping Engine</div>
+                        <p class="phase-description">Domain→Generic mapping generation with collision detection</p>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-number">3</span>
+                        <span class="phase-icon">🔄</span>
+                        <div class="phase-title">Transformer Engine</div>
+                        <p class="phase-description">Transactional file transformations with atomic operations</p>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-number">4</span>
+                        <span class="phase-icon">✅</span>
+                        <div class="phase-title">Validator Engine</div>
+                        <p class="phase-description">Build/test execution with automatic rollback on failure</p>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-number">5</span>
+                        <span class="phase-icon">📊</span>
+                        <div class="phase-title">Report Generator</div>
+                        <p class="phase-description">Audit reports with diff summaries and mapping manifests</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Key Features -->
+        <section class="level2-section-title-green">
+            <div class="glass-card">
+                <h2><span>⚡</span> Advanced Capabilities</h2>
+                <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong>Progressive AST Parsing:</strong> Cached parsing for 10x performance on repeat runs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Risk-Based Workflow:</strong> Auto-approve safe changes, require approval for high-risk</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Transactional Safety:</strong> Atomic file operations with automatic rollback</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Checkpoint Recovery:</strong> Resume from last checkpoint on failure</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Build Validation:</strong> Verify sanitized code compiles and tests pass</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong>Parallel Processing:</strong> Multi-worker file scanning (configurable)</div>
+    </div>
+</div>
+            </div>
+        </section>
+        
+        <!-- Engine Details -->
+        <section class="level2-section-title-green">
+            <div class="glass-card">
+                <h2><span>🔧</span> Technical Architecture</h2>
+                
+                <div class="guideline-card">
+                    <h3>Code Analyzer Engine</h3>
+                    <p><strong>Location:</strong> <code>src/orchestrators/sanitization/engines/code_analyzer_engine.py</code></p>
+                    <p><strong>Lines:</strong> 400-500</p>
+                    <p><strong>Responsibilities:</strong></p>
+                    <ul>
+                        <li>File scanning with filtering (respects .gitignore patterns)</li>
+                        <li>AST parsing with 24-hour cache TTL</li>
+                        <li>Domain terminology extraction using NLP patterns</li>
+                        <li>Risk classification (SAFE / LOW / MEDIUM / HIGH / CRITICAL)</li>
+                        <li>PII and credential detection</li>
+                    </ul>
+                </div>
+                
+                <div class="guideline-card">
+                    <h3>Mapping Engine</h3>
+                    <p><strong>Location:</strong> <code>src/orchestrators/sanitization/engines/mapping_engine.py</code></p>
+                    <p><strong>Code Reuse:</strong> 70% from legacy sanitization</p>
+                    <p><strong>Responsibilities:</strong></p>
+                    <ul>
+                        <li>Generate domain→generic mappings with context awareness</li>
+                        <li>Collision detection and disambiguation</li>
+                        <li>Reversible mapping manifest creation</li>
+                        <li>Interactive approval workflow for high-risk mappings</li>
+                    </ul>
+                </div>
+                
+                <div class="guideline-card">
+                    <h3>Transformer Engine</h3>
+                    <p><strong>Location:</strong> <code>src/orchestrators/sanitization/engines/transformer_engine.py</code></p>
+                    <p><strong>Responsibilities:</strong></p>
+                    <ul>
+                        <li>Atomic file transformations (all-or-nothing)</li>
+                        <li>Checkpoint creation every 100 files</li>
+                        <li>Backup management with retention policies</li>
+                        <li>String replacement with context preservation</li>
+                        <li>Progress tracking with ETA calculation</li>
+                    </ul>
+                </div>
+                
+                <div class="guideline-card">
+                    <h3>Validator Engine</h3>
+                    <p><strong>Location:</strong> <code>src/orchestrators/sanitization/engines/validator_engine.py</code></p>
+                    <p><strong>Responsibilities:</strong></p>
+                    <ul>
+                        <li>Build execution (supports Python, Node.js, .NET, Java)</li>
+                        <li>Test suite execution with 300s timeout</li>
+                        <li>Automatic rollback on validation failure</li>
+                        <li>Detailed failure reporting with logs</li>
+                    </ul>
+                </div>
+                
+                <div class="guideline-card">
+                    <h3>Report Generator Engine</h3>
+                    <p><strong>Location:</strong> <code>src/orchestrators/sanitization/engines/report_generator_engine.py</code></p>
+                    <p><strong>Code Reuse:</strong> 60% from legacy reports</p>
+                    <p><strong>Responsibilities:</strong></p>
+                    <ul>
+                        <li>Audit report generation (Markdown + JSON)</li>
+                        <li>Diff summary with line-by-line changes</li>
+                        <li>Mapping manifest export (YAML)</li>
+                        <li>Statistics dashboard (file count, term count, risk breakdown)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Configuration -->
+        <section class="level2-section-title-green">
+            <div class="glass-card">
+                <h2><span>⚙️</span> Configuration</h2>
+                
+                <div class="guideline-card">
+                    <h3>Engine Configuration File</h3>
+                    <p><strong>Location:</strong> <code>cortex-brain/manifests/orchestrators/sanitization-orchestrator-v2.yaml</code></p>
+                    <div class="code-example">
+                        <pre><code>execution:
+  default_dry_run: true
+  token_warning_threshold: 80000
+  phase_timeout: 3600
+  checkpoint_interval: 100
+
+analysis:
+  progressive_parsing: true
+  ast_cache_ttl_hours: 24
+  parallel_workers: 4
+
+transformation:
+  checkpoint_before_transform: true
+  create_backups: true
+  atomic_operations: true
+
+validation:
+  run_build: true
+  run_tests: true
+  rollback_on_failure: true</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Related Links -->
+        <section class="level2-section-title-green">
+            <div class="glass-card">
+                <h2><span>🔗</span> Related Documentation</h2>
+                <div class="level1-relationship-grid">
+                    <a href="sanitization-orchestrator.html" class="btn level1-btn-icon">Sanitization Orchestrator</a>
+                    <a href="../architecture/orchestrator-ecosystem.html" class="btn level1-btn-icon">Orchestrator Ecosystem</a>
+                    <a href="../governance/skull-rulebook.html" class="btn level1-btn-icon">SKULL Rules</a>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>
             max-width: 600px;
             text-align: center;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
