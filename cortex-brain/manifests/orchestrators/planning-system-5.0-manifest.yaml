@@ -38,6 +38,31 @@ folder_structure:
       type: "documentation"
       description: "Session continuation prompt for token limit management"
 
+# Execution instructions for GitHub Copilot (when interpreting this manifest)
+execution_instructions:
+  progress_reporting:
+    mode: "concise"  # Options: "concise" (default), "verbose"
+    policy:
+      - "Display progress ONLY at phase boundaries (start/completion)"
+      - "DO NOT narrate individual task completions to user"
+      - "DO NOT show 'Now I'll...', 'Perfect!', 'Excellent!' commentary"
+      - "Update progress bar silently between phases"
+      - "Use verbose mode ONLY if user explicitly requests detailed output"
+  
+  accessibility:
+    wcag_alignment: "AA"
+    cognitive_load_management:
+      - "Users with reading difficulties: minimize text output"
+      - "Autonomous execution is silent except at phase milestones"
+      - "Completion summary: ≤40 lines (not 150+)"
+      - "No redundant progress tables (show once at beginning, once at end)"
+    
+    display_frequency:
+      phase_start: "Show phase name + overall progress bar (3 lines)"
+      task_completion: "SILENT - no user-facing output"
+      phase_completion: "Show completed phase + next phase (5 lines)"
+      overall_completion: "Summary table with key metrics (≤40 lines)"
+
 # Execution phases (config-only, Python implements logic)
 phases:
   - number: 0

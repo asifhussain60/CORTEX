@@ -10,6 +10,22 @@ orchestrator:
   base_orchestrator: "v4.1"
   autonomous: true
 
+# Execution instructions for GitHub Copilot (when interpreting this manifest)
+execution_instructions:
+  progress_reporting:
+    mode: "concise"
+    policy:
+      - "Display progress ONLY at phase boundaries"
+      - "DO NOT narrate task completions"
+      - "Update progress bar silently"
+  accessibility:
+    wcag_alignment: "AA"
+    display_frequency:
+      phase_start: "Show phase name + progress (3 lines)"
+      task_completion: "SILENT"
+      phase_completion: "Show completed + next (5 lines)"
+      overall_completion: "Summary (≤40 lines)"
+
 # Cleanup modes
 modes:
   cache:
