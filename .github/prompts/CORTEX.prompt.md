@@ -1,7 +1,14 @@
 # 🎯 CORTEX Universal Entry Point
 
 **Version:** 4.0.1 | **Status:** ✅ PRODUCTION  
-**Author:** Asif Hussain | **Website:** https://asifhussain60.github.io/CORTEX/  
+**Author:** Asif Hussain | **Website:** https://asifhussain6| Command | Orchestrator | Pattern | Confidence | Type | Behavior |
+|---------|--------------|---------|------------|------|----------|
+| `introduce yourself`, `intro`, `hello`, `hi cortex` | **Introduction** | N/A | N/A | Template | ASCII banner + capabilities |
+| `plan`, `create a plan`, `make a plan` | 🛡️ **Planning v5** | `^(plan\|create a plan\|make a plan).*$` | 1.00 | regex | **HAND-OFF** → Autonomous execution |
+| `holistic review`, `review holistically`, `architectural review` | 🛡️ **Holistic Review** | `^(holistic review\|review holistically\|architectural review).*$` | 1.00 | regex | **AUTO-TRIGGER** → Reviews at phase transitions |
+| `ado`, `ado story`, `ado feature` | 🛡️ **ADO v2** | `^(ado\|ado story\|ado feature).*$` | 1.00 | regex | **HAND-OFF** → Wizard or auto mode |
+| `vacuum`, `deep clean`, `organize files` | 🛡️ **Vacuum v2** | `^(vacuum\|deep clean\|organize files).*$` | 1.00 | regex | **HAND-OFF** → Filesystem cleanup |
+| `cleanup`, `cleanup cache`, `cleanup logs` | 🛡️ **Cleanup v2** | `^(cleanup\|cleanup cache\|...).*$` | 1.00 | regex | **HAND-OFF** → Selective cleanup |b.io/CORTEX/  
 **Copyright © 2025 Asif Hussain. All rights reserved.**
 
 ---
@@ -152,6 +159,7 @@ Orchestrator Execution
 | `sanitize`, `make generic` | 📋 **Sanitization** | `^(sanitize\|make generic).*$` | 1.00 | regex | GUIDED sanitization |
 | `debug`, `fix bug`, `troubleshoot` | 📋 **Debug** | `^(debug\|fix bug\|troubleshoot).*$` | 1.00 | regex | GUIDED debugging |
 | `refine`, `improve`, `optimize` | 📋 **Refinement** | `^(refine\|improve\|optimize).*$` | 1.00 | regex | GUIDED improvement |
+| `investigate`, `find root cause`, `why is`, `debug architecture`, `fix brittleness` | 🛡️ **Investigation** | `^(investigate|find root cause|why is|debug architecture|fix brittleness).*$` | 1.00 | regex | Deep root cause analysis → Architecture-level fix → Master Orch integration |
 | `system maintenance`, `health check` | 📋 **Maintenance** | DISABLED | N/A | N/A | Not yet registered |
 | `help`, `show commands` | **Help** | N/A | N/A | Template | Command list |
 

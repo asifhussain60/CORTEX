@@ -16,6 +16,8 @@ from src.orchestrators.pattern_router import PatternRouter, OrchestratorMatch
 from src.orchestrators.state_manager import StateManager
 from src.orchestrators.execution_engine import ExecutionEngine, ExecutionResult
 from src.orchestrators.context_middleware import CrossSessionContextMiddleware
+from src.orchestrators.response_renderer import ResponseRenderer
+from src.orchestrators.response_middleware import ResponseMiddleware
 from src.mcp.registry import OrchestratorRegistry
 from src.database.planning_state_db import PlanningStateDB
 
@@ -56,7 +58,9 @@ class MasterOrchestrator:
         registry: OrchestratorRegistry,
         state_db: PlanningStateDB,
         llm_fallback: Optional[Any] = None,
-        context_middleware: Optional[CrossSessionContextMiddleware] = None
+        context_middleware: Optional[CrossSessionContextMiddleware] = None,
+        response_renderer: Optional[ResponseRenderer] = None,
+        response_middleware: Optional[ResponseMiddleware] = None
     ):
         """
         Initialize Master Orchestrator.
@@ -67,6 +71,8 @@ class MasterOrchestrator:
             state_db: PlanningStateDB for state persistence
             llm_fallback: Optional LLMIntentClassifier for ambiguous inputs
             context_middleware: Optional CrossSessionContextMiddleware for continuation routing
+            response_renderer: Optional ResponseRenderer for markdown generation
+            response_middleware: Optional ResponseMiddleware for system message injection
         """
         self.config_path = Path(config_path)
         self.registry = registry
@@ -84,6 +90,10 @@ class MasterOrchestrator:
         # Cross-session context middleware (Phase 4.5)
         self.context_middleware = context_middleware or CrossSessionContextMiddleware()
         
+        # Response rendering pipeline (Phase 6.4 - Option B fix)
+        self.response_renderer = response_renderer or ResponseRenderer()
+        self.response_middleware = response_middleware or ResponseMiddleware()
+        
         # Execution tracking
         self._request_count = 0
         self._pattern_match_count = 0
@@ -91,8 +101,83 @@ class MasterOrchestrator:
         self._continuation_count = 0
         
         self.logger.info(
-            f"MasterOrchestrator initialized with context middleware (config={config_path})"
+            f"MasterOrchestrator initialized with context middleware + response pipeline (config={config_path})"
         )
+    
+    def _check_review_schedule(
+        self,
+        orchestrator_id: str,
+        context: Dict[str, Any]
+    ) -> Optional[Dict[str, Any]]:
+        """
+        Check if holistic review should be triggered before orchestrator execution.
+        
+        Reads progress.json from parent plan to determine if a holistic review
+        is scheduled and should auto-trigger at this point.
+        
+        Args:
+            orchestrator_id: Target orchestrator about to execute
+            context: Execution context (may contain parent_plan_id)
+        
+        Returns:
+            Review configuration dict if review needed, None otherwise
+            Dict contains: review_number, review_name, document_path, scope, etc.
+        """
+        # Check if context has parent plan information
+        parent_plan_id = context.get('parent_plan_id')
+        if not parent_plan_id:
+            # No parent plan = no automatic review triggering
+            return None
+        
+        # Load progress.json for parent plan
+        progress_file = Path(
+            f"cortex-brain/documents/planning/active/{parent_plan_id}/tracking/progress.json"
+        )
+        
+        if not progress_file.exists():
+            self.logger.debug(f"No progress.json found for {parent_plan_id}")
+            return None
+        
+        try:
+            import json
+            with open(progress_file, 'r') as f:
+                progress_data = json.load(f)
+            
+            # Check if holistic reviews enabled
+            reviews_config = progress_data.get('holistic_reviews', {})
+            if not reviews_config.get('enabled') or not reviews_config.get('auto_trigger'):
+                return None
+            
+            # Check schedule for pending reviews
+            schedule = reviews_config.get('schedule', [])
+            for review in schedule:
+                if review['status'] == 'not_started':
+                    # Check if trigger condition met
+                    trigger_condition = review.get('trigger_condition', '')
+                    
+                    # Parse trigger condition (e.g., "phase_1_complete")
+                    if trigger_condition.startswith('phase_'):
+                        phase_num = int(trigger_condition.split('_')[1])
+                        
+                        # Check if phase complete in progress
+                        current_phase = progress_data.get('progress', {}).get('current_phase', 0)
+                        
+                        if current_phase >= phase_num:
+                            # Review should be triggered
+                            self.logger.info(
+                                f"Holistic Review #{review['review_number']} scheduled "
+                                f"(trigger: {trigger_condition})"
+                            )
+                            return review
+            
+            return None
+            
+        except Exception as e:
+            self.logger.error(
+                f"Failed to check review schedule: {e}",
+                exc_info=True
+            )
+            return None
     
     def handle_request(
         self,
@@ -144,7 +229,46 @@ class MasterOrchestrator:
             f"(confidence={match.confidence:.2f}, type={match.match_type.value})"
         )
         
-        # STEP 4: Execute orchestrator
+        # STEP 3.5: Check if holistic review should be triggered (NEW - Phase 6.4)
+        review_config = self._check_review_schedule(match.orchestrator_id, enriched_context)
+        
+        if review_config:
+            self.logger.info(
+                f"Auto-triggering Holistic Review #{review_config['review_number']} "
+                f"before {match.orchestrator_id} execution"
+            )
+            
+            try:
+                # Execute holistic review
+                review_result = self.execute_orchestrator(
+                    orchestrator_id="holistic_review_orchestrator",
+                    params={
+                        'parent_plan_id': enriched_context.get('parent_plan_id'),
+                        'review_number': review_config['review_number'],
+                        'review_name': review_config.get('review_name', 'Automated Review'),
+                        'document_path': review_config.get('document_path', 'architecture/holistic-review.md'),
+                        'scope': review_config.get('scope', 'general'),
+                        'completed_phases': review_config.get('completed_phases', [])
+                    }
+                )
+                
+                # Inject review insights into context
+                if review_result.success and review_result.metadata:
+                    insights = review_result.metadata.get('insights', [])
+                    enriched_context['review_insights'] = insights
+                    
+                    self.logger.info(
+                        f"Injected {len(insights)} insights from holistic review into context"
+                    )
+                
+            except Exception as e:
+                # Review failure is non-blocking
+                self.logger.warning(
+                    f"Holistic review failed (non-blocking): {e}",
+                    exc_info=True
+                )
+        
+        # STEP 4: Execute orchestrator (now with optional review insights)
         result = self.execute_orchestrator(
             orchestrator_id=match.orchestrator_id,
             params={
@@ -154,7 +278,55 @@ class MasterOrchestrator:
             }
         )
         
-        # STEP 5: Record session metadata for future continuations
+        # STEP 5: Render user-facing response (NEW - Phase 6.4)
+        if result.metadata.get('orchestrator_result'):
+            orch_result = result.metadata['orchestrator_result']
+            
+            # Prepare rendering context
+            render_context = {
+                'session_id': enriched_context.get('session_id'),
+                'token_usage_percentage': enriched_context.get('token_usage_percentage', 0),
+                'total_tokens': enriched_context.get('total_tokens', 0),
+                'security_warnings': enriched_context.get('security_warnings', []),
+                'deprecated_features_used': enriched_context.get('deprecated_features_used', []),
+                'success_metadata': result.metadata.get('success_metadata', {}),
+                'files_modified': result.metadata.get('files_modified', False),
+                'multi_phase_operation': result.metadata.get('multi_phase_operation', False),
+                'progress': result.metadata.get('progress', {}),
+                'next_steps': result.metadata.get('next_steps', []),
+                'review_insights': enriched_context.get('review_insights', [])
+            }
+            
+            try:
+                # Step 5.1: Render markdown
+                rendered_markdown = self.response_renderer.render(
+                    orch_result,
+                    tier='auto',
+                    context=render_context
+                )
+                
+                # Step 5.2: Inject system messages
+                final_markdown = self.response_middleware.inject_system_messages(
+                    rendered_markdown,
+                    render_context
+                )
+                
+                # Step 5.3: Store in ExecutionResult
+                result.user_message = final_markdown
+                
+                self.logger.debug(
+                    f"Rendered user message: {len(final_markdown)} chars, "
+                    f"tier=auto, system_messages={(render_context.get('token_usage_percentage', 0) > 80)}"
+                )
+            except Exception as e:
+                # Rendering failure is non-blocking - log and continue
+                self.logger.warning(
+                    f"Response rendering failed (non-blocking): {e}",
+                    exc_info=True
+                )
+                result.user_message = None
+        
+        # STEP 6: Record session metadata for future continuations
         if result.success and enriched_context.get('session_id'):
             self._record_session_metadata(
                 session_id=enriched_context['session_id'],
@@ -493,6 +665,16 @@ class MasterOrchestrator:
         
         except Exception as e:
             self.logger.error(f"Failed to record session metadata: {e}")
+    
+    def get_statistics(self) -> Dict[str, Any]:
+        """
+        Get Master Orchestrator statistics.
+        
+        Returns:
+            Dictionary with routing, execution, and performance metrics
+        """
+        # Get component statistics
+        router_stats = self.router.get_statistics()
         state_stats = self.state_manager.get_stats()
         engine_metrics = self.execution_engine.get_metrics()
         

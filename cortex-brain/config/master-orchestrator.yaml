@@ -6,6 +6,19 @@ schema_version: "5.0"
 # Pattern-Based Routing Rules (Primary)
 # 90%+ of requests handled via exact/regex matching
 routing_rules:
+  # Holistic Review Orchestrator (NEW - Phase 6.4)
+  # Automatic architectural analysis system
+  - pattern: "^(holistic review|review holistically|architectural review).*$"
+    orchestrator: "holistic_review_orchestrator"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 5
+    metadata:
+      description: "Automated holistic architectural review"
+      autonomous: true
+      auto_trigger: true
+      version: "1.0"
+  
   # Planning System
   - pattern: "^(plan|create a plan|make a plan)\\s*.*$"
     orchestrator: "planning_v5"

@@ -238,19 +238,19 @@ class VacuumOrchestratorV2(BaseOrchestratorV4_1):
                 approval_result = self._phase_approval_dry_run()
                 artifacts.extend(approval_result.artifacts)
                 
-                # Check token usage after dry-run
+                # Check token usage - middleware will handle user-facing warnings
                 token_check = self.check_token_usage()
                 dry_run_message = "Dry-run completed successfully. Review report to proceed."
-                
-                # Append token warning if threshold reached
-                if token_check.get('user_message'):
-                    dry_run_message += token_check['user_message']
                 
                 return OrchestratorResult(
                     status=OrchestratorStatus.SUCCESS,
                     message=dry_run_message,
                     artifacts=artifacts,
-                    errors=errors
+                    errors=errors,
+                    data={
+                        'token_usage_percentage': token_check.get('percentage', 0),  # For middleware
+                        'dry_run': True
+                    }
                 )
             else:
                 # User confirmation (if not auto-approved)
@@ -272,11 +272,6 @@ class VacuumOrchestratorV2(BaseOrchestratorV4_1):
                 errors.extend(execution_result.errors)
                 raise RuntimeError("Execution phase failed")
             
-            # Check token usage after Phase 5
-            token_check = self.check_token_usage()
-            if token_check.get('user_message'):
-                self.logger.info("Token warning triggered after Execution phase")
-            
             # Phase 6: COMPLETION
             completion_result = self._phase_completion()
             artifacts.extend(completion_result.artifacts)
@@ -284,19 +279,23 @@ class VacuumOrchestratorV2(BaseOrchestratorV4_1):
             # Calculate duration
             duration = (datetime.now() - started_at).total_seconds()
             
-            # Check final token usage
+            # Check final token usage - middleware will handle warnings
             final_token_check = self.check_token_usage()
             completion_message = f"Vacuum completed successfully in {duration:.1f}s"
-            
-            # Append token warning if threshold reached
-            if final_token_check.get('user_message'):
-                completion_message += final_token_check['user_message']
             
             return OrchestratorResult(
                 status=OrchestratorStatus.SUCCESS,
                 message=completion_message,
                 artifacts=artifacts,
-                errors=errors
+                errors=errors,
+                data={
+                    'token_usage_percentage': final_token_check.get('percentage', 0),  # For middleware
+                    'success_metadata': {
+                        'duration_seconds': duration,
+                        'files_cleaned': len([a for a in artifacts if 'cleaned' in a.lower()]),
+                        'phases_completed': 6
+                    }
+                }
             )
         
         except Exception as e:
