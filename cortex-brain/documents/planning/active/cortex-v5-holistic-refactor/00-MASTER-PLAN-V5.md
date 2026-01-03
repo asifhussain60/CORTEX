@@ -19,6 +19,7 @@
 |-------|------|----------|----------|--------|
 | 0 | Foundation Setup | `██████████` | 1d | ✅ Complete |
 | 1 | MCP Tool Infra | `██████████` | 2d | ✅ Complete |
+| **1.5** | **MCP-Copilot CLI Bridge** | `░░░░░░░░░░` | **4h** | 🔴 **CRITICAL** |
 | 2 | State Database | `██████████` | 1.5d | ✅ Complete |
 | 3 | BaseOrch v4.1 + Master Orch Core | `██████████` | 2.5d | ✅ Complete |
 | 3.5 | Master Orch Integration | `██████████` | 1d | ✅ Complete |
@@ -36,21 +37,23 @@
 | 6.2 | **Cleanup v2 Migration** | `██████████` | **3.5d** | ✅ **Complete** |
 | 6.3 | **Vacuum v2 Migration** | `██████████` | **5d** | ✅ **Complete** |
 | 6.4 | **GUIDED Orchestrators Assessment** | `██████████` | **3.5d** | ✅ **Complete** |
-| 6.5 | **TDD v2 Migration** | `░░░░░░░░░░` | **4d** | ⏸️ **Approved** |
-| 6.6 | **Debug v2 Migration** | `░░░░░░░░░░` | **3d** | ⏸️ **Approved** |
-| 6.7 | **Sanitization v2 Migration** | `░░░░░░░░░░` | **2d** | ⏸️ **Approved** |
-| 6.8 | **Refinement Enhancements** | `░░░░░░░░░░` | **4h** | ⏸️ **Approved** |
+| **1.5** | **🔴 MCP-Copilot CLI Bridge** | `░░░░░░░░░░` | **4h** | 🔴 **CRITICAL BLOCKER** |
+| 6.5 | **TDD v2 Migration** | `░░░░░░░░░░` | **4d** | ⏸️ **Blocked by 1.5** |
+| 6.6 | **Debug v2 Migration** | `░░░░░░░░░░` | **3d** | ⏸️ **Blocked by 1.5** |
+| 6.7 | **Sanitization v2 Migration** | `░░░░░░░░░░` | **2d** | ⏸️ **Blocked by 1.5** |
+| 6.8 | **Refinement Enhancements** | `░░░░░░░░░░` | **4h** | ⏸️ **Blocked by 1.5** |
 | 7 | System Integration | `░░░░░░░░░░` | 2d | ⏸️ Not Started |
 | 8 | Testing & Validation | `░░░░░░░░░░` | 3d | ⏸️ Not Started |
 | 9 | Documentation | `░░░░░░░░░░` | 1.5d | ⏸️ Not Started |
 | 10 | REFACTOR & Cleanup | `░░░░░░░░░░` | 2d | ⏸️ Not Started |
 
-**Bootstrap Completion:** ~13 days (includes Master Orchestrator + Context Middleware)  
-**Full Completion:** ~40 days  
-**Current Phase:** Phase 6.4 Complete (GUIDED Orchestrators Assessment) → Ready for Phase 6.5-6.8 (Migrations)
+**Bootstrap Completion:** ~13.2 days (includes Master Orchestrator + Context Middleware + CLI Bridge)  
+**Full Completion:** ~40.2 days  
+**Current Phase:** Phase 6.4 Complete (GUIDED Orchestrators Assessment) → **Phase 1.5 CRITICAL (CLI Bridge blocks all autonomous execution)**
 
 **Checkpoints:**
-- ✅ Phase 1 checkpoint @ commit 90153190: MCP Tool Infrastructure
+- ✅ Phase 1 checkpoint @ commit 90153190: MCP Tool Infrastructure (Python code - not callable by Copilot)
+- 🔴 **Phase 1.5 MISSING:** MCP-Copilot Bridge (terminal invocation mechanism) - **BLOCKS ALL AUTONOMOUS EXECUTION**
 - ✅ Phase 2 checkpoint @ commit 3a081949: Planning State Database
 - ✅ Master Orchestrator Integration @ commit 87a081529: Plan holistically updated
 - ✅ Progressive Activation Strategy @ commit 4568a2f52: Master Orch activates as components are built
@@ -63,7 +66,10 @@
 - ✅ **Phase 6.1 COMPLETE** @ commit [PENDING]: ADO Orchestrator v2 Migration (conversational wizard + dual-mode routing)
 - ✅ **Phase 6.2 COMPLETE** @ commit 2c9235589: Cleanup Orchestrator v2 Migration (5 modes, 1,955 lines, 48 tests)
 - ✅ **Phase 6.3 COMPLETE** @ commit d07c01c7b: Vacuum Orchestrator v2 Migration (2,442 lines, 1,550 tests, 10 categories)
-- ✅ **Phase 6.4 COMPLETE** @ commit [PENDING]: GUIDED Orchestrators Assessment (3 AUTONOMOUS, 1 GUIDED, decision framework established)
+- ✅ **Phase 6.4 COMPLETE** @ commit d313e31e7: GUIDED Orchestrators Assessment (3 AUTONOMOUS, 1 GUIDED, decision framework established)
+- 🔴 **ARCHITECTURAL FAILURE DISCOVERED:** 7,067 lines of orchestrator code (Phases 1-6.4) DORMANT - Copilot cannot invoke Python
+- 🔴 **ROOT CAUSE:** Phase 1 built MCP tools but no Copilot→Python bridge exists
+- 🔴 **IMPACT:** Planning v5 (763 lines), Master Orchestrator (584 lines), Cleanup/Vacuum (4,397 lines), ADO v2, Context Middleware ALL UNREACHABLE
 - ✅ **Phase 6.2 COMPLETE** @ commit 2c9235589: Cleanup Orchestrator v2 Migration (5 modes, 1,955 lines, 48 tests)
 - ✅ **Phase 6.3 COMPLETE** @ commit d07c01c7b: Vacuum Orchestrator v2 Migration (2,442 lines, 1,550 tests, 10 categories)
 
@@ -116,6 +122,33 @@ copilot_instructions:
     - PROGRESS_TRACKER_ENFORCEMENT
     - HOLISTIC_CODE_DISCOVERY_ENFORCEMENT
 ```
+
+---
+
+## 🚨 CRITICAL UPDATE (January 3, 2026)
+
+### Architectural Failure Discovered
+
+**Problem:** Phases 1-6.4 built 7,067 lines of "autonomous" orchestrator code, but GitHub Copilot **CANNOT INVOKE** any of it.
+
+**Root Cause:** Phase 1 built MCP tools (Python infrastructure) but no bridge to GitHub Copilot. CORTEX.prompt.md says "HAND-OFF → STOP" with no invocation mechanism.
+
+**Impact:**
+- Planning System v5 (763 lines) - DORMANT
+- Master Orchestrator (584 lines) - DORMANT  
+- ADO v2, Cleanup v2, Vacuum v2 (4,397 lines) - DORMANT
+- Cross-Session Context Middleware - DORMANT
+- **40.5 days of bootstrap work unreachable**
+
+**Solution:** Phase 1.5 (4 hours) creates CLI bridge: `python scripts/cortex-cli.py <orchestrator> <request>`
+
+**Reprioritization:**
+- Phase 1.5 inserted as **CRITICAL BLOCKER**
+- Phases 6.5-6.8 now blocked until CLI bridge complete
+- Timeline impact: +4 hours (negligible vs 40.5 days activated)
+- ROI: 81:1 (activates 7,067 dormant lines)
+
+**Status:** Phase 1.5 must complete BEFORE any new orchestrator migrations.
 
 ---
 
@@ -493,7 +526,146 @@ def invoke_orchestrator(
 - ✅ Universal tool invokes orchestrators successfully
 - ✅ Error handling prevents crashes
 - ✅ **Foundation ready for Master Orchestrator integration (Phase 3)**
+- ❌ **CRITICAL GAP:** MCP tools NOT callable by GitHub Copilot (no terminal bridge)
 - ✅ Git checkpoint created: `checkpoint-phase-1-mcp-infrastructure`
+
+---
+
+## 🌉 Phase 1.5: MCP-Copilot CLI Bridge (4 hours) - **CRITICAL UNBLOCK**
+
+**Goal:** Bridge GitHub Copilot to MCP orchestrators via terminal invocation
+
+**🔴 CRITICAL DISCOVERY:** Phase 1 built Python MCP infrastructure but GitHub Copilot cannot invoke it. This phase creates the missing bridge that activates 7,067 lines of dormant orchestrator code built in Phases 1-6.4.
+
+**Problem Statement:**
+- Phase 1 MCP tools exist: `src/mcp/tools/invoke_orchestrator.py` (254 lines)
+- GitHub Copilot has NO tool to call Python code
+- CORTEX.prompt.md says "HAND-OFF → STOP" (no invocation instruction)
+- Result: LLM reads manifests manually, 40.5 days of bootstrap work dormant
+
+**Solution:** CLI bridge makes `invoke_orchestrator()` callable via `run_in_terminal`
+
+### Task 1.5.1: Create CLI Bridge Script
+**Duration:** 2h
+
+**Files to Create:**
+- `scripts/cortex-cli.py` - Universal MCP wrapper (CLI entry point)
+- `scripts/__init__.py` - Package initialization
+- `tests/test_cortex_cli.py` - CLI validation tests
+
+**CLI Interface:**
+```bash
+# Planning operations
+python scripts/cortex-cli.py plan "Build user authentication"
+python scripts/cortex-cli.py planning continue
+
+# ADO operations  
+python scripts/cortex-cli.py ado "create story for feature X"
+
+# Cleanup/Vacuum operations
+python scripts/cortex-cli.py cleanup cache
+python scripts/cortex-cli.py vacuum /path/to/cleanup
+
+# Generic orchestrator invocation
+python scripts/cortex-cli.py orchestrate <orchestrator_name> <user_request>
+```
+
+**CLI Features:**
+- Loads MCP registry from `cortex-brain/config/mcp-server.yaml`
+- Calls `invoke_orchestrator()` with user request
+- Formats output for terminal display
+- Handles errors gracefully (user-friendly messages)
+- Version checking (CLI vs orchestrator compatibility)
+- Cross-platform (Windows/Mac/Linux)
+
+### Task 1.5.2: Update CORTEX.prompt.md Protocol
+**Duration:** 1h
+
+**Changes Required:**
+
+**OLD (Lines 80-95):**
+```markdown
+**REQUIRED Behaviors for 🛡️ AUTONOMOUS Orchestrators:**
+1. ✅ Load manifest/orchestrator reference ONLY
+2. ✅ Use specified response template
+3. ✅ STOP immediately after hand-off header
+4. ✅ Let orchestrator Python code execute autonomously
+```
+
+**NEW:**
+```markdown
+**REQUIRED Behaviors for 🛡️ AUTONOMOUS Orchestrators:**
+1. ✅ Route intent to appropriate orchestrator
+2. ✅ INVOKE via run_in_terminal: `python scripts/cortex-cli.py <orchestrator> <request>`
+3. ✅ Use specified response template for progress display
+4. ✅ Python orchestrator executes autonomously
+```
+
+**Intent Router Updates:**
+- Update "Planning System" row: Change "STOP" → "INVOKE: `python scripts/cortex-cli.py plan`"
+- Update "ADO Operations" row: Change "STOP" → "INVOKE: `python scripts/cortex-cli.py ado`"
+- Update "Cleanup v2" row: Add CLI invocation example
+- Update "Vacuum v2" row: Add CLI invocation example
+
+### Task 1.5.3: Update copilot-instructions.md
+**Duration:** 30min
+
+**Changes Required:**
+
+**OLD (Lines 40-50):**
+```markdown
+🛡️ AUTONOMOUS: CORTEX routes and stops
+```
+
+**NEW:**
+```markdown
+🛡️ AUTONOMOUS: CORTEX routes and invokes Python orchestrators
+
+Protocol:
+1. Detect autonomous intent (plan, ado, cleanup, vacuum)
+2. Use run_in_terminal to invoke CLI bridge
+3. Display orchestrator output via response template
+4. Python code executes, CORTEX displays progress
+```
+
+### Task 1.5.4: Integration Testing
+**Duration:** 30min
+
+**Test Cases:**
+1. **Planning Continuation:**
+   - User: "continue with plan"
+   - Copilot executes: `python scripts/cortex-cli.py planning continue`
+   - Verify: Planning v5 resumes from last checkpoint
+
+2. **ADO Story Creation:**
+   - User: "ado story for user authentication"
+   - Copilot executes: `python scripts/cortex-cli.py ado "create story for user authentication"`
+   - Verify: ADO wizard or auto-mode executes
+
+3. **Cleanup Operation:**
+   - User: "cleanup cache"
+   - Copilot executes: `python scripts/cortex-cli.py cleanup cache`
+   - Verify: Cleanup v2 removes cache files
+
+4. **Error Handling:**
+   - Test invalid orchestrator name
+   - Test missing parameters
+   - Verify user-friendly error messages
+
+### Completion Criteria
+- ✅ CLI bridge script operational (all orchestrators callable)
+- ✅ CORTEX.prompt.md updated with INVOKE protocol
+- ✅ copilot-instructions.md updated with terminal invocation
+- ✅ 4 integration tests pass (planning, ado, cleanup, vacuum)
+- ✅ Cross-platform compatibility verified (Mac tested minimum)
+- ✅ Error messages user-friendly (no Python tracebacks)
+- ✅ **7,067 lines of dormant code ACTIVATED**
+- ✅ Git checkpoint created: `checkpoint-phase-1.5-cli-bridge`
+
+**Impact:** 
+- **Unblocks:** Phases 3 (Master Orchestrator), 4 (Planning v5), 4.5 (Context Middleware), 6.1-6.3 (ADO/Cleanup/Vacuum), 6.5-6.8 (TDD/Debug/Sanitization)
+- **Activates:** 11 architectural problems solved, 81:1 ROI (40.5 days / 4 hours)
+- **Validates:** Autonomous architecture finally functional as designed
 
 ---
 

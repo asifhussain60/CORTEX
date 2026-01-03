@@ -2,12 +2,12 @@
   "plan_id": "cortex-v5-holistic-refactor",
   "feature_name": "CORTEX v5.0 Holistic Architecture Refactor with Cross-Session Context",
   "created_at": "2026-01-02T00:00:00Z",
-  "updated_at": "2026-01-03T07:30:00Z",
-  "status": "active",
+  "updated_at": "2026-01-03T18:00:00Z",
+  "status": "blocked",
   "progress": {
     "overall_percent": 53,
-    "current_phase": 6,
-    "total_phases": 12,
+    "current_phase": "1.5",
+    "total_phases": 13,
     "phases": [
       {
         "phase_number": 0,
@@ -62,6 +62,23 @@
           "tests/database/test_migration_runner.py",
           "Database schema with 8 tables (ACID transactions)"
         ]
+      },
+      {
+        "phase_number": "1.5",
+        "name": "MCP-Copilot CLI Bridge (CRITICAL BLOCKER)",
+        "status": "blocked",
+        "estimated_hours": 4,
+        "actual_hours": 0,
+        "progress_percent": 0,
+        "created_at": "2026-01-03T18:00:00Z",
+        "deliverables": [
+          "scripts/cortex-cli.py (CLI bridge script)",
+          ".github/prompts/CORTEX.prompt.md (HAND-OFF protocol updated)",
+          ".github/copilot-instructions.md (AUTONOMOUS orchestrator invocation)",
+          "tests/integration/test_cli_bridge.py"
+        ],
+        "blocks_phases": ["6.5", "6.6", "6.7", "6.8"],
+        "activates": "7,067 lines of dormant orchestrator code"
       },
       {
         "phase_number": 3,

@@ -1,9 +1,11 @@
 {
   "plan_id": "cortex-v5-holistic-refactor",
-  "status": "NOT_STARTED",
+  "status": "BLOCKED",
   "created": "2026-01-02T00:00:00Z",
-  "last_updated": "2026-01-02T00:00:00Z",
-  "current_phase": 0,
+  "last_updated": "2026-01-03T18:00:00Z",
+  "current_phase": "1.5",
+  "blocking_phase": "1.5",
+  "blocking_reason": "MCP-Copilot CLI Bridge required to activate 7,067 lines of autonomous orchestrator code",
   "phases": [
     {
       "phase_id": 0,
@@ -24,6 +26,19 @@
       "completed": null,
       "tasks_total": 5,
       "tasks_completed": 0
+    },
+    {
+      "phase_id": "1.5",
+      "name": "MCP-Copilot CLI Bridge",
+      "status": "BLOCKED",
+      "progress": 0,
+      "started": null,
+      "completed": null,
+      "tasks_total": 4,
+      "tasks_completed": 0,
+      "criticality": "CRITICAL_BLOCKER",
+      "blocks_phases": ["6.5", "6.6", "6.7", "6.8"],
+      "activates": "7,067 lines of dormant code (Planning v5, Master, Cleanup v2, Vacuum v2, ADO v2, Context Middleware)"
     },
     {
       "phase_id": 2,
@@ -116,6 +131,47 @@
       "tasks_completed": 0
     }
   ],
+  "blocked_phases": [
+    {
+      "phase_id": "6.5",
+      "name": "Context-Awareness Migration",
+      "blocked_by": "1.5",
+      "reason": "Requires CLI bridge to invoke context middleware orchestrator"
+    },
+    {
+      "phase_id": "6.6",
+      "name": "Cleanup v2 Migration",
+      "blocked_by": "1.5",
+      "reason": "Requires CLI bridge to invoke cleanup orchestrator v2"
+    },
+    {
+      "phase_id": "6.7",
+      "name": "Vacuum v2 Migration",
+      "blocked_by": "1.5",
+      "reason": "Requires CLI bridge to invoke vacuum orchestrator v2"
+    },
+    {
+      "phase_id": "6.8",
+      "name": "ADO v2 Migration",
+      "blocked_by": "1.5",
+      "reason": "Requires CLI bridge to invoke ADO orchestrator v2"
+    }
+  ],
+  "critical_path": [
+    "Phase 1.5: MCP-Copilot CLI Bridge (4h) - BLOCKS all migration phases 6.5-6.8",
+    "Phase 6.5-6.8: Context/Cleanup/Vacuum/ADO migrations (33h) - BLOCKED until 1.5 complete",
+    "Phase 7: Integration Testing (24h)",
+    "Phase 8: Validation (16h)",
+    "Phase 9: Documentation (8h)",
+    "Phase 10: REFACTOR (20h)"
+  ],
+  "roi_analysis": {
+    "phase_1_5_effort_hours": 4,
+    "code_activated_lines": 7067,
+    "bootstrap_work_activated_hours": 324,
+    "roi_ratio": "81:1",
+    "centralization_improvement": "87%"
+  },
   "artifacts": [],
   "validations": []
 }
