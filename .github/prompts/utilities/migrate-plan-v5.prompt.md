@@ -34,7 +34,7 @@ Transform existing Planning System V4 plans to V5 architecture, which includes:
 ### V5 Structure (Target)
 ```
 {plan-name}/
-├── 00-master-plan.md (V4 - PRESERVED)
+├── 00-master-plan-v4-DEPRECATED.md (V4 - RENAMED)
 ├── 00-MASTER-PLAN-V5.md (V5 - NEW)
 ├── CONTINUATION-PROMPT.md (V5 - NEW)
 ├── context/ (V4 - PRESERVED + new files)

@@ -135,6 +135,30 @@ class PlanMigrationV5:
             self.changes_log.append(f"❌ Master plan upgrade failed: {str(e)}")
             return False
 
+    def rename_v4_master_plan(self) -> bool:
+        """Rename V4 master plan to avoid confusion with V5."""
+        old_master = self.plan_path / "00-master-plan.md"
+        deprecated_master = self.plan_path / "00-master-plan-v4-DEPRECATED.md"
+
+        if not old_master.exists():
+            self.changes_log.append("⚠️  00-master-plan.md not found (skipping rename)")
+            return True
+
+        if deprecated_master.exists():
+            self.changes_log.append("⚠️  00-master-plan-v4-DEPRECATED.md already exists (skipping)")
+            return True
+
+        try:
+            if not self.dry_run:
+                old_master.rename(deprecated_master)
+            
+            self.changes_log.append("✅ Renamed: 00-master-plan.md → 00-master-plan-v4-DEPRECATED.md")
+            self.changes_log.append("ℹ️  V4 file preserved for reference with clear deprecation marker")
+            return True
+        except Exception as e:
+            self.changes_log.append(f"❌ V4 master plan rename failed: {str(e)}")
+            return False
+
     def _extract_plan_metadata(self, content: str) -> Dict:
         """Extract key metadata from V4 plan."""
         metadata = {
@@ -1111,6 +1135,13 @@ This plan is now ready for Master Orchestrator execution:
             print("❌ Master plan upgrade failed")
             return False
         print("✅ V5 master plan created\n")
+
+        # Step 4.5: Rename old V4 master plan to avoid confusion
+        print("Step 4.5: Renaming V4 master plan to deprecated...")
+        if not self.rename_v4_master_plan():
+            print("❌ V4 master plan rename failed")
+            return False
+        print("✅ V4 master plan renamed\n")
 
         # Step 5: Create phase documents
         print("Step 5: Creating phase documents...")

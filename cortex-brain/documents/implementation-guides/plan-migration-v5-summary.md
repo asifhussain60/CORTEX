@@ -28,7 +28,7 @@ A complete migration toolkit to transform V4 plans to V5 Planning Architecture w
 ### 1. V4 to V5 Transformation
 
 **Preserves V4 Structure:**
-- Original `00-master-plan.md` kept for reference
+- Original `00-master-plan.md` renamed to `00-master-plan-v4-DEPRECATED.md`
 - All folders (`context/`, `reports/`, `artifacts/`, `tracking/`) preserved
 - Existing files untouched
 
@@ -164,19 +164,21 @@ Status: SUCCESS
 - Phase 4 status explicitly stated
 - Usage examples based on current capabilities
 
-### 2. Preserve V4, Add V5
+### 2. Rename V4, Create V5
 
-**Decision:** Keep original `00-master-plan.md`, create new `00-MASTER-PLAN-V5.md`
+**Decision:** Rename original `00-master-plan.md` → `00-master-plan-v4-DEPRECATED.md`, create new `00-MASTER-PLAN-V5.md`
 
 **Rationale:**
-- Non-destructive migration
-- Users can compare V4 vs V5
+- Non-destructive migration (V4 preserved for reference)
+- Clear deprecation marker eliminates confusion
+- Users can still compare V4 vs V5 if needed
 - Rollback remains simple
+- Single authoritative master plan (V5)
 
 **Implementation:**
-- V4 file preserved with note
+- V4 file renamed with DEPRECATED suffix
 - V5 file includes original content in "V4 Original Content" section
-- Both files coexist
+- Migration log documents rename operation
 
 ### 3. Progressive Enhancement
 

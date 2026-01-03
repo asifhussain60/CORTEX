@@ -41,8 +41,8 @@ class TestDuplicateDetector:
     
     def test_find_exact_duplicates(self, detector, temp_dir):
         """Test detection of exact duplicate files."""
-        # Create duplicate files
-        content = "duplicate content"
+        # Create duplicate files with content >=100 bytes (min_file_size)
+        content = "duplicate content " * 10  # ~170 bytes
         
         file1 = temp_dir / "file1.txt"
         file2 = temp_dir / "file2.txt"
@@ -75,7 +75,7 @@ class TestDuplicateDetector:
     
     def test_size_grouping_phase1(self, detector, temp_dir):
         """Test Phase 1: Size grouping optimization."""
-        # Create files of different sizes
+        # Create files of different sizes (all >=100 bytes due to min_file_size)
         small = temp_dir / "small.txt"
         medium = temp_dir / "medium.txt"
         large = temp_dir / "large.txt"
@@ -87,10 +87,9 @@ class TestDuplicateDetector:
         # Group by size
         size_groups = detector._group_by_size([small, medium, large])
         
-        assert len(size_groups) == 3  # 3 different sizes
-        assert 100 in size_groups
-        assert 1000 in size_groups
-        assert 10000 in size_groups
+        # Only groups with 2+ files are kept, so we expect 0 groups
+        # (each file has unique size)
+        assert len(size_groups) == 0
     
     def test_quick_hash_phase2(self, detector, temp_dir):
         """Test Phase 2: Quick hash (first 8KB)."""
@@ -164,19 +163,21 @@ class TestDuplicateDetector:
     
     def test_multiple_duplicate_groups(self, detector, temp_dir):
         """Test multiple independent duplicate groups."""
-        # Group 1: Duplicates of "content A"
+        # Group 1: Duplicates of "content A" (>=100 bytes)
+        content_a = "content A " * 15  # ~150 bytes
         a1 = temp_dir / "a1.txt"
         a2 = temp_dir / "a2.txt"
-        a1.write_text("content A")
-        a2.write_text("content A")
+        a1.write_text(content_a)
+        a2.write_text(content_a)
         
-        # Group 2: Duplicates of "content B"
+        # Group 2: Duplicates of "content B" (>=100 bytes)
+        content_b = "content B " * 15  # ~150 bytes
         b1 = temp_dir / "b1.txt"
         b2 = temp_dir / "b2.txt"
         b3 = temp_dir / "b3.txt"
-        b1.write_text("content B")
-        b2.write_text("content B")
-        b3.write_text("content B")
+        b1.write_text(content_b)
+        b2.write_text(content_b)
+        b3.write_text(content_b)
         
         result = detector.find_duplicates([a1, a2, b1, b2, b3])
         

@@ -60,7 +60,7 @@ my-plan/
 ### V5 Structure (After)
 ```
 my-plan/
-├── 00-master-plan.md (V4 - PRESERVED)
+├── 00-master-plan-v4-DEPRECATED.md (V4 - RENAMED)
 ├── 00-MASTER-PLAN-V5.md (NEW)
 ├── CONTINUATION-PROMPT.md (NEW)
 ├── context/ (PRESERVED + new files)
