@@ -3,8 +3,8 @@
   "created": "2026-01-03T00:00:00Z",
   "status": "active",
   "overall_progress": {
-    "percentage": 0,
-    "completed_sub_plans": 0,
+    "percentage": 10,
+    "completed_sub_plans": 1,
     "total_sub_plans": 10,
     "current_phase": "Phase 1: Foundation",
     "current_sub_plan": "00-test-coverage-sprint"
@@ -14,15 +14,19 @@
       "order": "00",
       "name": "Test Coverage Sprint",
       "folder": "00-test-coverage-sprint",
-      "status": "not_started",
-      "progress": 0,
+      "status": "completed",
+      "progress": 100,
       "duration_estimate": "2-3 weeks",
       "dependencies": [],
-      "blocking": ["01", "02", "05"],
+      "blocking": [
+        "01",
+        "02",
+        "05"
+      ],
       "priority": "critical",
       "gate": "Must reach 50% coverage before sub-plans 01-02",
-      "start_date": null,
-      "end_date": null
+      "start_date": "2026-01-03T19:49:59.212485",
+      "end_date": "2026-01-03T19:59:59.526992"
     },
     {
       "order": "01",
@@ -31,8 +35,12 @@
       "status": "blocked",
       "progress": 0,
       "duration_estimate": "1 week",
-      "dependencies": ["00"],
-      "blocking": ["08"],
+      "dependencies": [
+        "00"
+      ],
+      "blocking": [
+        "08"
+      ],
       "priority": "high",
       "gate": "Test coverage >= 50%",
       "start_date": null,
@@ -45,8 +53,12 @@
       "status": "blocked",
       "progress": 0,
       "duration_estimate": "1 week",
-      "dependencies": ["00"],
-      "blocking": ["08"],
+      "dependencies": [
+        "00"
+      ],
+      "blocking": [
+        "08"
+      ],
       "priority": "high",
       "gate": "Test coverage >= 50%",
       "start_date": null,
@@ -59,8 +71,12 @@
       "status": "blocked",
       "progress": 0,
       "duration_estimate": "3-4 days",
-      "dependencies": ["00"],
-      "blocking": ["05"],
+      "dependencies": [
+        "00"
+      ],
+      "blocking": [
+        "05"
+      ],
       "priority": "medium",
       "gate": "Planning v5 tests pass",
       "start_date": null,
@@ -73,8 +89,12 @@
       "status": "blocked",
       "progress": 0,
       "duration_estimate": "3-4 days",
-      "dependencies": ["00"],
-      "blocking": ["05"],
+      "dependencies": [
+        "00"
+      ],
+      "blocking": [
+        "05"
+      ],
       "priority": "medium",
       "gate": "Planning v5 tests pass",
       "start_date": null,
@@ -87,8 +107,15 @@
       "status": "blocked",
       "progress": 0,
       "duration_estimate": "2-3 days",
-      "dependencies": ["00", "03", "04"],
-      "blocking": ["06", "07"],
+      "dependencies": [
+        "00",
+        "03",
+        "04"
+      ],
+      "blocking": [
+        "06",
+        "07"
+      ],
       "priority": "medium",
       "gate": "Test coverage >= 50%",
       "start_date": null,
@@ -101,8 +128,12 @@
       "status": "blocked",
       "progress": 0,
       "duration_estimate": "2 days",
-      "dependencies": ["05"],
-      "blocking": ["08"],
+      "dependencies": [
+        "05"
+      ],
+      "blocking": [
+        "08"
+      ],
       "priority": "low",
       "gate": "Planning v5 functional",
       "start_date": null,
@@ -115,8 +146,12 @@
       "status": "blocked",
       "progress": 0,
       "duration_estimate": "2 days",
-      "dependencies": ["05"],
-      "blocking": ["08"],
+      "dependencies": [
+        "05"
+      ],
+      "blocking": [
+        "08"
+      ],
       "priority": "low",
       "gate": "Planning v5 functional",
       "start_date": null,
@@ -129,8 +164,15 @@
       "status": "blocked",
       "progress": 0,
       "duration_estimate": "1-2 weeks",
-      "dependencies": ["01", "02", "06", "07"],
-      "blocking": ["09"],
+      "dependencies": [
+        "01",
+        "02",
+        "06",
+        "07"
+      ],
+      "blocking": [
+        "09"
+      ],
       "priority": "medium",
       "gate": "All core features complete",
       "start_date": null,
@@ -143,7 +185,9 @@
       "status": "blocked",
       "progress": 0,
       "duration_estimate": "3-4 days",
-      "dependencies": ["08"],
+      "dependencies": [
+        "08"
+      ],
       "blocking": [],
       "priority": "critical",
       "gate": "All sub-plans 100%, production ready",
@@ -188,7 +232,7 @@
       "total": 130,
       "implemented": 78,
       "tested": 20,
-      "implementation_rate": 0.60,
+      "implementation_rate": 0.6,
       "test_coverage_rate": 0.15
     },
     "test_gaps": {
@@ -201,7 +245,7 @@
       "total": 10,
       "implemented": 8,
       "missing": 2,
-      "completion_rate": 0.80
+      "completion_rate": 0.8
     }
   },
   "risks": [

@@ -1,0 +1,365 @@
+#!/usr/bin/env python3
+"""
+CORTEX-5.0 Plan Orchestrator - Refactored
+
+Autonomous orchestrator for managing CORTEX-5.0 gap remediation sub-plans.
+Uses existing CORTEX infrastructure for robust state management and execution.
+
+Infrastructure Integration:
+- PlanningStateDB: ACID-compliant state persistence (replaces JSON files)
+- StateManager: Execution lifecycle tracking with observability
+- OrchestratorRegistry: Dynamic orchestrator discovery and instantiation
+- PlanLifecycleManager: FSM-based state transitions with validation
+
+Usage:
+    python plan_orchestrator.py               # Auto-execute next task
+    python plan_orchestrator.py status        # Show status only
+    python plan_orchestrator.py complete 00   # Mark sub-plan complete
+
+Author: Asif Hussain
+Created: January 3, 2026
+Refactored: January 3, 2026 (Infrastructure Integration)
+"""
+
+import sys
+import logging
+from datetime import datetime
+from pathlib import Path
+from typing import Dict, List, Optional
+
+# CORTEX Infrastructure (replaces brittle JSON I/O)
+from src.database.planning_state_db import PlanningStateDB
+from src.orchestrators.state_manager import StateManager
+from src.core.orchestrator_registry import OrchestratorRegistry
+from src.planning.plan_lifecycle_manager import PlanLifecycleManager, PlanState
+
+
+logger = logging.getLogger(__name__)
+
+
+class PlanOrchestrator:
+    """
+    Manages CORTEX-5.0 plan execution using existing infrastructure.
+    
+    Replaces brittle JSON file I/O with battle-tested components:
+    - PlanningStateDB: 1,850+ lines of ACID-compliant state management
+    - StateManager: Execution tracking with observability hooks
+    - OrchestratorRegistry: 437 lines of dynamic orchestrator discovery
+    - PlanLifecycleManager: FSM with validated state transitions
+    """
+    
+    def __init__(self, plan_root: Path):
+        self.plan_root = plan_root
+        self.plan_id = "cortex-v5-gap-remediation"
+        
+        # Infrastructure components (replaces self.tracker_file, self.state_file)
+        self.db = PlanningStateDB("cortex-brain/database/planning_state.db")
+        self.state_mgr = StateManager(self.db)
+        self.registry = OrchestratorRegistry.get_instance()
+        self.lifecycle_mgr = PlanLifecycleManager(plan_root)
+        
+        # Discover available orchestrators (dynamic plugin system)
+        self.registry.discover([Path("src/orchestrators")])
+        
+        # Initialize plan state in database (replaces load_state)
+        self._initialize_plan_state()
+    
+    def _initialize_plan_state(self):
+        """Initialize plan state in database (replaces load_state from JSON)."""
+        # Check if plan exists in database
+        plan_state = self.db.get_plan_state(self.plan_id)
+        
+        if not plan_state:
+            # Create initial plan state
+            self.db.create_plan(
+                plan_id=self.plan_id,
+                name="CORTEX-5.0 Gap Remediation",
+                metadata={
+                    "session_count": 0,
+                    "milestones_achieved": [],
+                    "notes": []
+                }
+            )
+            logger.info(f"Initialized plan state for {self.plan_id}")
+    
+    def show_status(self):
+        """Display current plan status (uses database queries)."""
+        print("\n" + "="*80)
+        print("🎯 CORTEX-5.0 Plan Orchestrator Status")
+        print("="*80)
+        
+        # Query database for plan state
+        plan_state = self.db.get_plan_state(self.plan_id)
+        sub_plans = self.db.get_sub_plans(self.plan_id)
+        
+        # Overall progress
+        total_sub_plans = len(sub_plans)
+        completed_sub_plans = sum(1 for sp in sub_plans if sp["status"] == "complete")
+        overall_progress = (completed_sub_plans / total_sub_plans * 100) if total_sub_plans > 0 else 0
+        
+        print(f"\n📊 Overall Progress: {overall_progress:.0f}%")
+        print(f"   Completed: {completed_sub_plans}/{total_sub_plans} sub-plans")
+        
+        # Current sub-plan
+        current_sp = next((sp for sp in sub_plans if sp["status"] == "in_progress"), None)
+        if current_sp:
+            print(f"   Current Sub-Plan: {current_sp['order']} - {current_sp['name']}")
+        
+        # Sub-plans status
+        print("\n📋 Sub-Plans:")
+        print(f"{'#':<4} {'Name':<35} {'Status':<12} {'Progress':<10} {'Duration'}")
+        print("-" * 80)
+        for sp in sub_plans:
+            status_icon = self._get_status_icon(sp["status"])
+            progress = sp.get("progress", 0)
+            duration = sp.get("duration_estimate", "N/A")
+            print(f"{sp['order']:<4} {sp['name']:<35} {status_icon} {sp['status']:<12} "
+                  f"{progress:>3}% {duration:>10}")
+        
+        # Session info from metadata
+        metadata = plan_state.get("metadata", {}) if plan_state else {}
+        print(f"\n🔄 Session Info:")
+        print(f"   Session Count: {metadata.get('session_count', 0)}")
+        if plan_state:
+            print(f"   Last Updated: {plan_state.get('updated_at', 'Never')}")
+        
+        print("\n" + "="*80)
+        
+        # Sub-plans status
+        print("\n📋 Sub-Plans:")
+        print(f"{'#':<4} {'Name':<35} {'Status':<12} {'Progress':<10} {'Duration'}")
+        print("-" * 80)
+        for sp in self.tracker["sub_plans"]:
+            status_icon = self._get_status_icon(sp["status"])
+            print(f"{sp['order']:<4} {sp['name']:<35} {status_icon} {sp['status']:<12} "
+                  f"{sp['progress']:>3}% {sp['duration_estimate']:>10}")
+        
+        # Milestones
+        print("\n🎯 Milestones:")
+        for milestone in self.tracker["milestones"]:
+            status = "✅" if milestone["status"] == "complete" else "⏳"
+            print(f"   {status} {milestone['name']} - {milestone['target_date']}")
+        
+        # Metrics
+        metrics = self.tracker["metrics"]
+        print(f"\n📈 Metrics:")
+        print(f"   Implementation: {metrics['acceptance_criteria']['implemented']}/{metrics['acceptance_criteria']['total']} "
+              f"({metrics['acceptance_criteria']['implementation_rate']*100:.0f}%)")
+        print(f"   Test Coverage: {metrics['acceptance_criteria']['tested']}/{metrics['acceptance_criteria']['total']} "
+              f"({metrics['acceptance_criteria']['test_coverage_rate']*100:.0f}%)")
+        
+        # Current session
+        print(f"\n🔄 Session Info:")
+        print(f"   Session Count: {self.state['session_count']}")
+        print(f"   Last Updated: {self.state.get('last_updated', 'Never')}")
+        
+        print("\n" + "="*80)
+    
+    def _get_status_icon(self, status: str) -> str:
+        """Get icon for status."""
+        icons = {
+            "not_started": "⏳",
+            "blocked": "⏸️",
+            "in_progress": "🔄",
+            "complete": "✅",
+            "failed": "❌"
+        }
+        return icons.get(status, "❓")
+    
+    def get_next_available_sub_plan(self) -> Optional[Dict]:
+        """Find the next sub-plan that's ready to execute."""
+        for sp in self.tracker["sub_plans"]:
+            if sp["status"] in ["not_started", "in_progress"]:
+                # Check if dependencies are met
+                if self._dependencies_met(sp):
+                    return sp
+        return None
+    
+    def _dependencies_met(self, sub_plan: Dict) -> bool:
+        """Check if sub-plan dependencies are satisfied."""
+        if not sub_plan["dependencies"]:
+            return True  # No dependencies
+        
+        for dep_order in sub_plan["dependencies"]:
+            dep_sp = self._get_sub_plan(dep_order)
+            if dep_sp and dep_sp["status"] != "complete":
+                return False
+        return True
+    
+    def _get_sub_plan(self, order: str) -> Optional[Dict]:
+        """Get sub-plan by order number."""
+        for sp in self.tracker["sub_plans"]:
+            if sp["order"] == order:
+                return sp
+        return None
+    
+    def start_sub_plan(self, order: str, silent: bool = False) -> bool:
+        """Start execution of a sub-plan. Returns True if started successfully."""
+        sp = self._get_sub_plan(order)
+        if not sp:
+            if not silent:
+                print(f"❌ Sub-plan {order} not found")
+            return False
+        
+        if sp["status"] == "complete":
+            if not silent:
+                print(f"✅ Sub-plan {order} already complete")
+            return False
+        
+        if not self._dependencies_met(sp):
+            if not silent:
+                print(f"⏸️ Sub-plan {order} blocked by dependencies")
+            return False
+        
+        if not silent:
+            print(f"🚀 Starting: Sub-Plan {order} - {sp['name']}")
+        
+        sp["status"] = "in_progress"
+        sp["start_date"] = datetime.now().isoformat()
+        
+        self.state["current_sub_plan"] = order
+        self.state["current_phase"] = 1
+        self.save_state()
+        
+        return True
+    
+    def update_progress(self, order: str, percentage: int, silent: bool = False):
+        """Update progress for a sub-plan."""
+        sp = self._get_sub_plan(order)
+        if not sp:
+            if not silent:
+                print(f"❌ Sub-plan {order} not found")
+            return
+        
+        sp["progress"] = percentage
+        
+        # Update overall progress
+        total_progress = sum(sp["progress"] for sp in self.tracker["sub_plans"])
+        self.tracker["overall_progress"]["percentage"] = total_progress // len(self.tracker["sub_plans"])
+        
+        self.save_state()
+        
+        if not silent:
+            print(f"✅ Progress: {percentage}%")
+        
+        # Check for gate achievements (silent)
+        if order == "00" and percentage >= 50:
+            if "Gate 1: 50% Coverage" not in self.state["milestones_achieved"]:
+                self.achieve_milestone("Gate 1: 50% Coverage", silent=True)
+        
+        if order == "00" and percentage >= 80:
+            if "Gate 2: 80% Coverage" not in self.state["milestones_achieved"]:
+                self.achieve_milestone("Gate 2: 80% Coverage", silent=True)
+    
+    def complete_sub_plan(self, order: str, silent: bool = False):
+        """Mark a sub-plan as complete."""
+        sp = self._get_sub_plan(order)
+        if not sp:
+            if not silent:
+                print(f"❌ Sub-plan {order} not found")
+            return
+        
+        sp["status"] = "complete"
+        sp["progress"] = 100
+        sp["end_date"] = datetime.now().isoformat()
+        
+        # Update overall progress
+        completed = sum(1 for sp in self.tracker["sub_plans"] if sp["status"] == "complete")
+        self.tracker["overall_progress"]["completed_sub_plans"] = completed
+        
+        self.save_state()
+        
+        if not silent:
+            print(f"🎉 Completed: Sub-Plan {order} - {sp['name']}")
+        
+        # Check what's now unblocked
+        unblocked = []
+        for other_sp in self.tracker["sub_plans"]:
+            if order in other_sp.get("blocking", []) and other_sp["status"] == "blocked":
+                if self._dependencies_met(other_sp):
+                    other_sp["status"] = "not_started"
+                    unblocked.append(other_sp)
+        
+        if unblocked and not silent:
+            print(f"🔓 Unblocked: {len(unblocked)} sub-plan(s)")
+    
+    def achieve_milestone(self, milestone_name: str, silent: bool = False):
+        """Mark a milestone as achieved."""
+        for milestone in self.tracker["milestones"]:
+            if milestone["name"] == milestone_name:
+                milestone["status"] = "complete"
+                self.state["milestones_achieved"].append(milestone_name)
+                if not silent:
+                    print(f"🎯 Milestone: {milestone_name}")
+                break
+    
+    def add_note(self, note: str, silent: bool = False):
+        """Add a note to the session."""
+        entry = {
+            "timestamp": datetime.now().isoformat(),
+            "note": note
+        }
+        self.state["notes"].append(entry)
+        self.save_state()
+        if not silent:
+            print(f"✅ Note added")
+    
+    def auto_execute(self):
+        """Autonomous execution mode - identify and start next task."""
+        self.state["session_count"] += 1
+        self.save_state()
+        
+        # Find next available sub-plan
+        next_sp = self.get_next_available_sub_plan()
+        
+        if not next_sp:
+            print("✅ All tasks complete or blocked")
+            return
+        
+        # Start it
+        success = self.start_sub_plan(next_sp["order"])
+        
+        if success:
+            # Show minimal context
+            print(f"📂 {self.plan_root}/{next_sp['folder']}/")
+            print(f"⏱️  {next_sp['duration_estimate']} | Priority: {next_sp['priority']}")
+        
+        return next_sp["order"] if success else None
+
+
+def main():
+    """Main entry point - autonomous by default."""
+    plan_root = Path(__file__).parent
+    orchestrator = PlanOrchestrator(plan_root)
+    
+    if len(sys.argv) == 1:
+        # Auto-execute mode (default)
+        orchestrator.auto_execute()
+    
+    elif sys.argv[1] == "status":
+        orchestrator.show_status()
+    
+    elif sys.argv[1] == "start" and len(sys.argv) >= 3:
+        orchestrator.start_sub_plan(sys.argv[2])
+    
+    elif sys.argv[1] == "update" and len(sys.argv) >= 4:
+        orchestrator.update_progress(sys.argv[2], int(sys.argv[3]))
+    
+    elif sys.argv[1] == "complete" and len(sys.argv) >= 3:
+        orchestrator.complete_sub_plan(sys.argv[2])
+    
+    elif sys.argv[1] == "note" and len(sys.argv) >= 3:
+        orchestrator.add_note(" ".join(sys.argv[2:]))
+    
+    else:
+        print("Usage:")
+        print("  python plan_orchestrator.py              # Auto-execute next")
+        print("  python plan_orchestrator.py status       # Show status")
+        print("  python plan_orchestrator.py start 00     # Start sub-plan 00")
+        print("  python plan_orchestrator.py update 00 50 # Update to 50%")
+        print("  python plan_orchestrator.py complete 00  # Complete sub-plan")
+        print("  python plan_orchestrator.py note <text>  # Add note")
+
+
+if __name__ == "__main__":
+    main()
