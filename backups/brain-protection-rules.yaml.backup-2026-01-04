@@ -6910,61 +6910,61 @@ validation:
         - No context mistakes
         - Professional interaction model
         - Standard behavior for all planning
-
+    
     - rule_id: PLAN_BASED_WORKFLOW_ENFORCEMENT
-    name: "Plan-Based Workflow Mandate"
-    severity: blocked
-    description: "ALL code changes require approved plan (no implementation shortcuts)"
-    detection:
-      keywords:
-        - "let me create that file"
-        - "I can write that function"
-        - "quick fix"
-        - "small change without plan"
-        - "implement now, plan later"
-      scope:
-        - code_generation
-        - file_operations
-        - next_steps
-    validation:
-      - "plan_id parameter present in all code operations"
-      - "Plan exists in active/ folder"
-      - "Plan status is 'approved' or 'in_progress'"
-      - "No code changes without plan_id"
-    alternatives:
-      - "Create temp plan first (even for small changes)"
-      - "Get user approval before implementation"
-      - "Follow: Review → DoR Check → Approve → Execute"
-    evidence_template: |
-      Operation: {operation_type}
-      Plan ID: {plan_id}
-      Plan Status: {plan_status}
-      Code Change Attempted: {code_change_desc}
-    rationale: |
-      PLAN_BASED_WORKFLOW: No Implementation Shortcuts
-      
-      Problem: Ad-hoc implementations
-      - "Quick fixes" bypass planning
-      - No documentation of changes
-      - Scope creep from small changes
-      
-      Solution: Mandatory planning
-      - ALL changes require approved plan
-      - Even small changes go through planning
-      - Implementation only after approval
-      - Complete audit trail
-      
-      Benefits:
-      - Documented decisions
-      - Predictable workflow
-      - No surprise changes
-      - Professional discipline
-
-  - rule_id: NO_IMPLEMENTATION_SHORTCUTS_ENFORCEMENT
-    name: "No Implementation Shortcuts in Next Steps"
-    severity: warning
-    description: "Next Steps must show planning workflow, not implementation shortcuts"
-    detection:
+      name: "Plan-Based Workflow Mandate"
+      severity: blocked
+      description: "ALL code changes require approved plan (no implementation shortcuts)"
+      detection:
+        keywords:
+          - "let me create that file"
+          - "I can write that function"
+          - "quick fix"
+          - "small change without plan"
+          - "implement now, plan later"
+        scope:
+          - code_generation
+          - file_operations
+          - next_steps
+      validation:
+        - "plan_id parameter present in all code operations"
+        - "Plan exists in active/ folder"
+        - "Plan status is 'approved' or 'in_progress'"
+        - "No code changes without plan_id"
+      alternatives:
+        - "Create temp plan first (even for small changes)"
+        - "Get user approval before implementation"
+        - "Follow: Review → DoR Check → Approve → Execute"
+      evidence_template: |
+        Operation: {operation_type}
+        Plan ID: {plan_id}
+        Plan Status: {plan_status}
+        Code Change Attempted: {code_change_desc}
+      rationale: |
+        PLAN_BASED_WORKFLOW: No Implementation Shortcuts
+        
+        Problem: Ad-hoc implementations
+        - "Quick fixes" bypass planning
+        - No documentation of changes
+        - Scope creep from small changes
+        
+        Solution: Mandatory planning
+        - ALL changes require approved plan
+        - Even small changes go through planning
+        - Implementation only after approval
+        - Complete audit trail
+        
+        Benefits:
+        - Documented decisions
+        - Predictable workflow
+        - No surprise changes
+        - Professional discipline
+    
+    - rule_id: NO_IMPLEMENTATION_SHORTCUTS_ENFORCEMENT
+      name: "No Implementation Shortcuts in Next Steps"
+      severity: warning
+      description: "Next Steps must show planning workflow, not implementation shortcuts"
+      detection:
       keywords:
         - "I'll create the file"
         - "I'll implement"
@@ -6973,21 +6973,21 @@ validation:
       scope:
         - next_steps
         - response_content
-    validation:
-      - "Next Steps shows: Review → DoR Check → Approve → Execute"
-      - "No direct implementation suggestions"
-      - "Plan approval required before execution mentioned"
-      - "Critical warning about planning phase present"
-    alternatives:
-      - "Show planning workflow in Next Steps"
-      - "Explain approval requirement"
-      - "Defer implementation to post-approval"
-    evidence_template: |
-      Next Steps Content: {next_steps_excerpt}
-      Contains Shortcut: {shortcut_detected}
-      Correct Workflow: {workflow_shown}
-    rationale: |
-      NO_IMPLEMENTATION_SHORTCUTS: Planning Phase Discipline
+      validation:
+        - "Next Steps shows: Review → DoR Check → Approve → Execute"
+        - "No direct implementation suggestions"
+        - "Plan approval required before execution mentioned"
+        - "Critical warning about planning phase present"
+      alternatives:
+        - "Show planning workflow in Next Steps"
+        - "Explain approval requirement"
+        - "Defer implementation to post-approval"
+      evidence_template: |
+        Next Steps Content: {next_steps_excerpt}
+        Contains Shortcut: {shortcut_detected}
+        Correct Workflow: {workflow_shown}
+      rationale: |
+        NO_IMPLEMENTATION_SHORTCUTS: Planning Phase Discipline
       
       Problem: Implementation suggestions during planning
       - Users confused about when implementation starts
