@@ -38,6 +38,7 @@ python plan_orchestrator.py status  # Show current status
 02   Debug Orchestrator                  ⏸️ blocked        0%     1 week
 03   Phase -1 Knowledge Library          ⏸️ blocked        0%   3-4 days
 04   AST Scanning Integration            ⏸️ blocked        0%   3-4 days
+11   CORTEX-LENS Admin Dashboard         ⏸️ blocked        0%     1 week
 05   Context Middleware Enhancement      ⏸️ blocked        0%   2-3 days
 06   Visual Progress Generation          ⏸️ blocked        0%     2 days
 07   REFACTOR Task Enforcement           ⏸️ blocked        0%     2 days
@@ -83,7 +84,11 @@ python plan_orchestrator.py status  # Show current status
 ├── Blocks: 08
 │
 03 (Knowledge Library) + 04 (AST Scanning)
-├── Blocks: 05
+├── Blocks: 11, 05
+│
+11 (CORTEX-LENS Admin Dashboard)
+├── Consumes: 03 (Knowledge), 04 (AST)
+├── Provides: Plan metadata, unified admin UI
 │
 05 (Context Middleware)
 ├── Blocks: 06, 07
@@ -129,11 +134,13 @@ CORTEX-5.0/
 ├── 02-debug-orchestrator/
 ├── 03-knowledge-library-phase/
 ├── 04-ast-scanning-planning/
+├── 11-cortex-lens-admin/            # Admin dashboard
 ├── 05-context-middleware/
 ├── 06-visual-progress/
 ├── 07-refactor-enforcement/
 ├── 08-orchestrator-migrations/
-└── 09-final-validation/
+├── 09-final-validation/
+└── 10-acceptance-validation-system/
 ```
 
 ---

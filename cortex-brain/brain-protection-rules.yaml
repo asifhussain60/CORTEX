@@ -85,6 +85,7 @@ tier0_instincts:
 - INTERACTIVE_MODE_ENFORCEMENT
 - TOKEN_OPTIMIZATION_ENFORCEMENT
 - GIT_CHECKPOINT_PHASE_PROTECTION
+- GIT_NO_PUSH_ENFORCEMENT
 - NO_EMOJIS_IN_SCRIPTS
 - KNOWLEDGE_LIBRARY_INTEGRATION_ENFORCEMENT
 - VISION_API_INTEGRATION_ENFORCEMENT
@@ -2427,6 +2428,151 @@ protection_layers:
       
       Solution: Git checkpoints
       - Commit after each phase
+  
+  - rule_id: GIT_NO_PUSH_ENFORCEMENT
+    name: Git No Push Enforcement
+    severity: blocked
+    minimum_coverage: 100
+    description: "CORTEX MUST commit at all checkpoints but NEVER push to remote. Push operations are ALWAYS at user's discretion."
+    test_requirements:
+    - test_no_push_in_orchestrators
+    - test_commit_without_push
+    - test_user_push_notification
+    - test_push_command_detection
+    detection:
+      combined_keywords:
+        git_operations:
+        - git push
+        - push origin
+        - --push
+        orchestrator_context:
+        - orchestrator
+        - planning system
+        - autonomous execution
+        - checkpoint
+      scope:
+      - code
+      - commands
+      - orchestrator_logic
+    alternatives:
+    - "ALWAYS: git add . && git commit -m 'message'"
+    - "NEVER: git push, git push origin, git push --force"
+    - "User notification: 'Changes committed locally. Run git push when ready.'"
+    - "Dashboard shows: uncommitted changes count, unpushed commits count"
+    evidence_template: |
+      ⛔ GIT PUSH DETECTED IN ORCHESTRATOR CODE
+      
+      Location: {file_path}:{line_number}
+      Command: {detected_command}
+      
+      ❌ BLOCKED: CORTEX orchestrators MUST NOT push to remote
+      
+      CORRECT GIT WORKFLOW:
+      
+      ✅ **ALLOWED (Automated by CORTEX):**
+      ```bash
+      # Checkpoint at phase completion
+      git add .
+      git commit -m "cortex: Phase {number} complete"
+      git tag cortex-phase-{number}
+      
+      # Notify user
+      echo "✅ Changes committed locally (not pushed)"
+      echo "📊 Unpushed commits: $(git log origin/main..HEAD --oneline | wc -l)"
+      ```
+      
+      ❌ **FORBIDDEN (Never automated):**
+      ```bash
+      git push                    # NO
+      git push origin main        # NO
+      git push --force            # ABSOLUTELY NO
+      git push --all              # NO
+      git push --tags             # NO
+      ```
+      
+      USER-CONTROLLED PUSH:
+      
+      ```bash
+      # User decides when to push
+      git push origin CORTEX-5.0
+      
+      # Or user can review commits first
+      git log origin/main..HEAD --oneline
+      git diff origin/main..HEAD
+      
+      # Then push when satisfied
+      git push
+      ```
+      
+      WHY THIS RULE EXISTS:
+      
+      1. **User Control:** Users may want to review/squash commits before pushing
+      2. **Privacy:** Work may contain sensitive info not ready for remote
+      3. **Collaboration:** Avoid polluting shared branches with WIP commits
+      4. **Rollback:** Local commits can be amended/reset, pushed commits cannot
+      5. **CI/CD:** Avoid triggering pipelines on incomplete work
+      
+      CORTEX NOTIFICATION TEMPLATE:
+      
+      ```
+      ## 🎉 Phase 3 Complete
+      
+      ✅ All tasks completed successfully
+      📦 Changes committed locally (commit: abc123f)
+      🏷️  Tagged as: cortex-phase-3-implementation
+      
+      ⚠️  **Not pushed to remote** - Push when ready:
+      \`\`\`bash
+      git push origin CORTEX-5.0
+      \`\`\`
+      
+      📊 Status:
+      - Unpushed commits: 5
+      - Local commits ahead of origin: 5
+      - Files changed: 12 (+847, -523)
+      ```
+      
+      ENFORCEMENT IN CODE:
+      
+      ```python
+      # ✅ CORRECT
+      def create_checkpoint(phase_name: str):
+          run_command("git add .")
+          run_command(f"git commit -m 'cortex: {phase_name} complete'")
+          run_command(f"git tag cortex-{phase_name}")
+          notify_user("Changes committed locally (not pushed)")
+      
+      # ❌ FORBIDDEN
+      def create_checkpoint(phase_name: str):
+          run_command("git add .")
+          run_command(f"git commit -m 'cortex: {phase_name} complete'")
+          run_command("git push origin main")  # ❌ BLOCKED
+      ```
+      
+      This protection ensures users maintain full control over when code reaches remote repositories.
+    rationale: |
+      GIT_NO_PUSH_ENFORCEMENT: User Control Over Remote Operations
+      
+      Problem: Automated push operations
+      - Users lose control over remote sync timing
+      - Cannot review commits before pushing
+      - May push sensitive/incomplete work
+      - Triggers CI/CD prematurely
+      - Cannot squash/amend commits after push
+      
+      Solution: Commit locally, never push
+      - CORTEX commits at every checkpoint
+      - User reviews unpushed commits
+      - User decides when to push
+      - User can amend/squash/reset before pushing
+      - CI/CD only triggers on user push
+      
+      Benefits:
+      - Full user control
+      - Review before remote sync
+      - Privacy protection
+      - Rollback capability
+      - Professional git workflow
       - Tag with phase identifier
       - Include phase summary
       

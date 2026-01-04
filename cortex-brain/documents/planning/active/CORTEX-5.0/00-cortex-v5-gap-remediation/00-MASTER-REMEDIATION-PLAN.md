@@ -6,27 +6,29 @@
 **Status:** 🔄 ACTIVE  
 **Complexity:** TIER 5 (STRATEGIC MULTI-PHASE)  
 **Parent Plan:** cortex-v5-holistic-refactor  
-**Duration:** 6-8 weeks
+**Duration:** 8-9 weeks
 
 ---
 
 ## 📊 Master Progress Tracker
 
-**Overall Progress:** `█░░░░░░░░░` **10%** 🔄 IN PROGRESS (1/10 sub-plans complete)
+**Overall Progress:** `░░░░░░░░░░` **0%** ⏳ NOT STARTED
 
 | Order | Sub-Plan | Folder | Progress | Duration | Status | Dependencies |
 |-------|----------|--------|----------|----------|--------|--------------|
 | 00 | **Test Coverage Sprint** | `00-test-coverage-sprint/` | `░░░░░░░░░░` 0% | 2-3w | ⏳ Not Started | None |
 | 01 | **Refinement Orchestrator** | `01-refinement-orchestrator/` | `░░░░░░░░░░` 0% | 1w | ⏳ Not Started | Test Coverage 50%+ |
 | 02 | **Debug Orchestrator** | `02-debug-orchestrator/` | `░░░░░░░░░░` 0% | 1w | ⏳ Not Started | Test Coverage 50%+ |
-| 03 | **Phase -1 Knowledge Library** | `03-knowledge-library-phase/` | `██████████` 100% | 3-4d | ✅ COMPLETE | Planning v5 tests pass |
+| 03 | **Phase -1 Knowledge Library** | `03-knowledge-library-phase/` | `░░░░░░░░░░` 0% | 3-4d | ⏳ Not Started | Planning v5 tests pass |
 | 04 | **AST Scanning Integration** | `04-ast-scanning-planning/` | `░░░░░░░░░░` 0% | 3-4d | ⏳ Not Started | Planning v5 tests pass |
+| 11 | **CORTEX-LENS Admin Dashboard** | `11-cortex-lens-admin/` | `░░░░░░░░░░` 0% | 1w | ⏳ Not Started | Sub-Plans 03, 04 |
 | 05 | **Context Middleware Enhancement** | `05-context-middleware/` | `░░░░░░░░░░` 0% | 2-3d | ⏳ Not Started | Test Coverage 50%+ |
 | 06 | **Visual Progress Generation** | `06-visual-progress/` | `░░░░░░░░░░` 0% | 2d | ⏳ Not Started | Planning v5 functional |
 | 07 | **REFACTOR Task Enforcement** | `07-refactor-enforcement/` | `░░░░░░░░░░` 0% | 2d | ⏳ Not Started | Planning v5 functional |
+| 10 | **Token Optimization Pipeline** | `10-token-optimization/` | `░░░░░░░░░░` 0% | 3-4d | ⏳ Not Started | Planning v5 functional |
 | 08 | **Orchestrator Migrations** | `08-orchestrator-migrations/` | `░░░░░░░░░░` 0% | 1-2w | ⏳ Not Started | All core features complete |
-| 09 | **Final Validation & DoD** | `09-final-validation/` | `░░░░░░░░░░` 0% | 3-4d | ⏳ Not Started | All sub-plans 100% |
-| 10 | **Planning System v5 Fix** | `10-planning-system-v5-fix/` | `░░░░░░░░░░` 0% | 3-4d | 🚨 ACTIVE | Sub-Plan 03 complete |
+| 12 | **Production Validation Pipeline** | `12-production-validation-pipeline/` | `░░░░░░░░░░` 0% | 1w | ⏳ Not Started | Sub-Plans 00-11 complete |
+| 09 | **Final Validation & DoD** | `09-final-validation/` | `░░░░░░░░░░` 0% | 3-4d | ⏳ Not Started | Sub-Plan 12 complete |
 
 ---
 
@@ -42,13 +44,15 @@ Gap analysis identified **critical deficiencies** in CORTEX v5:
 
 ### Strategic Approach
 
-This master plan coordinates **9 ordered sub-plans** to:
+This master plan coordinates **13 ordered sub-plans** to:
 1. **Stabilize foundation** - Achieve 80%+ test coverage (Sub-Plan 00)
 2. **Complete missing orchestrators** - Build Refinement + Debug (Sub-Plans 01-02)
 3. **Add critical features** - Knowledge Library, AST, Context (Sub-Plans 03-05)
-4. **Polish & enhance** - Progress tracking, REFACTOR enforcement (Sub-Plans 06-07)
-5. **Finalize migrations** - Complete autonomous conversions (Sub-Plan 08)
-6. **Validate & ship** - Final acceptance validation (Sub-Plan 09)
+4. **Build admin tooling** - CORTEX-LENS unified dashboard (Sub-Plan 11)
+5. **Polish & enhance** - Progress tracking, REFACTOR enforcement, Token optimization (Sub-Plans 06-07, 10)
+6. **Finalize migrations** - Complete autonomous conversions (Sub-Plan 08)
+7. **Production validation** - REFACTOR, DOCUMENTATION, comprehensive checks (Sub-Plan 12)
+8. **Final approval** - DoD validation and sign-off (Sub-Plan 09)
 
 ### Success Criteria
 
@@ -202,6 +206,57 @@ This master plan coordinates **9 ordered sub-plans** to:
 
 ---
 
+### Sub-Plan 11: CORTEX-LENS Administrative Dashboard
+
+**Folder:** `11-cortex-lens-admin/`  
+**Priority:** HIGH (unified admin tooling)  
+**Duration:** 1 week  
+**Dependencies:** Sub-Plans 03 (Knowledge Library), 04 (AST Scanning)
+
+**Strategic Rationale:**
+CORTEX-LENS serves dual purposes:
+1. **Repository Intelligence** - AST analysis, code visualization (existing)
+2. **Plan Monitoring** - Real-time plan execution tracking (new)
+
+Combining these creates a unified admin dashboard where users can:
+- Visualize repository structure and dependencies
+- Monitor active plan progress and acceptance criteria
+- Cross-reference plan phases with actual code changes
+- Track plan effectiveness against time estimates
+
+**Scope:**
+- Migrate `docs/panel-viewer.html` → `cortex-lens-output/index.html`
+- Implement vertical tab navigation (Repository Lens | Plan Viewer | Analytics)
+- Create plan metadata standardization (`.cortex-metadata.json`)
+- Build Plan Viewer with active/completed/search capabilities
+- Integrate Glass design system with CORTEX logo
+- Generate `plans-index.json` aggregation script
+- Cross-link plans to affected files in Repository Lens
+
+**Key Deliverables:**
+- `cortex-lens-output/index.html` - Multi-tab dashboard
+- `cortex-lens-output/views/plan-dashboard.html` - Plan viewer UI
+- `cortex-lens-output/assets/css/` - Glass design tokens
+- `scripts/generate_plans_index.py` - Metadata aggregator
+- `.cortex-metadata.json` schema - Plan standardization
+- Sample standardized plan - Migration reference
+
+**Intelligence Layer Features:**
+- **Plan-to-Code Linking:** Click phase → Highlight affected files in AST view
+- **AC Validation:** Map acceptance criteria to test coverage heatmaps
+- **Effectiveness Metrics:** Compare estimated vs. actual time per phase
+- **Risk Scoring:** Flag high-churn areas indicating rework
+
+**Exit Criteria:**
+- Multi-tab navigation working (Repository | Plans | Analytics)
+- Plan Viewer shows active/completed plans with search
+- Metadata schema validated and documented
+- Sample plan migrated to standardized format
+- Cross-linking between plans and code functional
+- Glass design system integrated with 200x200 logo
+
+---
+
 ### Sub-Plan 05: Context Middleware Enhancement
 
 **Folder:** `05-context-middleware/`  
@@ -281,6 +336,57 @@ This master plan coordinates **9 ordered sub-plans** to:
 
 ---
 
+### Sub-Plan 10: Token Optimization Pipeline
+
+**Folder:** `10-token-optimization/`  
+**Priority:** HIGH (cost & performance)  
+**Duration:** 3-4 days  
+**Dependencies:** Planning v5 functional
+
+**Strategic Rationale:**
+Token optimization addresses two critical needs:
+1. **Outbound:** Compress context sent to Copilot API (40% reduction target)
+2. **Inbound:** Condense responses from Copilot API (60% reduction target)
+
+**Scope:**
+
+**Outbound Optimization (Task #6 from Enhancement Review):**
+- Semantic compression: Summarize redundant context
+- Smart truncation: Keep first/last 20%, summarize middle
+- De-duplication: Hash-based dedup of code blocks
+- Prioritization: Rank context by cosine similarity
+
+**Inbound Optimization (Task #7 from Enhancement Review):**
+- Summarization: GPT-4-mini summarizes verbose responses
+- Structured extraction: Parse key info (files, tests, errors)
+- Adaptive detail: Summaries by default, expand on request
+- Progressive disclosure: Collapsible sections in UI
+
+**Key Deliverables:**
+- `src/cortex_agents/token_optimizer_outbound.py`
+- `src/cortex_agents/response_condenser.py`
+- Context prioritization algorithm (cosine similarity)
+- A/B testing framework (shadow execution)
+- Performance benchmarks
+
+**Intelligence Layer:**
+- ML-based summarization (using GPT-4-mini for cost efficiency)
+- Semantic embeddings for context ranking
+- Dynamic compression based on token budget
+- Fallback to deterministic compression if LLM fails
+
+**Exit Criteria:**
+- 40% token reduction (outbound) without accuracy loss
+- 60% token reduction (inbound) in displayed output
+- A/B test validates no regression in quality
+- Integration tests pass
+
+**Enhancement Mapping:**
+- ✅ Task #6: Token Optimization (Outbound)
+- ✅ Task #7: Token Optimization (Inbound)
+
+---
+
 ### Sub-Plan 08: Orchestrator Migrations Completion
 
 **Folder:** `08-orchestrator-migrations/`  
@@ -305,6 +411,88 @@ This master plan coordinates **9 ordered sub-plans** to:
 - All planned migrations complete
 - All orchestrators tested and functional
 - Migration documentation complete
+
+---
+
+### Sub-Plan 12: Production Validation Pipeline
+
+**Folder:** `12-production-validation-pipeline/`  
+**Priority:** 🚨 CRITICAL (Production Readiness Gate)  
+**Duration:** 1 week  
+**Dependencies:** Sub-Plans 00-11 complete
+
+**Strategic Rationale:**
+Final comprehensive validation ensures production readiness through 8-phase pipeline:
+
+**Phase 1: REFACTOR - Holistic Code Cleanup (18+ tasks)**
+- Remove duplicates, fix broken structure, reduce complexity
+- Enforce SOLID principles, remove dead code
+- HTML/CSS validation, API contract validation
+
+**Phase 2: DOCUMENTATION - Comprehensive Docs (12 tasks)**
+- API docs, architecture diagrams, deployment guide
+- Runbook, CHANGELOG, acceptance criteria report
+- Generate metrics dashboard
+
+**Phase 3: Compilation & Syntax Validation**
+- Python, TypeScript, HTML, CSS, SQL, JSON/YAML
+- Import resolution, configuration validation
+
+**Phase 4: Security & Vulnerability Scan**
+- Dependency vulnerabilities (Safety, npm audit)
+- Static security analysis (Bandit, ESLint security)
+- Secret detection, SQL injection, XSS prevention
+- Auth/authz review, rate limiting, data privacy
+
+**Phase 5: Performance & Scalability Check**
+- Profiling, database performance, memory leaks
+- Load testing (1000 requests, <1% errors)
+- API response times (p95 <200ms)
+
+**Phase 6: Integration & Deployment Validation**
+- CI/CD pipeline, environment config, migrations
+- External services, container builds, health checks
+- Rollback testing, disaster recovery
+
+**Phase 7: Final Approval & Handoff**
+- Production readiness report
+- AC-to-evidence mapping
+- Risk assessment, deployment checklist
+
+**Key Deliverables:**
+- `12-production-validation-pipeline.md` (comprehensive plan)
+- REFACTOR task checklist (18+ tasks)
+- Security scan results
+- Performance benchmark reports
+- Production readiness report template
+- Deployment validation scripts
+
+**Critical Enhancement Addressed:**
+✅ **Task #8: Pre-Approval Validation** - Comprehensive risk analysis covering:
+- Edge cases, failure modes, race conditions
+- Security: AuthN/AuthZ, input validation, secrets
+- Performance: Latency, scalability, bottlenecks
+- Deployment: CI/CD, env drift, rollback
+- Data integrity, idempotency, compliance
+
+**GIT_NO_PUSH_ENFORCEMENT:**
+- All 7 phases commit to local git
+- NEVER push to remote
+- User notified: "Run 'git push' when ready"
+
+**Exit Criteria:**
+- All 8 phases executed and passed
+- 0 critical vulnerabilities
+- 0 syntax errors
+- Performance targets met (p95 <200ms)
+- Test coverage ≥80%
+- Final approval granted
+- Production readiness report generated
+
+**Enhancement Mapping:**
+- ✅ Task #8: Pre-Approval Validation (comprehensive checks)
+- ✅ REFACTOR & DOCUMENTATION phases mandated
+- ✅ GIT_NO_PUSH_ENFORCEMENT applied
 
 ---
 
@@ -340,7 +528,103 @@ This master plan coordinates **9 ordered sub-plans** to:
 
 ---
 
-## 🔄 Execution Workflow
+## � Enhancement Mapping to Sub-Plans
+
+Based on comprehensive review (January 4, 2026), **8 critical enhancements** have been mapped to CORTEX-5.0 sub-plans:
+
+| Enhancement | Requirement | Mapped To | Status |
+|-------------|-------------|-----------|--------|
+| **#1** | Brain governance referenced every turn | Sub-Plans 03, 04 (Knowledge Library + AST) | 📋 Planned |
+| **#2** | Knowledge base consulted every turn | Sub-Plan 03 (Phase -1 Knowledge Library) | 📋 Planned |
+| **#3** | Alignment with final acceptance criteria | Sub-Plan 12 (AC validation system) | 📋 Planned |
+| **#4** | AST-based context building + incremental knowledge graph | Sub-Plan 04 (AST Scanning Integration) | 📋 Planned |
+| **#5** | Visual progress bar (like Maintenance Orchestrator) | Sub-Plan 06 (Visual Progress Generation) | 📋 Planned |
+| **#6** | Token optimization (outbound to Copilot API) | Sub-Plan 10 (Token Optimization Pipeline) | 📋 Planned |
+| **#7** | Token optimization (inbound from Copilot API) | Sub-Plan 10 (Token Optimization Pipeline) | 📋 Planned |
+| **#8** | Pre-approval validation (comprehensive checks) | Sub-Plan 12 (Production Validation Pipeline) | 📋 Planned |
+
+### Implementation Details
+
+#### Enhancement #1: Brain Governance Every Turn
+**Sub-Plans 03 + 04**
+- `governance_checkpoint()` called before every phase transition
+- Query Tier 0 instincts for applicable rules
+- Validate against SKULL rules automatically
+- Log governance decisions to audit trail
+
+#### Enhancement #2: Knowledge Base Consulted Every Turn
+**Sub-Plan 03**
+- `tier2_knowledge_query()` middleware in orchestrators
+- Query for: past plan patterns, similar code contexts, lessons learned
+- Inject relevant knowledge into planning context
+- Update knowledge graph after plan completion
+
+#### Enhancement #3: Acceptance Criteria Alignment
+**Sub-Plan 12 (Phase 7)**
+- `ac_validator_agent.py` runs after every phase
+- Validation results logged to `{plan_id}-AC-validation.jsonl`
+- Real-time AC status tracking
+- Final report maps all ACs to evidence
+
+#### Enhancement #4: AST Context Building
+**Sub-Plan 04**
+- `ast_context_builder.py` parses target files
+- Extract: functions, classes, dependencies, complexity
+- Store in Tier 1 (`working-memory/{plan_id}/ast-context.json`)
+- Promote to Tier 2 knowledge graph on completion
+- Use `jedi` + `tree-sitter` for multi-language support
+
+#### Enhancement #5: Visual Progress Bar
+**Sub-Plan 06**
+- Extract progress rendering from `cortex-maintenance.prompt.md`
+- Create `progress_display_v2.py` module
+- Orchestrators call `update_progress(phase, percent, status)`
+- Render using `response-templates-v4.yaml:autonomous_execution_progress`
+
+#### Enhancement #6 & #7: Token Optimization
+**Sub-Plan 10**
+- **Outbound:** Semantic compression, smart truncation, de-duplication (40% reduction)
+- **Inbound:** Response summarization, structured extraction, progressive disclosure (60% reduction)
+- ML-based prioritization using cosine similarity
+- A/B testing to validate no quality regression
+
+#### Enhancement #8: Pre-Approval Validation
+**Sub-Plan 12 (All Phases)**
+- **Phase 1:** REFACTOR (18+ mandatory tasks, whole-file review)
+- **Phase 2:** DOCUMENTATION (12 comprehensive docs)
+- **Phase 3:** Compilation & syntax validation
+- **Phase 4:** Security scan (Bandit, Safety, secret detection)
+- **Phase 5:** Performance check (profiling, load test, p95 <200ms)
+- **Phase 6:** Integration & deployment validation
+- **Phase 7:** Final approval with production readiness report
+
+### GIT_NO_PUSH_ENFORCEMENT
+
+**NEW SKULL RULE (Added to `brain-protection-rules.yaml`):**
+
+```yaml
+rule_id: GIT_NO_PUSH_ENFORCEMENT
+severity: blocked
+description: "CORTEX commits at checkpoints but NEVER pushes to remote"
+```
+
+**Applied to ALL sub-plans:**
+- ✅ Git commit after every phase completion
+- ❌ NEVER `git push` automated
+- ✅ User notified: "Changes committed locally (not pushed)"
+- ✅ Display unpushed commit count
+- ✅ User controls when to push: `git push origin CORTEX-5.0`
+
+**Rationale:**
+- Users maintain full control over remote sync
+- Can review/squash/amend commits before pushing
+- Avoid triggering CI/CD prematurely
+- Privacy protection (may contain sensitive WIP)
+- Professional git workflow
+
+---
+
+## �🔄 Execution Workflow
 
 ### Master Plan Execution Process
 
@@ -357,6 +641,10 @@ START
 [03] Knowledge Library (3-4d) ║ [04] AST Scanning (3-4d)
   └──────────────┬─────────────────┘
                  ↓
+[11] CORTEX-LENS Admin Dashboard (1w)
+  ├─→ Plan metadata generation
+  ├─→ Repository + Plan viewer integration
+  ↓
 [05] Context Middleware (2-3d)
   ↓
 [06] Visual Progress (2d) ║ [07] REFACTOR Enforcement (2d)
@@ -381,13 +669,14 @@ PRODUCTION READY ✅
 - Sub-Plans 03 and 04 can run in parallel
 
 **Phase 4 (Week 5-6):**
-- Sub-Plan 05 sequential (depends on 03, 04)
+- Sub-Plan 11 sequential (depends on 03, 04) - Admin dashboard
+- Sub-Plan 05 sequential (depends on 03, 04) - Context middleware
 - Sub-Plans 06 and 07 can run in parallel after 05
 
-**Phase 5 (Week 6-7):**
+**Phase 5 (Week 6-8):**
 - Sub-Plan 08 sequential (depends on all previous)
 
-**Phase 6 (Week 8):**
+**Phase 6 (Week 8-9):**
 - Sub-Plan 09 sequential (final gate)
 
 ---
@@ -501,11 +790,11 @@ PRODUCTION READY ✅
 - Reach 80% test coverage (Gate 2)
 - Create Sub-Plans 01-02 (Refinement/Debug)
 
-**MEDIUM-TERM (Weeks 4-7):**
-- Complete all sub-plans 01-08
+**MEDIUM-TERM (Weeks 4-8):**
+- Complete all sub-plans 01-08, 11
 - Validate each sub-plan's exit criteria
 
-**LONG-TERM (Week 8):**
+**LONG-TERM (Week 9):**
 - Execute Sub-Plan 09: Final Validation
 - Achieve production readiness
 - Deploy CORTEX v5 to production
@@ -514,7 +803,7 @@ PRODUCTION READY ✅
 
 **Status:** ✅ MASTER PLAN CREATED  
 **Next:** Create Sub-Plan 00 - Test Coverage Sprint  
-**Timeline:** 6-8 weeks to production readiness  
+**Timeline:** 8-9 weeks to production readiness  
 **Confidence:** HIGH (clear path, well-defined scope)
 
 ---
