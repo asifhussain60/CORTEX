@@ -54,6 +54,11 @@
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 100px; /* Account for sticky nav */
+        }
+
         body {
             font-family: var(--font-family);
             background: linear-gradient(135deg, #0f0e1f 0%, #1a1640 50%, #0f1f3f 100%);
@@ -569,6 +574,64 @@
             50% { opacity: 0.5; transform: scale(1.2); }
         }
 
+        /* Quick Navigation */
+        .quick-nav {
+            position: sticky;
+            top: 20px;
+            z-index: 999;
+            margin-bottom: 20px;
+            padding: 15px 20px;
+        }
+
+        .nav-header {
+            color: white;
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .nav-link {
+            background: rgba(109, 40, 217, 0.3);
+            border: 1px solid rgba(109, 40, 217, 0.5);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.9em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-link:hover {
+            background: rgba(109, 40, 217, 0.5);
+            border-color: rgba(109, 40, 217, 0.8);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(109, 40, 217, 0.4);
+        }
+
+        .nav-link.back-to-top {
+            background: rgba(5, 150, 105, 0.3);
+            border-color: rgba(5, 150, 105, 0.5);
+        }
+
+        .nav-link.back-to-top:hover {
+            background: rgba(5, 150, 105, 0.5);
+            border-color: rgba(5, 150, 105, 0.8);
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4);
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .header h1 {
@@ -617,6 +680,7 @@
     </style>
 </head>
 <body>
+    <div id="top"></div>
     <div class="container">
         <div class="header glass">
             <div class="header-brand">
@@ -646,7 +710,21 @@
             </div>
         </div>
 
-        <div class="overall-progress glass">
+        <div class="quick-nav glass" id="quick-nav">
+            <div class="nav-header">
+                🧭 Quick Navigation
+            </div>
+            <div class="nav-links">
+                <a href="#top" class="nav-link back-to-top">⬆️ Top</a>
+                <a href="#overall-progress" class="nav-link">📊 Progress</a>
+                <a href="#wave-1" class="nav-link">1️⃣ Wave 1</a>
+                <a href="#wave-2" class="nav-link">2️⃣ Wave 2</a>
+                <a href="#wave-3" class="nav-link">3️⃣ Wave 3</a>
+                <a href="#deferred" class="nav-link">⏸️ Deferred</a>
+            </div>
+        </div>
+
+        <div class="overall-progress glass" id="overall-progress">
             <div class="progress-header">
                 <span>📊 Overall Epic Progress</span>
             </div>
@@ -692,12 +770,12 @@
     <script>
         // ========================================
         // CORTEX C50 Epic Dashboard
-        // Progressive Disclosure Pattern: Active Work at TOP
+        // Sequential Progress View: Show Work in Natural Order
         // ========================================
-        // Sorting Strategy:
-        //   1. In Progress (needs attention NOW)
-        //   2. Blocked (needs unblocking)
-        //   3. Pending (ready to start)
+        // Display Strategy:
+        //   - Show plans in sequential order (00A, 00B, 00C, 01, 02, etc.)
+        //   - Progress visible as cards update status/percentage
+        //   - Completed work stays in position (visual progress indicator)
         //   4. Active (general active state)
         //   5. Deferred (postponed)
         //   6. Complete (done, pushed to bottom)
@@ -786,37 +864,11 @@
             return stats;
         }
 
-        // Sort child plans by priority (active work at top, completed at bottom)
+        // Sort child plans by natural order (preserve sequential progression)
         function sortChildPlansByPriority(plans) {
-            const priorityMap = {
-                'in progress': 1,
-                'blocked': 2,
-                'pending': 3,
-                'active': 4,
-                'deferred': 5,
-                'complete': 6,
-                'completed': 6
-            };
-
+            // Simply sort by order/id to show progress as it happens
             return plans.sort((a, b) => {
-                const aStatus = a.status.toLowerCase();
-                const bStatus = b.status.toLowerCase();
-                
-                // Find priority for each status
-                let aPriority = 999;
-                let bPriority = 999;
-                
-                for (const [key, value] of Object.entries(priorityMap)) {
-                    if (aStatus.includes(key)) aPriority = Math.min(aPriority, value);
-                    if (bStatus.includes(key)) bPriority = Math.min(bPriority, value);
-                }
-                
-                // If same priority, sort by order/id
-                if (aPriority === bPriority) {
-                    return (a.order || a.id).localeCompare(b.order || b.id);
-                }
-                
-                return aPriority - bPriority;
+                return (a.order || a.id).localeCompare(b.order || b.id);
             });
         }
 
@@ -826,15 +878,16 @@
             wavesContainer.innerHTML = '';
 
             const waves = {
-                'Wave 1: Foundation (Weeks 1-3)': ['00A', '00B', '00C', '00D'],
-                'Wave 2: Core Features (Weeks 4-9)': ['01', '02', '03', '04', '05', '06', '07', '08', '10', '11'],
-                'Wave 3: Finalization (Weeks 10-11)': ['09', '12', '13', '14', '15'],
-                'Deferred': ['16', '17', '18']
+                'Wave 1: Foundation (Weeks 1-3)': { id: 'wave-1', children: ['00A', '00B', '00C', '00D'] },
+                'Wave 2: Core Features (Weeks 4-9)': { id: 'wave-2', children: ['01', '02', '03', '04', '05', '06', '07', '08', '10', '11'] },
+                'Wave 3: Finalization (Weeks 10-11)': { id: 'wave-3', children: ['09', '12', '13', '14', '15'] },
+                'Deferred': { id: 'deferred', children: ['16', '17', '18'] }
             };
 
-            Object.entries(waves).forEach(([waveName, childIds]) => {
+            Object.entries(waves).forEach(([waveName, waveConfig]) => {
                 const waveDiv = document.createElement('div');
                 waveDiv.className = 'wave glass';
+                waveDiv.id = waveConfig.id; // Add ID for anchor links
 
                 const waveHeader = document.createElement('div');
                 waveHeader.className = 'wave-header';
@@ -851,11 +904,12 @@
                 childPlansGrid.className = 'child-plans-grid';
 
                 // Filter child plans for this wave
+                const childIds = waveConfig.children;
                 let wavePlans = epicData.child_plans.filter(plan => 
                     childIds.some(id => plan.id.includes(id) || plan.order === id)
                 );
 
-                // Sort plans: active work at top, completed at bottom
+                // Keep plans in natural sequential order (show progress as it happens)
                 wavePlans = sortChildPlansByPriority(wavePlans);
 
                 wavePlans.forEach(plan => {

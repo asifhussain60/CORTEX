@@ -85,6 +85,16 @@ This epic coordinates **18 ordered sub-plans** in THREE strategic waves:
 - **Final approval** - DoD validation and sign-off (C50-09)
 - **User experience** - Onboarding, demos, templates (C50-13 through C50-15)
 
+#### Wave 4: Phase 8 Enhancements (Post-C50, Future) - 7+ weeks
+**Status:** 🔮 DEFERRED (May 2026+)
+
+- **C60: Smart Orchestrator Intelligence v1** - Global learning system (7 weeks)
+  - Learn user preferences, patterns, development styles
+  - Eliminate repeated prompting across orchestrators
+  - Cross-orchestrator pattern sharing
+  - **Prerequisites:** C50 complete, 6 months usage data, stable architecture
+  - **See:** Deferred Items section below for full details
+
 ### Why Epic-First Strategy?
 
 **Original Timeline:** 8-9 weeks (foundation unstable)  
@@ -213,9 +223,69 @@ C50-cortex-v5-remediation/
 
 ### Deferred Items
 
+**C50 Epic Scope:**
 - C50-16: Planning System v5 Fix (TBD)
 - C50-17: Planning v5 Enhancement (TBD)
 - C50-18: Planning v5 Fix (Duplicate - needs review)
+
+**Phase 8 (Post-C50 Enhancements):**
+
+#### C60: Smart Orchestrator Intelligence System v1
+**Status:** 🔮 FUTURE (Phase 8, post-C50 completion)  
+**Duration:** 7 weeks (175 hours)  
+**Priority:** HIGH VALUE (8.6/10), CRITICAL EFFORT (7.2/10)  
+**Value/Effort Ratio:** 1.19 (DO LATER)
+
+**Description:**  
+Global learning system that enables orchestrators to learn user preferences, patterns, and development styles to eliminate repeated prompting and instructions.
+
+**Key Features:**
+- **User Preference Learning:** Track styling choices, component patterns, workflow preferences
+- **Pattern Recognition:** Identify recurring code structures, bug patterns, test patterns
+- **Auto-Application:** Apply learned patterns without re-prompting
+- **Cross-Orchestrator Intelligence:** Share patterns between HTML View, TDD, Debug, Refinement orchestrators
+
+**Affected Orchestrators:**
+- HTML View Orchestrator: Learn glassmorphism preferences, token naming, CSS patterns
+- TDD Orchestrator: Learn test structures, assertion patterns, naming conventions
+- Debug Orchestrator: Learn bug resolution patterns, hypothesis strategies, fix approaches
+- Refinement Orchestrator: Learn code quality preferences, refactoring patterns, anti-pattern rules
+
+**Dependencies:**
+- ✅ C50 epic complete (stable orchestrator foundation)
+- ✅ 6 months usage data collected (May 2026+)
+- ✅ Tier 2 Knowledge Graph mature
+- ✅ Performance baseline established
+
+**Strategic Analysis:** `cortex-brain/documents/analysis/smart-orchestrator-intelligence-strategic-analysis.md`
+
+**Immediate Actions (Passive Collection):**
+- Enable pattern tracking in Tier 2 `html-view-requirements.yaml` (already exists)
+- Log user choices in Tier 1 working memory
+- No active learning yet, observation only
+
+**Phase 8 Execution Plan:**
+1. **Weeks 1-3:** Data analysis + architecture design
+   - Analyze 6 months Tier 1/Tier 2 data
+   - Design global learning coordinator
+   - Prototype pattern matching
+2. **Weeks 4-5:** Core learning system implementation
+   - Pattern learner
+   - Preference tracker
+   - Auto-applicator
+3. **Weeks 6-7:** Orchestrator integration + testing
+   - HTML View (pilot), TDD, Debug, Refinement
+   - Integration tests, performance benchmarks
+   - User acceptance testing
+
+**Alternative:** Smart Hints v0.1 MVP (1 week)
+- Static pattern library + manual selection
+- No learning, just suggestions
+- 30% value, 15% effort
+- Can be implemented now without delaying C50
+
+**Justification:**  
+Brilliant concept aligned with CORTEX mission ("strategic multiplier"), but wrong timing. C50 at 31.6% completion with 48 days remaining. Adding 7-week project would delay epic by 30%. Defer to Phase 8 when orchestrators are stable and real-world usage patterns can inform design.
 
 ---
 

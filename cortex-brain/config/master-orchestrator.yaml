@@ -208,6 +208,34 @@ routing_rules:
         - "TDD enforcement (RED→GREEN→REFACTOR)"
         - "Rollback checkpoints"
         - "Before/after metrics"
+  
+  # Debug Orchestrator (C50-02 - ACTIVE)
+  # 7-phase systematic debugging with root cause analysis
+  - pattern: "^(debug|fix bug|troubleshoot|investigate bug|root cause).*$"
+    orchestrator: "debug_orchestrator"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 61
+    metadata:
+      description: "7-phase systematic debugging workflow"
+      autonomous: false
+      version: "5.0"
+      phases:
+        - "Bug Report Parsing"
+        - "Error Analysis"
+        - "Root Cause Detection"
+        - "Fix Generation"
+        - "Debug Marker Injection"
+        - "Validation"
+        - "Pattern Learning"
+      features:
+        - "Stack trace analysis"
+        - "Hypothesis generation"
+        - "Evidence collection"
+        - "Multi-strategy fix proposals"
+        - "Debug marker injection/cleanup"
+        - "Git checkpoint management"
+        - "DoR/DoD validation"
 
 # LLM Fallback Configuration (Secondary)
 # Handles ambiguous inputs that don't match patterns

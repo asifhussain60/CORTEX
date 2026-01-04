@@ -25,6 +25,8 @@ from src.orchestrators.planning.knowledge_graph_query import (
     KnowledgeGraphQuery,
     KnowledgeContext
 )
+# C50-04: AST Scanning Integration
+from src.cortex_agents.knowledge_library import KnowledgeLibrary, KnowledgeDiscovery
 
 
 @dataclass
@@ -33,6 +35,7 @@ class GovernanceConsultationResult:
     success: bool
     governance_validation: Optional[GovernanceValidation]
     knowledge_context: Optional[KnowledgeContext]
+    knowledge_discovery: Optional[KnowledgeDiscovery]  # C50-04: AST scanning results
     consultation_report_path: Optional[str]
     violations: List[str]
     warnings: List[str]
@@ -64,7 +67,9 @@ class PhaseMinusOne:
         self,
         governance_integrator: Optional[GovernanceIntegrator] = None,
         knowledge_query: Optional[KnowledgeGraphQuery] = None,
-        output_dir: Optional[Path] = None
+        knowledge_library: Optional[KnowledgeLibrary] = None,  # C50-04
+        output_dir: Optional[Path] = None,
+        enable_ast_scanning: bool = True  # C50-04
     ):
         """
         Initialize Phase -1.
@@ -72,7 +77,9 @@ class PhaseMinusOne:
         Args:
             governance_integrator: Tier 0 governance integration
             knowledge_query: Tier 2 knowledge graph query
+            knowledge_library: C50-04 Knowledge Library for AST scanning
             output_dir: Directory for consultation reports
+            enable_ast_scanning: C50-04 Enable enhanced AST analysis
         """
         self.logger = logging.getLogger(__name__)
         
@@ -80,11 +87,15 @@ class PhaseMinusOne:
         self.governance = governance_integrator or GovernanceIntegrator()
         self.knowledge = knowledge_query or KnowledgeGraphQuery()
         
+        # C50-04: Initialize Knowledge Library for AST scanning
+        self.knowledge_library = knowledge_library
+        self.enable_ast_scanning = enable_ast_scanning
+        
         # Output configuration
         self.output_dir = output_dir or Path("cortex-brain/documents/planning/governance-consultations")
         self.output_dir.mkdir(parents=True, exist_ok=True)
         
-        self.logger.info("Phase -1 Knowledge Library initialized")
+        self.logger.info(f"Phase -1 Knowledge Library initialized (AST scanning: {enable_ast_scanning})")
     
     def execute(
         self,
@@ -119,18 +130,55 @@ class PhaseMinusOne:
                 feature_name, user_request
             )
             
+            # Step 2.5: C50-04 - Knowledge Library AST Scanning
+            knowledge_discovery = None
+            if self.enable_ast_scanning and self.knowledge_library:
+                self.logger.info("Phase -1: Executing Knowledge Library AST scanning (C50-04)")
+                try:
+                    knowledge_discovery = self.knowledge_library.scan_workspace(
+                        target_feature=feature_name,
+                        enable_ast_scanning=True
+                    )
+                    
+                    # Log findings
+                    stats = knowledge_discovery.scan_statistics
+                    self.logger.info(
+                        f"Phase -1: AST scan complete - "
+                        f"{stats.get('injection_points_found', 0)} injection points, "
+                        f"{stats.get('security_issues_found', 0)} security issues, "
+                        f"{stats.get('performance_issues_found', 0)} performance issues"
+                    )
+                    
+                    # Check for critical security issues
+                    critical_security = [
+                        issue for issue in knowledge_discovery.security_issues
+                        if issue.severity == 'critical'
+                    ]
+                    if critical_security:
+                        self.logger.warning(
+                            f"Phase -1: Found {len(critical_security)} CRITICAL security issues - "
+                            "review before proceeding"
+                        )
+                    
+                except Exception as e:
+                    self.logger.warning(f"Phase -1: Knowledge Library scanning failed: {e}")
+            elif self.enable_ast_scanning:
+                self.logger.warning("Phase -1: AST scanning enabled but Knowledge Library not initialized")
+            
             # Step 3: Generate consultation report
             self.logger.info("Phase -1: Generating consultation report")
             report_path = self._generate_consultation_report(
                 feature_name,
                 governance_validation,
-                knowledge_context
+                knowledge_context,
+                knowledge_discovery  # C50-04: Include AST results
             )
             
             # Step 4: Compile recommendations
             recommendations = self._compile_recommendations(
                 governance_validation,
-                knowledge_context
+                knowledge_context,
+                knowledge_discovery  # C50-04: Include AST recommendations
             )
             
             duration = (datetime.now() - start_time).total_seconds()
@@ -149,6 +197,7 @@ class PhaseMinusOne:
                 success=success,
                 governance_validation=governance_validation,
                 knowledge_context=knowledge_context,
+                knowledge_discovery=knowledge_discovery,  # C50-04
                 consultation_report_path=str(report_path) if report_path else None,
                 violations=[v.get('message', str(v)) for v in violations],
                 warnings=warnings,
@@ -164,6 +213,7 @@ class PhaseMinusOne:
                 success=False,
                 governance_validation=None,
                 knowledge_context=None,
+                knowledge_discovery=None,  # C50-04
                 consultation_report_path=None,
                 violations=[f"Phase -1 execution error: {str(e)}"],
                 warnings=[],
@@ -233,7 +283,8 @@ class PhaseMinusOne:
         self,
         feature_name: str,
         governance: Optional[GovernanceValidation],
-        knowledge: Optional[KnowledgeContext]
+        knowledge: Optional[KnowledgeContext],
+        knowledge_discovery: Optional[KnowledgeDiscovery] = None  # C50-04
     ) -> Optional[Path]:
         """Generate consultation report in Markdown."""
         try:
@@ -241,7 +292,12 @@ class PhaseMinusOne:
             report_file = self.output_dir / f"consultation-{feature_name}-{timestamp}.md"
             
             # Build report content
-            content = self._build_report_content(feature_name, governance, knowledge)
+            content = self._build_report_content(
+                feature_name,
+                governance,
+                knowledge,
+                knowledge_discovery  # C50-04
+            )
             
             # Write report
             report_file.write_text(content, encoding='utf-8')
@@ -258,7 +314,8 @@ class PhaseMinusOne:
         self,
         feature_name: str,
         governance: Optional[GovernanceValidation],
-        knowledge: Optional[KnowledgeContext]
+        knowledge: Optional[KnowledgeContext],
+        knowledge_discovery: Optional[KnowledgeDiscovery] = None  # C50-04
     ) -> str:
         """Build consultation report content."""
         lines = [
@@ -341,6 +398,63 @@ class PhaseMinusOne:
                 ""
             ])
         
+        # C50-04: AST Scanning Results
+        if knowledge_discovery:
+            lines.extend([
+                "---",
+                "",
+                "## 🔬 AST Scanning Analysis (C50-04)",
+                ""
+            ])
+            
+            stats = knowledge_discovery.scan_statistics
+            lines.extend([
+                f"**Files Scanned:** {stats.get('files_scanned', 0)}",
+                f"**Injection Points:** {stats.get('injection_points_found', 0)}",
+                f"**Security Issues:** {stats.get('security_issues_found', 0)}",
+                f"**Performance Issues:** {stats.get('performance_issues_found', 0)}",
+                ""
+            ])
+            
+            # Injection points (top 3)
+            if knowledge_discovery.injection_points:
+                lines.append("### 🎯 Top Injection Points")
+                lines.append("")
+                for point in knowledge_discovery.injection_points[:3]:
+                    lines.append(f"- **{point.file_path}:{point.line_number}** (score: {point.score:.2f})")
+                    lines.append(f"  - Type: `{point.injection_type}`")
+                    lines.append(f"  - Reasoning: {point.reasoning}")
+                lines.append("")
+            
+            # Security issues (critical/high only)
+            critical_security = [
+                issue for issue in knowledge_discovery.security_issues
+                if issue.severity in ['critical', 'high']
+            ]
+            if critical_security:
+                lines.append("### 🔒 Critical/High Security Issues")
+                lines.append("")
+                for issue in critical_security[:5]:  # Top 5
+                    severity_icon = "🔴" if issue.severity == "critical" else "🟠"
+                    lines.append(f"- {severity_icon} **{issue.issue_type}** - {issue.file_path}:{issue.line_number}")
+                    lines.append(f"  - {issue.description}")
+                    lines.append(f"  - Recommendation: {issue.recommendation}")
+                lines.append("")
+            
+            # Performance issues (high only)
+            high_perf = [
+                issue for issue in knowledge_discovery.performance_issues
+                if issue.severity == 'high'
+            ]
+            if high_perf:
+                lines.append("### ⚡ High-Impact Performance Issues")
+                lines.append("")
+                for issue in high_perf[:5]:
+                    lines.append(f"- 🔴 **{issue.issue_type}** - {issue.file_path}:{issue.line_number}")
+                    lines.append(f"  - {issue.description}")
+                    lines.append(f"  - Impact: {issue.estimated_impact}")
+                lines.append("")
+        
         lines.extend([
             "---",
             "",
@@ -349,7 +463,7 @@ class PhaseMinusOne:
         ])
         
         # Recommendations
-        recommendations = self._compile_recommendations(governance, knowledge)
+        recommendations = self._compile_recommendations(governance, knowledge, knowledge_discovery)
         if recommendations:
             for rec in recommendations:
                 lines.append(f"- {rec}")
@@ -368,7 +482,8 @@ class PhaseMinusOne:
     def _compile_recommendations(
         self,
         governance: Optional[GovernanceValidation],
-        knowledge: Optional[KnowledgeContext]
+        knowledge: Optional[KnowledgeContext],
+        knowledge_discovery: Optional[KnowledgeDiscovery] = None  # C50-04
     ) -> List[str]:
         """Compile actionable recommendations from consultation."""
         recommendations = []
@@ -394,6 +509,36 @@ class PhaseMinusOne:
                 # Add top 3 recommendations from knowledge graph
                 for rec in knowledge.recommendations[:3]:
                     recommendations.append(f"💡 {rec}")
+        
+        # C50-04: AST Scanning Recommendations
+        if knowledge_discovery:
+            # Security recommendations
+            critical_security = [
+                issue for issue in knowledge_discovery.security_issues
+                if issue.severity == 'critical'
+            ]
+            if critical_security:
+                recommendations.append(
+                    f"🔒 URGENT: Address {len(critical_security)} critical security issue(s) before implementation"
+                )
+            
+            # Performance recommendations
+            high_perf = [
+                issue for issue in knowledge_discovery.performance_issues
+                if issue.severity == 'high'
+            ]
+            if high_perf:
+                recommendations.append(
+                    f"⚡ Consider refactoring {len(high_perf)} high-complexity function(s) for maintainability"
+                )
+            
+            # Injection point recommendations
+            if knowledge_discovery.injection_points:
+                top_point = knowledge_discovery.injection_points[0]
+                recommendations.append(
+                    f"🎯 Optimal injection point: {top_point.file_path}:{top_point.line_number} "
+                    f"(score: {top_point.score:.2f})"
+                )
         
         # Default recommendation
         if not recommendations:
