@@ -158,6 +158,9 @@ class CrossSessionContextMiddleware:
         """
         context = existing_context.copy() if existing_context else {}
         
+        # PRIORITY 1: Vision Context - Check for image attachments
+        context = self._inject_vision_context(context)
+        
         # Check if continuation pattern detected
         if not self._is_continuation(user_input):
             self.logger.debug("No continuation pattern detected")
@@ -285,3 +288,99 @@ class CrossSessionContextMiddleware:
             project_tokens = len(project_json) // 4
         
         return session_tokens + project_tokens
+    
+    def _inject_vision_context(self, context: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Inject Vision API context if images are present in attachments.
+        
+        Priority 1: Highest priority context source (<100 tokens).
+        
+        Args:
+            context: Context dict (may contain 'attachments')
+        
+        Returns:
+            Context with 'vision_context' added if images detected
+        """
+        # Check for image attachments
+        attachments = context.get('attachments', [])
+        if not attachments:
+            return context
+        
+        # Check if any attachment is an image
+        has_images = any(
+            att.get('type') == 'image' for att in attachments
+        )
+        
+        if not has_images:
+            return context
+        
+        # Mark vision context as available
+        context['vision_context_available'] = True
+        
+        try:
+            # Import vision middleware (lazy import to avoid circular deps)
+            from src.operations.utilities.vision_context_middleware import VisionContextMiddleware
+            
+            vision_middleware = VisionContextMiddleware()
+            
+            # Process context to get vision analysis
+            enhanced_context = vision_middleware.process_context(context)
+            
+            # Extract and trim vision analysis to token budget
+            if 'vision_analysis' in enhanced_context:
+                vision_data = enhanced_context['vision_analysis']
+                
+                # Trim to ~100 token budget (400 chars ≈ 100 tokens)
+                context['vision_context'] = self._trim_vision_context(vision_data, max_chars=400)
+                
+                self.logger.info("Vision context injected (<100 tokens)")
+            
+        except ImportError:
+            self.logger.warning("VisionContextMiddleware not available")
+        except Exception as e:
+            self.logger.error(f"Failed to inject vision context: {e}")
+        
+        return context
+    
+    def _trim_vision_context(self, vision_data: Dict[str, Any], max_chars: int = 400) -> Dict[str, Any]:
+        """
+        Trim vision context to respect token budget.
+        
+        Args:
+            vision_data: Vision analysis data
+            max_chars: Maximum characters (~max_chars/4 tokens)
+        
+        Returns:
+            Trimmed vision context
+        """
+        # Keep only essential fields
+        trimmed = {}
+        
+        if 'description' in vision_data:
+            desc = str(vision_data['description'])
+            # Trim description if too long
+            if len(desc) > 200:
+                trimmed['description'] = desc[:197] + "..."
+            else:
+                trimmed['description'] = desc
+        
+        if 'confidence' in vision_data:
+            trimmed['confidence'] = vision_data['confidence']
+        
+        if 'ui_elements' in vision_data:
+            elements = vision_data['ui_elements']
+            # Keep max 10 elements
+            if isinstance(elements, list):
+                trimmed['ui_elements'] = elements[:10]
+            else:
+                trimmed['ui_elements'] = elements
+        
+        if 'objects' in vision_data:
+            objects = vision_data['objects']
+            # Keep max 8 objects
+            if isinstance(objects, list):
+                trimmed['objects'] = objects[:8]
+            else:
+                trimmed['objects'] = objects
+        
+        return trimmed
