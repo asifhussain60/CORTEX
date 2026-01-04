@@ -10,7 +10,8 @@
     "completed_sub_plans": 1,
     "total_sub_plans": 19,
     "current_phase": "Phase 1",
-    "current_sub_plan": "00B"
+    "current_sub_plan": "00D",
+    "next_action": "Integrate VSCode Cache Manager into orchestrators"
   },
   "total_plans": 19,
   "completed_plans": 1,
@@ -29,7 +30,7 @@
       "total_phases": 4,
       "duration": "2h",
       "status": "in_progress",
-      "status_emoji": "\u23f3",
+      "status_emoji": "⏳",
       "dependencies": [],
       "viewer_url": "00A-epic-structure-cleanup/epic-structure-cleanup-plan-viewer.html",
       "start_date": "2026-01-04T09:21:47.583295"
@@ -44,7 +45,7 @@
       "total_phases": 6,
       "duration": "2-3w",
       "status": "blocked",
-      "status_emoji": "\ud83d\udd12",
+      "status_emoji": "🔒",
       "dependencies": [
         "epic-structure-cleanup"
       ],
@@ -61,7 +62,7 @@
       "total_phases": 8,
       "duration": "2-3w",
       "status": "blocked",
-      "status_emoji": "\ud83d\udd12",
+      "status_emoji": "🔒",
       "dependencies": [
         "epic-feature-planner"
       ],
@@ -77,11 +78,14 @@
       "phases_complete": 0,
       "total_phases": 4,
       "duration": "2-3h",
-      "status": "ready",
-      "status_emoji": "\u2705",
+      "status": "urgent",
+      "status_emoji": "🚀",
       "dependencies": [],
       "dependency_rule": "No blockers - can run in parallel",
-      "viewer_url": "00D-vscode-cache-optimization/vscode-cache-optimization-plan-viewer.html"
+      "viewer_url": "00D-vscode-cache-optimization/vscode-cache-optimization-plan-viewer.html",
+      "priority": "IMMEDIATE",
+      "priority_reason": "VSCodeCacheManager already implemented - ready for immediate integration into 4 orchestrators",
+      "implementation_status": "PHASE 1 COMPLETE - Core utility ready, integration pending"
     },
     {
       "order": "01",
@@ -93,11 +97,11 @@
       "total_phases": 5,
       "duration": "1w",
       "status": "blocked",
-      "status_emoji": "\ud83d\udd12",
+      "status_emoji": "🔒",
       "dependencies": [
         "test-coverage-sprint"
       ],
-      "dependency_rule": "Test Coverage \u226550%",
+      "dependency_rule": "Test Coverage ≥50%",
       "viewer_url": "01-refinement-orchestrator/refinement-orchestrator-plan-viewer.html"
     },
     {
@@ -110,11 +114,11 @@
       "total_phases": 5,
       "duration": "1w",
       "status": "blocked",
-      "status_emoji": "\ud83d\udd12",
+      "status_emoji": "🔒",
       "dependencies": [
         "test-coverage-sprint"
       ],
-      "dependency_rule": "Test Coverage \u226550%",
+      "dependency_rule": "Test Coverage ≥50%",
       "viewer_url": "02-debug-orchestrator/debug-orchestrator-plan-viewer.html"
     },
     {
@@ -127,7 +131,7 @@
       "total_phases": 4,
       "duration": "3-4d",
       "status": "blocked",
-      "status_emoji": "\ud83d\udd12",
+      "status_emoji": "🔒",
       "dependencies": [
         "test-coverage-sprint"
       ],
@@ -144,7 +148,7 @@
       "total_phases": 4,
       "duration": "3-4d",
       "status": "blocked",
-      "status_emoji": "\ud83d\udd12",
+      "status_emoji": "🔒",
       "dependencies": [
         "test-coverage-sprint"
       ],
@@ -161,11 +165,11 @@
       "total_phases": 4,
       "duration": "2-3d",
       "status": "blocked",
-      "status_emoji": "\ud83d\udd12",
+      "status_emoji": "🔒",
       "dependencies": [
         "test-coverage-sprint"
       ],
-      "dependency_rule": "Test Coverage \u226550%",
+      "dependency_rule": "Test Coverage ≥50%",
       "viewer_url": "05-context-middleware/context-middleware-plan-viewer.html"
     },
     {
@@ -178,7 +182,7 @@
       "total_phases": 4,
       "duration": "2d",
       "status": "blocked",
-      "status_emoji": "\ud83d\udd12",
+      "status_emoji": "🔒",
       "dependencies": [
         "epic-feature-planner"
       ],
@@ -195,7 +199,7 @@
       "total_phases": 4,
       "duration": "2d",
       "status": "blocked",
-      "status_emoji": "\ud83d\udd12",
+      "status_emoji": "🔒",
       "dependencies": [
         "epic-feature-planner"
       ],
@@ -212,7 +216,7 @@
       "total_phases": 6,
       "duration": "1-2w",
       "status": "blocked",
-      "status_emoji": "\ud83d\udd12",
+      "status_emoji": "🔒",
       "dependencies": [
         "refinement-orchestrator",
         "debug-orchestrator",
@@ -231,7 +235,7 @@
       "total_phases": 5,
       "duration": "3-4d",
       "status": "blocked",
-      "status_emoji": "\ud83d\udd12",
+      "status_emoji": "🔒",
       "dependencies": [
         "production-validation-pipeline"
       ],
@@ -248,7 +252,7 @@
       "total_phases": 4,
       "duration": "3-4d",
       "status": "blocked",
-      "status_emoji": "\ud83d\udd12",
+      "status_emoji": "🔒",
       "dependencies": [
         "epic-feature-planner"
       ],
@@ -265,7 +269,7 @@
       "total_phases": 5,
       "duration": "1w",
       "status": "blocked",
-      "status_emoji": "\ud83d\udd12",
+      "status_emoji": "🔒",
       "dependencies": [
         "knowledge-library-phase",
         "ast-scanning-planning"
@@ -283,7 +287,7 @@
       "total_phases": 5,
       "duration": "1w",
       "status": "blocked",
-      "status_emoji": "\ud83d\udd12",
+      "status_emoji": "🔒",
       "dependencies": [
         "orchestrator-migrations",
         "cortex-lens-admin"
@@ -301,7 +305,7 @@
       "total_phases": 4,
       "duration": "1w",
       "status": "blocked",
-      "status_emoji": "\ud83d\udd12",
+      "status_emoji": "🔒",
       "dependencies": [
         "production-validation-pipeline"
       ],
@@ -318,7 +322,7 @@
       "total_phases": 4,
       "duration": "1w",
       "status": "blocked",
-      "status_emoji": "\ud83d\udd12",
+      "status_emoji": "🔒",
       "dependencies": [
         "onboarding-system"
       ],
@@ -335,7 +339,7 @@
       "total_phases": 4,
       "duration": "1w",
       "status": "blocked",
-      "status_emoji": "\ud83d\udd12",
+      "status_emoji": "🔒",
       "dependencies": [
         "onboarding-system"
       ],
@@ -413,7 +417,7 @@
       "total_phases": 4,
       "duration": "2h",
       "status": "complete",
-      "status_emoji": "\u23f3",
+      "status_emoji": "⏳",
       "dependencies": [],
       "viewer_url": "00A-epic-structure-cleanup/epic-structure-cleanup-plan-viewer.html",
       "start_date": "2026-01-04T09:21:47.583295",
@@ -429,7 +433,7 @@
       "total_phases": 6,
       "duration": "2-3w",
       "status": "in_progress",
-      "status_emoji": "\ud83d\udd12",
+      "status_emoji": "🔒",
       "dependencies": [
         "epic-structure-cleanup"
       ],
@@ -447,7 +451,7 @@
       "total_phases": 8,
       "duration": "2-3w",
       "status": "blocked",
-      "status_emoji": "\ud83d\udd12",
+      "status_emoji": "🔒",
       "dependencies": [
         "epic-feature-planner"
       ],
@@ -463,11 +467,14 @@
       "phases_complete": 0,
       "total_phases": 4,
       "duration": "2-3h",
-      "status": "ready",
-      "status_emoji": "\u2705",
+      "status": "urgent",
+      "status_emoji": "🚀",
       "dependencies": [],
       "dependency_rule": "No blockers - can run in parallel",
-      "viewer_url": "00D-vscode-cache-optimization/vscode-cache-optimization-plan-viewer.html"
+      "viewer_url": "00D-vscode-cache-optimization/vscode-cache-optimization-plan-viewer.html",
+      "priority": "IMMEDIATE",
+      "priority_reason": "VSCodeCacheManager already implemented - ready for immediate integration into 4 orchestrators",
+      "implementation_status": "PHASE 1 COMPLETE - Core utility ready, integration pending"
     },
     {
       "order": "01",
@@ -479,11 +486,11 @@
       "total_phases": 5,
       "duration": "1w",
       "status": "blocked",
-      "status_emoji": "\ud83d\udd12",
+      "status_emoji": "🔒",
       "dependencies": [
         "test-coverage-sprint"
       ],
-      "dependency_rule": "Test Coverage \u226550%",
+      "dependency_rule": "Test Coverage ≥50%",
       "viewer_url": "01-refinement-orchestrator/refinement-orchestrator-plan-viewer.html"
     },
     {
@@ -496,11 +503,11 @@
       "total_phases": 5,
       "duration": "1w",
       "status": "blocked",
-      "status_emoji": "\ud83d\udd12",
+      "status_emoji": "🔒",
       "dependencies": [
         "test-coverage-sprint"
       ],
-      "dependency_rule": "Test Coverage \u226550%",
+      "dependency_rule": "Test Coverage ≥50%",
       "viewer_url": "02-debug-orchestrator/debug-orchestrator-plan-viewer.html"
     },
     {
@@ -513,7 +520,7 @@
       "total_phases": 4,
       "duration": "3-4d",
       "status": "blocked",
-      "status_emoji": "\ud83d\udd12",
+      "status_emoji": "🔒",
       "dependencies": [
         "test-coverage-sprint"
       ],
@@ -530,7 +537,7 @@
       "total_phases": 4,
       "duration": "3-4d",
       "status": "blocked",
-      "status_emoji": "\ud83d\udd12",
+      "status_emoji": "🔒",
       "dependencies": [
         "test-coverage-sprint"
       ],
@@ -547,11 +554,11 @@
       "total_phases": 4,
       "duration": "2-3d",
       "status": "blocked",
-      "status_emoji": "\ud83d\udd12",
+      "status_emoji": "🔒",
       "dependencies": [
         "test-coverage-sprint"
       ],
-      "dependency_rule": "Test Coverage \u226550%",
+      "dependency_rule": "Test Coverage ≥50%",
       "viewer_url": "05-context-middleware/context-middleware-plan-viewer.html"
     },
     {
@@ -564,7 +571,7 @@
       "total_phases": 4,
       "duration": "2d",
       "status": "blocked",
-      "status_emoji": "\ud83d\udd12",
+      "status_emoji": "🔒",
       "dependencies": [
         "epic-feature-planner"
       ],
@@ -581,7 +588,7 @@
       "total_phases": 4,
       "duration": "2d",
       "status": "blocked",
-      "status_emoji": "\ud83d\udd12",
+      "status_emoji": "🔒",
       "dependencies": [
         "epic-feature-planner"
       ],
@@ -598,7 +605,7 @@
       "total_phases": 6,
       "duration": "1-2w",
       "status": "blocked",
-      "status_emoji": "\ud83d\udd12",
+      "status_emoji": "🔒",
       "dependencies": [
         "refinement-orchestrator",
         "debug-orchestrator",
@@ -617,7 +624,7 @@
       "total_phases": 5,
       "duration": "3-4d",
       "status": "blocked",
-      "status_emoji": "\ud83d\udd12",
+      "status_emoji": "🔒",
       "dependencies": [
         "production-validation-pipeline"
       ],
@@ -634,7 +641,7 @@
       "total_phases": 4,
       "duration": "3-4d",
       "status": "blocked",
-      "status_emoji": "\ud83d\udd12",
+      "status_emoji": "🔒",
       "dependencies": [
         "epic-feature-planner"
       ],
@@ -651,7 +658,7 @@
       "total_phases": 5,
       "duration": "1w",
       "status": "blocked",
-      "status_emoji": "\ud83d\udd12",
+      "status_emoji": "🔒",
       "dependencies": [
         "knowledge-library-phase",
         "ast-scanning-planning"
@@ -669,7 +676,7 @@
       "total_phases": 5,
       "duration": "1w",
       "status": "blocked",
-      "status_emoji": "\ud83d\udd12",
+      "status_emoji": "🔒",
       "dependencies": [
         "orchestrator-migrations",
         "cortex-lens-admin"
@@ -687,7 +694,7 @@
       "total_phases": 4,
       "duration": "1w",
       "status": "blocked",
-      "status_emoji": "\ud83d\udd12",
+      "status_emoji": "🔒",
       "dependencies": [
         "production-validation-pipeline"
       ],
@@ -704,7 +711,7 @@
       "total_phases": 4,
       "duration": "1w",
       "status": "blocked",
-      "status_emoji": "\ud83d\udd12",
+      "status_emoji": "🔒",
       "dependencies": [
         "onboarding-system"
       ],
@@ -721,7 +728,7 @@
       "total_phases": 4,
       "duration": "1w",
       "status": "blocked",
-      "status_emoji": "\ud83d\udd12",
+      "status_emoji": "🔒",
       "dependencies": [
         "onboarding-system"
       ],

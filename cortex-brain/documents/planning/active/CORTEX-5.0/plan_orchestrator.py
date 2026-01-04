@@ -128,8 +128,22 @@ class PlanOrchestrator:
         for sp in self.tracker["sub_plans"]:
             status_icon = self._get_status_icon(sp["status"])
             duration = sp.get('duration_estimate', sp.get('duration', 'TBD'))
-            print(f"{sp['order']:<4} {sp['name']:<35} {status_icon} {sp['status']:<12} "
+            
+            # Highlight urgent/immediate sub-plans
+            name = sp['name']
+            if sp.get('priority') == 'IMMEDIATE' or sp.get('status') == 'urgent':
+                name = f"⚡ {name} ⚡"
+                status_icon = "🚀"
+            
+            print(f"{sp['order']:<4} {name:<35} {status_icon} {sp['status']:<12} "
                   f"{sp['progress']:>3}% {duration:>10}")
+            
+            # Show implementation status for urgent items
+            if sp.get('implementation_status'):
+                print(f"     └─ {sp['implementation_status']}")
+            if sp.get('priority_reason'):
+                print(f"     └─ 💡 {sp['priority_reason'][:70]}...")
+
         
         # Milestones
         print("\n🎯 Milestones:")
@@ -159,7 +173,9 @@ class PlanOrchestrator:
             "blocked": "⏸️",
             "in_progress": "🔄",
             "complete": "✅",
-            "failed": "❌"
+            "failed": "❌",
+            "ready": "✅",
+            "urgent": "🚀"
         }
         return icons.get(status, "❓")
     
