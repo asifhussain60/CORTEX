@@ -1,0 +1,146 @@
+# Debug Orchestrator Response Templates
+# Professional template-based responses for debug workflow stages
+#
+# Version: 1.0.0
+# Author: Asif Hussain
+# Created: January 4, 2026
+
+bug_report_received:
+  template_name: "debug_bug_report_received"
+  tier: "instant"
+  components:
+    header:
+      icon: "🐛"
+      title: "CORTEX Debug Session Started"
+    body:
+      message: |
+        Bug report received and parsed successfully.
+        
+        **Session ID:** {session_id}
+        **Error Type:** {error_type}
+        **Severity:** {severity}
+        **Affected Components:** {affected_components}
+        
+        **Next Steps:**
+        - Running contextual architectural review
+        - Analyzing root causes
+        - Generating fix proposals
+    progress:
+      current_phase: "Bug Report Parsed"
+      total_phases: 8
+      percentage: 12
+  response_time: "instant"
+
+debug_session_progress:
+  template_name: "debug_session_progress"
+  tier: "concise"
+  components:
+    header:
+      icon: "🔍"
+      title: "CORTEX Debug Session Progress"
+    body:
+      message: |
+        **Phase:** {current_phase}
+        **Status:** {status}
+        
+        **Progress:** {progress_percentage}% Complete
+        
+        {phase_specific_message}
+    progress:
+      visual_bar: true
+      show_phases: true
+  response_time: "concise"
+
+fix_proposal:
+  template_name: "debug_fix_proposal"
+  tier: "detailed"
+  components:
+    header:
+      icon: "💡"
+      title: "CORTEX Fix Proposal"
+    body:
+      message: |
+        **Root Cause:** {hypothesis}
+        **Confidence:** {confidence}%
+        
+        **Proposed Fix:**
+        {fix_title}
+        
+        **Approach:** {approach}
+        **Impact:** {impact_scope} scope, {impact_risk} risk
+        
+        **Steps:**
+        {fix_steps}
+        
+        **Affected Files:**
+        {affected_files}
+    action_required: true
+    actions:
+      - label: "Apply Fix"
+        action: "apply_fix"
+      - label: "See Alternative"
+        action: "next_proposal"
+      - label: "Cancel"
+        action: "cancel"
+  response_time: "detailed"
+
+debug_complete:
+  template_name: "debug_complete"
+  tier: "comprehensive"
+  components:
+    header:
+      icon: "🎉"
+      title: "CORTEX Debug Session Complete"
+    body:
+      message: |
+        Debug session completed successfully!
+        
+        **Session Summary:**
+        - Session ID: {session_id}
+        - Root Cause: {root_cause}
+        - Fix Applied: {fix_applied}
+        - Tests Passing: ✅
+        - Markers Cleaned: ✅
+        
+        **Patterns Learned:**
+        {patterns_learned}
+        
+        **Git Checkpoints:**
+        {git_checkpoints}
+    success: true
+    completion_message: |
+      All debug markers removed and tests passing.
+      Session data saved for future pattern matching.
+  response_time: "comprehensive"
+
+debug_failed:
+  template_name: "debug_failed"
+  tier: "detailed"
+  components:
+    header:
+      icon: "❌"
+      title: "CORTEX Debug Session Failed"
+    body:
+      message: |
+        Debug session encountered an error.
+        
+        **Session ID:** {session_id}
+        **Failure Point:** {failure_phase}
+        **Error:** {error_message}
+        
+        **Completed Phases:**
+        {completed_phases}
+        
+        **Recovery Options:**
+        - Review session logs
+        - Restart from last checkpoint
+        - Manual debugging required
+    error: true
+    recovery_actions:
+      - label: "View Session Logs"
+        action: "view_logs"
+      - label: "Rollback to Checkpoint"
+        action: "rollback"
+      - label: "Start New Session"
+        action: "new_session"
+  response_time: "detailed"

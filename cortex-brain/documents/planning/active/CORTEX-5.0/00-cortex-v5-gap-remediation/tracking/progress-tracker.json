@@ -3,8 +3,8 @@
   "created": "2026-01-03T00:00:00Z",
   "status": "active",
   "overall_progress": {
-    "percentage": 20,
-    "completed_sub_plans": 1,
+    "percentage": 30,
+    "completed_sub_plans": 3,
     "total_sub_plans": 10,
     "current_phase": "Phase 1: Foundation",
     "current_sub_plan": "00-test-coverage-sprint"
@@ -50,8 +50,8 @@
       "order": "02",
       "name": "Debug Orchestrator",
       "folder": "02-debug-orchestrator",
-      "status": "blocked",
-      "progress": 0,
+      "status": "complete",
+      "progress": 100,
       "duration_estimate": "1 week",
       "dependencies": [
         "00"
@@ -61,14 +61,14 @@
       ],
       "priority": "high",
       "gate": "Test coverage >= 50%",
-      "start_date": null,
-      "end_date": null
+      "start_date": "2026-01-04T05:05:02.435041",
+      "end_date": "2026-01-04T05:18:19.589719"
     },
     {
       "order": "03",
       "name": "Phase -1 Knowledge Library",
       "folder": "03-knowledge-library-phase",
-      "status": "blocked",
+      "status": "not_started",
       "progress": 0,
       "duration_estimate": "3-4 days",
       "dependencies": [
@@ -86,7 +86,7 @@
       "order": "04",
       "name": "AST Scanning Integration",
       "folder": "04-ast-scanning-planning",
-      "status": "blocked",
+      "status": "not_started",
       "progress": 0,
       "duration_estimate": "3-4 days",
       "dependencies": [
