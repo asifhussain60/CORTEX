@@ -14,6 +14,12 @@ orchestrator:
 # Folder structure template
 folder_structure:
   root: "cortex-brain/documents/planning/active/{plan_name}/"
+  
+  naming_conventions:
+    folders: "lowercase-kebab-case"  # Example: epic-structure-cleanup, test-coverage-sprint
+    files: "kebab-case-with-prefix"  # Example: 00-epic-structure-cleanup.md, planViewer.html
+    reasoning: "Consistency with existing CORTEX structure, filesystem compatibility"
+  
   subfolders:
     - name: "context"
       description: "Context discovery and analysis documents"
@@ -33,10 +39,17 @@ folder_structure:
       description: "Quick start guide"
     - path: "tracking/progress-tracker.json"
       type: "state"
-      description: "JSON progress tracker"
+      description: "JSON progress tracker (FEATURE mode) or epic-progress-tracker.json (EPIC mode)"
     - path: "tracking/CONTINUATION-PROMPT.md"
       type: "documentation"
       description: "Session continuation prompt for token limit management"
+  
+  generated_on_approval:
+    - path: "plan-viewer.html"
+      type: "viewer"
+      description: "Universal HTML viewer - auto-detects EPIC vs FEATURE mode from folder structure"
+      generation_phase: "approval"  # Generated when plan approved for execution, NOT during planning
+      mode_detection: "automatic"  # Reads epic-progress-tracker.json (EPIC) or progress-tracker.json (FEATURE)
 
 # Execution instructions for GitHub Copilot (when interpreting this manifest)
 execution_instructions:

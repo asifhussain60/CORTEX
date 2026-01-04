@@ -1,759 +1,566 @@
-# ========================================
-# CORTEX-5.0 EPIC Manifest
-# ========================================
-# Purpose: Formal EPIC structure definition for plan_orchestrator.py
-# Version: 1.0.0
-# Created: January 4, 2026
-# Author: Asif Hussain
-#
-# This manifest serves as the source of truth for:
-# - Child plan metadata and ordering
-# - Inter-plan dependencies and validation rules
-# - Execution gates and blocking conditions
-# - Progress tracking and status management
-#
-# The plan_orchestrator.py script detects this file and uses it to:
-# 1. Validate EPIC mode (vs feature mode)
-# 2. Load child plan definitions
-# 3. Enforce dependency rules
-# 4. Track progress across 18 coordinated sub-plans
-# ========================================
-
 epic_metadata:
   epic_id: cortex-v5-gap-remediation
-  epic_name: "CORTEX v5 Gap Remediation & Completion"
+  epic_name: CORTEX v5 Gap Remediation & Completion
   epic_type: strategic_multi_phase
-  planner_mode: epic  # Triggers EPIC mode detection
+  planner_mode: epic
   version: 5.0.1
-  created: "2026-01-03"
-  last_updated: "2026-01-04"
-  author: "Asif Hussain"
+  created: '2026-01-03'
+  last_updated: '2026-01-04'
+  author: Asif Hussain
   status: active
-  
-  # Master plan reference
-  master_plan_file: "00-MASTER-REMEDIATION-PLAN.md"
-  
-  # Tracking infrastructure
+  master_plan_file: 00-MASTER-REMEDIATION-PLAN.md
   tracking:
-    epic_progress_tracker: "tracking/epic-progress-tracker.json"
-    child_plan_registry: "tracking/child-plan-registry.json"
-    dependency_graph: "tracking/dependency-graph.json"
-  
-  # Epic-level metrics
+    epic_progress_tracker: tracking/epic-progress-tracker.json
+    child_plan_registry: tracking/child-plan-registry.json
+    dependency_graph: tracking/dependency-graph.json
   metrics:
     total_child_plans: 18
     total_estimated_hours: 400
     critical_path_weeks: 11
     blocking_plans: 3
     parallel_execution_supported: true
-
-# ========================================
-# CHILD PLANS (18 Total)
-# ========================================
-# Order: Sequential execution order (00A-18)
-# Type: infrastructure | feature | validation | enhancement | migration | documentation
-# Priority: critical | high | medium | low
-# Blocking: true = must complete before dependents can start
-# ========================================
-
+  viewer: plan-viewer.html
 child_plans:
-  
-  # ----------------------------------
-  # WAVE 0: Foundation (00A-00D)
-  # ----------------------------------
-  
-  - id: epic-structure-cleanup
-    order: "00A"
-    name: "Epic Structure Cleanup"
-    type: infrastructure
-    priority: critical
-    blocking: true
-    
-    folder: "00A-epic-structure-cleanup/"
-    master_plan: "00A-epic-structure-cleanup/00-epic-structure-cleanup.md"
-    tracking_file: "00A-epic-structure-cleanup/tracking/progress-tracker.json"
-    viewer_file: "00A-epic-structure-cleanup/epic-structure-cleanup-plan-viewer.html"
-    
-    estimated_hours: 2
-    duration_estimate: "2h"
-    complexity: simple
-    
-    dependencies: []  # First sub-plan, no dependencies
-    
-    description: "Organize and validate CORTEX-5.0 epic folder structure, remove duplicates, establish standard patterns."
-    
-    exit_criteria:
-      - "All 18 child plan folders properly named and organized"
-      - "No duplicate or orphaned files"
-      - "Tracking infrastructure validated"
-      - "README.md and structure documentation complete"
-  
-  - id: epic-feature-planner
-    order: "00B"
-    name: "Epic & Feature Planner Implementation"
-    type: infrastructure
-    priority: critical
-    blocking: true
-    
-    folder: "00B-epic-feature-planner/"
-    master_plan: "00B-epic-feature-planner/00-epic-feature-planner.md"
-    tracking_file: "00B-epic-feature-planner/tracking/progress-tracker.json"
-    viewer_file: "00B-epic-feature-planner/epic-feature-planner-plan-viewer.html"
-    
-    estimated_hours: 120
-    duration_estimate: "2-3w"
-    complexity: complex
-    
-    dependencies:
-      - "00A"  # Epic structure must be clean first
-    
-    dependency_rules:
-      - condition: "Sub-Plan 00A must be 100% complete"
-        rationale: "Clean structure required before planner implementation"
-    
-    description: "Implement dual-mode planning system with EPIC orchestration, child plan management, HTML viewer generation, and dependency validation."
-    
-    exit_criteria:
-      - "Epic planner detects and manages 18 child plans"
-      - "HTML viewer displays real-time progress"
-      - "Dependency validation blocks child plans appropriately"
-      - "All 6 phases tested with CORTEX-5.0 structure"
-      - "TDD: Tests written before implementation"
-  
-  - id: test-coverage-sprint
-    order: "00C"
-    name: "Test Coverage Sprint"
-    type: validation
-    priority: critical
-    blocking: true
-    
-    folder: "00C-test-coverage-sprint/"
-    master_plan: "00C-test-coverage-sprint/00-test-coverage-sprint.md"
-    tracking_file: "00C-test-coverage-sprint/tracking/progress-tracker.json"
-    viewer_file: "00C-test-coverage-sprint/test-coverage-sprint-plan-viewer.html"
-    
-    estimated_hours: 120
-    duration_estimate: "2-3w"
-    complexity: moderate
-    
-    dependencies:
-      - "00B"  # Epic planner infrastructure must exist
-    
-    dependency_rules:
-      - condition: "Sub-Plan 00B must be 100% complete"
-        rationale: "Testing infrastructure depends on planner being operational"
-    
-    description: "Achieve ≥80% test coverage across planning system v5, fix brittleness issues, establish quality gates."
-    
-    gates:
-      - gate_id: "GATE-1"
-        name: "50% Coverage Milestone"
-        condition: "Test coverage reaches 50%"
-        blocks: ["01", "02", "05"]  # Blocks core orchestrators
-      
-      - gate_id: "GATE-2"
-        name: "80% Coverage Milestone"
-        condition: "Test coverage reaches 80%"
-        blocks: ["03", "04"]  # Blocks knowledge library and AST scanning
-    
-    exit_criteria:
-      - "Test coverage ≥80%"
-      - "All critical paths covered"
-      - "Brittleness tests passing"
-      - "DoR/DoD validation implemented"
-  
-  - id: vscode-cache-optimization
-    order: "00D"
-    name: "VSCode Cache Optimization"
-    type: infrastructure
-    priority: urgent
-    blocking: false  # Can run in parallel
-    
-    folder: "00D-vscode-cache-optimization/"
-    master_plan: "00D-vscode-cache-optimization/00-vscode-cache-optimization.md"
-    tracking_file: "00D-vscode-cache-optimization/tracking/progress-tracker.json"
-    viewer_file: "00D-vscode-cache-optimization/vscode-cache-optimization-plan-viewer.html"
-    
-    estimated_hours: 3
-    duration_estimate: "2-3h"
-    complexity: simple
-    
-    dependencies: []  # Parallel execution allowed
-    
-    description: "Pre-flight cache optimization before autonomous operations. Cross-platform support (Windows, macOS, Linux)."
-    
-    exit_criteria:
-      - "VSCodeCacheManager fully implemented"
-      - "Integration in 4 orchestrators verified"
-      - "Documentation complete"
-      - "Cross-platform testing passed"
-  
-  # ----------------------------------
-  # WAVE 1: Core Features (01-07)
-  # ----------------------------------
-  
-  - id: refinement-orchestrator
-    order: "01"
-    name: "Refinement Orchestrator Implementation"
-    type: feature
-    priority: high
-    blocking: false
-    
-    folder: "01-refinement-orchestrator/"
-    master_plan: "01-refinement-orchestrator/00-refinement-orchestrator.md"
-    tracking_file: "01-refinement-orchestrator/tracking/progress-tracker.json"
-    
-    estimated_hours: 40
-    duration_estimate: "1w"
-    complexity: moderate
-    
-    dependencies:
-      - "00C"  # Gate 1: 50% coverage
-    
-    dependency_rules:
-      - condition: "Test coverage ≥50%"
-        gate: "GATE-1"
-        rationale: "Quality baseline required for orchestrator development"
-    
-    description: "7-phase code refinement workflow with quality scoring, pattern analysis, and automated improvements."
-    
-    exit_criteria:
-      - "All 7 refinement phases implemented"
-      - "Test coverage ≥95%"
-      - "Integration with planning system verified"
-  
-  - id: debug-orchestrator
-    order: "02"
-    name: "Debug Orchestrator Implementation"
-    type: feature
-    priority: high
-    blocking: false
-    
-    folder: "02-debug-orchestrator/"
-    master_plan: "02-debug-orchestrator/00-debug-orchestrator.md"
-    tracking_file: "02-debug-orchestrator/tracking/progress-tracker.json"
-    
-    estimated_hours: 40
-    duration_estimate: "1w"
-    complexity: moderate
-    
-    dependencies:
-      - "00C"  # Gate 1: 50% coverage
-    
-    dependency_rules:
-      - condition: "Test coverage ≥50%"
-        gate: "GATE-1"
-        rationale: "Quality baseline required for orchestrator development"
-    
-    description: "Automated debugging workflow with error analysis, root cause detection, fix generation."
-  
-  - id: knowledge-library-phase
-    order: "03"
-    name: "Phase -1 Knowledge Library Implementation"
-    type: feature
-    priority: high
-    blocking: false
-    
-    folder: "03-knowledge-library-phase/"
-    master_plan: "03-knowledge-library-phase/00-knowledge-library-phase.md"
-    tracking_file: "03-knowledge-library-phase/tracking/progress-tracker.json"
-    
-    estimated_hours: 32
-    duration_estimate: "3-4d"
-    complexity: moderate
-    
-    dependencies:
-      - "00C"  # Gate 2: Planning v5 tests must pass
-    
-    dependency_rules:
-      - condition: "Planning v5 tests passing"
-        gate: "GATE-2"
-        rationale: "Knowledge library integrates with planning system"
-    
-    description: "Pre-planning knowledge discovery phase with AST scanning, pattern detection, duplication analysis."
-  
-  - id: ast-scanning-planning
-    order: "04"
-    name: "AST Scanning Integration for Planning"
-    type: feature
-    priority: high
-    blocking: false
-    
-    folder: "04-ast-scanning-planning/"
-    master_plan: "04-ast-scanning-planning/00-ast-scanning-planning.md"
-    tracking_file: "04-ast-scanning-planning/tracking/progress-tracker.json"
-    
-    estimated_hours: 32
-    duration_estimate: "3-4d"
-    complexity: moderate
-    
-    dependencies:
-      - "00C"  # Gate 2: Planning v5 tests must pass
-    
-    dependency_rules:
-      - condition: "Planning v5 tests passing"
-        gate: "GATE-2"
-        rationale: "AST integration requires stable planning system"
-    
-    description: "AST-based code analysis for intelligent injection point detection in planning phase."
-  
-  - id: context-middleware
-    order: "05"
-    name: "Context Middleware Enhancement"
-    type: feature
-    priority: high
-    blocking: false
-    
-    folder: "05-context-middleware/"
-    master_plan: "05-context-middleware/00-context-middleware.md"
-    tracking_file: "05-context-middleware/tracking/progress-tracker.json"
-    
-    estimated_hours: 24
-    duration_estimate: "2-3d"
-    complexity: moderate
-    
-    dependencies:
-      - "00C"  # Gate 1: 50% coverage
-    
-    dependency_rules:
-      - condition: "Test coverage ≥50%"
-        gate: "GATE-1"
-        rationale: "Middleware enhancement requires quality baseline"
-    
-    description: "Enhanced context gathering with Vision API integration, file relationship analysis, semantic search."
-  
-  - id: visual-progress
-    order: "06"
-    name: "Visual Progress Generation"
-    type: enhancement
-    priority: medium
-    blocking: false
-    
-    folder: "06-visual-progress/"
-    master_plan: "06-visual-progress/00-visual-progress.md"
-    tracking_file: "06-visual-progress/tracking/progress-tracker.json"
-    
-    estimated_hours: 16
-    duration_estimate: "2d"
-    complexity: simple
-    
-    dependencies:
-      - "00B"  # Epic planner must be functional
-    
-    dependency_rules:
-      - condition: "Planning v5 functional"
-        rationale: "Visual progress relies on planning system data"
-    
-    description: "HTML progress bars, Mermaid diagrams, real-time status displays for plans."
-  
-  - id: refactor-enforcement
-    order: "07"
-    name: "REFACTOR Task Enforcement"
-    type: enhancement
-    priority: medium
-    blocking: false
-    
-    folder: "07-refactor-enforcement/"
-    master_plan: "07-refactor-enforcement/00-refactor-enforcement.md"
-    tracking_file: "07-refactor-enforcement/tracking/progress-tracker.json"
-    
-    estimated_hours: 16
-    duration_estimate: "2d"
-    complexity: simple
-    
-    dependencies:
-      - "00B"  # Epic planner must be functional
-    
-    dependency_rules:
-      - condition: "Planning v5 functional"
-        rationale: "REFACTOR enforcement integrates with planning"
-    
-    description: "Automated SKULL rule enforcement for whole-file cleanup in REFACTOR phase."
-  
-  # ----------------------------------
-  # WAVE 2: Integration (08-12)
-  # ----------------------------------
-  
-  - id: orchestrator-migrations
-    order: "08"
-    name: "Orchestrator Migrations to Planning v5"
-    type: migration
-    priority: high
-    blocking: false
-    
-    folder: "08-orchestrator-migrations/"
-    master_plan: "08-orchestrator-migrations/00-orchestrator-migrations.md"
-    tracking_file: "08-orchestrator-migrations/tracking/progress-tracker.json"
-    
-    estimated_hours: 80
-    duration_estimate: "1-2w"
-    complexity: complex
-    
-    dependencies:
-      - "01"  # Refinement orchestrator
-      - "02"  # Debug orchestrator
-      - "05"  # Context middleware
-    
-    dependency_rules:
-      - condition: "Orchestrators 01, 02, 05 operational"
-        rationale: "Migration requires all core orchestrators functional"
-    
-    description: "Migrate all 8 existing orchestrators to planning system v5 architecture."
-  
-  - id: acceptance-validation-system
-    order: "10"
-    name: "Acceptance Validation System"
-    type: validation
-    priority: high
-    blocking: false
-    
-    folder: "10-acceptance-validation-system/"
-    master_plan: "10-acceptance-validation-system/00-acceptance-validation-system.md"
-    tracking_file: "10-acceptance-validation-system/tracking/progress-tracker.json"
-    
-    estimated_hours: 32
-    duration_estimate: "3-4d"
-    complexity: moderate
-    
-    dependencies:
-      - "00B"  # Epic planner must be functional
-    
-    dependency_rules:
-      - condition: "Planning v5 functional"
-        rationale: "Acceptance validation integrates with planning"
-    
-    description: "Automated acceptance criteria validation with DoR/DoD gates."
-  
-  - id: cortex-lens-admin
-    order: "11"
-    name: "CORTEX-LENS Admin Dashboard"
-    type: feature
-    priority: medium
-    blocking: false
-    
-    folder: "11-cortex-lens-admin/"
-    master_plan: "11-cortex-lens-admin/00-cortex-lens-admin.md"
-    tracking_file: "11-cortex-lens-admin/tracking/progress-tracker.json"
-    
-    estimated_hours: 40
-    duration_estimate: "1w"
-    complexity: moderate
-    
-    dependencies:
-      - "03"  # Knowledge library
-      - "04"  # AST scanning
-    
-    dependency_rules:
-      - condition: "Phase -1 and AST integration complete"
-        rationale: "Dashboard displays knowledge graph and AST analysis"
-    
-    description: "Web-based admin dashboard for brain tier visualization, governance rule management."
-  
-  - id: production-validation-pipeline
-    order: "12"
-    name: "Production Validation Pipeline"
-    type: validation
-    priority: critical
-    blocking: true
-    
-    folder: "12-production-validation-pipeline/"
-    master_plan: "12-production-validation-pipeline/00-production-validation-pipeline.md"
-    tracking_file: "12-production-validation-pipeline/tracking/progress-tracker.json"
-    
-    estimated_hours: 40
-    duration_estimate: "1w"
-    complexity: complex
-    
-    dependencies:
-      - "08"  # Orchestrator migrations
-      - "11"  # CORTEX-LENS admin
-    
-    dependency_rules:
-      - condition: "All migrations complete and LENS operational"
-        rationale: "Production validation requires all systems operational"
-    
-    description: "24-gate deployment validation pipeline with automated quality checks."
-  
-  # ----------------------------------
-  # WAVE 3: Finalization (09, 13-18)
-  # ----------------------------------
-  
-  - id: final-validation
-    order: "09"
-    name: "Final Validation & Definition of Done"
-    type: validation
-    priority: critical
-    blocking: true
-    
-    folder: "09-final-validation/"
-    master_plan: "09-final-validation/00-final-validation.md"
-    tracking_file: "09-final-validation/tracking/progress-tracker.json"
-    
-    estimated_hours: 32
-    duration_estimate: "3-4d"
-    complexity: moderate
-    
-    dependencies:
-      - "12"  # Production validation must pass
-    
-    dependency_rules:
-      - condition: "Production validation pipeline passed"
-        rationale: "Final validation confirms all systems production-ready"
-    
-    description: "Comprehensive DoD validation, acceptance testing, production readiness check."
-  
-  - id: onboarding-system
-    order: "13"
-    name: "Onboarding System Implementation"
-    type: documentation
-    priority: medium
-    blocking: false
-    
-    folder: "13-onboarding-system/"
-    master_plan: "13-onboarding-system/00-onboarding-system.md"
-    tracking_file: "13-onboarding-system/tracking/progress-tracker.json"
-    
-    estimated_hours: 40
-    duration_estimate: "1w"
-    complexity: moderate
-    
-    dependencies:
-      - "12"  # Production validation
-    
-    dependency_rules:
-      - condition: "Production ready"
-        rationale: "Onboarding requires stable production system"
-    
-    description: "Interactive onboarding flow for new CORTEX users with guided tutorials."
-  
-  - id: demo-tutorials
-    order: "14"
-    name: "Demo & Tutorial System"
-    type: documentation
-    priority: medium
-    blocking: false
-    
-    folder: "14-demo-tutorials/"
-    master_plan: "14-demo-tutorials/00-demo-tutorials.md"
-    tracking_file: "14-demo-tutorials/tracking/progress-tracker.json"
-    
-    estimated_hours: 40
-    duration_estimate: "1w"
-    complexity: moderate
-    
-    dependencies:
-      - "13"  # Onboarding system
-    
-    dependency_rules:
-      - condition: "Onboarding complete"
-        rationale: "Tutorials extend onboarding system"
-    
-    description: "Interactive demos showcasing CORTEX capabilities and workflows."
-  
-  - id: user-response-templates
-    order: "15"
-    name: "User Response Templates"
-    type: documentation
-    priority: medium
-    blocking: false
-    
-    folder: "15-user-response-templates/"
-    master_plan: "15-user-response-templates/00-user-response-templates.md"
-    tracking_file: "15-user-response-templates/tracking/progress-tracker.json"
-    
-    estimated_hours: 40
-    duration_estimate: "1w"
-    complexity: moderate
-    
-    dependencies:
-      - "13"  # Onboarding system
-    
-    dependency_rules:
-      - condition: "Onboarding complete"
-        rationale: "Response templates support user interactions"
-    
-    description: "User-friendly response template system for common CORTEX operations."
-  
-  # ----------------------------------
-  # Deferred / TBD (16-18)
-  # ----------------------------------
-  
-  - id: planning-system-v5-fix
-    order: "16"
-    name: "Planning System v5 Fix"
-    type: feature
-    priority: low
-    blocking: false
-    
-    folder: "16-planning-system-v5-fix/"
-    master_plan: "16-planning-system-v5-fix/00-planning-system-v5-fix.md"
-    tracking_file: "16-planning-system-v5-fix/tracking/progress-tracker.json"
-    
-    estimated_hours: 0
-    duration_estimate: "TBD"
-    complexity: unknown
-    
-    dependencies: []
-    
-    status: deferred
-    description: "Deferred until requirements clarified."
-  
-  - id: planning-v5-enhancement
-    order: "17"
-    name: "Planning v5 Enhancement"
-    type: feature
-    priority: low
-    blocking: false
-    
-    folder: "17-planning-v5-enhancement/"
-    master_plan: "17-planning-v5-enhancement/00-planning-v5-enhancement.md"
-    tracking_file: "17-planning-v5-enhancement/tracking/progress-tracker.json"
-    
-    estimated_hours: 0
-    duration_estimate: "TBD"
-    complexity: unknown
-    
-    dependencies: []
-    
-    status: deferred
-    description: "Deferred until requirements clarified."
-  
-  - id: planning-v5-fix-duplicate
-    order: "18"
-    name: "Planning v5 Fix (Duplicate?)"
-    type: feature
-    priority: low
-    blocking: false
-    
-    folder: "18-planning-v5-fix/"
-    master_plan: "18-planning-v5-fix/00-planning-v5-fix.md"
-    tracking_file: "18-planning-v5-fix/tracking/progress-tracker.json"
-    
-    estimated_hours: 0
-    duration_estimate: "TBD"
-    complexity: unknown
-    
-    dependencies: []
-    
-    status: review_needed
-    description: "Possible duplicate of Sub-Plan 16. Requires investigation."
-
-# ========================================
-# VALIDATION RULES
-# ========================================
-# Enforced by plan_orchestrator.py during execution
-# ========================================
-
+- id: epic-structure-cleanup
+  order: 00A
+  name: Epic Structure Cleanup
+  type: infrastructure
+  priority: critical
+  blocking: true
+  folder: 00A-epic-structure-cleanup/
+  master_plan: 00A-epic-structure-cleanup/00-epic-structure-cleanup.md
+  tracking_file: 00A-epic-structure-cleanup/tracking/progress-tracker.json
+  viewer_file: 00A-epic-structure-cleanup/plan-viewer.html
+  estimated_hours: 2
+  duration_estimate: 2h
+  complexity: simple
+  dependencies: []
+  description: Organize and validate CORTEX-5.0 epic folder structure, remove duplicates,
+    establish standard patterns.
+  exit_criteria:
+  - All 18 child plan folders properly named and organized
+  - No duplicate or orphaned files
+  - Tracking infrastructure validated
+  - README.md and structure documentation complete
+- id: epic-feature-planner
+  order: 00B
+  name: Epic & Feature Planner Implementation
+  type: infrastructure
+  priority: critical
+  blocking: true
+  folder: 00B-epic-feature-planner/
+  master_plan: 00B-epic-feature-planner/00-epic-feature-planner.md
+  tracking_file: 00B-epic-feature-planner/tracking/progress-tracker.json
+  viewer_file: 00B-epic-feature-planner/plan-viewer.html
+  estimated_hours: 120
+  duration_estimate: 2-3w
+  complexity: complex
+  dependencies:
+  - 00A
+  dependency_rules:
+  - condition: Sub-Plan 00A must be 100% complete
+    rationale: Clean structure required before planner implementation
+  description: Implement dual-mode planning system with EPIC orchestration, child
+    plan management, HTML viewer generation, and dependency validation.
+  exit_criteria:
+  - Epic planner detects and manages 18 child plans
+  - HTML viewer displays real-time progress
+  - Dependency validation blocks child plans appropriately
+  - All 6 phases tested with CORTEX-5.0 structure
+  - 'TDD: Tests written before implementation'
+- id: test-coverage-sprint
+  order: 00C
+  name: Test Coverage Sprint
+  type: validation
+  priority: critical
+  blocking: true
+  folder: 00C-test-coverage-sprint/
+  master_plan: 00C-test-coverage-sprint/00-test-coverage-sprint.md
+  tracking_file: 00C-test-coverage-sprint/tracking/progress-tracker.json
+  viewer_file: 00C-test-coverage-sprint/plan-viewer.html
+  estimated_hours: 120
+  duration_estimate: 2-3w
+  complexity: moderate
+  dependencies:
+  - 00B
+  dependency_rules:
+  - condition: Sub-Plan 00B must be 100% complete
+    rationale: Testing infrastructure depends on planner being operational
+  description: Achieve ≥80% test coverage across planning system v5, fix brittleness
+    issues, establish quality gates.
+  gates:
+  - gate_id: GATE-1
+    name: 50% Coverage Milestone
+    condition: Test coverage reaches 50%
+    blocks:
+    - '01'
+    - '02'
+    - '05'
+  - gate_id: GATE-2
+    name: 80% Coverage Milestone
+    condition: Test coverage reaches 80%
+    blocks:
+    - '03'
+    - '04'
+  exit_criteria:
+  - Test coverage ≥80%
+  - All critical paths covered
+  - Brittleness tests passing
+  - DoR/DoD validation implemented
+- id: vscode-cache-optimization
+  order: 00D
+  name: VSCode Cache Optimization
+  type: infrastructure
+  priority: urgent
+  blocking: false
+  folder: 00D-vscode-cache-optimization/
+  master_plan: 00D-vscode-cache-optimization/00-vscode-cache-optimization.md
+  tracking_file: 00D-vscode-cache-optimization/tracking/progress-tracker.json
+  viewer_file: 00D-vscode-cache-optimization/plan-viewer.html
+  estimated_hours: 3
+  duration_estimate: 2-3h
+  complexity: simple
+  dependencies: []
+  description: Pre-flight cache optimization before autonomous operations. Cross-platform
+    support (Windows, macOS, Linux).
+  exit_criteria:
+  - VSCodeCacheManager fully implemented
+  - Integration in 4 orchestrators verified
+  - Documentation complete
+  - Cross-platform testing passed
+- id: refinement-orchestrator
+  order: '01'
+  name: Refinement Orchestrator Implementation
+  type: feature
+  priority: high
+  blocking: false
+  folder: 01-refinement-orchestrator/
+  master_plan: 01-refinement-orchestrator/00-refinement-orchestrator.md
+  tracking_file: 01-refinement-orchestrator/tracking/progress-tracker.json
+  estimated_hours: 40
+  duration_estimate: 1w
+  complexity: moderate
+  dependencies:
+  - 00C
+  dependency_rules:
+  - condition: Test coverage ≥50%
+    gate: GATE-1
+    rationale: Quality baseline required for orchestrator development
+  description: 7-phase code refinement workflow with quality scoring, pattern analysis,
+    and automated improvements.
+  exit_criteria:
+  - All 7 refinement phases implemented
+  - Test coverage ≥95%
+  - Integration with planning system verified
+  viewer_file: 01-refinement-orchestrator/plan-viewer.html
+- id: debug-orchestrator
+  order: '02'
+  name: Debug Orchestrator Implementation
+  type: feature
+  priority: high
+  blocking: false
+  folder: 02-debug-orchestrator/
+  master_plan: 02-debug-orchestrator/00-debug-orchestrator.md
+  tracking_file: 02-debug-orchestrator/tracking/progress-tracker.json
+  estimated_hours: 40
+  duration_estimate: 1w
+  complexity: moderate
+  dependencies:
+  - 00C
+  dependency_rules:
+  - condition: Test coverage ≥50%
+    gate: GATE-1
+    rationale: Quality baseline required for orchestrator development
+  description: Automated debugging workflow with error analysis, root cause detection,
+    fix generation.
+  viewer_file: 02-debug-orchestrator/plan-viewer.html
+- id: knowledge-library-phase
+  order: '03'
+  name: Phase -1 Knowledge Library Implementation
+  type: feature
+  priority: high
+  blocking: false
+  folder: 03-knowledge-library-phase/
+  master_plan: 03-knowledge-library-phase/00-knowledge-library-phase.md
+  tracking_file: 03-knowledge-library-phase/tracking/progress-tracker.json
+  estimated_hours: 32
+  duration_estimate: 3-4d
+  complexity: moderate
+  dependencies:
+  - 00C
+  dependency_rules:
+  - condition: Planning v5 tests passing
+    gate: GATE-2
+    rationale: Knowledge library integrates with planning system
+  description: Pre-planning knowledge discovery phase with AST scanning, pattern detection,
+    duplication analysis.
+  viewer_file: 03-knowledge-library-phase/plan-viewer.html
+- id: ast-scanning-planning
+  order: '04'
+  name: AST Scanning Integration for Planning
+  type: feature
+  priority: high
+  blocking: false
+  folder: 04-ast-scanning-planning/
+  master_plan: 04-ast-scanning-planning/00-ast-scanning-planning.md
+  tracking_file: 04-ast-scanning-planning/tracking/progress-tracker.json
+  estimated_hours: 32
+  duration_estimate: 3-4d
+  complexity: moderate
+  dependencies:
+  - 00C
+  dependency_rules:
+  - condition: Planning v5 tests passing
+    gate: GATE-2
+    rationale: AST integration requires stable planning system
+  description: AST-based code analysis for intelligent injection point detection in
+    planning phase.
+  viewer_file: 04-ast-scanning-planning/plan-viewer.html
+- id: context-middleware
+  order: '05'
+  name: Context Middleware Enhancement
+  type: feature
+  priority: high
+  blocking: false
+  folder: 05-context-middleware/
+  master_plan: 05-context-middleware/00-context-middleware.md
+  tracking_file: 05-context-middleware/tracking/progress-tracker.json
+  estimated_hours: 24
+  duration_estimate: 2-3d
+  complexity: moderate
+  dependencies:
+  - 00C
+  dependency_rules:
+  - condition: Test coverage ≥50%
+    gate: GATE-1
+    rationale: Middleware enhancement requires quality baseline
+  description: Enhanced context gathering with Vision API integration, file relationship
+    analysis, semantic search.
+  viewer_file: 05-context-middleware/plan-viewer.html
+- id: visual-progress
+  order: '06'
+  name: Visual Progress Generation
+  type: enhancement
+  priority: medium
+  blocking: false
+  folder: 06-visual-progress/
+  master_plan: 06-visual-progress/00-visual-progress.md
+  tracking_file: 06-visual-progress/tracking/progress-tracker.json
+  estimated_hours: 16
+  duration_estimate: 2d
+  complexity: simple
+  dependencies:
+  - 00B
+  dependency_rules:
+  - condition: Planning v5 functional
+    rationale: Visual progress relies on planning system data
+  description: HTML progress bars, Mermaid diagrams, real-time status displays for
+    plans.
+  viewer_file: 06-visual-progress/plan-viewer.html
+- id: refactor-enforcement
+  order: '07'
+  name: REFACTOR Task Enforcement
+  type: enhancement
+  priority: medium
+  blocking: false
+  folder: 07-refactor-enforcement/
+  master_plan: 07-refactor-enforcement/00-refactor-enforcement.md
+  tracking_file: 07-refactor-enforcement/tracking/progress-tracker.json
+  estimated_hours: 16
+  duration_estimate: 2d
+  complexity: simple
+  dependencies:
+  - 00B
+  dependency_rules:
+  - condition: Planning v5 functional
+    rationale: REFACTOR enforcement integrates with planning
+  description: Automated SKULL rule enforcement for whole-file cleanup in REFACTOR
+    phase.
+  viewer_file: 07-refactor-enforcement/plan-viewer.html
+- id: orchestrator-migrations
+  order: 08
+  name: Orchestrator Migrations to Planning v5
+  type: migration
+  priority: high
+  blocking: false
+  folder: 08-orchestrator-migrations/
+  master_plan: 08-orchestrator-migrations/00-orchestrator-migrations.md
+  tracking_file: 08-orchestrator-migrations/tracking/progress-tracker.json
+  estimated_hours: 80
+  duration_estimate: 1-2w
+  complexity: complex
+  dependencies:
+  - '01'
+  - '02'
+  - '05'
+  dependency_rules:
+  - condition: Orchestrators 01, 02, 05 operational
+    rationale: Migration requires all core orchestrators functional
+  description: Migrate all 8 existing orchestrators to planning system v5 architecture.
+  viewer_file: 08-orchestrator-migrations/plan-viewer.html
+- id: acceptance-validation-system
+  order: '10'
+  name: Acceptance Validation System
+  type: validation
+  priority: high
+  blocking: false
+  folder: 10-acceptance-validation-system/
+  master_plan: 10-acceptance-validation-system/00-acceptance-validation-system.md
+  tracking_file: 10-acceptance-validation-system/tracking/progress-tracker.json
+  estimated_hours: 32
+  duration_estimate: 3-4d
+  complexity: moderate
+  dependencies:
+  - 00B
+  dependency_rules:
+  - condition: Planning v5 functional
+    rationale: Acceptance validation integrates with planning
+  description: Automated acceptance criteria validation with DoR/DoD gates.
+  viewer_file: 10-acceptance-validation-system/plan-viewer.html
+- id: cortex-lens-admin
+  order: '11'
+  name: CORTEX-LENS Admin Dashboard
+  type: feature
+  priority: medium
+  blocking: false
+  folder: 11-cortex-lens-admin/
+  master_plan: 11-cortex-lens-admin/00-cortex-lens-admin.md
+  tracking_file: 11-cortex-lens-admin/tracking/progress-tracker.json
+  estimated_hours: 40
+  duration_estimate: 1w
+  complexity: moderate
+  dependencies:
+  - '03'
+  - '04'
+  dependency_rules:
+  - condition: Phase -1 and AST integration complete
+    rationale: Dashboard displays knowledge graph and AST analysis
+  description: Web-based admin dashboard for brain tier visualization, governance
+    rule management.
+  viewer_file: 11-cortex-lens-admin/plan-viewer.html
+- id: production-validation-pipeline
+  order: '12'
+  name: Production Validation Pipeline
+  type: validation
+  priority: critical
+  blocking: true
+  folder: 12-production-validation-pipeline/
+  master_plan: 12-production-validation-pipeline/00-production-validation-pipeline.md
+  tracking_file: 12-production-validation-pipeline/tracking/progress-tracker.json
+  estimated_hours: 40
+  duration_estimate: 1w
+  complexity: complex
+  dependencies:
+  - 08
+  - '11'
+  dependency_rules:
+  - condition: All migrations complete and LENS operational
+    rationale: Production validation requires all systems operational
+  description: 24-gate deployment validation pipeline with automated quality checks.
+  viewer_file: 12-production-validation-pipeline/plan-viewer.html
+- id: final-validation
+  order: 09
+  name: Final Validation & Definition of Done
+  type: validation
+  priority: critical
+  blocking: true
+  folder: 09-final-validation/
+  master_plan: 09-final-validation/00-final-validation.md
+  tracking_file: 09-final-validation/tracking/progress-tracker.json
+  estimated_hours: 32
+  duration_estimate: 3-4d
+  complexity: moderate
+  dependencies:
+  - '12'
+  dependency_rules:
+  - condition: Production validation pipeline passed
+    rationale: Final validation confirms all systems production-ready
+  description: Comprehensive DoD validation, acceptance testing, production readiness
+    check.
+  viewer_file: 09-final-validation/plan-viewer.html
+- id: onboarding-system
+  order: '13'
+  name: Onboarding System Implementation
+  type: documentation
+  priority: medium
+  blocking: false
+  folder: 13-onboarding-system/
+  master_plan: 13-onboarding-system/00-onboarding-system.md
+  tracking_file: 13-onboarding-system/tracking/progress-tracker.json
+  estimated_hours: 40
+  duration_estimate: 1w
+  complexity: moderate
+  dependencies:
+  - '12'
+  dependency_rules:
+  - condition: Production ready
+    rationale: Onboarding requires stable production system
+  description: Interactive onboarding flow for new CORTEX users with guided tutorials.
+  viewer_file: 13-onboarding-system/plan-viewer.html
+- id: demo-tutorials
+  order: '14'
+  name: Demo & Tutorial System
+  type: documentation
+  priority: medium
+  blocking: false
+  folder: 14-demo-tutorials/
+  master_plan: 14-demo-tutorials/00-demo-tutorials.md
+  tracking_file: 14-demo-tutorials/tracking/progress-tracker.json
+  estimated_hours: 40
+  duration_estimate: 1w
+  complexity: moderate
+  dependencies:
+  - '13'
+  dependency_rules:
+  - condition: Onboarding complete
+    rationale: Tutorials extend onboarding system
+  description: Interactive demos showcasing CORTEX capabilities and workflows.
+  viewer_file: 14-demo-tutorials/plan-viewer.html
+- id: user-response-templates
+  order: '15'
+  name: User Response Templates
+  type: documentation
+  priority: medium
+  blocking: false
+  folder: 15-user-response-templates/
+  master_plan: 15-user-response-templates/00-user-response-templates.md
+  tracking_file: 15-user-response-templates/tracking/progress-tracker.json
+  estimated_hours: 40
+  duration_estimate: 1w
+  complexity: moderate
+  dependencies:
+  - '13'
+  dependency_rules:
+  - condition: Onboarding complete
+    rationale: Response templates support user interactions
+  description: User-friendly response template system for common CORTEX operations.
+  viewer_file: 15-user-response-templates/plan-viewer.html
+- id: planning-system-v5-fix
+  order: '16'
+  name: Planning System v5 Fix
+  type: feature
+  priority: low
+  blocking: false
+  folder: 16-planning-system-v5-fix/
+  master_plan: 16-planning-system-v5-fix/00-planning-system-v5-fix.md
+  tracking_file: 16-planning-system-v5-fix/tracking/progress-tracker.json
+  estimated_hours: 0
+  duration_estimate: TBD
+  complexity: unknown
+  dependencies: []
+  status: deferred
+  description: Deferred until requirements clarified.
+  viewer_file: 16-planning-system-v5-fix/plan-viewer.html
+- id: planning-v5-enhancement
+  order: '17'
+  name: Planning v5 Enhancement
+  type: feature
+  priority: low
+  blocking: false
+  folder: 17-planning-v5-enhancement/
+  master_plan: 17-planning-v5-enhancement/00-planning-v5-enhancement.md
+  tracking_file: 17-planning-v5-enhancement/tracking/progress-tracker.json
+  estimated_hours: 0
+  duration_estimate: TBD
+  complexity: unknown
+  dependencies: []
+  status: deferred
+  description: Deferred until requirements clarified.
+  viewer_file: 17-planning-v5-enhancement/plan-viewer.html
+- id: planning-v5-fix-duplicate
+  order: '18'
+  name: Planning v5 Fix (Duplicate?)
+  type: feature
+  priority: low
+  blocking: false
+  folder: 18-planning-v5-fix/
+  master_plan: 18-planning-v5-fix/00-planning-v5-fix.md
+  tracking_file: 18-planning-v5-fix/tracking/progress-tracker.json
+  estimated_hours: 0
+  duration_estimate: TBD
+  complexity: unknown
+  dependencies: []
+  status: review_needed
+  description: Possible duplicate of Sub-Plan 16. Requires investigation.
+  viewer_file: 18-planning-v5-fix/plan-viewer.html
 validation_rules:
-  
-  # Dependency validation
   dependency_enforcement:
     enabled: true
-    strict_mode: true  # Block execution if dependencies not met
+    strict_mode: true
     check_on_start: true
     check_on_update: false
-    
-  # Gate validation  
   gate_enforcement:
     enabled: true
     gates:
-      - gate_id: "GATE-1"
-        name: "50% Test Coverage"
-        condition: "Sub-Plan 00C progress ≥50%"
-        blocks: ["01", "02", "05"]
-        
-      - gate_id: "GATE-2"
-        name: "80% Test Coverage"
-        condition: "Sub-Plan 00C progress ≥80%"
-        blocks: ["03", "04"]
-  
-  # Progress validation
+    - gate_id: GATE-1
+      name: 50% Test Coverage
+      condition: Sub-Plan 00C progress ≥50%
+      blocks:
+      - '01'
+      - '02'
+      - '05'
+    - gate_id: GATE-2
+      name: 80% Test Coverage
+      condition: Sub-Plan 00C progress ≥80%
+      blocks:
+      - '03'
+      - '04'
   progress_validation:
     min_progress: 0
     max_progress: 100
-    allow_regression: false  # Cannot decrease progress
+    allow_regression: false
     require_status_update: true
-  
-  # Completion validation
   completion_validation:
     require_100_percent: true
     require_exit_criteria: true
     require_documentation: true
     require_tests_passing: true
-
-# ========================================
-# EXECUTION CONFIGURATION
-# ========================================
-
 execution_config:
-  
-  # Parallel execution
   parallel_execution:
     enabled: true
-    max_parallel: 3  # Maximum 3 sub-plans executing simultaneously
+    max_parallel: 3
     allow_parallel_in_wave: true
-    cross_wave_parallel: false  # Must complete wave before starting next
-  
-  # Brittleness testing
+    cross_wave_parallel: false
   brittleness_testing:
     enabled: true
     run_before_start: true
     auto_fix: true
     fail_on_critical: true
-  
-  # Pre-execution analysis
   pre_execution_analysis:
     enabled: true
     generate_analysis_doc: true
-    require_review: false  # Auto-proceed
-    analysis_folder: "analysis/"
-  
-  # Git integration
+    require_review: false
+    analysis_folder: analysis/
   git_checkpoints:
     enabled: true
     checkpoint_on_start: true
     checkpoint_on_complete: true
-    checkpoint_prefix: "feat(sub-plan-{order})"
-
-# ========================================
-# CRITICAL PATH
-# ========================================
-# Longest dependency chain - determines minimum completion time
-# ========================================
-
+    checkpoint_prefix: feat(sub-plan-{order})
 critical_path:
   total_weeks: 11
   path:
-    - "00A"  # Epic Structure Cleanup (2h)
-    - "00B"  # Epic & Feature Planner (2-3w)
-    - "00C"  # Test Coverage Sprint (2-3w)
-    - "01"   # Refinement Orchestrator (1w)
-    - "08"   # Orchestrator Migrations (1-2w)
-    - "12"   # Production Validation (1w)
-    - "09"   # Final Validation (3-4d)
-
-# ========================================
-# SUCCESS CRITERIA
-# ========================================
-
+  - 00A
+  - 00B
+  - 00C
+  - '01'
+  - 08
+  - '12'
+  - 09
 epic_success_criteria:
-  - "All 18 child plans completed (excluding deferred 16-18)"
-  - "Overall test coverage ≥80%"
-  - "All deployment gates passed"
-  - "Production validation pipeline operational"
-  - "Documentation complete"
-  - "Onboarding system functional"
-  - "Zero critical brittleness issues"
-  - "All SKULL rules enforced"
-
-# ========================================
-# METADATA
-# ========================================
-
+- All 18 child plans completed (excluding deferred 16-18)
+- Overall test coverage ≥80%
+- All deployment gates passed
+- Production validation pipeline operational
+- Documentation complete
+- Onboarding system functional
+- Zero critical brittleness issues
+- All SKULL rules enforced
 manifest_metadata:
-  schema_version: "1.0"
-  compatible_orchestrator_versions: ["5.0.0", "5.0.1"]
-  last_validated: "2026-01-04"
-  validation_tool: "plan_orchestrator.py"
-  format: "YAML 1.2"
-  encoding: "UTF-8"
+  schema_version: '1.0'
+  compatible_orchestrator_versions:
+  - 5.0.0
+  - 5.0.1
+  last_validated: '2026-01-04'
+  validation_tool: plan_orchestrator.py
+  format: YAML 1.2
+  encoding: UTF-8
