@@ -191,6 +191,18 @@ class AutonomousExecutionEngine(BaseOrchestrator):
         start_time = datetime.now()
         
         try:
+            # PHASE 0: Pre-Flight Cache Optimization (C50-00D)
+            from src.operations.utilities.vscode_cache_manager import optimize_pre_flight
+            cache_result = optimize_pre_flight(self.config.get("cache_management") if hasattr(self, 'config') else None)
+            if cache_result.get("success"):
+                freed_mb = sum(
+                    cache.get("freed_mb", 0)
+                    for cache in cache_result.get("cache_cleared", {}).values()
+                    if isinstance(cache, dict)
+                )
+                if freed_mb > 0:
+                    self.logger.info(f"🧹 Cache optimized: {freed_mb:.1f}MB freed")
+            
             # Parse parameters
             plan_path = kwargs["plan_path"]
             self.execution_mode = ExecutionMode(kwargs.get("mode", "supervised"))

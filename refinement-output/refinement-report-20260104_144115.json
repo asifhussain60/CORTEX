@@ -1,0 +1,111 @@
+{
+  "session_id": "20260104_144115",
+  "generated_at": "2026-01-04T14:41:15.409054",
+  "target": "/private/var/folders/q9/5s1lv3rs3zg5j_ncbsck4jc00000gn/T/pytest-of-asifhussain/pytest-82/test_error_handling0/nonexistent.py",
+  "summary": {
+    "phases_completed": 7,
+    "overall_status": "completed",
+    "quality_score": 0,
+    "issues_found": 0,
+    "duplicates_found": 0,
+    "security_score": 100,
+    "high_security_issues": 0,
+    "refactoring_tasks": 0,
+    "overall_improvement": 0.0
+  },
+  "phase_results": {
+    "QualityAssessment": {
+      "quality_score": 0,
+      "issues": [],
+      "metrics": {},
+      "files_analyzed": 0
+    },
+    "DuplicateDetection": {
+      "duplicates_found": 0,
+      "duplicate_groups": [],
+      "consolidation_suggestions": [],
+      "estimated_savings": {
+        "lines": 0,
+        "files": 0
+      }
+    },
+    "PerformanceAnalysis": {
+      "hotspots": [],
+      "inefficient_patterns": [
+        {
+          "pattern": "N+1 Query",
+          "description": "Database queries inside loops",
+          "impact": "High",
+          "fix": "Use batch queries or prefetch_related"
+        },
+        {
+          "pattern": "Global Variables",
+          "description": "Excessive use of global state",
+          "impact": "Medium",
+          "fix": "Refactor to use parameters and return values"
+        },
+        {
+          "pattern": "Premature Optimization",
+          "description": "Complex optimizations without profiling",
+          "impact": "Low",
+          "fix": "Profile first, then optimize hotspots"
+        }
+      ],
+      "optimization_suggestions": [],
+      "performance_score": 100
+    },
+    "SecurityAudit": {
+      "vulnerabilities": [],
+      "security_score": 100,
+      "high_severity": 0,
+      "medium_severity": 0,
+      "low_severity": 0,
+      "remediation_plan": []
+    },
+    "RefactoringPlan": {
+      "refactoring_tasks": [],
+      "priority_high": 0,
+      "priority_medium": 0,
+      "priority_low": 0,
+      "estimated_effort_hours": 0
+    },
+    "ApplyRefactorings": {
+      "auto_applied": [],
+      "manual_checklist": [],
+      "git_checkpoint": null,
+      "applied_count": 0,
+      "manual_count": 0
+    },
+    "ValidationMetrics": {
+      "before": {
+        "quality_score": 0,
+        "issues_count": 0,
+        "duplicates_found": 0,
+        "performance_score": 100,
+        "security_score": 100,
+        "high_severity_security": 0
+      },
+      "after": {
+        "quality_score": 0,
+        "issues_count": 0,
+        "duplicates_found": 0,
+        "performance_score": 100,
+        "security_score": 100,
+        "high_severity_security": 0
+      },
+      "improvements": {
+        "quality_score_delta": 0,
+        "issues_fixed": 0,
+        "duplicates_removed": 0,
+        "performance_improvement": 0,
+        "security_improvement": 0,
+        "critical_security_fixed": 0,
+        "overall_improvement_percentage": 0.0
+      },
+      "validation_status": "projected"
+    }
+  },
+  "recommendations": [
+    "Quality score is below 70. Prioritize fixing high-severity issues."
+  ]
+}

@@ -37,6 +37,30 @@
     "dependency_injection": false,
     "documentation_engine": false
   },
+  "cache_management": {
+    "enabled": true,
+    "pre_flight": {
+      "enabled": true,
+      "clear_copilot_chat": true,
+      "log_metrics": true
+    },
+    "full_cleanup": {
+      "enabled": true,
+      "clear_extension_vsix": true,
+      "clear_general_cache": true,
+      "clear_cached_data": true
+    },
+    "thresholds": {
+      "copilot_chat_mb": 100,
+      "extension_vsix_mb": 500,
+      "general_cache_mb": 500,
+      "cached_data_mb": 1000
+    },
+    "logging": {
+      "enabled": true,
+      "path": "logs/cache-optimization.jsonl"
+    }
+  },
   "legacy_v3": {
     "comment": "Legacy v3.9.0 configuration - kept for backward compatibility during migration",
     "planningSystem": {

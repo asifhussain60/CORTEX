@@ -678,6 +678,21 @@ class PlanningOrchestrator:
             ...     checkpoint_callback=my_checkpoint_handler
             ... )
         """
+        # PHASE 0: Pre-Flight Cache Optimization (C50-00D)
+        try:
+            from src.operations.utilities.vscode_cache_manager import optimize_pre_flight
+            cache_result = optimize_pre_flight()
+            if cache_result.get("success"):
+                freed_mb = sum(
+                    cache.get("freed_mb", 0)
+                    for cache in cache_result.get("cache_cleared", {}).values()
+                    if isinstance(cache, dict)
+                )
+                if freed_mb > 0:
+                    logger.info(f"🧹 Pre-flight cache optimization: {freed_mb:.1f}MB freed")
+        except Exception as e:
+            logger.debug(f"Cache optimization skipped: {e}")
+        
         # Create git checkpoint before starting plan generation
         try:
             feature_name = feature_requirements[:50] if len(feature_requirements) <= 50 else feature_requirements[:47] + "..."
