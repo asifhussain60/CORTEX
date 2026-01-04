@@ -27,6 +27,7 @@ import json
 import os
 import subprocess
 import sys
+import yaml
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
@@ -42,6 +43,17 @@ class PlanOrchestrator:
         self.state_file = plan_root / ".orchestrator-state.json"
         self.brittleness_script = plan_root / "artifacts" / "brittleness_test.py"
         self.enable_brittleness_test = enable_brittleness_test
+        
+        # 🎯 EPIC Mode Detection (v5.0.1+)
+        self.epic_manifest_file = plan_root / "cortex-5.0-epic-manifest.yaml"
+        self.epic_mode = self.epic_manifest_file.exists()
+        self.epic_manifest = None
+        
+        if self.epic_mode:
+            print(f"\n🎭 EPIC Mode Detected")
+            print(f"   Manifest: {self.epic_manifest_file.name}")
+            self._load_epic_manifest()
+        
         self.load_state()
     
     def run_brittleness_test(self, auto_fix: bool = True) -> bool:
@@ -89,6 +101,78 @@ class PlanOrchestrator:
             print(f"\n⚠️  Error running brittleness test: {e}")
             print(f"   Continuing without brittleness validation...")
             return True
+    
+    def _load_epic_manifest(self):
+        """
+        Load EPIC manifest from YAML file.
+        
+        The manifest serves as the source of truth for:
+        - Child plan metadata (names, folders, durations)
+        - Dependency rules and validation logic
+        - Execution gates and blocking conditions
+        - Critical path and success criteria
+        """
+        try:
+            with open(self.epic_manifest_file, 'r', encoding='utf-8') as f:
+                self.epic_manifest = yaml.safe_load(f)
+            
+            # Validate manifest structure
+            if not self._validate_epic_manifest():
+                print(f"⚠️  EPIC manifest validation failed")
+                print(f"   Falling back to JSON-only mode")
+                self.epic_mode = False
+                self.epic_manifest = None
+                return
+            
+            print(f"   ✅ Loaded {len(self.epic_manifest['child_plans'])} child plans")
+            print(f"   ✅ Validation rules: {len(self.epic_manifest.get('validation_rules', {}).get('gate_enforcement', {}).get('gates', []))} gates")
+            print(f"   ✅ Critical path: {self.epic_manifest['critical_path']['total_weeks']} weeks")
+            
+        except Exception as e:
+            print(f"\n⚠️  Error loading EPIC manifest: {e}")
+            print(f"   Falling back to JSON-only mode")
+            self.epic_mode = False
+            self.epic_manifest = None
+    
+    def _validate_epic_manifest(self) -> bool:
+        """Validate EPIC manifest structure and content."""
+        if not self.epic_manifest:
+            return False
+        
+        # Required top-level keys
+        required_keys = ['epic_metadata', 'child_plans', 'validation_rules']
+        for key in required_keys:
+            if key not in self.epic_manifest:
+                print(f"❌ Missing required key: {key}")
+                return False
+        
+        # Validate child plans
+        child_plans = self.epic_manifest['child_plans']
+        if not isinstance(child_plans, list):
+            print(f"❌ child_plans must be a list")
+            return False
+        
+        if len(child_plans) == 0:
+            print(f"❌ child_plans cannot be empty")
+            return False
+        
+        # Validate each child plan has required fields
+        required_plan_fields = ['id', 'order', 'name', 'folder', 'dependencies']
+        for i, plan in enumerate(child_plans):
+            for field in required_plan_fields:
+                if field not in plan:
+                    print(f"❌ Child plan {i} missing required field: {field}")
+                    return False
+        
+        # Validate dependency references
+        plan_orders = {p['order'] for p in child_plans}
+        for plan in child_plans:
+            for dep in plan['dependencies']:
+                if dep not in plan_orders:
+                    print(f"❌ Invalid dependency '{dep}' in plan {plan['order']}")
+                    return False
+        
+        return True
     
     def load_state(self):
         """Load orchestrator state and progress."""
@@ -246,11 +330,35 @@ class PlanOrchestrator:
         return None
     
     def _dependencies_met(self, sub_plan: Dict) -> bool:
-        """Check if sub-plan dependencies are satisfied."""
-        if not sub_plan.get("dependencies"):
+        """
+        Check if sub-plan dependencies are satisfied.
+        
+        In EPIC mode, uses manifest dependency rules.
+        In JSON mode, uses tracker dependencies.
+        """
+        # Get dependencies from manifest if in EPIC mode
+        if self.epic_mode and self.epic_manifest:
+            manifest_plan = self._get_manifest_plan(sub_plan.get("order", ""))
+            if manifest_plan:
+                dependencies = manifest_plan.get("dependencies", [])
+                # Also check for gate-based dependencies
+                gate_rules = manifest_plan.get("dependency_rules", [])
+                
+                # Check gate conditions if present
+                for rule in gate_rules:
+                    gate_id = rule.get("gate")
+                    if gate_id:
+                        if not self._check_gate_condition(gate_id):
+                            return False
+            else:
+                dependencies = sub_plan.get("dependencies", [])
+        else:
+            dependencies = sub_plan.get("dependencies", [])
+        
+        if not dependencies:
             return True  # No dependencies
         
-        for dep_id in sub_plan["dependencies"]:
+        for dep_id in dependencies:
             # Try to find by both ID and order
             dep_sp = self._get_sub_plan_by_id(dep_id)
             if not dep_sp:
@@ -260,6 +368,44 @@ class PlanOrchestrator:
             if not dep_sp or dep_sp["status"] not in ["complete", "completed"]:
                 return False
         return True
+    
+    def _get_manifest_plan(self, order: str) -> Optional[Dict]:
+        """Get child plan from EPIC manifest by order."""
+        if not self.epic_mode or not self.epic_manifest:
+            return None
+        
+        for plan in self.epic_manifest['child_plans']:
+            if plan['order'] == order:
+                return plan
+        return None
+    
+    def _check_gate_condition(self, gate_id: str) -> bool:
+        """Check if a gate condition is met."""
+        if not self.epic_mode or not self.epic_manifest:
+            return True
+        
+        gates = self.epic_manifest.get('validation_rules', {}).get('gate_enforcement', {}).get('gates', [])
+        
+        for gate in gates:
+            if gate['gate_id'] == gate_id:
+                condition = gate['condition']
+                
+                # Parse condition (e.g., "Sub-Plan 00C progress ≥50%")
+                if "progress" in condition:
+                    # Extract sub-plan order and percentage
+                    import re
+                    match = re.search(r'Sub-Plan (\w+) progress ≥(\d+)%', condition)
+                    if match:
+                        sub_plan_order = match.group(1)
+                        required_progress = int(match.group(2))
+                        
+                        sub_plan = self._get_sub_plan(sub_plan_order)
+                        if sub_plan:
+                            return sub_plan.get("progress", 0) >= required_progress
+                
+                return False  # Unknown condition format
+        
+        return True  # Gate not found = condition met
     
     def _get_sub_plan(self, order: str) -> Optional[Dict]:
         """Get sub-plan by order number."""
