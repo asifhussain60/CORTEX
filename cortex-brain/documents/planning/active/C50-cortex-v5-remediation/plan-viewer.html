@@ -323,7 +323,7 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
         .status-complete { 
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            background: linear-gradient(135deg, #059669 0%, #10B981 100%);
             color: white;
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
@@ -333,14 +333,14 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
         .status-in-progress { 
-            background: linear-gradient(135deg, var(--warning) 0%, #F59E0B 100%);
+            background: linear-gradient(135deg, #D97706 0%, #F59E0B 100%);
             color: white;
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
         .status-pending { 
-            background: rgba(255, 255, 255, 0.15);
-            color: var(--text-primary);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: linear-gradient(135deg, #DC2626 0%, #EF4444 100%);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         .status-deferred { 
             background: rgba(75, 85, 99, 0.8);
@@ -466,6 +466,28 @@
             cursor: pointer;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             position: relative;
+        }
+
+        /* Card background colors based on status */
+        .child-plan.card-complete {
+            background: rgba(5, 150, 105, 0.15);
+            border: 1px solid rgba(5, 150, 105, 0.3);
+        }
+
+        .child-plan.card-in-progress {
+            background: rgba(217, 119, 6, 0.15);
+            border: 1px solid rgba(217, 119, 6, 0.3);
+        }
+
+        .child-plan.card-blocked,
+        .child-plan.card-pending {
+            background: rgba(220, 38, 38, 0.15);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+        }
+
+        .child-plan.card-deferred {
+            background: rgba(75, 85, 99, 0.15);
+            border: 1px solid rgba(75, 85, 99, 0.3);
         }
 
         /* Priority indicator for active work (visual cue) */
@@ -630,6 +652,42 @@
             background: rgba(5, 150, 105, 0.5);
             border-color: rgba(5, 150, 105, 0.8);
             box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4);
+        }
+
+        /* Status-based navigation link colors */
+        .nav-link.nav-complete {
+            background: rgba(5, 150, 105, 0.3);
+            border-color: rgba(5, 150, 105, 0.5);
+        }
+
+        .nav-link.nav-complete:hover {
+            background: rgba(5, 150, 105, 0.5);
+            border-color: rgba(5, 150, 105, 0.8);
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4);
+        }
+
+        .nav-link.nav-in-progress {
+            background: rgba(217, 119, 6, 0.3);
+            border-color: rgba(217, 119, 6, 0.5);
+        }
+
+        .nav-link.nav-in-progress:hover {
+            background: rgba(217, 119, 6, 0.5);
+            border-color: rgba(217, 119, 6, 0.8);
+            box-shadow: 0 4px 12px rgba(217, 119, 6, 0.4);
+        }
+
+        .nav-link.nav-blocked,
+        .nav-link.nav-pending {
+            background: rgba(220, 38, 38, 0.3);
+            border-color: rgba(220, 38, 38, 0.5);
+        }
+
+        .nav-link.nav-blocked:hover,
+        .nav-link.nav-pending:hover {
+            background: rgba(220, 38, 38, 0.5);
+            border-color: rgba(220, 38, 38, 0.8);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
         }
 
         /* Responsive Design */
@@ -838,6 +896,53 @@
 
             // Render waves
             renderWaves();
+            
+            // Update navigation link colors based on wave status
+            updateNavigationColors();
+        }
+
+        // Update navigation link colors based on wave completion status
+        function updateNavigationColors() {
+            if (!epicData || !epicData.child_plans) return;
+
+            const waves = {
+                'wave-1': ['00A', '00B', '00C', '00D'],
+                'wave-2': ['01', '02', '03', '04', '05', '06', '07', '08', '10', '11'],
+                'wave-3': ['09', '12', '13', '14', '15'],
+                'deferred': ['16', '17', '18']
+            };
+
+            Object.entries(waves).forEach(([waveId, childIds]) => {
+                // Get all plans in this wave
+                const wavePlans = epicData.child_plans.filter(plan => 
+                    childIds.some(id => plan.id.includes(id) || plan.order === id)
+                );
+
+                if (wavePlans.length === 0) return;
+
+                // Calculate wave status based on all plans
+                const allComplete = wavePlans.every(plan => plan.status.toLowerCase().includes('complete'));
+                const anyInProgress = wavePlans.some(plan => plan.status.toLowerCase().includes('progress'));
+                const anyBlocked = wavePlans.some(plan => plan.status.toLowerCase().includes('blocked'));
+
+                // Find the nav link and update its class
+                const navLink = document.querySelector(`a[href="#${waveId}"]`);
+                if (navLink) {
+                    // Remove existing status classes
+                    navLink.classList.remove('nav-complete', 'nav-in-progress', 'nav-blocked', 'nav-pending');
+                    
+                    // Add appropriate status class
+                    if (allComplete) {
+                        navLink.classList.add('nav-complete');
+                    } else if (anyBlocked) {
+                        navLink.classList.add('nav-blocked');
+                    } else if (anyInProgress) {
+                        navLink.classList.add('nav-in-progress');
+                    } else {
+                        navLink.classList.add('nav-pending');
+                    }
+                }
+            });
         }
 
         // Calculate statistics from child plans
@@ -932,8 +1037,21 @@
             const statusClass = getStatusClass(plan.status);
             const progress = plan.progress || 0;
             
-            // Add priority attribute for visual indicator
+            // Add card status class for background color
             const status = plan.status.toLowerCase();
+            if (status.includes('complete')) {
+                card.classList.add('card-complete');
+            } else if (status.includes('progress')) {
+                card.classList.add('card-in-progress');
+            } else if (status.includes('blocked')) {
+                card.classList.add('card-blocked');
+            } else if (status.includes('deferred')) {
+                card.classList.add('card-deferred');
+            } else {
+                card.classList.add('card-pending');
+            }
+            
+            // Add priority attribute for visual indicator
             if (status.includes('progress') || status.includes('blocked')) {
                 card.setAttribute('data-priority', 'high');
             } else if (status.includes('pending')) {
