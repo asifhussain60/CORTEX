@@ -5,18 +5,27 @@ CORTEX-5.0 Plan Orchestrator
 Interactive orchestrator for managing CORTEX-5.0 gap remediation sub-plans.
 Call this script repeatedly to execute phases, track progress, and manage the plan.
 
+Features:
+- Integrated brittleness testing (Phase 0 pre-flight checks)
+- Auto-fix for common structural issues
+- Progress tracking and milestone management
+- Dependency validation
+
 Usage:
     python plan_orchestrator.py               # Interactive mode
     python plan_orchestrator.py status        # Show status
     python plan_orchestrator.py next          # Execute next available phase
     python plan_orchestrator.py --sub-plan 00 # Work on specific sub-plan
+    python plan_orchestrator.py brittleness   # Run brittleness test only
 
 Author: Asif Hussain
 Created: January 3, 2026
+Updated: January 4, 2026 (Added brittleness testing integration)
 """
 
 import json
 import os
+import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -26,12 +35,60 @@ from typing import Dict, List, Optional, Tuple
 class PlanOrchestrator:
     """Manages CORTEX-5.0 plan execution and progress tracking."""
     
-    def __init__(self, plan_root: Path):
+    def __init__(self, plan_root: Path, enable_brittleness_test: bool = True):
         self.plan_root = plan_root
         self.master_plan_dir = plan_root
         self.tracker_file = plan_root / "tracking" / "epic-progress-tracker.json"
         self.state_file = plan_root / ".orchestrator-state.json"
+        self.brittleness_script = plan_root / "artifacts" / "brittleness_test.py"
+        self.enable_brittleness_test = enable_brittleness_test
         self.load_state()
+    
+    def run_brittleness_test(self, auto_fix: bool = True) -> bool:
+        """Run Phase 0: Brittleness Testing with optional auto-fix."""
+        print("\n" + "="*80)
+        print("🧪 Phase 0: Brittleness Testing (Pre-Flight Checks)")
+        print("="*80)
+        
+        if not self.brittleness_script.exists():
+            print(f"⚠️  Brittleness test script not found: {self.brittleness_script}")
+            print(f"   Skipping brittleness tests...")
+            return True
+        
+        try:
+            # Run brittleness test with auto-fix
+            cmd = ["python3", str(self.brittleness_script), "--test", "all"]
+            if auto_fix:
+                cmd.append("--auto-fix")
+            
+            result = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                cwd=str(self.plan_root)
+            )
+            
+            # Print output
+            if result.stdout:
+                print(result.stdout)
+            
+            if result.stderr:
+                print(f"⚠️  Stderr: {result.stderr}")
+            
+            # Check exit code (0 = success, 1 = critical issues)
+            if result.returncode == 0:
+                print(f"\n✅ Brittleness Test: PASSED")
+                return True
+            else:
+                print(f"\n🔴 Brittleness Test: CRITICAL ISSUES FOUND")
+                print(f"   Action Required: Fix critical issues before proceeding")
+                print(f"   Report: Check reports/brittleness-test-*.json for details")
+                return False
+        
+        except Exception as e:
+            print(f"\n⚠️  Error running brittleness test: {e}")
+            print(f"   Continuing without brittleness validation...")
+            return True
     
     def load_state(self):
         """Load orchestrator state and progress."""
@@ -218,8 +275,8 @@ class PlanOrchestrator:
                 return sp
         return None
     
-    def start_sub_plan(self, order: str, skip_analysis: bool = False):
-        """Start execution of a sub-plan with optional pre-execution analysis."""
+    def start_sub_plan(self, order: str, skip_analysis: bool = False, skip_brittleness: bool = False):
+        """Start execution of a sub-plan with Phase 0 brittleness testing."""
         sp = self._get_sub_plan(order)
         if not sp:
             print(f"❌ Sub-plan {order} not found")
@@ -236,7 +293,15 @@ class PlanOrchestrator:
                 print(f"   - Sub-Plan {dep}: {dep_sp['name']} ({dep_sp['status']})")
             return
         
-        # 🔄 NEW: Pre-execution analysis phase
+        # 🧪 PHASE 0: Brittleness Testing (Pre-Flight Checks)
+        if self.enable_brittleness_test and not skip_brittleness:
+            brittleness_passed = self.run_brittleness_test(auto_fix=True)
+            if not brittleness_passed:
+                print(f"\n❌ Cannot proceed with Sub-Plan {order}")
+                print(f"   Fix critical issues and run: python plan_orchestrator.py start {order}")
+                return
+        
+        # 🔄 Pre-execution analysis phase
         if not skip_analysis:
             print(f"\n🔍 Running pre-execution analysis for Sub-Plan {order}...")
             analysis_path = self._run_pre_execution_analysis(order, sp)
@@ -686,14 +751,15 @@ Previous sub-plans achieved 100% test coverage and clean implementations by:
         
         while True:
             print("\n📋 Commands:")
-            print("   1. status   - Show current status")
-            print("   2. next     - Execute next available sub-plan")
-            print("   3. start    - Start a specific sub-plan")
-            print("   4. update   - Update sub-plan progress")
-            print("   5. complete - Complete a sub-plan")
-            print("   6. note     - Add a session note")
-            print("   7. notes    - Show session notes")
-            print("   8. exit     - Save and exit")
+            print("   1. status      - Show current status")
+            print("   2. next        - Execute next available sub-plan")
+            print("   3. start       - Start a specific sub-plan")
+            print("   4. update      - Update sub-plan progress")
+            print("   5. complete    - Complete a sub-plan")
+            print("   6. brittleness - Run brittleness test with auto-fix")
+            print("   7. note        - Add a session note")
+            print("   8. notes       - Show session notes")
+            print("   9. exit        - Save and exit")
             
             cmd = input("\n🎯 Command: ").strip().lower()
             
@@ -720,14 +786,19 @@ Previous sub-plans achieved 100% test coverage and clean implementations by:
                 order = input("   Sub-Plan # (00-09): ").strip()
                 self.complete_sub_plan(order)
             
-            elif cmd == "6" or cmd == "note":
+            elif cmd == "6" or cmd == "brittleness":
+                success = self.run_brittleness_test(auto_fix=True)
+                if not success:
+                    print("\n⚠️  Critical issues found. Review reports/brittleness-test-*.json")
+            
+            elif cmd == "7" or cmd == "note":
                 note = input("   Note: ").strip()
                 self.add_note(note)
             
-            elif cmd == "7" or cmd == "notes":
+            elif cmd == "8" or cmd == "notes":
                 self.show_notes()
             
-            elif cmd == "8" or cmd == "exit":
+            elif cmd == "9" or cmd == "exit":
                 self.save_state()
                 print("\n✅ Progress saved. Goodbye!")
                 break
@@ -774,6 +845,12 @@ def main():
         else:
             print(f"❌ Sub-plan {sys.argv[2]} not found")
     
+    elif sys.argv[1] == "brittleness":
+        # Run brittleness test only
+        auto_fix = "--auto-fix" in sys.argv or "-f" in sys.argv
+        success = orchestrator.run_brittleness_test(auto_fix=auto_fix)
+        sys.exit(0 if success else 1)
+    
     else:
         print("Usage:")
         print("  python plan_orchestrator.py                 # Interactive mode")
@@ -783,6 +860,7 @@ def main():
         print("  python plan_orchestrator.py update 00 50    # Update to 50%")
         print("  python plan_orchestrator.py complete 00     # Complete sub-plan")
         print("  python plan_orchestrator.py analyze 03      # Analyze sub-plan 03")
+        print("  python plan_orchestrator.py brittleness [-f] # Run brittleness test")
 
 
 if __name__ == "__main__":
