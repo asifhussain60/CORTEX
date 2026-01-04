@@ -5,73 +5,73 @@
     "docs_directory": "D:\\PROJECTS\\CORTEX\\docs"
   },
   "summary": {
-    "total_pages": 269,
+    "total_pages": 272,
     "by_level": {
       "0": 1,
       "1": 14,
-      "2": 254
+      "2": 257
     },
-    "avg_enhancement_score": 41.87360594795539,
+    "avg_enhancement_score": 45.02205882352941,
     "high_priority": [
-      {
-        "file": "sitemap.html",
-        "level": 2,
-        "score": 0,
-        "missing": 2
-      },
-      {
-        "file": "architecture\\agent-system.html",
-        "level": 2,
-        "score": 0,
-        "missing": 2
-      },
-      {
-        "file": "architecture\\four-tier-brain.html",
-        "level": 2,
-        "score": 0,
-        "missing": 2
-      },
-      {
-        "file": "architecture\\multi-repo.html",
-        "level": 2,
-        "score": 0,
-        "missing": 2
-      },
-      {
-        "file": "architecture\\working-memory.html",
-        "level": 2,
-        "score": 0,
-        "missing": 2
-      },
-      {
-        "file": "design-system\\panel-viewer.html",
-        "level": 2,
-        "score": 0,
-        "missing": 1
-      },
-      {
-        "file": "features\\ado-operations.html",
-        "level": 2,
-        "score": 0,
-        "missing": 2
-      },
-      {
-        "file": "features\\execution-orchestrator.html",
-        "level": 2,
-        "score": 0,
-        "missing": 2
-      },
-      {
-        "file": "features\\orchestrators.html",
-        "level": 2,
-        "score": 0,
-        "missing": 2
-      },
       {
         "file": "features\\tdd-mastery.html",
         "level": 2,
         "score": 0,
         "missing": 2
+      },
+      {
+        "file": "getting-started\\deployment.html",
+        "level": 2,
+        "score": 0,
+        "missing": 2
+      },
+      {
+        "file": "getting-started\\first-commands.html",
+        "level": 2,
+        "score": 0,
+        "missing": 2
+      },
+      {
+        "file": "getting-started\\multi-repo-setup.html",
+        "level": 2,
+        "score": 0,
+        "missing": 2
+      },
+      {
+        "file": "knowledge\\engineering-hub.html",
+        "level": 2,
+        "score": 0,
+        "missing": 2
+      },
+      {
+        "file": "security\\compliance-standards.html",
+        "level": 2,
+        "score": 0,
+        "missing": 2
+      },
+      {
+        "file": "sharpen-the-saw\\security.html",
+        "level": 2,
+        "score": 0,
+        "missing": 2
+      },
+      {
+        "file": "sharpen-the-saw\\solid.html",
+        "level": 2,
+        "score": 0,
+        "missing": 2
+      },
+      {
+        "file": "sharpen-the-saw\\testing.html",
+        "level": 2,
+        "score": 0,
+        "missing": 2
+      },
+      {
+        "file": "story\\character-colors-reference.html",
+        "level": 2,
+        "score": 0,
+        "missing": 1
       }
     ]
   },
@@ -215,8 +215,10 @@
         "file": "security\\index.html",
         "level": 1,
         "purpose": "technical_deep_dive",
-        "enhancement_score": 0,
-        "current_features": [],
+        "enhancement_score": 33,
+        "current_features": [
+          "glassmorphism"
+        ],
         "missing_features": [
           "category-panels",
           "d3-overview-diagram"
@@ -306,8 +308,10 @@
         "file": "orchestrators\\ado-v2\\index.html",
         "level": 1,
         "purpose": "technical_deep_dive",
-        "enhancement_score": 0,
-        "current_features": [],
+        "enhancement_score": 33,
+        "current_features": [
+          "glassmorphism"
+        ],
         "missing_features": [
           "category-panels",
           "d3-overview-diagram"
@@ -335,28 +339,40 @@
         ]
       },
       {
+        "file": "four-tier-brain-preview.html",
+        "level": 2,
+        "purpose": "reference_guide",
+        "enhancement_score": 100,
+        "current_features": [
+          "mermaid-diagrams",
+          "glassmorphism"
+        ],
+        "missing_features": [],
+        "recommendations": []
+      },
+      {
         "file": "panel-viewer.html",
         "level": 2,
-        "purpose": "technical_deep_dive",
-        "enhancement_score": 33,
+        "purpose": "reference_guide",
+        "enhancement_score": 50,
         "current_features": [
           "glassmorphism"
         ],
         "missing_features": [
-          "mermaid-technical-flows",
-          "code-examples"
+          "mermaid-technical-flows"
         ],
         "recommendations": [
-          "Add Mermaid flowcharts/sequence diagrams",
-          "Add code examples with syntax highlighting"
+          "Add Mermaid flowcharts/sequence diagrams"
         ]
       },
       {
         "file": "sitemap.html",
         "level": 2,
         "purpose": "conceptual_learning",
-        "enhancement_score": 0,
-        "current_features": [],
+        "enhancement_score": 33,
+        "current_features": [
+          "glassmorphism"
+        ],
         "missing_features": [
           "mermaid-technical-flows",
           "d3-interactive-viz"
@@ -369,112 +385,113 @@
       {
         "file": "architecture\\agent-system.html",
         "level": 2,
-        "purpose": "technical_deep_dive",
-        "enhancement_score": 0,
-        "current_features": [],
-        "missing_features": [
-          "mermaid-technical-flows",
-          "code-examples"
+        "purpose": "reference_guide",
+        "enhancement_score": 100,
+        "current_features": [
+          "mermaid-diagrams",
+          "glassmorphism"
         ],
-        "recommendations": [
-          "Add Mermaid flowcharts/sequence diagrams",
-          "Add code examples with syntax highlighting"
-        ]
+        "missing_features": [],
+        "recommendations": []
       },
       {
         "file": "architecture\\four-tier-brain.html",
         "level": 2,
-        "purpose": "technical_deep_dive",
-        "enhancement_score": 0,
-        "current_features": [],
+        "purpose": "dashboard",
+        "enhancement_score": 100,
+        "current_features": [
+          "mermaid-diagrams",
+          "glassmorphism"
+        ],
+        "missing_features": [],
+        "recommendations": []
+      },
+      {
+        "file": "architecture\\index-preview.html",
+        "level": 2,
+        "purpose": "dashboard",
+        "enhancement_score": 66,
+        "current_features": [
+          "d3-diagrams",
+          "glassmorphism"
+        ],
         "missing_features": [
-          "mermaid-technical-flows",
-          "code-examples"
+          "mermaid-technical-flows"
         ],
         "recommendations": [
-          "Add Mermaid flowcharts/sequence diagrams",
-          "Add code examples with syntax highlighting"
+          "Add Mermaid flowcharts/sequence diagrams"
         ]
       },
       {
         "file": "architecture\\knowledge-graph.html",
         "level": 2,
-        "purpose": "technical_deep_dive",
-        "enhancement_score": 33,
+        "purpose": "reference_guide",
+        "enhancement_score": 66,
         "current_features": [
-          "d3-diagrams"
+          "d3-diagrams",
+          "glassmorphism"
         ],
         "missing_features": [
-          "mermaid-technical-flows",
-          "code-examples"
+          "mermaid-technical-flows"
         ],
         "recommendations": [
-          "Add Mermaid flowcharts/sequence diagrams",
-          "Add code examples with syntax highlighting"
+          "Add Mermaid flowcharts/sequence diagrams"
         ]
       },
       {
         "file": "architecture\\multi-repo.html",
         "level": 2,
-        "purpose": "technical_deep_dive",
-        "enhancement_score": 0,
-        "current_features": [],
+        "purpose": "reference_guide",
+        "enhancement_score": 50,
+        "current_features": [
+          "glassmorphism"
+        ],
         "missing_features": [
-          "mermaid-technical-flows",
-          "code-examples"
+          "mermaid-technical-flows"
         ],
         "recommendations": [
-          "Add Mermaid flowcharts/sequence diagrams",
-          "Add code examples with syntax highlighting"
+          "Add Mermaid flowcharts/sequence diagrams"
         ]
       },
       {
         "file": "architecture\\orchestrator-ecosystem.html",
         "level": 2,
-        "purpose": "technical_deep_dive",
-        "enhancement_score": 66,
+        "purpose": "reference_guide",
+        "enhancement_score": 100,
         "current_features": [
           "mermaid-diagrams",
           "glassmorphism"
         ],
-        "missing_features": [
-          "code-examples"
-        ],
-        "recommendations": [
-          "Add code examples with syntax highlighting"
-        ]
+        "missing_features": [],
+        "recommendations": []
       },
       {
         "file": "architecture\\skull-protection.html",
         "level": 2,
-        "purpose": "technical_deep_dive",
-        "enhancement_score": 33,
+        "purpose": "reference_guide",
+        "enhancement_score": 66,
         "current_features": [
-          "d3-diagrams"
+          "d3-diagrams",
+          "glassmorphism"
         ],
         "missing_features": [
-          "mermaid-technical-flows",
-          "code-examples"
+          "mermaid-technical-flows"
         ],
         "recommendations": [
-          "Add Mermaid flowcharts/sequence diagrams",
-          "Add code examples with syntax highlighting"
+          "Add Mermaid flowcharts/sequence diagrams"
         ]
       },
       {
         "file": "architecture\\working-memory.html",
         "level": 2,
-        "purpose": "technical_deep_dive",
-        "enhancement_score": 0,
-        "current_features": [],
-        "missing_features": [
-          "mermaid-technical-flows",
-          "code-examples"
+        "purpose": "reference_guide",
+        "enhancement_score": 100,
+        "current_features": [
+          "mermaid-diagrams",
+          "glassmorphism"
         ],
-        "recommendations": [
-          "Add Mermaid flowcharts/sequence diagrams",
-          "Add code examples with syntax highlighting"
-        ]
+        "missing_features": [],
+        "recommendations": []
       },
       {
         "file": "design-system\\glassmorphism-guide.html",
@@ -495,8 +512,25 @@
         "file": "design-system\\panel-viewer.html",
         "level": 2,
         "purpose": "dashboard",
-        "enhancement_score": 0,
-        "current_features": [],
+        "enhancement_score": 50,
+        "current_features": [
+          "glassmorphism"
+        ],
+        "missing_features": [
+          "mermaid-technical-flows"
+        ],
+        "recommendations": [
+          "Add Mermaid flowcharts/sequence diagrams"
+        ]
+      },
+      {
+        "file": "examples\\modern-tabs-example.html",
+        "level": 2,
+        "purpose": "dashboard",
+        "enhancement_score": 50,
+        "current_features": [
+          "d3-diagrams"
+        ],
         "missing_features": [
           "mermaid-technical-flows"
         ],
@@ -507,16 +541,16 @@
       {
         "file": "features\\ado-operations.html",
         "level": 2,
-        "purpose": "technical_deep_dive",
-        "enhancement_score": 0,
-        "current_features": [],
+        "purpose": "reference_guide",
+        "enhancement_score": 50,
+        "current_features": [
+          "glassmorphism"
+        ],
         "missing_features": [
-          "mermaid-technical-flows",
-          "code-examples"
+          "mermaid-technical-flows"
         ],
         "recommendations": [
-          "Add Mermaid flowcharts/sequence diagrams",
-          "Add code examples with syntax highlighting"
+          "Add Mermaid flowcharts/sequence diagrams"
         ]
       },
       {
@@ -537,16 +571,16 @@
       {
         "file": "features\\execution-orchestrator.html",
         "level": 2,
-        "purpose": "technical_deep_dive",
-        "enhancement_score": 0,
-        "current_features": [],
+        "purpose": "reference_guide",
+        "enhancement_score": 50,
+        "current_features": [
+          "glassmorphism"
+        ],
         "missing_features": [
-          "mermaid-technical-flows",
-          "code-examples"
+          "mermaid-technical-flows"
         ],
         "recommendations": [
-          "Add Mermaid flowcharts/sequence diagrams",
-          "Add code examples with syntax highlighting"
+          "Add Mermaid flowcharts/sequence diagrams"
         ]
       },
       {
@@ -582,16 +616,16 @@
       {
         "file": "features\\orchestrators.html",
         "level": 2,
-        "purpose": "technical_deep_dive",
-        "enhancement_score": 0,
-        "current_features": [],
+        "purpose": "reference_guide",
+        "enhancement_score": 50,
+        "current_features": [
+          "glassmorphism"
+        ],
         "missing_features": [
-          "mermaid-technical-flows",
-          "code-examples"
+          "mermaid-technical-flows"
         ],
         "recommendations": [
-          "Add Mermaid flowcharts/sequence diagrams",
-          "Add code examples with syntax highlighting"
+          "Add Mermaid flowcharts/sequence diagrams"
         ]
       },
       {

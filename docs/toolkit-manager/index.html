@@ -1,31 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<style>
-/* Mobile font optimization */
-html {
-    -webkit-text-size-adjust: 100%;
-    -moz-text-size-adjust: 100%;
-    text-size-adjust: 100%;
-}
-</style>
-<style>
-/* Touch target optimization */
-a, button, [role="button"] {
-    min-width: 44px;
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-</style>
-<style>
-/* Mobile touch optimization */
-button, a, input, select, textarea, [role="button"] {
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
-}
-</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CORTEX Toolkit Manager - Master Orchestrator Routing Layer with Pattern-Based + LLM Hybrid Intelligence">
@@ -33,65 +8,18 @@ button, a, input, select, textarea, [role="button"] {
     <meta name="author" content="Asif Hussain">
     <title>Toolkit Manager | CORTEX 4.0</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
-    <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
+    <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02-v4">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-    <style>
-        /* Compact Tetris Override */
-        .tetris-panel {
-            padding: 0 2.5rem;
-            width: 70%;
-            margin: 0 auto;
-        }
-        
-        .glass-card-display .token-metrics-tetris {
-            margin-top: var(--spacing-md, 1rem);
-            gap: 0.5rem;
-        }
-        
-        .glass-card-display .token-metric-tile {
-            padding: 1.875rem clamp(0.5rem, 2cqi, 0.75rem);
-            gap: clamp(0.4rem, 1.5cqi, 0.6rem);
-            flex-direction: row;
-            text-align: left;
-        }
-        
-        .glass-card-display .token-metric-tile i {
-            font-size: clamp(1.25rem, 4cqi + 0.25rem, 1.75rem);
-            width: clamp(32px, 7cqi, 48px);
-            height: clamp(32px, 7cqi, 48px);
-            flex-shrink: 0;
-        }
-        
-        .glass-card-display .token-metric-tile .metric-value {
-            font-size: clamp(1.125rem, 3.5cqi + 0.5rem, 1.5rem);
-            font-weight: 600;
-            line-height: 1.2;
-        }
-        
-        .glass-card-display .token-metric-tile .metric-label {
-            font-size: clamp(0.7rem, 2cqi + 0.2rem, 0.875rem);
-        }
-        
-        .tetris-panel {
-            background: var(--glass-bg, rgba(26, 31, 58, 0.7));
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
-            border-radius: var(--radius-lg, 16px);
-            padding: var(--spacing-lg, 1.5rem);
-            box-shadow: var(--shadow, 0 8px 32px rgba(0, 0, 0, 0.37));
-        }
-    </style>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
     <!-- Glass Header Navigation -->
     <header class="glass-header">
         <div class="header-content">
-            <nav class="header-nav" mobile-nav-optimized>
-                <a href="../index.html" class="nav-link" mobile-nav-optimized>
-                    <i class="fas fa-home pulse-glow-glass--fast"></i>
+            <nav class="header-nav">
+                <a href="../index.html" class="nav-link">
+                    <i class="fas fa-home"></i>
                     <span>Home</span>
                 </a>
             </nav>
@@ -100,102 +28,76 @@ button, a, input, select, textarea, [role="button"] {
     
     <!-- Main Content -->
     <main class="container" id="main-content">
-        <!-- Page Title Card with Tetris Metrics -->
+        <!-- Page Title Card -->
         <div class="glass-card-display animation-t1">
             <div class="page-title-section">
-                <h1 class="page-title"><i class="fas fa-toolbox pulse-glow-glass--fast"></i> CORTEX Toolkit Manager</h1>
+                <h1 class="page-title">
+                    <i class="fas fa-toolbox"></i>
+                    CORTEX Toolkit Manager
+                </h1>
                 <p class="page-subtitle">Master Orchestrator Routing Layer · Pattern-Based + LLM Hybrid Intelligence</p>
             </div>
             
-            <!-- Tetris-style metric tiles -->
-            <div class="tetris-panel">
-                <div class="token-metrics-tetris">
-                    <a href="#orchestrators" class="token-metric-tile tile-reduction">
-                        <i class="fas fa-sitemap pulse-glow-glass--fast"></i>
-                        <span class="metric-value">8</span>
-                        <span class="metric-label">Orcstr</span>
-                    </a>
-                    <a href="#routing" class="token-metric-tile tile-savings">
-                        <i class="fas fa-route pulse-glow-glass--fast"></i>
-                        <span class="metric-value">Hybrid</span>
-                        <span class="metric-label">Routing</span>
-                    </a>
-                    <a href="#llm" class="token-metric-tile tile-architecture">
-                        <i class="fas fa-brain pulse-glow-glass--fast"></i>
-                        <span class="metric-value">LLM</span>
-                        <span class="metric-label">Fallback</span>
-                    </a>
-                    <a href="#intent" class="token-metric-tile tile-access">
-                        <i class="fas fa-bullseye pulse-glow-glass--fast"></i>
-                        <span class="metric-value">Intent</span>
-                        <span class="metric-label">Classify</span>
-                    </a>
-                    <a href="#score" class="token-metric-tile tile-score">
-                        <i class="fas fa-chart-bar pulse-glow-glass--fast"></i>
-                        <span class="metric-value">20</span>
-                        <span class="metric-label">Score</span>
-                    </a>
-                    <a href="#updated" class="token-metric-tile tile-updated">
-                        <i class="fas fa-calendar-alt pulse-glow-glass--fast"></i>
-                        <span class="metric-value">Jan</span>
-                        <span class="metric-label">2026</span>
-                    </a>
+            <div class="metadata-grid">
+                <div class="metadata-item">
+                    <i class="fas fa-sitemap"></i>
+                    <span>8 Orchestrators</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-cogs"></i>
+                    <span>Hybrid Routing</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-brain"></i>
+                    <span>LLM Fallback</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-route"></i>
+                    <span>Intent Classification</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Score: 20</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Updated: Jan 2026</span>
                 </div>
             </div>
         </div>
 
         <!-- Executive Summary -->
         <section class="glass-card-display animation-t1">
-            <h2 class="section-title"><i class="fas fa-book-open pulse-glow-glass--fast"></i> What Is Toolkit Manager?</h2>
+            <h2 class="section-title">
+                <i class="fas fa-book-open"></i>
+                What Is Toolkit Manager?
+            </h2>
             
             <p class="intro-text">Toolkit Manager is CORTEX's <strong>Master Orchestrator Routing Layer</strong> that intelligently routes user requests to the appropriate specialized orchestrator. It uses a <strong>hybrid approach</strong>: fast pattern-based matching for exact intents, with LLM classification fallback for ambiguous requests.</p>
             
-            <!-- Key Capabilities Cards -->
-            <section class="capability-tiles-container">
-                <h2 class="section-title"><i class="fas fa-lightbulb pulse-glow-glass--fast"></i> Key Features</h2>
-                <div class="capability-tiles">
-                    <div class="capability-tile">
-                        <i class="fas fa-route pulse-glow-glass--fast"></i>
-                        <div>
-                            <strong>Hybrid Routing</strong>
-                            <span>Pattern matching (fast) + LLM classification (intelligent)</span>
-                        </div>
-                    </div>
-                    <div class="capability-tile">
-                        <i class="fas fa-layer-group pulse-glow-glass--fast"></i>
-                        <div>
-                            <strong>8 Orchestrators</strong>
-                            <span>Planning, TDD, ADO, Sanitization, Maintenance, Refinement, Vision, Diagnostics</span>
-                        </div>
-                    </div>
-                    <div class="capability-tile">
-                        <i class="fas fa-check-circle pulse-glow-glass--fast"></i>
-                        <div>
-                            <strong>Zero Ambiguity</strong>
-                            <span>LLM fallback resolves unclear intents</span>
-                        </div>
-                    </div>
-                    <div class="capability-tile">
-                        <i class="fas fa-shield-alt pulse-glow-glass--fast"></i>
-                        <div>
-                            <strong>Autonomous Handoff</strong>
-                            <span>🛡️ orchestrators execute independently</span>
-                        </div>
-                    </div>
-                    <div class="capability-tile">
-                        <i class="fas fa-file-alt pulse-glow-glass--fast"></i>
-                        <div>
-                            <strong>Manifest-Driven</strong>
-                            <span>Orchestrator definitions stored in YAML</span>
-                        </div>
-                    </div>
+            <div class="highlight-box">
+                <div class="highlight-icon">
+                    <i class="fas fa-lightbulb"></i>
                 </div>
-            </section>
+                <div class="highlight-content">
+                    <h3>Key Features</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i><strong>Hybrid Routing:</strong> Pattern matching (fast) + LLM classification (intelligent)</li>
+                        <li><i class="fas fa-check-circle"></i><strong>8 Orchestrators:</strong> Planning, TDD, ADO, Sanitization, Maintenance, Refinement, Vision, Diagnostics</li>
+                        <li><i class="fas fa-check-circle"></i><strong>Zero Ambiguity:</strong> LLM fallback resolves unclear intents</li>
+                        <li><i class="fas fa-check-circle"></i><strong>Autonomous Handoff:</strong> 🛡️ orchestrators execute independently</li>
+                        <li><i class="fas fa-check-circle"></i><strong>Manifest-Driven:</strong> Orchestrator definitions stored in YAML</li>
+                    </ul>
+                </div>
+            </div>
         </section>
 
         <!-- Routing Architecture -->
         <section class="glass-card-display animation-t1">
-            <h2 class="section-title"><i class="fas fa-project-diagram pulse-glow-glass--fast"></i> Hybrid Routing Architecture</h2>
+            <h2 class="section-title">
+                <i class="fas fa-project-diagram"></i>
+                Hybrid Routing Architecture
+            </h2>
             
             <p class="intro-text">Toolkit Manager uses a 2-phase routing strategy: <strong>Pattern-Based Matching</strong> (90% of requests) and <strong>LLM Intent Classification</strong> (10% fallback for ambiguous cases).</p>
             
@@ -236,7 +138,10 @@ graph TB
 
         <!-- 8 Orchestrators -->
         <section class="glass-card-display animation-t1">
-            <h2 class="section-title"><i class="fas fa-layer-group pulse-glow-glass--fast"></i> 8 Specialized Orchestrators</h2>
+            <h2 class="section-title">
+                <i class="fas fa-layer-group"></i>
+                8 Specialized Orchestrators
+            </h2>
             
             <p class="intro-text">Each orchestrator handles a specific workflow domain. <strong>🛡️ AUTONOMOUS</strong> orchestrators execute independently, while <strong>📋 GUIDED</strong> orchestrators provide manifest instructions.</p>
             
@@ -244,104 +149,104 @@ graph TB
                 <!-- Planning -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon planning-icon">
-                        <i class="fas fa-project-diagram pulse-glow-glass--fast"></i>
+                        <i class="fas fa-project-diagram"></i>
                     </div>
                     <h4 class="card-title">🛡️ Planning System</h4>
                     <p class="card-description">4-folder structure: <code>requirements/</code>, <code>architecture/</code>, <code>implementation/</code>, <code>validation/</code>. Full autonomous execution.</p>
                     <div class="card-stats">
-                        <span class="stat-item"><i class="fas fa-folder pulse-glow-glass--fast"></i> 4 Folders</span>
-                        <span class="stat-item"><i class="fas fa-shield-alt pulse-glow-glass--fast"></i> AUTONOMOUS</span>
+                        <span class="stat-item"><i class="fas fa-folder"></i> 4 Folders</span>
+                        <span class="stat-item"><i class="fas fa-shield-alt"></i> AUTONOMOUS</span>
                     </div>
                 </div>
                 
                 <!-- TDD -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon tdd-icon">
-                        <i class="fas fa-vial pulse-glow-glass--fast"></i>
+                        <i class="fas fa-vial"></i>
                     </div>
                     <h4 class="card-title">📋 TDD Orchestrator</h4>
                     <p class="card-description">RED→GREEN→REFACTOR cycle enforcement. Tests must fail before implementation (SKULL rule).</p>
                     <div class="card-stats">
-                        <span class="stat-item"><i class="fas fa-sync-alt pulse-glow-glass--fast"></i> 3 Phases</span>
-                        <span class="stat-item"><i class="fas fa-book pulse-glow-glass--fast"></i> GUIDED</span>
+                        <span class="stat-item"><i class="fas fa-sync-alt"></i> 3 Phases</span>
+                        <span class="stat-item"><i class="fas fa-book"></i> GUIDED</span>
                     </div>
                 </div>
                 
                 <!-- ADO -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon ado-icon">
-                        <i class="fas fa-tasks pulse-glow-glass--fast"></i>
+                        <i class="fas fa-tasks"></i>
                     </div>
                     <h4 class="card-title">🛡️ ADO Operations</h4>
                     <p class="card-description">Azure DevOps work item generation (Stories, Features, Epics). Full autonomous execution with API integration.</p>
                     <div class="card-stats">
-                        <span class="stat-item"><i class="fas fa-plug pulse-glow-glass--fast"></i> API Driven</span>
-                        <span class="stat-item"><i class="fas fa-shield-alt pulse-glow-glass--fast"></i> AUTONOMOUS</span>
+                        <span class="stat-item"><i class="fas fa-plug"></i> API Driven</span>
+                        <span class="stat-item"><i class="fas fa-shield-alt"></i> AUTONOMOUS</span>
                     </div>
                 </div>
                 
                 <!-- Sanitization -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon sanitize-icon">
-                        <i class="fas fa-broom pulse-glow-glass--fast"></i>
+                        <i class="fas fa-broom"></i>
                     </div>
                     <h4 class="card-title">📋 Sanitization</h4>
                     <p class="card-description">5-phase cleanup: credentials, PII, hardcoded values, sensitive paths, API keys. Makes code generic.</p>
                     <div class="card-stats">
-                        <span class="stat-item"><i class="fas fa-list-ol pulse-glow-glass--fast"></i> 5 Phases</span>
-                        <span class="stat-item"><i class="fas fa-book pulse-glow-glass--fast"></i> GUIDED</span>
+                        <span class="stat-item"><i class="fas fa-list-ol"></i> 5 Phases</span>
+                        <span class="stat-item"><i class="fas fa-book"></i> GUIDED</span>
                     </div>
                 </div>
                 
                 <!-- Maintenance -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon maintain-icon">
-                        <i class="fas fa-heartbeat pulse-glow-glass--fast"></i>
+                        <i class="fas fa-heartbeat"></i>
                     </div>
                     <h4 class="card-title">📋 Maintenance</h4>
                     <p class="card-description">12-phase health check pipeline: duplicates, dead code, complexity, test gaps, docs, dependencies.</p>
                     <div class="card-stats">
-                        <span class="stat-item"><i class="fas fa-list-ol pulse-glow-glass--fast"></i> 12 Phases</span>
-                        <span class="stat-item"><i class="fas fa-book pulse-glow-glass--fast"></i> GUIDED</span>
+                        <span class="stat-item"><i class="fas fa-list-ol"></i> 12 Phases</span>
+                        <span class="stat-item"><i class="fas fa-book"></i> GUIDED</span>
                     </div>
                 </div>
                 
                 <!-- Refinement -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon refine-icon">
-                        <i class="fas fa-magic pulse-glow-glass--fast"></i>
+                        <i class="fas fa-magic"></i>
                     </div>
                     <h4 class="card-title">📋 Refinement</h4>
                     <p class="card-description">7-phase improvement: code quality, performance, security, accessibility, testing, docs, architecture.</p>
                     <div class="card-stats">
-                        <span class="stat-item"><i class="fas fa-list-ol pulse-glow-glass--fast"></i> 7 Phases</span>
-                        <span class="stat-item"><i class="fas fa-book pulse-glow-glass--fast"></i> GUIDED</span>
+                        <span class="stat-item"><i class="fas fa-list-ol"></i> 7 Phases</span>
+                        <span class="stat-item"><i class="fas fa-book"></i> GUIDED</span>
                     </div>
                 </div>
                 
                 <!-- Vision -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon vision-icon">
-                        <i class="fas fa-eye pulse-glow-glass--fast"></i>
+                        <i class="fas fa-eye"></i>
                     </div>
                     <h4 class="card-title">🔍 Vision API</h4>
                     <p class="card-description">Auto-engages when images attached. Analyzes screenshots, diagrams, UI mockups, error messages.</p>
                     <div class="card-stats">
-                        <span class="stat-item"><i class="fas fa-image pulse-glow-glass--fast"></i> Auto-Trigger</span>
-                        <span class="stat-item"><i class="fas fa-robot pulse-glow-glass--fast"></i> MIDDLEWARE</span>
+                        <span class="stat-item"><i class="fas fa-image"></i> Auto-Trigger</span>
+                        <span class="stat-item"><i class="fas fa-robot"></i> MIDDLEWARE</span>
                     </div>
                 </div>
                 
                 <!-- Diagnostics -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon diag-icon">
-                        <i class="fas fa-stethoscope pulse-glow-glass--fast"></i>
+                        <i class="fas fa-stethoscope"></i>
                     </div>
                     <h4 class="card-title">🩺 Diagnostics</h4>
                     <p class="card-description">System health checks: brain integrity, orchestrator status, agent connectivity, knowledge graph validation.</p>
                     <div class="card-stats">
-                        <span class="stat-item"><i class="fas fa-clipboard-check pulse-glow-glass--fast"></i> Health</span>
-                        <span class="stat-item"><i class="fas fa-book pulse-glow-glass--fast"></i> GUIDED</span>
+                        <span class="stat-item"><i class="fas fa-clipboard-check"></i> Health</span>
+                        <span class="stat-item"><i class="fas fa-book"></i> GUIDED</span>
                     </div>
                 </div>
             </div>
@@ -349,7 +254,10 @@ graph TB
 
         <!-- Routing Decision Flow -->
         <section class="glass-card-display animation-t1">
-            <h2 class="section-title"><i class="fas fa-route pulse-glow-glass--fast"></i> Routing Decision Flow</h2>
+            <h2 class="section-title">
+                <i class="fas fa-route"></i>
+                Routing Decision Flow
+            </h2>
             
             <p class="intro-text">Step-by-step process of how Toolkit Manager routes user requests to orchestrators.</p>
             
@@ -382,52 +290,39 @@ sequenceDiagram
             <div class="two-column-grid">
                 <div class="info-box">
                     <h3>Pattern-Based (Fast)</h3>
-                    <div class="capability-tiles">
-    <div class="glass-card">
-        <div class="card-body">Regex keyword matching</div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body">Exact phrase detection</div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body">90% of requests</div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body">Sub-millisecond routing</div>
-    </div>
-</div>
+                    <ul class="feature-list-compact">
+                        <li>Regex keyword matching</li>
+                        <li>Exact phrase detection</li>
+                        <li>90% of requests</li>
+                        <li>Sub-millisecond routing</li>
+                    </ul>
                 </div>
                 
                 <div class="info-box">
                     <h3>LLM Classification (Intelligent)</h3>
-                    <div class="capability-tiles">
-    <div class="glass-card">
-        <div class="card-body">GPT-4o semantic analysis</div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body">Context-aware reasoning</div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body">10% fallback cases</div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body">200-500ms latency</div>
-    </div>
-</div>
+                    <ul class="feature-list-compact">
+                        <li>GPT-4o semantic analysis</li>
+                        <li>Context-aware reasoning</li>
+                        <li>10% fallback cases</li>
+                        <li>200-500ms latency</li>
+                    </ul>
                 </div>
             </div>
         </section>
 
         <!-- Intent Patterns -->
         <section class="glass-card-display animation-t1">
-            <h2 class="section-title"><i class="fas fa-list-alt pulse-glow-glass--fast"></i> Intent Pattern Examples</h2>
+            <h2 class="section-title">
+                <i class="fas fa-list-alt"></i>
+                Intent Pattern Examples
+            </h2>
             
             <p class="intro-text">Common user request patterns and their orchestrator routing.</p>
             
             <div class="pattern-grid">
                 <div class="pattern-card">
                     <div class="pattern-header">
-                        <i class="fas fa-project-diagram pulse-glow-glass--fast"></i>
+                        <i class="fas fa-project-diagram"></i>
                         <span>Planning</span>
                     </div>
                     <ul class="pattern-list">
@@ -438,7 +333,7 @@ sequenceDiagram
                 
                 <div class="pattern-card">
                     <div class="pattern-header">
-                        <i class="fas fa-vial pulse-glow-glass--fast"></i>
+                        <i class="fas fa-vial"></i>
                         <span>TDD</span>
                     </div>
                     <ul class="pattern-list">
@@ -449,7 +344,7 @@ sequenceDiagram
                 
                 <div class="pattern-card">
                     <div class="pattern-header">
-                        <i class="fas fa-tasks pulse-glow-glass--fast"></i>
+                        <i class="fas fa-tasks"></i>
                         <span>ADO</span>
                     </div>
                     <ul class="pattern-list">
@@ -460,7 +355,7 @@ sequenceDiagram
                 
                 <div class="pattern-card">
                     <div class="pattern-header">
-                        <i class="fas fa-broom pulse-glow-glass--fast"></i>
+                        <i class="fas fa-broom"></i>
                         <span>Sanitization</span>
                     </div>
                     <ul class="pattern-list">
@@ -471,7 +366,7 @@ sequenceDiagram
                 
                 <div class="pattern-card">
                     <div class="pattern-header">
-                        <i class="fas fa-heartbeat pulse-glow-glass--fast"></i>
+                        <i class="fas fa-heartbeat"></i>
                         <span>Maintenance</span>
                     </div>
                     <ul class="pattern-list">
@@ -482,7 +377,7 @@ sequenceDiagram
                 
                 <div class="pattern-card">
                     <div class="pattern-header">
-                        <i class="fas fa-magic pulse-glow-glass--fast"></i>
+                        <i class="fas fa-magic"></i>
                         <span>Refinement</span>
                     </div>
                     <ul class="pattern-list">
@@ -493,7 +388,7 @@ sequenceDiagram
                 
                 <div class="pattern-card">
                     <div class="pattern-header">
-                        <i class="fas fa-eye pulse-glow-glass--fast"></i>
+                        <i class="fas fa-eye"></i>
                         <span>Vision</span>
                     </div>
                     <ul class="pattern-list">
@@ -504,7 +399,7 @@ sequenceDiagram
                 
                 <div class="pattern-card">
                     <div class="pattern-header">
-                        <i class="fas fa-stethoscope pulse-glow-glass--fast"></i>
+                        <i class="fas fa-stethoscope"></i>
                         <span>Diagnostics</span>
                     </div>
                     <ul class="pattern-list">
@@ -517,14 +412,17 @@ sequenceDiagram
 
         <!-- Manifest Storage -->
         <section class="glass-card-display animation-t1">
-            <h2 class="section-title"><i class="fas fa-database pulse-glow-glass--fast"></i> Manifest-Driven Architecture</h2>
+            <h2 class="section-title">
+                <i class="fas fa-database"></i>
+                Manifest-Driven Architecture
+            </h2>
             
             <p class="intro-text">All orchestrator definitions are stored as YAML manifests in <code>cortex-brain/manifests/orchestrators/</code>. This enables version control, easy updates, and declarative orchestrator definitions.</p>
             
             <div class="code-block">
                 <div class="code-header">
                     <span>Example: Planning Orchestrator Manifest</span>
-                    <i class="fas fa-file-code pulse-glow-glass--fast"></i>
+                    <i class="fas fa-file-code"></i>
                 </div>
                 <pre><code>name: planning-system
 version: 4.0.0
@@ -551,78 +449,51 @@ output_structure:
             <div class="two-column-grid">
                 <div class="info-box">
                     <h3>Manifest Benefits</h3>
-                    <div class="capability-tiles">
-    <div class="glass-card">
-        <div class="card-body">Version-controlled definitions</div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body">Easy orchestrator updates</div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body">Declarative configuration</div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body">No code changes needed</div>
-    </div>
-</div>
+                    <ul class="feature-list-compact">
+                        <li>Version-controlled definitions</li>
+                        <li>Easy orchestrator updates</li>
+                        <li>Declarative configuration</li>
+                        <li>No code changes needed</li>
+                    </ul>
                 </div>
                 
                 <div class="info-box">
                     <h3>Manifest Location</h3>
-                    <div class="capability-tiles">
-    <div class="glass-card">
-        <div class="card-body"><code>cortex-brain/manifests/orchestrators/</code></div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body">8 YAML files (one per orchestrator)</div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body">Loaded at runtime</div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body">Hot-reload supported</div>
-    </div>
-</div>
+                    <ul class="feature-list-compact">
+                        <li><code>cortex-brain/manifests/orchestrators/</code></li>
+                        <li>8 YAML files (one per orchestrator)</li>
+                        <li>Loaded at runtime</li>
+                        <li>Hot-reload supported</li>
+                    </ul>
                 </div>
             </div>
         </section>
 
         <!-- Related Resources -->
         <section class="glass-card-display animation-t1">
-            <h2 class="section-title"><i class="fas fa-link pulse-glow-glass--fast"></i> Related Resources</h2>
+            <h2 class="section-title">
+                <i class="fas fa-link"></i>
+                Related Resources
+            </h2>
             
             <div class="reference-grid">
                 <div class="reference-section">
                     <h3>Implementation</h3>
-                    <div class="capability-tiles">
-    <div class="glass-card">
-        <div class="card-body"><code>src/operations/toolkit_manager.py</code></div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body"><code>src/cortex_agents/llm_intent_classifier.py</code></div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body"><code>src/orchestrators/</code> (8 orchestrators)</div>
-    </div>
-</div>
+                    <ul class="reference-list">
+                        <li><code>src/operations/toolkit_manager.py</code></li>
+                        <li><code>src/cortex_agents/llm_intent_classifier.py</code></li>
+                        <li><code>src/orchestrators/</code> (8 orchestrators)</li>
+                    </ul>
                 </div>
                 
                 <div class="reference-section">
                     <h3>Manifests</h3>
-                    <div class="capability-tiles">
-    <div class="glass-card">
-        <div class="card-body"><code>cortex-brain/manifests/orchestrators/</code></div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body">planning-system-4.0-manifest.yaml</div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body">tdd-orchestrator-manifest.yaml</div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body">...all 8 orchestrators</div>
-    </div>
-</div>
+                    <ul class="reference-list">
+                        <li><code>cortex-brain/manifests/orchestrators/</code></li>
+                        <li>planning-system-4.0-manifest.yaml</li>
+                        <li>tdd-orchestrator-manifest.yaml</li>
+                        <li>...all 8 orchestrators</li>
+                    </ul>
                 </div>
                 
                 <div class="reference-section">
@@ -636,17 +507,11 @@ output_structure:
                 
                 <div class="reference-section">
                     <h3>Configuration</h3>
-                    <div class="capability-tiles">
-    <div class="glass-card">
-        <div class="card-body"><code>.github/prompts/CORTEX.prompt.md</code></div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body"><code>cortex-brain/operations-config.yaml</code></div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body"><code>cortex.config.json</code></div>
-    </div>
-</div>
+                    <ul class="reference-list">
+                        <li><code>.github/prompts/CORTEX.prompt.md</code></li>
+                        <li><code>cortex-brain/operations-config.yaml</code></li>
+                        <li><code>cortex.config.json</code></li>
+                    </ul>
                 </div>
             </div>
         </section>

@@ -10420,3 +10420,201 @@ h1, h2, h3, h4, h5, h6, p, span, div {
 }
 
 /* End of Level 1 Enhancements */
+
+/* ============================================
+   FEATURE PILLS / TAGS - Global Styling
+   ============================================ */
+
+/* Container for feature pills (used in Implementation Details, etc.) */
+.feature-pills-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+/* Individual feature pill/tag */
+.feature-pill,
+span[style*="background: rgba"][style*="padding: 0.5rem"] {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.2;
+    white-space: nowrap;
+    transition: all var(--transition-base);
+}
+
+/* Icon inside feature pill */
+.feature-pill i,
+span[style*="background: rgba"] i {
+    font-size: 0.875rem;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Hover effect for feature pills */
+.feature-pill:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   DOCUMENTATION CARDS - Global Styling
+   ============================================ */
+
+/* Grid container for documentation cards */
+.docs-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+/* Individual documentation card */
+.docs-card,
+a.glass-card-clickable[style*="text-decoration: none"] {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1.25rem;
+    text-decoration: none;
+    transition: all var(--transition-base);
+    border-radius: var(--radius-md);
+}
+
+/* Icon in documentation card */
+.docs-card i,
+.docs-card .fas,
+a.glass-card-clickable i {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+/* Title in documentation card */
+.docs-card h4,
+a.glass-card-clickable h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+    margin-bottom: 0.25rem;
+    line-height: 1.3;
+}
+
+/* Description in documentation card */
+.docs-card p,
+a.glass-card-clickable p {
+    font-size: 0.875rem;
+    margin: 0;
+    line-height: 1.5;
+    opacity: 0.9;
+}
+
+/* Hover effect for documentation cards */
+.docs-card:hover,
+a.glass-card-clickable:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.docs-card:hover i,
+a.glass-card-clickable:hover i {
+    transform: scale(1.1);
+    filter: brightness(1.2);
+}
+
+/* ============================================
+   TIER BADGE COMPONENTS - Global Styling
+   ============================================ */
+
+/* Numbered tier badge (60x60px gradient boxes) */
+.tier-badge {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Tier badge with icon instead of number */
+.tier-badge i {
+    font-size: 1.75rem;
+}
+
+/* Layout for tier badge + content */
+.tier-content-flex {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+}
+
+/* Content area next to tier badge */
+.tier-content {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Tier title */
+.tier-content h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+}
+
+/* Inline code badge (file paths) */
+.tier-content code,
+code[style*="color:"][style*="background:"] {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 6px;
+    display: inline-block;
+    margin-bottom: 1rem;
+    font-family: var(--font-mono);
+}
+
+/* Tier description text */
+.tier-content > p {
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 768px) {
+    /* Stack tier badges vertically on mobile */
+    .tier-content-flex {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .tier-badge {
+        margin: 0 auto;
+    }
+    
+    /* Adjust feature pills on mobile */
+    .feature-pills-container {
+        justify-content: center;
+    }
+    
+    /* Single column for docs cards on mobile */
+    .docs-card-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
