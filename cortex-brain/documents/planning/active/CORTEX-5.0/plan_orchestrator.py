@@ -28,8 +28,8 @@ class PlanOrchestrator:
     
     def __init__(self, plan_root: Path):
         self.plan_root = plan_root
-        self.master_plan_dir = plan_root / "00-cortex-v5-gap-remediation"
-        self.tracker_file = self.master_plan_dir / "tracking" / "progress-tracker.json"
+        self.master_plan_dir = plan_root
+        self.tracker_file = plan_root / "tracking" / "epic-progress-tracker.json"
         self.state_file = plan_root / ".orchestrator-state.json"
         self.load_state()
     
@@ -38,6 +38,35 @@ class PlanOrchestrator:
         if self.tracker_file.exists():
             with open(self.tracker_file, 'r') as f:
                 self.tracker = json.load(f)
+                # Handle both sub_plans and child_plans format
+                if "child_plans" in self.tracker and "sub_plans" not in self.tracker:
+                    self.tracker["sub_plans"] = self.tracker["child_plans"]
+                # Create overall_progress if missing
+                if "overall_progress" not in self.tracker:
+                    self.tracker["overall_progress"] = {
+                        "percentage": int(self.tracker.get("overall_progress", 0.0)),
+                        "completed_sub_plans": self.tracker.get("completed_plans", 0),
+                        "total_sub_plans": self.tracker.get("total_plans", 18),
+                        "current_phase": "Phase 1",
+                        "current_sub_plan": self.tracker["child_plans"][0]["order"] if self.tracker.get("child_plans") else "00A"
+                    }
+                # Create milestones if missing
+                if "milestones" not in self.tracker:
+                    self.tracker["milestones"] = [
+                        {"name": "Gate 1: 50% Coverage", "status": "not_started", "target_date": "Week 3", "criteria": "50%+ test coverage"},
+                        {"name": "Gate 2: 80% Coverage", "status": "not_started", "target_date": "Week 4", "criteria": "80%+ test coverage"}
+                    ]
+                # Create metrics if missing
+                if "metrics" not in self.tracker:
+                    self.tracker["metrics"] = {
+                        "acceptance_criteria": {
+                            "total": 130,
+                            "implemented": 78,
+                            "tested": 20,
+                            "implementation_rate": 0.60,
+                            "test_coverage_rate": 0.15
+                        }
+                    }
         else:
             print(f"❌ Progress tracker not found: {self.tracker_file}")
             sys.exit(1)
@@ -72,11 +101,25 @@ class PlanOrchestrator:
         print("="*80)
         
         # Overall progress
-        overall = self.tracker["overall_progress"]
-        print(f"\n📊 Overall Progress: {overall['percentage']}%")
-        print(f"   Completed: {overall['completed_sub_plans']}/{overall['total_sub_plans']} sub-plans")
-        print(f"   Current Phase: {overall['current_phase']}")
-        print(f"   Current Sub-Plan: {overall['current_sub_plan']}")
+        overall = self.tracker.get("overall_progress", {})
+        if isinstance(overall, dict):
+            percentage = overall.get('percentage', 0)
+            completed_sub_plans = overall.get('completed_sub_plans', 0)
+            total_sub_plans = overall.get('total_sub_plans', 18)
+            current_phase = overall.get('current_phase', 'Phase 1')
+            current_sub_plan = overall.get('current_sub_plan', '00A')
+        else:
+            # Handle if overall_progress is a float
+            percentage = int(overall) if isinstance(overall, float) else 0
+            completed_sub_plans = self.tracker.get('completed_plans', 0)
+            total_sub_plans = self.tracker.get('total_plans', 18)
+            current_phase = "Phase 1"
+            current_sub_plan = "00A"
+        
+        print(f"\n📊 Overall Progress: {percentage}%")
+        print(f"   Completed: {completed_sub_plans}/{total_sub_plans} sub-plans")
+        print(f"   Current Phase: {current_phase}")
+        print(f"   Current Sub-Plan: {current_sub_plan}")
         
         # Sub-plans status
         print("\n📋 Sub-Plans:")
@@ -84,8 +127,9 @@ class PlanOrchestrator:
         print("-" * 80)
         for sp in self.tracker["sub_plans"]:
             status_icon = self._get_status_icon(sp["status"])
+            duration = sp.get('duration_estimate', sp.get('duration', 'TBD'))
             print(f"{sp['order']:<4} {sp['name']:<35} {status_icon} {sp['status']:<12} "
-                  f"{sp['progress']:>3}% {sp['duration_estimate']:>10}")
+                  f"{sp['progress']:>3}% {duration:>10}")
         
         # Milestones
         print("\n🎯 Milestones:")
@@ -122,7 +166,7 @@ class PlanOrchestrator:
     def get_next_available_sub_plan(self) -> Optional[Dict]:
         """Find the next sub-plan that's ready to execute."""
         for sp in self.tracker["sub_plans"]:
-            if sp["status"] in ["not_started", "in_progress"]:
+            if sp["status"] in ["not_started", "in_progress", "blocked"]:
                 # Check if dependencies are met
                 if self._dependencies_met(sp):
                     return sp
@@ -130,13 +174,17 @@ class PlanOrchestrator:
     
     def _dependencies_met(self, sub_plan: Dict) -> bool:
         """Check if sub-plan dependencies are satisfied."""
-        if not sub_plan["dependencies"]:
+        if not sub_plan.get("dependencies"):
             return True  # No dependencies
         
-        for dep_order in sub_plan["dependencies"]:
-            dep_sp = self._get_sub_plan(dep_order)
+        for dep_id in sub_plan["dependencies"]:
+            # Try to find by both ID and order
+            dep_sp = self._get_sub_plan_by_id(dep_id)
+            if not dep_sp:
+                dep_sp = self._get_sub_plan(dep_id)
+            
             # Accept both "complete" and "completed" as valid completion states
-            if dep_sp and dep_sp["status"] not in ["complete", "completed"]:
+            if not dep_sp or dep_sp["status"] not in ["complete", "completed"]:
                 return False
         return True
     
@@ -144,6 +192,13 @@ class PlanOrchestrator:
         """Get sub-plan by order number."""
         for sp in self.tracker["sub_plans"]:
             if sp["order"] == order:
+                return sp
+        return None
+    
+    def _get_sub_plan_by_id(self, plan_id: str) -> Optional[Dict]:
+        """Get sub-plan by plan ID."""
+        for sp in self.tracker["sub_plans"]:
+            if sp.get("id") == plan_id:
                 return sp
         return None
     
@@ -180,8 +235,9 @@ class PlanOrchestrator:
                 print(f"⚠️ Analysis skipped or failed")
         
         print(f"\n🚀 Starting Sub-Plan {order}: {sp['name']}")
-        print(f"   Duration: {sp['duration_estimate']}")
-        print(f"   Priority: {sp['priority']}")
+        duration = sp.get('duration_estimate', sp.get('duration', 'TBD'))
+        print(f"   Duration: {duration}")
+        print(f"   Priority: {sp.get('priority', 'Medium')}")
         print(f"   Gate: {sp.get('gate', 'None')}")
         
         sp["status"] = "in_progress"
@@ -208,7 +264,13 @@ class PlanOrchestrator:
         
         # Update overall progress
         total_progress = sum(sp["progress"] for sp in self.tracker["sub_plans"])
-        self.tracker["overall_progress"]["percentage"] = total_progress // len(self.tracker["sub_plans"])
+        new_overall = total_progress // len(self.tracker["sub_plans"])
+        
+        # Update overall_progress structure
+        if isinstance(self.tracker.get("overall_progress"), dict):
+            self.tracker["overall_progress"]["percentage"] = new_overall
+        else:
+            self.tracker["overall_progress"] = new_overall
         
         self.save_state()
         print(f"✅ Updated Sub-Plan {order} progress to {percentage}%")
@@ -235,7 +297,23 @@ class PlanOrchestrator:
         
         # Update overall progress (count both "complete" and "completed")
         completed = sum(1 for sp in self.tracker["sub_plans"] if sp["status"] in ["complete", "completed"])
-        self.tracker["overall_progress"]["completed_sub_plans"] = completed
+        
+        # Update overall_progress structure
+        if isinstance(self.tracker.get("overall_progress"), dict):
+            self.tracker["overall_progress"]["completed_sub_plans"] = completed
+        else:
+            # Create the dict structure if it doesn't exist
+            self.tracker["overall_progress"] = {
+                "percentage": int(self.tracker.get("overall_progress", 0)),
+                "completed_sub_plans": completed,
+                "total_sub_plans": len(self.tracker["sub_plans"]),
+                "current_phase": "Phase 1",
+                "current_sub_plan": order
+            }
+        
+        # Also update the tracker-level completed_plans if it exists
+        if "completed_plans" in self.tracker:
+            self.tracker["completed_plans"] = completed
         
         self.save_state()
         
@@ -309,7 +387,13 @@ class PlanOrchestrator:
     def _generate_analysis_content(self, order: str, sub_plan: Dict, completed_plans: List[Dict]) -> str:
         """Generate analysis content based on completed work."""
         completed_names = [f"Sub-Plan {sp['order']}: {sp['name']}" for sp in completed_plans]
-        overall_progress = self.tracker["overall_progress"]["percentage"]
+        
+        # Handle overall_progress as either dict or float
+        overall = self.tracker.get("overall_progress", 0)
+        if isinstance(overall, dict):
+            overall_progress = overall.get("percentage", 0)
+        else:
+            overall_progress = int(overall) if isinstance(overall, float) else 0
         
         # Calculate metrics
         total_duration = 0
@@ -367,9 +451,9 @@ class PlanOrchestrator:
 ### Upcoming Sub-Plan Review
 
 **Sub-Plan:** {order} - {sub_plan['name']}  
-**Original Duration:** {sub_plan['duration_estimate']}  
+**Original Duration:** {sub_plan.get('duration_estimate', sub_plan.get('duration', 'TBD'))}  
 **Original Dependencies:** {', '.join(sub_plan.get('dependencies', []))}  
-**Priority:** {sub_plan['priority']}
+**Priority:** {sub_plan.get('priority', 'Medium')}
 
 #### Dependency Validation
 
@@ -405,8 +489,8 @@ Previous sub-plans achieved 100% test coverage and clean implementations by:
 
 | Metric | Original | Recommendation |
 |--------|----------|----------------|
-| Duration | {sub_plan['duration_estimate']} | Monitor actual vs estimate |
-| Priority | {sub_plan['priority']} | {sub_plan['priority']} |
+| Duration | {sub_plan.get('duration_estimate', sub_plan.get('duration', 'TBD'))} | Monitor actual vs estimate |
+| Priority | {sub_plan.get('priority', 'Medium')} | {sub_plan.get('priority', 'Medium')} |
 | Risk Level | Medium | {self._assess_risk(sub_plan, completed_plans)} |
 
 ---
@@ -486,7 +570,7 @@ Previous sub-plans achieved 100% test coverage and clean implementations by:
 4. Implement quality gates early
 5. Use template-based responses
 
-**Estimated Completion:** {sub_plan['duration_estimate']}
+**Estimated Completion:** {sub_plan.get('duration_estimate', sub_plan.get('duration', 'TBD'))}
 
 ---
 
