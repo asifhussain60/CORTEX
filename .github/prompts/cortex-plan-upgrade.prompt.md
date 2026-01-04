@@ -28,6 +28,74 @@ Autonomous migration of legacy plans to CORTEX-5.0 standards via GitHub Copilot 
 
 ## 🤖 Orchestrator Behavior
 
+### Phase 0: Pre-Flight System Validation (ALWAYS RUN FIRST)
+
+**Objective:** Ensure orchestrator reflects latest CORTEX-5.0 state before upgrading user plans
+
+**Critical:** User plans must be migrated against the CURRENT, LIVE CORTEX-5.0 template, not stale cache.
+
+**Tasks:**
+
+1. **Check Remote for CORTEX-5.0 Updates**
+   ```powershell
+   # Fetch latest remote state (no merge)
+   git fetch origin CORTEX-5.0
+   
+   # Compare local vs remote for CORTEX-5.0 plan folder
+   $remoteHash = git rev-parse origin/CORTEX-5.0:cortex-brain/documents/planning/active/CORTEX-5.0
+   $localHash = git rev-parse HEAD:cortex-brain/documents/planning/active/CORTEX-5.0
+   
+   if ($remoteHash -ne $localHash) {
+       Write-Host "🔄 CORTEX-5.0 updates detected on remote. Pulling latest..."
+       git pull origin CORTEX-5.0 -- cortex-brain/documents/planning/active/CORTEX-5.0
+   }
+   ```
+
+2. **Self-Enhancement Check**
+   - Compare `cortex-plan-upgrade.prompt.md` against CORTEX-5.0 plan structure
+   - Validate compliance checks match current CORTEX-5.0 standards
+   - Verify folder structure requirements up-to-date
+   - Check REFACTOR phase task count (18+ still current?)
+
+3. **Wiring Validation**
+   - **Check:** `copilot-instructions.md` references Plan Upgrade orchestrator
+   - **Check:** `CORTEX.prompt.md` includes Plan Upgrade routing pattern
+   - **Verify:** Pattern: `^(upgrade plan|migrate plan|plan upgrade)`
+   - **Verify:** Type: 🛡️ AUTONOMOUS or 📋 GUIDED
+   - **If missing:** Display warning and recommendation
+
+4. **Implementation State Audit**
+   - Scan `src/orchestrators/plan_upgrade/` for implementation status
+   - Check `cortex-upgrade-plan.py` CLI wrapper exists
+   - Verify test coverage: `tests/orchestrators/plan_upgrade/`
+   - Document gaps between specification and implementation
+
+**Exit Criteria:**
+- ✅ CORTEX-5.0 folder synchronized with remote
+- ✅ Orchestrator specification up-to-date
+- ✅ Wiring validated (or warnings issued)
+- ✅ Implementation gaps documented (if any)
+
+**Output Display:**
+```markdown
+## 🔍 Pre-Flight Validation Complete
+
+**CORTEX-5.0 Sync:** ✅ Up-to-date (or ⚠️ Updated from remote)
+**Orchestrator Spec:** ✅ Current
+**Wiring Status:**
+- copilot-instructions.md: ✅ Referenced
+- CORTEX.prompt.md: ⚠️ Pattern missing (recommend adding)
+
+**Implementation Status:**
+- Python orchestrator: ⚠️ Not implemented yet
+- CLI wrapper: ❌ Missing
+- Tests: ❌ No tests found
+
+**Ready to proceed:** ✅ Yes (GitHub Copilot can execute manually)
+```
+
+---
+
 ### Phase 1: Analysis & Discovery
 1. **Validate Input Path**
    - Check path exists and is accessible
@@ -82,7 +150,28 @@ Autonomous migration of legacy plans to CORTEX-5.0 standards via GitHub Copilot 
    **Proceed with upgrade?** (Reply "yes" to continue)
    ```
 
-### Phase 3: Plan Generation
+### Phase 3: Backup & Plan Generation
+
+**CRITICAL:** NEVER lose existing plan content during migration.
+
+4. **Backup Original Plan (MANDATORY)**
+   ```powershell
+   # Create timestamped backup
+   $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
+   $backupPath = "cortex-brain/documents/planning/backups/{plan-name}-pre-v5-$timestamp/"
+   
+   # Copy entire plan folder
+   Copy-Item "{original-plan-path}" $backupPath -Recurse
+   
+   # Create backup metadata
+   @{
+       backup_date = (Get-Date -Format "yyyy-MM-dd HH:mm:ss")
+       original_path = "{original-plan-path}"
+       backup_reason = "Pre-CORTEX-5.0 migration"
+       orchestrator_version = "1.0.0"
+   } | ConvertTo-Json | Out-File "$backupPath/backup-metadata.json"
+   ```
+
 5. **Create Folder Structure**
    ```
    cortex-brain/documents/planning/active/{plan-name}-v5/
@@ -90,7 +179,10 @@ Autonomous migration of legacy plans to CORTEX-5.0 standards via GitHub Copilot 
    ├── context/
    ├── reports/
    ├── artifacts/
+   ├── phases/                     # Optional but recommended
    └── tracking/
+       ├── progress-tracker.json
+       └── acceptance-criteria.yaml # If complex plan with >10 ACs
    ```
 
 6. **Generate Master Plan Content**
@@ -107,11 +199,68 @@ Autonomous migration of legacy plans to CORTEX-5.0 standards via GitHub Copilot 
 
 7. **Generate Supporting Files**
    - `tracking/progress-tracker.json` (phase tracking)
+   - `tracking/acceptance-criteria.yaml` (if >10 acceptance criteria)
    - `reports/migration-report.md` (comprehensive analysis)
    - Copy context files from legacy plan
+   - Create `phases/README.md` explaining optional phase breakdown
 
-### Phase 4: Completion & Handoff
-8. **Display Results**
+### Phase 4: Verification & Alignment
+
+**Objective:** Ensure migrated plan preserves all original content and intent
+
+8. **Content Verification**
+   ```powershell
+   # Compare phase counts
+   $originalPhases = (Select-String -Path "$backupPath/*.md" -Pattern "^###?\s+Phase\s+\d+" | Measure-Object).Count
+   $migratedPhases = (Select-String -Path "{plan-name}-v5/00-master-plan.md" -Pattern "^###?\s+Phase\s+\d+" | Measure-Object).Count
+   
+   if ($originalPhases -ne $migratedPhases) {
+       Write-Warning "⚠️ Phase count mismatch: Original=$originalPhases, Migrated=$migratedPhases"
+   }
+   
+   # Compare acceptance criteria counts
+   $originalACs = (Select-String -Path "$backupPath/*.md" -Pattern "AC-\d+|^\s*\d+\.\s+" | Measure-Object).Count
+   $migratedACs = (Select-String -Path "{plan-name}-v5/00-master-plan.md" -Pattern "AC-\d+|^\s*\d+\.\s+" | Measure-Object).Count
+   
+   if ($originalACs -ne $migratedACs) {
+       Write-Warning "⚠️ AC count mismatch: Original=$originalACs, Migrated=$migratedACs"
+   }
+   ```
+
+9. **Alignment Corrections**
+   - If phase count mismatch: Review missing phases in original, add to migrated plan
+   - If AC count mismatch: Extract missing ACs from backup, append to migrated plan
+   - If task descriptions truncated: Restore full descriptions from backup
+   - If context files missing: Copy from backup to new `context/` folder
+
+10. **Final Validation**
+    - Run compliance checker on migrated plan: `check-cortex-5-compliance.ps1 {plan-name}-v5/`
+    - Verify all CORTEX-5.0 requirements met: 100% score
+    - Cross-reference backup metadata: all files accounted for
+    - Generate verification report: `reports/verification-report.md`
+
+11. **Backup Cleanup Decision**
+    ```markdown
+    ## 📦 Verification Complete
+    
+    **Content Integrity:** ✅ PASS
+    - Original phases: {count} → Migrated phases: {count}
+    - Original ACs: {count} → Migrated ACs: {count}
+    - Context files: {count} copied
+    
+    **Compliance Score:** 100% ✅
+    
+    **Backup Location:** `{backupPath}`
+    
+    The backup can now be safely deleted. However, recommend keeping for 48 hours.
+    
+    **Delete backup now?** (Reply "delete backup" to remove, "keep backup" to preserve)
+    ```
+
+---
+
+### Phase 5: Completion & Handoff
+12. **Display Results**
    ```markdown
    ## 🎉 Plan Upgrade Complete
    
@@ -120,10 +269,12 @@ Autonomous migration of legacy plans to CORTEX-5.0 standards via GitHub Copilot 
    
    ### What Was Created
    - ✅ CORTEX-5.0 compliant master plan
-   - ✅ Proper folder structure (4 subfolders)
+   - ✅ Proper folder structure (5 subfolders: context, reports, artifacts, phases, tracking)
    - ✅ REFACTOR phase with 18+ tasks
    - ✅ Visual progress tracker
    - ✅ Git checkpoint documentation
+   - ✅ Progress tracker JSON
+   - ✅ Acceptance criteria (inline or separate file)
    - ✅ Migration report
    
    ### Next Steps
@@ -135,7 +286,7 @@ Autonomous migration of legacy plans to CORTEX-5.0 standards via GitHub Copilot 
    **Legacy plan preserved at:** {original_path}
    ```
 
-9. **Offer Archive Option**
+13. **Offer Archive Option**
    ```markdown
    ## 📦 Archive Legacy Plan?
    
@@ -161,8 +312,10 @@ Autonomous migration of legacy plans to CORTEX-5.0 standards via GitHub Copilot 
 ├── reports/                    # Progress reports
 │   └── migration-report.md
 ├── artifacts/                  # Supporting files
+├── phases/                     # Individual phase documents (optional but recommended)
 └── tracking/                   # Progress tracking
-    └── progress-tracker.json
+    ├── progress-tracker.json
+    └── acceptance-criteria.yaml (optional - for complex plans)
 ```
 
 ### Master Plan Required Sections
@@ -212,6 +365,13 @@ Autonomous migration of legacy plans to CORTEX-5.0 standards via GitHub Copilot 
    - Links to related plans
    - Migration notes
    - Compliance scores
+   - Reference to FINAL-ACCEPTANCE-CRITERIA.md (if applicable)
+
+9. **📋 Final Acceptance Criteria** (for production-ready plans)
+   - Link to external acceptance criteria file OR
+   - Inline acceptance criteria section
+   - Format: `acceptance-criteria.yaml` in plan folder OR
+   - Reference to `../../FINAL-ACCEPTANCE-CRITERIA.md`
 
 ### Progress Tracking JSON Schema
 ```json
@@ -242,16 +402,17 @@ Autonomous migration of legacy plans to CORTEX-5.0 standards via GitHub Copilot 
 
 | Check | Description | Weight | Auto-Fixed |
 |-------|-------------|--------|------------|
-| **Subfolders** | `context/`, `reports/`, `artifacts/`, `tracking/` present | 10% | ✅ Yes |
-| **Master Plan** | `00-master-plan.md` exists | 10% | ✅ Yes |
-| **Progress Tracker** | Visual ASCII progress bars | 10% | ✅ Yes |
-| **REFACTOR Phase** | Dedicated cleanup phase exists | 10% | ✅ Yes |
-| **REFACTOR Tasks** | Minimum 18 tasks in REFACTOR phase | 10% | ✅ Yes |
-| **Git Checkpoints** | Checkpoint commands documented | 10% | ✅ Yes |
-| **Phase Count** | At least 3 phases defined | 10% | ⚠️ Partial |
-| **Acceptance Criteria** | ACs defined and formatted | 10% | ⚠️ Partial |
-| **Directory Structure** | Plan is directory (not single file) | 10% | ✅ Yes |
-| **Context Files** | Context artifacts present | 10% | ℹ️ Info |
+| **Subfolders** | `context/`, `reports/`, `artifacts/`, `tracking/`, `phases/` present | 9% | ✅ Yes |
+| **Master Plan** | `00-master-plan.md` exists | 9% | ✅ Yes |
+| **Progress Tracker** | Visual ASCII progress bars | 9% | ✅ Yes |
+| **REFACTOR Phase** | Dedicated cleanup phase exists | 9% | ✅ Yes |
+| **REFACTOR Tasks** | Minimum 18 tasks in REFACTOR phase | 9% | ✅ Yes |
+| **Git Checkpoints** | Checkpoint commands documented | 9% | ✅ Yes |
+| **Phase Count** | At least 3 phases defined | 9% | ⚠️ Partial |
+| **Acceptance Criteria** | ACs defined (inline or external file) | 10% | ⚠️ Partial |
+| **Final Acceptance** | Links to FINAL-ACCEPTANCE-CRITERIA.md or has acceptance-criteria.yaml | 9% | ⚠️ Partial |
+| **Directory Structure** | Plan is directory (not single file) | 9% | ✅ Yes |
+| **Context Files** | Context artifacts present | 9% | ℹ️ Info |
 
 **Scoring:**
 - 90-100%: ✅ Excellent
@@ -327,21 +488,33 @@ python cortex-upgrade-plan.py path/to/legacy-plan/ [--archive]
 ```
 User: @workspace /CORTEX Plan Upgrade: cortex-brain/documents/planning/active/old-auth-plan/
 
-Copilot: [Analyzes plan]
+Copilot: [Phase 0: Pre-Flight Validation]
+         [Checks remote for CORTEX-5.0 updates]
+         [Validates wiring and implementation state]
+         [Phase 1: Analyzes plan]
          [Displays compliance score and issues]
          [Asks for confirmation]
 
 User: yes
 
-Copilot: [Generates new plan]
+Copilot: [Phase 3: Backs up original plan]
+         [Generates new plan]
          [Creates all required files]
+         [Phase 4: Verifies content integrity]
+         [Aligns any mismatches]
          [Displays clickable links to new plan]
-         [Asks about archiving]
+         [Asks about backup cleanup]
+
+User: delete backup
+
+Copilot: [Removes backup after verification]
+         [Displays completion summary]
+         [Offers to archive original plan]
 
 User: yes
 
 Copilot: [Archives original plan]
-         [Displays completion summary]
+         [Final completion summary]
 ```
 
 ---
@@ -448,9 +621,11 @@ Permission denied when creating: `{output_path}`
 - ✅ Created `context/` subfolder
 - ✅ Created `reports/` subfolder
 - ✅ Created `artifacts/` subfolder
+- ✅ Created `phases/` subfolder
 - ✅ Created `tracking/` subfolder
 - ✅ Generated `00-master-plan.md`
 - ✅ Generated `tracking/progress-tracker.json`
+- ✅ Generated `tracking/acceptance-criteria.yaml` (if >10 ACs)
 
 ### Master Plan Content
 - ✅ Visual progress tracker (ASCII bars)
@@ -458,8 +633,10 @@ Permission denied when creating: `{output_path}`
 - ✅ REFACTOR phase (18+ mandatory tasks)
 - ✅ GIT_NO_PUSH_ENFORCEMENT documented
 - ✅ SKULL rules section
-- ✅ Acceptance criteria section
+- ✅ Acceptance criteria section (inline or external reference)
+- ✅ Final acceptance criteria (link to FINAL-ACCEPTANCE-CRITERIA.md if production plan)
 - ✅ Reference documentation section
+- ✅ phases/ subfolder for detailed phase docs (optional)
 
 ### Git Workflow
 - ✅ Git checkpoint format: `cortex-phase-{number}`
@@ -516,8 +693,11 @@ Permission denied when creating: `{output_path}`
 ├── reports/
 │   └── migration-report.md    # ✅ Generated
 ├── artifacts/
+├── phases/                     # ✅ Created (optional phase docs)
+│   └── README.md
 └── tracking/
-    └── progress-tracker.json  # ✅ Generated
+    ├── progress-tracker.json  # ✅ Generated
+    └── acceptance-criteria.yaml # ✅ Generated (if >10 ACs)
 \`\`\`
 
 ### 🎯 Next Steps
@@ -559,6 +739,9 @@ cp -r {archive_path} {original_path}
 3. **No Code Dumps:** Reference files, don't display full content
 4. **Progressive Disclosure:** Show summary first, offer details on request
 5. **Action-Oriented:** Focus on "what's next" not "what happened"
+6. **Backup Transparency:** Always show backup location and verification status
+7. **Alignment Focus:** If content mismatch detected, fix it (don't just warn)
+8. **Pre-Flight Speed:** Remote check + wiring validation ≤ 30 seconds
 
 ---
 
@@ -569,6 +752,8 @@ cp -r {archive_path} {original_path}
 - [CORTEX-5.0 Master Plan](../../cortex-brain/documents/planning/active/CORTEX-5.0/00-cortex-v5-gap-remediation/00-MASTER-REMEDIATION-PLAN.md)
 - [Sub-Plan 12: Production Validation Pipeline](../../cortex-brain/documents/planning/active/CORTEX-5.0/12-production-validation-pipeline/12-production-validation-pipeline.md)
 - [Brain Protection Rules](../../cortex-brain/brain-protection-rules.yaml)
+- [Wiring Configuration](../../.github/copilot-instructions.md)
+- [Intent Router](../../.github/prompts/CORTEX.prompt.md)
 
 ---
 

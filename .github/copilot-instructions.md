@@ -27,6 +27,7 @@ All command routing is defined in `CORTEX.prompt.md`. Key orchestrators:
 |----------------|----------|------|
 | `introduce yourself`, `intro`, `hello`, `hi cortex` | Introduction → ASCII banner + capabilities | — |
 | `plan`, `create a plan`, `make a plan` | Planning System → folder with 4 subfolders | 🛡️ AUTONOMOUS |
+| `upgrade plan`, `migrate plan`, `plan upgrade` | Plan Upgrade → CORTEX-5.0 migration | 📋 GUIDED |
 | `tdd`, `start tdd`, `run tests` | TDD Orchestrator → RED→GREEN→REFACTOR | 📋 GUIDED |
 | `ado`, `ado story`, `ado feature` | ADO Operations → work items | 🛡️ AUTONOMOUS |
 | `vacuum`, `deep clean` | Vacuum → Deep filesystem cleanup | 🛡️ AUTONOMOUS |
@@ -58,6 +59,7 @@ When you see 🛡️ in Intent Router, these orchestrators **MUST take over comp
 | Orchestrator | Trigger | Template | Header |
 |--------------|---------|----------|--------|
 | **Planning** | `plan`, `create a plan` | `autonomous_execution_progress` | `## 🛡️🧠 CORTEX Plan Execution` |
+| **Plan Upgrade** | `upgrade plan`, `migrate plan` | `guided_execution` | `## 📋🔄 CORTEX Plan Upgrade` |
 | **ADO** | `ado story`, `ado feature` | `ado_execution_progress` | `## 🛡️🧠 CORTEX ADO Work Item Generation` |
 | **Vacuum** | `vacuum`, `deep clean` | `autonomous_execution_progress` | `## 🛡️🧠 CORTEX Vacuum Execution` |
 | **Cleanup** | `cleanup`, `cleanup cache` | `autonomous_execution_progress` | `## 🛡️🧠 CORTEX Cleanup Execution` |
