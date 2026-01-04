@@ -12,12 +12,14 @@
 ### View Epic Progress
 
 ```bash
-# Open plan viewer in browser
-open plan-viewer.html
+# Launch plan viewer on localhost:8000 (recommended - avoids CORS issues)
+./scripts/launch_plan_viewer.sh
 
 # Or check status via orchestrator
 python3 plan_orchestrator.py status
 ```
+
+**Plan Viewer URL:** http://localhost:8000/cortex-brain/documents/planning/active/C50-cortex-v5-remediation/plan-viewer.html
 
 ### Start a Child Plan
 

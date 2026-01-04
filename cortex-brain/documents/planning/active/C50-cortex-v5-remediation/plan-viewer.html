@@ -5,6 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>C50: CORTEX v5 Gap Remediation - Plan Viewer</title>
     <style>
+        /* CORTEX Plan Viewer - Self-Contained Glassmorphism Theme
+         * Based on: docs/technical/assets/styles/glassmorphism.css
+         * Author: Asif Hussain
+         * Version: 5.1.0
+         * Copyright © 2025-2026 Asif Hussain. All rights reserved.
+         */
+
+        :root {
+            /* CORTEX Brand Colors */
+            --primary: #7C3AED;
+            --primary-light: #8B5CF6;
+            --primary-dark: #6D28D9;
+            --accent: #10B981;
+            --accent-light: #34D399;
+            --warning: #F59E0B;
+            --error: #EF4444;
+            --info: #06B6D4;
+            
+            /* Glassmorphism Backgrounds */
+            --bg-primary: rgba(255, 255, 255, 0.1);
+            --bg-secondary: rgba(255, 255, 255, 0.05);
+            --bg-hover: rgba(255, 255, 255, 0.15);
+            
+            /* Glass Effects */
+            --glass-blur: blur(10px);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.18);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            --glass-shadow-hover: 0 12px 40px 0 rgba(31, 38, 135, 0.45);
+            
+            /* Text Colors */
+            --text-primary: #E5E7EB;
+            --text-secondary: #9CA3AF;
+            --text-muted: #6B7280;
+            
+            /* Border Radius */
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            
+            /* Font */
+            --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,11 +55,13 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: var(--font-family);
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e3a8a 100%);
+            background-attachment: fixed;
             min-height: 100vh;
             padding: 20px;
-            color: #333;
+            color: var(--text-primary);
+            line-height: 1.6;
         }
 
         .container {
@@ -24,17 +69,23 @@
             margin: 0 auto;
         }
 
-        /* Glassmorphism Styling */
+        /* Glassmorphism Base Class */
         .glass {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            background: var(--bg-primary);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            border-radius: var(--radius-lg);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Header */
+        .glass:hover {
+            background: var(--bg-hover);
+            box-shadow: var(--glass-shadow-hover);
+            transform: translateY(-2px);
+        }
+
         .header {
             padding: 30px;
             margin-bottom: 20px;
@@ -46,12 +97,14 @@
             font-size: 2.5em;
             margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            font-weight: 600;
         }
 
         .header .subtitle {
-            color: rgba(255, 255, 255, 0.9);
+            color: var(--text-secondary);
             font-size: 1.2em;
             margin-bottom: 20px;
+            font-weight: 300;
         }
 
         .meta-info {
@@ -106,7 +159,7 @@
 
         .progress-bar {
             height: 100%;
-            background: linear-gradient(90deg, #00d4ff 0%, #00ff88 100%);
+            background: linear-gradient(90deg, var(--accent) 0%, var(--accent-light) 100%);
             transition: width 0.5s ease;
             display: flex;
             align-items: center;
@@ -114,6 +167,7 @@
             font-weight: bold;
             color: white;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
         }
 
         .progress-stats {
@@ -130,21 +184,21 @@
             gap: 5px;
         }
 
-        /* Status Badge */
+        /* Status Badges - CORTEX Colors */
         .status-badge {
             padding: 5px 15px;
             border-radius: 20px;
             font-size: 0.9em;
-            font-weight: bold;
+            font-weight: 600;
             display: inline-block;
         }
 
-        .status-active { background: #00ff88; color: #333; }
-        .status-complete { background: #4caf50; color: white; }
-        .status-blocked { background: #ff5252; color: white; }
-        .status-in-progress { background: #ffc107; color: #333; }
-        .status-pending { background: rgba(255, 255, 255, 0.3); color: white; }
-        .status-deferred { background: #9e9e9e; color: white; }
+        .status-active { background: var(--accent); color: white; }
+        .status-complete { background: var(--primary); color: white; }
+        .status-blocked { background: var(--error); color: white; }
+        .status-in-progress { background: var(--warning); color: white; }
+        .status-pending { background: rgba(255, 255, 255, 0.2); color: var(--text-primary); }
+        .status-deferred { background: var(--text-muted); color: white; }
 
         /* Waves Section */
         .waves-container {
@@ -248,8 +302,9 @@
 
         .child-progress-bar {
             height: 100%;
-            background: linear-gradient(90deg, #00d4ff 0%, #00ff88 100%);
+            background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
             transition: width 0.5s ease;
+            border-radius: 10px;
         }
 
         .child-plan-dependencies {
@@ -276,14 +331,14 @@
         .refresh-dot {
             width: 10px;
             height: 10px;
-            background: #00ff88;
+            background: var(--accent);
             border-radius: 50%;
             animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
         }
 
         /* Responsive Design */
