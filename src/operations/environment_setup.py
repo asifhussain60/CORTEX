@@ -414,7 +414,7 @@ class EnvironmentSetup:
             return False
         
         essential_files = [
-            'brain-protection-rules.yaml',
+            'tier0/governance.db',
             'knowledge-graph.yaml',
             'response-templates-v4.yaml'
         ]

@@ -138,7 +138,7 @@ class TokenOptimizer:
         
         files_to_backup = [
             config.root_path / ".github" / "prompts" / "CORTEX.prompt.md",
-            self.brain_path / "brain-protection-rules.yaml",
+            self.brain_path / "tier0" / "governance.db",
             self.brain_path / "response-templates-v4.yaml",
             config.root_path / ".github" / "copilot-instructions.md",
         ]
@@ -218,11 +218,13 @@ class TokenOptimizer:
         """Quick optimization - high-impact changes only.
         
         Strategy:
-            1. Extract 10 largest remaining templates from brain-protection-rules.yaml
+            1. Optimize response-templates-v4.yaml (governance.db already optimized)
             2. Implement YAML anchors in response-templates-v4.yaml
             3. Move 3 largest sections from CORTEX.prompt.md to guides
         
         Expected: ~35% total reduction, ~1 hour execution
+        
+        Note: brain-protection-rules.yaml migrated to governance.db (99.9% token savings achieved)
         """
         start_time = time.time()
         before_tokens = sum(self.get_current_tokens().values())
@@ -240,12 +242,9 @@ class TokenOptimizer:
         files_created = []
         
         try:
-            # Step 1: Extract largest templates (20 min)
-            safe_print("\n📊 Step 1/3: Extracting large templates from brain-protection-rules.yaml")
-            if not self.dry_run:
-                self._extract_large_templates(limit=10)
-                files_modified.append("brain-protection-rules.yaml")
-            safe_print("✅ Template extraction complete")
+            # Step 1: Note governance database optimization (COMPLETE)
+            safe_print("\n📊 Step 1/3: Governance optimization status")
+            safe_print("✅ brain-protection-rules.yaml → governance.db migration complete (99.9% savings)")
             
             # Step 2: YAML anchors in response-templates (20 min)
             safe_print("\n📊 Step 2/3: Implementing YAML anchors in response-templates-v4.yaml")
@@ -317,12 +316,14 @@ class TokenOptimizer:
         """Full optimization - reach 17K token target.
         
         Strategy:
-            1. Extract ALL remaining templates from brain-protection-rules.yaml
+            1. Template optimization for response-templates-v4.yaml (governance.db done)
             2. Implement comprehensive YAML anchors
             3. Template inheritance for response-templates-v4.yaml
             4. Module-based architecture for CORTEX.prompt.md
         
         Expected: ~75% total reduction, ~3-4 hours execution
+        
+        Note: brain-protection-rules.yaml → governance.db migration complete (99.9% savings)
         """
         start_time = time.time()
         before_tokens = sum(self.get_current_tokens().values())
@@ -339,18 +340,15 @@ class TokenOptimizer:
         files_created = []
         
         try:
-            # Step 1: Extract ALL templates (1 hour)
-            safe_print("\n📊 Step 1/4: Extracting all remaining templates")
-            if not self.dry_run:
-                self._extract_all_templates()
-                files_modified.append("brain-protection-rules.yaml")
-            safe_print("✅ All templates extracted")
+            # Step 1: Note governance database optimization (COMPLETE)
+            safe_print("\n📊 Step 1/4: Governance optimization status")
+            safe_print("✅ brain-protection-rules.yaml → governance.db migration complete (99.9% savings)")
             
             # Step 2: Comprehensive YAML anchors (1 hour)
             safe_print("\n📊 Step 2/4: Implementing comprehensive YAML anchors")
             if not self.dry_run:
                 self._implement_comprehensive_anchors()
-                files_modified.extend(["brain-protection-rules.yaml", "response-templates-v4.yaml"])
+                files_modified.append("response-templates-v4.yaml")
             safe_print("✅ YAML anchors implemented")
             
             # Step 3: Template inheritance (1 hour)

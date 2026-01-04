@@ -70,12 +70,12 @@ class SetupValidator:
     ]
     
     REQUIRED_BRAIN_FILES = [
-        "brain-protection-rules.yaml",
         "response-templates-v4.yaml",
         "capabilities.yaml"
     ]
     
     REQUIRED_DATABASES = {
+        "tier0/governance.db": ["rules", "protection_layers", "tier0_instincts"],
         "tier1/working_memory.db": ["conversations", "entities"],
         "tier2/knowledge_graph.db": ["patterns", "relationships"],
         "tier3/development_context.db": ["metrics", "hotspots"]

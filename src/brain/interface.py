@@ -43,7 +43,7 @@ class BrainInterface:
     Unified interface to all CORTEX brain tiers.
     
     Architecture:
-        Tier 0 (Governance): {workspace}/cortex-brain/brain-protection-rules.yaml (BrainProtector)
+        Tier 0 (Governance): {workspace}/cortex-brain/tier0/governance.db (GovernanceDB)
         Tier 1 (Working Memory): {workspace}/cortex-brain/tier1/conversations.db (per-repo)
         Tier 2 (Knowledge Graph): ~/.cortex/shared/tier2/knowledge-graph.db (centralized with namespaces)
         Tier 3 (Dev Context): {workspace}/cortex-brain/tier3/metrics.db (per-repo)
@@ -99,16 +99,16 @@ class BrainInterface:
     @property
     def tier0(self):
         """
-        Tier 0: Governance (SKULL rules enforcement via BrainProtector).
+        Tier 0: Governance (SKULL rules enforcement via GovernanceDB).
         
-        Storage: {workspace}/cortex-brain/brain-protection-rules.yaml
+        Storage: {workspace}/cortex-brain/tier0/governance.db
         """
         if self._tier0 is None and self.config.enable_tier0:
-            from src.tier0.brain_protector import BrainProtector
+            from src.cortex_core.governance_db import GovernanceDB
             
-            # BrainProtector auto-resolves paths via resource_resolver
-            self._tier0 = BrainProtector()
-            self.logger.debug("Tier 0 (BrainProtector) initialized")
+            db_path = self.config.workspace_root / "cortex-brain" / "tier0" / "governance.db"
+            self._tier0 = GovernanceDB(db_path)
+            self.logger.debug("Tier 0 (GovernanceDB) initialized")
         
         return self._tier0
     
