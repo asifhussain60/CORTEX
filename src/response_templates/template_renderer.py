@@ -601,20 +601,29 @@ Which track would you like to pursue first?"""
 
     # ============================================================================
     # PROGRESS BAR GENERATION HELPERS (Phase 1.2 - Planner 2.0 Enhancements)
+    # Standardized to 10-character width (C50-06 Phase 1)
     # ============================================================================
     
     @staticmethod
-    def generate_progress_bar(percentage: float, width: int = 20, filled_char: str = '█', empty_char: str = '░') -> str:
+    def generate_progress_bar(percentage: float, width: int = 10, filled_char: str = '█', empty_char: str = '░') -> str:
         """Generate a visual progress bar using Unicode block characters.
+        
+        **STANDARD WIDTH:** 10 characters (CORTEX v5 standardization, C50-06)
         
         Args:
             percentage: Progress percentage (0-100)
-            width: Total width of the bar in characters
+            width: Total width of the bar in characters (default: 10)
             filled_char: Character for filled portion (default: █)
             empty_char: Character for empty portion (default: ░)
             
         Returns:
-            Progress bar string like "████████░░░░░░░░░░░░"
+            Progress bar string like "████████░░" (10 chars at 80%)
+        
+        Example:
+            >>> TemplateRenderer.generate_progress_bar(50)
+            '█████░░░░░'
+            >>> TemplateRenderer.generate_progress_bar(100)
+            '██████████'
         """
         percentage = max(0, min(100, percentage))  # Clamp to 0-100
         filled_count = int(width * percentage / 100)

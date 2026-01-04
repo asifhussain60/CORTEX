@@ -84,11 +84,12 @@ class TierValidator:
         
         self.brain_root = Path(brain_root)
         
+        # C50-19: Updated to use SQLite databases (YAML deprecated 2026-01-04)
         self.tier_paths = {
             TierLevel.TIER_0: self.brain_root / "brain-protection-rules.yaml",
-            TierLevel.TIER_1: self.brain_root / "conversation-history.jsonl",
-            TierLevel.TIER_2: self.brain_root / "knowledge-graph.yaml",
-            TierLevel.TIER_3: self.brain_root / "development-context.yaml"
+            TierLevel.TIER_1: self.brain_root / "tier1" / "working_memory.db",
+            TierLevel.TIER_2: self.brain_root / "tier2" / "knowledge_graph.db",
+            TierLevel.TIER_3: self.brain_root / "tier3" / "policies"
         }
         
         self.tier_rules = {

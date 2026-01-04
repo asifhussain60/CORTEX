@@ -82,11 +82,11 @@ class IntegrityChecker:
         self.brain_root = Path(brain_root)
         self.auto_repair = auto_repair
         
+        # C50-19: Updated to use SQLite databases (YAML deprecated 2026-01-04)
         self.data_paths = {
-            "tier1_history": self.brain_root / "conversation-history.jsonl",
-            "tier1_context": self.brain_root / "conversation-context.jsonl",
-            "tier2_knowledge": self.brain_root / "knowledge-graph.yaml",
-            "tier3_dev_context": self.brain_root / "development-context.yaml"
+            "tier1_db": self.brain_root / "tier1" / "working_memory.db",
+            "tier2_db": self.brain_root / "tier2" / "knowledge_graph.db",
+            "tier3_policies": self.brain_root / "tier3" / "policies"
         }
     
     def check_all(self) -> IntegrityReport:

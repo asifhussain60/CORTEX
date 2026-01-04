@@ -21,6 +21,11 @@ from src.orchestrators.response_middleware import ResponseMiddleware
 from src.mcp.registry import OrchestratorRegistry
 from src.database.planning_state_db import PlanningStateDB
 
+# CORTEX v5 Middleware (Phase -2, Runtime, Phase N+1)
+from src.orchestrators.middleware.setup_verification import SetupVerifier
+from src.orchestrators.middleware.governance_checkpoint import GovernanceCheckpoint
+from src.orchestrators.middleware.teardown_refactor import TeardownRefactor
+
 
 class MasterOrchestrator:
     """
@@ -93,6 +98,11 @@ class MasterOrchestrator:
         # Response rendering pipeline (Phase 6.4 - Option B fix)
         self.response_renderer = response_renderer or ResponseRenderer()
         self.response_middleware = response_middleware or ResponseMiddleware()
+        
+        # CORTEX v5 Universal Pattern Middleware (C50-20)
+        self.setup_verifier = SetupVerifier(workspace_root=Path.cwd())
+        self.governance_checkpoint = GovernanceCheckpoint(workspace_path=str(Path.cwd()))
+        self.teardown_refactor = TeardownRefactor(workspace_root=Path.cwd())
         
         # Execution tracking
         self._request_count = 0
@@ -481,19 +491,51 @@ class MasterOrchestrator:
         """
         Get lifecycle hooks for orchestrator.
         
+        CORTEX v5 Universal Pattern (C50-20):
+        - Phase -2: SetupVerifier (Priority 1)
+        - Runtime: GovernanceCheckpoint (Priority 20)
+        - Phase N+1: TeardownRefactor (Priority 30)
+        
         Args:
             orchestrator_id: Orchestrator identifier
         
         Returns:
-            Dictionary of hook lists
+            Dictionary of hook lists with priority-ordered middleware
         """
-        # Default hooks for all orchestrators
+        # CORTEX v5 Universal Pattern Lifecycle Hooks
         return {
             'pre_execution': [
+                # Priority 1: Phase -2 Setup Verification
+                lambda orch, params: self.setup_verifier.verify_setup(
+                    orchestrator_name=orchestrator_id,
+                    dependencies=params.get('dependencies', []),
+                    cache_check_enabled=True
+                ),
+                # Priority 20: Runtime Governance Checkpoint
+                lambda orch, params: self.governance_checkpoint.checkpoint_phase_start(
+                    phase_number=params.get('phase_number', 1),
+                    orchestrator=orchestrator_id,
+                    context=params
+                ),
+                # Legacy validation (kept for backwards compatibility)
                 self._validate_dependencies,
                 self._check_state_conflicts
             ],
             'post_execution': [
+                # Priority 30: Phase N+1 Teardown + REFACTOR + Commit
+                lambda orch, result: self.teardown_refactor.execute_teardown(
+                    orchestrator_name=orchestrator_id,
+                    modified_files=result.get('modified_files', []),
+                    phase_summary=result.get('phase_summary', 'Execution complete'),
+                    skip_git_commit=False
+                ),
+                # Runtime Governance Checkpoint (completion)
+                lambda orch, result: self.governance_checkpoint.checkpoint_phase_complete(
+                    phase_number=result.get('phase_number', 1),
+                    orchestrator=orchestrator_id,
+                    artifacts=result.get('artifacts', {})
+                ),
+                # Legacy hooks
                 self._save_artifacts,
                 self._update_metrics
             ],

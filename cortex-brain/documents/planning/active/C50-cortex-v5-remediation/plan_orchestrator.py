@@ -3,21 +3,31 @@
 CORTEX Epic Plan Orchestrator - C50 Autonomous Execution Engine
 ================================================================
 
-Coordinates multi-phase epic planning with dependency management,
-real-time progress tracking, and HTML viewer generation.
+Intelligently analyzes C50 Epic, determines next ready sub-plan,
+and executes autonomously with zero user intervention.
 
 Author: Asif Hussain
-Version: 5.1.0
+Version: 7.0.0 - FULL AUTONOMOUS EXECUTION
 Date: 2026-01-04
+
+USAGE:
+    python3 plan_orchestrator.py auto           # Execute next ready plan
+    python3 plan_orchestrator.py status         # Show status only
+    python3 plan_orchestrator.py next           # Show what's next without executing
 """
 
 import argparse
 import json
+import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 import yaml
+
+# Import CORTEX PlanExecutor for actual autonomous execution
+sys.path.insert(0, str(Path(__file__).resolve().parents[5]))
+from src.orchestrators.planning.plan_executor import PlanExecutor, ExecutionMode
 
 
 class C50Orchestrator:
@@ -163,11 +173,12 @@ class C50Orchestrator:
                 available.append(plan)
                 continue
             
-            # Check each dependency
+            # Check each dependency (by ID, not order)
             deps_met = True
             for dep_id in deps:
+                # FIX: Look up by ID, not order
                 dep_plan = next((p for p in self.progress_data["child_plans"] 
-                               if p["order"] == dep_id), None)
+                               if p["id"] == dep_id), None)
                 if not dep_plan or dep_plan.get("progress", 0) < 100:
                     deps_met = False
                     break
@@ -392,25 +403,257 @@ class C50Orchestrator:
         print(f"   file://{viewer_path.absolute()}")
         
         return True
+    
+    def get_next_ready_plan(self) -> Optional[Dict]:
+        """
+        Intelligently determine the next plan ready for execution.
+        
+        Returns:
+            Dict with plan details, or None if no plans ready
+        """
+        available = self._get_available_plans()
+        
+        if not available:
+            return None
+        
+        # Priority scoring: blocking > high priority > complexity
+        def score_plan(plan):
+            score = 0
+            if plan.get('blocking'):
+                score += 100
+            
+            priority_map = {'critical': 50, 'high': 30, 'medium': 20, 'low': 10}
+            score += priority_map.get(plan.get('priority', 'medium'), 20)
+            
+            # Prefer simpler plans (faster wins)
+            complexity_map = {'simple': 20, 'moderate': 10, 'complex': 5}
+            score += complexity_map.get(plan.get('complexity', 'moderate'), 10)
+            
+            return score
+        
+        # Sort by score (highest first)
+        available.sort(key=score_plan, reverse=True)
+        
+        return available[0] if available else None
+    
+    def execute_next_plan(self) -> bool:
+        """
+        🛡️ AUTONOMOUS: Execute next ready plan WITHOUT user intervention.
+        
+        Returns:
+            True if execution started, False if no plans ready
+        """
+        next_plan = self.get_next_ready_plan()
+        
+        if not next_plan:
+            print("\n✅ No plans ready for execution")
+            print("   All available plans are blocked by dependencies")
+            return False
+        
+        plan_id = next_plan['order']
+        plan_name = next_plan['name']
+        
+        print(f"\n🛡️🧠 CORTEX AUTONOMOUS EXECUTION")
+        print(f"{'='*60}")
+        print(f"📋 Next Plan: C50-{plan_id}")
+        print(f"📝 Name: {plan_name}")
+        print(f"⏱️ Duration: {next_plan.get('duration', 'N/A')}")
+        if 'priority' in next_plan:
+            print(f"🎯 Priority: {next_plan['priority']}")
+        if 'complexity' in next_plan:
+            print(f"🔧 Complexity: {next_plan['complexity']}")
+        print(f"{'='*60}\n")
+        
+        # Get plan document path
+        plan_folder = self.epic_root / next_plan['folder']
+        plan_doc = plan_folder / f"00-{next_plan['id']}.md"
+        
+        # Check if plan document exists
+        if not plan_doc.exists():
+            print(f"⚠️ Plan document not found: {plan_doc}")
+            print(f"   Attempting to create from epic manifest...\n")
+            
+            # Auto-generate plan document from epic manifest
+            if not self._generate_plan_document(next_plan, plan_doc):
+                print(f"❌ Failed to generate plan document")
+                return False
+        
+        # Load plan data
+        try:
+            plan_data = self._load_plan_document(plan_doc)
+        except Exception as e:
+            print(f"❌ Failed to load plan document: {e}")
+            return False
+        
+        # Initialize PlanExecutor for AUTONOMOUS execution
+        print("🚀 Initializing PlanExecutor...")
+        print(f"   Mode: AUTONOMOUS (zero user intervention)")
+        print(f"   Workspace: {self.epic_root}")
+        print(f"   Epic Progress: {self.progress_data.get('overall_progress', 0)}%\n")
+        
+        executor = PlanExecutor(
+            workspace_root=str(self.epic_root.parents[4]),  # CORTEX repo root
+            output_dir=str(plan_folder),
+            execution_mode=ExecutionMode.AUTONOMOUS
+        )
+        
+        # Execute plan autonomously
+        print(f"▶️  EXECUTING C50-{plan_id}: {plan_name}\n")
+        print("─" * 60)
+        
+        try:
+            result = executor.execute_plan(
+                plan_data=plan_data,
+                plan_path=str(plan_doc),
+                auto_checkpoint=True,
+                resume_from_phase=None
+            )
+            
+            print("─" * 60)
+            print(f"\n{'✅ SUCCESS' if result.success else '❌ FAILED'}: {result.message}")
+            print(f"   Execution Time: {result.total_execution_time_seconds:.2f}s")
+            print(f"   Phases Completed: {len([r for r in result.phase_results if r.success])}/{len(result.phase_results)}")
+            
+            if result.success:
+                # Update progress tracker
+                self._mark_plan_complete(plan_id)
+                print(f"\n🎉 C50-{plan_id} completed successfully!")
+                return True
+            else:
+                print(f"\n❌ C50-{plan_id} execution failed")
+                # Show errors
+                for phase_result in result.phase_results:
+                    if not phase_result.success:
+                        print(f"   Phase {phase_result.phase.value}: {phase_result.message}")
+                        for error in phase_result.errors:
+                            print(f"      - {error}")
+                return False
+        
+        except Exception as e:
+            print(f"\n❌ Execution error: {e}")
+            import traceback
+            traceback.print_exc()
+            return False
+    
+    def _generate_plan_document(self, plan: Dict, output_path: Path) -> bool:
+        """Generate plan document from epic manifest data."""
+        try:
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            # Create basic plan document structure
+            content = f"""# {plan['name']}
+
+**Plan ID:** C50-{plan['order']}
+**Status:** {plan.get('status', '⏳ PENDING')}
+**Priority:** {plan.get('priority', 'medium')}
+**Complexity:** {plan.get('complexity', 'moderate')}
+**Duration:** {plan.get('duration', 'TBD')}
+
+## Overview
+
+{plan.get('description', 'Auto-generated plan document from epic manifest.')}
+
+## Dependencies
+
+{', '.join([f"C50-{d}" for d in plan.get('dependencies', [])]) or 'None'}
+
+## Phases
+
+### Phase 1: Discovery & Analysis
+- Analyze existing implementation
+- Identify gaps and requirements
+- Review dependencies
+
+### Phase 2: Planning
+- Design solution architecture
+- Define test strategy
+- Create implementation plan
+
+### Phase 3: Implementation (TDD)
+- RED: Write failing tests
+- GREEN: Implement solution
+- REFACTOR: Optimize and cleanup
+
+### Phase 4: Validation
+- Run full test suite
+- Verify acceptance criteria
+- Code quality checks
+
+### Phase 5: Completion
+- Update documentation
+- Create completion report
+- Update progress trackers
+
+## Acceptance Criteria
+
+- [ ] All tests passing
+- [ ] Code coverage ≥ 80%
+- [ ] Documentation complete
+- [ ] Progress trackers updated
+"""
+            
+            output_path.write_text(content)
+            print(f"✅ Generated plan document: {output_path}")
+            return True
+        
+        except Exception as e:
+            print(f"❌ Failed to generate plan document: {e}")
+            return False
+    
+    def _load_plan_document(self, plan_path: Path) -> Dict:
+        """Load plan document and convert to structured data."""
+        content = plan_path.read_text()
+        
+        # Parse markdown to extract plan data
+        # For now, create minimal structure
+        plan_data = {
+            "metadata": {
+                "title": plan_path.stem,
+                "complexity": "MEDIUM"
+            },
+            "phases": [
+                {"name": "Discovery", "description": "Analyze and gather context"},
+                {"name": "Planning", "description": "Design and plan implementation"},
+                {"name": "Implementation", "description": "Implement with TDD"},
+                {"name": "Validation", "description": "Test and validate"},
+                {"name": "Completion", "description": "Finalize and document"}
+            ]
+        }
+        
+        return plan_data
+    
+    def _mark_plan_complete(self, plan_id: str) -> None:
+        """Mark plan as complete in progress tracker."""
+        plan = self._find_plan(plan_id)
+        if plan:
+            plan['status'] = '✅ COMPLETE'
+            plan['progress'] = 100
+            plan['completed_at'] = datetime.now().isoformat()
+            
+            self._recalculate_statistics()
+            self._save_progress(self.progress_data)
+            
+            print(f"✅ Updated progress tracker: C50-{plan_id} → COMPLETE")
 
 
 def main():
     """CLI entry point."""
     parser = argparse.ArgumentParser(
-        description="C50 Epic Plan Orchestrator - Autonomous Execution Engine",
+        description="C50 Epic Plan Orchestrator - Autonomous Execution Engine v6.0",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python3 plan_orchestrator.py status
-  python3 plan_orchestrator.py start 00B
-  python3 plan_orchestrator.py check 00C
+  python3 plan_orchestrator.py auto              # 🛡️ Execute next ready plan (AUTONOMOUS)
+  python3 plan_orchestrator.py next              # Show next plan without executing
+  python3 plan_orchestrator.py status            # Show epic status
+  python3 plan_orchestrator.py check 02          # Check specific plan readiness
   python3 plan_orchestrator.py validate-dependencies
         """
     )
     
     parser.add_argument(
         "command",
-        choices=["status", "start", "check", "validate-dependencies", "generate-viewer"],
+        choices=["auto", "next", "status", "start", "check", "validate-dependencies", "generate-viewer"],
         help="Command to execute"
     )
     
@@ -422,14 +665,18 @@ Examples:
     
     parser.add_argument(
         "--epic-root",
-        default=".",
-        help="Epic root directory (default: current directory)"
+        default=None,
+        help="Epic root directory (default: script's parent directory)"
     )
     
     args = parser.parse_args()
     
     # Initialize orchestrator
-    epic_root = Path(args.epic_root).resolve()
+    # Auto-detect epic root from script location if not specified
+    if args.epic_root:
+        epic_root = Path(args.epic_root).resolve()
+    else:
+        epic_root = Path(__file__).resolve().parent
     
     try:
         orchestrator = C50Orchestrator(epic_root)
@@ -439,7 +686,27 @@ Examples:
     
     # Execute command
     try:
-        if args.command == "status":
+        if args.command == "auto":
+            # 🛡️ AUTONOMOUS EXECUTION MODE
+            if not orchestrator.execute_next_plan():
+                orchestrator.status()
+                sys.exit(1)
+        
+        elif args.command == "next":
+            # Show next plan without executing
+            next_plan = orchestrator.get_next_ready_plan()
+            if next_plan:
+                print(f"\n📋 Next Ready Plan:")
+                print(f"   C50-{next_plan['order']}: {next_plan['name']}")
+                if 'priority' in next_plan:
+                    print(f"   Priority: {next_plan['priority']}")
+                print(f"   Duration: {next_plan.get('duration', 'N/A')}")
+                if 'complexity' in next_plan:
+                    print(f"   Complexity: {next_plan['complexity']}")
+            else:
+                print("\n⚠️ No plans ready for execution")
+        
+        elif args.command == "status":
             orchestrator.status()
         
         elif args.command == "start":

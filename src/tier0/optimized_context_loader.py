@@ -290,14 +290,18 @@ class OptimizedContextLoader:
         return conversations
     
     def _load_patterns_from_file(self) -> List[Dict]:
-        """Fallback: Load patterns from knowledge graph file"""
-        kg_file = self.brain_dir / "knowledge-graph.yaml"
+        """
+        Load patterns from knowledge graph database.
         
-        if not kg_file.exists():
+        C50-19: Updated to use SQLite (YAML deprecated 2026-01-04)
+        """
+        try:
+            from src.tier2.knowledge_graph import KnowledgeGraph
+            kg = KnowledgeGraph()
+            patterns = kg.query_patterns(limit=100)
+            return patterns if patterns else []
+        except Exception:
             return []
-        
-        # For now, return empty (would need YAML parsing)
-        return []
     
     def _update_metrics(self, stats: Dict):
         """Update performance metrics"""
