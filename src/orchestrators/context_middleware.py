@@ -183,6 +183,9 @@ class CrossSessionContextMiddleware:
         # PRIORITY 3: File Relationships - Check for file mentions
         context = self._inject_file_relationships(user_input, context)
         
+        # Enforce token budget before continuation check
+        context = self._enforce_token_budget(context, max_tokens=500)
+        
         # Check if continuation pattern detected
         if not self._is_continuation(user_input):
             self.logger.debug("No continuation pattern detected")
@@ -309,7 +312,19 @@ class CrossSessionContextMiddleware:
             project_json = json.dumps(context['active_project'])
             project_tokens = len(project_json) // 4
         
-        return session_tokens + project_tokens
+        # Calculate tokens for vision context
+        vision_tokens = 0
+        if 'vision_context' in context:
+            vision_json = json.dumps(context['vision_context'])
+            vision_tokens = len(vision_json) // 4
+        
+        # Calculate tokens for file relationships
+        file_rel_tokens = 0
+        if 'file_relationships' in context:
+            file_rel_json = json.dumps(context['file_relationships'])
+            file_rel_tokens = len(file_rel_json) // 4
+        
+        return session_tokens + project_tokens + vision_tokens + file_rel_tokens
     
     def _inject_vision_context(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """
@@ -506,3 +521,44 @@ class CrossSessionContextMiddleware:
             {k: v for k, v in rel.items() if k in essential_fields}
             for rel in trimmed
         ]
+    
+    def _enforce_token_budget(self, context: Dict[str, Any], max_tokens: int = 500) -> Dict[str, Any]:
+        """
+        Enforce overall token budget across all context sources.
+        
+        Priority order (highest to lowest):
+        1. Vision Context (~100 tokens)
+        2. Session/Project Context (~100 tokens) 
+        3. File Relationships (~150 tokens)
+        
+        Args:
+            context: Context dict with injected data
+            max_tokens: Maximum total tokens allowed
+        
+        Returns:
+            Context with trimmed data if needed
+        """
+        current_tokens = self.get_context_token_count(context)
+        
+        if current_tokens <= max_tokens:
+            return context  # Under budget, no trimming needed
+        
+        self.logger.warning(
+            f"Context token budget exceeded: {current_tokens} > {max_tokens}. "
+            f"Trimming lower priority sources."
+        )
+        
+        # Priority 4: Trim file relationships further if over budget
+        if 'file_relationships' in context and current_tokens > max_tokens:
+            # Reduce file relationships to 3 items
+            context['file_relationships'] = context['file_relationships'][:3]
+            current_tokens = self.get_context_token_count(context)
+        
+        # Priority 5: If still over, remove file relationships entirely
+        if current_tokens > max_tokens and 'file_relationships' in context:
+            del context['file_relationships']
+            if 'mentioned_files' in context:
+                del context['mentioned_files']
+            self.logger.warning("Removed file relationships to meet token budget")
+        
+        return context
