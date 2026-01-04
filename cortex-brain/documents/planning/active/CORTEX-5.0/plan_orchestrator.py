@@ -135,7 +135,8 @@ class PlanOrchestrator:
         
         for dep_order in sub_plan["dependencies"]:
             dep_sp = self._get_sub_plan(dep_order)
-            if dep_sp and dep_sp["status"] != "complete":
+            # Accept both "complete" and "completed" as valid completion states
+            if dep_sp and dep_sp["status"] not in ["complete", "completed"]:
                 return False
         return True
     
