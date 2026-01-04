@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C50: CORTEX v5 Gap Remediation - Plan Viewer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Glassmorphism Styling */
+        .glass {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        /* Header */
+        .header {
+            padding: 30px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .meta-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            color: white;
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .meta-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .meta-value {
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        /* Overall Progress */
+        .overall-progress {
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        .progress-header {
+            color: white;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #00d4ff 0%, #00ff88 100%);
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            color: white;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .status-active { background: #00ff88; color: #333; }
+        .status-complete { background: #4caf50; color: white; }
+        .status-blocked { background: #ff5252; color: white; }
+        .status-in-progress { background: #ffc107; color: #333; }
+        .status-pending { background: rgba(255, 255, 255, 0.3); color: white; }
+        .status-deferred { background: #9e9e9e; color: white; }
+
+        /* Waves Section */
+        .waves-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .wave {
+            padding: 25px;
+        }
+
+        .wave-header {
+            color: white;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .wave-header:hover {
+            opacity: 0.8;
+        }
+
+        .collapse-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .collapse-icon.collapsed {
+            transform: rotate(-90deg);
+        }
+
+        .wave-content {
+            max-height: 5000px;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .wave-content.collapsed {
+            max-height: 0;
+        }
+
+        /* Child Plans Grid */
+        .child-plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .child-plan {
+            padding: 20px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .child-plan:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.5);
+        }
+
+        .child-plan-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .child-plan-id {
+            color: white;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .child-plan-name {
+            color: white;
+            font-size: 1em;
+            margin-bottom: 10px;
+        }
+
+        .child-plan-meta {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+            font-size: 0.85em;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .child-plan-progress {
+            width: 100%;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .child-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #00d4ff 0%, #00ff88 100%);
+            transition: width 0.5s ease;
+        }
+
+        .child-plan-dependencies {
+            font-size: 0.8em;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Auto-refresh indicator */
+        .auto-refresh {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .refresh-dot {
+            width: 10px;
+            height: 10px;
+            background: #00ff88;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .meta-info {
+                gap: 15px;
+            }
+
+            .child-plans-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            color: white;
+            font-size: 1.2em;
+            padding: 50px;
+        }
+
+        .error {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid rgba(244, 67, 54, 0.5);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header glass">
+            <h1>🎯 C50: CORTEX v5 Gap Remediation</h1>
+            <div class="subtitle">Epic Planning Dashboard</div>
+            <div class="meta-info">
+                <div class="meta-item">
+                    <span class="meta-label">Epic ID</span>
+                    <span class="meta-value" id="epic-id">C50</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Status</span>
+                    <span class="meta-value"><span id="epic-status" class="status-badge status-active">🔄 ACTIVE</span></span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Duration</span>
+                    <span class="meta-value" id="epic-duration">10-11 weeks</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Child Plans</span>
+                    <span class="meta-value" id="child-count">22</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="overall-progress glass">
+            <div class="progress-header">
+                <span>📊 Overall Epic Progress</span>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="overall-progress-bar" style="width: 0%;">
+                    <span id="overall-percentage">0%</span>
+                </div>
+            </div>
+            <div class="progress-stats">
+                <div class="stat-item">
+                    <span>✅ Complete:</span>
+                    <span id="complete-count">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>🔄 In Progress:</span>
+                    <span id="inprogress-count">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>🔒 Blocked:</span>
+                    <span id="blocked-count">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>⏳ Pending:</span>
+                    <span id="pending-count">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>⏸️ Deferred:</span>
+                    <span id="deferred-count">0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="waves-container" id="waves-container">
+            <div class="loading">Loading plan data...</div>
+        </div>
+    </div>
+
+    <div class="auto-refresh">
+        <div class="refresh-dot"></div>
+        <span>Auto-refresh: <span id="refresh-interval">10s</span> | Last: <span id="last-update">--:--:--</span></span>
+    </div>
+
+    <script>
+        // Configuration
+        const TRACKING_FILE = 'tracking/epic-progress-tracker.json';
+        const REFRESH_INTERVAL = 10000; // 10 seconds
+        const CHILD_PLAN_REGISTRY = 'tracking/child-plan-registry.json';
+
+        // State
+        let epicData = null;
+        let childPlans = [];
+        let autoRefreshTimer = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadEpicData();
+            startAutoRefresh();
+        });
+
+        // Load epic data from JSON
+        async function loadEpicData() {
+            try {
+                const response = await fetch(TRACKING_FILE);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                epicData = await response.json();
+                
+                // Load child plan registry
+                const childResponse = await fetch(CHILD_PLAN_REGISTRY);
+                if (childResponse.ok) {
+                    childPlans = await childResponse.json();
+                }
+
+                renderEpicView();
+                updateTimestamp();
+            } catch (error) {
+                showError(error);
+            }
+        }
+
+        // Render epic dashboard
+        function renderEpicView() {
+            if (!epicData) return;
+
+            // Update overall progress
+            const overallProgress = epicData.overall_progress || 0;
+            document.getElementById('overall-progress-bar').style.width = `${overallProgress}%`;
+            document.getElementById('overall-percentage').textContent = `${overallProgress}%`;
+
+            // Update statistics
+            const stats = calculateStats();
+            document.getElementById('complete-count').textContent = stats.complete;
+            document.getElementById('inprogress-count').textContent = stats.inProgress;
+            document.getElementById('blocked-count').textContent = stats.blocked;
+            document.getElementById('pending-count').textContent = stats.pending;
+            document.getElementById('deferred-count').textContent = stats.deferred;
+
+            // Render waves
+            renderWaves();
+        }
+
+        // Calculate statistics from child plans
+        function calculateStats() {
+            const stats = {
+                complete: 0,
+                inProgress: 0,
+                blocked: 0,
+                pending: 0,
+                deferred: 0
+            };
+
+            if (epicData.child_plans) {
+                epicData.child_plans.forEach(plan => {
+                    const status = plan.status.toLowerCase();
+                    if (status.includes('complete')) stats.complete++;
+                    else if (status.includes('progress')) stats.inProgress++;
+                    else if (status.includes('blocked')) stats.blocked++;
+                    else if (status.includes('deferred')) stats.deferred++;
+                    else stats.pending++;
+                });
+            }
+
+            return stats;
+        }
+
+        // Render waves with child plans
+        function renderWaves() {
+            const wavesContainer = document.getElementById('waves-container');
+            wavesContainer.innerHTML = '';
+
+            const waves = {
+                'Wave 1: Foundation (Weeks 1-3)': ['00A', '00B', '00C', '00D'],
+                'Wave 2: Core Features (Weeks 4-9)': ['01', '02', '03', '04', '05', '06', '07', '08', '10', '11'],
+                'Wave 3: Finalization (Weeks 10-11)': ['09', '12', '13', '14', '15'],
+                'Deferred': ['16', '17', '18']
+            };
+
+            Object.entries(waves).forEach(([waveName, childIds]) => {
+                const waveDiv = document.createElement('div');
+                waveDiv.className = 'wave glass';
+
+                const waveHeader = document.createElement('div');
+                waveHeader.className = 'wave-header';
+                waveHeader.innerHTML = `
+                    <span class="collapse-icon">▼</span>
+                    <span>${waveName}</span>
+                `;
+                waveHeader.onclick = () => toggleWave(waveDiv);
+
+                const waveContent = document.createElement('div');
+                waveContent.className = 'wave-content';
+
+                const childPlansGrid = document.createElement('div');
+                childPlansGrid.className = 'child-plans-grid';
+
+                // Filter and render child plans for this wave
+                const wavePlans = epicData.child_plans.filter(plan => 
+                    childIds.some(id => plan.id.includes(id) || plan.order === id)
+                );
+
+                wavePlans.forEach(plan => {
+                    childPlansGrid.appendChild(createChildPlanCard(plan));
+                });
+
+                waveContent.appendChild(childPlansGrid);
+                waveDiv.appendChild(waveHeader);
+                waveDiv.appendChild(waveContent);
+                wavesContainer.appendChild(waveDiv);
+            });
+        }
+
+        // Create child plan card
+        function createChildPlanCard(plan) {
+            const card = document.createElement('div');
+            card.className = 'child-plan glass';
+            card.onclick = () => openChildPlan(plan);
+
+            const statusClass = getStatusClass(plan.status);
+            const progress = plan.progress || 0;
+
+            card.innerHTML = `
+                <div class="child-plan-header">
+                    <span class="child-plan-id">C50-${plan.order}</span>
+                    <span class="status-badge ${statusClass}">${plan.status}</span>
+                </div>
+                <div class="child-plan-name">${plan.name}</div>
+                <div class="child-plan-meta">
+                    <span>⏱️ ${plan.estimated_hours || 0}h</span>
+                    <span>🔧 ${plan.complexity || 'N/A'}</span>
+                    <span>🎯 ${plan.priority || 'N/A'}</span>
+                </div>
+                <div class="child-plan-progress">
+                    <div class="child-progress-bar" style="width: ${progress}%;"></div>
+                </div>
+                ${plan.dependencies && plan.dependencies.length > 0 ? `
+                    <div class="child-plan-dependencies">
+                        📌 Depends on: ${plan.dependencies.join(', ')}
+                    </div>
+                ` : ''}
+            `;
+
+            return card;
+        }
+
+        // Get status CSS class
+        function getStatusClass(status) {
+            const s = status.toLowerCase();
+            if (s.includes('complete')) return 'status-complete';
+            if (s.includes('progress')) return 'status-in-progress';
+            if (s.includes('blocked')) return 'status-blocked';
+            if (s.includes('deferred')) return 'status-deferred';
+            return 'status-pending';
+        }
+
+        // Toggle wave collapse
+        function toggleWave(waveDiv) {
+            const content = waveDiv.querySelector('.wave-content');
+            const icon = waveDiv.querySelector('.collapse-icon');
+            
+            content.classList.toggle('collapsed');
+            icon.classList.toggle('collapsed');
+        }
+
+        // Open child plan
+        function openChildPlan(plan) {
+            const planPath = `C50-${plan.order}/`;
+            console.log('Opening child plan:', planPath);
+            // In a real implementation, this would navigate to the child plan viewer
+            alert(`Opening ${plan.name} (C50-${plan.order})\n\nPath: ${planPath}`);
+        }
+
+        // Auto-refresh functionality
+        function startAutoRefresh() {
+            autoRefreshTimer = setInterval(() => {
+                loadEpicData();
+            }, REFRESH_INTERVAL);
+        }
+
+        // Update timestamp
+        function updateTimestamp() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            document.getElementById('last-update').textContent = timeString;
+        }
+
+        // Show error
+        function showError(error) {
+            const wavesContainer = document.getElementById('waves-container');
+            wavesContainer.innerHTML = `
+                <div class="error glass">
+                    <h3>⚠️ Error Loading Plan Data</h3>
+                    <p>${error.message}</p>
+                    <p><strong>Expected file:</strong> ${TRACKING_FILE}</p>
+                    <p>Please ensure the tracking file exists and contains valid JSON.</p>
+                </div>
+            `;
+        }
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (autoRefreshTimer) {
+                clearInterval(autoRefreshTimer);
+            }
+        });
+    </script>
+</body>
+</html>
