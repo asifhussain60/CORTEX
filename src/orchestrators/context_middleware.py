@@ -93,12 +93,31 @@ class CrossSessionContextMiddleware:
         else:
             self.project_tracker = project_tracker
         
+        # Initialize knowledge graph for file relationships
+        try:
+            from src.tier2.knowledge_graph import KnowledgeGraph
+            kg_path = Path("cortex-brain/tier2/knowledge_graph.db")
+            self.knowledge_graph = KnowledgeGraph(db_path=str(kg_path))
+        except Exception as e:
+            self.logger.warning(f"Knowledge graph not available: {e}")
+            self.knowledge_graph = None
+        
         self.logger = logging.getLogger("cortex.orchestrators.context_middleware")
         
         # Compile continuation patterns for performance
         self._continuation_regex = re.compile(
             '|'.join(self.CONTINUATION_PATTERNS),
             re.IGNORECASE
+        )
+        
+        # Compile file path pattern for extraction
+        self._file_path_regex = re.compile(
+            r'(?:^|[\s\'"(])'  # Start or preceded by whitespace/quotes/parens
+            r'((?:\./)?'  # Optional ./
+            r'[a-zA-Z0-9_\-./]+'  # Path segments
+            r'\.py)'  # Must end in .py
+            r'(?:$|[\s\'")\],])',  # End or followed by whitespace/quotes/parens/punctuation
+            re.MULTILINE
         )
         
         self.logger.info("CrossSessionContextMiddleware initialized with project tracking")
@@ -160,6 +179,9 @@ class CrossSessionContextMiddleware:
         
         # PRIORITY 1: Vision Context - Check for image attachments
         context = self._inject_vision_context(context)
+        
+        # PRIORITY 3: File Relationships - Check for file mentions
+        context = self._inject_file_relationships(user_input, context)
         
         # Check if continuation pattern detected
         if not self._is_continuation(user_input):
@@ -384,3 +406,103 @@ class CrossSessionContextMiddleware:
                 trimmed['objects'] = objects
         
         return trimmed
+    
+    def _inject_file_relationships(self, user_input: str, context: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Inject file relationship context if files are mentioned.
+        
+        Priority 3: File relationships from knowledge graph (<150 tokens).
+        
+        Args:
+            user_input: User's natural language request
+            context: Context dict
+        
+        Returns:
+            Context with 'file_relationships' added if files mentioned
+        """
+        # Extract file paths from user input
+        file_paths = self._extract_file_paths(user_input)
+        
+        if not file_paths:
+            return context
+        
+        if not self.knowledge_graph:
+            self.logger.debug("Knowledge graph not available for file relationships")
+            return context
+        
+        try:
+            # Query relationships for first mentioned file
+            # (could expand to all files, but limiting for token budget)
+            primary_file = file_paths[0]
+            
+            relationships = self.knowledge_graph.get_file_relationships(
+                file_path=primary_file,
+                min_strength=0.5  # Filter weak relationships
+            )
+            
+            if relationships:
+                # Trim to token budget (~150 tokens = 600 chars)
+                trimmed_relationships = self._trim_file_relationships(relationships, max_items=5)
+                context['file_relationships'] = trimmed_relationships
+                context['mentioned_files'] = file_paths
+                
+                self.logger.info(
+                    f"File relationships injected: {len(trimmed_relationships)} related files "
+                    f"for {primary_file}"
+                )
+        
+        except Exception as e:
+            self.logger.error(f"Failed to inject file relationships: {e}")
+        
+        return context
+    
+    def _extract_file_paths(self, user_input: str) -> List[str]:
+        """
+        Extract file paths from user input.
+        
+        Args:
+            user_input: User's natural language request
+        
+        Returns:
+            List of extracted file paths
+        """
+        matches = self._file_path_regex.findall(user_input)
+        
+        # Clean up matches
+        file_paths = []
+        for match in matches:
+            # Remove leading/trailing whitespace and quotes
+            cleaned = match.strip().strip('\'"')
+            if cleaned:
+                file_paths.append(cleaned)
+        
+        return file_paths
+    
+    def _trim_file_relationships(
+        self,
+        relationships: List[Dict[str, Any]],
+        max_items: int = 5
+    ) -> List[Dict[str, Any]]:
+        """
+        Trim file relationships to respect token budget.
+        
+        Args:
+            relationships: List of relationship dicts
+            max_items: Maximum number of relationships to keep
+        
+        Returns:
+            Trimmed list of relationships
+        """
+        # Sort by strength (descending)
+        sorted_rels = sorted(relationships, key=lambda r: r.get('strength', 0), reverse=True)
+        
+        # Keep top N relationships
+        trimmed = sorted_rels[:max_items]
+        
+        # Keep only essential fields
+        essential_fields = ['related_file', 'relationship_type', 'strength']
+        
+        return [
+            {k: v for k, v in rel.items() if k in essential_fields}
+            for rel in trimmed
+        ]
