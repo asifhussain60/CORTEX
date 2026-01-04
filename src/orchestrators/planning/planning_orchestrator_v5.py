@@ -37,6 +37,12 @@ from src.orchestrators.planning.knowledge_graph_query import (
     KnowledgeGraphQuery,
     KnowledgeContext
 )
+# CORTEX-5.0 Sub-Plan 10 (C50-10): Phase-Level Acceptance Criteria (Gap 1)
+from src.orchestrators.planning.acceptance_validator import (
+    AcceptanceCriteriaValidator,
+    PhaseNotReadyError,
+    PhaseIncompleteError
+)
 
 
 class PlanningOrchestratorV5(BaseOrchestratorV4_1):
@@ -86,7 +92,63 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
         self.governance = GovernanceIntegrator()
         self.knowledge_graph = KnowledgeGraphQuery()
         
+        # Initialize acceptance criteria validator (C50-10: Gap 1 remediation)
+        self.acceptance_validator = None  # Initialized per-plan in execute()
+        
         self.logger.info("PlanningOrchestratorV5 initialized with governance + knowledge graph")
+    
+    def execute_phase(
+        self,
+        phase_number: int,
+        phase_config: dict,
+        **kwargs
+    ) -> PhaseResult:
+        """
+        Execute a single phase with DoR/DoD validation.
+        
+        Override of BaseOrchestratorV4_1.execute_phase() to add acceptance criteria
+        validation hooks. Validates DoR before phase start and DoD after phase completion.
+        
+        Args:
+            phase_number: Sequential phase number (0-indexed)
+            phase_config: Phase configuration from manifest
+            **kwargs: Additional phase parameters
+        
+        Returns:
+            PhaseResult with phase execution details
+        
+        Raises:
+            PhaseNotReadyError: If DoR validation fails (phase not ready to start)
+            PhaseIncompleteError: If DoD validation fails (phase not ready to complete)
+        """
+        phase_name = phase_config.get('name', f'Phase {phase_number}')
+        
+        # C50-10 Gap 1: Validate Definition of Ready (DoR) BEFORE phase start
+        if self.acceptance_validator:
+            try:
+                self.logger.info(f"Validating DoR for Phase {phase_number}: {phase_name}")
+                self.acceptance_validator.validate_phase_dor(phase_number)
+            except PhaseNotReadyError as e:
+                self.logger.error(f"Phase {phase_number} blocked by DoR: {e}")
+                raise  # Block phase execution
+        
+        # Execute phase via base class (normal execution flow)
+        phase_result = super().execute_phase(phase_number, phase_config, **kwargs)
+        
+        # C50-10 Gap 1: Validate Definition of Done (DoD) AFTER phase completion
+        if self.acceptance_validator and phase_result.status == PhaseStatus.COMPLETED:
+            try:
+                self.logger.info(f"Validating DoD for Phase {phase_number}: {phase_name}")
+                self.acceptance_validator.validate_phase_dod(phase_number)
+            except PhaseIncompleteError as e:
+                self.logger.error(f"Phase {phase_number} blocked by DoD: {e}")
+                # Mark phase incomplete and rollback
+                phase_result.status = PhaseStatus.FAILED
+                phase_result.errors.append(f"DoD validation failed: {e}")
+                self.state_db.fail_phase(phase_result.phase_id, str(e))
+                raise  # Block phase completion
+        
+        return phase_result
     
     @staticmethod
     def get_registration_config() -> dict:
@@ -161,6 +223,18 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
             )
             
             self.logger.info(f"Created plan: {self.plan_id}")
+            
+            # C50-10 Gap 1: Initialize acceptance criteria validator
+            plan_root = Path(plan_data['folder_path'])
+            if plan_root.exists():
+                try:
+                    self.acceptance_validator = AcceptanceCriteriaValidator(
+                        plan_root=plan_root,
+                        logger=self.logger
+                    )
+                    self.logger.info("✅ Acceptance criteria validator initialized")
+                except Exception as e:
+                    self.logger.warning(f"⚠️  Acceptance validator init failed (non-blocking): {e}")
             
             # Phase -1: Knowledge Library (Governance Consultation)
             # Execute BEFORE Phase 0 to consult Tier 0/2 governance
