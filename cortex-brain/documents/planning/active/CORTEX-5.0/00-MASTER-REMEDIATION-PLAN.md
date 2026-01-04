@@ -1,34 +1,49 @@
-# 🎯 CORTEX v5 Gap Remediation & Completion - Master Plan
+# 🎯 CORTEX v5 Gap Remediation & Completion - Epic Master Plan
 
 **Plan ID:** cortex-v5-gap-remediation  
+**Plan Type:** EPIC  
+**Planner Mode:** epic  
 **Created:** January 3, 2026  
+**Updated:** January 4, 2026  
 **Author:** Asif Hussain  
 **Status:** 🔄 ACTIVE  
-**Complexity:** TIER 5 (STRATEGIC MULTI-PHASE)  
+**Complexity:** TIER 5 (STRATEGIC MULTI-PHASE EPIC)  
 **Parent Plan:** cortex-v5-holistic-refactor  
-**Duration:** 8-9 weeks
+**Duration:** 10-11 weeks  
+**Child Plans:** 18 (00A-00C, 01-15, 16-18)  
+**Epic Viewer:** `CORTEX-5.0-plan-viewer.html` (pending Sub-Plan 00B)
 
 ---
 
-## 📊 Master Progress Tracker
+## 📊 Epic Progress Tracker
 
-**Overall Progress:** `░░░░░░░░░░` **0%** ⏳ NOT STARTED
+**Overall Progress:** `░░░░░░░░░░` **0%** ⏳ NOT STARTED  
+**JSON Tracker:** `tracking/epic-progress-tracker.json`  
+**Dependency Graph:** `tracking/dependency-graph.json`
 
 | Order | Sub-Plan | Folder | Progress | Duration | Status | Dependencies |
 |-------|----------|--------|----------|----------|--------|--------------|
-| 00 | **Test Coverage Sprint** | `00-test-coverage-sprint/` | `░░░░░░░░░░` 0% | 2-3w | ⏳ Not Started | None |
-| 01 | **Refinement Orchestrator** | `01-refinement-orchestrator/` | `░░░░░░░░░░` 0% | 1w | ⏳ Not Started | Test Coverage 50%+ |
-| 02 | **Debug Orchestrator** | `02-debug-orchestrator/` | `░░░░░░░░░░` 0% | 1w | ⏳ Not Started | Test Coverage 50%+ |
-| 03 | **Phase -1 Knowledge Library** | `03-knowledge-library-phase/` | `░░░░░░░░░░` 0% | 3-4d | ⏳ Not Started | Planning v5 tests pass |
-| 04 | **AST Scanning Integration** | `04-ast-scanning-planning/` | `░░░░░░░░░░` 0% | 3-4d | ⏳ Not Started | Planning v5 tests pass |
-| 11 | **CORTEX-LENS Admin Dashboard** | `11-cortex-lens-admin/` | `░░░░░░░░░░` 0% | 1w | ⏳ Not Started | Sub-Plans 03, 04 |
-| 05 | **Context Middleware Enhancement** | `05-context-middleware/` | `░░░░░░░░░░` 0% | 2-3d | ⏳ Not Started | Test Coverage 50%+ |
-| 06 | **Visual Progress Generation** | `06-visual-progress/` | `░░░░░░░░░░` 0% | 2d | ⏳ Not Started | Planning v5 functional |
-| 07 | **REFACTOR Task Enforcement** | `07-refactor-enforcement/` | `░░░░░░░░░░` 0% | 2d | ⏳ Not Started | Planning v5 functional |
-| 10 | **Token Optimization Pipeline** | `10-token-optimization/` | `░░░░░░░░░░` 0% | 3-4d | ⏳ Not Started | Planning v5 functional |
-| 08 | **Orchestrator Migrations** | `08-orchestrator-migrations/` | `░░░░░░░░░░` 0% | 1-2w | ⏳ Not Started | All core features complete |
-| 12 | **Production Validation Pipeline** | `12-production-validation-pipeline/` | `░░░░░░░░░░` 0% | 1w | ⏳ Not Started | Sub-Plans 00-11 complete |
-| 09 | **Final Validation & DoD** | `09-final-validation/` | `░░░░░░░░░░` 0% | 3-4d | ⏳ Not Started | Sub-Plan 12 complete |
+| **00A** | **Epic Structure Cleanup** | `00A-epic-structure-cleanup/` | `██████████` 100% | 2h | ✅ **COMPLETE** | None |
+| **00B** | **Epic & Feature Planner** | `00B-epic-feature-planner/` | `░░░░░░░░░░` 0% | 2-3w | 🔒 Blocked | 00A complete |
+| **00C** | **Test Coverage Sprint** | `00C-test-coverage-sprint/` | `░░░░░░░░░░` 0% | 2-3w | 🔒 Blocked | 00B complete |
+| 01 | **Refinement Orchestrator** | `01-refinement-orchestrator/` | `░░░░░░░░░░` 0% | 1w | 🔒 Blocked | 00C ≥50% coverage |
+| 02 | **Debug Orchestrator** | `02-debug-orchestrator/` | `░░░░░░░░░░` 0% | 1w | 🔒 Blocked | 00C ≥50% coverage |
+| 03 | **Phase -1 Knowledge Library** | `03-knowledge-library-phase/` | `░░░░░░░░░░` 0% | 3-4d | 🔒 Blocked | 00C tests pass |
+| 04 | **AST Scanning Integration** | `04-ast-scanning-planning/` | `░░░░░░░░░░` 0% | 3-4d | 🔒 Blocked | 00C tests pass |
+| 05 | **Context Middleware Enhancement** | `05-context-middleware/` | `░░░░░░░░░░` 0% | 2-3d | 🔒 Blocked | 00C ≥50% coverage |
+| 06 | **Visual Progress Generation** | `06-visual-progress/` | `░░░░░░░░░░` 0% | 2d | 🔒 Blocked | 00B functional |
+| 07 | **REFACTOR Task Enforcement** | `07-refactor-enforcement/` | `░░░░░░░░░░` 0% | 2d | 🔒 Blocked | 00B functional |
+| 08 | **Orchestrator Migrations** | `08-orchestrator-migrations/` | `░░░░░░░░░░` 0% | 1-2w | 🔒 Blocked | 01, 02, 05 complete |
+| 09 | **Final Validation & DoD** | `09-final-validation/` | `░░░░░░░░░░` 0% | 3-4d | 🔒 Blocked | 12 complete |
+| 10 | **Acceptance Validation System** | `10-acceptance-validation-system/` | `░░░░░░░░░░` 0% | 3-4d | 🔒 Blocked | 00B functional |
+| 11 | **CORTEX-LENS Admin Dashboard** | `11-cortex-lens-admin/` | `░░░░░░░░░░` 0% | 1w | 🔒 Blocked | 03, 04 complete |
+| 12 | **Production Validation Pipeline** | `12-production-validation-pipeline/` | `░░░░░░░░░░` 0% | 1w | 🔒 Blocked | 08, 11 complete |
+| 13 | **Onboarding System** | `13-onboarding-system/` | `░░░░░░░░░░` 0% | 1w | 🔒 Blocked | 12 complete |
+| 14 | **Demo & Tutorial System** | `14-demo-tutorials/` | `░░░░░░░░░░` 0% | 1w | 🔒 Blocked | 13 complete |
+| 15 | **User Response Templates** | `15-user-response-templates/` | `░░░░░░░░░░` 0% | 1w | 🔒 Blocked | 13 complete |
+| 16 | **Planning System v5 Fix** | `16-planning-system-v5-fix/` | `░░░░░░░░░░` 0% | TBD | ⏸️ Deferred | TBD |
+| 17 | **Planning v5 Enhancement** | `17-planning-v5-enhancement/` | `░░░░░░░░░░` 0% | TBD | ⏸️ Deferred | TBD |
+| 18 | **Planning v5 Fix (Duplicate)** | `18-planning-v5-fix/` | `░░░░░░░░░░` 0% | TBD | ⚠️ Review | TBD |
 
 ---
 
@@ -42,39 +57,135 @@ Gap analysis identified **critical deficiencies** in CORTEX v5:
 - ❌ **23%** Not implemented (30/130 criteria)
 - **Assessment:** NOT PRODUCTION READY
 
-### Strategic Approach
+### Strategic Approach - REVISED (Epic-First Strategy)
 
-This master plan coordinates **13 ordered sub-plans** to:
-1. **Stabilize foundation** - Achieve 80%+ test coverage (Sub-Plan 00)
-2. **Complete missing orchestrators** - Build Refinement + Debug (Sub-Plans 01-02)
-3. **Add critical features** - Knowledge Library, AST, Context (Sub-Plans 03-05)
-4. **Build admin tooling** - CORTEX-LENS unified dashboard (Sub-Plan 11)
-5. **Polish & enhance** - Progress tracking, REFACTOR enforcement, Token optimization (Sub-Plans 06-07, 10)
-6. **Finalize migrations** - Complete autonomous conversions (Sub-Plan 08)
-7. **Production validation** - REFACTOR, DOCUMENTATION, comprehensive checks (Sub-Plan 12)
-8. **Final approval** - DoD validation and sign-off (Sub-Plan 09)
+**CRITICAL INSIGHT:** CORTEX-5.0 is already structured as an Epic Plan but lacks infrastructure to execute as one.
+
+**Holistic Refinement Analysis:** See `HOLISTIC-REFINEMENT-ANALYSIS.md` for detailed rationale.
+
+This epic coordinates **18 ordered sub-plans** in THREE strategic waves:
+
+#### Wave 1: Foundation Infrastructure (00A-00C) - 2-3 weeks
+1. **00A: Epic Structure Cleanup** ✅ - Fix structural issues (2 hours)
+2. **00B: Epic & Feature Planner** - Build epic management tooling (2-3 weeks)
+3. **00C: Test Coverage Sprint** - Achieve 80%+ test coverage (2-3 weeks)
+
+#### Wave 2: Core Features (01-11) - 5-6 weeks
+4. **Complete missing orchestrators** - Refinement + Debug (01-02)
+5. **Add critical features** - Knowledge Library, AST, Context (03-05)
+6. **Build admin tooling** - CORTEX-LENS unified dashboard (11)
+7. **Polish & enhance** - Progress tracking, REFACTOR enforcement, validation (06-07, 10)
+
+#### Wave 3: Finalization (08-15) - 3-4 weeks
+8. **Finalize migrations** - Complete autonomous conversions (08)
+9. **Production validation** - REFACTOR, DOCUMENTATION, comprehensive checks (12)
+10. **Final approval** - DoD validation and sign-off (09)
+11. **User experience** - Onboarding, demos, templates (13-15)
+
+### Why Epic-First Strategy?
+
+**Original Timeline:** 8-9 weeks (foundation unstable)  
+**Refined Timeline:** 10-11 weeks (+2-3 weeks for epic infrastructure)
+
+**ROI Justification:**
+- ✅ **Visibility:** Single HTML viewer shows entire epic status
+- ✅ **Automation:** No more manual progress table updates
+- ✅ **Safety:** Dependencies enforced programmatically
+- ✅ **Reusability:** All future multi-plan work benefits
+- ✅ **Foundation:** 3-week investment saves 10+ weeks long-term
+
+**Investment:** +2-3 weeks now  
+**Returns:** Saves 10+ weeks across all future planning work
 
 ### Success Criteria
 
 **Production Readiness Achieved When:**
+- ✅ Epic infrastructure operational (00B complete)
 - ✅ Test coverage ≥80% (104+ of 130 criteria tested)
 - ✅ All 10 orchestrators implemented and functional
 - ✅ All SKULL brain protection rules enforced
 - ✅ All acceptance criteria pass
 - ✅ Documentation complete and accurate
+- ✅ Epic HTML viewer displays all child plans
 
 ---
 
 ## 📋 Sub-Plan Execution Order
 
-### Sub-Plan 00: Test Coverage Sprint (CRITICAL - EXECUTE FIRST)
+### 🚨 Wave 1: Foundation Infrastructure (CRITICAL PATH)
 
-**Folder:** `00-test-coverage-sprint/`  
-**Priority:** 🚨 BLOCKER (must reach 50%+ before continuing)  
+---
+
+### Sub-Plan 00A: Epic Structure Cleanup ✅ COMPLETE
+
+**Folder:** `00A-epic-structure-cleanup/`  
+**Priority:** 🚨 BLOCKER (must complete before 00B)  
+**Duration:** 2 hours  
+**Status:** ✅ COMPLETE
+
+**Why First:** Epic detection requires correct folder structure.
+
+**Completed Actions:**
+- ✅ Moved master plan to CORTEX-5.0 root
+- ✅ Renumbered duplicate plans (10-* → 16-, 17-, 18-)
+- ✅ Created `tracking/` folder
+- ✅ Generated epic-progress-tracker.json
+- ✅ Generated child-plan-registry.json
+- ✅ Generated dependency-graph.json
+
+**Exit Criteria:** ✅ ALL MET
+- Structure valid for `detect_planner_mode()`
+- All child plans have unique prefixes
+- Epic tracking infrastructure in place
+
+---
+
+### Sub-Plan 00B: Epic & Feature Planner Implementation
+
+**Folder:** `00B-epic-feature-planner/`  
+**Priority:** 🚨 CRITICAL FOUNDATION (must complete before 00C)  
 **Duration:** 2-3 weeks  
+**Status:** 🔒 Blocked (requires 00A complete)  
+**Target:** Dual-mode planning system with HTML viewers
+
+**Why Second:** Cannot manage 18-plan epic without tooling. This IS the foundation.
+
+**Scope (from EPIC-FEATURE-PLANNER-VISION.md):**
+- Phase 0: Architecture Design (data models, manifest schema)
+- Phase 1: Epic Planner Implementation (epic_planner.py)
+- Phase 2: Feature Planner Enhancement (parent epic awareness)
+- Phase 3: Plan Viewer HTML Generator (glassmorphism viewers)
+- Phase 4: Real-Time Progress Updates (auto-refresh JSONs)
+- Phase 5: Testing & Validation (E2E with CORTEX-5.0)
+- Phase 6: Documentation & Templates (user guides)
+
+**Key Deliverables:**
+- `src/orchestrators/planning/epic_planner.py` - Epic orchestration
+- `src/orchestrators/planning/models.py` - PlannerMode, EpicPlan, FeaturePlan
+- `src/orchestrators/planning/viewer_generator.py` - HTML generation
+- `templates/planning/epic-plan-viewer.jinja2` - Epic HTML template
+- `templates/planning/feature-plan-viewer.jinja2` - Feature HTML template
+- `CORTEX-5.0-plan-viewer.html` - Static epic viewer (THIS EPIC!)
+- Updated `planning-system-5.0-manifest.yaml` with epic/feature modes
+
+**Exit Criteria:**
+- Epic planner detects and manages 18 child plans
+- HTML viewer displays real-time progress
+- Dependency validation blocks child plans appropriately
+- All 6 phases tested with CORTEX-5.0 structure
+- TDD: Tests written before implementation
+
+---
+
+### Sub-Plan 00C: Test Coverage Sprint (ORIGINAL SUB-PLAN 00)
+
+**Folder:** `00C-test-coverage-sprint/`  
+**Priority:** 🚨 VALIDATION FOUNDATION (must reach 50%+ before continuing)  
+**Duration:** 2-3 weeks  
+**Status:** 🔒 Blocked (requires 00B complete)  
 **Target:** 80%+ test coverage (104+ criteria tested)
 
-**Why First:** Without tests, we cannot validate any new implementations. This is the foundation.
+**Why Third:** Now benefits from epic infrastructure. Progress automatically tracked.
 
 **Scope:**
 - Write 84 missing tests (from 20 → 104)
@@ -93,9 +204,15 @@ This master plan coordinates **13 ordered sub-plans** to:
 - `tests/orchestrators/lens/` - 5 tests (Lens)
 
 **Exit Criteria:**
-- Test coverage ≥50% (65+ criteria tested)
+- Test coverage ≥50% (65+ criteria tested) - GATE 1
+- Test coverage ≥80% (104+ criteria tested) - GATE 2
 - All brain protection tests pass
 - All common utility tests pass
+- Feature HTML viewer shows test growth in real-time
+
+---
+
+### 🎯 Wave 2: Core Features (5-6 weeks)
 
 ---
 

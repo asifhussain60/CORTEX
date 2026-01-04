@@ -29,7 +29,7 @@ python plan_orchestrator.py status  # Show current status
 
 ```
 📊 Overall Progress: 0%
-   Completed: 0/11 sub-plans
+   Completed: 0/14 sub-plans
    Current Sub-Plan: 00 - Test Coverage Sprint
 
 📋 Sub-Plans:
@@ -45,6 +45,9 @@ python plan_orchestrator.py status  # Show current status
 08   Orchestrator Migrations             ⏸️ blocked        0%  1-2 weeks
 09   Final Validation & DoD              ⏸️ blocked        0%   3-4 days
 10   Acceptance Validation System        ⏸️ blocked        0%     1 week
+13   Onboarding System (CORTEX-LENS)     ⏸️ blocked        0%  1-2 weeks
+14   Demo & Tutorial System              ⏸️ blocked        0%  1-2 weeks
+15   User Response Templates             ⏸️ blocked        0%   3-5 days
 ```
 
 ---

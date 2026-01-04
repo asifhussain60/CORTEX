@@ -1,11 +1,14 @@
-# 🧪 Sub-Plan 00: Test Coverage Sprint
+# 🧪 Sub-Plan 00C: Test Coverage Sprint
 
 **Plan ID:** test-coverage-sprint  
-**Parent Plan:** CORTEX-5.0 Gap Remediation  
+**Parent Epic:** CORTEX-5.0 Gap Remediation  
+**Order:** 00C  
 **Created:** January 3, 2026  
-**Priority:** 🚨 CRITICAL BLOCKER  
+**Updated:** January 4, 2026  
+**Priority:** 🚨 CRITICAL VALIDATION  
 **Duration:** 2-3 weeks  
-**Status:** ⏳ READY TO START
+**Status:** 🔒 Blocked (requires 00B complete)  
+**Dependencies:** Epic & Feature Planner (00B) must be functional
 
 ---
 

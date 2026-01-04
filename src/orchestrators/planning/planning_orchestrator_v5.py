@@ -29,6 +29,10 @@ from src.orchestrators.planning.governance_integrator import (
     GovernanceIntegrator,
     GovernanceValidation
 )
+# CORTEX-5.0 Sub-Plan 04: AST Scanning Integration
+from src.orchestrators.planning.ast_scanner import ASTScanner
+from src.orchestrators.planning.duplicate_detector import PlanningDuplicateDetector
+from src.orchestrators.planning.orphan_detector import PlanningOrphanDetector
 from src.orchestrators.planning.knowledge_graph_query import (
     KnowledgeGraphQuery,
     KnowledgeContext
@@ -513,6 +517,9 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
         # Phase 4 Enhancement: Knowledge Graph Query
         knowledge_context = self.knowledge_graph.get_feature_context(feature_name)
         
+        # CORTEX-5.0 Enhancement: AST Scanning Integration (Sub-Plan 04)
+        ast_analysis = self._run_ast_scanning(feature_name)
+        
         # Create context document with governance and knowledge graph data
         context_content = f"""# Context Discovery Report
 ## Feature: {feature_name}
@@ -522,6 +529,20 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
 ### Workspace Analysis
 - Workspace root: {Path.cwd()}
 - Planning for: {feature_name}
+
+### AST Analysis (CORTEX-5.0 Enhancement)
+**Files Scanned:** {ast_analysis.get('files_scanned', 0)}
+**Total Functions:** {ast_analysis.get('total_functions', 0)}
+**Total Classes:** {ast_analysis.get('total_classes', 0)}
+**Total Imports:** {ast_analysis.get('total_imports', 0)}
+
+#### Duplicate Code Analysis
+- **Duplicate Patterns:** {ast_analysis.get('duplicate_analysis', {}).get('duplicates_found', 0)}
+- **Duplicate Rate:** {ast_analysis.get('duplicate_analysis', {}).get('duplicate_percentage', 0)}%
+
+#### Orphaned Function Analysis
+- **Orphaned Functions:** {ast_analysis.get('orphan_analysis', {}).get('orphaned_count', 0)}
+- **Orphan Rate:** {ast_analysis.get('orphan_analysis', {}).get('orphaned_percentage', 0)}%
 
 ### Governance Validation
 **Status:** {'✅ Valid' if governance_validation.is_valid else '❌ Violations Detected'}
@@ -935,3 +956,68 @@ Check `tracking/progress-tracker.json` for current status.
             raise ValueError(f"Plan validation failed: {len(missing_files + missing_folders)} issues found")
         
         return [str(report_path)]
+    
+    def _run_ast_scanning(self, feature_name: str) -> Dict[str, Any]:
+        """
+        Run AST scanning for Phase 0 Discovery (CORTEX-5.0 Sub-Plan 04).
+        
+        Performs comprehensive code analysis:
+        1. AST scanning (functions, classes, imports)
+        2. Duplicate code detection
+        3. Orphaned function detection
+        4. Save results to context/ast-analysis.json
+        
+        Args:
+            feature_name: Feature being planned
+        
+        Returns:
+            Dictionary with AST analysis results
+        """
+        self.logger.info("Running AST scanning analysis...")
+        
+        try:
+            # Initialize scanners
+            scanner = ASTScanner(workspace_root=Path.cwd())
+            duplicate_detector = PlanningDuplicateDetector()
+            orphan_detector = PlanningOrphanDetector(workspace_root=Path.cwd())
+            
+            # Step 1: Scan workspace for AST metrics
+            scanner.scan_workspace()
+            
+            # Step 2: Detect duplicate code
+            python_files = list(Path.cwd().rglob("*.py"))
+            duplicate_results = duplicate_detector.find_code_duplicates(python_files)
+            scanner.add_duplicate_analysis(duplicate_results)
+            
+            # Step 3: Detect orphaned functions
+            orphan_results = orphan_detector.find_orphaned_functions()
+            scanner.add_orphan_analysis(orphan_results)
+            
+            # Step 4: Save results to context folder
+            plan_dir = Path(f"cortex-brain/documents/planning/active/{feature_name}")
+            ast_output_file = plan_dir / "context" / "ast-analysis.json"
+            scanner.save_results(ast_output_file)
+            
+            self.logger.info(f"AST analysis complete: {scanner.results['files_scanned']} files scanned")
+            
+            return scanner.results
+        
+        except Exception as e:
+            self.logger.error(f"AST scanning failed: {e}")
+            # Return empty results on error to avoid blocking plan
+            return {
+                "files_scanned": 0,
+                "total_functions": 0,
+                "total_classes": 0,
+                "total_imports": 0,
+                "duplicate_analysis": {
+                    "duplicates_found": 0,
+                    "duplicate_percentage": 0
+                },
+                "orphan_analysis": {
+                    "orphaned_count": 0,
+                    "orphaned_percentage": 0
+                },
+                "error": str(e)
+            }
+
