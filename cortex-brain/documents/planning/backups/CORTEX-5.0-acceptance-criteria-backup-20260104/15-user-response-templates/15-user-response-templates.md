@@ -312,7 +312,280 @@ persona_scores = {
 
 ---
 
-### Phase 6: Integration & Testing (Day 6)
+### Phase 6: Context-Aware "Did You Know?" System (Day 6)
+**Status:** 🔴 not_started
+
+#### Overview
+Add intelligent knowledge snippets to response templates that provide relevant insights based on:
+- Current user activity (files open, operations running)
+- Conversation history (what user has been asking about)
+- User persona (developer, product owner, leadership)
+- Knowledge graph patterns (lessons learned, best practices)
+- Recent CORTEX operations (planning, TDD, debugging)
+
+#### Knowledge Delivery Strategy
+
+**Context Analysis:**
+```python
+class ContextAwareKnowledgeProvider:
+    def select_knowledge_fact(self, context: dict) -> str:
+        """
+        Select most relevant knowledge fact based on:
+        1. Active files (Python, C#, React, etc.)
+        2. Recent operations (plan, tdd, vacuum, etc.)
+        3. Conversation history (recurring themes)
+        4. User persona (developer, PO, leadership)
+        5. Knowledge graph patterns (high-value lessons)
+        """
+        signals = self._analyze_context(context)
+        candidates = self._filter_knowledge_by_signals(signals)
+        return self._rank_and_select(candidates, signals)
+```
+
+**Knowledge Sources:**
+1. **knowledge-graph.yaml** - 54+ patterns, validation insights, strategic learnings
+2. **conversation-context.jsonl** - User session history, recurring topics
+3. **brain-protection-rules.yaml** - SKULL rules, governance patterns
+4. **lessons-learned.yaml** - Project retrospectives, best practices
+5. **development-context.yaml** - Active work context, tech stack
+
+**Persona-Specific Knowledge:**
+
+**Developer Focus:**
+- TDD patterns ("Did you know? CORTEX TDD enforces RED→GREEN→REFACTOR with automatic test generation")
+- Performance tips ("Tip: Use `vacuum` before large refactors - it removes 40-60% of dead code")
+- Testing insights ("CORTEX validates filesystem changes post-write - no silent failures")
+- Architecture patterns ("Phase -1 Knowledge Library consults governance BEFORE planning")
+
+**Product Owner Focus:**
+- Velocity metrics ("Teams using CORTEX Planning reduce sprint planning time by 45%")
+- ADO integration ("CORTEX generates User Stories with acceptance criteria from epic plans")
+- Quality gates ("Definition of Ready/Done validation prevents 70% of scope creep")
+- Sprint patterns ("TDD workflow reduces bug escape rate by 60-80% in production")
+
+**Leadership Focus:**
+- ROI metrics ("CORTEX autonomous operations save 8-12 hours/week per developer")
+- Quality improvements ("SKULL rules enforce whole-file refactoring, reducing tech debt 35%")
+- Risk mitigation ("Governance consultation catches architectural violations in Phase -1")
+- Strategic value ("Knowledge graph captures patterns across 54+ categories automatically")
+
+**Contextual Triggers:**
+```yaml
+knowledge_triggers:
+  file_context:
+    python:
+      - "Python tip: Use `mcp_pylance_mcp_s_pylanceRunCodeSnippet` instead of terminal commands"
+      - "CORTEX validates Python syntax before execution - no runtime surprises"
+    
+    test_files:
+      - "TDD insight: CORTEX enforces tests-fail-first - no green tests allowed before implementation"
+      - "Coverage tip: Use `tdd --coverage` to get line-by-line coverage reports"
+    
+    large_files:
+      - "Refactoring tip: SKULL rule 5 enforces whole-file cleanup, not spot fixes"
+      - "CORTEX Vacuum can remove 40-60% of dead code before refactoring"
+  
+  operation_context:
+    planning:
+      - "Planning tip: Phase -1 Knowledge Library queries governance before Phase 0"
+      - "CORTEX generates 4-folder structures: context/, reports/, artifacts/, tracking/"
+    
+    tdd_active:
+      - "TDD cycle: RED (fail) → GREEN (pass) → REFACTOR (cleanup) - never skip refactor"
+      - "CORTEX blocks implementation if tests don't fail first - TDD_ENFORCEMENT rule"
+    
+    debugging:
+      - "Debug strategy: CORTEX Investigation Orchestrator uses 5-phase root cause analysis"
+      - "Validation: Always verify filesystem changes, not code execution"
+    
+    ado_operation:
+      - "ADO tip: CORTEX generates full work item hierarchies from epic plans"
+      - "Story points: CORTEX calculates SP based on phase complexity (1-13 scale)"
+  
+  conversation_patterns:
+    performance_questions:
+      - "Performance: Vacuum operation can save 40-60% file size through dead code removal"
+      - "Cache optimization: VSCodeCacheManager reduces token overhead by 60-80%"
+    
+    quality_concerns:
+      - "Quality gate: SKULL rules enforce 7 governance constraints before commits"
+      - "CORTEX validates DoR/DoD at every phase - no silent quality degradation"
+    
+    testing_issues:
+      - "Test pattern: CORTEX requires filesystem validation after every write operation"
+      - "Coverage: Sub-Plan 00C aims for 95%+ test coverage across all orchestrators"
+```
+
+**Implementation:**
+
+**1. Knowledge Selector Module**
+```python
+# src/utilities/knowledge_selector.py
+from pathlib import Path
+import yaml
+import json
+from typing import Dict, List, Optional
+
+class ContextAwareKnowledgeSelector:
+    def __init__(self):
+        self.knowledge_graph = self._load_knowledge_graph()
+        self.conversation_history = self._load_conversation_history()
+        self.brain_rules = self._load_brain_rules()
+    
+    def get_relevant_fact(self, context: Dict) -> Optional[str]:
+        """
+        Select most relevant knowledge fact (≤2 sentences).
+        
+        Priority:
+        1. File context (language, type)
+        2. Operation context (command, orchestrator)
+        3. Conversation patterns (recurring topics)
+        4. Persona (developer, PO, leadership)
+        5. Random high-value insight
+        """
+        signals = self._extract_signals(context)
+        candidates = self._get_candidate_facts(signals)
+        
+        if not candidates:
+            return self._get_random_high_value_fact()
+        
+        ranked = self._rank_by_relevance(candidates, signals)
+        return ranked[0] if ranked else None
+    
+    def _extract_signals(self, context: Dict) -> Dict:
+        return {
+            'active_files': context.get('active_files', []),
+            'file_types': self._detect_file_types(context),
+            'recent_operations': context.get('recent_operations', []),
+            'conversation_topics': self._analyze_conversation_patterns(),
+            'persona': context.get('persona', 'developer'),
+            'operation_type': context.get('operation', 'general')
+        }
+    
+    def _get_candidate_facts(self, signals: Dict) -> List[str]:
+        facts = []
+        
+        # File context facts
+        for file_type in signals['file_types']:
+            facts.extend(self._get_file_type_facts(file_type))
+        
+        # Operation facts
+        if signals['operation_type']:
+            facts.extend(self._get_operation_facts(signals['operation_type']))
+        
+        # Conversation pattern facts
+        for topic in signals['conversation_topics']:
+            facts.extend(self._get_topic_facts(topic))
+        
+        # Persona-specific facts
+        facts.extend(self._get_persona_facts(signals['persona']))
+        
+        return facts
+    
+    def _rank_by_relevance(self, facts: List[str], signals: Dict) -> List[str]:
+        """
+        Score facts by relevance:
+        - File context match: +3
+        - Operation context match: +2
+        - Conversation pattern match: +2
+        - Persona match: +1
+        - High strategic value: +1
+        """
+        scored = []
+        for fact in facts:
+            score = self._calculate_relevance_score(fact, signals)
+            scored.append((score, fact))
+        
+        scored.sort(reverse=True)
+        return [fact for _, fact in scored]
+```
+
+**2. Response Template Integration**
+```yaml
+# Add to response-templates-v4.yaml
+composable_blocks:
+  standard_blocks:
+    did_you_know:
+      block_id: "BLK-STD-009"
+      description: "Context-aware knowledge fact from knowledge graph (≤2 sentences)"
+      category: "optional"
+      condition: "knowledge_available AND response_allows_educational_content"
+      format: |
+        ### 💡 Did You Know?
+        
+        {{knowledge_fact}}
+      variables:
+        - knowledge_fact: "Context-aware fact from ContextAwareKnowledgeSelector"
+      priority: 60  # Between cautions and achievements
+      frequency: "25% of responses (avoid fatigue)"
+      sources:
+        - "knowledge-graph.yaml (54+ patterns)"
+        - "conversation-context.jsonl (user history)"
+        - "brain-protection-rules.yaml (SKULL rules)"
+        - "lessons-learned.yaml (retrospectives)"
+      selection_logic: |
+        1. Analyze active files, recent operations, conversation history
+        2. Extract context signals (file types, operations, persona)
+        3. Filter knowledge base by signals
+        4. Rank by relevance score (file:3, operation:2, conversation:2, persona:1)
+        5. Select top-ranked fact
+        6. Format to ≤2 sentences
+      examples:
+        developer_python: "Did you know? Use `mcp_pylance_mcp_s_pylanceRunCodeSnippet` instead of terminal commands - it auto-selects the correct Python interpreter and eliminates shell escaping issues."
+        developer_testing: "TDD Insight: CORTEX blocks implementation if tests don't fail first (TDD_ENFORCEMENT rule) - this prevents false positives that damage test suite integrity."
+        product_owner_planning: "Teams using CORTEX Planning reduce sprint planning time by 45% through Phase -1 governance consultation and automated Definition of Ready validation."
+        leadership_roi: "CORTEX autonomous operations (Vacuum, Maintenance, Investigation) save 8-12 hours per developer per week through intelligent automation."
+```
+
+**3. Integration with Persona Detection**
+```python
+# In template rendering
+def render_response(context: dict, orchestrator_type: str, persona: str) -> str:
+    blocks = select_blocks(context, orchestrator_type)
+    
+    # Inject "Did You Know?" block 25% of the time
+    if should_include_knowledge(context):
+        knowledge_selector = ContextAwareKnowledgeSelector()
+        fact = knowledge_selector.get_relevant_fact({
+            'active_files': context.get('active_files'),
+            'operation': orchestrator_type,
+            'persona': persona,
+            'recent_operations': context.get('recent_operations'),
+        })
+        
+        if fact:
+            blocks.insert_before('next_steps', {
+                'type': 'did_you_know',
+                'content': fact
+            })
+    
+    return render_blocks(blocks, context)
+```
+
+#### Tasks
+- [ ] Design ContextAwareKnowledgeSelector class
+- [ ] Create knowledge fact database (file triggers, operation triggers, persona facts)
+- [ ] Implement context signal extraction
+- [ ] Build relevance scoring algorithm
+- [ ] Add "did_you_know" block to response-templates-v4.yaml
+- [ ] Integrate with template rendering system
+- [ ] Create 50+ knowledge facts across categories
+- [ ] Write unit tests for fact selection
+- [ ] Test with different personas and contexts
+- [ ] Add frequency limiting (25% of responses)
+- [ ] Create analytics tracking for fact engagement
+
+**Deliverables:**
+- ContextAwareKnowledgeSelector module
+- Knowledge fact database (50+ facts)
+- Response template block definition
+- Unit tests (>90% coverage)
+- Integration with persona detection
+- Analytics tracking implementation
+
+---
+
+### Phase 7: Integration & Testing (Day 7)
 **Status:** 🔴 not_started
 
 #### Integration Points
@@ -321,19 +594,22 @@ persona_scores = {
 - Connect to onboarding system
 - Link to demo/tutorial content
 - Enable analytics tracking
+- Deploy "Did You Know?" knowledge selector
 
 #### Testing Strategy
-- **Unit Tests** - Persona detection accuracy
-- **Integration Tests** - Template rendering
-- **User Tests** - Relevance and satisfaction
-- **A/B Tests** - Template variations
+- **Unit Tests** - Persona detection accuracy, knowledge fact selection
+- **Integration Tests** - Template rendering, "Did You Know?" integration
+- **User Tests** - Relevance and satisfaction for templates and knowledge facts
+- **A/B Tests** - Template variations, knowledge fact frequency (15%/25%/35%)
 
 #### Tasks
 - [ ] Integrate templates into response system
 - [ ] Connect persona detection to router
+- [ ] Deploy ContextAwareKnowledgeSelector
 - [ ] Write integration tests
+- [ ] Test knowledge fact relevance across contexts
 - [ ] Conduct user testing (5-10 users per persona)
-- [ ] Run A/B tests on template variations
+- [ ] Run A/B tests on template variations and fact frequency
 - [ ] Gather feedback and iterate
 - [ ] Final quality review
 
@@ -353,6 +629,9 @@ persona_scores = {
 - **Engagement Rate:** >70% continue conversation after intro
 - **Follow-Up Rate:** >50% ask follow-up questions
 - **Conversion Rate:** >60% proceed to onboarding/demos
+- **Knowledge Fact Relevance:** >80% users find facts useful
+- **Fact Engagement:** >30% users ask follow-up questions about facts
+- **Context Accuracy:** >75% facts match user's current activity
 
 ### Qualitative
 - Introduction feels personalized and relevant
@@ -360,6 +639,8 @@ persona_scores = {
 - Language and tone match user expectations
 - Clear understanding of value proposition
 - Confidence to explore further
+- Knowledge facts feel timely and actionable
+- Educational content enhances (not distracts) workflow
 
 ---
 
@@ -462,10 +743,14 @@ CORTEX: [Asks clarifying question about role/goals]
 - [ ] 3 persona introduction templates complete
 - [ ] Persona detection algorithm implemented and tested
 - [ ] 17 follow-up response patterns written
+- [ ] ContextAwareKnowledgeSelector implemented
+- [ ] 50+ knowledge facts created across categories
+- [ ] "Did You Know?" block added to response-templates-v4.yaml
+- [ ] Knowledge fact selection achieves >75% context accuracy
 - [ ] Integration with response-templates-v4.yaml complete
 - [ ] Unit tests written (>90% coverage)
 - [ ] User testing completed (positive feedback)
-- [ ] A/B testing results analyzed
+- [ ] A/B testing results analyzed (templates + fact frequency)
 - [ ] Analytics tracking operational
 - [ ] Documentation updated
 - [ ] Deployment to production

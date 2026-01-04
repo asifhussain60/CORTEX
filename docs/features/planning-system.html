@@ -32,6 +32,42 @@ button, a, input, select, textarea, [role="button"] {
     <link rel="stylesheet" href="../assets/css/main.css">
     <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <link rel="icon" href="../assets/images/CORTEX-logo.png" type="image/png">
+<style>
+        /* REFERENCE Theme - Level 2 */
+        .level2-reference {
+            --theme-primary: #00bfff;
+            --theme-accent: #7c7cff;
+            --theme-success: #00ff88;
+            --theme-warning: #ffd700;
+            --theme-glow: rgba(0, 191, 255, 0.25);
+            
+            /* Apply to glass effects */
+            --glass-border-color: #00bfff33;
+            --pulse-glow-color: rgba(0, 191, 255, 0.25);
+        }
+        
+        /* Themed glass cards */
+        .level2-reference .glass-card-clickable:hover {
+            border-color: #00bfff66;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37),
+                        0 0 30px rgba(0, 191, 255, 0.25);
+        }
+        
+        /* Themed icons */
+        .level2-reference .pulse-glow-glass--fast {
+            filter: drop-shadow(0 0 10px rgba(0, 191, 255, 0.25));
+        }
+        
+        /* Themed metric tiles */
+        .level2-reference .token-metric-tile {
+            border-color: #00bfff33;
+        }
+        
+        .level2-reference .token-metric-tile:hover {
+            border-color: #00bfff66;
+            background: #00bfff11;
+        }
+</style>
 </head>
 <body>
     <!-- Breadcrumb -->

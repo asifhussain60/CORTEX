@@ -84,6 +84,42 @@ button, a, input, select, textarea, [role="button"] {
             box-shadow: var(--shadow, 0 8px 32px rgba(0, 0, 0, 0.37));
         }
     </style>
+<style>
+        /* ORCHESTRATORS Theme - Level 1 */
+        .level1-orchestrators {
+            --theme-primary: #00d4ff;
+            --theme-accent: #7c7cff;
+            --theme-success: #00ff88;
+            --theme-warning: #ffd700;
+            --theme-glow: rgba(0, 212, 255, 0.3);
+            
+            /* Apply to glass effects */
+            --glass-border-color: #00d4ff33;
+            --pulse-glow-color: rgba(0, 212, 255, 0.3);
+        }
+        
+        /* Themed glass cards */
+        .level1-orchestrators .glass-card-clickable:hover {
+            border-color: #00d4ff66;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37),
+                        0 0 30px rgba(0, 212, 255, 0.3);
+        }
+        
+        /* Themed icons */
+        .level1-orchestrators .pulse-glow-glass--fast {
+            filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.3));
+        }
+        
+        /* Themed metric tiles */
+        .level1-orchestrators .token-metric-tile {
+            border-color: #00d4ff33;
+        }
+        
+        .level1-orchestrators .token-metric-tile:hover {
+            border-color: #00d4ff66;
+            background: #00d4ff11;
+        }
+</style>
 </head>
 <body class="level1-integration-icon-container">
     <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -125,7 +161,7 @@ button, a, input, select, textarea, [role="button"] {
         <p class="level1-integration-icon-container">Autonomous Workflow Coordinators - 10 Core Orchestrators · 5 Categories</p>
     </header>
     
-    <main id="main-content" class="level1-integration-icon-container">
+    <main id="main-content" class="level1-integration-icon-container level1-orchestrators">
         <!-- Page Title Card with Tetris Metrics -->
         <section class="glass-card-display">
             <div class="page-title-section">

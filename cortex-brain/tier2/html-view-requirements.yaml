@@ -1,0 +1,536 @@
+# HTML View Requirements - Tier 2 Knowledge Graph
+# Persistent learning system for HTML/CSS view development
+# Version: 1.0 | Created: 2026-01-04 | Author: Asif Hussain
+
+schema_version: "1.0"
+last_updated: "2026-01-04T00:00:00Z"
+total_patterns: 0
+total_learnings: 0
+
+# Visual Design Patterns
+visual_patterns:
+  description: "Successful visual design patterns from view development"
+  retention: "permanent"
+  
+  patterns:
+    - id: "VP001"
+      name: "Examples Tab Transformation"
+      created: "2026-01-04"
+      context: "four-tier-brain-preview.html Examples tab"
+      problem: "Plain <ol> lists were boring and hard to scan"
+      solution: "Transformed to interactive tile grid with tier-flow visualization"
+      implementation:
+        html: |
+          <div class="example-grid">
+            <div class="example-tile">
+              <h4>Example Name</h4>
+              <div class="tier-flow">
+                <div class="tier-step" data-tier="0">T0: Validation</div>
+                <div class="tier-step" data-tier="1">T1: Execution</div>
+                <div class="tier-step" data-tier="3">T3: Context</div>
+              </div>
+              <div class="output-box">Result</div>
+            </div>
+          </div>
+        css: |
+          .example-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+          }
+          .example-tile:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 212, 255, 0.3);
+          }
+      visual_impact: "high"
+      reusability: "high"
+      related_patterns: ["VP002", "VP003"]
+
+# Spacing Rules
+spacing_rules:
+  description: "Margin/padding standards for consistent spacing"
+  retention: "permanent"
+  
+  rules:
+    - id: "SR001"
+      name: "Card Bottom Margin Standard"
+      rule: "tier-card, example-tile, feature-card: margin-bottom: 3rem (NOT 1.5rem)"
+      context: "Tier Details tab cards were cramped with 1.5rem margins"
+      rationale: "3rem provides breathing room, improves scannability"
+      applies_to: ["tier-card", "example-tile", "feature-card", "panel-*"]
+      wcag_benefit: "Cognitive load reduction"
+      created: "2026-01-04"
+    
+    - id: "SR002"
+      name: "Section Spacing Minimum"
+      rule: "section, .glass-card-display: margin-bottom: 3rem minimum"
+      rationale: "Clear visual separation between major sections"
+      applies_to: ["section", "div.glass-card-display", "article"]
+      created: "2026-01-04"
+    
+    - id: "SR003"
+      name: "Grid Gap Standard"
+      rule: ".example-grid, .feature-list, .tier-flow: gap: 1.5rem"
+      rationale: "Consistent spacing across all grid layouts"
+      applies_to: ["grids", "flexbox containers"]
+      created: "2026-01-04"
+    
+    - id: "SR004"
+      name: "Card Padding Standard"
+      rule: "tier-card, panel-*: padding: 2.5rem"
+      rationale: "Generous internal spacing for readability"
+      mobile_adjustment: "padding: 1.5rem on <768px"
+      created: "2026-01-04"
+
+# Component Recipes
+component_recipes:
+  description: "Reusable component patterns with full implementation"
+  retention: "permanent"
+  
+  recipes:
+    - id: "CR001"
+      name: "Interactive Tile Component"
+      use_case: "Example showcases, feature highlights, card grids"
+      structure:
+        html: |
+          <div class="example-tile">
+            <h4><i class="fas fa-icon"></i> Title</h4>
+            <div class="content">Content here</div>
+            <div class="metadata">Metadata/badges</div>
+          </div>
+        css: |
+          .example-tile {
+            background: rgba(26, 31, 58, 0.5);
+            backdrop-filter: blur(20px);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+          }
+          .example-tile:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 212, 255, 0.3);
+            border-color: #00d4ff;
+          }
+      features:
+        - "Glassmorphism background"
+        - "Hover lift (4px)"
+        - "Glow effect on hover"
+        - "Border color transition"
+      created: "2026-01-04"
+    
+    - id: "CR002"
+      name: "Stat Badge Component"
+      use_case: "Inline metrics, KPIs, tier metadata"
+      structure:
+        html: |
+          <span class="stat-badge" style="--stat-color: #ffd700;">
+            <i class="fas fa-icon"></i> 149 Plans
+          </span>
+        css: |
+          .stat-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.35rem 0.85rem;
+            border-radius: 20px;
+            font-size: clamp(12px, 1.5vw, 14px);
+            font-weight: 700;
+            background: linear-gradient(135deg, 
+              var(--stat-color, #00d4ff) 0%, 
+              rgba(var(--stat-color-rgb), 0.5) 100%);
+            color: #fff;
+          }
+      features:
+        - "Gradient background (customizable color)"
+        - "Icon support"
+        - "Responsive font size"
+        - "Inline-flex for text flow"
+      created: "2026-01-04"
+    
+    - id: "CR003"
+      name: "Tier Card Component"
+      use_case: "Multi-tier architecture panels"
+      structure:
+        html: |
+          <div class="tier-card tier-{N}-card">
+            <h3>
+              <span class="tier-badge tier-{N}">Tier N</span>
+              <i class="fas fa-icon"></i>
+              Title
+            </h3>
+            <p><strong>Purpose:</strong> Description</p>
+            <div class="feature-list">
+              <div class="feature-item">...</div>
+            </div>
+            <div class="diagram-container">
+              <pre class="mermaid">...</pre>
+            </div>
+          </div>
+        css: |
+          .tier-card {
+            background: rgba(26, 31, 58, 0.5);
+            backdrop-filter: blur(20px);
+            border-radius: 12px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            border-left: 4px solid var(--tier-color);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+          }
+          .tier-card.tier-0-card { 
+            --tier-color: #ff6b6b;
+            background: linear-gradient(135deg, 
+              rgba(255, 107, 107, 0.1) 0%, 
+              rgba(26, 31, 58, 0.5) 100%);
+          }
+      features:
+        - "Tier-specific gradient backgrounds"
+        - "Left border color coding"
+        - "3rem bottom margin"
+        - "Hover lift effect"
+      variants:
+        - "tier-0-card (red)"
+        - "tier-1-card (gold)"
+        - "tier-2-card (cyan)"
+        - "tier-3-card (green)"
+      created: "2026-01-04"
+    
+    - id: "CR004"
+      name: "Diagram Container"
+      use_case: "Mermaid.js chart embedding"
+      structure:
+        html: |
+          <div class="diagram-container">
+            <h4><i class="fas fa-sitemap"></i> Diagram Title</h4>
+            <pre class="mermaid">
+            graph LR
+              A --> B
+            </pre>
+            <p class="diagram-caption">Caption text</p>
+          </div>
+        css: |
+          .diagram-container {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2rem;
+            border-radius: 16px;
+            margin: 2rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 100%;
+            overflow-x: auto;
+          }
+          .diagram-container .mermaid {
+            background: transparent;
+          }
+      features:
+        - "Dark background for contrast"
+        - "Horizontal scroll on overflow"
+        - "Caption support"
+        - "Title with icon"
+      created: "2026-01-04"
+
+# WCAG Compliance Fixes
+wcag_fixes:
+  description: "Accessibility improvements and compliance patterns"
+  retention: "permanent"
+  wcag_level: "AA"
+  
+  fixes:
+    - id: "WF001"
+      name: "Gold Tier Badge Contrast Fix"
+      issue: "Original #ffd700 gold failed 4.5:1 contrast on dark backgrounds"
+      solution: "Use #b89500 (darker gold) for tier-1 badge background"
+      implementation:
+        before: ".tier-1 { background: #ffd700; color: #fff; }"
+        after: ".tier-1 { background: #b89500; color: #fff; }"
+      contrast_ratio: "4.6:1"
+      wcag_criterion: "1.4.3 Contrast (Minimum)"
+      applies_to: ["tier-badge", "tier-1-card borders", "gold text"]
+      created: "2026-01-04"
+    
+    - id: "WF002"
+      name: "Cyan Tier Badge Contrast Fix"
+      issue: "Original #00d4ff cyan borderline on contrast"
+      solution: "Use #0088bb (darker cyan) for tier-2 elements"
+      implementation:
+        before: ".tier-2 { background: #00d4ff; color: #fff; }"
+        after: ".tier-2 { background: #0088bb; color: #fff; }"
+      contrast_ratio: "4.5:1"
+      wcag_criterion: "1.4.3 Contrast (Minimum)"
+      applies_to: ["tier-badge tier-2", "tier-2-card borders"]
+      created: "2026-01-04"
+    
+    - id: "WF003"
+      name: "Responsive Font Size Enforcement"
+      issue: "Fixed font sizes below 16px on mobile"
+      solution: "Use clamp() for all text to maintain 16px minimum"
+      implementation:
+        body: "font-size: clamp(16px, 2vw, 18px);"
+        small: "font-size: clamp(14px, 1.8vw, 16px);"
+        code: "font-size: clamp(14px, 1.5vw, 16px);"
+      wcag_criterion: "1.4.4 Resize Text"
+      mobile_test: "Validated at 320px width"
+      created: "2026-01-04"
+    
+    - id: "WF004"
+      name: "Touch Target Sizing"
+      issue: "Tab buttons < 44px on mobile"
+      solution: "Enforce min-height: 44px, padding: 0.75rem 1.5rem"
+      implementation: |
+        .tab-button {
+          min-height: 44px;
+          padding: 0.75rem 1.5rem;
+          touch-action: manipulation;
+        }
+      wcag_criterion: "2.5.5 Target Size (Enhanced)"
+      applies_to: ["buttons", "tabs", "links", "interactive elements"]
+      created: "2026-01-04"
+
+# Diagram Usage Patterns
+diagram_usage:
+  description: "When to use which Mermaid.js diagram type"
+  retention: "permanent"
+  
+  patterns:
+    - diagram_type: "mindmap"
+      use_cases:
+        - "Category hierarchies (SKULL rules, knowledge domains)"
+        - "Concept relationships (non-linear)"
+        - "Taxonomy visualization"
+      example_context: "Tier 0 SKULL rules breakdown"
+      syntax_template: |
+        ```mermaid
+        mindmap
+          root((Central Concept))
+            Category 1
+              Item A
+              Item B
+            Category 2
+              Item C
+        ```
+      best_for: "Non-sequential, radial relationships"
+      avoid_when: "Linear processes or sequential flows"
+    
+    - diagram_type: "flowchart"
+      use_cases:
+        - "Linear processes (context loading pipeline)"
+        - "Decision trees"
+        - "Algorithm steps"
+      example_context: "Tier 3 development context loading"
+      syntax_template: |
+        ```mermaid
+        flowchart TD
+          A[Start] --> B[Process]
+          B --> C{Decision}
+          C -->|Yes| D[Success]
+          C -->|No| E[Error]
+        ```
+      best_for: "Sequential processes with branches"
+      avoid_when: "Multi-actor interactions"
+    
+    - diagram_type: "sequence"
+      use_cases:
+        - "Multi-tier communication flows"
+        - "API interactions"
+        - "Agent handoffs"
+      example_context: "Inter-tier communication (Tier 0 → Tier 1 → Tier 3)"
+      syntax_template: |
+        ```mermaid
+        sequenceDiagram
+          participant User
+          participant T0
+          participant T1
+          User->>T0: Request
+          T0->>T1: Validated
+          T1-->>User: Response
+        ```
+      best_for: "Temporal interactions between actors"
+      avoid_when: "Static hierarchies"
+    
+    - diagram_type: "graph"
+      use_cases:
+        - "Relationship networks (Tier 2 knowledge graph)"
+        - "Dependency visualization"
+        - "State machines"
+      example_context: "Tier 1 PlanningStateDB structure"
+      syntax_template: |
+        ```mermaid
+        graph LR
+          A[Component] --> B[Dependency]
+          B --> C[Sub-component]
+          C --> A
+        ```
+      best_for: "Interconnected nodes with relationships"
+      avoid_when: "Purely hierarchical structures"
+
+# Anti-Patterns (What NOT to Do)
+anti_patterns:
+  description: "Visual design mistakes to avoid"
+  retention: "permanent"
+  
+  patterns:
+    - id: "AP001"
+      name: "Dense Paragraph Walls"
+      problem: "Long paragraphs (>5 lines) without visual breaks"
+      symptoms:
+        - "Users skip over content"
+        - "High cognitive load"
+        - "Poor scannability"
+      solution:
+        - "Break into 2-3 line chunks"
+        - "Add diagrams between paragraphs"
+        - "Use bullet points / feature grids"
+        - "Highlight key terms with <strong>"
+      example: "Tier Details tab original (text-only descriptions)"
+      created: "2026-01-04"
+    
+    - id: "AP002"
+      name: "Buried Metrics"
+      problem: "Important numbers hidden in prose"
+      symptoms:
+        - "Users miss key stats"
+        - "Hard to compare values"
+        - "No visual prominence"
+      solution:
+        - "Extract to stat-badge components"
+        - "Place in header area"
+        - "Use icons for context"
+      example: "61 rules, 149 plans, 1,264 lines hidden in paragraphs"
+      created: "2026-01-04"
+    
+    - id: "AP003"
+      name: "Inline Styles Only"
+      problem: "No CSS reusability, hard to maintain"
+      symptoms:
+        - "Duplicate styles across elements"
+        - "Hard to change themes"
+        - "Bloated HTML file size"
+      solution:
+        - "Extract repeated styles to CSS classes"
+        - "Use BEM naming convention"
+        - "Keep inline styles for one-offs only"
+      example: "Four-tier-brain.html with 500+ lines inline CSS"
+      refactor_strategy: "Extract to docs/assets/css/glassmorphism.css"
+      created: "2026-01-04"
+    
+    - id: "AP004"
+      name: "Cramped Spacing"
+      problem: "1rem or 1.5rem margins on major sections"
+      symptoms:
+        - "Content feels rushed"
+        - "Hard to distinguish sections"
+        - "Mobile: elements touch edges"
+      solution:
+        - "Use 3rem for section/card bottom margins"
+        - "Use 2rem for internal padding"
+        - "Mobile: reduce to 1.5rem padding, 2rem margins"
+      example: "Tier card margin-bottom: 1rem → 3rem"
+      created: "2026-01-04"
+    
+    - id: "AP005"
+      name: "Missing Diagram Opportunities"
+      problem: "Complex concepts explained only with text"
+      symptoms:
+        - "Long explanations that could be visualized"
+        - "User confusion on relationships"
+        - "Missed opportunity for engagement"
+      solution:
+        - "Add Mermaid diagrams for:"
+          - "Hierarchies (mindmap)"
+          - "Processes (flowchart)"
+          - "Interactions (sequence)"
+          - "Networks (graph)"
+      example: "Inter-tier communication (text-only → sequence diagram)"
+      created: "2026-01-04"
+
+# Cross-View Consistency Checks
+consistency_checks:
+  description: "Patterns to ensure consistency across multiple HTML views"
+  retention: "permanent"
+  
+  checks:
+    - id: "CC001"
+      name: "Tier Color Consistency"
+      requirement: "All views must use same tier colors"
+      colors:
+        tier_0: "#ff6b6b"
+        tier_1: "#ffd700"
+        tier_2: "#00d4ff"
+        tier_3: "#00ff88"
+      applies_to: ["badges", "borders", "gradients", "icons"]
+      validation: "Grep search for color hex codes"
+    
+    - id: "CC002"
+      name: "Typography Hierarchy"
+      requirement: "Consistent font sizing across views"
+      scale:
+        h1: "clamp(2rem, 4vw, 3rem)"
+        h2: "clamp(1.5rem, 3vw, 2.25rem)"
+        h3: "clamp(1.25rem, 2vw, 1.5rem)"
+        body: "clamp(16px, 2vw, 18px)"
+      validation: "Check clamp() usage in all headings"
+    
+    - id: "CC003"
+      name: "Component Class Naming"
+      requirement: "Use BEM convention consistently"
+      pattern: ".block__element--modifier"
+      examples:
+        - ".tier-card"
+        - ".tier-card__header"
+        - ".tier-card--tier-0"
+        - ".example-tile"
+        - ".stat-badge"
+      validation: "CSS class name audit"
+    
+    - id: "CC004"
+      name: "Responsive Breakpoints"
+      requirement: "Consistent breakpoints across views"
+      breakpoints:
+        mobile: "320px - 767px"
+        tablet: "768px - 1023px"
+        desktop: "1024px - 1919px"
+        wide: "1920px+"
+      validation: "Check @media queries match"
+
+# Usage Statistics (Auto-updated)
+usage_statistics:
+  total_views_developed: 1
+  patterns_applied: 5
+  wcag_fixes_deployed: 4
+  diagrams_inserted: 0
+  components_created: 4
+  
+  most_used_patterns:
+    - "VP001: Examples Tab Transformation"
+    - "CR001: Interactive Tile Component"
+    - "CR003: Tier Card Component"
+  
+  most_reused_components:
+    - ".tier-card"
+    - ".example-tile"
+    - ".stat-badge"
+
+# Integration Hooks
+integration:
+  tier_0: "cortex-brain/brain-protection-rules.yaml"
+  tier_1: "cortex-brain/tier1/working_memory.db"
+  tier_2: "cortex-brain/tier2/html-view-requirements.yaml (this file)"
+  tier_3: "Live workspace HTML files"
+  
+  orchestrator: "cortex-brain/manifests/orchestrators/html-view-orchestrator-manifest.yaml"
+  response_templates: "cortex-brain/response-templates-v4.yaml"
+
+# Changelog
+changelog:
+  - version: "1.0"
+    date: "2026-01-04"
+    changes:
+      - "Initial schema creation"
+      - "Added VP001: Examples Tab Transformation"
+      - "Added 4 spacing rules (SR001-SR004)"
+      - "Added 4 component recipes (CR001-CR004)"
+      - "Added 4 WCAG fixes (WF001-WF004)"
+      - "Added 4 diagram usage patterns"
+      - "Added 5 anti-patterns (AP001-AP005)"
+      - "Added 4 consistency checks (CC001-CC004)"

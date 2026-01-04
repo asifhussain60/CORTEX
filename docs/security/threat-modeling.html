@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <style>
@@ -26,57 +27,55 @@ button, a, input, select, textarea, [role="button"] {
     -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 </style>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="CORTEX Threat Modeling - STRIDE Methodology, Attack Surface Analysis, and Threat Assessment">
-    <meta name="keywords" content="CORTEX, threat modeling, STRIDE, attack surface, security assessment">
-    <meta name="author" content="Asif Hussain">
-    <title>Threat Modeling - CORTEX Security</title>
-    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo-64.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="CORTEX Threat Modeling - STRIDE Methodology, Attack Surface Analysis, and Threat Assessment" name="description"/>
+<meta content="CORTEX, threat modeling, STRIDE, attack surface, security assessment" name="keywords"/>
+<meta content="Asif Hussain" name="author"/>
+<title>Threat Modeling - CORTEX Security</title>
+<link href="../assets/images/CORTEX-logo-64.png" rel="icon" type="image/png"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="../assets/css/main.css" rel="stylesheet"/>
+<link href="../assets/css/intentional-classes.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
-    <!-- Glass Header (Level 1 - No Logo) -->
-    <header class="glass-header">
-        <div class="header-content">
-            <nav class="header-nav" mobile-nav-optimized>
-                <a href="../index.html" class="nav-link" mobile-nav-optimized><i class="fas fa-home pulse-glow-glass--fast"></i> Home</a>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="hero-section">
-        <div class="hero-content">
-            <div class="hero-icon">
-                <i class="fas fa-bullseye pulse-glow-glass--fast"></i>
-            </div>
-            <h1 class="hero-title">Threat Modeling</h1>
-            <p class="hero-subtitle">
+<!-- Glass Header (Level 1 - No Logo) -->
+<header class="glass-header">
+<div class="header-content">
+<nav class="header-nav" mobile-nav-optimized="">
+<a class="nav-link" href="../index.html" mobile-nav-optimized=""><i class="fas fa-home pulse-glow-glass--fast"></i> Home</a>
+</nav>
+</div>
+</header>
+<!-- Hero Section -->
+<section class="hero-section">
+<div class="hero-content">
+<div class="hero-icon">
+<i class="fas fa-bullseye pulse-glow-glass--fast"></i>
+</div>
+<h1 class="hero-title">Threat Modeling</h1>
+<p class="hero-subtitle">
                 Systematic identification and mitigation of security threats using STRIDE methodology, 
                 attack surface analysis, and comprehensive threat assessment workflows.
             </p>
-        </div>
-    </section>
-
-    <!-- Main Content -->
-    <main class="content-section">
-        <!-- STRIDE Framework -->
-        <article class="glass-card-display animation-t1">
-            <div class="card-header-with-icon">
-                <i class="fas fa-diagram-project pulse-glow-glass--fast"></i>
-                <h2 class="card-title">STRIDE Threat Categories</h2>
-            </div>
-            <p class="card-description">
+</div>
+</section>
+<!-- Main Content -->
+<main class="content-section">
+<!-- STRIDE Framework -->
+<article class="glass-card-display animation-t1">
+<div class="card-header-with-icon">
+<i class="fas fa-diagram-project pulse-glow-glass--fast"></i>
+<h2 class="card-title">STRIDE Threat Categories</h2>
+</div>
+<p class="card-description">
                 STRIDE is a comprehensive threat modeling framework that categorizes threats into six key areas. 
                 Each category represents a specific type of security vulnerability that must be addressed.
             </p>
-            <div class="visualization-container">
-                <div class="mermaid">
+<div class="visualization-container">
+<div class="mermaid">
 graph TB
     subgraph "STRIDE Threat Categories"
         S[🎭 Spoofing<br/>Identity Impersonation]
@@ -87,19 +86,19 @@ graph TB
         E[⬆️ Elevation of Privilege<br/>Unauthorized Access]
     end
     
-    S --> AUTH[Authentication Required]
-    T --> INTEGRITY[Integrity Controls]
-    R --> AUDIT[Audit Logging]
-    I --> ENCRYPTION[Encryption/Access Control]
-    D --> RESILIENCE[Resilience Measures]
-    E --> AUTHORIZATION[Authorization Controls]
+    S --&gt; AUTH[Authentication Required]
+    T --&gt; INTEGRITY[Integrity Controls]
+    R --&gt; AUDIT[Audit Logging]
+    I --&gt; ENCRYPTION[Encryption/Access Control]
+    D --&gt; RESILIENCE[Resilience Measures]
+    E --&gt; AUTHORIZATION[Authorization Controls]
     
-    AUTH --> MITIGATE[Mitigation Strategies]
-    INTEGRITY --> MITIGATE
-    AUDIT --> MITIGATE
-    ENCRYPTION --> MITIGATE
-    RESILIENCE --> MITIGATE
-    AUTHORIZATION --> MITIGATE
+    AUTH --&gt; MITIGATE[Mitigation Strategies]
+    INTEGRITY --&gt; MITIGATE
+    AUDIT --&gt; MITIGATE
+    ENCRYPTION --&gt; MITIGATE
+    RESILIENCE --&gt; MITIGATE
+    AUTHORIZATION --&gt; MITIGATE
     
     style S fill:#ff6b9d,stroke:#fff,stroke-width:2px
     style T fill:#ffb84d,stroke:#fff,stroke-width:2px
@@ -108,29 +107,28 @@ graph TB
     style D fill:#00d4ff,stroke:#fff,stroke-width:2px
     style E fill:#2ecc71,stroke:#fff,stroke-width:2px
                 </div>
-            </div>
-        </article>
-
-        <!-- Threat Assessment Workflow -->
-        <article class="glass-card-display animation-t1">
-            <div class="card-header-with-icon">
-                <i class="fas fa-route pulse-glow-glass--fast"></i>
-                <h2 class="card-title">Threat Assessment Workflow</h2>
-            </div>
-            <p class="card-description">
+</div>
+</article>
+<!-- Threat Assessment Workflow -->
+<article class="glass-card-display animation-t1">
+<div class="card-header-with-icon">
+<i class="fas fa-route pulse-glow-glass--fast"></i>
+<h2 class="card-title">Threat Assessment Workflow</h2>
+</div>
+<p class="card-description">
                 A systematic approach to identifying, analyzing, and mitigating threats throughout the CORTEX ecosystem. 
                 This workflow ensures comprehensive coverage and continuous improvement.
             </p>
-            <div class="visualization-container">
-                <div class="mermaid">
+<div class="visualization-container">
+<div class="mermaid">
 flowchart LR
-    A[🎯 Identify Assets] --> B[🔍 Enumerate Threats]
-    B --> C[📊 Assess Risk]
-    C --> D[🛡️ Define Controls]
-    D --> E[✅ Validate Effectiveness]
-    E --> F[🔄 Continuous Monitoring]
+    A[🎯 Identify Assets] --&gt; B[🔍 Enumerate Threats]
+    B --&gt; C[📊 Assess Risk]
+    C --&gt; D[🛡️ Define Controls]
+    D --&gt; E[✅ Validate Effectiveness]
+    E --&gt; F[🔄 Continuous Monitoring]
     
-    F --> B
+    F --&gt; B
     
     style A fill:#7b61ff,stroke:#fff,stroke-width:2px
     style B fill:#ff6b9d,stroke:#fff,stroke-width:2px
@@ -139,136 +137,130 @@ flowchart LR
     style E fill:#00d4ff,stroke:#fff,stroke-width:2px
     style F fill:#00d4ff,stroke:#fff,stroke-width:2px
                 </div>
-            </div>
-        </article>
-
-        <!-- Interactive Threat Matrix -->
-        <article class="glass-card-display animation-t1">
-            <div class="card-header-with-icon">
-                <i class="fas fa-table-cells pulse-glow-glass--fast"></i>
-                <h2 class="card-title">Threat Likelihood × Impact Matrix</h2>
-            </div>
-            <p class="card-description">
+</div>
+</article>
+<!-- Interactive Threat Matrix -->
+<article class="glass-card-display animation-t1">
+<div class="card-header-with-icon">
+<i class="fas fa-table-cells pulse-glow-glass--fast"></i>
+<h2 class="card-title">Threat Likelihood × Impact Matrix</h2>
+</div>
+<p class="card-description">
                 Interactive heatmap showing the relationship between threat likelihood and impact. 
                 Hover over cells to see specific threat examples and recommended actions.
             </p>
-            <div class="visualization-container" id="threat-matrix"></div>
-        </article>
-
-        <!-- Attack Surface Visualization -->
-        <article class="glass-card-display animation-t1">
-            <div class="card-header-with-icon">
-                <i class="fas fa-network-wired pulse-glow-glass--fast"></i>
-                <h2 class="card-title">Attack Surface Visualization</h2>
-            </div>
-            <p class="card-description">
+<div class="visualization-container" id="threat-matrix"></div>
+</article>
+<!-- Attack Surface Visualization -->
+<article class="glass-card-display animation-t1">
+<div class="card-header-with-icon">
+<i class="fas fa-network-wired pulse-glow-glass--fast"></i>
+<h2 class="card-title">Attack Surface Visualization</h2>
+</div>
+<p class="card-description">
                 Force-directed graph showing CORTEX components and potential attack vectors. 
                 Drag nodes to explore connections, click to view detailed attack scenarios.
             </p>
-            <div class="visualization-container" id="attack-surface"></div>
-        </article>
-
-        <!-- STRIDE Application Guide -->
-        <article class="glass-card-display animation-t1">
-            <div class="card-header-with-icon">
-                <i class="fas fa-list-check pulse-glow-glass--fast"></i>
-                <h2 class="card-title">Applying STRIDE to CORTEX</h2>
-            </div>
-            <div class="principles-grid">
-                <div class="principle-card">
-                    <div class="principle-icon">🎭</div>
-                    <h3 class="principle-title">Spoofing</h3>
-                    <p class="principle-description">
-                        <strong>Threat:</strong> Attacker impersonates CORTEX user or service<br>
-                        <strong>Mitigation:</strong> Multi-factor authentication, API key rotation, JWT with short expiry
+<div class="visualization-container" id="attack-surface"></div>
+</article>
+<!-- STRIDE Application Guide -->
+<article class="glass-card-display animation-t1">
+<div class="card-header-with-icon">
+<i class="fas fa-list-check pulse-glow-glass--fast"></i>
+<h2 class="card-title">Applying STRIDE to CORTEX</h2>
+</div>
+<div class="principles-grid">
+<div class="principle-card">
+<div class="principle-icon">🎭</div>
+<h3 class="principle-title">Spoofing</h3>
+<p class="principle-description">
+<strong>Threat:</strong> Attacker impersonates CORTEX user or service<br/>
+<strong>Mitigation:</strong> Multi-factor authentication, API key rotation, JWT with short expiry
                     </p>
-                </div>
-                <div class="principle-card">
-                    <div class="principle-icon">🔄</div>
-                    <h3 class="principle-title">Tampering</h3>
-                    <p class="principle-description">
-                        <strong>Threat:</strong> Unauthorized modification of code, configs, or data<br>
-                        <strong>Mitigation:</strong> Git commit signing, file integrity monitoring, immutable audit logs
+</div>
+<div class="principle-card">
+<div class="principle-icon">🔄</div>
+<h3 class="principle-title">Tampering</h3>
+<p class="principle-description">
+<strong>Threat:</strong> Unauthorized modification of code, configs, or data<br/>
+<strong>Mitigation:</strong> Git commit signing, file integrity monitoring, immutable audit logs
                     </p>
-                </div>
-                <div class="principle-card">
-                    <div class="principle-icon">🚫</div>
-                    <h3 class="principle-title">Repudiation</h3>
-                    <p class="principle-description">
-                        <strong>Threat:</strong> User denies performing malicious action<br>
-                        <strong>Mitigation:</strong> Comprehensive audit logging, non-repudiation signatures, event correlation
+</div>
+<div class="principle-card">
+<div class="principle-icon">🚫</div>
+<h3 class="principle-title">Repudiation</h3>
+<p class="principle-description">
+<strong>Threat:</strong> User denies performing malicious action<br/>
+<strong>Mitigation:</strong> Comprehensive audit logging, non-repudiation signatures, event correlation
                     </p>
-                </div>
-                <div class="principle-card">
-                    <div class="principle-icon">📢</div>
-                    <h3 class="principle-title">Information Disclosure</h3>
-                    <p class="principle-description">
-                        <strong>Threat:</strong> Sensitive data exposed through logs, errors, or leaks<br>
-                        <strong>Mitigation:</strong> Data sanitization, encryption at rest/transit, minimal logging
+</div>
+<div class="principle-card">
+<div class="principle-icon">📢</div>
+<h3 class="principle-title">Information Disclosure</h3>
+<p class="principle-description">
+<strong>Threat:</strong> Sensitive data exposed through logs, errors, or leaks<br/>
+<strong>Mitigation:</strong> Data sanitization, encryption at rest/transit, minimal logging
                     </p>
-                </div>
-                <div class="principle-card">
-                    <div class="principle-icon">⛔</div>
-                    <h3 class="principle-title">Denial of Service</h3>
-                    <p class="principle-description">
-                        <strong>Threat:</strong> Resource exhaustion preventing legitimate use<br>
-                        <strong>Mitigation:</strong> Rate limiting, input validation, resource quotas, graceful degradation
+</div>
+<div class="principle-card">
+<div class="principle-icon">⛔</div>
+<h3 class="principle-title">Denial of Service</h3>
+<p class="principle-description">
+<strong>Threat:</strong> Resource exhaustion preventing legitimate use<br/>
+<strong>Mitigation:</strong> Rate limiting, input validation, resource quotas, graceful degradation
                     </p>
-                </div>
-                <div class="principle-card">
-                    <div class="principle-icon">⬆️</div>
-                    <h3 class="principle-title">Elevation of Privilege</h3>
-                    <p class="principle-description">
-                        <strong>Threat:</strong> Attacker gains higher permissions than authorized<br>
-                        <strong>Mitigation:</strong> Principle of least privilege, input validation, secure defaults
+</div>
+<div class="principle-card">
+<div class="principle-icon">⬆️</div>
+<h3 class="principle-title">Elevation of Privilege</h3>
+<p class="principle-description">
+<strong>Threat:</strong> Attacker gains higher permissions than authorized<br/>
+<strong>Mitigation:</strong> Principle of least privilege, input validation, secure defaults
                     </p>
-                </div>
-            </div>
-        </article>
-
-        <!-- Quick Links -->
-        <article class="glass-card-display animation-t1">
-            <div class="card-header-with-icon">
-                <i class="fas fa-link pulse-glow-glass--fast"></i>
-                <h2 class="card-title">Related Resources</h2>
-            </div>
-            <div class="quick-links-grid">
-                <a href="risk-assessment.html" class="quick-link-card">
-                    <i class="fas fa-chart-line pulse-glow-glass--fast"></i>
-                    <span>Risk Assessment</span>
-                </a>
-                <a href="vulnerability-assessment.html" class="quick-link-card">
-                    <i class="fas fa-bug pulse-glow-glass--fast"></i>
-                    <span>Vulnerability Assessment</span>
-                </a>
-                <a href="penetration-testing.html" class="quick-link-card">
-                    <i class="fas fa-user-secret pulse-glow-glass--fast"></i>
-                    <span>Penetration Testing</span>
-                </a>
-                <a href="incident-response.html" class="quick-link-card">
-                    <i class="fas fa-bell pulse-glow-glass--fast"></i>
-                    <span>Incident Response</span>
-                </a>
-            </div>
-        </article>
-    </main>
-
-    <!-- Glass Footer -->
-    <footer class="glass-footer">
-        <div class="footer-content">
-            <p class="footer-copyright">
+</div>
+</div>
+</article>
+<!-- Quick Links -->
+<article class="glass-card-display animation-t1">
+<div class="card-header-with-icon">
+<i class="fas fa-link pulse-glow-glass--fast"></i>
+<h2 class="card-title">Related Resources</h2>
+</div>
+<div class="quick-links-grid">
+<a class="quick-link-card" href="risk-assessment.html">
+<i class="fas fa-chart-line pulse-glow-glass--fast"></i>
+<span>Risk Assessment</span>
+</a>
+<a class="quick-link-card" href="vulnerability-assessment.html">
+<i class="fas fa-bug pulse-glow-glass--fast"></i>
+<span>Vulnerability Assessment</span>
+</a>
+<a class="quick-link-card" href="penetration-testing.html">
+<i class="fas fa-user-secret pulse-glow-glass--fast"></i>
+<span>Penetration Testing</span>
+</a>
+<a class="quick-link-card" href="incident-response.html">
+<i class="fas fa-bell pulse-glow-glass--fast"></i>
+<span>Incident Response</span>
+</a>
+</div>
+</article>
+</main>
+<!-- Glass Footer -->
+<footer class="glass-footer">
+<div class="footer-content">
+<p class="footer-copyright">
                 Copyright © 2026 Asif Hussain. All rights reserved.
             </p>
-            <div class="footer-links">
-                <a href="../index.html" class="footer-link">Home</a>
-                <a href="https://github.com/asifhussain60/CORTEX" class="footer-link" target="_blank">GitHub</a>
-                <a href="../documentation.html" class="footer-link">Documentation</a>
-            </div>
-            <p class="footer-version">CORTEX | Glassmorphism Design System</p>
-        </div>
-    </footer>
-
-    <script>
+<div class="footer-links">
+<a class="footer-link" href="../index.html">Home</a>
+<a class="footer-link" href="https://github.com/asifhussain60/CORTEX" target="_blank">GitHub</a>
+<a class="footer-link" href="../sts/documentation.html">Documentation</a>
+</div>
+<p class="footer-version">CORTEX | Glassmorphism Design System</p>
+</div>
+</footer>
+<script>
         // Initialize Mermaid
         mermaid.initialize({ 
             startOnLoad: true,

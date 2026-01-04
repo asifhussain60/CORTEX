@@ -32,6 +32,42 @@ button, a, input, select, textarea, [role="button"] {
     <link rel="stylesheet" href="../assets/css/main.css">
     <link rel="stylesheet" href="../assets/css/intentional-classes.css">
     <link rel="icon" href="../assets/images/CORTEX-logo.png" type="image/png">
+<style>
+        /* DASHBOARD Theme - Level 2 */
+        .level2-dashboard {
+            --theme-primary: #00ff88;
+            --theme-accent: #00d4ff;
+            --theme-success: #7c7cff;
+            --theme-warning: #ffd700;
+            --theme-glow: rgba(0, 255, 136, 0.25);
+            
+            /* Apply to glass effects */
+            --glass-border-color: #00ff8833;
+            --pulse-glow-color: rgba(0, 255, 136, 0.25);
+        }
+        
+        /* Themed glass cards */
+        .level2-dashboard .glass-card-clickable:hover {
+            border-color: #00ff8866;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37),
+                        0 0 30px rgba(0, 255, 136, 0.25);
+        }
+        
+        /* Themed icons */
+        .level2-dashboard .pulse-glow-glass--fast {
+            filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.25));
+        }
+        
+        /* Themed metric tiles */
+        .level2-dashboard .token-metric-tile {
+            border-color: #00ff8833;
+        }
+        
+        .level2-dashboard .token-metric-tile:hover {
+            border-color: #00ff8866;
+            background: #00ff8811;
+        }
+</style>
 </head>
 <body>
     <!-- Breadcrumb -->

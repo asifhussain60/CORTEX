@@ -1,0 +1,220 @@
+{
+  "files_modified": 27,
+  "total_fixed": 32,
+  "details": {
+    "index.html": [
+      {
+        "old_href": "../security/index.html",
+        "new_href": "archives/prototypes-20260103-101816/prototypes/toolkit-manager/index.html",
+        "link_text": "\ud83d\udee1\ufe0fSKULL Rules22 governance rules for code quality"
+      }
+    ],
+    "sitemap.html": [
+      {
+        "old_href": "../security/index.html",
+        "new_href": "archives/prototypes-20260103-101816/prototypes/toolkit-manager/index.html",
+        "link_text": "SKULL Rulebook Governance"
+      }
+    ],
+    "design-system\\glassmorphism-guide.html": [
+      {
+        "old_href": "index.html",
+        "new_href": "../archives/prototypes-20260103-101816/prototypes/toolkit-manager/index.html",
+        "link_text": "Read Migration Guide \u2192"
+      }
+    ],
+    "getting-started\\tutorial.html": [
+      {
+        "old_href": "../technical/orchestrators/refinement-orchestrator.html",
+        "new_href": "../orchestrators/refinement-orchestrator.html",
+        "link_text": "Learn more \u2192"
+      }
+    ],
+    "security\\access-control.html": [
+      {
+        "old_href": "../documentation.html",
+        "new_href": "../sts/documentation.html",
+        "link_text": "Documentation"
+      }
+    ],
+    "security\\audit-logging.html": [
+      {
+        "old_href": "../documentation.html",
+        "new_href": "../sts/documentation.html",
+        "link_text": "Documentation"
+      }
+    ],
+    "security\\data-protection.html": [
+      {
+        "old_href": "../documentation.html",
+        "new_href": "../sts/documentation.html",
+        "link_text": "Documentation"
+      }
+    ],
+    "security\\penetration-testing.html": [
+      {
+        "old_href": "../documentation.html",
+        "new_href": "../sts/documentation.html",
+        "link_text": "Documentation"
+      }
+    ],
+    "security\\risk-assessment.html": [
+      {
+        "old_href": "../documentation.html",
+        "new_href": "../sts/documentation.html",
+        "link_text": "Documentation"
+      }
+    ],
+    "security\\threat-modeling.html": [
+      {
+        "old_href": "../documentation.html",
+        "new_href": "../sts/documentation.html",
+        "link_text": "Documentation"
+      }
+    ],
+    "security\\vulnerability-assessment.html": [
+      {
+        "old_href": "../documentation.html",
+        "new_href": "../sts/documentation.html",
+        "link_text": "Documentation"
+      }
+    ],
+    "sts\\index.html": [
+      {
+        "old_href": "sts/code-quality.html",
+        "new_href": "code-quality.html",
+        "link_text": "View Details"
+      },
+      {
+        "old_href": "sts/solid-principles.html",
+        "new_href": "../knowledge/files/engineering/solid-principles.html",
+        "link_text": "View Details"
+      },
+      {
+        "old_href": "sts/testing-strategies.html",
+        "new_href": "testing-strategies.html",
+        "link_text": "View Details"
+      },
+      {
+        "old_href": "sts/performance-optimization.html",
+        "new_href": "../knowledge/frontend/performance-optimization.html",
+        "link_text": "View Details"
+      },
+      {
+        "old_href": "sts/security-best-practices.html",
+        "new_href": "security-best-practices.html",
+        "link_text": "View Details"
+      },
+      {
+        "old_href": "sts/documentation-guidelines.html",
+        "new_href": "documentation-guidelines.html",
+        "link_text": "View Details"
+      }
+    ],
+    "knowledge\\files\\files-hub.html": [
+      {
+        "old_href": "../files-hub.html",
+        "new_href": "files-hub.html",
+        "link_text": "Back to Overview"
+      }
+    ],
+    "archives\\orphaned-best-practices-20260103-102230\\coding-standards.html": [
+      {
+        "old_href": "../index.html",
+        "new_href": "../prototypes-20260103-101816/prototypes/toolkit-manager/index.html",
+        "link_text": "Back to Overview"
+      }
+    ],
+    "archives\\orphaned-best-practices-20260103-102230\\collaboration-patterns.html": [
+      {
+        "old_href": "../index.html",
+        "new_href": "../prototypes-20260103-101816/prototypes/toolkit-manager/index.html",
+        "link_text": "Back to Overview"
+      }
+    ],
+    "archives\\orphaned-best-practices-20260103-102230\\index.html": [
+      {
+        "old_href": "../index.html",
+        "new_href": "../prototypes-20260103-101816/prototypes/toolkit-manager/index.html",
+        "link_text": "Back to Overview"
+      }
+    ],
+    "archives\\orphaned-best-practices-20260103-102230\\planning-guidelines.html": [
+      {
+        "old_href": "../index.html",
+        "new_href": "../prototypes-20260103-101816/prototypes/toolkit-manager/index.html",
+        "link_text": "Back to Overview"
+      }
+    ],
+    "archives\\orphaned-knowledge-20260103-102230\\data-protection.html": [
+      {
+        "old_href": "../security-hub.html",
+        "new_href": "../../knowledge/security-hub.html",
+        "link_text": "Back to Overview"
+      }
+    ],
+    "archives\\orphaned-knowledge-20260103-102230\\index.html": [
+      {
+        "old_href": "../index.html",
+        "new_href": "../prototypes-20260103-101816/prototypes/toolkit-manager/index.html",
+        "link_text": "Back to Overview"
+      }
+    ],
+    "archives\\orphaned-knowledge-20260103-102230\\integration-testing.html": [
+      {
+        "old_href": "../testing-hub.html",
+        "new_href": "../../knowledge/testing-hub.html",
+        "link_text": "Back to Overview"
+      }
+    ],
+    "archives\\orphaned-knowledge-20260103-102230\\orm-best-practices.html": [
+      {
+        "old_href": "../database-hub.html",
+        "new_href": "../../knowledge/database-hub.html",
+        "link_text": "Back to Overview"
+      }
+    ],
+    "archives\\orphaned-knowledge-20260103-102230\\query-optimization.html": [
+      {
+        "old_href": "../performance-hub.html",
+        "new_href": "../../knowledge/performance-hub.html",
+        "link_text": "Back to Overview"
+      }
+    ],
+    "archives\\orphaned-knowledge-20260103-102230\\service-design.html": [
+      {
+        "old_href": "../microservices-hub.html",
+        "new_href": "../../knowledge/microservices-hub.html",
+        "link_text": "Back to Overview"
+      }
+    ],
+    "archives\\orphaned-knowledge-20260103-102230\\test-tabs.html": [
+      {
+        "old_href": "../index.html",
+        "new_href": "../prototypes-20260103-101816/prototypes/toolkit-manager/index.html",
+        "link_text": "Back to Overview"
+      }
+    ],
+    "archives\\validation-stubs-20260103-101816\\validation\\capabilities.html": [
+      {
+        "old_href": "../index.html",
+        "new_href": "../../prototypes-20260103-101816/prototypes/toolkit-manager/index.html",
+        "link_text": "Back to Overview"
+      }
+    ],
+    "archives\\validation-stubs-20260103-101816\\validation\\metrics.html": [
+      {
+        "old_href": "../index.html",
+        "new_href": "../../prototypes-20260103-101816/prototypes/toolkit-manager/index.html",
+        "link_text": "Back to Overview"
+      }
+    ],
+    "archives\\prototypes-20260103-101816\\prototypes\\index.html": [
+      {
+        "old_href": "../index.html",
+        "new_href": "toolkit-manager/index.html",
+        "link_text": "Back to Overview"
+      }
+    ]
+  }
+}

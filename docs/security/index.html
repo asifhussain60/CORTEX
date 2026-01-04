@@ -113,6 +113,42 @@ button, a, input, select, textarea, [role="button"] {
             color: var(--text-tertiary, rgba(255, 255, 255, 0.5));
         }
     </style>
+<style>
+        /* SECURITY Theme - Level 1 */
+        .level1-security {
+            --theme-primary: #ff6b6b;
+            --theme-accent: #ffd700;
+            --theme-success: #00ff88;
+            --theme-warning: #ff9f40;
+            --theme-glow: rgba(255, 107, 107, 0.3);
+            
+            /* Apply to glass effects */
+            --glass-border-color: #ff6b6b33;
+            --pulse-glow-color: rgba(255, 107, 107, 0.3);
+        }
+        
+        /* Themed glass cards */
+        .level1-security .glass-card-clickable:hover {
+            border-color: #ff6b6b66;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37),
+                        0 0 30px rgba(255, 107, 107, 0.3);
+        }
+        
+        /* Themed icons */
+        .level1-security .pulse-glow-glass--fast {
+            filter: drop-shadow(0 0 10px rgba(255, 107, 107, 0.3));
+        }
+        
+        /* Themed metric tiles */
+        .level1-security .token-metric-tile {
+            border-color: #ff6b6b33;
+        }
+        
+        .level1-security .token-metric-tile:hover {
+            border-color: #ff6b6b66;
+            background: #ff6b6b11;
+        }
+</style>
 </head>
 <body>
     <div class="stub-container">

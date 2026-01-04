@@ -1,20 +1,18 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CORTEX Glassmorphism Style Guide</title>
-    
-    <!-- Design System CSS -->
-    <link rel="stylesheet" href="../assets/css/cortex-glass-system.css">
-    <link rel="stylesheet" href="../assets/css/glass-performance.css">
-    
-    <!-- Font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CORTEX Glassmorphism Style Guide</title>
+<!-- Design System CSS -->
+<link href="../assets/css/cortex-glass-system.css" rel="stylesheet"/>
+<link href="../assets/css/glass-performance.css" rel="stylesheet"/>
+<!-- Font -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<style>
         * {
             margin: 0;
             padding: 0;
@@ -243,385 +241,387 @@
             margin-bottom: 0.5rem;
         }
     </style>
+<style>
+        /* REFERENCE Theme - Level 2 */
+        .level2-reference {
+            --theme-primary: #00bfff;
+            --theme-accent: #7c7cff;
+            --theme-success: #00ff88;
+            --theme-warning: #ffd700;
+            --theme-glow: rgba(0, 191, 255, 0.25);
+            
+            /* Apply to glass effects */
+            --glass-border-color: #00bfff33;
+            --pulse-glow-color: rgba(0, 191, 255, 0.25);
+        }
+        
+        /* Themed glass cards */
+        .level2-reference .glass-card-clickable:hover {
+            border-color: #00bfff66;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37),
+                        0 0 30px rgba(0, 191, 255, 0.25);
+        }
+        
+        /* Themed icons */
+        .level2-reference .pulse-glow-glass--fast {
+            filter: drop-shadow(0 0 10px rgba(0, 191, 255, 0.25));
+        }
+        
+        /* Themed metric tiles */
+        .level2-reference .token-metric-tile {
+            border-color: #00bfff33;
+        }
+        
+        .level2-reference .token-metric-tile:hover {
+            border-color: #00bfff66;
+            background: #00bfff11;
+        }
+</style>
 </head>
 <body>
-    <div class="guide-container">
-        <!-- Header -->
-        <header class="guide-header">
-            <h1>🎨 Glassmorphism Style Guide</h1>
-            <p>Complete documentation for CORTEX's glassmorphism design system</p>
-        </header>
-        
-        <!-- Navigation -->
-        <nav class="guide-nav">
-            <button class="guide-nav-btn" onclick="scrollToSection('getting-started')">Getting Started</button>
-            <button class="guide-nav-btn" onclick="scrollToSection('design-tokens')">Design Tokens</button>
-            <button class="guide-nav-btn" onclick="scrollToSection('named-panels')">Named Panels</button>
-            <button class="guide-nav-btn" onclick="scrollToSection('patterns')">Base Patterns</button>
-            <button class="guide-nav-btn" onclick="scrollToSection('components')">UI Components</button>
-            <button class="guide-nav-btn" onclick="scrollToSection('best-practices')">Best Practices</button>
-        </nav>
-        
-        <!-- Section 1: Getting Started -->
-        <section id="getting-started" class="guide-section">
-            <h2>🚀 Getting Started</h2>
-            
-            <div class="guide-card">
-                <h4>Installation</h4>
-                <p>Import the glassmorphism design system in your HTML:</p>
-                <div class="code-block">&lt;!-- Production (minified) --&gt;
+<div class="guide-container">
+<!-- Header -->
+<header class="guide-header">
+<h1>🎨 Glassmorphism Style Guide</h1>
+<p>Complete documentation for CORTEX's glassmorphism design system</p>
+</header>
+<!-- Navigation -->
+<nav class="guide-nav">
+<button class="guide-nav-btn" onclick="scrollToSection('getting-started')">Getting Started</button>
+<button class="guide-nav-btn" onclick="scrollToSection('design-tokens')">Design Tokens</button>
+<button class="guide-nav-btn" onclick="scrollToSection('named-panels')">Named Panels</button>
+<button class="guide-nav-btn" onclick="scrollToSection('patterns')">Base Patterns</button>
+<button class="guide-nav-btn" onclick="scrollToSection('components')">UI Components</button>
+<button class="guide-nav-btn" onclick="scrollToSection('best-practices')">Best Practices</button>
+</nav>
+<!-- Section 1: Getting Started -->
+<section class="guide-section" id="getting-started">
+<h2>🚀 Getting Started</h2>
+<div class="guide-card">
+<h4>Installation</h4>
+<p>Import the glassmorphism design system in your HTML:</p>
+<div class="code-block">&lt;!-- Production (minified) --&gt;
 &lt;link rel="stylesheet" href="assets/css/minified/cortex-glass-system.min.css"&gt;
 &lt;link rel="stylesheet" href="assets/css/glass-performance.css"&gt;
 
 &lt;!-- Development (full) --&gt;
 &lt;link rel="stylesheet" href="assets/css/cortex-glass-system.css"&gt;</div>
-            </div>
-            
-            <div class="guide-card">
-                <h4>Quick Example</h4>
-                <p>Create a glassmorphism card in seconds:</p>
-                <div class="code-block">&lt;div class="panel-intro"&gt;
+</div>
+<div class="guide-card">
+<h4>Quick Example</h4>
+<p>Create a glassmorphism card in seconds:</p>
+<div class="code-block">&lt;div class="panel-intro"&gt;
     &lt;h2&gt;Welcome to CORTEX&lt;/h2&gt;
     &lt;p&gt;AI-powered development assistant&lt;/p&gt;
 &lt;/div&gt;</div>
-                
-                <div class="example-preview">
-                    <div class="panel-intro" style="max-width: 600px;">
-                        <h2>Welcome to CORTEX</h2>
-                        <p>AI-powered development assistant with long-term memory and strategic planning capabilities.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Section 2: Design Tokens -->
-        <section id="design-tokens" class="guide-section">
-            <h2>🎨 Design Tokens</h2>
-            <p>CSS custom properties for consistent styling across the design system.</p>
-            
-            <h3>Blur Values</h3>
-            <table class="token-table">
-                <thead>
-                    <tr>
-                        <th>Token</th>
-                        <th>Value</th>
-                        <th>Use Case</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>--glass-blur-sm</td>
-                        <td>10px</td>
-                        <td>Standard cards, dropdowns, tooltips</td>
-                    </tr>
-                    <tr>
-                        <td>--glass-blur-md</td>
-                        <td>20px</td>
-                        <td>Hero sections, modals, emphasized panels</td>
-                    </tr>
-                    <tr>
-                        <td>--glass-blur-lg</td>
-                        <td>30px</td>
-                        <td>Overlays, backgrounds, high-emphasis</td>
-                    </tr>
-                </tbody>
-            </table>
-            
-            <h3>Background Colors</h3>
-            <table class="token-table">
-                <thead>
-                    <tr>
-                        <th>Token</th>
-                        <th>Value</th>
-                        <th>Alpha</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>--glass-bg-base</td>
-                        <td>rgba(255, 255, 255, 0.05)</td>
-                        <td>5%</td>
-                    </tr>
-                    <tr>
-                        <td>--glass-bg-hover</td>
-                        <td>rgba(255, 255, 255, 0.08)</td>
-                        <td>8%</td>
-                    </tr>
-                    <tr>
-                        <td>--glass-bg-active</td>
-                        <td>rgba(255, 255, 255, 0.12)</td>
-                        <td>12%</td>
-                    </tr>
-                </tbody>
-            </table>
-            
-            <h3>Border Styles</h3>
-            <table class="token-table">
-                <thead>
-                    <tr>
-                        <th>Token</th>
-                        <th>Value</th>
-                        <th>Use Case</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>--glass-border-subtle</td>
-                        <td>rgba(255, 255, 255, 0.1)</td>
-                        <td>Standard glass borders</td>
-                    </tr>
-                    <tr>
-                        <td>--glass-border-accent</td>
-                        <td>rgba(0, 212, 255, 0.3)</td>
-                        <td>Focused/highlighted elements</td>
-                    </tr>
-                    <tr>
-                        <td>--glass-border-neon</td>
-                        <td>rgba(123, 47, 247, 0.5)</td>
-                        <td>Neon glass panels</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-        
-        <!-- Section 3: Named Panels -->
-        <section id="named-panels" class="guide-section">
-            <h2>🎴 Named Panel Taxonomy</h2>
-            <p>11 semantic panel styles for consistent glassmorphism across CORTEX.</p>
-            
-            <div class="panel-showcase">
-                <div class="showcase-item panel-tetris">
-                    <span class="showcase-label">.panel-tetris</span>
-                    <div style="padding: 2rem;">
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                            <div style="background: rgba(0, 212, 255, 0.1); padding: 1rem; border-radius: 8px; text-align: center;">
-                                <div style="font-size: 2rem;">42</div>
-                                <div style="font-size: 0.85rem;">Agents</div>
-                            </div>
-                            <div style="background: rgba(123, 47, 247, 0.1); padding: 1rem; border-radius: 8px; text-align: center;">
-                                <div style="font-size: 2rem;">8</div>
-                                <div style="font-size: 0.85rem;">Active</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="showcase-item panel-intro">
-                    <span class="showcase-label">.panel-intro</span>
-                    <div style="padding: 2rem; text-align: center;">
-                        <h3>CORTEX Platform</h3>
-                        <p style="color: #94a3b8; margin-top: 0.5rem;">AI-powered development assistant</p>
-                    </div>
-                </div>
-                
-                <div class="showcase-item panel-compact-cards">
-                    <span class="showcase-label">.panel-compact-cards</span>
-                    <div style="padding: 2rem; display: flex; gap: 1rem;">
-                        <div style="flex: 1; background: rgba(255, 255, 255, 0.05); padding: 1rem; border-radius: 8px;">
-                            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">💡</div>
-                            <div style="font-size: 0.9rem;">Planning</div>
-                        </div>
-                        <div style="flex: 1; background: rgba(255, 255, 255, 0.05); padding: 1rem; border-radius: 8px;">
-                            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🔍</div>
-                            <div style="font-size: 0.9rem;">Analysis</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="guide-grid">
-                <div class="guide-card">
-                    <h4>panel-tetris</h4>
-                    <p>Dashboard metrics in compact grid layout</p>
-                    <ul class="usage-list">
-                        <li>KPI dashboards</li>
-                        <li>Analytics displays</li>
-                        <li>Status monitoring</li>
-                    </ul>
-                    <div class="code-block">&lt;div class="panel-tetris"&gt;
+<div class="example-preview">
+<div class="panel-intro" style="max-width: 600px;">
+<h2>Welcome to CORTEX</h2>
+<p>AI-powered development assistant with long-term memory and strategic planning capabilities.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 2: Design Tokens -->
+<section class="guide-section" id="design-tokens">
+<h2>🎨 Design Tokens</h2>
+<p>CSS custom properties for consistent styling across the design system.</p>
+<h3>Blur Values</h3>
+<table class="token-table">
+<thead>
+<tr>
+<th>Token</th>
+<th>Value</th>
+<th>Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>--glass-blur-sm</td>
+<td>10px</td>
+<td>Standard cards, dropdowns, tooltips</td>
+</tr>
+<tr>
+<td>--glass-blur-md</td>
+<td>20px</td>
+<td>Hero sections, modals, emphasized panels</td>
+</tr>
+<tr>
+<td>--glass-blur-lg</td>
+<td>30px</td>
+<td>Overlays, backgrounds, high-emphasis</td>
+</tr>
+</tbody>
+</table>
+<h3>Background Colors</h3>
+<table class="token-table">
+<thead>
+<tr>
+<th>Token</th>
+<th>Value</th>
+<th>Alpha</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>--glass-bg-base</td>
+<td>rgba(255, 255, 255, 0.05)</td>
+<td>5%</td>
+</tr>
+<tr>
+<td>--glass-bg-hover</td>
+<td>rgba(255, 255, 255, 0.08)</td>
+<td>8%</td>
+</tr>
+<tr>
+<td>--glass-bg-active</td>
+<td>rgba(255, 255, 255, 0.12)</td>
+<td>12%</td>
+</tr>
+</tbody>
+</table>
+<h3>Border Styles</h3>
+<table class="token-table">
+<thead>
+<tr>
+<th>Token</th>
+<th>Value</th>
+<th>Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>--glass-border-subtle</td>
+<td>rgba(255, 255, 255, 0.1)</td>
+<td>Standard glass borders</td>
+</tr>
+<tr>
+<td>--glass-border-accent</td>
+<td>rgba(0, 212, 255, 0.3)</td>
+<td>Focused/highlighted elements</td>
+</tr>
+<tr>
+<td>--glass-border-neon</td>
+<td>rgba(123, 47, 247, 0.5)</td>
+<td>Neon glass panels</td>
+</tr>
+</tbody>
+</table>
+</section>
+<!-- Section 3: Named Panels -->
+<section class="guide-section" id="named-panels">
+<h2>🎴 Named Panel Taxonomy</h2>
+<p>11 semantic panel styles for consistent glassmorphism across CORTEX.</p>
+<div class="panel-showcase">
+<div class="showcase-item panel-tetris">
+<span class="showcase-label">.panel-tetris</span>
+<div style="padding: 2rem;">
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+<div style="background: rgba(0, 212, 255, 0.1); padding: 1rem; border-radius: 8px; text-align: center;">
+<div style="font-size: 2rem;">42</div>
+<div style="font-size: 0.85rem;">Agents</div>
+</div>
+<div style="background: rgba(123, 47, 247, 0.1); padding: 1rem; border-radius: 8px; text-align: center;">
+<div style="font-size: 2rem;">8</div>
+<div style="font-size: 0.85rem;">Active</div>
+</div>
+</div>
+</div>
+</div>
+<div class="showcase-item panel-intro">
+<span class="showcase-label">.panel-intro</span>
+<div style="padding: 2rem; text-align: center;">
+<h3>CORTEX Platform</h3>
+<p style="color: #94a3b8; margin-top: 0.5rem;">AI-powered development assistant</p>
+</div>
+</div>
+<div class="showcase-item panel-compact-cards">
+<span class="showcase-label">.panel-compact-cards</span>
+<div style="padding: 2rem; display: flex; gap: 1rem;">
+<div style="flex: 1; background: rgba(255, 255, 255, 0.05); padding: 1rem; border-radius: 8px;">
+<div style="font-size: 1.5rem; margin-bottom: 0.5rem;">💡</div>
+<div style="font-size: 0.9rem;">Planning</div>
+</div>
+<div style="flex: 1; background: rgba(255, 255, 255, 0.05); padding: 1rem; border-radius: 8px;">
+<div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🔍</div>
+<div style="font-size: 0.9rem;">Analysis</div>
+</div>
+</div>
+</div>
+</div>
+<div class="guide-grid">
+<div class="guide-card">
+<h4>panel-tetris</h4>
+<p>Dashboard metrics in compact grid layout</p>
+<ul class="usage-list">
+<li>KPI dashboards</li>
+<li>Analytics displays</li>
+<li>Status monitoring</li>
+</ul>
+<div class="code-block">&lt;div class="panel-tetris"&gt;
   &lt;div class="tile"&gt;...&lt;/div&gt;
 &lt;/div&gt;</div>
-                </div>
-                
-                <div class="guide-card">
-                    <h4>panel-intro</h4>
-                    <p>Hero sections with centered content</p>
-                    <ul class="usage-list">
-                        <li>Landing pages</li>
-                        <li>Feature descriptions</li>
-                        <li>Call-to-action sections</li>
-                    </ul>
-                    <div class="code-block">&lt;div class="panel-intro"&gt;
+</div>
+<div class="guide-card">
+<h4>panel-intro</h4>
+<p>Hero sections with centered content</p>
+<ul class="usage-list">
+<li>Landing pages</li>
+<li>Feature descriptions</li>
+<li>Call-to-action sections</li>
+</ul>
+<div class="code-block">&lt;div class="panel-intro"&gt;
   &lt;h2&gt;Title&lt;/h2&gt;
   &lt;p&gt;Description&lt;/p&gt;
 &lt;/div&gt;</div>
-                </div>
-                
-                <div class="guide-card">
-                    <h4>panel-compact-cards</h4>
-                    <p>Horizontal row of capability highlights</p>
-                    <ul class="usage-list">
-                        <li>Feature lists</li>
-                        <li>Service offerings</li>
-                        <li>Quick links</li>
-                    </ul>
-                </div>
-                
-                <div class="guide-card">
-                    <h4>panel-grid-cards</h4>
-                    <p>Detailed content in 2x3 or 3x3 grid</p>
-                    <ul class="usage-list">
-                        <li>Product catalogs</li>
-                        <li>Analysis results</li>
-                        <li>Portfolio displays</li>
-                    </ul>
-                </div>
-                
-                <div class="guide-card">
-                    <h4>panel-neon-glass</h4>
-                    <p>Accent panel with glowing borders</p>
-                    <ul class="usage-list">
-                        <li>Premium features</li>
-                        <li>Highlighted CTAs</li>
-                        <li>Special announcements</li>
-                    </ul>
-                </div>
-                
-                <div class="guide-card">
-                    <h4>panel-modal-glass</h4>
-                    <p>Overlay dialogs and confirmations</p>
-                    <ul class="usage-list">
-                        <li>Forms</li>
-                        <li>Confirmations</li>
-                        <li>Detail views</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Section 4: Base Patterns -->
-        <section id="patterns" class="guide-section">
-            <h2>🔷 Base Glassmorphism Patterns</h2>
-            <p>5 core patterns for building custom glass effects.</p>
-            
-            <div class="guide-grid">
-                <div class="guide-card">
-                    <h4>.glass-card (Multi-Layer)</h4>
-                    <p>4-layer depth effect with gradient borders</p>
-                    <div class="example-preview">
-                        <div class="glass-card" style="padding: 2rem; width: 100%;">
-                            <h3>Multi-Layer Glass</h3>
-                            <p style="color: #94a3b8;">Standard glassmorphism pattern</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="guide-card">
-                    <h4>.neuglass-card</h4>
-                    <p>Neumorphism-inspired soft shadows</p>
-                    <div class="example-preview">
-                        <div class="neuglass-card" style="padding: 2rem; width: 100%;">
-                            <h3>Neuglass Effect</h3>
-                            <p style="color: #94a3b8;">Soft, subtle depth</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="guide-card">
-                    <h4>.morph-card</h4>
-                    <p>Expandable morphing animation</p>
-                    <div class="example-preview">
-                        <div class="morph-card" style="padding: 2rem; width: 100%;">
-                            <h3>Morphing Glass</h3>
-                            <p style="color: #94a3b8;">Hover to expand</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Section 5: Best Practices -->
-        <section id="best-practices" class="guide-section">
-            <h2>✨ Best Practices</h2>
-            
-            <div class="best-practices">
-                <h4>Performance</h4>
-                <ul class="usage-list">
-                    <li>Use minified CSS in production (45% smaller)</li>
-                    <li>Import glass-performance.css for mobile optimization</li>
-                    <li>Limit backdrop-filter usage (GPU-intensive)</li>
-                    <li>Use .glass-optimized fallback for low-end devices</li>
-                    <li>Enable GPU acceleration with transform: translateZ(0)</li>
-                </ul>
-            </div>
-            
-            <div class="best-practices">
-                <h4>Accessibility</h4>
-                <ul class="usage-list">
-                    <li>Ensure text contrast meets WCAG 2.1 AA (4.5:1)</li>
-                    <li>Support prefers-reduced-motion for animations</li>
-                    <li>Provide keyboard navigation for interactive elements</li>
-                    <li>Use semantic HTML with glassmorphism classes</li>
-                </ul>
-            </div>
-            
-            <div class="warning-box">
-                <h4>⚠️ Browser Compatibility</h4>
-                <ul class="usage-list">
-                    <li>Chrome 76+ (full support)</li>
-                    <li>Firefox 103+ (full support)</li>
-                    <li>Safari 9+ (requires -webkit- prefix)</li>
-                    <li>Edge 79+ (full support)</li>
-                    <li>IE11 not supported (fallback provided)</li>
-                </ul>
-            </div>
-            
-            <div class="guide-card">
-                <h4>Mobile Optimization</h4>
-                <p>Reduce blur intensity on mobile devices:</p>
-                <div class="code-block">@media (max-width: 768px) {
+</div>
+<div class="guide-card">
+<h4>panel-compact-cards</h4>
+<p>Horizontal row of capability highlights</p>
+<ul class="usage-list">
+<li>Feature lists</li>
+<li>Service offerings</li>
+<li>Quick links</li>
+</ul>
+</div>
+<div class="guide-card">
+<h4>panel-grid-cards</h4>
+<p>Detailed content in 2x3 or 3x3 grid</p>
+<ul class="usage-list">
+<li>Product catalogs</li>
+<li>Analysis results</li>
+<li>Portfolio displays</li>
+</ul>
+</div>
+<div class="guide-card">
+<h4>panel-neon-glass</h4>
+<p>Accent panel with glowing borders</p>
+<ul class="usage-list">
+<li>Premium features</li>
+<li>Highlighted CTAs</li>
+<li>Special announcements</li>
+</ul>
+</div>
+<div class="guide-card">
+<h4>panel-modal-glass</h4>
+<p>Overlay dialogs and confirmations</p>
+<ul class="usage-list">
+<li>Forms</li>
+<li>Confirmations</li>
+<li>Detail views</li>
+</ul>
+</div>
+</div>
+</section>
+<!-- Section 4: Base Patterns -->
+<section class="guide-section" id="patterns">
+<h2>🔷 Base Glassmorphism Patterns</h2>
+<p>5 core patterns for building custom glass effects.</p>
+<div class="guide-grid">
+<div class="guide-card">
+<h4>.glass-card (Multi-Layer)</h4>
+<p>4-layer depth effect with gradient borders</p>
+<div class="example-preview">
+<div class="glass-card" style="padding: 2rem; width: 100%;">
+<h3>Multi-Layer Glass</h3>
+<p style="color: #94a3b8;">Standard glassmorphism pattern</p>
+</div>
+</div>
+</div>
+<div class="guide-card">
+<h4>.neuglass-card</h4>
+<p>Neumorphism-inspired soft shadows</p>
+<div class="example-preview">
+<div class="neuglass-card" style="padding: 2rem; width: 100%;">
+<h3>Neuglass Effect</h3>
+<p style="color: #94a3b8;">Soft, subtle depth</p>
+</div>
+</div>
+</div>
+<div class="guide-card">
+<h4>.morph-card</h4>
+<p>Expandable morphing animation</p>
+<div class="example-preview">
+<div class="morph-card" style="padding: 2rem; width: 100%;">
+<h3>Morphing Glass</h3>
+<p style="color: #94a3b8;">Hover to expand</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 5: Best Practices -->
+<section class="guide-section" id="best-practices">
+<h2>✨ Best Practices</h2>
+<div class="best-practices">
+<h4>Performance</h4>
+<ul class="usage-list">
+<li>Use minified CSS in production (45% smaller)</li>
+<li>Import glass-performance.css for mobile optimization</li>
+<li>Limit backdrop-filter usage (GPU-intensive)</li>
+<li>Use .glass-optimized fallback for low-end devices</li>
+<li>Enable GPU acceleration with transform: translateZ(0)</li>
+</ul>
+</div>
+<div class="best-practices">
+<h4>Accessibility</h4>
+<ul class="usage-list">
+<li>Ensure text contrast meets WCAG 2.1 AA (4.5:1)</li>
+<li>Support prefers-reduced-motion for animations</li>
+<li>Provide keyboard navigation for interactive elements</li>
+<li>Use semantic HTML with glassmorphism classes</li>
+</ul>
+</div>
+<div class="warning-box">
+<h4>⚠️ Browser Compatibility</h4>
+<ul class="usage-list">
+<li>Chrome 76+ (full support)</li>
+<li>Firefox 103+ (full support)</li>
+<li>Safari 9+ (requires -webkit- prefix)</li>
+<li>Edge 79+ (full support)</li>
+<li>IE11 not supported (fallback provided)</li>
+</ul>
+</div>
+<div class="guide-card">
+<h4>Mobile Optimization</h4>
+<p>Reduce blur intensity on mobile devices:</p>
+<div class="code-block">@media (max-width: 768px) {
   :root {
     --glass-blur-sm: 7px;   /* 30% reduction */
     --glass-blur-md: 14px;  /* 30% reduction */
     --glass-blur-lg: 21px;  /* 30% reduction */
   }
 }</div>
-            </div>
-        </section>
-        
-        <!-- Section 6: Resources -->
-        <section id="resources" class="guide-section">
-            <h2>📚 Additional Resources</h2>
-            
-            <div class="guide-grid">
-                <div class="guide-card">
-                    <h4>🎨 Panel Viewer</h4>
-                    <p>Interactive tool to explore all 11 panels</p>
-                    <a href="panel-viewer.html" style="color: #00d4ff;">Open Panel Viewer →</a>
-                </div>
-                
-                <div class="guide-card">
-                    <h4>📖 Migration Guide</h4>
-                    <p>Step-by-step guide for updating existing HTML</p>
-                    <a href="index.html" style="color: #00d4ff;">Read Migration Guide →</a>
-                </div>
-                
-                <div class="guide-card">
-                    <h4>🔧 W3C Validation</h4>
-                    <p>All CSS files validated (0 errors)</p>
-                    <a href="../../cortex-brain/documents/reports/w3c-validation-report.md" style="color: #00d4ff;">View Report →</a>
-                </div>
-                
-                <div class="guide-card">
-                    <h4>⚡ Performance Report</h4>
-                    <p>Mobile optimization and browser testing</p>
-                    <a href="../../cortex-brain/documents/reports/phase7-github-pages-optimization.md" style="color: #00d4ff;">View Report →</a>
-                </div>
-            </div>
-        </section>
-    </div>
-    
-    <script>
+</div>
+</section>
+<!-- Section 6: Resources -->
+<section class="guide-section" id="resources">
+<h2>📚 Additional Resources</h2>
+<div class="guide-grid">
+<div class="guide-card">
+<h4>🎨 Panel Viewer</h4>
+<p>Interactive tool to explore all 11 panels</p>
+<a href="panel-viewer.html" style="color: #00d4ff;">Open Panel Viewer →</a>
+</div>
+<div class="guide-card">
+<h4>📖 Migration Guide</h4>
+<p>Step-by-step guide for updating existing HTML</p>
+<a href="../archives/prototypes-20260103-101816/prototypes/toolkit-manager/index.html" style="color: #00d4ff;">Read Migration Guide →</a>
+</div>
+<div class="guide-card">
+<h4>🔧 W3C Validation</h4>
+<p>All CSS files validated (0 errors)</p>
+<a href="../../cortex-brain/documents/reports/w3c-validation-report.md" style="color: #00d4ff;">View Report →</a>
+</div>
+<div class="guide-card">
+<h4>⚡ Performance Report</h4>
+<p>Mobile optimization and browser testing</p>
+<a href="../../cortex-brain/documents/reports/phase7-github-pages-optimization.md" style="color: #00d4ff;">View Report →</a>
+</div>
+</div>
+</section>
+</div>
+<script>
         function scrollToSection(id) {
             document.getElementById(id).scrollIntoView({ 
                 behavior: 'smooth',

@@ -115,6 +115,42 @@ button, a, input, select, textarea, [role="button"] {
             box-shadow: var(--shadow, 0 8px 32px rgba(0, 0, 0, 0.37));
         }
     </style>
+<style>
+        /* ARCHITECTURE Theme - Level 1 */
+        .level1-architecture {
+            --theme-primary: #7c7cff;
+            --theme-accent: #00d4ff;
+            --theme-success: #00ff88;
+            --theme-warning: #ffd700;
+            --theme-glow: rgba(124, 124, 255, 0.3);
+            
+            /* Apply to glass effects */
+            --glass-border-color: #7c7cff33;
+            --pulse-glow-color: rgba(124, 124, 255, 0.3);
+        }
+        
+        /* Themed glass cards */
+        .level1-architecture .glass-card-clickable:hover {
+            border-color: #7c7cff66;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37),
+                        0 0 30px rgba(124, 124, 255, 0.3);
+        }
+        
+        /* Themed icons */
+        .level1-architecture .pulse-glow-glass--fast {
+            filter: drop-shadow(0 0 10px rgba(124, 124, 255, 0.3));
+        }
+        
+        /* Themed metric tiles */
+        .level1-architecture .token-metric-tile {
+            border-color: #7c7cff33;
+        }
+        
+        .level1-architecture .token-metric-tile:hover {
+            border-color: #7c7cff66;
+            background: #7c7cff11;
+        }
+</style>
 </head>
 <body>
     <!-- Glass Header Navigation -->
@@ -130,7 +166,7 @@ button, a, input, select, textarea, [role="button"] {
     </header>
     
     <!-- Main Content -->
-    <main class="container" id="main-content">
+    <main class="container level1-architecture" id="main-content">
         <!-- Page Title Card with Tetris Metrics -->
         <div class="glass-card-display animation-t1">
             <div class="page-title-section">
