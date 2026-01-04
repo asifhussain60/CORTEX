@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <style>
@@ -26,69 +27,67 @@ button, a, input, select, textarea, [role="button"] {
     -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 </style>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="CORTEX Risk Assessment - Risk Calculation, Prioritization, and Treatment Planning">
-    <meta name="keywords" content="CORTEX, risk assessment, risk management, security risk, mitigation">
-    <meta name="author" content="Asif Hussain">
-    <title>Risk Assessment - CORTEX Security</title>
-    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo-64.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="CORTEX Risk Assessment - Risk Calculation, Prioritization, and Treatment Planning" name="description"/>
+<meta content="CORTEX, risk assessment, risk management, security risk, mitigation" name="keywords"/>
+<meta content="Asif Hussain" name="author"/>
+<title>Risk Assessment - CORTEX Security</title>
+<link href="../assets/images/CORTEX-logo-64.png" rel="icon" type="image/png"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="../assets/css/main.css" rel="stylesheet"/>
+<link href="../assets/css/intentional-classes.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
-    <!-- Glass Header (Level 1 - No Logo) -->
-    <header class="glass-header">
-        <div class="header-content">
-            <nav class="header-nav" mobile-nav-optimized>
-                <a href="../index.html" class="nav-link" mobile-nav-optimized><i class="fas fa-home pulse-glow-glass--fast"></i> Home</a>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="hero-section">
-        <div class="hero-content">
-            <div class="hero-icon">
-                <i class="fas fa-chart-line pulse-glow-glass--fast"></i>
-            </div>
-            <h1 class="hero-title">Risk Assessment</h1>
-            <p class="hero-subtitle">
+<!-- Glass Header (Level 1 - No Logo) -->
+<header class="glass-header">
+<div class="header-content">
+<nav class="header-nav" mobile-nav-optimized="">
+<a class="nav-link" href="../index.html" mobile-nav-optimized=""><i class="fas fa-home pulse-glow-glass--fast"></i> Home</a>
+</nav>
+</div>
+</header>
+<!-- Hero Section -->
+<section class="hero-section">
+<div class="hero-content">
+<div class="hero-icon">
+<i class="fas fa-chart-line pulse-glow-glass--fast"></i>
+</div>
+<h1 class="hero-title">Risk Assessment</h1>
+<p class="hero-subtitle">
                 Quantitative risk analysis, prioritization, and treatment planning with data-driven 
                 visualizations to support informed security decisions.
             </p>
-        </div>
-    </section>
-
-    <!-- Main Content -->
-    <main class="content-section">
-        <!-- Risk Calculation Formula -->
-        <article class="glass-card-display animation-t1">
-            <div class="card-header-with-icon">
-                <i class="fas fa-calculator pulse-glow-glass--fast"></i>
-                <h2 class="card-title">Risk Calculation Methodology</h2>
-            </div>
-            <p class="card-description">
+</div>
+</section>
+<!-- Main Content -->
+<main class="content-section">
+<!-- Risk Calculation Formula -->
+<article class="glass-card-display animation-t1">
+<div class="card-header-with-icon">
+<i class="fas fa-calculator pulse-glow-glass--fast"></i>
+<h2 class="card-title">Risk Calculation Methodology</h2>
+</div>
+<p class="card-description">
                 CORTEX uses a quantitative risk scoring system that combines likelihood and impact assessments. 
                 Risk scores guide prioritization and resource allocation for mitigation efforts.
             </p>
-            <div class="visualization-container">
-                <div class="mermaid">
+<div class="visualization-container">
+<div class="mermaid">
 graph LR
-    L[📊 Likelihood<br/>1-5 Scale] --> R[⚠️ Risk Score]
-    I[💥 Impact<br/>1-5 Scale] --> R
-    A[🎯 Asset Value<br/>Multiplier] --> R
+    L[📊 Likelihood<br/>1-5 Scale] --&gt; R[⚠️ Risk Score]
+    I[💥 Impact<br/>1-5 Scale] --&gt; R
+    A[🎯 Asset Value<br/>Multiplier] --&gt; R
     
-    R --> C{Risk Score<br/>Classification}
+    R --&gt; C{Risk Score<br/>Classification}
     
-    C --> CRIT[🔴 Critical<br/>20-25]
-    C --> HIGH[🟠 High<br/>15-19]
-    C --> MED[🟡 Medium<br/>10-14]
-    C --> LOW[🟢 Low<br/>5-9]
-    C --> MIN[⚪ Minimal<br/>1-4]
+    C --&gt; CRIT[🔴 Critical<br/>20-25]
+    C --&gt; HIGH[🟠 High<br/>15-19]
+    C --&gt; MED[🟡 Medium<br/>10-14]
+    C --&gt; LOW[🟢 Low<br/>5-9]
+    C --&gt; MIN[⚪ Minimal<br/>1-4]
     
     style L fill:#00d4ff,stroke:#fff,stroke-width:2px
     style I fill:#ff6b9d,stroke:#fff,stroke-width:2px
@@ -99,19 +98,19 @@ graph LR
     style LOW fill:#2ecc71,stroke:#fff,stroke-width:2px
     style MIN fill:#ffffff,stroke:#fff,stroke-width:2px
                 </div>
-            </div>
-            <div class="code-example">
-                <div class="code-header">
-                    <span class="code-title">Risk Score Formula</span>
-                </div>
-                <pre><code>Risk Score = (Likelihood × Impact) × Asset Value Multiplier
+</div>
+<div class="code-example">
+<div class="code-header">
+<span class="code-title">Risk Score Formula</span>
+</div>
+<pre><code>Risk Score = (Likelihood × Impact) × Asset Value Multiplier
 
 Likelihood Scale (1-5):
-1 = Rare (< 10% probability/year)
+1 = Rare (&lt; 10% probability/year)
 2 = Unlikely (10-25%)
 3 = Possible (25-50%)
 4 = Likely (50-75%)
-5 = Almost Certain (> 75%)
+5 = Almost Certain (&gt; 75%)
 
 Impact Scale (1-5):
 1 = Negligible (minimal disruption)
@@ -125,34 +124,33 @@ Asset Value Multiplier (0.5-2.0):
 1.0 = Standard assets
 1.5 = High-criticality assets
 2.0 = Mission-critical assets</code></pre>
-            </div>
-        </article>
-
-        <!-- Risk Treatment Decision Tree -->
-        <article class="glass-card-display animation-t1">
-            <div class="card-header-with-icon">
-                <i class="fas fa-sitemap pulse-glow-glass--fast"></i>
-                <h2 class="card-title">Risk Treatment Decision Tree</h2>
-            </div>
-            <p class="card-description">
+</div>
+</article>
+<!-- Risk Treatment Decision Tree -->
+<article class="glass-card-display animation-t1">
+<div class="card-header-with-icon">
+<i class="fas fa-sitemap pulse-glow-glass--fast"></i>
+<h2 class="card-title">Risk Treatment Decision Tree</h2>
+</div>
+<p class="card-description">
                 Systematic approach to determining the appropriate risk treatment strategy based on 
                 risk score, cost-benefit analysis, and organizational risk appetite.
             </p>
-            <div class="visualization-container">
-                <div class="mermaid">
+<div class="visualization-container">
+<div class="mermaid">
 graph TD
-    R[Risk Identified] --> A{Acceptable<br/>Risk?}
-    A -->|Yes| ACC[✅ Accept Risk<br/>Document Decision]
-    A -->|No| S{Can Risk be<br/>Eliminated?}
+    R[Risk Identified] --&gt; A{Acceptable<br/>Risk?}
+    A --&gt;|Yes| ACC[✅ Accept Risk<br/>Document Decision]
+    A --&gt;|No| S{Can Risk be<br/>Eliminated?}
     
-    S -->|Yes| AV[🚫 Avoid Risk<br/>Remove Vulnerability]
-    S -->|No| C{Cost-Effective<br/>to Mitigate?}
+    S --&gt;|Yes| AV[🚫 Avoid Risk<br/>Remove Vulnerability]
+    S --&gt;|No| C{Cost-Effective<br/>to Mitigate?}
     
-    C -->|Yes| MIT[🛡️ Mitigate Risk<br/>Implement Controls]
-    C -->|No| T{Can Transfer<br/>Risk?}
+    C --&gt;|Yes| MIT[🛡️ Mitigate Risk<br/>Implement Controls]
+    C --&gt;|No| T{Can Transfer<br/>Risk?}
     
-    T -->|Yes| TRANS[🔄 Transfer Risk<br/>Insurance/3rd Party]
-    T -->|No| REAS[🔁 Reassess<br/>Seek Alternatives]
+    T --&gt;|Yes| TRANS[🔄 Transfer Risk<br/>Insurance/3rd Party]
+    T --&gt;|No| REAS[🔁 Reassess<br/>Seek Alternatives]
     
     style R fill:#7b61ff,stroke:#fff,stroke-width:2px
     style ACC fill:#2ecc71,stroke:#fff,stroke-width:2px
@@ -161,124 +159,118 @@ graph TD
     style TRANS fill:#ffb84d,stroke:#fff,stroke-width:2px
     style REAS fill:#ff6b9d,stroke:#fff,stroke-width:2px
                 </div>
-            </div>
-        </article>
-
-        <!-- Risk Priority Bubble Chart -->
-        <article class="glass-card-display animation-t1">
-            <div class="card-header-with-icon">
-                <i class="fas fa-circle-dot pulse-glow-glass--fast"></i>
-                <h2 class="card-title">Risk Priority Matrix</h2>
-            </div>
-            <p class="card-description">
+</div>
+</article>
+<!-- Risk Priority Bubble Chart -->
+<article class="glass-card-display animation-t1">
+<div class="card-header-with-icon">
+<i class="fas fa-circle-dot pulse-glow-glass--fast"></i>
+<h2 class="card-title">Risk Priority Matrix</h2>
+</div>
+<p class="card-description">
                 Interactive bubble chart showing risk distribution across likelihood and impact dimensions. 
                 Bubble size represents the number of affected assets. Click bubbles to view mitigation plans.
             </p>
-            <div class="visualization-container" id="risk-bubble-chart"></div>
-        </article>
-
-        <!-- Risk Heatmap Time-Series -->
-        <article class="glass-card-display animation-t1">
-            <div class="card-header-with-icon">
-                <i class="fas fa-calendar-days pulse-glow-glass--fast"></i>
-                <h2 class="card-title">Risk Trends Over Time</h2>
-            </div>
-            <p class="card-description">
+<div class="visualization-container" id="risk-bubble-chart"></div>
+</article>
+<!-- Risk Heatmap Time-Series -->
+<article class="glass-card-display animation-t1">
+<div class="card-header-with-icon">
+<i class="fas fa-calendar-days pulse-glow-glass--fast"></i>
+<h2 class="card-title">Risk Trends Over Time</h2>
+</div>
+<p class="card-description">
                 Calendar heatmap showing 12-month risk history. Color intensity indicates total risk score per day. 
                 Track progress in risk reduction and identify seasonal patterns.
             </p>
-            <div class="visualization-container" id="risk-heatmap"></div>
-        </article>
-
-        <!-- Risk Treatment Strategies -->
-        <article class="glass-card-display animation-t1">
-            <div class="card-header-with-icon">
-                <i class="fas fa-shield-halved pulse-glow-glass--fast"></i>
-                <h2 class="card-title">Risk Treatment Strategies</h2>
-            </div>
-            <div class="principles-grid">
-                <div class="principle-card">
-                    <div class="principle-icon">✅</div>
-                    <h3 class="principle-title">Accept</h3>
-                    <p class="principle-description">
-                        <strong>When:</strong> Risk score < 5, cost of mitigation exceeds risk impact<br>
-                        <strong>Action:</strong> Document acceptance, monitor regularly, set review date<br>
-                        <strong>Example:</strong> Low-traffic API endpoint with minimal sensitive data
+<div class="visualization-container" id="risk-heatmap"></div>
+</article>
+<!-- Risk Treatment Strategies -->
+<article class="glass-card-display animation-t1">
+<div class="card-header-with-icon">
+<i class="fas fa-shield-halved pulse-glow-glass--fast"></i>
+<h2 class="card-title">Risk Treatment Strategies</h2>
+</div>
+<div class="principles-grid">
+<div class="principle-card">
+<div class="principle-icon">✅</div>
+<h3 class="principle-title">Accept</h3>
+<p class="principle-description">
+<strong>When:</strong> Risk score &lt; 5, cost of mitigation exceeds risk impact<br/>
+<strong>Action:</strong> Document acceptance, monitor regularly, set review date<br/>
+<strong>Example:</strong> Low-traffic API endpoint with minimal sensitive data
                     </p>
-                </div>
-                <div class="principle-card">
-                    <div class="principle-icon">🚫</div>
-                    <h3 class="principle-title">Avoid</h3>
-                    <p class="principle-description">
-                        <strong>When:</strong> Risk score > 20, eliminating activity feasible<br>
-                        <strong>Action:</strong> Remove vulnerable feature, redesign architecture<br>
-                        <strong>Example:</strong> Disable insecure legacy authentication method
+</div>
+<div class="principle-card">
+<div class="principle-icon">🚫</div>
+<h3 class="principle-title">Avoid</h3>
+<p class="principle-description">
+<strong>When:</strong> Risk score &gt; 20, eliminating activity feasible<br/>
+<strong>Action:</strong> Remove vulnerable feature, redesign architecture<br/>
+<strong>Example:</strong> Disable insecure legacy authentication method
                     </p>
-                </div>
-                <div class="principle-card">
-                    <div class="principle-icon">🛡️</div>
-                    <h3 class="principle-title">Mitigate</h3>
-                    <p class="principle-description">
-                        <strong>When:</strong> Risk score 10-19, controls available and cost-effective<br>
-                        <strong>Action:</strong> Implement security controls, reduce likelihood/impact<br>
-                        <strong>Example:</strong> Add input validation, encryption, access controls
+</div>
+<div class="principle-card">
+<div class="principle-icon">🛡️</div>
+<h3 class="principle-title">Mitigate</h3>
+<p class="principle-description">
+<strong>When:</strong> Risk score 10-19, controls available and cost-effective<br/>
+<strong>Action:</strong> Implement security controls, reduce likelihood/impact<br/>
+<strong>Example:</strong> Add input validation, encryption, access controls
                     </p>
-                </div>
-                <div class="principle-card">
-                    <div class="principle-icon">🔄</div>
-                    <h3 class="principle-title">Transfer</h3>
-                    <p class="principle-description">
-                        <strong>When:</strong> Risk score 15-25, third-party better positioned<br>
-                        <strong>Action:</strong> Purchase insurance, outsource to specialized vendor<br>
-                        <strong>Example:</strong> Use managed security service for DDoS protection
+</div>
+<div class="principle-card">
+<div class="principle-icon">🔄</div>
+<h3 class="principle-title">Transfer</h3>
+<p class="principle-description">
+<strong>When:</strong> Risk score 15-25, third-party better positioned<br/>
+<strong>Action:</strong> Purchase insurance, outsource to specialized vendor<br/>
+<strong>Example:</strong> Use managed security service for DDoS protection
                     </p>
-                </div>
-            </div>
-        </article>
-
-        <!-- Quick Links -->
-        <article class="glass-card-display animation-t1">
-            <div class="card-header-with-icon">
-                <i class="fas fa-link pulse-glow-glass--fast"></i>
-                <h2 class="card-title">Related Resources</h2>
-            </div>
-            <div class="quick-links-grid">
-                <a href="threat-modeling.html" class="quick-link-card">
-                    <i class="fas fa-bullseye pulse-glow-glass--fast"></i>
-                    <span>Threat Modeling</span>
-                </a>
-                <a href="vulnerability-assessment.html" class="quick-link-card">
-                    <i class="fas fa-bug pulse-glow-glass--fast"></i>
-                    <span>Vulnerability Assessment</span>
-                </a>
-                <a href="compliance.html" class="quick-link-card">
-                    <i class="fas fa-certificate pulse-glow-glass--fast"></i>
-                    <span>Compliance Standards</span>
-                </a>
-                <a href="dashboard.html" class="quick-link-card">
-                    <i class="fas fa-gauge-high pulse-glow-glass--fast"></i>
-                    <span>Security Dashboard</span>
-                </a>
-            </div>
-        </article>
-    </main>
-
-    <!-- Glass Footer -->
-    <footer class="glass-footer">
-        <div class="footer-content">
-            <p class="footer-copyright">
+</div>
+</div>
+</article>
+<!-- Quick Links -->
+<article class="glass-card-display animation-t1">
+<div class="card-header-with-icon">
+<i class="fas fa-link pulse-glow-glass--fast"></i>
+<h2 class="card-title">Related Resources</h2>
+</div>
+<div class="quick-links-grid">
+<a class="quick-link-card" href="threat-modeling.html">
+<i class="fas fa-bullseye pulse-glow-glass--fast"></i>
+<span>Threat Modeling</span>
+</a>
+<a class="quick-link-card" href="vulnerability-assessment.html">
+<i class="fas fa-bug pulse-glow-glass--fast"></i>
+<span>Vulnerability Assessment</span>
+</a>
+<a class="quick-link-card" href="compliance.html">
+<i class="fas fa-certificate pulse-glow-glass--fast"></i>
+<span>Compliance Standards</span>
+</a>
+<a class="quick-link-card" href="dashboard.html">
+<i class="fas fa-gauge-high pulse-glow-glass--fast"></i>
+<span>Security Dashboard</span>
+</a>
+</div>
+</article>
+</main>
+<!-- Glass Footer -->
+<footer class="glass-footer">
+<div class="footer-content">
+<p class="footer-copyright">
                 Copyright © 2026 Asif Hussain. All rights reserved.
             </p>
-            <div class="footer-links">
-                <a href="../index.html" class="footer-link">Home</a>
-                <a href="https://github.com/asifhussain60/CORTEX" class="footer-link" target="_blank">GitHub</a>
-                <a href="../documentation.html" class="footer-link">Documentation</a>
-            </div>
-            <p class="footer-version">CORTEX | Glassmorphism Design System</p>
-        </div>
-    </footer>
-
-    <script>
+<div class="footer-links">
+<a class="footer-link" href="../index.html">Home</a>
+<a class="footer-link" href="https://github.com/asifhussain60/CORTEX" target="_blank">GitHub</a>
+<a class="footer-link" href="../sts/documentation.html">Documentation</a>
+</div>
+<p class="footer-version">CORTEX | Glassmorphism Design System</p>
+</div>
+</footer>
+<script>
         // Initialize Mermaid
         mermaid.initialize({ 
             startOnLoad: true,

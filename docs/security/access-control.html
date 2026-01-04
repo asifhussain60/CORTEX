@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <style>
@@ -26,116 +27,112 @@ button, a, input, select, textarea, [role="button"] {
     -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 </style>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="CORTEX Access Control - Role-Based Access Control (RBAC), Permissions Matrix, and Authentication Strategies">
-    <meta name="keywords" content="CORTEX, access control, RBAC, permissions, authentication, authorization">
-    <meta name="author" content="Asif Hussain">
-    <title>Access Control - CORTEX Security</title>
-    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo-64.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="CORTEX Access Control - Role-Based Access Control (RBAC), Permissions Matrix, and Authentication Strategies" name="description"/>
+<meta content="CORTEX, access control, RBAC, permissions, authentication, authorization" name="keywords"/>
+<meta content="Asif Hussain" name="author"/>
+<title>Access Control - CORTEX Security</title>
+<link href="../assets/images/CORTEX-logo-64.png" rel="icon" type="image/png"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="../assets/css/main.css" rel="stylesheet"/>
+<link href="../assets/css/intentional-classes.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
-    <!-- Glass Header (Level 1 - No Logo) -->
-    <header class="glass-header">
-        <div class="header-content">
-            <nav class="header-nav" mobile-nav-optimized>
-                <a href="../index.html" class="nav-link" mobile-nav-optimized><i class="fas fa-home pulse-glow-glass--fast"></i> Home</a>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="hero-section">
-        <div class="hero-content">
-            <div class="hero-icon">
-                <i class="fas fa-lock pulse-glow-glass--fast"></i>
-            </div>
-            <h1 class="hero-title">Access Control</h1>
-            <p class="hero-subtitle">
+<!-- Glass Header (Level 1 - No Logo) -->
+<header class="glass-header">
+<div class="header-content">
+<nav class="header-nav" mobile-nav-optimized="">
+<a class="nav-link" href="../index.html" mobile-nav-optimized=""><i class="fas fa-home pulse-glow-glass--fast"></i> Home</a>
+</nav>
+</div>
+</header>
+<!-- Hero Section -->
+<section class="hero-section">
+<div class="hero-content">
+<div class="hero-icon">
+<i class="fas fa-lock pulse-glow-glass--fast"></i>
+</div>
+<h1 class="hero-title">Access Control</h1>
+<p class="hero-subtitle">
                 Role-Based Access Control (RBAC), fine-grained permissions, and multi-factor authentication strategies 
                 to protect CORTEX operations and user data.
             </p>
-        </div>
-    </section>
-
-    <!-- Main Content -->
-    <main class="content-section">
-        <!-- RBAC Architecture -->
-        <article class="glass-card-display animation-t1">
-            <div class="card-header-with-icon">
-                <i class="fas fa-sitemap pulse-glow-glass--fast"></i>
-                <h2 class="card-title">RBAC Architecture</h2>
-            </div>
-            <p class="card-description">
+</div>
+</section>
+<!-- Main Content -->
+<main class="content-section">
+<!-- RBAC Architecture -->
+<article class="glass-card-display animation-t1">
+<div class="card-header-with-icon">
+<i class="fas fa-sitemap pulse-glow-glass--fast"></i>
+<h2 class="card-title">RBAC Architecture</h2>
+</div>
+<p class="card-description">
                 CORTEX implements a hierarchical Role-Based Access Control system with four primary roles: 
                 Administrator, Developer, Analyst, and Viewer. Each role inherits permissions from lower-privilege roles.
             </p>
-            <div class="visualization-container">
-                <div class="mermaid">
+<div class="visualization-container">
+<div class="mermaid">
 graph TB
     subgraph "RBAC Hierarchy"
         ADMIN[👑 Administrator<br/>Full System Access]
-        DEV[👨‍💻 Developer<br/>Code & Config Access]
+        DEV[👨‍💻 Developer<br/>Code &amp; Config Access]
         ANALYST[📊 Analyst<br/>Read + Report Access]
         VIEWER[👁️ Viewer<br/>Read-Only Access]
     end
     
-    ADMIN --> DEV
-    DEV --> ANALYST
-    ANALYST --> VIEWER
+    ADMIN --&gt; DEV
+    DEV --&gt; ANALYST
+    ANALYST --&gt; VIEWER
     
-    ADMIN --> SYS[🔧 System Operations]
-    ADMIN --> USER[👥 User Management]
-    ADMIN --> SEC[🔒 Security Config]
+    ADMIN --&gt; SYS[🔧 System Operations]
+    ADMIN --&gt; USER[👥 User Management]
+    ADMIN --&gt; SEC[🔒 Security Config]
     
-    DEV --> CODE[💻 Code Repository]
-    DEV --> DEPLOY[🚀 Deployment]
-    DEV --> CONFIG[⚙️ Configuration]
+    DEV --&gt; CODE[💻 Code Repository]
+    DEV --&gt; DEPLOY[🚀 Deployment]
+    DEV --&gt; CONFIG[⚙️ Configuration]
     
-    ANALYST --> REPORTS[📈 Analytics]
-    ANALYST --> LOGS[📋 Audit Logs]
-    ANALYST --> METRICS[📊 Metrics Dashboard]
+    ANALYST --&gt; REPORTS[📈 Analytics]
+    ANALYST --&gt; LOGS[📋 Audit Logs]
+    ANALYST --&gt; METRICS[📊 Metrics Dashboard]
     
-    VIEWER --> DOCS[📚 Documentation]
-    VIEWER --> STATUS[✅ System Status]
+    VIEWER --&gt; DOCS[📚 Documentation]
+    VIEWER --&gt; STATUS[✅ System Status]
     
     style ADMIN fill:#ff4757,stroke:#fff,stroke-width:2px
     style DEV fill:#ffb84d,stroke:#fff,stroke-width:2px
     style ANALYST fill:#00d4ff,stroke:#fff,stroke-width:2px
     style VIEWER fill:#2ecc71,stroke:#fff,stroke-width:2px
                 </div>
-            </div>
-        </article>
-
-        <!-- Permissions Matrix -->
-        <article class="glass-card-display animation-t1">
-            <div class="card-header-with-icon">
-                <i class="fas fa-table pulse-glow-glass--fast"></i>
-                <h2 class="card-title">Permissions Matrix</h2>
-            </div>
-            <p class="card-description">
+</div>
+</article>
+<!-- Permissions Matrix -->
+<article class="glass-card-display animation-t1">
+<div class="card-header-with-icon">
+<i class="fas fa-table pulse-glow-glass--fast"></i>
+<h2 class="card-title">Permissions Matrix</h2>
+</div>
+<p class="card-description">
                 Interactive permissions matrix showing granular access rights across CORTEX resources. 
                 Hover over cells to see permission details.
             </p>
-            <div class="visualization-container" id="permissions-matrix"></div>
-        </article>
-
-        <!-- Authentication Flow -->
-        <article class="glass-card-display animation-t1">
-            <div class="card-header-with-icon">
-                <i class="fas fa-key pulse-glow-glass--fast"></i>
-                <h2 class="card-title">Authentication Flow</h2>
-            </div>
-            <p class="card-description">
+<div class="visualization-container" id="permissions-matrix"></div>
+</article>
+<!-- Authentication Flow -->
+<article class="glass-card-display animation-t1">
+<div class="card-header-with-icon">
+<i class="fas fa-key pulse-glow-glass--fast"></i>
+<h2 class="card-title">Authentication Flow</h2>
+</div>
+<p class="card-description">
                 Multi-factor authentication (MFA) workflow with fallback mechanisms and session management.
             </p>
-            <div class="visualization-container">
-                <div class="mermaid">
+<div class="visualization-container">
+<div class="mermaid">
 sequenceDiagram
     participant U as User
     participant A as Auth Service
@@ -143,96 +140,91 @@ sequenceDiagram
     participant S as Session Manager
     participant R as Resource
     
-    U->>A: Login Request (username/password)
-    A->>A: Validate Credentials
+    U-&gt;&gt;A: Login Request (username/password)
+    A-&gt;&gt;A: Validate Credentials
     
     alt Valid Credentials
-        A->>MFA: Request MFA Challenge
-        MFA->>U: Send OTP (SMS/Email/App)
-        U->>MFA: Submit OTP
-        MFA->>A: Validate OTP
+        A-&gt;&gt;MFA: Request MFA Challenge
+        MFA-&gt;&gt;U: Send OTP (SMS/Email/App)
+        U-&gt;&gt;MFA: Submit OTP
+        MFA-&gt;&gt;A: Validate OTP
         
         alt OTP Valid
-            A->>S: Create Session Token
-            S->>U: Return JWT Token
-            U->>R: Access Resource (with token)
-            R->>S: Validate Token
-            S->>R: Token Valid
-            R->>U: Grant Access
+            A-&gt;&gt;S: Create Session Token
+            S-&gt;&gt;U: Return JWT Token
+            U-&gt;&gt;R: Access Resource (with token)
+            R-&gt;&gt;S: Validate Token
+            S-&gt;&gt;R: Token Valid
+            R-&gt;&gt;U: Grant Access
         else OTP Invalid
-            MFA->>U: Challenge Failed
-            U->>A: Retry (max 3 attempts)
+            MFA-&gt;&gt;U: Challenge Failed
+            U-&gt;&gt;A: Retry (max 3 attempts)
         end
     else Invalid Credentials
-        A->>U: Access Denied
-        A->>A: Log Failed Attempt
+        A-&gt;&gt;U: Access Denied
+        A-&gt;&gt;A: Log Failed Attempt
     end
                 </div>
-            </div>
-        </article>
-
-        <!-- Access Control Principles -->
-        <article class="glass-card-display animation-t1">
-            <div class="card-header-with-icon">
-                <i class="fas fa-shield-alt pulse-glow-glass--fast"></i>
-                <h2 class="card-title">Access Control Principles</h2>
-            </div>
-            <div class="principles-grid">
-                <div class="principle-card">
-                    <div class="principle-icon">
-                        <i class="fas fa-user-lock pulse-glow-glass--fast"></i>
-                    </div>
-                    <h3 class="principle-title">Least Privilege</h3>
-                    <p class="principle-description">
+</div>
+</article>
+<!-- Access Control Principles -->
+<article class="glass-card-display animation-t1">
+<div class="card-header-with-icon">
+<i class="fas fa-shield-alt pulse-glow-glass--fast"></i>
+<h2 class="card-title">Access Control Principles</h2>
+</div>
+<div class="principles-grid">
+<div class="principle-card">
+<div class="principle-icon">
+<i class="fas fa-user-lock pulse-glow-glass--fast"></i>
+</div>
+<h3 class="principle-title">Least Privilege</h3>
+<p class="principle-description">
                         Users granted minimum permissions necessary to perform their job functions. 
                         Privilege escalation requires approval workflow.
                     </p>
-                </div>
-                
-                <div class="principle-card">
-                    <div class="principle-icon">
-                        <i class="fas fa-user-shield pulse-glow-glass--fast"></i>
-                    </div>
-                    <h3 class="principle-title">Separation of Duties</h3>
-                    <p class="principle-description">
+</div>
+<div class="principle-card">
+<div class="principle-icon">
+<i class="fas fa-user-shield pulse-glow-glass--fast"></i>
+</div>
+<h3 class="principle-title">Separation of Duties</h3>
+<p class="principle-description">
                         Critical operations require multiple authorized users. No single user can complete 
                         sensitive workflows independently.
                     </p>
-                </div>
-                
-                <div class="principle-card">
-                    <div class="principle-icon">
-                        <i class="fas fa-clock pulse-glow-glass--fast"></i>
-                    </div>
-                    <h3 class="principle-title">Time-Based Access</h3>
-                    <p class="principle-description">
+</div>
+<div class="principle-card">
+<div class="principle-icon">
+<i class="fas fa-clock pulse-glow-glass--fast"></i>
+</div>
+<h3 class="principle-title">Time-Based Access</h3>
+<p class="principle-description">
                         Temporary elevated permissions expire automatically. Access reviews conducted quarterly 
                         to validate continued need.
                     </p>
-                </div>
-                
-                <div class="principle-card">
-                    <div class="principle-icon">
-                        <i class="fas fa-network-wired pulse-glow-glass--fast"></i>
-                    </div>
-                    <h3 class="principle-title">Zero Trust Model</h3>
-                    <p class="principle-description">
+</div>
+<div class="principle-card">
+<div class="principle-icon">
+<i class="fas fa-network-wired pulse-glow-glass--fast"></i>
+</div>
+<h3 class="principle-title">Zero Trust Model</h3>
+<p class="principle-description">
                         Verify every access request regardless of location. No implicit trust based on 
                         network position or previous authentication.
                     </p>
-                </div>
-            </div>
-        </article>
-
-        <!-- Implementation Guide -->
-        <article class="glass-card-display animation-t1">
-            <div class="card-header-with-icon">
-                <i class="fas fa-code pulse-glow-glass--fast"></i>
-                <h2 class="card-title">Implementation Guide</h2>
-            </div>
-            <div class="code-example">
-                <h3 class="code-title">RBAC Decorator Example</h3>
-                <pre><code class="language-badge"># Python RBAC Decorator for CORTEX Operations
+</div>
+</div>
+</article>
+<!-- Implementation Guide -->
+<article class="glass-card-display animation-t1">
+<div class="card-header-with-icon">
+<i class="fas fa-code pulse-glow-glass--fast"></i>
+<h2 class="card-title">Implementation Guide</h2>
+</div>
+<div class="code-example">
+<h3 class="code-title">RBAC Decorator Example</h3>
+<pre><code class="language-badge"># Python RBAC Decorator for CORTEX Operations
 from functools import wraps
 from cortex_brain.tier0.security import check_permissions
 
@@ -264,56 +256,53 @@ def deploy_code(branch: str):
 def generate_report(report_type: str):
     """Analyst-only: Generate security reports."""
     pass</code></pre>
-            </div>
-        </article>
-
-        <!-- Quick Links -->
-        <article class="glass-card-clickable animation-t1">
-            <div class="card-header-with-icon">
-                <i class="fas fa-link pulse-glow-glass--fast"></i>
-                <h2 class="card-title">Related Security Topics</h2>
-            </div>
-            <div class="quick-links-grid">
-                <a href="data-protection.html" class="quick-link-item">
-                    <i class="fas fa-database pulse-glow-glass--fast"></i>
-                    <span>Data Protection</span>
-                </a>
-                <a href="audit-logging.html" class="quick-link-item">
-                    <i class="fas fa-clipboard-list pulse-glow-glass--fast"></i>
-                    <span>Audit Logging</span>
-                </a>
-                <a href="threat-modeling.html" class="quick-link-item">
-                    <i class="fas fa-crosshairs pulse-glow-glass--fast"></i>
-                    <span>Threat Modeling</span>
-                </a>
-                <a href="compliance.html" class="quick-link-item">
-                    <i class="fas fa-certificate pulse-glow-glass--fast"></i>
-                    <span>Compliance Standards</span>
-                </a>
-            </div>
-        </article>
-    </main>
-
-    <!-- Glass Footer -->
-    <footer class="glass-footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <p class="footer-copyright">© 2026 Asif Hussain. All rights reserved.</p>
-            </div>
-            <div class="footer-section">
-                <a href="../index.html" class="footer-link">Home</a>
-                <a href="index.html" class="footer-link">Security Hub</a>
-                <a href="../documentation.html" class="footer-link">Documentation</a>
-                <a href="https://github.com/asifhussain60/CORTEX" class="footer-link" target="_blank">GitHub</a>
-            </div>
-            <div class="footer-section">
-                <p class="footer-version">CORTEX</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Scripts -->
-    <script>
+</div>
+</article>
+<!-- Quick Links -->
+<article class="glass-card-clickable animation-t1">
+<div class="card-header-with-icon">
+<i class="fas fa-link pulse-glow-glass--fast"></i>
+<h2 class="card-title">Related Security Topics</h2>
+</div>
+<div class="quick-links-grid">
+<a class="quick-link-item" href="data-protection.html">
+<i class="fas fa-database pulse-glow-glass--fast"></i>
+<span>Data Protection</span>
+</a>
+<a class="quick-link-item" href="audit-logging.html">
+<i class="fas fa-clipboard-list pulse-glow-glass--fast"></i>
+<span>Audit Logging</span>
+</a>
+<a class="quick-link-item" href="threat-modeling.html">
+<i class="fas fa-crosshairs pulse-glow-glass--fast"></i>
+<span>Threat Modeling</span>
+</a>
+<a class="quick-link-item" href="compliance.html">
+<i class="fas fa-certificate pulse-glow-glass--fast"></i>
+<span>Compliance Standards</span>
+</a>
+</div>
+</article>
+</main>
+<!-- Glass Footer -->
+<footer class="glass-footer">
+<div class="footer-content">
+<div class="footer-section">
+<p class="footer-copyright">© 2026 Asif Hussain. All rights reserved.</p>
+</div>
+<div class="footer-section">
+<a class="footer-link" href="../index.html">Home</a>
+<a class="footer-link" href="index.html">Security Hub</a>
+<a class="footer-link" href="../sts/documentation.html">Documentation</a>
+<a class="footer-link" href="https://github.com/asifhussain60/CORTEX" target="_blank">GitHub</a>
+</div>
+<div class="footer-section">
+<p class="footer-version">CORTEX</p>
+</div>
+</div>
+</footer>
+<!-- Scripts -->
+<script>
         // Initialize Mermaid
         mermaid.initialize({
             theme: 'dark',

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <style>
@@ -26,57 +27,55 @@ button, a, input, select, textarea, [role="button"] {
     -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 </style>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="CORTEX Data Protection - Encryption Strategies, Data Loss Prevention (DLP), and Privacy Controls">
-    <meta name="keywords" content="CORTEX, data protection, encryption, DLP, privacy, security">
-    <meta name="author" content="Asif Hussain">
-    <title>Data Protection - CORTEX Security</title>
-    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo-64.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="CORTEX Data Protection - Encryption Strategies, Data Loss Prevention (DLP), and Privacy Controls" name="description"/>
+<meta content="CORTEX, data protection, encryption, DLP, privacy, security" name="keywords"/>
+<meta content="Asif Hussain" name="author"/>
+<title>Data Protection - CORTEX Security</title>
+<link href="../assets/images/CORTEX-logo-64.png" rel="icon" type="image/png"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="../assets/css/main.css" rel="stylesheet"/>
+<link href="../assets/css/intentional-classes.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
-    <!-- Glass Header (Level 1 - No Logo) -->
-    <header class="glass-header">
-        <div class="header-content">
-            <nav class="header-nav" mobile-nav-optimized>
-                <a href="../index.html" class="nav-link" mobile-nav-optimized><i class="fas fa-home pulse-glow-glass--fast"></i> Home</a>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="hero-section">
-        <div class="hero-content">
-            <div class="hero-icon">
-                <i class="fas fa-database pulse-glow-glass--fast"></i>
-            </div>
-            <h1 class="hero-title">Data Protection</h1>
-            <p class="hero-subtitle">
+<!-- Glass Header (Level 1 - No Logo) -->
+<header class="glass-header">
+<div class="header-content">
+<nav class="header-nav" mobile-nav-optimized="">
+<a class="nav-link" href="../index.html" mobile-nav-optimized=""><i class="fas fa-home pulse-glow-glass--fast"></i> Home</a>
+</nav>
+</div>
+</header>
+<!-- Hero Section -->
+<section class="hero-section">
+<div class="hero-content">
+<div class="hero-icon">
+<i class="fas fa-database pulse-glow-glass--fast"></i>
+</div>
+<h1 class="hero-title">Data Protection</h1>
+<p class="hero-subtitle">
                 Comprehensive encryption strategies, Data Loss Prevention (DLP) policies, and privacy-by-design 
                 principles to safeguard sensitive information across the CORTEX ecosystem.
             </p>
-        </div>
-    </section>
-
-    <!-- Main Content -->
-    <main class="content-section">
-        <!-- Encryption Architecture -->
-        <article class="glass-card-display animation-t1">
-            <div class="card-header-with-icon">
-                <i class="fas fa-lock pulse-glow-glass--fast"></i>
-                <h2 class="card-title">Encryption Architecture</h2>
-            </div>
-            <p class="card-description">
+</div>
+</section>
+<!-- Main Content -->
+<main class="content-section">
+<!-- Encryption Architecture -->
+<article class="glass-card-display animation-t1">
+<div class="card-header-with-icon">
+<i class="fas fa-lock pulse-glow-glass--fast"></i>
+<h2 class="card-title">Encryption Architecture</h2>
+</div>
+<p class="card-description">
                 CORTEX implements defense-in-depth encryption covering data at rest, in transit, and in use 
                 with industry-standard cryptographic algorithms.
             </p>
-            <div class="visualization-container">
-                <div class="mermaid">
+<div class="visualization-container">
+<div class="mermaid">
 graph TB
     subgraph "Encryption Layers"
         DAR[💾 Data at Rest<br/>AES-256-GCM]
@@ -102,215 +101,204 @@ graph TB
         VAULT[Secret Vault]
     end
     
-    DAR --> DB
-    DAR --> FS
-    DAR --> BK
+    DAR --&gt; DB
+    DAR --&gt; FS
+    DAR --&gt; BK
     
-    DIT --> API
-    DIT --> WS
-    DIT --> RPC
+    DIT --&gt; API
+    DIT --&gt; WS
+    DIT --&gt; RPC
     
-    DB --> HSM
-    FS --> KMS
-    BK --> VAULT
-    API --> HSM
+    DB --&gt; HSM
+    FS --&gt; KMS
+    BK --&gt; VAULT
+    API --&gt; HSM
     
     style DAR fill:#7b61ff,stroke:#fff,stroke-width:2px
     style DIT fill:#00d4ff,stroke:#fff,stroke-width:2px
     style DIU fill:#ff6b9d,stroke:#fff,stroke-width:2px
     style HSM fill:#2ecc71,stroke:#fff,stroke-width:3px
                 </div>
-            </div>
-        </article>
-
-        <!-- Data Classification Matrix -->
-        <article class="glass-card-display animation-t1">
-            <div class="card-header-with-icon">
-                <i class="fas fa-tag pulse-glow-glass--fast"></i>
-                <h2 class="card-title">Data Classification & Handling</h2>
-            </div>
-            <p class="card-description">
+</div>
+</article>
+<!-- Data Classification Matrix -->
+<article class="glass-card-display animation-t1">
+<div class="card-header-with-icon">
+<i class="fas fa-tag pulse-glow-glass--fast"></i>
+<h2 class="card-title">Data Classification &amp; Handling</h2>
+</div>
+<p class="card-description">
                 Interactive classification matrix showing protection requirements based on data sensitivity levels.
             </p>
-            <div class="visualization-container" id="classification-matrix"></div>
-        </article>
-
-        <!-- DLP Policy Flow -->
-        <article class="glass-card-display animation-t1">
-            <div class="card-header-with-icon">
-                <i class="fas fa-shield-virus pulse-glow-glass--fast"></i>
-                <h2 class="card-title">Data Loss Prevention (DLP) Workflow</h2>
-            </div>
-            <p class="card-description">
+<div class="visualization-container" id="classification-matrix"></div>
+</article>
+<!-- DLP Policy Flow -->
+<article class="glass-card-display animation-t1">
+<div class="card-header-with-icon">
+<i class="fas fa-shield-virus pulse-glow-glass--fast"></i>
+<h2 class="card-title">Data Loss Prevention (DLP) Workflow</h2>
+</div>
+<p class="card-description">
                 Automated DLP policy enforcement prevents unauthorized data exfiltration through content inspection and policy-based blocking.
             </p>
-            <div class="visualization-container">
-                <div class="mermaid">
+<div class="visualization-container">
+<div class="mermaid">
 flowchart LR
-    START[Data Access Request] --> SCAN[Content Scanner]
+    START[Data Access Request] --&gt; SCAN[Content Scanner]
     
-    SCAN --> CLASS{Data<br/>Classification}
+    SCAN --&gt; CLASS{Data<br/>Classification}
     
-    CLASS -->|Public| ALLOW[✅ Allow Access]
-    CLASS -->|Internal| CHECK1{User Role<br/>Check}
-    CLASS -->|Confidential| CHECK2{Authorized<br/>User?}
-    CLASS -->|Restricted| CHECK3{Multi-Factor<br/>Auth?}
+    CLASS --&gt;|Public| ALLOW[✅ Allow Access]
+    CLASS --&gt;|Internal| CHECK1{User Role<br/>Check}
+    CLASS --&gt;|Confidential| CHECK2{Authorized<br/>User?}
+    CLASS --&gt;|Restricted| CHECK3{Multi-Factor<br/>Auth?}
     
-    CHECK1 -->|Authorized| LOG1[📝 Log Access]
-    CHECK1 -->|Unauthorized| BLOCK1[🚫 Block + Alert]
+    CHECK1 --&gt;|Authorized| LOG1[📝 Log Access]
+    CHECK1 --&gt;|Unauthorized| BLOCK1[🚫 Block + Alert]
     
-    CHECK2 -->|Yes| CONTEXT{Business<br/>Context?}
-    CHECK2 -->|No| BLOCK2[🚫 Block + Alert Manager]
+    CHECK2 --&gt;|Yes| CONTEXT{Business<br/>Context?}
+    CHECK2 --&gt;|No| BLOCK2[🚫 Block + Alert Manager]
     
-    CHECK3 -->|Verified| APPROVAL{Approval<br/>Required?}
-    CHECK3 -->|Failed| BLOCK3[🚫 Block + Security Alert]
+    CHECK3 --&gt;|Verified| APPROVAL{Approval<br/>Required?}
+    CHECK3 --&gt;|Failed| BLOCK3[🚫 Block + Security Alert]
     
-    CONTEXT -->|Valid| LOG2[📝 Log + Monitor]
-    CONTEXT -->|Invalid| REQUEST[Request Justification]
+    CONTEXT --&gt;|Valid| LOG2[📝 Log + Monitor]
+    CONTEXT --&gt;|Invalid| REQUEST[Request Justification]
     
-    APPROVAL -->|Approved| LOG3[📝 Audit Trail]
-    APPROVAL -->|Denied| BLOCK4[🚫 Block + Escalate]
+    APPROVAL --&gt;|Approved| LOG3[📝 Audit Trail]
+    APPROVAL --&gt;|Denied| BLOCK4[🚫 Block + Escalate]
     
-    LOG1 --> ALLOW
-    LOG2 --> ALLOW
-    LOG3 --> ALLOW
+    LOG1 --&gt; ALLOW
+    LOG2 --&gt; ALLOW
+    LOG3 --&gt; ALLOW
     
-    BLOCK1 --> END[Access Denied]
-    BLOCK2 --> END
-    BLOCK3 --> END
-    BLOCK4 --> END
-    REQUEST --> END
+    BLOCK1 --&gt; END[Access Denied]
+    BLOCK2 --&gt; END
+    BLOCK3 --&gt; END
+    BLOCK4 --&gt; END
+    REQUEST --&gt; END
     
     style ALLOW fill:#2ecc71,stroke:#fff,stroke-width:2px
     style END fill:#ff4757,stroke:#fff,stroke-width:2px
     style SCAN fill:#00d4ff,stroke:#fff,stroke-width:2px
                 </div>
-            </div>
-        </article>
-
-        <!-- Encryption Standards -->
-        <article class="glass-card-display animation-t1">
-            <div class="card-header-with-icon">
-                <i class="fas fa-certificate pulse-glow-glass--fast"></i>
-                <h2 class="card-title">Encryption Standards</h2>
-            </div>
-            <div class="level1-level1-standard-card">
-                <div class="level1-standard-card">
-                    <div class="level1-level1-standard-card">
-                        <i class="fas fa-hard-drive pulse-glow-glass--fast"></i>
-                    </div>
-                    <h3 class="level1-level1-standard-card">Data at Rest</h3>
-                    <div class="level1-standard-card">
-                        <p><strong>Algorithm:</strong> AES-256-GCM</p>
-                        <p><strong>Key Length:</strong> 256 bits</p>
-                        <p><strong>Key Rotation:</strong> Every 90 days</p>
-                        <p><strong>Storage:</strong> Hardware Security Module (HSM)</p>
-                    </div>
-                </div>
-                
-                <div class="level1-standard-card">
-                    <div class="level1-level1-standard-card">
-                        <i class="fas fa-exchange-alt pulse-glow-glass--fast"></i>
-                    </div>
-                    <h3 class="level1-level1-standard-card">Data in Transit</h3>
-                    <div class="level1-standard-card">
-                        <p><strong>Protocol:</strong> TLS 1.3</p>
-                        <p><strong>Cipher Suite:</strong> TLS_AES_256_GCM_SHA384</p>
-                        <p><strong>Certificate:</strong> ECC P-384</p>
-                        <p><strong>Perfect Forward Secrecy:</strong> Enabled</p>
-                    </div>
-                </div>
-                
-                <div class="level1-standard-card">
-                    <div class="level1-level1-standard-card">
-                        <i class="fas fa-memory pulse-glow-glass--fast"></i>
-                    </div>
-                    <h3 class="level1-level1-standard-card">Data in Use</h3>
-                    <div class="level1-standard-card">
-                        <p><strong>Technology:</strong> Intel SGX / AMD SEV</p>
-                        <p><strong>Memory:</strong> Encrypted RAM</p>
-                        <p><strong>Scrubbing:</strong> Secure memory wiping</p>
-                        <p><strong>Isolation:</strong> Trusted Execution Environment</p>
-                    </div>
-                </div>
-                
-                <div class="level1-standard-card">
-                    <div class="level1-level1-standard-card">
-                        <i class="fas fa-key pulse-glow-glass--fast"></i>
-                    </div>
-                    <h3 class="level1-level1-standard-card">Key Management</h3>
-                    <div class="level1-standard-card">
-                        <p><strong>KMS:</strong> AWS KMS / Azure Key Vault</p>
-                        <p><strong>Hierarchy:</strong> Master + Data Encryption Keys</p>
-                        <p><strong>Backup:</strong> Offline HSM backup</p>
-                        <p><strong>Access:</strong> Role-based key access</p>
-                    </div>
-                </div>
-            </div>
-        </article>
-
-        <!-- Privacy Controls -->
-        <article class="glass-card-display animation-t1">
-            <div class="card-header-with-icon">
-                <i class="fas fa-user-secret pulse-glow-glass--fast"></i>
-                <h2 class="card-title">Privacy-by-Design Principles</h2>
-            </div>
-            <div class="principles-grid">
-                <div class="principle-card">
-                    <div class="principle-icon">
-                        <i class="fas fa-minimize pulse-glow-glass--fast"></i>
-                    </div>
-                    <h3 class="principle-title">Data Minimization</h3>
-                    <p class="principle-description">
+</div>
+</article>
+<!-- Encryption Standards -->
+<article class="glass-card-display animation-t1">
+<div class="card-header-with-icon">
+<i class="fas fa-certificate pulse-glow-glass--fast"></i>
+<h2 class="card-title">Encryption Standards</h2>
+</div>
+<div class="level1-level1-standard-card">
+<div class="level1-standard-card">
+<div class="level1-level1-standard-card">
+<i class="fas fa-hard-drive pulse-glow-glass--fast"></i>
+</div>
+<h3 class="level1-level1-standard-card">Data at Rest</h3>
+<div class="level1-standard-card">
+<p><strong>Algorithm:</strong> AES-256-GCM</p>
+<p><strong>Key Length:</strong> 256 bits</p>
+<p><strong>Key Rotation:</strong> Every 90 days</p>
+<p><strong>Storage:</strong> Hardware Security Module (HSM)</p>
+</div>
+</div>
+<div class="level1-standard-card">
+<div class="level1-level1-standard-card">
+<i class="fas fa-exchange-alt pulse-glow-glass--fast"></i>
+</div>
+<h3 class="level1-level1-standard-card">Data in Transit</h3>
+<div class="level1-standard-card">
+<p><strong>Protocol:</strong> TLS 1.3</p>
+<p><strong>Cipher Suite:</strong> TLS_AES_256_GCM_SHA384</p>
+<p><strong>Certificate:</strong> ECC P-384</p>
+<p><strong>Perfect Forward Secrecy:</strong> Enabled</p>
+</div>
+</div>
+<div class="level1-standard-card">
+<div class="level1-level1-standard-card">
+<i class="fas fa-memory pulse-glow-glass--fast"></i>
+</div>
+<h3 class="level1-level1-standard-card">Data in Use</h3>
+<div class="level1-standard-card">
+<p><strong>Technology:</strong> Intel SGX / AMD SEV</p>
+<p><strong>Memory:</strong> Encrypted RAM</p>
+<p><strong>Scrubbing:</strong> Secure memory wiping</p>
+<p><strong>Isolation:</strong> Trusted Execution Environment</p>
+</div>
+</div>
+<div class="level1-standard-card">
+<div class="level1-level1-standard-card">
+<i class="fas fa-key pulse-glow-glass--fast"></i>
+</div>
+<h3 class="level1-level1-standard-card">Key Management</h3>
+<div class="level1-standard-card">
+<p><strong>KMS:</strong> AWS KMS / Azure Key Vault</p>
+<p><strong>Hierarchy:</strong> Master + Data Encryption Keys</p>
+<p><strong>Backup:</strong> Offline HSM backup</p>
+<p><strong>Access:</strong> Role-based key access</p>
+</div>
+</div>
+</div>
+</article>
+<!-- Privacy Controls -->
+<article class="glass-card-display animation-t1">
+<div class="card-header-with-icon">
+<i class="fas fa-user-secret pulse-glow-glass--fast"></i>
+<h2 class="card-title">Privacy-by-Design Principles</h2>
+</div>
+<div class="principles-grid">
+<div class="principle-card">
+<div class="principle-icon">
+<i class="fas fa-minimize pulse-glow-glass--fast"></i>
+</div>
+<h3 class="principle-title">Data Minimization</h3>
+<p class="principle-description">
                         Collect only necessary data for specified purposes. Automated data retention 
                         policies delete aged data after retention period expires.
                     </p>
-                </div>
-                
-                <div class="principle-card">
-                    <div class="principle-icon">
-                        <i class="fas fa-user-slash pulse-glow-glass--fast"></i>
-                    </div>
-                    <h3 class="principle-title">Anonymization</h3>
-                    <p class="principle-description">
+</div>
+<div class="principle-card">
+<div class="principle-icon">
+<i class="fas fa-user-slash pulse-glow-glass--fast"></i>
+</div>
+<h3 class="principle-title">Anonymization</h3>
+<p class="principle-description">
                         PII data anonymized for analytics using differential privacy techniques. 
                         K-anonymity ensures individuals cannot be re-identified.
                     </p>
-                </div>
-                
-                <div class="principle-card">
-                    <div class="principle-icon">
-                        <i class="fas fa-eye-slash pulse-glow-glass--fast"></i>
-                    </div>
-                    <h3 class="principle-title">Purpose Limitation</h3>
-                    <p class="principle-description">
+</div>
+<div class="principle-card">
+<div class="principle-icon">
+<i class="fas fa-eye-slash pulse-glow-glass--fast"></i>
+</div>
+<h3 class="principle-title">Purpose Limitation</h3>
+<p class="principle-description">
                         Data used only for documented purposes. Secondary use requires explicit consent. 
                         Purpose tags enforced at database and API levels.
                     </p>
-                </div>
-                
-                <div class="principle-card">
-                    <div class="principle-icon">
-                        <i class="fas fa-user-check pulse-glow-glass--fast"></i>
-                    </div>
-                    <h3 class="principle-title">User Control</h3>
-                    <p class="principle-description">
+</div>
+<div class="principle-card">
+<div class="principle-icon">
+<i class="fas fa-user-check pulse-glow-glass--fast"></i>
+</div>
+<h3 class="principle-title">User Control</h3>
+<p class="principle-description">
                         Users exercise data rights: access, rectification, erasure, portability. 
                         Self-service privacy dashboard with audit trail.
                     </p>
-                </div>
-            </div>
-        </article>
-
-        <!-- Implementation Example -->
-        <article class="glass-card-display animation-t1">
-            <div class="card-header-with-icon">
-                <i class="fas fa-code pulse-glow-glass--fast"></i>
-                <h2 class="card-title">Encryption Implementation</h2>
-            </div>
-            <div class="code-example">
-                <h3 class="code-title">Field-Level Encryption Example</h3>
-                <pre><code class="language-badge"># Python Field-Level Encryption for CORTEX
+</div>
+</div>
+</article>
+<!-- Implementation Example -->
+<article class="glass-card-display animation-t1">
+<div class="card-header-with-icon">
+<i class="fas fa-code pulse-glow-glass--fast"></i>
+<h2 class="card-title">Encryption Implementation</h2>
+</div>
+<div class="code-example">
+<h3 class="code-title">Field-Level Encryption Example</h3>
+<pre><code class="language-badge"># Python Field-Level Encryption for CORTEX
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cortex_brain.tier0.security import KeyManager
 import os
@@ -322,7 +310,7 @@ class FieldEncryptor:
         self.key_manager = KeyManager()
         self.cipher = AESGCM(self.key_manager.get_data_key())
     
-    def encrypt_field(self, plaintext: str, field_name: str) -> dict:
+    def encrypt_field(self, plaintext: str, field_name: str) -&gt; dict:
         """Encrypt field with authenticated encryption."""
         nonce = os.urandom(12)  # 96-bit nonce for GCM
         
@@ -342,7 +330,7 @@ class FieldEncryptor:
             'algorithm': 'AES-256-GCM'
         }
     
-    def decrypt_field(self, encrypted_data: dict) -> str:
+    def decrypt_field(self, encrypted_data: dict) -&gt; str:
         """Decrypt and verify field integrity."""
         nonce = bytes.fromhex(encrypted_data['nonce'])
         ciphertext = bytes.fromhex(encrypted_data['ciphertext'])
@@ -363,56 +351,53 @@ user_data = {
 
 # Decrypt when authorized
 ssn = encryptor.decrypt_field(user_data['ssn'])</code></pre>
-            </div>
-        </article>
-
-        <!-- Quick Links -->
-        <article class="glass-card-clickable animation-t1">
-            <div class="card-header-with-icon">
-                <i class="fas fa-link pulse-glow-glass--fast"></i>
-                <h2 class="card-title">Related Security Topics</h2>
-            </div>
-            <div class="quick-links-grid">
-                <a href="access-control.html" class="quick-link-item">
-                    <i class="fas fa-lock pulse-glow-glass--fast"></i>
-                    <span>Access Control</span>
-                </a>
-                <a href="audit-logging.html" class="quick-link-item">
-                    <i class="fas fa-clipboard-list pulse-glow-glass--fast"></i>
-                    <span>Audit Logging</span>
-                </a>
-                <a href="compliance.html" class="quick-link-item">
-                    <i class="fas fa-certificate pulse-glow-glass--fast"></i>
-                    <span>Compliance Standards</span>
-                </a>
-                <a href="threat-modeling.html" class="quick-link-item">
-                    <i class="fas fa-crosshairs pulse-glow-glass--fast"></i>
-                    <span>Threat Modeling</span>
-                </a>
-            </div>
-        </article>
-    </main>
-
-    <!-- Glass Footer -->
-    <footer class="glass-footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <p class="footer-copyright">© 2026 Asif Hussain. All rights reserved.</p>
-            </div>
-            <div class="footer-section">
-                <a href="../index.html" class="footer-link">Home</a>
-                <a href="index.html" class="footer-link">Security Hub</a>
-                <a href="../documentation.html" class="footer-link">Documentation</a>
-                <a href="https://github.com/asifhussain60/CORTEX" class="footer-link" target="_blank">GitHub</a>
-            </div>
-            <div class="footer-section">
-                <p class="footer-version">CORTEX</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Scripts -->
-    <script>
+</div>
+</article>
+<!-- Quick Links -->
+<article class="glass-card-clickable animation-t1">
+<div class="card-header-with-icon">
+<i class="fas fa-link pulse-glow-glass--fast"></i>
+<h2 class="card-title">Related Security Topics</h2>
+</div>
+<div class="quick-links-grid">
+<a class="quick-link-item" href="access-control.html">
+<i class="fas fa-lock pulse-glow-glass--fast"></i>
+<span>Access Control</span>
+</a>
+<a class="quick-link-item" href="audit-logging.html">
+<i class="fas fa-clipboard-list pulse-glow-glass--fast"></i>
+<span>Audit Logging</span>
+</a>
+<a class="quick-link-item" href="compliance.html">
+<i class="fas fa-certificate pulse-glow-glass--fast"></i>
+<span>Compliance Standards</span>
+</a>
+<a class="quick-link-item" href="threat-modeling.html">
+<i class="fas fa-crosshairs pulse-glow-glass--fast"></i>
+<span>Threat Modeling</span>
+</a>
+</div>
+</article>
+</main>
+<!-- Glass Footer -->
+<footer class="glass-footer">
+<div class="footer-content">
+<div class="footer-section">
+<p class="footer-copyright">© 2026 Asif Hussain. All rights reserved.</p>
+</div>
+<div class="footer-section">
+<a class="footer-link" href="../index.html">Home</a>
+<a class="footer-link" href="index.html">Security Hub</a>
+<a class="footer-link" href="../sts/documentation.html">Documentation</a>
+<a class="footer-link" href="https://github.com/asifhussain60/CORTEX" target="_blank">GitHub</a>
+</div>
+<div class="footer-section">
+<p class="footer-version">CORTEX</p>
+</div>
+</div>
+</footer>
+<!-- Scripts -->
+<script>
         // Initialize Mermaid
         mermaid.initialize({
             theme: 'dark',
