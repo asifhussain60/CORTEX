@@ -13,13 +13,13 @@ This document shows the **node structure** starting from Home (root), displaying
 ---
 
 **Purpose:** Document the documentation structure for navigation and planning  
-**Last Updated:** January 3, 2026 (Icon-Title Spacing Fix)  
-**Total Pages:** 318 (151 active + 167 stubs)  
+**Last Updated:** January 3, 2026 (Panel Viewer + Design System)  
+**Total Pages:** 320 (153 active + 167 stubs)  
 **Cleanup Stats:** 42 orphaned files archived, 7 new stub pages created, broken links reduced 28% (181 → 129)  
 **CSS Cleanup:** 865 unused classes identified, backup preserved, 335 auto-generated classes, 0 inline styles  
 **v5.0 Architecture:** 28 pages documented (Master Orchestrator Hub + Planning v5 + ADO v2)
-**Architecture Page Fix:** Tier Deep Dive now uses strict 2x2 panel grid (`.principle-card-grid.columns-2`)
-**Spacing Fix:** All icon-title pairs now use `gap: var(--spacing-sm)` (8px) for tight coupling
+**Design System:** Panel viewer relocated to root (docs/panel-viewer.html), glassmorphism guide in design-system/
+**Panel Viewer:** 15 components cataloged, collapsible code inspector, frequency-based ordering
 
 ---
 
@@ -145,6 +145,10 @@ This document shows the **node structure** starting from Home (root), displaying
 │     ├─ Collaboration Patterns - CORTEX [STUB]
 │     ├─ Planning Guidelines - CORTEX [STUB]
 │
+├─📄 DESIGN SYSTEM (2 active, 0 stubs)
+│  ├─ Glassmorphism Design Guide - CORTEX (design-system\glassmorphism-guide.html)
+│  └─ Component Panel Viewer - CORTEX Design System (design-system\panel-viewer.html)
+│
 ├─📄 DASHBOARD DIAGNOSTIC.HTML (1 active, 0 stubs)
 │
 ├─📄 FAQ.HTML (1 active, 0 stubs)
@@ -159,6 +163,9 @@ This document shows the **node structure** starting from Home (root), displaying
 ├─📄 LENS (1 active, 1 stubs)
 │  ├─ CORTEX Lens | CORTEX 4.0 (lens\index.html) - Hub
 │  │
+│
+├─📄 PANEL-VIEWER.HTML (1 active, 0 stubs)
+│  └─ Interactive Component Viewer - CORTEX (panel-viewer.html) - Root Level
 │
 ├─📄 PROTOTYPES (2 active, 36 stubs)
 │  ├─ Index - CORTEX [STUB] (prototypes\index.html) - Hub
@@ -210,7 +217,7 @@ This document shows the **node structure** starting from Home (root), displaying
 
 ---
 
-**Statistics:** 318 total pages | 151 active | 167 stubs | Documentation Cleanup: 42 archived, 7 new stubs, 129 broken links remaining
+**Statistics:** 320 total pages | 153 active | 167 stubs | Documentation Cleanup: 42 archived, 7 new stubs, 129 broken links remaining | Design System: 2 active pages + root panel viewer
 
 ## 📋 v5.0 Architecture Documentation Structure
 
