@@ -6,13 +6,13 @@
   "created_date": "2026-01-03",
   "last_updated": "2026-01-04T00:00:00Z",
   "overall_progress": {
-    "percentage": 6.0,
+    "percentage": 5.26,
     "completed_sub_plans": 1,
-    "total_sub_plans": 18,
+    "total_sub_plans": 19,
     "current_phase": "Phase 1",
-    "current_sub_plan": "00A"
+    "current_sub_plan": "00B"
   },
-  "total_plans": 18,
+  "total_plans": 19,
   "completed_plans": 1,
   "total_phases": 72,
   "completed_phases": 0,
@@ -67,6 +67,21 @@
       ],
       "dependency_rule": "Epic infrastructure must exist",
       "viewer_url": "00C-test-coverage-sprint/test-coverage-sprint-plan-viewer.html"
+    },
+    {
+      "order": "00D",
+      "id": "vscode-cache-optimization",
+      "name": "VSCode Cache Optimization",
+      "folder": "00D-vscode-cache-optimization/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 4,
+      "duration": "2-3h",
+      "status": "ready",
+      "status_emoji": "\u2705",
+      "dependencies": [],
+      "dependency_rule": "No blockers - can run in parallel",
+      "viewer_url": "00D-vscode-cache-optimization/vscode-cache-optimization-plan-viewer.html"
     },
     {
       "order": "01",
@@ -336,6 +351,7 @@
     "test-coverage-sprint": [
       "epic-feature-planner"
     ],
+    "vscode-cache-optimization": [],
     "refinement-orchestrator": [
       "test-coverage-sprint"
     ],
@@ -437,6 +453,21 @@
       ],
       "dependency_rule": "Epic infrastructure must exist",
       "viewer_url": "00C-test-coverage-sprint/test-coverage-sprint-plan-viewer.html"
+    },
+    {
+      "order": "00D",
+      "id": "vscode-cache-optimization",
+      "name": "VSCode Cache Optimization",
+      "folder": "00D-vscode-cache-optimization/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 4,
+      "duration": "2-3h",
+      "status": "ready",
+      "status_emoji": "\u2705",
+      "dependencies": [],
+      "dependency_rule": "No blockers - can run in parallel",
+      "viewer_url": "00D-vscode-cache-optimization/vscode-cache-optimization-plan-viewer.html"
     },
     {
       "order": "01",
