@@ -13,31 +13,31 @@
          */
 
         :root {
-            /* CORTEX Brand Colors */
-            --primary: #7C3AED;
-            --primary-light: #8B5CF6;
-            --primary-dark: #6D28D9;
-            --accent: #10B981;
-            --accent-light: #34D399;
-            --warning: #F59E0B;
-            --error: #EF4444;
-            --info: #06B6D4;
+            /* CORTEX Brand Colors - Darker */
+            --primary: #6D28D9;
+            --primary-light: #7C3AED;
+            --primary-dark: #5B21B6;
+            --accent: #059669;
+            --accent-light: #10B981;
+            --warning: #D97706;
+            --error: #DC2626;
+            --info: #0891B2;
             
-            /* Glassmorphism Backgrounds */
-            --bg-primary: rgba(255, 255, 255, 0.1);
-            --bg-secondary: rgba(255, 255, 255, 0.05);
-            --bg-hover: rgba(255, 255, 255, 0.15);
+            /* Glassmorphism Backgrounds - Darker/More Opaque */
+            --bg-primary: rgba(30, 27, 75, 0.5);
+            --bg-secondary: rgba(20, 18, 50, 0.6);
+            --bg-hover: rgba(40, 35, 90, 0.55);
             
-            /* Glass Effects */
-            --glass-blur: blur(10px);
-            --glass-border: 1px solid rgba(255, 255, 255, 0.18);
-            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            --glass-shadow-hover: 0 12px 40px 0 rgba(31, 38, 135, 0.45);
+            /* Glass Effects - Darker */
+            --glass-blur: blur(12px);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+            --glass-shadow-hover: 0 12px 40px 0 rgba(0, 0, 0, 0.6);
             
-            /* Text Colors */
-            --text-primary: #E5E7EB;
-            --text-secondary: #9CA3AF;
-            --text-muted: #6B7280;
+            /* Text Colors - Slightly Darker */
+            --text-primary: #D1D5DB;
+            --text-secondary: #6B7280;
+            --text-muted: #4B5563;
             
             /* Border Radius */
             --radius-md: 12px;
@@ -56,7 +56,7 @@
 
         body {
             font-family: var(--font-family);
-            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e3a8a 100%);
+            background: linear-gradient(135deg, #0f0e1f 0%, #1a1640 50%, #0f1f3f 100%);
             background-attachment: fixed;
             min-height: 100vh;
             padding: 20px;
@@ -89,21 +89,41 @@
         .header {
             padding: 30px;
             margin-bottom: 20px;
-            text-align: center;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .header-logo {
+            height: 60px;
+            width: auto;
+            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+        }
+
+        .header-title-group {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
         }
 
         .header h1 {
             color: white;
             font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
             font-weight: 600;
+            line-height: 1.2;
         }
 
         .header .subtitle {
             color: var(--text-secondary);
-            font-size: 1.2em;
-            margin-bottom: 20px;
+            font-size: 1.1em;
+            margin: 4px 0 0 0;
             font-weight: 300;
         }
 
@@ -347,6 +367,19 @@
                 font-size: 1.8em;
             }
 
+            .header-logo {
+                height: 40px;
+            }
+
+            .header-brand {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .header-title-group {
+                align-items: center;
+            }
+
             .meta-info {
                 gap: 15px;
             }
@@ -377,8 +410,13 @@
 <body>
     <div class="container">
         <div class="header glass">
-            <h1>🎯 C50: CORTEX v5 Gap Remediation</h1>
-            <div class="subtitle">Epic Planning Dashboard</div>
+            <div class="header-brand">
+                <img src="../../../../../docs/assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="header-logo">
+                <div class="header-title-group">
+                    <h1>C50: CORTEX v5 Gap Remediation</h1>
+                    <div class="subtitle">Epic Planning Dashboard</div>
+                </div>
+            </div>
             <div class="meta-info">
                 <div class="meta-item">
                     <span class="meta-label">Epic ID</span>
