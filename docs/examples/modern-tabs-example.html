@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX Modern Tab System - Example</title>
+    
+    <!-- CORTEX Styles -->
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/modern-tabs.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- D3.js for Interactive Visualizations -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    
+    <style>
+        /* Enhanced spacing and layout */
+        body {
+            padding-top: 2rem;
+        }
+        
+        .page-header {
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+        }
+        
+        .system-overview-section {
+            margin: 3rem auto;
+            padding: 2.5rem;
+            background: rgba(26, 31, 58, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+        }
+        
+        .system-overview-section h2 {
+            color: #00d4ff;
+            font-size: clamp(1.75rem, 5cqi, 2.5rem);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .tab-container {
+            margin: 3rem 0;
+        }
+        
+        /* D3 Visualization Container */
+        #brain-architecture-viz {
+            width: 100%;
+            height: 600px;
+            background: rgba(10, 14, 39, 0.5);
+            border-radius: 12px;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tier-card {
+            background: linear-gradient(135deg, 
+                        rgba(0, 212, 255, 0.1) 0%, 
+                        rgba(123, 97, 255, 0.1) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+        }
+        
+        .tier-card:hover {
+            transform: translateX(8px);
+            border-color: rgba(0, 212, 255, 0.5);
+            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.2);
+        }
+        
+        .tier-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #00d4ff, #7b61ff);
+            border-radius: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin-right: 1rem;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container" style="max-width: 1400px; margin: 0 auto; padding: 0 2rem;">
+            <h1 class="page-title" style="font-size: clamp(2rem, 6cqi, 3.5rem); margin-bottom: 1rem;">
+                <i class="fas fa-brain" style="color: #00d4ff;"></i>
+                CORTEX Documentation
+            </h1>
+            <p class="readable-text" style="font-size: clamp(1.125rem, 3.5cqi, 1.375rem);">Modern, organized, and accessible information architecture</p>
+        </div>
+    </header>
+    
+    <!-- System Overview - Outside Tabs -->
+    <section class="system-overview-section" style="max-width: 1400px; margin: 3rem auto; padding: 2.5rem;">
+        <h2>
+            <i class="fas fa-info-circle"></i>
+            System Overview
+        </h2>
+        
+        <div class="description-block" style="margin: 2rem 0;">
+            <strong>CORTEX</strong> is an AI-powered development intelligence system that transforms 
+            your workflow with automated planning, test-driven development, and autonomous orchestration. 
+            Built on a 4-tier brain architecture, CORTEX learns from your codebase and adapts to your 
+            development patterns.
+        </div>
+        
+        <div class="description-block">
+            This system integrates seamlessly with GitHub Copilot, providing strategic context management, 
+            long-term memory persistence, and intelligent routing to specialized orchestrators. Whether 
+            you're planning complex features, debugging critical issues, or maintaining code quality, 
+            CORTEX has you covered.
+        </div>
+        
+        <!-- Key Features Grid -->
+        <div class="metric-cards-grid" style="margin-top: 3rem;">
+            <div class="metric-card">
+                <div class="metric-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <div class="metric-value">4</div>
+                <div class="metric-label">Brain Tiers</div>
+                <div class="metric-description">
+                    Governance, Working Memory, Knowledge Graph, Development Context
+                </div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="metric-value">10+</div>
+                <div class="metric-label">Orchestrators</div>
+                <div class="metric-description">
+                    Specialized agents for planning, testing, debugging, and automation
+                </div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="metric-value">61</div>
+                <div class="metric-label">Protection Rules</div>
+                <div class="metric-description">
+                    SKULL governance ensures quality, prevents duplication, enforces TDD
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Main Content Area -->
+    <main class="container" style="max-width: 1400px; margin: 3rem auto; padding: 0 2rem;">
+        
+        <!-- Tab System Example -->
+        <div id="main-content-tabs" class="tab-container">
+            
+            <!-- Tab Navigation -->
+            <nav class="tab-nav">
+                <button class="tab-button active">
+                    <i class="fas fa-brain"></i>
+                    Brain Architecture
+                </button>
+                <button class="tab-button">
+                    <i class="fas fa-chart-line"></i>
+                    Metrics
+                </button>
+                <button class="tab-button">
+                    <i class="fas fa-cog"></i>
+                    Configuration
+                </button>
+                <button class="tab-button">
+                    <i class="fas fa-book"></i>
+                    Documentation
+                </button>
+                <button class="tab-button">
+                    <i class="fas fa-rocket"></i>
+                    Getting Started
+                </button>
+            </nav>
+            
+            <!-- Tab Content -->
+            <div class="tab-content-wrapper">
+                
+                <!-- Tab 1: Brain Architecture -->
+                <div class="tab-panel active">
+                    <h2 style="color: #00d4ff; margin-bottom: 2rem; font-size: clamp(1.75rem, 4cqi, 2.25rem);">
+                        <i class="fas fa-brain"></i>
+                        4-Tier Brain Architecture
+                    </h2>
+                    
+                    <!-- D3.js Interactive Visualization -->
+                    <div id="brain-architecture-viz"></div>
+                    
+                    <!-- Tier Detail Cards -->
+                    <div style="margin-top: 3rem;">
+                        
+                        <!-- Tier 0: Governance -->
+                        <div class="tier-card">
+                            <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                                <span class="tier-number" style="background: linear-gradient(135deg, #00d4ff, #7b61ff);">0</span>
+                                <div>
+                                    <h3 style="margin: 0; font-size: 1.5rem; color: #00d4ff;">Tier 0: Governance</h3>
+                                    <p style="margin: 0.25rem 0 0; opacity: 0.8; font-size: 0.9rem;">
+                                        <code>cortex-brain/brain-protection-rules.yaml</code>
+                                    </p>
+                                </div>
+                            </div>
+                            <p style="margin-bottom: 1rem; line-height: 1.7;">
+                                Strategic Knowledge & Universal Lifecycle Laws (SKULL). Contains 61 protection rules 
+                                that enforce development best practices, prevent common pitfalls, and maintain 
+                                architectural integrity across all operations.
+                            </p>
+                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                <span style="padding: 0.25rem 0.75rem; background: rgba(0, 212, 255, 0.2); border-radius: 6px; font-size: 0.875rem;">
+                                    61 Rules
+                                </span>
+                                <span style="padding: 0.25rem 0.75rem; background: rgba(0, 212, 255, 0.2); border-radius: 6px; font-size: 0.875rem;">
+                                    TDD Enforcement
+                                </span>
+                                <span style="padding: 0.25rem 0.75rem; background: rgba(0, 212, 255, 0.2); border-radius: 6px; font-size: 0.875rem;">
+                                    Git Isolation
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Tier 1: Working Memory -->
+                        <div class="tier-card">
+                            <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                                <span class="tier-number" style="background: linear-gradient(135deg, #00ff88, #00d4ff);">1</span>
+                                <div>
+                                    <h3 style="margin: 0; font-size: 1.5rem; color: #00ff88;">Tier 1: Working Memory</h3>
+                                    <p style="margin: 0.25rem 0 0; opacity: 0.8; font-size: 0.9rem;">
+                                        <code>cortex-brain/conversation-context.jsonl</code>
+                                    </p>
+                                </div>
+                            </div>
+                            <p style="margin-bottom: 1rem; line-height: 1.7;">
+                                Session-level context tracking that maintains conversation history across interactions. 
+                                Stores up to 70 conversations with automatic summarization, enabling seamless 
+                                continuation and context awareness.
+                            </p>
+                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                <span style="padding: 0.25rem 0.75rem; background: rgba(0, 255, 136, 0.2); border-radius: 6px; font-size: 0.875rem;">
+                                    70 Conversations
+                                </span>
+                                <span style="padding: 0.25rem 0.75rem; background: rgba(0, 255, 136, 0.2); border-radius: 6px; font-size: 0.875rem;">
+                                    Session State
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Tier 2: Knowledge Graph -->
+                        <div class="tier-card">
+                            <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                                <span class="tier-number" style="background: linear-gradient(135deg, #7b61ff, #ff61d8);">2</span>
+                                <div>
+                                    <h3 style="margin: 0; font-size: 1.5rem; color: #7b61ff;">Tier 2: Knowledge Graph</h3>
+                                    <p style="margin: 0.25rem 0 0; opacity: 0.8; font-size: 0.9rem;">
+                                        <code>cortex-brain/knowledge-graph.yaml</code>
+                                    </p>
+                                </div>
+                            </div>
+                            <p style="margin-bottom: 1rem; line-height: 1.7;">
+                                Long-term relationship mapping between files, functions, concepts, and patterns. 
+                                Powers semantic search and enables CORTEX to understand architectural relationships 
+                                and component dependencies.
+                            </p>
+                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                <span style="padding: 0.25rem 0.75rem; background: rgba(123, 97, 255, 0.2); border-radius: 6px; font-size: 0.875rem;">
+                                    Relationships
+                                </span>
+                                <span style="padding: 0.25rem 0.75rem; background: rgba(123, 97, 255, 0.2); border-radius: 6px; font-size: 0.875rem;">
+                                    Pattern Learning
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Tier 3: Development Context -->
+                        <div class="tier-card">
+                            <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                                <span class="tier-number" style="background: linear-gradient(135deg, #ffa500, #ff4444);">3</span>
+                                <div>
+                                    <h3 style="margin: 0; font-size: 1.5rem; color: #ffa500;">Tier 3: Development Context</h3>
+                                    <p style="margin: 0.25rem 0 0; opacity: 0.8; font-size: 0.9rem;">
+                                        <code>cortex-brain/development-context.yaml</code>
+                                    </p>
+                                </div>
+                            </div>
+                            <p style="margin-bottom: 1rem; line-height: 1.7;">
+                                Project-specific learning repository that captures lessons learned, best practices, 
+                                common pitfalls, and successful patterns. Continuously evolves based on development 
+                                history and team experiences.
+                            </p>
+                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                <span style="padding: 0.25rem 0.75rem; background: rgba(255, 165, 0, 0.2); border-radius: 6px; font-size: 0.875rem;">
+                                    Lessons Learned
+                                </span>
+                                <span style="padding: 0.25rem 0.75rem; background: rgba(255, 165, 0, 0.2); border-radius: 6px; font-size: 0.875rem;">
+                                    Best Practices
+                                </span>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+                <!-- Tab 2: Metrics -->
+                <div class="tab-panel">
+                    <h2 style="color: #00d4ff; margin-bottom: 1.5rem; font-size: clamp(1.5rem, 4cqi, 2rem);">
+                        <i class="fas fa-chart-line"></i>
+                        Performance Metrics
+                    </h2>
+                    
+                    <!-- Modern Metric Cards -->
+                    <div class="metric-cards-grid">
+                        <div class="metric-card">
+                            <div class="metric-icon">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <div class="metric-value">97%</div>
+                            <div class="metric-label">Token Reduction</div>
+                            <div class="metric-description">
+                                Response templates reduced from 15,851 to 486 lines through 
+                                adaptive tier-based architecture.
+                            </div>
+                        </div>
+                        
+                        <div class="metric-card">
+                            <div class="metric-icon">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                            <div class="metric-value">55%</div>
+                            <div class="metric-label">Productivity Gain</div>
+                            <div class="metric-description">
+                                Developers complete tasks 55% faster with AI-assisted planning 
+                                and automated code generation.
+                            </div>
+                        </div>
+                        
+                        <div class="metric-card">
+                            <div class="metric-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="metric-value">94%</div>
+                            <div class="metric-label">Test Success Rate</div>
+                            <div class="metric-description">
+                                TDD enforcement ensures high quality with 94% first-time test 
+                                pass rate (industry average: 67%).
+                            </div>
+                        </div>
+                        
+                        <div class="metric-card">
+                            <div class="metric-icon">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <div class="metric-value">70</div>
+                            <div class="metric-label">Conversations Remembered</div>
+                            <div class="metric-description">
+                                Long-term memory persists context across 70+ conversations, 
+                                eliminating repetitive explanations.
+                            </div>
+                        </div>
+                        
+                        <div class="metric-card">
+                            <div class="metric-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="metric-value">60%</div>
+                            <div class="metric-label">API Cost Reduction</div>
+                            <div class="metric-description">
+                                Intelligent token optimization reduces AI API costs by 60% 
+                                compared to standard implementations.
+                            </div>
+                        </div>
+                        
+                        <div class="metric-card">
+                            <div class="metric-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div class="metric-value">61</div>
+                            <div class="metric-label">Protection Rules</div>
+                            <div class="metric-description">
+                                SKULL governance enforces quality gates, prevents code duplication, 
+                                and maintains architectural integrity.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tab 3: Configuration -->
+                <div class="tab-panel">
+                    <h2 style="color: #00d4ff; margin-bottom: 1.5rem; font-size: clamp(1.5rem, 4cqi, 2rem);">
+                        <i class="fas fa-cog"></i>
+                        Configuration Options
+                    </h2>
+                    
+                    <div class="description-block">
+                        CORTEX configuration is managed through YAML files in the <strong>cortex-brain</strong> 
+                        directory. The system supports hot-reloading, allowing changes to take effect without 
+                        restarting the application.
+                    </div>
+                    
+                    <!-- Configuration sections would go here -->
+                    <div class="visual-data-list" style="margin-top: 2rem;">
+                        <div class="visual-data-item">
+                            <div class="visual-data-icon">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <div class="visual-data-content">
+                                <div class="visual-data-title">master-orchestrator.yaml</div>
+                                <div class="visual-data-text">
+                                    Pattern-based routing rules, orchestrator priorities, and lifecycle hooks 
+                                    for request processing.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="visual-data-item">
+                            <div class="visual-data-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div class="visual-data-content">
+                                <div class="visual-data-title">brain-protection-rules.yaml</div>
+                                <div class="visual-data-text">
+                                    SKULL governance rules for TDD enforcement, planning isolation, 
+                                    and code quality gates.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="visual-data-item">
+                            <div class="visual-data-icon">
+                                <i class="fas fa-palette"></i>
+                            </div>
+                            <div class="visual-data-content">
+                                <div class="visual-data-title">response-templates-v4.yaml</div>
+                                <div class="visual-data-text">
+                                    Adaptive response formatting with INSTANT, FOCUSED, STRUCTURED, 
+                                    and COMPREHENSIVE tiers.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tab 4: Documentation -->
+                <div class="tab-panel">
+                    <h2 style="color: #00d4ff; margin-bottom: 1.5rem; font-size: clamp(1.5rem, 4cqi, 2rem);">
+                        <i class="fas fa-book"></i>
+                        Documentation Resources
+                    </h2>
+                    
+                    <div class="description-block">
+                        Comprehensive documentation is available across multiple formats, from quick reference 
+                        guides to deep architectural analysis. All documentation follows the glassmorphism 
+                        design standard for consistency and readability.
+                    </div>
+                    
+                    <!-- Documentation links would go here -->
+                </div>
+                
+                <!-- Tab 5: Getting Started -->
+                <div class="tab-panel">
+                    <h2 style="color: #00d4ff; margin-bottom: 1.5rem; font-size: clamp(1.5rem, 4cqi, 2rem);">
+                        <i class="fas fa-rocket"></i>
+                        Quick Start Guide
+                    </h2>
+                    
+                    <div class="description-block">
+                        Get started with CORTEX in just a few minutes. Follow these steps to integrate 
+                        CORTEX with your development environment and start benefiting from AI-powered 
+                        development intelligence.
+                    </div>
+                    
+                    <!-- Getting started content would go here -->
+                </div>
+                
+            </div>
+        </div>
+        
+    </main>
+    
+    <!-- Tab System JavaScript -->
+    <script src="../assets/js/modern-tabs.js"></script>
+    
+    <!-- D3.js Brain Architecture Visualization -->
+    <script>
+        // Wait for DOM and D3 to be ready
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof d3 === 'undefined') {
+                console.error('D3.js not loaded. Ensure script tag is present.');
+                return;
+            }
+            
+            // Visualization configuration
+            const container = document.getElementById('brain-architecture-viz');
+            if (!container) return;
+            
+            const width = container.clientWidth;
+            const height = 600;
+            const centerX = width / 2;
+            const centerY = height / 2;
+            
+            // Tier data with positions (circular layout)
+            const tiers = [
+                { 
+                    id: 0, 
+                    name: 'Tier 0: Governance', 
+                    color: 'url(#tier0-gradient)',
+                    angle: 0,
+                    distance: 200,
+                    description: 'SKULL Protection Rules'
+                },
+                { 
+                    id: 1, 
+                    name: 'Tier 1: Working Memory', 
+                    color: 'url(#tier1-gradient)',
+                    angle: 120,
+                    distance: 200,
+                    description: '70 Conversation Context'
+                },
+                { 
+                    id: 2, 
+                    name: 'Tier 2: Knowledge Graph', 
+                    color: 'url(#tier2-gradient)',
+                    angle: 240,
+                    distance: 200,
+                    description: 'Relationship Mapping'
+                },
+                { 
+                    id: 3, 
+                    name: 'Tier 3: Dev Context', 
+                    color: 'url(#tier3-gradient)',
+                    angle: 180,
+                    distance: 140,
+                    description: 'Lessons Learned'
+                }
+            ];
+            
+            // Calculate positions
+            tiers.forEach(tier => {
+                const angleRad = (tier.angle * Math.PI) / 180;
+                tier.x = centerX + tier.distance * Math.cos(angleRad);
+                tier.y = centerY + tier.distance * Math.sin(angleRad);
+            });
+            
+            // Create SVG
+            const svg = d3.select('#brain-architecture-viz')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height)
+                .attr('viewBox', `0 0 ${width} ${height}`)
+                .style('display', 'block')
+                .style('margin', '0 auto');
+            
+            // Define gradients
+            const defs = svg.append('defs');
+            
+            const gradients = [
+                { id: 'tier0-gradient', colors: ['#00d4ff', '#7b61ff'] },
+                { id: 'tier1-gradient', colors: ['#00ff88', '#00d4ff'] },
+                { id: 'tier2-gradient', colors: ['#7b61ff', '#ff61d8'] },
+                { id: 'tier3-gradient', colors: ['#ffa500', '#ff4444'] }
+            ];
+            
+            gradients.forEach(grad => {
+                const gradient = defs.append('radialGradient')
+                    .attr('id', grad.id);
+                gradient.append('stop')
+                    .attr('offset', '0%')
+                    .attr('stop-color', grad.colors[0]);
+                gradient.append('stop')
+                    .attr('offset', '100%')
+                    .attr('stop-color', grad.colors[1]);
+            });
+            
+            // Connection paths (curved lines between tiers)
+            const connections = [
+                { source: 0, target: 1 },
+                { source: 1, target: 2 },
+                { source: 2, target: 0 },
+                { source: 0, target: 3 },
+                { source: 1, target: 3 },
+                { source: 2, target: 3 }
+            ];
+            
+            const linkGroup = svg.append('g').attr('class', 'links');
+            
+            connections.forEach((conn, i) => {
+                const source = tiers[conn.source];
+                const target = tiers[conn.target];
+                
+                // Create curved path
+                const midX = (source.x + target.x) / 2;
+                const midY = (source.y + target.y) / 2;
+                const dx = target.x - source.x;
+                const dy = target.y - source.y;
+                const curve = Math.sqrt(dx * dx + dy * dy) * 0.2;
+                
+                const path = linkGroup.append('path')
+                    .attr('d', `M ${source.x},${source.y} Q ${midX + curve},${midY - curve} ${target.x},${target.y}`)
+                    .attr('stroke', 'rgba(0, 212, 255, 0.3)')
+                    .attr('stroke-width', 2)
+                    .attr('fill', 'none')
+                    .style('opacity', 0);
+                
+                // Animate path appearance with delay
+                path.transition()
+                    .delay(500 + i * 100)
+                    .duration(800)
+                    .style('opacity', 1);
+                
+                // Pulsing animation
+                function pulse() {
+                    path.transition()
+                        .duration(2000)
+                        .attr('stroke', 'rgba(0, 212, 255, 0.6)')
+                        .transition()
+                        .duration(2000)
+                        .attr('stroke', 'rgba(0, 212, 255, 0.3)')
+                        .on('end', pulse);
+                }
+                pulse();
+            });
+            
+            // Node group
+            const nodeGroup = svg.append('g').attr('class', 'nodes');
+            
+            // Create nodes for each tier
+            tiers.forEach((tier, i) => {
+                const node = nodeGroup.append('g')
+                    .attr('class', 'tier-node')
+                    .attr('transform', `translate(${tier.x}, ${tier.y})`)
+                    .style('cursor', 'pointer')
+                    .style('opacity', 0);
+                
+                // Animate node appearance
+                node.transition()
+                    .delay(200 + i * 150)
+                    .duration(600)
+                    .style('opacity', 1);
+                
+                // Outer circle (gradient)
+                const circle = node.append('circle')
+                    .attr('r', 60)
+                    .attr('fill', tier.color)
+                    .attr('stroke', 'rgba(255, 255, 255, 0.3)')
+                    .attr('stroke-width', 2);
+                
+                // Inner circle (number background)
+                node.append('circle')
+                    .attr('r', 35)
+                    .attr('fill', 'rgba(10, 14, 39, 0.8)')
+                    .attr('stroke', 'rgba(255, 255, 255, 0.2)')
+                    .attr('stroke-width', 1);
+                
+                // Tier number
+                node.append('text')
+                    .attr('text-anchor', 'middle')
+                    .attr('dy', '0.35em')
+                    .attr('font-size', '32px')
+                    .attr('font-weight', 'bold')
+                    .attr('fill', 'white')
+                    .text(tier.id);
+                
+                // Tier name (below circle)
+                node.append('text')
+                    .attr('text-anchor', 'middle')
+                    .attr('y', 85)
+                    .attr('font-size', '14px')
+                    .attr('font-weight', '600')
+                    .attr('fill', gradients[i].colors[0])
+                    .text(tier.name);
+                
+                // Description (below name)
+                node.append('text')
+                    .attr('text-anchor', 'middle')
+                    .attr('y', 105)
+                    .attr('font-size', '12px')
+                    .attr('fill', 'rgba(255, 255, 255, 0.7)')
+                    .text(tier.description);
+                
+                // Hover effects
+                node.on('mouseenter', function() {
+                    d3.select(this).select('circle:first-child')
+                        .transition()
+                        .duration(300)
+                        .attr('r', 70)
+                        .attr('stroke-width', 4)
+                        .attr('stroke', gradients[i].colors[0]);
+                    
+                    d3.select(this).transition()
+                        .duration(300)
+                        .attr('transform', `translate(${tier.x}, ${tier.y}) scale(1.05)`);
+                })
+                .on('mouseleave', function() {
+                    d3.select(this).select('circle:first-child')
+                        .transition()
+                        .duration(300)
+                        .attr('r', 60)
+                        .attr('stroke-width', 2)
+                        .attr('stroke', 'rgba(255, 255, 255, 0.3)');
+                    
+                    d3.select(this).transition()
+                        .duration(300)
+                        .attr('transform', `translate(${tier.x}, ${tier.y}) scale(1)`);
+                });
+            });
+            
+            // Responsive resize
+            window.addEventListener('resize', function() {
+                const newWidth = container.clientWidth;
+                svg.attr('width', newWidth)
+                   .attr('viewBox', `0 0 ${newWidth} ${height}`);
+            });
+        });
+    </script>
+    
+</body>
+</html>

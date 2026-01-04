@@ -33,10 +33,11 @@ button, a, input, select, textarea, [role="button"] {
     <meta name="author" content="Asif Hussain">
     <title>Four-Tier Brain Architecture | CORTEX</title>
     <link rel="icon" type="image/png" href="assets/images/CORTEX-logo.png">
-    <link rel="stylesheet" href="assets/css/variables.css">
-    <link rel="stylesheet" href="assets/css/main.css">
-    <link rel="stylesheet" href="assets/css/intentional-classes.css">
-    <link rel="stylesheet" href="assets/css/purpose-driven-themes.css">
+    <link rel="stylesheet" href="../assets/css/variables.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
+    <link rel="stylesheet" href="../assets/css/purpose-driven-themes.css">
+    <link rel="stylesheet" href="../assets/css/four-tier-brain-custom.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script>
@@ -460,25 +461,18 @@ button, a, input, select, textarea, [role="button"] {
 </head>
 <body>
     <!-- Glass Header Navigation -->
-    <header class="glass-header" style="background: rgba(10, 14, 39, 0.85); backdrop-filter: blur(30px); border-bottom: 1px solid rgba(0, 212, 255, 0.2); padding: 1rem 0;">
-        <div class="header-content" style="max-width: 1400px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 2rem;">
+    <header class="glass-header">
+        <div class="header-content">
             <!-- CORTEX Logo (Home Link) -->
-            <a href="../index.html" style="display: inline-block; text-decoration: none; transition: all 0.3s ease; flex-shrink: 0;" 
-               onmouseover="this.style.transform='scale(1.05)'; this.style.filter='drop-shadow(0 6px 16px rgba(0, 212, 255, 0.4))';"
-               onmouseout="this.style.transform='scale(1)'; this.style.filter='drop-shadow(0 2px 8px rgba(0, 212, 255, 0.2))';"
-               title="CORTEX Home">
+            <a href="../index.html" class="logo-link" title="CORTEX Home">
                 <img src="../assets/images/CORTEX-logo.png" 
                      alt="CORTEX - AI Development Orchestrator" 
-                     style="width: 100px; height: 100px; object-fit: contain; filter: drop-shadow(0 2px 8px rgba(0, 212, 255, 0.2));">
+                     class="cortex-logo">
             </a>
             
             <!-- Level 1 Navigation (Architecture Link) -->
             <nav>
-                <a href="index.html" 
-                   class="nav-link" 
-                   style="display: inline-flex; align-items: center; gap: 0.5rem; color: #00d4ff; text-decoration: none; font-size: clamp(16px, 2vw, 18px); font-weight: 500; transition: all 0.3s ease; white-space: nowrap;"
-                   onmouseover="this.style.color='#33e0ff'; this.style.textShadow='0 0 20px rgba(0, 212, 255, 0.6)';"
-                   onmouseout="this.style.color='#00d4ff'; this.style.textShadow='none';">
+                <a href="index.html" class="nav-link">
                     <i class="fas fa-sitemap"></i>
                     <span>Architecture Hub</span>
                 </a>
@@ -521,17 +515,14 @@ button, a, input, select, textarea, [role="button"] {
         <div class="tab-content active" role="tabpanel" id="tab-overview" aria-labelledby="btn-overview">
             <!-- Overview Section -->
             <div class="glass-card-display animation-t1">
-                <h2 class="section-title">
-                    <i class="fas fa-brain pulse-glow-glass--fast"></i>
-                    Overview
-                </h2>
+                <h2 class="section-title"><i class="fas fa-brain pulse-glow-glass--fast"></i> Overview</h2>
                 <div class="overview-content">
-                    <p style="font-size: clamp(19px, 2.6vw, 23px); margin-bottom: 2rem;">
+                    <p>
                         The <strong>4-Tier Brain</strong> is CORTEX's hierarchical memory architecture that enables intelligent, 
                         context-aware orchestration. Each tier serves a distinct purpose in the cognitive pipeline, from rigid 
                         governance rules to dynamic execution context.
                     </p>
-                    <p style="font-size: clamp(19px, 2.6vw, 23px);">
+                    <p>
                         Unlike traditional AI systems with flat memory models, CORTEX's tiered approach creates a <em>memory hierarchy</em> 
                         that mirrors human cognition: immutable rules (instinct), working memory (consciousness), long-term knowledge 
                         (experience), and environmental context (perception).
@@ -541,10 +532,7 @@ button, a, input, select, textarea, [role="button"] {
 
             <!-- Architecture Diagram -->
             <div class="glass-card-display animation-t1">
-                <h2 class="section-title">
-                    <i class="fas fa-project-diagram pulse-glow-glass--fast"></i>
-                    System Architecture
-                </h2>
+                <h2 class="section-title"><i class="fas fa-project-diagram pulse-glow-glass--fast"></i> System Architecture</h2>
                 <div class="mermaid-container">
                     <div class="mermaid">
 graph TD
@@ -580,72 +568,44 @@ graph TD
             </div>
 
             <!-- Benefits -->
-            <div class="glass-card-display animation-t1" style="background: linear-gradient(135deg, rgba(26, 31, 58, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%); border: 1px solid rgba(0, 212, 255, 0.3); padding: 3rem;">
-                <div style="text-align: center; margin-bottom: 3rem;">
-                    <div style="display: inline-flex; align-items: center; justify-content: center; width: 80px; height: 80px; background: linear-gradient(135deg, #00d4ff 0%, #7c7cff 100%); border-radius: 16px; margin-bottom: 1.5rem; box-shadow: 0 8px 32px rgba(0, 212, 255, 0.4);">
-                        <i class="fas fa-trophy" style="font-size: 2.5rem; color: #fff;"></i>
+            <div class="glass-card-display animation-t1 benefits-hero">
+                <div class="benefits-header">
+                    <div class="benefits-icon-badge">
+                        <i class="fas fa-trophy"></i>
                     </div>
-                    <h2 style="font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; margin: 0; color: #fff; letter-spacing: -0.02em;">
-                        Key Benefits
-                    </h2>
-                    <p style="font-size: clamp(16px, 2vw, 19px); color: rgba(255, 255, 255, 0.7); margin-top: 0.75rem; font-style: italic;">
-                        Intelligent Architecture Advantages
-                    </p>
+                    <h2 class="benefits-title">Key Benefits</h2>
+                    <p class="benefits-subtitle">Intelligent Architecture Advantages</p>
                 </div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; max-width: 1200px; margin: 0 auto;">
-                    <div style="background: rgba(0, 0, 0, 0.3); padding: 2rem; border-radius: 12px; border-left: 4px solid #00d4ff; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 12px 32px rgba(0, 212, 255, 0.3)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
-                        <div style="display: flex; align-items: flex-start; gap: 1rem;">
-                            <i class="fas fa-check-circle" style="font-size: 1.5rem; color: #00ff88; margin-top: 0.25rem; flex-shrink: 0;"></i>
-                            <div>
-                                <h3 style="font-size: clamp(1.25rem, 2vw, 1.5rem); font-weight: 600; margin: 0 0 0.75rem 0; color: #fff;">Safety</h3>
-                                <p style="font-size: clamp(15px, 1.8vw, 17px); line-height: 1.6; margin: 0; color: rgba(255, 255, 255, 0.8);">Tier 0 prevents harmful actions before execution</p>
-                            </div>
-                        </div>
+                <div class="principle-card-grid columns-3">
+                    <div class="glass-card-display animation-t1">
+                        <i class="fas fa-check-circle benefit-icon"></i>
+                        <h3>Safety</h3>
+                        <p>Tier 0 prevents harmful actions before execution</p>
                     </div>
-                    <div style="background: rgba(0, 0, 0, 0.3); padding: 2rem; border-radius: 12px; border-left: 4px solid #00d4ff; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 12px 32px rgba(0, 212, 255, 0.3)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
-                        <div style="display: flex; align-items: flex-start; gap: 1rem;">
-                            <i class="fas fa-check-circle" style="font-size: 1.5rem; color: #00ff88; margin-top: 0.25rem; flex-shrink: 0;"></i>
-                            <div>
-                                <h3 style="font-size: clamp(1.25rem, 2vw, 1.5rem); font-weight: 600; margin: 0 0 0.75rem 0; color: #fff;">Statefulness</h3>
-                                <p style="font-size: clamp(15px, 1.8vw, 17px); line-height: 1.6; margin: 0; color: rgba(255, 255, 255, 0.8);">Tier 1 enables resuming work across sessions</p>
-                            </div>
-                        </div>
+                    <div class="glass-card-display animation-t1">
+                        <i class="fas fa-check-circle benefit-icon"></i>
+                        <h3>Statefulness</h3>
+                        <p>Tier 1 enables resuming work across sessions</p>
                     </div>
-                    <div style="background: rgba(0, 0, 0, 0.3); padding: 2rem; border-radius: 12px; border-left: 4px solid #00d4ff; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 12px 32px rgba(0, 212, 255, 0.3)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
-                        <div style="display: flex; align-items: flex-start; gap: 1rem;">
-                            <i class="fas fa-check-circle" style="font-size: 1.5rem; color: #00ff88; margin-top: 0.25rem; flex-shrink: 0;"></i>
-                            <div>
-                                <h3 style="font-size: clamp(1.25rem, 2vw, 1.5rem); font-weight: 600; margin: 0 0 0.75rem 0; color: #fff;">Learning</h3>
-                                <p style="font-size: clamp(15px, 1.8vw, 17px); line-height: 1.6; margin: 0; color: rgba(255, 255, 255, 0.8);">Tier 2 captures lessons, improving over time</p>
-                            </div>
-                        </div>
+                    <div class="glass-card-display animation-t1">
+                        <i class="fas fa-check-circle benefit-icon"></i>
+                        <h3>Learning</h3>
+                        <p>Tier 2 captures lessons, improving over time</p>
                     </div>
-                    <div style="background: rgba(0, 0, 0, 0.3); padding: 2rem; border-radius: 12px; border-left: 4px solid #00d4ff; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 12px 32px rgba(0, 212, 255, 0.3)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
-                        <div style="display: flex; align-items: flex-start; gap: 1rem;">
-                            <i class="fas fa-check-circle" style="font-size: 1.5rem; color: #00ff88; margin-top: 0.25rem; flex-shrink: 0;"></i>
-                            <div>
-                                <h3 style="font-size: clamp(1.25rem, 2vw, 1.5rem); font-weight: 600; margin: 0 0 0.75rem 0; color: #fff;">Context Awareness</h3>
-                                <p style="font-size: clamp(15px, 1.8vw, 17px); line-height: 1.6; margin: 0; color: rgba(255, 255, 255, 0.8);">Tier 3 grounds actions in current workspace reality</p>
-                            </div>
-                        </div>
+                    <div class="glass-card-display animation-t1">
+                        <i class="fas fa-check-circle benefit-icon"></i>
+                        <h3>Context Awareness</h3>
+                        <p>Tier 3 grounds actions in current workspace reality</p>
                     </div>
-                    <div style="background: rgba(0, 0, 0, 0.3); padding: 2rem; border-radius: 12px; border-left: 4px solid #00d4ff; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 12px 32px rgba(0, 212, 255, 0.3)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
-                        <div style="display: flex; align-items: flex-start; gap: 1rem;">
-                            <i class="fas fa-check-circle" style="font-size: 1.5rem; color: #00ff88; margin-top: 0.25rem; flex-shrink: 0;"></i>
-                            <div>
-                                <h3 style="font-size: clamp(1.25rem, 2vw, 1.5rem); font-weight: 600; margin: 0 0 0.75rem 0; color: #fff;">Separation of Concerns</h3>
-                                <p style="font-size: clamp(15px, 1.8vw, 17px); line-height: 1.6; margin: 0; color: rgba(255, 255, 255, 0.8);">Each tier has a single, well-defined responsibility</p>
-                            </div>
-                        </div>
+                    <div class="glass-card-display animation-t1">
+                        <i class="fas fa-check-circle benefit-icon"></i>
+                        <h3>Separation of Concerns</h3>
+                        <p>Each tier has a single, well-defined responsibility</p>
                     </div>
-                    <div style="background: rgba(0, 0, 0, 0.3); padding: 2rem; border-radius: 12px; border-left: 4px solid #00d4ff; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 12px 32px rgba(0, 212, 255, 0.3)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
-                        <div style="display: flex; align-items: flex-start; gap: 1rem;">
-                            <i class="fas fa-check-circle" style="font-size: 1.5rem; color: #00ff88; margin-top: 0.25rem; flex-shrink: 0;"></i>
-                            <div>
-                                <h3 style="font-size: clamp(1.25rem, 2vw, 1.5rem); font-weight: 600; margin: 0 0 0.75rem 0; color: #fff;">Scalability</h3>
-                                <p style="font-size: clamp(15px, 1.8vw, 17px); line-height: 1.6; margin: 0; color: rgba(255, 255, 255, 0.8);">Add/modify tiers without affecting others</p>
-                            </div>
-                        </div>
+                    <div class="glass-card-display animation-t1">
+                        <i class="fas fa-check-circle benefit-icon"></i>
+                        <h3>Scalability</h3>
+                        <p>Add/modify tiers without affecting others</p>
                     </div>
                 </div>
             </div>
@@ -1034,15 +994,12 @@ graph TD
 
         <!-- Related Pages -->
         <div class="glass-card-display animation-t1">
-            <h2 class="section-title">
-                <i class="fas fa-link pulse-glow-glass--fast"></i>
-                Related Topics
-            </h2>
+            <h2 class="section-title"><i class="fas fa-link pulse-glow-glass--fast"></i> Related Topics</h2>
             <div class="feature-list">
                 <div class="feature-item">
                     <i class="fas fa-users"></i>
                     <div>
-                        <a href="agent-system.html" style="color: #00d4ff; text-decoration: none;">
+                        <a href="agent-system.html" class="level2-link">
                             <strong>Agent System</strong><br>
                             <small>How Planning & Execution agents coordinate via Tier 1</small>
                         </a>
@@ -1051,7 +1008,7 @@ graph TD
                 <div class="feature-item">
                     <i class="fas fa-memory"></i>
                     <div>
-                        <a href="working-memory.html" style="color: #00d4ff; text-decoration: none;">
+                        <a href="working-memory.html" class="level2-link">
                             <strong>Working Memory Deep Dive</strong><br>
                             <small>Tier 1 internals: PlanningStateDB, conversation context</small>
                         </a>
@@ -1060,7 +1017,7 @@ graph TD
                 <div class="feature-item">
                     <i class="fas fa-shield-halved"></i>
                     <div>
-                        <a href="skull-protection.html" style="color: #00d4ff; text-decoration: none;">
+                        <a href="skull-protection.html" class="level2-link">
                             <strong>SKULL Protection Rules</strong><br>
                             <small>Complete list of 61 Tier 0 governance constraints</small>
                         </a>
@@ -1069,7 +1026,7 @@ graph TD
                 <div class="feature-item">
                     <i class="fas fa-network-wired"></i>
                     <div>
-                        <a href="knowledge-graph.html" style="color: #00d4ff; text-decoration: none;">
+                        <a href="knowledge-graph.html" class="level2-link">
                             <strong>Knowledge Graph</strong><br>
                             <small>Tier 2 structure: nodes, relationships, querying</small>
                         </a>
