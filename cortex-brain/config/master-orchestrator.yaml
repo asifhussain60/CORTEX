@@ -192,10 +192,22 @@ fallback:
     temperature: 0.1
     max_tokens: 500
 
-# Orchestrator Lifecycle Hooks
+# Orchestrator Lifecycle Hooks (CORTEX v5 Universal Pattern)
+# Phase -2: Setup Verification | Phase 0-N: Work | Phase N+1: Teardown + REFACTOR
 lifecycle_hooks:
-  # Pre-execution hooks (run before orchestrator.execute())
+  # Phase -2: Setup Verification (Pre-execution - ALL orchestrators)
   pre_execution:
+    - name: "setup_verification"
+      enabled: true
+      priority: 1
+      middleware: "src.orchestrators.middleware.setup_verification.SetupVerifier"
+      description: "Verify dependencies, detect false positives, check cache state"
+      checks:
+        - "validate_dependencies_implementation"  # Not just file checks
+        - "detect_false_positives"
+        - "check_vscode_cache_state"
+        - "validate_governance_compliance"
+    
     - name: "validate_dependencies"
       enabled: true
       priority: 10
@@ -204,7 +216,7 @@ lifecycle_hooks:
       enabled: true
       priority: 20
   
-  # Post-execution hooks (run after successful execution)
+  # Phase N+1: Teardown + REFACTOR + Commit (Post-execution - ALL orchestrators)
   post_execution:
     - name: "save_artifacts"
       enabled: true
@@ -213,6 +225,35 @@ lifecycle_hooks:
     - name: "update_metrics"
       enabled: true
       priority: 20
+    
+    - name: "teardown_refactor"
+      enabled: true
+      priority: 30
+      middleware: "src.orchestrators.middleware.teardown_refactor.TeardownRefactor"
+      description: "Whole-file cleanup, remove orphaned code, git commit"
+      phases:
+        - name: "REFACTOR"
+          cleanup_rules:
+            - "Remove unused imports"
+            - "Remove orphaned code"
+            - "Remove duplicate functions"
+            - "Consolidate redundant logic"
+            - "Update docstrings"
+            - "Format code (black/prettier)"
+        
+        - name: "Git Commit"
+          commit_strategy: "atomic"  # One commit per orchestrator execution
+          commit_pattern: "/cortex-git-commit"
+          commit_message_template: |
+            {orchestrator_name}: {phase_summary}
+            
+            {change_summary}
+            
+            Files modified: {file_count}
+            Tests added: {test_count}
+            Coverage: {coverage_change}
+            
+            Co-authored-by: CORTEX v5 <cortex@asifhussain.dev>
   
   # Error hooks (run on execution failure)
   on_error:

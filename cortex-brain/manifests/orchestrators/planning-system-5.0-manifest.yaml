@@ -21,10 +21,12 @@ folder_structure:
     reasoning: "Consistency with existing CORTEX structure, filesystem compatibility"
   
   subfolders:
-    - name: "context"
-      description: "Context discovery and analysis documents"
+    - name: "analysis"
+      description: "Deep analysis, architecture review, and investigation reports"
     - name: "artifacts"
       description: "Generated code, configs, and outputs"
+    - name: "context"
+      description: "Context discovery and background documents"
     - name: "reports"
       description: "Progress and completion reports"
     - name: "tracking"
@@ -77,7 +79,32 @@ execution_instructions:
       overall_completion: "Summary table with key metrics (≤40 lines)"
 
 # Execution phases (config-only, Python implements logic)
+# CORTEX v5 Universal Pattern: Phase -2 (Setup), Phase 0-N (Work), Phase N+1 (Teardown + REFACTOR)
 phases:
+  - number: -2
+    name: "Setup Verification"
+    description: "Verify dependencies met, detect false positives, check cache state"
+    estimated_duration_hours: 0.1
+    required: true
+    middleware: "src.orchestrators.middleware.setup_verification.SetupVerifier"
+    validation:
+      dependency_check:
+        enabled: true
+        method: "implementation_test"  # Not just file existence
+        false_positive_detection: true
+        exit_on_failure: true
+      cache_check:
+        enabled: true
+        vscode_cache_clear_threshold: "30_days_inactive"
+        force_clear_on_brittleness: true
+      governance_check:
+        enabled: true
+        validate_skull_rules: true
+        check_tier0_compliance: true
+    outputs:
+      - "analysis/setup-verification-report.md"
+      - "tracking/dependency-validation.json"
+  
   - number: 0
     name: "Context Discovery"
     description: "Search workspace for relevant files and patterns"
@@ -102,11 +129,12 @@ phases:
   
   - number: 3
     name: "Folder Creation"
-    description: "Create directory structure"
+    description: "Create directory structure (5 subfolders: analysis, artifacts, context, reports, tracking)"
     estimated_duration_hours: 0.1
     outputs:
-      - "context/"
+      - "analysis/"
       - "artifacts/"
+      - "context/"
       - "reports/"
       - "tracking/"
   
@@ -116,6 +144,47 @@ phases:
     estimated_duration_hours: 0.2
     outputs:
       - "reports/validation-report.md"
+  
+  - number: 999
+    name: "Teardown + REFACTOR + Commit"
+    description: "Whole-file cleanup, remove orphaned code, git commit with /cortex-git-commit"
+    estimated_duration_hours: 0.3
+    required: true
+    middleware: "src.orchestrators.middleware.teardown_refactor.TeardownRefactor"
+    phases:
+      - name: "REFACTOR"
+        description: "Whole-file cleanup of all modified files"
+        cleanup_rules:
+          - "Remove unused imports"
+          - "Remove orphaned code"
+          - "Remove duplicate functions"
+          - "Consolidate redundant logic"
+          - "Update docstrings"
+          - "Format code (black/prettier)"
+        validation:
+          - "All tests still pass after refactor"
+          - "No new linting errors introduced"
+      
+      - name: "Git Commit"
+        description: "Automated commit with /cortex-git-commit pattern"
+        commit_strategy: "atomic"  # One commit per orchestrator execution
+        commit_message_template: |
+          {orchestrator_name}: {phase_summary}
+          
+          {change_summary}
+          
+          Files modified: {file_count}
+          Tests added: {test_count}
+          Coverage: {coverage_change}
+          
+          Co-authored-by: CORTEX v5 <cortex@asifhussain.dev>
+        validation:
+          - "All files staged successfully"
+          - "Commit message follows convention"
+          - "No sensitive data in commit"
+    outputs:
+      - "reports/refactor-report.md"
+      - "tracking/git-commit-sha.txt"
 
 # Context discovery configuration
 context_discovery:
@@ -183,8 +252,9 @@ validation:
     - "tracking/CONTINUATION-PROMPT.md"
   
   required_folders:
-    - "context"
+    - "analysis"
     - "artifacts"
+    - "context"
     - "reports"
     - "tracking"
   
@@ -196,6 +266,41 @@ validation:
   
   min_plan_length_lines: 50
   max_plan_length_lines: 5000
+  
+  # Phase-level acceptance criteria (Gap 1 remediation)
+  phase_acceptance_criteria:
+    enabled: true
+    template_path: "cortex-brain/templates/planning/acceptance-criteria-template.md"
+    
+    dor_validation:
+      enforce_blocking: true  # Block phase start if DoR fails
+      required_checks:
+        - "dependencies_met"
+        - "resources_available"
+        - "prerequisites_complete"
+        - "false_positive_check"  # NEW: Verify deps are ACTUALLY complete
+    
+    dod_validation:
+      enforce_blocking: true  # Block phase completion if DoD fails
+      required_checks:
+        - "deliverables_created"
+        - "tests_passing"
+        - "documentation_updated"
+        - "refactor_complete"  # NEW: Phase N+1 REFACTOR completed
+  
+  # Epic-level acceptance criteria (Gap 3 remediation)
+  epic_acceptance_criteria:
+    enabled: true
+    validator_class: "src.orchestrators.planning.epic_acceptance_validator.EpicAcceptanceValidator"
+    
+    production_readiness:
+      required_criteria_passed: "100%"
+      required_test_coverage: "80%"
+      required_dod_passed: true
+      vscode_cache_validated: true  # Gap 4 remediation
+    
+    tracker_path: "tracking/epic-acceptance-tracker.json"
+    matrix_path: "reports/epic-acceptance-matrix.md"
 
 # Database integration
 database:
@@ -247,14 +352,74 @@ master_orchestrator:
       - "jinja2"
     
     lifecycle_hooks:
+      # Phase -2: Setup Verification (NEW - Universal CORTEX v5 pattern)
       pre_execution:
-        - "validate_workspace"
-        - "check_dependencies"
+        - name: "setup_verification"
+          enabled: true
+          priority: 1
+          middleware: "src.orchestrators.middleware.setup_verification.SetupVerifier"
+          checks:
+            - "validate_dependencies_implementation"  # Not just file checks
+            - "detect_false_positives"
+            - "check_vscode_cache_state"
+            - "validate_governance_compliance"
+        
+        - name: "validate_workspace"
+          enabled: true
+          priority: 5
+        
+        - name: "check_dependencies"
+          enabled: true
+          priority: 10
+        
+        - name: "validate_phase_dor"
+          enabled: true
+          priority: 15
+          description: "Gap 1 remediation: Phase-level DoR validation"
+        
+        - name: "governance_checkpoint"
+          enabled: true
+          priority: 20
+          description: "Gap 2 remediation: Runtime governance enforcement"
       
+      # Phase N+1: Teardown + REFACTOR + Commit (NEW - Universal CORTEX v5 pattern)
       post_execution:
-        - "save_plan_artifact"
-        - "update_continuation_prompt"
-        - "create_git_checkpoint"
+        - name: "validate_phase_dod"
+          enabled: true
+          priority: 5
+          description: "Gap 1 remediation: Phase-level DoD validation"
+        
+        - name: "save_plan_artifact"
+          enabled: true
+          priority: 10
+        
+        - name: "update_continuation_prompt"
+          enabled: true
+          priority: 15
+        
+        - name: "governance_checkpoint"
+          enabled: true
+          priority: 20
+          description: "Gap 2 remediation: Runtime governance enforcement"
+        
+        - name: "validate_epic_acceptance"
+          enabled: true
+          priority: 25
+          condition: "orchestrator_type == 'planning' AND plan_type == 'epic'"
+          description: "Gap 3 remediation: Epic acceptance validation"
+        
+        - name: "teardown_refactor"
+          enabled: true
+          priority: 30
+          middleware: "src.orchestrators.middleware.teardown_refactor.TeardownRefactor"
+          phases:
+            - "whole_file_refactor"
+            - "remove_orphaned_code"
+            - "git_commit_atomic"
+        
+        - name: "create_git_checkpoint"
+          enabled: true
+          priority: 35
       
       on_error:
         - "log_failure"
@@ -273,7 +438,7 @@ performance:
   cache_search_results: true
   cache_ttl_seconds: 3600
 
-# Governance integration (Phase 4 enhancement)
+# Governance integration (Phase 4 enhancement + Gap 2 remediation)
 governance:
   tier0_validation:
     enabled: true
@@ -286,6 +451,24 @@ governance:
       - "DOCUMENT_ORGANIZATION_ENFORCEMENT"
       - "GIT_ISOLATION"
       - "PLANNING_ISOLATION"
+      - "SETUP_VERIFICATION"  # NEW: Phase -2 mandatory
+      - "TEARDOWN_REFACTOR"   # NEW: Phase N+1 mandatory
+  
+  # Runtime governance enforcement (Gap 2 remediation)
+  runtime_enforcement:
+    enabled: true
+    middleware: "src.orchestrators.middleware.governance_checkpoint.GovernanceCheckpoint"
+    
+    checkpoints:
+      phase_start: true
+      phase_operations: true
+      phase_complete: true
+    
+    audit_trail:
+      enabled: true
+      log_path: "tracking/governance-audit.jsonl"
+      track_violations: true
+      track_overrides: false  # No overrides allowed
       
   critical_path_protection:
     enabled: true
