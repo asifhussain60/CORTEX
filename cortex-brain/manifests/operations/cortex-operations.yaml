@@ -5594,15 +5594,40 @@ operations:
       completion_percentage: 100
   refinement_orchestrator:
     name: Refinement Orchestrator
-    description: refinement_orchestrator module
+    description: 7-phase guided code improvement with TDD enforcement (v5.0)
     deployment_tier: admin
     execution_method: python_module
-    category: utility
+    category: code_quality
     modules:
     - refinement_orchestrator
+    class: RefinementOrchestrator
+    config_path: cortex-brain/manifests/orchestrators/refinement-manifest.yaml
+    triggers:
+      - "refine"
+      - "improve"
+      - "optimize"
+      - "code quality"
+      - "refactor"
+    phases:
+      - code_analysis
+      - issue_identification
+      - impact_assessment
+      - refactoring_plan
+      - implementation
+      - validation
+      - documentation
+    features:
+      - complexity_analysis
+      - anti_pattern_detection
+      - test_coverage_analysis
+      - tdd_enforcement
+      - rollback_checkpoints
+      - before_after_metrics
     implementation_status:
       status: ready
       completion_percentage: 100
+      version: "5.0"
+      epic: C50-01
   session_context_manager:
     name: Session Context Manager
     description: session_context_manager module

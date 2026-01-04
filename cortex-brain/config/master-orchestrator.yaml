@@ -182,15 +182,32 @@ routing_rules:
         - "Preview-first workflow"
         - "Component pattern library"
   
-  # Refinement - DISABLED: orchestrator not yet registered
-  # - pattern: "^(refine|improve|optimize).*$"
-  #   orchestrator: "refinement_orchestrator"
-  #   confidence: 1.0
-  #   match_type: "regex"
-  #   priority: 60
-  #   metadata:
-  #     description: "Code refinement and improvement"
-  #     autonomous: false
+  # Refinement Orchestrator (C50-01 - ACTIVE)
+  # 7-phase guided code improvement with TDD enforcement
+  - pattern: "^(refine|improve|optimize|code quality|refactor).*$"
+    orchestrator: "refinement_orchestrator"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 60
+    metadata:
+      description: "7-phase code refinement with TDD enforcement"
+      autonomous: false
+      version: "5.0"
+      phases:
+        - "Code Analysis"
+        - "Issue Identification"
+        - "Impact Assessment"
+        - "Refactoring Plan"
+        - "Implementation"
+        - "Validation"
+        - "Documentation"
+      features:
+        - "Complexity analysis (cyclomatic, cognitive)"
+        - "Anti-pattern detection"
+        - "Test coverage analysis"
+        - "TDD enforcement (RED→GREEN→REFACTOR)"
+        - "Rollback checkpoints"
+        - "Before/after metrics"
 
 # LLM Fallback Configuration (Secondary)
 # Handles ambiguous inputs that don't match patterns

@@ -64,11 +64,14 @@ orchestrators:
     type: "guided"
     description: "Intelligent HTML/CSS view development with glassmorphism design system"
     version: "1.0.0"
-    features:
-      - "Vision API integration"
-      - "Tier 2 learning system"
-      - "WCAG AA compliance"
-      - "Mermaid diagram generation"
+  
+  refinement_orchestrator:
+    class: "RefinementOrchestrator"
+    module: "src.orchestrators.refinement_orchestrator"
+    config: "cortex-brain/manifests/orchestrators/refinement-manifest.yaml"
+    type: "guided"
+    description: "7-phase code refinement with TDD enforcement"
+    version: "5.0.0"
 
 # Server settings
 server:
