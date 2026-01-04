@@ -150,31 +150,47 @@ button, a, input, select, textarea, [role="button"] {
             
             <p class="intro-text">Toolkit Manager is CORTEX's <strong>Master Orchestrator Routing Layer</strong> that intelligently routes user requests to the appropriate specialized orchestrator. It uses a <strong>hybrid approach</strong>: fast pattern-based matching for exact intents, with LLM classification fallback for ambiguous requests.</p>
             
-            <div class="highlight-box">
-                <div class="highlight-icon">
-                    <i class="fas fa-lightbulb pulse-glow-glass--fast"></i>
+            <!-- Key Capabilities Cards -->
+            <section class="capability-tiles-container">
+                <h2 class="section-title"><i class="fas fa-lightbulb pulse-glow-glass--fast"></i> Key Features</h2>
+                <div class="capability-tiles">
+                    <div class="capability-tile">
+                        <i class="fas fa-route pulse-glow-glass--fast"></i>
+                        <div>
+                            <strong>Hybrid Routing</strong>
+                            <span>Pattern matching (fast) + LLM classification (intelligent)</span>
+                        </div>
+                    </div>
+                    <div class="capability-tile">
+                        <i class="fas fa-layer-group pulse-glow-glass--fast"></i>
+                        <div>
+                            <strong>8 Orchestrators</strong>
+                            <span>Planning, TDD, ADO, Sanitization, Maintenance, Refinement, Vision, Diagnostics</span>
+                        </div>
+                    </div>
+                    <div class="capability-tile">
+                        <i class="fas fa-check-circle pulse-glow-glass--fast"></i>
+                        <div>
+                            <strong>Zero Ambiguity</strong>
+                            <span>LLM fallback resolves unclear intents</span>
+                        </div>
+                    </div>
+                    <div class="capability-tile">
+                        <i class="fas fa-shield-alt pulse-glow-glass--fast"></i>
+                        <div>
+                            <strong>Autonomous Handoff</strong>
+                            <span>🛡️ orchestrators execute independently</span>
+                        </div>
+                    </div>
+                    <div class="capability-tile">
+                        <i class="fas fa-file-alt pulse-glow-glass--fast"></i>
+                        <div>
+                            <strong>Manifest-Driven</strong>
+                            <span>Orchestrator definitions stored in YAML</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="highlight-content">
-                    <h3>Key Features</h3>
-                    <div class="capability-tiles">
-    <div class="glass-card">
-        <div class="card-body"><i class="fas fa-check-circle pulse-glow-glass--fast"></i><strong>Hybrid Routing:</strong> Pattern matching (fast) + LLM classification (intelligent)</div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body"><i class="fas fa-check-circle pulse-glow-glass--fast"></i><strong>8 Orchestrators:</strong> Planning, TDD, ADO, Sanitization, Maintenance, Refinement, Vision, Diagnostics</div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body"><i class="fas fa-check-circle pulse-glow-glass--fast"></i><strong>Zero Ambiguity:</strong> LLM fallback resolves unclear intents</div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body"><i class="fas fa-check-circle pulse-glow-glass--fast"></i><strong>Autonomous Handoff:</strong> 🛡️ orchestrators execute independently</div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body"><i class="fas fa-check-circle pulse-glow-glass--fast"></i><strong>Manifest-Driven:</strong> Orchestrator definitions stored in YAML</div>
-    </div>
-</div>
-                </div>
-            </div>
+            </section>
         </section>
 
         <!-- Routing Architecture -->
