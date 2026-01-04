@@ -5549,6 +5549,139 @@ validation:
         - Consistent naming conventions
         - Scalable structure
     
+    # ========================================
+    # EPIC PLANNING FOLDER STRUCTURE ENFORCEMENT
+    # Added: January 4, 2026
+    # ========================================
+    - rule_id: "EPIC_PLANNING_FOLDER_STRUCTURE"
+      name: "Epic Planning Folder Structure Enforcement"
+      severity: "blocked"
+      description: "Epic plans MUST use universal subfolder structure (context/, reports/, artifacts/, tracking/). Only master plan (00-*.md), orchestrator scripts (.py, .json), and sub-plan folders allowed at root. Enforced via brittleness testing."
+      
+      detection:
+        combined_keywords:
+          planning_file_creation:
+            - "create"
+            - "planning/active/"
+            - "*.md"
+          wrong_location:
+            - "planning/active/{epic}/*.md"
+            - "not 00-*.md"
+            - "not in subfolder"
+        scope: ["file_creation", "target_path"]
+        logic: "AND"
+      
+      alternatives:
+        - "STEP 1: Determine document category:"
+        - "  - Vision/design/reference docs → context/"
+        - "  - Completion reports/status updates → reports/"
+        - "  - Diagrams/templates/supporting files → artifacts/"
+        - "  - Progress tracking JSON → tracking/"
+        - "STEP 2: For new epics, use scaffold generator:"
+        - "  python cortex-toolkit/core/utilities/plan_scaffold_generator.py 'EPIC-NAME'"
+        - "STEP 3: Place file in correct subfolder with filename ≤20 chars"
+        - "STEP 4: Run brittleness test before committing:"
+        - "  python plan_orchestrator.py brittleness --auto-fix"
+      
+      evidence_template: |
+        Epic planning folder structure violation detected!
+        
+        Target: '{target_path}'
+        Epic: '{epic_name}'
+        
+        ❌ WRONG: Root-level markdown file in epic folder
+        - Path: planning/active/CORTEX-5.0/VISION-DOCUMENT.md
+        - Reason: Pollutes epic root, violates planning-system-4.0-manifest.yaml
+        - Impact: Difficult navigation, inconsistent structure across epics
+        
+        ✅ CORRECT: Organized in universal subfolders
+        - Path: planning/active/CORTEX-5.0/context/vision-doc.md
+        - Category: context/
+        - Filename: vision-doc.md (10 chars ≤ 20 char limit)
+        
+        **Required Universal Subfolders:**
+        cortex-brain/documents/planning/active/{EPIC-NAME}/
+        ├── 00-MASTER-PLAN.md          # ✅ Allowed at root
+        ├── plan_orchestrator.py       # ✅ Allowed at root (if applicable)
+        ├── .orchestrator-state.json   # ✅ Allowed at root (if applicable)
+        ├── context/                   # Vision, design, reference docs
+        │   ├── architecture.md
+        │   ├── user-personas.md
+        │   └── design-principles.md
+        ├── reports/                   # Completion reports, status updates
+        │   ├── phase-01-complete.md
+        │   ├── milestone-report.md
+        │   └── status-summary.md
+        ├── artifacts/                 # Diagrams, templates, tools
+        │   ├── diagrams/
+        │   ├── templates/
+        │   └── migration-scripts/
+        ├── tracking/                  # Progress tracking JSON
+        │   └── epic-progress-tracker.json
+        └── {SUB-PLAN-ID}/            # Sub-plan folders
+            ├── 00-{sub-plan}.md
+            ├── context/
+            ├── reports/
+            └── artifacts/
+        
+        **Allowed at Epic Root:**
+        - Master plan: 00-MASTER-*.md or 00-master-*.md
+        - Orchestrator: plan_orchestrator.py, *.py (orchestration scripts)
+        - State files: .orchestrator-state.json, *.json (orchestrator state)
+        - Sub-plan folders: 00A-*, 01-*, 02-*, etc.
+        - Universal subfolders: context/, reports/, artifacts/, tracking/
+        
+        **NOT Allowed at Epic Root:**
+        - Vision documents → context/
+        - Design documents → context/
+        - README files → context/plan-readme.md
+        - Completion reports → reports/
+        - Status updates → reports/
+        - Analysis documents → reports/
+        - Supporting files → artifacts/
+        
+        **Brittleness Testing:**
+        - Automatic enforcement via `python plan_orchestrator.py brittleness`
+        - Runs as Phase 0 pre-flight check before sub-plan execution
+        - Auto-fix available: `python artifacts/brittleness_test.py --auto-fix`
+        - Migration tool: `python artifacts/migrate-folder-structure.py --execute`
+      
+      rationale: |
+        EPIC_PLANNING_FOLDER_STRUCTURE: Consistent Epic Organization
+        
+        Problem Before (CORTEX-5.0 Example):
+        - 15 root-level markdown files
+        - No consistent categorization
+        - Difficult to find specific documents
+        - Mix of vision, reports, and context docs at root
+        - No universal subfolder structure
+        
+        Solution Implemented:
+        - Universal subfolders enforced: context/, reports/, artifacts/, tracking/
+        - Only master plan + orchestrator files at root
+        - Migration script for existing epics
+        - Brittleness testing integrated into orchestrator
+        - Auto-fix capability for violations
+        
+        Benefits:
+        - Consistent structure across all epics
+        - Easy document discovery (by category)
+        - Clean epic root (only master plan visible)
+        - Scalable to 100+ epics
+        - Automated enforcement via brittleness testing
+        
+        Implementation:
+        - planning-system-4.0-manifest.yaml defines structure
+        - plan_scaffold_generator.py creates folders automatically
+        - brittleness_test.py validates and auto-fixes
+        - plan_orchestrator.py enforces via Phase 0 checks
+        
+        Migration Path:
+        1. Run brittleness test to detect violations
+        2. Use migrate-folder-structure.py to auto-migrate
+        3. Commit changes with proper git history
+        4. Future plans automatically use correct structure
+    
     - rule_id: "TIERED_PLANNING_ENFORCEMENT"
       name: "Tiered Planning Enforcement"
       severity: "blocked"
