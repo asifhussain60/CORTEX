@@ -1,11 +1,13 @@
 # CORTEX-5.0 Acceptance Criteria
-# HTML View Glassmorphism Alignment & Verification Plan
+# HTML View Glassmorphism Alignment & Verification Plan (Extended)
 
-plan_id: html-glassmorphism-alignment-v5
-version: "5.0"
+plan_id: html-glassmorphism-alignment-v5-extended
+version: "5.1"
 created: 2026-01-04
-total_criteria: 27
-critical_criteria: 6
+updated: 2026-01-04
+total_criteria: 30
+critical_criteria: 8
+extension_phases: 3
 
 # Phase-Specific Acceptance Criteria
 
@@ -299,22 +301,118 @@ holistic_success:
     met: false
     critical: true
 
+# Extension Phases: Purpose-Driven Design Implementation
+
+phase_13_design_framework:
+  AC-28:
+    description: "Design framework and automation tools created"
+    status: complete
+    validation: "11 themes, 3 tools (1,549 LOC), 26 pages themed"
+    met: true
+    completion_date: 2026-01-04
+    requirements:
+      - "11 color themes defined (7 Level 1 + 4 Level 2)"
+      - "Global CSS theme stylesheet generated"
+      - "Page refresh tool created (444 LOC)"
+      - "Purpose-driven designer created (564 LOC)"
+      - "Intelligent diagram enhancer created (541 LOC)"
+      - "Design specification documented (375 lines)"
+      - "Implementation report generated (415 lines)"
+      - "Page analysis completed (269 pages)"
+      - "26 pages themed successfully"
+      - "10 Mermaid diagrams designed"
+    deliverables:
+      - "cortex-toolkit/page-refresh-tool.py"
+      - "cortex-toolkit/purpose-driven-designer.py"
+      - "cortex-toolkit/intelligent-diagram-enhancer.py"
+      - "docs/assets/css/purpose-driven-themes.css"
+      - "cortex-brain/documents/standards/cortex-design-specification.md"
+      - "cortex-brain/documents/implementation-guides/purpose-driven-design-implementation-report.md"
+      - "reports/page-refresh-analysis.json"
+
+phase_14_content_transformation:
+  AC-29:
+    description: "Top 10 stub pages transformed to full content with diagrams"
+    status: in_progress
+    validation: "1/10 pages complete (10%)"
+    met: false
+    critical: true
+    current_progress: 10
+    completion_date: null
+    requirements:
+      - "architecture/four-tier-brain.html complete with 1,500+ words"
+      - "architecture/agent-system.html complete with diagram"
+      - "architecture/working-memory.html complete with mindmap"
+      - "features/orchestrators.html complete with ecosystem graph"
+      - "features/tdd-mastery.html complete with workflow diagram"
+      - "features/ado-operations.html complete with sequence diagram"
+      - "features/execution-orchestrator.html complete with state machine"
+      - "architecture/multi-repo.html complete with coordination graph"
+      - "architecture/skull-protection.html complete with flowchart"
+      - "features/planning-system.html complete with architecture diagram"
+      - "All pages have 1,000-1,500 words content"
+      - "All pages have interactive Mermaid diagrams"
+      - "All pages have breadcrumb navigation"
+      - "All pages have feature grids (4-6 items)"
+      - "All pages have 2-3 real-world examples"
+      - "All pages have related links (4-6 links)"
+      - "All pages maintain glassmorphism compliance"
+      - "All pages have purpose-driven themes applied"
+    completed:
+      - "architecture/four-tier-brain.html (1,500+ words, flowchart diagram)"
+    pending:
+      - "architecture/agent-system.html"
+      - "architecture/working-memory.html"
+      - "features/orchestrators.html"
+      - "features/tdd-mastery.html"
+      - "features/ado-operations.html"
+      - "features/execution-orchestrator.html"
+      - "architecture/multi-repo.html"
+      - "architecture/skull-protection.html"
+      - "features/planning-system.html"
+
+phase_15_final_validation:
+  AC-30:
+    description: "Final validation and deployment readiness"
+    status: pending
+    validation: "All pages validated, Lighthouse scores pass, deployment ready"
+    met: false
+    critical: true
+    requirements:
+      - "Glassmorphism compliance check passes (10/10 pages)"
+      - "WCAG 2.1 AA accessibility verified"
+      - "Mobile responsive testing complete (320px-2560px)"
+      - "Lighthouse scores: Performance 90+, Accessibility 95+"
+      - "Cross-browser testing complete (Chrome, Firefox, Safari, Edge)"
+      - "All internal links verified working"
+      - "All Mermaid diagrams render correctly"
+      - "Sitemap updated with new pages"
+      - "Final transformation report generated"
+      - "Staging deployment checklist executed"
+
 # Summary
 
 summary:
-  total_criteria: 27
-  met: 5
-  pending: 22
-  percentage_complete: 18.5
+  total_criteria: 30
+  met: 6
+  in_progress: 1
+  pending: 23
+  percentage_complete: 23.3
   critical_met: 0
-  critical_pending: 6
+  critical_pending: 9
   critical_criteria:
     - "AC-01: Phase 0-6 complete with 315/320 files compliant (98.4%)"
     - "AC-14: REFACTOR phase complete with 24 tasks"
-    - "AC-15: All 16 phases complete"
+    - "AC-15: All phases complete (now 20 total phases)"
     - "AC-26: REFACTOR complete"
     - "AC-27: Automated enforcement setup"
     - "AC-19: Git verification passes (all phases)"
+    - "AC-29: 10 stub pages transformed to full content ⚠️ IN PROGRESS"
+    - "AC-30: Final validation complete ⏳ PENDING"
+  extension_status:
+    phase_13: "✅ Complete (11 themes, 3 tools, 26 pages themed)"
+    phase_14: "🚀 Active (1/10 pages, 10% complete)"
+    phase_15: "⏳ Pending (awaiting Phase 14 completion)"
 
 # Validation Rules
 
