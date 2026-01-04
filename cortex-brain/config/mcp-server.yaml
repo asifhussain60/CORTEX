@@ -56,6 +56,19 @@ orchestrators:
     config: "cortex-brain/manifests/orchestrators/vacuum-orchestrator-v2.yaml"
     type: "autonomous"
     description: "Deep filesystem cleanup and reorganization"
+  
+  html_view_orchestrator:
+    class: "HTMLViewOrchestrator"
+    module: "src.orchestrators.html_view.html_view_orchestrator"
+    config: "cortex-brain/manifests/orchestrators/html-view-orchestrator-manifest.yaml"
+    type: "guided"
+    description: "Intelligent HTML/CSS view development with glassmorphism design system"
+    version: "1.0.0"
+    features:
+      - "Vision API integration"
+      - "Tier 2 learning system"
+      - "WCAG AA compliance"
+      - "Mermaid diagram generation"
 
 # Server settings
 server:

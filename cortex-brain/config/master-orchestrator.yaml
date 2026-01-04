@@ -163,6 +163,25 @@ routing_rules:
         - "HTML/CSS preview generation"
         - "BEM class name resolution"
   
+  # HTML View Orchestrator (NEW - Phase 14.5)
+  # Intelligent HTML/CSS view development with glassmorphism
+  - pattern: "^(build html view|fix visual issues|standardize .+ to glassmorphism|add diagram to|make .+ responsive|html view).*$"
+    orchestrator: "html_view_orchestrator"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 58
+    metadata:
+      description: "HTML view development with glassmorphism design system"
+      autonomous: false
+      version: "1.0"
+      features:
+        - "Vision API integration"
+        - "Tier 2 learning system (html-view-requirements.yaml)"
+        - "WCAG AA compliance validation"
+        - "Mermaid diagram generation"
+        - "Preview-first workflow"
+        - "Component pattern library"
+  
   # Refinement - DISABLED: orchestrator not yet registered
   # - pattern: "^(refine|improve|optimize).*$"
   #   orchestrator: "refinement_orchestrator"
