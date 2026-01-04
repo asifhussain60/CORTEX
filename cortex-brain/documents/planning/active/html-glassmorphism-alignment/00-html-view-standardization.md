@@ -34,7 +34,8 @@
     ║ Phase 12: REFACTOR - Cleanup & Optimize [░░░░░░░░░░]   0%  ⏳ PENDING     ║
     ╠════════════════════════════════════════════════════════════════════════════╣
     ║ Overall Progress: [██████░░░░░] 44% (7/16 phases)                          ║
-    ║ Estimated Time: 40 hours | Elapsed: 11 hours | Remaining: 29 hours        ║
+    ║ Estimated Time: 42 hours | Elapsed: 11 hours | Remaining: 31 hours        ║
+    ║ **🆕 SCOPE UPDATE:** +2 hours for Plan Viewer + Epic/Feature split docs   ║
     ╚════════════════════════════════════════════════════════════════════════════╝
     ```
 
@@ -452,23 +453,32 @@
     ---
 
     ### **Phase 7: CORTEX-5.0 Documentation Alignment Review** ⏳ PENDING
-    | `tests/*.html` | CONDITIONAL | Update if test is active |
-    | `refinement-output/*.html` | SKIP | Report outputs, not user-facing |
-    | `cortex-brain/documents/analysis/dashboards/*.html` | UPDATE | Analysis dashboards may be referenced |
-    | `templates/*.html` | UPDATE | Templates used for generation |
-
-    **Deliverables:**
-    - `reports/phase-6-legacy-review.md`
-    - `reports/phase-6-files-to-delete.csv`
-    - `reports/phase-6-files-to-preserve.csv`
-
-    ---
-
-    ### **Phase 7: CORTEX-5.0 Documentation Alignment Review** ⏳ PENDING
-    **Duration:** 4 hours  
+    **Duration:** 9 hours (expanded from 7 hours)  
     **Status:** ⏳ PENDING
 
     **Objective:** Perform a fresh, holistic review of the `CORTEX-5.0` plan to ensure the `docs/` site accurately reflects the planned implementation reality once CORTEX-5.0 is fully executed.
+
+    **🆕 NEW ENHANCEMENTS IDENTIFIED (2026-01-04):**
+    
+    1. **CORTEX-LENS Plan Viewer** (Sub-Plan 11)
+       - **New HTML Page:** `cortex-lens-output/views/plan-viewer.html`
+       - **Purpose:** Static HTML dashboard for plan progress tracking
+       - **Features:** Phase timelines, AC validation, cross-links to code files
+       - **Glassmorphism Impact:** Requires full design system compliance
+       - **Documentation Gap:** No docs/ page exists yet
+    
+    2. **Epic vs. Feature Planning Split**
+       - **Current State:** WorkDecomposer has Epic/Feature logic (src/agents/estimation/work_decomposer.py)
+       - **Epic Trigger:** >21 story points (needs hierarchical breakdown)
+       - **Feature Scope:** <21 story points (flat structure)
+       - **Documentation Gap:** Planning v5 docs don't explain Epic vs. Feature workflows
+       - **User Impact:** Users need guidance on when to use Epic planning
+    
+    3. **Plan Viewer Architecture Integration**
+       - **Cross-Linking:** Plan Viewer ↔ Repository Lens (AST scanning)
+       - **Data Schema:** `plans-index.json` (metadata for all plans)
+       - **Visual Components:** Progress bars, AC checklists, phase swimlanes
+       - **Diagram Needed:** Plan Viewer architecture + data flow
 
     **Context:**
     - **CORTEX-5.0 Plan Location:** `cortex-brain/documents/planning/active/CORTEX-5.0/`
@@ -477,6 +487,17 @@
     - **Current Site:** `docs/` folder with 408 HTML files
 
     **Gap Analysis Scope:**
+
+    **🆕 0. Plan Viewer HTML Page (NEW - Priority 1):**
+
+    | Component | Status | Gap | Fix Required |
+    |-----------|--------|-----|--------------|
+    | **Plan Viewer Page** | ❌ NOT CREATED | Missing static HTML viewer | **CREATE NEW PAGE** |
+    | Location | N/A | `cortex-lens-output/views/plan-viewer.html` | New file creation |
+    | Glassmorphism Compliance | N/A | Must use `.glass-card-clickable`, `.panel-tetris` | Apply design system |
+    | Navigation Integration | N/A | Tab switching from CORTEX-LENS index | Wire up JavaScript |
+    | Data Schema | 🟡 PLANNED | `data/plans-index.json` (Sub-Plan 11) | Create schema + generator |
+    | Visual Components | ❌ MISSING | Progress bars, phase swimlanes, AC checklists | Build UI components |
 
     **1. Missing Orchestrator Documentation:**
 
@@ -499,6 +520,8 @@
     | **Context Middleware Enhancement** | Sub-Plan 05 | 🟡 Basic mention | **DETAILED PAGE NEEDED** |
     | **Visual Progress Generation** | Sub-Plan 06 | ❌ NOT DOCUMENTED | **SECTION NEEDED** in Planning v5 |
     | **REFACTOR Task Enforcement** | Sub-Plan 07 | 🟡 SKULL mentions | **DETAILED DOCS NEEDED** |
+    | **🆕 Epic vs. Feature Planning Split** | WorkDecomposer | ❌ NOT DOCUMENTED | **NEW WORKFLOW GUIDE NEEDED** |
+    | **🆕 Plan Viewer Integration** | Sub-Plan 11 | ❌ NOT DOCUMENTED | **NEW ARCHITECTURE PAGE NEEDED** |
 
     **3. Missing Diagrams & Illustrations:**
 
@@ -510,26 +533,42 @@
     | **AST Scanning in Planning v5** | ❌ MISSING | **NEW FLOWCHART** |
     | **Context Middleware Priority Logic** | ❌ MISSING | **NEW SEQUENCE DIAGRAM** |
     | **Orchestrator Migration Status** | ❌ MISSING | **NEW STATUS MATRIX** |
+    | **🆕 Plan Viewer Architecture** | ❌ MISSING | **NEW ARCHITECTURE DIAGRAM** |
+    | **🆕 Epic vs. Feature Decision Tree** | ❌ MISSING | **NEW FLOWCHART** (>21 SP threshold) |
+    | **🆕 Plan Viewer ↔ Repository Lens** | ❌ MISSING | **NEW DATA FLOW DIAGRAM** |
 
     **4. Outdated Content Requiring Updates:**
 
     | Page | Issue | Fix Required |
     |------|-------|--------------|
     | `docs/orchestrators/index.html` | Lists 8 orchestrators, plan has 10 | Add Refinement + Debug tiles |
-    | `docs/orchestrators/planning-v5.html` | Missing Phase -1, AST scanning, visual progress | Add 3 new sections |
+    | `docs/orchestrators/planning-v5.html` | Missing Phase -1, AST scanning, visual progress, Epic/Feature split | Add 4 new sections |
     | `docs/orchestrators/refinement-orchestrator.html` | Stub page, no implementation details | Write 7-phase workflow docs |
     | `docs/orchestrators/debug-orchestrator.html` | Stub page, no implementation details | Write error analysis workflow docs |
     | `docs/architecture/orchestrator-ecosystem.html` | Shows 8 orchestrators | Update to 10 orchestrators |
     | `docs/toolkit-manager/index.html` | Missing routing to Refinement/Debug | Add 2 new routing patterns |
+    | **🆕 `cortex-lens-output/index.html`** | **Missing Plan Viewer tab** | **Add navigation to plan-viewer.html** |
 
     **Review Tasks:**
 
-    1. **Read CORTEX-5.0 Master Plan:**
-    - Parse all 10 sub-plans
+    1. **🆕 Review CORTEX-LENS Plan Viewer Requirements:**
+    - Read Sub-Plan 11 (11-cortex-lens-admin.md)
+    - Extract UI requirements (progress bars, phase swimlanes, AC checklists)
+    - Document data schema for `plans-index.json`
+    - Identify glassmorphism compliance needs
+
+    2. **🆕 Review Epic vs. Feature Planning Logic:**
+    - Read WorkDecomposer implementation (src/agents/estimation/work_decomposer.py)
+    - Document >21 story point Epic trigger
+    - Explain hierarchical vs. flat planning workflows
+    - Create user decision flowchart
+
+    3. **Read CORTEX-5.0 Master Plan:**
+    - Parse all 10 sub-plans (updated count: 12 sub-plans with Plan Viewer + Production Validation)
     - Extract feature descriptions, workflows, deliverables
     - Identify documentation requirements
 
-    2. **Audit docs/ Site:**
+    4. **Audit docs/ Site:**
     - Compare existing orchestrator pages vs. planned orchestrators
     - Identify missing pages, outdated sections, stub content
     - Check diagrams match planned architecture
@@ -638,17 +677,26 @@
     - Define visual style consistency rules
 
     **Deliverables:**
-    - `reports/cortex-5.0-documentation-gap-analysis.md` (comprehensive review)
+    - `reports/cortex-5.0-documentation-gap-analysis.md` (comprehensive review - **UPDATED** to include Plan Viewer + Epic/Feature)
     - `reports/documentation-fix-priorities.csv` (gap classification)
     - `artifacts/documentation-scaffolding/` (stub pages, sections)
-    - `artifacts/diagram-updates/` (Mermaid diagram specs)
+    - `artifacts/diagram-updates/` (Mermaid diagram specs - **3 NEW DIAGRAMS ADDED**)
     - `reports/phase-7-alignment-recommendations.md` (fix strategy)
+    - **🆕 `cortex-lens-output/views/plan-viewer.html`** (NEW: Plan Viewer HTML template)
+    - **🆕 `docs/orchestrators/planning-v5-epic-vs-feature.html`** (NEW: Epic vs. Feature workflow guide)
+    - **🆕 `artifacts/plan-viewer-architecture-diagram.mmd`** (NEW: Plan Viewer architecture)
 
-    **Fix Phase Structure:**
-
-    After gap analysis, create **3 sub-phases** for efficient fixes:
-
-    **Phase 7a: Critical Orchestrator Documentation (2 hours)**
+    **✅ ACCEPTANCE CRITERIA VALIDATION:**
+    Compare against `acceptance-criteria.yaml` → `phase_7a_cortex5_gap_analysis`
+    - [ ] All criteria met (see acceptance-criteria.yaml lines 332-382)
+    - [ ] All 12 CORTEX-5.0 sub-plans reviewed (**UPDATED:** was 10, now 12 with Sub-Plan 11 & 12)
+    - [ ] 2 missing orchestrators identified (Refinement, Debug)
+    - [ ] **🆕 7 feature gaps identified** (was 5: Phase -1, AST, Context, Visual Progress, REFACTOR + **Plan Viewer + Epic/Feature**)
+    - [ ] **🆕 9 diagram gaps identified** (was 4: + **Plan Viewer arch, Epic decision tree, Plan ↔ Lens flow**)
+    - [ ] **🆕 7 outdated pages identified** (was 6: + **cortex-lens-output/index.html**)
+    - [ ] Gaps classified by priority
+    - [ ] Stub pages created
+    - [ ] Ready to proceed to Phase 7b
     - Update `docs/orchestrators/index.html` (add Refinement + Debug)
     - Complete `docs/orchestrators/refinement-orchestrator.html` (7-phase workflow)
     - Complete `docs/orchestrators/debug-orchestrator.html` (error analysis workflow)
