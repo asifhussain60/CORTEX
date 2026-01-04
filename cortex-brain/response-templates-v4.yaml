@@ -943,6 +943,76 @@ sections:
     content_guidelines: "Low-level technical information"
 
 # ============================================================================
+# METRIC FORMATTING GUIDELINES
+# ============================================================================
+
+metric_formatting:
+  description: "Standards for presenting metrics clearly to avoid confusion"
+  
+  target_vs_actual:
+    rule: "NEVER use percentages when actual exceeds target by >100%"
+    
+    when_actual_exceeds_target:
+      format_options:
+        multiplier:
+          example: "8.6x target (720 tests written, 84 required)"
+          use_when: "actual > 2x target"
+          formula: "actual / target = multiplier"
+        
+        absolute_with_comparison:
+          example: "720 tests written (target: 84) - exceeded by 636 tests"
+          use_when: "clarity is paramount"
+        
+        ratio:
+          example: "720/84 tests (target exceeded 8.6x)"
+          use_when: "both numbers important"
+      
+      anti_patterns:
+        - example: "857% of target"
+          problem: "Confusing - sounds like impossible percentage"
+          fix: "8.6x target" OR "720/84 tests"
+        
+        - example: "Performance improved 400%"
+          problem: "Ambiguous - is it 4x or 5x?"
+          fix: "Performance improved 4x (from 100ms to 25ms)"
+    
+    when_actual_below_target:
+      format: "Use standard percentage notation"
+      example: "60% of target (60/100 tests)"
+      rule: "Always include absolute numbers in parentheses"
+    
+    when_actual_equals_target:
+      format: "100% of target (N/N items)"
+      example: "100% of target (84/84 tests)"
+  
+  progress_percentages:
+    description: "Progress bars and completion percentages"
+    rule: "Progress percentages ONLY go from 0% to 100%"
+    
+    examples:
+      valid:
+        - "Progress: 45% (45/100 tasks)"
+        - "Coverage: 89% (641/720 tests passing)"
+        - "Epic completion: 15.8% (3/19 sub-plans)"
+      
+      invalid:
+        - "Progress: 150%" # Impossible - use "1.5x target" instead
+        - "Coverage: 857%" # Confusing - use "8.6x target coverage"
+  
+  coverage_metrics:
+    description: "Test coverage, code coverage, etc."
+    rule: "Coverage is actual/total, NOT actual/target"
+    
+    correct_usage:
+      test_coverage: "89% coverage (641 of 720 tests passing)"
+      code_coverage: "75% coverage (300 of 400 lines tested)"
+      target_comparison: "8.6x target (720 tests, 84 required)"
+    
+    incorrect_usage:
+      - "857% coverage" # Coverage can't exceed 100%
+      - "Tests: 857% complete" # Completion can't exceed 100%
+
+# ============================================================================
 # REUSABLE COMPONENTS
 # ============================================================================
 

@@ -185,6 +185,45 @@ This cleanup aligns CORTEX-5.0 with requirements from `EPIC-FEATURE-PLANNER-VISI
 
 ---
 
+## 🚀 Post-Initialization: Launch Plan Viewer
+
+**AUTOMATED SERVER LAUNCH (v5.1.1):**
+
+Once `plan-viewer.html` is generated in the epic root, the server launcher automatically:
+
+1. **Detects** `plan-viewer.html` existence in C50 epic root
+2. **Finds** available port (8000-8010 range)
+3. **Launches** Python HTTP server in **separate terminal** (non-blocking)
+4. **Opens** browser to plan viewer URL
+5. **Continues** workflow - no blocking on server process
+
+**Manual Launch (if needed):**
+```bash
+cd /path/to/C50-cortex-v5-remediation
+python3 launch_plan_viewer.py
+```
+
+**Configuration:**
+- Script: `launch_plan_viewer.py`
+- Port Range: 8000-8010 (auto-detect first available)
+- Terminal: Separate window (macOS: Terminal.app, Windows: cmd, Linux: nohup)
+- Browser: Opens automatically to localhost:{port}/plan-viewer.html
+- Stop: Close server terminal or Ctrl+C
+
+**Server Commands:**
+```bash
+# Check if server running
+lsof -i :8000
+
+# Stop server manually
+pkill -f "python3 -m http.server"
+
+# View server logs (if using nohup)
+tail -f nohup.out
+```
+
+---
+
 ## ✅ Completion Summary
 
 **Duration:** 2 hours  
@@ -198,6 +237,7 @@ This cleanup aligns CORTEX-5.0 with requirements from `EPIC-FEATURE-PLANNER-VISI
 - ✅ Foundation ready for Sub-Plan 00B (Epic & Feature Planner)
 - ✅ All 18 child plans properly ordered
 - ✅ Epic tracking infrastructure operational
+- ✅ Plan viewer server auto-launch configured
 
 **Status:** ✅ COMPLETE - Ready for Sub-Plan 00B
 

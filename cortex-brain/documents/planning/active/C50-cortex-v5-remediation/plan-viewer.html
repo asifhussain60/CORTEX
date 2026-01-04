@@ -87,51 +87,70 @@
         }
 
         .header {
-            padding: 30px;
+            padding: 40px 30px;
             margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(109, 40, 217, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%);
+            z-index: -1;
         }
 
         .header-brand {
             display: flex;
             align-items: center;
-            gap: var(--spacing-md);
-            justify-content: center;
-            margin-bottom: 20px;
+            gap: 30px;
+            justify-content: flex-start;
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .header-logo {
-            height: 60px;
-            width: auto;
-            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+            height: 180px;
+            width: 180px;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 12px rgba(109, 40, 217, 0.4));
+            flex-shrink: 0;
         }
 
         .header-title-group {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
+            flex: 1;
         }
 
         .header h1 {
             color: white;
-            font-size: 2.5em;
-            margin: 0;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            font-weight: 600;
-            line-height: 1.2;
+            font-size: 2.8em;
+            margin: 0 0 8px 0;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: -0.5px;
         }
 
         .header .subtitle {
-            color: var(--text-secondary);
-            font-size: 1.1em;
-            margin: 4px 0 0 0;
-            font-weight: 300;
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 1.2em;
+            margin: 0;
+            font-weight: 400;
+            letter-spacing: 0.5px;
         }
 
         .meta-info {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
             color: white;
         }
 
@@ -139,86 +158,251 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            padding: 18px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .meta-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
 
         .meta-label {
-            font-size: 0.9em;
-            opacity: 0.8;
-            margin-bottom: 5px;
+            font-size: 0.85em;
+            opacity: 0.7;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
         }
 
         .meta-value {
-            font-size: 1.3em;
-            font-weight: bold;
+            font-size: 1.5em;
+            font-weight: 700;
+            letter-spacing: -0.5px;
         }
 
         /* Overall Progress */
         .overall-progress {
             padding: 30px;
             margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .overall-progress::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.08) 0%, rgba(109, 40, 217, 0.08) 100%);
+            z-index: -1;
         }
 
         .progress-header {
             color: white;
             font-size: 1.5em;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             gap: 10px;
+            font-weight: 600;
         }
 
         .progress-bar-container {
             width: 100%;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
+            height: 45px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 25px;
             overflow: hidden;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
         }
 
         .progress-bar {
             height: 100%;
-            background: linear-gradient(90deg, var(--accent) 0%, var(--accent-light) 100%);
+            background: linear-gradient(90deg, var(--accent) 0%, var(--accent-light) 50%, var(--primary-light) 100%);
             transition: width 0.5s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
+            font-weight: 700;
+            font-size: 1.1em;
             color: white;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-            border-radius: 20px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+            border-radius: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.1) 50%, 
+                transparent 100%);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
         .progress-stats {
-            display: flex;
-            justify-content: space-between;
-            color: white;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 15px;
+            color: white;
         }
 
         .stat-item {
             display: flex;
             align-items: center;
-            gap: 5px;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: scale(1.02);
+        }
+
+        .stat-item span:last-child {
+            font-weight: 700;
+            font-size: 1.2em;
         }
 
         /* Status Badges - CORTEX Colors */
         .status-badge {
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            font-weight: 600;
-            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 0.95em;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
         }
 
-        .status-active { background: var(--accent); color: white; }
-        .status-complete { background: var(--primary); color: white; }
-        .status-blocked { background: var(--error); color: white; }
-        .status-in-progress { background: var(--warning); color: white; }
-        .status-pending { background: rgba(255, 255, 255, 0.2); color: var(--text-primary); }
-        .status-deferred { background: var(--text-muted); color: white; }
+        .status-badge:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .status-active { 
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .status-complete { 
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .status-blocked { 
+            background: linear-gradient(135deg, #DC2626 0%, #EF4444 100%);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .status-in-progress { 
+            background: linear-gradient(135deg, var(--warning) 0%, #F59E0B 100%);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .status-pending { 
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--text-primary);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .status-deferred { 
+            background: rgba(75, 85, 99, 0.8);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .header h1 {
+                font-size: 2.2em;
+            }
+            
+            .header .subtitle {
+                font-size: 1em;
+            }
+            
+            .header-logo {
+                height: 140px;
+                width: 140px;
+            }
+            
+            .meta-info {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .header {
+                padding: 25px 20px;
+            }
+            
+            .header-brand {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+            
+            .header-title-group {
+                align-items: center;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .header .subtitle {
+                font-size: 0.9em;
+            }
+            
+            .header-logo {
+                height: 120px;
+                width: 120px;
+            }
+            
+            .meta-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .child-plans-grid {
+                grid-template-columns: 1fr;
+            }
+        }
 
         /* Waves Section */
         .waves-container {
@@ -276,6 +460,30 @@
             padding: 20px;
             cursor: pointer;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+        }
+
+        /* Priority indicator for active work (visual cue) */
+        .child-plan[data-priority="high"]::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, var(--accent) 0%, var(--accent-light) 100%);
+            border-radius: 12px 0 0 12px;
+        }
+
+        .child-plan[data-priority="medium"]::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, var(--warning) 0%, #F59E0B 100%);
+            border-radius: 12px 0 0 12px;
         }
 
         .child-plan:hover {
@@ -368,7 +576,8 @@
             }
 
             .header-logo {
-                height: 40px;
+                height: 150px;
+                width: 150px;
             }
 
             .header-brand {
@@ -481,6 +690,19 @@
     </div>
 
     <script>
+        // ========================================
+        // CORTEX C50 Epic Dashboard
+        // Progressive Disclosure Pattern: Active Work at TOP
+        // ========================================
+        // Sorting Strategy:
+        //   1. In Progress (needs attention NOW)
+        //   2. Blocked (needs unblocking)
+        //   3. Pending (ready to start)
+        //   4. Active (general active state)
+        //   5. Deferred (postponed)
+        //   6. Complete (done, pushed to bottom)
+        // ========================================
+        
         // Configuration
         const TRACKING_FILE = 'tracking/epic-progress-tracker.json';
         const REFRESH_INTERVAL = 10000; // 10 seconds
@@ -564,6 +786,40 @@
             return stats;
         }
 
+        // Sort child plans by priority (active work at top, completed at bottom)
+        function sortChildPlansByPriority(plans) {
+            const priorityMap = {
+                'in progress': 1,
+                'blocked': 2,
+                'pending': 3,
+                'active': 4,
+                'deferred': 5,
+                'complete': 6,
+                'completed': 6
+            };
+
+            return plans.sort((a, b) => {
+                const aStatus = a.status.toLowerCase();
+                const bStatus = b.status.toLowerCase();
+                
+                // Find priority for each status
+                let aPriority = 999;
+                let bPriority = 999;
+                
+                for (const [key, value] of Object.entries(priorityMap)) {
+                    if (aStatus.includes(key)) aPriority = Math.min(aPriority, value);
+                    if (bStatus.includes(key)) bPriority = Math.min(bPriority, value);
+                }
+                
+                // If same priority, sort by order/id
+                if (aPriority === bPriority) {
+                    return (a.order || a.id).localeCompare(b.order || b.id);
+                }
+                
+                return aPriority - bPriority;
+            });
+        }
+
         // Render waves with child plans
         function renderWaves() {
             const wavesContainer = document.getElementById('waves-container');
@@ -594,10 +850,13 @@
                 const childPlansGrid = document.createElement('div');
                 childPlansGrid.className = 'child-plans-grid';
 
-                // Filter and render child plans for this wave
-                const wavePlans = epicData.child_plans.filter(plan => 
+                // Filter child plans for this wave
+                let wavePlans = epicData.child_plans.filter(plan => 
                     childIds.some(id => plan.id.includes(id) || plan.order === id)
                 );
+
+                // Sort plans: active work at top, completed at bottom
+                wavePlans = sortChildPlansByPriority(wavePlans);
 
                 wavePlans.forEach(plan => {
                     childPlansGrid.appendChild(createChildPlanCard(plan));
@@ -618,6 +877,14 @@
 
             const statusClass = getStatusClass(plan.status);
             const progress = plan.progress || 0;
+            
+            // Add priority attribute for visual indicator
+            const status = plan.status.toLowerCase();
+            if (status.includes('progress') || status.includes('blocked')) {
+                card.setAttribute('data-priority', 'high');
+            } else if (status.includes('pending')) {
+                card.setAttribute('data-priority', 'medium');
+            }
 
             card.innerHTML = `
                 <div class="child-plan-header">

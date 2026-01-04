@@ -52,6 +52,26 @@ folder_structure:
       description: "Universal HTML viewer - auto-detects EPIC vs FEATURE mode from folder structure"
       generation_phase: "approval"  # Generated when plan approved for execution, NOT during planning
       mode_detection: "automatic"  # Reads epic-progress-tracker.json (EPIC) or progress-tracker.json (FEATURE)
+      
+    - path: "launch_plan_viewer.py"
+      type: "launcher"
+      description: "HTTP server launcher for plan viewer (non-blocking, separate terminal)"
+      generation_phase: "approval"  # Generated alongside plan-viewer.html
+      auto_launch: true  # Automatically execute after generation (if enabled in epic manifest)
+      execution_mode: "background"  # Non-blocking execution
+      
+  server_config:
+    auto_launch_enabled: true  # Global setting - can be overridden per epic
+    default_port_range: [8000, 8010]
+    project_root_detection: "automatic"  # Find CORTEX root via .git or parent navigation
+    launcher_script_name: "launch_plan_viewer.py"
+    post_generation_hook:
+      enabled: true
+      condition: "plan-viewer.html exists AND server_config.auto_launch_enabled"
+      command: "python3 launch_plan_viewer.py"
+      execution: "background"  # Non-blocking
+      timeout_seconds: 30
+      success_indicator: "Server started on port"
 
 # Execution instructions for GitHub Copilot (when interpreting this manifest)
 execution_instructions:

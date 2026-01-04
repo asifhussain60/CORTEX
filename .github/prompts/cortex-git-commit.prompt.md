@@ -266,3 +266,189 @@ if ($s) { Write-Warning "⚠️ Sync incomplete: $s" }
 ---
 
 **Anti-Bloat:** Reduced from 455 → ~280 lines (38% reduction). Autonomous mode: 80% faster, zero user prompts.
+
+---
+
+## 🔌 C50 Plan Auto-Wiring (Post-Pull Hook)
+
+**TRIGGER:** Automatically execute after any `git pull` that includes C50 plan changes.
+
+**Detection Logic:**
+```python
+# Check if C50 plan files were pulled
+c50_changed = any("C50-cortex-v5-remediation" in file for file in git_diff_files)
+if c50_changed:
+    wire_c50_functionality()
+```
+
+### **Auto-Wiring Instructions for Machines**
+
+When C50 plan code is pulled, **automatically integrate live functionality** with these steps:
+
+#### **Step 1: Identify Active Sub-Plans**
+
+```python
+# Read epic progress tracker
+import json
+from pathlib import Path
+
+tracker_path = Path("cortex-brain/documents/planning/active/C50-cortex-v5-remediation/tracking/epic-progress-tracker.json")
+with open(tracker_path) as f:
+    epic = json.load(f)
+
+# Get completed and in-progress plans
+active_plans = [p for p in epic["child_plans"] if p["status"] in ["complete", "in_progress"]]
+print(f"✅ Active C50 Plans: {len(active_plans)}")
+for plan in active_plans:
+    print(f"   {plan['order']}: {plan['name']} ({plan['status']})")
+```
+
+#### **Step 2: Wire Completed Functionality**
+
+**C50-00A (Epic Structure Cleanup)** ✅ COMPLETE
+- No wiring needed (structural organization)
+
+**C50-00B (Epic & Feature Planner)** ✅ COMPLETE
+- **Files to integrate:**
+  - `src/orchestrators/planning/planner_mode_detector.py`
+  - `src/orchestrators/planning/epic_planner.py`
+  - `src/orchestrators/planning/feature_planner.py`
+  - `src/orchestrators/planning/html_viewer_generator.py`
+  - `src/orchestrators/planning/dual_mode_integration.py`
+
+**Wiring Command:**
+```python
+# Import and initialize dual-mode planner
+from src.orchestrators.planning.dual_mode_integration import (
+    create_plan,
+    update_plan_progress,
+    regenerate_viewer
+)
+
+# Verify installation
+try:
+    from src.orchestrators.planning.planner_mode_detector import detect_planner_mode
+    print("✅ C50-00B: Epic & Feature Planner - WIRED")
+except ImportError as e:
+    print(f"⚠️ C50-00B wiring failed: {e}")
+```
+
+**C50-00C (Test Coverage Sprint)** ✅ COMPLETE
+- **Test files available:**
+  - `tests/brain_protection/` (51 tests)
+  - `tests/orchestrators/common/` (15 tests)
+  - `tests/middleware/` (17 tests)
+  - `tests/orchestrators/planning/test_epic_feature_planner.py` (31 tests)
+  - `tests/orchestrators/tdd/` (272 tests)
+  - `tests/orchestrators/ado/` (229 tests)
+  - `tests/orchestrators/vacuum/` (105 tests)
+
+**Wiring Command:**
+```bash
+# Run test suite to verify
+python3 -m pytest tests/brain_protection tests/orchestrators/common tests/middleware -v --tb=short
+```
+
+**C50-00D (VSCode Cache Optimization)** 🚀 IN PROGRESS (60% complete)
+- **Files available (Phase 1 complete):**
+  - `src/operations/utilities/vscode_cache_manager.py`
+
+**Wiring Command:**
+```python
+# Import cache manager (ready for integration)
+from src.operations.utilities.vscode_cache_manager import VSCodeCacheManager
+
+cache_mgr = VSCodeCacheManager()
+cache_mgr.check_and_clear_if_needed()
+print("✅ C50-00D: VSCode Cache Manager - AVAILABLE (integration pending)")
+```
+
+#### **Step 3: Reference Master Plan**
+
+**Primary reference file:**
+```
+cortex-brain/documents/planning/active/C50-cortex-v5-remediation/00-cortex-v5-remediation.md
+```
+
+**Key tracking files:**
+```
+tracking/epic-progress-tracker.json     # Real-time progress
+tracking/child-plan-registry.json       # All 18 sub-plans
+tracking/dependency-graph.json          # Dependencies
+SEQUENTIAL-EXECUTION-PLAN.md           # Execution order
+```
+
+#### **Step 4: Auto-Execute Wiring Script**
+
+**On git pull detection, run:**
+```python
+#!/usr/bin/env python3
+"""
+C50 Plan Auto-Wiring Script
+Executes after git pull to integrate completed C50 functionality
+"""
+
+import json
+import sys
+from pathlib import Path
+
+def wire_c50_plans():
+    """Automatically wire in C50 completed functionality"""
+    
+    # Read epic progress
+    tracker = Path("cortex-brain/documents/planning/active/C50-cortex-v5-remediation/tracking/epic-progress-tracker.json")
+    with open(tracker) as f:
+        epic = json.load(f)
+    
+    print("🔌 C50 Auto-Wiring: Integrating completed functionality...")
+    print(f"📊 Epic Progress: {epic['overall_progress']}% ({epic['completed_plans']}/{epic['total_plans']})")
+    
+    # Wire C50-00B (Epic & Feature Planner)
+    try:
+        from src.orchestrators.planning.dual_mode_integration import create_plan
+        print("✅ C50-00B: Epic & Feature Planner - WIRED")
+    except ImportError:
+        print("⏸️ C50-00B: Not yet available")
+    
+    # Wire C50-00D (VSCode Cache Manager)
+    try:
+        from src.operations.utilities.vscode_cache_manager import VSCodeCacheManager
+        print("✅ C50-00D: VSCode Cache Manager - AVAILABLE")
+    except ImportError:
+        print("⏸️ C50-00D: Not yet available")
+    
+    print("✅ C50 Auto-Wiring Complete")
+
+if __name__ == "__main__":
+    wire_c50_plans()
+```
+
+**Save as:** `scripts/wire_c50_plans.py`
+
+**Auto-execute in git commit workflow:**
+```python
+# Add to Phase 4 (after pull success)
+final_status = run_in_terminal("git status --short")
+if not final_status:
+    # Check if C50 files changed
+    diff = run_in_terminal("git diff HEAD@{1} --name-only")
+    if "C50-cortex-v5-remediation" in diff:
+        run_in_terminal("python3 scripts/wire_c50_plans.py")
+```
+
+---
+
+### **Quick Reference: C50 Wiring Status**
+
+| Sub-Plan | Status | Wiring Required | Import Path |
+|----------|--------|-----------------|-------------|
+| **C50-00A** | ✅ Complete | No | — |
+| **C50-00B** | ✅ Complete | Yes | `src.orchestrators.planning.dual_mode_integration` |
+| **C50-00C** | ✅ Complete | No (tests) | `pytest tests/` |
+| **C50-00D** | 🚀 60% | Yes | `src.operations.utilities.vscode_cache_manager` |
+| **C50-01 to C50-18** | 🔒 Blocked | No | — |
+
+---
+
+**Update:** v3.1.0 (2026-01-04) - Added C50 plan auto-wiring for seamless integration across machines.
+

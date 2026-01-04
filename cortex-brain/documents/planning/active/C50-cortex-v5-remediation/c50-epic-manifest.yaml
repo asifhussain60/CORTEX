@@ -3,7 +3,7 @@ epic_metadata:
   epic_name: CORTEX v5 Gap Remediation & Completion
   epic_type: strategic_multi_phase
   planner_mode: epic
-  version: 5.1.0
+  version: 5.1.1
   created: '2026-01-03'
   last_updated: '2026-01-04'
   author: Asif Hussain
@@ -20,11 +20,27 @@ epic_metadata:
     blocking_plans: 3
     parallel_execution_supported: true
   viewer: plan-viewer.html
+  viewer_launcher: launch_plan_viewer.py
   # C50-specific metadata
   epic_folder: C50-cortex-v5-remediation
   naming_convention: 3-char alphanumeric ID (C50) + descriptive name
   folder_structure: 5 subfolders (analysis/, artifacts/, context/, reports/, tracking/)
   legacy_folder: CORTEX-5.0 (preserved for reference)
+  
+  # Plan Viewer Server Configuration (v5.1.1)
+  server_config:
+    auto_launch: true  # Automatically launch server when plan-viewer.html is generated
+    execution_mode: background  # Run in separate terminal (non-blocking)
+    port_range: [8000, 8010]  # Try ports in this range
+    auto_open_browser: true  # Open browser automatically
+    launcher_script: launch_plan_viewer.py
+    server_command: "python3 -m http.server {port}"
+    terminal_strategy:
+      macos: "osascript"  # Use AppleScript to launch new Terminal
+      windows: "start cmd"  # Use cmd in new window
+      linux: "nohup"  # Background process with nohup
+    initialization_trigger: "plan-viewer.html exists"  # When to launch
+    stop_instructions: "Close the server terminal window or press Ctrl+C"
 child_plans:
 - id: epic-structure-cleanup
   order: 00A

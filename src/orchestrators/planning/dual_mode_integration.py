@@ -342,6 +342,22 @@ def create_epic_plan(
     epic_path.mkdir(parents=True, exist_ok=True)
     (epic_path / "tracking").mkdir(exist_ok=True)
     
+    # Create master plan file (required for epic detection)
+    master_plan = epic_path / f"00-{plan_id}.md"
+    master_plan.write_text(f"# {plan_name}\n\n**Epic Plan**\n")
+    
+    # Create child plan folders with master plans (required for epic detection)
+    for cp_data in child_plans:
+        child_folder = epic_path / cp_data["folder"].rstrip("/")
+        child_folder.mkdir(exist_ok=True)
+        
+        # Create child master plan
+        child_master = child_folder / f"00-{cp_data['id']}.md"
+        child_master.write_text(f"# {cp_data['name']}\n\n**Child Plan**\n")
+        
+        # Create child tracking folder
+        (child_folder / "tracking").mkdir(exist_ok=True)
+    
     # Initialize epic planner
     planner = EpicPlanner(epic_path)
     planner.tracker.plan_name = plan_name
@@ -396,6 +412,10 @@ def create_feature_plan(
     (feature_path / "context").mkdir(exist_ok=True)
     (feature_path / "artifacts").mkdir(exist_ok=True)
     (feature_path / "reports").mkdir(exist_ok=True)
+    
+    # Create master plan file (required for feature detection)
+    master_plan = feature_path / f"00-{plan_id}.md"
+    master_plan.write_text(f"# {plan_name}\n\n**Feature Plan**\n")
     
     # Initialize feature planner
     planner = FeaturePlanner(feature_path)

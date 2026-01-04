@@ -111,6 +111,18 @@ def feature_structure(temp_dir):
     tracking = feature_path / "tracking"
     tracking.mkdir()
     
+    # Add progress tracker (required for validation)
+    tracker_data = {
+        "schema_version": "1.0",
+        "plan_type": "feature",
+        "plan_id": "test-feature",
+        "overall_progress": 0.0,
+        "status": "not_started",
+        "phases": []
+    }
+    tracker_file = tracking / "progress-tracker.json"
+    tracker_file.write_text(json.dumps(tracker_data))
+    
     return feature_path
 
 
@@ -519,7 +531,7 @@ class TestDualModeIntegration:
         )
         
         assert orchestrator.get_mode() == PlannerMode.EPIC
-        assert (epic_path / "integration-epic-plan-viewer.html").exists()
+        assert (epic_path / "plan-viewer.html").exists()  # Universal viewer name
     
     def test_create_feature_plan(self, temp_dir):
         """Test feature plan creation via integration layer."""
@@ -539,7 +551,7 @@ class TestDualModeIntegration:
         )
         
         assert orchestrator.get_mode() == PlannerMode.FEATURE
-        assert (feature_path / "integration-feature-plan-viewer.html").exists()
+        assert (feature_path / "plan-viewer.html").exists()  # Universal viewer name
     
     def test_dual_mode_orchestrator_epic(self, epic_structure):
         """Test dual-mode orchestrator with epic plan."""
