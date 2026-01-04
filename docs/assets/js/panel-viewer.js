@@ -8,6 +8,122 @@
 
 // Panel data configuration
 const PANEL_DATA = {
+    'glass-card-clickable': {
+        name: 'glass-card-clickable',
+        type: 'Container',
+        tokens: 12,
+        html: `<div class="glass-card-clickable animation-t1">
+  <div class="tier-header">
+    <div class="card-icon tier-icon">
+      <i class="fas fa-shield-alt pulse-glow-glass--fast"></i>
+    </div>
+    <div class="tier-title-group">
+      <h3 class="card-title">Tier 0: SKULL Governance</h3>
+      <p class="card-subtitle">Brain Protection & Safety Validation</p>
+    </div>
+  </div>
+  
+  <div class="capability-tiles">
+    <div class="capability-tile">
+      <i class="fas fa-check-circle pulse-glow-glass--fast"></i>
+      <div>
+        <strong>TDD</strong>
+        <span>Test-first enforcement</span>
+      </div>
+    </div>
+    <div class="capability-tile">
+      <i class="fas fa-search pulse-glow-glass--fast"></i>
+      <div>
+        <strong>Holistic</strong>
+        <span>Discovery before creation</span>
+      </div>
+    </div>
+  </div>
+</div>`,
+        css: `/* Tokens used: */
+--glass-bg-base (45-50% opacity)
+--glass-blur-md
+--glass-border-cyan
+--radius-lg
+--shadow-glass-md
+--space-lg
+--gap-md
+--transition-glass
+--glass-hover-lift
+--glass-glow-cyan
+--accent-cyan`
+    },
+    'glass-card-display': {
+        name: 'glass-card-display',
+        type: 'Container',
+        tokens: 10,
+        html: `<section class="glass-card-display animation-t1">
+  <h2 class="section-title">
+    <i class="fas fa-layer-group pulse-glow-glass--fast"></i> 
+    Tier Deep Dive
+  </h2>
+  
+  <p class="intro-text">
+    The brain is organized into four hierarchical tiers, each serving 
+    a distinct purpose in memory management and intelligence.
+  </p>
+</section>`,
+        css: `/* Tokens used: */
+--glass-bg-base (35-40% opacity)
+--glass-blur-lg
+--glass-border-blue
+--radius-lg
+--shadow-glass-md
+--space-xl
+--gap-lg
+--transition-glass
+--glass-gradient-blue
+--accent-blue`
+    },
+    'capability-tiles': {
+        name: 'capability-tiles',
+        type: 'Feature',
+        tokens: 8,
+        html: `<div class="capability-tiles">
+  <div class="capability-tile">
+    <i class="fas fa-puzzle-piece pulse-glow-glass--fast"></i>
+    <div>
+      <strong>Task Decomposition</strong>
+      <span>Break complex tasks into phases</span>
+    </div>
+  </div>
+  <div class="capability-tile">
+    <i class="fas fa-stream pulse-glow-glass--fast"></i>
+    <div>
+      <strong>Dependency Sequencing</strong>
+      <span>Logical workflow ordering</span>
+    </div>
+  </div>
+  <div class="capability-tile">
+    <i class="fas fa-stopwatch pulse-glow-glass--fast"></i>
+    <div>
+      <strong>Effort Estimation</strong>
+      <span>Duration & resource planning</span>
+    </div>
+  </div>
+  <div class="capability-tile">
+    <i class="fas fa-exclamation-triangle pulse-glow-glass--fast"></i>
+    <div>
+      <strong>Risk Identification</strong>
+      <span>Detect blockers early</span>
+    </div>
+  </div>
+</div>`,
+        css: `/* Tokens used: */
+--glass-bg-tile
+--glass-blur-sm
+--glass-border-standard
+--radius-md
+--shadow-tile
+--space-md
+--gap-sm
+--transition-fast`
+    },
     'tetris': {
         name: 'panel-tetris',
         type: 'Layout',
@@ -441,6 +557,91 @@ const PANEL_DATA = {
 --space-lg
 --space-md
 --transition-glass`
+    },
+    'dual-layout': {
+        name: 'columns-1 / columns-2',
+        type: 'Grid System',
+        tokens: 6,
+        html: `<!-- Layout Design 1: Single Row per Panel (1 Row × 1 Column) -->
+<h3 class="level1-subsection-title">Layout Design 1: Single Row per Panel (1 Row × 1 Column)</h3>
+<div class="principle-card-grid columns-1">
+  <div class="glass-card-clickable animation-t1">
+    <div class="tier-header">
+      <div class="card-icon tier-icon">
+        <i class="fas fa-shield-alt pulse-glow-glass--fast"></i>
+      </div>
+      <div class="tier-title-group">
+        <h3 class="card-title">Panel 1: Example Title</h3>
+        <p class="card-subtitle">Description text here</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="glass-card-clickable animation-t1">
+    <div class="tier-header">
+      <div class="card-icon tier-icon">
+        <i class="fas fa-memory pulse-glow-glass--fast"></i>
+      </div>
+      <div class="tier-title-group">
+        <h3 class="card-title">Panel 2: Example Title</h3>
+        <p class="card-subtitle">Description text here</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Layout Design 2: Panels Side by Side (1 Row × 2 Columns) -->
+<h3 class="level1-subsection-title">Layout Design 2: Panels Side by Side (1 Row × 2 Columns)</h3>
+<div class="principle-card-grid columns-2">
+  <div class="glass-card-clickable animation-t1">
+    <div class="tier-header">
+      <div class="card-icon tier-icon">
+        <i class="fas fa-shield-alt pulse-glow-glass--fast"></i>
+      </div>
+      <div class="tier-title-group">
+        <h3 class="card-title">Panel 1: Example Title</h3>
+        <p class="card-subtitle">Description text here</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="glass-card-clickable animation-t1">
+    <div class="tier-header">
+      <div class="card-icon tier-icon">
+        <i class="fas fa-memory pulse-glow-glass--fast"></i>
+      </div>
+      <div class="tier-title-group">
+        <h3 class="card-title">Panel 2: Example Title</h3>
+        <p class="card-subtitle">Description text here</p>
+      </div>
+    </div>
+  </div>
+</div>`,
+        css: `/* Tokens used: */
+--glass-bg-base
+--glass-blur-md
+--glass-border-subtle
+--radius-lg
+--shadow-glass-md
+--spacing-lg
+--spacing-xl
+
+/* Grid layout classes */
+.principle-card-grid {
+    display: grid;
+    gap: var(--spacing-lg);
+    margin: var(--spacing-xl) 0;
+}
+
+/* 1-Column Layout (Each panel on separate row) */
+.principle-card-grid.columns-1 {
+    grid-template-columns: 1fr;
+}
+
+/* 2-Column Explicit (for >100 char descriptions) */
+.principle-card-grid.columns-2 {
+    grid-template-columns: repeat(2, 1fr);
+}`
     }
 };
 
@@ -531,9 +732,14 @@ function loadPanel(panelId) {
 
 // Setup code tabs
 function setupCodeTabs() {
+    const codeInspector = document.querySelector('.viewer-code-inspector');
+    
     codeTabs.forEach(tab => {
         tab.addEventListener('click', () => {
             const tabName = tab.dataset.tab;
+            
+            // Toggle expanded state on tab click
+            codeInspector.classList.toggle('expanded');
             
             // Update active tab
             codeTabs.forEach(t => t.classList.remove('viewer-code-tab--active'));
