@@ -28,155 +28,629 @@ button, a, input, select, textarea, [role="button"] {
 </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Four Tier Brain - Architecture - CORTEX</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="description" content="CORTEX 4-Tier Brain Architecture - Hierarchical memory system with Tier 0 Governance, Tier 1 Working Memory, Tier 2 Knowledge Graph, and Tier 3 Dev Context">
+    <meta name="keywords" content="CORTEX, 4-tier brain, memory hierarchy, Tier 0, Tier 1, Tier 2, Tier 3, SKULL rules, working memory, knowledge graph">
+    <meta name="author" content="Asif Hussain">
+    <title>Four-Tier Brain Architecture | CORTEX</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
     <link rel="stylesheet" href="../assets/css/variables.css">
     <link rel="stylesheet" href="../assets/css/main.css">
     <link rel="stylesheet" href="../assets/css/intentional-classes.css">
+    <link rel="stylesheet" href="../assets/css/purpose-driven-themes.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                darkMode: true,
+                background: '#0a0e27',
+                primaryColor: '#7c7cff',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#fff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#00d4ff',
+                tertiaryColor: '#ffd700'
+            }
+        });
+    </script>
     <style>
-        .stub-container {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .mermaid-container {
+            background: rgba(26, 31, 58, 0.5);
             padding: 2rem;
-        }
-        
-        .stub-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            margin: 2rem 0;
             border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .tier-card {
+            background: rgba(26, 31, 58, 0.7);
+            backdrop-filter: blur(20px);
             border-radius: 12px;
-            padding: 3rem;
-            max-width: 600px;
-            text-align: center;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-        }
-        
-        .stub-icon {
-            font-size: 4rem;
-            color: var(--accent-primary, #00d9ff);
-            margin-bottom: 1.5rem;
-            animation: pulse 2s ease-in-out infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-        
-        .stub-title {
-            font-size: 2rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--text-primary, #ffffff);
-        }
-        
-        .stub-category {
-            font-size: 0.875rem;
-            color: var(--accent-secondary, #ffd700);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 1.5rem;
-        }
-        
-        .stub-message {
-            font-size: 1.125rem;
-            line-height: 1.6;
-            color: var(--text-secondary, rgba(255, 255, 255, 0.7));
-            margin-bottom: 2rem;
-        }
-        
-        .stub-back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            background: var(--accent-primary, #00d9ff);
-            color: var(--bg-primary, #0a0e27);
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: 500;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.3s ease;
         }
         
-        .stub-back-link:hover {
+        .tier-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 217, 255, 0.3);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
         }
         
-        .stub-metadata {
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        .tier-card h3 {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        
+        .tier-badge {
+            display: inline-flex;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
             font-size: 0.75rem;
-            color: var(--text-tertiary, rgba(255, 255, 255, 0.5));
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .tier-0 { background: #ff6b6b; color: #fff; }
+        .tier-1 { background: #ffd700; color: #000; }
+        .tier-2 { background: #00d4ff; color: #000; }
+        .tier-3 { background: #00ff88; color: #000; }
+        
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-color, #00d4ff);
+        }
+        
+        .feature-item i {
+            margin-top: 0.25rem;
+            color: var(--accent-color, #00d4ff);
         }
     </style>
-<style>
-        /* REFERENCE Theme - Level 2 */
-        .level2-reference {
-            --theme-primary: #00bfff;
-            --theme-accent: #7c7cff;
-            --theme-success: #00ff88;
-            --theme-warning: #ffd700;
-            --theme-glow: rgba(0, 191, 255, 0.25);
-            
-            /* Apply to glass effects */
-            --glass-border-color: #00bfff33;
-            --pulse-glow-color: rgba(0, 191, 255, 0.25);
-        }
-        
-        /* Themed glass cards */
-        .level2-reference .glass-card-clickable:hover {
-            border-color: #00bfff66;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37),
-                        0 0 30px rgba(0, 191, 255, 0.25);
-        }
-        
-        /* Themed icons */
-        .level2-reference .pulse-glow-glass--fast {
-            filter: drop-shadow(0 0 10px rgba(0, 191, 255, 0.25));
-        }
-        
-        /* Themed metric tiles */
-        .level2-reference .token-metric-tile {
-            border-color: #00bfff33;
-        }
-        
-        .level2-reference .token-metric-tile:hover {
-            border-color: #00bfff66;
-            background: #00bfff11;
-        }
-</style>
 </head>
 <body>
-    <div class="stub-container">
-        <div class="stub-card">
-            <div class="stub-icon">
-                <i class="fas fa-hammer pulse-glow-glass--fast"></i>
-            </div>
-            
-            <div class="stub-category">Architecture</div>
-            
-            <h1 class="stub-title">Four Tier Brain - Architecture</h1>
-            
-            <p class="stub-message">
-                This page is currently under construction. We're working hard to bring you 
-                comprehensive content, interactive visualizations, and practical examples.
-            </p>
-            
-            <a href="index.html" class="stub-back-link">
-                <i class="fas fa-arrow-left pulse-glow-glass--fast"></i>
-                Back to Overview
-            </a>
-            
-            <div class="stub-metadata">
-                <p>Page Status: <strong>Placeholder</strong></p>
-                <p>Created: 2026-01-03</p>
-                <p>Auto-generated by CORTEX Toolkit Manager</p>
+    <!-- Glass Header Navigation -->
+    <header class="glass-header">
+        <div class="header-content">
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../index.html" class="nav-link" mobile-nav-optimized>
+                    <i class="fas fa-home pulse-glow-glass--fast"></i>
+                    <span>Home</span>
+                </a>
+                <a href="index.html" class="nav-link" mobile-nav-optimized>
+                    <i class="fas fa-sitemap pulse-glow-glass--fast"></i>
+                    <span>Architecture</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container level2-reference" id="main-content">
+        <!-- Breadcrumbs -->
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+            <a href="../index.html"><i class="fas fa-home"></i> Home</a>
+            <span class="separator">/</span>
+            <a href="index.html">Architecture</a>
+            <span class="separator">/</span>
+            <span class="current">Four-Tier Brain</span>
+        </nav>
+
+        <!-- Page Title Card -->
+        <div class="glass-card-display animation-t1">
+            <div class="page-title-section">
+                <h1 class="page-title">
+                    <i class="fas fa-layer-group pulse-glow-glass--fast"></i>
+                    CORTEX 4-Tier Brain Architecture
+                </h1>
+                <p class="page-subtitle">
+                    Hierarchical memory system powering intelligent, context-aware development orchestration
+                </p>
             </div>
         </div>
-    </div>
+
+        <!-- Architecture Diagram -->
+        <div class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-project-diagram pulse-glow-glass--fast"></i>
+                System Architecture
+            </h2>
+            <div class="mermaid-container">
+                <div class="mermaid">
+graph TD
+    MO[Master Orchestrator<br/>Intent Router]
+    
+    T0[Tier 0: Governance<br/>SKULL Rules, Constraints]
+    T1[Tier 1: Working Memory<br/>Active Plans, Conversation State]
+    T2[Tier 2: Knowledge Graph<br/>Lessons, Relationships, Patterns]
+    T3[Tier 3: Dev Context<br/>Project Files, Git, Dependencies]
+    
+    MO -->|Enforces| T0
+    MO -->|Reads/Writes| T1
+    MO -->|Learns| T2
+    MO -->|Executes| T3
+    
+    T0 -->|Guards| T1
+    T1 -->|Queries| T2
+    T2 -->|Enriches| T3
+    T3 -->|Feeds| T1
+    
+    User[User Request] --> MO
+    MO --> Result[Orchestrated Result]
+    
+    style T0 fill:#ff6b6b,stroke:#fff,stroke-width:2px,color:#fff
+    style T1 fill:#ffd700,stroke:#fff,stroke-width:2px,color:#000
+    style T2 fill:#00d4ff,stroke:#fff,stroke-width:2px,color:#000
+    style T3 fill:#00ff88,stroke:#fff,stroke-width:2px,color:#000
+    style MO fill:#7c7cff,stroke:#fff,stroke-width:3px,color:#fff
+    style User fill:#00bfff,stroke:#fff,stroke-width:2px,color:#000
+    style Result fill:#00ff88,stroke:#fff,stroke-width:2px,color:#000
+                </div>
+            </div>
+        </div>
+
+        <!-- Overview Section -->
+        <div class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-brain pulse-glow-glass--fast"></i>
+                Overview
+            </h2>
+            <p>
+                The <strong>4-Tier Brain</strong> is CORTEX's hierarchical memory architecture that enables intelligent, 
+                context-aware orchestration. Each tier serves a distinct purpose in the cognitive pipeline, from rigid 
+                governance rules to dynamic execution context.
+            </p>
+            <p>
+                Unlike traditional AI systems with flat memory models, CORTEX's tiered approach creates a <em>memory hierarchy</em> 
+                that mirrors human cognition: immutable rules (instinct), working memory (consciousness), long-term knowledge 
+                (experience), and environmental context (perception).
+            </p>
+        </div>
+
+        <!-- Tier 0: Governance -->
+        <div class="tier-card" id="tier-0">
+            <h3>
+                <span class="tier-badge tier-0">Tier 0</span>
+                <i class="fas fa-shield-halved"></i>
+                Governance Layer
+            </h3>
+            <p>
+                <strong>Purpose:</strong> Immutable brain protection rules that enforce quality, safety, and architectural integrity.
+            </p>
+            <p>
+                Tier 0 contains the <strong>SKULL (Safeguards for Knowledge, Understanding, Learning & Logic)</strong> rules—61 
+                non-negotiable constraints that the Master Orchestrator must obey. These act as CORTEX's "instincts," preventing 
+                harmful or architecturally unsound actions.
+            </p>
+            
+            <h4 style="margin-top: 1.5rem;"><i class="fas fa-list-check"></i> Key Rules</h4>
+            <div class="feature-list">
+                <div class="feature-item" style="--accent-color: #ff6b6b;">
+                    <i class="fas fa-vial"></i>
+                    <div>
+                        <strong>TDD_ENFORCEMENT</strong><br>
+                        <small>Tests must fail before implementation (RED→GREEN→REFACTOR)</small>
+                    </div>
+                </div>
+                <div class="feature-item" style="--accent-color: #ff6b6b;">
+                    <i class="fas fa-search"></i>
+                    <div>
+                        <strong>HOLISTIC_DISCOVERY</strong><br>
+                        <small>Search before create to prevent duplication</small>
+                    </div>
+                </div>
+                <div class="feature-item" style="--accent-color: #ff6b6b;">
+                    <i class="fas fa-code-branch"></i>
+                    <div>
+                        <strong>GIT_ISOLATION</strong><br>
+                        <small>CORTEX code never commits to user repos</small>
+                    </div>
+                </div>
+                <div class="feature-item" style="--accent-color: #ff6b6b;">
+                    <i class="fas fa-drafting-compass"></i>
+                    <div>
+                        <strong>PLANNING_ISOLATION</strong><br>
+                        <small>Planning commands create plans only, never implement</small>
+                    </div>
+                </div>
+                <div class="feature-item" style="--accent-color: #ff6b6b;">
+                    <i class="fas fa-broom"></i>
+                    <div>
+                        <strong>REFACTOR_CLEANUP</strong><br>
+                        <small>Remove orphaned code, deduplicate, optimize</small>
+                    </div>
+                </div>
+                <div class="feature-item" style="--accent-color: #ff6b6b;">
+                    <i class="fas fa-hand-paper"></i>
+                    <div>
+                        <strong>HAND_OFF_PROTOCOL</strong><br>
+                        <small>Autonomous orchestrators execute independently</small>
+                    </div>
+                </div>
+            </div>
+            
+            <p style="margin-top: 1rem;">
+                <strong>Storage:</strong> <code>cortex-brain/brain-protection-rules.yaml</code> (61 rules)<br>
+                <strong>Access:</strong> Read-only by Master Orchestrator<br>
+                <strong>Update Frequency:</strong> Rarely (architectural changes only)
+            </p>
+        </div>
+
+        <!-- Tier 1: Working Memory -->
+        <div class="tier-card" id="tier-1">
+            <h3>
+                <span class="tier-badge tier-1">Tier 1</span>
+                <i class="fas fa-memory"></i>
+                Working Memory
+            </h3>
+            <p>
+                <strong>Purpose:</strong> Short-term, high-velocity storage for active plans, conversation state, and orchestrator coordination.
+            </p>
+            <p>
+                Tier 1 is CORTEX's "consciousness"—what it's currently thinking about. When you create a plan, start a TDD session, 
+                or continue a previous task, Tier 1 tracks the state. This enables <strong>stateful orchestration</strong> where 
+                agents can resume work across sessions.
+            </p>
+            
+            <h4 style="margin-top: 1.5rem;"><i class="fas fa-database"></i> Data Stored</h4>
+            <div class="feature-list">
+                <div class="feature-item" style="--accent-color: #ffd700;">
+                    <i class="fas fa-clipboard-list"></i>
+                    <div>
+                        <strong>Active Plans</strong><br>
+                        <small>Current phase, progress, acceptance criteria, git checkpoints</small>
+                    </div>
+                </div>
+                <div class="feature-item" style="--accent-color: #ffd700;">
+                    <i class="fas fa-comments"></i>
+                    <div>
+                        <strong>Conversation Context</strong><br>
+                        <small>Last 3 sessions, user preferences, intent history</small>
+                    </div>
+                </div>
+                <div class="feature-item" style="--accent-color: #ffd700;">
+                    <i class="fas fa-sync"></i>
+                    <div>
+                        <strong>State Coordination</strong><br>
+                        <small>PlanningStateDB, orchestrator status, agent handoffs</small>
+                    </div>
+                </div>
+                <div class="feature-item" style="--accent-color: #ffd700;">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <div>
+                        <strong>Performance Cache</strong><br>
+                        <small>Token usage, execution metrics, hot paths</small>
+                    </div>
+                </div>
+            </div>
+            
+            <p style="margin-top: 1rem;">
+                <strong>Storage:</strong> <code>cortex-brain/tier1/</code> (JSONL, SQLite)<br>
+                <strong>Access:</strong> Read/write by all orchestrators<br>
+                <strong>Retention:</strong> 30 days (rolling window)
+            </p>
+        </div>
+
+        <!-- Tier 2: Knowledge Graph -->
+        <div class="tier-card" id="tier-2">
+            <h3>
+                <span class="tier-badge tier-2">Tier 2</span>
+                <i class="fas fa-network-wired"></i>
+                Knowledge Graph
+            </h3>
+            <p>
+                <strong>Purpose:</strong> Long-term, structured knowledge capturing lessons learned, relationships, and patterns.
+            </p>
+            <p>
+                Tier 2 is CORTEX's "experience memory." Every successful pattern, failure mode, and architectural decision is 
+                captured as nodes in a knowledge graph with typed relationships. This enables <strong>continuous learning</strong>—CORTEX 
+                gets smarter with every project.
+            </p>
+            
+            <h4 style="margin-top: 1.5rem;"><i class="fas fa-sitemap"></i> Knowledge Structure</h4>
+            <div class="feature-list">
+                <div class="feature-item" style="--accent-color: #00d4ff;">
+                    <i class="fas fa-lightbulb"></i>
+                    <div>
+                        <strong>Lessons Learned</strong><br>
+                        <small>What worked, what failed, why, context, impact</small>
+                    </div>
+                </div>
+                <div class="feature-item" style="--accent-color: #00d4ff;">
+                    <i class="fas fa-link"></i>
+                    <div>
+                        <strong>Relationships</strong><br>
+                        <small>Dependencies, conflicts, alternatives, compositions</small>
+                    </div>
+                </div>
+                <div class="feature-item" style="--accent-color: #00d4ff;">
+                    <i class="fas fa-chart-line"></i>
+                    <div>
+                        <strong>Patterns</strong><br>
+                        <small>Architectural patterns, anti-patterns, idioms</small>
+                    </div>
+                </div>
+                <div class="feature-item" style="--accent-color: #00d4ff;">
+                    <i class="fas fa-graduation-cap"></i>
+                    <div>
+                        <strong>Phase -1 Knowledge</strong><br>
+                        <small>80 modules across 17 domains (API design, testing, security...)</small>
+                    </div>
+                </div>
+            </div>
+            
+            <p style="margin-top: 1rem;">
+                <strong>Storage:</strong> <code>cortex-brain/tier2/knowledge-graph.yaml</code>, Neo4j-style graph<br>
+                <strong>Access:</strong> Read by all, write by Learning Agent<br>
+                <strong>Retention:</strong> Permanent (with version history)
+            </p>
+        </div>
+
+        <!-- Tier 3: Dev Context -->
+        <div class="tier-card" id="tier-3">
+            <h3>
+                <span class="tier-badge tier-3">Tier 3</span>
+                <i class="fas fa-code"></i>
+                Development Context
+            </h3>
+            <p>
+                <strong>Purpose:</strong> Real-time workspace awareness including files, git state, dependencies, and execution environment.
+            </p>
+            <p>
+                Tier 3 is CORTEX's "perception"—what it sees in your project right now. This tier is dynamically loaded from the 
+                workspace and provides the concrete context for executing plans. Unlike the other tiers, Tier 3 is <em>ephemeral</em> 
+                and project-specific.
+            </p>
+            
+            <h4 style="margin-top: 1.5rem;"><i class="fas fa-folder-open"></i> Context Sources</h4>
+            <div class="feature-list">
+                <div class="feature-item" style="--accent-color: #00ff88;">
+                    <i class="fas fa-file-code"></i>
+                    <div>
+                        <strong>Project Files</strong><br>
+                        <small>Source code, configs, schemas, documentation</small>
+                    </div>
+                </div>
+                <div class="feature-item" style="--accent-color: #00ff88;">
+                    <i class="fas fa-code-branch"></i>
+                    <div>
+                        <strong>Git State</strong><br>
+                        <small>Current branch, commit history, diffs, remote status</small>
+                    </div>
+                </div>
+                <div class="feature-item" style="--accent-color: #00ff88;">
+                    <i class="fas fa-cube"></i>
+                    <div>
+                        <strong>Dependencies</strong><br>
+                        <small>package.json, requirements.txt, .csproj, lock files</small>
+                    </div>
+                </div>
+                <div class="feature-item" style="--accent-color: #00ff88;">
+                    <i class="fas fa-terminal"></i>
+                    <div>
+                        <strong>Execution Env</strong><br>
+                        <small>Python/Node versions, virtual envs, PATH, shells</small>
+                    </div>
+                </div>
+                <div class="feature-item" style="--accent-color: #00ff88;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div>
+                        <strong>Errors & Warnings</strong><br>
+                        <small>Compiler errors, linter warnings, test failures</small>
+                    </div>
+                </div>
+                <div class="feature-item" style="--accent-color: #00ff88;">
+                    <i class="fas fa-cog"></i>
+                    <div>
+                        <strong>Build Config</strong><br>
+                        <small>tasks.json, scripts, Makefiles, CI/CD pipelines</small>
+                    </div>
+                </div>
+            </div>
+            
+            <p style="margin-top: 1rem;">
+                <strong>Storage:</strong> Live workspace + <code>cortex-brain/tier3/development-context.yaml</code><br>
+                <strong>Access:</strong> Read-only (writes go to workspace, not Tier 3)<br>
+                <strong>Retention:</strong> Session-based (cleared on workspace close)
+            </p>
+        </div>
+
+        <!-- Interaction Flow -->
+        <div class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-exchange-alt pulse-glow-glass--fast"></i>
+                Inter-Tier Communication
+            </h2>
+            <p>
+                The tiers don't operate in isolation—they form a <strong>cognitive pipeline</strong> where data flows up and down 
+                the hierarchy based on the task at hand.
+            </p>
+            
+            <h3 style="margin-top: 1.5rem;"><i class="fas fa-arrow-down"></i> Downward Flow (Enforcement)</h3>
+            <p>
+                <code>Tier 0 → Tier 1 → Tier 2 → Tier 3</code><br>
+                When you issue a command, the Master Orchestrator checks Tier 0 constraints, loads Tier 1 state, queries Tier 2 
+                for relevant patterns, and applies to Tier 3 context. This ensures every action is <em>compliant, stateful, 
+                informed, and contextual</em>.
+            </p>
+            
+            <h3 style="margin-top: 1.5rem;"><i class="fas fa-arrow-up"></i> Upward Flow (Learning)</h3>
+            <p>
+                <code>Tier 3 → Tier 2 → Tier 1</code><br>
+                After execution, results from Tier 3 (did the tests pass? was the refactor successful?) feed back to Tier 1 
+                (update plan progress) and Tier 2 (capture lesson learned). Tier 0 never changes—rules are immutable.
+            </p>
+        </div>
+
+        <!-- Use Cases -->
+        <div class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb pulse-glow-glass--fast"></i>
+                Real-World Examples
+            </h2>
+            
+            <h3><i class="fas fa-clipboard-list"></i> Example 1: Creating a Plan</h3>
+            <p>
+                <strong>User:</strong> <code>/CORTEX plan user authentication</code>
+            </p>
+            <ol>
+                <li><strong>Tier 0:</strong> Enforce PLANNING_ISOLATION (plan only, don't implement)</li>
+                <li><strong>Tier 1:</strong> Create new plan entry, set status = "active", phase = 0</li>
+                <li><strong>Tier 2:</strong> Query for authentication patterns, best practices, security considerations</li>
+                <li><strong>Tier 3:</strong> Scan project for existing auth code, identify integration points</li>
+                <li><strong>Output:</strong> 17-phase plan document with knowledge-enriched steps</li>
+            </ol>
+            
+            <h3 style="margin-top: 1.5rem;"><i class="fas fa-vial"></i> Example 2: TDD Session</h3>
+            <p>
+                <strong>User:</strong> <code>tdd login function</code>
+            </p>
+            <ol>
+                <li><strong>Tier 0:</strong> Enforce TDD_ENFORCEMENT (RED→GREEN→REFACTOR mandatory)</li>
+                <li><strong>Tier 1:</strong> Check for active TDD session, resume if exists</li>
+                <li><strong>Tier 2:</strong> Load testing patterns for login functions</li>
+                <li><strong>Tier 3:</strong> Identify test framework, locate test files, check coverage</li>
+                <li><strong>Output:</strong> Failing test first, then minimal implementation, then refactor</li>
+            </ol>
+            
+            <h3 style="margin-top: 1.5rem;"><i class="fas fa-sync"></i> Example 3: Resuming Work</h3>
+            <p>
+                <strong>User:</strong> <code>continue</code>
+            </p>
+            <ol>
+                <li><strong>Tier 1:</strong> Query last 3 sessions, find most recent orchestrator</li>
+                <li><strong>Tier 1:</strong> Load plan state (current phase, completed tasks)</li>
+                <li><strong>Tier 2:</strong> Recall context from previous session</li>
+                <li><strong>Tier 3:</strong> Re-scan workspace for changes since last session</li>
+                <li><strong>Output:</strong> "Resuming Phase 5: Implementation (3/8 tasks complete)"</li>
+            </ol>
+        </div>
+
+        <!-- Benefits -->
+        <div class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-trophy pulse-glow-glass--fast"></i>
+                Advantages of Tiered Architecture
+            </h2>
+            <div class="feature-list">
+                <div class="feature-item" style="--accent-color: #00d4ff;">
+                    <i class="fas fa-shield-alt"></i>
+                    <div>
+                        <strong>Safety</strong><br>
+                        <small>Tier 0 prevents harmful actions before execution</small>
+                    </div>
+                </div>
+                <div class="feature-item" style="--accent-color: #00d4ff;">
+                    <i class="fas fa-history"></i>
+                    <div>
+                        <strong>Statefulness</strong><br>
+                        <small>Tier 1 enables resuming work across sessions</small>
+                    </div>
+                </div>
+                <div class="feature-item" style="--accent-color: #00d4ff;">
+                    <i class="fas fa-brain"></i>
+                    <div>
+                        <strong>Learning</strong><br>
+                        <small>Tier 2 captures lessons, improving over time</small>
+                    </div>
+                </div>
+                <div class="feature-item" style="--accent-color: #00d4ff;">
+                    <i class="fas fa-crosshairs"></i>
+                    <div>
+                        <strong>Context Awareness</strong><br>
+                        <small>Tier 3 grounds actions in current workspace reality</small>
+                    </div>
+                </div>
+                <div class="feature-item" style="--accent-color: #00d4ff;">
+                    <i class="fas fa-layer-group"></i>
+                    <div>
+                        <strong>Separation of Concerns</strong><br>
+                        <small>Each tier has a single, well-defined responsibility</small>
+                    </div>
+                </div>
+                <div class="feature-item" style="--accent-color: #00d4ff;">
+                    <i class="fas fa-arrows-alt-h"></i>
+                    <div>
+                        <strong>Scalability</strong><br>
+                        <small>Add/modify tiers without affecting others</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Related Pages -->
+        <div class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-link pulse-glow-glass--fast"></i>
+                Related Topics
+            </h2>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <i class="fas fa-users"></i>
+                    <div>
+                        <a href="agent-system.html" style="color: #00d4ff; text-decoration: none;">
+                            <strong>Agent System</strong><br>
+                            <small>How Planning & Execution agents coordinate via Tier 1</small>
+                        </a>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-memory"></i>
+                    <div>
+                        <a href="working-memory.html" style="color: #00d4ff; text-decoration: none;">
+                            <strong>Working Memory Deep Dive</strong><br>
+                            <small>Tier 1 internals: PlanningStateDB, conversation context</small>
+                        </a>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-shield-halved"></i>
+                    <div>
+                        <a href="skull-protection.html" style="color: #00d4ff; text-decoration: none;">
+                            <strong>SKULL Protection Rules</strong><br>
+                            <small>Complete list of 61 Tier 0 governance constraints</small>
+                        </a>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-network-wired"></i>
+                    <div>
+                        <a href="knowledge-graph.html" style="color: #00d4ff; text-decoration: none;">
+                            <strong>Knowledge Graph</strong><br>
+                            <small>Tier 2 structure: nodes, relationships, querying</small>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Glass Footer -->
+    <footer class="glass-footer">
+        <div class="footer-content">
+            <p>&copy; 2026 Asif Hussain. All rights reserved.</p>
+            <p class="footer-links">
+                <a href="../index.html">Home</a> |
+                <a href="index.html">Architecture</a> |
+                <a href="../faq.html">FAQ</a>
+            </p>
+        </div>
+    </footer>
 </body>
 </html>
