@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D3.js Diagrams Test</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+            padding: 2rem;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #00d4ff;
+        }
+        .test-section {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .test-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #10b981;
+        }
+        .test-status {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            display: inline-block;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        .status-pending {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fbbf24;
+        }
+        .status-pass {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+        .status-fail {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+        .d3-diagram-container {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            border-radius: 8px;
+            min-height: 600px;
+            position: relative;
+            overflow: hidden;
+        }
+        .diagram-wrapper {
+            position: relative;
+        }
+        .external-diagram-reset {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(0, 212, 255, 0.2);
+            border: 1px solid rgba(0, 212, 255, 0.5);
+            color: #00d4ff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 10;
+        }
+        .external-diagram-reset:hover {
+            transform: rotate(90deg);
+            background: rgba(0, 212, 255, 0.4);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+            color: #ffffff;
+        }
+        .test-instructions {
+            background: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid #10b981;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+        }
+        .test-instructions ul {
+            margin-left: 1.5rem;
+            margin-top: 0.5rem;
+        }
+        .test-instructions li {
+            margin-bottom: 0.5rem;
+        }
+        .console-output {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            border-radius: 4px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .console-output .log {
+            color: #10b981;
+        }
+        .console-output .error {
+            color: #ef4444;
+        }
+        .console-output .warn {
+            color: #fbbf24;
+        }
+    </style>
+</head>
+<body>
+    <h1><i class="fas fa-vial"></i> CORTEX D3.js Diagrams - Automated Tests</h1>
+
+    <!-- Test 1: Radial Sunburst -->
+    <div class="test-section">
+        <h2 class="test-title"><i class="fas fa-sitemap"></i> Test 1: Radial Sunburst Diagram</h2>
+        <div class="test-status status-pending" id="test1-status">⏳ Pending</div>
+        
+        <div class="test-instructions">
+            <strong>Manual Test Steps:</strong>
+            <ul>
+                <li>✅ Verify circular radial layout renders</li>
+                <li>✅ Drag to pan (diagram should move)</li>
+                <li>✅ Scroll to zoom (diagram should scale)</li>
+                <li>✅ Hover nodes (should enlarge)</li>
+                <li>✅ Click reset button (should return to center)</li>
+            </ul>
+        </div>
+
+        <div class="diagram-wrapper">
+            <div class="d3-diagram-container" id="test-radial-sunburst"></div>
+        </div>
+        
+        <div class="console-output" id="test1-console"></div>
+    </div>
+
+    <!-- Test 2: Force-Directed Network -->
+    <div class="test-section">
+        <h2 class="test-title"><i class="fas fa-project-diagram"></i> Test 2: Force-Directed Network</h2>
+        <div class="test-status status-pending" id="test2-status">⏳ Pending</div>
+        
+        <div class="test-instructions">
+            <strong>Manual Test Steps:</strong>
+            <ul>
+                <li>✅ Verify nodes and links render</li>
+                <li>✅ Drag individual nodes (nodes should move, circles MUST NOT disappear)</li>
+                <li>✅ Zoom/pan the diagram</li>
+                <li>✅ Hover nodes (should show tooltips)</li>
+                <li>✅ Click reset button (should reset simulation)</li>
+            </ul>
+        </div>
+
+        <div class="diagram-wrapper">
+            <div class="d3-diagram-container" id="test-orchestrator-network"></div>
+        </div>
+        
+        <div class="console-output" id="test2-console"></div>
+    </div>
+
+    <script src="assets/js/d3-brain-architecture.js"></script>
+    <script>
+        // Test automation
+        const test1Console = document.getElementById('test1-console');
+        const test2Console = document.getElementById('test2-console');
+        const test1Status = document.getElementById('test1-status');
+        const test2Status = document.getElementById('test2-status');
+
+        function logTest(testNum, message, type = 'log') {
+            const consoleEl = testNum === 1 ? test1Console : test2Console;
+            const timestamp = new Date().toLocaleTimeString();
+            consoleEl.innerHTML += `<div class="${type}">[${timestamp}] ${message}</div>`;
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+        }
+
+        // Override console methods for testing
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            const message = args.join(' ');
+            if (message.includes('Radial sunburst')) {
+                logTest(1, message, 'log');
+            } else if (message.includes('network') || message.includes('orchestrator')) {
+                logTest(2, message, 'log');
+            }
+        };
+
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            const message = args.join(' ');
+            if (message.includes('brain-tree') || message.includes('sunburst')) {
+                logTest(1, `ERROR: ${message}`, 'error');
+                test1Status.textContent = '❌ Failed';
+                test1Status.className = 'test-status status-fail';
+            } else if (message.includes('orchestrator') || message.includes('network')) {
+                logTest(2, `ERROR: ${message}`, 'error');
+                test2Status.textContent = '❌ Failed';
+                test2Status.className = 'test-status status-fail';
+            }
+        };
+
+        console.warn = function(...args) {
+            originalWarn.apply(console, args);
+            const message = args.join(' ');
+            if (message.includes('Tree')) {
+                logTest(1, `WARN: ${message}`, 'warn');
+            } else if (message.includes('Network')) {
+                logTest(2, `WARN: ${message}`, 'warn');
+            }
+        };
+
+        // Run tests after DOM loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            logTest(1, 'Starting Test 1: Radial Sunburst', 'log');
+            logTest(2, 'Starting Test 2: Force-Directed Network', 'log');
+
+            setTimeout(() => {
+                // Test 1: Radial Sunburst
+                try {
+                    const treeContainer = document.getElementById('test-radial-sunburst');
+                    logTest(1, 'Initializing radial sunburst...', 'log');
+                    
+                    const treeInstance = createBrainArchitectureTree('test-radial-sunburst');
+                    
+                    if (treeInstance && treeInstance.svg && treeInstance.zoom) {
+                        logTest(1, '✓ Radial sunburst created successfully', 'log');
+                        
+                        // Create reset button
+                        const resetBtn = document.createElement('button');
+                        resetBtn.innerHTML = '<i class="fas fa-redo"></i>';
+                        resetBtn.className = 'external-diagram-reset';
+                        resetBtn.title = 'Reset View';
+                        treeContainer.parentElement.insertBefore(resetBtn, treeContainer);
+                        
+                        resetBtn.addEventListener('click', () => {
+                            logTest(1, 'Reset button clicked', 'log');
+                            treeInstance.svg.transition()
+                                .duration(750)
+                                .call(treeInstance.zoom.transform, d3.zoomIdentity);
+                        });
+                        
+                        // Check for SVG elements
+                        setTimeout(() => {
+                            const svgEl = treeContainer.querySelector('svg');
+                            const nodes = treeContainer.querySelectorAll('.node');
+                            const links = treeContainer.querySelectorAll('.link');
+                            
+                            if (svgEl && nodes.length > 0 && links.length > 0) {
+                                logTest(1, `✓ SVG rendered: ${nodes.length} nodes, ${links.length} links`, 'log');
+                                test1Status.textContent = '✅ Passed (Manual verification needed)';
+                                test1Status.className = 'test-status status-pass';
+                            } else {
+                                logTest(1, '✗ SVG elements missing', 'error');
+                                test1Status.textContent = '❌ Failed';
+                                test1Status.className = 'test-status status-fail';
+                            }
+                        }, 1000);
+                    } else {
+                        logTest(1, '✗ Failed to create diagram instance', 'error');
+                        test1Status.textContent = '❌ Failed';
+                        test1Status.className = 'test-status status-fail';
+                    }
+                } catch (err) {
+                    logTest(1, `✗ Exception: ${err.message}`, 'error');
+                    test1Status.textContent = '❌ Failed';
+                    test1Status.className = 'test-status status-fail';
+                }
+
+                // Test 2: Force-Directed Network
+                try {
+                    const networkContainer = document.getElementById('test-orchestrator-network');
+                    logTest(2, 'Initializing force-directed network...', 'log');
+                    
+                    const networkInstance = createOrchestratorNetwork('test-orchestrator-network');
+                    
+                    if (networkInstance && networkInstance.svg && networkInstance.zoom) {
+                        logTest(2, '✓ Network created successfully', 'log');
+                        
+                        // Create reset button
+                        const resetBtn = document.createElement('button');
+                        resetBtn.innerHTML = '<i class="fas fa-redo"></i>';
+                        resetBtn.className = 'external-diagram-reset';
+                        resetBtn.title = 'Reset View';
+                        networkContainer.parentElement.insertBefore(resetBtn, networkContainer);
+                        
+                        resetBtn.addEventListener('click', () => {
+                            logTest(2, 'Reset button clicked', 'log');
+                            networkInstance.svg.transition()
+                                .duration(750)
+                                .call(networkInstance.zoom.transform, d3.zoomIdentity);
+                        });
+                        
+                        // Check for SVG elements
+                        setTimeout(() => {
+                            const svgEl = networkContainer.querySelector('svg');
+                            const nodes = networkContainer.querySelectorAll('circle');
+                            const links = networkContainer.querySelectorAll('line');
+                            
+                            if (svgEl && nodes.length > 0 && links.length > 0) {
+                                logTest(2, `✓ SVG rendered: ${nodes.length} nodes, ${links.length} links`, 'log');
+                                logTest(2, '⚠ CRITICAL: Drag nodes to verify circles DO NOT disappear', 'warn');
+                                test2Status.textContent = '✅ Passed (Manual verification needed)';
+                                test2Status.className = 'test-status status-pass';
+                            } else {
+                                logTest(2, '✗ SVG elements missing', 'error');
+                                test2Status.textContent = '❌ Failed';
+                                test2Status.className = 'test-status status-fail';
+                            }
+                        }, 2000);
+                    } else {
+                        logTest(2, '✗ Failed to create diagram instance', 'error');
+                        test2Status.textContent = '❌ Failed';
+                        test2Status.className = 'test-status status-fail';
+                    }
+                } catch (err) {
+                    logTest(2, `✗ Exception: ${err.message}`, 'error');
+                    test2Status.textContent = '❌ Failed';
+                    test2Status.className = 'test-status status-fail';
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

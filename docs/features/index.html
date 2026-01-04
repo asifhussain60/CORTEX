@@ -1,41 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<style>
-/* Mobile font optimization */
-html {
-    -webkit-text-size-adjust: 100%;
-    -moz-text-size-adjust: 100%;
-    text-size-adjust: 100%;
-}
-</style>
-<style>
-/* Touch target optimization */
-a, button, [role="button"] {
-    min-width: 44px;
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-</style>
-<style>
-/* Mobile touch optimization */
-button, a, input, select, textarea, [role="button"] {
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
-}
-</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Features | CORTEX - Enterprise Development Intelligence</title>
-    <meta name="description" content="Explore CORTEX's powerful features including Planning System, TDD Orchestration, Dashboard System, and intelligent automation">
-    <meta name="keywords" content="CORTEX features, AI development tools, planning system, TDD, dashboard, automation">
+    <meta name="description" content="CORTEX Features - Intelligent planning, TDD orchestration, ADO integration, and autonomous development workflows">
+    <title>Features | CORTEX 4.0</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    
+    <!-- CORTEX Styles -->
     <link rel="stylesheet" href="../assets/css/main.css">
     <link rel="stylesheet" href="../assets/css/intentional-classes.css">
+    <link rel="stylesheet" href="../assets/css/modern-tabs.css">
+    
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" href="../assets/images/CORTEX-logo.png" type="image/png">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600&family=Montserrat:wght@400;600;700&family=Raleway:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Mermaid.js for Diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs?v=20260104164746';
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                // Glassmorphism-aligned colors
+                primaryColor: 'rgba(26, 31, 58, 0.85)',
+                primaryTextColor: '#e2e8f0',
+                primaryBorderColor: 'rgba(0, 212, 255, 0.6)',
+                
+                secondaryColor: 'rgba(26, 31, 58, 0.75)',
+                secondaryTextColor: '#cbd5e0',
+                secondaryBorderColor: 'rgba(123, 97, 255, 0.5)',
+                
+                tertiaryColor: 'rgba(26, 31, 58, 0.65)',
+                tertiaryTextColor: '#a0aec0',
+                tertiaryBorderColor: 'rgba(16, 185, 129, 0.5)',
+                
+                // Node-specific colors (glassmorphism panels)
+                noteBkgColor: 'rgba(26, 31, 58, 0.9)',
+                noteTextColor: '#e2e8f0',
+                noteBorderColor: 'rgba(0, 212, 255, 0.4)',
+                
+                // Lines and connections
+                lineColor: 'rgba(0, 212, 255, 0.5)',
+                
+                // Background
+                background: 'transparent',
+                mainBkg: 'rgba(26, 31, 58, 0.8)',
+                secondBkg: 'rgba(15, 23, 42, 0.7)',
+                
+                // Text
+                textColor: '#e2e8f0',
+                labelTextColor: '#e2e8f0',
+                
+                // Typography - Modern sans-serif
+                fontSize: '15px',
+                fontFamily: "'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif"
+            },
+            flowchart: {
+                curve: 'basis',
+                useMaxWidth: true,
+                htmlLabels: true,
+                padding: 20
+            },
+            stateDiagram: {
+                useMaxWidth: true
+            }
+        });
+    </script>
     <style>
+        /* Mermaid Container */
+        .mermaid-container {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+        
+        .mermaid-container:hover {
+            border-color: rgba(0, 212, 255, 0.4);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+                        0 0 20px rgba(0, 212, 255, 0.15),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+        
+        .mermaid-container .mermaid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        /* Mermaid SVG text enhancement */
+        .mermaid-container svg {
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+        
         /* Compact Tetris Override */
         .tetris-panel {
             padding: 0 2.5rem;

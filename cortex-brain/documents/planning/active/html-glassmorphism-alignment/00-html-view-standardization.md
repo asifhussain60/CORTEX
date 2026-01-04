@@ -6,7 +6,8 @@
     **Created:** 2026-01-04  
     **Author:** Asif Hussain  
     **Target:** All HTML files in `docs/` folder  
-    **Reference:** `glassmorphism-css-standardization` (completed 2026-01-03)
+    **Reference:** `glassmorphism-css-standardization` (completed 2026-01-03)  
+    **Execution Strategy:** [SNOWBALL-STRATEGY.md](./SNOWBALL-STRATEGY.md) - Iterative live refinement approach
 
     ---
 
@@ -43,16 +44,16 @@
     ╠════════════════════════════════════════════════════════════════════════════╣
     ║ 🔄 PIVOT: SNOWBALL STRATEGY (Phase 16 - NEW APPROACH)                    ║
     ╠════════════════════════════════════════════════════════════════════════════╣
-    ║ Phase 16a: Level 1 Architecture Pages   [░░░░░░░░░░]   0%  🚀 ACTIVE     ║
-    ║ Phase 16b: Level 1 Feature Pages        [░░░░░░░░░░]   0%  ⏳ PENDING    ║
+    ║ Phase 16a: Level 1 Architecture Pages   [██████████] 100%  ✅ COMPLETE    ║
+    ║ Phase 16b: Level 1 Feature Pages        [██░░░░░░░░]  20%  🚀 ACTIVE     ║
     ║ Phase 16c: Level 1 Orchestrator Hub     [░░░░░░░░░░]   0%  ⏳ PENDING    ║
     ║ Phase 16d: Level 2 Detail Pages         [░░░░░░░░░░]   0%  ⏳ PENDING    ║
     ║ Phase 17: Production Validation & QA    [░░░░░░░░░░]   0%  ⏳ PENDING    ║
     ╠════════════════════════════════════════════════════════════════════════════╣
-    ║ Overall Progress: [██████████████████░░] 88% (17.5/20 phases)            ║
-    ║ Estimated Time: 72 hours | Elapsed: 42.5 hours | Remaining: 29.5 hours   ║
-    ║ **⛔ Phase 14 BLOCKED:** Preview approach not working (abandoned)         ║
-    ║ **🚀 Phase 16a ACTIVE:** Live production iterative refinement started    ║
+    ║ Overall Progress: [███████████████████░] 92% (18.5/20 phases)            ║
+    ║ Estimated Time: 72 hours | Elapsed: 48 hours | Remaining: 24 hours       ║
+    ║ **✅ Phase 16a COMPLETE:** architecture/index.html redesigned            ║
+    ║ **🚀 Phase 16b NEXT:** Level 1 Feature Pages                            ║
     ╚════════════════════════════════════════════════════════════════════════════╝
     ```
 
@@ -244,6 +245,11 @@
     4. Create rollback script (`rollback-transformation.ps1`)
     5. Test verification framework on sample HTML file
     6. Document verification workflow
+
+    **🛠️ TOOLKIT INTEGRATION:**
+    - **`validate_templates.py`**: Validate YAML syntax for response templates and manifests
+    - **`validate_plan_governance.py`**: Automated SKULL rule compliance checks (Phase -1, REFACTOR ≥15 tasks)
+    - Purpose: Ensure governance compliance during verification framework setup
 
     **Verification Script Features:**
 
@@ -673,6 +679,12 @@
     - Create Orchestrator Migration status matrix (HTML table)
     - Update all cross-reference links
 
+    **🛠️ TOOLKIT INTEGRATION:**
+    - **`diagram-generator.py`**: Generate D3.js and Mermaid diagrams based on content analysis
+    - **`intelligent-diagram-enhancer.py`**: Add purpose-driven diagrams to high-priority Level 2 pages
+    - **`value-scoring-engine.py`**: Assess content quality and recommend optimal diagram types
+    - Purpose: Automate diagram creation with intelligent placement and type selection
+
     **✅ ACCEPTANCE CRITERIA VALIDATION:**
     Compare against `acceptance-criteria.yaml` → `phase_7d_diagram_updates`
     - [ ] All criteria met (see acceptance-criteria.yaml lines 449-477)
@@ -855,6 +867,11 @@
     - `reports/risk-mitigation-strategy.md`
     - `reports/failure-mode-analysis.md`
 
+    **🛠️ TOOLKIT INTEGRATION:**
+    - **`validate_templates.py`**: Validate YAML structure for edge cases in manifests
+    - **`validate_plan_governance.py`**: Ensure governance compliance in risk mitigation
+    - Purpose: Automated validation during edge case analysis phase
+
     **✅ ACCEPTANCE CRITERIA VALIDATION:**
     Compare against `acceptance-criteria.yaml` → `phase_8_edge_case_security`
     - [x] All criteria met (see acceptance-criteria.yaml lines 479-519)
@@ -926,6 +943,11 @@
     - ✅ `reports/accessibility-compliance-report.md` (WCAG 2.1 AA validation)
     - ✅ `reports/cross-browser-test-matrix.md` (5 browsers + 3 mobile)
     - ✅ `reports/lighthouse-scores.md` (projected scores + CSV export)
+
+    **🛠️ TOOLKIT INTEGRATION:**
+    - **`css-cleanup-engine.py`**: Remove unused CSS classes, eliminate duplicates, optimize CSS files
+    - **`link-fixer.py`**: Detect and fix broken internal links across HTML files
+    - Purpose: Ensure clean CSS and valid navigation during performance testing
 
     **✅ ACCEPTANCE CRITERIA VALIDATION:**
     Compare against `acceptance-criteria.yaml` → `phase_9_performance_accessibility`
@@ -1457,6 +1479,12 @@
     - `reports/link-validation-report.md` (broken links fixed)
     - `reports/visual-regression-comparison.md` (screenshots)
     - `reports/vscode-cache-optimization-log.jsonl` (metrics)
+
+    **🛠️ TOOLKIT INTEGRATION:**
+    - **`link-fixer.py`**: Automatically detect and fix broken internal links
+    - **`css-cleanup-engine.py`**: Validate CSS class usage and remove unused classes
+    - **`validate_templates.py`**: Ensure YAML template integrity
+    - Purpose: Automated link fixing and CSS validation during integration testing
 
     **✅ ACCEPTANCE CRITERIA VALIDATION:**
     Compare against `acceptance-criteria.yaml` → `phase_10_integration_testing`
@@ -2050,6 +2078,12 @@
     - `cortex-toolkit/pre-commit-glassmorphism-check.ps1`
     - `cortex-brain/documents/standards/glassmorphism-design-standard.md` (v4.2.9)
 
+    **🛠️ TOOLKIT INTEGRATION:**
+    - **`css-cleanup-engine.py`**: Remove unused CSS classes, eliminate duplicates
+    - **`validate_templates.py`**: Final YAML template validation
+    - **`validate_plan_governance.py`**: Verify REFACTOR phase has ≥15 tasks across 5 categories
+    - Purpose: Automated cleanup and governance compliance validation
+
     ---
 
     ## 🛡️ Brain Protection (SKULL) Compliance
@@ -2208,6 +2242,14 @@
     7. ✅ Implementation report (415 lines)
     8. ✅ Page analysis report (4,129 lines JSON)
 
+    **🛠️ TOOLKIT INTEGRATION:**
+    - **`page-refresh-tool.py`**: Discover enhanced functionalities and selectively recreate Level 1/2 pages
+    - **`purpose-driven-designer.py`**: Apply purpose-specific designs with thematic color variations
+    - **`intelligent-diagram-enhancer.py`**: Add D3.js/Mermaid diagrams based on content analysis
+    - **`value-scoring-engine.py`**: Assess content quality and recommend diagram types
+    - **`diagram-generator.py`**: Generate intelligent diagrams for HTML pages
+    - Purpose: Automated purpose-driven design implementation with intelligent diagram placement
+
     **Results:**
     - 26 pages themed (6 Level 1 hubs, 20 Level 2 details)
     - 269 pages discovered and analyzed
@@ -2247,6 +2289,8 @@
 
     ## 🔄 PIVOT: SNOWBALL STRATEGY (Phase 16-17)
 
+    **Strategy Documentation:** [SNOWBALL-STRATEGY.md](./SNOWBALL-STRATEGY.md)
+
     ### Strategic Change Rationale
 
     **Why Pivot?**
@@ -2264,8 +2308,10 @@
 
     ---
 
-    ### **Phase 16a: Level 1 Architecture Pages** 🚀 ACTIVE
-    **Duration:** 8 hours (2h × 4 pages) | **Status:** 🚀 ACTIVE | **Date:** 2026-01-04
+    ### **Phase 16a: Level 1 Architecture Pages** ✅ COMPLETE
+    **Duration:** 8 hours (2h × 4 pages) | **Status:** ✅ COMPLETE | **Date:** 2026-01-04
+
+    **Execution Approach:** See [SNOWBALL-STRATEGY.md](./SNOWBALL-STRATEGY.md) for detailed workflow
 
     **Objective:** Refine all Level 1 architecture hub pages with glassmorphism design.
 
@@ -2342,18 +2388,143 @@
     - All quality checks pass
     - Page renders correctly at http://localhost:8000/
 
+    **🛠️ TOOLKIT INTEGRATION:**
+    - **`purpose-driven-designer.py`**: Apply architecture theme (level1-architecture) to pages
+    - **`intelligent-diagram-enhancer.py`**: Add D3.js/Mermaid diagrams to enhance understanding
+    - **`value-scoring-engine.py`**: Prioritize diagram types for architecture pages
+    - **`css-cleanup-engine.py`**: Remove unused CSS classes during refinement
+    - **`link-fixer.py`**: Validate internal links between architecture pages
+    - Purpose: Automated design refinement with real-time validation
+
     ---
 
-    ### **Phase 16b: Level 1 Feature Pages** ⏳ PENDING
-    **Duration:** 6 hours (1.5h × 4 pages) | **Status:** ⏳ Pending | **Dependencies:** Phase 16a
+    ### **Phase 16b: Level 1 Feature Pages - Remaining Key Features** 🚀 ACTIVE
+    **Duration:** 8 hours (2h × 4 pages) | **Status:** 🚀 ACTIVE | **Dependencies:** Phase 16a
 
-    **Target Pages:**
-    1. ⏳ `features/index.html` - Main features hub
-    2. ⏳ `features/planning-system.html` - Planning system detail
-    3. ⏳ `features/tdd-mastery.html` - TDD orchestrator
-    4. ⏳ `features/ado-operations.html` - ADO integration
+    **Execution Approach:** See [SNOWBALL-STRATEGY.md](./SNOWBALL-STRATEGY.md) for iterative refinement workflow
 
-    **Same Workflow:** Iterative refinement with live preview
+    **Objective:** Redesign the 4 remaining Level 1 Key Feature pages using approved templates as inspiration.
+
+    **Approved Templates (Reference Only - Already Complete):**
+    1. ✅ `knowledge/index.html` - COMPLETED (reference design pattern)
+    2. ✅ `architecture/index.html` - COMPLETED (reference design pattern)
+    3. ✅ `token-optimization/index.html` - COMPLETED (reference design pattern)
+
+    **Target Pages to Redesign:**
+    1. 🚀 `learning-paths/index.html` - **ACTIVE** (Learning Paths hub)
+       - Live URL: http://localhost:8000/learning-paths/index.html
+       - Design Pattern: Educational hub with module cards (similar to knowledge/index.html)
+       - Color Theme: level1-learning (#00ff88 - green accent for growth)
+       
+    2. ⏳ `lens/index.html` - PENDING (CORTEX LENS hub)
+       - Live URL: http://localhost:8000/lens/index.html
+       - Design Pattern: Analytics dashboard (similar to token-optimization/index.html)
+       - Color Theme: level1-lens (#00d4ff - blue accent for insights)
+       
+    3. ⏳ `toolkit-manager/index.html` - PENDING (Toolkit Manager hub)
+       - Live URL: http://localhost:8000/toolkit-manager/index.html
+       - Design Pattern: Tool grid with capability tiles (similar to architecture/index.html)
+       - Color Theme: level1-toolkit (#ffa500 - orange accent for tools)
+       
+    4. ⏳ `getting-started/index.html` - PENDING (Get Started hub)
+       - Live URL: http://localhost:8000/getting-started/index.html
+       - Design Pattern: Step-by-step journey cards (similar to knowledge/index.html)
+       - Color Theme: level1-getting-started (#ff6b6b - red accent for action)
+
+    **Design Inspiration from Approved Templates:**
+
+    **From `knowledge/index.html`:**
+    - Multi-panel navigation hero with glassmorphism cards
+    - `.glass-card-clickable` for interactive tiles
+    - Vertical card stack (`.capability-tiles`) for detailed content
+    - Icon + title inline with `gap: var(--spacing-sm)`
+    - Hover glow effects with `.animation-t1`
+
+    **From `architecture/index.html`:**
+    - Tetris-style metric tiles (`.token-metrics-tetris`)
+    - Brain tier visualization with color-coded sections
+    - Inline icon containers with proper spacing
+    - D3.js/Mermaid diagram integration points
+    - Gradient backgrounds for section differentiation
+
+    **From `token-optimization/index.html`:**
+    - Dashboard-style layout with key metrics
+    - Progress bars and visual indicators
+    - Before/after comparison sections
+    - Glassmorphism panels for metric groups
+    - Color-coded success/warning states
+
+    **Common Design Elements to Apply:**
+    - ✅ All CSS classes from `intentional-classes.css`
+    - ✅ No inline styles (100% CSS class-based)
+    - ✅ Icon + title inline (not separate lines)
+    - ✅ `gap: var(--spacing-sm)` for icon containers
+    - ✅ Hover effects on interactive elements
+    - ✅ Responsive design (320px → 2560px)
+    - ✅ WCAG 2.1 AA accessibility
+    - ✅ Mermaid/D3.js diagram integration where appropriate
+
+    **Iterative Refinement Workflow (Per Page):**
+
+    ```
+    FOR EACH PAGE:
+      1. Open in VSCode: [page-path]
+      2. Open in browser: http://localhost:8000/[page-path]
+      3. Review approved templates for design inspiration
+      4. Identify key sections to redesign:
+         - Hero section (navigation cards)
+         - Key features/capabilities section
+         - Metrics/statistics section (if applicable)
+         - Call-to-action section
+      5. Apply glassmorphism classes section by section
+      6. Refresh browser to validate changes
+      7. Iterate until section perfect
+      8. Move to next section
+      9. Final quality check:
+         - [ ] All CSS classes from intentional-classes.css
+         - [ ] No inline styles
+         - [ ] Icon + title inline
+         - [ ] Hover effects work
+         - [ ] Color theme applied
+         - [ ] Responsive on mobile (320px)
+         - [ ] Accessible (WCAG AA)
+      10. User confirms "this looks perfect"
+      11. Git commit with descriptive message
+      12. Move to next page
+    ```
+
+    **Quality Checklist Per Page:**
+    - [ ] Follows design patterns from approved templates
+    - [ ] All CSS classes from intentional-classes.css
+    - [ ] No inline styles
+    - [ ] Icon + title inline (not separate lines)
+    - [ ] gap: var(--spacing-sm) for icon containers
+    - [ ] Hover effects work correctly
+    - [ ] Appropriate color theme applied (see above)
+    - [ ] Responsive on mobile (320px)
+    - [ ] Accessible (WCAG AA)
+    - [ ] Diagrams integrated where appropriate
+    - [ ] Cross-browser tested (Chrome, Firefox, Safari)
+
+    **Git Commit Strategy:**
+    - One commit per page completion
+    - Commit message format: `Phase 16b: Redesign [page-name] using approved template patterns - [key changes]`
+    - Example: `Phase 16b: Redesign learning-paths/index.html using knowledge hub pattern - Module cards + progress tracking`
+
+    **Success Criteria:**
+    - User confirms "this looks perfect" before moving to next page
+    - All quality checks pass
+    - Page renders correctly at http://localhost:8000/
+    - Design consistency with approved templates
+    - All 4 Key Feature pages complete and aligned
+
+    **🛠️ TOOLKIT INTEGRATION:**
+    - **`purpose-driven-designer.py`**: Apply appropriate L1 color themes to each page
+    - **`intelligent-diagram-enhancer.py`**: Add diagrams based on content analysis
+    - **`value-scoring-engine.py`**: Prioritize diagram types for each hub
+    - **`css-cleanup-engine.py`**: Remove unused CSS classes during refinement
+    - **`link-fixer.py`**: Validate internal links across all 7 Key Feature pages
+    - Purpose: Automated design application with cross-page consistency validation
 
     ---
 

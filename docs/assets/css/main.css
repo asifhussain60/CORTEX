@@ -8463,6 +8463,12 @@ h1, h2, h3, h4, h5, h6, p, span, div {
     box-shadow: 
         0 4px 24px rgba(0, 0, 0, 0.25),
         inset 0 1px 0 rgba(0, 229, 255, 0.08);
+    text-decoration: none;
+}
+
+.glass-card-display {
+    cursor: pointer;
+    text-decoration: none;
 }
 
 .glass-card-clickable:hover {
@@ -9266,8 +9272,9 @@ h1, h2, h3, h4, h5, h6, p, span, div {
     margin-bottom: var(--spacing-md);
 }
 
-.sanitize-icon {
-    background: linear-gradient(135deg, #f59e0b, #fbbf24);
+.sanitize-icon,
+.sanitization-icon {
+    background: linear-gradient(135deg, #7c3aed, #a78bfa);
     color: white;
     width: 60px;
     height: 60px;
@@ -9279,7 +9286,21 @@ h1, h2, h3, h4, h5, h6, p, span, div {
     margin-bottom: var(--spacing-md);
 }
 
-.maintain-icon {
+.debug-icon {
+    background: linear-gradient(135deg, #ef4444, #f87171);
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.maintain-icon,
+.maintenance-icon {
     background: linear-gradient(135deg, #06b6d4, #22d3ee);
     color: white;
     width: 60px;
@@ -9292,8 +9313,9 @@ h1, h2, h3, h4, h5, h6, p, span, div {
     margin-bottom: var(--spacing-md);
 }
 
-.refine-icon {
-    background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+.refine-icon,
+.refinement-icon {
+    background: linear-gradient(135deg, #06b6d4, #22d3ee);
     color: white;
     width: 60px;
     height: 60px;
@@ -9305,7 +9327,8 @@ h1, h2, h3, h4, h5, h6, p, span, div {
     margin-bottom: var(--spacing-md);
 }
 
-.vision-icon {
+.vision-icon,
+.lens-icon {
     background: linear-gradient(135deg, #ec4899, #f472b6);
     color: white;
     width: 60px;
@@ -9383,6 +9406,86 @@ h1, h2, h3, h4, h5, h6, p, span, div {
     margin-bottom: var(--spacing-md);
 }
 
+/* Tier Icon Styles */
+.tier0-icon {
+    background: linear-gradient(135deg, #7c3aed, #a78bfa);
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.tier1-icon {
+    background: linear-gradient(135deg, #06b6d4, #22d3ee);
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.tier2-icon {
+    background: linear-gradient(135deg, #10b981, #34d399);
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.tier3-icon {
+    background: linear-gradient(135deg, #f59e0b, #fbbf24);
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    margin-bottom: var(--spacing-md);
+}
+
+/* Agent Icon Styles */
+.agent-planning {
+    background: linear-gradient(135deg, #e91e63, #f06292);
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.agent-strategy {
+    background: linear-gradient(135deg, #6366f1, #818cf8);
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    margin-bottom: var(--spacing-md);
+}
+
 .smell-icon {
     background: linear-gradient(135deg, #ef4444, #f87171);
     color: white;
@@ -9446,6 +9549,76 @@ h1, h2, h3, h4, h5, h6, p, span, div {
     justify-content: center;
     font-size: 1.75rem;
     margin-bottom: var(--spacing-md);
+}
+
+/* Knowledge Hub Learning Path Icons */
+.api-icon {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.testing-icon {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.design-patterns-icon {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    margin-bottom: var(--spacing-md);
+}
+
+/* Highlight Box Styles (Knowledge Hub) */
+.highlight-box-success {
+    margin-top: var(--space-xl);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%);
+    border-left: 4px solid #10b981;
+}
+
+.highlight-icon-success {
+    color: #10b981;
+}
+
+.highlight-title-success {
+    color: #10b981;
+}
+
+.highlight-text {
+    margin-bottom: var(--space-md);
+}
+
+.highlight-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-sm);
+}
+
+.highlight-link {
+    color: var(--hub-primary);
+    text-decoration: none;
 }
 
 /* Card Badges */
@@ -10420,3 +10593,201 @@ h1, h2, h3, h4, h5, h6, p, span, div {
 }
 
 /* End of Level 1 Enhancements */
+
+/* ============================================
+   FEATURE PILLS / TAGS - Global Styling
+   ============================================ */
+
+/* Container for feature pills (used in Implementation Details, etc.) */
+.feature-pills-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+/* Individual feature pill/tag */
+.feature-pill,
+span[style*="background: rgba"][style*="padding: 0.5rem"] {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.2;
+    white-space: nowrap;
+    transition: all var(--transition-base);
+}
+
+/* Icon inside feature pill */
+.feature-pill i,
+span[style*="background: rgba"] i {
+    font-size: 0.875rem;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Hover effect for feature pills */
+.feature-pill:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   DOCUMENTATION CARDS - Global Styling
+   ============================================ */
+
+/* Grid container for documentation cards */
+.docs-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+/* Individual documentation card */
+.docs-card,
+a.glass-card-clickable[style*="text-decoration: none"] {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1.25rem;
+    text-decoration: none;
+    transition: all var(--transition-base);
+    border-radius: var(--radius-md);
+}
+
+/* Icon in documentation card */
+.docs-card i,
+.docs-card .fas,
+a.glass-card-clickable i {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+/* Title in documentation card */
+.docs-card h4,
+a.glass-card-clickable h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+    margin-bottom: 0.25rem;
+    line-height: 1.3;
+}
+
+/* Description in documentation card */
+.docs-card p,
+a.glass-card-clickable p {
+    font-size: 0.875rem;
+    margin: 0;
+    line-height: 1.5;
+    opacity: 0.9;
+}
+
+/* Hover effect for documentation cards */
+.docs-card:hover,
+a.glass-card-clickable:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.docs-card:hover i,
+a.glass-card-clickable:hover i {
+    transform: scale(1.1);
+    filter: brightness(1.2);
+}
+
+/* ============================================
+   TIER BADGE COMPONENTS - Global Styling
+   ============================================ */
+
+/* Numbered tier badge (60x60px gradient boxes) */
+.tier-badge {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Tier badge with icon instead of number */
+.tier-badge i {
+    font-size: 1.75rem;
+}
+
+/* Layout for tier badge + content */
+.tier-content-flex {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+}
+
+/* Content area next to tier badge */
+.tier-content {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Tier title */
+.tier-content h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+}
+
+/* Inline code badge (file paths) */
+.tier-content code,
+code[style*="color:"][style*="background:"] {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 6px;
+    display: inline-block;
+    margin-bottom: 1rem;
+    font-family: var(--font-mono);
+}
+
+/* Tier description text */
+.tier-content > p {
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 768px) {
+    /* Stack tier badges vertically on mobile */
+    .tier-content-flex {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .tier-badge {
+        margin: 0 auto;
+    }
+    
+    /* Adjust feature pills on mobile */
+    .feature-pills-container {
+        justify-content: center;
+    }
+    
+    /* Single column for docs cards on mobile */
+    .docs-card-grid {
+        grid-template-columns: 1fr;
+    }
+}
+

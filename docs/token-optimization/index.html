@@ -1,31 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<style>
-/* Mobile font optimization */
-html {
-    -webkit-text-size-adjust: 100%;
-    -moz-text-size-adjust: 100%;
-    text-size-adjust: 100%;
-}
-</style>
-<style>
-/* Touch target optimization */
-a, button, [role="button"] {
-    min-width: 44px;
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-</style>
-<style>
-/* Mobile touch optimization */
-button, a, input, select, textarea, [role="button"] {
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
-}
-</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CORTEX Token Optimization - 97% Input Reduction, $8.6K Annual Savings through 4-Tier Brain Architecture">
@@ -33,65 +8,18 @@ button, a, input, select, textarea, [role="button"] {
     <meta name="author" content="Asif Hussain">
     <title>Token Optimization | CORTEX 4.0</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
-    <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
+    <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02-v4">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-    <style>
-        /* Compact Tetris Override */
-        .tetris-panel {
-            padding: 0 2.5rem;
-            width: 70%;
-            margin: 0 auto;
-        }
-        
-        .glass-card-display .token-metrics-tetris {
-            margin-top: var(--spacing-md, 1rem);
-            gap: 0.5rem;
-        }
-        
-        .glass-card-display .token-metric-tile {
-            padding: 1.875rem clamp(0.5rem, 2cqi, 0.75rem);
-            gap: clamp(0.4rem, 1.5cqi, 0.6rem);
-            flex-direction: row;
-            text-align: left;
-        }
-        
-        .glass-card-display .token-metric-tile i {
-            font-size: clamp(1.25rem, 4cqi + 0.25rem, 1.75rem);
-            width: clamp(32px, 7cqi, 48px);
-            height: clamp(32px, 7cqi, 48px);
-            flex-shrink: 0;
-        }
-        
-        .glass-card-display .token-metric-tile .metric-value {
-            font-size: clamp(1.125rem, 3.5cqi + 0.5rem, 1.5rem);
-            font-weight: 600;
-            line-height: 1.2;
-        }
-        
-        .glass-card-display .token-metric-tile .metric-label {
-            font-size: clamp(0.7rem, 2cqi + 0.2rem, 0.875rem);
-        }
-        
-        .tetris-panel {
-            background: var(--glass-bg, rgba(26, 31, 58, 0.7));
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
-            border-radius: var(--radius-lg, 16px);
-            padding: var(--spacing-lg, 1.5rem);
-            box-shadow: var(--shadow, 0 8px 32px rgba(0, 0, 0, 0.37));
-        }
-    </style>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
     <!-- Glass Header Navigation -->
     <header class="glass-header">
         <div class="header-content">
-            <nav class="header-nav" mobile-nav-optimized>
-                <a href="../index.html" class="nav-link" mobile-nav-optimized>
-                    <i class="fas fa-home pulse-glow-glass--fast"></i>
+            <nav class="header-nav">
+                <a href="../index.html" class="nav-link">
+                    <i class="fas fa-home"></i>
                     <span>Home</span>
                 </a>
             </nav>
@@ -103,67 +31,52 @@ button, a, input, select, textarea, [role="button"] {
         <!-- Page Title Card -->
         <div class="glass-card-display animation-t1">
             <div class="page-title-section">
-                <h1 class="page-title"><i class="fas fa-chart-line pulse-glow-glass--fast"></i> Token Optimization</h1>
+                <h1 class="page-title">
+                    <i class="fas fa-chart-line"></i>
+                    Token Optimization
+                </h1>
                 <p class="page-subtitle">97% Input Reduction · $8.6K Annual Savings · 4-Tier Brain Architecture</p>
             </div>
             
-            <!-- Tetris-style metric tiles -->
-            <div class="tetris-panel">
-                <div class="token-metrics-tetris">
-                    <a href="#reduction" class="token-metric-tile tile-reduction">
-                        <i class="fas fa-compress-arrows-alt pulse-glow-glass--fast"></i>
-                        <div>
-                            <span class="metric-value">97.2%</span>
-                            <span class="metric-label">Reduction</span>
-                        </div>
-                    </a>
-                    <a href="#savings" class="token-metric-tile tile-savings">
-                        <i class="fas fa-dollar-sign pulse-glow-glass--fast"></i>
-                        <div>
-                            <span class="metric-value">$8,636</span>
-                            <span class="metric-label">Savings</span>
-                        </div>
-                    </a>
-                    <a href="#architecture" class="token-metric-tile tile-architecture">
-                        <i class="fas fa-brain pulse-glow-glass--fast"></i>
-                        <div>
-                            <span class="metric-value">4-Tier</span>
-                            <span class="metric-label">Architecture</span>
-                        </div>
-                    </a>
-                    <a href="#access" class="token-metric-tile tile-access">
-                        <i class="fas fa-tachometer-alt pulse-glow-glass--fast"></i>
-                        <div>
-                            <span class="metric-value">Sub-100ms</span>
-                            <span class="metric-label">Access</span>
-                        </div>
-                    </a>
-                    <a href="#score" class="token-metric-tile tile-score">
-                        <i class="fas fa-chart-bar pulse-glow-glass--fast"></i>
-                        <div>
-                            <span class="metric-value">25</span>
-                            <span class="metric-label">Score</span>
-                        </div>
-                    </a>
-                    <a href="#updated" class="token-metric-tile tile-updated">
-                        <i class="fas fa-calendar-alt pulse-glow-glass--fast"></i>
-                        <div>
-                            <span class="metric-value">Jan 2026</span>
-                            <span class="metric-label">Updated</span>
-                        </div>
-                    </a>
+            <div class="metadata-grid">
+                <div class="metadata-item">
+                    <i class="fas fa-compress-arrows-alt"></i>
+                    <span>97.2% Reduction</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-dollar-sign"></i>
+                    <span>$8,636 Savings</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-brain"></i>
+                    <span>4-Tier Architecture</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Sub-100ms Access</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Score: 25</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Updated: Jan 2026</span>
                 </div>
             </div>
         </div>
 
         <!-- Key Metrics -->
         <section class="glass-card-display animation-t1">
-            <h2 class="section-title"><i class="fas fa-trophy pulse-glow-glass--fast"></i> Impact Metrics</h2>
+            <h2 class="section-title">
+                <i class="fas fa-trophy"></i>
+                Impact Metrics
+            </h2>
             
             <div class="metrics-grid">
                 <div class="metric-card metric-highlight">
                     <div class="metric-icon metric-icon-primary">
-                        <i class="fas fa-compress-arrows-alt pulse-glow-glass--fast"></i>
+                        <i class="fas fa-compress-arrows-alt"></i>
                     </div>
                     <div class="metric-value">97.2%</div>
                     <div class="metric-label">Input Token Reduction</div>
@@ -172,7 +85,7 @@ button, a, input, select, textarea, [role="button"] {
                 
                 <div class="metric-card metric-highlight">
                     <div class="metric-icon metric-icon-success">
-                        <i class="fas fa-percent pulse-glow-glass--fast"></i>
+                        <i class="fas fa-percent"></i>
                     </div>
                     <div class="metric-value">93.4%</div>
                     <div class="metric-label">Cost Reduction</div>
@@ -181,7 +94,7 @@ button, a, input, select, textarea, [role="button"] {
                 
                 <div class="metric-card metric-highlight">
                     <div class="metric-icon metric-icon-warning">
-                        <i class="fas fa-dollar-sign pulse-glow-glass--fast"></i>
+                        <i class="fas fa-dollar-sign"></i>
                     </div>
                     <div class="metric-value">$8,636</div>
                     <div class="metric-label">Annual Savings</div>
@@ -192,13 +105,16 @@ button, a, input, select, textarea, [role="button"] {
 
         <!-- Problem vs Solution -->
         <section class="glass-card-display animation-t1">
-            <h2 class="section-title"><i class="fas fa-lightbulb pulse-glow-glass--fast"></i> The Challenge & Solution</h2>
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i>
+                The Challenge & Solution
+            </h2>
             
             <div class="two-column-grid">
                 <!-- Problem: Vanilla Copilot -->
-                <div class="glass-card-clickable animation-t1 glass-card--no-hover">
+                <div class="glass-card-clickable animation-t1 card-danger">
                     <div class="card-header-with-icon">
-                        <i class="fas fa-exclamation-triangle pulse-glow-glass--fast"></i>
+                        <i class="fas fa-exclamation-triangle"></i>
                         <h3 class="card-title">❌ Vanilla GitHub Copilot</h3>
                     </div>
                     
@@ -207,7 +123,7 @@ button, a, input, select, textarea, [role="button"] {
                     <div class="comparison-table">
                         <div class="comparison-row">
                             <span class="comparison-label">Input Tokens:</span>
-                            <span class="comparison-value glass-toast--danger">74,047 tokens</span>
+                            <span class="comparison-value danger-text">74,047 tokens</span>
                         </div>
                         <div class="comparison-row">
                             <span class="comparison-label">Context Management:</span>
@@ -219,19 +135,19 @@ button, a, input, select, textarea, [role="button"] {
                         </div>
                         <div class="comparison-row">
                             <span class="comparison-label">Cost per Request:</span>
-                            <span class="comparison-value glass-toast--danger">$0.7705</span>
+                            <span class="comparison-value danger-text">$0.7705</span>
                         </div>
                         <div class="comparison-row">
                             <span class="comparison-label">Annual Cost:</span>
-                            <span class="comparison-value glass-toast--danger">$9,246</span>
+                            <span class="comparison-value danger-text">$9,246</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Solution: CORTEX -->
-                <div class="glass-card-clickable animation-t1 glass-card--no-hover">
+                <div class="glass-card-clickable animation-t1 card-success">
                     <div class="card-header-with-icon">
-                        <i class="fas fa-check-circle pulse-glow-glass--fast"></i>
+                        <i class="fas fa-check-circle"></i>
                         <h3 class="card-title">✅ CORTEX Optimized</h3>
                     </div>
                     
@@ -240,7 +156,7 @@ button, a, input, select, textarea, [role="button"] {
                     <div class="comparison-table">
                         <div class="comparison-row">
                             <span class="comparison-label">Input Tokens:</span>
-                            <span class="comparison-value text-hub-success">2,078 tokens</span>
+                            <span class="comparison-value success-text">2,078 tokens</span>
                         </div>
                         <div class="comparison-row">
                             <span class="comparison-label">Context Management:</span>
@@ -252,11 +168,11 @@ button, a, input, select, textarea, [role="button"] {
                         </div>
                         <div class="comparison-row">
                             <span class="comparison-label">Cost per Request:</span>
-                            <span class="comparison-value text-hub-success">$0.0508</span>
+                            <span class="comparison-value success-text">$0.0508</span>
                         </div>
                         <div class="comparison-row">
                             <span class="comparison-label">Annual Cost:</span>
-                            <span class="comparison-value text-hub-success">$610</span>
+                            <span class="comparison-value success-text">$610</span>
                         </div>
                     </div>
                 </div>
@@ -265,7 +181,10 @@ button, a, input, select, textarea, [role="button"] {
 
         <!-- 4-Tier Brain Architecture -->
         <section class="glass-card-display animation-t1">
-            <h2 class="section-title"><i class="fas fa-brain pulse-glow-glass--fast"></i> 4-Tier Brain Architecture</h2>
+            <h2 class="section-title">
+                <i class="fas fa-brain"></i>
+                4-Tier Brain Architecture
+            </h2>
             
             <p class="intro-text">CORTEX's intelligent memory system distributes context across four specialized tiers, each optimized for specific types of data and access patterns. This hierarchical approach eliminates redundant token transmission.</p>
             
@@ -294,13 +213,16 @@ graph LR
 
         <!-- Optimization Strategies -->
         <section class="glass-card-display animation-t1">
-            <h2 class="section-title"><i class="fas fa-cogs pulse-glow-glass--fast"></i> Optimization Strategies</h2>
+            <h2 class="section-title">
+                <i class="fas fa-cogs"></i>
+                Optimization Strategies
+            </h2>
             
             <div class="masonry-grid">
                 <!-- Semantic Caching -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon">
-                        <i class="fas fa-database pulse-glow-glass--fast"></i>
+                        <i class="fas fa-database"></i>
                     </div>
                     <h3 class="card-title">Semantic Caching</h3>
                     <p class="card-description">Frequently accessed context stored in Tier 1 working memory with sub-100ms retrieval. ML-based cache invalidation ensures freshness.</p>
@@ -310,7 +232,7 @@ graph LR
                 <!-- Intelligent Pruning -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon">
-                        <i class="fas fa-cut pulse-glow-glass--fast"></i>
+                        <i class="fas fa-cut"></i>
                     </div>
                     <h3 class="card-title">Intelligent Pruning</h3>
                     <p class="card-description">Context relevance scoring removes low-value conversation history while preserving critical information. FIFO buffer prevents unbounded growth.</p>
@@ -320,7 +242,7 @@ graph LR
                 <!-- Knowledge Graph Compression -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon">
-                        <i class="fas fa-compress pulse-glow-glass--fast"></i>
+                        <i class="fas fa-compress"></i>
                     </div>
                     <h3 class="card-title">Knowledge Graph Compression</h3>
                     <p class="card-description">Tier 2 stores semantic relationships instead of full text. Query patterns learned over time enable predictive prefetching.</p>
@@ -330,7 +252,7 @@ graph LR
                 <!-- Cross-Session Context -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon">
-                        <i class="fas fa-arrows-alt-h pulse-glow-glass--fast"></i>
+                        <i class="fas fa-arrows-alt-h"></i>
                     </div>
                     <h3 class="card-title">Cross-Session Context</h3>
                     <p class="card-description">Session metadata (200 tokens) replaces full conversation history (50,000 tokens). 99.6% efficiency for continuation detection.</p>
@@ -340,7 +262,7 @@ graph LR
                 <!-- Strategic Summarization -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon">
-                        <i class="fas fa-file-alt pulse-glow-glass--fast"></i>
+                        <i class="fas fa-file-alt"></i>
                     </div>
                     <h3 class="card-title">Strategic Summarization</h3>
                     <p class="card-description">Long conversations automatically summarized at inflection points. Key decisions preserved, verbose discussions compressed.</p>
@@ -350,7 +272,7 @@ graph LR
                 <!-- Differential Updates -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon">
-                        <i class="fas fa-sync-alt pulse-glow-glass--fast"></i>
+                        <i class="fas fa-sync-alt"></i>
                     </div>
                     <h3 class="card-title">Differential Updates</h3>
                     <p class="card-description">Only changed context transmitted to API. Unchanged memory tiers referenced by ID, not resent in full.</p>
@@ -361,7 +283,10 @@ graph LR
 
         <!-- Token Flow Comparison -->
         <section class="glass-card-display animation-t1">
-            <h2 class="section-title"><i class="fas fa-exchange-alt pulse-glow-glass--fast"></i> Token Flow: Before & After</h2>
+            <h2 class="section-title">
+                <i class="fas fa-exchange-alt"></i>
+                Token Flow: Before & After
+            </h2>
             
             <div class="diagram-container">
                 <div class="mermaid">
@@ -394,75 +319,666 @@ sequenceDiagram
         </section>
 
         <!-- ROI Calculator -->
-        <section class="glass-card-display animation-t1">
-            <h2 class="section-title"><i class="fas fa-calculator pulse-glow-glass--fast"></i> ROI Calculator</h2>
-            
-            <div class="two-column-grid">
-                <div class="calc-section">
-                    <h3>Usage Assumptions</h3>
-                    <div class="capability-tiles">
-    <div class="glass-card">
-        <div class="card-body"><strong>Requests per Month:</strong> 1,000</div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body"><strong>Average Conversation Length:</strong> 50 turns</div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body"><strong>Pricing:</strong> GPT-4 Turbo (<ul class="feature-list-compact">
-                        <li><strong>Requests per Month:</strong> 1,000</li>
-                        <li><strong>Average Conversation Length:</strong> 50 turns</li>
-                        <li><strong>Pricing:</strong> GPT-4 Turbo ($0.01/1K input tokens)</li>
-                        <li><strong>Timeframe:</strong> 12 months (annual)</li>
-                    </ul>.01/1K input tokens)</div>
-    </div>
-    <div class="glass-card">
-        <div class="card-body"><strong>Timeframe:</strong> 12 months (annual)</div>
-    </div>
-</div>
-                </div>
+        <section class="glass-card-display animation-t1" id="roi-calculator-section">
+            <style>
+                /* ROI Calculator - Embedded Styles */
+                #roi-calculator-section .calc-card {
+                    background: var(--glass-bg);
+                    backdrop-filter: blur(20px);
+                    -webkit-backdrop-filter: blur(20px);
+                    border: 1px solid var(--glass-border);
+                    border-radius: var(--radius-lg);
+                    padding: 2rem;
+                    box-shadow: var(--shadow-lg);
+                    position: relative;
+                    overflow: hidden;
+                    margin-bottom: 2rem;
+                }
                 
-                <div class="calc-section">
-                    <h3>Cost Breakdown</h3>
-                    <div class="cost-table">
-                        <div class="cost-row">
-                            <span class="cost-header">Vanilla Copilot:</span>
-                            <span class="cost-header glass-toast--danger">$9,246/year</span>
+                #roi-calculator-section .calc-card::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    height: 3px;
+                    background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+                }
+                
+                #roi-calculator-section .calc-card h2, #roi-calculator-section .calc-card h3 {
+                    font-size: 1.5rem;
+                    margin-bottom: 1.5rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.75rem;
+                }
+                
+                #roi-calculator-section .calc-card h2 i, #roi-calculator-section .calc-card h3 i {
+                    color: var(--accent-primary);
+                    filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.5));
+                }
+                
+                #roi-calculator-section .calculator-grid {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 2rem;
+                }
+                
+                @media (max-width: 968px) {
+                    #roi-calculator-section .calculator-grid {
+                        grid-template-columns: 1fr;
+                    }
+                }
+                
+                #roi-calculator-section .input-group {
+                    margin-bottom: 1.5rem;
+                }
+                
+                #roi-calculator-section .input-group label {
+                    display: block;
+                    font-size: 0.9rem;
+                    color: var(--text-secondary);
+                    margin-bottom: 0.5rem;
+                    font-weight: 500;
+                }
+                
+                #roi-calculator-section .input-group label i {
+                    color: var(--accent-primary);
+                    margin-right: 0.5rem;
+                    width: 16px;
+                }
+                
+                #roi-calculator-section .input-wrapper {
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                }
+                
+                #roi-calculator-section .input-prefix {
+                    position: absolute;
+                    left: 1rem;
+                    color: var(--text-muted);
+                    font-weight: 600;
+                    z-index: 1;
+                }
+                
+                #roi-calculator-section .input-suffix {
+                    position: absolute;
+                    right: 1rem;
+                    color: var(--text-muted);
+                    font-size: 0.85rem;
+                }
+                
+                #roi-calculator-section .calc-input {
+                    width: 100%;
+                    padding: 1rem 1.5rem;
+                    font-size: 1.1rem;
+                    font-weight: 600;
+                    color: var(--text-primary);
+                    background: rgba(10, 14, 39, 0.6);
+                    border: 1px solid rgba(0, 212, 255, 0.2);
+                    border-radius: var(--radius-md);
+                    transition: all var(--transition-base);
+                    font-family: var(--font-mono);
+                }
+                
+                #roi-calculator-section .calc-input:focus {
+                    outline: none;
+                    border-color: var(--accent-primary);
+                    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3), inset 0 0 10px rgba(0, 212, 255, 0.05);
+                }
+                
+                #roi-calculator-section .slider-container {
+                    padding-top: 0.5rem;
+                }
+                
+                #roi-calculator-section .slider-value {
+                    font-size: 2rem;
+                    font-weight: 700;
+                    color: var(--accent-primary);
+                    text-align: center;
+                    margin-bottom: 0.5rem;
+                    font-family: var(--font-mono);
+                    text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+                }
+                
+                #roi-calculator-section .calc-slider {
+                    width: 100%;
+                    height: 8px;
+                    -webkit-appearance: none;
+                    appearance: none;
+                    background: rgba(10, 14, 39, 0.8);
+                    border-radius: 4px;
+                    outline: none;
+                    cursor: pointer;
+                }
+                
+                #roi-calculator-section .calc-slider::-webkit-slider-thumb {
+                    -webkit-appearance: none;
+                    appearance: none;
+                    width: 24px;
+                    height: 24px;
+                    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+                    border-radius: 50%;
+                    cursor: pointer;
+                    box-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+                    transition: transform var(--transition-fast);
+                }
+                
+                #roi-calculator-section .calc-slider::-webkit-slider-thumb:hover {
+                    transform: scale(1.15);
+                }
+                
+                #roi-calculator-section .calc-slider::-moz-range-thumb {
+                    width: 24px;
+                    height: 24px;
+                    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+                    border-radius: 50%;
+                    cursor: pointer;
+                    border: none;
+                    box-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+                }
+                
+                #roi-calculator-section .slider-labels {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-top: 0.5rem;
+                    font-size: 0.8rem;
+                    color: var(--text-muted);
+                }
+                
+                #roi-calculator-section .results-card {
+                    background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(123, 97, 255, 0.1) 100%);
+                    border-color: rgba(0, 212, 255, 0.3);
+                }
+                
+                #roi-calculator-section .results-card::before {
+                    background: linear-gradient(90deg, var(--success), var(--accent-primary));
+                }
+                
+                #roi-calculator-section .big-number {
+                    text-align: center;
+                    padding: 2rem;
+                    margin-bottom: 1.5rem;
+                    background: rgba(0, 255, 136, 0.08);
+                    border: 1px solid rgba(0, 255, 136, 0.2);
+                    border-radius: var(--radius-md);
+                    position: relative;
+                    overflow: hidden;
+                }
+                
+                #roi-calculator-section .big-number-label {
+                    font-size: 0.9rem;
+                    color: var(--text-secondary);
+                    text-transform: uppercase;
+                    letter-spacing: 0.1em;
+                    margin-bottom: 0.5rem;
+                }
+                
+                #roi-calculator-section .big-number-value {
+                    font-size: 3.5rem;
+                    font-weight: 800;
+                    color: var(--success);
+                    font-family: var(--font-mono);
+                    text-shadow: 0 0 40px rgba(0, 255, 136, 0.5);
+                }
+                
+                #roi-calculator-section .big-number-subtext {
+                    font-size: 0.85rem;
+                    color: var(--text-muted);
+                    margin-top: 0.5rem;
+                }
+                
+                #roi-calculator-section .metrics-grid {
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 1rem;
+                    margin-bottom: 1.5rem;
+                }
+                
+                #roi-calculator-section .metric-item {
+                    background: rgba(10, 14, 39, 0.5);
+                    border: 1px solid var(--glass-border);
+                    border-radius: var(--radius-md);
+                    padding: 1.25rem;
+                    text-align: center;
+                    transition: all var(--transition-base);
+                }
+                
+                #roi-calculator-section .metric-item:hover {
+                    border-color: rgba(0, 212, 255, 0.3);
+                    transform: translateY(-2px);
+                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+                }
+                
+                #roi-calculator-section .metric-label {
+                    font-size: 0.75rem;
+                    color: var(--text-muted);
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                    margin-bottom: 0.5rem;
+                }
+                
+                #roi-calculator-section .metric-value {
+                    font-size: 1.5rem;
+                    font-weight: 700;
+                    font-family: var(--font-mono);
+                }
+                
+                #roi-calculator-section .metric-value.positive {
+                    color: var(--success);
+                }
+                
+                #roi-calculator-section .metric-value.accent {
+                    color: var(--accent-primary);
+                }
+                
+                #roi-calculator-section .roi-breakdown {
+                    background: rgba(10, 14, 39, 0.5);
+                    border-radius: var(--radius-md);
+                    overflow: hidden;
+                    margin-top: 1.5rem;
+                }
+                
+                #roi-calculator-section .breakdown-header {
+                    background: rgba(0, 212, 255, 0.1);
+                    padding: 1rem 1.25rem;
+                    font-weight: 600;
+                    font-size: 0.9rem;
+                    border-bottom: 1px solid var(--glass-border);
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                }
+                
+                #roi-calculator-section .breakdown-header i {
+                    color: var(--accent-primary);
+                }
+                
+                #roi-calculator-section .breakdown-item {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 1rem 1.25rem;
+                    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                    transition: background var(--transition-fast);
+                }
+                
+                #roi-calculator-section .breakdown-item:last-child {
+                    border-bottom: none;
+                }
+                
+                #roi-calculator-section .breakdown-item:hover {
+                    background: rgba(0, 212, 255, 0.05);
+                }
+                
+                #roi-calculator-section .breakdown-label {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.75rem;
+                    color: var(--text-secondary);
+                }
+                
+                #roi-calculator-section .breakdown-label i {
+                    width: 20px;
+                    color: var(--accent-secondary);
+                }
+                
+                #roi-calculator-section .breakdown-value {
+                    font-family: var(--font-mono);
+                    font-weight: 600;
+                    color: var(--success);
+                }
+                
+                #roi-calculator-section .breakdown-item.total {
+                    background: rgba(0, 255, 136, 0.1);
+                    font-weight: 700;
+                }
+                
+                #roi-calculator-section .breakdown-item.total .breakdown-label {
+                    color: var(--text-primary);
+                }
+                
+                #roi-calculator-section .breakdown-item.total .breakdown-value {
+                    font-size: 1.25rem;
+                    text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+                }
+                
+                #roi-calculator-section .payback-badge {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 212, 255, 0.2));
+                    border: 1px solid rgba(0, 255, 136, 0.3);
+                    border-radius: var(--radius-full);
+                    padding: 0.75rem 1.5rem;
+                    font-weight: 600;
+                    color: var(--success);
+                    margin-top: 1rem;
+                }
+                
+                #roi-calculator-section .benchmark-section {
+                    margin-top: 2rem;
+                    padding: 1.5rem;
+                    background: rgba(123, 97, 255, 0.08);
+                    border: 1px solid rgba(123, 97, 255, 0.2);
+                    border-radius: var(--radius-md);
+                }
+                
+                #roi-calculator-section .benchmark-title {
+                    font-size: 0.85rem;
+                    color: var(--accent-secondary);
+                    text-transform: uppercase;
+                    letter-spacing: 0.1em;
+                    margin-bottom: 1rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                }
+                
+                #roi-calculator-section .benchmark-grid {
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 1rem;
+                }
+                
+                @media (max-width: 600px) {
+                    #roi-calculator-section .benchmark-grid {
+                        grid-template-columns: 1fr;
+                    }
+                    
+                    #roi-calculator-section .big-number-value {
+                        font-size: 2.5rem;
+                    }
+                    
+                    #roi-calculator-section .metrics-grid {
+                        grid-template-columns: 1fr;
+                    }
+                }
+                
+                #roi-calculator-section .benchmark-item {
+                    text-align: center;
+                }
+                
+                #roi-calculator-section .benchmark-stat {
+                    font-size: 1.75rem;
+                    font-weight: 800;
+                    color: var(--accent-secondary);
+                    font-family: var(--font-mono);
+                }
+                
+                #roi-calculator-section .benchmark-label {
+                    font-size: 0.75rem;
+                    color: var(--text-muted);
+                    margin-top: 0.25rem;
+                }
+            </style>
+            
+            <h2 class="section-title">
+                <i class="fas fa-calculator"></i>
+                ROI Calculator
+            </h2>
+            
+            <div class="calculator-grid">
+                <!-- Inputs Card -->
+                <div class="calc-card">
+                    <h3><i class="fas fa-sliders-h"></i> Your Team Parameters</h3>
+                    
+                    <div class="input-group">
+                        <label><i class="fas fa-users"></i> Team Size (Developers)</label>
+                        <div class="slider-container">
+                            <div class="slider-value" id="teamSizeValue">5</div>
+                            <input type="range" class="calc-slider" id="teamSize" min="1" max="50" value="5">
+                            <div class="slider-labels">
+                                <span>1</span>
+                                <span>25</span>
+                                <span>50</span>
+                            </div>
                         </div>
-                        <div class="cost-row">
-                            <span class="cost-header">CORTEX Optimized:</span>
-                            <span class="cost-header text-hub-success">$610/year</span>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label><i class="fas fa-dollar-sign"></i> Hourly Rate (Fully Loaded Cost)</label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">$</span>
+                            <input type="number" class="calc-input" id="hourlyRate" value="175" min="50" max="500" style="padding-left: 2rem;">
+                            <span class="input-suffix">/hour</span>
                         </div>
-                        <div class="cost-row cost-header">
-                            <span class="cost-header"><strong>Annual Savings:</strong></span>
-                            <span class="cost-header"><strong>$8,636</strong></span>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label><i class="fas fa-calendar-alt"></i> Sprints Per Year</label>
+                        <div class="input-wrapper">
+                            <input type="number" class="calc-input" id="sprintsPerYear" value="26" min="12" max="52" style="padding-left: 1rem;">
+                            <span class="input-suffix">sprints</span>
                         </div>
-                        <div class="cost-row">
-                            <span class="cost-header">Payback Period:</span>
-                            <span class="cost-header">Immediate (free OSS)</span>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label><i class="fas fa-robot"></i> AI API Monthly Queries per Developer</label>
+                        <div class="slider-container">
+                            <div class="slider-value" id="queriesValue">500</div>
+                            <input type="range" class="calc-slider" id="apiQueries" min="100" max="2000" value="500" step="50">
+                            <div class="slider-labels">
+                                <span>100</span>
+                                <span>1,000</span>
+                                <span>2,000</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Industry Benchmarks -->
+                    <div class="benchmark-section">
+                        <div class="benchmark-title">
+                            <i class="fas fa-chart-line"></i> Industry Research (GitHub Survey 2024)
+                        </div>
+                        <div class="benchmark-grid">
+                            <div class="benchmark-item">
+                                <div class="benchmark-stat">92%</div>
+                                <div class="benchmark-label">Developers using AI tools</div>
+                            </div>
+                            <div class="benchmark-item">
+                                <div class="benchmark-stat">55%</div>
+                                <div class="benchmark-label">Faster task completion</div>
+                            </div>
+                            <div class="benchmark-item">
+                                <div class="benchmark-stat">81%</div>
+                                <div class="benchmark-label">Expect more collaboration</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Card -->
+                <div class="calc-card results-card">
+                    <h3><i class="fas fa-chart-pie"></i> Your Estimated Savings</h3>
+                    
+                    <!-- Big Annual Number -->
+                    <div class="big-number">
+                        <div class="big-number-label">Annual Savings</div>
+                        <div class="big-number-value" id="annualSavings">$955,500</div>
+                        <div class="big-number-subtext">Based on productivity gains and cost reduction</div>
+                    </div>
+                    
+                    <!-- Quick Metrics -->
+                    <div class="metrics-grid">
+                        <div class="metric-item">
+                            <div class="metric-label">Per Sprint</div>
+                            <div class="metric-value positive" id="perSprintSavings">$36,750</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-label">Token Cost Savings</div>
+                            <div class="metric-value accent" id="tokenSavings">$432</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-label">Hours Saved/Sprint</div>
+                            <div class="metric-value accent" id="hoursSaved">48</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-label">Payback Period</div>
+                            <div class="metric-value positive" id="paybackPeriod">0 days</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Breakdown Table -->
+                    <div class="roi-breakdown">
+                        <div class="breakdown-header">
+                            <i class="fas fa-list-ul"></i> Savings Breakdown (Per Sprint)
+                        </div>
+                        <div class="breakdown-item">
+                            <div class="breakdown-label">
+                                <i class="fas fa-tasks"></i> Sprint Planning (-75%)
+                            </div>
+                            <div class="breakdown-value" id="planningValue">$5,250</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div class="breakdown-label">
+                                <i class="fas fa-bug"></i> Test Debugging (-95%)
+                            </div>
+                            <div class="breakdown-value" id="debuggingValue">$16,625</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div class="breakdown-label">
+                                <i class="fas fa-comments"></i> Context Re-explanation (-100%)
+                            </div>
+                            <div class="breakdown-value" id="contextValue">$4,375</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div class="breakdown-label">
+                                <i class="fas fa-redo"></i> Rework & Bugs (-80%)
+                            </div>
+                            <div class="breakdown-value" id="reworkValue">$10,500</div>
+                        </div>
+                        <div class="breakdown-item total">
+                            <div class="breakdown-label">
+                                <i class="fas fa-coins"></i> Total Per Sprint
+                            </div>
+                            <div class="breakdown-value" id="totalSprintValue">$36,750</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Payback Badge -->
+                    <div style="text-align: center;">
+                        <div class="payback-badge">
+                            <i class="fas fa-check-circle"></i>
+                            CORTEX is open-source — Zero licensing cost!
                         </div>
                     </div>
                 </div>
             </div>
             
-            <div class="highlight-box">
-                <div class="highlight-icon">
-                    <i class="fas fa-info-circle pulse-glow-glass--fast"></i>
-                </div>
-                <div class="highlight-content">
-                    <h3>Scaling Impact</h3>
-                    <p>At <strong>10,000 requests/month</strong> (enterprise scale), annual savings exceed <strong>$86,000</strong>. For development teams with multiple users, savings multiply proportionally.</p>
-                </div>
-            </div>
+            <script>
+                // ROI Calculator Logic
+                (function() {
+                    const teamSizeSlider = document.getElementById('teamSize');
+                    const teamSizeValue = document.getElementById('teamSizeValue');
+                    const hourlyRateInput = document.getElementById('hourlyRate');
+                    const sprintsInput = document.getElementById('sprintsPerYear');
+                    const queriesSlider = document.getElementById('apiQueries');
+                    const queriesValue = document.getElementById('queriesValue');
+                    
+                    const annualSavingsEl = document.getElementById('annualSavings');
+                    const perSprintSavingsEl = document.getElementById('perSprintSavings');
+                    const tokenSavingsEl = document.getElementById('tokenSavings');
+                    const hoursSavedEl = document.getElementById('hoursSaved');
+                    const paybackPeriodEl = document.getElementById('paybackPeriod');
+                    const planningValueEl = document.getElementById('planningValue');
+                    const debuggingValueEl = document.getElementById('debuggingValue');
+                    const contextValueEl = document.getElementById('contextValue');
+                    const reworkValueEl = document.getElementById('reworkValue');
+                    const totalSprintValueEl = document.getElementById('totalSprintValue');
+                    
+                    const EFFICIENCY = {
+                        PLANNING_REDUCTION: 0.75,
+                        PLANNING_BASELINE_HOURS: 8,
+                        DEBUG_REDUCTION: 0.95,
+                        DEBUG_BASELINE_HOURS: 20,
+                        CONTEXT_REDUCTION: 1.0,
+                        CONTEXT_BASELINE_HOURS: 5,
+                        REWORK_REDUCTION: 0.80,
+                        REWORK_BASELINE_HOURS: 15,
+                        TOKEN_COST_REDUCTION: 0.60,
+                        TOKENS_PER_QUERY: 800,
+                        COST_PER_1K_TOKENS: 0.015
+                    };
+                    
+                    function formatCurrency(amount) {
+                        return new Intl.NumberFormat('en-US', {
+                            style: 'currency',
+                            currency: 'USD',
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0
+                        }).format(amount);
+                    }
+                    
+                    function calculateROI() {
+                        const teamSize = parseInt(teamSizeSlider.value);
+                        const hourlyRate = parseFloat(hourlyRateInput.value) || 175;
+                        const sprintsPerYear = parseInt(sprintsInput.value) || 26;
+                        const monthlyQueries = parseInt(queriesSlider.value);
+                        
+                        const planningHoursSaved = EFFICIENCY.PLANNING_BASELINE_HOURS * EFFICIENCY.PLANNING_REDUCTION;
+                        const debugHoursSaved = EFFICIENCY.DEBUG_BASELINE_HOURS * EFFICIENCY.DEBUG_REDUCTION;
+                        const contextHoursSaved = EFFICIENCY.CONTEXT_BASELINE_HOURS * EFFICIENCY.CONTEXT_REDUCTION;
+                        const reworkHoursSaved = EFFICIENCY.REWORK_BASELINE_HOURS * EFFICIENCY.REWORK_REDUCTION;
+                        
+                        const totalHoursSaved = planningHoursSaved + debugHoursSaved + contextHoursSaved + reworkHoursSaved;
+                        
+                        const planningSavings = planningHoursSaved * hourlyRate * teamSize;
+                        const debuggingSavings = debugHoursSaved * hourlyRate * teamSize;
+                        const contextSavings = contextHoursSaved * hourlyRate * teamSize;
+                        const reworkSavings = reworkHoursSaved * hourlyRate * teamSize;
+                        
+                        const totalSprintSavings = planningSavings + debuggingSavings + contextSavings + reworkSavings;
+                        const annualSavings = totalSprintSavings * sprintsPerYear;
+                        
+                        const monthlyTokensWithoutCortex = monthlyQueries * EFFICIENCY.TOKENS_PER_QUERY * teamSize;
+                        const monthlyTokensSaved = monthlyTokensWithoutCortex * EFFICIENCY.TOKEN_COST_REDUCTION;
+                        const monthlyTokenCostSavings = (monthlyTokensSaved / 1000) * EFFICIENCY.COST_PER_1K_TOKENS;
+                        const annualTokenSavings = monthlyTokenCostSavings * 12;
+                        
+                        annualSavingsEl.textContent = formatCurrency(annualSavings);
+                        perSprintSavingsEl.textContent = formatCurrency(totalSprintSavings);
+                        tokenSavingsEl.textContent = formatCurrency(annualTokenSavings);
+                        hoursSavedEl.textContent = Math.round(totalHoursSaved * teamSize);
+                        paybackPeriodEl.textContent = '0 days';
+                        
+                        planningValueEl.textContent = formatCurrency(planningSavings);
+                        debuggingValueEl.textContent = formatCurrency(debuggingSavings);
+                        contextValueEl.textContent = formatCurrency(contextSavings);
+                        reworkValueEl.textContent = formatCurrency(reworkSavings);
+                        totalSprintValueEl.textContent = formatCurrency(totalSprintSavings);
+                    }
+                    
+                    teamSizeSlider.addEventListener('input', function() {
+                        teamSizeValue.textContent = this.value;
+                        calculateROI();
+                    });
+                    
+                    queriesSlider.addEventListener('input', function() {
+                        queriesValue.textContent = this.value;
+                        calculateROI();
+                    });
+                    
+                    hourlyRateInput.addEventListener('input', calculateROI);
+                    sprintsInput.addEventListener('input', calculateROI);
+                    
+                    calculateROI();
+                })();
+            </script>
         </section>
 
         <!-- Performance Metrics -->
         <section class="glass-card-display animation-t1">
-            <h2 class="section-title"><i class="fas fa-tachometer-alt pulse-glow-glass--fast"></i> Performance Metrics</h2>
+            <h2 class="section-title">
+                <i class="fas fa-tachometer-alt"></i>
+                Performance Metrics
+            </h2>
             
             <div class="metrics-grid">
                 <div class="metric-card">
                     <div class="metric-icon">
-                        <i class="fas fa-clock pulse-glow-glass--fast"></i>
+                        <i class="fas fa-clock"></i>
                     </div>
                     <div class="metric-value">&lt; 100ms</div>
                     <div class="metric-label">Tier 1 Access</div>
@@ -470,7 +986,7 @@ sequenceDiagram
                 
                 <div class="metric-card">
                     <div class="metric-icon">
-                        <i class="fas fa-database pulse-glow-glass--fast"></i>
+                        <i class="fas fa-database"></i>
                     </div>
                     <div class="metric-value">70</div>
                     <div class="metric-label">FIFO Buffer Size</div>
@@ -478,7 +994,7 @@ sequenceDiagram
                 
                 <div class="metric-card">
                     <div class="metric-icon">
-                        <i class="fas fa-percent pulse-glow-glass--fast"></i>
+                        <i class="fas fa-percent"></i>
                     </div>
                     <div class="metric-value">99.6%</div>
                     <div class="metric-label">Cross-Session Efficiency</div>
@@ -486,7 +1002,7 @@ sequenceDiagram
                 
                 <div class="metric-card">
                     <div class="metric-icon">
-                        <i class="fas fa-compress pulse-glow-glass--fast"></i>
+                        <i class="fas fa-compress"></i>
                     </div>
                     <div class="metric-value">35.6x</div>
                     <div class="metric-label">Compression Ratio</div>
@@ -494,7 +1010,7 @@ sequenceDiagram
                 
                 <div class="metric-card">
                     <div class="metric-icon">
-                        <i class="fas fa-brain pulse-glow-glass--fast"></i>
+                        <i class="fas fa-brain"></i>
                     </div>
                     <div class="metric-value">4</div>
                     <div class="metric-label">Memory Tiers</div>
@@ -502,7 +1018,7 @@ sequenceDiagram
                 
                 <div class="metric-card">
                     <div class="metric-icon">
-                        <i class="fas fa-shield-alt pulse-glow-glass--fast"></i>
+                        <i class="fas fa-shield-alt"></i>
                     </div>
                     <div class="metric-value">100%</div>
                     <div class="metric-label">SKULL Validation</div>
@@ -512,15 +1028,16 @@ sequenceDiagram
 
         <!-- Implementation Details -->
         <section class="glass-card-display animation-t1">
-            <h2 class="section-title"><i class="fas fa-code pulse-glow-glass--fast"></i> Implementation Details</h2>
+            <h2 class="section-title">
+                <i class="fas fa-code"></i>
+                Implementation Details
+            </h2>
             
             <div class="reference-grid">
                 <div class="reference-section">
                     <h3>Tier 1 Optimizer</h3>
-                    <div class="reference-item">
-                        <code>src/tier0-3/tier1_optimizer.py</code>
-                    </div>
-                    <ul class="feature-list">
+                    <ul class="reference-list">
+                        <li><code>src/tier0-3/tier1_optimizer.py</code></li>
                         <li>ML-based context relevance scoring</li>
                         <li>FIFO buffer management (70 conversations)</li>
                         <li>Sub-100ms retrieval performance</li>
@@ -529,10 +1046,8 @@ sequenceDiagram
                 
                 <div class="reference-section">
                     <h3>Knowledge Graph</h3>
-                    <div class="reference-item">
-                        <code>cortex-brain/tier2/knowledge-graph.yaml</code>
-                    </div>
-                    <ul class="feature-list">
+                    <ul class="reference-list">
+                        <li><code>cortex-brain/tier2/knowledge-graph.yaml</code></li>
                         <li>Semantic relationship storage</li>
                         <li>Pattern learning and inference</li>
                         <li>Continuous graph enrichment</li>
@@ -541,10 +1056,8 @@ sequenceDiagram
                 
                 <div class="reference-section">
                     <h3>Cross-Session Middleware</h3>
-                    <div class="reference-item">
-                        <code>src/operations/utilities/vision_context_middleware.py</code>
-                    </div>
-                    <ul class="feature-list">
+                    <ul class="reference-list">
+                        <li><code>src/operations/utilities/vision_context_middleware.py</code></li>
                         <li>Session metadata (200 tokens vs 50K)</li>
                         <li>99.6% efficiency for continuation</li>
                         <li>Automatic orchestrator routing</li>

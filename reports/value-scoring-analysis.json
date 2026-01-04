@@ -1,16 +1,21 @@
 {
   "summary": {
-    "total_files": 320,
+    "total_files": 322,
     "tier_distribution": {
       "EXCEPTIONAL": 0,
       "HIGH": 0,
-      "MEDIUM": 44,
-      "LOW": 276
+      "MEDIUM": 45,
+      "LOW": 277
     },
-    "avg_score": 20.890625,
+    "avg_score": 21.52173913043478,
     "top_10_pages": [
       {
-        "file": "D:\\PROJECTS\\CORTEX\\docs\\features\\response-templates.html",
+        "file": "D:\\PROJECTS\\CORTEX\\docs\\examples\\modern-tabs-example.html",
+        "score": 60,
+        "tier": "MEDIUM"
+      },
+      {
+        "file": "D:\\PROJECTS\\CORTEX\\docs\\features\\planning-system.html",
         "score": 60,
         "tier": "MEDIUM"
       },
@@ -35,7 +40,12 @@
         "tier": "MEDIUM"
       },
       {
-        "file": "D:\\PROJECTS\\CORTEX\\docs\\features\\planning-system.html",
+        "file": "D:\\PROJECTS\\CORTEX\\docs\\architecture\\agent-system.html",
+        "score": 55,
+        "tier": "MEDIUM"
+      },
+      {
+        "file": "D:\\PROJECTS\\CORTEX\\docs\\features\\response-templates.html",
         "score": 55,
         "tier": "MEDIUM"
       },
@@ -48,34 +58,72 @@
         "file": "D:\\PROJECTS\\CORTEX\\docs\\knowledge\\api-design-hub.html",
         "score": 55,
         "tier": "MEDIUM"
-      },
-      {
-        "file": "D:\\PROJECTS\\CORTEX\\docs\\knowledge\\api-design.html",
-        "score": 55,
-        "tier": "MEDIUM"
-      },
-      {
-        "file": "D:\\PROJECTS\\CORTEX\\docs\\orchestrators\\intelligent-dashboard.html",
-        "score": 55,
-        "tier": "MEDIUM"
       }
     ]
   },
   "detailed_results": [
     {
-      "file_path": "D:\\PROJECTS\\CORTEX\\docs\\features\\response-templates.html",
+      "file_path": "D:\\PROJECTS\\CORTEX\\docs\\examples\\modern-tabs-example.html",
       "metrics": {
-        "word_count": 800,
-        "sentence_count": 42,
+        "word_count": 1234,
+        "sentence_count": 219,
         "paragraph_count": 1,
         "heading_count": 0,
-        "technical_terms": 42,
+        "technical_terms": 72,
         "code_blocks": 0,
         "indicators": {
-          "process": 5,
-          "hierarchy": 13,
-          "relationship": 3,
-          "sequence": 7
+          "process": 0,
+          "hierarchy": 40,
+          "relationship": 1,
+          "sequence": 5
+        }
+      },
+      "value_score": {
+        "total": 60,
+        "educational_value": 10,
+        "technical_depth": 30,
+        "structural_quality": 0,
+        "visualization_need": 20,
+        "quality_tier": "MEDIUM"
+      },
+      "diagram_recommendations": [
+        {
+          "type": "d3-tree",
+          "confidence": 90,
+          "reason": "Clear hierarchical structure detected",
+          "complexity": 8,
+          "use_case": "Hierarchical structures, taxonomy"
+        },
+        {
+          "type": "mermaid-sequence",
+          "confidence": 88,
+          "reason": "API interaction sequence detected",
+          "complexity": 6,
+          "use_case": "Interaction flows, API calls"
+        },
+        {
+          "type": "mermaid-state",
+          "confidence": 87,
+          "reason": "State machine detected",
+          "complexity": 6,
+          "use_case": "State machines, lifecycles"
+        }
+      ]
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\docs\\features\\planning-system.html",
+      "metrics": {
+        "word_count": 786,
+        "sentence_count": 35,
+        "paragraph_count": 1,
+        "heading_count": 0,
+        "technical_terms": 40,
+        "code_blocks": 0,
+        "indicators": {
+          "process": 7,
+          "hierarchy": 14,
+          "relationship": 0,
+          "sequence": 23
         }
       },
       "value_score": {
@@ -93,6 +141,20 @@
           "reason": "Clear hierarchical structure detected",
           "complexity": 8,
           "use_case": "Hierarchical structures, taxonomy"
+        },
+        {
+          "type": "mermaid-sequence",
+          "confidence": 88,
+          "reason": "API interaction sequence detected",
+          "complexity": 6,
+          "use_case": "Interaction flows, API calls"
+        },
+        {
+          "type": "mermaid-state",
+          "confidence": 87,
+          "reason": "State machine detected",
+          "complexity": 6,
+          "use_case": "State machines, lifecycles"
         }
       ]
     },
@@ -236,15 +298,15 @@
     {
       "file_path": "D:\\PROJECTS\\CORTEX\\docs\\faq.html",
       "metrics": {
-        "word_count": 1664,
-        "sentence_count": 75,
+        "word_count": 1761,
+        "sentence_count": 89,
         "paragraph_count": 1,
         "heading_count": 0,
-        "technical_terms": 71,
+        "technical_terms": 73,
         "code_blocks": 0,
         "indicators": {
           "process": 16,
-          "hierarchy": 13,
+          "hierarchy": 14,
           "relationship": 7,
           "sequence": 36
         }
@@ -282,19 +344,19 @@
       ]
     },
     {
-      "file_path": "D:\\PROJECTS\\CORTEX\\docs\\features\\planning-system.html",
+      "file_path": "D:\\PROJECTS\\CORTEX\\docs\\architecture\\agent-system.html",
       "metrics": {
-        "word_count": 689,
-        "sentence_count": 21,
+        "word_count": 838,
+        "sentence_count": 27,
         "paragraph_count": 1,
         "heading_count": 0,
-        "technical_terms": 38,
+        "technical_terms": 60,
         "code_blocks": 0,
         "indicators": {
-          "process": 7,
-          "hierarchy": 13,
-          "relationship": 0,
-          "sequence": 23
+          "process": 4,
+          "hierarchy": 29,
+          "relationship": 3,
+          "sequence": 19
         }
       },
       "value_score": {
@@ -306,6 +368,13 @@
         "quality_tier": "MEDIUM"
       },
       "diagram_recommendations": [
+        {
+          "type": "d3-sankey",
+          "confidence": 92,
+          "reason": "Data flow patterns detected",
+          "complexity": 9,
+          "use_case": "Flow analysis, data pipelines"
+        },
         {
           "type": "d3-tree",
           "confidence": 90,
@@ -319,13 +388,40 @@
           "reason": "API interaction sequence detected",
           "complexity": 6,
           "use_case": "Interaction flows, API calls"
-        },
+        }
+      ]
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\docs\\features\\response-templates.html",
+      "metrics": {
+        "word_count": 897,
+        "sentence_count": 56,
+        "paragraph_count": 1,
+        "heading_count": 0,
+        "technical_terms": 44,
+        "code_blocks": 0,
+        "indicators": {
+          "process": 5,
+          "hierarchy": 14,
+          "relationship": 3,
+          "sequence": 7
+        }
+      },
+      "value_score": {
+        "total": 55,
+        "educational_value": 10,
+        "technical_depth": 20,
+        "structural_quality": 5,
+        "visualization_need": 20,
+        "quality_tier": "MEDIUM"
+      },
+      "diagram_recommendations": [
         {
-          "type": "mermaid-state",
-          "confidence": 87,
-          "reason": "State machine detected",
-          "complexity": 6,
-          "use_case": "State machines, lifecycles"
+          "type": "d3-tree",
+          "confidence": 90,
+          "reason": "Clear hierarchical structure detected",
+          "complexity": 8,
+          "use_case": "Hierarchical structures, taxonomy"
         }
       ]
     },
@@ -818,15 +914,15 @@
     {
       "file_path": "D:\\PROJECTS\\CORTEX\\docs\\sitemap.html",
       "metrics": {
-        "word_count": 1325,
-        "sentence_count": 88,
+        "word_count": 1422,
+        "sentence_count": 102,
         "paragraph_count": 1,
         "heading_count": 0,
-        "technical_terms": 50,
+        "technical_terms": 52,
         "code_blocks": 0,
         "indicators": {
           "process": 3,
-          "hierarchy": 4,
+          "hierarchy": 5,
           "relationship": 0,
           "sequence": 7
         }
@@ -835,8 +931,8 @@
         "total": 50,
         "educational_value": 10,
         "technical_depth": 20,
-        "structural_quality": 5,
-        "visualization_need": 15,
+        "structural_quality": 0,
+        "visualization_need": 20,
         "quality_tier": "MEDIUM"
       },
       "diagram_recommendations": [
@@ -864,65 +960,17 @@
       ]
     },
     {
-      "file_path": "D:\\PROJECTS\\CORTEX\\docs\\architecture\\orchestrator-ecosystem.html",
-      "metrics": {
-        "word_count": 601,
-        "sentence_count": 32,
-        "paragraph_count": 1,
-        "heading_count": 0,
-        "technical_terms": 32,
-        "code_blocks": 0,
-        "indicators": {
-          "process": 2,
-          "hierarchy": 7,
-          "relationship": 4,
-          "sequence": 20
-        }
-      },
-      "value_score": {
-        "total": 50,
-        "educational_value": 10,
-        "technical_depth": 15,
-        "structural_quality": 5,
-        "visualization_need": 20,
-        "quality_tier": "MEDIUM"
-      },
-      "diagram_recommendations": [
-        {
-          "type": "d3-tree",
-          "confidence": 90,
-          "reason": "Clear hierarchical structure detected",
-          "complexity": 8,
-          "use_case": "Hierarchical structures, taxonomy"
-        },
-        {
-          "type": "mermaid-flowchart",
-          "confidence": 85,
-          "reason": "Process flow detected",
-          "complexity": 5,
-          "use_case": "Process flows, decision trees"
-        },
-        {
-          "type": "d3-timeline",
-          "confidence": 85,
-          "reason": "Temporal sequence detected",
-          "complexity": 7,
-          "use_case": "Sequential events, history"
-        }
-      ]
-    },
-    {
       "file_path": "D:\\PROJECTS\\CORTEX\\docs\\features\\git-operations.html",
       "metrics": {
-        "word_count": 765,
-        "sentence_count": 32,
+        "word_count": 862,
+        "sentence_count": 46,
         "paragraph_count": 1,
         "heading_count": 0,
-        "technical_terms": 15,
+        "technical_terms": 17,
         "code_blocks": 0,
         "indicators": {
           "process": 17,
-          "hierarchy": 9,
+          "hierarchy": 10,
           "relationship": 1,
           "sequence": 5
         }
@@ -2042,17 +2090,113 @@
       ]
     },
     {
-      "file_path": "D:\\PROJECTS\\CORTEX\\docs\\architecture\\index.html",
+      "file_path": "D:\\PROJECTS\\CORTEX\\docs\\four-tier-brain-preview.html",
       "metrics": {
-        "word_count": 1180,
-        "sentence_count": 101,
+        "word_count": 1098,
+        "sentence_count": 157,
         "paragraph_count": 1,
         "heading_count": 0,
-        "technical_terms": 99,
+        "technical_terms": 56,
+        "code_blocks": 0,
+        "indicators": {
+          "process": 8,
+          "hierarchy": 30,
+          "relationship": 0,
+          "sequence": 15
+        }
+      },
+      "value_score": {
+        "total": 45,
+        "educational_value": 10,
+        "technical_depth": 15,
+        "structural_quality": 0,
+        "visualization_need": 20,
+        "quality_tier": "LOW"
+      },
+      "diagram_recommendations": [
+        {
+          "type": "d3-tree",
+          "confidence": 90,
+          "reason": "Clear hierarchical structure detected",
+          "complexity": 8,
+          "use_case": "Hierarchical structures, taxonomy"
+        },
+        {
+          "type": "mermaid-state",
+          "confidence": 87,
+          "reason": "State machine detected",
+          "complexity": 6,
+          "use_case": "State machines, lifecycles"
+        },
+        {
+          "type": "d3-timeline",
+          "confidence": 85,
+          "reason": "Temporal sequence detected",
+          "complexity": 7,
+          "use_case": "Sequential events, history"
+        }
+      ]
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\docs\\architecture\\four-tier-brain.html",
+      "metrics": {
+        "word_count": 2359,
+        "sentence_count": 256,
+        "paragraph_count": 1,
+        "heading_count": 0,
+        "technical_terms": 152,
+        "code_blocks": 0,
+        "indicators": {
+          "process": 16,
+          "hierarchy": 110,
+          "relationship": 0,
+          "sequence": 27
+        }
+      },
+      "value_score": {
+        "total": 45,
+        "educational_value": 10,
+        "technical_depth": 15,
+        "structural_quality": 0,
+        "visualization_need": 20,
+        "quality_tier": "LOW"
+      },
+      "diagram_recommendations": [
+        {
+          "type": "d3-sankey",
+          "confidence": 92,
+          "reason": "Data flow patterns detected",
+          "complexity": 9,
+          "use_case": "Flow analysis, data pipelines"
+        },
+        {
+          "type": "d3-tree",
+          "confidence": 90,
+          "reason": "Clear hierarchical structure detected",
+          "complexity": 8,
+          "use_case": "Hierarchical structures, taxonomy"
+        },
+        {
+          "type": "mermaid-state",
+          "confidence": 87,
+          "reason": "State machine detected",
+          "complexity": 6,
+          "use_case": "State machines, lifecycles"
+        }
+      ]
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\docs\\architecture\\index.html",
+      "metrics": {
+        "word_count": 1277,
+        "sentence_count": 115,
+        "paragraph_count": 1,
+        "heading_count": 0,
+        "technical_terms": 107,
         "code_blocks": 0,
         "indicators": {
           "process": 3,
-          "hierarchy": 44,
+          "hierarchy": 45,
           "relationship": 0,
           "sequence": 11
         }
@@ -2086,6 +2230,102 @@
           "reason": "Temporal sequence detected",
           "complexity": 7,
           "use_case": "Sequential events, history"
+        }
+      ]
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\docs\\architecture\\orchestrator-ecosystem.html",
+      "metrics": {
+        "word_count": 698,
+        "sentence_count": 46,
+        "paragraph_count": 1,
+        "heading_count": 0,
+        "technical_terms": 34,
+        "code_blocks": 0,
+        "indicators": {
+          "process": 2,
+          "hierarchy": 8,
+          "relationship": 4,
+          "sequence": 20
+        }
+      },
+      "value_score": {
+        "total": 45,
+        "educational_value": 10,
+        "technical_depth": 10,
+        "structural_quality": 5,
+        "visualization_need": 20,
+        "quality_tier": "LOW"
+      },
+      "diagram_recommendations": [
+        {
+          "type": "d3-tree",
+          "confidence": 90,
+          "reason": "Clear hierarchical structure detected",
+          "complexity": 8,
+          "use_case": "Hierarchical structures, taxonomy"
+        },
+        {
+          "type": "mermaid-flowchart",
+          "confidence": 85,
+          "reason": "Process flow detected",
+          "complexity": 5,
+          "use_case": "Process flows, decision trees"
+        },
+        {
+          "type": "d3-timeline",
+          "confidence": 85,
+          "reason": "Temporal sequence detected",
+          "complexity": 7,
+          "use_case": "Sequential events, history"
+        }
+      ]
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\docs\\architecture\\working-memory.html",
+      "metrics": {
+        "word_count": 915,
+        "sentence_count": 31,
+        "paragraph_count": 1,
+        "heading_count": 0,
+        "technical_terms": 58,
+        "code_blocks": 0,
+        "indicators": {
+          "process": 5,
+          "hierarchy": 25,
+          "relationship": 2,
+          "sequence": 27
+        }
+      },
+      "value_score": {
+        "total": 45,
+        "educational_value": 10,
+        "technical_depth": 15,
+        "structural_quality": 0,
+        "visualization_need": 20,
+        "quality_tier": "LOW"
+      },
+      "diagram_recommendations": [
+        {
+          "type": "d3-tree",
+          "confidence": 90,
+          "reason": "Clear hierarchical structure detected",
+          "complexity": 8,
+          "use_case": "Hierarchical structures, taxonomy"
+        },
+        {
+          "type": "mermaid-state",
+          "confidence": 87,
+          "reason": "State machine detected",
+          "complexity": 6,
+          "use_case": "State machines, lifecycles"
+        },
+        {
+          "type": "mermaid-flowchart",
+          "confidence": 85,
+          "reason": "Process flow detected",
+          "complexity": 5,
+          "use_case": "Process flows, decision trees"
         }
       ]
     },
@@ -2181,15 +2421,15 @@
     {
       "file_path": "D:\\PROJECTS\\CORTEX\\docs\\knowledge\\index.html",
       "metrics": {
-        "word_count": 959,
-        "sentence_count": 84,
+        "word_count": 1056,
+        "sentence_count": 98,
         "paragraph_count": 1,
         "heading_count": 0,
-        "technical_terms": 44,
+        "technical_terms": 46,
         "code_blocks": 0,
         "indicators": {
           "process": 0,
-          "hierarchy": 9,
+          "hierarchy": 10,
           "relationship": 0,
           "sequence": 4
         }
@@ -2605,6 +2845,54 @@
           "reason": "Categorical distribution detected",
           "complexity": 7,
           "use_case": "Part-to-whole, resource allocation"
+        }
+      ]
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\docs\\features\\dashboard-system.html",
+      "metrics": {
+        "word_count": 746,
+        "sentence_count": 66,
+        "paragraph_count": 1,
+        "heading_count": 0,
+        "technical_terms": 31,
+        "code_blocks": 0,
+        "indicators": {
+          "process": 0,
+          "hierarchy": 11,
+          "relationship": 1,
+          "sequence": 3
+        }
+      },
+      "value_score": {
+        "total": 40,
+        "educational_value": 10,
+        "technical_depth": 10,
+        "structural_quality": 0,
+        "visualization_need": 20,
+        "quality_tier": "LOW"
+      },
+      "diagram_recommendations": [
+        {
+          "type": "d3-tree",
+          "confidence": 90,
+          "reason": "Clear hierarchical structure detected",
+          "complexity": 8,
+          "use_case": "Hierarchical structures, taxonomy"
+        },
+        {
+          "type": "mermaid-state",
+          "confidence": 87,
+          "reason": "State machine detected",
+          "complexity": 6,
+          "use_case": "State machines, lifecycles"
+        },
+        {
+          "type": "mermaid-flowchart",
+          "confidence": 85,
+          "reason": "Process flow detected",
+          "complexity": 5,
+          "use_case": "Process flows, decision trees"
         }
       ]
     },
@@ -3696,15 +3984,15 @@
     {
       "file_path": "D:\\PROJECTS\\CORTEX\\docs\\architecture\\skull-protection.html",
       "metrics": {
-        "word_count": 1442,
-        "sentence_count": 163,
+        "word_count": 1539,
+        "sentence_count": 177,
         "paragraph_count": 1,
         "heading_count": 0,
-        "technical_terms": 36,
+        "technical_terms": 38,
         "code_blocks": 0,
         "indicators": {
           "process": 8,
-          "hierarchy": 45,
+          "hierarchy": 46,
           "relationship": 2,
           "sequence": 6
         }
@@ -3735,27 +4023,27 @@
       ]
     },
     {
-      "file_path": "D:\\PROJECTS\\CORTEX\\docs\\features\\dashboard-system.html",
+      "file_path": "D:\\PROJECTS\\CORTEX\\docs\\design-system\\glassmorphism-guide.html",
       "metrics": {
-        "word_count": 649,
-        "sentence_count": 52,
+        "word_count": 1066,
+        "sentence_count": 111,
         "paragraph_count": 1,
         "heading_count": 0,
-        "technical_terms": 29,
+        "technical_terms": 25,
         "code_blocks": 0,
         "indicators": {
-          "process": 0,
-          "hierarchy": 10,
-          "relationship": 1,
-          "sequence": 3
+          "process": 1,
+          "hierarchy": 6,
+          "relationship": 2,
+          "sequence": 6
         }
       },
       "value_score": {
         "total": 35,
         "educational_value": 10,
-        "technical_depth": 10,
+        "technical_depth": 5,
         "structural_quality": 0,
-        "visualization_need": 15,
+        "visualization_need": 20,
         "quality_tier": "LOW"
       },
       "diagram_recommendations": [
@@ -3772,28 +4060,21 @@
           "reason": "State machine detected",
           "complexity": 6,
           "use_case": "State machines, lifecycles"
-        },
-        {
-          "type": "mermaid-flowchart",
-          "confidence": 85,
-          "reason": "Process flow detected",
-          "complexity": 5,
-          "use_case": "Process flows, decision trees"
         }
       ]
     },
     {
       "file_path": "D:\\PROJECTS\\CORTEX\\docs\\features\\index.html",
       "metrics": {
-        "word_count": 775,
-        "sentence_count": 71,
+        "word_count": 872,
+        "sentence_count": 85,
         "paragraph_count": 1,
         "heading_count": 0,
-        "technical_terms": 26,
+        "technical_terms": 28,
         "code_blocks": 0,
         "indicators": {
           "process": 3,
-          "hierarchy": 4,
+          "hierarchy": 5,
           "relationship": 0,
           "sequence": 4
         }
@@ -4794,58 +5075,17 @@
       ]
     },
     {
-      "file_path": "D:\\PROJECTS\\CORTEX\\docs\\design-system\\glassmorphism-guide.html",
-      "metrics": {
-        "word_count": 969,
-        "sentence_count": 97,
-        "paragraph_count": 1,
-        "heading_count": 0,
-        "technical_terms": 23,
-        "code_blocks": 0,
-        "indicators": {
-          "process": 1,
-          "hierarchy": 5,
-          "relationship": 2,
-          "sequence": 6
-        }
-      },
-      "value_score": {
-        "total": 30,
-        "educational_value": 10,
-        "technical_depth": 5,
-        "structural_quality": 0,
-        "visualization_need": 15,
-        "quality_tier": "LOW"
-      },
-      "diagram_recommendations": [
-        {
-          "type": "d3-tree",
-          "confidence": 90,
-          "reason": "Clear hierarchical structure detected",
-          "complexity": 8,
-          "use_case": "Hierarchical structures, taxonomy"
-        },
-        {
-          "type": "mermaid-state",
-          "confidence": 87,
-          "reason": "State machine detected",
-          "complexity": 6,
-          "use_case": "State machines, lifecycles"
-        }
-      ]
-    },
-    {
       "file_path": "D:\\PROJECTS\\CORTEX\\docs\\features\\holistic-discovery.html",
       "metrics": {
-        "word_count": 779,
-        "sentence_count": 57,
+        "word_count": 876,
+        "sentence_count": 71,
         "paragraph_count": 1,
         "heading_count": 0,
-        "technical_terms": 19,
+        "technical_terms": 21,
         "code_blocks": 0,
         "indicators": {
           "process": 5,
-          "hierarchy": 0,
+          "hierarchy": 1,
           "relationship": 1,
           "sequence": 7
         }
@@ -5121,7 +5361,7 @@
     {
       "file_path": "D:\\PROJECTS\\CORTEX\\docs\\security\\risk-assessment.html",
       "metrics": {
-        "word_count": 1379,
+        "word_count": 1406,
         "sentence_count": 251,
         "paragraph_count": 1,
         "heading_count": 0,
@@ -5408,15 +5648,15 @@
     {
       "file_path": "D:\\PROJECTS\\CORTEX\\docs\\architecture\\knowledge-graph.html",
       "metrics": {
-        "word_count": 1042,
-        "sentence_count": 133,
+        "word_count": 1139,
+        "sentence_count": 147,
         "paragraph_count": 1,
         "heading_count": 0,
-        "technical_terms": 18,
+        "technical_terms": 20,
         "code_blocks": 0,
         "indicators": {
           "process": 0,
-          "hierarchy": 0,
+          "hierarchy": 1,
           "relationship": 4,
           "sequence": 2
         }
@@ -6095,15 +6335,15 @@
     {
       "file_path": "D:\\PROJECTS\\CORTEX\\docs\\panel-viewer.html",
       "metrics": {
-        "word_count": 885,
-        "sentence_count": 87,
+        "word_count": 982,
+        "sentence_count": 101,
         "paragraph_count": 1,
         "heading_count": 0,
-        "technical_terms": 22,
+        "technical_terms": 24,
         "code_blocks": 0,
         "indicators": {
           "process": 0,
-          "hierarchy": 2,
+          "hierarchy": 3,
           "relationship": 0,
           "sequence": 0
         }
@@ -6164,6 +6404,40 @@
           "reason": "State machine detected",
           "complexity": 6,
           "use_case": "State machines, lifecycles"
+        }
+      ]
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\docs\\orchestrators\\index.html",
+      "metrics": {
+        "word_count": 570,
+        "sentence_count": 70,
+        "paragraph_count": 1,
+        "heading_count": 0,
+        "technical_terms": 16,
+        "code_blocks": 0,
+        "indicators": {
+          "process": 0,
+          "hierarchy": 1,
+          "relationship": 0,
+          "sequence": 3
+        }
+      },
+      "value_score": {
+        "total": 15,
+        "educational_value": 10,
+        "technical_depth": 5,
+        "structural_quality": 0,
+        "visualization_need": 0,
+        "quality_tier": "LOW"
+      },
+      "diagram_recommendations": [
+        {
+          "type": "mermaid-flowchart",
+          "confidence": 85,
+          "reason": "Process flow detected",
+          "complexity": 5,
+          "use_case": "Process flows, decision trees"
         }
       ]
     },
@@ -6419,99 +6693,17 @@
       ]
     },
     {
-      "file_path": "D:\\PROJECTS\\CORTEX\\docs\\architecture\\agent-system.html",
-      "metrics": {
-        "word_count": 274,
-        "sentence_count": 31,
-        "paragraph_count": 1,
-        "heading_count": 0,
-        "technical_terms": 5,
-        "code_blocks": 0,
-        "indicators": {
-          "process": 0,
-          "hierarchy": 0,
-          "relationship": 0,
-          "sequence": 0
-        }
-      },
-      "value_score": {
-        "total": 10,
-        "educational_value": 5,
-        "technical_depth": 5,
-        "structural_quality": 0,
-        "visualization_need": 0,
-        "quality_tier": "LOW"
-      },
-      "diagram_recommendations": [
-        {
-          "type": "d3-tree",
-          "confidence": 90,
-          "reason": "Clear hierarchical structure detected",
-          "complexity": 8,
-          "use_case": "Hierarchical structures, taxonomy"
-        },
-        {
-          "type": "mermaid-state",
-          "confidence": 87,
-          "reason": "State machine detected",
-          "complexity": 6,
-          "use_case": "State machines, lifecycles"
-        }
-      ]
-    },
-    {
-      "file_path": "D:\\PROJECTS\\CORTEX\\docs\\architecture\\four-tier-brain.html",
-      "metrics": {
-        "word_count": 276,
-        "sentence_count": 31,
-        "paragraph_count": 1,
-        "heading_count": 0,
-        "technical_terms": 5,
-        "code_blocks": 0,
-        "indicators": {
-          "process": 0,
-          "hierarchy": 2,
-          "relationship": 0,
-          "sequence": 0
-        }
-      },
-      "value_score": {
-        "total": 10,
-        "educational_value": 5,
-        "technical_depth": 5,
-        "structural_quality": 0,
-        "visualization_need": 0,
-        "quality_tier": "LOW"
-      },
-      "diagram_recommendations": [
-        {
-          "type": "d3-tree",
-          "confidence": 90,
-          "reason": "Clear hierarchical structure detected",
-          "complexity": 8,
-          "use_case": "Hierarchical structures, taxonomy"
-        },
-        {
-          "type": "mermaid-state",
-          "confidence": 87,
-          "reason": "State machine detected",
-          "complexity": 6,
-          "use_case": "State machines, lifecycles"
-        }
-      ]
-    },
-    {
       "file_path": "D:\\PROJECTS\\CORTEX\\docs\\architecture\\multi-repo.html",
       "metrics": {
-        "word_count": 274,
-        "sentence_count": 31,
+        "word_count": 371,
+        "sentence_count": 45,
         "paragraph_count": 1,
         "heading_count": 0,
-        "technical_terms": 3,
+        "technical_terms": 5,
         "code_blocks": 0,
         "indicators": {
           "process": 0,
-          "hierarchy": 0,
+          "hierarchy": 1,
           "relationship": 0,
           "sequence": 0
         }
@@ -6535,17 +6727,43 @@
       ]
     },
     {
-      "file_path": "D:\\PROJECTS\\CORTEX\\docs\\architecture\\working-memory.html",
+      "file_path": "D:\\PROJECTS\\CORTEX\\docs\\design-system\\panel-viewer.html",
       "metrics": {
-        "word_count": 274,
-        "sentence_count": 31,
+        "word_count": 203,
+        "sentence_count": 15,
         "paragraph_count": 1,
         "heading_count": 0,
-        "technical_terms": 3,
+        "technical_terms": 5,
         "code_blocks": 0,
         "indicators": {
           "process": 0,
-          "hierarchy": 0,
+          "hierarchy": 1,
+          "relationship": 0,
+          "sequence": 0
+        }
+      },
+      "value_score": {
+        "total": 10,
+        "educational_value": 5,
+        "technical_depth": 5,
+        "structural_quality": 0,
+        "visualization_need": 0,
+        "quality_tier": "LOW"
+      },
+      "diagram_recommendations": []
+    },
+    {
+      "file_path": "D:\\PROJECTS\\CORTEX\\docs\\features\\execution-orchestrator.html",
+      "metrics": {
+        "word_count": 371,
+        "sentence_count": 45,
+        "paragraph_count": 1,
+        "heading_count": 0,
+        "technical_terms": 4,
+        "code_blocks": 0,
+        "indicators": {
+          "process": 0,
+          "hierarchy": 1,
           "relationship": 0,
           "sequence": 0
         }
@@ -6569,19 +6787,19 @@
       ]
     },
     {
-      "file_path": "D:\\PROJECTS\\CORTEX\\docs\\orchestrators\\index.html",
+      "file_path": "D:\\PROJECTS\\CORTEX\\docs\\features\\orchestrators.html",
       "metrics": {
-        "word_count": 473,
-        "sentence_count": 56,
+        "word_count": 361,
+        "sentence_count": 36,
         "paragraph_count": 1,
         "heading_count": 0,
-        "technical_terms": 14,
+        "technical_terms": 4,
         "code_blocks": 0,
         "indicators": {
-          "process": 0,
-          "hierarchy": 0,
+          "process": 1,
+          "hierarchy": 1,
           "relationship": 0,
-          "sequence": 3
+          "sequence": 1
         }
       },
       "value_score": {
@@ -6594,11 +6812,11 @@
       },
       "diagram_recommendations": [
         {
-          "type": "mermaid-flowchart",
-          "confidence": 85,
-          "reason": "Process flow detected",
-          "complexity": 5,
-          "use_case": "Process flows, decision trees"
+          "type": "mermaid-state",
+          "confidence": 87,
+          "reason": "State machine detected",
+          "complexity": 6,
+          "use_case": "State machines, lifecycles"
         }
       ]
     },
@@ -6697,113 +6915,19 @@
       ]
     },
     {
-      "file_path": "D:\\PROJECTS\\CORTEX\\docs\\design-system\\panel-viewer.html",
-      "metrics": {
-        "word_count": 106,
-        "sentence_count": 1,
-        "paragraph_count": 1,
-        "heading_count": 0,
-        "technical_terms": 3,
-        "code_blocks": 0,
-        "indicators": {
-          "process": 0,
-          "hierarchy": 0,
-          "relationship": 0,
-          "sequence": 0
-        }
-      },
-      "value_score": {
-        "total": 5,
-        "educational_value": 0,
-        "technical_depth": 5,
-        "structural_quality": 0,
-        "visualization_need": 0,
-        "quality_tier": "LOW"
-      },
-      "diagram_recommendations": []
-    },
-    {
       "file_path": "D:\\PROJECTS\\CORTEX\\docs\\features\\ado-operations.html",
       "metrics": {
-        "word_count": 274,
-        "sentence_count": 31,
-        "paragraph_count": 1,
-        "heading_count": 0,
-        "technical_terms": 0,
-        "code_blocks": 0,
-        "indicators": {
-          "process": 0,
-          "hierarchy": 0,
-          "relationship": 0,
-          "sequence": 0
-        }
-      },
-      "value_score": {
-        "total": 5,
-        "educational_value": 5,
-        "technical_depth": 0,
-        "structural_quality": 0,
-        "visualization_need": 0,
-        "quality_tier": "LOW"
-      },
-      "diagram_recommendations": [
-        {
-          "type": "mermaid-state",
-          "confidence": 87,
-          "reason": "State machine detected",
-          "complexity": 6,
-          "use_case": "State machines, lifecycles"
-        }
-      ]
-    },
-    {
-      "file_path": "D:\\PROJECTS\\CORTEX\\docs\\features\\execution-orchestrator.html",
-      "metrics": {
-        "word_count": 274,
-        "sentence_count": 31,
+        "word_count": 371,
+        "sentence_count": 45,
         "paragraph_count": 1,
         "heading_count": 0,
         "technical_terms": 2,
         "code_blocks": 0,
         "indicators": {
           "process": 0,
-          "hierarchy": 0,
+          "hierarchy": 1,
           "relationship": 0,
           "sequence": 0
-        }
-      },
-      "value_score": {
-        "total": 5,
-        "educational_value": 5,
-        "technical_depth": 0,
-        "structural_quality": 0,
-        "visualization_need": 0,
-        "quality_tier": "LOW"
-      },
-      "diagram_recommendations": [
-        {
-          "type": "mermaid-state",
-          "confidence": 87,
-          "reason": "State machine detected",
-          "complexity": 6,
-          "use_case": "State machines, lifecycles"
-        }
-      ]
-    },
-    {
-      "file_path": "D:\\PROJECTS\\CORTEX\\docs\\features\\orchestrators.html",
-      "metrics": {
-        "word_count": 264,
-        "sentence_count": 22,
-        "paragraph_count": 1,
-        "heading_count": 0,
-        "technical_terms": 2,
-        "code_blocks": 0,
-        "indicators": {
-          "process": 1,
-          "hierarchy": 0,
-          "relationship": 0,
-          "sequence": 1
         }
       },
       "value_score": {
@@ -7031,15 +7155,15 @@
     {
       "file_path": "D:\\PROJECTS\\CORTEX\\docs\\security\\index.html",
       "metrics": {
-        "word_count": 272,
-        "sentence_count": 31,
+        "word_count": 369,
+        "sentence_count": 45,
         "paragraph_count": 1,
         "heading_count": 0,
-        "technical_terms": 0,
+        "technical_terms": 2,
         "code_blocks": 0,
         "indicators": {
           "process": 0,
-          "hierarchy": 0,
+          "hierarchy": 1,
           "relationship": 0,
           "sequence": 0
         }
@@ -7635,15 +7759,15 @@
     {
       "file_path": "D:\\PROJECTS\\CORTEX\\docs\\orchestrators\\ado-v2\\index.html",
       "metrics": {
-        "word_count": 272,
-        "sentence_count": 31,
+        "word_count": 369,
+        "sentence_count": 45,
         "paragraph_count": 1,
         "heading_count": 0,
-        "technical_terms": 0,
+        "technical_terms": 2,
         "code_blocks": 0,
         "indicators": {
           "process": 0,
-          "hierarchy": 0,
+          "hierarchy": 1,
           "relationship": 0,
           "sequence": 0
         }
@@ -7663,6 +7787,13 @@
           "reason": "State machine detected",
           "complexity": 6,
           "use_case": "State machines, lifecycles"
+        },
+        {
+          "type": "mermaid-flowchart",
+          "confidence": 85,
+          "reason": "Process flow detected",
+          "complexity": 5,
+          "use_case": "Process flows, decision trees"
         }
       ]
     },
