@@ -142,11 +142,31 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
             
             self.logger.info(f"Created plan: {self.plan_id}")
             
+            # Phase -1: Knowledge Library (Governance Consultation)
+            # Execute BEFORE Phase 0 to consult Tier 0/2 governance
+            governance_result = self.execute_phase(
+                -1,
+                {'name': 'Knowledge Library', 'description': 'Consult governance and knowledge graph'},
+                feature_name=feature_name,
+                user_request=user_request
+            )
+            
+            # Check for blocking governance violations
+            if governance_result and hasattr(governance_result, 'data'):
+                governance_data = governance_result.data
+                if not governance_data.get('success', True):
+                    violations = governance_data.get('violations', [])
+                    blocking_violations = [v for v in violations if 'blocked' in str(v).lower()]
+                    if blocking_violations:
+                        self.logger.error(f"Phase -1: Blocking governance violations: {blocking_violations}")
+                        raise ValueError(f"Governance violations prevent planning: {blocking_violations}")
+            
             # Phase 1: Context Discovery
             context_result = self.execute_phase(
                 0,
                 {'name': 'Context Discovery', 'description': 'Search workspace'},
-                feature_name=feature_name
+                feature_name=feature_name,
+                governance_context=governance_result
             )
             
             # Phase 2: Architecture Analysis
@@ -182,8 +202,9 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
             # Mark plan complete
             self.state_db.update_plan_status(self.plan_id, 'completed')
             
-            # Collect all artifacts
+            # Collect all artifacts (including Phase -1 governance)
             all_artifacts = (
+                (governance_result.artifacts if governance_result else []) +
                 context_result.artifacts +
                 analysis_result.artifacts +
                 generation_result.artifacts +
@@ -240,7 +261,7 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
         Execute phase-specific logic.
         
         Args:
-            phase_number: Phase number (0-4)
+            phase_number: Phase number (-1 to 4)
             phase_config: Phase configuration
             **kwargs: Phase-specific parameters
         
@@ -251,7 +272,11 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
         
         self.logger.info(f"Executing {phase_name} logic...")
         
-        if phase_number == 0:
+        if phase_number == -1:
+            # Phase -1: Knowledge Library (Governance Consultation)
+            return self._execute_governance_consultation(**kwargs)
+        
+        elif phase_number == 0:
             # Context Discovery
             return self._discover_context(**kwargs)
         
@@ -400,6 +425,65 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
             return 2  # Simple
         else:
             return 1  # Trivial
+    
+    def _execute_governance_consultation(
+        self,
+        feature_name: str,
+        user_request: str,
+        **kwargs
+    ) -> List[str]:
+        """
+        Execute Phase -1: Knowledge Library governance consultation.
+        
+        Consults Tier 0 (brain-protection-rules.yaml) and Tier 2 (knowledge-graph.yaml)
+        BEFORE any planning work begins.
+        
+        Args:
+            feature_name: Feature being planned
+            user_request: Original user request
+            **kwargs: Additional parameters
+        
+        Returns:
+            List of artifact paths (consultation report)
+        """
+        from src.orchestrators.planning.phases.phase_minus_one import PhaseMinusOne
+        
+        self.logger.info("Phase -1: Executing governance consultation...")
+        
+        # Initialize Phase -1
+        phase = PhaseMinusOne(
+            governance_integrator=self.governance,
+            knowledge_query=self.knowledge_graph
+        )
+        
+        # Execute consultation
+        result = phase.execute(
+            feature_name=feature_name,
+            user_request=user_request,
+            plan_context=kwargs.get('plan_context')
+        )
+        
+        # Store consultation data in phase result
+        if hasattr(self, '_phase_data'):
+            self._phase_data['governance_consultation'] = {
+                'success': result.success,
+                'violations': result.violations,
+                'warnings': result.warnings,
+                'recommendations': result.recommendations,
+                'report_path': result.consultation_report_path
+            }
+        
+        # Return artifacts
+        artifacts = []
+        if result.consultation_report_path:
+            artifacts.append(result.consultation_report_path)
+        
+        self.logger.info(
+            f"Phase -1 complete: {len(result.violations)} violations, "
+            f"{len(result.warnings)} warnings"
+        )
+        
+        return artifacts
     
     def _discover_context(self, feature_name: str, **kwargs) -> List[str]:
         """
