@@ -1,31 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<style>
-/* Mobile font optimization */
-html {
-    -webkit-text-size-adjust: 100%;
-    -moz-text-size-adjust: 100%;
-    text-size-adjust: 100%;
-}
-</style>
-<style>
-/* Touch target optimization */
-a, button, [role="button"] {
-    min-width: 44px;
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-</style>
-<style>
-/* Mobile touch optimization */
-button, a, input, select, textarea, [role="button"] {
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
-}
-</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CORTEX Token Optimization - 97% Input Reduction, $8.6K Annual Savings through 4-Tier Brain Architecture">
@@ -33,66 +8,19 @@ button, a, input, select, textarea, [role="button"] {
     <meta name="author" content="Asif Hussain">
     <title>Token Optimization | CORTEX 4.0</title>
     <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
-    <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
+    <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02-v4">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-    <style>
-        /* Compact Tetris Override */
-        .tetris-panel {
-            padding: 0 2.5rem;
-            width: 70%;
-            margin: 0 auto;
-        }
-        
-        .glass-card-display .token-metrics-tetris {
-            margin-top: var(--spacing-md, 1rem);
-            gap: 0.5rem;
-        }
-        
-        .glass-card-display .token-metric-tile {
-            padding: 1.875rem clamp(0.5rem, 2cqi, 0.75rem);
-            gap: clamp(0.4rem, 1.5cqi, 0.6rem);
-            flex-direction: row;
-            text-align: left;
-        }
-        
-        .glass-card-display .token-metric-tile i {
-            font-size: clamp(1.25rem, 4cqi + 0.25rem, 1.75rem);
-            width: clamp(32px, 7cqi, 48px);
-            height: clamp(32px, 7cqi, 48px);
-            flex-shrink: 0;
-        }
-        
-        .glass-card-display .token-metric-tile .metric-value {
-            font-size: clamp(1.125rem, 3.5cqi + 0.5rem, 1.5rem);
-            font-weight: 600;
-            line-height: 1.2;
-        }
-        
-        .glass-card-display .token-metric-tile .metric-label {
-            font-size: clamp(0.7rem, 2cqi + 0.2rem, 0.875rem);
-        }
-        
-        .tetris-panel {
-            background: var(--glass-bg, rgba(26, 31, 58, 0.7));
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
-            border-radius: var(--radius-lg, 16px);
-            padding: var(--spacing-lg, 1.5rem);
-            box-shadow: var(--shadow, 0 8px 32px rgba(0, 0, 0, 0.37));
-        }
-    </style>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
     <!-- Glass Header Navigation -->
     <header class="glass-header">
         <div class="header-content">
-            <nav class="header-nav" mobile-nav-optimized>
-                <a href="../index.html" class="nav-link" mobile-nav-optimized>
-                    <img src="../assets/images/CORTEX-logo.png" alt="CORTEX" 
-                         style="width: 200px; height: 200px; object-fit: contain;">
+            <nav class="header-nav">
+                <a href="../index.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
                 </a>
             </nav>
         </div>
@@ -103,67 +31,52 @@ button, a, input, select, textarea, [role="button"] {
         <!-- Page Title Card -->
         <div class="glass-card-display animation-t1">
             <div class="page-title-section">
-                <h1 class="page-title"><i class="fas fa-chart-line pulse-glow-glass--fast"></i> Token Optimization</h1>
+                <h1 class="page-title">
+                    <i class="fas fa-chart-line"></i>
+                    Token Optimization
+                </h1>
                 <p class="page-subtitle">97% Input Reduction · $8.6K Annual Savings · 4-Tier Brain Architecture</p>
             </div>
             
-            <!-- Tetris-style metric tiles -->
-            <div class="tetris-panel">
-                <div class="token-metrics-tetris">
-                    <a href="#reduction" class="token-metric-tile tile-reduction">
-                        <i class="fas fa-compress-arrows-alt pulse-glow-glass--fast"></i>
-                        <div>
-                            <span class="metric-value">97.2%</span>
-                            <span class="metric-label">Reduction</span>
-                        </div>
-                    </a>
-                    <a href="#savings" class="token-metric-tile tile-savings">
-                        <i class="fas fa-dollar-sign pulse-glow-glass--fast"></i>
-                        <div>
-                            <span class="metric-value">$8,636</span>
-                            <span class="metric-label">Savings</span>
-                        </div>
-                    </a>
-                    <a href="#architecture" class="token-metric-tile tile-architecture">
-                        <i class="fas fa-brain pulse-glow-glass--fast"></i>
-                        <div>
-                            <span class="metric-value">4-Tier</span>
-                            <span class="metric-label">Architecture</span>
-                        </div>
-                    </a>
-                    <a href="#access" class="token-metric-tile tile-access">
-                        <i class="fas fa-tachometer-alt pulse-glow-glass--fast"></i>
-                        <div>
-                            <span class="metric-value">Sub-100ms</span>
-                            <span class="metric-label">Access</span>
-                        </div>
-                    </a>
-                    <a href="#score" class="token-metric-tile tile-score">
-                        <i class="fas fa-chart-bar pulse-glow-glass--fast"></i>
-                        <div>
-                            <span class="metric-value">25</span>
-                            <span class="metric-label">Score</span>
-                        </div>
-                    </a>
-                    <a href="#updated" class="token-metric-tile tile-updated">
-                        <i class="fas fa-calendar-alt pulse-glow-glass--fast"></i>
-                        <div>
-                            <span class="metric-value">Jan 2026</span>
-                            <span class="metric-label">Updated</span>
-                        </div>
-                    </a>
+            <div class="metadata-grid">
+                <div class="metadata-item">
+                    <i class="fas fa-compress-arrows-alt"></i>
+                    <span>97.2% Reduction</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-dollar-sign"></i>
+                    <span>$8,636 Savings</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-brain"></i>
+                    <span>4-Tier Architecture</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Sub-100ms Access</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Score: 25</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Updated: Jan 2026</span>
                 </div>
             </div>
         </div>
 
         <!-- Key Metrics -->
         <section class="glass-card-display animation-t1">
-            <h2 class="section-title"><i class="fas fa-trophy pulse-glow-glass--fast"></i> Impact Metrics</h2>
+            <h2 class="section-title">
+                <i class="fas fa-trophy"></i>
+                Impact Metrics
+            </h2>
             
             <div class="metrics-grid">
                 <div class="metric-card metric-highlight">
                     <div class="metric-icon metric-icon-primary">
-                        <i class="fas fa-compress-arrows-alt pulse-glow-glass--fast"></i>
+                        <i class="fas fa-compress-arrows-alt"></i>
                     </div>
                     <div class="metric-value">97.2%</div>
                     <div class="metric-label">Input Token Reduction</div>
@@ -172,7 +85,7 @@ button, a, input, select, textarea, [role="button"] {
                 
                 <div class="metric-card metric-highlight">
                     <div class="metric-icon metric-icon-success">
-                        <i class="fas fa-percent pulse-glow-glass--fast"></i>
+                        <i class="fas fa-percent"></i>
                     </div>
                     <div class="metric-value">93.4%</div>
                     <div class="metric-label">Cost Reduction</div>
@@ -181,7 +94,7 @@ button, a, input, select, textarea, [role="button"] {
                 
                 <div class="metric-card metric-highlight">
                     <div class="metric-icon metric-icon-warning">
-                        <i class="fas fa-dollar-sign pulse-glow-glass--fast"></i>
+                        <i class="fas fa-dollar-sign"></i>
                     </div>
                     <div class="metric-value">$8,636</div>
                     <div class="metric-label">Annual Savings</div>
@@ -192,13 +105,16 @@ button, a, input, select, textarea, [role="button"] {
 
         <!-- Problem vs Solution -->
         <section class="glass-card-display animation-t1">
-            <h2 class="section-title"><i class="fas fa-lightbulb pulse-glow-glass--fast"></i> The Challenge & Solution</h2>
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i>
+                The Challenge & Solution
+            </h2>
             
             <div class="two-column-grid">
                 <!-- Problem: Vanilla Copilot -->
-                <div class="glass-card-clickable animation-t1 glass-card--no-hover">
+                <div class="glass-card-clickable animation-t1 card-danger">
                     <div class="card-header-with-icon">
-                        <i class="fas fa-exclamation-triangle pulse-glow-glass--fast"></i>
+                        <i class="fas fa-exclamation-triangle"></i>
                         <h3 class="card-title">❌ Vanilla GitHub Copilot</h3>
                     </div>
                     
@@ -207,7 +123,7 @@ button, a, input, select, textarea, [role="button"] {
                     <div class="comparison-table">
                         <div class="comparison-row">
                             <span class="comparison-label">Input Tokens:</span>
-                            <span class="comparison-value glass-toast--danger">74,047 tokens</span>
+                            <span class="comparison-value danger-text">74,047 tokens</span>
                         </div>
                         <div class="comparison-row">
                             <span class="comparison-label">Context Management:</span>
@@ -219,19 +135,19 @@ button, a, input, select, textarea, [role="button"] {
                         </div>
                         <div class="comparison-row">
                             <span class="comparison-label">Cost per Request:</span>
-                            <span class="comparison-value glass-toast--danger">$0.7705</span>
+                            <span class="comparison-value danger-text">$0.7705</span>
                         </div>
                         <div class="comparison-row">
                             <span class="comparison-label">Annual Cost:</span>
-                            <span class="comparison-value glass-toast--danger">$9,246</span>
+                            <span class="comparison-value danger-text">$9,246</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Solution: CORTEX -->
-                <div class="glass-card-clickable animation-t1 glass-card--no-hover">
+                <div class="glass-card-clickable animation-t1 card-success">
                     <div class="card-header-with-icon">
-                        <i class="fas fa-check-circle pulse-glow-glass--fast"></i>
+                        <i class="fas fa-check-circle"></i>
                         <h3 class="card-title">✅ CORTEX Optimized</h3>
                     </div>
                     
@@ -240,7 +156,7 @@ button, a, input, select, textarea, [role="button"] {
                     <div class="comparison-table">
                         <div class="comparison-row">
                             <span class="comparison-label">Input Tokens:</span>
-                            <span class="comparison-value text-hub-success">2,078 tokens</span>
+                            <span class="comparison-value success-text">2,078 tokens</span>
                         </div>
                         <div class="comparison-row">
                             <span class="comparison-label">Context Management:</span>
@@ -252,11 +168,11 @@ button, a, input, select, textarea, [role="button"] {
                         </div>
                         <div class="comparison-row">
                             <span class="comparison-label">Cost per Request:</span>
-                            <span class="comparison-value text-hub-success">$0.0508</span>
+                            <span class="comparison-value success-text">$0.0508</span>
                         </div>
                         <div class="comparison-row">
                             <span class="comparison-label">Annual Cost:</span>
-                            <span class="comparison-value text-hub-success">$610</span>
+                            <span class="comparison-value success-text">$610</span>
                         </div>
                     </div>
                 </div>
@@ -265,7 +181,10 @@ button, a, input, select, textarea, [role="button"] {
 
         <!-- 4-Tier Brain Architecture -->
         <section class="glass-card-display animation-t1">
-            <h2 class="section-title"><i class="fas fa-brain pulse-glow-glass--fast"></i> 4-Tier Brain Architecture</h2>
+            <h2 class="section-title">
+                <i class="fas fa-brain"></i>
+                4-Tier Brain Architecture
+            </h2>
             
             <p class="intro-text">CORTEX's intelligent memory system distributes context across four specialized tiers, each optimized for specific types of data and access patterns. This hierarchical approach eliminates redundant token transmission.</p>
             
@@ -294,13 +213,16 @@ graph LR
 
         <!-- Optimization Strategies -->
         <section class="glass-card-display animation-t1">
-            <h2 class="section-title"><i class="fas fa-cogs pulse-glow-glass--fast"></i> Optimization Strategies</h2>
+            <h2 class="section-title">
+                <i class="fas fa-cogs"></i>
+                Optimization Strategies
+            </h2>
             
             <div class="masonry-grid">
                 <!-- Semantic Caching -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon">
-                        <i class="fas fa-database pulse-glow-glass--fast"></i>
+                        <i class="fas fa-database"></i>
                     </div>
                     <h3 class="card-title">Semantic Caching</h3>
                     <p class="card-description">Frequently accessed context stored in Tier 1 working memory with sub-100ms retrieval. ML-based cache invalidation ensures freshness.</p>
@@ -310,7 +232,7 @@ graph LR
                 <!-- Intelligent Pruning -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon">
-                        <i class="fas fa-cut pulse-glow-glass--fast"></i>
+                        <i class="fas fa-cut"></i>
                     </div>
                     <h3 class="card-title">Intelligent Pruning</h3>
                     <p class="card-description">Context relevance scoring removes low-value conversation history while preserving critical information. FIFO buffer prevents unbounded growth.</p>
@@ -320,7 +242,7 @@ graph LR
                 <!-- Knowledge Graph Compression -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon">
-                        <i class="fas fa-compress pulse-glow-glass--fast"></i>
+                        <i class="fas fa-compress"></i>
                     </div>
                     <h3 class="card-title">Knowledge Graph Compression</h3>
                     <p class="card-description">Tier 2 stores semantic relationships instead of full text. Query patterns learned over time enable predictive prefetching.</p>
@@ -330,7 +252,7 @@ graph LR
                 <!-- Cross-Session Context -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon">
-                        <i class="fas fa-arrows-alt-h pulse-glow-glass--fast"></i>
+                        <i class="fas fa-arrows-alt-h"></i>
                     </div>
                     <h3 class="card-title">Cross-Session Context</h3>
                     <p class="card-description">Session metadata (200 tokens) replaces full conversation history (50,000 tokens). 99.6% efficiency for continuation detection.</p>
@@ -340,7 +262,7 @@ graph LR
                 <!-- Strategic Summarization -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon">
-                        <i class="fas fa-file-alt pulse-glow-glass--fast"></i>
+                        <i class="fas fa-file-alt"></i>
                     </div>
                     <h3 class="card-title">Strategic Summarization</h3>
                     <p class="card-description">Long conversations automatically summarized at inflection points. Key decisions preserved, verbose discussions compressed.</p>
@@ -350,7 +272,7 @@ graph LR
                 <!-- Differential Updates -->
                 <div class="glass-card-clickable animation-t1">
                     <div class="card-icon">
-                        <i class="fas fa-sync-alt pulse-glow-glass--fast"></i>
+                        <i class="fas fa-sync-alt"></i>
                     </div>
                     <h3 class="card-title">Differential Updates</h3>
                     <p class="card-description">Only changed context transmitted to API. Unchanged memory tiers referenced by ID, not resent in full.</p>
@@ -361,7 +283,10 @@ graph LR
 
         <!-- Token Flow Comparison -->
         <section class="glass-card-display animation-t1">
-            <h2 class="section-title"><i class="fas fa-exchange-alt pulse-glow-glass--fast"></i> Token Flow: Before & After</h2>
+            <h2 class="section-title">
+                <i class="fas fa-exchange-alt"></i>
+                Token Flow: Before & After
+            </h2>
             
             <div class="diagram-container">
                 <div class="mermaid">
@@ -395,123 +320,67 @@ sequenceDiagram
 
         <!-- ROI Calculator -->
         <section class="glass-card-display animation-t1">
-            <h2 class="section-title"><i class="fas fa-calculator pulse-glow-glass--fast"></i> ROI Calculator</h2>
-            
-            <p class="intro-text">Calculate the cost savings CORTEX delivers based on your usage patterns. These calculations use real-world data from production deployments.</p>
+            <h2 class="section-title">
+                <i class="fas fa-calculator"></i>
+                ROI Calculator
+            </h2>
             
             <div class="two-column-grid">
-                <!-- Usage Assumptions -->
-                <div class="glass-card-display animation-t1" style="background: rgba(26, 31, 58, 0.8);">
-                    <h3 style="color: #00d4ff; font-size: 1.25rem; font-weight: 600; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                        <i class="fas fa-sliders-h"></i>
-                        Usage Assumptions
-                    </h3>
-                    
-                    <div class="principle-card-grid columns-2">
-                        <div class="glass-card-clickable animation-t1" style="text-align: center; padding: 1.5rem;">
-                            <i class="fas fa-hashtag" style="font-size: 2rem; color: #00d4ff; margin-bottom: 0.75rem;"></i>
-                            <div style="font-size: 1.75rem; font-weight: 700; color: #fff; margin-bottom: 0.25rem;">1,000</div>
-                            <div style="font-size: 0.875rem; color: #cbd5e0;">Requests per Month</div>
-                        </div>
-                        
-                        <div class="glass-card-clickable animation-t1" style="text-align: center; padding: 1.5rem;">
-                            <i class="fas fa-comments" style="font-size: 2rem; color: #7b61ff; margin-bottom: 0.75rem;"></i>
-                            <div style="font-size: 1.75rem; font-weight: 700; color: #fff; margin-bottom: 0.25rem;">50</div>
-                            <div style="font-size: 0.875rem; color: #cbd5e0;">Avg Conversation Turns</div>
-                        </div>
-                        
-                        <div class="glass-card-clickable animation-t1" style="text-align: center; padding: 1.5rem;">
-                            <i class="fas fa-dollar-sign" style="font-size: 2rem; color: #10b981; margin-bottom: 0.75rem;"></i>
-                            <div style="font-size: 1.75rem; font-weight: 700; color: #fff; margin-bottom: 0.25rem;">$0.01</div>
-                            <div style="font-size: 0.875rem; color: #cbd5e0;">Per 1K Input Tokens</div>
-                        </div>
-                        
-                        <div class="glass-card-clickable animation-t1" style="text-align: center; padding: 1.5rem;">
-                            <i class="fas fa-calendar-alt" style="font-size: 2rem; color: #f59e0b; margin-bottom: 0.75rem;"></i>
-                            <div style="font-size: 1.75rem; font-weight: 700; color: #fff; margin-bottom: 0.25rem;">12</div>
-                            <div style="font-size: 0.875rem; color: #cbd5e0;">Months (Annual)</div>
-                        </div>
-                    </div>
-                    
-                    <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(0, 212, 255, 0.1); border: 1px solid rgba(0, 212, 255, 0.3); border-radius: 8px;">
-                        <div style="font-size: 0.875rem; color: #cbd5e0; display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fas fa-info-circle" style="color: #00d4ff;"></i>
-                            <span><strong>Model:</strong> GPT-4 Turbo pricing standard</span>
-                        </div>
-                    </div>
+                <div class="calc-section">
+                    <h3>Usage Assumptions</h3>
+                    <ul class="feature-list-compact">
+                        <li><strong>Requests per Month:</strong> 1,000</li>
+                        <li><strong>Average Conversation Length:</strong> 50 turns</li>
+                        <li><strong>Pricing:</strong> GPT-4 Turbo ($0.01/1K input tokens)</li>
+                        <li><strong>Timeframe:</strong> 12 months (annual)</li>
+                    </ul>
                 </div>
                 
-                <!-- Cost Breakdown -->
-                <div class="glass-card-display animation-t1" style="background: rgba(26, 31, 58, 0.8);">
-                    <h3 style="color: #00d4ff; font-size: 1.25rem; font-weight: 600; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                        <i class="fas fa-chart-pie"></i>
-                        Cost Breakdown
-                    </h3>
-                    
-                    <div style="display: flex; flex-direction: column; gap: 1rem;">
-                        <!-- Vanilla Copilot Cost -->
-                        <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px; padding: 1.5rem;">
-                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
-                                <span style="color: #ef4444; font-weight: 600; font-size: 1rem;">❌ Vanilla Copilot</span>
-                                <span style="color: #ef4444; font-weight: 700; font-size: 1.5rem;">$9,246</span>
-                            </div>
-                            <div style="color: #fca5a5; font-size: 0.875rem;">74,047 tokens × $0.01/1K × 12,000 requests</div>
+                <div class="calc-section">
+                    <h3>Cost Breakdown</h3>
+                    <div class="cost-table">
+                        <div class="cost-row">
+                            <span class="cost-label">Vanilla Copilot:</span>
+                            <span class="cost-value danger-text">$9,246/year</span>
                         </div>
-                        
-                        <!-- CORTEX Optimized Cost -->
-                        <div style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px; padding: 1.5rem;">
-                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
-                                <span style="color: #10b981; font-weight: 600; font-size: 1rem;">✅ CORTEX Optimized</span>
-                                <span style="color: #10b981; font-weight: 700; font-size: 1.5rem;">$610</span>
-                            </div>
-                            <div style="color: #6ee7b7; font-size: 0.875rem;">2,078 tokens × $0.01/1K × 12,000 requests</div>
+                        <div class="cost-row">
+                            <span class="cost-label">CORTEX Optimized:</span>
+                            <span class="cost-value success-text">$610/year</span>
                         </div>
-                        
-                        <!-- Annual Savings -->
-                        <div style="background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.15)); border: 2px solid rgba(0, 212, 255, 0.5); border-radius: 12px; padding: 1.5rem; box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);">
-                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
-                                <span style="color: #00d4ff; font-weight: 700; font-size: 1.25rem;">💰 Annual Savings</span>
-                                <span style="color: #00d4ff; font-weight: 800; font-size: 2rem;">$8,636</span>
-                            </div>
-                            <div style="color: #7dd3fc; font-size: 0.875rem; font-weight: 500;">93.4% cost reduction</div>
+                        <div class="cost-row cost-savings">
+                            <span class="cost-label"><strong>Annual Savings:</strong></span>
+                            <span class="cost-value"><strong>$8,636</strong></span>
                         </div>
-                        
-                        <!-- Payback Period -->
-                        <div style="background: rgba(123, 97, 255, 0.15); border: 1px solid rgba(123, 97, 255, 0.3); border-radius: 12px; padding: 1.25rem; text-align: center;">
-                            <div style="color: #a78bfa; font-size: 0.875rem; margin-bottom: 0.25rem;">Payback Period</div>
-                            <div style="color: #7b61ff; font-weight: 700; font-size: 1.25rem;">Immediate (Free OSS)</div>
+                        <div class="cost-row">
+                            <span class="cost-label">Payback Period:</span>
+                            <span class="cost-value">Immediate (free OSS)</span>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <!-- Scaling Impact -->
-            <div style="margin-top: 2rem; background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(251, 191, 36, 0.1)); border: 1px solid rgba(245, 158, 11, 0.4); border-radius: 16px; padding: 2rem;">
-                <div style="display: flex; align-items: flex-start; gap: 1.5rem;">
-                    <div style="flex-shrink: 0;">
-                        <i class="fas fa-rocket" style="font-size: 3rem; color: #fbbf24;"></i>
-                    </div>
-                    <div>
-                        <h3 style="color: #fbbf24; font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem;">Scaling Impact</h3>
-                        <p style="color: #fde68a; font-size: 1rem; line-height: 1.6; margin-bottom: 1rem;">
-                            At <strong style="color: #fff;">10,000 requests/month</strong> (enterprise scale), annual savings exceed <strong style="color: #fff;">$86,000</strong>. 
-                        </p>
-                        <p style="color: #fde68a; font-size: 1rem; line-height: 1.6;">
-                            For development teams with <strong style="color: #fff;">multiple users</strong>, savings multiply proportionally. A team of 10 developers saves over <strong style="color: #fff;">$860K annually</strong>.
-                        </p>
-                    </div>
+            <div class="highlight-box">
+                <div class="highlight-icon">
+                    <i class="fas fa-info-circle"></i>
+                </div>
+                <div class="highlight-content">
+                    <h3>Scaling Impact</h3>
+                    <p>At <strong>10,000 requests/month</strong> (enterprise scale), annual savings exceed <strong>$86,000</strong>. For development teams with multiple users, savings multiply proportionally.</p>
                 </div>
             </div>
         </section>
 
         <!-- Performance Metrics -->
         <section class="glass-card-display animation-t1">
-            <h2 class="section-title"><i class="fas fa-tachometer-alt pulse-glow-glass--fast"></i> Performance Metrics</h2>
+            <h2 class="section-title">
+                <i class="fas fa-tachometer-alt"></i>
+                Performance Metrics
+            </h2>
             
             <div class="metrics-grid">
                 <div class="metric-card">
                     <div class="metric-icon">
-                        <i class="fas fa-clock pulse-glow-glass--fast"></i>
+                        <i class="fas fa-clock"></i>
                     </div>
                     <div class="metric-value">&lt; 100ms</div>
                     <div class="metric-label">Tier 1 Access</div>
@@ -519,7 +388,7 @@ sequenceDiagram
                 
                 <div class="metric-card">
                     <div class="metric-icon">
-                        <i class="fas fa-database pulse-glow-glass--fast"></i>
+                        <i class="fas fa-database"></i>
                     </div>
                     <div class="metric-value">70</div>
                     <div class="metric-label">FIFO Buffer Size</div>
@@ -527,7 +396,7 @@ sequenceDiagram
                 
                 <div class="metric-card">
                     <div class="metric-icon">
-                        <i class="fas fa-percent pulse-glow-glass--fast"></i>
+                        <i class="fas fa-percent"></i>
                     </div>
                     <div class="metric-value">99.6%</div>
                     <div class="metric-label">Cross-Session Efficiency</div>
@@ -535,7 +404,7 @@ sequenceDiagram
                 
                 <div class="metric-card">
                     <div class="metric-icon">
-                        <i class="fas fa-compress pulse-glow-glass--fast"></i>
+                        <i class="fas fa-compress"></i>
                     </div>
                     <div class="metric-value">35.6x</div>
                     <div class="metric-label">Compression Ratio</div>
@@ -543,7 +412,7 @@ sequenceDiagram
                 
                 <div class="metric-card">
                     <div class="metric-icon">
-                        <i class="fas fa-brain pulse-glow-glass--fast"></i>
+                        <i class="fas fa-brain"></i>
                     </div>
                     <div class="metric-value">4</div>
                     <div class="metric-label">Memory Tiers</div>
@@ -551,7 +420,7 @@ sequenceDiagram
                 
                 <div class="metric-card">
                     <div class="metric-icon">
-                        <i class="fas fa-shield-alt pulse-glow-glass--fast"></i>
+                        <i class="fas fa-shield-alt"></i>
                     </div>
                     <div class="metric-value">100%</div>
                     <div class="metric-label">SKULL Validation</div>
@@ -561,76 +430,51 @@ sequenceDiagram
 
         <!-- Implementation Details -->
         <section class="glass-card-display animation-t1">
-            <h2 class="section-title"><i class="fas fa-code pulse-glow-glass--fast"></i> Implementation Details</h2>
+            <h2 class="section-title">
+                <i class="fas fa-code"></i>
+                Implementation Details
+            </h2>
             
-            <p class="intro-text">Explore the core components that power CORTEX's token optimization. Each tier contributes to the intelligent context management pipeline.</p>
-            
-            <!-- Tier 1 Optimizer -->
-            <div class="glass-card-display animation-t1" style="border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px; margin-bottom: 1.5rem; padding: 0;">
-                <div style="background: rgba(16, 185, 129, 0.15); border-bottom: 1px solid rgba(16, 185, 129, 0.4); padding: 1.25rem; border-radius: 12px 12px 0 0;">
-                    <h3 style="color: #10b981; margin: 0; font-size: 1.5rem; font-weight: 700;">Tier 1 Optimizer</h3>
+            <div class="reference-grid">
+                <div class="reference-section">
+                    <h3>Tier 1 Optimizer</h3>
+                    <ul class="reference-list">
+                        <li><code>src/tier0-3/tier1_optimizer.py</code></li>
+                        <li>ML-based context relevance scoring</li>
+                        <li>FIFO buffer management (70 conversations)</li>
+                        <li>Sub-100ms retrieval performance</li>
+                    </ul>
                 </div>
-                <div style="padding: 1.5rem;">
-                    <code style="color: #6ee7b7; background: rgba(16, 185, 129, 0.2);">src/tier0-3/tier1_optimizer.py</code>
-                        <p style="color: #d1fae5;">ML-based context relevance scoring system that intelligently prunes low-value conversation history. Maintains a FIFO buffer of 70 conversations with sub-100ms retrieval performance.</p>
-                        <div class="feature-pills-container">
-                            <span class="feature-pill" style="background: rgba(16, 185, 129, 0.2); color: #6ee7b7;">
-                                <i class="fas fa-brain"></i> ML-based scoring
-                            </span>
-                            <span class="feature-pill" style="background: rgba(16, 185, 129, 0.2); color: #6ee7b7;">
-                                <i class="fas fa-database"></i> FIFO buffer (70 conversations)
-                            </span>
-                            <span class="feature-pill" style="background: rgba(16, 185, 129, 0.2); color: #6ee7b7;">
-                                <i class="fas fa-tachometer-alt"></i> Sub-100ms retrieval
-                            </span>
-                        </div>
+                
+                <div class="reference-section">
+                    <h3>Knowledge Graph</h3>
+                    <ul class="reference-list">
+                        <li><code>cortex-brain/tier2/knowledge-graph.yaml</code></li>
+                        <li>Semantic relationship storage</li>
+                        <li>Pattern learning and inference</li>
+                        <li>Continuous graph enrichment</li>
+                    </ul>
+                </div>
+                
+                <div class="reference-section">
+                    <h3>Cross-Session Middleware</h3>
+                    <ul class="reference-list">
+                        <li><code>src/operations/utilities/vision_context_middleware.py</code></li>
+                        <li>Session metadata (200 tokens vs 50K)</li>
+                        <li>99.6% efficiency for continuation</li>
+                        <li>Automatic orchestrator routing</li>
+                    </ul>
+                </div>
+                
+                <div class="reference-section">
+                    <h3>Related Documentation</h3>
+                    <ul class="reference-list">
+                        <li><a href="../architecture/index.html">Architecture Overview</a></li>
+                        <li><a href="../knowledge/index.html">Best Practices</a></li>
+                        <li><a href="../getting-started/index.html">Getting Started</a></li>
+                    </ul>
                 </div>
             </div>
-            
-            <!-- Tier 2 Knowledge Graph -->
-            <div class="glass-card-display animation-t1" style="border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 12px; margin-bottom: 1.5rem; padding: 0;">
-                <div style="background: rgba(59, 130, 246, 0.15); border-bottom: 1px solid rgba(59, 130, 246, 0.4); padding: 1.25rem; border-radius: 12px 12px 0 0;">
-                    <h3 style="color: #60a5fa; margin: 0; font-size: 1.5rem; font-weight: 700;">Tier 2: Knowledge Graph</h3>
-                </div>
-                <div style="padding: 1.5rem;">
-                    <code style="color: #93c5fd; background: rgba(59, 130, 246, 0.2);">cortex-brain/tier2/knowledge-graph.yaml</code>
-                        <p style="color: #dbeafe;">Long-term relationship mapping between files, functions, concepts, and patterns. Powers semantic search and enables CORTEX to understand architectural relationships and component dependencies.</p>
-                        <div class="feature-pills-container">
-                            <span class="feature-pill" style="background: rgba(59, 130, 246, 0.2); color: #93c5fd;">
-                                <i class="fas fa-project-diagram"></i> Semantic relationships
-                            </span>
-                            <span class="feature-pill" style="background: rgba(59, 130, 246, 0.2); color: #93c5fd;">
-                                <i class="fas fa-lightbulb"></i> Pattern learning
-                            </span>
-                            <span class="feature-pill" style="background: rgba(59, 130, 246, 0.2); color: #93c5fd;">
-                                <i class="fas fa-sync-alt"></i> Continuous enrichment
-                            </span>
-                        </div>
-                </div>
-            </div>
-            
-            <!-- Cross-Session Middleware -->
-            <div class="glass-card-display animation-t1" style="border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 12px; margin-bottom: 1.5rem; padding: 0;">
-                <div style="background: rgba(139, 92, 246, 0.15); border-bottom: 1px solid rgba(139, 92, 246, 0.4); padding: 1.25rem; border-radius: 12px 12px 0 0;">
-                    <h3 style="color: #a78bfa; margin: 0; font-size: 1.5rem; font-weight: 700;">Cross-Session Middleware</h3>
-                </div>
-                <div style="padding: 1.5rem;">
-                    <code style="color: #c4b5fd; background: rgba(139, 92, 246, 0.2);">src/operations/utilities/vision_context_middleware.py</code>
-                        <p style="color: #ede9fe;">Session metadata compression reduces 50,000 tokens to 200 tokens (99.6% efficiency) for continuation detection. Automatic orchestrator routing based on conversation patterns.</p>
-                        <div class="feature-pills-container">
-                            <span class="feature-pill" style="background: rgba(139, 92, 246, 0.2); color: #c4b5fd;">
-                                <i class="fas fa-compress-arrows-alt"></i> 200 tokens vs 50K
-                            </span>
-                            <span class="feature-pill" style="background: rgba(139, 92, 246, 0.2); color: #c4b5fd;">
-                                <i class="fas fa-percent"></i> 99.6% efficiency
-                            </span>
-                            <span class="feature-pill" style="background: rgba(139, 92, 246, 0.2); color: #c4b5fd;">
-                                <i class="fas fa-route"></i> Auto routing
-                            </span>
-                        </div>
-                </div>
-            </div>
-            
         </section>
 
     </main>
