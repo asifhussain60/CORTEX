@@ -82,6 +82,42 @@ button, a, input, select, textarea, [role="button"] {
             box-shadow: var(--shadow, 0 8px 32px rgba(0, 0, 0, 0.37));
         }
     </style>
+<style>
+        /* FEATURES Theme - Level 1 */
+        .level1-features {
+            --theme-primary: #00d4ff;
+            --theme-accent: #00ff88;
+            --theme-success: #7c7cff;
+            --theme-warning: #ffd700;
+            --theme-glow: rgba(0, 212, 255, 0.3);
+            
+            /* Apply to glass effects */
+            --glass-border-color: #00d4ff33;
+            --pulse-glow-color: rgba(0, 212, 255, 0.3);
+        }
+        
+        /* Themed glass cards */
+        .level1-features .glass-card-clickable:hover {
+            border-color: #00d4ff66;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37),
+                        0 0 30px rgba(0, 212, 255, 0.3);
+        }
+        
+        /* Themed icons */
+        .level1-features .pulse-glow-glass--fast {
+            filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.3));
+        }
+        
+        /* Themed metric tiles */
+        .level1-features .token-metric-tile {
+            border-color: #00d4ff33;
+        }
+        
+        .level1-features .token-metric-tile:hover {
+            border-color: #00d4ff66;
+            background: #00d4ff11;
+        }
+</style>
 </head>
 <body>
     <!-- Breadcrumb Navigation -->
@@ -143,7 +179,7 @@ button, a, input, select, textarea, [role="button"] {
     </section>
 
     <!-- Main Content -->
-    <main class="container">
+    <main class="container level1-features">
 
         <!-- What Are CORTEX Features -->
         <section class="section">

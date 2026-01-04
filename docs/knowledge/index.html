@@ -60,6 +60,42 @@
         }
     </style>
     <script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+        /* KNOWLEDGE Theme - Level 1 */
+        .level1-knowledge {
+            --theme-primary: #ffd700;
+            --theme-accent: #7c7cff;
+            --theme-success: #00d4ff;
+            --theme-warning: #00ff88;
+            --theme-glow: rgba(255, 215, 0, 0.3);
+            
+            /* Apply to glass effects */
+            --glass-border-color: #ffd70033;
+            --pulse-glow-color: rgba(255, 215, 0, 0.3);
+        }
+        
+        /* Themed glass cards */
+        .level1-knowledge .glass-card-clickable:hover {
+            border-color: #ffd70066;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37),
+                        0 0 30px rgba(255, 215, 0, 0.3);
+        }
+        
+        /* Themed icons */
+        .level1-knowledge .pulse-glow-glass--fast {
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3));
+        }
+        
+        /* Themed metric tiles */
+        .level1-knowledge .token-metric-tile {
+            border-color: #ffd70033;
+        }
+        
+        .level1-knowledge .token-metric-tile:hover {
+            border-color: #ffd70066;
+            background: #ffd70011;
+        }
+</style>
 </head>
 <body>
     <!-- Glass Header Navigation -->
@@ -75,7 +111,7 @@
     </header>
     
     <!-- Main Content -->
-    <main class="container" id="main-content">
+    <main class="container level1-knowledge" id="main-content">
         <!-- Page Title Card -->
         <div class="glass-card-display animation-t1">
             <div class="page-title-section">
