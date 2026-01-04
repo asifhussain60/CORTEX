@@ -81,6 +81,12 @@ from .knowledge_graph_auto_updater import (
     UpdateResult,
     PatternExtractor
 )
+from .vscode_cache_manager import (
+    VSCodeCacheManager,
+    optimize_pre_flight,
+    run_full_cleanup,
+    check_cache_health
+)
 
 __all__ = [
     "ProgressRenderer",
@@ -125,4 +131,8 @@ __all__ = [
     "KnowledgeGraphAutoUpdater",
     "UpdateResult",
     "PatternExtractor",
+    "VSCodeCacheManager",
+    "optimize_pre_flight",
+    "run_full_cleanup",
+    "check_cache_health",
 ]

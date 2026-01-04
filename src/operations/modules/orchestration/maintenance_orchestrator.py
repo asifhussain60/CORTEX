@@ -671,6 +671,23 @@ def execute_maintenance(cortex_root: Path, logger: Optional[logging.Logger] = No
     Returns:
         Maintenance execution result
     """
+    # Phase 0.5: Pre-Flight Cache Optimization (CORTEX-5.0 Sub-Plan 00D)
+    if logger:
+        try:
+            from src.operations.utilities.vscode_cache_manager import VSCodeCacheManager
+            
+            cache_manager = VSCodeCacheManager()
+            cache_results = cache_manager.pre_flight_optimize(log_metrics=True, fail_silently=True)
+            
+            if cache_results.get("success") and not cache_results.get("skipped"):
+                logger.info(f"✅ Pre-flight cache optimization: {cache_results.get('summary', 'Complete')}")
+            elif cache_results.get("skipped"):
+                logger.debug(f"⏭️  Cache optimization skipped: {cache_results.get('reason', 'N/A')}")
+            else:
+                logger.warning(f"⚠️  Cache optimization failed (non-critical): {cache_results.get('error', 'Unknown')}")
+        except Exception as e:
+            logger.warning(f"⚠️  Pre-flight cache optimization failed (non-critical): {e}")
+    
     orchestrator = MaintenanceOrchestrator(
         cortex_root=cortex_root,
         logger=logger

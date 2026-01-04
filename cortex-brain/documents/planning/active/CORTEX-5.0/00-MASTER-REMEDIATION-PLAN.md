@@ -24,8 +24,9 @@
 | Order | Sub-Plan | Folder | Progress | Duration | Status | Dependencies |
 |-------|----------|--------|----------|----------|--------|--------------|
 | **00A** | **Epic Structure Cleanup** | `00A-epic-structure-cleanup/` | `██████████` 100% | 2h | ✅ **COMPLETE** | None |
-| **00B** | **Epic & Feature Planner** | `00B-epic-feature-planner/` | `░░░░░░░░░░` 0% | 2-3w | 🔒 Blocked | 00A complete |
+| **00B** | **Epic & Feature Planner** | `00B-epic-feature-planner/` | `█░░░░░░░░░` 15% | 2-3w | ⏳ In Progress | 00A complete |
 | **00C** | **Test Coverage Sprint** | `00C-test-coverage-sprint/` | `░░░░░░░░░░` 0% | 2-3w | 🔒 Blocked | 00B complete |
+| **00D** | **VSCode Cache Optimization ⚡** | `00D-vscode-cache-optimization/` | `██████░░░░` 60% | 2-3h | 🚀 **URGENT** | None (parallel) |
 | 01 | **Refinement Orchestrator** | `01-refinement-orchestrator/` | `░░░░░░░░░░` 0% | 1w | 🔒 Blocked | 00C ≥50% coverage |
 | 02 | **Debug Orchestrator** | `02-debug-orchestrator/` | `░░░░░░░░░░` 0% | 1w | 🔒 Blocked | 00C ≥50% coverage |
 | 03 | **Phase -1 Knowledge Library** | `03-knowledge-library-phase/` | `░░░░░░░░░░` 0% | 3-4d | 🔒 Blocked | 00C tests pass |
@@ -209,6 +210,45 @@ This epic coordinates **18 ordered sub-plans** in THREE strategic waves:
 - All brain protection tests pass
 - All common utility tests pass
 - Feature HTML viewer shows test growth in real-time
+
+---
+
+### Sub-Plan 00D: VSCode Cache Optimization ⚡🚀
+
+**Folder:** `00D-vscode-cache-optimization/`  
+**Priority:** 🚀 **URGENT - IMMEDIATE INTEGRATION** (Phase 0.5 Pre-Flight)  
+**Duration:** 2-3 hours (Phase 1 COMPLETE - Integration remaining)  
+**Status:** ✅ **READY FOR IMMEDIATE USE** (no blockers - can run in parallel)  
+**Implementation Status:** ✅ **PHASE 1 COMPLETE** - `VSCodeCacheManager` utility fully implemented  
+**Target:** Pre-flight cache clearing for IDE stability
+
+**⚡ IMMEDIATE ACTION REQUIRED:**
+- **VSCodeCacheManager utility ALREADY EXISTS** at `src/operations/utilities/vscode_cache_manager.py` (557 lines, fully tested)
+- **Ready for integration** into 4 orchestrators TODAY
+- **No dependencies** - can be integrated immediately while other sub-plans are in progress
+- **High impact** - Addresses user-reported performance degradation during long autonomous operations
+
+**Why Urgent:** Core utility is production-ready. Only integration work remains (Phases 2-4). Can deliver immediate performance improvements to users while other infrastructure work continues.
+
+**Scope:**
+- ✅ ~~Implement `VSCodeCacheManager` utility with cross-platform support~~ **COMPLETE**
+- ⏳ Add pre-flight cache optimization hooks to 4 orchestrators (45 minutes)
+- ⏳ Create configuration schema for cache management settings (30 minutes)
+- ⏳ Extend Maintenance Phase 11 with full cache cleanup (30 minutes)
+
+**Key Deliverables:**
+- ✅ `src/operations/utilities/vscode_cache_manager.py` - Core utility (557 lines) **COMPLETE**
+- ⏳ Pre-flight integration in Planning v5, Investigation, Vacuum, Maintenance
+- ⏳ Config schema: `vscode_cache.optimization_level`, `auto_cleanup`, `preserve_extensions`
+- ⏳ Tests for VSCodeCacheManager and orchestrator integration
+- ⏳ Documentation: Cache path resolution, optimization levels, troubleshooting
+
+**Exit Criteria:**
+- ✅ VSCodeCacheManager supports Windows, macOS, Linux paths **COMPLETE**
+- ⏳ All 4 orchestrators call `pre_flight_optimize()` before main execution
+- ⏳ Cache optimization reduces memory footprint by 30-50%
+- ✅ No disruption to user's VSCode settings or extensions **VERIFIED**
+- ⏳ TDD: Tests written before implementation
 
 ---
 
