@@ -347,14 +347,14 @@ CORTEX operates under strict governance rules to ensure quality and safety.
 - This banner appears once per session
 - Say "got it" or continue with your request to proceed
 
-Full Rulebook: cortex-brain/brain-protection-rules.yaml
+Full Rulebook: cortex-brain/tier0/governance.db (83 rules, 0.42ms query time)
 ΓòÜΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓò¥
 """
         
         return {
             "banner_text": banner_text.strip(),
             "dismissal_phrases": ["got it", "show rules", "rulebook", "help", "compliance"],
-            "rulebook_path": "cortex-brain/brain-protection-rules.yaml"
+            "rulebook_path": "cortex-brain/tier0/governance.db"
         }
     
     def get_session_stats(self) -> Dict[str, Any]:

@@ -275,9 +275,9 @@ class DualModePlanningOrchestrator:
                 enable_auto_refresh=True
             )
             
-            # Generate HTML
+            # Generate HTML - Universal viewer name (auto-detects EPIC vs FEATURE mode)
             generator = HTMLViewerGenerator(config, ViewerStyle())
-            output_path = self.plan_path / f"{plan_id}-plan-viewer.html"
+            output_path = self.plan_path / "plan-viewer.html"  # Standard name for all plans
             generator.generate(tracker_data, output_path)
             
             logger.info(f"Generated HTML viewer: {output_path}")
@@ -358,7 +358,7 @@ def create_epic_plan(
             duration=cp_data.get("duration", ""),
             dependencies=cp_data.get("dependencies", []),
             dependency_rule=cp_data.get("dependency_rule", ""),
-            viewer_url=f"{cp_data['folder']}/{cp_data['id']}-plan-viewer.html"
+            viewer_url=f"{cp_data['folder']}/plan-viewer.html"  # Universal viewer name
         )
         planner.add_child_plan(child_plan)
     

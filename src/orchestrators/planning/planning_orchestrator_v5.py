@@ -847,8 +847,9 @@ Check `tracking/progress-tracker.json` for current status.
         plan_dir = Path(f"cortex-brain/documents/planning/active/{feature_name}")
         
         folders = [
-            plan_dir / "context",
+            plan_dir / "analysis",
             plan_dir / "artifacts",
+            plan_dir / "context",
             plan_dir / "reports",
             plan_dir / "tracking"
         ]
@@ -931,7 +932,7 @@ Check `tracking/progress-tracker.json` for current status.
                 missing_files.append(file_path)
         
         # Check required folders
-        required_folders = ["context", "artifacts", "reports", "tracking"]
+        required_folders = ["analysis", "artifacts", "context", "reports", "tracking"]
         missing_folders = []
         for folder in required_folders:
             if not (plan_dir / folder).exists():

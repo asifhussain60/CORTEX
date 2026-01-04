@@ -261,7 +261,7 @@ class DeploymentGates:
         
         # ALL 24 GATES MANDATORY - No skipping allowed
         # Enforced by DEPLOYMENT_GATE_ENFORCEMENT Tier 0 instinct
-        # See: cortex-brain/brain-protection-rules.yaml (rule_id: DEPLOYMENT_GATE_ENFORCEMENT)
+        # See: cortex-brain/tier0/governance.db (rule_id: DEPLOYMENT_GATE_ENFORCEMENT)
         
         return results
     
@@ -830,28 +830,33 @@ class DeploymentGates:
         else:
             issues.append("git-checkpoint-rules.yaml not found")
         
-        brain_rules_path = self.project_root / "cortex-brain" / "brain-protection-rules.yaml"
-        if brain_rules_path.exists():
+        governance_db_path = self.project_root / "cortex-brain" / "tier0" / "governance.db"
+        if governance_db_path.exists():
             try:
-                import yaml
-                with open(brain_rules_path, 'r', encoding='utf-8') as f:
-                    brain_rules = yaml.safe_load(f)
+                from src.cortex_core.governance_db import GovernanceDB
                 
-                tier0_instincts = brain_rules.get("tier0_instincts", [])
+                gov_db = GovernanceDB(governance_db_path)
+                health = gov_db.health_check()
                 
-                if "PREVENT_DIRTY_STATE_WORK" in tier0_instincts:
+                if health["status"] == "healthy":
                     checks["brain_rule_active"] = True
+                    
+                    # Check for required instincts
+                    instincts = gov_db.get_all_instincts()
+                    instinct_ids = [inst.instinct_id for inst in instincts]
+                    
+                    if "PREVENT_DIRTY_STATE_WORK" not in instinct_ids:
+                        issues.append("PREVENT_DIRTY_STATE_WORK not in tier0_instincts")
+                    
+                    if "GIT_CHECKPOINT_ENFORCEMENT" not in instinct_ids:
+                        issues.append("GIT_CHECKPOINT_ENFORCEMENT not in tier0_instincts")
                 else:
-                    issues.append("PREVENT_DIRTY_STATE_WORK not in tier0_instincts")
-                
-                # Also check if GIT_CHECKPOINT_ENFORCEMENT is present
-                if "GIT_CHECKPOINT_ENFORCEMENT" not in tier0_instincts:
-                    issues.append("GIT_CHECKPOINT_ENFORCEMENT not in tier0_instincts")
+                    issues.append(f"Governance database unhealthy: {health.get('error', 'Unknown')}")
             
             except Exception as e:
                 issues.append(f"Could not validate brain protection rules: {e}")
         else:
-            issues.append("brain-protection-rules.yaml not found")
+            issues.append("governance.db not found in cortex-brain/tier0/")
         
         if checks["utility_imports"]:
             try:
@@ -1487,22 +1492,23 @@ class DeploymentGates:
         else:
             issues.append("response-templates-v4.yaml not found in cortex-brain/")
         
-        protection_file = brain_path / 'brain-protection-rules.yaml' if brain_path.exists() else None
-        if protection_file and protection_file.exists():
+        governance_db = brain_path / 'tier0' / 'governance.db' if brain_path.exists() else None
+        if governance_db and governance_db.exists():
             try:
-                import yaml
-                with open(protection_file, 'r', encoding='utf-8') as f:
-                    data = yaml.safe_load(f)
+                from src.cortex_core.governance_db import GovernanceDB
                 
-                # Verify SKULL rules exist
-                if 'skull_rules' in data or 'protection_layers' in data or 'instincts' in data:
+                gov_db = GovernanceDB(governance_db)
+                health = gov_db.health_check()
+                
+                # Verify database is healthy and has rules
+                if health["status"] == "healthy" and health["total_rules"] > 0:
                     checks["brain_protection"] = True
                 else:
-                    issues.append("brain-protection-rules.yaml missing SKULL rules")
+                    issues.append(f"Governance database unhealthy or empty: {health}")
             except Exception as e:
-                issues.append(f"brain-protection-rules.yaml is invalid: {e}")
+                issues.append(f"governance.db is invalid: {e}")
         else:
-            issues.append("brain-protection-rules.yaml not found in cortex-brain/")
+            issues.append("governance.db not found in cortex-brain/tier0/")
         
         # Check that response-templates-v4.yaml references key orchestrators
         wired_ok = True
@@ -2761,12 +2767,12 @@ class DeploymentGates:
         
         Token Budgets (from TOKEN_EFFICIENCY_ENFORCEMENT SKULL rule):
         - CORTEX.prompt.md: 5,000 tokens (currently 11,836 = 136% over)
-        - brain-protection-rules.yaml: 8,000 tokens (currently 63,098 = 688% over)
+        - tier0/governance.db: 8,000 tokens (database, minimal token usage)
         - response-templates-v4.yaml: 3,000 tokens (currently 22,752 = 658% over)
         - copilot-instructions.md: 1,000 tokens (currently 3,416 = 241% over)
         
         Total Budget: 17,000 tokens
-        Current Total: 101,102 tokens (494.7% over budget)
+        Current Total: ~40,000 tokens (135% over budget) - improved with database migration
         
         Returns:
             Gate result with detailed token analysis

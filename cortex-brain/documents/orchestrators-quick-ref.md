@@ -40,7 +40,7 @@ Creates structured execution plans with context discovery, folder organization, 
 1. **Context Discovery:** Search workspace for relevant files (semantic + grep)
 2. **Architecture Analysis:** Parse codebase and analyze dependencies
 3. **Plan Generation:** Generate master plan from templates (Jinja2)
-4. **Folder Creation:** Create 4-subfolder structure (`context/`, `artifacts/`, `reports/`, `tracking/`)
+4. **Folder Creation:** Create 5-subfolder structure (`analysis/`, `artifacts/`, `context/`, `reports/`, `tracking/`)
 5. **Validation:** Validate plan structure and content
 
 #### Inputs
@@ -53,10 +53,11 @@ Creates structured execution plans with context discovery, folder organization, 
 cortex-brain/documents/planning/active/{plan-name}/
 ├── 00-{plan-name}.md          # Master plan (meaningful filename, max 22 chars)
 ├── README.md                   # Quick start guide
+├── analysis/                   # Deep analysis and investigation reports
+├── artifacts/                  # Generated artifacts
 ├── context/                    # Context discovery documents
 │   ├── discovery.md
 │   └── architecture-analysis.md
-├── artifacts/                  # Generated artifacts
 ├── reports/                    # Progress reports
 │   └── validation-report.md
 └── tracking/                   # State tracking
@@ -80,7 +81,7 @@ cortex-brain/documents/planning/active/{plan-name}/
 | 1 | ✅ **Context Discovery** | `██████████` 100% | 2/2 | 0.5h |
 | 2 | ⏳ **Architecture Analysis** | `████░░░░░░` 40% | 0/1 | 0.2h |
 | 3 | ⏸️ **Plan Generation** | `░░░░░░░░░░` 0% | 0/2 | 0h |
-| 4 | ⏸️ **Folder Creation** | `░░░░░░░░░░` 0% | 0/4 | 0h |
+| 4 | ⏸️ **Folder Creation** | `░░░░░░░░░░` 0% | 0/5 | 0h |
 | 5 | ⏸️ **Validation** | `░░░░░░░░░░` 0% | 0/1 | 0h |
 
 **Next:** Complete architecture analysis → Parse codebase
