@@ -392,6 +392,58 @@ button, a, input, select, textarea, [role="button"] {
             </div>
         </div>
 
+        <!-- CORTEX-5.0 REFACTOR Enforcement Enhancement -->
+        <div class="viz-container" style="margin-top: 3rem;">
+            <h2 style="font-size: 1.75rem; font-weight: 700; color: #8b5cf6; margin-bottom: 1.5rem;">
+                <i class="fas fa-broom pulse-glow-glass--fast"></i> CORTEX-5.0: REFACTOR Task Enforcement
+            </h2>
+            
+            <div class="alert alert-info" style="margin-bottom: 1.5rem; padding: 1rem; background: rgba(139, 92, 246, 0.2); border: 1px solid #8b5cf6; border-radius: 8px;">
+                <strong>📋 Sub-Plan 07:</strong> REFACTOR Task Enforcement is a planned enhancement for CORTEX-5.0 that 
+                extends SKULL protection with mandatory final cleanup phases in all plans.
+            </div>
+            
+            <div class="architecture-layer" style="grid-template-columns: 1fr;">
+                <div class="architecture-layer" style="border-left-color: #8b5cf6;">
+                    <div class="architecture-layer">🚀 New Rule</div>
+                    <div class="architecture-layer">REFACTOR Task Enforcement</div>
+                    <div class="architecture-layer">
+                        <strong>Rule:</strong> Every planning manifest MUST include a final REFACTOR phase (typically Phase 12) that 
+                        enforces SKULL whole-file cleanup rules. This prevents half-implemented changes, dead code accumulation, 
+                        and ensures every plan completes with a clean codebase state.
+                        <br><br>
+                        <strong>Enforcement Scope:</strong>
+                        <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+                            <li>Dead code removal (orphaned functions, unused imports)</li>
+                            <li>Duplicate elimination (merge redundant implementations)</li>
+                            <li>Comment cleanup (remove TODO/FIXME markers)</li>
+                            <li>Test coverage validation (≥80% for modified files)</li>
+                            <li>Documentation sync (update docstrings, READMEs)</li>
+                            <li>Git checkpoint creation (final commit with cleanup summary)</li>
+                        </ul>
+                        <br>
+                        <strong>Acceptance Criteria:</strong> REFACTOR phase must be present in <code>acceptance-criteria.yaml</code> 
+                        as <code>final_refactor_required: true</code>. Plans without this flag will fail validation.
+                        <br><br>
+                        <strong>Status:</strong> <span class="badge badge-warning">⏸️ BLOCKED</span> - Waiting for Gate 1 (≥50% test coverage)
+                    </div>
+                    <div class="architecture-layer">Status: Planned</div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 2rem; padding: 1rem; background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; border-radius: 8px;">
+                <h3 style="font-size: 1.25rem; font-weight: 600; color: #10b981; margin-bottom: 0.75rem;">
+                    <i class="fas fa-check-circle pulse-glow-glass--fast"></i> Benefits
+                </h3>
+                <ul style="padding-left: 1.5rem; color: rgba(255, 255, 255, 0.8);">
+                    <li><strong>Zero Technical Debt:</strong> Every plan ends with a clean state—no leftover scaffolding or debug code</li>
+                    <li><strong>Enforced Hygiene:</strong> Automated whole-file cleanup eliminates manual review burden</li>
+                    <li><strong>Predictable Completion:</strong> Plans have clear Definition of Done with measurable cleanup criteria</li>
+                    <li><strong>Integration with CI/CD:</strong> REFACTOR phase can trigger automated quality gates before merge</li>
+                </ul>
+            </div>
+        </div>
+
         <!-- Navigation Footer -->
         <nav class="nav-content" mobile-nav-optimized>
             <a href="index.html" class="nav-link" mobile-nav-optimized>← Back to Architecture</a>

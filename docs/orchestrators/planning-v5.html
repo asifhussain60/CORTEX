@@ -145,6 +145,99 @@ button, a, input, select, textarea, [role="button"] {
             </div>
         </article>
         
+        <!-- CORTEX-5.0 Planned Enhancements -->
+        <article class="glass-card-display animation-t1">
+            <h2>🚀 CORTEX-5.0 Planned Enhancements</h2>
+            
+            <!-- Implementation Status Alert -->
+            <div class="alert alert-info" style="margin-bottom: 1.5rem; padding: 1rem; background: rgba(139, 92, 246, 0.2); border: 1px solid #8b5cf6; border-radius: 8px;">
+                <strong>📋 CORTEX-5.0 Roadmap:</strong><br>
+                The following enhancements are planned for Planning v5 as part of the CORTEX-5.0 gap remediation. 
+                Implementation status varies by sub-plan. See <a href="../architecture/orchestrator-ecosystem.html" style="color: #00d4ff;">Orchestrator Ecosystem</a> for full details.
+            </div>
+            
+            <div class="features-grid">
+                <div class="level1-feature-panel" style="border: 2px solid rgba(245, 158, 11, 0.5);">
+                    <div class="feature-icon">📚</div>
+                    <h3>Phase -1: Knowledge Library</h3>
+                    <p><strong>Sub-Plan 03:</strong> Pre-planning governance consultation. Queries brain-protection-rules.yaml, 
+                    knowledge-graph.yaml, and lessons-learned.yaml BEFORE Phase 0 to inject organizational memory into every plan.</p>
+                    <span class="badge badge-warning" style="display: inline-block; margin-top: 0.5rem;">⏸️ Blocked</span>
+                </div>
+                
+                <div class="level1-feature-panel" style="border: 2px solid rgba(245, 158, 11, 0.5);">
+                    <div class="feature-icon">📊</div>
+                    <h3>Visual Progress Generation</h3>
+                    <p><strong>Sub-Plan 06:</strong> Auto-generates ASCII progress bars and phase swimlanes in planning manifests. 
+                    Real-time progress tracking with `autonomous_execution_progress` template integration.</p>
+                    <span class="badge badge-warning" style="display: inline-block; margin-top: 0.5rem;">⏸️ Blocked</span>
+                </div>
+                
+                <div class="level1-feature-panel" style="border: 2px solid rgba(245, 158, 11, 0.5);">
+                    <div class="feature-icon">🧹</div>
+                    <h3>REFACTOR Task Enforcement</h3>
+                    <p><strong>Sub-Plan 07:</strong> Every plan MUST include a final REFACTOR phase that enforces SKULL whole-file cleanup rules. 
+                    Prevents half-implemented changes and dead code accumulation.</p>
+                    <span class="badge badge-warning" style="display: inline-block; margin-top: 0.5rem;">⏸️ Blocked</span>
+                </div>
+                
+                <div class="level1-feature-panel">
+                    <div class="feature-icon">🌳</div>
+                    <h3>Enhanced AST Scanning</h3>
+                    <p><strong>Sub-Plan 04:</strong> Deep AST analysis with function/class signature extraction, import graph traversal, 
+                    and breaking change prediction. Powers Phase 3 AST Impact Analysis with granular insights.</p>
+                    <span class="badge badge-success" style="display: inline-block; margin-top: 0.5rem;">✅ Deployed</span>
+                </div>
+                
+                <div class="level1-feature-panel">
+                    <div class="feature-icon">🔄</div>
+                    <h3>Context Middleware Integration</h3>
+                    <p><strong>Sub-Plan 05:</strong> Vision API auto-analysis, continuation detection, and priority-based context injection. 
+                    Reduces manual context gathering by 80%.</p>
+                    <span class="badge badge-success" style="display: inline-block; margin-top: 0.5rem;">✅ Deployed</span>
+                </div>
+                
+                <div class="level1-feature-panel">
+                    <div class="feature-icon">📈</div>
+                    <h3>Epic vs. Feature Planning</h3>
+                    <p><strong>WorkDecomposer:</strong> Automatically switches to hierarchical Epic planning when story points exceed 21. 
+                    Features use flat structure, Epics break down into sub-stories.</p>
+                    <span class="badge badge-success" style="display: inline-block; margin-top: 0.5rem;">✅ Deployed</span>
+                </div>
+            </div>
+            
+            <!-- Phase -1 Workflow Diagram -->
+            <div class="mermaid-container" style="margin-top: 2rem;">
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-sitemap pulse-glow-glass--fast"></i> Phase -1 Knowledge Library Flow</h3>
+                <pre class="mermaid">
+flowchart LR
+    subgraph PrePlanning["📚 Phase -1: Knowledge Library"]
+        Start[Plan Command] --> Query1[Query Tier 0<br/>brain-protection-rules.yaml]
+        Query1 --> Query2[Query Tier 2<br/>knowledge-graph.yaml]
+        Query2 --> Query3[Query Tier 2<br/>lessons-learned.yaml]
+        Query3 --> Report[Generate Consultation Report]
+    end
+    
+    subgraph Planning["📋 Phase 0-10: Core Planning"]
+        Report --> Phase0[Phase 0: Requirements]
+        Phase0 --> Phase1[Phase 1: Governance]
+        Phase1 --> Dots[...]
+        Dots --> Phase10[Phase 10: Finalization]
+    end
+    
+    style PrePlanning fill:#8b5cf6,stroke:#7b61ff,stroke-width:3px
+    style Query1 fill:#ef4444,color:#fff
+    style Query2 fill:#06b6d4,color:#fff
+    style Query3 fill:#06b6d4,color:#fff
+    style Report fill:#10b981,color:#fff
+                </pre>
+                <p style="font-size: 0.875rem; color: rgba(255, 255, 255, 0.7); margin-top: 1rem;">
+                    <strong>Status:</strong> Phase -1 is part of Sub-Plan 03 (⏸️ Blocked). When implemented, it will execute 
+                    BEFORE Phase 0 to inject governance context into every plan.
+                </p>
+            </div>
+        </article>
+        
         <!-- 10-Phase Execution Pipeline -->
         <article class="glass-card-display animation-t1">
             <h2>🔄 10-Phase Execution Pipeline</h2>
