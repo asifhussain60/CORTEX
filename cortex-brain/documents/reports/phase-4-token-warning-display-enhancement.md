@@ -51,7 +51,7 @@ Implemented user-facing display for continuation prompt token warnings, enabling
 
 ### New Files (3)
 
-4. **demo_token_warning_display.py** (112 lines)
+4. **scripts/demos/demo_token_warning_display.py** (112 lines)
    - Demonstrates user-facing token warning functionality
    - Simulates 6 phases with 5k threshold
    - Shows formatted warning message display

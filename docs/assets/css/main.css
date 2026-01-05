@@ -864,6 +864,87 @@ body {
     display: block;
 }
 
+/* Card Icon Color Variants */
+.card-icon-primary {
+    width: 4rem;
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, #7b61ff, #9f87ff);
+    box-shadow: 0 8px 24px rgba(123, 97, 255, 0.3);
+    font-size: 2rem;
+    color: var(--text-primary);
+}
+
+.card-icon-success {
+    width: 4rem;
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, #10b981, #34d399);
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+    font-size: 2rem;
+    color: var(--text-primary);
+}
+
+.card-icon-warning {
+    width: 4rem;
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, #f59e0b, #fbbf24);
+    box-shadow: 0 8px 24px rgba(245, 158, 11, 0.3);
+    font-size: 2rem;
+    color: var(--text-primary);
+}
+
+.card-icon-info {
+    width: 4rem;
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, #3b82f6, #60a5fa);
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+    font-size: 2rem;
+    color: var(--text-primary);
+}
+
+.glass-card-clickable:hover .card-icon-primary {
+    box-shadow: 0 12px 32px rgba(123, 97, 255, 0.5);
+    transform: scale(1.05);
+    transition: all var(--transition-base);
+}
+
+.glass-card-clickable:hover .card-icon-success {
+    box-shadow: 0 12px 32px rgba(16, 185, 129, 0.5);
+    transform: scale(1.05);
+    transition: all var(--transition-base);
+}
+
+.glass-card-clickable:hover .card-icon-warning {
+    box-shadow: 0 12px 32px rgba(245, 158, 11, 0.5);
+    transform: scale(1.05);
+    transition: all var(--transition-base);
+}
+
+.glass-card-clickable:hover .card-icon-info {
+    box-shadow: 0 12px 32px rgba(59, 130, 246, 0.5);
+    transform: scale(1.05);
+    transition: all var(--transition-base);
+}
+
 .glass-card.card-link h4 {
     margin: 0 0 0.5rem 0;
     color: var(--text-primary);
