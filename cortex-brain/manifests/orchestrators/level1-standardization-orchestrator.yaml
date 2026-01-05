@@ -1,0 +1,223 @@
+---
+name: Level 1 View Standardization Orchestrator
+version: 1.0.0
+type: autonomous
+category: documentation
+status: production
+author: Asif Hussain
+created: 2026-01-05
+last_updated: 2026-01-05
+
+description: |
+  Master orchestrator for standardizing Level 1 documentation views based on 
+  the approved orchestrators/index.html pattern. Includes complexity analysis,
+  visual treatment decisions, and automated content regeneration.
+
+capabilities:
+  - complexity_analysis:
+      description: "Analyzes page complexity using content volume, structural depth, and data types"
+      scoring:
+        content_volume: "0-30 points (word count, sections)"
+        structural_depth: "0-25 points (nesting, hierarchy)"
+        data_types: "0-45 points (tables, lists, code blocks, diagrams)"
+      thresholds:
+        high: 70
+        medium: 40
+        low: 20
+        
+  - visual_treatment:
+      description: "Decides visual layout based on complexity score"
+      treatments:
+        high_visual:
+          complexity: ">= 70"
+          layout: "hero-card-grid"
+          colors: "3-color rotation"
+          features: "icons, diagrams, rich cards"
+        medium_visual:
+          complexity: "40-69"
+          layout: "tetris or card-grid"
+          colors: "2-color rotation"
+          features: "icons, standard cards"
+        simple_visual:
+          complexity: "< 40"
+          layout: "tiles"
+          colors: "single color"
+          features: "icons, minimal decoration"
+          
+  - color_palette:
+      description: "7-color glassmorphism palette with subtle randomization"
+      colors:
+        - glass-panel-purple
+        - glass-panel-emerald
+        - glass-panel-amber
+        - glass-panel-cyan
+        - glass-panel-teal
+        - glass-panel-indigo
+        - glass-panel-pink
+      application: "Soft colors with glass effects on all panels and divs"
+      
+  - content_regeneration:
+      description: "Regenerates HTML to conform to approved styles"
+      features:
+        - "Hero section with robot head"
+        - "Glass-card-display sections"
+        - "Masonry grid for cards"
+        - "Card-stats-tetris for metadata pills"
+        - "Automatic list-to-card conversion"
+        - "Icon integration"
+        
+  - state_tracking:
+      description: "Persists standardization state between invocations"
+      file: "cortex-brain/cache/html-standardization-state.json"
+      tracked_data:
+        - "Last modified timestamp"
+        - "Git checkpoint tag"
+        - "Complexity score"
+        - "Visual treatment"
+        - "Color palette"
+        - "Approval status"
+
+target_pages:
+  - architecture/index.html
+  - features/index.html
+  - getting-started/index.html
+  - knowledge/index.html
+  - learning-paths/index.html
+  - lens/index.html
+  - orchestrators/index.html  # Reference pattern
+  - security/index.html
+  - story/index.html
+  - sts/index.html
+  - token-optimization/index.html
+  - toolkit-manager/index.html
+
+usage:
+  command: "python scripts/orchestrators/level1_standardization_orchestrator.py"
+  
+  options:
+    --dry-run: "Run without making changes (preview mode)"
+    --page: "Standardize specific page only (e.g., --page architecture)"
+    --workspace: "Specify workspace root (default: current directory)"
+    
+  examples:
+    - description: "Standardize all Level 1 pages"
+      command: "python scripts/orchestrators/level1_standardization_orchestrator.py"
+      
+    - description: "Preview changes without modifying files"
+      command: "python scripts/orchestrators/level1_standardization_orchestrator.py --dry-run"
+      
+    - description: "Standardize single page"
+      command: "python scripts/orchestrators/level1_standardization_orchestrator.py --page architecture"
+
+workflow:
+  phases:
+    - phase: 1
+      name: "Complexity Analysis"
+      description: "Analyze page structure and content"
+      outputs:
+        - "Total complexity score"
+        - "Content volume score"
+        - "Structural depth score"
+        - "Data types score"
+        - "Visual treatment recommendation"
+        
+    - phase: 2
+      name: "Visual Treatment Decision"
+      description: "Decide layout type and color palette"
+      outputs:
+        - "Layout type (hero-card-grid, tetris, card-grid, tiles)"
+        - "Color palette (1-3 colors from 7-color system)"
+        - "Icon usage flag"
+        - "Diagram usage flag"
+        
+    - phase: 3
+      name: "Content Regeneration"
+      description: "Regenerate HTML to approved pattern"
+      steps:
+        - "Create git checkpoint"
+        - "Parse existing HTML"
+        - "Generate hero section"
+        - "Convert sections to glass-card-display"
+        - "Apply color rotation"
+        - "Convert lists to cards"
+        - "Save regenerated HTML"
+        - "Update state tracking"
+
+enforcement_rules:
+  - name: "CSS-Only Styling"
+    rule: "All styling via CSS classes, NO inline styles"
+    
+  - name: "7-Color Palette"
+    rule: "All panels use glassmorphism 7-color palette"
+    
+  - name: "Visual Preference"
+    rule: "Prefer cards/tiles/tetris over bullet lists"
+    
+  - name: "Git Checkpoints"
+    rule: "Create checkpoint before modifications"
+    
+  - name: "State Persistence"
+    rule: "Update state file after each page"
+
+output:
+  standardization_result:
+    fields:
+      - page: "Page name"
+      - success: "Boolean success flag"
+      - complexity_score: "ComplexityScore object"
+      - visual_treatment: "VisualTreatment object"
+      - changes_applied: "List of changes"
+      - errors: "List of errors"
+      - git_checkpoint: "Checkpoint tag"
+      
+  state_file:
+    location: "cortex-brain/cache/html-standardization-state.json"
+    structure:
+      version: "2.0"
+      last_updated: "ISO timestamp"
+      pages: "Dict of page states"
+      global_state: "Overall statistics"
+
+integration:
+  dependencies:
+    - BeautifulSoup4: "HTML parsing"
+    - PyYAML: "YAML configuration"
+    
+  related_orchestrators:
+    - migration_orchestrator: "Inline style migration"
+    - cleanup_orchestrator: "Theme cleanup"
+    - validation_orchestrator: "HTML validation"
+    
+  css_files:
+    - docs/assets/css/variables.css: "Glassmorphism classes"
+    - docs/assets/css/main.css: "Card layouts"
+
+skull_rules:
+  - "PYTHON_ONLY_GENERATION: Never modify HTML directly via Copilot"
+  - "STATE_FIRST: Query state before modifications"
+  - "VALIDATION_FIRST: Pre-flight checks before changes"
+  - "ATOMIC_OPERATIONS: Single responsibility per operation"
+  - "GIT_CHECKPOINTS: Rollback safety mandatory"
+
+design_principles:
+  - complexity_driven: "Visual treatment based on content complexity"
+  - visual_first: "Prefer graphical over textual"
+  - glassmorphism: "7-color subtle palette with glass effects"
+  - consistency: "All Level 1 views follow same pattern"
+  - automation: "Minimize manual intervention"
+
+future_enhancements:
+  - diagram_generation: "Auto-generate diagrams for high complexity"
+  - icon_selection: "AI-powered icon recommendations"
+  - content_optimization: "Auto-summarize long descriptions"
+  - accessibility: "WCAG AA compliance validation"
+  - multi_language: "Support for multilingual content"
+
+testing:
+  dry_run_mode: true
+  git_safety: "Automatic checkpoint creation"
+  state_rollback: "Restore from checkpoint on error"
+  validation: "HTML structure validation post-regeneration"
+
+copyright: "© 2026 Asif Hussain. All rights reserved."
+license: "Source-Available (Use Allowed, No Contributions)"

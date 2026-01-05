@@ -9023,6 +9023,11 @@ a.glass-card-clickable .card-header-centered,
     width: 100%;
 }
 
+/* Fixed height for card descriptions in cards with tetris stats */
+.glass-card-clickable:has(.card-stats-tetris) .card-description {
+    min-height: 120px;
+}
+
 /* Ensure descriptions in tetris cards are left-aligned */
 .glass-card-clickable .card-description,
 a.glass-card-clickable .card-description {
