@@ -126,6 +126,140 @@ This standard defines **modern glassmorphism patterns** for CORTEX documentation
 
 ---
 
+## ⚠️ MANDATORY Design Requirements (v4.3.0)
+
+**ADDED:** January 5, 2026 - Visual Monotony Prevention & Professional Polish
+
+### 1. All Headings MUST Be Wrapped in Glassmorphism Panels
+
+**Rule:** Every `<h2>` with `.section-title` class MUST be wrapped in `<section class="glass-card-display">`.
+
+**❌ WRONG (Naked Heading):**
+```html
+<h2 class="section-title">
+    <i class="fas fa-gears"></i>
+    Master Orchestrators
+</h2>
+```
+
+**✅ CORRECT (Panel-Wrapped):**
+```html
+<section class="glass-card-display">
+    <h2 class="section-title">
+        <i class="fas fa-gears"></i>
+        Master Orchestrators
+    </h2>
+</section>
+```
+
+**Rationale:** 
+- Provides visual consistency across all pages
+- Creates professional depth hierarchy
+- Maintains glassmorphism aesthetic throughout UI
+- Prevents jarring visual breaks between sections
+
+---
+
+### 2. Color Rotation MUST Be Applied to Card Grids (Pattern C50)
+
+**Rule:** All card grids with 4+ items MUST use 4-color rotation pattern to prevent visual monotony.
+
+**Color Cycle:** `primary → info → warning → success → repeat`
+
+**Implementation:**
+```html
+<!-- Card 1 (Primary) -->
+<a href="#" class="glass-card-clickable card-variant-primary">
+    <div class="card-header-inline">
+        <i class="card-icon-primary fas fa-icon"></i>
+        <h3>Title</h3>
+    </div>
+</a>
+
+<!-- Card 2 (Info) -->
+<a href="#" class="glass-card-clickable card-variant-info">
+    <div class="card-header-inline">
+        <i class="card-icon-info fas fa-icon"></i>
+        <h3>Title</h3>
+    </div>
+</a>
+
+<!-- Card 3 (Warning) -->
+<a href="#" class="glass-card-clickable card-variant-warning">
+    <div class="card-header-inline">
+        <i class="card-icon-warning fas fa-icon"></i>
+        <h3>Title</h3>
+    </div>
+</a>
+
+<!-- Card 4 (Success) - Cycle Complete -->
+<a href="#" class="glass-card-clickable card-variant-success">
+    <div class="card-header-inline">
+        <i class="card-icon-success fas fa-icon"></i>
+        <h3>Title</h3>
+    </div>
+</a>
+
+<!-- Card 5 (Primary) - Cycle Restarts -->
+<a href="#" class="glass-card-clickable card-variant-primary">
+    <!-- ... -->
+</a>
+```
+
+**Visual Impact:**
+- **Before:** 10 purple icons → monotone, boring
+- **After:** 3 primary + 3 info + 2 warning + 2 success → vibrant, professional
+
+**CSS Requirements:**
+All color variants must have corresponding CSS definitions in `main.css`:
+- `.card-variant-primary` + `.card-icon-primary`
+- `.card-variant-info` + `.card-icon-info`
+- `.card-variant-warning` + `.card-icon-warning`
+- `.card-variant-success` + `.card-icon-success`
+
+**Hover Effects:**
+Each variant must include:
+- `transform: scale(1.05)` on hover
+- Enhanced box-shadow (color-specific)
+- Smooth transition (`var(--transition-normal)`)
+
+**Automated Detection:**
+Validation scripts should flag:
+- ❌ 4+ cards without color rotation
+- ❌ All icons using same `card-icon-*` class
+- ❌ Missing `card-variant-*` classes
+
+**Business-Professional Balance:**
+- **Subtle Colors:** Glass overlays maintain soft, professional appearance
+- **Smart Distribution:** Even distribution prevents any single color from dominating
+- **Animation Control:** Hover effects remain T1 subtle (no dramatic effects)
+
+---
+
+### 3. Validation Enforcement
+
+**Pre-Commit Checks:**
+```powershell
+# Check for naked headings
+.\cortex-toolkit\validate-panel-wrapping.ps1 -Path "docs/" -Recursive
+
+# Check for color monotony
+.\cortex-toolkit\validate-color-rotation.ps1 -Path "docs/" -Recursive -MinCards 4
+```
+
+**CI/CD Integration:**
+Add to `.github/workflows/validate-glassmorphism.yml`:
+- Panel wrapping validation
+- Color rotation pattern enforcement
+- Automated fix suggestions
+
+**Exit Codes:**
+- `0` → All checks passed
+- `1` → Warnings (optional fixes)
+- `2` → Critical (must fix before merge)
+
+---
+
 ## 🚀 Quick Reference
 
 ### Content-Driven Layout Decision Matrix
