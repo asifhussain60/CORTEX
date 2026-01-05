@@ -53,28 +53,37 @@ button, a, input, select, textarea, [role="button"] {
     </style>
 </head>
 <body>
-    <!-- Skip Link -->
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-    
-    <!-- Glass Header Navigation -->
-    <header class="glass-header">
-        <div class="header-content">
-            <nav class="header-nav" mobile-nav-optimized>
-                <a href="../index.html" class="nav-link" mobile-nav-optimized>
-                    <i class="fas fa-home pulse-glow-glass--fast"></i>
-                    <span>Home</span>
-                </a>
-            </nav>
-        </div>
-    </header>
-    
     <!-- Main Content -->
     <main class="container" id="main-content">
+        <!-- Hero Section with Robot Head -->
+        <div class="hero-section-wrapper">
+            <div class="hero-robot-container">
+                <a href="../index.html" title="Back to Home">
+                    <img src="../assets/images/CORTEX-logo-200.png" alt="CORTEX Robot" class="hero-robot-head"/>
+                </a>
+            </div>
+            <div class="hero-divider-line"></div>
+        </div>
+
+        <!-- Page Title Card -->
+        <section class="glass-card-display hero-introduction">
+            <div class="card-header-centered">
+                <i class="card-icon-primary fas fa-clipboard-check"></i>
+                <h2>Pre-Flight Orchestrator</h2>
+            </div>
+            <p class="hero-description">
+                Validate development environment BEFORE plan execution with pattern detection (FastAPI, .NET, Node.js, Docker), 
+                tool validation, and gate enforcement with remediation scripts. Prevent costly delays before they happen.
+            </p>
+            <div class="hero-stats">
+                <span class="stat-pill">Production Ready</span>
+                <span class="stat-pill">Pattern Detection</span>
+                <span class="stat-pill">Auto Remediation</span>
+            </div>
+        </section>
+        
         <!-- Main Content Card -->
         <div class="glass-card">
-            <h1>Pre-Flight Orchestrator</h1>
-            <span class="badge badge-success">Production Ready</span>
-            
             <p>
                 The Pre-Flight Orchestrator validates your development environment <strong>BEFORE</strong> executing 
                 a feature plan. It detects project patterns (FastAPI, .NET, Node.js, Docker), generates environment 

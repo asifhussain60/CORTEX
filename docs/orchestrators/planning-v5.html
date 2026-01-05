@@ -37,30 +37,37 @@ button, a, input, select, textarea, [role="button"] {
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
-    <!-- Skip Link -->
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-    
-    <!-- Level 1 Navigation Header (glassmorphism v4.1.0 compliant) -->
-    <header class="glass-header">
-        <div class="header-content">
-            <nav class="header-nav" mobile-nav-optimized>
-                <a href="../index.html" class="nav-link" mobile-nav-optimized>
-                    <i class="fas fa-home pulse-glow-glass--fast"></i>
-                    <span>Home</span>
-                </a>
-            </nav>
-        </div>
-    </header>
-    
     <!-- Main Content -->
     <main class="container" id="main-content">
-        <!-- Hero Section -->
-        <article class="glass-card-display animation-t1">
-            <div class="btn-hero-story">
-                <h1>🧠 Planning System</h1>
-                <p class="hero-subtitle">Pure Autonomous Planning with Tier 0 Governance + Knowledge Graphs</p>
+        <!-- Hero Section with Robot Head -->
+        <div class="hero-section-wrapper">
+            <div class="hero-robot-container">
+                <a href="../index.html" title="Back to Home">
+                    <img src="../assets/images/CORTEX-logo-200.png" alt="CORTEX Robot" class="hero-robot-head"/>
+                </a>
             </div>
-            
+            <div class="hero-divider-line"></div>
+        </div>
+
+        <!-- Page Title Card -->
+        <section class="glass-card-display hero-introduction">
+            <div class="card-header-centered">
+                <i class="card-icon-primary fas fa-brain"></i>
+                <h2>Planning System v5.0</h2>
+            </div>
+            <p class="hero-description">
+                Pure autonomous planning with Tier 0 Governance validation, Knowledge Graph reasoning, and AST-based impact analysis. 
+                Enterprise-grade plans with zero human intervention across 10 sophisticated phases.
+            </p>
+            <div class="hero-stats">
+                <span class="stat-pill">10 Execution Phases</span>
+                <span class="stat-pill">100% Autonomous</span>
+                <span class="stat-pill">Tier 0 Governance</span>
+            </div>
+        </section>
+        
+        <!-- Content Section -->
+        <article class="glass-card-display animation-t1">
             <p class="btn-hero-story">
                 The Planning System represents a paradigm shift from guided workflows to <strong>fully autonomous planning</strong>. 
                 By integrating <strong>Tier 0 Governance Validation</strong>, <strong>Knowledge Graph reasoning</strong>, and 

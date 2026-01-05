@@ -35,29 +35,36 @@ button, a, input, select, textarea, [role="button"] {
     <link rel="stylesheet" href="../assets/css/intentional-classes.css">
 </head>
 <body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-    
-    <!-- Breadcrumb Navigation (Top) -->
-    <nav class="breadcrumb" aria-label="Breadcrumb">
-        <a href="../index.html">Home</a>
-        <span class="breadcrumb-separator">→</span>
-        <a href="index.html">Orchestrators</a>
-        <span class="breadcrumb-separator">→</span>
-        <span class="breadcrumb-current">Execution Orchestrator</span>
-    </nav>
-    
-    <!-- Logo Header (Below Breadcrumb) -->
-    <div class="logo-header">
-        <a href="../index.html">
-            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
-        </a>
-    </div>
-    
+    <!-- Main Content -->
     <main class="container" id="main-content">
+        <!-- Hero Section with Robot Head -->
+        <div class="hero-section-wrapper">
+            <div class="hero-robot-container">
+                <a href="../index.html" title="Back to Home">
+                    <img src="../assets/images/CORTEX-logo-200.png" alt="CORTEX Robot" class="hero-robot-head"/>
+                </a>
+            </div>
+            <div class="hero-divider-line"></div>
+        </div>
+
+        <!-- Page Title Card -->
+        <section class="glass-card-display hero-introduction">
+            <div class="card-header-centered">
+                <i class="card-icon-primary fas fa-play-circle"></i>
+                <h2>Execution Orchestrator</h2>
+            </div>
+            <p class="hero-description">
+                Autonomous plan execution with phase-by-phase validation gates, automatic rollback on failure, 
+                and clear intervention options. Your approved plan, executed perfectly.
+            </p>
+            <div class="hero-stats">
+                <span class="stat-pill">Auto Execution</span>
+                <span class="stat-pill">100% Phase Gates</span>
+                <span class="stat-pill">Rollback Support</span>
+            </div>
+        </section>
+        
         <div class="glass-card">
-            <h1>Execution Orchestrator</h1>
-            <span class="badge badge-info">Autonomous</span>
-            
             <!-- Intro Description -->
             <p>
                 Once you have a plan, you need to execute it—but manually tracking which phase you're on, 

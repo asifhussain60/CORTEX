@@ -48,23 +48,35 @@ button, a, input, select, textarea, [role="button"] {
     </style>
 </head>
 <body>
-    <!-- Skip Link -->
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-    
-    <!-- Level 1 Navigation Header -->
-    <header class="glass-header">
-        <div class="header-content">
-            <nav class="header-nav" mobile-nav-optimized>
-                <a href="../index.html" class="nav-link" mobile-nav-optimized>
-                    <i class="fas fa-home pulse-glow-glass--fast"></i>
-                    <span>Home</span>
-                </a>
-            </nav>
-        </div>
-    </header>
-    
     <!-- Main Content -->
     <main class="container" id="main-content">
+        <!-- Hero Section with Robot Head -->
+        <div class="hero-section-wrapper">
+            <div class="hero-robot-container">
+                <a href="../index.html" title="Back to Home">
+                    <img src="../assets/images/CORTEX-logo-200.png" alt="CORTEX Robot" class="hero-robot-head"/>
+                </a>
+            </div>
+            <div class="hero-divider-line"></div>
+        </div>
+
+        <!-- Page Title Card -->
+        <section class="glass-card-display hero-introduction">
+            <div class="card-header-centered">
+                <i class="card-icon-primary fas fa-save"></i>
+                <h2>Git Checkpoint Orchestrator</h2>
+            </div>
+            <p class="hero-description">
+                Automatic git checkpoints at key workflow milestones with smart retention policies, trigger-based automation, 
+                and safety checks—your instant rollback safety net.
+            </p>
+            <div class="hero-stats">
+                <span class="stat-pill">Production Ready</span>
+                <span class="stat-pill">30-Day Retention</span>
+                <span class="stat-pill">Auto Triggers</span>
+            </div>
+        </section>
+        
         <!-- Main Content Card -->
         <div class="glass-card">
             <h1>Git Checkpoint Orchestrator</h1>

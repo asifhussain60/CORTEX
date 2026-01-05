@@ -35,29 +35,36 @@ button, a, input, select, textarea, [role="button"] {
     <link rel="stylesheet" href="../assets/css/intentional-classes.css">
 </head>
 <body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-    
-    <!-- Breadcrumb Navigation (Top) -->
-    <nav class="breadcrumb" aria-label="Breadcrumb">
-        <a href="../index.html">Home</a>
-        <span class="breadcrumb-separator">→</span>
-        <a href="index.html">Orchestrators</a>
-        <span class="breadcrumb-separator">→</span>
-        <span class="breadcrumb-current">TDD Mastery</span>
-    </nav>
-    
-    <!-- Logo Header (Below Breadcrumb) -->
-    <div class="logo-header">
-        <a href="../index.html">
-            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
-        </a>
-    </div>
-    
+    <!-- Main Content -->
     <main class="container" id="main-content">
+        <!-- Hero Section with Robot Head -->
+        <div class="hero-section-wrapper">
+            <div class="hero-robot-container">
+                <a href="../index.html" title="Back to Home">
+                    <img src="../assets/images/CORTEX-logo-200.png" alt="CORTEX Robot" class="hero-robot-head"/>
+                </a>
+            </div>
+            <div class="hero-divider-line"></div>
+        </div>
+
+        <!-- Page Title Card -->
+        <section class="glass-card-display hero-introduction">
+            <div class="card-header-centered">
+                <i class="card-icon-primary fas fa-vial"></i>
+                <h2>TDD Mastery</h2>
+            </div>
+            <p class="hero-description">
+                Enforced RED-GREEN-REFACTOR cycle with per-layer coverage validation. Achieve 94% reliability with comprehensive 
+                test coverage—discipline automated, mental overhead eliminated.
+            </p>
+            <div class="hero-stats">
+                <span class="stat-pill">94% Success Rate</span>
+                <span class="stat-pill">3 Mandatory Phases</span>
+                <span class="stat-pill">4 Coverage Layers</span>
+            </div>
+        </section>
+        
         <div class="glass-card">
-            <h1>TDD Mastery</h1>
-            <span class="badge badge-success">94% Success Rate</span>
-            
             <!-- Intro Description -->
             <p>
                 Writing tests first sounds great in theory, but in practice it's easy to skip or do 

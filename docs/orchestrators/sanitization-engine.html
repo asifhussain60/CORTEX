@@ -36,27 +36,37 @@ button, a, input, select, textarea, [role="button"] {
     <link rel="stylesheet" href="../assets/css/intentional-classes.css">
 </head>
 <body>
-    <!-- Skip Link -->
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-    
-    <!-- Level 1 Navigation Header -->
-    <header class="glass-header">
-        <div class="header-content">
-            <nav class="header-nav" mobile-nav-optimized>
-                <a href="../index.html" class="nav-link" mobile-nav-optimized>
-                    <i class="fas fa-home pulse-glow-glass--fast"></i>
-                    <span>Home</span>
-                </a>
-            </nav>
-        </div>
-    </header>
-    
     <!-- Main Content -->
     <main class="container" id="main-content">
+        <!-- Hero Section with Robot Head -->
+        <div class="hero-section-wrapper">
+            <div class="hero-robot-container">
+                <a href="../index.html" title="Back to Home">
+                    <img src="../assets/images/CORTEX-logo-200.png" alt="CORTEX Robot" class="hero-robot-head"/>
+                </a>
+            </div>
+            <div class="hero-divider-line"></div>
+        </div>
+
+        <!-- Page Title Card -->
+        <section class="glass-card-display hero-introduction">
+            <div class="card-header-centered">
+                <i class="card-icon-primary fas fa-cogs"></i>
+                <h2>Sanitization Engine</h2>
+            </div>
+            <p class="hero-description">
+                Modular engine architecture powering code sanitization with 5 specialized engines: AST-based analysis, 
+                transactional transformations, and build validation for safe, reliable enterprise-scale processing.
+            </p>
+            <div class="hero-stats">
+                <span class="stat-pill">5 Specialized Engines</span>
+                <span class="stat-pill">70% Code Reuse</span>
+                <span class="stat-pill">AST Progressive Parsing</span>
+            </div>
+        </section>
+        
         <!-- Main Content Card -->
         <div class="glass-card">
-            <h1>⚙️ Sanitization Engine</h1>
-            
             <!-- Intro Description -->
             <p>
                 The technical backbone of CORTEX's sanitization capabilities. Built on a modular 

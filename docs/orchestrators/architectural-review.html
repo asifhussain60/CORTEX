@@ -48,28 +48,37 @@ button, a, input, select, textarea, [role="button"] {
     </style>
 </head>
 <body>
-    <!-- Skip Link -->
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-    
-    <!-- Level 1 Navigation Header -->
-    <header class="glass-header">
-        <div class="header-content">
-            <nav class="header-nav" mobile-nav-optimized>
-                <a href="../index.html" class="nav-link" mobile-nav-optimized>
-                    <i class="fas fa-home pulse-glow-glass--fast"></i>
-                    <span>Home</span>
-                </a>
-            </nav>
-        </div>
-    </header>
-    
     <!-- Main Content -->
     <main class="container" id="main-content">
+        <!-- Hero Section with Robot Head -->
+        <div class="hero-section-wrapper">
+            <div class="hero-robot-container">
+                <a href="../index.html" title="Back to Home">
+                    <img src="../assets/images/CORTEX-logo-200.png" alt="CORTEX Robot" class="hero-robot-head"/>
+                </a>
+            </div>
+            <div class="hero-divider-line"></div>
+        </div>
+
+        <!-- Page Title Card -->
+        <section class="glass-card-display hero-introduction">
+            <div class="card-header-centered">
+                <i class="card-icon-primary fas fa-drafting-compass"></i>
+                <h2>Architectural Review</h2>
+            </div>
+            <p class="hero-description">
+                Comprehensive 6-phase architecture assessment generating 0-100 scores with letter grades for layer separation, 
+                SOLID compliance, testability, and design patterns. Detailed findings with actionable recommendations.
+            </p>
+            <div class="hero-stats">
+                <span class="stat-pill">Production Ready</span>
+                <span class="stat-pill">6 Phases</span>
+                <span class="stat-pill">0-100 Scoring</span>
+            </div>
+        </section>
+        
         <!-- Main Content Card -->
         <div class="glass-card">
-            <h1>Architectural Review Orchestrator</h1>
-            <span class="badge badge-success">Production Ready</span>
-            
             <p>
                 The Architectural Review Orchestrator performs comprehensive architecture assessment across 6 phases.
                 It generates a 0-100 architecture score with letter grades (A-F) based on layer separation, 

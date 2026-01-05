@@ -36,27 +36,37 @@ button, a, input, select, textarea, [role="button"] {
     <link rel="stylesheet" href="../assets/css/intentional-classes.css">
 </head>
 <body>
-    <!-- Skip Link -->
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-    
-    <!-- Level 1 Navigation Header (glassmorphism v4.1.0 compliant) -->
-    <header class="glass-header">
-        <div class="header-content">
-            <nav class="header-nav" mobile-nav-optimized>
-                <a href="../index.html" class="nav-link" mobile-nav-optimized>
-                    <i class="fas fa-home pulse-glow-glass--fast"></i>
-                    <span>Home</span>
-                </a>
-            </nav>
-        </div>
-    </header>
-    
     <!-- Main Content -->
     <main class="container" id="main-content">
+        <!-- Hero Section with Robot Head -->
+        <div class="hero-section-wrapper">
+            <div class="hero-robot-container">
+                <a href="../index.html" title="Back to Home">
+                    <img src="../assets/images/CORTEX-logo-200.png" alt="CORTEX Robot" class="hero-robot-head"/>
+                </a>
+            </div>
+            <div class="hero-divider-line"></div>
+        </div>
+
+        <!-- Page Title Card -->
+        <section class="glass-card-display hero-introduction">
+            <div class="card-header-centered">
+                <i class="card-icon-primary fas fa-project-diagram"></i>
+                <h2>Planning System</h2>
+            </div>
+            <p class="hero-description">
+                Transform vague feature requests into crystal-clear, executable plans with automated DoR/DoD compliance, 
+                TDD integration, and multi-phase detection. Your experienced architect in AI form.
+            </p>
+            <div class="hero-stats">
+                <span class="stat-pill">4 Core Phases</span>
+                <span class="stat-pill">100% TDD Integration</span>
+                <span class="stat-pill">DoR/DoD Validation</span>
+            </div>
+        </section>
+        
         <!-- Main Content Card -->
         <div class="glass-card">
-            <h1>Planning System</h1>
-            
             <!-- Intro Description -->
             <p>
                 Imagine planning a complex feature in minutes instead of hours, with every acceptance 

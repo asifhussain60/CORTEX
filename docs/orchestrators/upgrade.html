@@ -35,29 +35,36 @@ button, a, input, select, textarea, [role="button"] {
     <link rel="stylesheet" href="../assets/css/intentional-classes.css">
 </head>
 <body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-    
-    <!-- Breadcrumb Navigation (Top) -->
-    <nav class="breadcrumb" aria-label="Breadcrumb">
-        <a href="../index.html">Home</a>
-        <span class="breadcrumb-separator">→</span>
-        <a href="index.html">Orchestrators</a>
-        <span class="breadcrumb-separator">→</span>
-        <span class="breadcrumb-current">Upgrade Orchestrator</span>
-    </nav>
-    
-    <!-- Logo Header (Below Breadcrumb) -->
-    <div class="logo-header">
-        <a href="../index.html">
-            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="page-logo">
-        </a>
-    </div>
-    
+    <!-- Main Content -->
     <main class="container" id="main-content">
+        <!-- Hero Section with Robot Head -->
+        <div class="hero-section-wrapper">
+            <div class="hero-robot-container">
+                <a href="../index.html" title="Back to Home">
+                    <img src="../assets/images/CORTEX-logo-200.png" alt="CORTEX Robot" class="hero-robot-head"/>
+                </a>
+            </div>
+            <div class="hero-divider-line"></div>
+        </div>
+
+        <!-- Page Title Card -->
+        <section class="glass-card-display hero-introduction">
+            <div class="card-header-centered">
+                <i class="card-icon-primary fas fa-arrow-circle-up"></i>
+                <h2>Upgrade Orchestrator</h2>
+            </div>
+            <p class="hero-description">
+                Automated version upgrades with backup, compatibility checks, migration application, validation, 
+                and rollback options. Handle complex version transitions confidently.
+            </p>
+            <div class="hero-stats">
+                <span class="stat-pill">Migration Support</span>
+                <span class="stat-pill">Auto Backup</span>
+                <span class="stat-pill">100% Validation</span>
+            </div>
+        </section>
+        
         <div class="glass-card">
-            <h1>Upgrade Orchestrator</h1>
-            <span class="badge badge-info">Migration Support</span>
-            
             <!-- Intro Description -->
             <p>
                 Upgrading between CORTEX versions can be complex—configuration changes, deprecated features, 
