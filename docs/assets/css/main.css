@@ -8562,7 +8562,7 @@ h1, h2, h3, h4, h5, h6, p, span, div {
 /* Hero Section Wrapper with Robot Head */
 .hero-section-wrapper {
     position: relative;
-    margin-top: 4rem;
+    margin-top: 3rem;
     margin-bottom: -80px;
     z-index: 10;
 }
