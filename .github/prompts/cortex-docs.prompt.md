@@ -1,6 +1,6 @@
 # 🎨 CORTEX Documentation Designer - Intelligent Glassmorphism Automation
 
-**Version:** 1.1.0 | **Status:** ✅ PRODUCTION | **Type:** Holistic HTML Standardization  
+**Version:** 1.2.0 | **Status:** ✅ PRODUCTION | **Type:** Holistic HTML Standardization  
 **Author:** Asif Hussain | **Date:** January 5, 2026  
 **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
@@ -10,7 +10,12 @@
 
 **Central orchestration system for HTML glassmorphism standardization** using intelligent Python tools, Vision API, and SNOWBALL methodology. Automates design pattern application, eliminates repetitive requests, prevents duplicates, and ensures holistic consistency across CORTEX documentation.
 
-**🆕 NEW in v1.1.0:**
+**🆕 NEW in v1.2.0:**
+- ✅ **Single Next View Recommendation** - Zero multi-path confusion, highest-value snowball scoring (dependency + pattern + sequence + flow)
+- ✅ **Auto-Generated Global Scripts** - Dynamic PowerShell script creation for link integrity across all levels
+- ✅ **Parent-Child Link Fixing** - Automatic detection and repair of broken navigation/breadcrumbs
+
+**Previously in v1.1.0:**
 - ✅ Delete-Over-Fix intelligence (no duplicate creation)
 - ✅ Approved panel library auto-update (pattern recording)
 - ✅ Vision-driven granular analysis (URLs, CSS classes, visual flaws)
@@ -317,12 +322,18 @@ For Each Page:
      ./cortex-toolkit/fix-inline-styles.ps1 -Path docs/{page}.html -AutoFix
      ./cortex-toolkit/validate-color-rotation.ps1 -Path docs/{page}.html -AutoFix
      # If user approved batch: apply to 5 similar pages too
-  6. User Validates: Hard refresh + review changes
-  7. If Approved:
+  6. **Generate Global Scripts (If Structural Changes Made):**
+     If changes affect navigation/breadcrumbs/links:
+     → Auto-generate: fix-parent-child-links.ps1
+     → Analyzes: All HTML files in docs/
+     → Fixes: Parent links (← Back to), child links (→ View), breadcrumbs
+     → Validates: No broken links remain
+  7. User Validates: Hard refresh + review changes
+  8. If Approved:
      - Git commit with detailed changelog
      - **Auto-update approved panel library**
-     - Move to next page
-  8. If Not Approved:
+     - Move to SINGLE NEXT VIEW (no path confusion)
+  9. If Not Approved:
      - Iterate on specific section
      - Re-run tools with refined parameters
 ```
@@ -332,14 +343,102 @@ For Each Page:
 - ✅ Live browser feedback (http://localhost:8000)
 - ✅ Tool execution visible to user (transparency)
 - ✅ **Auto-detect standardization opportunities** (batch efficiency)
+- ✅ **Auto-generate global fix scripts** (link integrity)
 - ✅ Atomic commits per page (rollback safety)
 - ✅ User approval required (quality gate)
+- ✅ **SINGLE NEXT VIEW** recommendation (no multi-path confusion)
 
 **Progress Tracking:** `SNOWBALL-STRATEGY.md` + `approved-panels.yaml` updated after each page completion
 
 ---
 
-### 5. **Automatic Standardization Intelligence**
+### 5. **Single Next View Recommendation Algorithm**
+
+**🎯 GOAL:** Always provide ONE clear next step (no multi-path confusion) based on highest-value snowball effect.
+
+**Scoring Criteria (Weighted):**
+
+```python
+def calculate_highest_value_next_view(current_page: str) -> Dict[str, Any]:
+    """Calculate single best next view based on snowball value."""
+    
+    candidates = get_remaining_pages_in_phase()
+    scores = {}
+    
+    for page in candidates:
+        score = 0
+        reasons = []
+        
+        # 1. DEPENDENCY CHAIN (40% weight)
+        # Pages that link TO current page or FROM current page
+        if has_navigation_link_to(page, current_page):
+            score += 40
+            reasons.append(f"Child of {current_page} - user flow continuity")
+        elif has_navigation_link_from(current_page, page):
+            score += 35
+            reasons.append(f"Parent of {current_page} - breadcrumb integrity")
+        
+        # 2. PATTERN REUSE (30% weight)
+        # Pages using same approved patterns (C50, C51, C52, C53)
+        shared_patterns = get_shared_patterns(current_page, page)
+        if len(shared_patterns) > 0:
+            score += 30 * (len(shared_patterns) / 4)  # Max 4 patterns
+            reasons.append(f"Reuses {len(shared_patterns)} patterns from {current_page}")
+        
+        # 3. PHASE SEQUENCE (20% weight)
+        # Natural SNOWBALL order (Phase 16a → 16b → 16c)
+        if is_next_in_phase_sequence(current_page, page):
+            score += 20
+            reasons.append(f"Next in Phase {get_current_phase()} sequence")
+        
+        # 4. USER FLOW PRIORITY (10% weight)
+        # Most common navigation path (analytics-based)
+        if is_high_traffic_route(current_page, page):
+            score += 10
+            reasons.append(f"High-traffic navigation path")
+        
+        scores[page] = {
+            "path": page,
+            "score": round(score, 1),
+            "reason": " + ".join(reasons[:2]),  # Top 2 reasons
+            "patterns_ready": shared_patterns
+        }
+    
+    # Return highest scoring view
+    best_view = max(scores.values(), key=lambda x: x["score"])
+    return best_view
+```
+
+**Example Output:**
+
+```
+✅ CHANGES APPLIED: token-optimization/index.html
+
+🎯 RECOMMENDED NEXT VIEW: architecture/four-tier-brain.html
+
+   Reason: Child of architecture/index.html (user flow continuity) 
+           + Reuses 3 patterns (C50, C51, C53)
+   Value Score: 75.0/100
+   Patterns Ready: C50 (color rotation), C51 (tetris badges), C53 (panel wrapping)
+   
+   Open: http://localhost:8000/architecture/four-tier-brain.html
+   
+   ❓ Ready to work on this view? [Y/n]
+```
+
+**Benefits:**
+- ✅ **Zero ambiguity** - Always ONE clear next action
+- ✅ **Maximum momentum** - Leverage patterns just validated
+- ✅ **User flow integrity** - Follow natural navigation paths
+- ✅ **Phase alignment** - Stay within SNOWBALL sequence
+- ✅ **Confidence building** - High success rate (pattern reuse)
+
+**Override Capability:**
+User can always say "work on [specific page] instead" - algorithm just provides intelligent default.
+
+---
+
+### 6. **Automatic Standardization Intelligence**
 
 **Proactive Pattern Detection:**
 
@@ -454,6 +553,152 @@ Benefits:
 | `pre-commit-glassmorphism-check.ps1` | Pre-commit hook (blocks bad commits) | 0=pass, 1=block | ✅ Yes |
 
 ### **Generation & Scaffolding Tools**
+
+| Tool | Purpose | Generated Output | Auto-Run |
+|------|---------|------------------|----------|
+| `purpose-driven-designer.py` | Generate complete HTML page from spec | Full HTML file with patterns | Manual |
+| `generate-mermaid-theme.py` | Create glassmorphism Mermaid config | `mermaid-config.js` | Manual |
+| `generate-css-inventory.py` | Document all intentional classes | `CSS-INVENTORY.md` | Manual |
+
+### **🆕 Dynamic Script Generation (Auto-Created Based on Changes)**
+
+**Trigger:** When structural changes are made to any page (navigation, breadcrumbs, links)
+
+**Auto-Generated Scripts:**
+
+#### 1. **fix-parent-child-links.ps1**
+
+**Purpose:** Maintain link integrity across entire documentation hierarchy
+
+**Generated When:**
+- Page added/removed from navigation
+- Breadcrumb structure modified
+- Parent/child relationships changed
+- Level hierarchy restructured
+
+**Operations:**
+```powershell
+# Auto-generated script structure
+param(
+    [string]$Scope = "docs/",  # Target directory
+    [switch]$AutoFix,          # Apply fixes automatically
+    [switch]$DryRun            # Preview changes only
+)
+
+# 1. SCAN PHASE
+$allHtmlFiles = Get-ChildItem -Path $Scope -Recurse -Filter "*.html"
+$linkIssues = @()
+
+foreach ($file in $allHtmlFiles) {
+    # Extract navigation links
+    $parentLinks = Select-Xml -Path $file -XPath "//a[contains(@class, 'back-link')]"
+    $childLinks = Select-Xml -Path $file -XPath "//a[contains(@class, 'view-link')]"
+    $breadcrumbs = Select-Xml -Path $file -XPath "//nav[@class='breadcrumb']//a"
+    
+    # Validate each link
+    foreach ($link in ($parentLinks + $childLinks + $breadcrumbs)) {
+        $href = $link.Node.GetAttribute("href")
+        $targetExists = Test-Path (Join-Path (Split-Path $file) $href)
+        
+        if (-not $targetExists) {
+            $linkIssues += @{
+                File = $file.FullName
+                LinkType = Get-LinkType($link)
+                BrokenHref = $href
+                ExpectedHref = Calculate-CorrectHref($file, $link)
+            }
+        }
+    }
+}
+
+# 2. REPORT PHASE
+Write-Host "`n📊 LINK INTEGRITY SCAN RESULTS" -ForegroundColor Cyan
+Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor DarkGray
+
+if ($linkIssues.Count -eq 0) {
+    Write-Host "✅ All links valid - No issues found" -ForegroundColor Green
+    exit 0
+}
+
+Write-Host "⚠️  Found $($linkIssues.Count) broken links:" -ForegroundColor Yellow
+foreach ($issue in $linkIssues) {
+    Write-Host "  ❌ $($issue.File)" -ForegroundColor Red
+    Write-Host "     Type: $($issue.LinkType)" -ForegroundColor Gray
+    Write-Host "     Broken: $($issue.BrokenHref)" -ForegroundColor Red
+    Write-Host "     Fixed:  $($issue.ExpectedHref)" -ForegroundColor Green
+}
+
+# 3. FIX PHASE (if AutoFix enabled)
+if ($AutoFix) {
+    Write-Host "`n🔧 APPLYING FIXES..." -ForegroundColor Cyan
+    foreach ($issue in $linkIssues) {
+        # Replace broken href with correct href
+        (Get-Content $issue.File -Raw) -replace `
+            [regex]::Escape($issue.BrokenHref), `
+            $issue.ExpectedHref | `
+            Set-Content $issue.File -NoNewline
+        
+        Write-Host "  ✅ Fixed: $($issue.File)" -ForegroundColor Green
+    }
+    Write-Host "`n✅ All $($linkIssues.Count) links fixed!" -ForegroundColor Green
+} elseif ($DryRun) {
+    Write-Host "`n💡 Dry run complete. Use -AutoFix to apply changes." -ForegroundColor Yellow
+}
+```
+
+**Usage Examples:**
+```powershell
+# Preview what would be fixed
+./fix-parent-child-links.ps1 -DryRun
+
+# Fix all broken links automatically
+./fix-parent-child-links.ps1 -AutoFix
+
+# Fix only architecture pages
+./fix-parent-child-links.ps1 -Scope "docs/architecture/" -AutoFix
+```
+
+**Intelligence Integration:**
+```python
+# Automatically detects when script generation needed
+def has_structural_changes(modified_files: List[str]) -> bool:
+    structural_patterns = [
+        r'<nav.*?class="breadcrumb"',  # Breadcrumb changes
+        r'<a.*?class="back-link"',     # Parent link changes
+        r'<a.*?class="view-link"',     # Child link changes
+        r'data-parent=',                # Parent attribute changes
+        r'data-level=',                 # Level hierarchy changes
+    ]
+    
+    for file in modified_files:
+        content = read_file(file)
+        for pattern in structural_patterns:
+            if re.search(pattern, content):
+                return True
+    return False
+
+# Auto-generate and run script
+if has_structural_changes(git_diff_files()):
+    print("🔍 Structural changes detected - generating link integrity script...")
+    generate_script(
+        template="fix-parent-child-links.ps1.template",
+        output="cortex-toolkit/fix-parent-child-links.ps1",
+        scope=detect_affected_scope()
+    )
+    run_script("cortex-toolkit/fix-parent-child-links.ps1", autofix=True)
+    print("✅ Link integrity validated across all levels")
+```
+
+**Generated Script Lifecycle:**
+1. ⚡ **Trigger:** Structural change detected during page refinement
+2. 🔨 **Generate:** Create PowerShell script with detected scope
+3. 🧪 **Dry Run:** Show preview of fixes (30 seconds)
+4. ✅ **User Approval:** Confirm fixes look correct
+5. 🚀 **Execute:** Apply fixes with `--autofix` flag
+6. 📊 **Report:** Display before/after validation results
+7. 🗑️ **Cleanup:** Archive script to `cortex-toolkit/generated/` (optional reuse)
+
+---
 
 | Tool | Purpose | Templates | Output |
 |------|---------|-----------|--------|
@@ -742,15 +987,35 @@ if user_approval:
     # 5. Commit page
     git_commit(f"Phase 16a: Refine {X} - {', '.join(issues)}")
     
-    # 6. Update SNOWBALL-STRATEGY.md
+    # 6. Generate global fix scripts (if structural changes)
+    if has_structural_changes(page="X.html"):
+        generate_global_fix_script(
+            script_name="fix-parent-child-links.ps1",
+            scope="docs/",
+            operations=["parent_links", "child_links", "breadcrumbs"]
+        )
+        run_script("fix-parent-child-links.ps1", autofix=True)
+    
+    # 7. Update SNOWBALL-STRATEGY.md
     update_snowball_progress(page="X.html", status="COMPLETE")
     
-    # 7. Auto-update approved panel library
+    # 8. Auto-update approved panel library
     update_approved_panel_library(page="X.html", patterns_used=["C50", "C51", "C53"])
     
-    # 8. Move to next page
-    next_page = get_next_snowball_page()
-    print(f"🎯 Next page: {next_page}")
+    # 9. Recommend SINGLE NEXT VIEW (high-value snowball)
+    next_view = calculate_highest_value_next_view(
+        current_page="X.html",
+        criteria=[
+            "dependency_chain",  # Pages that depend on current
+            "pattern_reuse",     # Pages with same patterns
+            "phase_sequence",    # Natural order in SNOWBALL
+            "user_flow",         # Most common navigation path
+        ]
+    )
+    print(f"\n🎯 RECOMMENDED NEXT VIEW: {next_view['path']}")
+    print(f"   Reason: {next_view['reason']}")
+    print(f"   Value Score: {next_view['score']}/100")
+    print(f"   Open: http://localhost:8000/{next_view['path']}")
 else:
     # 5. Iterate on specific section
     section = user_specifies_section()
@@ -1327,13 +1592,16 @@ feat(ui): {Change description} ({N} pages)
 SCOPE:
 - Files changed: {list}
 - Strategy: {targeted/script-driven/regenerate}
-- Complexity: {score}
+1. Apply changes
+2. **Generate global fix scripts** (if structural changes detected)
+3. Print: "✅ Changes applied. Refresh http://localhost:8000/{page}.html"
+4. Wait for user approval
+5. If approved: 
+   - Commit with detailed changelog
+   - **RECOMMEND SINGLE NEXT VIEW** (no multi-path confusion)
+6. If not approved: iterate on specific section
 
-VALIDATION:
-- {tool1}: PASSED
-- {tool2}: PASSED
-
-STANDARD UPDATES:
+**Enforcement:** SNOWBALL strategy mandates live validation + focused progression.
 - {standard}: v{version}
 - {pattern}: Added/Modified
 ```
@@ -1361,14 +1629,31 @@ STANDARD UPDATES:
 
 **User says:** → **Intelligence does:**
 
-| User Input | Intelligence Action | Tools Used | Result |
-|------------|---------------------|------------|--------|
-| "Fix hero on X.html" | Find all Level 1 pages → Apply C52 to all | `page-refresh-tool.py` | 8 pages updated |
-| "Colorize cards" | Detect monotone cards → Apply C50 rotation | `validate-color-rotation.ps1` | Pattern applied site-wide |
-| "Standardize panels" | Find unwrapped sections → Apply C53 | `validate-panel-wrapping.ps1` | 23 sections wrapped |
-| "This page looks broken" | Calculate complexity (67) → Regenerate | `purpose-driven-designer.py` | Fresh page created |
-| "Review X.html" | Auto-analyze → Report issues + recommendations | Multiple validators | Proactive detection |
-| "Continue Phase 16a" | Load SNOWBALL state → Resume at next page | `SNOWBALL-STRATEGY.md` | Seamless continuation |
+| User Input | Intelligence Action | Tools Used | Next View Recommendation |
+|------------|---------------------|------------|--------------------------|
+| "Fix hero on X.html" | Find all Level 1 pages → Apply C52 to all | `page-refresh-tool.py` | → `Y.html` (child with same pattern, score: 75/100) |
+| "Colorize cards" | Detect monotone cards → Apply C50 rotation | `validate-color-rotation.ps1` | → Next in sequence with cards (score: 68/100) |
+| "Standardize panels" | Find unwrapped sections → Apply C53 | `validate-panel-wrapping.ps1` | → Sibling page in same category (score: 82/100) |
+| "This page looks broken" | Calculate complexity (67) → Regenerate | `purpose-driven-designer.py` | → High-traffic child page (score: 90/100) |
+| "Review X.html" | Auto-analyze → Report issues + recommendations | Multiple validators | → Best pattern-match page (score: 70/100) |
+| "Continue Phase 16a" | Load SNOWBALL state → Resume at highest-value view | `SNOWBALL-STRATEGY.md` | → **SINGLE NEXT VIEW** calculated (score shown) |
+
+**🆕 Single Next View Output Format:**
+```
+✅ CHANGES APPLIED: architecture/index.html
+
+🎯 RECOMMENDED NEXT VIEW: architecture/four-tier-brain.html
+
+   Reason: Child of architecture/index.html + Reuses 3 patterns (C50, C51, C53)
+   Value Score: 75.0/100
+   Patterns Ready: C50, C51, C53
+   
+   Open: http://localhost:8000/architecture/four-tier-brain.html
+   
+   ❓ Ready to work on this view? [Y/n]
+```
+
+**Override:** User can always specify different page - algorithm provides intelligent default only.
 
 ---
 
@@ -1386,10 +1671,14 @@ STANDARD UPDATES:
 2. **Detect scope** (similar pages)
 3. **Choose strategy** (targeted/script-driven/regenerate)
 4. **Execute with tools** (Python/PowerShell automation)
-5. **Validate holistically** (run compliance suite)
-6. **Commit atomically** (detailed changelog)
+5. **Generate global scripts** (if structural changes detected)
+6. **Validate holistically** (run compliance suite)
+7. **Commit atomically** (detailed changelog)
+8. **Recommend SINGLE next view** (highest-value snowball score)
 
-**Your goal:** Eliminate repetitive work, standardize holistically, maximize tool usage, and deliver consistent glassmorphism excellence.
+**Your goal:** Eliminate repetitive work, standardize holistically, maximize tool usage, provide focused progression, and deliver consistent glassmorphism excellence.
 
 **Version History:**
-- v1.0.0: Initial release - Intelligent automation framework for HTML standardization
+- **v1.2.0** (2026-01-05): Single next view recommendation algorithm + auto-generated global link fixing scripts
+- **v1.1.0** (2026-01-05): Delete-over-fix intelligence + approved panel library + Vision API granular details
+- **v1.0.0** (2026-01-04): Initial release - Intelligent automation framework for HTML standardization
