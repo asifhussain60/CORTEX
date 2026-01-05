@@ -9,6 +9,7 @@ checks for patterns in past requests, and routes to the most appropriate special
 """
 
 import re
+from pathlib import Path
 from typing import List, Dict, Any, Optional, Tuple
 from .base_agent import BaseAgent, AgentRequest, AgentResponse
 from .agent_types import (
@@ -1026,10 +1027,11 @@ class IntentRouter(BaseAgent):
             return self._handle_regular_routing(request)
         
         try:
-            # Extract context from request
+            # Extract context from request (compute cortex_root dynamically)
+            cortex_root = Path(__file__).resolve().parents[2]
             context = {
                 'current_file': request.metadata.get('current_file'),
-                'workspace_root': request.metadata.get('workspace_root', Path(CORTEX_ROOT) / ""),
+                'workspace_root': request.metadata.get('workspace_root', str(cortex_root)),
                 'conversation_id': request.conversation_id
             }
             

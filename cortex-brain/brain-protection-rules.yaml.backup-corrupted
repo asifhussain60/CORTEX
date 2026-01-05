@@ -1,0 +1,430 @@
+# CORTEX Brain Protection Rules (SKULL)
+# Strategic Knowledge & Universal Lifecycle Laws
+#
+# These rules protect CORTEX's architectural integrity and prevent
+# common failure patterns identified through lessons learned.
+#
+# Version: 5.0 (CORTEX v5 Universal Pattern Integration)
+# Author: Asif Hussain
+# Date: January 4, 2026
+
+schema_version: "5.0"
+
+# SKULL Rule Categories
+categories:
+  - development_workflow
+  - architecture_integrity
+  - quality_gates
+  - orchestration_lifecycle
+  - security_privacy
+
+# === ORCHESTRATION LIFECYCLE RULES (NEW - CORTEX v5 Universal Pattern) ===
+
+rules:
+  - rule_id: SETUP_VERIFICATION
+    category: orchestration_lifecycle
+    severity: blocked
+    name: "Phase -2: Setup Verification Mandatory"
+    description: |
+      ALL orchestrators MUST run Phase -2 setup verification before execution.
+      This prevents false positives and ensures dependencies are ACTUALLY complete.
+    enforcement:
+      trigger: "orchestrator_execution_start"
+      action: "block_if_verification_fails"
+    validation:
+      - "Dependencies must pass implementation tests (not just file existence)"
+      - "False positive detection must run"
+      - "VSCode cache state must be checked"
+      - "Governance compliance must be validated"
+    implementation:
+      middleware: "src.orchestrators.middleware.setup_verification.SetupVerifier"
+      hook: "pre_execution"
+      priority: 1
+    examples:
+      pass:
+        - "C50-03 verifies C50-00C tests ACTUALLY pass (pytest execution)"
+        - "Planning v5 detects broken dependency file (import test fails)"
+      fail:
+        - "Orchestrator starts without running SetupVerifier"
+        - "Dependency file exists but broken (false positive not detected)"
+
+  - rule_id: TEARDOWN_REFACTOR
+  category: orchestration_lifecycle
+  severity: blocked
+  name: "Phase N+1: Teardown + REFACTOR + Commit Mandatory"
+  description: |
+    ALL orchestrators MUST run Phase N+1 teardown after execution.
+    This ensures code cleanup and atomic git commits follow /cortex-git-commit pattern.
+  
+  enforcement:
+    trigger: "orchestrator_execution_complete"
+    action: "block_if_refactor_fails"
+  
+  validation:
+    - "Whole-file REFACTOR must run (remove unused imports, orphaned code)"
+    - "All modified files must be refactored"
+    - "Git commit must follow /cortex-git-commit pattern"
+    - "Commit message must include orchestrator name + phase summary"
+  
+  implementation:
+    middleware: "src.orchestrators.middleware.teardown_refactor.TeardownRefactor"
+    hook: "post_execution"
+    priority: 30
+  
+  examples:
+    pass:
+      - "Orchestrator completes → REFACTOR runs → Git commit with Co-authored-by"
+      - "5 files modified → All refactored → Atomic commit"
+    fail:
+      - "Orchestrator completes but no REFACTOR cycle"
+      - "Git commit without /cortex-git-commit pattern"
+
+  - rule_id: RUNTIME_GOVERNANCE
+  category: orchestration_lifecycle
+  severity: blocked
+  name: "Runtime Governance Enforcement (Gap 2 Remediation)"
+  description: |
+    Governance validation must occur at RUNTIME (not just Phase -1).
+    SKULL rules must be enforced at phase start, operations, and completion.
+  
+  enforcement:
+    trigger: "phase_start | operation_execution | phase_complete"
+    action: "block_if_governance_violated"
+  
+  validation:
+    - "Governance checkpoints must fire at phase boundaries"
+    - "Audit trail must log all governance decisions"
+    - "SKULL rule violations must block execution"
+  
+  implementation:
+    middleware: "src.orchestrators.middleware.governance_checkpoint.GovernanceCheckpoint"
+    hooks:
+      - name: "pre_execution"
+        priority: 20
+      - name: "post_execution"
+        priority: 20
+    audit_log: "tracking/governance-audit.jsonl"
+  
+  examples:
+    pass:
+      - "Phase 2 starts → Governance checkpoint validates TDD_ENFORCEMENT → Passes"
+      - "PLANNING_ISOLATION violated → Execution blocked → Audit logged"
+    fail:
+      - "Phase executes without governance checkpoint"
+      - "Governance violation not logged to audit trail"
+
+---
+
+# === DEVELOPMENT WORKFLOW RULES ===
+
+  - rule_id: TDD_ENFORCEMENT
+  category: development_workflow
+  severity: blocked
+  name: "Test-Driven Development Mandatory"
+  description: |
+    Tests MUST be written BEFORE implementation (RED → GREEN → REFACTOR).
+    This prevents untested code from entering the codebase.
+  
+  enforcement:
+    trigger: "code_change"
+    action: "block_if_no_test_first"
+  
+  validation:
+    - "Test file must exist before implementation file"
+    - "Test must fail initially (RED phase)"
+    - "Implementation makes test pass (GREEN phase)"
+    - "REFACTOR phase removes code smells"
+  
+  examples:
+    pass:
+      - "test_feature.py created → RED → feature.py created → GREEN → REFACTOR"
+    fail:
+      - "feature.py created without test_feature.py"
+      - "Test never fails (not actually testing anything)"
+
+  - rule_id: INCREMENTAL_PLAN_GENERATION
+  category: development_workflow
+  severity: warning
+  name: "Incremental Planning Enforced"
+  description: |
+    Plans should be generated incrementally, not all at once.
+    This allows for course correction and user feedback.
+  
+  enforcement:
+    trigger: "plan_generation"
+    action: "warn_if_monolithic"
+  
+  validation:
+    - "Plan should have logical phases/milestones"
+    - "Each phase should have clear exit criteria"
+    - "User checkpoints between phases"
+
+  - rule_id: HOLISTIC_DISCOVERY
+  category: development_workflow
+  severity: blocked
+  name: "Search Before Create (Prevent Duplication)"
+  description: |
+    MUST search workspace for existing implementations before creating new files.
+    This prevents duplicate code and orphaned implementations.
+  
+  enforcement:
+    trigger: "file_creation"
+    action: "block_if_duplicate_exists"
+  
+  validation:
+    - "Semantic search must run before file creation"
+    - "Existing similar files must be reviewed"
+    - "Justification required if creating despite duplicates"
+  
+  examples:
+    pass:
+      - "Search 'user authentication' → Found auth.py → Extend instead of create"
+    fail:
+      - "Create auth_new.py without searching for existing auth implementations"
+
+---
+
+# === ARCHITECTURE INTEGRITY RULES ===
+
+  - rule_id: PLANNING_ISOLATION
+  category: architecture_integrity
+  severity: blocked
+  name: "Planning Commands Create Plans ONLY"
+  description: |
+    When user says 'plan', ONLY create plan structure. NEVER implement.
+    This prevents scope creep and ensures user review before execution.
+  
+  enforcement:
+    trigger: "pattern_match:^(plan|create a plan).*$"
+    action: "block_if_implementation_detected"
+  
+  validation:
+    - "Planning command → Create plan folder + files"
+    - "NO code implementation during planning"
+    - "User must explicitly approve plan before execution"
+  
+  examples:
+    pass:
+      - "'plan user auth' → Creates plan folder with 00-user-auth.md"
+    fail:
+      - "'plan user auth' → Directly implements auth.py"
+
+  - rule_id: GIT_ISOLATION
+  category: architecture_integrity
+  severity: blocked
+  name: "CORTEX Code Never in User Repos"
+  description: |
+    CORTEX implementation code MUST stay in CORTEX repo.
+    User repos get ONLY generated artifacts (plans, reports, configs).
+  
+  enforcement:
+    trigger: "git_commit"
+    action: "block_if_cortex_code_in_user_repo"
+  
+  validation:
+    - "src/orchestrators/* → Only in CORTEX repo"
+    - "User repo commits → Only artifacts (*.md, *.json, *.yaml)"
+  
+  examples:
+    pass:
+      - "CORTEX repo: Commit orchestrator code"
+      - "User repo: Commit generated plan + report"
+    fail:
+      - "User repo: Commit planning_orchestrator_v5.py"
+
+  - rule_id: DOCUMENT_ORGANIZATION_ENFORCEMENT
+  category: architecture_integrity
+  severity: warning
+  name: "No Root-Level Documents"
+  description: |
+    Documents MUST be organized in cortex-brain/documents/{category}/.
+    This prevents workspace clutter and improves discoverability.
+  
+  enforcement:
+    trigger: "document_creation"
+    action: "warn_if_root_level"
+  
+  validation:
+    - "Reports → cortex-brain/documents/reports/"
+    - "Analysis → cortex-brain/documents/analysis/"
+    - "Summaries → cortex-brain/documents/summaries/"
+  
+  examples:
+    pass:
+      - "cortex-brain/documents/reports/gap-analysis.md"
+    fail:
+      - "gap-analysis.md" (root level)
+
+---
+
+# === QUALITY GATES RULES ===
+
+  - rule_id: PHASE_ACCEPTANCE_CRITERIA
+  category: quality_gates
+  severity: blocked
+  name: "Phase-Level DoR/DoD Validation (Gap 1 Remediation)"
+  description: |
+    Phases MUST have Definition of Ready (DoR) and Definition of Done (DoD).
+    DoR blocks phase start if not met. DoD blocks phase completion if not met.
+  
+  enforcement:
+    trigger: "phase_start | phase_complete"
+    action: "block_if_criteria_not_met"
+  
+  validation:
+    - "DoR: dependencies_met, resources_available, false_positive_check"
+    - "DoD: deliverables_created, tests_passing, refactor_complete"
+  
+  implementation:
+    methods:
+      - "validate_phase_dor(phase_number)"
+      - "validate_phase_dod(phase_number)"
+    hooks:
+      - name: "pre_execution"
+        priority: 15
+      - name: "post_execution"
+        priority: 5
+  
+  examples:
+    pass:
+      - "Phase 2 DoR met → Phase starts"
+      - "Phase 2 DoD not met → Phase completion blocked"
+    fail:
+      - "Phase starts without DoR validation"
+      - "Phase completes with failing tests (DoD not enforced)"
+
+  - rule_id: EPIC_ACCEPTANCE_CRITERIA
+  category: quality_gates
+  severity: blocked
+  name: "Epic-Level Production Readiness (Gap 3 Remediation)"
+  description: |
+    Epics MUST have production readiness checklist validated before completion.
+    Single source of truth for 'system is production ready'.
+  
+  enforcement:
+    trigger: "epic_completion"
+    action: "block_if_not_production_ready"
+  
+  validation:
+    - "All 130 acceptance criteria passed"
+    - "Test coverage ≥80%"
+    - "15-item production readiness checklist validated"
+    - "Epic acceptance tracker updated"
+  
+  implementation:
+    validator: "src.orchestrators.planning.epic_acceptance_validator.EpicAcceptanceValidator"
+    hook: "post_execution"
+    priority: 25
+    condition: "orchestrator_type == 'planning' AND plan_type == 'epic'"
+  
+  examples:
+    pass:
+      - "Epic complete → 130 criteria validated → Production ready"
+    fail:
+      - "Epic marked complete with 15% test coverage"
+
+  - rule_id: TEST_COVERAGE_MINIMUM
+  category: quality_gates
+  severity: warning
+  name: "Minimum Test Coverage (80%)"
+  description: |
+    New code MUST maintain ≥80% test coverage.
+    Below 80% triggers warning but doesn't block (can be overridden).
+  
+  enforcement:
+    trigger: "code_change"
+    action: "warn_if_coverage_below_80"
+  
+  validation:
+    - "Line coverage ≥80%"
+    - "Branch coverage ≥70%"
+    - "Critical paths 100% covered"
+
+---
+
+# === SECURITY & PRIVACY RULES ===
+
+  - rule_id: SENSITIVE_DATA_DETECTION
+  category: security_privacy
+  severity: blocked
+  name: "No Sensitive Data in Commits"
+  description: |
+    MUST detect and block commits containing sensitive data.
+    API keys, passwords, PII must be sanitized before commit.
+  
+  enforcement:
+    trigger: "git_commit"
+    action: "block_if_sensitive_data_detected"
+  
+  patterns:
+    - regex: "[A-Z0-9]{20,}" # API keys
+    - regex: "password\\s*=\\s*['\"].*['\"]" # Hardcoded passwords
+    - regex: "\\b\\d{3}-\\d{2}-\\d{4}\\b" # SSN
+    - regex: "\\b\\d{16}\\b" # Credit card numbers
+  
+  examples:
+    pass:
+      - "Commit without API keys"
+      - "Secrets stored in environment variables"
+    fail:
+      - "Commit with API_KEY = 'sk-ABCD1234...'"
+
+  - rule_id: PII_SANITIZATION
+  category: security_privacy
+  severity: blocked
+  name: "PII Must Be Sanitized in Reports"
+  description: |
+    Reports and logs MUST NOT contain personally identifiable information.
+    Use sanitization orchestrator before sharing.
+  
+  enforcement:
+    trigger: "report_generation"
+    action: "block_if_pii_detected"
+  
+  validation:
+    - "Names → [REDACTED_NAME]"
+    - "Emails → user@[DOMAIN_REDACTED]"
+    - "Paths → /Users/[REDACTED]/..."
+
+---
+
+# Governance Settings
+governance:
+  enforcement_level: "strict" # strict | permissive | audit_only
+  
+  override_allowed: false # Cannot override blocked rules
+  
+  audit_logging:
+    enabled: true
+    log_path: "tracking/governance-audit.jsonl"
+    track_violations: true
+    track_overrides: false
+  
+  notification:
+    enabled: true
+    channels:
+      - "console"
+      - "log_file"
+
+# Rule Priority (Higher = enforced first)
+priority_order:
+  1: SETUP_VERIFICATION  # Phase -2 runs first
+  2: RUNTIME_GOVERNANCE  # Governance throughout execution
+  3: TDD_ENFORCEMENT  # Tests before implementation
+  4: PLANNING_ISOLATION  # Planning never implements
+  5: PHASE_ACCEPTANCE_CRITERIA  # DoR/DoD validation
+  6: GIT_ISOLATION  # Code stays in CORTEX repo
+  7: TEARDOWN_REFACTOR  # Phase N+1 runs last
+  8: EPIC_ACCEPTANCE_CRITERIA  # Final validation
+  9: SENSITIVE_DATA_DETECTION  # Security check before commit
+  10: HOLISTIC_DISCOVERY  # Search before create
+
+---
+
+# Version History
+# v5.0 (2026-01-04): Added CORTEX v5 Universal Pattern (Phase -2, Phase N+1, Runtime Governance)
+# v4.0 (2026-01-03): Added Gap Remediation rules (Phase AC, Runtime Governance, Epic AC)
+# v3.0 (2025-12-15): Added TDD, Planning Isolation, Git Isolation
+# v2.0 (2025-11-20): Initial SKULL framework
+
+# Copyright © 2025-2026 Asif Hussain. All rights reserved.

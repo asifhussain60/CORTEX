@@ -1,0 +1,368 @@
+# CORTEX v5.0 Remediation Epic - Python-Based Autonomous Orchestrator Manifest
+# Version: 6.0.0 | Created: January 5, 2026 | Author: Asif Hussain
+# Architecture: 100% Python autonomous execution via terminal invocation
+
+epic_metadata:
+  epic_id: cortex-v5-remediation-epic
+  epic_name: "CORTEX 5.0 Architecture Enhancement & Remediation"
+  version: "6.0.0"
+  created: "2026-01-05"
+  author: "Asif Hussain"
+  status: planning
+  execution_mode: autonomous_python
+  
+  # Epic Objectives
+  objectives:
+    primary: "Complete CORTEX 5.0 transition to Python-based autonomous orchestrators"
+    secondary:
+      - "Eliminate all markdown-based workflow execution"
+      - "Implement Master Orchestrator task tracking system"
+      - "Create auto-refreshing HTML plan viewers"
+      - "Establish terminal-based Python invocation as standard"
+  
+  # Success Criteria
+  success_criteria:
+    - "All orchestrators execute via python3 -m src.main invocation"
+    - "Master Orchestrator manages todo/task lists"
+    - "Zero markdown files used for workflow execution"
+    - "Plan viewers auto-refresh with progress updates"
+    - "All phases tracked in JSON with real-time updates"
+
+# Python Orchestrator Architecture
+orchestrator_architecture:
+  entry_point: "src/main.py"
+  invocation_pattern: "python3 -m src.main \"{request}\" --format markdown"
+  execution_mode: terminal_based
+  routing: master_orchestrator
+  
+  # Task Management System
+  task_tracking:
+    enabled: true
+    storage: "tracking/task-registry.json"
+    todo_manager: "src/orchestrators/master/todo_manager.py"
+    features:
+      - "Create, update, complete tasks"
+      - "Priority-based sorting"
+      - "Dependency tracking"
+      - "Progress percentage calculation"
+      - "Real-time JSON updates"
+  
+  # Progress Tracking
+  progress_tracking:
+    storage: "tracking/progress-tracker.json"
+    update_frequency: "per_phase_completion"
+    fields:
+      - "epic_id"
+      - "overall_progress"
+      - "phases_complete"
+      - "total_phases"
+      - "current_phase"
+      - "status"
+      - "last_updated"
+  
+  # Plan Viewer Configuration
+  plan_viewer:
+    file: "plan-viewer.html"
+    template: "templates/plan-viewer/plan-viewer-template.html"
+    css_theme: "templates/plan-viewer/glassmorphism-theme.css"
+    generator: "templates/plan-viewer/generate-plan-viewer.py"
+    auto_refresh: true
+    refresh_interval: 5  # seconds
+    features:
+      - "Real-time progress tracking"
+      - "Phase status visualization"
+      - "Task list display"
+      - "Dependency graph"
+      - "Glassmorphism design standard v4.2.9"
+    regeneration:
+      command: "python3 -m templates.plan-viewer.generate-plan-viewer --plan-dir {plan_dir}"
+      trigger: "After CSS theme updates or metadata changes"
+      applies_to: "All active plans when using --regenerate-all"
+
+# Epic Phases (Python Orchestrator-Based)
+phases:
+  - phase_id: "P01"
+    name: "Master Orchestrator Task Management"
+    type: autonomous_python
+    script: "scripts/phase_01_master_orchestrator_tasks.py"
+    duration: "3 days"
+    priority: P0_CRITICAL
+    status: planning
+    description: "Add todo/task list capability to Master Orchestrator"
+    deliverables:
+      - "src/orchestrators/master/todo_manager.py"
+      - "tracking/task-registry.json schema"
+      - "Task CRUD operations"
+      - "Progress calculation"
+    dependencies: []
+    
+  - phase_id: "P02"
+    name: "Planning Orchestrator v6 - Pure Python"
+    type: autonomous_python
+    script: "scripts/phase_02_planning_orchestrator_v6.py"
+    duration: "4 days"
+    priority: P0_CRITICAL
+    status: planning
+    description: "Convert Planning Orchestrator to 100% Python autonomous execution"
+    deliverables:
+      - "src/orchestrators/planning/planning_orchestrator_v6.py"
+      - "Remove all MD-based plan templates"
+      - "Python-based plan structure generation"
+      - "Task-aware plan creation"
+    dependencies: ["P01"]
+    
+  - phase_id: "P03"
+    name: "ADO Orchestrator v3 - Python Autonomous"
+    type: autonomous_python
+    script: "scripts/phase_03_ado_orchestrator_v3.py"
+    duration: "3 days"
+    priority: P1
+    status: planning
+    description: "Upgrade ADO Orchestrator to Python autonomous execution"
+    deliverables:
+      - "src/orchestrators/ado/ado_orchestrator_v3.py"
+      - "Python-based work item generation"
+      - "Task integration"
+    dependencies: ["P01"]
+    
+  - phase_id: "P04"
+    name: "Cleanup Orchestrator v3 - Python Autonomous"
+    type: autonomous_python
+    script: "scripts/phase_04_cleanup_orchestrator_v3.py"
+    duration: "2 days"
+    priority: P1
+    status: planning
+    description: "Convert Cleanup Orchestrator to Python autonomous"
+    deliverables:
+      - "src/orchestrators/cleanup/cleanup_orchestrator_v3.py"
+      - "Python-based cleanup execution"
+      - "Task-tracked operations"
+    dependencies: ["P01"]
+    
+  - phase_id: "P05"
+    name: "Vacuum Orchestrator v3 - Python Autonomous"
+    type: autonomous_python
+    script: "scripts/phase_05_vacuum_orchestrator_v3.py"
+    duration: "2 days"
+    priority: P1
+    status: planning
+    description: "Convert Vacuum Orchestrator to Python autonomous"
+    deliverables:
+      - "src/orchestrators/vacuum/vacuum_orchestrator_v3.py"
+      - "Python-based deep cleanup"
+      - "Task integration"
+    dependencies: ["P01"]
+    
+  - phase_id: "P06"
+    name: "Investigation Orchestrator v3 - Python Autonomous"
+    type: autonomous_python
+    script: "scripts/phase_06_investigation_orchestrator_v3.py"
+    duration: "3 days"
+    priority: P1
+    status: planning
+    description: "Convert Investigation Orchestrator to Python autonomous"
+    deliverables:
+      - "src/orchestrators/investigation/investigation_orchestrator_v3.py"
+      - "Python-based root cause analysis"
+      - "Task-tracked investigations"
+    dependencies: ["P01"]
+    
+  - phase_id: "P07"
+    name: "Sanitization Orchestrator v3 - Python Autonomous"
+    type: autonomous_python
+    script: "scripts/phase_07_sanitization_orchestrator_v3.py"
+    duration: "2 days"
+    priority: P1
+    status: planning
+    description: "Convert Sanitization Orchestrator to Python autonomous"
+    deliverables:
+      - "src/orchestrators/sanitization/sanitization_orchestrator_v3.py"
+      - "Python-based PII/secret removal"
+      - "Task integration"
+    dependencies: ["P01"]
+    
+  - phase_id: "P08"
+    name: "TDD Orchestrator v3 - Python Autonomous"
+    type: autonomous_python
+    script: "scripts/phase_08_tdd_orchestrator_v3.py"
+    duration: "3 days"
+    priority: P1
+    status: planning
+    description: "Convert TDD Orchestrator to Python autonomous"
+    deliverables:
+      - "src/orchestrators/tdd/tdd_orchestrator_v3.py"
+      - "Python-based RED→GREEN→REFACTOR"
+      - "Task-tracked TDD cycles"
+    dependencies: ["P01"]
+    
+  - phase_id: "P09"
+    name: "Refinement Orchestrator v3 - Python Autonomous"
+    type: autonomous_python
+    script: "scripts/phase_09_refinement_orchestrator_v3.py"
+    duration: "3 days"
+    priority: P2
+    status: planning
+    description: "Convert Refinement Orchestrator to Python autonomous"
+    deliverables:
+      - "src/orchestrators/refinement/refinement_orchestrator_v3.py"
+      - "Python-based code improvement"
+      - "Task integration"
+    dependencies: ["P01"]
+    
+  - phase_id: "P10"
+    name: "Debug Orchestrator v3 - Python Autonomous"
+    type: autonomous_python
+    script: "scripts/phase_10_debug_orchestrator_v3.py"
+    duration: "3 days"
+    priority: P2
+    status: planning
+    description: "Convert Debug Orchestrator to Python autonomous"
+    deliverables:
+      - "src/orchestrators/debug/debug_orchestrator_v3.py"
+      - "Python-based debugging"
+      - "Task-tracked debug sessions"
+    dependencies: ["P01"]
+    
+  - phase_id: "P11"
+    name: "Maintenance Orchestrator v3 - Python Autonomous"
+    type: autonomous_python
+    script: "scripts/phase_11_maintenance_orchestrator_v3.py"
+    duration: "4 days"
+    priority: P2
+    status: planning
+    description: "Convert Maintenance Orchestrator to Python autonomous"
+    deliverables:
+      - "src/orchestrators/maintenance/maintenance_orchestrator_v3.py"
+      - "Python-based 12-phase maintenance"
+      - "Task integration"
+    dependencies: ["P01"]
+    
+  - phase_id: "P12"
+    name: "Plan Viewer v3 - Task Tracking UI"
+    type: autonomous_python
+    script: "scripts/phase_12_plan_viewer_v3.py"
+    duration: "3 days"
+    priority: P1
+    status: planning
+    description: "Create modern HTML plan viewer with task tracking"
+    deliverables:
+      - "templates/plan-viewer-v3.html"
+      - "Auto-refresh every 5 seconds"
+      - "Task list visualization"
+      - "Progress bars and metrics"
+      - "Real-time JSON updates"
+    dependencies: ["P01", "P02"]
+    
+  - phase_id: "P13"
+    name: "Master Orchestrator Request Transformer"
+    type: autonomous_python
+    script: "scripts/phase_13_request_transformer.py"
+    duration: "2 days"
+    priority: P0_CRITICAL
+    status: planning
+    description: "Enhance request transformation with context enrichment"
+    deliverables:
+      - "src/orchestrators/master/request_transformer.py"
+      - "Context injection system"
+      - "Domain-aware transformations"
+    dependencies: ["P01"]
+    
+  - phase_id: "P14"
+    name: "Epic Final Validation & Testing"
+    type: autonomous_python
+    script: "scripts/phase_14_final_validation.py"
+    duration: "2 days"
+    priority: P0_CRITICAL
+    status: planning
+    description: "End-to-end testing of Python autonomous architecture"
+    deliverables:
+      - "Integration tests"
+      - "Task management validation"
+      - "Plan viewer testing"
+      - "Epic completion report"
+    dependencies: ["P01", "P02", "P03", "P04", "P05", "P06", "P07", "P08", "P09", "P10", "P11", "P12", "P13"]
+
+# Task Registry Schema
+task_registry_schema:
+  task:
+    id: "string (UUID)"
+    title: "string"
+    description: "string"
+    phase_id: "string (references phases.phase_id)"
+    status: "enum [not_started, in_progress, completed, blocked]"
+    priority: "enum [P0_CRITICAL, P1, P2, P3]"
+    created: "ISO 8601 datetime"
+    updated: "ISO 8601 datetime"
+    completed: "ISO 8601 datetime (nullable)"
+    dependencies: "array of task IDs"
+    assignee: "string (default: CORTEX)"
+    estimated_hours: "number"
+    actual_hours: "number (nullable)"
+    progress_percentage: "number (0-100)"
+
+# Progress Tracker Schema
+progress_tracker_schema:
+  epic_id: "string"
+  epic_name: "string"
+  version: "string"
+  status: "enum [planning, in_progress, completed, blocked]"
+  overall_progress: "number (0-100)"
+  phases:
+    total: "number"
+    completed: "number"
+    in_progress: "number"
+    pending: "number"
+  tasks:
+    total: "number"
+    completed: "number"
+    in_progress: "number"
+    pending: "number"
+    blocked: "number"
+  current_phase: "string (phase_id)"
+  started: "ISO 8601 datetime (nullable)"
+  completed: "ISO 8601 datetime (nullable)"
+  last_updated: "ISO 8601 datetime"
+  
+# SKULL Rules Enforcement
+skull_rules:
+  - rule: "PLANNING_ISOLATION"
+    enforcement: "Planning creates structure only, never implements"
+  - rule: "HAND_OFF_PROTOCOL"
+    enforcement: "All orchestrators invoke via terminal (python3 -m src.main)"
+  - rule: "AUTONOMOUS_ONLY"
+    enforcement: "NO markdown workflows, Python scripts only"
+  - rule: "TDD_ENFORCEMENT"
+    enforcement: "All code changes require RED→GREEN→REFACTOR"
+  - rule: "HOLISTIC_DISCOVERY"
+    enforcement: "Search before create (prevent duplicates)"
+  - rule: "TRANSFORMATION_REQUIRED"
+    enforcement: "Raw requests enriched before routing"
+
+# Execution Strategy
+execution_strategy:
+  approach: "Sequential with dependency validation"
+  start_phase: "P01"
+  checkpoint_frequency: "per_phase"
+  rollback_strategy: "Git-based with timestamped backups"
+  validation_gates:
+    - "Phase completion requires all tasks completed"
+    - "Dependencies must be satisfied before phase start"
+    - "Tests must pass before marking phase complete"
+  
+# Metrics & KPIs
+metrics:
+  brittleness_target: "< 30/100"
+  test_coverage_target: "> 80%"
+  orchestrator_readiness: "12/12 production-ready"
+  task_completion_rate: "measured per phase"
+  avg_task_duration: "tracked for estimation improvement"
+
+# References
+references:
+  architecture: "cortex-brain/documents/cortex-architecture-quick-ref.md"
+  skull_rules: "cortex-brain/brain-protection-rules.yaml"
+  master_orchestrator: "cortex-brain/config/master-orchestrator.yaml"
+  response_templates: "cortex-brain/response-templates-v4.yaml"
+  
+# Copyright
+copyright: "© 2025-2026 Asif Hussain. All rights reserved."

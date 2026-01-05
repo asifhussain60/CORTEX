@@ -78,9 +78,28 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
         config_path: Optional[str] = None,
         state_db: Optional[PlanningStateDB] = None,
         plan_id: Optional[str] = None,
-        template_dir: Optional[str] = None
+        template_dir: Optional[str] = None,
+        context: Optional[Dict[str, Any]] = None,
+        plan_type: str = "feature"
     ):
-        """Initialize Planning Orchestrator v5."""
+        """Initialize Planning Orchestrator v5.
+        
+        Args:
+            config_path: Path to configuration YAML
+            state_db: Planning state database instance
+            plan_id: Existing plan ID to resume
+            template_dir: Custom template directory
+            context: Additional context from Master Orchestrator
+            plan_type: Type of plan - 'feature' | 'epic' | 'phase' | 'sub-plan'
+        """
+        # Validate plan_type
+        valid_types = ['feature', 'epic', 'phase', 'sub-plan']
+        if plan_type not in valid_types:
+            raise ValueError(f"Invalid plan_type: {plan_type}. Must be one of {valid_types}")
+        
+        # Store plan type before super().__init__
+        self.plan_type = plan_type
+        
         # Load default config if not provided
         if config_path is None:
             config_path = "cortex-brain/config/planning-v5-default.yaml"
@@ -91,6 +110,9 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
             state_db = PlanningStateDB(db_path=db_path)
         
         super().__init__(config_path, state_db, plan_id, template_dir)
+        
+        # Store context from Master Orchestrator
+        self.master_context = context or {}
         
         # Initialize governance and knowledge graph integrations (Phase 4 enhancement)
         self.governance = GovernanceIntegrator()
@@ -387,8 +409,50 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
             return self._generate_plan(**kwargs)
         
         elif phase_number == 3:
-            # Folder Creation
-            return self._create_folder_structure(**kwargs)
+            # Folder Creation + YAML + HTML Viewer
+            artifacts = []
+            
+            # Create folder structure
+            folders = self._create_folder_structure(**kwargs)
+            artifacts.extend(folders)
+            
+            # Generate YAML plan for execution
+            user_request = kwargs.get('user_request', '')
+            feature_name = kwargs.get('feature_name', self._extract_feature_name(user_request))
+            
+            # Create kwargs without feature_name to avoid duplication
+            method_kwargs = {k: v for k, v in kwargs.items() if k != 'feature_name'}
+            yaml_path = self._generate_plan_yaml(feature_name, **method_kwargs)
+            artifacts.append(yaml_path)
+            
+            # Generate HTML plan viewer
+            html_path = self._generate_plan_viewer_html(feature_name, **method_kwargs)
+            artifacts.append(html_path)
+            
+            # Start plan server on port 8150
+            try:
+                from src.servers import start_plan_viewer
+                from pathlib import Path
+                
+                # Get plan folder
+                master_plan_filename = self._generate_master_plan_filename(feature_name)
+                folder_id_prefix = master_plan_filename.split('-')[0].lower()
+                abbreviated_name = self._abbreviate_feature_name(feature_name, max_length=22)
+                folder_name = f"{folder_id_prefix}-{abbreviated_name}"
+                plan_folder = Path(f"cortex-brain/documents/planning/active/{folder_name}")
+                
+                # Start server (reuses existing if running)
+                viewer_url = start_plan_viewer(plan_folder)
+                self.logger.info(f"🌐 Plan viewer available at: {viewer_url}")
+                
+                # Add server URL to artifacts
+                artifacts.append(f"server:{viewer_url}")
+                
+            except Exception as e:
+                self.logger.warning(f"⚠️  Failed to start plan server: {e}")
+                self.logger.info("Plan viewer HTML generated but server not started")
+            
+            return artifacts
         
         elif phase_number == 4:
             # Validation
@@ -427,42 +491,114 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
         
         return text or 'untitled-plan'
     
+    def _abbreviate_feature_name(self, feature_name: str, max_length: int = 22) -> str:
+        """
+        Abbreviate feature name to fit within length constraint.
+        
+        Args:
+            feature_name: Full feature name (kebab-case)
+            max_length: Maximum length for abbreviated name (default: 22)
+        
+        Returns:
+            Abbreviated feature name
+        
+        Examples:
+            "enterprise-python-audit-logger" → "enterprise-py-aud-log"
+            "glassmorphism-css-standardization" → "glassmorphism-css-std"
+            "oauth2-authentication-system" → "oauth2-auth-sys"
+        """
+        # Common abbreviation mapping
+        abbrev_map = {
+            'enterprise': 'ent',
+            'python': 'py',
+            'logger': 'log',
+            'audit': 'aud',
+            'implementation': 'impl',
+            'integration': 'integ',
+            'authentication': 'auth',
+            'authorization': 'authz',
+            'application': 'app',
+            'database': 'db',
+            'configuration': 'config',
+            'management': 'mgmt',
+            'development': 'dev',
+            'production': 'prod',
+            'environment': 'env',
+            'deployment': 'deploy',
+            'monitoring': 'mon',
+            'performance': 'perf',
+            'optimization': 'opt',
+            'standardization': 'std',
+            'orchestrator': 'orch',
+            'validation': 'valid',
+            'documentation': 'doc',
+            'system': 'sys',
+            'service': 'svc',
+            'interface': 'iface',
+            'component': 'comp',
+            'container': 'ctr',
+            'kubernetes': 'k8s',
+            'infrastructure': 'infra'
+        }
+        
+        # Split on hyphens and abbreviate
+        parts = feature_name.split('-')
+        abbreviated_parts = []
+        
+        for part in parts:
+            # Use abbreviation map if available
+            if part in abbrev_map:
+                abbreviated_parts.append(abbrev_map[part])
+            elif len(part) > 8:
+                # Abbreviate long words (keep first 6 chars)
+                abbreviated_parts.append(part[:6])
+            else:
+                # Keep short words full
+                abbreviated_parts.append(part)
+        
+        # Join and truncate if needed
+        abbreviated_name = '-'.join(abbreviated_parts)
+        if len(abbreviated_name) > max_length:
+            # Truncate at last hyphen before max_length
+            abbreviated_name = abbreviated_name[:max_length].rsplit('-', 1)[0]
+        
+        return abbreviated_name
+    
     def _generate_master_plan_filename(self, feature_name: str) -> str:
         """
-        Generate meaningful master plan filename.
+        Generate meaningful master plan filename with 3-char ID prefix.
+        
+        Format: [A-Z0-9]{3}-{abbreviated-name}.md
+        Total length: 3 (ID) + 1 (dash) + 20-25 (name) + 3 (.md) = 27-32 chars
         
         Args:
             feature_name: Full feature name (kebab-case)
         
         Returns:
-            Master plan filename (00-{short-name}.md, <=25 chars total)
+            Master plan filename (e.g., "A01-enterprise-audit-logger.md")
         
-        Example:
-            feature_name="glassmorphism-css-standardization"
-            returns="00-glassmorphism.md" (17 chars)
+        Examples:
+            "enterprise-python-audit-logger" → "A01-ent-py-aud-log.md"
+            "glassmorphism-css-standardization" → "A02-glassmorphism-css-std.md"
+            "oauth2-authentication-system" → "A03-oauth2-auth-sys.md"
         """
-        # Extract meaningful short name (max 22 chars to fit "00-" prefix + ".md" suffix)
-        max_name_length = 22 - 3 - 3  # 22 total - "00-" - ".md" = 16 chars
+        # Generate 3-char ID based on plan count in database
+        if hasattr(self, 'state_db') and self.state_db:
+            # Query database directly for plan count
+            cursor = self.state_db._conn.execute("SELECT COUNT(*) FROM plans")
+            plan_count = cursor.fetchone()[0]
+        else:
+            plan_count = 0
         
-        # Split on hyphens and take meaningful parts
-        parts = feature_name.split('-')
+        # ID format: A00-A99 (100 plans), then B00-B99, etc.
+        letter = chr(65 + (plan_count // 100))  # A=0-99, B=100-199, etc.
+        number = plan_count % 100
+        plan_id = f"{letter}{number:02d}"
         
-        # Strategy: Take first significant word + version/type suffix if exists
-        short_name = parts[0]
+        # Use helper method to abbreviate
+        abbreviated_name = self._abbreviate_feature_name(feature_name, max_length=22)
         
-        # Check for version/type indicators in remaining parts
-        for part in parts[1:]:
-            if part in ['v1', 'v2', 'v3', 'v4', 'v5', 'migration', 'refactor', 'system']:
-                # Add significant suffix if it fits
-                if len(short_name + '-' + part) <= max_name_length:
-                    short_name = f"{short_name}-{part}"
-                break
-        
-        # Truncate if still too long
-        if len(short_name) > max_name_length:
-            short_name = short_name[:max_name_length].rstrip('-')
-        
-        return f"00-{short_name}.md"
+        return f"{plan_id}-{abbreviated_name}.md"
     
     def _create_plan_metadata(
         self,
@@ -905,13 +1041,436 @@ Check `tracking/progress-tracker.json` for current status.
         
         return artifacts
     
+    def _generate_plan_yaml(
+        self,
+        feature_name: str,
+        **kwargs
+    ) -> str:
+        """
+        Generate master-plan.yaml for execution.
+        
+        Creates structured YAML defining phases, tasks, and acceptance criteria
+        for Python-based plan execution (not MD processing).
+        
+        Args:
+            feature_name: Feature being planned
+            **kwargs: Additional parameters
+        
+        Returns:
+            Path to generated YAML file
+        """
+        import yaml
+        from datetime import datetime
+        
+        self.logger.info("Generating plan YAML...")
+        
+        # Generate master plan filename to extract ID
+        master_plan_filename = self._generate_master_plan_filename(feature_name)
+        folder_id_prefix = master_plan_filename.split('-')[0].upper()
+        
+        # Get plan folder with correct naming
+        abbreviated_name = self._abbreviate_feature_name(feature_name, max_length=22)
+        folder_name = f"{folder_id_prefix.lower()}-{abbreviated_name}"
+        plan_dir = Path(f"cortex-brain/documents/planning/active/{folder_name}")
+        
+        # Ensure plan folder exists
+        plan_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Create plan structure based on schema
+        plan_data = {
+            'plan': {
+                'id': folder_id_prefix,
+                'type': self.plan_type,
+                'name': feature_name,
+                'title': feature_name.replace('-', ' ').title(),
+                'description': f"Implementation plan for {feature_name}",
+                
+                'metadata': {
+                    'created': datetime.now().isoformat(),
+                    'author': 'CORTEX Planning Orchestrator v5',
+                    'complexity_tier': 3,
+                    'estimated_hours': self._get_default_hours_by_type(),
+                    'plan_id': self.plan_id,
+                    'status': 'active'
+                },
+                
+                'phases': self._generate_phases_by_type(feature_name),
+                
+                'acceptance_criteria': self._get_acceptance_criteria_by_type()
+            }
+        }
+        
+        # Write YAML file
+        yaml_filename = master_plan_filename.replace('.md', '.yaml')
+        yaml_path = plan_dir / yaml_filename
+        
+        with open(yaml_path, 'w') as f:
+            yaml.dump(plan_data, f, default_flow_style=False, sort_keys=False, indent=2)
+        
+        self.logger.info(f"✅ Generated plan YAML: {yaml_path}")
+        
+        # Register as artifact
+        self.create_artifact(
+            path=str(yaml_path),
+            content=yaml_path.read_text(),
+            artifact_type="plan"
+        )
+        
+        return str(yaml_path)
+    
+    def _generate_plan_viewer_html(
+        self,
+        feature_name: str,
+        **kwargs
+    ) -> str:
+        """
+        Generate interactive HTML plan viewer with live updates.
+        
+        Creates self-contained HTML file that polls /api/plan and /api/progress
+        endpoints for real-time plan execution updates.
+        
+        Args:
+            feature_name: Feature being planned
+            **kwargs: Additional parameters
+        
+        Returns:
+            Path to generated HTML file
+        """
+        self.logger.info("Generating plan viewer HTML...")
+        
+        master_plan_filename = self._generate_master_plan_filename(feature_name)
+        plan_id = master_plan_filename.split('-')[0]
+        
+        # Get plan folder with correct naming
+        folder_id_prefix = plan_id.lower()
+        abbreviated_name = self._abbreviate_feature_name(feature_name, max_length=22)
+        folder_name = f"{folder_id_prefix}-{abbreviated_name}"
+        plan_dir = Path(f"cortex-brain/documents/planning/active/{folder_name}")
+        
+        # Ensure plan folder exists
+        plan_dir.mkdir(parents=True, exist_ok=True)
+        
+        html_content = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{plan_id} - {feature_name.replace('-', ' ').title()} - CORTEX Plan Viewer</title>
+    <style>
+        /* CORTEX 5.0 Glassmorphism Styles */
+        :root {{
+            --glass-bg: rgba(15, 23, 42, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --progress-gradient: linear-gradient(90deg, #00d4ff 0%, #a855f7 100%);
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --accent-blue: #00d4ff;
+            --accent-purple: #a855f7;
+        }}
+        
+        * {{ margin: 0; padding: 0; box-sizing: border-box; }}
+        
+        body {{
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: var(--text-primary);
+            padding: 2rem;
+            min-height: 100vh;
+            line-height: 1.6;
+        }}
+        
+        .container {{ max-width: 1400px; margin: 0 auto; }}
+        
+        .glass-panel {{
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }}
+        
+        .glass-panel:hover {{
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.15);
+        }}
+        
+        .header {{ text-align: center; margin-bottom: 3rem; }}
+        
+        .plan-id {{
+            display: inline-block;
+            background: var(--progress-gradient);
+            color: #000;
+            font-weight: 700;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }}
+        
+        .plan-title {{
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }}
+        
+        .live-indicator {{
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #10b981;
+            font-size: 0.875rem;
+            margin-top: 1rem;
+        }}
+        
+        .live-dot {{
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }}
+        
+        @keyframes pulse {{
+            0%, 100% {{ opacity: 1; }}
+            50% {{ opacity: 0.5; }}
+        }}
+        
+        .overall-progress {{ margin: 2rem 0; }}
+        
+        .progress-bar {{
+            height: 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }}
+        
+        .progress-fill {{
+            height: 100%;
+            background: var(--progress-gradient);
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 1rem;
+            color: #000;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }}
+        
+        .phase-card {{
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }}
+        
+        .phase-header {{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }}
+        
+        .phase-title {{ font-size: 1.5rem; font-weight: 600; }}
+        
+        .phase-status {{
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }}
+        
+        .status-not-started {{ background: rgba(148, 163, 184, 0.2); color: #94a3b8; }}
+        .status-in-progress {{ background: rgba(0, 212, 255, 0.2); color: #00d4ff; }}
+        .status-completed {{ background: rgba(16, 185, 129, 0.2); color: #10b981; }}
+        
+        .task-list {{ list-style: none; margin-top: 1rem; }}
+        
+        .task-item {{
+            padding: 0.75rem;
+            border-left: 3px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }}
+        
+        .task-item.completed {{
+            border-left-color: #10b981;
+            opacity: 0.7;
+        }}
+        
+        .task-item.in-progress {{
+            border-left-color: #00d4ff;
+        }}
+        
+        .meta-info {{
+            display: flex;
+            gap: 1rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header glass-panel">
+            <div class="plan-id" id="planId">{plan_id}</div>
+            <h1 class="plan-title" id="planTitle">{feature_name.replace('-', ' ').title()}</h1>
+            <div class="live-indicator">
+                <div class="live-dot"></div>
+                <span>Live Updates</span>
+            </div>
+        </div>
+        
+        <div class="glass-panel overall-progress">
+            <h2>Overall Progress</h2>
+            <div class="progress-bar">
+                <div class="progress-fill" id="overallProgress" style="width: 0%">0%</div>
+            </div>
+            <div class="meta-info">
+                <span>⏱️ <span id="estimatedHours">0</span> hours estimated</span>
+                <span>📅 Created: <span id="createdDate">-</span></span>
+            </div>
+        </div>
+        
+        <div id="phasesContainer">
+            <!-- Phases loaded dynamically -->
+        </div>
+    </div>
+    
+    <script>
+        // Fetch plan data from server
+        async function fetchPlan() {{
+            try {{
+                const response = await fetch('/api/plan');
+                const data = await response.json();
+                return data.plan;
+            }} catch (error) {{
+                console.error('Failed to fetch plan:', error);
+                return null;
+            }}
+        }}
+        
+        // Fetch progress data
+        async function fetchProgress() {{
+            try {{
+                const response = await fetch('/api/progress');
+                const data = await response.json();
+                return data;
+            }} catch (error) {{
+                console.error('Failed to fetch progress:', error);
+                return null;
+            }}
+        }}
+        
+        // Render phases
+        function renderPhases(plan, progress) {{
+            const container = document.getElementById('phasesContainer');
+            container.innerHTML = '';
+            
+            if (!plan || !plan.phases) return;
+            
+            plan.phases.forEach(phase => {{
+                const statusClass = `status-${{phase.status.replace('_', '-')}}`;
+                
+                const tasksHtml = phase.tasks.map(task => `
+                    <li class="task-item ${{task.status.replace('_', '-')}}">
+                        <span>${{task.name}}</span>
+                        <span class="phase-status ${{`status-${{task.status.replace('_', '-')}}`}}">${{task.status.replace('_', ' ')}}</span>
+                    </li>
+                `).join('');
+                
+                const phaseHtml = `
+                    <div class="glass-panel phase-card">
+                        <div class="phase-header">
+                            <h3 class="phase-title">Phase ${{phase.number}}: ${{phase.name}}</h3>
+                            <span class="phase-status ${{statusClass}}">${{phase.status.replace('_', ' ').toUpperCase()}}</span>
+                        </div>
+                        <p class="meta-info">${{phase.description || ''}}</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%">0%</div>
+                        </div>
+                        <ul class="task-list">
+                            ${{tasksHtml}}
+                        </ul>
+                        <div class="meta-info">
+                            <span>⏱️ ${{phase.estimated_hours}} hours</span>
+                            <span>📋 ${{phase.tasks.length}} tasks</span>
+                        </div>
+                    </div>
+                `;
+                
+                container.innerHTML += phaseHtml;
+            }});
+        }}
+        
+        // Update progress
+        function updateProgress(progress) {{
+            if (!progress || !progress.progress) return;
+            
+            const overallPercent = progress.progress.overall_percent || 0;
+            const overallEl = document.getElementById('overallProgress');
+            overallEl.style.width = overallPercent + '%';
+            overallEl.textContent = Math.round(overallPercent) + '%';
+        }}
+        
+        // Initialize
+        async function init() {{
+            const plan = await fetchPlan();
+            if (plan) {{
+                document.getElementById('planId').textContent = plan.id;
+                document.getElementById('planTitle').textContent = plan.title;
+                document.getElementById('estimatedHours').textContent = plan.metadata?.estimated_hours || 0;
+                document.getElementById('createdDate').textContent = 
+                    new Date(plan.metadata?.created).toLocaleDateString() || '-';
+                renderPhases(plan, {{}});
+            }}
+            
+            // Poll for updates every 2 seconds
+            setInterval(async () => {{
+                const progress = await fetchProgress();
+                updateProgress(progress);
+            }}, 2000);
+        }}
+        
+        init();
+    </script>
+</body>
+</html>
+"""
+        
+        # Write HTML file
+        html_path = plan_dir / "plan-viewer.html"
+        html_path.write_text(html_content)
+        
+        self.logger.info(f"✅ Generated plan viewer: {html_path}")
+        
+        # Register as artifact
+        self.create_artifact(
+            path=str(html_path),
+            content=html_content,
+            artifact_type="documentation"
+        )
+        
+        return str(html_path)
+    
     def _create_folder_structure(
         self,
         feature_name: str,
         **kwargs
     ) -> List[str]:
         """
-        Create plan folder structure.
+        Create plan folder structure with A## prefix matching master plan ID.
         
         Args:
             feature_name: Feature being planned
@@ -922,8 +1481,20 @@ Check `tracking/progress-tracker.json` for current status.
         """
         self.logger.info("Creating folder structure...")
         
-        plan_dir = Path(f"cortex-brain/documents/planning/active/{feature_name}")
+        # Generate master plan filename to extract ID prefix
+        master_plan_filename = self._generate_master_plan_filename(feature_name)
+        folder_id_prefix = master_plan_filename.split('-')[0].lower()  # Extract "a01" from "A01-..."
         
+        # Abbreviate feature name (reuse helper method)
+        abbreviated_name = self._abbreviate_feature_name(feature_name, max_length=22)
+        
+        # Create folder name with ID prefix: a01-enterprise-aud-log
+        folder_name = f"{folder_id_prefix}-{abbreviated_name}"
+        
+        # Create at active plans path
+        plan_dir = Path(f"cortex-brain/documents/planning/active/{folder_name}")
+        
+        # Standard folders for all plan types
         folders = [
             plan_dir / "analysis",
             plan_dir / "artifacts",
@@ -932,15 +1503,33 @@ Check `tracking/progress-tracker.json` for current status.
             plan_dir / "tracking"
         ]
         
+        # Epic-specific folders
+        if self.plan_type == "epic":
+            folders.extend([
+                plan_dir / "features",      # Nested feature plans
+                plan_dir / "integration"    # Cross-feature integration tests
+            ])
+            self.logger.info(f"📦 Creating epic-specific folders: features/, integration/")
+        
+        # Sub-plan specific folders
+        if self.plan_type == "sub-plan":
+            folders.append(plan_dir / "dependencies")  # Parent plan dependencies
+            self.logger.info(f"📦 Creating sub-plan folder: dependencies/")
+        
         for folder in folders:
             folder.mkdir(parents=True, exist_ok=True)
             # Create .gitkeep
             (folder / ".gitkeep").touch()
         
-        # Create progress tracker
+        # Create progress tracker (type-specific)
+        tracker_filename = self._get_progress_tracker_filename()
+        
         progress_content = {
             "plan_id": self.plan_id,
+            "plan_type": self.plan_type,
             "feature_name": feature_name,
+            "folder_name": folder_name,
+            "master_plan_id": folder_id_prefix.upper(),
             "created_at": datetime.now().isoformat(),
             "status": "active",
             "progress": {
@@ -950,11 +1539,399 @@ Check `tracking/progress-tracker.json` for current status.
             }
         }
         
+        # Epic-specific tracker fields
+        if self.plan_type == "epic":
+            progress_content["features"] = []  # List of child feature plan IDs
+            progress_content["integration_status"] = "not-started"
+        
         import json
-        tracker_path = plan_dir / "tracking" / "progress-tracker.json"
+        tracker_path = plan_dir / "tracking" / tracker_filename
         tracker_path.write_text(json.dumps(progress_content, indent=2))
         
+        self.logger.info(f"✅ Created folder structure: {folder_name}/ (type: {self.plan_type})")
+        
         return [str(f) for f in folders]
+    
+    def _get_progress_tracker_filename(self) -> str:
+        """Get progress tracker filename based on plan type."""
+        if self.plan_type == "epic":
+            return "epic-progress-tracker.json"
+        elif self.plan_type == "sub-plan":
+            return "sub-plan-tracker.json"
+        else:
+            return "progress-tracker.json"
+    
+    def _generate_phases_by_type(self, feature_name: str) -> List[Dict]:
+        """Generate phase structure based on plan type."""
+        if self.plan_type == 'epic':
+            # Epic: 5 phases with feature breakdown
+            return [
+                {
+                    'id': 'phase-1',
+                    'number': 1,
+                    'name': 'Epic Planning & Architecture',
+                    'description': 'Design overall epic architecture and feature breakdown',
+                    'status': 'not-started',
+                    'estimated_hours': 24,
+                    'tasks': [
+                        {
+                            'id': 'task-1-1',
+                            'name': 'Define epic scope and objectives',
+                            'description': 'Establish overall goals and success criteria',
+                            'status': 'not-started',
+                            'estimated_minutes': 120,
+                            'priority': 'critical',
+                            'dependencies': []
+                        },
+                        {
+                            'id': 'task-1-2',
+                            'name': 'Break down into features',
+                            'description': 'Identify and define constituent features',
+                            'status': 'not-started',
+                            'estimated_minutes': 240,
+                            'priority': 'critical',
+                            'dependencies': ['task-1-1']
+                        },
+                        {
+                            'id': 'task-1-3',
+                            'name': 'Design integration strategy',
+                            'description': 'Plan how features will integrate',
+                            'status': 'not-started',
+                            'estimated_minutes': 180,
+                            'priority': 'high',
+                            'dependencies': ['task-1-2']
+                        }
+                    ]
+                },
+                {
+                    'id': 'phase-2',
+                    'number': 2,
+                    'name': 'Feature Implementation',
+                    'description': 'Implement individual features in parallel',
+                    'status': 'not-started',
+                    'estimated_hours': 48,
+                    'tasks': [
+                        {
+                            'id': 'task-2-1',
+                            'name': 'Implement Feature A',
+                            'description': 'Complete first feature',
+                            'status': 'not-started',
+                            'estimated_minutes': 960,
+                            'priority': 'high',
+                            'dependencies': ['task-1-3']
+                        },
+                        {
+                            'id': 'task-2-2',
+                            'name': 'Implement Feature B',
+                            'description': 'Complete second feature',
+                            'status': 'not-started',
+                            'estimated_minutes': 960,
+                            'priority': 'high',
+                            'dependencies': ['task-1-3']
+                        }
+                    ]
+                },
+                {
+                    'id': 'phase-3',
+                    'number': 3,
+                    'name': 'Feature Integration',
+                    'description': 'Integrate all features and ensure interoperability',
+                    'status': 'not-started',
+                    'estimated_hours': 24,
+                    'tasks': [
+                        {
+                            'id': 'task-3-1',
+                            'name': 'Integrate features',
+                            'description': 'Combine features into cohesive epic',
+                            'status': 'not-started',
+                            'estimated_minutes': 480,
+                            'priority': 'critical',
+                            'dependencies': ['task-2-1', 'task-2-2']
+                        },
+                        {
+                            'id': 'task-3-2',
+                            'name': 'Integration testing',
+                            'description': 'Test feature interactions',
+                            'status': 'not-started',
+                            'estimated_minutes': 360,
+                            'priority': 'high',
+                            'dependencies': ['task-3-1']
+                        }
+                    ]
+                },
+                {
+                    'id': 'phase-4',
+                    'number': 4,
+                    'name': 'Epic Testing & Validation',
+                    'description': 'Comprehensive epic-level testing',
+                    'status': 'not-started',
+                    'estimated_hours': 16,
+                    'tasks': [
+                        {
+                            'id': 'task-4-1',
+                            'name': 'End-to-end testing',
+                            'description': 'Complete epic workflow validation',
+                            'status': 'not-started',
+                            'estimated_minutes': 480,
+                            'priority': 'critical',
+                            'dependencies': ['task-3-2']
+                        },
+                        {
+                            'id': 'task-4-2',
+                            'name': 'Performance testing',
+                            'description': 'Validate epic meets performance requirements',
+                            'status': 'not-started',
+                            'estimated_minutes': 240,
+                            'priority': 'high',
+                            'dependencies': ['task-4-1']
+                        }
+                    ]
+                },
+                {
+                    'id': 'phase-5',
+                    'number': 5,
+                    'name': 'Epic Documentation & Deployment',
+                    'description': 'Complete epic documentation and prepare for release',
+                    'status': 'not-started',
+                    'estimated_hours': 12,
+                    'tasks': [
+                        {
+                            'id': 'task-5-1',
+                            'name': 'Write epic documentation',
+                            'description': 'Comprehensive epic documentation',
+                            'status': 'not-started',
+                            'estimated_minutes': 360,
+                            'priority': 'high',
+                            'dependencies': ['task-4-2']
+                        },
+                        {
+                            'id': 'task-5-2',
+                            'name': 'Prepare deployment',
+                            'description': 'Release planning and deployment prep',
+                            'status': 'not-started',
+                            'estimated_minutes': 180,
+                            'priority': 'high',
+                            'dependencies': ['task-5-1']
+                        }
+                    ]
+                }
+            ]
+        
+        elif self.plan_type == 'phase':
+            # Phase: 2 phases for targeted work
+            return [
+                {
+                    'id': 'phase-1',
+                    'number': 1,
+                    'name': 'Phase Implementation',
+                    'description': 'Implement phase-specific work',
+                    'status': 'not-started',
+                    'estimated_hours': 12,
+                    'tasks': [
+                        {
+                            'id': 'task-1-1',
+                            'name': 'Setup phase structure',
+                            'description': 'Prepare phase environment',
+                            'status': 'not-started',
+                            'estimated_minutes': 60,
+                            'priority': 'high',
+                            'dependencies': []
+                        },
+                        {
+                            'id': 'task-1-2',
+                            'name': 'Implement phase logic',
+                            'description': 'Core phase implementation',
+                            'status': 'not-started',
+                            'estimated_minutes': 360,
+                            'priority': 'high',
+                            'dependencies': ['task-1-1']
+                        }
+                    ]
+                },
+                {
+                    'id': 'phase-2',
+                    'number': 2,
+                    'name': 'Phase Validation',
+                    'description': 'Validate and document phase work',
+                    'status': 'not-started',
+                    'estimated_hours': 8,
+                    'tasks': [
+                        {
+                            'id': 'task-2-1',
+                            'name': 'Test phase implementation',
+                            'status': 'not-started',
+                            'estimated_minutes': 240,
+                            'priority': 'high',
+                            'dependencies': ['task-1-2']
+                        },
+                        {
+                            'id': 'task-2-2',
+                            'name': 'Document phase',
+                            'status': 'not-started',
+                            'estimated_minutes': 120,
+                            'priority': 'medium',
+                            'dependencies': ['task-2-1']
+                        }
+                    ]
+                }
+            ]
+        
+        elif self.plan_type == 'sub-plan':
+            # Sub-plan: 1-2 phases for quick tactical work
+            return [
+                {
+                    'id': 'phase-1',
+                    'number': 1,
+                    'name': 'Sub-Plan Implementation',
+                    'description': 'Quick tactical implementation',
+                    'status': 'not-started',
+                    'estimated_hours': 6,
+                    'tasks': [
+                        {
+                            'id': 'task-1-1',
+                            'name': 'Implement changes',
+                            'description': 'Core sub-plan work',
+                            'status': 'not-started',
+                            'estimated_minutes': 180,
+                            'priority': 'high',
+                            'dependencies': []
+                        },
+                        {
+                            'id': 'task-1-2',
+                            'name': 'Validate changes',
+                            'description': 'Test and verify',
+                            'status': 'not-started',
+                            'estimated_minutes': 120,
+                            'priority': 'high',
+                            'dependencies': ['task-1-1']
+                        }
+                    ]
+                }
+            ]
+        
+        else:  # feature (default)
+            # Feature: 3 phases (standard workflow)
+            return [
+                {
+                    'id': 'phase-1',
+                    'number': 1,
+                    'name': 'Core Implementation',
+                    'description': 'Implement core functionality',
+                    'status': 'not-started',
+                    'estimated_hours': 16,
+                    'tasks': [
+                        {
+                            'id': 'task-1-1',
+                            'name': 'Setup project structure',
+                            'description': 'Create folders and base files',
+                            'status': 'not-started',
+                            'estimated_minutes': 30,
+                            'priority': 'high',
+                            'dependencies': [],
+                            'implementation': {
+                                'type': 'code',
+                                'language': 'python',
+                                'files': []
+                            },
+                            'validation': {
+                                'type': 'test',
+                                'files': [],
+                                'coverage_threshold': 85
+                            }
+                        },
+                        {
+                            'id': 'task-1-2',
+                            'name': 'Implement core logic',
+                            'description': 'Main implementation',
+                            'status': 'not-started',
+                            'estimated_minutes': 240,
+                            'priority': 'high',
+                            'dependencies': ['task-1-1']
+                        }
+                    ]
+                },
+                {
+                    'id': 'phase-2',
+                    'number': 2,
+                    'name': 'Testing & Validation',
+                    'description': 'Comprehensive testing',
+                    'status': 'not-started',
+                    'estimated_hours': 12,
+                    'tasks': [
+                        {
+                            'id': 'task-2-1',
+                            'name': 'Write unit tests',
+                            'status': 'not-started',
+                            'estimated_minutes': 180,
+                            'priority': 'high',
+                            'dependencies': ['task-1-2']
+                        }
+                    ]
+                },
+                {
+                    'id': 'phase-3',
+                    'number': 3,
+                    'name': 'Documentation',
+                    'description': 'Complete documentation',
+                    'status': 'not-started',
+                    'estimated_hours': 8,
+                    'tasks': [
+                        {
+                            'id': 'task-3-1',
+                            'name': 'Write API documentation',
+                            'status': 'not-started',
+                            'estimated_minutes': 120,
+                            'priority': 'medium',
+                            'dependencies': ['task-2-1']
+                        }
+                    ]
+                }
+            ]
+    
+    def _get_acceptance_criteria_by_type(self) -> List[str]:
+        """Return acceptance criteria based on plan type."""
+        if self.plan_type == 'epic':
+            return [
+                'All features complete and integrated',
+                'Epic-level integration tests passing with >90% coverage',
+                'Feature interactions validated',
+                'Performance requirements met',
+                'Complete epic documentation',
+                'Deployment readiness achieved'
+            ]
+        elif self.plan_type == 'phase':
+            return [
+                'Phase implementation complete',
+                'Phase tests passing with >85% coverage',
+                'Phase documentation complete',
+                'Phase integrated with existing work'
+            ]
+        elif self.plan_type == 'sub-plan':
+            return [
+                'Sub-plan changes implemented',
+                'Changes validated and tested',
+                'Dependencies checked',
+                'Quick verification passed'
+            ]
+        else:  # feature (default)
+            return [
+                'All phases complete',
+                'All tests passing with >85% coverage',
+                'Documentation complete and reviewed',
+                'Code review approved',
+                'Integration tests passing'
+            ]
+    
+    def _get_default_hours_by_type(self) -> int:
+        """Return estimated hours based on plan type."""
+        if self.plan_type == 'epic':
+            return 120
+        elif self.plan_type == 'phase':
+            return 20
+        elif self.plan_type == 'sub-plan':
+            return 10
+        else:  # feature (default)
+            return 40
     
     def _format_file_list(self, required_files: List[str], missing_files: List[str]) -> str:
         """Format file list for validation report (Python 3.9 compatible)."""
@@ -984,7 +1961,7 @@ Check `tracking/progress-tracker.json` for current status.
     
     def _validate_plan(self, feature_name: str, **kwargs) -> List[str]:
         """
-        Validate generated plan.
+        Validate generated plan with folder naming convention check.
         
         Args:
             feature_name: Feature being planned
@@ -995,16 +1972,60 @@ Check `tracking/progress-tracker.json` for current status.
         """
         self.logger.info("Validating plan...")
         
-        plan_dir = Path(f"cortex-brain/documents/planning/active/{feature_name}")
+        # Generate expected folder name with A## prefix
+        master_plan_filename = self._generate_master_plan_filename(feature_name)
+        folder_id_prefix = master_plan_filename.split('-')[0].lower()
+        abbreviated_name = self._abbreviate_feature_name(feature_name, max_length=22)
+        expected_folder_name = f"{folder_id_prefix}-{abbreviated_name}"
+        
+        plan_dir = Path(f"cortex-brain/documents/planning/active/{expected_folder_name}")
+        
+        # Validate folder exists with correct naming
+        if not plan_dir.exists():
+            # Try to find folder with old naming (without A## prefix)
+            old_plan_dir = Path(f"cortex-brain/documents/planning/active/{feature_name}")
+            if old_plan_dir.exists():
+                self.logger.warning(
+                    f"⚠️ Folder uses old naming convention: '{feature_name}' "
+                    f"should be '{expected_folder_name}'"
+                )
+                plan_dir = old_plan_dir
+            else:
+                raise ValueError(f"Plan folder not found: {expected_folder_name}")
+        
+        # Find master plan file (pattern: [A-Z0-9]{3}-*.md)
+        import re
+        master_plan_pattern = re.compile(r'^[A-Z0-9]{3}-.*\.md$')
+        master_plan_files = [f.name for f in plan_dir.glob('*.md') if master_plan_pattern.match(f.name)]
+        
+        # Validate folder name matches master plan ID
+        folder_validation = []
+        folder_name = plan_dir.name
+        if folder_name.startswith(folder_id_prefix):
+            folder_validation.append(f"✅ Folder name '{folder_name}' matches master plan ID '{folder_id_prefix.upper()}'")
+        else:
+            folder_validation.append(
+                f"⚠️ Folder name '{folder_name}' doesn't match master plan ID '{folder_id_prefix.upper()}' "
+                f"(expected: {expected_folder_name})"
+            )
         
         # Check required files
         required_files = [
-            "00-master-plan.md",
             "README.md",
             "tracking/progress-tracker.json"
         ]
         
         missing_files = []
+        
+        # Validate master plan exists with correct pattern
+        master_plan_status = "✅" if master_plan_files else "❌"
+        master_plan_desc = f"Master plan file (pattern: [A-Z0-9]{{3}}-{{name}}.md)"
+        if master_plan_files:
+            master_plan_desc += f" → Found: {', '.join(master_plan_files)}"
+        else:
+            missing_files.append(master_plan_desc)
+        
+        # Check other required files
         for file_path in required_files:
             if not (plan_dir / file_path).exists():
                 missing_files.append(file_path)
@@ -1025,6 +2046,12 @@ Check `tracking/progress-tracker.json` for current status.
 **Validation Date:** {datetime.now().isoformat()}  
 **Status:** {"✅ PASSED" if validation_passed else "❌ FAILED"}
 
+### Folder Naming Convention
+{chr(10).join(folder_validation)}
+
+### Master Plan File
+{master_plan_status} {master_plan_desc}
+
 ### Required Files
 {self._format_file_list(required_files, missing_files)}
 
@@ -1032,8 +2059,8 @@ Check `tracking/progress-tracker.json` for current status.
 {self._format_folder_list(required_folders, missing_folders)}
 
 ### Summary
-- Total checks: {len(required_files) + len(required_folders)}
-- Passed: {len(required_files) + len(required_folders) - len(missing_files) - len(missing_folders)}
+- Total checks: {len(required_files) + len(required_folders) + 1}
+- Passed: {len(required_files) + len(required_folders) + 1 - len(missing_files) - len(missing_folders)}
 - Failed: {len(missing_files) + len(missing_folders)}
 
 {self._format_validation_issues(missing_files, missing_folders)}
@@ -1049,6 +2076,8 @@ Check `tracking/progress-tracker.json` for current status.
         
         if not validation_passed:
             raise ValueError(f"Plan validation failed: {len(missing_files + missing_folders)} issues found")
+        
+        return [str(report_path)]
         
         return [str(report_path)]
     

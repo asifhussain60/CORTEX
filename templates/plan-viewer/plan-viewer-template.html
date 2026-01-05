@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{EPIC_NAME}} - Live Progress Tracker</title>
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+{{CSS_CONTENT}}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="page-title">
+                <i class="fas {{EPIC_ICON}}"></i>
+                {{EPIC_NAME}}
+            </h1>
+            <div class="subtitle">{{EPIC_SUBTITLE}}</div>
+        </header>
+
+        <div class="auto-refresh-status" id="refreshStatus">
+            ✅ Auto-refresh: Active (every {{REFRESH_INTERVAL_SECONDS}} seconds) | Last updated: <span id="lastUpdate">Loading...</span>
+        </div>
+
+        <!-- Metrics Grid -->
+        <div class="metrics-grid" id="metricsGrid">
+            <div class="metric-card">
+                <div class="metric-label">Overall Progress</div>
+                <div class="metric-value" id="overallProgress">0%</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Phases Complete</div>
+                <div class="metric-value" id="phasesComplete">0 / {{TOTAL_PHASES}}</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Tasks Complete</div>
+                <div class="metric-value" id="tasksComplete">0 / 0</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Current Status</div>
+                <div class="metric-value" id="currentStatus">{{INITIAL_STATUS}}</div>
+            </div>
+        </div>
+
+        <!-- Overall Progress Bar -->
+        <div class="progress-section">
+            <h2 class="section-title"><i class="fas fa-chart-line"></i> Epic Progress</h2>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar" style="width: 0%">
+                    0%
+                </div>
+            </div>
+        </div>
+
+        <!-- Phases Grid -->
+        <div class="phases-section">
+            <h2 class="section-title"><i class="fas fa-tasks"></i> Phases</h2>
+            <div class="phases-grid" id="phasesGrid">
+                <!-- Phases will be dynamically loaded -->
+                <div class="empty-state loading">
+                    <div class="empty-state-icon">⏳</div>
+                    <div>Loading phases...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tasks Section -->
+        <div class="tasks-section">
+            <h2 class="section-title"><i class="fas fa-check-square"></i> Task List</h2>
+            <div class="task-list" id="taskList">
+                <div class="empty-state">
+                    <div class="empty-state-icon">📋</div>
+                    <div>No tasks created yet. Tasks will appear when phases begin execution.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dependency Graph -->
+        <div class="dependency-graph" id="dependencyGraph">
+            <h2 class="section-title"><i class="fas fa-project-diagram"></i> Phase Dependencies</h2>
+            <div id="dependencyContent">
+                <div class="empty-state loading">
+                    <div class="empty-state-icon">🔄</div>
+                    <div>Loading dependencies...</div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <div class="timestamp">
+                Created: {{CREATION_DATE}} | Version: {{VERSION}} | Execution Mode: {{EXECUTION_MODE}}
+            </div>
+            <div class="timestamp">
+                {{COPYRIGHT}}
+            </div>
+            <div class="timestamp" style="margin-top: 8px; font-size: 0.75em; opacity: 0.7;">
+                <!-- Generated from template v{{TEMPLATE_VERSION}} on {{GENERATION_DATE}} -->
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        const REFRESH_INTERVAL = {{REFRESH_INTERVAL_MS}}; // milliseconds
+        const PROGRESS_FILE = '{{PROGRESS_FILE}}';
+        const TASK_FILE = '{{TASK_FILE}}';
+
+        let autoRefreshInterval;
+        let lastUpdateTime = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            startAutoRefresh();
+        });
+
+        function startAutoRefresh() {
+            autoRefreshInterval = setInterval(() => {
+                loadData();
+            }, REFRESH_INTERVAL);
+        }
+
+        async function loadData() {
+            try {
+                const [progressData, taskData] = await Promise.all([
+                    fetch(PROGRESS_FILE).then(r => r.json()),
+                    fetch(TASK_FILE).then(r => r.json())
+                ]);
+
+                updateMetrics(progressData, taskData);
+                updateProgressBar(progressData);
+                updatePhases(progressData);
+                updateTasks(taskData);
+                updateDependencies(progressData);
+                updateTimestamp();
+                updateRefreshStatus(true);
+            } catch (error) {
+                console.error('Error loading data:', error);
+                updateRefreshStatus(false, error.message);
+            }
+        }
+
+        function updateMetrics(progressData, taskData) {
+            document.getElementById('overallProgress').textContent = 
+                `${progressData.overall_progress}%`;
+            
+            document.getElementById('phasesComplete').textContent = 
+                `${progressData.phases.completed} / ${progressData.phases.total}`;
+            
+            document.getElementById('tasksComplete').textContent = 
+                `${taskData.statistics.completed} / ${taskData.statistics.total}`;
+            
+            document.getElementById('currentStatus').textContent = 
+                progressData.status.charAt(0).toUpperCase() + progressData.status.slice(1);
+        }
+
+        function updateProgressBar(progressData) {
+            const progressBar = document.getElementById('progressBar');
+            const progress = progressData.overall_progress;
+            progressBar.style.width = `${progress}%`;
+            progressBar.textContent = `${progress}%`;
+        }
+
+        function updatePhases(progressData) {
+            const phasesGrid = document.getElementById('phasesGrid');
+            
+            if (!progressData.phase_details || progressData.phase_details.length === 0) {
+                phasesGrid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🎯</div>
+                        <div>No phases defined yet.</div>
+                    </div>
+                `;
+                return;
+            }
+
+            phasesGrid.innerHTML = progressData.phase_details.map(phase => `
+                <div class="phase-card ${phase.status}">
+                    <div class="phase-header">
+                        <span class="phase-id">${phase.phase_id}</span>
+                        <span class="phase-status status-${phase.status}">
+                            ${phase.status.replace('_', ' ').toUpperCase()}
+                        </span>
+                    </div>
+                    <div class="phase-name">${phase.name}</div>
+                    <div class="phase-meta">
+                        <span><i class="fas fa-clock"></i> ${phase.duration_estimate}</span>
+                        <span class="priority-badge priority-${phase.priority}">${phase.priority}</span>
+                    </div>
+                    ${phase.dependencies && phase.dependencies.length > 0 ? `
+                        <div class="phase-meta">
+                            <span><i class="fas fa-link"></i> Depends on: ${phase.dependencies.join(', ')}</span>
+                        </div>
+                    ` : ''}
+                    ${phase.blocking && phase.blocking.length > 0 ? `
+                        <div class="phase-meta">
+                            <span><i class="fas fa-lock"></i> Blocks: ${phase.blocking.join(', ')}</span>
+                        </div>
+                    ` : ''}
+                    <div class="phase-progress">
+                        <div class="mini-progress-bar">
+                            <div class="mini-progress-fill" style="width: ${phase.progress}%"></div>
+                        </div>
+                        <div style="font-size: 0.85em; color: rgba(255, 255, 255, 0.7); margin-top: 5px;">
+                            ${phase.progress}% complete (${phase.tasks_complete}/${phase.tasks_total} tasks)
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateTasks(taskData) {
+            const taskList = document.getElementById('taskList');
+            
+            if (!taskData.tasks || taskData.tasks.length === 0) {
+                taskList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📋</div>
+                        <div>No tasks created yet. Tasks will appear when phases begin execution.</div>
+                    </div>
+                `;
+                return;
+            }
+
+            taskList.innerHTML = taskData.tasks.map(task => `
+                <div class="task-item">
+                    <input type="checkbox" class="task-checkbox" ${task.status === 'completed' ? 'checked' : ''} disabled>
+                    <div class="task-info">
+                        <div class="task-title">${task.title}</div>
+                        <div class="task-meta">
+                            Phase: ${task.phase_id} | 
+                            Status: ${task.status} | 
+                            Progress: ${task.progress_percentage}%
+                        </div>
+                    </div>
+                    <span class="priority-badge priority-${task.priority}">${task.priority}</span>
+                </div>
+            `).join('');
+        }
+
+        function updateDependencies(progressData) {
+            const dependencyContent = document.getElementById('dependencyContent');
+            
+            if (!progressData.phase_details) {
+                return;
+            }
+
+            const dependencies = progressData.phase_details
+                .filter(phase => phase.dependencies && phase.dependencies.length > 0)
+                .map(phase => `
+                    <div class="dependency-item">
+                        <strong>${phase.phase_id}</strong> depends on: 
+                        ${phase.dependencies.join(', ')}
+                    </div>
+                `).join('');
+
+            if (dependencies) {
+                dependencyContent.innerHTML = dependencies;
+            } else {
+                dependencyContent.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">✅</div>
+                        <div>No dependencies defined.</div>
+                    </div>
+                `;
+            }
+        }
+
+        function updateTimestamp() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            document.getElementById('lastUpdate').textContent = timeString;
+            lastUpdateTime = now;
+        }
+
+        function updateRefreshStatus(success, errorMessage = '') {
+            const statusDiv = document.getElementById('refreshStatus');
+            if (success) {
+                statusDiv.className = 'auto-refresh-status';
+                statusDiv.innerHTML = `✅ Auto-refresh: Active (every {{REFRESH_INTERVAL_SECONDS}} seconds) | Last updated: <span id="lastUpdate">${new Date().toLocaleTimeString()}</span>`;
+            } else {
+                statusDiv.className = 'auto-refresh-status error';
+                statusDiv.innerHTML = `❌ Auto-refresh error: ${errorMessage} | Retrying...`;
+            }
+        }
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+            }
+        });
+    </script>
+</body>
+</html>

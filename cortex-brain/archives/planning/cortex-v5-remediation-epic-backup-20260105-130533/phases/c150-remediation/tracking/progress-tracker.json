@@ -1,0 +1,405 @@
+{
+  "plan_id": "c150-remediation",
+  "plan_name": "C150 Remediation - Fix HTML Alignment Plan Gaps",
+  "created_date": "2026-01-04",
+  "updated_date": "2026-01-05T21:00:00Z",
+  "start_time": "2026-01-05T00:00:00Z",
+  "end_time": null,
+  "status": "in_progress",
+  "estimated_total_hours": 181,
+  "actual_total_hours": 13.99,
+  "percent_complete": 9,
+  "current_phase": 5,
+  "next_phase": 23,
+  "last_completed_phase": 4,
+  "sqlite_migration_notes": {
+    "governance_rules": "COMPLETE - brain-protection-rules.yaml migrated to cortex-brain/tier0/governance.db",
+    "tier_context_data": "PENDING - Phase 6 will migrate tier1/tier2/tier3 YAML files",
+    "api_reference": "Use GovernanceDB API (src/cortex_core/governance_db.py) for <10ms queries"
+  },
+  "plan_viewer_notes": {
+    "status": "RESOLVED - Phase 16 complete",
+    "root_cause": "Planning Orchestrator v5 doesn't call DualModePlanningOrchestrator.generate_html_viewer()",
+    "expected_files": [
+      "plan-viewer.html",
+      "launch_plan_viewer.py"
+    ],
+    "remediation_phase": 16
+  },
+  "phases": [
+    {
+      "number": -2,
+      "name": "Setup Verification",
+      "status": "complete",
+      "start_time": null,
+      "end_time": null,
+      "estimated_hours": 0.5,
+      "actual_hours": null,
+      "outputs": [],
+      "validation_passed": null,
+      "python_executor": "src/orchestrators/middleware/setup_verification.py"
+    },
+    {
+      "number": 0,
+      "name": "Context Discovery",
+      "status": "complete",
+      "start_time": null,
+      "end_time": null,
+      "estimated_hours": 1.0,
+      "actual_hours": null,
+      "outputs": [],
+      "validation_passed": null,
+      "python_executor": "scripts/orchestration/context_discovery.py"
+    },
+    {
+      "number": 1,
+      "name": "Acceptance Criteria Cross-Check",
+      "status": "complete",
+      "start_time": null,
+      "end_time": null,
+      "estimated_hours": 1.5,
+      "actual_hours": null,
+      "outputs": [],
+      "validation_passed": null,
+      "python_executor": "scripts/orchestration/acceptance_criteria_validator.py"
+    },
+    {
+      "number": 2,
+      "name": "Fix planning_v5 Orchestrator",
+      "status": "complete",
+      "start_time": null,
+      "end_time": null,
+      "estimated_hours": 2.0,
+      "actual_hours": null,
+      "outputs": [],
+      "validation_passed": null,
+      "python_executor": "scripts/orchestration/fix_orchestrator.py"
+    },
+    {
+      "number": 3,
+      "name": "Fix StateManager Interface",
+      "status": "complete",
+      "start_time": null,
+      "end_time": null,
+      "estimated_hours": 4.0,
+      "actual_hours": null,
+      "outputs": [],
+      "validation_passed": null,
+      "python_executor": "scripts/orchestration/fix_state_manager.py"
+    },
+    {
+      "number": 4,
+      "name": "Fix Python 3.9/3.10 Compatibility",
+      "status": "complete",
+      "start_time": null,
+      "end_time": null,
+      "estimated_hours": 3.0,
+      "actual_hours": null,
+      "outputs": [],
+      "validation_passed": null,
+      "python_executor": "scripts/orchestration/python_compatibility_fixer.py"
+    },
+    {
+      "number": 5,
+      "name": "Implement Runtime Governance Middleware",
+      "status": "complete",
+      "start_time": null,
+      "end_time": null,
+      "estimated_hours": 10.0,
+      "actual_hours": null,
+      "outputs": [],
+      "validation_passed": null,
+      "python_executor": "scripts/orchestration/create_governance_middleware.py"
+    },
+    {
+      "number": 6,
+      "name": "Resolve Dual-Source Brittleness (C50-19)",
+      "status": "complete",
+      "start_time": null,
+      "end_time": null,
+      "estimated_hours": 3.0,
+      "actual_hours": null,
+      "outputs": [],
+      "validation_passed": null,
+      "python_executor": "scripts/orchestration/dual_source_cutover.py"
+    },
+    {
+      "number": 7,
+      "name": "Write Refinement Orchestrator Documentation",
+      "status": "complete",
+      "start_time": null,
+      "end_time": null,
+      "estimated_hours": 6.0,
+      "actual_hours": null,
+      "outputs": [],
+      "validation_passed": null,
+      "python_executor": "scripts/orchestration/generate_orchestrator_docs.py"
+    },
+    {
+      "number": 8,
+      "name": "Write Debug Orchestrator Documentation",
+      "status": "complete",
+      "start_time": null,
+      "end_time": null,
+      "estimated_hours": 6.0,
+      "actual_hours": null,
+      "outputs": [],
+      "validation_passed": null,
+      "python_executor": "scripts/orchestration/generate_orchestrator_docs.py"
+    },
+    {
+      "number": 9,
+      "name": "Document 5 Missing Features + Create 4 Diagrams",
+      "status": "complete",
+      "start_time": null,
+      "end_time": null,
+      "estimated_hours": 10.0,
+      "actual_hours": null,
+      "outputs": [],
+      "validation_passed": null,
+      "python_executor": "scripts/orchestration/generate_feature_docs.py"
+    },
+    {
+      "number": 10,
+      "name": "Execute Dead Code Removal (Phase 12)",
+      "status": "complete",
+      "start_time": null,
+      "end_time": null,
+      "estimated_hours": 4.0,
+      "actual_hours": null,
+      "outputs": [],
+      "validation_passed": null,
+      "python_executor": "scripts/orchestration/execute_css_cleanup.py"
+    },
+    {
+      "number": 11,
+      "name": "Deployment Validation (Staging + Production)",
+      "status": "complete",
+      "start_time": null,
+      "end_time": null,
+      "estimated_hours": 48.0,
+      "actual_hours": null,
+      "outputs": [],
+      "validation_passed": null,
+      "python_executor": "scripts/orchestration/deployment_validator.py"
+    },
+    {
+      "number": 12,
+      "name": "Update C150 Completion Certificate",
+      "status": "complete",
+      "start_time": null,
+      "end_time": null,
+      "estimated_hours": 1.0,
+      "actual_hours": null,
+      "outputs": [],
+      "validation_passed": null,
+      "python_executor": "scripts/orchestration/update_completion_certificate.py"
+    },
+    {
+      "number": 13,
+      "name": "Create Acceptance Criteria Validation Automation",
+      "status": "complete",
+      "start_time": null,
+      "end_time": null,
+      "estimated_hours": 8.0,
+      "actual_hours": null,
+      "outputs": [],
+      "validation_passed": null,
+      "python_executor": "scripts/orchestration/create_acceptance_validator.py"
+    },
+    {
+      "number": 14,
+      "name": "Create Cross-Plan Brittleness Checker",
+      "status": "complete",
+      "start_time": null,
+      "end_time": null,
+      "estimated_hours": 6.0,
+      "actual_hours": null,
+      "outputs": [],
+      "validation_passed": null,
+      "python_executor": "scripts/orchestration/create_brittleness_checker.py"
+    },
+    {
+      "number": 19,
+      "name": "Execute Acceptance Criteria Validation Suite",
+      "status": "not_started",
+      "start_time": null,
+      "end_time": null,
+      "estimated_hours": 4.0,
+      "actual_hours": null,
+      "outputs": [],
+      "validation_passed": null,
+      "python_executor": "scripts/orchestration/acceptance_criteria_validator.py"
+    },
+    {
+      "number": 20,
+      "name": "Fix ADO v2 Import Path",
+      "status": "COMPLETE",
+      "start_time": null,
+      "end_time": null,
+      "estimated_hours": 0.5,
+      "actual_hours": 0.08,
+      "outputs": [],
+      "validation_passed": true,
+      "python_executor": "scripts/orchestration/fix_ado_import_path.py",
+      "completion_date": "2026-01-05T08:32:00.666659",
+      "deliverables_completed": [
+        "src/orchestrators/ado/__init__.py updated",
+        "ADOOrchestratorV2 exported from package",
+        "Import validation tests passed (4/4)",
+        "reports/phase-20-completion-report.md"
+      ]
+    },
+    {
+      "number": 21,
+      "name": "Perform Deployment Validation with 24hr Monitoring",
+      "status": "not_started",
+      "start_time": null,
+      "end_time": null,
+      "estimated_hours": 26.0,
+      "actual_hours": null,
+      "outputs": [],
+      "validation_passed": null,
+      "python_executor": "scripts/orchestration/deployment_validator.py"
+    },
+    {
+      "number": 999,
+      "name": "Teardown + REFACTOR + Commit",
+      "status": "not_started",
+      "start_time": null,
+      "end_time": null,
+      "estimated_hours": 2.0,
+      "actual_hours": null,
+      "outputs": [],
+      "validation_passed": true,
+      "python_executor": "src/orchestrators/middleware/teardown_refactor.py"
+    },
+    {
+      "number": 28,
+      "name": "Implement CORTEX Audit Logging System",
+      "status": "COMPLETE",
+      "start_time": "2026-01-05T08:48:05.618340",
+      "end_time": "2026-01-05T08:48:05.618344",
+      "duration_hours": 0.5,
+      "outputs": [
+        "src/orchestrators/audit_logger.py",
+        "tests/test_audit_logger.py",
+        "reports/phase-28-completion-report.md"
+      ],
+      "validation_passed": true
+    }
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "description": "All 6 orchestrators instantiate without errors",
+      "status": "not_validated",
+      "validation_result": null
+    },
+    {
+      "id": "AC-2",
+      "description": "82 unit tests pass (67 vacuum + 15 cleanup)",
+      "status": "not_validated",
+      "validation_result": null
+    },
+    {
+      "id": "AC-3",
+      "description": "Runtime governance middleware exists and functions",
+      "status": "not_validated",
+      "validation_result": null
+    },
+    {
+      "id": "AC-4",
+      "description": "Dual-source brittleness resolved",
+      "status": "not_validated",
+      "validation_result": null
+    },
+    {
+      "id": "AC-5",
+      "description": "CORTEX-5.0 documentation complete",
+      "status": "not_validated",
+      "validation_result": null
+    },
+    {
+      "id": "AC-6",
+      "description": "Dead code removed",
+      "status": "not_validated",
+      "validation_result": null
+    },
+    {
+      "id": "AC-7",
+      "description": "Deployment validation complete",
+      "status": "not_validated",
+      "validation_result": null
+    },
+    {
+      "id": "AC-8",
+      "description": "C150 completion certificate corrected",
+      "status": "not_validated",
+      "validation_result": null
+    },
+    {
+      "id": "AC-9",
+      "description": "Acceptance criteria validator automated",
+      "status": "not_validated",
+      "validation_result": null
+    },
+    {
+      "id": "AC-10",
+      "description": "Cross-plan brittleness checker automated",
+      "status": "not_validated",
+      "validation_result": null
+    },
+    {
+      "id": "AC-11",
+      "description": "All HTML transformation criteria validated (HTML-1.1 to HTML-1.6)",
+      "status": "not_validated",
+      "validation_result": null
+    },
+    {
+      "id": "AC-12",
+      "description": "All CORTEX-5.0 documentation criteria validated (DOC-2.1 to DOC-2.6)",
+      "status": "not_validated",
+      "validation_result": null
+    },
+    {
+      "id": "AC-13",
+      "description": "All quality assurance criteria validated (QA-3.1 to QA-3.6)",
+      "status": "not_validated",
+      "validation_result": null
+    },
+    {
+      "id": "AC-14",
+      "description": "ADO v2 import path fixed and validated",
+      "status": "not_validated",
+      "validation_result": null
+    },
+    {
+      "id": "AC-15",
+      "description": "Deployment validation complete with 24hr monitoring",
+      "status": "not_validated",
+      "validation_result": null
+    },
+    {
+      "id": "AC-16",
+      "description": "Brittleness score improved to \u226585/100",
+      "status": "not_validated",
+      "validation_result": null
+    }
+  ],
+  "skull_compliance": {
+    "TDD_ENFORCEMENT": "not_validated",
+    "HOLISTIC_DISCOVERY": "not_validated",
+    "GIT_ISOLATION": "not_validated",
+    "PLANNING_ISOLATION": "not_validated",
+    "HAND_OFF_PROTOCOL": "not_validated"
+  },
+  "brittleness_test": {
+    "test_date": "2026-01-05",
+    "brittleness_score": "40.25/100",
+    "risk_level": "HIGH RISK",
+    "orchestrator_pass_rate": "5/6 (83%)",
+    "critical_gaps": 3,
+    "report": "cortex-brain/documents/reports/CORTEX-5.0-brittleness-gap-analysis-2026-01-05.md"
+  }
+}

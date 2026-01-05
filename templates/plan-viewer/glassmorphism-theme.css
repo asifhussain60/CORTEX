@@ -1,0 +1,569 @@
+/* 
+ * CORTEX Plan Viewer - Glassmorphism Theme
+ * Version: 1.0.0
+ * Author: Asif Hussain
+ * Created: January 5, 2026
+ * 
+ * Implements glassmorphism design standard v4.2.9
+ * Reference: cortex-brain/documents/standards/glassmorphism-design-standard.md
+ * 
+ * Usage: Link this CSS in all plan-viewer.html files
+ */
+
+/* === CSS Variables (Glassmorphism Theme) === */
+:root {
+    /* Primary Colors */
+    --color-primary: #7b61ff;
+    --color-primary-dark: #6347e6;
+    --color-primary-light: #9d86ff;
+    
+    /* Accent Colors (4-color rotation) */
+    --color-info: #4a90e2;
+    --color-warning: #f5a623;
+    --color-success: #7ed321;
+    --color-danger: #d0021b;
+    
+    /* Glassmorphism Effects */
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.18);
+    --glass-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+    --glass-blur: blur(8px);
+    
+    /* Spacing (Glassmorphism Standard) */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    --spacing-2xl: 48px;
+    
+    /* Transitions */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+    
+    /* Typography */
+    --font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    --font-size-base: 16px;
+    --font-size-sm: 14px;
+    --font-size-lg: 18px;
+    --font-size-xl: 24px;
+    --font-size-2xl: 32px;
+    --font-size-3xl: 40px;
+}
+
+/* === Reset & Base === */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.95);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    padding: var(--spacing-lg);
+}
+
+/* === Container (Main Glassmorphism Card) === */
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: var(--spacing-2xl);
+    box-shadow: var(--glass-shadow);
+    animation: glassReflection 8s ease-in-out infinite;
+}
+
+@keyframes glassReflection {
+    0%, 100% { 
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.18);
+    }
+    50% { 
+        background: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.25);
+    }
+}
+
+/* === Header === */
+header {
+    text-align: center;
+    margin-bottom: var(--spacing-2xl);
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 2px solid var(--glass-border);
+}
+
+.page-title {
+    font-size: var(--font-size-3xl);
+    font-weight: 700;
+    color: white;
+    margin-bottom: var(--spacing-sm);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-md);
+}
+
+.subtitle {
+    font-size: var(--font-size-lg);
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 300;
+}
+
+/* === Auto-Refresh Status Bar === */
+.auto-refresh-status {
+    background: linear-gradient(135deg, rgba(126, 211, 33, 0.2), rgba(126, 211, 33, 0.1));
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(126, 211, 33, 0.3);
+    padding: var(--spacing-md);
+    border-radius: 10px;
+    margin-bottom: var(--spacing-lg);
+    text-align: center;
+    font-size: var(--font-size-sm);
+    color: white;
+    font-weight: 500;
+    transition: all var(--transition-normal);
+}
+
+.auto-refresh-status.error {
+    background: linear-gradient(135deg, rgba(208, 2, 27, 0.2), rgba(208, 2, 27, 0.1));
+    border-color: rgba(208, 2, 27, 0.3);
+}
+
+/* === Metrics Grid (Glassmorphism Cards) === */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-2xl);
+}
+
+.metric-card {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    border-radius: 15px;
+    padding: var(--spacing-lg);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    transition: all var(--transition-normal);
+    animation: glassReflection 8s ease-in-out infinite;
+}
+
+.metric-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* Metric Card Variants (4-color rotation) */
+.metric-card:nth-child(4n+1) {
+    border-left: 4px solid var(--color-primary);
+}
+
+.metric-card:nth-child(4n+2) {
+    border-left: 4px solid var(--color-info);
+}
+
+.metric-card:nth-child(4n+3) {
+    border-left: 4px solid var(--color-warning);
+}
+
+.metric-card:nth-child(4n+4) {
+    border-left: 4px solid var(--color-success);
+}
+
+.metric-label {
+    font-size: var(--font-size-sm);
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: var(--spacing-sm);
+    font-weight: 500;
+}
+
+.metric-value {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* === Section Headers === */
+.section-title {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    color: white;
+    margin-bottom: var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* === Progress Bar === */
+.progress-section {
+    margin-bottom: var(--spacing-2xl);
+}
+
+.progress-bar-container {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    height: 40px;
+    overflow: hidden;
+    position: relative;
+    margin-top: var(--spacing-md);
+    border: 1px solid var(--glass-border);
+}
+
+.progress-bar {
+    background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+    height: 100%;
+    transition: width var(--transition-slow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: var(--font-size-lg);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    box-shadow: inset 0 2px 8px rgba(255, 255, 255, 0.2);
+}
+
+/* === Phase Cards Grid === */
+.phases-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-2xl);
+}
+
+.phase-card {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    border: 2px solid var(--glass-border);
+    border-radius: 15px;
+    padding: var(--spacing-lg);
+    transition: all var(--transition-normal);
+    animation: glassReflection 8s ease-in-out infinite;
+}
+
+.phase-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Phase Card Status Variants */
+.phase-card.completed {
+    border-color: var(--color-success);
+    background: linear-gradient(135deg, rgba(126, 211, 33, 0.1), rgba(126, 211, 33, 0.05));
+}
+
+.phase-card.in-progress {
+    border-color: var(--color-warning);
+    background: linear-gradient(135deg, rgba(245, 166, 35, 0.1), rgba(245, 166, 35, 0.05));
+}
+
+.phase-card.blocked {
+    border-color: var(--color-danger);
+    background: linear-gradient(135deg, rgba(208, 2, 27, 0.1), rgba(208, 2, 27, 0.05));
+}
+
+.phase-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+}
+
+.phase-id {
+    font-weight: 700;
+    color: white;
+    font-size: var(--font-size-lg);
+}
+
+.phase-status {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    backdrop-filter: blur(4px);
+}
+
+.status-planning {
+    background: linear-gradient(135deg, rgba(74, 144, 226, 0.3), rgba(74, 144, 226, 0.2));
+    color: white;
+    border: 1px solid rgba(74, 144, 226, 0.5);
+}
+
+.status-in-progress {
+    background: linear-gradient(135deg, rgba(245, 166, 35, 0.3), rgba(245, 166, 35, 0.2));
+    color: white;
+    border: 1px solid rgba(245, 166, 35, 0.5);
+}
+
+.status-completed {
+    background: linear-gradient(135deg, rgba(126, 211, 33, 0.3), rgba(126, 211, 33, 0.2));
+    color: white;
+    border: 1px solid rgba(126, 211, 33, 0.5);
+}
+
+.status-blocked {
+    background: linear-gradient(135deg, rgba(208, 2, 27, 0.3), rgba(208, 2, 27, 0.2));
+    color: white;
+    border: 1px solid rgba(208, 2, 27, 0.5);
+}
+
+.phase-name {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+    color: white;
+}
+
+.phase-meta {
+    display: flex;
+    justify-content: space-between;
+    margin: var(--spacing-sm) 0;
+    font-size: var(--font-size-sm);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.phase-progress {
+    margin-top: var(--spacing-md);
+}
+
+.mini-progress-bar {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    height: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mini-progress-fill {
+    background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+    height: 100%;
+    transition: width var(--transition-slow);
+    box-shadow: inset 0 1px 4px rgba(255, 255, 255, 0.2);
+}
+
+/* === Priority Badges (4-color rotation) === */
+.priority-badge {
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.75em;
+    font-weight: 700;
+    backdrop-filter: blur(4px);
+}
+
+.priority-P0_CRITICAL {
+    background: linear-gradient(135deg, rgba(208, 2, 27, 0.3), rgba(208, 2, 27, 0.2));
+    color: white;
+    border: 1px solid rgba(208, 2, 27, 0.5);
+}
+
+.priority-P1 {
+    background: linear-gradient(135deg, rgba(245, 166, 35, 0.3), rgba(245, 166, 35, 0.2));
+    color: white;
+    border: 1px solid rgba(245, 166, 35, 0.5);
+}
+
+.priority-P2 {
+    background: linear-gradient(135deg, rgba(74, 144, 226, 0.3), rgba(74, 144, 226, 0.2));
+    color: white;
+    border: 1px solid rgba(74, 144, 226, 0.5);
+}
+
+.priority-P3 {
+    background: linear-gradient(135deg, rgba(123, 97, 255, 0.3), rgba(123, 97, 255, 0.2));
+    color: white;
+    border: 1px solid rgba(123, 97, 255, 0.5);
+}
+
+/* === Task List === */
+.tasks-section {
+    margin-top: var(--spacing-2xl);
+}
+
+.task-list {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    border-radius: 15px;
+    padding: var(--spacing-lg);
+    border: 2px solid var(--glass-border);
+    animation: glassReflection 8s ease-in-out infinite;
+}
+
+.task-item {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all var(--transition-fast);
+}
+
+.task-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    padding-left: var(--spacing-lg);
+}
+
+.task-item:last-child {
+    border-bottom: none;
+}
+
+.task-checkbox {
+    width: 24px;
+    height: 24px;
+    margin-right: var(--spacing-md);
+    cursor: pointer;
+}
+
+.task-info {
+    flex: 1;
+}
+
+.task-title {
+    font-weight: 600;
+    color: white;
+    margin-bottom: 4px;
+}
+
+.task-meta {
+    font-size: var(--font-size-sm);
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 4px;
+}
+
+/* === Dependency Graph === */
+.dependency-graph {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    border-radius: 15px;
+    padding: var(--spacing-lg);
+    border: 2px solid var(--glass-border);
+    margin-top: var(--spacing-2xl);
+    animation: glassReflection 8s ease-in-out infinite;
+}
+
+.dependency-item {
+    padding: var(--spacing-sm);
+    margin: var(--spacing-sm) 0;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border-left: 3px solid var(--color-primary);
+    font-size: var(--font-size-sm);
+    color: rgba(255, 255, 255, 0.9);
+    transition: all var(--transition-fast);
+}
+
+.dependency-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    padding-left: var(--spacing-md);
+}
+
+/* === Empty States === */
+.empty-state {
+    text-align: center;
+    padding: var(--spacing-2xl) var(--spacing-lg);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.empty-state-icon {
+    font-size: 4em;
+    margin-bottom: var(--spacing-lg);
+    opacity: 0.5;
+}
+
+.loading {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* === Footer === */
+footer {
+    text-align: center;
+    margin-top: var(--spacing-2xl);
+    padding-top: var(--spacing-lg);
+    border-top: 2px solid var(--glass-border);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.timestamp {
+    font-size: var(--font-size-sm);
+    color: rgba(255, 255, 255, 0.6);
+    margin-top: var(--spacing-sm);
+}
+
+/* === Responsive Design === */
+@media (max-width: 768px) {
+    body {
+        padding: var(--spacing-md);
+    }
+    
+    .container {
+        padding: var(--spacing-lg);
+    }
+    
+    .page-title {
+        font-size: var(--font-size-2xl);
+    }
+    
+    .metrics-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+    
+    .phases-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+    
+    .phase-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-sm);
+    }
+}
+
+/* === Accessibility === */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* === Print Styles === */
+@media print {
+    body {
+        background: white;
+        color: black;
+    }
+    
+    .container {
+        background: white;
+        box-shadow: none;
+        border: 1px solid #ccc;
+    }
+    
+    .auto-refresh-status {
+        display: none;
+    }
+}

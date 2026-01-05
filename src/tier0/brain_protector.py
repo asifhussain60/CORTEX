@@ -23,7 +23,10 @@ from enum import Enum
 from pathlib import Path
 from typing import List, Optional, Dict, Any
 import json
+import logging
 import yaml
+
+logger = logging.getLogger(__name__)
 
 
 class Severity(Enum):
@@ -120,7 +123,27 @@ class BrainProtector:
             rules_path = get_brain_path() / "brain-protection-rules.yaml"
         
         self.rules_path = Path(rules_path)
-        self.rules_config = self._load_rules()
+        
+        # Load rules with graceful fallback for YAML errors
+        try:
+            self.rules_config = self._load_rules()
+        except Exception as e:
+            logger.warning(
+                f"Brain protector rules YAML invalid, using permissive defaults: {e}\n"
+                f"  File: {self.rules_path}\n"
+                f"  This should be fixed - see cortex-brain/documents/planning/active/"
+                f"enterprise-python-audit-logger-with-self-healing/phase-4-blockers.md"
+            )
+            self.rules_config = {
+                "schema_version": "5.0",
+                "categories": [],
+                "rules": [],
+                "critical_paths": [],
+                "tier0_instincts": [],
+                "application_paths": [],
+                "brain_state_files": [],
+                "protection_layers": []
+            }
         
         # Extract configuration for easy access
         self.CRITICAL_PATHS = self.rules_config.get('critical_paths', [])

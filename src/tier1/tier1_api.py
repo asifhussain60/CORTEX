@@ -7,13 +7,14 @@ Duration: 1.5 hours
 """
 
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Any
 from datetime import datetime
 
 from .conversation_manager import ConversationManager
 from .entity_extractor import EntityExtractor
 from .file_tracker import FileTracker
 from .request_logger import RequestLogger
+from .user_profile_manager import UserProfileManager
 
 
 class Tier1API:
@@ -25,6 +26,7 @@ class Tier1API:
     - Entity extraction
     - File tracking
     - Request logging
+    - User profile management
     """
     
     def __init__(self, db_path: Path, log_path: Path):
@@ -39,6 +41,7 @@ class Tier1API:
         self.entity_extractor = EntityExtractor()
         self.file_tracker = FileTracker()
         self.request_logger = RequestLogger(log_path)
+        self.profile_manager = UserProfileManager(db_path)
     
     # ========================================================================
     # HIGH-LEVEL CONVERSATION OPERATIONS
@@ -498,3 +501,53 @@ class Tier1API:
             return (end - start).total_seconds()
         except (ValueError, AttributeError):
             return None
+    
+    # ========================================================================
+    # USER PROFILE OPERATIONS
+    # ========================================================================
+    
+    def get_profile(self) -> Optional[Dict[str, Any]]:
+        """
+        Get user profile with interaction preferences.
+        
+        Returns:
+            Dict with user profile data (interaction_mode, experience_level, etc.)
+            None if profile doesn't exist
+        
+        Example:
+            >>> tier1 = Tier1API(db_path, log_path)
+            >>> profile = tier1.get_profile()
+            >>> if profile:
+            ...     print(f"Mode: {profile['interaction_mode']}")
+        """
+        return self.profile_manager.get_profile()
+    
+    def update_profile(
+        self,
+        interaction_mode: Optional[str] = None,
+        experience_level: Optional[str] = None,
+        response_detail: Optional[str] = None,
+        tech_stack_preference: Optional[Dict[str, Any]] = None
+    ) -> bool:
+        """
+        Update user profile settings.
+        
+        Args:
+            interaction_mode: Interaction mode (autonomous/guided/wizard)
+            experience_level: Experience level (expert/intermediate/beginner)
+            response_detail: Response detail level (concise/standard/verbose)
+            tech_stack_preference: Technology stack preferences
+        
+        Returns:
+            True if update successful, False otherwise
+        """
+        try:
+            self.profile_manager.update_profile(
+                interaction_mode=interaction_mode,
+                experience_level=experience_level,
+                response_detail=response_detail,
+                tech_stack_preference=tech_stack_preference
+            )
+            return True
+        except Exception:
+            return False
