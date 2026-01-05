@@ -8544,7 +8544,7 @@ h1, h2, h3, h4, h5, h6, p, span, div {
         rgba(0, 229, 255, 0.2) 50%,
         rgba(76, 175, 80, 0.25) 75%,
         rgba(156, 39, 176, 0.3) 100%) !important;
-    border: 2px solid rgba(100, 181, 246, 0.5) !important;
+    border: 3px solid rgba(100, 181, 246, 0.5) !important;
     box-shadow: 
         0 16px 64px rgba(0, 0, 0, 0.5),
         0 0 40px rgba(0, 229, 255, 0.3),
@@ -8736,6 +8736,10 @@ h1, h2, h3, h4, h5, h6, p, span, div {
 /* Hero-specific larger icon */
 .hero-introduction .card-header-centered i {
     font-size: 3.3rem;
+    padding: var(--spacing-lg);
+    background: rgba(100, 181, 246, 0.1);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(100, 181, 246, 0.2);
 }
 
 .card-header-centered .card-title {
@@ -10057,6 +10061,8 @@ a.glass-card-clickable .card-description {
 .hero-introduction .stat-pill {
     font-size: 0.9625rem;
     padding: 0.55rem 1.1rem;
+    border: 2px solid rgba(100, 181, 246, 0.4);
+    box-shadow: 0 2px 8px rgba(100, 181, 246, 0.15);
 }
 
 .stat-pill:hover {
