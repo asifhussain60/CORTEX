@@ -6,18 +6,30 @@ schema_version: "5.0"
 # Pattern-Based Routing Rules (Primary)
 # 90%+ of requests handled via exact/regex matching
 routing_rules:
-  # Holistic Review Orchestrator (NEW - Phase 6.4)
+  # Holistic Review Orchestrator - DISABLED (orchestrator not yet registered)
   # Automatic architectural analysis system
-  - pattern: "^(holistic review|review holistically|architectural review).*$"
-    orchestrator: "holistic_review_orchestrator"
+  # TODO: Add holistic_review_orchestrator to mcp-server.yaml registry before enabling
+  # - pattern: "^(holistic review|review holistically|architectural review).*$"
+  #   orchestrator: "holistic_review_orchestrator"
+  #   confidence: 1.0
+  #   match_type: "regex"
+  #   priority: 5
+  #   metadata:
+  #     description: "Automated holistic architectural review"
+  #     autonomous: true
+  #     auto_trigger: true
+  #     version: "1.0"
+  
+  # Planning System (Alias for planning_v5)
+  # Both planning_system and planning_v5 exist in registry
+  - pattern: "^(planning system).*$"
+    orchestrator: "planning_system"
     confidence: 1.0
     match_type: "regex"
-    priority: 5
+    priority: 9
     metadata:
-      description: "Automated holistic architectural review"
+      description: "Planning system (explicit name routing)"
       autonomous: true
-      auto_trigger: true
-      version: "1.0"
   
   # Planning System
   - pattern: "^(plan|create a plan|make a plan)\\s*.*$"
@@ -63,21 +75,17 @@ routing_rules:
       mode: "auto"
       version: "2.0"
   
-  # Sanitization v2 - AUTONOMOUS (NEW)
+  # Sanitization Orchestrator - AUTONOMOUS
+  # Updated: January 5, 2026 - Fixed naming mismatch (was sanitization_v2)
   - pattern: "^(sanitize|remove sensitive data|clean sensitive info|anonymize|redact|sanitization).*$"
-    orchestrator: "sanitization_v2"
+    orchestrator: "sanitization_orchestrator"
     confidence: 1.0
     match_type: "regex"
     priority: 40
     metadata:
-      description: "Sanitization v2 - autonomous sensitive data removal"
+      description: "Sanitization orchestrator - autonomous sensitive data removal"
       autonomous: true
-      version: "2.0"
-      features:
-        - "30+ consolidated patterns"
-        - "Holistic review engine"
-        - "99.6% token efficiency"
-        - "Priority-based matching"
+      version: "1.0"
   
   # Maintenance - DISABLED: orchestrator not yet registered
   # - pattern: "^(maintenance|health check|system health).*$"
@@ -165,22 +173,23 @@ routing_rules:
         - "Checkpoint rollback"
         - "CORTEX brain protection"
   
-  # Panel Styling (NEW - Phase 6)
+  # Panel Styling - DISABLED (orchestrator not yet registered)
   # Natural language glassmorphism styling commands
-  - pattern: "^(style|make .+ look like|use .+ panel|apply .+ to).*$"
-    orchestrator: "panel_styler"
-    confidence: 1.0
-    match_type: "regex"
-    priority: 57
-    metadata:
-      description: "Natural language glassmorphism panel styling"
-      autonomous: false
-      version: "1.0"
-      features:
-        - "11 named panel styles"
-        - "'style X like Y' parsing"
-        - "HTML/CSS preview generation"
-        - "BEM class name resolution"
+  # TODO: Add panel_styler to mcp-server.yaml registry before enabling
+  # - pattern: "^(style|make .+ look like|use .+ panel|apply .+ to).*$"
+  #   orchestrator: "panel_styler"
+  #   confidence: 1.0
+  #   match_type: "regex"
+  #   priority: 57
+  #   metadata:
+  #     description: "Natural language glassmorphism panel styling"
+  #     autonomous: false
+  #     version: "1.0"
+  #     features:
+  #       - "11 named panel styles"
+  #       - "'style X like Y' parsing"
+  #       - "HTML/CSS preview generation"
+  #       - "BEM class name resolution"
   
   # HTML View Orchestrator (NEW - Phase 14.5)
   # Intelligent HTML/CSS view development with glassmorphism
@@ -228,33 +237,34 @@ routing_rules:
         - "Rollback checkpoints"
         - "Before/after metrics"
   
-  # Debug Orchestrator (C50-02 - ACTIVE)
+  # Debug Orchestrator - DISABLED (orchestrator not yet registered)
   # 7-phase systematic debugging with root cause analysis
-  - pattern: "^(debug|fix bug|troubleshoot|investigate bug|root cause).*$"
-    orchestrator: "debug_orchestrator"
-    confidence: 1.0
-    match_type: "regex"
-    priority: 61
-    metadata:
-      description: "7-phase systematic debugging workflow"
-      autonomous: false
-      version: "5.0"
-      phases:
-        - "Bug Report Parsing"
-        - "Error Analysis"
-        - "Root Cause Detection"
-        - "Fix Generation"
-        - "Debug Marker Injection"
-        - "Validation"
-        - "Pattern Learning"
-      features:
-        - "Stack trace analysis"
-        - "Hypothesis generation"
-        - "Evidence collection"
-        - "Multi-strategy fix proposals"
-        - "Debug marker injection/cleanup"
-        - "Git checkpoint management"
-        - "DoR/DoD validation"
+  # TODO: Add debug_orchestrator to mcp-server.yaml registry before enabling
+  # - pattern: "^(debug|fix bug|troubleshoot|investigate bug|root cause).*$"
+  #   orchestrator: "debug_orchestrator"
+  #   confidence: 1.0
+  #   match_type: "regex"
+  #   priority: 61
+  #   metadata:
+  #     description: "7-phase systematic debugging workflow"
+  #     autonomous: false
+  #     version: "5.0"
+  #     phases:
+  #       - "Bug Report Parsing"
+  #       - "Error Analysis"
+  #       - "Root Cause Detection"
+  #       - "Fix Generation"
+  #       - "Debug Marker Injection"
+  #       - "Validation"
+  #       - "Pattern Learning"
+  #     features:
+  #       - "Stack trace analysis"
+  #       - "Hypothesis generation"
+  #       - "Evidence collection"
+  #       - "Multi-strategy fix proposals"
+  #       - "Debug marker injection/cleanup"
+  #       - "Git checkpoint management"
+  #       - "DoR/DoD validation"
 
 # LLM Fallback Configuration (Secondary)
 # Handles ambiguous inputs that don't match patterns
