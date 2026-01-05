@@ -1,8 +1,11 @@
 # 🔄 HTML View Standardization - Snowball Strategy
 
 **Date:** 2026-01-04  
-**Status:** 🚀 ACTIVE (Phase 16a)  
-**Approach:** Iterative Live Refinement
+**Status:** 🚀 ACTIVE (Phase 16b)  
+**Approach:** Iterative Live Refinement with Intelligent Automation
+
+**🤖 INTELLIGENCE LAYER:** `.github/prompts/cortex-docs.prompt.md` (v1.0.0)  
+**📚 USAGE GUIDE:** `CORTEX-DOCS-USAGE-GUIDE.md`
 
 ---
 
@@ -10,7 +13,14 @@
 
 **Problem:** Preview-based approach (Phase 14) failed - isolated files don't reflect production CSS environment.
 
-**Solution:** Work directly on production files with live browser feedback loop.
+**Solution:** Work directly on production files with live browser feedback loop **+ intelligent tool automation**.
+
+**🆕 Intelligence Enhancement (v1.0.0):**
+- ✅ Complexity-based execution strategy (0-20/21-50/51+ score thresholds)
+- ✅ Holistic pattern detection (auto-finds similar pages)
+- ✅ Tool-first philosophy (95% automation via 52 scripts)
+- ✅ Automatic scope detection (one request → batch transformation)
+- ✅ Self-documenting standards (patterns auto-recorded)
 
 ---
 
