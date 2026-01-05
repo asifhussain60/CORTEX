@@ -8654,6 +8654,26 @@ h1, h2, h3, h4, h5, h6, p, span, div {
     }
 }
 
+/* Hero-specific centered elements */
+.hero-introduction .hero-description {
+    text-align: center;
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: var(--spacing-xl);
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hero-introduction .hero-stats {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-lg);
+    flex-wrap: wrap;
+}
+
 .glass-card-clickable {
     cursor: pointer;
     background: linear-gradient(135deg,
