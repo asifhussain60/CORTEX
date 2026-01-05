@@ -9888,6 +9888,28 @@ a.glass-card-clickable .card-description {
     box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
 
+/* Stat Pills (Simplified Badges) */
+.stat-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-full);
+    font-size: 0.875rem;
+    font-weight: 500;
+    background: rgba(100, 181, 246, 0.15);
+    border: 1px solid rgba(100, 181, 246, 0.25);
+    color: var(--text-secondary);
+    transition: all var(--transition-normal);
+}
+
+.stat-pill:hover {
+    background: rgba(100, 181, 246, 0.25);
+    border-color: rgba(100, 181, 246, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(100, 181, 246, 0.2);
+}
+
 /* Pattern Grid */
 .pattern-grid {
     display: grid;
