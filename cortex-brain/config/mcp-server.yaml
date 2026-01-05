@@ -57,6 +57,14 @@ orchestrators:
     type: "autonomous"
     description: "Deep filesystem cleanup and reorganization"
   
+  investigation_v2:
+    class: "InvestigationOrchestratorV2"
+    module: "src.orchestrators.investigation.investigation_orchestrator_v2"
+    config: "cortex-brain/manifests/orchestrators/investigation-orchestrator-v2.yaml"
+    type: "autonomous"
+    description: "Root cause analysis and architectural review"
+    version: "2.0.0"
+  
   html_view_orchestrator:
     class: "HTMLViewOrchestrator"
     module: "src.orchestrators.html_view.html_view_orchestrator"

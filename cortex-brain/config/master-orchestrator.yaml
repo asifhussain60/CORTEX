@@ -124,6 +124,25 @@ routing_rules:
           expected_space_freed: "100MB"
           priority: "LOW"
   
+  # Investigation v2 (Root Cause Analysis & Architectural Review)
+  - pattern: "^(investigate|find root cause|review|why is|debug architecture|fix brittleness|analyze).*$"
+    orchestrator: "investigation_v2"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 60
+    metadata:
+      description: "Investigation v2 autonomous root cause analysis"
+      autonomous: true
+      version: "2.0"
+      features:
+        - "Multi-source artifact discovery"
+        - "Acceptance criteria validation"
+        - "Brittleness cross-reference"
+        - "Root cause analysis"
+        - "Gap identification"
+        - "Remediation planning"
+        - "Comprehensive reporting"
+  
   # Vacuum v2 (Deep Filesystem Cleanup)
   - pattern: "^(vacuum|deep clean|organize files).*$"
     orchestrator: "vacuum"
