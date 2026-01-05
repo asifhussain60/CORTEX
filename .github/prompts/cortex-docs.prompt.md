@@ -1,6 +1,6 @@
 # 🎨 CORTEX Documentation Designer - Intelligent Glassmorphism Automation
 
-**Version:** 1.0.0 | **Status:** ✅ PRODUCTION | **Type:** Holistic HTML Standardization  
+**Version:** 1.1.0 | **Status:** ✅ PRODUCTION | **Type:** Holistic HTML Standardization  
 **Author:** Asif Hussain | **Date:** January 5, 2026  
 **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
@@ -8,17 +8,192 @@
 
 ## 🎯 Purpose
 
-**Central orchestration system for HTML glassmorphism standardization** using intelligent Python tools and SNOWBALL methodology. Automates design pattern application, eliminates repetitive requests, and ensures holistic consistency across CORTEX documentation.
+**Central orchestration system for HTML glassmorphism standardization** using intelligent Python tools, Vision API, and SNOWBALL methodology. Automates design pattern application, eliminates repetitive requests, prevents duplicates, and ensures holistic consistency across CORTEX documentation.
+
+**🆕 NEW in v1.1.0:**
+- ✅ Delete-Over-Fix intelligence (no duplicate creation)
+- ✅ Approved panel library auto-update (pattern recording)
+- ✅ Vision-driven granular analysis (URLs, CSS classes, visual flaws)
+- ✅ Complexity-based regeneration threshold (51+ = delete & regenerate)
 
 **Plan Context:** `cortex-brain/documents/planning/active/html-glassmorphism-alignment/`  
+**Plan Config:** `cortex-brain/documents/planning/active/html-glassmorphism-alignment/plan-config.yaml`  
 **Standards:** `cortex-brain/documents/standards/glassmorphism-design-standard.md` (v4.3.0)  
-**Strategy:** SNOWBALL (incremental live refinement with user validation)
+**Strategy:** SNOWBALL (incremental live refinement with user validation)  
+**Vision API:** `src/operations/utilities/vision_context_middleware.py` (automatic image analysis)
+
+---
+
+## 🖼️ Vision API Integration (Automatic Image Analysis)
+
+### **Automatic Engagement**
+
+When user attaches images (PNG/JPG/JPEG) or provides URLs, Vision API **automatically analyzes** without explicit prompting.
+
+**Middleware:** `src/operations/utilities/vision_context_middleware.py`
+
+**Workflow:**
+```python
+# User attaches screenshot or says "Review http://localhost:8000/page.html"
+  ↓
+Vision API Auto-Detects:
+  1. Image attachments in context (PNG, JPG, JPEG)
+  2. URLs mentioned → Captures screenshot automatically
+  3. "see this", "look at", "review" triggers
+  ↓
+GPT-4V Analysis (<500ms):
+  - Visual structure (panels, grids, cards, headers)
+  - Color schemes (monotone vs. colorized)
+  - Spacing issues (gaps, alignment)
+  - Pattern violations (missing C50, C51, C52, C53)
+  - Broken elements (orphaned headings, inline styles)
+  - URL extraction (links, navigation)
+  ↓
+Intelligence Layer Receives:
+  vision_analysis = {
+      'structure': 'hero header + 3 card grids',
+      'issues': ['monotone icons', 'missing panel wrapping'],
+      'urls': ['http://localhost:8000/...'],
+      'complexity_score': 35,
+      'recommended_fixes': ['C50 color rotation', 'C53 panel wrapping']
+  }
+  ↓
+Automatic Tool Execution (no manual parsing needed)
+```
+
+**User Experience:**
+
+**BEFORE (Manual):**
+```
+User: "See screenshot - fix the cards"
+Copilot: "I can't see images. Please describe what needs fixing."
+User: "The cards are all purple. They need color rotation."
+Copilot: [applies fix]
+```
+
+**AFTER (Vision API):**
+```
+User: [Attaches screenshot]
+Copilot Intelligence:
+🖼️ Vision Analysis Complete (<500ms)
+
+📊 DETECTED STRUCTURE:
+- Hero header: ✅ Present (Pattern C52)
+- Master Orchestrators section: 10 cards
+- Card grid layout: 3-4 column responsive
+
+⚠️ ISSUES FOUND:
+1. ❌ All 10 cards using same purple icon (monotone)
+2. ❌ Section heading not panel-wrapped (Pattern C53 violation)
+3. ❌ 3 inline styles detected
+
+📊 COMPLEXITY SCORE: 28 (Script-Driven Recommended)
+
+🎯 RECOMMENDED FIXES:
+- Apply Pattern C50 (4-color rotation) → validate-color-rotation.ps1 --autofix
+- Apply Pattern C53 (panel wrapping) → validate-panel-wrapping.ps1 --autofix
+- Remove inline styles → fix-inline-styles.ps1 --autofix
+
+❓ Execute recommended fixes? [Y/n]
+
+// User just says "y" - no manual description needed
+```
+
+**Benefits:**
+- ✅ No manual issue description required
+- ✅ Granular visual details extracted (URLs, colors, spacing)
+- ✅ Complexity automatically calculated
+- ✅ Tools auto-selected based on vision analysis
+- ✅ <500ms analysis time (cached for duplicates)
+
+---
+
+### **URL Extraction from Images**
+
+Vision API **automatically extracts URLs** from screenshots:
+
+```python
+# User attaches screenshot showing browser address bar
+  ↓
+Vision Analysis:
+  - URL detected: http://localhost:8000/token-optimization/index.html
+  - Page type: Level 1 (Token Optimization Hub)
+  - Visual issues: [list extracted from image]
+  ↓
+Intelligence Layer:
+  - Opens URL context automatically
+  - Reads current HTML structure
+  - Compares vision analysis vs. actual DOM
+  - Generates precise fix commands
+```
+
+**User Experience:**
+```
+User: [Attaches screenshot of browser]
+
+CORTEX Intelligence:
+🖼️ URL Detected: http://localhost:8000/token-optimization/index.html
+📄 Reading current HTML structure...
+🔍 Comparing visual vs. DOM...
+
+DISCREPANCIES FOUND:
+1. Vision shows monotone cards → DOM confirms: all use card-icon-primary
+2. Vision shows missing panel → DOM confirms: no glass-card-display wrapper
+3. Vision shows inline styles → DOM confirms: 3 style="" attributes
+
+✅ Analysis complete - Ready to apply fixes
+```
+
+---
+
+### **Vision-Driven Complexity Scoring**
+
+Vision API enhances complexity calculation with visual analysis:
+
+```python
+complexity_score = (
+    file_size_kb * 0.1 +
+    broken_patterns * 2 +
+    inline_styles_count * 0.5 +
+    missing_classes * 1.5 +
+    duplicate_sections * 3 +
+    # NEW: Vision API contributions
+    vision_monotone_elements * 0.5 +
+    vision_alignment_issues * 1.0 +
+    vision_color_violations * 0.8 +
+    vision_spacing_problems * 0.6
+)
+```
+
+**Example:**
+```
+File size: 45 KB → +4.5
+Inline styles (vision detected): 3 → +1.5
+Missing panels (vision detected): 2 → +6.0
+Monotone cards (vision detected): 10 → +5.0
+Alignment issues (vision detected): 4 → +4.0
+---
+Total Complexity: 21 → Script-Driven Strategy
+```
+
+---
+
+### **Caching & Performance**
+
+**Duplicate Image Detection:**
+- SHA-256 hash of image content
+- Cache analysis for 24 hours
+- Skip API call if analysis exists
+- <500ms per NEW image
+- <50ms for cached images
+
+**Cache Location:** `cortex-brain/cache/vision-analysis/`
 
 ---
 
 ## 🧠 Core Intelligence Principles
 
-### 1. **Complexity-Based Execution Strategy**
+### 1. **Complexity-Based Execution Strategy (Delete-Over-Fix)**
 
 Before any change, calculate complexity and choose the optimal approach:
 
@@ -28,11 +203,16 @@ complexity_score = (
     broken_patterns * 2 +
     inline_styles_count * 0.5 +
     missing_classes * 1.5 +
-    duplicate_sections * 3
+    duplicate_sections * 3 +
+    # Vision API contributions
+    vision_monotone_elements * 0.5 +
+    vision_alignment_issues * 1.0 +
+    vision_color_violations * 0.8 +
+    vision_spacing_problems * 0.6
 )
 
 if complexity_score > 50:
-    action = "DELETE_AND_REGENERATE"  # Fresh start with approved templates
+    action = "DELETE_AND_REGENERATE"  # Fresh start with approved templates (PREFERRED)
 elif complexity_score > 20:
     action = "SCRIPT_DRIVEN_REFACTOR"  # Use Python tools for batch changes
 else:
@@ -41,11 +221,18 @@ else:
 
 **Decision Matrix:**
 
-| Score | Strategy | Tools | Reason |
-|-------|----------|-------|--------|
-| 0-20 | Targeted Edits | `replace_string_in_file`, `multi_replace_string_in_file` | Clean codebase, surgical fixes |
-| 21-50 | Script-Driven | `page-refresh-tool.py`, `fix-*.ps1` scripts | Multiple issues, automation efficient |
-| 51+ | Delete & Regenerate | `purpose-driven-designer.py`, templates | Broken state, faster to rebuild |
+| Score | Strategy | Tools | Reason | Duplicate Risk |
+|-------|----------|-------|--------|----------------|
+| 0-20 | Targeted Edits | `replace_string_in_file`, `multi_replace_string_in_file` | Clean codebase, surgical fixes | LOW ✅ |
+| 21-50 | Script-Driven | `page-refresh-tool.py`, `fix-*.ps1` scripts | Multiple issues, automation efficient | MEDIUM ⚠️ |
+| 51+ | Delete & Regenerate | `purpose-driven-designer.py`, templates | Broken state, **prevents duplicates** | ZERO 🛡️ |
+
+**🛡️ Duplicate Prevention Rule:**
+When complexity > 50, ALWAYS delete HTML file before regenerating. This prevents:
+- ❌ Duplicate sections (old + new content)
+- ❌ Orphaned code blocks (leftover from edits)
+- ❌ Conflicting CSS classes (old styles + new styles)
+- ✅ Clean slate (approved templates only)
 
 **Risk Factors (Add to Score):**
 - Orphaned code blocks: +10
@@ -120,15 +307,22 @@ For Each Page:
   3. Intelligence Analysis:
      - Complexity score: 35 → Script-Driven
      - Similar pages: 3 found → Batch mode
+     - **Standardization opportunities detected: 2 patterns**
      - Tools required: fix-inline-styles.ps1, validate-color-rotation.ps1
-  4. Execute Tools:
+  4. **Auto-Standardization Check:**
+     🔍 Analyzing workspace for similar issues...
+     Found: 5 additional pages with same pattern violations
+     ❓ Apply fixes to ALL 6 pages? [Y/n] (RECOMMENDED)
+  5. Execute Tools:
      ./cortex-toolkit/fix-inline-styles.ps1 -Path docs/{page}.html -AutoFix
      ./cortex-toolkit/validate-color-rotation.ps1 -Path docs/{page}.html -AutoFix
-  5. User Validates: Hard refresh + review changes
-  6. If Approved:
+     # If user approved batch: apply to 5 similar pages too
+  6. User Validates: Hard refresh + review changes
+  7. If Approved:
      - Git commit with detailed changelog
+     - **Auto-update approved panel library**
      - Move to next page
-  7. If Not Approved:
+  8. If Not Approved:
      - Iterate on specific section
      - Re-run tools with refined parameters
 ```
@@ -137,10 +331,88 @@ For Each Page:
 - ✅ One page at a time (focused validation)
 - ✅ Live browser feedback (http://localhost:8000)
 - ✅ Tool execution visible to user (transparency)
+- ✅ **Auto-detect standardization opportunities** (batch efficiency)
 - ✅ Atomic commits per page (rollback safety)
 - ✅ User approval required (quality gate)
 
-**Progress Tracking:** `SNOWBALL-STRATEGY.md` updated after each page completion
+**Progress Tracking:** `SNOWBALL-STRATEGY.md` + `approved-panels.yaml` updated after each page completion
+
+---
+
+### 5. **Automatic Standardization Intelligence**
+
+**Proactive Pattern Detection:**
+
+When fixing one page, intelligence layer **automatically scans workspace** for identical issues.
+
+**Detection Algorithm:**
+```python
+def detect_standardization_opportunities(current_page: str, issues_found: List[str]) -> List[str]:
+    """Find similar pages with same pattern violations."""
+    
+    similar_pages = []
+    
+    for issue in issues_found:
+        # Example: "Missing color rotation (Pattern C50)"
+        pattern = extract_pattern_id(issue)  # → "C50"
+        
+        # Scan all HTML files in workspace
+        all_pages = glob("docs/**/*.html")
+        
+        for page in all_pages:
+            if page == current_page:
+                continue  # Skip current page
+            
+            # Check if page violates same pattern
+            if validates_pattern(page, pattern) == False:
+                similar_pages.append({
+                    "page": page,
+                    "issue": issue,
+                    "pattern": pattern,
+                    "confidence": calculate_confidence(page, pattern)
+                })
+    
+    # Sort by confidence (highest first)
+    return sorted(similar_pages, key=lambda x: x["confidence"], reverse=True)
+```
+
+**User Experience:**
+```
+User: "Fix color rotation on orchestrators/index.html"
+
+Intelligence Analysis:
+🔍 Scanning workspace for similar issues...
+
+📊 STANDARDIZATION OPPORTUNITIES DETECTED:
+
+Pattern C50 (Color Rotation) violations found on:
+  1. ✅ orchestrators/index.html (current page)
+  2. ❌ features/index.html (10 monotone cards) - Confidence: 98%
+  3. ❌ architecture/index.html (8 monotone cards) - Confidence: 95%
+  4. ❌ token-optimization/index.html (6 monotone cards) - Confidence: 92%
+
+🎯 RECOMMENDATION: Apply Pattern C50 to ALL 4 pages
+
+Benefits:
+  - ✅ Consistent design across Level 1 pages
+  - ✅ One validation → 4x work complete
+  - ✅ Prevents repetitive requests
+  - ✅ 3x faster than sequential fixes
+
+❓ Apply fix to ALL 4 pages? [Y/n] (default: Y)
+```
+
+**If User Approves Batch:**
+- Execute tool on all 4 pages
+- Validate each page individually
+- Commit atomically with detailed changelog
+- Update approved-panels.yaml once
+- Mark all 4 pages complete in SNOWBALL tracker
+
+**If User Declines:**
+- Fix only current page
+- Mark others as "deferred" in tracker
+- User can manually address later
 
 ---
 
@@ -473,7 +745,10 @@ if user_approval:
     # 6. Update SNOWBALL-STRATEGY.md
     update_snowball_progress(page="X.html", status="COMPLETE")
     
-    # 7. Move to next page
+    # 7. Auto-update approved panel library
+    update_approved_panel_library(page="X.html", patterns_used=["C50", "C51", "C53"])
+    
+    # 8. Move to next page
     next_page = get_next_snowball_page()
     print(f"🎯 Next page: {next_page}")
 else:
@@ -486,8 +761,112 @@ else:
 - ✅ Describes issues in natural language (no technical jargon required)
 - ✅ Sees tools execute automatically (transparency)
 - ✅ Validates changes in live browser (immediate feedback)
-- ✅ One approval → automatic commit + progress tracking (efficiency)
+- ✅ One approval → automatic commit + progress tracking + library update (efficiency)
 - ✅ Clear next steps (guided workflow)
+
+---
+
+## 📚 Approved Panel Library (Auto-Update)
+
+### **Intelligent Pattern Recording**
+
+When user approves a page, **automatically record** approved patterns to library.
+
+**Library Location:** `cortex-brain/documents/planning/active/html-glassmorphism-alignment/standards/approved-panels.yaml`
+
+**Auto-Update Workflow:**
+```python
+def update_approved_panel_library(page_path: str, patterns_used: List[str]):
+    """Record approved patterns to library after user validation."""
+    
+    # 1. Extract HTML patterns from approved page
+    soup = BeautifulSoup(read_file(page_path))
+    
+    # 2. Identify new/modified patterns
+    library = load_yaml("approved-panels.yaml")
+    
+    for pattern_id in patterns_used:
+        # Extract pattern HTML from page
+        pattern_html = extract_pattern(soup, pattern_id)
+        
+        # Check if pattern exists in library
+        if pattern_id not in library["patterns"]:
+            # NEW pattern - add to library
+            library["patterns"][pattern_id] = {
+                "name": get_pattern_name(pattern_id),
+                "approved_date": today(),
+                "approved_page": page_path,
+                "html_template": pattern_html,
+                "css_classes": extract_css_classes(pattern_html),
+                "validation_script": f"validate-{pattern_id}.ps1"
+            }
+            logger.info(f"✅ NEW pattern {pattern_id} added to library")
+        
+        elif pattern_html != library["patterns"][pattern_id]["html_template"]:
+            # MODIFIED pattern - version bump
+            library["patterns"][pattern_id]["version"] += 1
+            library["patterns"][pattern_id]["html_template"] = pattern_html
+            library["patterns"][pattern_id]["last_modified"] = today()
+            logger.info(f"✅ Pattern {pattern_id} updated (v{library['patterns'][pattern_id]['version']})")
+    
+    # 3. Save library + commit
+    save_yaml(library, "approved-panels.yaml")
+    git_commit(f"docs(library): Auto-update approved panels from {page_path}")
+```
+
+**Library Structure:**
+```yaml
+---
+# Approved Panel Library
+# Auto-updated when user approves pages
+
+version: 1.1.0
+last_updated: 2026-01-05
+
+patterns:
+  C50:
+    name: Color Rotation (Card Grids)
+    approved_date: 2026-01-04
+    approved_page: orchestrators/index.html
+    version: 1
+    html_template: |
+      <a href="#" class="glass-card-clickable card-variant-primary">
+        <div class="card-header-inline">
+          <i class="card-icon-primary fas fa-icon"></i>
+          <h3>Title</h3>
+        </div>
+      </a>
+    css_classes:
+      - glass-card-clickable
+      - card-variant-primary
+      - card-header-inline
+      - card-icon-primary
+    validation_script: validate-color-rotation.ps1
+    
+  C51:
+    name: Tetris Stat Badges
+    approved_date: 2026-01-04
+    approved_page: orchestrators/index.html
+    version: 1
+    html_template: |
+      <div class="card-stats">
+        <span class="stat-badge stat-primary">
+          <i class="fas fa-icon"></i> Text
+        </span>
+      </div>
+    css_classes:
+      - card-stats
+      - stat-badge
+      - stat-primary
+    validation_script: validate-color-rotation.ps1 --badges
+```
+
+**Benefits:**
+- ✅ Self-documenting (patterns recorded automatically)
+- ✅ Version tracking (detect modifications)
+- ✅ Template repository (reuse approved HTML)
+- ✅ CSS inventory (track required classes)
+- ✅ Zero manual updates (fully automated)
 
 ---
 
@@ -690,6 +1069,186 @@ def evolve_standard(new_pattern: dict):
 ```
 
 **Generated by:** `validate-all-html.ps1 --dashboard`
+
+### **6. ANTI_DUPLICATION**
+
+**Rule:** ALWAYS check for existing implementations before creating new ones.
+
+**Prevention Strategy:**
+```python
+before_action(change_request):
+    1. Search for similar HTML structures
+    2. Check if pattern already exists in approved library
+    3. Verify no duplicate sections in target file
+    4. Confirm delete-and-recreate vs. patch strategy
+    
+    if duplicates_would_be_created:
+        strategy = "DELETE_EXISTING_FIRST"
+        delete_old_implementation()
+        create_new_from_template()
+    elif simple_change_possible:
+        strategy = "TARGETED_PATCH"
+        apply_minimal_edit()
+    else:
+        strategy = "FULL_REBUILD"
+        delete_entire_section()
+        regenerate_from_approved_template()
+```
+
+**Rationale:**
+- Duplicates create confusion (which version is correct?)
+- Orphaned code accumulates technical debt
+- Fresh rebuild is cleaner than layering patches
+- Approved templates guarantee consistency
+
+**Enforcement:** Intelligence layer scans for duplicates before ANY create operation.
+
+---
+
+### **7. APPROVED_LIBRARY_SYNC**
+
+**Rule:** ALWAYS update approved pattern library when new patterns emerge.
+
+**Auto-Sync Workflow:**
+```python
+on_pattern_approval(new_pattern):
+    # 1. Detect pattern characteristics
+    pattern_signature = extract_signature(new_pattern)
+    
+    # 2. Check if pattern exists in library
+    library_path = "plan-config.yaml:patterns"
+    existing = search_pattern_library(pattern_signature)
+    
+    if not existing:
+        # 3. Generate pattern ID
+        next_id = get_next_pattern_id()  # C54, C55, etc.
+        
+        # 4. Document in library
+        add_to_library(
+            id=next_id,
+            name=pattern_name,
+            template=pattern_html,
+            validation_script=f"validate-{pattern_name}.ps1",
+            applies_to=scope,
+            examples=[...]
+        )
+        
+        # 5. Update glassmorphism-design-standard.md
+        add_to_standard(next_id, pattern_doc)
+        
+        # 6. Generate validation script
+        if not exists(validation_script):
+            generate_script(next_id, pattern_signature)
+        
+        # 7. Commit changes
+        git_commit(f"feat(patterns): Add Pattern {next_id} - {pattern_name}")
+    else:
+        # Pattern exists - update if changed
+        if pattern_changed(existing, new_pattern):
+            update_library(existing_id, new_pattern)
+            git_commit(f"feat(patterns): Update Pattern {existing_id}")
+```
+
+**Library Location:** `cortex-brain/documents/planning/active/html-glassmorphism-alignment/plan-config.yaml:patterns`
+
+**Benefits:**
+- ✅ Central source of truth for all patterns
+- ✅ Auto-documentation (no manual updates)
+- ✅ Version tracking (pattern evolution history)
+- ✅ Validation scripts auto-generated
+- ✅ Prevents pattern drift across pages
+
+**Enforcement:** Pre-commit hook validates library sync before allowing commits.
+
+---
+
+### **8. INTELLIGENT_STANDARDIZATION**
+
+**Rule:** When user requests standardization, AUTOMATICALLY apply to ALL applicable pages without asking.
+
+**Auto-Standardization Workflow:**
+```python
+on_standardization_request(pattern_name):
+    # 1. Identify pattern scope
+    pattern = load_from_library(pattern_name)
+    scope = pattern.applies_to  # e.g., [level1, level2]
+    
+    # 2. Find ALL applicable pages
+    applicable_pages = []
+    for level in scope:
+        applicable_pages.extend(find_pages_by_level(level))
+    
+    # 3. Analyze compliance
+    compliant_pages = []
+    non_compliant_pages = []
+    for page in applicable_pages:
+        if is_compliant(page, pattern):
+            compliant_pages.append(page)
+        else:
+            non_compliant_pages.append(page)
+    
+    # 4. Group by complexity
+    complexity_groups = group_by_complexity(non_compliant_pages)
+    
+    # 5. Execute WITHOUT asking user
+    print(f"🔄 Auto-Standardizing {pattern_name} ({len(non_compliant_pages)} pages)")
+    print(f"  - Already compliant: {len(compliant_pages)} pages ✅")
+    print(f"  - Regenerating: {len(complexity_groups['high'])} pages (51+)")
+    print(f"  - Script-driven: {len(complexity_groups['medium'])} pages (21-50)")
+    print(f"  - Targeted edits: {len(complexity_groups['low'])} pages (0-20)")
+    
+    for page in complexity_groups['high']:
+        regenerate_page(page, pattern)
+    
+    for page in complexity_groups['medium']:
+        apply_script_fixes(page, pattern)
+    
+    for page in complexity_groups['low']:
+        apply_targeted_edits(page, pattern)
+    
+    # 6. Validate ALL pages
+    validate_compliance(applicable_pages, pattern)
+    
+    # 7. Update library (mark as site-wide applied)
+    update_library_status(pattern_name, "APPLIED_SITE_WIDE")
+    
+    # 8. Commit atomically
+    git_commit(f"feat(ui): Standardize {pattern_name} site-wide ({len(non_compliant_pages)} pages)")
+```
+
+**User Experience:**
+```
+User: "Standardize hero headers"
+
+CORTEX Intelligence:
+🔍 Pattern: C52 (Level 1 Hero Header)
+📊 Scope: 8 Level 1 pages
+
+COMPLIANCE ANALYSIS:
+  ✅ Already compliant: 2 pages (orchestrators, token-optimization)
+  ⏳ Need updates: 6 pages
+
+EXECUTION (Automatic - No Confirmation Needed):
+  [████████████████████] 100% (6/6 pages complete)
+
+VALIDATION:
+  ✅ glassmorphism-compliance: PASSED (8/8 pages)
+  ✅ html-structure: PASSED
+  ✅ responsive-design: PASSED
+
+✅ COMMITTED: feat(ui): Standardize C52 site-wide (6 pages)
+
+// No "Are you sure?" or "Proceed?" prompts - Intelligence handles it
+```
+
+**Benefits:**
+- ✅ Zero friction (no confirmation dialogs)
+- ✅ Intelligent scope detection (finds ALL applicable pages)
+- ✅ Complexity-based execution (optimal strategy per page)
+- ✅ Atomic commits (all changes together)
+- ✅ Library updates automatically
+
+**Enforcement:** HOLISTIC_STANDARDIZATION rule requires auto-application.
 
 ---
 
