@@ -179,11 +179,11 @@ Maintenance fixes MUST:
 
 ---
 
-## Rule 10: Orchestrator Hand-off Enforcement
+## Rule 10: Orchestrator Invocation Enforcement
 
-**HAND-OFF Orchestrators (marked with 🛡️) MUST take over completely.**
+**AUTONOMOUS Orchestrators (marked with 🛡️) MUST be invoked via terminal.**
 
-**✅ REQUIRED Hand-off Orchestrators:**
+**✅ REQUIRED Autonomous Orchestrators:**
 
 | Orchestrator | Trigger Keywords | Response Template | Header |
 |--------------|------------------|-------------------|--------|
@@ -191,8 +191,8 @@ Maintenance fixes MUST:
 | **ADO Operations** | `ado story`, `ado feature`, `plan ado` | `ado_execution_progress` | `## 🛡️🧠 CORTEX ADO Work Item Generation` |
 
 **Visual Confirmation:**
-- 🛡️ = Orchestrator engaged and using correct template
-- If response does NOT show 🛡️ header → Hand-off failed
+- 🛡️ = Orchestrator invoked via `run_in_terminal` tool
+- If response does NOT show 🛡️ header → Invocation failed
 
 **Location in Pipeline:** Phase 2b (Template Validation) + Phase 11 (Final Verification)
 

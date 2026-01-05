@@ -54,7 +54,7 @@
 | `^(refine\|improve\|optimize)` | **Refinement v2** | 60 | autonomous |
 | `^(system maintenance\|health check)` | **Maintenance v2** | 50 | autonomous |
 
-**⚡ Philosophy:** CORTEX is built for **100% autonomous execution**. GitHub Copilot routes and stops. Python orchestrators execute.
+**⚡ Philosophy:** CORTEX is built for **Python-based orchestration via terminal invocation**. GitHub Copilot routes via `run_in_terminal`. Python orchestrators execute.
 
 ### 🎭 Special Handlers (Templates Only)
 
@@ -121,12 +121,12 @@ python3 -m src.main "{transformed_user_request}" --format markdown
 - **Result:** Python Planning v5 executes → Plan folder created
 
 **YOU MUST NOT:**
-- ❌ Display "hand-off" message and stop (no Python execution)
+- ❌ Display routing message and stop (no Python execution)
 - ❌ Read manifest files yourself
 - ❌ Execute orchestrator logic in Copilot Chat
 - ❌ Skip the terminal invocation
 
-**Visual Confirmation:** Terminal output shows Python orchestrator executing
+**Visual Confirmation:** Terminal output shows `python3 -m src.main` executing
 
 ---
 
@@ -135,7 +135,7 @@ python3 -m src.main "{transformed_user_request}" --format markdown
 | Rule | Enforcement |
 |------|-------------|
 | **PLANNING_ISOLATION** | "plan" pattern → Create plan structure ONLY, NEVER implement |
-| **HAND_OFF_PROTOCOL** | ALL orchestrators → Transform + Route + STOP (no execution) |
+| **HAND_OFF_PROTOCOL** | ALL orchestrators → Transform + Route + **Invoke via terminal** (no Copilot execution) |
 | **AUTONOMOUS_ONLY** | NO manual orchestration. Python executes everything. |
 | **TDD_ENFORCEMENT** | All code changes → RED→GREEN→REFACTOR mandatory |
 | **HOLISTIC_DISCOVERY** | Search workspace before creating files (prevent duplicates) |
@@ -195,7 +195,7 @@ python3 -m src.main "continue plan c150-remediation-plan from phase 3..." --form
 
 ## ⚠️ Common Mistakes to Avoid
 
-❌ **Displaying "hand-off" without executing:** Text messages don't invoke Python  
+❌ **Displaying routing message without executing:** Text messages don't invoke Python  
 ❌ **Executing orchestrator logic yourself:** ALL logic is in Python orchestrators  
 ❌ **Skipping terminal invocation:** Python MUST be called via `run_in_terminal`  
 ❌ **Using raw user input:** ALWAYS transform before invoking Python  

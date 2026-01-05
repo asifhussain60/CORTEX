@@ -268,7 +268,7 @@ Index updated: `yamls/index.yaml`
 ### 🎯 Next Actions
 
 1. Review archived items for implementation priority
-2. Select item for hand-off to appropriate orchestrator
+2. Select item for routing to appropriate orchestrator
 3. Run `backlog status` to see current state
 ```
 
@@ -282,7 +282,7 @@ Index updated: `yamls/index.yaml`
 | `backlog status` | Show YAML index summary |
 | `backlog review {id}` | Detailed analysis of specific item |
 | `backlog prioritize` | Re-rank items by complexity/value |
-| `backlog hand-off {id}` | Prepare item for orchestrator |
+| `backlog route {id}` | Prepare item for orchestrator invocation |
 
 ---
 
@@ -298,7 +298,7 @@ Index updated: `yamls/index.yaml`
 
 ## 🔗 Integration Points
 
-- **Planning Orchestrator:** Hand-off ready items with `hand_off.ready: true`
+- **Planning Orchestrator:** Route ready items with `routing.ready: true`
 - **TDD Orchestrator:** Items with `tdd_assessment.applicable: true`
 - **Maintenance Orchestrator:** Infrastructure/refactor category items
 

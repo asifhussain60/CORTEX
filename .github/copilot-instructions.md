@@ -20,7 +20,7 @@
 All command routing is defined in `CORTEX.prompt.md`. Key orchestrators:
 
 **Legend:**
-- 🛡️ **AUTONOMOUS** = Hand-off to Python (GitHub Copilot stops after routing)
+- 🛡️ **AUTONOMOUS** = Invoke Python via terminal (GitHub Copilot routes, Python executes)
 
 | Intent Pattern | Route To | Type |
 |----------------|----------|------|
@@ -51,9 +51,9 @@ All command routing is defined in `CORTEX.prompt.md`. Key orchestrators:
 
 **Middleware:** `src/operations/utilities/vision_context_middleware.py`
 
-### 🛡️ HAND-OFF Orchestrators
+### 🛡️ AUTONOMOUS Orchestrators
 
-When you see 🛡️ in Intent Router, these orchestrators **MUST take over completely**:
+When you see 🛡️ in Intent Router, these orchestrators **execute via Python terminal invocation**:
 
 | Orchestrator | Trigger | Template | Header |
 |--------------|---------|----------|--------|
@@ -65,34 +65,33 @@ When you see 🛡️ in Intent Router, these orchestrators **MUST take over comp
 | **Investigation** | `investigate`, `find root cause` | `autonomous_execution_progress` | `## 🛡️🧠 CORTEX Investigation` |
 | **Sanitization** | `sanitize`, `anonymize` | `autonomous_execution_progress` | `## 🛡️🧠 CORTEX Sanitization` |
 
-**🛡️ Shield Icon Meaning:** Autonomous orchestrator is taking control - GitHub Copilot hands off execution to Python.
+**🛡️ Shield Icon Meaning:** Autonomous orchestrator invoked via `run_in_terminal` - GitHub Copilot routes, Python executes.
 
-**Hand-Off Protocol:**
+**Invocation Protocol:**
 - ❌ Do NOT read manifest and execute yourself
 - ❌ Do NOT provide guidance based on manifest
 - ❌ Do NOT continue after loading orchestrator
 - ❌ Do NOT add verbose transformation details (unless user requests "explain" or "verbose")
-- ✅ Load manifest reference ONLY
+- ✅ Invoke Python via `run_in_terminal` tool
 - ✅ Use **CONCISE** response template (3 lines) by default
-- ✅ STOP immediately after hand-off header
-- ✅ Display **brief** hand-off confirmation message (Pattern + Confidence + Hand-off status)
+- ✅ Display **brief** routing confirmation message (Pattern + Confidence + Invocation status)
 
-**Visual Confirmation:** 🛡️ in response header = Orchestrator correctly engaged
+**Visual Confirmation:** 🛡️ in response header = Orchestrator correctly invoked
 
-**Concise Hand-Off Format (Default):**
+**Concise Invocation Format (Default):**
 ```markdown
-## 🛡️ {Orchestrator} → Executing autonomously
+## 🛡️ {Orchestrator} → Invoking via terminal
 
 **Pattern:** `{regex}` | **Confidence:** 1.0 | **Mode:** {mode}
 
-⚠️ **HAND-OFF COMPLETE** - Python orchestrator executing...
+✅ **INVOKING PYTHON** - `python3 -m src.main "{request}"`
 ```
 
-**Hand-Off Confirmation Format:**
+**Invocation Confirmation Format:**
 ```markdown
 ## 🛡️🧠 CORTEX {Orchestrator Name}
 
-*Autonomous Mode Engaged - Master Orchestrator Hand-Off Complete*
+*Autonomous Mode - Python Invocation via Terminal*
 
 **✅ Routing Confirmed:**
 - Pattern: `{matched_pattern}`
@@ -101,7 +100,7 @@ When you see 🛡️ in Intent Router, these orchestrators **MUST take over comp
 
 ---
 
-**⚠️ HAND-OFF COMPLETE** - Python orchestrator is now executing.  
+✅ **INVOKING PYTHON VIA TERMINAL** - `python3 -m src.main "{request}"`  
 Progress updates will appear below as phases complete.
 ```
 
