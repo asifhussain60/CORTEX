@@ -579,7 +579,218 @@ Build an enterprise-grade Python audit logging system with autonomous self-heali
 
 ---
 
-## 📝 Next Steps
+## � Future Enhancements
+
+**Status:** Post Phase 6 (Beyond v1.0)  
+**Purpose:** Advanced capabilities to transform CORTEX into enterprise-grade observability platform
+
+### 1️⃣ Real-time Dashboards - Grafana Integration
+
+**Objective:** Live visualization of orchestrator health, performance, and operations
+
+**Implementation:**
+- **Grafana Datasource:** Custom JSON datasource reading JSONL logs
+- **Pre-built Dashboards:**
+  - **Operations Dashboard:** Request rates, latency (P50/P95/P99), error rates
+  - **Security Dashboard:** PII redaction stats, encryption metrics, failed authentications
+  - **Performance Dashboard:** Throughput trends, buffer utilization, storage growth
+  - **Orchestrator Dashboard:** Per-orchestrator metrics, handoff success rates, state transitions
+- **Alerting:** Threshold-based alerts (error spikes, latency degradation, disk space)
+- **Custom Metrics:** Prometheus exporter for time-series data
+
+**Benefit:** Operations teams get real-time visibility with zero query lag
+
+---
+
+### 2️⃣ ML-based Anomaly Detection - Predictive Alerts
+
+**Objective:** Proactive identification of issues before they become critical
+
+**Implementation:**
+- **Statistical Models:** Baseline normal behavior (mean, std dev, seasonal patterns)
+- **ML Algorithms:**
+  - **Isolation Forest:** Detect outliers in latency, error rates, resource usage
+  - **LSTM Networks:** Time-series forecasting for capacity planning
+  - **Clustering:** Group similar error patterns for root cause analysis
+- **Training Pipeline:** 
+  - Daily batch jobs analyze logs from past 30 days
+  - Update models with new patterns
+  - A/B test model versions for accuracy
+- **Alert Generation:**
+  - Predictive alerts: "Disk space will reach 90% in 12 hours"
+  - Anomaly alerts: "Error rate 3σ above baseline (unusual for this hour)"
+  - Correlation alerts: "High latency + increased memory usage detected"
+
+**Benefit:** Prevent outages by catching issues 6-12 hours before they impact users
+
+---
+
+### 3️⃣ Distributed Tracing - OpenTelemetry Support
+
+**Objective:** End-to-end request tracing across distributed orchestrator workflows
+
+**Implementation:**
+- **OpenTelemetry SDK:** W3C trace context propagation
+- **Spans:**
+  - Parent span: User request → CORTEX
+  - Child spans: Planning → TDD → Refinement (orchestrator handoffs)
+  - Nested spans: Database queries, LLM API calls, file I/O
+- **Trace Attributes:**
+  - `orchestrator.name`: Current orchestrator
+  - `orchestrator.phase`: Current phase (for Planning)
+  - `user.session_id`: Cross-request correlation
+  - `llm.tokens`: Token usage per operation
+  - `db.query`: SQL query executed
+- **Exporters:**
+  - **Jaeger:** For local development and debugging
+  - **Zipkin:** For production environments
+  - **Cloud Trace:** Google Cloud / AWS X-Ray integration
+- **Sampling:** Intelligent sampling (always trace errors, sample 1% of success)
+
+**Benefit:** Debug complex multi-orchestrator workflows in minutes (vs hours)
+
+**Example Trace:**
+```
+Span: Create Plan (15.2s)
+├─ Span: Context Discovery (2.1s)
+│  ├─ Span: semantic_search (1.8s)
+│  └─ Span: grep_search (0.3s)
+├─ Span: LLM Plan Generation (10.5s)
+│  ├─ Span: OpenAI API Call (10.1s)
+│  │  └─ Attribute: tokens=8500, cost=$0.17
+│  └─ Span: Template Rendering (0.4s)
+└─ Span: Validation (2.6s)
+   ├─ Span: Schema Validation (0.8s)
+   └─ Span: Governance Check (1.8s)
+```
+
+---
+
+### 4️⃣ Cost Analytics - LLM Token Cost Tracking
+
+**Objective:** Track and optimize LLM API costs across all orchestrators
+
+**Implementation:**
+- **Cost Tracking:**
+  - Capture token usage per LLM call (prompt, completion, total)
+  - Apply pricing models: GPT-4 ($0.03/1k prompt, $0.06/1k completion)
+  - Aggregate costs by orchestrator, user, date, operation type
+- **Cost Dashboards:**
+  - **Daily Spend:** Time-series chart of daily LLM costs
+  - **Orchestrator Breakdown:** Pie chart (Planning: 45%, TDD: 30%, etc.)
+  - **Per-User Costs:** Identify high-usage users
+  - **Cost Trends:** Week-over-week, month-over-month comparisons
+- **Optimization Recommendations:**
+  - **Prompt Optimization:** Identify verbose prompts
+  - **Caching Opportunities:** Detect repeated prompts
+  - **Model Selection:** Suggest GPT-3.5 for simple tasks
+  - **Batch Processing:** Group requests to reduce overhead
+- **Budget Alerts:**
+  - Daily spend exceeds $50
+  - User exceeds $10/day quota
+  - Orchestrator cost spike >50% vs baseline
+- **Cost Attribution:**
+  - Tag costs by project, team, customer
+  - Chargeback reports for multi-tenant environments
+
+**Benefit:** Reduce LLM costs by 40-60% through optimization insights
+
+**Example Report:**
+```
+LLM Cost Summary - January 2026
+────────────────────────────────────────
+Total Spend:        $1,247.50
+Requests:           12,450
+Avg Cost/Request:   $0.10
+
+Top Orchestrators by Cost:
+1. Planning v5      $562.30 (45%)
+2. TDD v2           $374.25 (30%) 
+3. ADO v2           $186.90 (15%)
+4. Investigation    $124.05 (10%)
+
+Optimization Opportunities:
+⚠️ 2,300 requests with >4k prompt tokens (consider compression)
+⚠️ 450 duplicate prompts detected (implement caching)
+✅ Saved $89.40 this month via prompt optimization
+```
+
+---
+
+### 5️⃣ Smart Archival - Automatic Cold Storage
+
+**Objective:** Intelligent log archival to optimize storage costs and performance
+
+**Implementation:**
+- **Tiered Storage Strategy:**
+  - **Hot Storage (0-7 days):** SSD, full-text search enabled, instant access
+  - **Warm Storage (8-30 days):** HDD, indexed, 2-5s query latency
+  - **Cold Storage (31-365 days):** Object storage (S3/GCS), compressed, 30-60s retrieval
+  - **Frozen Storage (>365 days):** Glacier, compliance archives, hours to retrieve
+- **Intelligent Archival Rules:**
+  - **Age-based:** Move logs >7 days to warm storage
+  - **Access-based:** Keep frequently accessed logs in hot storage
+  - **Importance-based:** ERROR/CRITICAL logs stay hot for 30 days
+  - **Compliance-based:** Audit logs retain for 7 years (SOC2/GDPR)
+- **Compression:**
+  - **Hot/Warm:** ZSTD compression (fast, 3:1 ratio)
+  - **Cold:** ZSTD level 19 (slow compression, 10:1 ratio)
+  - **Frozen:** LZMA (ultra compression, 15:1 ratio)
+- **Automated Lifecycle:**
+  - Daily jobs move logs between tiers
+  - Auto-delete logs >retention period
+  - Restore on-demand from cold/frozen storage
+- **Cost Optimization:**
+  - **Before:** 1TB logs/month @ $100/TB SSD = $100/month
+  - **After:** 100GB hot + 300GB warm + 600GB cold = $10 + $15 + $5 = $30/month (70% savings)
+- **Query Federation:**
+  - Unified query API searches across all tiers
+  - Transparent retrieval from cold storage
+  - Cache frequently accessed cold logs to warm
+
+**Benefit:** Store 10x more logs at same cost, comply with long-term retention requirements
+
+**Archival Flow:**
+```
+Day 0-7:   Hot Storage (SSD) → 100GB
+           ↓ (auto-move)
+Day 8-30:  Warm Storage (HDD) → 300GB
+           ↓ (auto-move)
+Day 31-365: Cold Storage (S3) → 3.6TB (compressed 10:1)
+           ↓ (auto-move)
+Day 366+:  Frozen Storage (Glacier) → Compliance archives
+```
+
+---
+
+### 🚀 Phased Rollout Plan
+
+| Enhancement | Priority | Estimated Effort | Dependencies | Target Release |
+|-------------|----------|------------------|--------------|----------------|
+| **Real-time Dashboards** | P0 (High) | 2 weeks | Phase 6 complete | v1.1 (Q2 2026) |
+| **Cost Analytics** | P0 (High) | 1 week | None | v1.1 (Q2 2026) |
+| **Smart Archival** | P1 (Medium) | 2 weeks | None | v1.2 (Q3 2026) |
+| **ML Anomaly Detection** | P2 (Low) | 4 weeks | 30 days of logs | v2.0 (Q4 2026) |
+| **Distributed Tracing** | P2 (Low) | 3 weeks | OpenTelemetry SDK | v2.0 (Q4 2026) |
+
+**Total Effort:** 12 weeks (3 months)  
+**Timeline:** v1.1 (Q2 2026) → v2.0 (Q4 2026)
+
+---
+
+### 🎯 Success Metrics
+
+| Enhancement | Success Criteria |
+|-------------|------------------|
+| **Dashboards** | <5s dashboard load time, >95% uptime |
+| **Anomaly Detection** | >80% precision, >90% recall, <5% false positive rate |
+| **Distributed Tracing** | Trace 100% of errors, 1% of successes, <2ms overhead |
+| **Cost Analytics** | 40-60% cost reduction via optimization insights |
+| **Smart Archival** | 70% storage cost reduction, <60s cold retrieval time |
+
+---
+
+## �📝 Next Steps
 
 1. **Phase 1:** Begin core logger implementation
 2. **Set up development environment:** Python 3.9+, pytest, asyncio

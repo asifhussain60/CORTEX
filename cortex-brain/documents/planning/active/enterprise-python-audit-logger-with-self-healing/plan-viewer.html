@@ -257,7 +257,8 @@
         }
 
         .phase-card.completed {
-            border-color: rgba(5, 150, 105, 0.5);
+            border-color: rgba(5, 150, 105, 0.6);
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.15) 0%, rgba(16, 185, 129, 0.1) 100%);
         }
 
         .phase-card.in_progress {
@@ -291,9 +292,10 @@
         }
 
         .status-completed {
-            background: rgba(5, 150, 105, 0.2);
-            color: var(--accent-light);
-            border: 1px solid rgba(5, 150, 105, 0.4);
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.3) 0%, rgba(16, 185, 129, 0.25) 100%);
+            color: #10B981;
+            border: 1px solid rgba(5, 150, 105, 0.5);
+            font-weight: 700;
         }
 
         .status-in_progress {
@@ -499,6 +501,12 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: var(--radius-md);
             text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-item.success {
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.15) 0%, rgba(16, 185, 129, 0.1) 100%);
+            border: 1px solid rgba(5, 150, 105, 0.4);
         }
 
         .stat-label {
@@ -731,6 +739,18 @@
             document.getElementById('testCoverage').textContent = `${stats.test_coverage}%`;
             document.getElementById('linesOfCode').textContent = stats.lines_of_code.toLocaleString();
             document.getElementById('filesCreated').textContent = stats.files_created;
+            
+            // Add success class to stat items when all tests pass
+            const testCoverageItem = document.getElementById('testCoverage').closest('.stat-item');
+            const passingTestsItem = document.getElementById('passingTests').closest('.stat-item');
+            
+            if (stats.test_coverage === 100) {
+                testCoverageItem?.classList.add('success');
+            }
+            
+            if (stats.passing_tests === stats.total_tests && stats.total_tests > 0) {
+                passingTestsItem?.classList.add('success');
+            }
         }
 
         function updatePhases(progressData) {
