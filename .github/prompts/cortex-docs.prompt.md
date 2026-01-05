@@ -1,6 +1,6 @@
-# 🎨 CORTEX Documentation Designer - Intelligent Glassmorphism Automation
+# 🎨 CORTEX Documentation Designer v2.0 - State-Aware Glassmorphism System
 
-**Version:** 1.2.0 | **Status:** ✅ PRODUCTION | **Type:** Holistic HTML Standardization  
+**Version:** 2.0.0 | **Status:** 🚧 REDESIGN | **Type:** Stateful HTML Standardization  
 **Author:** Asif Hussain | **Date:** January 5, 2026  
 **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
@@ -8,1677 +8,674 @@
 
 ## 🎯 Purpose
 
-**Central orchestration system for HTML glassmorphism standardization** using intelligent Python tools, Vision API, and SNOWBALL methodology. Automates design pattern application, eliminates repetitive requests, prevents duplicates, and ensures holistic consistency across CORTEX documentation.
+**State-aware orchestration system** for HTML glassmorphism standardization that **prevents duplicate content, preserves color schemes, and enforces CSS-only architecture** through mandatory pre-flight validation and state tracking.
 
-**🆕 NEW in v1.2.0:**
-- ✅ **Single Next View Recommendation** - Zero multi-path confusion, highest-value snowball scoring (dependency + pattern + sequence + flow)
-- ✅ **Auto-Generated Global Scripts** - Dynamic PowerShell script creation for link integrity across all levels
-- ✅ **Parent-Child Link Fixing** - Automatic detection and repair of broken navigation/breadcrumbs
-
-**Previously in v1.1.0:**
-- ✅ Delete-Over-Fix intelligence (no duplicate creation)
-- ✅ Approved panel library auto-update (pattern recording)
-- ✅ Vision-driven granular analysis (URLs, CSS classes, visual flaws)
-- ✅ Complexity-based regeneration threshold (51+ = delete & regenerate)
-
-**Plan Context:** `cortex-brain/documents/planning/active/html-glassmorphism-alignment/`  
-**Plan Config:** `cortex-brain/documents/planning/active/html-glassmorphism-alignment/plan-config.yaml`  
-**Standards:** `cortex-brain/documents/standards/glassmorphism-design-standard.md` (v4.3.0)  
-**Strategy:** SNOWBALL (incremental live refinement with user validation)  
-**Vision API:** `src/operations/utilities/vision_context_middleware.py` (automatic image analysis)
+**🆕 v2.0 Design Principles:**
+1. **State-First**: Query approved panel library BEFORE any changes
+2. **Validation-First**: Pre-flight checks BEFORE executing tools
+3. **Atomic Operations**: Single source of truth per change
+4. **Git Checkpoints**: Mandatory snapshots before destructive operations
+5. **CSS Registry**: Centralized class tracking prevents inline style reversion
 
 ---
 
-## 🖼️ Vision API Integration (Automatic Image Analysis)
+## 🚨 ROOT CAUSE ANALYSIS (from chat01.md)
 
-### **Automatic Engagement**
+### Issue #1: Duplicate Content Creation
+**Symptom:** Python scripts add new sections WITHOUT deleting old ones  
+**Root Cause:** No state validation before tool execution  
+**Example from chat:**
+- Script adds `glass-panel-purple` class to section
+- Individual cards ALREADY have inline `style="background..."` 
+- Result: Conflicting styles, section backgrounds hidden
 
-When user attaches images (PNG/JPG/JPEG) or provides URLs, Vision API **automatically analyzes** without explicit prompting.
+**Fix:** Pre-flight HTML structure analysis
 
-**Middleware:** `src/operations/utilities/vision_context_middleware.py`
+### Issue #2: Lost Color Schemes
+**Symptom:** Color classes applied, then disappear in next iteration  
+**Root Cause:** No tracking of applied classes between invocations  
+**Example from chat:**
+- User: "Apply 7-color palette"
+- Copilot: Adds glass-panel classes ✅
+- User: "Effects disappeared"  
+- Copilot: Restores via git checkout (losing classes) ❌
 
-**Workflow:**
+**Fix:** State persistence + git tag references
+
+### Issue #3: Inline Styles Reappearing
+**Symptom:** CSS-only mandate ignored, inline styles keep coming back  
+**Root Cause:** No enforcement mechanism, tools don't remove existing inline styles  
+**Example from chat:**
+- Prompt says "NO inline styles"
+- HTML has 13 cards with `style="background: linear-gradient(...)"`
+- Tools add CSS classes but DON'T remove inline attributes
+- Browser shows inline styles (higher specificity)
+
+**Fix:** Mandatory inline style removal + CSS class registry
+
+### Issue #4: Approved Panel Library Ignored
+**Symptom:** Changes applied without consulting approved patterns  
+**Root Cause:** Library exists but not queried in workflow  
+**Evidence:** `approved-panels.yaml` referenced in v1.4 but never used
+
+**Fix:** Pre-flight library query + pattern matching
+
+---
+
+## 🛡️ MANDATORY PRE-FLIGHT CHECKLIST
+
+**BEFORE ANY CHANGE, RUN THIS VALIDATION SEQUENCE:**
+
 ```python
-# User attaches screenshot or says "Review http://localhost:8000/page.html"
-  ↓
-Vision API Auto-Detects:
-  1. Image attachments in context (PNG, JPG, JPEG)
-  2. URLs mentioned → Captures screenshot automatically
-  3. "see this", "look at", "review" triggers
-  ↓
-GPT-4V Analysis (<500ms):
-  - Visual structure (panels, grids, cards, headers)
-  - Color schemes (monotone vs. colorized)
-  - Spacing issues (gaps, alignment)
-  - Pattern violations (missing C50, C51, C52, C53)
-  - Broken elements (orphaned headings, inline styles)
-  - URL extraction (links, navigation)
-  ↓
-Intelligence Layer Receives:
-  vision_analysis = {
-      'structure': 'hero header + 3 card grids',
-      'issues': ['monotone icons', 'missing panel wrapping'],
-      'urls': ['http://localhost:8000/...'],
-      'complexity_score': 35,
-      'recommended_fixes': ['C50 color rotation', 'C53 panel wrapping']
+def pre_flight_validation(target_page: str, change_type: str) -> ValidationResult:
+    """
+    MANDATORY validation before executing any tool or manual edit.
+    Prevents duplicates, preserves state, enforces CSS-only architecture.
+    """
+    
+    result = ValidationResult()
+    
+    # ═══════════════════════════════════════════════════════════════
+    # STEP 1: Git Checkpoint (Rollback Safety)
+    # ═══════════════════════════════════════════════════════════════
+    checkpoint_tag = f"checkpoint-{target_page}-{timestamp()}"
+    git_tag(checkpoint_tag, f"Pre-change snapshot: {change_type}")
+    result.checkpoint = checkpoint_tag
+    
+    # ═══════════════════════════════════════════════════════════════
+    # STEP 2: Query Approved Panel Library
+    # ═══════════════════════════════════════════════════════════════
+    library = load_yaml("cortex-brain/documents/planning/active/html-glassmorphism-alignment/standards/approved-panels.yaml")
+    
+    if not library:
+        result.add_warning("Approved panel library not found - proceeding without pattern validation")
+    else:
+        result.approved_patterns = library["patterns"]
+        result.add_info(f"Loaded {len(library['patterns'])} approved patterns")
+    
+    # ═══════════════════════════════════════════════════════════════
+    # STEP 3: Parse Current HTML Structure
+    # ═══════════════════════════════════════════════════════════════
+    html_content = read_file(target_page)
+    soup = BeautifulSoup(html_content, 'html.parser')
+    
+    # Extract current state
+    result.current_state = {
+        "sections": len(soup.find_all('section')),
+        "glass_classes": extract_glass_classes(soup),
+        "inline_styles": find_inline_styles(soup),
+        "css_imports": extract_css_imports(soup),
+        "color_classes": find_color_classes(soup),  # glass-panel-cyan, etc.
+    }
+    
+    # ═══════════════════════════════════════════════════════════════
+    # STEP 4: CSS Class Registry Check
+    # ═══════════════════════════════════════════════════════════════
+    registry = load_css_class_registry("docs/assets/css/variables.css")
+    
+    for color_class in result.current_state["color_classes"]:
+        if color_class not in registry:
+            result.add_error(f"Color class '{color_class}' NOT in CSS registry")
+            result.add_fix(f"Add {color_class} to variables.css or remove from HTML")
+    
+    # ═══════════════════════════════════════════════════════════════
+    # STEP 5: Inline Style Detection (CRITICAL)
+    # ═══════════════════════════════════════════════════════════════
+    if result.current_state["inline_styles"]:
+        result.add_error(f"Found {len(result.current_state['inline_styles'])} inline style attributes")
+        result.add_fix("MUST remove ALL inline styles before applying CSS classes")
+        result.inline_style_removal_required = True
+    
+    # ═══════════════════════════════════════════════════════════════
+    # STEP 6: Duplicate Detection
+    # ═══════════════════════════════════════════════════════════════
+    section_ids = [s.get('id') for s in soup.find_all('section') if s.get('id')]
+    duplicate_ids = [id for id in section_ids if section_ids.count(id) > 1]
+    
+    if duplicate_ids:
+        result.add_error(f"Duplicate section IDs found: {duplicate_ids}")
+        result.add_fix("Delete duplicate sections before proceeding")
+    
+    # ═══════════════════════════════════════════════════════════════
+    # STEP 7: Complexity Score (Regeneration Threshold)
+    # ═══════════════════════════════════════════════════════════════
+    complexity = calculate_complexity(result.current_state)
+    result.complexity_score = complexity
+    
+    if complexity > 50:
+        result.strategy = "DELETE_AND_REGENERATE"
+        result.add_warning("Complexity > 50 - Fresh regeneration recommended")
+    elif complexity > 20:
+        result.strategy = "SCRIPT_DRIVEN"
+    else:
+        result.strategy = "TARGETED_EDITS"
+    
+    return result
+```
+
+**ENFORCEMENT:**
+- ❌ NO tool execution without pre-flight validation
+- ❌ NO manual edits without state snapshot
+- ❌ NO CSS class application if inline styles exist
+- ✅ ALWAYS create git checkpoint before changes
+- ✅ ALWAYS query approved panel library first
+- ✅ ALWAYS remove inline styles before adding classes
+
+---
+
+## 🎨 CSS CLASS REGISTRY (Single Source of Truth)
+
+**Location:** `docs/assets/css/variables.css`
+
+**Mandatory Registry Structure:**
+
+```css
+/* ═══════════════════════════════════════════════════════════════
+   GLASSMORPHISM 7-COLOR PANEL CLASSES
+   Registry Version: 2.0
+   Last Updated: 2026-01-05
+   Approved Tag: v5.0-glassmorphism-approved
+   ═══════════════════════════════════════════════════════════════ */
+
+/* PRIMARY COLORS (Cyan) */
+.glass-panel-cyan {
+    background: linear-gradient(
+        135deg, 
+        rgba(0, 212, 255, 0.08) 0%, 
+        rgba(0, 212, 255, 0.06) 50%, 
+        rgba(26, 31, 58, 0.65) 100%
+    );
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 212, 255, 0.15);
+    box-shadow: 
+        0 8px 32px 0 rgba(0, 212, 255, 0.12),
+        inset 0 1px 2px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Repeat for: purple, teal, indigo, pink, emerald, amber */
+/* ... */
+```
+
+**Registry Management:**
+
+```python
+def query_css_registry(css_file: str) -> Dict[str, CSSRule]:
+    """
+    Parse CSS file and extract all class definitions.
+    Returns: {class_name: css_properties}
+    """
+    registry = {}
+    content = read_file(css_file)
+    
+    # Parse CSS with regex (simple) or cssutils (robust)
+    classes = re.findall(r'\.([a-z-]+)\s*{([^}]+)}', content, re.MULTILINE)
+    
+    for class_name, properties in classes:
+        registry[class_name] = {
+            "properties": properties.strip(),
+            "file": css_file,
+            "line": find_line_number(content, class_name)
+        }
+    
+    return registry
+
+
+def validate_html_against_registry(html_file: str, registry: Dict) -> List[str]:
+    """
+    Check if all CSS classes in HTML exist in registry.
+    Returns: List of missing classes
+    """
+    soup = BeautifulSoup(read_file(html_file))
+    html_classes = set()
+    
+    for element in soup.find_all(class_=True):
+        html_classes.update(element['class'])
+    
+    missing = [cls for cls in html_classes if cls not in registry and cls.startswith('glass-')]
+    
+    return missing
+```
+
+**Usage in Workflow:**
+
+```
+BEFORE applying glass-panel-purple:
+  1. Query registry: glass-panel-purple exists? ✅
+  2. Check HTML: Any conflicting inline styles? ❌ (3 found)
+  3. ACTION: Remove inline styles FIRST
+  4. Then apply CSS class
+```
+
+---
+
+## 🔄 STATE PERSISTENCE BETWEEN INVOCATIONS
+
+**Problem:** Each Copilot invocation has no memory of previous changes
+
+**Solution:** State tracking file
+
+**Location:** `cortex-brain/cache/html-standardization-state.json`
+
+**Structure:**
+
+```json
+{
+  "version": "2.0",
+  "last_updated": "2026-01-05T14:30:00Z",
+  "pages": {
+    "docs/orchestrators/index.html": {
+      "last_modified": "2026-01-05T14:15:00Z",
+      "git_checkpoint": "checkpoint-orchestrators-20260105-141500",
+      "applied_patterns": ["glass-panel-purple", "glass-panel-emerald", "glass-panel-amber"],
+      "inline_styles_removed": 13,
+      "complexity_score": 28,
+      "status": "approved",
+      "approved_tag": "v5.0-glassmorphism-approved"
+    }
+  },
+  "global_state": {
+    "total_pages_processed": 9,
+    "css_registry_version": "2.0",
+    "approved_panel_library_version": "1.1.0"
   }
-  ↓
-Automatic Tool Execution (no manual parsing needed)
+}
+```
+
+**Workflow Integration:**
+
+```python
+def load_page_state(page: str) -> Dict:
+    """Load state from previous invocations"""
+    state_file = "cortex-brain/cache/html-standardization-state.json"
+    state = load_json(state_file)
+    
+    if page in state["pages"]:
+        return state["pages"][page]
+    else:
+        return {"status": "new", "applied_patterns": []}
+
+
+def save_page_state(page: str, new_state: Dict):
+    """Persist state for next invocation"""
+    state_file = "cortex-brain/cache/html-standardization-state.json"
+    state = load_json(state_file)
+    
+    state["pages"][page] = new_state
+    state["last_updated"] = timestamp()
+    
+    save_json(state, state_file)
 ```
 
 **User Experience:**
 
-**BEFORE (Manual):**
 ```
-User: "See screenshot - fix the cards"
-Copilot: "I can't see images. Please describe what needs fixing."
-User: "The cards are all purple. They need color rotation."
-Copilot: [applies fix]
-```
+User: "Apply glassmorphism to orchestrators page"
 
-**AFTER (Vision API):**
-```
-User: [Attaches screenshot]
-Copilot Intelligence:
-🖼️ Vision Analysis Complete (<500ms)
-
-📊 DETECTED STRUCTURE:
-- Hero header: ✅ Present (Pattern C52)
-- Master Orchestrators section: 10 cards
-- Card grid layout: 3-4 column responsive
-
-⚠️ ISSUES FOUND:
-1. ❌ All 10 cards using same purple icon (monotone)
-2. ❌ Section heading not panel-wrapped (Pattern C53 violation)
-3. ❌ 3 inline styles detected
-
-📊 COMPLEXITY SCORE: 28 (Script-Driven Recommended)
-
-🎯 RECOMMENDED FIXES:
-- Apply Pattern C50 (4-color rotation) → validate-color-rotation.ps1 --autofix
-- Apply Pattern C53 (panel wrapping) → validate-panel-wrapping.ps1 --autofix
-- Remove inline styles → fix-inline-styles.ps1 --autofix
-
-❓ Execute recommended fixes? [Y/n]
-
-// User just says "y" - no manual description needed
-```
-
-**Benefits:**
-- ✅ No manual issue description required
-- ✅ Granular visual details extracted (URLs, colors, spacing)
-- ✅ Complexity automatically calculated
-- ✅ Tools auto-selected based on vision analysis
-- ✅ <500ms analysis time (cached for duplicates)
-
----
-
-### **URL Extraction from Images**
-
-Vision API **automatically extracts URLs** from screenshots:
-
-```python
-# User attaches screenshot showing browser address bar
-  ↓
-Vision Analysis:
-  - URL detected: http://localhost:8000/token-optimization/index.html
-  - Page type: Level 1 (Token Optimization Hub)
-  - Visual issues: [list extracted from image]
-  ↓
 Intelligence Layer:
-  - Opens URL context automatically
-  - Reads current HTML structure
-  - Compares vision analysis vs. actual DOM
-  - Generates precise fix commands
-```
+🔍 Checking previous state...
+📄 Last modified: 2026-01-05 14:15:00
+✅ Git checkpoint: checkpoint-orchestrators-20260105-141500
+🎨 Applied patterns: glass-panel-purple, glass-panel-emerald, glass-panel-amber
+⚠️ Status: APPROVED (do not modify without user confirmation)
 
-**User Experience:**
-```
-User: [Attaches screenshot of browser]
+❓ This page was already processed. Options:
+  1. Restore from git checkpoint (undo changes)
+  2. Apply additional patterns (incremental)
+  3. Regenerate from scratch (delete + rebuild)
 
-CORTEX Intelligence:
-🖼️ URL Detected: http://localhost:8000/token-optimization/index.html
-📄 Reading current HTML structure...
-🔍 Comparing visual vs. DOM...
-
-DISCREPANCIES FOUND:
-1. Vision shows monotone cards → DOM confirms: all use card-icon-primary
-2. Vision shows missing panel → DOM confirms: no glass-card-display wrapper
-3. Vision shows inline styles → DOM confirms: 3 style="" attributes
-
-✅ Analysis complete - Ready to apply fixes
+[User selects option]
 ```
 
 ---
 
-### **Vision-Driven Complexity Scoring**
+## 🛠️ TOOL EXECUTION FRAMEWORK (Atomic Operations)
 
-Vision API enhances complexity calculation with visual analysis:
+### Principle: One Tool = One Atomic Change
 
+**BEFORE (Problematic):**
 ```python
-complexity_score = (
-    file_size_kb * 0.1 +
-    broken_patterns * 2 +
-    inline_styles_count * 0.5 +
-    missing_classes * 1.5 +
-    duplicate_sections * 3 +
-    # NEW: Vision API contributions
-    vision_monotone_elements * 0.5 +
-    vision_alignment_issues * 1.0 +
-    vision_color_violations * 0.8 +
-    vision_spacing_problems * 0.6
-)
+# Script does multiple things, hard to rollback
+def apply_glassmorphism(page):
+    add_css_classes(page)        # Change 1
+    remove_inline_styles(page)   # Change 2
+    update_color_scheme(page)    # Change 3
+    # If Change 3 fails, Changes 1 & 2 already applied!
 ```
 
-**Example:**
-```
-File size: 45 KB → +4.5
-Inline styles (vision detected): 3 → +1.5
-Missing panels (vision detected): 2 → +6.0
-Monotone cards (vision detected): 10 → +5.0
-Alignment issues (vision detected): 4 → +4.0
----
-Total Complexity: 21 → Script-Driven Strategy
-```
-
----
-
-### **Caching & Performance**
-
-**Duplicate Image Detection:**
-- SHA-256 hash of image content
-- Cache analysis for 24 hours
-- Skip API call if analysis exists
-- <500ms per NEW image
-- <50ms for cached images
-
-**Cache Location:** `cortex-brain/cache/vision-analysis/`
-
----
-
-## 🧠 Core Intelligence Principles
-
-### 1. **Complexity-Based Execution Strategy (Delete-Over-Fix)**
-
-Before any change, calculate complexity and choose the optimal approach:
-
+**AFTER (Atomic):**
 ```python
-complexity_score = (
-    file_size_kb * 0.1 +
-    broken_patterns * 2 +
-    inline_styles_count * 0.5 +
-    missing_classes * 1.5 +
-    duplicate_sections * 3 +
-    # Vision API contributions
-    vision_monotone_elements * 0.5 +
-    vision_alignment_issues * 1.0 +
-    vision_color_violations * 0.8 +
-    vision_spacing_problems * 0.6
-)
-
-if complexity_score > 50:
-    action = "DELETE_AND_REGENERATE"  # Fresh start with approved templates (PREFERRED)
-elif complexity_score > 20:
-    action = "SCRIPT_DRIVEN_REFACTOR"  # Use Python tools for batch changes
-else:
-    action = "TARGETED_EDITS"  # Manual precision fixes
-```
-
-**Decision Matrix:**
-
-| Score | Strategy | Tools | Reason | Duplicate Risk |
-|-------|----------|-------|--------|----------------|
-| 0-20 | Targeted Edits | `replace_string_in_file`, `multi_replace_string_in_file` | Clean codebase, surgical fixes | LOW ✅ |
-| 21-50 | Script-Driven | `page-refresh-tool.py`, `fix-*.ps1` scripts | Multiple issues, automation efficient | MEDIUM ⚠️ |
-| 51+ | Delete & Regenerate | `purpose-driven-designer.py`, templates | Broken state, **prevents duplicates** | ZERO 🛡️ |
-
-**🛡️ Duplicate Prevention Rule:**
-When complexity > 50, ALWAYS delete HTML file before regenerating. This prevents:
-- ❌ Duplicate sections (old + new content)
-- ❌ Orphaned code blocks (leftover from edits)
-- ❌ Conflicting CSS classes (old styles + new styles)
-- ✅ Clean slate (approved templates only)
-
-**Risk Factors (Add to Score):**
-- Orphaned code blocks: +10
-- Multiple inline style sections: +15
-- Broken glassmorphism panels: +20
-- Missing hero headers: +25
-- Inconsistent color schemes: +8
-
----
-
-### 2. **Holistic Standardization Protocol**
-
-When user requests **any** design change, automatically:
-
-1. **Detect Scope:** Single page, Level 1 category, or site-wide?
-2. **Find Similar Patterns:** Search for identical/similar HTML structures
-3. **Batch Transform:** Apply change to ALL matching instances
-4. **Update Standards:** Modify `glassmorphism-design-standard.md` if new pattern
-5. **Validate Compliance:** Run toolkit scripts to verify changes
-6. **Git Atomic Commit:** One commit per logical change group
-
-**Example Flow:**
-
-```
-User: "Fix hero header on architecture/index.html - make robot clickable"
-  ↓
-Intelligence Layer Activates:
-  1. Detect: This is a Level 1 hero header pattern
-  2. Search: Find ALL Level 1 pages (8 found)
-  3. Analyze: 5 pages have old hero, 3 are compliant
-  4. Script: Run page-refresh-tool.py with hero-header mode
-  5. Apply: Transform ALL 5 pages with approved template
-  6. Validate: Run validate-html-structure.ps1
-  7. Commit: "feat(ui): Standardize Level 1 hero headers (8 pages)"
-```
-
-**NO User Repetition Required:** Intelligence layer handles propagation automatically.
-
----
-
-### 3. **Tool-First Execution Philosophy**
-
-**ALWAYS prefer Python scripts over manual edits:**
-
-| Task | Manual Approach | Tool-First Approach | Efficiency Gain |
-|------|-----------------|---------------------|-----------------|
-| Fix inline styles | Replace 50x files manually | `fix-inline-styles.ps1` | 95% faster |
-| Apply color rotation | Edit each card individually | `validate-color-rotation.ps1 --autofix` | 90% faster |
-| Panel wrapping | Wrap 20 sections manually | `validate-panel-wrapping.ps1 --autofix` | 85% faster |
-| Hero headers | Copy-paste 8 times | `page-refresh-tool.py --level1-heroes` | 80% faster |
-| Tetris conversion | Restructure HTML manually | `replace-bullets-with-cards.ps1` | 92% faster |
-
-**Tool Inventory:** `cortex-toolkit/TOOLS-INVENTORY.md` (52 scripts available)
-
-**Execution Priority:**
-1. **Python scripts** (`*.py`) - Most powerful, handles complex logic
-2. **PowerShell scripts** (`*.ps1`) - Validation + AutoFix capabilities
-3. **Manual edits** - Only for unique/one-off changes
-
----
-
-### 4. **SNOWBALL Strategy Implementation**
-
-**Phase-Based Execution with Live Validation:**
-
-```
-Phase N: [Category] (X pages)
-  ↓
-For Each Page:
-  1. User Opens: http://localhost:8000/{page}.html
-  2. User Reviews: "Current state looks like X, needs Y"
-  3. Intelligence Analysis:
-     - Complexity score: 35 → Script-Driven
-     - Similar pages: 3 found → Batch mode
-     - **Standardization opportunities detected: 2 patterns**
-     - Tools required: fix-inline-styles.ps1, validate-color-rotation.ps1
-  4. **Auto-Standardization Check:**
-     🔍 Analyzing workspace for similar issues...
-     Found: 5 additional pages with same pattern violations
-     ❓ Apply fixes to ALL 6 pages? [Y/n] (RECOMMENDED)
-  5. Execute Tools:
-     ./cortex-toolkit/fix-inline-styles.ps1 -Path docs/{page}.html -AutoFix
-     ./cortex-toolkit/validate-color-rotation.ps1 -Path docs/{page}.html -AutoFix
-     # If user approved batch: apply to 5 similar pages too
-  6. **Generate Global Scripts (If Structural Changes Made):**
-     If changes affect navigation/breadcrumbs/links:
-     → Auto-generate: fix-parent-child-links.ps1
-     → Analyzes: All HTML files in docs/
-     → Fixes: Parent links (← Back to), child links (→ View), breadcrumbs
-     → Validates: No broken links remain
-  7. User Validates: Hard refresh + review changes
-  8. If Approved:
-     - Git commit with detailed changelog
-     - **Auto-update approved panel library**
-     - Move to SINGLE NEXT VIEW (no path confusion)
-  9. If Not Approved:
-     - Iterate on specific section
-     - Re-run tools with refined parameters
-```
-
-**Key Principles:**
-- ✅ One page at a time (focused validation)
-- ✅ Live browser feedback (http://localhost:8000)
-- ✅ Tool execution visible to user (transparency)
-- ✅ **Auto-detect standardization opportunities** (batch efficiency)
-- ✅ **Auto-generate global fix scripts** (link integrity)
-- ✅ Atomic commits per page (rollback safety)
-- ✅ User approval required (quality gate)
-- ✅ **SINGLE NEXT VIEW** recommendation (no multi-path confusion)
-
-**Progress Tracking:** `SNOWBALL-STRATEGY.md` + `approved-panels.yaml` updated after each page completion
-
----
-
-### 5. **Single Next View Recommendation Algorithm**
-
-**🎯 GOAL:** Always provide ONE clear next step (no multi-path confusion) based on highest-value snowball effect.
-
-**Scoring Criteria (Weighted):**
-
-```python
-def calculate_highest_value_next_view(current_page: str) -> Dict[str, Any]:
-    """Calculate single best next view based on snowball value."""
+# Each tool does ONE thing, easy to rollback
+def remove_inline_styles_only(page):
+    """ONLY removes inline style attributes, nothing else"""
+    checkpoint = create_git_checkpoint(page)
     
-    candidates = get_remaining_pages_in_phase()
-    scores = {}
-    
-    for page in candidates:
-        score = 0
-        reasons = []
+    try:
+        soup = parse_html(page)
+        for element in soup.find_all(style=True):
+            del element['style']
         
-        # 1. DEPENDENCY CHAIN (40% weight)
-        # Pages that link TO current page or FROM current page
-        if has_navigation_link_to(page, current_page):
-            score += 40
-            reasons.append(f"Child of {current_page} - user flow continuity")
-        elif has_navigation_link_from(current_page, page):
-            score += 35
-            reasons.append(f"Parent of {current_page} - breadcrumb integrity")
+        save_html(page, soup)
+        validate_no_inline_styles(page)  # Assertion
         
-        # 2. PATTERN REUSE (30% weight)
-        # Pages using same approved patterns (C50, C51, C52, C53)
-        shared_patterns = get_shared_patterns(current_page, page)
-        if len(shared_patterns) > 0:
-            score += 30 * (len(shared_patterns) / 4)  # Max 4 patterns
-            reasons.append(f"Reuses {len(shared_patterns)} patterns from {current_page}")
+    except Exception as e:
+        rollback_to_checkpoint(checkpoint)
+        raise
+
+
+def apply_css_classes_only(page, classes: List[str]):
+    """ONLY adds CSS classes to sections, nothing else"""
+    checkpoint = create_git_checkpoint(page)
+    
+    # Pre-condition check
+    if has_inline_styles(page):
+        raise ValueError("Inline styles detected - run remove_inline_styles_only first")
+    
+    try:
+        soup = parse_html(page)
+        sections = soup.find_all('section', class_='glass-card-display')
         
-        # 3. PHASE SEQUENCE (20% weight)
-        # Natural SNOWBALL order (Phase 16a → 16b → 16c)
-        if is_next_in_phase_sequence(current_page, page):
-            score += 20
-            reasons.append(f"Next in Phase {get_current_phase()} sequence")
+        for i, section in enumerate(sections):
+            color_class = classes[i % len(classes)]
+            section['class'].append(color_class)
         
-        # 4. USER FLOW PRIORITY (10% weight)
-        # Most common navigation path (analytics-based)
-        if is_high_traffic_route(current_page, page):
-            score += 10
-            reasons.append(f"High-traffic navigation path")
+        save_html(page, soup)
+        validate_css_classes(page, classes)  # Assertion
         
-        scores[page] = {
-            "path": page,
-            "score": round(score, 1),
-            "reason": " + ".join(reasons[:2]),  # Top 2 reasons
-            "patterns_ready": shared_patterns
-        }
-    
-    # Return highest scoring view
-    best_view = max(scores.values(), key=lambda x: x["score"])
-    return best_view
+    except Exception as e:
+        rollback_to_checkpoint(checkpoint)
+        raise
 ```
 
-**Example Output:**
+**Tool Inventory (Redesigned):**
 
-```
-✅ CHANGES APPLIED: token-optimization/index.html
-
-🎯 RECOMMENDED NEXT VIEW: architecture/four-tier-brain.html
-
-   Reason: Child of architecture/index.html (user flow continuity) 
-           + Reuses 3 patterns (C50, C51, C53)
-   Value Score: 75.0/100
-   Patterns Ready: C50 (color rotation), C51 (tetris badges), C53 (panel wrapping)
-   
-   Open: http://localhost:8000/architecture/four-tier-brain.html
-   
-   ❓ Ready to work on this view? [Y/n]
-```
-
-**Benefits:**
-- ✅ **Zero ambiguity** - Always ONE clear next action
-- ✅ **Maximum momentum** - Leverage patterns just validated
-- ✅ **User flow integrity** - Follow natural navigation paths
-- ✅ **Phase alignment** - Stay within SNOWBALL sequence
-- ✅ **Confidence building** - High success rate (pattern reuse)
-
-**Override Capability:**
-User can always say "work on [specific page] instead" - algorithm just provides intelligent default.
+| Tool | Purpose | Atomic | Pre-Conditions | Post-Conditions |
+|------|---------|--------|----------------|-----------------|
+| `remove-inline-styles.py` | Delete ALL `style=""` attributes | ✅ Yes | HTML file exists | Zero inline styles |
+| `apply-css-classes.py` | Add glass-panel-{color} classes | ✅ Yes | No inline styles | Classes in HTML + CSS registry |
+| `validate-color-scheme.py` | Check class registry consistency | ✅ Yes | HTML + CSS exist | Exit 0 = pass, 1 = fail |
+| `create-git-checkpoint.py` | Tag current state | ✅ Yes | Git repo | Tag created |
+| `rollback-to-checkpoint.py` | Restore from tag | ✅ Yes | Tag exists | State restored |
 
 ---
 
-### 6. **Automatic Standardization Intelligence**
+## 🔍 APPROVED PANEL LIBRARY INTEGRATION
 
-**Proactive Pattern Detection:**
+**Problem:** Library exists but never consulted before changes
 
-When fixing one page, intelligence layer **automatically scans workspace** for identical issues.
+**Solution:** Mandatory library query in pre-flight
 
-**Detection Algorithm:**
-```python
-def detect_standardization_opportunities(current_page: str, issues_found: List[str]) -> List[str]:
-    """Find similar pages with same pattern violations."""
-    
-    similar_pages = []
-    
-    for issue in issues_found:
-        # Example: "Missing color rotation (Pattern C50)"
-        pattern = extract_pattern_id(issue)  # → "C50"
-        
-        # Scan all HTML files in workspace
-        all_pages = glob("docs/**/*.html")
-        
-        for page in all_pages:
-            if page == current_page:
-                continue  # Skip current page
-            
-            # Check if page violates same pattern
-            if validates_pattern(page, pattern) == False:
-                similar_pages.append({
-                    "page": page,
-                    "issue": issue,
-                    "pattern": pattern,
-                    "confidence": calculate_confidence(page, pattern)
-                })
-    
-    # Sort by confidence (highest first)
-    return sorted(similar_pages, key=lambda x: x["confidence"], reverse=True)
-```
+**Location:** `cortex-brain/documents/planning/active/html-glassmorphism-alignment/standards/approved-panels.yaml`
 
-**User Experience:**
-```
-User: "Fix color rotation on orchestrators/index.html"
+**Enhanced Structure:**
 
-Intelligence Analysis:
-🔍 Scanning workspace for similar issues...
-
-📊 STANDARDIZATION OPPORTUNITIES DETECTED:
-
-Pattern C50 (Color Rotation) violations found on:
-  1. ✅ orchestrators/index.html (current page)
-  2. ❌ features/index.html (10 monotone cards) - Confidence: 98%
-  3. ❌ architecture/index.html (8 monotone cards) - Confidence: 95%
-  4. ❌ token-optimization/index.html (6 monotone cards) - Confidence: 92%
-
-🎯 RECOMMENDATION: Apply Pattern C50 to ALL 4 pages
-
-Benefits:
-  - ✅ Consistent design across Level 1 pages
-  - ✅ One validation → 4x work complete
-  - ✅ Prevents repetitive requests
-  - ✅ 3x faster than sequential fixes
-
-❓ Apply fix to ALL 4 pages? [Y/n] (default: Y)
-```
-
-**If User Approves Batch:**
-- Execute tool on all 4 pages
-- Validate each page individually
-- Commit atomically with detailed changelog
-- Update approved-panels.yaml once
-- Mark all 4 pages complete in SNOWBALL tracker
-
-**If User Declines:**
-- Fix only current page
-- Mark others as "deferred" in tracker
-- User can manually address later
-
----
-
-## 🛠️ Tool Suite Reference
-
-### **Analysis & Detection Tools**
-
-| Tool | Purpose | Output | Use When |
-|------|---------|--------|----------|
-| `page-refresh-tool.py` | Analyze page level, purpose, design profile | PageAnalysis JSON | Determining page type/scope |
-| `value-scoring-engine.py` | Calculate content quality score (0-100) | ValueScore + recommendations | Deciding rebuild vs. refactor |
-| `css-cleanup-engine.py` | Identify unused/duplicate CSS (1009 found) | Cleanup manifest JSON | CSS optimization needed |
-| `intelligent-diagram-enhancer.py` | Recommend diagram type (D3.js vs Mermaid) | Enhancement suggestions | Adding visualizations |
-| `link-fixer.py` | Detect broken links (32 fixed) | Link repair report | Validation phase |
-
-### **Transform & Fix Tools**
-
-| Tool | Purpose | AutoFix | Batch Mode |
-|------|---------|---------|------------|
-| `fix-inline-styles.ps1` | Convert inline styles to CSS classes | ✅ Yes | ✅ Yes (directory) |
-| `fix-missing-css-classes.ps1` | Generate missing CSS definitions (143 classes) | ✅ Yes | ✅ Yes |
-| `validate-color-rotation.ps1` | Apply Pattern C50 (4-color tetris) | ✅ Yes | ✅ Yes |
-| `validate-panel-wrapping.ps1` | Wrap sections in glassmorphism panels | ✅ Yes | ✅ Yes |
-| `validate-icon-title-spacing.ps1` | Fix inline icon+title gaps (use `gap: var(--spacing-sm)`) | ✅ Yes | ✅ Yes |
-| `replace-bullets-with-cards.ps1` | Convert `<ul>` lists to tetris card grids | ✅ Yes | ✅ Yes |
-| `fix-animation-tiers.ps1` | Enforce T1 animations on Level 1 pages | ✅ Yes | ✅ Yes |
-| `improve-mobile-friendliness.ps1` | Fix responsive design issues (target: 95%+ score) | ✅ Yes | ✅ Yes |
-
-### **Validation & Compliance Tools**
-
-| Tool | Purpose | Exit Codes | CI/CD Ready |
-|------|---------|------------|-------------|
-| `validate-all-html.ps1` | Run full compliance suite (12 checks) | 0=pass, 1=warn, 2=fail | ✅ Yes |
-| `validate-glassmorphism-compliance.ps1` | Check Panel C50, Pattern C51, C52 compliance | 0=pass, 1=warn, 2=fail | ✅ Yes |
-| `validate-css-usage.ps1` | Find unused CSS classes (target: <2%) | 0=pass, 1=warn, 2=fail | ✅ Yes |
-| `validate-css-duplicates.ps1` | Detect duplicate CSS rules (target: <2%) | 0=pass, 1=warn, 2=fail | ✅ Yes |
-| `validate-responsive-design.ps1` | Test mobile breakpoints (320px, 768px, 1024px) | 0=pass, 1=warn, 2=fail | ✅ Yes |
-| `validate-html-structure.ps1` | Check semantic HTML5, accessibility (WCAG AA) | 0=pass, 1=warn, 2=fail | ✅ Yes |
-| `pre-commit-glassmorphism-check.ps1` | Pre-commit hook (blocks bad commits) | 0=pass, 1=block | ✅ Yes |
-
-### **Generation & Scaffolding Tools**
-
-| Tool | Purpose | Generated Output | Auto-Run |
-|------|---------|------------------|----------|
-| `purpose-driven-designer.py` | Generate complete HTML page from spec | Full HTML file with patterns | Manual |
-| `generate-mermaid-theme.py` | Create glassmorphism Mermaid config | `mermaid-config.js` | Manual |
-| `generate-css-inventory.py` | Document all intentional classes | `CSS-INVENTORY.md` | Manual |
-
-### **🆕 Dynamic Script Generation (Auto-Created Based on Changes)**
-
-**Trigger:** When structural changes are made to any page (navigation, breadcrumbs, links)
-
-**Auto-Generated Scripts:**
-
-#### 1. **fix-parent-child-links.ps1**
-
-**Purpose:** Maintain link integrity across entire documentation hierarchy
-
-**Generated When:**
-- Page added/removed from navigation
-- Breadcrumb structure modified
-- Parent/child relationships changed
-- Level hierarchy restructured
-
-**Operations:**
-```powershell
-# Auto-generated script structure
-param(
-    [string]$Scope = "docs/",  # Target directory
-    [switch]$AutoFix,          # Apply fixes automatically
-    [switch]$DryRun            # Preview changes only
-)
-
-# 1. SCAN PHASE
-$allHtmlFiles = Get-ChildItem -Path $Scope -Recurse -Filter "*.html"
-$linkIssues = @()
-
-foreach ($file in $allHtmlFiles) {
-    # Extract navigation links
-    $parentLinks = Select-Xml -Path $file -XPath "//a[contains(@class, 'back-link')]"
-    $childLinks = Select-Xml -Path $file -XPath "//a[contains(@class, 'view-link')]"
-    $breadcrumbs = Select-Xml -Path $file -XPath "//nav[@class='breadcrumb']//a"
-    
-    # Validate each link
-    foreach ($link in ($parentLinks + $childLinks + $breadcrumbs)) {
-        $href = $link.Node.GetAttribute("href")
-        $targetExists = Test-Path (Join-Path (Split-Path $file) $href)
-        
-        if (-not $targetExists) {
-            $linkIssues += @{
-                File = $file.FullName
-                LinkType = Get-LinkType($link)
-                BrokenHref = $href
-                ExpectedHref = Calculate-CorrectHref($file, $link)
-            }
-        }
-    }
-}
-
-# 2. REPORT PHASE
-Write-Host "`n📊 LINK INTEGRITY SCAN RESULTS" -ForegroundColor Cyan
-Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor DarkGray
-
-if ($linkIssues.Count -eq 0) {
-    Write-Host "✅ All links valid - No issues found" -ForegroundColor Green
-    exit 0
-}
-
-Write-Host "⚠️  Found $($linkIssues.Count) broken links:" -ForegroundColor Yellow
-foreach ($issue in $linkIssues) {
-    Write-Host "  ❌ $($issue.File)" -ForegroundColor Red
-    Write-Host "     Type: $($issue.LinkType)" -ForegroundColor Gray
-    Write-Host "     Broken: $($issue.BrokenHref)" -ForegroundColor Red
-    Write-Host "     Fixed:  $($issue.ExpectedHref)" -ForegroundColor Green
-}
-
-# 3. FIX PHASE (if AutoFix enabled)
-if ($AutoFix) {
-    Write-Host "`n🔧 APPLYING FIXES..." -ForegroundColor Cyan
-    foreach ($issue in $linkIssues) {
-        # Replace broken href with correct href
-        (Get-Content $issue.File -Raw) -replace `
-            [regex]::Escape($issue.BrokenHref), `
-            $issue.ExpectedHref | `
-            Set-Content $issue.File -NoNewline
-        
-        Write-Host "  ✅ Fixed: $($issue.File)" -ForegroundColor Green
-    }
-    Write-Host "`n✅ All $($linkIssues.Count) links fixed!" -ForegroundColor Green
-} elseif ($DryRun) {
-    Write-Host "`n💡 Dry run complete. Use -AutoFix to apply changes." -ForegroundColor Yellow
-}
-```
-
-**Usage Examples:**
-```powershell
-# Preview what would be fixed
-./fix-parent-child-links.ps1 -DryRun
-
-# Fix all broken links automatically
-./fix-parent-child-links.ps1 -AutoFix
-
-# Fix only architecture pages
-./fix-parent-child-links.ps1 -Scope "docs/architecture/" -AutoFix
-```
-
-**Intelligence Integration:**
-```python
-# Automatically detects when script generation needed
-def has_structural_changes(modified_files: List[str]) -> bool:
-    structural_patterns = [
-        r'<nav.*?class="breadcrumb"',  # Breadcrumb changes
-        r'<a.*?class="back-link"',     # Parent link changes
-        r'<a.*?class="view-link"',     # Child link changes
-        r'data-parent=',                # Parent attribute changes
-        r'data-level=',                 # Level hierarchy changes
-    ]
-    
-    for file in modified_files:
-        content = read_file(file)
-        for pattern in structural_patterns:
-            if re.search(pattern, content):
-                return True
-    return False
-
-# Auto-generate and run script
-if has_structural_changes(git_diff_files()):
-    print("🔍 Structural changes detected - generating link integrity script...")
-    generate_script(
-        template="fix-parent-child-links.ps1.template",
-        output="cortex-toolkit/fix-parent-child-links.ps1",
-        scope=detect_affected_scope()
-    )
-    run_script("cortex-toolkit/fix-parent-child-links.ps1", autofix=True)
-    print("✅ Link integrity validated across all levels")
-```
-
-**Generated Script Lifecycle:**
-1. ⚡ **Trigger:** Structural change detected during page refinement
-2. 🔨 **Generate:** Create PowerShell script with detected scope
-3. 🧪 **Dry Run:** Show preview of fixes (30 seconds)
-4. ✅ **User Approval:** Confirm fixes look correct
-5. 🚀 **Execute:** Apply fixes with `--autofix` flag
-6. 📊 **Report:** Display before/after validation results
-7. 🗑️ **Cleanup:** Archive script to `cortex-toolkit/generated/` (optional reuse)
-
----
-
-| Tool | Purpose | Templates | Output |
-|------|---------|-----------|--------|
-| `purpose-driven-designer.py` | Generate HTML from PageDesignProfile | 6 purpose types | Complete HTML file |
-| `documentation/regenerate_prompts.py` | Generate page-specific prompts | Page-level guidance | Prompt files |
-| `documentation/site_manifest.py` | Generate site structure manifest | 83 pages tracked | JSON manifest |
-| `diagram-generator.py` | Generate Mermaid/D3.js diagrams | Glassmorphism theme | SVG/HTML |
-
----
-
-## 📋 Standard Design Patterns
-
-### **Pattern C50: Color Rotation (Card Grids)**
-
-**Rule:** 4+ cards MUST use 4-color cycle (primary → info → warning → success)
-
-**Implementation:**
-```html
-<!-- Card 1: Primary -->
-<a href="#" class="glass-card-clickable card-variant-primary">
-    <div class="card-header-inline">
-        <i class="card-icon-primary fas fa-icon"></i>
-        <h3>Title</h3>
-    </div>
-</a>
-
-<!-- Card 2: Info -->
-<a href="#" class="glass-card-clickable card-variant-info">
-    <div class="card-header-inline">
-        <i class="card-icon-info fas fa-icon"></i>
-        <h3>Title</h3>
-    </div>
-</a>
-
-<!-- Card 3: Warning -->
-<a href="#" class="glass-card-clickable card-variant-warning">
-    <div class="card-header-inline">
-        <i class="card-icon-warning fas fa-icon"></i>
-        <h3>Title</h3>
-    </div>
-</a>
-
-<!-- Card 4: Success (cycle restarts at card 5) -->
-<a href="#" class="glass-card-clickable card-variant-success">
-    <div class="card-header-inline">
-        <i class="card-icon-success fas fa-icon"></i>
-        <h3>Title</h3>
-    </div>
-</a>
-```
-
-**Validation:** `validate-color-rotation.ps1 --autofix`
-
----
-
-### **Pattern C51: Tetris Stat Badges**
-
-**Rule:** Stat badges MUST use 3-color rotation within each card
-
-**Implementation:**
-```html
-<div class="card-stats">
-    <span class="stat-badge stat-primary">
-        <i class="fas fa-icon"></i> 7 phases
-    </span>
-    <span class="stat-badge stat-info">
-        <i class="fas fa-icon"></i> TDD Enforced
-    </span>
-    <span class="stat-badge stat-warning">
-        <i class="fas fa-icon"></i> 96h duration
-    </span>
-</div>
-```
-
-**Validation:** `validate-color-rotation.ps1 --badges`
-
----
-
-### **Pattern C52: Level 1 Hero Header**
-
-**Rule:** All Level 1 pages MUST have standardized hero header with clickable robot logo
-
-**Template:**
-```html
-<!-- Hero Section with Robot Head -->
-<div class="hero-section-wrapper" style="margin-top: 3rem;">
-    <div class="hero-robot-container">
-        <a href="../index.html" class="robot-head-link" title="Back to Home">
-            <svg class="robot-head-icon" viewBox="0 0 100 100" width="200" height="200">
-                <!-- Robot SVG paths here -->
-            </svg>
-        </a>
-    </div>
-    <div class="hero-divider-line"></div>
-</div>
-
-<!-- Page Title Card -->
-<section class="glass-card-display hero-introduction">
-    <div class="card-header-centered">
-        <i class="fas fa-{icon} card-icon-{variant}"></i>
-        <h1>{Page Title}</h1>
-    </div>
-    <p class="hero-description">{Description text}</p>
-    <div class="hero-stats">
-        <span class="stat-pill stat-primary">{Stat 1}</span>
-        <span class="stat-pill stat-info">{Stat 2}</span>
-        <span class="stat-pill stat-warning">{Stat 3}</span>
-    </div>
-</section>
-```
-
-**Validation:** `page-refresh-tool.py --validate-heroes`
-
----
-
-### **Pattern C53: Full Section Panel Wrapping**
-
-**Rule:** Heading + content MUST be wrapped together in ONE glassmorphism panel
-
-**Template:**
-```html
-<section class="glass-card-display">
-    <h2 class="section-title">
-        <i class="fas fa-icon"></i>
-        Section Title
-    </h2>
-    
-    <div class="masonry-grid">
-        <!-- All section content here -->
-    </div>
-</section>
-```
-
-**Validation:** `validate-panel-wrapping.ps1 --autofix`
-
----
-
-## 🚀 Execution Workflows
-
-### **Workflow 1: User Requests Single-Page Change**
-
-**Trigger:** User says "Fix X on Y.html"
-
-**Intelligence Response:**
-
-```python
-# 1. Analyze request complexity
-complexity = calculate_complexity("Y.html")
-
-# 2. Detect similar pages
-similar_pages = find_similar_patterns("Y.html", scope="level1")
-
-# 3. Determine execution strategy
-if complexity > 50:
-    strategy = "regenerate"
-    tool = "purpose-driven-designer.py"
-elif len(similar_pages) > 3:
-    strategy = "batch_transform"
-    tool = "page-refresh-tool.py --batch"
-else:
-    strategy = "targeted_fix"
-    tool = "fix-{specific-issue}.ps1"
-
-# 4. Execute with transparency
-print(f"🔍 Detected: {len(similar_pages)} similar pages")
-print(f"📊 Complexity: {complexity} → Strategy: {strategy}")
-print(f"🛠️ Invoking: {tool}")
-
-run_tool(tool, pages=[Y] + similar_pages)
-
-# 5. Validate results
-run_validation_suite([Y] + similar_pages)
-
-# 6. Commit atomically
-git_commit(f"feat(ui): {change_description} ({len(similar_pages)+1} pages)")
-```
-
-**User Experience:**
-- ✅ Sees complexity analysis (transparent decision-making)
-- ✅ Sees tool execution output (progress visibility)
-- ✅ Gets batch fix applied to similar pages (efficiency)
-- ✅ No need to repeat request for other pages (intelligent propagation)
-
----
-
-### **Workflow 2: User Requests Standardization**
-
-**Trigger:** User says "Standardize X across all pages"
-
-**Intelligence Response:**
-
-```python
-# 1. Identify scope
-scope_pages = identify_scope("X", levels=[0,1,2])
-
-# 2. Analyze current state
-compliance_report = validate_compliance(scope_pages, pattern="X")
-
-# 3. Group by fix complexity
-high_complexity = [p for p in scope_pages if complexity(p) > 50]
-medium_complexity = [p for p in scope_pages if 20 < complexity(p) <= 50]
-low_complexity = [p for p in scope_pages if complexity(p) <= 20]
-
-# 4. Execute in batches
-print(f"🔄 Standardizing {len(scope_pages)} pages")
-print(f"  - {len(high_complexity)} regenerating (complexity 51+)")
-print(f"  - {len(medium_complexity)} script-driven (complexity 21-50)")
-print(f"  - {len(low_complexity)} targeted edits (complexity 0-20)")
-
-# Regenerate high-complexity pages
-for page in high_complexity:
-    purpose_driven_designer(page, template="X")
-
-# Script-driven medium-complexity
-for page in medium_complexity:
-    run_tool(f"fix-{X}.ps1", page, autofix=True)
-
-# Targeted edits for low-complexity
-for page in low_complexity:
-    apply_targeted_edits(page, pattern="X")
-
-# 5. Validate ALL pages
-run_validation_suite(scope_pages, strict=True)
-
-# 6. Update standard
-update_glassmorphism_standard(pattern="X", version="4.3.1")
-
-# 7. Commit with detailed changelog
-git_commit(f"""feat(ui): Standardize {X} across {len(scope_pages)} pages
-
-SCOPE:
-- Regenerated: {len(high_complexity)} pages (complexity 51+)
-- Script-driven: {len(medium_complexity)} pages (complexity 21-50)
-- Targeted edits: {len(low_complexity)} pages (complexity 0-20)
-
-VALIDATION:
-- glassmorphism-compliance: PASSED
-- css-usage: PASSED
-- html-structure: PASSED
-
-STANDARD UPDATED:
-- glassmorphism-design-standard.md v4.3.1
-- Added Pattern {X} documentation
-- Updated validation suite
-""")
-```
-
-**User Experience:**
-- ✅ Sees scope analysis (83 pages affected)
-- ✅ Sees strategy per complexity tier (transparent execution)
-- ✅ Gets comprehensive validation report (quality assurance)
-- ✅ Standards document updated automatically (knowledge capture)
-- ✅ NO manual work required (full automation)
-
----
-
-### **Workflow 3: SNOWBALL Phase Execution**
-
-**Trigger:** User opens `http://localhost:8000/X.html` and describes issues
-
-**Intelligence Response:**
-
-```python
-# 1. Parse user feedback
-issues = parse_feedback(user_input)
-# Example: ["hero header wrong", "cards not colorized", "panels missing"]
-
-# 2. Map to patterns
-pattern_map = {
-    "hero header wrong": ("C52", "page-refresh-tool.py --heroes"),
-    "cards not colorized": ("C50", "validate-color-rotation.ps1 --autofix"),
-    "panels missing": ("C53", "validate-panel-wrapping.ps1 --autofix")
-}
-
-# 3. Execute tools in dependency order
-for issue in issues:
-    pattern, tool = pattern_map[issue]
-    print(f"🔧 Fixing {issue} using {pattern}")
-    run_tool(tool, page="X.html")
-
-# 4. User validates
-print("✅ Changes applied. Please refresh browser to review.")
-user_approval = wait_for_approval()
-
-if user_approval:
-    # 5. Commit page
-    git_commit(f"Phase 16a: Refine {X} - {', '.join(issues)}")
-    
-    # 6. Generate global fix scripts (if structural changes)
-    if has_structural_changes(page="X.html"):
-        generate_global_fix_script(
-            script_name="fix-parent-child-links.ps1",
-            scope="docs/",
-            operations=["parent_links", "child_links", "breadcrumbs"]
-        )
-        run_script("fix-parent-child-links.ps1", autofix=True)
-    
-    # 7. Update SNOWBALL-STRATEGY.md
-    update_snowball_progress(page="X.html", status="COMPLETE")
-    
-    # 8. Auto-update approved panel library
-    update_approved_panel_library(page="X.html", patterns_used=["C50", "C51", "C53"])
-    
-    # 9. Recommend SINGLE NEXT VIEW (high-value snowball)
-    next_view = calculate_highest_value_next_view(
-        current_page="X.html",
-        criteria=[
-            "dependency_chain",  # Pages that depend on current
-            "pattern_reuse",     # Pages with same patterns
-            "phase_sequence",    # Natural order in SNOWBALL
-            "user_flow",         # Most common navigation path
-        ]
-    )
-    print(f"\n🎯 RECOMMENDED NEXT VIEW: {next_view['path']}")
-    print(f"   Reason: {next_view['reason']}")
-    print(f"   Value Score: {next_view['score']}/100")
-    print(f"   Open: http://localhost:8000/{next_view['path']}")
-else:
-    # 5. Iterate on specific section
-    section = user_specifies_section()
-    refine_section(page="X.html", section=section)
-```
-
-**User Experience:**
-- ✅ Describes issues in natural language (no technical jargon required)
-- ✅ Sees tools execute automatically (transparency)
-- ✅ Validates changes in live browser (immediate feedback)
-- ✅ One approval → automatic commit + progress tracking + library update (efficiency)
-- ✅ Clear next steps (guided workflow)
-
----
-
-## 📚 Approved Panel Library (Auto-Update)
-
-### **Intelligent Pattern Recording**
-
-When user approves a page, **automatically record** approved patterns to library.
-
-**Library Location:** `cortex-brain/documents/planning/active/html-glassmorphism-alignment/standards/approved-panels.yaml`
-
-**Auto-Update Workflow:**
-```python
-def update_approved_panel_library(page_path: str, patterns_used: List[str]):
-    """Record approved patterns to library after user validation."""
-    
-    # 1. Extract HTML patterns from approved page
-    soup = BeautifulSoup(read_file(page_path))
-    
-    # 2. Identify new/modified patterns
-    library = load_yaml("approved-panels.yaml")
-    
-    for pattern_id in patterns_used:
-        # Extract pattern HTML from page
-        pattern_html = extract_pattern(soup, pattern_id)
-        
-        # Check if pattern exists in library
-        if pattern_id not in library["patterns"]:
-            # NEW pattern - add to library
-            library["patterns"][pattern_id] = {
-                "name": get_pattern_name(pattern_id),
-                "approved_date": today(),
-                "approved_page": page_path,
-                "html_template": pattern_html,
-                "css_classes": extract_css_classes(pattern_html),
-                "validation_script": f"validate-{pattern_id}.ps1"
-            }
-            logger.info(f"✅ NEW pattern {pattern_id} added to library")
-        
-        elif pattern_html != library["patterns"][pattern_id]["html_template"]:
-            # MODIFIED pattern - version bump
-            library["patterns"][pattern_id]["version"] += 1
-            library["patterns"][pattern_id]["html_template"] = pattern_html
-            library["patterns"][pattern_id]["last_modified"] = today()
-            logger.info(f"✅ Pattern {pattern_id} updated (v{library['patterns'][pattern_id]['version']})")
-    
-    # 3. Save library + commit
-    save_yaml(library, "approved-panels.yaml")
-    git_commit(f"docs(library): Auto-update approved panels from {page_path}")
-```
-
-**Library Structure:**
 ```yaml
 ---
-# Approved Panel Library
-# Auto-updated when user approves pages
-
-version: 1.1.0
+version: 2.0
 last_updated: 2026-01-05
+
+# Registry of git tags for each approved pattern version
+git_tags:
+  v5.0-glassmorphism-approved: "2026-01-05T14:30:00Z"
 
 patterns:
   C50:
-    name: Color Rotation (Card Grids)
+    name: "Color Rotation (4-Color Tetris)"
     approved_date: 2026-01-04
     approved_page: orchestrators/index.html
-    version: 1
+    git_tag: v5.0-glassmorphism-approved
+    version: 2
+    
+    # HTML template WITH classes (NO inline styles)
     html_template: |
-      <a href="#" class="glass-card-clickable card-variant-primary">
-        <div class="card-header-inline">
-          <i class="card-icon-primary fas fa-icon"></i>
-          <h3>Title</h3>
+      <section class="glass-card-display glass-panel-purple">
+        <h2 class="section-title">
+          <i class="fas fa-icon"></i>
+          Section Title
+        </h2>
+        <div class="cards-grid-3col">
+          <a href="#" class="glass-card-clickable card-variant-primary">
+            <div class="card-header-inline">
+              <i class="card-icon-primary fas fa-cube"></i>
+              <h3>Card Title</h3>
+            </div>
+            <p>Card description</p>
+          </a>
         </div>
-      </a>
-    css_classes:
+      </section>
+    
+    # CSS classes required for this pattern
+    css_classes_required:
+      - glass-card-display
+      - glass-panel-purple
       - glass-card-clickable
       - card-variant-primary
-      - card-header-inline
       - card-icon-primary
+    
+    # CSS file locations
+    css_files:
+      - docs/assets/css/variables.css  # glass-panel-purple
+      - docs/assets/css/main.css       # glass-card-display
+    
+    # Validation script
     validation_script: validate-color-rotation.ps1
     
-  C51:
-    name: Tetris Stat Badges
-    approved_date: 2026-01-04
-    approved_page: orchestrators/index.html
-    version: 1
-    html_template: |
-      <div class="card-stats">
-        <span class="stat-badge stat-primary">
-          <i class="fas fa-icon"></i> Text
-        </span>
-      </div>
-    css_classes:
-      - card-stats
-      - stat-badge
-      - stat-primary
-    validation_script: validate-color-rotation.ps1 --badges
+    # CRITICAL: Inline styles forbidden
+    inline_styles_allowed: false
 ```
 
-**Benefits:**
-- ✅ Self-documenting (patterns recorded automatically)
-- ✅ Version tracking (detect modifications)
-- ✅ Template repository (reuse approved HTML)
-- ✅ CSS inventory (track required classes)
-- ✅ Zero manual updates (fully automated)
-
----
-
-## 🔍 Intelligent Problem Detection
-
-### **Automatic Issue Discovery**
-
-When user opens a page, **automatically analyze** and report:
+**Usage Workflow:**
 
 ```python
-def auto_analyze_page(page_path: str) -> PageHealthReport:
-    """Automatically detect issues before user describes them."""
+def apply_pattern_from_library(page: str, pattern_id: str):
+    """
+    Apply approved pattern from library instead of creating new HTML.
+    Guarantees: No inline styles, all classes in CSS registry, git-revertible.
+    """
     
-    report = {
-        "complexity_score": 0,
-        "issues": [],
-        "recommendations": []
-    }
+    # 1. Load pattern from library
+    library = load_approved_panel_library()
+    pattern = library["patterns"].get(pattern_id)
     
-    # 1. Parse HTML
-    soup = BeautifulSoup(page_path)
+    if not pattern:
+        raise ValueError(f"Pattern {pattern_id} not found in approved library")
     
-    # 2. Check patterns
-    if not has_hero_header(soup):
-        report["issues"].append("Missing Level 1 hero header (Pattern C52)")
-        report["complexity_score"] += 25
+    # 2. Validate pattern is still approved
+    if not pattern["inline_styles_allowed"] and has_inline_styles(pattern["html_template"]):
+        raise ValueError(f"Pattern {pattern_id} violates inline style policy")
     
-    if inline_styles := find_inline_styles(soup):
-        report["issues"].append(f"{len(inline_styles)} inline styles found")
-        report["complexity_score"] += len(inline_styles) * 0.5
+    # 3. Check CSS classes exist in registry
+    registry = load_css_class_registry("docs/assets/css/variables.css")
+    missing_classes = [cls for cls in pattern["css_classes_required"] if cls not in registry]
     
-    if orphaned_headings := find_orphaned_headings(soup):
-        report["issues"].append(f"{len(orphaned_headings)} headings not panel-wrapped (Pattern C53)")
-        report["complexity_score"] += len(orphaned_headings) * 3
+    if missing_classes:
+        raise ValueError(f"CSS classes missing from registry: {missing_classes}")
     
-    if monotone_cards := detect_monotone_cards(soup):
-        report["issues"].append(f"{len(monotone_cards)} cards without color rotation (Pattern C50)")
-        report["complexity_score"] += len(monotone_cards) * 0.5
+    # 4. Create git checkpoint
+    checkpoint = create_git_checkpoint(page, f"Before applying {pattern_id}")
     
-    # 3. CSS analysis
-    css_report = validate_css_usage(page_path)
-    if css_report["unused_classes"] > 10:
-        report["issues"].append(f"{css_report['unused_classes']} unused CSS classes")
-        report["complexity_score"] += css_report["unused_classes"] * 0.1
-    
-    # 4. Mobile responsiveness
-    mobile_score = validate_mobile_friendliness(page_path)
-    if mobile_score < 95:
-        report["issues"].append(f"Mobile score: {mobile_score}% (target: 95%+)")
-        report["complexity_score"] += (95 - mobile_score) * 0.5
-    
-    # 5. Generate recommendations
-    if report["complexity_score"] > 50:
-        report["recommendations"].append("DELETE & REGENERATE (complexity 51+)")
-        report["recommended_tool"] = "purpose-driven-designer.py"
-    elif report["complexity_score"] > 20:
-        report["recommendations"].append("SCRIPT-DRIVEN REFACTOR (complexity 21-50)")
-        report["recommended_tool"] = "page-refresh-tool.py --batch-fix"
-    else:
-        report["recommendations"].append("TARGETED EDITS (complexity 0-20)")
-        report["recommended_tool"] = "manual fixes"
-    
-    return report
-```
-
-**User Experience:**
-
-```
-User: "Review http://localhost:8000/architecture/index.html"
-
-CORTEX Intelligence:
-🔍 Automatic Analysis Complete
-
-📊 COMPLEXITY SCORE: 47 (Script-Driven Recommended)
-
-⚠️ ISSUES FOUND (6):
-1. ❌ 12 inline styles found
-2. ❌ 3 headings not panel-wrapped (Pattern C53)
-3. ❌ 10 cards without color rotation (Pattern C50)
-4. ❌ 23 unused CSS classes
-5. ❌ Mobile score: 88% (target: 95%+)
-6. ❌ Missing glassmorphism theme on 2 mermaid diagrams
-
-🎯 RECOMMENDED STRATEGY: Script-Driven Refactor
-🛠️ RECOMMENDED TOOLS:
-  - fix-inline-styles.ps1 --autofix
-  - validate-panel-wrapping.ps1 --autofix
-  - validate-color-rotation.ps1 --autofix
-  - remove-unused-css.ps1
-  - improve-mobile-friendliness.ps1
-
-❓ Execute recommended fixes? [Y/n]
-```
-
-**No User Description Required:** Intelligence layer detects issues proactively.
-
----
-
-## 🎨 Design Standard Evolution
-
-### **Automatic Standard Updates**
-
-When new patterns emerge, **automatically update** `glassmorphism-design-standard.md`:
-
-```python
-def evolve_standard(new_pattern: dict):
-    """Automatically update design standard when new pattern approved."""
-    
-    # 1. Load current standard
-    standard = load_standard("glassmorphism-design-standard.md")
-    
-    # 2. Calculate next pattern ID
-    existing_patterns = extract_patterns(standard)
-    next_id = f"C{max([int(p[1:]) for p in existing_patterns]) + 1}"
-    
-    # 3. Generate pattern documentation
-    pattern_doc = f"""
-### **Pattern {next_id}: {new_pattern['name']}**
-
-**Rule:** {new_pattern['rule']}
-
-**Implementation:**
-```html
-{new_pattern['template']}
-```
-
-**Validation:** `{new_pattern['validation_script']}`
-
-**Examples:**
-{generate_examples(new_pattern)}
-
-**Related Patterns:** {new_pattern['related']}
-"""
-    
-    # 4. Insert at appropriate section
-    insert_pattern(standard, pattern_doc, section="Design Patterns")
-    
-    # 5. Update version
-    bump_version(standard, level="minor")  # 4.3.0 → 4.4.0
-    
-    # 6. Save and commit
-    save_standard(standard)
-    git_commit(f"docs(standard): Add Pattern {next_id} - {new_pattern['name']}")
-    
-    # 7. Generate validation script (if not exists)
-    if not exists(new_pattern['validation_script']):
-        generate_validation_script(next_id, new_pattern)
-```
-
-**User Experience:**
-- ✅ Approves new pattern on ONE page
-- ✅ System documents pattern automatically
-- ✅ Generates validation script automatically
-- ✅ Standard version bumped automatically
-- ✅ NO manual documentation required
-
----
-
-## 📊 Quality Metrics Dashboard
-
-**Auto-Generated After Each Change:**
-
-```
-╔══════════════════════════════════════════════════════════════╗
-║           CORTEX DOCS QUALITY METRICS                        ║
-╠══════════════════════════════════════════════════════════════╣
-║ Total Pages:            83                                   ║
-║ Level 0 (Home):         1   [████████████████████] 100%      ║
-║ Level 1 (Hubs):         8   [███████████████████░] 95%       ║
-║ Level 2 (Detail):       74  [█████████████░░░░░░░] 68%       ║
-╠══════════════════════════════════════════════════════════════╣
-║ GLASSMORPHISM COMPLIANCE                                     ║
-║ - Pattern C50 (Color):  [████████████████░░░░] 78%           ║
-║ - Pattern C51 (Badges): [████████████████████] 92%           ║
-║ - Pattern C52 (Heroes): [████████████████░░░░] 75% (6/8 L1)  ║
-║ - Pattern C53 (Panels): [██████████████░░░░░░] 65%           ║
-╠══════════════════════════════════════════════════════════════╣
-║ CSS HEALTH                                                   ║
-║ - Unused Classes:       143 (target: <20)                    ║
-║ - Duplicate Rules:      12 (target: <2%)                     ║
-║ - Inline Styles:        0 (target: 0) ✅                     ║
-║ - Missing Classes:      23 (target: 0)                       ║
-╠══════════════════════════════════════════════════════════════╣
-║ MOBILE RESPONSIVENESS                                        ║
-║ - Average Score:        91% (target: 95%+)                   ║
-║ - Pages < 95%:          18 pages need improvement            ║
-║ - Perfect Score:        65 pages ✅                          ║
-╠══════════════════════════════════════════════════════════════╣
-║ ACCESSIBILITY (WCAG AA)                                      ║
-║ - Color Contrast:       [████████████████████] 98%           ║
-║ - Alt Text:             [███████████████████░] 96%           ║
-║ - ARIA Labels:          [████████████████░░░░] 82%           ║
-║ - Keyboard Nav:         [████████████████████] 100%          ║
-╠══════════════════════════════════════════════════════════════╣
-║ SNOWBALL PROGRESS (Phase 16a)                                ║
-║ - Completed Pages:      1/4  [█████░░░░░░░░░░░░] 25%         ║
-║ - Current Page:         token-optimization/index.html        ║
-║ - Est. Time Remaining:  6h                                   ║
-╚══════════════════════════════════════════════════════════════╝
-```
-
-**Generated by:** `validate-all-html.ps1 --dashboard`
-
-### **6. ANTI_DUPLICATION**
-
-**Rule:** ALWAYS check for existing implementations before creating new ones.
-
-**Prevention Strategy:**
-```python
-before_action(change_request):
-    1. Search for similar HTML structures
-    2. Check if pattern already exists in approved library
-    3. Verify no duplicate sections in target file
-    4. Confirm delete-and-recreate vs. patch strategy
-    
-    if duplicates_would_be_created:
-        strategy = "DELETE_EXISTING_FIRST"
-        delete_old_implementation()
-        create_new_from_template()
-    elif simple_change_possible:
-        strategy = "TARGETED_PATCH"
-        apply_minimal_edit()
-    else:
-        strategy = "FULL_REBUILD"
-        delete_entire_section()
-        regenerate_from_approved_template()
-```
-
-**Rationale:**
-- Duplicates create confusion (which version is correct?)
-- Orphaned code accumulates technical debt
-- Fresh rebuild is cleaner than layering patches
-- Approved templates guarantee consistency
-
-**Enforcement:** Intelligence layer scans for duplicates before ANY create operation.
-
----
-
-### **7. APPROVED_LIBRARY_SYNC**
-
-**Rule:** ALWAYS update approved pattern library when new patterns emerge.
-
-**Auto-Sync Workflow:**
-```python
-on_pattern_approval(new_pattern):
-    # 1. Detect pattern characteristics
-    pattern_signature = extract_signature(new_pattern)
-    
-    # 2. Check if pattern exists in library
-    library_path = "plan-config.yaml:patterns"
-    existing = search_pattern_library(pattern_signature)
-    
-    if not existing:
-        # 3. Generate pattern ID
-        next_id = get_next_pattern_id()  # C54, C55, etc.
+    # 5. Apply pattern HTML (replace or append)
+    try:
+        soup = parse_html(page)
+        # ... insert pattern["html_template"] ...
+        save_html(page, soup)
         
-        # 4. Document in library
-        add_to_library(
-            id=next_id,
-            name=pattern_name,
-            template=pattern_html,
-            validation_script=f"validate-{pattern_name}.ps1",
-            applies_to=scope,
-            examples=[...]
-        )
+        # 6. Validate result
+        assert has_no_inline_styles(page), "Inline styles detected after pattern application"
+        assert all_classes_in_registry(page, registry), "Unregistered classes found"
         
-        # 5. Update glassmorphism-design-standard.md
-        add_to_standard(next_id, pattern_doc)
+        # 7. Update state
+        state = load_page_state(page)
+        state["applied_patterns"].append(pattern_id)
+        state["git_checkpoint"] = checkpoint
+        save_page_state(page, state)
         
-        # 6. Generate validation script
-        if not exists(validation_script):
-            generate_script(next_id, pattern_signature)
-        
-        # 7. Commit changes
-        git_commit(f"feat(patterns): Add Pattern {next_id} - {pattern_name}")
-    else:
-        # Pattern exists - update if changed
-        if pattern_changed(existing, new_pattern):
-            update_library(existing_id, new_pattern)
-            git_commit(f"feat(patterns): Update Pattern {existing_id}")
+    except Exception as e:
+        rollback_to_checkpoint(checkpoint)
+        raise
 ```
-
-**Library Location:** `cortex-brain/documents/planning/active/html-glassmorphism-alignment/plan-config.yaml:patterns`
-
-**Benefits:**
-- ✅ Central source of truth for all patterns
-- ✅ Auto-documentation (no manual updates)
-- ✅ Version tracking (pattern evolution history)
-- ✅ Validation scripts auto-generated
-- ✅ Prevents pattern drift across pages
-
-**Enforcement:** Pre-commit hook validates library sync before allowing commits.
 
 ---
 
-### **8. INTELLIGENT_STANDARDIZATION**
+## 📊 EXECUTION DECISION TREE (with State Awareness)
 
-**Rule:** When user requests standardization, AUTOMATICALLY apply to ALL applicable pages without asking.
+```
+User Request: "Apply glassmorphism to X page"
+    ↓
+┌─────────────────────────────────────────┐
+│ STEP 1: Load Previous State            │
+│ - Check html-standardization-state.json│
+│ - Load approved_panels.yaml             │
+│ - Query CSS class registry              │
+└─────────────────────────────────────────┘
+    ↓
+┌─────────────────────────────────────────┐
+│ STEP 2: Pre-Flight Validation          │
+│ ✓ Git checkpoint created?               │
+│ ✓ Inline styles present?                │
+│ ✓ CSS classes in registry?              │
+│ ✓ Duplicate sections?                   │
+│ ✓ Complexity score?                     │
+└─────────────────────────────────────────┘
+    ↓
+    Decision Point: Inline Styles Detected?
+    ├─ YES → ❌ BLOCK
+    │         "ERROR: 13 inline styles found"
+    │         "Run: remove-inline-styles.py FIRST"
+    │         "Cannot apply CSS classes over inline styles"
+    │
+    └─ NO → Continue
+              ↓
+    Decision Point: Page Previously Approved?
+    ├─ YES → ⚠️ WARN
+    │         "Page approved on 2026-01-05"
+    │         "Git tag: v5.0-glassmorphism-approved"
+    │         "Overwrite? [Y/n]"
+    │         └─ User: n → STOP
+    │         └─ User: y → Continue
+    │
+    └─ NO → Continue
+              ↓
+    Decision Point: Pattern in Library?
+    ├─ YES → ✅ PREFERRED
+    │         "Using approved pattern C50 from library"
+    │         "Git tag: v5.0-glassmorphism-approved"
+    │         Apply pattern["html_template"]
+    │
+    └─ NO → ⚠️ CREATE NEW
+              "Pattern not in library - creating new"
+              "Will add to library after approval"
+              Generate HTML → User approval → Add to library
+              ↓
+    ┌─────────────────────────────────────────┐
+    │ STEP 3: Execute Atomic Operations      │
+    │ 1. create_git_checkpoint()              │
+    │ 2. remove_inline_styles() [if needed]   │
+    │ 3. apply_css_classes()                  │
+    │ 4. validate_no_inline_styles()          │
+    │ 5. validate_css_registry()              │
+    └─────────────────────────────────────────┘
+              ↓
+    ┌─────────────────────────────────────────┐
+    │ STEP 4: Update State & Commit          │
+    │ - Save to html-standardization-state.json│
+    │ - Update approved_panels.yaml            │
+    │ - Git commit with tag reference          │
+    └─────────────────────────────────────────┘
+```
 
-**Auto-Standardization Workflow:**
+---
+
+## 🚨 CRITICAL RULES (Zero Tolerance)
+
+### Rule 1: No Inline Styles
 ```python
-on_standardization_request(pattern_name):
-    # 1. Identify pattern scope
-    pattern = load_from_library(pattern_name)
-    scope = pattern.applies_to  # e.g., [level1, level2]
+def assert_no_inline_styles(html_file: str):
+    soup = BeautifulSoup(read_file(html_file))
+    inline_count = len(soup.find_all(style=True))
     
-    # 2. Find ALL applicable pages
-    applicable_pages = []
-    for level in scope:
-        applicable_pages.extend(find_pages_by_level(level))
-    
-    # 3. Analyze compliance
-    compliant_pages = []
-    non_compliant_pages = []
-    for page in applicable_pages:
-        if is_compliant(page, pattern):
-            compliant_pages.append(page)
-        else:
-            non_compliant_pages.append(page)
-    
-    # 4. Group by complexity
-    complexity_groups = group_by_complexity(non_compliant_pages)
-    
-    # 5. Execute WITHOUT asking user
-    print(f"🔄 Auto-Standardizing {pattern_name} ({len(non_compliant_pages)} pages)")
-    print(f"  - Already compliant: {len(compliant_pages)} pages ✅")
-    print(f"  - Regenerating: {len(complexity_groups['high'])} pages (51+)")
-    print(f"  - Script-driven: {len(complexity_groups['medium'])} pages (21-50)")
-    print(f"  - Targeted edits: {len(complexity_groups['low'])} pages (0-20)")
-    
-    for page in complexity_groups['high']:
-        regenerate_page(page, pattern)
-    
-    for page in complexity_groups['medium']:
-        apply_script_fixes(page, pattern)
-    
-    for page in complexity_groups['low']:
-        apply_targeted_edits(page, pattern)
-    
-    # 6. Validate ALL pages
-    validate_compliance(applicable_pages, pattern)
-    
-    # 7. Update library (mark as site-wide applied)
-    update_library_status(pattern_name, "APPLIED_SITE_WIDE")
-    
-    # 8. Commit atomically
-    git_commit(f"feat(ui): Standardize {pattern_name} site-wide ({len(non_compliant_pages)} pages)")
+    if inline_count > 0:
+        raise AssertionError(f"CRITICAL: {inline_count} inline styles detected in {html_file}")
 ```
 
-**User Experience:**
-```
-User: "Standardize hero headers"
-
-CORTEX Intelligence:
-🔍 Pattern: C52 (Level 1 Hero Header)
-📊 Scope: 8 Level 1 pages
-
-COMPLIANCE ANALYSIS:
-  ✅ Already compliant: 2 pages (orchestrators, token-optimization)
-  ⏳ Need updates: 6 pages
-
-EXECUTION (Automatic - No Confirmation Needed):
-  [████████████████████] 100% (6/6 pages complete)
-
-VALIDATION:
-  ✅ glassmorphism-compliance: PASSED (8/8 pages)
-  ✅ html-structure: PASSED
-  ✅ responsive-design: PASSED
-
-✅ COMMITTED: feat(ui): Standardize C52 site-wide (6 pages)
-
-// No "Are you sure?" or "Proceed?" prompts - Intelligence handles it
+### Rule 2: CSS Registry Enforcement
+```python
+def assert_all_classes_registered(html_file: str, registry: Dict):
+    html_classes = extract_glass_classes(html_file)
+    missing = [cls for cls in html_classes if cls not in registry]
+    
+    if missing:
+        raise AssertionError(f"CRITICAL: Unregistered classes: {missing}")
 ```
 
-**Benefits:**
-- ✅ Zero friction (no confirmation dialogs)
-- ✅ Intelligent scope detection (finds ALL applicable pages)
-- ✅ Complexity-based execution (optimal strategy per page)
-- ✅ Atomic commits (all changes together)
-- ✅ Library updates automatically
+### Rule 3: Git Checkpoint Before Destructive Ops
+```python
+def require_git_checkpoint(operation: str):
+    if not has_recent_checkpoint():
+        raise AssertionError(f"CRITICAL: No git checkpoint before {operation}")
+```
 
-**Enforcement:** HOLISTIC_STANDARDIZATION rule requires auto-application.
+### Rule 4: State Persistence
+```python
+def require_state_tracking(page: str):
+    state = load_page_state(page)
+    if not state:
+        raise AssertionError(f"CRITICAL: No state tracking for {page}")
+```
 
 ---
 
-## 🚨 Critical Rules (SKULL Enforcement)
+## 📚 Migration Path from v1.4 to v2.0
 
-### **1. HOLISTIC_STANDARDIZATION**
+### Phase 1: Create Infrastructure (1 hour)
+1. ✅ Create `html-standardization-state.json`
+2. ✅ Enhance `approved-panels.yaml` with git tags
+3. ✅ Build CSS class registry parser
+4. ✅ Create atomic tool wrappers
 
-**Rule:** When user requests a change, ALWAYS:
-1. Detect scope (single page, category, site-wide)
-2. Find similar patterns across workspace
-3. Apply change to ALL matching instances
-4. Update design standard if new pattern
-5. Validate compliance across affected pages
+### Phase 2: Validate Existing Pages (2 hours)
+1. ✅ Run pre-flight on all 100+ HTML files
+2. ✅ Document inline style violations (expected: 50+)
+3. ✅ Identify unregistered CSS classes
+4. ✅ Create git checkpoints for all
 
-**Enforcement:** Intelligence layer blocks single-page fixes when similar pages exist.
+### Phase 3: Clean Slate (3 hours)
+1. ✅ Run `remove-inline-styles.py` on all pages
+2. ✅ Validate CSS registry completeness
+3. ✅ Commit: "refactor: Remove all inline styles (v2.0 migration)"
 
----
-
-### **2. TOOL_FIRST_EXECUTION**
-
-**Rule:** ALWAYS prefer Python/PowerShell tools over manual edits.
-
-**Decision Tree:**
-```
-Change Requested
-  ↓
-Tool Exists? ─── YES ──→ Use tool (90% of cases)
-  ↓
-  NO
-  ↓
-Can Script Be Created? ─── YES ──→ Create script (8% of cases)
-  ↓
-  NO
-  ↓
-Manual Edit (2% of cases)
-```
-
-**Enforcement:** Intelligence layer suggests tool creation if missing.
+### Phase 4: Enable Enforcement (1 hour)
+1. ✅ Add assertion checks to all tools
+2. ✅ Update cortex-docs-v2.prompt.md in Copilot config
+3. ✅ Test with orchestrators/index.html
 
 ---
 
-### **3. COMPLEXITY_DRIVEN_STRATEGY**
+## ✅ SUCCESS CRITERIA
 
-**Rule:** ALWAYS calculate complexity before acting.
+**v2.0 is successful when:**
 
-**Mandatory Actions:**
-- Score 0-20: Targeted edits only
-- Score 21-50: Script-driven refactor only
-- Score 51+: Delete & regenerate only
+1. ✅ **Zero Duplicate Content**
+   - Pre-flight validation blocks duplicate section creation
+   - State tracking prevents re-application of patterns
 
-**Enforcement:** Intelligence layer blocks inappropriate strategies.
+2. ✅ **Zero Lost Color Schemes**
+   - State persistence remembers applied classes
+   - Git checkpoints enable rollback
+   - Approved library preserves working patterns
 
----
+3. ✅ **Zero Inline Styles**
+   - Assertion checks block tool execution
+   - remove-inline-styles.py runs BEFORE class application
+   - CSS registry is single source of truth
 
-### **4. DELETE_OVER_FIX**
-
-**Rule:** When complexity > 50, ALWAYS regenerate instead of fixing.
-
-**Rationale:**
-- Fixing broken HTML is error-prone (leaves orphaned code)
-- Regenerating from approved templates is faster (purpose-driven-designer.py)
-- Fresh start eliminates technical debt (no legacy patterns)
-
-**Enforcement:** Intelligence layer prompts user if complexity > 50.
-
----
-
-### **5. ATOMIC_COMMITS**
-
-**Rule:** ALWAYS commit changes atomically with detailed changelogs.
-
-**Format:**
-```
-feat(ui): {Change description} ({N} pages)
-
-SCOPE:
-- Files changed: {list}
-- Strategy: {targeted/script-driven/regenerate}
-1. Apply changes
-2. **Generate global fix scripts** (if structural changes detected)
-3. Print: "✅ Changes applied. Refresh http://localhost:8000/{page}.html"
-4. Wait for user approval
-5. If approved: 
-   - Commit with detailed changelog
-   - **RECOMMEND SINGLE NEXT VIEW** (no multi-path confusion)
-6. If not approved: iterate on specific section
-
-**Enforcement:** SNOWBALL strategy mandates live validation + focused progression.
-- {standard}: v{version}
-- {pattern}: Added/Modified
-```
-
-**Enforcement:** Pre-commit hook validates commit message format.
+4. ✅ **Approved Library Integration**
+   - Pre-flight queries library first
+   - New patterns added after user approval
+   - Git tags link patterns to working state
 
 ---
 
-### **6. LIVE_VALIDATION**
-
-**Rule:** ALWAYS require user approval after changes via browser refresh.
-
-**Workflow:**
-1. Apply changes
-2. Print: "✅ Changes applied. Refresh http://localhost:8000/{page}.html"
-3. Wait for user approval
-4. If approved: commit + move to next page
-5. If not approved: iterate on specific section
-
-**Enforcement:** SNOWBALL strategy mandates live validation.
-
----
-
-## 🎯 Quick Reference Card
-
-**User says:** → **Intelligence does:**
-
-| User Input | Intelligence Action | Tools Used | Next View Recommendation |
-|------------|---------------------|------------|--------------------------|
-| "Fix hero on X.html" | Find all Level 1 pages → Apply C52 to all | `page-refresh-tool.py` | → `Y.html` (child with same pattern, score: 75/100) |
-| "Colorize cards" | Detect monotone cards → Apply C50 rotation | `validate-color-rotation.ps1` | → Next in sequence with cards (score: 68/100) |
-| "Standardize panels" | Find unwrapped sections → Apply C53 | `validate-panel-wrapping.ps1` | → Sibling page in same category (score: 82/100) |
-| "This page looks broken" | Calculate complexity (67) → Regenerate | `purpose-driven-designer.py` | → High-traffic child page (score: 90/100) |
-| "Review X.html" | Auto-analyze → Report issues + recommendations | Multiple validators | → Best pattern-match page (score: 70/100) |
-| "Continue Phase 16a" | Load SNOWBALL state → Resume at highest-value view | `SNOWBALL-STRATEGY.md` | → **SINGLE NEXT VIEW** calculated (score shown) |
-
-**🆕 Single Next View Output Format:**
-```
-✅ CHANGES APPLIED: architecture/index.html
-
-🎯 RECOMMENDED NEXT VIEW: architecture/four-tier-brain.html
-
-   Reason: Child of architecture/index.html + Reuses 3 patterns (C50, C51, C53)
-   Value Score: 75.0/100
-   Patterns Ready: C50, C51, C53
-   
-   Open: http://localhost:8000/architecture/four-tier-brain.html
-   
-   ❓ Ready to work on this view? [Y/n]
-```
-
-**Override:** User can always specify different page - algorithm provides intelligent default only.
-
----
-
-## 📚 Related Documentation
-
-- **Main Strategy:** `cortex-brain/documents/planning/active/html-glassmorphism-alignment/SNOWBALL-STRATEGY.md`
-- **Design Standard:** `cortex-brain/documents/standards/glassmorphism-design-standard.md` (v4.3.0)
-- **Tool Inventory:** `cortex-toolkit/TOOLS-INVENTORY.md` (52 scripts)
-- **Plan Master:** `cortex-brain/documents/planning/active/html-glassmorphism-alignment/00-html-view-standardization.md`
-
----
-
-**REMEMBER:** You are an intelligent design orchestrator. When user requests changes:
-1. **Analyze complexity** (0-100 score)
-2. **Detect scope** (similar pages)
-3. **Choose strategy** (targeted/script-driven/regenerate)
-4. **Execute with tools** (Python/PowerShell automation)
-5. **Generate global scripts** (if structural changes detected)
-6. **Validate holistically** (run compliance suite)
-7. **Commit atomically** (detailed changelog)
-8. **Recommend SINGLE next view** (highest-value snowball score)
-
-**Your goal:** Eliminate repetitive work, standardize holistically, maximize tool usage, provide focused progression, and deliver consistent glassmorphism excellence.
-
-**Version History:**
-- **v1.2.0** (2026-01-05): Single next view recommendation algorithm + auto-generated global link fixing scripts
-- **v1.1.0** (2026-01-05): Delete-over-fix intelligence + approved panel library + Vision API granular details
-- **v1.0.0** (2026-01-04): Initial release - Intelligent automation framework for HTML standardization
+**Last Updated:** 2026-01-05  
+**Migration Status:** 🚧 Design Complete, Implementation Pending  
+**Replaces:** cortex-docs.prompt.md v1.4.0

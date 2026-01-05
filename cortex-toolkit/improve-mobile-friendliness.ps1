@@ -1,11 +1,36 @@
 <#
 .SYNOPSIS
-    Improves mobile-friendliness from B+ to A+
+    Automatically improves mobile-friendliness to 95%+ score
 .DESCRIPTION
-    Adds missing mobile meta tags, fixes responsive breakpoints, enhances touch targets
+    Comprehensive mobile optimization: viewport meta, responsive breakpoints, touch targets,
+    typography, overflow prevention, orientation support (portrait/landscape)
+.PARAMETER Path
+    Path to HTML file or directory (default: docs/)
+.PARAMETER AutoFix
+    Apply fixes automatically
+.PARAMETER DryRun
+    Preview changes without modifying files
+.PARAMETER TargetScore
+    Target mobile score (default: 95)
+.EXAMPLE
+    .\improve-mobile-friendliness.ps1 -Path "docs/orchestrators/index.html" -AutoFix
+.EXAMPLE
+    .\improve-mobile-friendliness.ps1 -DryRun
 #>
 
-param([switch]$DryRun = $false)
+param(
+    [Parameter(Mandatory=$false)]
+    [string]$Path = "docs/",
+    
+    [Parameter(Mandatory=$false)]
+    [switch]$AutoFix,
+    
+    [Parameter(Mandatory=$false)]
+    [switch]$DryRun,
+    
+    [Parameter(Mandatory=$false)]
+    [int]$TargetScore = 95
+)
 
 $DocsRoot = Join-Path $PSScriptRoot "..\docs"
 $htmlFiles = Get-ChildItem -Path $DocsRoot -Filter "*.html" -Recurse -File |
