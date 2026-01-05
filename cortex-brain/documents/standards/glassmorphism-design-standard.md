@@ -130,19 +130,23 @@ This standard defines **modern glassmorphism patterns** for CORTEX documentation
 
 **ADDED:** January 5, 2026 - Visual Monotony Prevention & Professional Polish
 
-### 1. All Headings MUST Be Wrapped in Glassmorphism Panels
+### 1. Section Content MUST Be Wrapped in Glassmorphism Panels
 
-**Rule:** Every `<h2>` with `.section-title` class MUST be wrapped in `<section class="glass-card-display">`.
+**Rule:** Entire section (heading + content) MUST be wrapped in `<section class="glass-card-display">`.
 
-**❌ WRONG (Naked Heading):**
+**❌ WRONG (Naked Section):**
 ```html
 <h2 class="section-title">
     <i class="fas fa-gears"></i>
     Master Orchestrators
 </h2>
+
+<div class="masonry-grid">
+    <!-- cards here -->
+</div>
 ```
 
-**✅ CORRECT (Panel-Wrapped):**
+**❌ WRONG (Heading-Only Panel):**
 ```html
 <section class="glass-card-display">
     <h2 class="section-title">
@@ -150,13 +154,31 @@ This standard defines **modern glassmorphism patterns** for CORTEX documentation
         Master Orchestrators
     </h2>
 </section>
+
+<div class="masonry-grid">
+    <!-- cards here -->
+</div>
+```
+
+**✅ CORRECT (Full Section Panel):**
+```html
+<section class="glass-card-display">
+    <h2 class="section-title">
+        <i class="fas fa-gears"></i>
+        Master Orchestrators
+    </h2>
+    
+    <div class="masonry-grid">
+        <!-- cards here -->
+    </div>
+</section>
 ```
 
 **Rationale:** 
-- Provides visual consistency across all pages
-- Creates professional depth hierarchy
+- Creates cohesive visual grouping (heading + content together)
+- Prevents orphaned headings with separate borders
 - Maintains glassmorphism aesthetic throughout UI
-- Prevents jarring visual breaks between sections
+- Matches reference design (Pasted Image 2 pattern)
 
 ---
 

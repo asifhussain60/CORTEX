@@ -1,11 +1,12 @@
 #!/usr/bin/env pwsh
 <#
 .SYNOPSIS
-    Validates that all section headings are wrapped in glassmorphism panels.
+    Validates that section content (heading + children) are wrapped in glassmorphism panels.
 
 .DESCRIPTION
-    Scans HTML files to detect naked <h2 class="section-title"> elements that are not
-    wrapped in <section class="glass-card-display">. Enforces glassmorphism design standard v4.3.0.
+    Scans HTML files to detect naked sections where <h2 class="section-title"> and its 
+    following content are not wrapped together in <section class="glass-card-display">. 
+    Enforces glassmorphism design standard v4.3.0.
 
 .PARAMETER Path
     Root directory to scan for HTML files.
@@ -14,7 +15,7 @@
     Recursively scan subdirectories.
 
 .PARAMETER AutoFix
-    Automatically wrap naked headings in glassmorphism panels (creates backups).
+    Automatically wrap section content in glassmorphism panels (creates backups).
 
 .EXAMPLE
     .\validate-panel-wrapping.ps1 -Path "docs/" -Recursive
@@ -23,10 +24,13 @@
     .\validate-panel-wrapping.ps1 -Path "docs/orchestrators/index.html" -AutoFix
 
 .NOTES
-    Version: 1.0.0
+    Version: 1.1.0
     Author: Asif Hussain
     Date: January 5, 2026
     Standard: glassmorphism-design-standard.md v4.3.0
+    
+    FIXED: Now detects full section wrapping (heading + content together),
+    not just heading-only wrapping.
 #>
 
 param(
@@ -73,6 +77,32 @@ function Test-NakedHeadings {
             
             for ($j = $i - $lookback; $j -lt $i; $j++) {
                 if ($lines[$j] -match '<section[^>]*class="[^"]*glass-card-display[^"]*"[^>]*>') {
+                    # Found wrapper, now check if content after heading is INSIDE the same section
+                    # Look ahead to find the next significant content (masonry-grid, etc.)
+                    $nextContentLine = -1
+                    $sectionCloseLine = -1
+                    
+                    for ($k = $i + 1; $k -lt [Math]::Min($lines.Count, $i + 10); $k++) {
+                        if ($lines[$k] -match '<div[^>]*class="[^"]*masonry-grid[^"]*"') {
+                            $nextContentLine = $k
+                            break
+                        }
+                    }
+                    
+                    # Find section close tag after heading
+                    for ($k = $i + 1; $k -lt [Math]::Min($lines.Count, $i + 5); $k++) {
+                        if ($lines[$k] -match '</section>') {
+                            $sectionCloseLine = $k
+                            break
+                        }
+                    }
+                    
+                    # If section closes BEFORE content starts, it's heading-only wrapping (WRONG)
+                    if ($sectionCloseLine -gt 0 -and $nextContentLine -gt 0 -and $sectionCloseLine -lt $nextContentLine) {
+                        $hasWrapper = $false
+                        break
+                    }
+                    
                     $hasWrapper = $true
                     break
                 }
@@ -129,8 +159,9 @@ function Invoke-AutoFix {
 }
 
 # Main execution
-Write-ColorOutput "🔍 Glassmorphism Panel Wrapping Validator v1.0.0" $CYAN
-Write-ColorOutput "Standard: glassmorphism-design-standard.md v4.3.0`n" $CYAN
+Write-ColorOutput "🔍 Glassmorphism Section Panel Validator v1.1.0" $CYAN
+Write-ColorOutput "Standard: glassmorphism-design-standard.md v4.3.0" $CYAN
+Write-ColorOutput "Checks: Full section wrapping (heading + content together)`n" $CYAN
 
 $searchParams = @{
     Path = $Path
@@ -169,15 +200,23 @@ foreach ($file in $htmlFiles) {
 # Summary
 Write-ColorOutput "`n========================================" $CYAN
 if ($totalIssues -eq 0) {
-    Write-ColorOutput "✅ All headings properly wrapped!" $GREEN
+    Write-ColorOutput "✅ All sections properly wrapped!" $GREEN
     Write-ColorOutput "Scanned: $($htmlFiles.Count) files" $GREEN
     exit 0
 } else {
-    Write-ColorOutput "❌ Found $totalIssues naked headings in $filesWithIssues files" $RED
+    Write-ColorOutput "❌ Found $totalIssues sections with incorrect wrapping in $filesWithIssues files" $RED
     Write-ColorOutput "Scanned: $($htmlFiles.Count) files" $YELLOW
+    Write-ColorOutput "`n⚠️  Common issues:" $YELLOW
+    Write-ColorOutput "   - Heading-only panel (section closes before content)" $YELLOW
+    Write-ColorOutput "   - No panel at all (naked section)" $YELLOW
+    Write-ColorOutput "`n✅ Correct pattern:" $GREEN
+    Write-ColorOutput "   <section class=`"glass-card-display`">" $GREEN
+    Write-ColorOutput "       <h2 class=`"section-title`">Title</h2>" $GREEN
+    Write-ColorOutput "       <div class=`"masonry-grid`">...</div>" $GREEN
+    Write-ColorOutput "   </section>" $GREEN
     
     if (-not $AutoFix) {
-        Write-ColorOutput "`n💡 Run with -AutoFix to automatically wrap headings" $CYAN
+        Write-ColorOutput "`n💡 Run with -AutoFix to automatically fix wrapping" $CYAN
     }
     
     exit 2

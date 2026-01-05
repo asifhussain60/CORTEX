@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Orchestrators - 10 core autonomous workflow coordinators across 5 categories: Planning, Execution, System Ops, Analysis, and Debug">
+    <title>Orchestrators Hub - CORTEX</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo-64.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/variables.css">
+    <link rel="stylesheet" href="../assets/css/cortex-glass-system.css">
+    <link rel="stylesheet" href="../assets/css/index-multipanel.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
+    <style>
+        /* Compact Tetris Override */
+        .tetris-panel {
+            padding: 0 2.5rem;
+            width: 70%;
+            margin: 0 auto;
+        }
+        
+        .glass-card-display .token-metrics-tetris {
+            margin-top: var(--spacing-md, 1rem);
+            gap: 0.5rem;
+        }
+        
+        .glass-card-display .token-metric-tile {
+            padding: 1.875rem clamp(0.5rem, 2cqi, 0.75rem);
+            gap: clamp(0.4rem, 1.5cqi, 0.6rem);
+            flex-direction: row;
+            text-align: left;
+        }
+        
+        .glass-card-display .token-metric-tile i {
+            font-size: clamp(1.25rem, 4cqi + 0.25rem, 1.75rem);
+            width: clamp(32px, 7cqi, 48px);
+            height: clamp(32px, 7cqi, 48px);
+            flex-shrink: 0;
+        }
+        
+        .glass-card-display .token-metric-tile .metric-value {
+            font-size: clamp(1.125rem, 3.5cqi + 0.5rem, 1.5rem);
+            font-weight: 600;
+            line-height: 1.2;
+        }
+        
+        .glass-card-display .token-metric-tile .metric-label {
+            font-size: clamp(0.7rem, 2cqi + 0.2rem, 0.875rem);
+        }
+        
+        .tetris-panel {
+            background: var(--glass-bg, rgba(26, 31, 58, 0.7));
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+            border-radius: var(--radius-lg, 16px);
+            padding: var(--spacing-lg, 1.5rem);
+            box-shadow: var(--shadow, 0 8px 32px rgba(0, 0, 0, 0.37));
+        }
+    </style>
+<style>
+        /* ORCHESTRATORS Theme - Level 1 */
+        .level1-orchestrators {
+            --theme-primary: #00d4ff;
+            --theme-accent: #7c7cff;
+            --theme-success: #00ff88;
+            --theme-warning: #ffd700;
+            --theme-glow: rgba(0, 212, 255, 0.3);
+            
+            /* Apply to glass effects */
+            --glass-border-color: #00d4ff33;
+            --pulse-glow-color: rgba(0, 212, 255, 0.3);
+        }
+        
+        /* Themed glass cards */
+        .level1-orchestrators .glass-card-clickable:hover {
+            border-color: #00d4ff66;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37),
+                        0 0 30px rgba(0, 212, 255, 0.3);
+        }
+        
+        /* Themed icons */
+        .level1-orchestrators .pulse-glow-glass--fast {
+            filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.3));
+        }
+        
+        /* Themed metric tiles */
+        .level1-orchestrators .token-metric-tile {
+            border-color: #00d4ff33;
+        }
+        
+        .level1-orchestrators .token-metric-tile:hover {
+            border-color: #00d4ff66;
+            background: #00d4ff11;
+        }
+</style>
+</head>
+<body class="level1-integration-icon-container">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <header class="level1-integration-icon-container">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="../index.html" class="breadcrumb-separator">
+                <i class="fas fa-home pulse-glow-glass--fast"></i> Home
+            </a>
+            <span class="breadcrumb-separator">→</span>
+            <span class="breadcrumb-current">Orchestrators</span>
+        </nav>
+        <h1 class="level1-integration-icon-container">🎯 CORTEX Orchestrators</h1>
+        <p class="level1-integration-icon-container">Autonomous Workflow Coordinators - 10 Core Orchestrators · 5 Categories</p>
+    </header>
+    
+    <main id="main-content" class="level1-integration-icon-container level1-orchestrators">
+        <!-- Page Title Card with Tetris Metrics -->
+        <section class="glass-card-display">
+            <div class="page-title-section">
+                <h1 class="page-title"><i class="fas fa-gears pulse-glow-glass--fast"></i> CORTEX Orchestrators</h1>
+                <p class="page-subtitle">Intelligent Workflow Coordinators · 10 Core Orchestrators · 5 Categories</p>
+            </div>
+            
+            <!-- Tetris-style metric tiles -->
+            <div class="tetris-panel">
+                <div class="token-metrics-tetris">
+                    <a href="#planning-strategy" class="token-metric-tile tile-reduction">
+                    <i class="fas fa-chess-knight pulse-glow-glass--fast"></i>
+                    <span class="metric-value">2</span>
+                    <span class="metric-label">Planning</span>
+                </a>
+                <a href="#execution" class="token-metric-tile tile-savings">
+                    <i class="fas fa-play-circle pulse-glow-glass--fast"></i>
+                    <span class="metric-value">2</span>
+                    <span class="metric-label">Execution</span>
+                </a>
+                <a href="#system-ops" class="token-metric-tile tile-architecture">
+                    <i class="fas fa-wrench pulse-glow-glass--fast"></i>
+                    <span class="metric-value">3</span>
+                    <span class="metric-label">System Ops</span>
+                </a>
+                <a href="#analysis" class="token-metric-tile tile-access">
+                    <i class="fas fa-chart-line pulse-glow-glass--fast"></i>
+                    <span class="metric-value">2</span>
+                    <span class="metric-label">Analysis</span>
+                </a>
+                <a href="#debug" class="token-metric-tile tile-score">
+                    <i class="fas fa-bug pulse-glow-glass--fast"></i>
+                    <span class="metric-value">1</span>
+                    <span class="metric-label">Debug</span>
+                </a>
+                <a href="#master-hub" class="token-metric-tile tile-updated">
+                    <i class="fas fa-brain pulse-glow-glass--fast"></i>
+                    <span class="metric-value">1</span>
+                    <span class="metric-label">Master Hub</span>
+                </a>
+            </div>
+            </div>
+        </section>
+        
+        <!-- Overview Section -->
+        <section class="glass-card-display">
+            <h2 class="section-title"><i class="fas fa-info-circle pulse-glow-glass--fast"></i> What are Orchestrators?</h2>
+            <p class="glass-card--no-hover">
+                CORTEX orchestrators are intelligent workflow coordinators that transform natural language 
+                commands into complete, multi-phase operations. Each of the 10 core orchestrators handles 
+                specific autonomous workflows—from Planning v5 and ADO work item generation to TDD execution, 
+                system maintenance, code refinement, and intelligent debugging.
+            </p>
+        </section>
+
+        <!-- Multi-Panel Grid: 5 Categories in 2x3 Layout -->
+        <article class="glass-card-display main-panel-wrapper">
+            <div class="category-panels-grid grid-2x3">
+                
+                <!-- Planning Category -->
+                <div class="category-subpanel">
+                    <h3 class="category-subpanel">
+                        <i class="fas fa-chess-knight pulse-glow-glass--fast"></i> Planning & Strategy
+                    </h3>
+                    <p class="category-subpanel">Autonomous project planning and work item generation</p>
+                    <div class="sts-category-icon-wrapper">
+                        <a href="planning-v5.html" class="category-tag animation-t1">
+                            <i class="fas fa-rocket pulse-glow-glass--fast"></i> Planning v5
+                        </a>
+                        <a href="ado-operations.html" class="category-tag animation-t1">
+                            <i class="fas fa-tasks pulse-glow-glass--fast"></i> ADO Operations
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Execution Category -->
+                <div class="category-subpanel">
+                    <h3 class="category-subpanel">
+                        <i class="fas fa-play-circle pulse-glow-glass--fast"></i> Execution & Quality
+                    </h3>
+                    <p class="category-subpanel">Test-driven development and deployment orchestration</p>
+                    <div class="sts-category-icon-wrapper">
+                        <a href="tdd-orchestrator.html" class="category-tag animation-t1">
+                            <i class="fas fa-vial pulse-glow-glass--fast"></i> TDD Mastery
+                        </a>
+                        <a href="execution-orchestrator.html" class="category-tag animation-t1">
+                            <i class="fas fa-terminal pulse-glow-glass--fast"></i> Execution Engine
+                        </a>
+                    </div>
+                </div>
+
+                <!-- System Maintenance Category -->
+                <div class="category-subpanel">
+                    <h3 class="category-subpanel">
+                        <i class="fas fa-cogs pulse-glow-glass--fast"></i> System Maintenance
+                    </h3>
+                    <p class="category-subpanel">Automated cleanup, integrity checks, and maintenance pipelines</p>
+                    <div class="sts-category-icon-wrapper">
+                        <a href="cleanup-orchestrator.html" class="category-tag animation-t1">
+                            <i class="fas fa-broom pulse-glow-glass--fast"></i> Cleanup v2
+                        </a>
+                        <a href="system-integrity.html" class="category-tag animation-t1">
+                            <i class="fas fa-shield-alt pulse-glow-glass--fast"></i> Vacuum v2
+                        </a>
+                        <a href="git-checkpoint.html" class="category-tag animation-t1">
+                            <i class="fas fa-code-branch pulse-glow-glass--fast"></i> Maintenance
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Analysis & Refinement Category -->
+                <div class="category-subpanel">
+                    <h3 class="category-subpanel">
+                        <i class="fas fa-chart-line pulse-glow-glass--fast"></i> Analysis & Refinement
+                    </h3>
+                    <p class="category-subpanel">Code quality improvement and architectural analysis</p>
+                    <div class="sts-category-icon-wrapper">
+                        <a href="refinement-orchestrator.html" class="category-tag animation-t1">
+                            <i class="fas fa-gem pulse-glow-glass--fast"></i> Refinement Engine
+                        </a>
+                        <a href="cortex-lens.html" class="category-tag animation-t1">
+                            <i class="fas fa-microscope pulse-glow-glass--fast"></i> CORTEX Lens
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Debug & Troubleshooting Category -->
+                <div class="category-subpanel">
+                    <h3 class="category-subpanel">
+                        <i class="fas fa-bug pulse-glow-glass--fast"></i> Debug & Troubleshooting
+                    </h3>
+                    <p class="category-subpanel">Intelligent error detection and automated fix workflows</p>
+                    <div class="sts-category-icon-wrapper">
+                        <a href="debug-orchestrator.html" class="category-tag animation-t1">
+                            <i class="fas fa-stethoscope pulse-glow-glass--fast"></i> Debug Orchestrator
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Master Hub -->
+                <div class="category-subpanel">
+                    <h3 class="category-subpanel">
+                        <i class="fas fa-brain pulse-glow-glass--fast"></i> Master Orchestrator
+                    </h3>
+                    <p class="category-subpanel">Central coordination hub routing commands to specialized orchestrators</p>
+                    <div class="sts-category-icon-wrapper">
+                        <a href="master-orchestrator-hub.html" class="category-tag animation-t1">
+                            <i class="fas fa-project-diagram pulse-glow-glass--fast"></i> Master Hub
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </article>
+
+        <!-- Key Capabilities -->
+        <section class="glass-card-display">
+            <h2 class="section-title"><i class="fas fa-star pulse-glow-glass--fast"></i> Key Capabilities</h2>
+            <div class="capabilities-grid">
+                <div class="capability-item">
+                    <i class="fas fa-brain pulse-glow-glass--fast capability-icon"></i>
+                    <h3>Autonomous Execution</h3>
+                    <p>Self-managing workflows with minimal human intervention</p>
+                </div>
+                <div class="capability-item">
+                    <i class="fas fa-network-wired pulse-glow-glass--fast capability-icon"></i>
+                    <h3>Multi-Phase Coordination</h3>
+                    <p>Complex operations broken into manageable phases</p>
+                </div>
+                <div class="capability-item">
+                    <i class="fas fa-shield-check pulse-glow-glass--fast capability-icon"></i>
+                    <h3>SKULL Protection</h3>
+                    <p>Built-in brain protection rules for safe operations</p>
+                </div>
+                <div class="capability-item">
+                    <i class="fas fa-sync pulse-glow-glass--fast capability-icon"></i>
+                    <h3>Rollback Support</h3>
+                    <p>Automatic checkpoints and recovery mechanisms</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="level1-integration-icon-container">
+        <div class="footer-content">
+            <p class="copyright">© 2026 Asif Hussain. All rights reserved.</p>
+            <p class="level1-pkg-version">CORTEX</p>
+            <a href="https://github.com/asifhussain60/CORTEX" class="github-link" target="_blank">
+                <i class="fab fa-github"></i> GitHub
+            </a>
+        </div>
+    </footer>
+    
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('fade-in-visible');
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+        
+        document.querySelectorAll('.orchestrator-card, .category-section').forEach(el => {
+            el.classList.add('fade-in');
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
