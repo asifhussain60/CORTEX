@@ -1,0 +1,1395 @@
+# C150 Remediation Plan - YAML-Based Python Execution
+# Fixes critical gaps identified in C150 plan review (January 4, 2026)
+
+schema_version: "5.0"
+plan_id: "c150-remediation"
+plan_name: "C150 Remediation - Fix HTML Alignment Plan Gaps"
+created_date: "2026-01-04"
+author: "CORTEX Planning System v5"
+priority: "P0_CRITICAL"
+estimated_total_hours: 111
+
+# Plan metadata
+metadata:
+  parent_plan: "html-glassmorphism-alignment"
+  trigger: "Post-implementation gap analysis"
+  references:
+    - "cortex-brain/documents/investigations/c150-plan-review/00-executive-summary.md"
+    - "cortex-brain/documents/reports/C50-brittleness-test-summary-2026-01-04.md"
+    - "cortex-brain/documents/reports/comprehensive-brittleness-audit-2026-01-02.md"
+    - "cortex-brain/documents/planning/active/html-glassmorphism-alignment/artifacts/final-acceptance-criteria-link.md"
+  
+  acceptance_criteria_source: "final-acceptance-criteria-link.md"
+  brittleness_reports:
+    - "C50-brittleness-test-summary-2026-01-04.md"
+    - "comprehensive-brittleness-audit-2026-01-02.md"
+
+# Executive summary
+summary: |
+  C150 plan claimed 100% completion but analysis reveals 85% actual completion with critical gaps:
+  - 6 orchestrators documented but broken (cannot instantiate)
+  - Runtime governance middleware missing (SKULL compliance gap)
+  - CORTEX-5.0 documentation incomplete (Phases 7b-7d)
+  - Deployment validation missing (Phase 11)
+  - Dead code removal identified but not executed (Phase 12)
+  - Dual-source brittleness unresolved (YAML + DB simultaneously)
+  - 82 unit tests blocked (67 vacuum + 15 cleanup)
+  
+  This plan implements fixes in 15 phases with Python execution orchestration.
+
+# Gap analysis from C150 review
+gaps_identified:
+  critical:
+    - id: "GAP-1"
+      title: "False Completion Claim"
+      severity: "CRITICAL"
+      description: "Plan marked complete before acceptance criteria validation, brittleness testing, deployment validation"
+      impact: "Undermines trust in completion certificates, false production-ready signal"
+      remediation_phases: [1, 13, 14]
+    
+    - id: "GAP-2"
+      title: "Documentation-Code Misalignment"
+      severity: "CRITICAL"
+      description: "6 orchestrators documented but cannot instantiate (planning_v5, tdd, ado_v2, sanitization, cleanup_v2, vacuum_v2)"
+      impact: "Classic 'vaporware' pattern, blocks orchestrator usage"
+      remediation_phases: [2, 3, 4]
+      affected_orchestrators:
+        - name: "planning_v5"
+          error: "SyntaxError: f-string backslash (line 718)"
+          file: "src/orchestrators/planning/planning_orchestrator_v5.py"
+        - name: "tdd_orchestrator"
+          error: "Unexpected kwarg 'config_path'"
+          file: "src/orchestrators/tdd/tdd_orchestrator.py"
+        - name: "ado_orchestrator_v2"
+          error: "Missing 'state_db' positional arg"
+          file: "src/orchestrators/ado/ado_orchestrator_v2.py"
+        - name: "sanitization"
+          error: "Unexpected kwarg 'config_path'"
+          file: "src/orchestrators/sanitization/sanitization_orchestrator.py"
+        - name: "cleanup_v2"
+          error: "Missing 'state_db' positional arg"
+          file: "src/orchestrators/cleanup/cleanup_orchestrator_v2.py"
+        - name: "vacuum_v2"
+          error: "StateManager.log_execution() missing"
+          file: "src/orchestrators/vacuum/vacuum_orchestrator_v2.py"
+    
+    - id: "GAP-3"
+      title: "Missing Runtime Governance"
+      severity: "CRITICAL"
+      description: "SKULL rules documented in SQLite governance DB (cortex-brain/tier0/governance.db), but runtime enforcement middleware NOT IMPLEMENTED (C50-20)"
+      impact: "No runtime enforcement of governance rules, brittle execution"
+      remediation_phases: [5]
+      sqlite_migration_note: "Brain governance migrated from brain-protection-rules.yaml to SQLite database. Use GovernanceDB API (src/cortex_core/governance_db.py) with <10ms query target."
+      missing_files:
+        - "src/orchestrators/middleware/governance_checkpoint.py"
+        - "src/orchestrators/middleware/setup_verification.py"
+        - "src/orchestrators/middleware/teardown_refactor.py"
+    
+    - id: "GAP-4"
+      title: "Dual-Source Brittleness"
+      severity: "CRITICAL"
+      description: "Code reads BOTH YAML files AND databases simultaneously (C50-19). Note: Governance rules already migrated to SQLite (cortex-brain/tier0/governance.db), but tier context data (tier1/tier2/tier3) still uses YAML+DB dual loading."
+      impact: "Data inconsistency risk, maintenance overhead"
+      remediation_phases: [6]
+      sqlite_migration_status: "governance.db complete, tier context data pending"
+      affected_files:
+        - "cortex-brain/tier1/conversation-context.jsonl"
+        - "cortex-brain/tier2/knowledge-graph.yaml"
+        - "cortex-brain/tier3/development-context.yaml"
+      code_locations:
+        - "src/tier1/integrity_checker.py"
+        - "src/tier2/tier_validator.py"
+        - "src/tier3/optimized_context_loader.py"
+    
+    - id: "GAP-ARCH-1"
+      title: "CORTEX.prompt.md Misrepresents Hand-Off Architecture"
+      severity: "HIGH"
+      description: "Prompt file claims Python orchestrators execute autonomously, but CORTEX is actually an AI assistant where GitHub Copilot executes workflows using manifest instructions"
+      impact: "User confusion, false expectations, contradicts actual implementation"
+      remediation_phases: [15]
+      discovered_in: "chat02.md (January 4, 2026)"
+      evidence: "User reported 'handoff still not working' → Copilot discovered it IS the executor, not a separate Python process"
+      affected_files:
+        - ".github/prompts/CORTEX.prompt.md (v5.1.0)"
+        - "cortex-brain/documents/orchestrators-quick-ref.md"
+        - "cortex-brain/response-templates-v4.yaml"
+      misconceptions:
+        - "Claims: 'Python orchestrator has taken over' (WRONG: Copilot executes)"
+        - "Claims: 'DO NOT proceed' after hand-off (WRONG: Copilot must proceed)"
+        - "Claims: 'Autonomous execution' (WRONG: Manifest-guided execution by Copilot)"
+        - "Claims: Background Python processes (WRONG: No CLI, no background execution)"
+  
+  high:
+    - id: "GAP-5"
+      title: "CORTEX-5.0 Documentation Incomplete"
+      severity: "HIGH"
+      description: "Refinement + Debug orchestrator docs are stubs, 5 features undocumented"
+      impact: "User confusion, blocks CORTEX-5.0 migration"
+      remediation_phases: [7, 8, 9]
+      missing_docs:
+        orchestrators:
+          - "Refinement orchestrator (400+ lines needed)"
+          - "Debug orchestrator (400+ lines needed)"
+        features:
+          - "Phase -1 Knowledge Library"
+          - "AST Scanning System"
+          - "Context Middleware"
+          - "Visual Progress System"
+          - "REFACTOR Phase"
+        diagrams:
+          - "Phase -1 flow (D3.js)"
+          - "AST flowchart (Mermaid)"
+          - "Context sequence (Mermaid)"
+          - "Migration matrix (D3.js heatmap)"
+    
+    - id: "GAP-6"
+      title: "Deployment Validation Missing"
+      severity: "HIGH"
+      description: "Phase 11 marked 'complete' but no staging/production testing"
+      impact: "Production deployment risk, no validation data"
+      remediation_phases: [11]
+      missing_validations:
+        - "Staging deployment report"
+        - "24-hour monitoring results"
+        - "Production deployment report"
+        - "24-hour production monitoring"
+    
+    - id: "GAP-7"
+      title: "Test Suite Blocked"
+      severity: "HIGH"
+      description: "82 unit tests blocked (67 vacuum + 15 cleanup)"
+      impact: "Cannot validate orchestrator behavior, TDD blocked"
+      remediation_phases: [3, 4]
+      blocked_tests:
+        vacuum:
+          count: 67
+          reason: "Python 3.9/3.10 compatibility (walrus operator, match statements)"
+          file: "tests/test_vacuum_v2.py"
+        cleanup:
+          count: 15
+          reason: "Mock setup error (StateManager interface)"
+          file: "tests/test_cleanup_v2.py"
+    
+    - id: "GAP-8"
+      title: "Dead Code Removal Not Executed"
+      severity: "MEDIUM"
+      description: "Phase 12 identified 1,009 unused CSS classes but did NOT remove them"
+      impact: "Performance overhead, maintenance burden"
+      remediation_phases: [10]
+      identified_waste:
+        unused_css_classes: 1009
+        analysis_file: "cortex-brain/documents/planning/active/html-glassmorphism-alignment/reports/phase-12-completion-report.md"
+    
+    - id: "GAP-9"
+      title: "Plan Viewer HTML Not Generated"
+      severity: "MEDIUM"
+      description: "Planning Orchestrator v5 doesn't generate plan-viewer.html + launch_plan_viewer.py despite manifest specification"
+      impact: "No real-time progress monitoring, poor user experience, manual file tracking required"
+      remediation_phases: [16]
+      discovered_in: "C150 plan folder inspection (January 4, 2026)"
+      evidence: "C50 plan has plan-viewer.html, C150 plan does not. Planning System 5.0 manifest specifies plan-viewer.html should be generated in approval phase."
+      missing_files:
+        - "cortex-brain/documents/planning/active/c150-remediation-plan/plan-viewer.html"
+        - "cortex-brain/documents/planning/active/c150-remediation-plan/launch_plan_viewer.py"
+      root_cause: "Planning Orchestrator v5 (planning_orchestrator_v5.py) doesn't import or call DualModePlanningOrchestrator.generate_html_viewer()"
+      integration_gap: "src/orchestrators/planning/dual_mode_integration.py exists and has generate_html_viewer() method, but planning_orchestrator_v5.py doesn't use it"
+
+# Phases (CORTEX v5 Universal Pattern: -2, 0-N, N+1)
+phases:
+  - number: -2
+    name: "Setup Verification"
+    description: "Verify dependencies, detect false positives, validate environment"
+    estimated_hours: 0.5
+    python_executor: "src/orchestrators/middleware/setup_verification.py"
+    validation:
+      dependency_check: true
+      false_positive_detection: true
+      environment_validation: true
+    outputs:
+      - "analysis/setup-verification-report.md"
+      - "tracking/dependency-validation.json"
+  
+  - number: 0
+    name: "Context Discovery"
+    description: "Gather C150 plan, brittleness reports, orchestrator code, test files"
+    estimated_hours: 1.0
+    python_executor: "scripts/orchestration/context_discovery.py"
+    discovery_targets:
+      - "cortex-brain/documents/planning/active/html-glassmorphism-alignment/**"
+      - "cortex-brain/documents/investigations/c150-plan-review/**"
+      - "cortex-brain/documents/reports/*brittleness*.md"
+      - "src/orchestrators/**/*.py"
+      - "tests/test_*orchestrator*.py"
+    outputs:
+      - "context/c150-plan-analysis.md"
+      - "context/brittleness-reports-summary.md"
+      - "context/orchestrator-inventory.json"
+  
+  - number: 1
+    name: "Acceptance Criteria Cross-Check"
+    description: "Parse final-acceptance-criteria-link.md, validate C150 against criteria"
+    estimated_hours: 1.5
+    python_executor: "scripts/orchestration/acceptance_criteria_validator.py"
+    inputs:
+      - "cortex-brain/documents/planning/active/html-glassmorphism-alignment/artifacts/final-acceptance-criteria-link.md"
+      - "cortex-brain/documents/planning/active/html-glassmorphism-alignment/PLAN-COMPLETION-CERTIFICATE.md"
+    validation_rules:
+      - "Cross-reference completion certificate claims vs actual artifacts"
+      - "Validate artifact existence for each completed phase"
+      - "Check deployment validation reports"
+      - "Verify orchestrator instantiation tests"
+    outputs:
+      - "analysis/acceptance-criteria-validation.md"
+      - "analysis/gap-matrix.json"
+  
+  - number: 2
+    name: "Fix planning_v5 Orchestrator"
+    description: "Fix SyntaxError: f-string backslash (line 718)"
+    estimated_hours: 2.0
+    python_executor: "scripts/orchestration/fix_orchestrator.py"
+    parameters:
+      orchestrator: "planning_v5"
+      file: "src/orchestrators/planning/planning_orchestrator_v5.py"
+      error_type: "SyntaxError"
+      error_line: 718
+      fix_strategy: "Escape backslash in f-string or use raw string"
+    validation:
+      - "Import test: from src.orchestrators.planning.planning_orchestrator_v5 import PlanningOrchestratorV5"
+      - "Instantiation test: PlanningOrchestratorV5(state_db=...)"
+      - "Run existing unit tests"
+    outputs:
+      - "artifacts/planning_v5_fix.patch"
+      - "reports/planning_v5_validation.md"
+  
+  - number: 3
+    name: "Fix StateManager Interface"
+    description: "Implement missing log_execution() method, standardize constructor signature"
+    estimated_hours: 4.0
+    python_executor: "scripts/orchestration/fix_state_manager.py"
+    affected_orchestrators:
+      - "tdd_orchestrator"
+      - "ado_orchestrator_v2"
+      - "sanitization"
+      - "cleanup_v2"
+      - "vacuum_v2"
+    fixes:
+      - action: "Add StateManager.log_execution() method"
+        signature: "def log_execution(self, orchestrator: str, phase: str, status: str, metrics: Dict) -> None"
+        implementation: "Log to state_db.executions table"
+      
+      - action: "Standardize constructor parameters"
+        before: "__init__(self, config_path: str, state_db: str)"
+        after: "__init__(self, state_db: StateManager, config: Dict)"
+        reasoning: "Consistent with BaseOrchestratorV4_1 interface"
+      
+      - action: "Remove 'config_path' parameter"
+        orchestrators: ["tdd_orchestrator", "sanitization"]
+        replacement: "Pass config dict directly"
+      
+      - action: "Fix 'state_db' positional arg"
+        orchestrators: ["ado_orchestrator_v2", "cleanup_v2"]
+        fix: "Change to keyword arg with default"
+    validation:
+      - "All 6 orchestrators instantiate successfully"
+      - "15 cleanup unit tests pass"
+      - "67 vacuum unit tests unblocked (Python 3.9/3.10 compatibility fix separate)"
+    outputs:
+      - "artifacts/state_manager_interface.py"
+      - "artifacts/orchestrator_fixes.patch"
+      - "reports/orchestrator_instantiation_tests.md"
+  
+  - number: 4
+    name: "Fix Python 3.9/3.10 Compatibility"
+    description: "Remove walrus operators, replace match statements with if/elif"
+    estimated_hours: 3.0
+    python_executor: "scripts/orchestration/python_compatibility_fixer.py"
+    targets:
+      - "src/orchestrators/vacuum/vacuum_orchestrator_v2.py"
+      - "tests/test_vacuum_v2.py"
+    fixes:
+      - action: "Remove walrus operators (:=)"
+        pattern: "if (match := re.search(...)):"
+        replacement: "match = re.search(...)\nif match:"
+      
+      - action: "Replace match statements"
+        pattern: "match value:\n    case 'a': ...\n    case 'b': ..."
+        replacement: "if value == 'a': ...\nelif value == 'b': ..."
+      
+      - action: "Update type hints"
+        pattern: "list[str]"
+        replacement: "List[str]"
+    validation:
+      - "Run 67 vacuum tests on Python 3.9"
+      - "Run 67 vacuum tests on Python 3.10"
+      - "All tests pass"
+    outputs:
+      - "artifacts/python39_compatibility.patch"
+      - "reports/vacuum_tests_validation.md"
+  
+  - number: 5
+    name: "Implement Runtime Governance Middleware"
+    description: "Create 3 middleware files for SKULL rule enforcement (C50-20)"
+    estimated_hours: 10.0
+    python_executor: "scripts/orchestration/create_governance_middleware.py"
+    governance_note: |
+      ⚠️ SQLITE GOVERNANCE: Brain governance migrated from YAML to SQLite.
+      Use GovernanceDB API (src/cortex_core/governance_db.py) to query rules from cortex-brain/tier0/governance.db
+      Target: <10ms query performance
+    files_to_create:
+      - path: "src/orchestrators/middleware/governance_checkpoint.py"
+        description: "Runtime SKULL rule enforcement using SQLite governance database"
+        methods:
+          - "validate_tdd_enforcement()"
+          - "validate_holistic_discovery()"
+          - "validate_git_isolation()"
+          - "validate_hand_off_protocol()"
+        implementation: |
+          from src.cortex_core.governance_db import GovernanceDB
+          
+          class GovernanceCheckpoint:
+              def __init__(self):
+                  self.gov_db = GovernanceDB()
+              
+              def validate_tdd_enforcement(self, orchestrator: str, phase: str) -> bool:
+                  """Enforce SKULL-001: TDD_ENFORCEMENT using SQLite governance DB"""
+                  rule = self.gov_db.get_rule_by_id("TDD_ENFORCEMENT")
+                  
+                  # Check tests exist before implementation
+                  if phase == "implementation":
+                      test_file = self._find_test_file(orchestrator)
+                      if not test_file or not self._tests_fail():
+                          raise TDDViolation(f"{rule['name']}: {rule['description']}")
+                  return True
+              
+              def validate_holistic_discovery(self, operation: str) -> bool:
+                  """Enforce SKULL-002: HOLISTIC_DISCOVERY using SQLite governance DB"""
+                  rule = self.gov_db.get_rule_by_id("HOLISTIC_DISCOVERY")
+                  
+                  if operation == "create":
+                      existing = self._search_workspace()
+                      if existing:
+                          raise DuplicationViolation(f"{rule['name']}: {existing}")
+                  return True
+      
+      - path: "src/orchestrators/middleware/setup_verification.py"
+        description: "Phase -2 setup verification using SQLite governance DB"
+        methods:
+          - "verify_dependencies()"
+          - "detect_false_positives()"
+          - "check_cache_state()"
+        implementation: |
+          from src.cortex_core.governance_db import GovernanceDB
+          
+          class SetupVerifier:
+              def __init__(self):
+                  self.gov_db = GovernanceDB()
+              
+              def verify_dependencies(self, orchestrator: str) -> Dict[str, bool]:
+                  """Test actual implementation, not just file existence (SETUP_VERIFICATION rule)"""
+                  rule = self.gov_db.get_rule_by_id("SETUP_VERIFICATION")
+                  results = {}
+                  
+                  if orchestrator == "planning_v5":
+                      try:
+                          from src.orchestrators.planning.planning_orchestrator_v5 import PlanningOrchestratorV5
+                          orch = PlanningOrchestratorV5(state_db=None)
+                          results["planning_v5"] = True
+                      except Exception as e:
+                          results["planning_v5"] = False
+                          results["error"] = str(e)
+                          results["rule_violated"] = rule["id"]
+                  return results
+      
+      - path: "src/orchestrators/middleware/teardown_refactor.py"
+        description: "Phase N+1 teardown + REFACTOR using SQLite governance DB"
+        methods:
+          - "whole_file_cleanup()"
+          - "remove_orphaned_code()"
+          - "git_commit()"
+        implementation: |
+          from src.cortex_core.governance_db import GovernanceDB
+          
+          class TeardownRefactor:
+              def __init__(self):
+                  self.gov_db = GovernanceDB()
+              
+              def whole_file_cleanup(self, modified_files: List[str]) -> Dict:
+                  """Enforce FINAL_REFACTOR rule using SQLite governance DB"""
+                  rule = self.gov_db.get_rule_by_id("FINAL_REFACTOR")
+                  results = {}
+                  
+                  for file in modified_files:
+                      results[file] = {
+                          "unused_imports_removed": self._remove_unused_imports(file),
+                          "orphaned_code_removed": self._remove_orphaned_code(file),
+                          "formatted": self._format_code(file),
+                          "rule_applied": rule["id"]
+                      }
+                  return results
+    validation:
+      - "All 3 files created"
+      - "Unit tests for each middleware class"
+      - "Integration test with planning_v5 orchestrator"
+      - "Verify cortex-brain/tier0/governance.db exists and is readable"
+      - "Verify GovernanceDB().get_rule_by_id() returns valid rule data"
+      - "Verify query performance <10ms"
+    outputs:
+      - "artifacts/governance_middleware/"
+      - "reports/governance_middleware_tests.md"
+  
+  - number: 6
+    name: "Resolve Dual-Source Brittleness (C50-19)"
+    description: "Migrate tier context data from YAML to database-only, archive YAML files"
+    estimated_hours: 3.0
+    python_executor: "scripts/orchestration/dual_source_cutover.py"
+    migration_status_note: |
+      ✅ ALREADY COMPLETE: brain-protection-rules.yaml → cortex-brain/tier0/governance.db
+      ⏳ PENDING: Tier context data (tier1/tier2/tier3) still dual-loading from YAML+DB
+    strategy:
+      - "Verify database contains all YAML data"
+      - "Archive YAML files to cortex-brain/archives/tier-data-2026-01-04/"
+      - "Update 6 code locations to read from database only"
+      - "Add deprecation warnings if YAML files accessed"
+    affected_files:
+      yaml_to_archive:
+        - "cortex-brain/tier1/conversation-context.jsonl"
+        - "cortex-brain/tier2/knowledge-graph.yaml"
+        - "cortex-brain/tier3/development-context.yaml"
+      already_migrated:
+        - "cortex-brain/brain-protection-rules.yaml → cortex-brain/tier0/governance.db ✅"
+      code_to_update:
+        - "src/tier1/integrity_checker.py"
+        - "src/tier2/tier_validator.py"
+        - "src/tier3/optimized_context_loader.py"
+    validation:
+      - "Database queries return expected data"
+      - "YAML files archived"
+      - "Code reads from database only"
+      - "All unit tests pass"
+      - "Verify governance.db NOT affected (already migrated)"
+    outputs:
+      - "artifacts/dual_source_cutover.patch"
+      - "reports/dual_source_validation.md"
+  
+  - number: 7
+    name: "Write Refinement Orchestrator Documentation"
+    description: "Complete stub documentation (400+ lines)"
+    estimated_hours: 6.0
+    python_executor: "scripts/orchestration/generate_orchestrator_docs.py"
+    parameters:
+      orchestrator: "refinement"
+      template: "cortex-brain/templates/orchestrator-documentation-template.md"
+      source_code: "src/orchestrators/refinement/refinement_orchestrator_v2.py"
+      manifest: "cortex-brain/manifests/orchestrators/refinement-v2-manifest.yaml"
+    sections_to_write:
+      - "Overview & Purpose"
+      - "When to Use"
+      - "Phase Breakdown (7 phases)"
+      - "Configuration Options"
+      - "Usage Examples"
+      - "Integration with Other Orchestrators"
+      - "Troubleshooting"
+    target_length: "400+ lines"
+    output_file: "docs/orchestrators/refinement-orchestrator.md"
+  
+  - number: 8
+    name: "Write Debug Orchestrator Documentation"
+    description: "Complete stub documentation (400+ lines)"
+    estimated_hours: 6.0
+    python_executor: "scripts/orchestration/generate_orchestrator_docs.py"
+    parameters:
+      orchestrator: "debug"
+      template: "cortex-brain/templates/orchestrator-documentation-template.md"
+      source_code: "src/orchestrators/debug/debug_orchestrator_v2.py"
+      manifest: "cortex-brain/manifests/orchestrators/debug-v2-manifest.yaml"
+    sections_to_write:
+      - "Overview & Purpose"
+      - "When to Use"
+      - "Phase Breakdown"
+      - "Root Cause Analysis Methods"
+      - "Fix Generation Strategies"
+      - "Usage Examples"
+      - "Integration with Other Orchestrators"
+      - "Troubleshooting"
+    target_length: "400+ lines"
+    output_file: "docs/orchestrators/debug-orchestrator.md"
+  
+  - number: 9
+    name: "Document 5 Missing Features + Create 4 Diagrams"
+    description: "Phase -1, AST, Context, Visual Progress, REFACTOR + diagrams"
+    estimated_hours: 10.0
+    python_executor: "scripts/orchestration/generate_feature_docs.py"
+    features_to_document:
+      - name: "Phase -1 Knowledge Library"
+        file: "docs/features/phase-minus-one-knowledge-library.md"
+        sections: ["Concept", "Implementation", "Use Cases", "Examples"]
+        diagram: "D3.js flow diagram"
+      
+      - name: "AST Scanning System"
+        file: "docs/features/ast-scanning-system.md"
+        sections: ["Architecture", "Scanners", "Use Cases", "Examples"]
+        diagram: "Mermaid flowchart"
+      
+      - name: "Context Middleware"
+        file: "docs/features/context-middleware.md"
+        sections: ["Architecture", "Interceptors", "Use Cases", "Examples"]
+        diagram: "Mermaid sequence diagram"
+      
+      - name: "Visual Progress System"
+        file: "docs/features/visual-progress-system.md"
+        sections: ["Components", "Templates", "Customization", "Examples"]
+        diagram: "None (screenshots)"
+      
+      - name: "REFACTOR Phase (Phase N+1)"
+        file: "docs/features/refactor-phase.md"
+        sections: ["Concept", "Cleanup Rules", "Automation", "Examples"]
+        diagram: "Mermaid flowchart"
+    
+    diagrams_to_create:
+      - name: "Phase -1 Knowledge Library Flow"
+        type: "D3.js"
+        file: "docs/diagrams/phase-minus-one-flow.html"
+        data_source: "cortex-brain/manifests/orchestrators/planning-system-5.0-manifest.yaml"
+      
+      - name: "AST Scanning Flowchart"
+        type: "Mermaid"
+        file: "docs/diagrams/ast-scanning-flowchart.md"
+        source: "src/orchestrators/middleware/ast_scanner.py"
+      
+      - name: "Context Middleware Sequence"
+        type: "Mermaid"
+        file: "docs/diagrams/context-middleware-sequence.md"
+        source: "src/orchestrators/middleware/context_middleware.py"
+      
+      - name: "Migration Status Matrix"
+        type: "D3.js heatmap"
+        file: "docs/diagrams/migration-status-heatmap.html"
+        data_source: "cortex-brain/documents/planning/active/html-glassmorphism-alignment/reports/*.md"
+    
+    outputs:
+      - "docs/features/*.md (5 files)"
+      - "docs/diagrams/*.{html,md} (4 files)"
+  
+  - number: 10
+    name: "Execute Dead Code Removal (Phase 12)"
+    description: "Remove 1,009 unused CSS classes identified in C150 Phase 12"
+    estimated_hours: 4.0
+    python_executor: "scripts/orchestration/execute_css_cleanup.py"
+    inputs:
+      - "cortex-brain/documents/planning/active/html-glassmorphism-alignment/reports/phase-12-completion-report.md"
+    strategy:
+      - "Parse Phase 12 report for unused CSS class list"
+      - "Validate classes are truly unused (search HTML files)"
+      - "Remove from CSS files"
+      - "Run CSS validation"
+      - "Test HTML rendering"
+    validation:
+      - "CSS files reduced in size"
+      - "HTML rendering unchanged"
+      - "No broken styles"
+      - "Lighthouse scores maintained"
+    outputs:
+      - "artifacts/css_cleanup.patch"
+      - "reports/dead_code_removal_validation.md"
+  
+  - number: 11
+    name: "Deployment Validation (Staging + Production)"
+    description: "Deploy to staging, monitor 24hrs, deploy to production, monitor 24hrs"
+    estimated_hours: 48.0  # Mostly monitoring time
+    python_executor: "scripts/orchestration/deployment_validator.py"
+    stages:
+      - name: "Staging Deployment"
+        steps:
+          - "Deploy to staging environment"
+          - "Run smoke tests"
+          - "Monitor 24 hours"
+          - "Collect metrics (uptime, errors, performance)"
+        outputs:
+          - "reports/staging-deployment-report.md"
+          - "reports/staging-24hr-monitoring.json"
+      
+      - name: "Production Deployment"
+        prerequisite: "Staging validation passed"
+        steps:
+          - "Deploy to production environment"
+          - "Run smoke tests"
+          - "Monitor 24 hours"
+          - "Collect metrics (uptime, errors, performance)"
+        outputs:
+          - "reports/production-deployment-report.md"
+          - "reports/production-24hr-monitoring.json"
+    
+    validation:
+      - "Zero critical errors in 24hr period"
+      - "Uptime >99.9%"
+      - "Performance metrics within targets"
+      - "No security incidents"
+  
+  - number: 12
+    name: "Update C150 Completion Certificate"
+    description: "Correct status to 85% PARTIAL COMPLETION, add KNOWN ISSUES section"
+    estimated_hours: 1.0
+    python_executor: "scripts/orchestration/update_completion_certificate.py"
+    file: "cortex-brain/documents/planning/active/html-glassmorphism-alignment/PLAN-COMPLETION-CERTIFICATE.md"
+    changes:
+      - section: "Completion Status"
+        before: "17 of 17 phases (100%) COMPLETE"
+        after: "15 of 17 phases (85%) PARTIAL COMPLETION"
+      
+      - section: "Acceptance Criteria"
+        before: "Acceptance Criteria Met: 100%"
+        after: "Acceptance Criteria Met: 68.2% (15 PASS, 2 PARTIAL, 5 FAIL)"
+      
+      - section: "SKULL Rules"
+        before: "SKULL Rules Compliance: 100%"
+        after: "SKULL Rules Compliance: 80% (orchestrator instantiation gap)"
+      
+      - section: "Add KNOWN ISSUES"
+        content: |
+          ## 🚨 KNOWN ISSUES
+          
+          The following gaps were identified in post-implementation review (Jan 4, 2026):
+          
+          1. **Orchestrator Instantiation Failures** (CRITICAL)
+             - 6 orchestrators documented but cannot instantiate
+             - See: C150 Remediation Plan (Phases 2-4)
+          
+          2. **Runtime Governance Missing** (CRITICAL)
+             - Middleware not implemented (governance_checkpoint, setup_verification, teardown_refactor)
+             - See: C150 Remediation Plan (Phase 5)
+          
+          3. **CORTEX-5.0 Documentation Incomplete** (HIGH)
+             - Refinement + Debug orchestrator docs are stubs
+             - 5 features undocumented, 4 diagrams missing
+             - See: C150 Remediation Plan (Phases 7-9)
+          
+          4. **Deployment Validation Missing** (HIGH)
+             - Phase 11 marked complete but no staging/production testing performed
+             - See: C150 Remediation Plan (Phase 11)
+          
+          5. **Dead Code Removal Not Executed** (MEDIUM)
+             - 1,009 unused CSS classes identified but not removed
+             - See: C150 Remediation Plan (Phase 10)
+          
+          **Remediation Status:** C150 Remediation Plan in progress (ETA: 12 business days)
+    outputs:
+      - "artifacts/completion-certificate-update.patch"
+  
+  - number: 13
+    name: "Create Acceptance Criteria Validation Automation"
+    description: "Build validation script to prevent false completion claims"
+    estimated_hours: 8.0
+    python_executor: "scripts/orchestration/create_acceptance_validator.py"
+    file_to_create: "scripts/validate_acceptance_criteria.py"
+    functionality:
+      - "Parse acceptance criteria from markdown files"
+      - "Cross-reference with plan completion certificates"
+      - "Validate artifact existence for each criterion"
+      - "Run brittleness tests"
+      - "Check deployment validation reports"
+      - "Test orchestrator instantiation"
+      - "Generate validation report"
+    integration:
+      - "Add to CI/CD pipeline"
+      - "Run before plan marked 'complete'"
+      - "Block completion if validation fails"
+    outputs:
+      - "scripts/validate_acceptance_criteria.py"
+      - "reports/acceptance_validation_automation.md"
+  
+  - number: 14
+    name: "Create Cross-Plan Brittleness Checker"
+    description: "Flag 'documented but broken' scenarios across all plans"
+    estimated_hours: 6.0
+    python_executor: "scripts/orchestration/create_brittleness_checker.py"
+    file_to_create: "scripts/cross_plan_brittleness_checker.py"
+    functionality:
+      - "Parse all brittleness reports"
+      - "Cross-reference with orchestrator documentation"
+      - "Identify 'documented but broken' patterns"
+      - "Flag orchestrators that cannot instantiate"
+      - "Generate consolidated brittleness report"
+    integration:
+      - "Add to nightly CI/CD runs"
+      - "Alert on new brittleness issues"
+    outputs:
+      - "scripts/cross_plan_brittleness_checker.py"
+      - "reports/cross_plan_brittleness_validation.md"
+  
+  - number: 15
+    name: "Fix CORTEX.prompt.md Architectural Misrepresentation (GAP-ARCH-1)"
+    description: "Correct prompt file to accurately describe Copilot-as-executor architecture"
+    estimated_hours: 4.0
+    python_executor: "scripts/orchestration/fix_cortex_prompt_architecture.py"
+    trigger: "chat02.md analysis - User reported 'handoff still not working'"
+    root_cause: "CORTEX.prompt.md v5.1.0 claims Python orchestrators execute autonomously, but GitHub Copilot IS the executor"
+    file_to_update: ".github/prompts/CORTEX.prompt.md"
+    changes_required:
+      terminology_updates:
+        - old: "🛡️ AUTONOMOUS Orchestrators (ALL Orchestrators Self-Execute)"
+          new: "🎯 MANIFEST-GUIDED Orchestrators (GitHub Copilot Executes)"
+        
+        - old: "GitHub Copilot routes and stops. Python orchestrators execute."
+          new: "GitHub Copilot routes and executes using manifest guidance."
+        
+        - old: "⚠️ **HAND-OFF PROTOCOL ENGAGED** - Orchestrator executing autonomously..."
+          new: "⚠️ **ROUTING COMPLETE** - GitHub Copilot will now execute the orchestrator workflow."
+        
+        - old: "**DO NOT proceed.** Python orchestrator has taken over."
+          new: "**Proceeding with execution** using manifest guidance from {manifest_file}."
+        
+        - old: "YOU MUST NOT: Execute tasks yourself"
+          new: "YOU MUST: Execute tasks using manifest instructions as guidance"
+        
+        - old: "Visual Confirmation: User sees 🛡️ = Correct protocol"
+          new: "Visual Confirmation: User sees 🎯 = Routing complete, Copilot executing"
+      
+      architecture_clarification:
+        - section: "Execution Protocol"
+          add: |
+            **CRITICAL ARCHITECTURE CLARIFICATION:**
+            
+            CORTEX is an **AI assistant pattern**, NOT a CLI tool with background processes.
+            
+            **Execution Flow:**
+            1. GitHub Copilot routes request to orchestrator manifest
+            2. GitHub Copilot reads manifest YAML
+            3. GitHub Copilot executes workflow using manifest as guidance
+            4. GitHub Copilot creates files, updates state, generates reports
+            5. Result: Work completed by GitHub Copilot
+            
+            **NO separate Python processes. NO autonomous execution. NO external hand-off.**
+            
+            **Manifests provide:**
+            - Phase definitions (what to do)
+            - Validation rules (how to verify)
+            - Output specifications (what to create)
+            - Python script paths (for FUTURE CLI implementation, currently guidance only)
+        
+        - section: "Hand-Off Protocol"
+          replace: "Hand-off means: Stop and let Python execute"
+          with: "Routing means: Load manifest and execute workflow yourself"
+      
+      icon_changes:
+        - old_icon: "🛡️ (Shield = Autonomous protection)"
+          new_icon: "🎯 (Target = Routing to correct workflow)"
+          rationale: "Shield implies external protection/execution, Target implies routing destination"
+      
+      examples_to_update:
+        - example: "Planning Request (AUTONOMOUS)"
+          change: "Step 4: Display routing message with 🛡️ + STOP (Python Planning v5 executes autonomously)"
+          to: "Step 4: Display routing message with 🎯 + Load planning-system-5.0-manifest.yaml + Execute phases 0-N"
+        
+        - example: "TDD Request (AUTONOMOUS)"
+          change: "Step 4: Display routing message with 🛡️ + STOP (Python TDD v2 executes autonomously)"
+          to: "Step 4: Display routing message with 🎯 + Load tdd-orchestrator-v4-manifest.yaml + Execute RED→GREEN→REFACTOR"
+      
+      related_files_to_update:
+        - file: "cortex-brain/documents/orchestrators-quick-ref.md"
+          changes:
+            - "Replace all '🛡️ AUTONOMOUS' with '🎯 MANIFEST-GUIDED'"
+            - "Update 'Python is executing' to 'GitHub Copilot executing using manifest'"
+            - "Clarify progress bars are rendered BY Copilot, not by Python"
+        
+        - file: "cortex-brain/response-templates-v4.yaml"
+          changes:
+            - "Rename 'autonomous_execution_progress' to 'manifest_guided_execution_progress'"
+            - "Update template description to clarify Copilot renders, not Python"
+        
+        - file: "cortex-brain/documents/cortex-architecture-quick-ref.md"
+          changes:
+            - "Update execution flow diagrams to show Copilot as executor"
+            - "Remove references to 'autonomous Python processes'"
+    
+    validation:
+      - "CORTEX.prompt.md no longer claims 'DO NOT proceed'"
+      - "All references to 'autonomous execution' replaced with 'manifest-guided execution'"
+      - "Architecture section clearly states Copilot IS the executor"
+      - "No misleading claims about background Python processes"
+      - "Icon changed from 🛡️ to 🎯"
+      - "orchestrators-quick-ref.md updated consistently"
+      - "response-templates-v4.yaml template renamed"
+    
+    skull_tests_required:
+      - test_file: "tests/tier0/test_skull_orchestrator_architecture.py"
+        description: "P0 SKULL tests protecting against architectural misrepresentation"
+        test_cases:
+          - name: "test_cortex_prompt_no_do_not_proceed"
+            rule: "SKULL_ARCHITECTURE_ACCURACY"
+            severity: "blocked"
+            validates: "CORTEX.prompt.md does not claim 'DO NOT proceed' after routing"
+            rationale: "Prevents user confusion about hand-off mechanism"
+          
+          - name: "test_no_autonomous_execution_claims"
+            rule: "SKULL_ARCHITECTURE_ACCURACY"
+            severity: "blocked"
+            validates: "No references to 'autonomous execution' or 'Python orchestrators execute'"
+            rationale: "Prevents false expectations of background Python processes"
+          
+          - name: "test_copilot_as_executor_documented"
+            rule: "SKULL_ARCHITECTURE_ACCURACY"
+            severity: "blocked"
+            validates: "Documentation clearly states GitHub Copilot IS the executor"
+            rationale: "Ensures accurate architecture representation"
+          
+          - name: "test_manifest_guided_terminology"
+            rule: "SKULL_ARCHITECTURE_ACCURACY"
+            severity: "blocked"
+            validates: "Uses 'manifest-guided' terminology instead of 'autonomous'"
+            rationale: "Accurate terminology prevents misconceptions"
+          
+          - name: "test_routing_icon_consistency"
+            rule: "SKULL_ARCHITECTURE_ACCURACY"
+            severity: "warning"
+            validates: "Uses 🎯 (target) icon consistently, not 🛡️ (shield)"
+            rationale: "Visual consistency reinforces correct mental model"
+          
+          - name: "test_orchestrator_quick_ref_consistency"
+            rule: "SKULL_ARCHITECTURE_ACCURACY"
+            severity: "blocked"
+            validates: "orchestrators-quick-ref.md matches CORTEX.prompt.md architecture"
+            rationale: "Prevents documentation drift"
+          
+          - name: "test_response_template_renamed"
+            rule: "SKULL_ARCHITECTURE_ACCURACY"
+            severity: "blocked"
+            validates: "response-templates-v4.yaml uses 'manifest_guided_execution_progress'"
+            rationale: "Template names reflect actual execution model"
+          
+          - name: "test_no_cli_tool_claims"
+            rule: "SKULL_ARCHITECTURE_ACCURACY"
+            severity: "blocked"
+            validates: "Documentation does not claim CORTEX is a CLI tool with background processes"
+            rationale: "Prevents expectations of non-existent CLI functionality"
+      
+      - test_file: "tests/integration/test_phase15_no_regression.py"
+        description: "Integration tests ensuring Phase 15 changes don't break existing functionality"
+        test_cases:
+          - name: "test_planning_orchestrator_still_works"
+            validates: "Planning orchestrator creates plans successfully after terminology changes"
+            rationale: "Phase 15 changes are cosmetic, must not break execution"
+          
+          - name: "test_manifest_loading_unchanged"
+            validates: "Manifest YAML files load and parse correctly"
+            rationale: "Terminology changes don't affect manifest structure"
+          
+          - name: "test_skull_rules_still_enforced"
+            validates: "Brain protection rules still apply after documentation updates"
+            rationale: "Documentation changes don't weaken governance"
+          
+          - name: "test_existing_plans_still_valid"
+            validates: "Existing plan structures remain compatible"
+            rationale: "No breaking changes to plan format"
+    
+    outputs:
+      - "artifacts/cortex-prompt-architecture-fix.patch"
+      - "artifacts/orchestrators-quick-ref-fix.patch"
+      - "artifacts/response-templates-rename.patch"
+      - "reports/architectural-clarification-validation.md"
+      - "analysis/chat02-root-cause-analysis.md"
+  
+  - number: 16
+    name: "Integrate Plan Viewer Generation into Planning Orchestrator v5"
+    description: "Auto-generate plan-viewer.html with real-time progress tracking for all FEATURE-mode plans"
+    estimated_hours: 6.0
+    python_executor: "scripts/orchestration/integrate_plan_viewer_generation.py"
+    trigger: "C150 plan missing plan-viewer.html (discovered January 4, 2026)"
+    root_cause: "Planning Orchestrator v5 doesn't generate HTML viewer despite capability existing"
+    
+    enhancements_required:
+      viewer_features:
+        - "Real-time progress tracking via progress-tracker.json"
+        - "Auto-refresh every 60 seconds (JavaScript polling)"
+        - "Glassmorphism UI matching CORTEX brand standards"
+        - "Modal popups for detailed phase information"
+        - "CORTEX logo (200x200) in header"
+        - "Compact tile layout for time tracking"
+        - "Status-based color coding (complete/in-progress/failed/not-started)"
+        - "HTTP server auto-launch with browser integration"
+      
+      generation_script:
+        file: "scripts/generate_feature_plan_viewer.py"
+        capabilities:
+          - "Validate FEATURE-mode plan structure"
+          - "Load tracking/progress-tracker.json"
+          - "Generate responsive HTML with embedded CSS/JS"
+          - "Create launch_plan_viewer.py auto-launcher"
+          - "Calculate progress percentages"
+          - "Render phase cards with status badges"
+          - "Generate glassmorphism modals for phase details"
+        template_integration:
+          - "Use glassmorphism-design-standard.md patterns"
+          - "Implement modal overlay system"
+          - "Add keyboard shortcuts (ESC to close)"
+          - "Mobile-responsive design"
+    
+    integration_points:
+      planning_v5:
+        file: "src/orchestrators/planning/planning_orchestrator_v5.py"
+        changes:
+          - action: "Add plan viewer generation step after plan creation"
+            location: "execute() method, after folder structure creation"
+            code: |
+              from scripts.generate_feature_plan_viewer import generate_html_viewer, generate_launcher_script
+              viewer_path = generate_html_viewer(self.plan_path, tracker_data)
+              launcher_path = generate_launcher_script(self.plan_path)
+              self.logger.info(f"Generated plan viewer: {viewer_path}")
+              self.logger.info(f"Generated launcher: {launcher_path}")
+          
+          - action: "Update progress tracker creation"
+            location: "_create_progress_tracker() method"
+            ensure: "Include all phase metadata for modal rendering"
+          
+          - action: "Add viewer generation to completion report"
+            location: "_generate_completion_report() method"
+            output: "Include plan-viewer.html and launch_plan_viewer.py in artifacts list"
+    
+    validation:
+      - "plan-viewer.html generated for new FEATURE-mode plans"
+      - "Auto-refresh works (60s interval)"
+      - "Modal popups display phase details"
+      - "CORTEX logo renders at 200x200"
+      - "Progress bar updates in real-time"
+      - "launch_plan_viewer.py opens browser automatically"
+      - "HTTP server starts on port 8000"
+      - "All 18 phases visible in C150 viewer"
+      - "Status badges show correct state"
+      - "Time tracking tiles display estimated/actual hours"
+    
+    retroactive_generation:
+      description: "Generate plan-viewer.html for C150 plan immediately after Phase 16 completion"
+      command: "python3 scripts/generate_feature_plan_viewer.py cortex-brain/documents/planning/active/c150-remediation-plan"
+      expected_output:
+        - "cortex-brain/documents/planning/active/c150-remediation-plan/plan-viewer.html"
+        - "cortex-brain/documents/planning/active/c150-remediation-plan/launch_plan_viewer.py"
+    
+    outputs:
+      - "artifacts/planning_v5_viewer_integration.patch"
+      - "scripts/generate_feature_plan_viewer.py (enhanced)"
+      - "cortex-brain/documents/planning/active/c150-remediation-plan/plan-viewer.html"
+      - "cortex-brain/documents/planning/active/c150-remediation-plan/launch_plan_viewer.py"
+      - "reports/plan-viewer-generation-validation.md"
+  
+  - number: 17
+    name: "Integrate Plan Viewer Generation into ADO Orchestrator v2"
+    description: "Auto-generate ado-work-items-viewer.html for ADO work item dashboards"
+    estimated_hours: 5.0
+    python_executor: "scripts/orchestration/integrate_ado_viewer_generation.py"
+    trigger: "ADO orchestrator generates JSON work items but no visual dashboard"
+    root_cause: "ADO v2 outputs JSON files without HTML visualization"
+    
+    viewer_features:
+      - "Epic/Feature/Story/Task hierarchy visualization"
+      - "Story point tracking and burndown"
+      - "Work item status dashboard"
+      - "Real-time progress updates (60s refresh)"
+      - "Glassmorphism cards for each work item"
+      - "Modal popups for work item details"
+      - "Export to Azure DevOps button"
+      - "Drag-and-drop work item prioritization"
+    
+    generation_script:
+      file: "scripts/generate_ado_work_items_viewer.py"
+      template_base: "scripts/generate_feature_plan_viewer.py"
+      adaptations:
+        - "Load work item JSONs instead of progress-tracker.json"
+        - "Render epic → feature → story → task hierarchy"
+        - "Calculate story points across hierarchy"
+        - "Generate Azure DevOps import instructions"
+        - "Add work item type badges (Epic/Feature/Story/Task)"
+    
+    integration_points:
+      ado_v2:
+        file: "src/orchestrators/ado/ado_orchestrator_v2.py"
+        changes:
+          - action: "Add viewer generation after work item creation"
+            location: "generate_work_items() method"
+            code: |
+              from scripts.generate_ado_work_items_viewer import generate_ado_viewer
+              viewer_path = generate_ado_viewer(output_dir, work_items)
+              self.logger.info(f"Generated ADO viewer: {viewer_path}")
+          
+          - action: "Include viewer in summary report"
+            location: "_generate_summary() method"
+            output: "Add ado-work-items-viewer.html to generated files list"
+    
+    validation:
+      - "ado-work-items-viewer.html generated for ADO outputs"
+      - "Epic/Feature/Story/Task cards render correctly"
+      - "Story points calculated accurately"
+      - "Hierarchy visualization shows dependencies"
+      - "Modal popups display work item JSON"
+      - "Auto-refresh updates status every 60s"
+      - "Export button generates Azure DevOps CSV"
+      - "Glassmorphism styling matches CORTEX brand"
+    
+    outputs:
+      - "artifacts/ado_v2_viewer_integration.patch"
+      - "scripts/generate_ado_work_items_viewer.py (new)"
+      - "reports/ado-viewer-generation-validation.md"
+  
+  - number: 999
+    name: "Teardown + REFACTOR + Commit"
+    description: "Whole-file cleanup, remove orphaned code, git commit"
+    estimated_hours: 2.0
+    python_executor: "src/orchestrators/middleware/teardown_refactor.py"
+    cleanup_rules:
+      - "Remove unused imports"
+      - "Remove orphaned code"
+      - "Remove duplicate functions"
+      - "Consolidate redundant logic"
+      - "Update docstrings"
+      - "Format code (black/prettier)"
+    validation:
+      - "All tests pass after refactor"
+      - "No new linting errors"
+    commit_strategy: "atomic"
+    commit_message: |
+      C150 Remediation: Fix critical gaps from HTML alignment plan
+      
+      - Fixed 6 orchestrator instantiation failures
+      - Implemented runtime governance middleware (C50-20)
+      - Resolved dual-source brittleness (C50-19)
+      - Completed CORTEX-5.0 documentation
+      - Executed dead code removal (1,009 CSS classes)
+      - Performed deployment validation (staging + production)
+      - Updated C150 completion certificate to 85% (honest status)
+      - Created acceptance criteria validation automation
+      - Created cross-plan brittleness checker
+      
+      Files modified: ~50
+      Tests added: ~200
+      Documentation: +2,000 lines
+      
+      Co-authored-by: CORTEX v5 <cortex@asifhussain.dev>
+
+# Python execution orchestration
+execution:
+  mode: "sequential"  # Run phases in order
+  parallelizable_phases: []  # All phases have dependencies
+  
+  python_scripts:
+    base_path: "scripts/orchestration/"
+    naming_convention: "{phase_name}.py"
+    template: "scripts/templates/orchestration_script_template.py"
+    
+    common_imports:
+      - "import os"
+      - "import sys"
+      - "import yaml"
+      - "import json"
+      - "from pathlib import Path"
+      - "from typing import Dict, List, Any"
+      - "from src.tier1.state_manager import StateManager"
+      - "from src.tier0.brain_protector import validate_skull_rules"
+    
+    common_structure: |
+      class {PhaseName}Executor:
+          def __init__(self, plan_path: str, state_db: StateManager):
+              self.plan_path = Path(plan_path)
+              self.state_db = state_db
+              self.config = self._load_plan_config()
+          
+          def _load_plan_config(self) -> Dict:
+              with open(self.plan_path / "00-c150-remediation-plan.yaml") as f:
+                  return yaml.safe_load(f)
+          
+          def execute(self) -> Dict[str, Any]:
+              # Phase-specific implementation
+              pass
+          
+          def validate(self) -> bool:
+              # Phase-specific validation
+              pass
+      
+      if __name__ == "__main__":
+          executor = {PhaseName}Executor(
+              plan_path="cortex-brain/documents/planning/active/c150-remediation-plan",
+              state_db=StateManager()
+          )
+          result = executor.execute()
+          if executor.validate():
+              print("✅ Phase {number} complete")
+          else:
+              print("❌ Phase {number} validation failed")
+              sys.exit(1)
+  
+  progress_tracking:
+    file: "tracking/progress-tracker.json"
+    schema:
+      plan_id: "c150-remediation"
+      start_time: "ISO 8601"
+      phases:
+        - number: 0
+          status: "not_started | in_progress | complete | failed"
+          start_time: "ISO 8601 | null"
+          end_time: "ISO 8601 | null"
+          duration_hours: "float | null"
+          outputs: ["list of files"]
+          validation_passed: "bool | null"
+  
+  state_coordination:
+    database: "cortex-brain/tier1/planning-state.db"
+    tables:
+      - "phases (id, plan_id, number, name, status, start_time, end_time)"
+      - "outputs (id, phase_id, file_path, created_at)"
+      - "validations (id, phase_id, rule, passed, error_message)"
+      - "executions (id, phase_id, orchestrator, metrics)"
+
+# Validation & acceptance criteria
+validation:
+  pre_execution:
+    - "All brittleness reports accessible"
+    - "C150 plan accessible"
+    - "Acceptance criteria file accessible"
+    - "Python 3.9+ available"
+    - "Git repository clean"
+  
+  post_execution:
+    - "All 6 orchestrators instantiate successfully"
+    - "82 unit tests unblocked (67 vacuum + 15 cleanup)"
+    - "Runtime governance middleware implemented"
+    - "Dual-source brittleness resolved"
+    - "CORTEX-5.0 documentation complete"
+    - "Dead code removed (1,009 CSS classes)"
+    - "Deployment validation complete (staging + production)"
+    - "C150 completion certificate updated to 85%"
+    - "Acceptance criteria validator automated"
+    - "Cross-plan brittleness checker automated"
+    - "CORTEX.prompt.md architectural misrepresentation fixed"
+  
+  acceptance_criteria:
+    - id: "AC-1"
+      description: "All 6 orchestrators instantiate without errors"
+      validation: "Run instantiation tests for planning_v5, tdd, ado_v2, sanitization, cleanup_v2, vacuum_v2"
+      pass_criteria: "0 errors, all constructors succeed"
+    
+    - id: "AC-2"
+      description: "82 unit tests pass (67 vacuum + 15 cleanup)"
+      validation: "pytest tests/test_vacuum_v2.py tests/test_cleanup_v2.py"
+      pass_criteria: "82/82 tests pass on Python 3.9 and 3.10"
+    
+    - id: "AC-3"
+      description: "Runtime governance middleware exists and functions"
+      validation: "Test governance_checkpoint.py, setup_verification.py, teardown_refactor.py"
+      pass_criteria: "All 3 files exist, unit tests pass, integration test passes"
+    
+    - id: "AC-4"
+      description: "Dual-source brittleness resolved"
+      validation: "Code reads from database only, YAML files archived"
+      pass_criteria: "0 YAML reads in src/tier*/*, all unit tests pass"
+    
+    - id: "AC-5"
+      description: "CORTEX-5.0 documentation complete"
+      validation: "Check docs/orchestrators/refinement-orchestrator.md (400+ lines), docs/orchestrators/debug-orchestrator.md (400+ lines), docs/features/*.md (5 files), docs/diagrams/*.{html,md} (4 files)"
+      pass_criteria: "All files exist with required content"
+    
+    - id: "AC-6"
+      description: "Dead code removed"
+      validation: "CSS files reduced, unused classes removed, HTML rendering unchanged"
+      pass_criteria: "1,009 CSS classes removed, Lighthouse scores maintained"
+    
+    - id: "AC-7"
+      description: "Deployment validation complete"
+      validation: "Staging + production deployment reports exist, 24hr monitoring data collected"
+      pass_criteria: "Zero critical errors, uptime >99.9%, performance targets met"
+    
+    - id: "AC-8"
+      description: "C150 completion certificate corrected"
+      validation: "Certificate shows 85% completion, KNOWN ISSUES section added"
+      pass_criteria: "Status updated, issues documented"
+    
+    - id: "AC-9"
+      description: "Acceptance criteria validator automated"
+      validation: "scripts/validate_acceptance_criteria.py exists, CI/CD integrated"
+      pass_criteria: "Script runs successfully, catches false positives"
+    
+    - id: "AC-10"
+      description: "Cross-plan brittleness checker automated"
+      validation: "scripts/cross_plan_brittleness_checker.py exists, nightly runs configured"
+      pass_criteria: "Script runs successfully, flags 'documented but broken' scenarios"
+    
+    - id: "AC-11"
+      description: "CORTEX.prompt.md architectural misrepresentation fixed"
+      validation: "Check CORTEX.prompt.md for 'DO NOT proceed', 'autonomous execution', '🛡️' icon"
+      pass_criteria: "All misleading language replaced, architecture clarified, icon changed to 🎯"
+    
+    - id: "AC-12"
+      description: "Plan viewer generation integrated into Planning Orchestrator v5"
+      validation: "Create new FEATURE-mode plan, verify plan-viewer.html + launch_plan_viewer.py auto-generated"
+      pass_criteria: "HTML viewer with 60s auto-refresh, modal popups, 200x200 logo, glassmorphism UI, real-time progress tracking"
+    
+    - id: "AC-13"
+      description: "ADO viewer generation integrated into ADO Orchestrator v2"
+      validation: "Generate ADO work items, verify ado-work-items-viewer.html auto-generated with hierarchy visualization"
+      pass_criteria: "HTML viewer shows epic/feature/story/task cards, story point tracking, 60s auto-refresh, Azure DevOps export"
+
+# SKULL compliance
+skull_compliance:
+  rules_enforced:
+    - "TDD_ENFORCEMENT: Phase 5 middleware validates tests before implementation"
+    - "HOLISTIC_DISCOVERY: Phase 0 searches workspace before creating files"
+    - "GIT_ISOLATION: Phase 999 commits with /cortex-git-commit pattern"
+    - "PLANNING_ISOLATION: This plan creates implementation, not another plan"
+    - "HAND_OFF_PROTOCOL: Python scripts execute autonomously"
+  
+  validation_checkpoints:
+    - phase: -2
+      rule: "HOLISTIC_DISCOVERY"
+      check: "Search for existing orchestrator fixes before creating new ones"
+    
+    - phase: 5
+      rule: "TDD_ENFORCEMENT"
+      check: "Middleware validates governance rules at runtime"
+    
+    - phase: 999
+      rule: "GIT_ISOLATION"
+      check: "Commit uses /cortex-git-commit pattern, no user repo contamination"
+
+# Estimated timeline
+timeline:
+  total_hours: 111
+  total_days: 14  # Business days (8 hours/day)
+  breakdown:
+    critical_path: "Phases 2-5 (orchestrator + middleware fixes): 19 hours"
+    documentation: "Phases 7-9 (CORTEX-5.0 docs): 22 hours"
+    deployment: "Phase 11 (staging + production): 48 hours (mostly monitoring)"
+    automation: "Phases 13-15 (validation automation + architecture fix): 18 hours"
+    viewer_integration: "Phases 16-17 (plan + ADO viewers): 11 hours"
+    cleanup: "Phases 10, 12, 999: 7 hours"
+  
+  milestones:
+    - day: 1
+      phases: [-2, 0, 1, 2]
+      deliverable: "planning_v5 fixed, gap analysis complete"
+    
+    - day: 3
+      phases: [3, 4]
+      deliverable: "All 6 orchestrators functional, 82 tests passing"
+    
+    - day: 5
+      phases: [5, 6]
+      deliverable: "Runtime governance + dual-source resolution complete"
+    
+    - day: 8
+      phases: [7, 8, 9]
+      deliverable: "CORTEX-5.0 documentation complete"
+    
+    - day: 10
+      phases: [10, 12]
+      deliverable: "Dead code removed, C150 certificate updated"
+    
+    - day: 13
+      phases: [11, 13, 14, 15]
+      deliverable: "Deployment validated, automation in place, architecture fixed"
+    
+    - day: 14
+      phases: [16, 17, 999]
+      deliverable: "Plan viewer + ADO viewer integrated, plan complete"
+
+# Success metrics
+success_metrics:
+  code_quality:
+    - "6 orchestrators instantiate successfully (100%)"
+    - "82 unit tests pass (100%)"
+    - "0 orchestrator interface mismatches"
+    - "0 Python 3.9/3.10 compatibility issues"
+  
+  governance:
+    - "3 middleware files implemented (100%)"
+    - "SKULL rules enforced at runtime"
+    - "0 dual-source brittleness issues"
+  
+  documentation:
+    - "2 orchestrator docs complete (400+ lines each)"
+    - "5 feature docs created"
+    - "4 diagrams created"
+    - "100% CORTEX-5.0 feature coverage"
+  
+  production_readiness:
+    - "Staging deployment validated (24hr monitoring)"
+    - "Production deployment validated (24hr monitoring)"
+    - "Uptime >99.9%"
+    - "0 critical errors"
+    - "Performance targets met"
+  
+  automation:
+    - "Acceptance criteria validator automated"
+    - "Cross-plan brittleness checker automated"
+    - "CI/CD integration complete"
+    - "False completion claims prevented"
+
+# Risk assessment
+risks:
+  high:
+    - risk: "Orchestrator interface changes break existing code"
+      mitigation: "Run full test suite after StateManager changes, rollback if failures"
+      contingency: "Phase 3 includes comprehensive testing"
+    
+    - risk: "Python 3.9/3.10 compatibility fixes introduce regressions"
+      mitigation: "Test on multiple Python versions, validate before/after behavior identical"
+      contingency: "Phase 4 includes regression testing"
+  
+  medium:
+    - risk: "Deployment validation reveals production issues"
+      mitigation: "Staging environment mirrors production, 24hr monitoring catches issues early"
+      contingency: "Phase 11 includes rollback plan"
+    
+    - risk: "Dead code removal breaks HTML rendering"
+      mitigation: "Validate CSS classes truly unused before removal, test rendering after"
+      contingency: "Phase 10 includes rendering validation"
+  
+  low:
+    - risk: "Documentation takes longer than estimated"
+      mitigation: "Use templates, generate from code where possible"
+      contingency: "Phases 7-9 can run in parallel if needed"
+
+# Dependencies
+dependencies:
+  external:
+    - "Python 3.9+"
+    - "Git"
+    - "pytest"
+    - "black (code formatter)"
+    - "yaml parser"
+    - "json parser"
+  
+  internal:
+    - "cortex-brain/brain-protection-rules.yaml"
+    - "cortex-brain/documents/planning/active/html-glassmorphism-alignment/"
+    - "cortex-brain/documents/investigations/c150-plan-review/"
+    - "cortex-brain/documents/reports/*brittleness*.md"
+    - "src/orchestrators/**/*.py"
+    - "tests/test_*orchestrator*.py"
+  
+  phase_dependencies:
+    phase_2: ["Phase 0 (context discovery)"]
+    phase_3: ["Phase 2 (planning_v5 fix)"]
+    phase_4: ["Phase 3 (StateManager fix)"]
+    phase_5: ["Phase 3 (StateManager fix)"]
+    phase_6: ["Phase 5 (governance middleware)"]
+    phase_11: ["Phases 2-10 (all code fixes)"]
+    phase_999: ["All previous phases"]
+
+# Lessons learned (for future plans)
+lessons_learned:
+  from_c150_gaps:
+    - "Never mark plan 'complete' before acceptance criteria validation"
+    - "Run brittleness tests BEFORE generating completion certificate"
+    - "Test orchestrator instantiation before documenting"
+    - "Deployment validation is mandatory, not optional"
+    - "Document what EXISTS, not what's PLANNED"
+    - "Separate gap analysis from gap remediation"
+    - "Automate acceptance criteria validation"
+    - "Cross-reference completion claims with artifacts"
+  
+  for_future_plans:
+    - "Create validate_acceptance_criteria.py FIRST"
+    - "Run brittleness tests at Phase N-1 (before completion)"
+    - "Require deployment validation for infrastructure plans"
+    - "Test ALL documented features instantiate/function"
+    - "Use Python execution orchestration for complex plans"
+    - "YAML-based plans enable better automation"
+    - "Progress tracking via JSON state files"
+    - "Phase -2 setup verification catches false positives early"
+    - "Phase N+1 teardown ensures no orphaned code"
