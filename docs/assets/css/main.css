@@ -2371,6 +2371,31 @@ footer,
     width: 80%;
 }
 
+/* Header Logo Navigation (Level 1 views) */
+.header-nav .nav-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-base);
+}
+
+.header-nav .nav-logo:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.2);
+}
+
+.cortex-logo {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 12px rgba(0, 229, 255, 0.3));
+    transition: all var(--transition-base);
+}
+
+.cortex-logo:hover {
+    filter: drop-shadow(0 6px 16px rgba(0, 229, 255, 0.5));
+}
+
 /* Header Brand (Level 0 only - with logo) */
 .header-brand {
     display: flex;
@@ -8534,10 +8559,64 @@ h1, h2, h3, h4, h5, h6, p, span, div {
         inset 0 1px 0 rgba(100, 181, 246, 0.1);
 }
 
+/* Hero Section Wrapper with Robot Head */
+.hero-section-wrapper {
+    position: relative;
+    margin-top: 2rem;
+    margin-bottom: -80px;
+    z-index: 10;
+}
+
+.hero-robot-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 12;
+    margin-bottom: -100px;
+}
+
+.hero-robot-head {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    filter: drop-shadow(0 8px 24px rgba(0, 229, 255, 0.6));
+    animation: hero-robot-float 4s ease-in-out infinite;
+}
+
+@keyframes hero-robot-float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.hero-divider-line {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(0, 229, 255, 0.3) 20%,
+        rgba(100, 181, 246, 0.5) 50%,
+        rgba(0, 229, 255, 0.3) 80%,
+        transparent 100%
+    );
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.5);
+    z-index: 11;
+}
+
 /* Hero Introduction Panel - Rich Glassmorphism with Animation */
 .hero-introduction {
     position: relative;
     overflow: hidden;
+    margin-top: 0;
+    padding-top: 120px;
     background: linear-gradient(135deg,
         rgba(123, 31, 162, 0.3) 0%,
         rgba(33, 150, 243, 0.25) 25%,
