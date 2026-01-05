@@ -44,48 +44,38 @@
         </section>
 
         <!-- Statistics Grid -->
-        <section class="stats-grid">
-            <div class="stat-card">
-                <i class="card-icon-primary fas fa-chess-knight"></i>
-                <div class="stat-content">
-                    <span class="stat-value">2</span>
-                    <span class="stat-label">Planning & Strategy</span>
+        <section class="glass-card-display">
+            <div class="metadata-grid">
+                <div class="metadata-item">
+                    <i class="fas fa-chess-knight"></i>
+                    <span>2 Planning</span>
                 </div>
-            </div>
-            <div class="stat-card">
-                <i class="card-icon-info fas fa-play-circle"></i>
-                <div class="stat-content">
-                    <span class="stat-value">2</span>
-                    <span class="stat-label">Execution & Quality</span>
+                <div class="metadata-item">
+                    <i class="fas fa-play-circle"></i>
+                    <span>2 Execution</span>
                 </div>
-            </div>
-            <div class="stat-card">
-                <i class="card-icon-warning fas fa-wrench"></i>
-                <div class="stat-content">
-                    <span class="stat-value">3</span>
-                    <span class="stat-label">System Maintenance</span>
+                <div class="metadata-item">
+                    <i class="fas fa-wrench"></i>
+                    <span>3 System Ops</span>
                 </div>
-            </div>
-            <div class="stat-card">
-                <i class="card-icon-success fas fa-chart-line"></i>
-                <div class="stat-content">
-                    <span class="stat-value">2</span>
-                    <span class="stat-label">Analysis & Refinement</span>
+                <div class="metadata-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>2 Analysis</span>
                 </div>
-            </div>
-            <div class="stat-card">
-                <i class="card-icon-primary fas fa-bug"></i>
-                <div class="stat-content">
-                    <span class="stat-value">1</span>
-                    <span class="stat-label">Debug & Troubleshoot</span>
+                <div class="metadata-item">
+                    <i class="fas fa-bug"></i>
+                    <span>1 Debug</span>
                 </div>
             </div>
         </section>
 
         <!-- Orchestrators Grid -->
-        <h2 class="section-heading">Master Orchestrators</h2>
+        <h2 class="section-title">
+            <i class="fas fa-gears"></i>
+            Master Orchestrators
+        </h2>
         
-        <div class="tetris-grid">
+        <div class="masonry-grid">
             <!-- Planning v5 -->
             <a href="planning-v5.html" class="glass-card-clickable tetris-card">
                 <div class="card-header-inline">
@@ -259,24 +249,27 @@
 
         <!-- Key Capabilities -->
         <section class="glass-card-display">
-            <h2 class="section-heading">Core Capabilities</h2>
-            <div class="capabilities-grid">
-                <div class="capability-item">
+            <h2 class="section-title">
+                <i class="fas fa-star"></i>
+                Core Capabilities
+            </h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
                     <i class="card-icon-primary fas fa-brain"></i>
                     <h3>Autonomous Execution</h3>
                     <p>Self-managing workflows with minimal human intervention required</p>
                 </div>
-                <div class="capability-item">
+                <div class="metric-card">
                     <i class="card-icon-info fas fa-network-wired"></i>
                     <h3>Multi-Phase Coordination</h3>
                     <p>Complex operations broken into manageable, validated phases</p>
                 </div>
-                <div class="capability-item">
+                <div class="metric-card">
                     <i class="card-icon-warning fas fa-shield-check"></i>
                     <h3>SKULL Protection</h3>
                     <p>Built-in brain protection rules ensuring safe operations</p>
                 </div>
-                <div class="capability-item">
+                <div class="metric-card">
                     <i class="card-icon-success fas fa-sync"></i>
                     <h3>Rollback Support</h3>
                     <p>Automatic Git checkpoints and recovery mechanisms</p>
@@ -286,10 +279,13 @@
 
         <!-- Categories Overview -->
         <section class="glass-card-display">
-            <h2 class="section-heading">Orchestrator Categories</h2>
+            <h2 class="section-title">
+                <i class="fas fa-layer-group"></i>
+                Orchestrator Categories
+            </h2>
             
-            <div class="category-grid">
-                <div class="category-card">
+            <div class="masonry-grid">
+                <div class="glass-card-display">
                     <div class="card-header-inline">
                         <i class="card-icon-primary fas fa-chess-knight"></i>
                         <h3>Planning & Strategy</h3>
@@ -297,7 +293,7 @@
                     <p>Autonomous project planning (Planning v5) and Azure DevOps work item generation (ADO v2). Transform requirements into executable plans and trackable work items.</p>
                 </div>
 
-                <div class="category-card">
+                <div class="glass-card-display">
                     <div class="card-header-inline">
                         <i class="card-icon-info fas fa-play-circle"></i>
                         <h3>Execution & Quality</h3>
@@ -305,7 +301,7 @@
                     <p>Test-driven development enforcement (TDD v2) and multi-phase execution coordination. Ensure quality through RED-GREEN-REFACTOR cycles and validated deployments.</p>
                 </div>
 
-                <div class="category-card">
+                <div class="glass-card-display">
                     <div class="card-header-inline">
                         <i class="card-icon-warning fas fa-wrench"></i>
                         <h3>System Maintenance</h3>
@@ -313,7 +309,7 @@
                     <p>Automated cleanup (Cleanup v2), deep integrity checks (Vacuum v2), and 12-phase health pipelines (Maintenance v2). Keep systems optimized and secure.</p>
                 </div>
 
-                <div class="category-card">
+                <div class="glass-card-display">
                     <div class="card-header-inline">
                         <i class="card-icon-success fas fa-chart-line"></i>
                         <h3>Analysis & Refinement</h3>
@@ -321,7 +317,7 @@
                     <p>Code quality improvement (Refinement v2) and architectural visualization (CORTEX Lens). Reduce complexity, eliminate duplication, optimize performance.</p>
                 </div>
 
-                <div class="category-card">
+                <div class="glass-card-display">
                     <div class="card-header-inline">
                         <i class="card-icon-primary fas fa-bug"></i>
                         <h3>Debug & Troubleshoot</h3>
