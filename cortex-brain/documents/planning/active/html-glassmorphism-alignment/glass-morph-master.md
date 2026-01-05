@@ -60,9 +60,9 @@ Apply {pattern_name} to {section_name} on http://localhost:8000/{page}.html
 | **Poor Styled Divs** | Dark bg without glassmorphism | Transform to `.glass-card-display` with icons |
 | **Nested Sections** | Unclosed/improper nesting | Fix structure, proper closure |
 | **Missing Hover** | Clickable without pointer | Add `.glass-card-clickable` |
-| **Icon-Title Vertical** | Stacked layout | Make inline with `gap: 8px` |
+| **CSS Inheritance Override** | Centered layout not working | Remove global `a.glass-card-clickable` selectors, increase specificity |
 
-**Pattern Confidence:** High (6 validated implementations)
+**Pattern Confidence:** High (7 validated implementations)
 
 ---
 
@@ -244,6 +244,57 @@ Apply {pattern_name} to {section_name} on http://localhost:8000/{page}.html
 - ❌ `category-grid` (use `masonry-grid`)
 - ❌ `capability-item` (use `metric-card` inside `metrics-grid`)
 - ❌ `section-heading` (use `section-title`)
+
+---
+
+### Pattern C53: CSS Inheritance Override Fix
+
+**When:** Centered layout not working despite correct HTML structure
+
+**Common Cause:** Global selector with lower specificity overriding component styles
+
+**Diagnostic Steps:**
+1. Inspect element in browser DevTools
+2. Check computed styles tab
+3. Look for `align-items: flex-start` or `text-align: left` overrides
+4. Trace to source CSS rule
+
+**Fix:**
+```css
+/* BEFORE (Problem) - Global override */
+a.glass-card-clickable {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;  /* ← Overrides centered layout */
+}
+
+/* AFTER (Fixed) - Increased specificity */
+.glass-card-clickable .card-header-centered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+a.glass-card-clickable .card-header-centered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+```
+
+**Prevention:**
+- Avoid global `a.glass-card-clickable` selectors
+- Use component-specific classes (`.docs-card`, `.tetris-card`)
+- Increase specificity for component styles
+- Test in browser after CSS changes
+
+**Validation:**
+```bash
+# Check for global overrides
+grep -n "a.glass-card-clickable {" docs/assets/css/main.css
+```
 
 ---
 
