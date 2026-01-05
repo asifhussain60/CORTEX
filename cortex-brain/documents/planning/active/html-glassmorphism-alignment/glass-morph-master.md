@@ -167,16 +167,83 @@ Apply {pattern_name} to {section_name} on http://localhost:8000/{page}.html
 
 ### Pattern C52: Full Reconstruction
 
-**When:** >10 structural issues OR user requests "from scratch"
+**When:** >10 structural issues OR user requests "from scratch" OR automated validation fails
+
+**Auto-Trigger Conditions:**
+- Duplicate `<style>` blocks (>2 occurrences)
+- Duplicate `<head>` sections
+- Missing `class="container"` on `<main>`
+- Non-existent CSS classes (tetris-grid, stats-grid, category-grid, etc.)
+- Broken header structure (missing `glass-header`)
+- >5 inline styles
+- Nested sections >3 levels deep
 
 **Protocol:**
-1. Backup existing file (`{filename}.backup-{timestamp}`)
-2. Delete broken file
-3. Create fresh file with proper structure
-4. Validate HTML (0 errors)
-5. Git commit
+1. Run pre-validation: `cortex-toolkit/validate-html-structure.ps1 {file}`
+2. Backup existing file (`{filename}.backup-{timestamp}`)
+3. Delete broken file
+4. Create fresh file using approved template
+5. Apply C50 color rotation to icons
+6. Validate HTML (0 errors)
+7. Git commit
 
-**Threshold:** Severe nesting issues, poor closure, heavy div soup
+**Required Template Structure:**
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{Page Title} - CORTEX</title>
+    <link rel="icon" href="../assets/images/CORTEX-logo-64.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/variables.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <header class="glass-header">
+        <div class="header-content">
+            <nav class="header-nav">
+                <a href="../index.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="container" id="main-content">
+        <!-- Content here -->
+    </main>
+    
+    <footer>
+        <div class="footer-content">
+            <p>© 2026 Asif Hussain. All rights reserved.</p>
+            <p class="version">CORTEX v5.1.0</p>
+            <a href="https://github.com/asifhussain60/CORTEX" target="_blank">
+                <i class="fab fa-github"></i> GitHub
+            </a>
+        </div>
+    </footer>
+</body>
+</html>
+```
+
+**Approved CSS Classes (main.css verified):**
+- Grids: `masonry-grid`, `metadata-grid`, `metrics-grid`
+- Cards: `glass-card-display`, `glass-card-clickable`
+- Icons: `card-icon-{primary|info|warning|success}`
+- Headers: `glass-header`, `header-content`, `header-nav`, `nav-link`
+- Sections: `section-title`, `page-title-section`
+
+**Forbidden Classes (not in main.css):**
+- ❌ `tetris-grid` (use `masonry-grid`)
+- ❌ `stats-grid` (use `metadata-grid`)
+- ❌ `category-grid` (use `masonry-grid`)
+- ❌ `capability-item` (use `metric-card` inside `metrics-grid`)
+- ❌ `section-heading` (use `section-title`)
 
 ---
 
@@ -186,7 +253,40 @@ Apply {pattern_name} to {section_name} on http://localhost:8000/{page}.html
 **Standards:** `glassmorphism-design-standard.md` (v4.2.9)  
 **Reference:** `knowledge/index.html` (954L), `token-optimization/index.html`, `panel-viewer.html` (807L)  
 **CSS:** `main.css` (10,875L), `panel-viewer.css` (838L)  
-**Validation:** `validate-icon-title-spacing.ps1`, `check-glassmorphism-compliance.ps1`
+**Validation:** `validate-icon-title-spacing.ps1`, `check-glassmorphism-compliance.ps1`, `validate-html-structure.ps1` ⭐ NEW, `validate-all-html.ps1` ⭐ NEW
+
+---
+
+## 🛡️ Pre-Validation (Auto-Detect C52 Triggers)
+
+**Before starting any page work, run:**
+```powershell
+.\cortex-toolkit\validate-html-structure.ps1 -FilePath "docs/{page}/index.html"
+```
+
+**Exit Codes:**
+- `0` → Passed (proceed with incremental fixes)
+- `1` → Warnings (minor fixes needed)
+- `2` → Critical (Pattern C52 required - delete & recreate)
+
+**Batch Validation:**
+```powershell
+.\cortex-toolkit\validate-all-html.ps1 -Path "docs/" -Recursive
+```
+
+**C52 Auto-Triggers Detected:**
+1. ❌ Duplicate `<style>` blocks (>2)
+2. ❌ Duplicate `<head>` sections
+3. ❌ Missing `class="container"` on `<main>`
+4. ❌ Non-existent CSS classes (tetris-grid, stats-grid, etc.)
+5. ❌ Broken header (missing `glass-header`)
+6. ❌ Missing required CSS (main.css, variables.css)
+
+**When validation returns exit code 2:**
+→ Skip incremental fixes
+→ Apply Pattern C52 immediately
+→ Use approved template
+→ Prevents wasted time on broken structure
 
 ---
 
