@@ -258,7 +258,102 @@ Validation scripts should flag:
 
 ---
 
-### 3. Validation Enforcement
+### 3. Tetris-Style Stat Badges MUST Use Color Rotation (Pattern C51)
+
+**Rule:** All stat badges within cards MUST use 3-4 color rotation to create visual interest.
+
+**Color Cycle:** `primary → info → warning → success → repeat`
+
+**Implementation:**
+```html
+<div class="card-stats">
+    <span class="stat-primary"><i class="fas fa-layer-group"></i> 7 Phases</span>
+    <span class="stat-info"><i class="fas fa-vial"></i> TDD Enforced</span>
+    <span class="stat-warning"><i class="fas fa-file-code"></i> YAML Plans</span>
+</div>
+```
+
+**Visual Impact:**
+- **Before:** All badges same color (monotone, boring)
+- **After:** Each badge unique color (vibrant, professional)
+
+**CSS Requirements:**
+All stat variants must have corresponding CSS definitions in `main.css`:
+- `.stat-primary` - Purple gradient with glassmorphism
+- `.stat-info` - Blue gradient with glassmorphism
+- `.stat-warning` - Orange/amber gradient with glassmorphism
+- `.stat-success` - Green gradient with glassmorphism
+
+**Badge Styling:**
+```css
+.stat-primary {
+    background: linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(123, 97, 255, 0.1));
+    border: 1px solid rgba(123, 97, 255, 0.3);
+    color: #b8a3ff;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-full);
+    transition: all var(--transition-normal);
+}
+
+.stat-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(123, 97, 255, 0.3);
+}
+```
+
+**Hover Effects:**
+Each variant includes:
+- `transform: translateY(-2px)` on hover
+- Enhanced box-shadow (color-specific)
+- Smooth transition (`var(--transition-normal)`)
+
+**Application Rules:**
+1. **3+ badges:** Use rotation pattern (avoid repetition)
+2. **Semantic matching:** Match badge color to content meaning when possible
+   - Warning color → warnings, cautions
+   - Success color → completion, validation
+   - Info color → metadata, details
+   - Primary color → key features, emphasis
+3. **Even distribution:** Rotate colors to prevent clustering
+
+**Example Patterns:**
+
+**3 Badges:**
+```html
+<!-- Pattern: primary → info → warning -->
+<span class="stat-primary">Feature 1</span>
+<span class="stat-info">Feature 2</span>
+<span class="stat-warning">Feature 3</span>
+```
+
+**4 Badges:**
+```html
+<!-- Pattern: primary → info → warning → success -->
+<span class="stat-primary">Feature 1</span>
+<span class="stat-info">Feature 2</span>
+<span class="stat-warning">Feature 3</span>
+<span class="stat-success">Feature 4</span>
+```
+
+**5 Badges:**
+```html
+<!-- Pattern: primary → info → warning → success → primary (cycle restart) -->
+<span class="stat-primary">Feature 1</span>
+<span class="stat-info">Feature 2</span>
+<span class="stat-warning">Feature 3</span>
+<span class="stat-success">Feature 4</span>
+<span class="stat-primary">Feature 5</span>
+```
+
+**Automated Detection:**
+Validation scripts should flag:
+- ❌ 3+ badges without color classes
+- ❌ All badges using same color class
+- ❌ Missing CSS definitions for stat-* classes
+
+---
+
+### 4. Validation Enforcement
 
 **Pre-Commit Checks:**
 ```powershell

@@ -9767,6 +9767,90 @@ h1, h2, h3, h4, h5, h6, p, span, div {
     color: var(--accent-primary);
 }
 
+/* Tetris-Style Stat Badges (Pattern C51) */
+.card-stats span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-full);
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all var(--transition-normal);
+}
+
+/* Primary Stat Badge */
+.stat-primary {
+    background: linear-gradient(135deg, 
+        rgba(123, 97, 255, 0.2), 
+        rgba(123, 97, 255, 0.1));
+    border: 1px solid rgba(123, 97, 255, 0.3);
+    color: #b8a3ff;
+}
+
+.stat-primary:hover {
+    background: linear-gradient(135deg, 
+        rgba(123, 97, 255, 0.3), 
+        rgba(123, 97, 255, 0.15));
+    border-color: rgba(123, 97, 255, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(123, 97, 255, 0.3);
+}
+
+/* Info Stat Badge */
+.stat-info {
+    background: linear-gradient(135deg, 
+        rgba(59, 130, 246, 0.2), 
+        rgba(59, 130, 246, 0.1));
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    color: #93c5fd;
+}
+
+.stat-info:hover {
+    background: linear-gradient(135deg, 
+        rgba(59, 130, 246, 0.3), 
+        rgba(59, 130, 246, 0.15));
+    border-color: rgba(59, 130, 246, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+/* Warning Stat Badge */
+.stat-warning {
+    background: linear-gradient(135deg, 
+        rgba(245, 158, 11, 0.2), 
+        rgba(245, 158, 11, 0.1));
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    color: #fbbf24;
+}
+
+.stat-warning:hover {
+    background: linear-gradient(135deg, 
+        rgba(245, 158, 11, 0.3), 
+        rgba(245, 158, 11, 0.15));
+    border-color: rgba(245, 158, 11, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+/* Success Stat Badge */
+.stat-success {
+    background: linear-gradient(135deg, 
+        rgba(16, 185, 129, 0.2), 
+        rgba(16, 185, 129, 0.1));
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #6ee7b7;
+}
+
+.stat-success:hover {
+    background: linear-gradient(135deg, 
+        rgba(16, 185, 129, 0.3), 
+        rgba(16, 185, 129, 0.15));
+    border-color: rgba(16, 185, 129, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
 /* Pattern Grid */
 .pattern-grid {
     display: grid;
