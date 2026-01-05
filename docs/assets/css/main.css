@@ -8657,7 +8657,7 @@ h1, h2, h3, h4, h5, h6, p, span, div {
 /* Hero-specific centered elements */
 .hero-introduction .hero-description {
     text-align: center;
-    font-size: 1.1rem;
+    font-size: 1.21rem;
     color: var(--text-secondary);
     line-height: 1.8;
     margin-bottom: var(--spacing-xl);
@@ -8733,6 +8733,11 @@ h1, h2, h3, h4, h5, h6, p, span, div {
     margin-bottom: 0;
 }
 
+/* Hero-specific larger icon */
+.hero-introduction .card-header-centered i {
+    font-size: 3.3rem;
+}
+
 .card-header-centered .card-title {
     margin: 0;
     text-align: center;
@@ -8751,6 +8756,11 @@ a.glass-card-clickable .card-header-centered,
     font-size: 1.75rem;
     font-weight: 600;
     color: var(--text-primary);
+}
+
+/* Hero-specific larger title */
+.hero-introduction .card-header-centered h2 {
+    font-size: 1.925rem;
 }
 
 .card-description {
@@ -10041,6 +10051,12 @@ a.glass-card-clickable .card-description {
     border: 1px solid rgba(100, 181, 246, 0.25);
     color: var(--text-secondary);
     transition: all var(--transition-normal);
+}
+
+/* Hero-specific larger pills */
+.hero-introduction .stat-pill {
+    font-size: 0.9625rem;
+    padding: 0.55rem 1.1rem;
 }
 
 .stat-pill:hover {
