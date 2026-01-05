@@ -1,41 +1,60 @@
 # C150 Remediation Plan - YAML-Based Python Execution
 # Fixes critical gaps identified in C150 plan review (January 4, 2026)
+# UPDATED: January 5, 2026 - Post-brittleness test gap analysis
 
 schema_version: "5.0"
 plan_id: "c150-remediation"
 plan_name: "C150 Remediation - Fix HTML Alignment Plan Gaps"
 created_date: "2026-01-04"
+updated_date: "2026-01-05"
 author: "CORTEX Planning System v5"
 priority: "P0_CRITICAL"
-estimated_total_hours: 116
+estimated_total_hours: 151  # Updated: +35 hours for new gaps
+status: "PENDING_VALIDATION"  # Changed from "complete" - critical gaps identified
 
 # Plan metadata
 metadata:
   parent_plan: "html-glassmorphism-alignment"
   trigger: "Post-implementation gap analysis"
+  validation_status:
+    brittleness_test: "COMPLETED - January 5, 2026"
+    brittleness_score: "40.25/100 (HIGH RISK)"
+    acceptance_validation: "NOT EXECUTED - CRITICAL GAP"
+    deployment_validation: "NOT EXECUTED - CRITICAL GAP"
   references:
     - "cortex-brain/documents/investigations/c150-plan-review/00-executive-summary.md"
     - "cortex-brain/documents/reports/C50-brittleness-test-summary-2026-01-04.md"
     - "cortex-brain/documents/reports/comprehensive-brittleness-audit-2026-01-02.md"
+    - "cortex-brain/documents/reports/CORTEX-5.0-brittleness-gap-analysis-2026-01-05.md"
     - "cortex-brain/documents/planning/active/html-glassmorphism-alignment/artifacts/final-acceptance-criteria-link.md"
   
   acceptance_criteria_source: "final-acceptance-criteria-link.md"
   brittleness_reports:
     - "C50-brittleness-test-summary-2026-01-04.md"
     - "comprehensive-brittleness-audit-2026-01-02.md"
+    - "CORTEX-5.0-brittleness-gap-analysis-2026-01-05.md"
 
 # Executive summary
 summary: |
-  C150 plan claimed 100% completion but analysis reveals 85% actual completion with critical gaps:
-  - 6 orchestrators documented but broken (cannot instantiate)
-  - Runtime governance middleware missing (SKULL compliance gap)
-  - CORTEX-5.0 documentation incomplete (Phases 7b-7d)
-  - Deployment validation missing (Phase 11)
-  - Dead code removal identified but not executed (Phase 12)
-  - Dual-source brittleness unresolved (YAML + DB simultaneously)
-  - 82 unit tests blocked (67 vacuum + 15 cleanup)
+  C150 plan claimed 100% completion but brittleness test (2026-01-05) reveals 40.25/100 score with critical gaps:
   
-  This plan implements fixes in 15 phases with Python execution orchestration.
+  ORIGINAL GAPS (Phases 2-18):
+  - 6 orchestrators documented but broken (cannot instantiate) → FIXED in Phases 2-4
+  - Runtime governance middleware missing (SKULL compliance gap) → FIXED in Phase 5
+  - CORTEX-5.0 documentation incomplete (Phases 7b-7d) → FIXED in Phases 7-9
+  - Deployment validation missing (Phase 11) → CLAIMED complete, NOT VALIDATED
+  - Dead code removal identified but not executed (Phase 12) → FIXED in Phase 10
+  - Dual-source brittleness unresolved (YAML + DB simultaneously) → FIXED in Phase 6
+  - 82 unit tests blocked (67 vacuum + 15 cleanup) → FIXED in Phases 3-4
+  
+  NEW GAPS FROM BRITTLENESS TEST (Phases 19-21):
+  - ❌ CRITICAL: No acceptance criteria validation executed (0/6 categories) → Phase 19
+  - ❌ CRITICAL: No deployment validation reports or monitoring (Phase 11 false claim) → Phase 21
+  - ⚠️ HIGH: ADO v2 import path inconsistency (file in v2/ subdirectory) → Phase 20
+  
+  Current Status: PENDING_VALIDATION (changed from "complete")
+  Brittleness Score: 40.25/100 (HIGH RISK) | Target: ≥85/100
+  This plan implements fixes in 21 phases + REFACTOR (Phase 999) with Python execution orchestration.
 
 # Gap analysis from C150 review
 gaps_identified:
@@ -119,7 +138,52 @@ gaps_identified:
         - "Claims: 'Autonomous execution' (WRONG: Manifest-guided execution by Copilot)"
         - "Claims: Background Python processes (WRONG: No CLI, no background execution)"
   
+    - id: "GAP-ACCEPTANCE-CRITICAL"
+      title: "No Acceptance Criteria Validation"
+      severity: "CRITICAL"
+      description: "Plan marked complete but 0/6 acceptance criteria categories validated. No validation scripts executed from final-acceptance-criteria-link.md"
+      impact: "Cannot certify plan completion without validation evidence"
+      discovered: "2026-01-05 Brittleness Test"
+      remediation_phases: [17, 18]
+      validation_categories:
+        - "HTML Transformation (HTML-1.1 to HTML-1.6): NOT VALIDATED"
+        - "CORTEX-5.0 Documentation (DOC-2.1 to DOC-2.6): NOT VALIDATED"
+        - "Quality Assurance (QA-3.1 to QA-3.6): NOT VALIDATED"
+        - "REFACTOR Phase (SKULL-9.5.1 to SKULL-9.5.5): NOT VALIDATED"
+      missing_reports:
+        - "html-transformation-validation.json"
+        - "docs-completeness-validation.json"
+        - "qa-validation.json"
+        - "final-acceptance-validation.md"
+    
+    - id: "GAP-DEPLOYMENT-CRITICAL"
+      title: "No Deployment Validation"
+      severity: "CRITICAL"
+      description: "Phase 11 marked complete but no staging deployment, 24hr monitoring, or production validation reports exist"
+      impact: "Production deployment risk without validation evidence"
+      discovered: "2026-01-05 Brittleness Test"
+      remediation_phases: [19]
+      missing_reports:
+        - "staging-deployment-report.md"
+        - "staging-monitoring.json (24hr)"
+        - "production-deployment-report.md"
+        - "production-monitoring.json (24hr)"
+      acceptance_criterion: "QA-3.6: Deployment validation"
+  
   high:
+    - id: "GAP-ADO-PATH"
+      title: "ADO v2 Import Path Inconsistency"
+      severity: "HIGH"
+      description: "ADO v2 file exists at src/orchestrators/ado/v2/ado_orchestrator_v2.py but import expects src/orchestrators/ado/ado_orchestrator_v2.py"
+      impact: "ADO orchestrator cannot be imported via documented path"
+      discovered: "2026-01-05 Brittleness Test"
+      remediation_phases: [20]
+      actual_location: "src/orchestrators/ado/v2/ado_orchestrator_v2.py"
+      expected_import: "from src.orchestrators.ado.ado_orchestrator_v2 import ADOOrchestratorV2"
+      fix_options:
+        - "Update src/orchestrators/ado/__init__.py to expose v2"
+        - "Move file from v2/ subdirectory to parent"
+    
     - id: "GAP-5"
       title: "CORTEX-5.0 Documentation Incomplete"
       severity: "HIGH"
@@ -1528,6 +1592,200 @@ phases:
       - "scripts/generate_ado_work_items_viewer.py (new)"
       - "reports/ado-viewer-generation-validation.md"
   
+  - number: 19
+    name: "Execute Acceptance Criteria Validation Suite"
+    description: "Run all validation scripts from final-acceptance-criteria-link.md against completed phases"
+    estimated_hours: 4.0
+    python_executor: "scripts/orchestration/acceptance_criteria_validator.py"
+    trigger: "GAP-ACCEPTANCE-CRITICAL: 0/6 acceptance criteria categories validated"
+    discovered: "2026-01-05 Brittleness Test"
+    severity: "CRITICAL"
+    
+    validation_categories:
+      html_transformation:
+        criterion_ids: ["HTML-1.1", "HTML-1.2", "HTML-1.3", "HTML-1.4", "HTML-1.5", "HTML-1.6"]
+        tests:
+          - name: "Glassmorphism Compliance Scan"
+            script: "scripts/validate_glassmorphism_compliance.py"
+            output: "reports/html-transformation-validation.json"
+          
+          - name: "Inline Styles Detection"
+            script: "scripts/detect_inline_styles.py"
+            output: "reports/inline-styles-scan.json"
+          
+          - name: "Git Checkpoint Verification"
+            script: "scripts/verify_git_checkpoints.py"
+            output: "reports/git-checkpoint-validation.json"
+      
+      cortex_5_documentation:
+        criterion_ids: ["DOC-2.1", "DOC-2.2", "DOC-2.3", "DOC-2.4", "DOC-2.5", "DOC-2.6"]
+        tests:
+          - name: "Orchestrator Documentation Audit"
+            script: "scripts/audit_orchestrator_docs.py"
+            output: "reports/orchestrator-docs-validation.json"
+          
+          - name: "Feature Documentation Coverage"
+            script: "scripts/audit_feature_docs.py"
+            output: "reports/feature-docs-validation.json"
+          
+          - name: "Diagram Inventory Check"
+            script: "scripts/inventory_diagrams.py"
+            output: "reports/diagram-inventory.json"
+      
+      quality_assurance:
+        criterion_ids: ["QA-3.1", "QA-3.2", "QA-3.3", "QA-3.4", "QA-3.5", "QA-3.6"]
+        tests:
+          - name: "Edge Case Documentation Review"
+            script: "scripts/review_edge_cases.py"
+            output: "reports/edge-case-validation.json"
+          
+          - name: "Security Vulnerability Scan"
+            script: "scripts/security_scan.py"
+            output: "reports/security-scan.json"
+          
+          - name: "Performance Benchmark"
+            script: "scripts/benchmark_performance.py"
+            output: "reports/performance-benchmark.json"
+          
+          - name: "Accessibility Audit"
+            script: "scripts/audit_accessibility.py"
+            output: "reports/accessibility-audit.json"
+      
+      refactor_phase:
+        criterion_ids: ["SKULL-9.5.1", "SKULL-9.5.2", "SKULL-9.5.3", "SKULL-9.5.4", "SKULL-9.5.5"]
+        tests:
+          - name: "REFACTOR Phase Verification"
+            script: "scripts/verify_refactor_phase.py"
+            output: "reports/refactor-phase-validation.json"
+    
+    validation:
+      - "All 6 criterion categories validated"
+      - "Validation reports generated for each category"
+      - "Consolidated acceptance report generated"
+      - "Pass rate ≥90% for each category"
+    
+    outputs:
+      - "reports/html-transformation-validation.json"
+      - "reports/orchestrator-docs-validation.json"
+      - "reports/feature-docs-validation.json"
+      - "reports/diagram-inventory.json"
+      - "reports/edge-case-validation.json"
+      - "reports/security-scan.json"
+      - "reports/performance-benchmark.json"
+      - "reports/accessibility-audit.json"
+      - "reports/refactor-phase-validation.json"
+      - "reports/final-acceptance-validation.md"
+  
+  - number: 20
+    name: "Fix ADO v2 Import Path"
+    description: "Update src/orchestrators/ado/__init__.py to expose ADOOrchestratorV2 from v2 subdirectory"
+    estimated_hours: 0.5
+    python_executor: "scripts/orchestration/fix_ado_import_path.py"
+    trigger: "GAP-ADO-PATH: ADO v2 file in subdirectory causes import failure"
+    discovered: "2026-01-05 Brittleness Test"
+    severity: "HIGH"
+    
+    problem_analysis:
+      actual_location: "src/orchestrators/ado/v2/ado_orchestrator_v2.py"
+      expected_import: "from src.orchestrators.ado.ado_orchestrator_v2 import ADOOrchestratorV2"
+      current_error: "ModuleNotFoundError: No module named 'src.orchestrators.ado.ado_orchestrator_v2'"
+    
+    fix_strategy:
+      file: "src/orchestrators/ado/__init__.py"
+      before: |
+        from .ado_orchestrator import ADOOrchestrator
+        
+        __all__ = ['ADOOrchestrator']
+      
+      after: |
+        from .ado_orchestrator import ADOOrchestrator
+        from .v2.ado_orchestrator_v2 import ADOOrchestratorV2
+        
+        __all__ = ['ADOOrchestrator', 'ADOOrchestratorV2']
+    
+    validation:
+      - "Import test passes: from src.orchestrators.ado.ado_orchestrator_v2 import ADOOrchestratorV2"
+      - "Instantiation test passes: ADOOrchestratorV2(state_db=...)"
+      - "Brittleness test shows 6/6 orchestrators passing"
+    
+    outputs:
+      - "artifacts/ado_init_fix.patch"
+      - "reports/ado-import-path-validation.md"
+  
+  - number: 21
+    name: "Perform Deployment Validation with 24hr Monitoring"
+    description: "Deploy to staging, monitor for 24 hours, validate metrics, deploy to production"
+    estimated_hours: 26.0  # Includes monitoring time
+    python_executor: "scripts/orchestration/deployment_validator.py"
+    trigger: "GAP-DEPLOYMENT-CRITICAL: No staging/production deployment validation"
+    discovered: "2026-01-05 Brittleness Test"
+    severity: "CRITICAL"
+    
+    deployment_stages:
+      staging:
+        environment: "staging"
+        url: "http://localhost:8000"
+        steps:
+          - "Deploy docs site to local staging"
+          - "Run initial validation (link checker, HTML validation)"
+          - "Start 24-hour monitoring (link checker every hour, performance every 6 hours)"
+          - "Collect monitoring data"
+          - "Generate staging validation report"
+        
+        monitoring_metrics:
+          - "Link checker pass rate (target: 100%)"
+          - "Page load time (target: <2s)"
+          - "CSS load time (target: <100ms)"
+          - "Lighthouse performance score (target: >90)"
+          - "Lighthouse accessibility score (target: >95)"
+          - "Error rate (target: 0%)"
+        
+        validation_criteria:
+          - "0 broken links"
+          - "All pages load <2s"
+          - "CSS loads <100ms"
+          - "Lighthouse performance >90"
+          - "Lighthouse accessibility >95"
+          - "0 console errors"
+      
+      production:
+        environment: "production"
+        url: "https://cortex-docs.asifhussain.dev"
+        prerequisites:
+          - "Staging validation passes"
+          - "24hr staging monitoring complete"
+          - "No critical issues in staging"
+        
+        steps:
+          - "Deploy to production environment"
+          - "Run smoke tests"
+          - "Start 24-hour production monitoring"
+          - "Collect production metrics"
+          - "Generate production validation report"
+        
+        monitoring_metrics:
+          - "Uptime (target: 100%)"
+          - "Response time (target: <500ms)"
+          - "Error rate (target: 0%)"
+          - "User traffic patterns"
+          - "Search functionality"
+    
+    validation:
+      - "Staging deployment successful"
+      - "Staging 24hr monitoring complete"
+      - "Staging validation criteria met"
+      - "Production deployment successful"
+      - "Production 24hr monitoring complete"
+      - "Production validation criteria met"
+    
+    outputs:
+      - "reports/staging-deployment-report.md"
+      - "reports/staging-monitoring-24hr.json"
+      - "reports/staging-validation.md"
+      - "reports/production-deployment-report.md"
+      - "reports/production-monitoring-24hr.json"
+      - "reports/production-validation.md"
+  
   - number: 999
     name: "Teardown + REFACTOR + Commit"
     description: "Whole-file cleanup, remove orphaned code, git commit"
@@ -1553,9 +1811,9 @@ phases:
       - Completed CORTEX-5.0 documentation
       - Executed dead code removal (1,009 CSS classes)
       - Performed deployment validation (staging + production)
-      - Updated C150 completion certificate to 85% (honest status)
-      - Created acceptance criteria validation automation
-      - Created cross-plan brittleness checker
+      - Validated all acceptance criteria (6/6 categories)
+      - Fixed ADO v2 import path
+      - Updated brittleness score from 40.25 to 85+ (target)
       
       Files modified: ~50
       Tests added: ~200
@@ -1753,14 +2011,17 @@ skull_compliance:
 
 # Estimated timeline
 timeline:
-  total_hours: 116
-  total_days: 15  # Business days (8 hours/day)
+  total_hours: 151  # Updated: +30.5 hours for Phases 19-21
+  total_days: 19  # Business days (8 hours/day)
   breakdown:
     critical_path: "Phases 2-5 (orchestrator + middleware fixes): 19 hours"
     documentation: "Phases 7-9 (CORTEX-5.0 docs): 22 hours"
     deployment: "Phase 11 (staging + production): 48 hours (mostly monitoring)"
     automation: "Phases 13-15 (validation automation + architecture fix): 18 hours"
     viewer_integration: "Phases 16-18 (plan viewer enhancement + ADO viewer): 16 hours"
+    validation: "Phase 19 (acceptance criteria validation): 4 hours"
+    quick_fixes: "Phase 20 (ADO import path fix): 0.5 hours"
+    deployment_validation: "Phase 21 (24hr monitoring): 26 hours"
     cleanup: "Phases 10, 12, 999: 7 hours"
   
   milestones:
@@ -1789,8 +2050,16 @@ timeline:
       deliverable: "Deployment validated, automation in place, architecture fixed"
     
     - day: 15
-      phases: [16, 17, 18, 999]
-      deliverable: "Plan viewer enhanced with complete modal data, ADO viewer integrated, plan complete"
+      phases: [16, 17, 18]
+      deliverable: "Plan viewer enhanced with complete modal data, ADO viewer integrated"
+    
+    - day: 16
+      phases: [19, 20]
+      deliverable: "Acceptance criteria validated, ADO import path fixed"
+    
+    - day: 19
+      phases: [21, 999]
+      deliverable: "Deployment validation complete (24hr monitoring), REFACTOR + commit, plan complete"
 
 # Success metrics
 success_metrics:
@@ -1799,6 +2068,7 @@ success_metrics:
     - "82 unit tests pass (100%)"
     - "0 orchestrator interface mismatches"
     - "0 Python 3.9/3.10 compatibility issues"
+    - "ADO v2 import path fixed (100% import success rate)"
   
   governance:
     - "3 middleware files implemented (100%)"
@@ -1811,12 +2081,23 @@ success_metrics:
     - "4 diagrams created"
     - "100% CORTEX-5.0 feature coverage"
   
+  validation:
+    - "All 6 acceptance criteria categories validated (100%)"
+    - "HTML Transformation criteria pass rate ≥90%"
+    - "CORTEX-5.0 Documentation criteria pass rate ≥90%"
+    - "Quality Assurance criteria pass rate ≥90%"
+    - "REFACTOR Phase criteria pass rate ≥90%"
+    - "Brittleness score ≥85/100 (up from 40.25/100)"
+  
   production_readiness:
     - "Staging deployment validated (24hr monitoring)"
     - "Production deployment validated (24hr monitoring)"
     - "Uptime >99.9%"
     - "0 critical errors"
     - "Performance targets met"
+    - "Link checker pass rate 100%"
+    - "Lighthouse performance score >90"
+    - "Lighthouse accessibility score >95"
   
   automation:
     - "Acceptance criteria validator automated"
@@ -1826,6 +2107,15 @@ success_metrics:
 
 # Risk assessment
 risks:
+  critical:
+    - risk: "Acceptance criteria validation may reveal more gaps"
+      mitigation: "Phase 19 runs comprehensive validation suite, captures all gaps early"
+      contingency: "Create Phase 22+ for any newly discovered critical gaps"
+    
+    - risk: "24hr monitoring may reveal production-blocking issues"
+      mitigation: "Phase 21 staging validation catches issues before production"
+      contingency: "Rollback plan included, extend monitoring if needed"
+  
   high:
     - risk: "Orchestrator interface changes break existing code"
       mitigation: "Run full test suite after StateManager changes, rollback if failures"
@@ -1834,6 +2124,10 @@ risks:
     - risk: "Python 3.9/3.10 compatibility fixes introduce regressions"
       mitigation: "Test on multiple Python versions, validate before/after behavior identical"
       contingency: "Phase 4 includes regression testing"
+    
+    - risk: "Brittleness score may not reach 85/100 target"
+      mitigation: "Phases 19-21 directly address 45% of scoring (Acceptance + Deployment)"
+      contingency: "Analyze remaining gaps, create Phase 22+ if needed"
   
   medium:
     - risk: "Deployment validation reveals production issues"
@@ -1843,6 +2137,10 @@ risks:
     - risk: "Dead code removal breaks HTML rendering"
       mitigation: "Validate CSS classes truly unused before removal, test rendering after"
       contingency: "Phase 10 includes rendering validation"
+    
+    - risk: "ADO import path fix may break existing ADO code"
+      mitigation: "Phase 20 maintains backward compatibility, tests all imports"
+      contingency: "Quick rollback, estimate only 0.5 hours"
   
   low:
     - risk: "Documentation takes longer than estimated"
@@ -1888,6 +2186,16 @@ lessons_learned:
     - "Automate acceptance criteria validation"
     - "Cross-reference completion claims with artifacts"
   
+  from_brittleness_test_2026_01_05:
+    - "Brittleness tests reveal hidden gaps in 'complete' plans"
+    - "40.25/100 score = HIGH RISK despite claimed completion"
+    - "Acceptance validation (30% weight) was 0/100 = critical gap"
+    - "Deployment validation (15% weight) was 0/100 = critical gap"
+    - "Import path issues count as brittleness (file exists but unusable)"
+    - "Progress tracker status ≠ actual validation status"
+    - "Must validate EVERY acceptance criterion, not just claim completion"
+    - "24hr monitoring is non-negotiable for deployment validation"
+  
   for_future_plans:
     - "Create validate_acceptance_criteria.py FIRST"
     - "Run brittleness tests at Phase N-1 (before completion)"
@@ -1898,3 +2206,6 @@ lessons_learned:
     - "Progress tracking via JSON state files"
     - "Phase -2 setup verification catches false positives early"
     - "Phase N+1 teardown ensures no orphaned code"
+    - "Brittleness score must be ≥85/100 before completion certificate"
+    - "Acceptance criteria validation is MANDATORY, not optional"
+    - "Import paths must be tested in brittleness checks"
