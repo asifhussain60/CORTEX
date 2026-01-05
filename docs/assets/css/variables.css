@@ -337,3 +337,174 @@
     border: 1px solid rgba(245, 158, 11, 0.15) !important;
     box-shadow: 0 8px 32px rgba(245, 158, 11, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   CARD VARIANT CLASSES - Enhanced Prominence within Panels
+   Version: 2.0 | Purpose: Make cards stand out from panel backgrounds
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Primary Card Variant (Cyan Accent) */
+.card-variant-primary {
+    background: linear-gradient(135deg, 
+        rgba(0, 212, 255, 0.15) 0%, 
+        rgba(0, 180, 216, 0.12) 50%, 
+        rgba(26, 31, 58, 0.85) 100%) !important;
+    border: 1px solid rgba(0, 212, 255, 0.35) !important;
+    box-shadow: 
+        0 8px 24px rgba(0, 212, 255, 0.2),
+        inset 0 1px 2px rgba(0, 212, 255, 0.15),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.card-variant-primary:hover {
+    background: linear-gradient(135deg, 
+        rgba(0, 212, 255, 0.22) 0%, 
+        rgba(0, 180, 216, 0.18) 50%, 
+        rgba(26, 31, 58, 0.9) 100%) !important;
+    border-color: rgba(0, 212, 255, 0.5) !important;
+    box-shadow: 
+        0 12px 32px rgba(0, 212, 255, 0.3),
+        0 0 30px rgba(0, 212, 255, 0.2),
+        inset 0 1px 2px rgba(0, 212, 255, 0.2),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Info Card Variant (Indigo Accent) */
+.card-variant-info {
+    background: linear-gradient(135deg, 
+        rgba(79, 70, 229, 0.15) 0%, 
+        rgba(99, 102, 241, 0.12) 50%, 
+        rgba(26, 31, 58, 0.85) 100%) !important;
+    border: 1px solid rgba(99, 102, 241, 0.35) !important;
+    box-shadow: 
+        0 8px 24px rgba(79, 70, 229, 0.2),
+        inset 0 1px 2px rgba(99, 102, 241, 0.15),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.card-variant-info:hover {
+    background: linear-gradient(135deg, 
+        rgba(79, 70, 229, 0.22) 0%, 
+        rgba(99, 102, 241, 0.18) 50%, 
+        rgba(26, 31, 58, 0.9) 100%) !important;
+    border-color: rgba(99, 102, 241, 0.5) !important;
+    box-shadow: 
+        0 12px 32px rgba(79, 70, 229, 0.3),
+        0 0 30px rgba(99, 102, 241, 0.2),
+        inset 0 1px 2px rgba(99, 102, 241, 0.2),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Success Card Variant (Emerald Accent) */
+.card-variant-success {
+    background: linear-gradient(135deg, 
+        rgba(16, 185, 129, 0.15) 0%, 
+        rgba(52, 211, 153, 0.12) 50%, 
+        rgba(26, 31, 58, 0.85) 100%) !important;
+    border: 1px solid rgba(16, 185, 129, 0.35) !important;
+    box-shadow: 
+        0 8px 24px rgba(16, 185, 129, 0.2),
+        inset 0 1px 2px rgba(52, 211, 153, 0.15),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.card-variant-success:hover {
+    background: linear-gradient(135deg, 
+        rgba(16, 185, 129, 0.22) 0%, 
+        rgba(52, 211, 153, 0.18) 50%, 
+        rgba(26, 31, 58, 0.9) 100%) !important;
+    border-color: rgba(16, 185, 129, 0.5) !important;
+    box-shadow: 
+        0 12px 32px rgba(16, 185, 129, 0.3),
+        0 0 30px rgba(52, 211, 153, 0.2),
+        inset 0 1px 2px rgba(52, 211, 153, 0.2),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Warning Card Variant (Amber Accent) */
+.card-variant-warning {
+    background: linear-gradient(135deg, 
+        rgba(245, 158, 11, 0.15) 0%, 
+        rgba(251, 191, 36, 0.12) 50%, 
+        rgba(26, 31, 58, 0.85) 100%) !important;
+    border: 1px solid rgba(245, 158, 11, 0.35) !important;
+    box-shadow: 
+        0 8px 24px rgba(245, 158, 11, 0.2),
+        inset 0 1px 2px rgba(251, 191, 36, 0.15),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.card-variant-warning:hover {
+    background: linear-gradient(135deg, 
+        rgba(245, 158, 11, 0.22) 0%, 
+        rgba(251, 191, 36, 0.18) 50%, 
+        rgba(26, 31, 58, 0.9) 100%) !important;
+    border-color: rgba(245, 158, 11, 0.5) !important;
+    box-shadow: 
+        0 12px 32px rgba(245, 158, 11, 0.3),
+        0 0 30px rgba(251, 191, 36, 0.2),
+        inset 0 1px 2px rgba(251, 191, 36, 0.2),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   METRIC CARD ENHANCEMENTS - Panel-Aware Prominence
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Enhanced metric cards within colored panels */
+.glass-panel-emerald .metric-card,
+.glass-panel-purple .metric-card,
+.glass-panel-amber .metric-card,
+.glass-panel-cyan .metric-card,
+.glass-panel-teal .metric-card,
+.glass-panel-indigo .metric-card,
+.glass-panel-pink .metric-card {
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.05) 0%, 
+        rgba(255, 255, 255, 0.02) 50%, 
+        rgba(26, 31, 58, 0.8) 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    box-shadow: 
+        0 8px 24px rgba(0, 0, 0, 0.3),
+        inset 0 1px 2px rgba(255, 255, 255, 0.1),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.glass-panel-emerald .metric-card:hover {
+    background: linear-gradient(135deg, 
+        rgba(16, 185, 129, 0.12) 0%, 
+        rgba(52, 211, 153, 0.08) 50%, 
+        rgba(26, 31, 58, 0.85) 100%) !important;
+    border-color: rgba(16, 185, 129, 0.4) !important;
+    box-shadow: 
+        0 12px 32px rgba(16, 185, 129, 0.25),
+        0 0 30px rgba(52, 211, 153, 0.15),
+        inset 0 1px 2px rgba(52, 211, 153, 0.15),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.glass-panel-purple .metric-card:hover {
+    background: linear-gradient(135deg, 
+        rgba(123, 97, 255, 0.12) 0%, 
+        rgba(186, 85, 211, 0.08) 50%, 
+        rgba(26, 31, 58, 0.85) 100%) !important;
+    border-color: rgba(123, 97, 255, 0.4) !important;
+    box-shadow: 
+        0 12px 32px rgba(123, 97, 255, 0.25),
+        0 0 30px rgba(186, 85, 211, 0.15),
+        inset 0 1px 2px rgba(186, 85, 211, 0.15),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.glass-panel-amber .metric-card:hover {
+    background: linear-gradient(135deg, 
+        rgba(245, 158, 11, 0.12) 0%, 
+        rgba(251, 191, 36, 0.08) 50%, 
+        rgba(26, 31, 58, 0.85) 100%) !important;
+    border-color: rgba(245, 158, 11, 0.4) !important;
+    box-shadow: 
+        0 12px 32px rgba(245, 158, 11, 0.25),
+        0 0 30px rgba(251, 191, 36, 0.15),
+        inset 0 1px 2px rgba(251, 191, 36, 0.15),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+}
