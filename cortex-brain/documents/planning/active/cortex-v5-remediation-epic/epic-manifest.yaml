@@ -81,6 +81,116 @@ orchestrator_architecture:
 
 # Epic Phases (Python Orchestrator-Based)
 phases:
+  - phase_id: "P00"
+    name: "Database Schema Consolidation & Migration"
+    type: autonomous_python
+    script: "scripts/phase_00_database_consolidation.py"
+    duration: "2 days"
+    priority: P0_CRITICAL
+    status: planning
+    description: "Fix database schema inconsistencies blocking autonomous execution"
+    
+    # Sub-phases for granular tracking
+    sub_phases:
+      - "P00.1: Schema Audit & Analysis (COMPLETED)"
+      - "P00.2: Design Unified Schema Strategy (2h)"
+      - "P00.3: Implement Database Views (2h)"
+      - "P00.4: Fix user_profile Schema (1h)"
+      - "P00.5: Consolidate Duplicate Databases (3h)"
+      - "P00.6: Implement Schema Migration System (3h)"
+      - "P00.7: Fix Code References (2h)"
+      - "P00.8: Testing & Validation (1h)"
+    
+    deliverables:
+      - "cortex-brain/documents/analysis/database-schema-audit-report-2026-01-05.md (✅ COMPLETED)"
+      - "src/database/migrations/001_add_compatibility_views.sql"
+      - "src/database/migrations/002_fix_user_profile_schema.sql"
+      - "src/database/migrations/003_consolidate_knowledge_graphs.sql"
+      - "src/database/migrations/000_migration_framework.py"
+      - "src/database/schema_validator.py"
+      - "cortex-brain/documents/database/SCHEMA-DOCUMENTATION.md"
+      - "cortex-brain/documents/database/MIGRATION-GUIDE.md"
+      - "cortex-brain/database/erd-diagram.png"
+    
+    acceptance_criteria:
+      functional:
+        - "✅ All orchestrators execute without database errors"
+        - "✅ Schema consistency verified (single source of truth)"
+        - "✅ Backward compatibility maintained via views"
+        - "✅ Migration system operational with version tracking"
+      
+      performance:
+        - "✅ Query performance not degraded (within 10% of baseline)"
+        - "✅ Indexes properly maintained"
+        - "✅ No table scans on large tables"
+      
+      data_integrity:
+        - "✅ Zero data loss during migration"
+        - "✅ Referential integrity enforced"
+        - "✅ No orphaned records"
+        - "✅ All foreign key constraints valid"
+        - "✅ No NULL values in NOT NULL columns"
+        - "✅ All FTS indexes synchronized"
+      
+      documentation:
+        - "✅ Complete ERD generated showing all relationships"
+        - "✅ Every table documented with purpose"
+        - "✅ Migration history tracked"
+        - "✅ Naming conventions documented"
+      
+      testing:
+        - "✅ Automated tests pass (>95% coverage for DB operations)"
+        - "✅ Integration tests for cross-database queries"
+        - "✅ Performance benchmarks within acceptable range"
+        - "✅ Schema validation tests pass"
+        - "✅ Manual smoke tests complete (all orchestrators)"
+    
+    issues_resolved:
+      p0_critical:
+        - "Schema mismatch: tier2_patterns vs patterns (name→title, description→content)"
+        - "Missing response_detail column in user_profile table"
+        - "Duplicate knowledge graph databases (knowledge-graph.db vs knowledge_graph.db)"
+        - "Code queries failing with 'no such table' and 'no such column' errors"
+      
+      p1_high:
+        - "Duplicate tier2_patterns in cortex-brain.db and tier2/knowledge_graph.db"
+        - "Orphaned tables in unified database"
+        - "Missing schema version tracking"
+      
+      p2_moderate:
+        - "Inconsistent naming conventions (hyphen vs underscore)"
+        - "Missing foreign key constraints"
+        - "No database documentation or ERD"
+    
+    metrics:
+      schema_consistency_score:
+        current: "45%"
+        target: "100%"
+        measurement: "Automated schema validator"
+      
+      database_errors:
+        current: "100% (blocking)"
+        target: "0%"
+        measurement: "Log analysis during orchestrator execution"
+      
+      duplicate_tables:
+        current: 6
+        target: 0
+        measurement: "Schema audit"
+      
+      missing_columns:
+        current: 4
+        target: 0
+        measurement: "Schema comparison tool"
+      
+      test_coverage:
+        current: "~60%"
+        target: ">95%"
+        measurement: "pytest --cov src/database/"
+    
+    dependencies: []
+    blocks: ["P01", "P02", "P03", "P04", "P05", "P06", "P07", "P08", "P09", "P10", "P11", "P12", "P13", "P14"]
+    
   - phase_id: "P01"
     name: "Master Orchestrator Task Management"
     type: autonomous_python
@@ -94,7 +204,7 @@ phases:
       - "tracking/task-registry.json schema"
       - "Task CRUD operations"
       - "Progress calculation"
-    dependencies: []
+    dependencies: ["P00"]
     
   - phase_id: "P02"
     name: "Planning Orchestrator v6 - Pure Python"
@@ -123,7 +233,7 @@ phases:
       - "src/orchestrators/ado/ado_orchestrator_v3.py"
       - "Python-based work item generation"
       - "Task integration"
-    dependencies: ["P01"]
+    dependencies: ["P00", "P01"]
     
   - phase_id: "P04"
     name: "Cleanup Orchestrator v3 - Python Autonomous"
@@ -137,7 +247,7 @@ phases:
       - "src/orchestrators/cleanup/cleanup_orchestrator_v3.py"
       - "Python-based cleanup execution"
       - "Task-tracked operations"
-    dependencies: ["P01"]
+    dependencies: ["P00", "P01"]
     
   - phase_id: "P05"
     name: "Vacuum Orchestrator v3 - Python Autonomous"
@@ -151,7 +261,7 @@ phases:
       - "src/orchestrators/vacuum/vacuum_orchestrator_v3.py"
       - "Python-based deep cleanup"
       - "Task integration"
-    dependencies: ["P01"]
+    dependencies: ["P00", "P01"]
     
   - phase_id: "P06"
     name: "Investigation Orchestrator v3 - Python Autonomous"
@@ -165,7 +275,7 @@ phases:
       - "src/orchestrators/investigation/investigation_orchestrator_v3.py"
       - "Python-based root cause analysis"
       - "Task-tracked investigations"
-    dependencies: ["P01"]
+    dependencies: ["P00", "P01"]
     
   - phase_id: "P07"
     name: "Sanitization Orchestrator v3 - Python Autonomous"
@@ -179,7 +289,7 @@ phases:
       - "src/orchestrators/sanitization/sanitization_orchestrator_v3.py"
       - "Python-based PII/secret removal"
       - "Task integration"
-    dependencies: ["P01"]
+    dependencies: ["P00", "P01"]
     
   - phase_id: "P08"
     name: "TDD Orchestrator v3 - Python Autonomous"
@@ -193,7 +303,7 @@ phases:
       - "src/orchestrators/tdd/tdd_orchestrator_v3.py"
       - "Python-based RED→GREEN→REFACTOR"
       - "Task-tracked TDD cycles"
-    dependencies: ["P01"]
+    dependencies: ["P00", "P01"]
     
   - phase_id: "P09"
     name: "Refinement Orchestrator v3 - Python Autonomous"
@@ -207,7 +317,7 @@ phases:
       - "src/orchestrators/refinement/refinement_orchestrator_v3.py"
       - "Python-based code improvement"
       - "Task integration"
-    dependencies: ["P01"]
+    dependencies: ["P00", "P01"]
     
   - phase_id: "P10"
     name: "Debug Orchestrator v3 - Python Autonomous"
@@ -221,7 +331,7 @@ phases:
       - "src/orchestrators/debug/debug_orchestrator_v3.py"
       - "Python-based debugging"
       - "Task-tracked debug sessions"
-    dependencies: ["P01"]
+    dependencies: ["P00", "P01"]
     
   - phase_id: "P11"
     name: "Maintenance Orchestrator v3 - Python Autonomous"
@@ -235,7 +345,7 @@ phases:
       - "src/orchestrators/maintenance/maintenance_orchestrator_v3.py"
       - "Python-based 12-phase maintenance"
       - "Task integration"
-    dependencies: ["P01"]
+    dependencies: ["P00", "P01"]
     
   - phase_id: "P12"
     name: "Plan Viewer v3 - Task Tracking UI"
@@ -251,7 +361,7 @@ phases:
       - "Task list visualization"
       - "Progress bars and metrics"
       - "Real-time JSON updates"
-    dependencies: ["P01", "P02"]
+    dependencies: ["P00", "P01", "P02"]
     
   - phase_id: "P13"
     name: "Master Orchestrator Request Transformer"
@@ -265,7 +375,7 @@ phases:
       - "src/orchestrators/master/request_transformer.py"
       - "Context injection system"
       - "Domain-aware transformations"
-    dependencies: ["P01"]
+    dependencies: ["P00", "P01"]
     
   - phase_id: "P14"
     name: "Epic Final Validation & Testing"
@@ -280,7 +390,7 @@ phases:
       - "Task management validation"
       - "Plan viewer testing"
       - "Epic completion report"
-    dependencies: ["P01", "P02", "P03", "P04", "P05", "P06", "P07", "P08", "P09", "P10", "P11", "P12", "P13"]
+    dependencies: ["P00", "P01", "P02", "P03", "P04", "P05", "P06", "P07", "P08", "P09", "P10", "P11", "P12", "P13"]
 
 # Task Registry Schema
 task_registry_schema:

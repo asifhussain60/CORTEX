@@ -149,15 +149,17 @@ class PatternSearch:
         usage_count_col = "p.usage_count" if has_usage_count else "p.access_count"
         
         # FTS5 search with BM25 ranking - use correct table names from schema
+        # NOTE: Using patterns/patterns_fts (actual tables) instead of tier2_patterns views
+        # because FTS5 virtual tables cannot be wrapped in views
         query_sql = f"""
-            SELECT p.pattern_id, p.name, p.description, p.category, p.confidence,
-                   p.created_at, p.last_accessed, p.access_count, p.source_conversation_id, p.context,
-                   0 as is_pinned, 'cortex' as scope, '["CORTEX-core"]' as namespaces,
+            SELECT p.pattern_id, p.title as name, p.content as description, p.pattern_type as category, p.confidence,
+                   p.created_at, p.last_accessed, p.access_count, '' as source_conversation_id, p.metadata as context,
+                   p.is_pinned, p.scope, p.namespaces,
                    {usage_count_col} as usage_count,
-                   bm25(tier2_patterns_fts) as rank
-            FROM tier2_patterns p
-            JOIN tier2_patterns_fts ON p.rowid = tier2_patterns_fts.rowid
-            WHERE tier2_patterns_fts MATCH ? AND {where_sql}
+                   bm25(patterns_fts) as rank
+            FROM patterns p
+            JOIN patterns_fts ON p.rowid = patterns_fts.rowid
+            WHERE patterns_fts MATCH ? AND {where_sql}
             ORDER BY rank
             LIMIT ?
         """

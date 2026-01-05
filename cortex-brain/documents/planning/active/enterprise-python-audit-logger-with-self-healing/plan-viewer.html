@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Audit Logger - Live Progress Tracker</title>
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* CORTEX Plan Viewer - Glassmorphism Theme
+         * Author: Asif Hussain
+         * Version: 5.1.0
+         * Copyright © 2025-2026 Asif Hussain. All rights reserved.
+         */
+
+        :root {
+            /* CORTEX Brand Colors */
+            --primary: #6D28D9;
+            --primary-light: #7C3AED;
+            --primary-dark: #5B21B6;
+            --accent: #059669;
+            --accent-light: #10B981;
+            --warning: #D97706;
+            --error: #DC2626;
+            --info: #0891B2;
+            
+            /* Glassmorphism Backgrounds */
+            --bg-primary: rgba(30, 27, 75, 0.5);
+            --bg-secondary: rgba(20, 18, 50, 0.6);
+            --bg-hover: rgba(40, 35, 90, 0.55);
+            
+            /* Glass Effects */
+            --glass-blur: blur(12px);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+            --glass-shadow-hover: 0 12px 40px 0 rgba(0, 0, 0, 0.6);
+            
+            /* Text Colors */
+            --text-primary: #D1D5DB;
+            --text-secondary: #6B7280;
+            --text-muted: #4B5563;
+            
+            /* Border Radius */
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            
+            /* Font */
+            --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: linear-gradient(135deg, #0f0e1f 0%, #1a1640 50%, #0f1f3f 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Glassmorphism Base Class */
+        .glass {
+            background: var(--bg-primary);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            border-radius: var(--radius-lg);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass:hover {
+            background: var(--bg-hover);
+            box-shadow: var(--glass-shadow-hover);
+        }
+
+        /* Header */
+        header {
+            padding: 40px 30px;
+            margin-bottom: 20px;
+            background: var(--bg-primary);
+            backdrop-filter: var(--glass-blur);
+            border: var(--glass-border);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--glass-shadow);
+            text-align: center;
+        }
+
+        .page-title {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--primary-light), var(--accent-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-title i {
+            margin-right: 15px;
+            background: linear-gradient(135deg, var(--primary-light), var(--accent-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            color: var(--text-secondary);
+            margin-top: 10px;
+        }
+
+        /* Auto-refresh Status */
+        .auto-refresh-status {
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            background: rgba(5, 150, 105, 0.2);
+            border: 1px solid rgba(5, 150, 105, 0.3);
+            border-radius: var(--radius-md);
+            text-align: center;
+            font-size: 0.9em;
+            color: var(--accent-light);
+        }
+
+        .auto-refresh-status.error {
+            background: rgba(220, 38, 38, 0.2);
+            border-color: rgba(220, 38, 38, 0.3);
+            color: var(--error);
+        }
+
+        /* Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            padding: 25px;
+            background: var(--bg-primary);
+            backdrop-filter: var(--glass-blur);
+            border: var(--glass-border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--glass-shadow);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--glass-shadow-hover);
+        }
+
+        .metric-label {
+            font-size: 0.9em;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .metric-value {
+            font-size: 2em;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-light), var(--accent-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            padding: 30px;
+            margin-bottom: 30px;
+            background: var(--bg-primary);
+            backdrop-filter: var(--glass-blur);
+            border: var(--glass-border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--glass-shadow);
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .section-title i {
+            margin-right: 10px;
+            color: var(--accent);
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 20px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 0 20px rgba(109, 40, 217, 0.5);
+        }
+
+        /* Phases Grid */
+        .phases-section {
+            margin-bottom: 30px;
+        }
+
+        .phases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .phase-card {
+            padding: 25px;
+            background: var(--bg-primary);
+            backdrop-filter: var(--glass-blur);
+            border: var(--glass-border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--glass-shadow);
+            transition: all 0.3s ease;
+        }
+
+        .phase-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--glass-shadow-hover);
+        }
+
+        .phase-card.completed {
+            border-color: rgba(5, 150, 105, 0.5);
+        }
+
+        .phase-card.in_progress {
+            border-color: rgba(217, 119, 6, 0.5);
+            box-shadow: 0 0 20px rgba(217, 119, 6, 0.3);
+        }
+
+        .phase-card.not_started {
+            border-color: rgba(107, 114, 128, 0.3);
+        }
+
+        .phase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .phase-id {
+            font-size: 0.85em;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .phase-status {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-completed {
+            background: rgba(5, 150, 105, 0.2);
+            color: var(--accent-light);
+            border: 1px solid rgba(5, 150, 105, 0.4);
+        }
+
+        .status-in_progress {
+            background: rgba(217, 119, 6, 0.2);
+            color: var(--warning);
+            border: 1px solid rgba(217, 119, 6, 0.4);
+        }
+
+        .status-not_started {
+            background: rgba(107, 114, 128, 0.2);
+            color: var(--text-secondary);
+            border: 1px solid rgba(107, 114, 128, 0.4);
+        }
+
+        .phase-name {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .phase-meta {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .phase-meta i {
+            margin-right: 5px;
+            color: var(--accent);
+        }
+
+        .priority-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-size: 0.75em;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-left: 10px;
+        }
+
+        .priority-critical {
+            background: rgba(220, 38, 38, 0.2);
+            color: var(--error);
+            border: 1px solid rgba(220, 38, 38, 0.4);
+        }
+
+        .priority-high {
+            background: rgba(217, 119, 6, 0.2);
+            color: var(--warning);
+            border: 1px solid rgba(217, 119, 6, 0.4);
+        }
+
+        .priority-medium {
+            background: rgba(8, 145, 178, 0.2);
+            color: var(--info);
+            border: 1px solid rgba(8, 145, 178, 0.4);
+        }
+
+        .priority-low {
+            background: rgba(107, 114, 128, 0.2);
+            color: var(--text-secondary);
+            border: 1px solid rgba(107, 114, 128, 0.4);
+        }
+
+        .phase-progress {
+            margin-top: 15px;
+        }
+
+        .mini-progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .mini-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        /* Tasks Section */
+        .tasks-section {
+            padding: 30px;
+            margin-bottom: 30px;
+            background: var(--bg-primary);
+            backdrop-filter: var(--glass-blur);
+            border: var(--glass-border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--glass-shadow);
+        }
+
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-md);
+            transition: all 0.3s ease;
+        }
+
+        .task-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(5px);
+        }
+
+        .task-checkbox {
+            margin-right: 15px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .task-info {
+            flex: 1;
+        }
+
+        .task-title {
+            font-size: 1em;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+        }
+
+        .task-meta {
+            font-size: 0.8em;
+            color: var(--text-secondary);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        .empty-state.loading .empty-state-icon {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* Dependency Graph */
+        .dependency-graph {
+            padding: 30px;
+            margin-bottom: 30px;
+            background: var(--bg-primary);
+            backdrop-filter: var(--glass-blur);
+            border: var(--glass-border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--glass-shadow);
+        }
+
+        .dependency-item {
+            padding: 10px 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-md);
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        /* Statistics Grid */
+        .statistics-section {
+            padding: 30px;
+            margin-bottom: 30px;
+            background: var(--bg-primary);
+            backdrop-filter: var(--glass-blur);
+            border: var(--glass-border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--glass-shadow);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .stat-item {
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-md);
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: var(--accent-light);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: var(--bg-primary);
+            backdrop-filter: var(--glass-blur);
+            border: var(--glass-border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--glass-shadow);
+            margin-top: 30px;
+        }
+
+        .timestamp {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            margin: 5px 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .phases-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .page-title {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="page-title">
+                <i class="fas fa-shield-alt"></i>
+                Enterprise Audit Logger with Self-Healing
+            </h1>
+            <div class="subtitle">Production-Ready Logging System with Autonomous Recovery</div>
+        </header>
+
+        <div class="auto-refresh-status" id="refreshStatus">
+            ✅ Auto-refresh: Active (every 30 seconds) | Last updated: <span id="lastUpdate">Loading...</span>
+        </div>
+
+        <!-- Metrics Grid -->
+        <div class="metrics-grid" id="metricsGrid">
+            <div class="metric-card">
+                <div class="metric-label">Overall Progress</div>
+                <div class="metric-value" id="overallProgress">0%</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Phases Complete</div>
+                <div class="metric-value" id="phasesComplete">0 / 6</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Tasks Complete</div>
+                <div class="metric-value" id="tasksComplete">0 / 0</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Current Status</div>
+                <div class="metric-value" id="currentStatus">In Progress</div>
+            </div>
+        </div>
+
+        <!-- Overall Progress Bar -->
+        <div class="progress-section">
+            <h2 class="section-title"><i class="fas fa-chart-line"></i> Implementation Progress</h2>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar" style="width: 0%">
+                    0%
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Section -->
+        <div class="statistics-section">
+            <h2 class="section-title"><i class="fas fa-chart-bar"></i> Code Statistics</h2>
+            <div class="stats-grid" id="statsGrid">
+                <div class="stat-item">
+                    <div class="stat-label">Total Tests</div>
+                    <div class="stat-value" id="totalTests">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Passing Tests</div>
+                    <div class="stat-value" id="passingTests">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Test Coverage</div>
+                    <div class="stat-value" id="testCoverage">0%</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Lines of Code</div>
+                    <div class="stat-value" id="linesOfCode">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Files Created</div>
+                    <div class="stat-value" id="filesCreated">0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phases Grid -->
+        <div class="phases-section">
+            <h2 class="section-title"><i class="fas fa-tasks"></i> Implementation Phases</h2>
+            <div class="phases-grid" id="phasesGrid">
+                <div class="empty-state loading">
+                    <div class="empty-state-icon">⏳</div>
+                    <div>Loading phases...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tasks Section -->
+        <div class="tasks-section">
+            <h2 class="section-title"><i class="fas fa-check-square"></i> Task Tracking</h2>
+            <div class="task-list" id="taskList">
+                <div class="empty-state">
+                    <div class="empty-state-icon">📋</div>
+                    <div>No tasks created yet. Tasks will appear when phases begin execution.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dependency Graph -->
+        <div class="dependency-graph" id="dependencyGraph">
+            <h2 class="section-title"><i class="fas fa-project-diagram"></i> Phase Dependencies</h2>
+            <div id="dependencyContent">
+                <div class="empty-state loading">
+                    <div class="empty-state-icon">🔄</div>
+                    <div>Loading dependencies...</div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <div class="timestamp">
+                Created: January 5, 2026 | Version: 1.0.0 | Execution Mode: TDD (RED→GREEN→REFACTOR)
+            </div>
+            <div class="timestamp">
+                Copyright © 2025-2026 Asif Hussain. All rights reserved.
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        const REFRESH_INTERVAL = 30000; // 30 seconds
+        const PROGRESS_FILE = 'progress.json';
+        const TASK_FILE = 'tasks.json';
+
+        let autoRefreshInterval;
+        let lastUpdateTime = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            startAutoRefresh();
+        });
+
+        function startAutoRefresh() {
+            autoRefreshInterval = setInterval(() => {
+                loadData();
+            }, REFRESH_INTERVAL);
+        }
+
+        async function loadData() {
+            try {
+                const [progressData, taskData] = await Promise.all([
+                    fetch(PROGRESS_FILE).then(r => r.json()),
+                    fetch(TASK_FILE).then(r => r.json())
+                ]);
+
+                updateMetrics(progressData, taskData);
+                updateProgressBar(progressData);
+                updateStatistics(progressData);
+                updatePhases(progressData);
+                updateTasks(taskData);
+                updateDependencies(progressData);
+                updateTimestamp();
+                updateRefreshStatus(true);
+            } catch (error) {
+                console.error('Error loading data:', error);
+                updateRefreshStatus(false, error.message);
+            }
+        }
+
+        function updateMetrics(progressData, taskData) {
+            document.getElementById('overallProgress').textContent = 
+                `${progressData.overall_progress}%`;
+            
+            document.getElementById('phasesComplete').textContent = 
+                `${progressData.phases.completed} / ${progressData.phases.total}`;
+            
+            document.getElementById('tasksComplete').textContent = 
+                `${taskData.statistics.completed} / ${taskData.statistics.total}`;
+            
+            document.getElementById('currentStatus').textContent = 
+                progressData.status.replace('_', ' ').charAt(0).toUpperCase() + 
+                progressData.status.replace('_', ' ').slice(1);
+        }
+
+        function updateProgressBar(progressData) {
+            const progressBar = document.getElementById('progressBar');
+            const progress = progressData.overall_progress;
+            progressBar.style.width = `${progress}%`;
+            progressBar.textContent = `${progress}%`;
+        }
+
+        function updateStatistics(progressData) {
+            const stats = progressData.statistics;
+            document.getElementById('totalTests').textContent = stats.total_tests;
+            document.getElementById('passingTests').textContent = stats.passing_tests;
+            document.getElementById('testCoverage').textContent = `${stats.test_coverage}%`;
+            document.getElementById('linesOfCode').textContent = stats.lines_of_code.toLocaleString();
+            document.getElementById('filesCreated').textContent = stats.files_created;
+        }
+
+        function updatePhases(progressData) {
+            const phasesGrid = document.getElementById('phasesGrid');
+            
+            if (!progressData.phase_details || progressData.phase_details.length === 0) {
+                phasesGrid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🎯</div>
+                        <div>No phases defined yet.</div>
+                    </div>
+                `;
+                return;
+            }
+
+            phasesGrid.innerHTML = progressData.phase_details.map(phase => {
+                const deliverables = phase.deliverables.map(d => 
+                    `<li>${d}</li>`
+                ).join('');
+                
+                return `
+                <div class="phase-card ${phase.status}">
+                    <div class="phase-header">
+                        <span class="phase-id">${phase.phase_id}</span>
+                        <span class="phase-status status-${phase.status}">
+                            ${phase.status.replace('_', ' ').toUpperCase()}
+                        </span>
+                    </div>
+                    <div class="phase-name">${phase.name}</div>
+                    <div class="phase-meta">
+                        <span><i class="fas fa-clock"></i> ${phase.duration_estimate}</span>
+                        <span class="priority-badge priority-${phase.priority}">${phase.priority}</span>
+                    </div>
+                    ${phase.dependencies && phase.dependencies.length > 0 ? `
+                        <div class="phase-meta">
+                            <span><i class="fas fa-link"></i> Depends on: ${phase.dependencies.join(', ')}</span>
+                        </div>
+                    ` : ''}
+                    ${phase.blocking && phase.blocking.length > 0 ? `
+                        <div class="phase-meta">
+                            <span><i class="fas fa-lock"></i> Blocks: ${phase.blocking.join(', ')}</span>
+                        </div>
+                    ` : ''}
+                    <div class="phase-progress">
+                        <div class="mini-progress-bar">
+                            <div class="mini-progress-fill" style="width: ${phase.progress}%"></div>
+                        </div>
+                        <div style="font-size: 0.85em; color: rgba(255, 255, 255, 0.7); margin-top: 5px;">
+                            ${phase.progress}% complete (${phase.tasks_complete}/${phase.tasks_total} tasks)
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px; font-size: 0.85em; color: rgba(255, 255, 255, 0.6);">
+                        <strong>Deliverables:</strong>
+                        <ul style="margin-left: 20px; margin-top: 5px;">
+                            ${deliverables}
+                        </ul>
+                    </div>
+                </div>
+            `}).join('');
+        }
+
+        function updateTasks(taskData) {
+            const taskList = document.getElementById('taskList');
+            
+            if (!taskData.tasks || taskData.tasks.length === 0) {
+                taskList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📋</div>
+                        <div>No tasks created yet. Tasks will appear when phases begin execution.</div>
+                    </div>
+                `;
+                return;
+            }
+
+            taskList.innerHTML = taskData.tasks.map(task => `
+                <div class="task-item">
+                    <input type="checkbox" class="task-checkbox" ${task.status === 'completed' ? 'checked' : ''} disabled>
+                    <div class="task-info">
+                        <div class="task-title">${task.title}</div>
+                        <div class="task-meta">
+                            <strong>${task.phase_id}</strong> | 
+                            Status: ${task.status.replace('_', ' ')} | 
+                            Progress: ${task.progress_percentage}%
+                            ${task.completed_date ? ` | Completed: ${new Date(task.completed_date).toLocaleDateString()}` : ''}
+                        </div>
+                    </div>
+                    <span class="priority-badge priority-${task.priority}">${task.priority}</span>
+                </div>
+            `).join('');
+        }
+
+        function updateDependencies(progressData) {
+            const dependencyContent = document.getElementById('dependencyContent');
+            
+            if (!progressData.phase_details) {
+                return;
+            }
+
+            const dependencies = progressData.phase_details
+                .filter(phase => phase.dependencies && phase.dependencies.length > 0)
+                .map(phase => `
+                    <div class="dependency-item">
+                        <strong>${phase.phase_id}</strong> depends on: 
+                        ${phase.dependencies.join(', ')}
+                    </div>
+                `).join('');
+
+            if (dependencies) {
+                dependencyContent.innerHTML = dependencies;
+            } else {
+                dependencyContent.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">✅</div>
+                        <div>No dependencies defined.</div>
+                    </div>
+                `;
+            }
+        }
+
+        function updateTimestamp() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            document.getElementById('lastUpdate').textContent = timeString;
+            lastUpdateTime = now;
+        }
+
+        function updateRefreshStatus(success, errorMessage = '') {
+            const statusDiv = document.getElementById('refreshStatus');
+            if (success) {
+                statusDiv.className = 'auto-refresh-status';
+                statusDiv.innerHTML = `✅ Auto-refresh: Active (every 30 seconds) | Last updated: <span id="lastUpdate">${new Date().toLocaleTimeString()}</span>`;
+            } else {
+                statusDiv.className = 'auto-refresh-status error';
+                statusDiv.innerHTML = `❌ Auto-refresh error: ${errorMessage} | Retrying...`;
+            }
+        }
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -296,11 +296,17 @@ class ResponseRenderer:
                 'config': {}
             })
         
-        # Mandatory: Next steps or completion
+        # Mandatory: Next steps or completion (with continuation prompt)
         if result.status == OrchestratorStatus.COMPLETED:
             blocks.append({
                 'name': 'completion',
                 'priority': 70,
+                'config': {}
+            })
+            # ALWAYS add next_steps block for continuation prompt (even on completion)
+            blocks.append({
+                'name': 'next_steps',
+                'priority': 69,  # Slightly lower than completion
                 'config': {}
             })
         else:
@@ -427,16 +433,136 @@ class ResponseRenderer:
         return completion_md
     
     def _render_next_steps(self, result: OrchestratorResult, context: Dict[str, Any]) -> str:
-        """Render next steps."""
+        """Render next steps with continuation prompt."""
         next_steps = context.get('next_steps', [])
-        if not next_steps:
-            return ""
+        continuation_prompt = self._generate_continuation_prompt(result, context)
         
-        next_steps_md = "\n\n**Next Steps:**\n\n"
-        for i, step in enumerate(next_steps, 1):
-            next_steps_md += f"{i}. {step}\n"
+        next_steps_md = ""
+        
+        # Add traditional next steps if provided
+        if next_steps:
+            next_steps_md += "\n\n**Next Steps:**\n\n"
+            for i, step in enumerate(next_steps, 1):
+                next_steps_md += f"{i}. {step}\n"
+        
+        # Always add continuation prompt (even if no next_steps provided)
+        next_steps_md += continuation_prompt
         
         return next_steps_md
+    
+    def _generate_continuation_prompt(self, result: OrchestratorResult, context: Dict[str, Any]) -> str:
+        """
+        Generate concise continuation prompt for cross-session resume.
+        
+        Provides user with exact command to resume work in a future session.
+        References plan files/tracking documents to keep prompt concise.
+        
+        Args:
+            result: Orchestrator result
+            context: Execution context with orchestrator metadata
+        
+        Returns:
+            Markdown continuation prompt
+        """
+        orchestrator_type = context.get('orchestrator_type', 'unknown')
+        orchestrator_name = context.get('orchestrator_name', 'Unknown')
+        
+        # Build continuation prompt based on orchestrator type
+        if orchestrator_type in ['planning_v5', 'planning_system']:
+            return self._continuation_prompt_planning(result, context)
+        elif orchestrator_type == 'ado_orchestrator_v2':
+            return self._continuation_prompt_ado(result, context)
+        elif orchestrator_type == 'tdd_orchestrator':
+            return self._continuation_prompt_tdd(result, context)
+        elif orchestrator_type in ['vacuum_orchestrator', 'cleanup_orchestrator']:
+            return self._continuation_prompt_cleanup(result, context)
+        elif orchestrator_type == 'investigation_orchestrator':
+            return self._continuation_prompt_investigation(result, context)
+        else:
+            return self._continuation_prompt_generic(result, context)
+    
+    def _continuation_prompt_planning(self, result: OrchestratorResult, context: Dict[str, Any]) -> str:
+        """Continuation prompt for Planning orchestrator."""
+        plan_id = context.get('plan_id') or result.data.get('plan_id')
+        current_phase = result.data.get('current_phase', 1)
+        
+        if not plan_id:
+            return "\n\n---\n\n📋 **Resume:** Reference plan files in `cortex-brain/documents/planning/active/`"
+        
+        tracking_file = f"cortex-brain/documents/planning/active/{plan_id}/tracking/progress-tracker.json"
+        continuation_file = f"cortex-brain/documents/planning/active/{plan_id}/CONTINUATION-PROMPT.md"
+        
+        return f"""
+
+---
+
+📋 **Resume Work:** `continue plan {plan_id} from phase {current_phase}` *(see `{continuation_file}`)*
+"""
+    
+    def _continuation_prompt_ado(self, result: OrchestratorResult, context: Dict[str, Any]) -> str:
+        """Continuation prompt for ADO orchestrator."""
+        feature_name = result.data.get('feature_name', context.get('feature_name'))
+        work_items_dir = result.data.get('work_items_dir')
+        
+        if not feature_name:
+            return "\n\n---\n\n📋 **Resume:** Reference ADO work items in `cortex-brain/documents/ado/`"
+        
+        return f"""
+
+---
+
+📋 **Resume Work:** `continue ado {feature_name}` *(see `{work_items_dir}/README.md`)*
+"""
+    
+    def _continuation_prompt_tdd(self, result: OrchestratorResult, context: Dict[str, Any]) -> str:
+        """Continuation prompt for TDD orchestrator."""
+        module_name = context.get('module_name') or result.data.get('module_name')
+        test_file = result.data.get('test_file')
+        
+        if not module_name:
+            return "\n\n---\n\n📋 **Resume:** `tdd continue` *(check test files in `tests/`)*"
+        
+        return f"""
+
+---
+
+📋 **Resume Work:** `tdd continue {module_name}` *(current test: `{test_file}`)*
+"""
+    
+    def _continuation_prompt_cleanup(self, result: OrchestratorResult, context: Dict[str, Any]) -> str:
+        """Continuation prompt for Vacuum/Cleanup orchestrators."""
+        operation_type = context.get('operation_type', 'cleanup')
+        report_file = result.data.get('report_file')
+        
+        return f"""
+
+---
+
+📋 **Resume Work:** `{operation_type} continue` *(see report: `{report_file}`)*
+"""
+    
+    def _continuation_prompt_investigation(self, result: OrchestratorResult, context: Dict[str, Any]) -> str:
+        """Continuation prompt for Investigation orchestrator."""
+        issue_name = result.data.get('issue_name') or context.get('issue_name')
+        report_dir = result.data.get('report_dir', 'cortex-brain/documents/investigations/')
+        
+        return f"""
+
+---
+
+📋 **Resume Work:** `investigate continue {issue_name}` *(see `{report_dir}00-investigation-report.md`)*
+"""
+    
+    def _continuation_prompt_generic(self, result: OrchestratorResult, context: Dict[str, Any]) -> str:
+        """Generic continuation prompt for other orchestrators."""
+        orchestrator_name = context.get('orchestrator_name', 'CORTEX')
+        
+        return f"""
+
+---
+
+📋 **Resume Work:** Reference tracking files in `cortex-brain/documents/` for continuation prompts
+"""
     
     def _compose_response(
         self,

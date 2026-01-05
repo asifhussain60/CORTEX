@@ -1,8 +1,8 @@
-schema_version: '4.0.3'
-last_updated: '2025-12-31'
+schema_version: '4.1.0'
+last_updated: '2026-01-05'
 architecture: adaptive_minimalism
 description: |
-  Response Template System v4.0 - 97% reduction (15,851 → 486 lines)
+  Response Template System v4.1 - Added Continuation Prompts
   
   Philosophy: Dynamic composition over static templates.
   No full templates - just routing rules + reusable components.
@@ -13,9 +13,69 @@ description: |
   - TIER 3 (STRUCTURED): 200-600 tokens, multi-faceted, 2-4 sections  
   - TIER 4 (COMPREHENSIVE): 600+ tokens, complex operations, 4-6 sections
   
+  NEW in v4.1 (2026-01-05):
+  - Continuation prompts added to ALL responses
+  - Enables seamless cross-session resume with concise reference to tracking files
+  - Format: "📋 Resume Work: `continue {operation} {context}` (see `{file}`)"
+  
   Custom Templates:
   - introduction: Comprehensive CORTEX overview for Engineers/Product Owners
   - business_value: ROI-focused presentation for Leadership
+
+# ============================================================================
+# CONTINUATION PROMPT CONFIGURATION
+# ============================================================================
+
+continuation_prompts:
+  enabled: true
+  description: |
+    Concise continuation prompts added to every response for cross-session resume.
+    Prompts reference plan files, tracking documents, and CONTINUATION-PROMPT.md
+    to keep the prompt concise while providing accurate context.
+  
+  format: "📋 **Resume Work:** `{command}` *(see `{reference_file}`)*"
+  
+  orchestrator_templates:
+    planning_v5:
+      command: "continue plan {plan_id} from phase {current_phase}"
+      reference_file: "cortex-brain/documents/planning/active/{plan_id}/CONTINUATION-PROMPT.md"
+      fallback: "cortex-brain/documents/planning/active/{plan_id}/tracking/progress-tracker.json"
+    
+    ado_orchestrator_v2:
+      command: "continue ado {feature_name}"
+      reference_file: "{work_items_dir}/README.md"
+      fallback: "cortex-brain/documents/ado/work-items/{feature_name}/"
+    
+    tdd_orchestrator:
+      command: "tdd continue {module_name}"
+      reference_file: "tests/{test_file}"
+      fallback: "tests/"
+    
+    vacuum_orchestrator:
+      command: "vacuum continue"
+      reference_file: "{report_file}"
+      fallback: "reports/vacuum-{timestamp}/"
+    
+    cleanup_orchestrator:
+      command: "cleanup continue"
+      reference_file: "{report_file}"
+      fallback: "reports/cleanup-{mode}-{timestamp}/"
+    
+    investigation_orchestrator:
+      command: "investigate continue {issue_name}"
+      reference_file: "{report_dir}00-investigation-report.md"
+      fallback: "cortex-brain/documents/investigations/{issue_name}/"
+    
+    generic:
+      command: "continue {operation}"
+      reference_file: "cortex-brain/documents/{category}/"
+      fallback: "Reference tracking files in cortex-brain/documents/"
+  
+  benefits:
+    - "Users can switch sessions without losing context"
+    - "Concise prompts avoid token bloat (reference files instead of duplicating content)"
+    - "Accurate resume commands generated from orchestrator state"
+    - "Tracking files provide full context when needed"
 
 # ============================================================================
 # TEMPLATES SECTION (Required by template_loader.py)
