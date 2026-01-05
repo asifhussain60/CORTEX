@@ -19,14 +19,31 @@ epic_metadata:
       - "Implement Master Orchestrator task tracking system"
       - "Create auto-refreshing HTML plan viewers"
       - "Establish terminal-based Python invocation as standard"
+      - "Fix 6 orchestrator instantiation failures (P0 blocker)"
+      - "Verify ResponseRenderer renders to user (continuation prompt issue)"
+      - "Verify SKULL middleware invokes during execution (setup/teardown hooks)"
   
-  # Success Criteria
+  # Success Criteria (Enhanced with Investigation Findings)
   success_criteria:
-    - "All orchestrators execute via python3 -m src.main invocation"
-    - "Master Orchestrator manages todo/task lists"
-    - "Zero markdown files used for workflow execution"
-    - "Plan viewers auto-refresh with progress updates"
-    - "All phases tracked in JSON with real-time updates"
+    functional:
+      - "All orchestrators execute via python3 -m src.main invocation"
+      - "All 6 broken orchestrators instantiate successfully (planning_v5, tdd, ado_v2, sanitization, cleanup_v2, vacuum_v2)"
+      - "Master Orchestrator manages todo/task lists via manage_todo_list integration"
+      - "ResponseRenderer confirmed rendering to user (continuation prompts display)"
+      - "SKULL middleware invoked on all executions (SetupVerifier, GovernanceCheckpoint, TeardownRefactor)"
+      - "Zero markdown files used for workflow execution"
+    
+    architectural:
+      - "Database schemas consolidated (zero schema mismatch errors)"
+      - "Knowledge graph queries work (tier2_patterns vs patterns resolved)"
+      - "User profile operations work (response_detail column exists)"
+      - "Duplicate databases eliminated (knowledge-graph.db vs knowledge_graph.db)"
+    
+    integration:
+      - "Plan viewers auto-refresh with progress updates"
+      - "All phases tracked in JSON with real-time updates"
+      - "manage_todo_list used consistently across all orchestrators"
+      - "Governance rules from brain-protection-rules.yaml enforced at runtime"
 
 # Python Orchestrator Architecture
 orchestrator_architecture:
@@ -92,25 +109,25 @@ phases:
     
     # Sub-phases for granular tracking
     sub_phases:
-      - "P00.1: Schema Audit & Analysis (COMPLETED)"
+      - "P00.1: Schema Audit & Analysis (✅ COMPLETED - 623-line report)"
       - "P00.2: Design Unified Schema Strategy (2h)"
-      - "P00.3: Implement Database Views (2h)"
-      - "P00.4: Fix user_profile Schema (1h)"
-      - "P00.5: Consolidate Duplicate Databases (3h)"
+      - "P00.3: Implement Database Views for Compatibility (2h)"
+      - "P00.4: Fix user_profile Schema (add response_detail column) (1h)"
+      - "P00.5: Consolidate Duplicate Databases (knowledge-graph.db → knowledge_graph.db) (3h)"
       - "P00.6: Implement Schema Migration System (3h)"
-      - "P00.7: Fix Code References (2h)"
-      - "P00.8: Testing & Validation (1h)"
+      - "P00.7: Fix Code References (update pattern_search.py, unified_context_manager.py) (2h)"
+      - "P00.8: Testing & Validation (zero schema errors) (1h)"
     
     deliverables:
       - "cortex-brain/documents/analysis/database-schema-audit-report-2026-01-05.md (✅ COMPLETED)"
-      - "src/database/migrations/001_add_compatibility_views.sql"
-      - "src/database/migrations/002_fix_user_profile_schema.sql"
-      - "src/database/migrations/003_consolidate_knowledge_graphs.sql"
-      - "src/database/migrations/000_migration_framework.py"
-      - "src/database/schema_validator.py"
-      - "cortex-brain/documents/database/SCHEMA-DOCUMENTATION.md"
-      - "cortex-brain/documents/database/MIGRATION-GUIDE.md"
-      - "cortex-brain/database/erd-diagram.png"
+      - "src/database/migrations/001_add_compatibility_views.sql (CREATE VIEW tier2_patterns AS SELECT ... FROM patterns)"
+      - "src/database/migrations/002_fix_user_profile_schema.sql (ALTER TABLE user_profile ADD COLUMN response_detail)"
+      - "src/database/migrations/003_consolidate_knowledge_graphs.sql (data migration + DROP old DB)"
+      - "src/database/migrations/000_migration_framework.py (version tracking + rollback)"
+      - "src/database/schema_validator.py (runtime schema verification)"
+      - "cortex-brain/documents/database/SCHEMA-DOCUMENTATION.md (ERD + table descriptions)"
+      - "cortex-brain/documents/database/MIGRATION-GUIDE.md (step-by-step migration instructions)"
+      - "cortex-brain/database/erd-diagram.png (visual schema relationships)"
     
     acceptance_criteria:
       functional:
@@ -189,22 +206,179 @@ phases:
         measurement: "pytest --cov src/database/"
     
     dependencies: []
-    blocks: ["P01", "P02", "P03", "P04", "P05", "P06", "P07", "P08", "P09", "P10", "P11", "P12", "P13", "P14"]
+    blocks: ["P00B", "P01", "P02", "P03", "P04", "P05", "P06", "P07", "P08", "P09", "P10", "P11", "P12", "P13", "P14"]
     
-  - phase_id: "P01"
-    name: "Master Orchestrator Task Management"
+  - phase_id: "P00B"
+    name: "Critical Orchestrator Instantiation Fixes"
     type: autonomous_python
-    script: "scripts/phase_01_master_orchestrator_tasks.py"
-    duration: "3 days"
+    script: "scripts/phase_00b_orchestrator_fixes.py"
+    duration: "1 day"
     priority: P0_CRITICAL
     status: planning
-    description: "Add todo/task list capability to Master Orchestrator"
+    description: "Fix 6 orchestrator instantiation failures blocking autonomous execution"
+    
+    issues_to_fix:
+      - orchestrator: "planning_v5"
+        error: "SyntaxError: f-string expression part cannot include a backslash"
+        file: "src/orchestrators/planning/planning_orchestrator_v5.py"
+        line: 718
+        fix: "Extract backslash logic outside f-string or use .format() method"
+      
+      - orchestrator: "tdd_orchestrator"
+        error: "__init__() got an unexpected keyword argument 'config_path'"
+        file: "src/orchestrators/tdd/tdd_orchestrator.py"
+        fix: "Remove config_path from __init__, use self.config_path = Path() directly"
+      
+      - orchestrator: "ado_orchestrator_v2"
+        error: "__init__() missing 1 required positional argument: 'state_db'"
+        file: "src/orchestrators/ado/ado_orchestrator_v2.py"
+        fix: "Add state_db parameter to __init__ or make optional with default"
+      
+      - orchestrator: "sanitization"
+        error: "__init__() got an unexpected keyword argument 'config_path'"
+        file: "src/orchestrators/sanitization/sanitization_orchestrator.py"
+        fix: "Remove config_path kwarg, use BaseOrchestrator pattern"
+      
+      - orchestrator: "cleanup_v2"
+        error: "__init__() missing 1 required positional argument: 'state_db'"
+        file: "src/orchestrators/cleanup/cleanup_orchestrator_v2.py"
+        fix: "Add state_db parameter or create default StateManager instance"
+      
+      - orchestrator: "vacuum_v2"
+        error: "StateManager has no attribute 'log_execution'"
+        file: "src/orchestrators/vacuum/vacuum_orchestrator_v2.py"
+        fix: "Implement StateManager.log_execution() or use state_db.log_execution()"
+    
     deliverables:
-      - "src/orchestrators/master/todo_manager.py"
-      - "tracking/task-registry.json schema"
-      - "Task CRUD operations"
-      - "Progress calculation"
+      - "Fixed: planning_v5 f-string syntax (src/orchestrators/planning/planning_orchestrator_v5.py)"
+      - "Fixed: tdd_orchestrator config_path kwargs (src/orchestrators/tdd/tdd_orchestrator.py)"
+      - "Fixed: ado_orchestrator_v2 state_db args (src/orchestrators/ado/ado_orchestrator_v2.py)"
+      - "Fixed: sanitization config_path kwargs (src/orchestrators/sanitization/sanitization_orchestrator.py)"
+      - "Fixed: cleanup_v2 state_db args (src/orchestrators/cleanup/cleanup_orchestrator_v2.py)"
+      - "Fixed: vacuum_v2 StateManager.log_execution (src/orchestrators/vacuum/vacuum_orchestrator_v2.py)"
+      - "tests/integration/test_orchestrator_instantiation.py (verify all 6 orchestrators instantiate)"
+    
+    acceptance_criteria:
+      functional:
+        - "✅ All 6 orchestrators instantiate without errors"
+        - "✅ Each orchestrator can be imported: from src.orchestrators.X import Y"
+        - "✅ Integration test passes: test_all_orchestrators_instantiate()"
+      
+      testing:
+        - "✅ Unit tests added for each fix (6 tests minimum)"
+        - "✅ Integration test covers all 6 orchestrators together"
+        - "✅ Test coverage >90% for modified files"
+    
+    metrics:
+      orchestrators_broken:
+        baseline: 6
+        target: 0
+        measurement: "pytest tests/integration/test_orchestrator_instantiation.py"
+      
+      instantiation_success_rate:
+        baseline: "50% (6/12 broken)"
+        target: "100% (12/12 working)"
+        measurement: "Orchestrator registry scan"
+    
     dependencies: ["P00"]
+    blocks: ["P01", "P02", "P03", "P04", "P05", "P06", "P07", "P08"]
+    
+  - phase_id: "P01"
+    name: "Master Orchestrator Integration & Verification"
+    type: autonomous_python
+    script: "scripts/phase_01_master_orchestrator_integration.py"
+    duration: "4 days"
+    priority: P0_CRITICAL
+    status: planning
+    description: "Integrate manage_todo_list, verify ResponseRenderer rendering, verify SKULL middleware invocation"
+    
+    sub_phases:
+      - "P01.1: Implement todo_manager.py with manage_todo_list integration (1 day)"
+      - "P01.2: Verify ResponseRenderer renders to user (continuation prompt fix) (1 day)"
+      - "P01.3: Verify SKULL middleware invocation (SetupVerifier, GovernanceCheckpoint, TeardownRefactor) (1 day)"
+      - "P01.4: Integration testing & validation (1 day)"
+    
+    deliverables:
+      # Task Management (P01.1)
+      - "src/orchestrators/master/todo_manager.py (manage_todo_list API integration)"
+      - "tracking/task-registry.json schema definition"
+      - "Task CRUD operations: create, update, complete, list, filter"
+      - "Priority-based task sorting and dependency tracking"
+      
+      # ResponseRenderer Verification (P01.2)
+      - "tests/integration/test_response_renderer_to_user.py (verify rendering reaches GitHub Copilot)"
+      - "Fixed: master_orchestrator.py handle_request() returns rendered markdown (not dict)"
+      - "Verified: continuation prompts display to user (fix from investigation report)"
+      - "cortex-brain/documents/investigations/response-renderer-verification-report.md"
+      
+      # SKULL Middleware Verification (P01.3)
+      - "tests/integration/test_skull_middleware_invocation.py (verify hooks called)"
+      - "Verified: SetupVerifier runs before orchestrator execution (Phase -2)"
+      - "Verified: GovernanceCheckpoint validates during execution (runtime)"
+      - "Verified: TeardownRefactor runs after execution (Phase N+1)"
+      - "Fixed: middleware hooks integrated into execution_engine.py if missing"
+      - "cortex-brain/documents/investigations/skull-middleware-verification-report.md"
+    
+    acceptance_criteria:
+      task_management:
+        - "✅ manage_todo_list integration complete (todo_manager.py exists)"
+        - "✅ Master Orchestrator can create/update/complete tasks"
+        - "✅ task-registry.json updates in real-time during execution"
+        - "✅ All orchestrators use consistent task tracking pattern"
+      
+      response_rendering:
+        - "✅ ResponseRenderer confirmed rendering to GitHub Copilot Chat"
+        - "✅ Continuation prompts display (no longer missing)"
+        - "✅ Token warnings display to user (from check_token_usage())"
+        - "✅ Success messages with metadata display properly"
+        - "✅ Integration test verifies end-to-end rendering pipeline"
+      
+      skull_middleware:
+        - "✅ SetupVerifier executes before every orchestrator (Phase -2 logged)"
+        - "✅ GovernanceCheckpoint validates during execution (checkpoints logged)"
+        - "✅ TeardownRefactor executes after every orchestrator (Phase N+1 logged)"
+        - "✅ brain-protection-rules.yaml rules enforced at runtime"
+        - "✅ tracking/governance-audit.jsonl shows middleware invocations"
+      
+      integration:
+        - "✅ All 3 subsystems work together (tasks + rendering + middleware)"
+        - "✅ Zero regression in existing orchestrator functionality"
+        - "✅ Test coverage >85% for new code"
+    
+    investigation_findings_addressed:
+      continuation_prompt_not_displaying:
+        root_cause: "Master Orchestrator missing ResponseRenderer integration"
+        status: "ADDRESSED in P01.2"
+        verification: "tests/integration/test_response_renderer_to_user.py"
+      
+      progress_bar_brittleness:
+        root_cause: "CORTEX master prompt lacks explicit post-orchestrator rendering instructions"
+        status: "ADDRESSED - ResponseRenderer verified + CORTEX.prompt.md already updated"
+        verification: "Manual testing with autonomous orchestrators"
+      
+      c150_plan_review:
+        root_cause: "SKULL middleware exists but invocation unclear"
+        status: "ADDRESSED in P01.3"
+        verification: "tests/integration/test_skull_middleware_invocation.py + governance audit logs"
+    
+    metrics:
+      task_tracking_adoption:
+        baseline: "0% (manual tracking only)"
+        target: "100% (all orchestrators use manage_todo_list)"
+        measurement: "Code review + integration tests"
+      
+      continuation_prompt_display_rate:
+        baseline: "0% (never displays)"
+        target: "100% (always displays when needed)"
+        measurement: "Integration test + manual validation"
+      
+      skull_middleware_invocation_rate:
+        baseline: "Unknown (middleware exists, invocation unverified)"
+        target: "100% (every orchestrator execution)"
+        measurement: "tracking/governance-audit.jsonl analysis"
+    
+    dependencies: ["P00", "P00B"]
+    blocks: ["P02", "P03", "P04", "P05", "P06", "P07", "P08"]
     
   - phase_id: "P02"
     name: "Planning Orchestrator v6 - Pure Python"
