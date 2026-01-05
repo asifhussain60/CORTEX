@@ -6,14 +6,14 @@ schema_version: "5.0"
 plan_id: "c150-remediation"
 plan_name: "C150 Remediation - Fix HTML Alignment Plan Gaps"
 created_date: "2026-01-04"
-updated_date: "2026-01-05T21:00:00Z"  # Holistic review complete, status updated to IN_PROGRESS
+updated_date: "2026-01-05T22:20:00Z"  # Phase 28 added: Audit logging system
 author: "CORTEX Planning System v5"
 priority: "P0_CRITICAL"
-estimated_total_hours: 181  # Updated: +12 hours for Phase 27 (Comprehensive Acceptance Criteria)
+estimated_total_hours: 185  # Updated: +4 hours for Phase 28 (Audit Logging)
 actual_start_date: "2026-01-05"
-actual_total_hours: 12.0  # Phases -2, 0, 1, 2, 3, 4 complete
-percent_complete: 21  # 6 of 28 phases complete
-status: "IN_PROGRESS"  # 6 phases complete, Phase 2 validated in terminal
+actual_total_hours: 12.33  # Phases -2, 0, 1, 2, 3, 4, 23 complete
+percent_complete: 21  # 7 of 29 phases complete (including Phase 28)
+status: "IN_PROGRESS"  # 7 phases complete, Phase 23 validated
 
 # Plan metadata
 metadata:
@@ -2596,6 +2596,145 @@ phases:
       - "reports/validation-category-*.json (6 files)"
       - "reports/failure-remediation-plan.md"
       - "tracking/acceptance-criteria-validation.db"
+  
+  - number: 28
+    name: "Implement CORTEX Audit Logging System"
+    description: "Create Python native logging for handoff tracking, execution flow monitoring, and performance metrics"
+    estimated_hours: 4.0
+    python_executor: "scripts/orchestration/create_audit_logger.py"
+    trigger: "Post-chat01.md analysis revealing need for accuracy/performance measurement"
+    requirements:
+      logging_targets:
+        - name: "Handoff Tracking"
+          events:
+            - "Copilot receives user request"
+            - "Meta-directives stripped"
+            - "Pattern matched (regex, confidence, priority)"
+            - "Request transformed (raw → optimized)"
+            - "Terminal command invoked"
+            - "Python execution started"
+            - "Orchestrator routed"
+            - "Orchestrator execution complete"
+            - "Results returned to user"
+          metrics:
+            - "Handoff latency (ms)"
+            - "Pattern matching accuracy (%)"
+            - "Transformation quality score"
+        
+        - name: "Execution Flow Monitoring"
+          events:
+            - "Phase start/end"
+            - "Validation pass/fail"
+            - "Error encountered"
+            - "Retry attempted"
+            - "Fallback triggered"
+          metrics:
+            - "Phase duration (seconds)"
+            - "Validation success rate (%)"
+            - "Error frequency"
+        
+        - name: "Performance Metrics"
+          measurements:
+            - "Request-to-response time"
+            - "Python import time"
+            - "Database query time"
+            - "File I/O time"
+            - "LLM API calls"
+          targets:
+            - "Total latency <5s (95th percentile)"
+            - "Import overhead <500ms"
+            - "DB queries <10ms"
+    
+    implementation:
+      logger_locations:
+        - path: "src/orchestrators/audit_logger.py"
+          purpose: "Core audit logging infrastructure"
+          features:
+            - "Structured JSON logging"
+            - "Performance decorators (@timed, @logged)"
+            - "Context managers (with audit_context())"
+            - "Rotation policy (10MB, 5 backups)"
+        
+        - path: "src/entry_point/cortex_entry_audit.py"
+          purpose: "Wrap CortexEntry with audit logging"
+          hooks:
+            - "pre_execution: Log request, pattern, transformation"
+            - "post_execution: Log result, duration, errors"
+        
+        - path: "src/orchestrators/base/base_orchestrator_audit_mixin.py"
+          purpose: "Audit mixin for all orchestrators"
+          methods:
+            - "log_phase_start(phase_number, phase_name)"
+            - "log_phase_end(phase_number, status, outputs)"
+            - "log_validation(rule, passed, error=None)"
+            - "log_performance(metric_name, value, unit)"
+      
+      log_format:
+        structure: "JSON Lines (.jsonl)"
+        schema:
+          timestamp: "ISO 8601 with microseconds"
+          event_type: "handoff | execution | validation | performance | error"
+          context:
+            request_id: "UUID v4"
+            plan_id: "string | null"
+            phase_number: "int | null"
+            orchestrator: "string"
+          data: "event-specific payload (JSON object)"
+        example: |
+          {"timestamp": "2026-01-05T22:15:34.123456Z", "event_type": "handoff", "context": {"request_id": "a1b2c3d4", "orchestrator": "planning_v5"}, "data": {"pattern_matched": "^(plan|create a plan)", "confidence": 1.0, "transformation": "plan OAuth2 system with JWT..."}}
+      
+      storage:
+        location: "logs/cortex-audit/"
+        files:
+          - "handoffs-{date}.jsonl (daily rotation)"
+          - "executions-{date}.jsonl (daily rotation)"
+          - "performance-{date}.jsonl (daily rotation)"
+          - "errors-{date}.jsonl (daily rotation)"
+        retention: "30 days (auto-purge)"
+      
+      analysis_tools:
+        - script: "scripts/analysis/audit_report.py"
+          purpose: "Generate daily/weekly/monthly audit reports"
+          outputs:
+            - "Average handoff latency"
+            - "Pattern matching accuracy"
+            - "Orchestrator success rate"
+            - "Performance trends"
+        
+        - script: "scripts/analysis/audit_query.py"
+          purpose: "Query audit logs by request_id, plan_id, date range"
+          usage: "python3 scripts/analysis/audit_query.py --request-id a1b2c3d4"
+    
+    validation:
+      unit_tests:
+        - "test_audit_logger.py: Test JSON logging, rotation, context managers"
+        - "test_audit_decorators.py: Test @timed, @logged decorators"
+        - "test_audit_integration.py: Test end-to-end handoff tracking"
+      
+      integration_tests:
+        - "Run Phase 23 with audit logging enabled"
+        - "Verify handoff logs captured (9 events expected)"
+        - "Verify performance logs show latency <5s"
+        - "Verify no sensitive data in logs (PII/secrets)"
+      
+      acceptance_criteria:
+        - "All handoff events logged (100% coverage)"
+        - "Performance metrics captured for all phases"
+        - "Logs are queryable by request_id"
+        - "Audit report generation works"
+        - "No performance overhead >5%"
+    
+    outputs:
+      - "src/orchestrators/audit_logger.py"
+      - "src/entry_point/cortex_entry_audit.py"
+      - "src/orchestrators/base/base_orchestrator_audit_mixin.py"
+      - "scripts/analysis/audit_report.py"
+      - "scripts/analysis/audit_query.py"
+      - "tests/test_audit_logger.py"
+      - "tests/test_audit_decorators.py"
+      - "tests/test_audit_integration.py"
+      - "docs/audit-logging-guide.md"
+      - "reports/phase-28-completion-report.md"
   
   - number: 999
     name: "Teardown + REFACTOR + Commit"

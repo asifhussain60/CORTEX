@@ -163,6 +163,41 @@ class CortexConfig:
             errors.append(f"Invalid logging level: {self.logging.level}. Must be one of {valid_levels}")
         
         return errors
+    
+    @property
+    def brain_path(self) -> Path:
+        """
+        Backward compatibility property for legacy code.
+        Returns: Path to cortex-brain directory
+        """
+        # Assume workspace structure: {repo}/cortex-brain
+        return Path.cwd() / "cortex-brain"
+    
+    def ensure_paths_exist(self) -> None:
+        """
+        Create essential CORTEX directories if they don't exist.
+        Backward compatibility method for legacy code.
+        
+        Creates:
+        - cortex-brain/tier1
+        - cortex-brain/tier2
+        - cortex-brain/tier3
+        - cortex-brain/tier0
+        - logs/
+        - cache/
+        """
+        dirs_to_create = [
+            self.brain_path / "tier0",
+            self.brain_path / "tier1",
+            self.brain_path / "tier2",
+            self.brain_path / "tier3",
+            self.brain_path / "corpus-callosum",
+            Path("logs"),
+            Path(".cortex/cache"),
+        ]
+        
+        for directory in dirs_to_create:
+            directory.mkdir(parents=True, exist_ok=True)
 
 
 class ConfigManager:

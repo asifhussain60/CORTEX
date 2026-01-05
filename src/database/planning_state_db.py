@@ -178,6 +178,47 @@ class PlanningStateDB:
         
         return cursor.rowcount > 0
     
+    def update_plan_status(self, plan_id: str, status: str) -> bool:
+        """
+        Update plan status to any valid status.
+        
+        Supports: 'not_started', 'in_progress', 'completed', 'failed', 'paused'
+        Used by planning_orchestrator_v5.py (lines 301, 343)
+        
+        Args:
+            plan_id: Plan identifier
+            status: New status
+        
+        Returns:
+            True if update successful, False otherwise
+        
+        Raises:
+            ValueError: If status is invalid
+        """
+        valid_statuses = ['not_started', 'in_progress', 'completed', 'failed', 'paused']
+        if status not in valid_statuses:
+            raise ValueError(f"Invalid status '{status}'. Must be one of: {valid_statuses}")
+        
+        # Update status and set completed_at if transitioning to completed/failed
+        if status in ('completed', 'failed'):
+            cursor = self._conn.execute("""
+                UPDATE plans
+                SET status = ?,
+                    completed_at = CURRENT_TIMESTAMP,
+                    actual_duration_seconds = (
+                        julianday(CURRENT_TIMESTAMP) - julianday(started_at)
+                    ) * 86400
+                WHERE plan_id = ?
+            """, (status, plan_id))
+        else:
+            cursor = self._conn.execute("""
+                UPDATE plans
+                SET status = ?
+                WHERE plan_id = ?
+            """, (status, plan_id))
+        
+        return cursor.rowcount > 0
+    
     def get_plan(self, plan_id: str) -> Optional[Dict[str, Any]]:
         """Get plan by ID."""
         cursor = self._conn.execute("""
@@ -228,6 +269,25 @@ class PlanningStateDB:
     # Phase Operations
     # ========================================
     
+    def get_phase(self, phase_id: str) -> Optional[Dict[str, Any]]:
+        """
+        Get phase by ID.
+        
+        Args:
+            phase_id: Phase identifier
+        
+        Returns:
+            Phase dictionary or None if not found
+        """
+        cursor = self._conn.execute("""
+            SELECT * FROM phases WHERE phase_id = ?
+        """, (phase_id,))
+        
+        row = cursor.fetchone()
+        if row:
+            return dict(row)
+        return None
+    
     def create_phase(
         self,
         plan_id: str,
@@ -254,15 +314,66 @@ class PlanningStateDB:
         
         return phase_id
     
-    def start_phase(self, phase_id: str) -> bool:
-        """Mark phase as started."""
-        cursor = self._conn.execute("""
-            UPDATE phases
-            SET status = 'in_progress', started_at = CURRENT_TIMESTAMP
-            WHERE phase_id = ? AND status = 'not_started'
-        """, (phase_id,))
+    def start_phase(
+        self, 
+        phase_id: Optional[str] = None,
+        plan_id: Optional[str] = None,
+        phase_number: Optional[int] = None,
+        config: Optional[Dict[str, Any]] = None
+    ) -> str:
+        """
+        Start a phase (mark as in_progress).
         
-        return cursor.rowcount > 0
+        Supports two usage patterns:
+        1. start_phase(phase_id="phase-123") - Update existing phase
+        2. start_phase(plan_id="plan-456", phase_number=1, config={...}) - Create + start
+        
+        Args:
+            phase_id: Existing phase ID (pattern 1)
+            plan_id: Plan ID for new phase (pattern 2)
+            phase_number: Phase number for new phase (pattern 2)
+            config: Phase configuration for new phase (pattern 2)
+        
+        Returns:
+            Phase ID
+        """
+        # Pattern 1: Update existing phase
+        if phase_id:
+            cursor = self._conn.execute("""
+                UPDATE phases
+                SET status = 'in_progress', started_at = CURRENT_TIMESTAMP
+                WHERE phase_id = ? AND status = 'not_started'
+            """, (phase_id,))
+            
+            if cursor.rowcount > 0:
+                return phase_id
+            else:
+                raise ValueError(f"Phase {phase_id} not found or already started")
+        
+        # Pattern 2: Create + start new phase
+        elif plan_id and phase_number is not None:
+            # Extract name from config or use default
+            name = config.get('name', f'Phase {phase_number}') if config else f'Phase {phase_number}'
+            
+            # Create phase
+            phase_id = self.create_phase(
+                plan_id=plan_id,
+                phase_number=phase_number,
+                name=name,
+                config=config
+            )
+            
+            # Immediately start it
+            self._conn.execute("""
+                UPDATE phases
+                SET status = 'in_progress', started_at = CURRENT_TIMESTAMP
+                WHERE phase_id = ?
+            """, (phase_id,))
+            
+            return phase_id
+        
+        else:
+            raise ValueError("Must provide either phase_id OR (plan_id + phase_number)")
     
     def complete_phase(self, phase_id: str, result: Optional[Dict[str, Any]] = None) -> bool:
         """Mark phase as completed."""
