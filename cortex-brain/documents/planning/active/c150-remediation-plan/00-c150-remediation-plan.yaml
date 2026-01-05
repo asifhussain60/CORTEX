@@ -6,11 +6,14 @@ schema_version: "5.0"
 plan_id: "c150-remediation"
 plan_name: "C150 Remediation - Fix HTML Alignment Plan Gaps"
 created_date: "2026-01-04"
-updated_date: "2026-01-05"
+updated_date: "2026-01-05T21:00:00Z"  # Holistic review complete, status updated to IN_PROGRESS
 author: "CORTEX Planning System v5"
 priority: "P0_CRITICAL"
-estimated_total_hours: 151  # Updated: +35 hours for new gaps
-status: "PENDING_VALIDATION"  # Changed from "complete" - critical gaps identified
+estimated_total_hours: 181  # Updated: +12 hours for Phase 27 (Comprehensive Acceptance Criteria)
+actual_start_date: "2026-01-05"
+actual_total_hours: 12.0  # Phases -2, 0, 1, 2, 3, 4 complete
+percent_complete: 21  # 6 of 28 phases complete
+status: "IN_PROGRESS"  # 6 phases complete, Phase 2 validated in terminal
 
 # Plan metadata
 metadata:
@@ -52,9 +55,15 @@ summary: |
   - ❌ CRITICAL: No deployment validation reports or monitoring (Phase 11 false claim) → Phase 21
   - ⚠️ HIGH: ADO v2 import path inconsistency (file in v2/ subdirectory) → Phase 20
   
+  ARCHITECTURAL GAPS (Phases 22-25) - DISCOVERED 2026-01-05:
+  - ❌ CRITICAL: CORTEX.prompt.md "hand-off" broken - Copilot doesn't invoke Python → Phase 22
+  - ❌ CRITICAL: Python CLI import errors prevent execution (src.config) → Phase 23
+  - ⚠️ HIGH: PlanningStateDB method signature mismatches → Phase 24
+  - 🎯 POC: Prove Python execution works end-to-end → Phase 25
+  
   Current Status: PENDING_VALIDATION (changed from "complete")
   Brittleness Score: 40.25/100 (HIGH RISK) | Target: ≥85/100
-  This plan implements fixes in 21 phases + REFACTOR (Phase 999) with Python execution orchestration.
+  This plan implements fixes in 25 phases + REFACTOR (Phase 999) with Python execution orchestration.
 
 # Gap analysis from C150 review
 gaps_identified:
@@ -122,8 +131,60 @@ gaps_identified:
     
     - id: "GAP-ARCH-1"
       title: "CORTEX.prompt.md Misrepresents Hand-Off Architecture"
+      severity: "CRITICAL"
+      description: "CORTEX.prompt.md v5.1.0 tells Copilot to 'hand off' and stop, but provides NO MECHANISM to invoke Python. Text messages don't execute code."
+      impact: "Orchestrators never execute. Users see 'hand-off complete' but nothing happens. Architecture fundamentally broken."
+      root_cause: "GitHub Copilot cannot invoke Python directly. Must use run_in_terminal tool to execute python3 -m src.main"
+      discovered: "2026-01-05 (chat03.md analysis)"
+      remediation_phases: [22]
+    
+    - id: "GAP-ARCH-2"
+      title: "Python CLI Import Errors Prevent Execution"
+      severity: "CRITICAL"
+      description: "python3 -m src.main fails with ImportError: cannot import name 'config' from 'src.config'"
+      impact: "Even with terminal invocation fix, Python CLI cannot run"
+      root_cause: "Broken import chain in src/entry_point/cortex_entry.py → src/config"
+      discovered: "2026-01-05 (terminal test)"
+      remediation_phases: [23]
+    
+    - id: "GAP-ARCH-3"
+      title: "Planning Orchestrator v5 Execution Bugs"
       severity: "HIGH"
-      description: "Prompt file claims Python orchestrators execute autonomously, but CORTEX is actually an AI assistant where GitHub Copilot executes workflows using manifest instructions"
+      description: "PlanningStateDB.start_phase() TypeError: unexpected keyword argument 'plan_id'"
+      impact: "Planning orchestrator cannot execute even when properly invoked"
+      root_cause: "Method signature mismatch between BaseOrchestratorV4_1 and PlanningStateDB"
+      discovered: "2026-01-05 (direct execution test)"
+      remediation_phases: [24]
+    
+    - id: "GAP-ARCH-4"
+      title: "Prompt File Logic Duplication & Drift"
+      severity: "MEDIUM"
+      description: "400+ lines of transformation logic in prompt files causing maintenance burden"
+      discovered: "2026-01-05 (architecture optimization analysis)"
+      impact: "Changes require editing 2+ files, no tests, manual validation, prompt file drift"
+      remediation_phases: [26]
+      problem_areas:
+        - ".github/prompts/CORTEX.prompt.md (250 lines): Intent matching, routing, transformation details"
+        - ".github/copilot-instructions.md (150 lines): Orchestrator tables, transformation logic, verbose docs"
+      duplication_examples:
+        - "Intent matching logic (both files)"
+        - "Orchestrator routing rules (both files)"
+        - "Request transformation examples (both files)"
+        - "Meta-directive parsing (both files)"
+      maintenance_issues:
+        - "Changes require editing 2+ files (CORTEX.prompt.md + copilot-instructions.md)"
+        - "No unit tests for transformation logic"
+        - "Manual validation only (no automated tests)"
+        - "Prompt file drift over time (inconsistent patterns)"
+        - "Cannot test transformation logic in isolation"
+      proposed_solution:
+        - "Move transformation logic to src/orchestrators/request_transformer.py (200 lines Python)"
+        - "Add transformation rules to cortex-brain/config/master-orchestrator.yaml (+132 lines)"
+        - "Reduce CORTEX.prompt.md to 50 lines (-80% size reduction)"
+        - "Reduce copilot-instructions.md to 50 lines (-67% size reduction)"
+        - "Single source of truth: Python + YAML (testable, maintainable)"
+    
+    - id: "GAP-MISREPRESENTATION"
       impact: "User confusion, false expectations, contradicts actual implementation"
       remediation_phases: [15]
       discovered_in: "chat02.md (January 4, 2026)"
@@ -1026,6 +1087,25 @@ phases:
       expected_output:
         - "cortex-brain/documents/planning/active/c150-remediation-plan/plan-viewer.html"
         - "cortex-brain/documents/planning/active/c150-remediation-plan/launch_plan_viewer.py"
+      
+      holistic_review_note: |
+        ⚠️ ATTEMPTED: 2026-01-05 holistic review tried to regenerate plan viewers but encountered import issues:
+        - DualModePlanningOrchestrator requires epic/feature mode detection
+        - HTMLViewerGenerator has import conflicts (ViewerStyle vs ViewerMode)
+        - examples.py has missing PhaseProgress import
+        
+        ROOT CAUSE: Plan viewer generation is tightly coupled to planner mode detection,
+        which expects specific folder structures (context/, artifacts/, tracking/ with
+        progress-tracker.json for FEATURE mode).
+        
+        RESOLUTION: Phase 16 must implement viewer generation that works with YAML plans
+        directly, not through mode detection. Alternative: Create standalone viewer
+        generator that reads YAML + progress-tracker.json without orchestrator dependencies.
+        
+        STATUS: Plan viewers NOT regenerated. Holistic review documented in:
+        - reports/holistic-review-2026-01-05.md (comprehensive analysis)
+        - Updated plan status to IN_PROGRESS (21% complete, 6/28 phases)
+        - Updated progress tracker metadata (181h total, 12h actual)
     
     outputs:
       - "artifacts/planning_v5_viewer_integration.patch"
@@ -1786,6 +1866,737 @@ phases:
       - "reports/production-monitoring-24hr.json"
       - "reports/production-validation.md"
   
+  - number: 22
+    name: "Fix CORTEX.prompt.md Execution Bridge (GAP-ARCH-1)"
+    description: "Update prompt to invoke Python via run_in_terminal instead of text 'hand-off'"
+    estimated_hours: 1.0
+    python_executor: "scripts/orchestration/fix_cortex_prompt_execution.py"
+    trigger: "GAP-ARCH-1: Copilot displays 'hand-off' but never invokes Python"
+    discovered: "2026-01-05 (chat03.md)"
+    severity: "CRITICAL"
+    
+    problem_analysis:
+      current_behavior: "CORTEX.prompt.md v5.1.0 says 'YOU MUST STOP immediately' after routing"
+      why_it_fails: "GitHub Copilot cannot invoke Python directly - only generates text"
+      correct_behavior: "Copilot must use run_in_terminal to execute: python3 -m src.main '{request}'"
+    
+    changes_required:
+      file: ".github/prompts/CORTEX.prompt.md"
+      version_bump: "5.1.0 → 5.2.0"
+      modifications:
+        - section: "[STEP 4] Execution Protocol"
+          old: "Display 3-line hand-off message + STOP immediately"
+          new: "Invoke Python via terminal: python3 -m src.main '{transformed_request}' --format markdown"
+        
+        - section: "Transformation Examples"
+          add: "Terminal command examples with run_in_terminal tool"
+        
+        - section: "Common Mistakes"
+          add: "❌ Displaying 'hand-off' without executing Python"
+    
+    validation:
+      - "CORTEX.prompt.md updated to v5.2.0"
+      - "All examples show terminal invocation"
+      - "NO references to 'hand-off and stop'"
+      - "Architecture correctly describes: Copilot → Terminal → Python → Results"
+    
+    outputs:
+      - "artifacts/cortex-prompt-v5.2.0.patch"
+      - "analysis/execution-bridge-fix.md"
+  
+  - number: 23
+    name: "Fix Python CLI Import Chain (GAP-ARCH-2)"
+    description: "Repair src/main.py → src/config import error"
+    estimated_hours: 2.0
+    python_executor: "scripts/orchestration/fix_python_cli_imports.py"
+    trigger: "GAP-ARCH-2: python3 -m src.main fails with ImportError"
+    discovered: "2026-01-05 (terminal test)"
+    severity: "CRITICAL"
+    
+    problem_analysis:
+      error: "ImportError: cannot import name 'config' from 'src.config'"
+      file: "src/entry_point/cortex_entry.py"
+      line: 29
+      root_cause: "src/config/__init__.py doesn't expose 'config' object"
+    
+    investigation_steps:
+      - "Check src/config/__init__.py exports"
+      - "Check src/config/*.py for config object"
+      - "Trace import chain: src/main.py → fast_commands.py → cortex_entry.py → config"
+    
+    fix_strategy:
+      option_1:
+        description: "Add config object to src/config/__init__.py"
+        risk: "May conflict with existing exports"
+      
+      option_2:
+        description: "Update cortex_entry.py to import from correct module"
+        risk: "Low - just fixes import path"
+      
+      recommended: "option_2"
+    
+    validation:
+      - "python3 -m src.main 'help' succeeds"
+      - "No ImportError raised"
+      - "CLI returns help text"
+    
+    outputs:
+      - "artifacts/cli_import_fix.patch"
+      - "reports/cli-import-validation.md"
+  
+  - number: 24
+    name: "Fix PlanningStateDB Method Signatures (GAP-ARCH-3)"
+    description: "Align start_phase() signature with BaseOrchestratorV4_1 calls"
+    estimated_hours: 3.0
+    python_executor: "scripts/orchestration/fix_planning_state_db.py"
+    trigger: "GAP-ARCH-3: Planning v5 execution fails with TypeError"
+    discovered: "2026-01-05 (direct execution test)"
+    severity: "HIGH"
+    
+    problem_analysis:
+      error: "TypeError: start_phase() got an unexpected keyword argument 'plan_id'"
+      file: "src/database/planning_state_db.py"
+      caller: "src/orchestrators/base/base_orchestrator_v4_1.py:277"
+      root_cause: "Method signature mismatch"
+    
+    affected_methods:
+      - method: "start_phase()"
+        current_signature: "start_phase(phase_number, phase_name, ...)"
+        called_with: "start_phase(plan_id=..., phase_number=..., ...)"
+        fix: "Add plan_id parameter"
+      
+      - method: "update_plan_status()"
+        issue: "Method doesn't exist"
+        called_in: "planning_orchestrator_v5.py:343"
+        fix: "Implement method"
+    
+    validation:
+      - "python3 -c 'from src.orchestrators.planning... executes successfully"
+      - "No TypeError raised"
+      - "Planning v5 can execute end-to-end"
+    
+    outputs:
+      - "artifacts/planning_state_db_fix.patch"
+      - "reports/planning-v5-execution-validation.md"
+  
+  - number: 25
+    name: "Create POC: Python-Only Plan Execution"
+    description: "Build minimal POC plan that executes purely via Python to prove architecture"
+    estimated_hours: 4.0
+    python_executor: "scripts/orchestration/create_poc_plan.py"
+    trigger: "Prove Python execution works end-to-end"
+    discovered: "2026-01-05 (architecture analysis)"
+    severity: "HIGH"
+    
+    poc_requirements:
+      plan_name: "poc-python-execution"
+      phases: 3
+      phase_structure:
+        - number: 1
+          name: "Hello World"
+          description: "Print hello world message"
+          python_executor: "scripts/poc/phase_1_hello.py"
+        
+        - number: 2
+          name: "File Creation"
+          description: "Create test file with timestamp"
+          python_executor: "scripts/poc/phase_2_create_file.py"
+        
+        - number: 3
+          name: "Validation"
+          description: "Validate file exists and contains timestamp"
+          python_executor: "scripts/poc/phase_3_validate.py"
+    
+    execution_flow:
+      step_1: "User: 'execute poc-python-execution plan'"
+      step_2: "GitHub Copilot: Transform → python3 -m src.main 'execute poc...'"
+      step_3: "Python CLI: Parse request → Load POC plan YAML"
+      step_4: "Master Orchestrator: Route to PlanningExecutor"
+      step_5: "PlanningExecutor: Execute phase 1 → scripts/poc/phase_1_hello.py"
+      step_6: "Phase 1 script: Print hello → Update progress tracker → Complete"
+      step_7: "Repeat for phases 2-3"
+      step_8: "Return: Complete execution report"
+    
+    success_criteria:
+      - "POC plan YAML created"
+      - "3 Python executor scripts created"
+      - "Execution via python3 -m src.main succeeds"
+      - "All 3 phases complete successfully"
+      - "Progress tracker updates correctly"
+      - "Output files created in expected locations"
+    
+    validation:
+      - "python3 -m src.main 'execute poc-python-execution' completes without errors"
+      - "cortex-brain/documents/planning/active/poc-python-execution/ exists"
+      - "tracking/progress-tracker.json shows 3/3 phases complete"
+      - "artifacts/poc_test_file.txt exists with timestamp"
+    
+    outputs:
+      - "cortex-brain/documents/planning/active/poc-python-execution/00-poc-python-execution.yaml"
+      - "scripts/poc/phase_1_hello.py"
+      - "scripts/poc/phase_2_create_file.py"
+      - "scripts/poc/phase_3_validate.py"
+      - "reports/poc-execution-validation.md"
+  
+  - number: 26
+    name: "Implement Lean Prompt Architecture v5.3.0"
+    description: "Move transformation logic from prompt files to Master Orchestrator Python code"
+    estimated_hours: 8.0
+    python_executor: "scripts/orchestration/implement_lean_prompt_v5_3.py"
+    trigger: "User: 'Push as much logic as possible to master orchestrator keeping cortex prompt lean so changes don't affect orchestrator'"
+    discovered: "2026-01-05 (architecture optimization)"
+    severity: "MEDIUM"
+    proposal_document: "cortex-brain/documents/architecture/lean-prompt-proposal-v5.3.0.md"
+    
+    problem_analysis:
+      issue: "Prompt files contain 400+ lines of transformation logic causing drift and duplication"
+      files_affected:
+        - ".github/prompts/CORTEX.prompt.md (250 lines)"
+        - ".github/copilot-instructions.md (150 lines)"
+      duplication_examples:
+        - "Intent matching logic (both files)"
+        - "Orchestrator routing rules (both files)"
+        - "Request transformation (both files)"
+      maintenance_burden: "Changes require editing 2+ files, no tests, manual validation"
+    
+    proposed_architecture:
+      principle: "Prompt files as LEAN routers, Python as source of truth"
+      size_reduction:
+        - "CORTEX.prompt.md: 250→50 lines (-80%)"
+        - "copilot-instructions.md: 150→50 lines (-67%)"
+        - "master-orchestrator.yaml: 418→550 lines (+132 lines for transformation rules)"
+        - "NEW: src/orchestrators/request_transformer.py (200 lines)"
+      
+      benefits:
+        - "Single source of truth (Python + YAML)"
+        - "Testable transformation logic"
+        - "No prompt file drift"
+        - "Easier to maintain and debug"
+    
+    implementation_phases:
+      phase_1:
+        name: "Create RequestTransformer Module"
+        duration: "3.0 hours"
+        tasks:
+          - "Create src/orchestrators/request_transformer.py"
+          - "Implement MetaDirectiveParser class"
+          - "Implement PatternMatcher class"
+          - "Implement TransformationEngine class"
+          - "Add unit tests (tests/orchestrators/test_request_transformer.py)"
+        outputs:
+          - "src/orchestrators/request_transformer.py (200 lines)"
+          - "tests/orchestrators/test_request_transformer.py (150 lines)"
+      
+      phase_2:
+        name: "Enhance Master Orchestrator YAML"
+        duration: "2.0 hours"
+        tasks:
+          - "Add transformation_rules section to master-orchestrator.yaml"
+          - "Define meta_directive_patterns (8 directives)"
+          - "Define transformation_templates (12 templates)"
+          - "Add routing_enhancements section"
+        outputs:
+          - "cortex-brain/config/master-orchestrator.yaml (+132 lines)"
+      
+      phase_3:
+        name: "Reduce CORTEX.prompt.md"
+        duration: "1.5 hours"
+        tasks:
+          - "Keep only: Purpose (3 lines), Core Protocol (7 lines), Intent Router (20 lines), Examples (15 lines), Footer (5 lines)"
+          - "Remove: Transformation details, verbose examples, duplication"
+          - "Add reference to Master Orchestrator for logic"
+        outputs:
+          - ".github/prompts/CORTEX.prompt.md.v5.2.0.backup (250 lines backup)"
+          - ".github/prompts/CORTEX.prompt.md (50 lines)"
+      
+      phase_4:
+        name: "Reduce copilot-instructions.md"
+        duration: "1.5 hours"
+        tasks:
+          - "Keep only: Entry Point (5 lines), Intent Routing Defer (10 lines), Response Format (10 lines), Brain Protection (10 lines), Quick Start (10 lines), Footer (5 lines)"
+          - "Remove: Orchestrator tables, transformation logic, verbose documentation"
+          - "Defer to orchestrators-quick-ref.md and cortex-architecture-quick-ref.md"
+        outputs:
+          - ".github/copilot-instructions.md.v5.0.0.backup (150 lines backup)"
+          - ".github/copilot-instructions.md (50 lines)"
+    
+    new_file_structure:
+      request_transformer_py:
+        location: "src/orchestrators/request_transformer.py"
+        classes:
+          - "MetaDirectiveParser: Extract [no verbose], [concise], [explain] from requests"
+          - "PatternMatcher: Match user intent against routing patterns"
+          - "TransformationEngine: Transform request → Python CLI command"
+        methods:
+          - "parse_request(raw_request: str) → ParsedRequest"
+          - "extract_meta_directives(text: str) → List[MetaDirective]"
+          - "match_pattern(clean_request: str) → MatchResult"
+          - "transform_to_cli(request: ParsedRequest, match: MatchResult) → CLICommand"
+      
+      master_orchestrator_yaml_additions:
+        transformation_rules:
+          meta_directives:
+            - "[no verbose]→mode=concise"
+            - "[concise]→mode=concise"
+            - "[explain]→mode=verbose"
+            - "[detailed]→mode=verbose"
+            - "[plan mode]→force_planning=true"
+            - "[dry run]→dry_run=true"
+            - "[wizard]→wizard_mode=true"
+            - "[auto]→wizard_mode=false"
+          
+          transformation_templates:
+            planning: "python3 -m src.main 'execute plan {plan_name}'"
+            ado: "python3 -m src.main 'generate ado {feature_name} --mode {mode}'"
+            vacuum: "python3 -m src.main 'vacuum {path} --mode {mode} --dry-run {dry_run}'"
+            cleanup: "python3 -m src.main 'cleanup --mode {mode} --dry-run {dry_run}'"
+            investigation: "python3 -m src.main 'investigate {symptom} --scope {scope}'"
+    
+    cortex_prompt_v5_3_structure:
+      line_count: 50
+      sections:
+        - "Purpose (3 lines): AI with memory + orchestrators"
+        - "Core Protocol (7 lines): Parse → Transform → Invoke Python"
+        - "Intent Router (20 lines): Table of patterns → orchestrators"
+        - "Examples (15 lines): 3 example transformations"
+        - "Footer (5 lines): Version + author"
+      
+      removed_sections:
+        - "❌ Transformation Details (50 lines) → Moved to RequestTransformer"
+        - "❌ Verbose Examples (30 lines) → Moved to cortex-protocol-examples.md"
+        - "❌ Orchestrator Descriptions (40 lines) → Defer to orchestrators-quick-ref.md"
+        - "❌ Architecture Diagrams (30 lines) → Defer to cortex-architecture-quick-ref.md"
+        - "❌ Response Format Details (20 lines) → Defer to response-templates-v4.yaml"
+    
+    copilot_instructions_v5_3_structure:
+      line_count: 50
+      sections:
+        - "Entry Point (5 lines): Load CORTEX.prompt.md"
+        - "Intent Routing (10 lines): Defer to Master Orchestrator"
+        - "Response Format (10 lines): Use response-templates-v4.yaml"
+        - "Brain Protection (10 lines): Reference brain-protection-rules.yaml"
+        - "Quick Start (10 lines): Say 'help' to see all operations"
+        - "Footer (5 lines): Version + maintenance note"
+      
+      removed_sections:
+        - "❌ Orchestrator Table (80 lines) → Defer to orchestrators-quick-ref.md"
+        - "❌ Architecture Overview (30 lines) → Defer to cortex-architecture-quick-ref.md"
+    
+    validation:
+      unit_tests:
+        - "test_request_transformer.py: 20+ test cases for parsing/transformation"
+        - "test_master_orchestrator_yaml.py: Validate YAML schema"
+      
+      integration_tests:
+        - "python3 -m src.main 'plan user-auth' → Correct CLI command generated"
+        - "python3 -m src.main 'ado story login' → Correct ADO command"
+        - "Meta-directives: 'plan [concise] dashboard' → mode=concise passed"
+      
+      acceptance_criteria:
+        - "CORTEX.prompt.md ≤50 lines"
+        - "copilot-instructions.md ≤50 lines"
+        - "All 12+ orchestrator routing patterns work"
+        - "Meta-directive extraction 100% accurate"
+        - "Transformation logic has 95%+ test coverage"
+    
+    migration_path:
+      backup_strategy:
+        - "Create .v5.2.0.backup files before modifying"
+        - "Store in backups/prompt-migration-v5.3.0/"
+        - "Keep backups for 30 days"
+      
+      rollback_plan:
+        - "If issues detected, restore from .backup files"
+        - "Master Orchestrator can fall back to regex patterns"
+        - "No data loss risk (only routing logic changes)"
+    
+    outputs:
+      - "src/orchestrators/request_transformer.py (200 lines)"
+      - "tests/orchestrators/test_request_transformer.py (150 lines)"
+      - "cortex-brain/config/master-orchestrator.yaml (+132 lines)"
+      - ".github/prompts/CORTEX.prompt.md (50 lines, -200 lines)"
+      - ".github/copilot-instructions.md (50 lines, -100 lines)"
+      - "backups/prompt-migration-v5.3.0/ (backup directory)"
+      - "reports/lean-prompt-migration-report.md"
+  
+  - number: 27
+    name: "Comprehensive Acceptance Criteria Validation & Remediation"
+    description: "Final validation phase with comprehensive acceptance criteria across all 26 phases + immediate remediation plan for failures"
+    estimated_hours: 12.0
+    python_executor: "scripts/orchestration/comprehensive_acceptance_validator.py"
+    trigger: "Final validation before plan completion"
+    discovered: "2026-01-05 (phase prioritization analysis)"
+    severity: "CRITICAL"
+    
+    purpose: |
+      This phase serves as the FINAL GATE before marking C150 plan complete.
+      It validates ALL 26 phases against comprehensive acceptance criteria,
+      generates detailed validation reports, and provides IMMEDIATE remediation
+      plans for any failures detected.
+    
+    validation_categories:
+      1_code_quality:
+        name: "Code Quality & Instantiation"
+        priority: "P0_CRITICAL"
+        acceptance_criteria:
+          - criterion: "AC-CQ-1: All 6 orchestrators instantiate successfully"
+            validation_method: "Python import test for each orchestrator"
+            pass_threshold: "100% (6/6 orchestrators)"
+            failure_remediation:
+              - "Identify orchestrator with instantiation failure"
+              - "Check constructor signature matches BaseOrchestratorV4_1"
+              - "Verify all required dependencies exist"
+              - "Fix import errors (GAP-ARCH-2 resolution)"
+              - "Re-run instantiation test"
+            test_script: "tests/orchestrators/test_all_orchestrators_instantiate.py"
+          
+          - criterion: "AC-CQ-2: Zero SyntaxError in orchestrator files"
+            validation_method: "Python AST parsing + mypy type checking"
+            pass_threshold: "0 syntax errors across all Python files"
+            failure_remediation:
+              - "Run mypy on failed file: mypy {file_path}"
+              - "Fix f-string backslash issues (Phase 2 pattern)"
+              - "Fix type hint errors (Python 3.9+ compatibility)"
+              - "Re-run AST parser validation"
+          
+          - criterion: "AC-CQ-3: All unit tests pass (67 vacuum + 15 cleanup + others)"
+            validation_method: "pytest execution with coverage report"
+            pass_threshold: "100% pass rate, 0 skipped tests"
+            failure_remediation:
+              - "Identify failing test: pytest -v {test_file}"
+              - "Check for Python 3.9/3.10 compatibility issues (Phase 4)"
+              - "Fix mock setup errors (StateManager interface)"
+              - "Ensure test fixtures are correctly configured"
+              - "Re-run test suite"
+          
+          - criterion: "AC-CQ-4: StateManager interface standardized"
+            validation_method: "Interface signature validation across all orchestrators"
+            pass_threshold: "All orchestrators use same StateManager constructor signature"
+            failure_remediation:
+              - "Audit all orchestrator constructors"
+              - "Standardize to: StateManager(db_path: str, config: Dict)"
+              - "Implement missing methods: log_execution(), update_phase_status()"
+              - "Update unit tests to match new interface"
+      
+      2_governance_compliance:
+        name: "SKULL Governance & Middleware"
+        priority: "P0_CRITICAL"
+        acceptance_criteria:
+          - criterion: "AC-GC-1: All 3 governance middleware files exist and functional"
+            validation_method: "File existence + import test + method signature check"
+            pass_threshold: "3/3 files (governance_checkpoint.py, setup_verification.py, teardown_refactor.py)"
+            failure_remediation:
+              - "Create missing middleware file from Phase 5 template"
+              - "Implement required methods per SKULL rules"
+              - "Add GovernanceDB integration"
+              - "Write unit tests for middleware"
+          
+          - criterion: "AC-GC-2: GovernanceDB query performance <10ms"
+            validation_method: "Performance profiling of governance.db queries"
+            pass_threshold: "95th percentile query time <10ms"
+            failure_remediation:
+              - "Add database indexes on frequently queried columns"
+              - "Optimize SQL queries (use prepared statements)"
+              - "Cache frequently accessed rules in memory"
+              - "Consider read-only connection pooling"
+          
+          - criterion: "AC-GC-3: Zero dual-source brittleness (YAML+DB conflicts)"
+            validation_method: "Scan codebase for YAML file access in governance paths"
+            pass_threshold: "0 YAML file reads in governance code paths"
+            failure_remediation:
+              - "Identify code still accessing YAML files"
+              - "Migrate data to governance.db"
+              - "Update code to query database instead"
+              - "Archive YAML files with deprecation warnings"
+          
+          - criterion: "AC-GC-4: TDD_ENFORCEMENT rule validated"
+            validation_method: "Test governance_checkpoint.validate_tdd_enforcement()"
+            pass_threshold: "Rule correctly rejects implementation before tests"
+            failure_remediation:
+              - "Fix validate_tdd_enforcement() logic"
+              - "Ensure tests must fail before implementation"
+              - "Add integration test for RED→GREEN→REFACTOR cycle"
+      
+      3_documentation_completeness:
+        name: "CORTEX-5.0 Documentation"
+        priority: "P1_HIGH"
+        acceptance_criteria:
+          - criterion: "AC-DC-1: Refinement orchestrator docs complete (400+ lines)"
+            validation_method: "Line count + section completeness check"
+            pass_threshold: "≥400 lines with all 7 required sections"
+            failure_remediation:
+              - "Run Phase 7 documentation generator"
+              - "Fill missing sections: Overview, Usage, Examples, API, Troubleshooting"
+              - "Add code examples for each refactoring pattern"
+              - "Generate diagrams: Mermaid flowcharts + D3.js visualizations"
+          
+          - criterion: "AC-DC-2: Debug orchestrator docs complete (400+ lines)"
+            validation_method: "Line count + section completeness check"
+            pass_threshold: "≥400 lines with all 7 required sections"
+            failure_remediation:
+              - "Run Phase 8 documentation generator"
+              - "Document debugging strategies + patterns"
+              - "Add troubleshooting guides for common errors"
+              - "Create debug workflow diagrams"
+          
+          - criterion: "AC-DC-3: All 5 missing features documented"
+            validation_method: "Check docs/features/ for 5 required documents"
+            pass_threshold: "5/5 feature docs exist (Phase -1, AST, Context, Visual Progress, REFACTOR)"
+            failure_remediation:
+              - "Run Phase 9 feature documentation generator"
+              - "Create missing feature docs from templates"
+              - "Add architecture diagrams for each feature"
+              - "Include integration examples"
+          
+          - criterion: "AC-DC-4: All 4 diagrams generated"
+            validation_method: "Check docs/diagrams/ for D3.js + Mermaid files"
+            pass_threshold: "4/4 diagrams (Phase -1 flow, AST flowchart, Context sequence, Migration matrix)"
+            failure_remediation:
+              - "Generate D3.js diagrams: Phase -1 flow, Migration matrix heatmap"
+              - "Generate Mermaid diagrams: AST flowchart, Context middleware sequence"
+              - "Embed diagrams in feature documentation"
+      
+      4_quality_assurance:
+        name: "Testing & Validation"
+        priority: "P1_HIGH"
+        acceptance_criteria:
+          - criterion: "AC-QA-1: Dead code removed (1,009 CSS classes)"
+            validation_method: "CSS analysis tool + lighthouse performance check"
+            pass_threshold: "0 unused CSS classes detected"
+            failure_remediation:
+              - "Run Phase 10 CSS cleanup script"
+              - "Parse Phase 12 report for unused class list"
+              - "Remove classes from CSS files"
+              - "Validate HTML rendering unchanged"
+              - "Re-run Lighthouse performance audit"
+          
+          - criterion: "AC-QA-2: Acceptance criteria automation created"
+            validation_method: "Check scripts/validate_acceptance_criteria.py exists + runnable"
+            pass_threshold: "Script exists, runs without errors, generates reports"
+            failure_remediation:
+              - "Run Phase 13 automation creation script"
+              - "Implement validation logic for all 6 criterion categories"
+              - "Add CI/CD integration hooks"
+              - "Test against C150 plan (dry run)"
+          
+          - criterion: "AC-QA-3: Brittleness checker functional"
+            validation_method: "Run scripts/cross_plan_brittleness_checker.py"
+            pass_threshold: "Script detects 'documented but broken' patterns"
+            failure_remediation:
+              - "Run Phase 14 brittleness checker creation"
+              - "Test against known brittleness cases (6 orchestrators from GAP-2)"
+              - "Validate alert system triggers on new issues"
+              - "Add to nightly CI/CD pipeline"
+          
+          - criterion: "AC-QA-4: ADO v2 import path fixed"
+            validation_method: "Python import test: from src.orchestrators.ado.ado_orchestrator_v2 import ADOOrchestratorV2"
+            pass_threshold: "Import succeeds without ModuleNotFoundError"
+            failure_remediation:
+              - "Run Phase 20 import path fix"
+              - "Update src/orchestrators/ado/__init__.py"
+              - "Expose ADOOrchestratorV2 from v2 subdirectory"
+              - "Re-run import test"
+      
+      5_deployment_production:
+        name: "Deployment & Monitoring"
+        priority: "P0_CRITICAL"
+        acceptance_criteria:
+          - criterion: "AC-DP-1: Staging deployment validated (24hr monitoring)"
+            validation_method: "Check staging-deployment-report.md + staging-monitoring.json"
+            pass_threshold: "0 critical errors in 24hr period, uptime >99.5%"
+            failure_remediation:
+              - "Run Phase 21 deployment validation"
+              - "Deploy to staging environment"
+              - "Monitor for 24 hours (error logs, performance metrics)"
+              - "Fix critical errors before production"
+              - "Generate staging validation report"
+          
+          - criterion: "AC-DP-2: Production deployment validated (24hr monitoring)"
+            validation_method: "Check production-deployment-report.md + production-monitoring.json"
+            pass_threshold: "0 critical errors in 24hr period, uptime >99.9%"
+            failure_remediation:
+              - "Continue Phase 21 to production"
+              - "Deploy to production environment"
+              - "Monitor for 24 hours (error logs, performance metrics, user feedback)"
+              - "Rollback if critical errors detected"
+              - "Generate production validation report"
+          
+          - criterion: "AC-DP-3: Plan viewer HTML generated for C150"
+            validation_method: "Check c150-remediation-plan/plan-viewer.html exists + functional"
+            pass_threshold: "HTML file exists, displays all 27 phases, progress tracking works"
+            failure_remediation:
+              - "Run Phase 16 plan viewer integration"
+              - "Generate plan-viewer.html for C150 plan"
+              - "Test all viewer features: phase navigation, progress bars, modal cards"
+              - "Validate glassmorphism styling"
+          
+          - criterion: "AC-DP-4: Lighthouse scores maintained"
+            validation_method: "Lighthouse audit on all HTML files"
+            pass_threshold: "Performance >90, Accessibility >95, Best Practices >95, SEO >90"
+            failure_remediation:
+              - "Run Lighthouse audits: lighthouse {url} --output json"
+              - "Fix performance issues (CSS optimization, image compression)"
+              - "Fix accessibility issues (ARIA labels, color contrast)"
+              - "Re-run audits until passing"
+      
+      6_architecture_fixes:
+        name: "Architectural Gap Resolution"
+        priority: "P0_CRITICAL"
+        acceptance_criteria:
+          - criterion: "AC-AF-1: CORTEX.prompt.md execution bridge fixed (GAP-ARCH-1)"
+            validation_method: "Manual test: User request → GitHub Copilot → Terminal invocation → Python execution"
+            pass_threshold: "python3 -m src.main invoked via run_in_terminal tool"
+            failure_remediation:
+              - "Verify Phase 22 changes applied to CORTEX.prompt.md v5.2.0"
+              - "Test Step 4 execution protocol"
+              - "Ensure no 'hand-off and stop' text remains"
+              - "Validate terminal command format correct"
+          
+          - criterion: "AC-AF-2: Python CLI import chain fixed (GAP-ARCH-2)"
+            validation_method: "Terminal test: python3 -m src.main 'help'"
+            pass_threshold: "Command succeeds, no ImportError raised"
+            failure_remediation:
+              - "Run Phase 23 import chain fix"
+              - "Investigate src/entry_point/cortex_entry.py line 29"
+              - "Fix import path: from src.config import config"
+              - "Update src/config/__init__.py to expose config object"
+              - "Re-run CLI test"
+          
+          - criterion: "AC-AF-3: PlanningStateDB method signatures fixed (GAP-ARCH-3)"
+            validation_method: "Python execution test: Planning v5 end-to-end execution"
+            pass_threshold: "No TypeError raised, planning workflow completes"
+            failure_remediation:
+              - "Run Phase 24 database signature fix"
+              - "Add plan_id parameter to start_phase() method"
+              - "Implement update_plan_status() method"
+              - "Update method signatures to match BaseOrchestratorV4_1 calls"
+              - "Re-run Planning v5 test"
+          
+          - criterion: "AC-AF-4: Lean prompt architecture implemented (GAP-ARCH-4)"
+            validation_method: "Check RequestTransformer module + reduced prompt files"
+            pass_threshold: "CORTEX.prompt.md ≤50 lines, copilot-instructions.md ≤50 lines, RequestTransformer exists"
+            failure_remediation:
+              - "Run Phase 26 lean prompt implementation"
+              - "Create src/orchestrators/request_transformer.py (200 lines)"
+              - "Enhance master-orchestrator.yaml (+132 lines)"
+              - "Reduce prompt files to 50 lines each"
+              - "Add 20+ unit tests for transformation logic"
+    
+    execution_workflow:
+      phase_1:
+        name: "Pre-Validation Setup"
+        duration: "0.5 hours"
+        tasks:
+          - "Load C150 plan YAML"
+          - "Initialize validation tracking database"
+          - "Create validation report template"
+          - "Set up failure remediation logging"
+      
+      phase_2:
+        name: "Category 1-3 Validation (Code, Governance, Docs)"
+        duration: "4.0 hours"
+        tasks:
+          - "Run code quality checks (AC-CQ-1 through AC-CQ-4)"
+          - "Run governance compliance checks (AC-GC-1 through AC-GC-4)"
+          - "Run documentation completeness checks (AC-DC-1 through AC-DC-4)"
+          - "Generate validation reports for categories 1-3"
+      
+      phase_3:
+        name: "Category 4-6 Validation (QA, Deployment, Architecture)"
+        duration: "5.0 hours"
+        tasks:
+          - "Run quality assurance checks (AC-QA-1 through AC-QA-4)"
+          - "Run deployment/production checks (AC-DP-1 through AC-DP-4)"
+          - "Run architecture fixes checks (AC-AF-1 through AC-AF-4)"
+          - "Generate validation reports for categories 4-6"
+      
+      phase_4:
+        name: "Failure Remediation Planning"
+        duration: "1.5 hours"
+        tasks:
+          - "Identify all failed criteria"
+          - "Generate immediate remediation plan for each failure"
+          - "Prioritize remediation tasks (P0 → P1 → P2)"
+          - "Estimate remediation hours"
+      
+      phase_5:
+        name: "Final Report Generation"
+        duration: "1.0 hours"
+        tasks:
+          - "Consolidate all validation results"
+          - "Calculate overall pass rate"
+          - "Generate executive summary"
+          - "Create remediation task list"
+          - "Update C150 plan status"
+    
+    validation_outputs:
+      reports:
+        - path: "reports/phase-27-comprehensive-validation.md"
+          description: "Executive summary of all validation results"
+        
+        - path: "reports/validation-category-1-code-quality.json"
+          description: "Detailed code quality validation results"
+        
+        - path: "reports/validation-category-2-governance.json"
+          description: "Detailed governance compliance results"
+        
+        - path: "reports/validation-category-3-documentation.json"
+          description: "Detailed documentation completeness results"
+        
+        - path: "reports/validation-category-4-qa.json"
+          description: "Detailed QA validation results"
+        
+        - path: "reports/validation-category-5-deployment.json"
+          description: "Detailed deployment/production results"
+        
+        - path: "reports/validation-category-6-architecture.json"
+          description: "Detailed architecture fixes results"
+        
+        - path: "reports/failure-remediation-plan.md"
+          description: "IMMEDIATE remediation plan for all failures"
+        
+        - path: "tracking/acceptance-criteria-validation.db"
+          description: "SQLite database tracking all 24 acceptance criteria"
+      
+      metrics:
+        - "Overall pass rate: X/24 criteria (Y%)"
+        - "Critical failures: N (P0 criteria failed)"
+        - "High-priority failures: N (P1 criteria failed)"
+        - "Medium-priority failures: N (P2 criteria failed)"
+        - "Estimated remediation hours: X.X hours"
+        - "Recommended next steps: [Phase numbers to re-execute]"
+    
+    pass_criteria:
+      overall: "≥90% pass rate (22/24 criteria passing)"
+      critical: "100% P0_CRITICAL criteria passing (AC-CQ-1, AC-GC-1, AC-DP-1, AC-AF-1, AC-AF-2, AC-AF-3)"
+      high: "≥80% P1_HIGH criteria passing"
+      remediation: "Remediation plan generated for all failures"
+    
+    failure_handling:
+      immediate_actions:
+        - "STOP plan completion process"
+        - "Generate detailed failure reports"
+        - "Create immediate remediation plan"
+        - "Notify stakeholders of failures"
+        - "Update C150 plan status to 'VALIDATION_FAILED'"
+      
+      remediation_workflow:
+        - "Execute remediation tasks in priority order (P0 → P1 → P2)"
+        - "Re-run validation for fixed criteria"
+        - "Track remediation progress in tracking database"
+        - "Repeat Phase 27 validation when all remediations complete"
+      
+      escalation:
+        - "If >3 P0 failures: Escalate to architecture review"
+        - "If >5 P1 failures: Escalate to planning review"
+        - "If remediation >20 hours: Create new remediation plan"
+    
+    outputs:
+      - "reports/phase-27-comprehensive-validation.md"
+      - "reports/validation-category-*.json (6 files)"
+      - "reports/failure-remediation-plan.md"
+      - "tracking/acceptance-criteria-validation.db"
+  
   - number: 999
     name: "Teardown + REFACTOR + Commit"
     description: "Whole-file cleanup, remove orphaned code, git commit"
@@ -1823,8 +2634,52 @@ phases:
 
 # Python execution orchestration
 execution:
-  mode: "sequential"  # Run phases in order
-  parallelizable_phases: []  # All phases have dependencies
+  mode: "hybrid"  # Sequential for dependent phases, parallel for independent waves
+  parallelizable_phases:
+    - group_id: "wave4_documentation"
+      phases: [7, 8, 9]
+      duration_sequential: 22.0
+      duration_parallel: 12.0
+      savings: 10.0
+      strategy: "3 independent orchestrator docs + feature docs can run simultaneously"
+    
+    - group_id: "wave5_automation"
+      phases: [13, 14]
+      duration_sequential: 14.0
+      duration_parallel: 8.0
+      savings: 6.0
+      strategy: "Acceptance validator + brittleness checker have no dependencies"
+    
+    - group_id: "wave6_viewers_part1"
+      phases: [15, 16]
+      duration_sequential: 10.0
+      duration_parallel: 5.0
+      savings: 5.0
+      strategy: "CORTEX.prompt fix and plan viewer integration are independent"
+    
+    - group_id: "wave6_viewers_part2"
+      phases: [17, 18]
+      duration_sequential: 10.0
+      duration_parallel: 5.0
+      savings: 5.0
+      strategy: "Orchestrator YAML enhancement and ADO viewer are independent"
+    
+    - group_id: "wave7_validation"
+      phases: [19, 20]
+      duration_sequential: 4.5
+      duration_parallel: 4.0
+      savings: 0.5
+      strategy: "Acceptance execution and ADO import fix are independent"
+    
+    - group_id: "wave9_architecture"
+      phases: [22, 25]
+      duration_sequential: 8.0
+      duration_parallel: 4.0
+      savings: 4.0
+      strategy: "Prompt fix and POC Python execution are independent"
+  
+  total_savings: 30.5  # Hours saved via parallelization
+  optimized_duration: 150.5  # 181 - 30.5 = 150.5 hours
   
   python_scripts:
     base_path: "scripts/orchestration/"

@@ -1,7 +1,7 @@
 # GitHub Copilot Instructions for CORTEX
 
 **Purpose:** AI Assistant with long-term memory, context awareness, and strategic planning  
-**Version:** 4.0.0 | **Author:** Asif Hussain
+**Version:** 5.1.0 | **Author:** Asif Hussain
 
 ---
 
@@ -21,26 +21,25 @@ All command routing is defined in `CORTEX.prompt.md`. Key orchestrators:
 
 **Legend:**
 - 🛡️ **AUTONOMOUS** = Hand-off to Python (GitHub Copilot stops after routing)
-- 📋 **GUIDED** = GitHub Copilot executes using manifest instructions
 
 | Intent Pattern | Route To | Type |
 |----------------|----------|------|
 | `introduce yourself`, `intro`, `hello`, `hi cortex` | Introduction → ASCII banner + capabilities | — |
-| `plan`, `create a plan`, `make a plan` | Planning System → folder with 4 subfolders | 🛡️ AUTONOMOUS |
-| `upgrade plan`, `migrate plan`, `plan upgrade` | Plan Upgrade → CORTEX-5.0 migration | 📋 GUIDED |
-| `tdd`, `start tdd`, `run tests` | TDD Orchestrator → RED→GREEN→REFACTOR | 📋 GUIDED |
-| `ado`, `ado story`, `ado feature` | ADO Operations → work items | 🛡️ AUTONOMOUS |
-| `vacuum`, `deep clean` | Vacuum → Deep filesystem cleanup | 🛡️ AUTONOMOUS |
-| `cleanup`, `cleanup cache` | Cleanup → Cache/log removal | 🛡️ AUTONOMOUS |
-| `investigate`, `find root cause` | Investigation → Root cause analysis | 🛡️ AUTONOMOUS |
-| `sanitize`, `make generic` | Sanitization → PII/secret removal | �️ AUTONOMOUS |
-| `maintenance`, `health check` | Maintenance → 12-phase pipeline | 📋 GUIDED |
-| `refine`, `improve` | Refinement → 7-phase improvement | 📋 GUIDED |
+| `plan`, `create a plan`, `make a plan` | Planning System v5 → YAML-based execution | 🛡️ AUTONOMOUS |
+| `tdd`, `start tdd`, `run tests` | TDD v2 → RED→GREEN→REFACTOR | �️ AUTONOMOUS |
+| `ado`, `ado story`, `ado feature` | ADO v2 → Work items | 🛡️ AUTONOMOUS |
+| `vacuum`, `deep clean` | Vacuum v2 → Deep filesystem cleanup | 🛡️ AUTONOMOUS |
+| `cleanup`, `cleanup cache` | Cleanup v2 → Cache/log removal | 🛡️ AUTONOMOUS |
+| `investigate`, `find root cause` | Investigation v2 → Root cause analysis | 🛡️ AUTONOMOUS |
+| `sanitize`, `make generic` | Sanitization v2 → PII/secret removal | 🛡️ AUTONOMOUS |
+| `maintenance`, `health check` | Maintenance v2 → 12-phase pipeline | �️ AUTONOMOUS |
+| `refine`, `improve` | Refinement v2 → 7-phase improvement | �️ AUTONOMOUS |
+| `debug`, `fix bug` | Debug v2 → Autonomous debugging | 🛡️ AUTONOMOUS |
 | **Image attachments** | **Vision API → Auto-analysis (no prompt needed)** | Auto |
 
-**Orchestrator Types:**
-- 🛡️ **AUTONOMOUS**: Python implementation, self-executing (CORTEX routes and stops)
-- 📋 **GUIDED**: Manifest instructions, CORTEX executes
+**Orchestrator Architecture:**
+- 🛡️ **AUTONOMOUS**: Python implementation, self-executing (GitHub Copilot routes and stops)
+- **NO GUIDED MODE**: All orchestrators are Python-based autonomous executors
 
 **LLM Intent Classification:** Use `LLMIntentClassifier` (src/cortex_agents/llm_intent_classifier.py) for intelligent routing when exact patterns don't match.
 
@@ -72,12 +71,22 @@ When you see 🛡️ in Intent Router, these orchestrators **MUST take over comp
 - ❌ Do NOT read manifest and execute yourself
 - ❌ Do NOT provide guidance based on manifest
 - ❌ Do NOT continue after loading orchestrator
+- ❌ Do NOT add verbose transformation details (unless user requests "explain" or "verbose")
 - ✅ Load manifest reference ONLY
-- ✅ Use specified response template with 🛡️ header
+- ✅ Use **CONCISE** response template (3 lines) by default
 - ✅ STOP immediately after hand-off header
-- ✅ Display **brief** hand-off confirmation message
+- ✅ Display **brief** hand-off confirmation message (Pattern + Confidence + Hand-off status)
 
 **Visual Confirmation:** 🛡️ in response header = Orchestrator correctly engaged
+
+**Concise Hand-Off Format (Default):**
+```markdown
+## 🛡️ {Orchestrator} → Executing autonomously
+
+**Pattern:** `{regex}` | **Confidence:** 1.0 | **Mode:** {mode}
+
+⚠️ **HAND-OFF COMPLETE** - Python orchestrator executing...
+```
 
 **Hand-Off Confirmation Format:**
 ```markdown
