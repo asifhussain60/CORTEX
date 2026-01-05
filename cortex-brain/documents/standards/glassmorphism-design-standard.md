@@ -258,7 +258,75 @@ Validation scripts should flag:
 
 ---
 
-### 3. Tetris-Style Stat Badges MUST Use Color Rotation (Pattern C51)
+### 3. Tetris-Style Card Layout MUST Use Centered Icon + Title (Pattern C52)
+
+**Rule:** ALL card layouts MUST center icon above title for consistent tetris-block appearance.
+
+**❌ WRONG (Inline Layout):**
+```html
+<div class="card-header-inline">
+    <i class="card-icon-primary fas fa-rocket"></i>
+    <h3 class="card-title">Planning v5</h3>
+</div>
+```
+
+**✅ CORRECT (Centered Tetris Layout):**
+```html
+<div class="card-header-centered">
+    <i class="card-icon-primary fas fa-rocket"></i>
+    <h3 class="card-title">Planning v5</h3>
+</div>
+```
+
+**Visual Structure:**
+```
+┌─────────────────────┐
+│                     │
+│        🚀           │  ← Icon (centered, 3rem)
+│                     │
+│    Planning v5      │  ← Title (centered)
+│                     │
+│  Description text   │  ← Description (left-aligned)
+│  goes here...       │
+│                     │
+│  [Badge] [Badge]    │  ← Stats (flex row)
+│                     │
+└─────────────────────┘
+```
+
+**CSS Requirements:**
+```css
+.card-header-centered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.card-header-centered i {
+    font-size: 3rem;
+    margin-bottom: 0;
+}
+```
+
+**Application Rules:**
+1. **ALWAYS center:** Icon + title must be centered (no inline layouts)
+2. **Icon size:** 3rem for card icons (larger for prominence)
+3. **Vertical gap:** `var(--spacing-md)` between icon and title
+4. **Text alignment:** Title centered, description left-aligned
+5. **Stats below:** Badges in flex row below description
+
+**Rationale:**
+- Creates iconic "tetris block" visual metaphor
+- Improves scannability (icon draws eye first)
+- Consistent with modern card design patterns
+- Distinguishes from traditional left-aligned layouts
+
+---
+
+### 4. Tetris-Style Stat Badges MUST Use Color Rotation (Pattern C51)
 
 **Rule:** All stat badges within cards MUST use 3-4 color rotation to create visual interest.
 
@@ -353,7 +421,7 @@ Validation scripts should flag:
 
 ---
 
-### 4. Validation Enforcement
+### 5. Validation Enforcement
 
 **Pre-Commit Checks:**
 ```powershell
