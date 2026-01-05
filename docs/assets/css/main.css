@@ -8595,6 +8595,16 @@ h1, h2, h3, h4, h5, h6, p, span, div {
 
 .card-header-centered .card-title {
     margin: 0;
+    text-align: center;
+}
+
+/* Ensure tetris-style cards maintain centered header regardless of parent */
+a.glass-card-clickable .card-header-centered,
+.glass-card-clickable .card-header-centered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 
 .card-title {
@@ -8608,6 +8618,14 @@ h1, h2, h3, h4, h5, h6, p, span, div {
     color: var(--text-secondary);
     line-height: 1.7;
     margin-bottom: var(--spacing-lg);
+    text-align: left;
+    width: 100%;
+}
+
+/* Ensure descriptions in tetris cards are left-aligned */
+.glass-card-clickable .card-description,
+a.glass-card-clickable .card-description {
+    text-align: left;
 }
 
 /* Visualization Container */
@@ -10833,8 +10851,7 @@ span[style*="background: rgba"] i {
 }
 
 /* Individual documentation card */
-.docs-card,
-a.glass-card-clickable[style*="text-decoration: none"] {
+.docs-card {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -10847,16 +10864,14 @@ a.glass-card-clickable[style*="text-decoration: none"] {
 
 /* Icon in documentation card */
 .docs-card i,
-.docs-card .fas,
-a.glass-card-clickable i {
+.docs-card .fas {
     font-size: 1.5rem;
     margin-bottom: 0.5rem;
     display: block;
 }
 
 /* Title in documentation card */
-.docs-card h4,
-a.glass-card-clickable h4 {
+.docs-card h4 {
     font-size: 1rem;
     font-weight: 600;
     margin: 0;
@@ -10865,8 +10880,7 @@ a.glass-card-clickable h4 {
 }
 
 /* Description in documentation card */
-.docs-card p,
-a.glass-card-clickable p {
+.docs-card p {
     font-size: 0.875rem;
     margin: 0;
     line-height: 1.5;
@@ -10874,14 +10888,12 @@ a.glass-card-clickable p {
 }
 
 /* Hover effect for documentation cards */
-.docs-card:hover,
-a.glass-card-clickable:hover {
+.docs-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
-.docs-card:hover i,
-a.glass-card-clickable:hover i {
+.docs-card:hover i {
     transform: scale(1.1);
     filter: brightness(1.2);
 }
