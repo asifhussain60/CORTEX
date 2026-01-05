@@ -1,0 +1,90 @@
+{
+  "timestamp": "2026-01-05T14:54:46.228161",
+  "files_processed": [
+    {
+      "file": "docs\\architecture\\index.html",
+      "removals": 5,
+      "classes_removed": [
+        "glass-panel-indigo",
+        "glass-panel-pink",
+        "glass-panel-cyan"
+      ]
+    },
+    {
+      "file": "D:\\PROJECTS\\CORTEX\\docs\\features\\index.html",
+      "removals": 0,
+      "classes_removed": []
+    },
+    {
+      "file": "docs\\getting-started\\index.html",
+      "removals": 7,
+      "classes_removed": [
+        "glass-panel-indigo",
+        "glass-panel-teal",
+        "glass-panel-cyan"
+      ]
+    },
+    {
+      "file": "docs\\knowledge\\index.html",
+      "removals": 2,
+      "classes_removed": [
+        "glass-panel-teal",
+        "glass-panel-cyan"
+      ]
+    },
+    {
+      "file": "docs\\learning-paths\\index.html",
+      "removals": 7,
+      "classes_removed": [
+        "glass-panel-teal",
+        "glass-panel-pink",
+        "glass-panel-indigo",
+        "glass-panel-cyan"
+      ]
+    },
+    {
+      "file": "docs\\lens\\index.html",
+      "removals": 5,
+      "classes_removed": [
+        "glass-panel-teal",
+        "glass-panel-indigo",
+        "glass-panel-cyan"
+      ]
+    },
+    {
+      "file": "D:\\PROJECTS\\CORTEX\\docs\\security\\index.html",
+      "removals": 0,
+      "classes_removed": []
+    },
+    {
+      "file": "D:\\PROJECTS\\CORTEX\\docs\\story\\index.html",
+      "removals": 0,
+      "classes_removed": []
+    },
+    {
+      "file": "docs\\sts\\index.html",
+      "removals": 1,
+      "classes_removed": [
+        "glass-panel-teal"
+      ]
+    },
+    {
+      "file": "docs\\token-optimization\\index.html",
+      "removals": 4,
+      "classes_removed": [
+        "glass-panel-indigo",
+        "glass-panel-pink",
+        "glass-panel-cyan"
+      ]
+    },
+    {
+      "file": "docs\\toolkit-manager\\index.html",
+      "removals": 3,
+      "classes_removed": [
+        "glass-panel-indigo",
+        "glass-panel-pink"
+      ]
+    }
+  ],
+  "total_removals": 34
+}

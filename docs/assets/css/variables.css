@@ -255,3 +255,327 @@
     /* Reserved for future light mode implementation */
     /* Currently CORTEX uses dark mode exclusively */
 }
+
+/* ============================================
+   7-COLOR GLASSMORPHISM PANEL BACKGROUNDS
+   ============================================ 
+   
+   Randomized color palette for Level 1 hub page sections.
+   Apply to glass-card-display sections for visual variety.
+   
+   Usage: <section class="glass-card-display glass-panel-cyan">
+   
+   Color Palette:
+   - Cyan: Primary accent
+   - Purple: Warmth accent  
+   - Teal: Bridge accent
+   - Indigo: Deep accent
+   - Pink: Vibrant accent
+   - Emerald: Success accent
+   - Amber: Energy accent
+*/
+
+/* Cyan Panel */
+.glass-panel-cyan {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.08) 0%, rgba(0, 212, 255, 0.06) 50%, rgba(26, 31, 58, 0.65) 100%) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 212, 255, 0.15) !important;
+    box-shadow: 0 8px 32px rgba(0, 212, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Purple Panel */
+.glass-panel-purple {
+    background: linear-gradient(135deg, rgba(123, 97, 255, 0.08) 0%, rgba(186, 85, 211, 0.06) 50%, rgba(26, 31, 58, 0.65) 100%) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(123, 97, 255, 0.15) !important;
+    box-shadow: 0 8px 32px rgba(123, 97, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Teal Panel */
+.glass-panel-teal {
+    background: linear-gradient(135deg, rgba(20, 184, 166, 0.08) 0%, rgba(20, 184, 166, 0.06) 50%, rgba(26, 31, 58, 0.65) 100%) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(20, 184, 166, 0.15) !important;
+    box-shadow: 0 8px 32px rgba(20, 184, 166, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Indigo Panel */
+.glass-panel-indigo {
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.08) 0%, rgba(99, 102, 241, 0.06) 50%, rgba(26, 31, 58, 0.65) 100%) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(79, 70, 229, 0.15) !important;
+    box-shadow: 0 8px 32px rgba(79, 70, 229, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Pink Panel */
+.glass-panel-pink {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.08) 0%, rgba(244, 114, 182, 0.06) 50%, rgba(26, 31, 58, 0.65) 100%) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(236, 72, 153, 0.15) !important;
+    box-shadow: 0 8px 32px rgba(236, 72, 153, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Emerald Panel */
+.glass-panel-emerald {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(52, 211, 153, 0.06) 50%, rgba(26, 31, 58, 0.65) 100%) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(16, 185, 129, 0.15) !important;
+    box-shadow: 0 8px 32px rgba(16, 185, 129, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Amber Panel */
+.glass-panel-amber {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(251, 191, 36, 0.06) 50%, rgba(26, 31, 58, 0.65) 100%) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(245, 158, 11, 0.15) !important;
+    box-shadow: 0 8px 32px rgba(245, 158, 11, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CARD VARIANT CLASSES - Enhanced Prominence within Panels
+   Version: 2.0 | Purpose: Make cards stand out from panel backgrounds
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Primary Card Variant (Cyan Accent) */
+.card-variant-primary {
+    background: linear-gradient(135deg, 
+        rgba(0, 212, 255, 0.15) 0%, 
+        rgba(0, 180, 216, 0.12) 50%, 
+        rgba(26, 31, 58, 0.85) 100%) !important;
+    border: 1px solid rgba(0, 212, 255, 0.35) !important;
+    box-shadow: 
+        0 8px 24px rgba(0, 212, 255, 0.2),
+        inset 0 1px 2px rgba(0, 212, 255, 0.15),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.card-variant-primary:hover {
+    background: linear-gradient(135deg, 
+        rgba(0, 212, 255, 0.22) 0%, 
+        rgba(0, 180, 216, 0.18) 50%, 
+        rgba(26, 31, 58, 0.9) 100%) !important;
+    border-color: rgba(0, 212, 255, 0.5) !important;
+    box-shadow: 
+        0 12px 32px rgba(0, 212, 255, 0.3),
+        0 0 30px rgba(0, 212, 255, 0.2),
+        inset 0 1px 2px rgba(0, 212, 255, 0.2),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Info Card Variant (Indigo Accent) */
+.card-variant-info {
+    background: linear-gradient(135deg, 
+        rgba(79, 70, 229, 0.15) 0%, 
+        rgba(99, 102, 241, 0.12) 50%, 
+        rgba(26, 31, 58, 0.85) 100%) !important;
+    border: 1px solid rgba(99, 102, 241, 0.35) !important;
+    box-shadow: 
+        0 8px 24px rgba(79, 70, 229, 0.2),
+        inset 0 1px 2px rgba(99, 102, 241, 0.15),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.card-variant-info:hover {
+    background: linear-gradient(135deg, 
+        rgba(79, 70, 229, 0.22) 0%, 
+        rgba(99, 102, 241, 0.18) 50%, 
+        rgba(26, 31, 58, 0.9) 100%) !important;
+    border-color: rgba(99, 102, 241, 0.5) !important;
+    box-shadow: 
+        0 12px 32px rgba(79, 70, 229, 0.3),
+        0 0 30px rgba(99, 102, 241, 0.2),
+        inset 0 1px 2px rgba(99, 102, 241, 0.2),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Success Card Variant (Emerald Accent) */
+.card-variant-success {
+    background: linear-gradient(135deg, 
+        rgba(16, 185, 129, 0.15) 0%, 
+        rgba(52, 211, 153, 0.12) 50%, 
+        rgba(26, 31, 58, 0.85) 100%) !important;
+    border: 1px solid rgba(16, 185, 129, 0.35) !important;
+    box-shadow: 
+        0 8px 24px rgba(16, 185, 129, 0.2),
+        inset 0 1px 2px rgba(52, 211, 153, 0.15),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.card-variant-success:hover {
+    background: linear-gradient(135deg, 
+        rgba(16, 185, 129, 0.22) 0%, 
+        rgba(52, 211, 153, 0.18) 50%, 
+        rgba(26, 31, 58, 0.9) 100%) !important;
+    border-color: rgba(16, 185, 129, 0.5) !important;
+    box-shadow: 
+        0 12px 32px rgba(16, 185, 129, 0.3),
+        0 0 30px rgba(52, 211, 153, 0.2),
+        inset 0 1px 2px rgba(52, 211, 153, 0.2),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Warning Card Variant (Amber Accent) */
+.card-variant-warning {
+    background: linear-gradient(135deg, 
+        rgba(245, 158, 11, 0.15) 0%, 
+        rgba(251, 191, 36, 0.12) 50%, 
+        rgba(26, 31, 58, 0.85) 100%) !important;
+    border: 1px solid rgba(245, 158, 11, 0.35) !important;
+    box-shadow: 
+        0 8px 24px rgba(245, 158, 11, 0.2),
+        inset 0 1px 2px rgba(251, 191, 36, 0.15),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.card-variant-warning:hover {
+    background: linear-gradient(135deg, 
+        rgba(245, 158, 11, 0.22) 0%, 
+        rgba(251, 191, 36, 0.18) 50%, 
+        rgba(26, 31, 58, 0.9) 100%) !important;
+    border-color: rgba(245, 158, 11, 0.5) !important;
+    box-shadow: 
+        0 12px 32px rgba(245, 158, 11, 0.3),
+        0 0 30px rgba(251, 191, 36, 0.2),
+        inset 0 1px 2px rgba(251, 191, 36, 0.2),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   METRIC CARD ENHANCEMENTS - Panel-Aware Prominence
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Enhanced metric cards within colored panels */
+.glass-panel-emerald .metric-card,
+.glass-panel-purple .metric-card,
+.glass-panel-amber .metric-card,
+.glass-panel-cyan .metric-card,
+.glass-panel-teal .metric-card,
+.glass-panel-indigo .metric-card,
+.glass-panel-pink .metric-card {
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.05) 0%, 
+        rgba(255, 255, 255, 0.02) 50%, 
+        rgba(26, 31, 58, 0.8) 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    box-shadow: 
+        0 8px 24px rgba(0, 0, 0, 0.3),
+        inset 0 1px 2px rgba(255, 255, 255, 0.1),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.glass-panel-emerald .metric-card:hover {
+    background: linear-gradient(135deg, 
+        rgba(16, 185, 129, 0.12) 0%, 
+        rgba(52, 211, 153, 0.08) 50%, 
+        rgba(26, 31, 58, 0.85) 100%) !important;
+    border-color: rgba(16, 185, 129, 0.4) !important;
+    box-shadow: 
+        0 12px 32px rgba(16, 185, 129, 0.25),
+        0 0 30px rgba(52, 211, 153, 0.15),
+        inset 0 1px 2px rgba(52, 211, 153, 0.15),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.glass-panel-purple .metric-card:hover {
+    background: linear-gradient(135deg, 
+        rgba(123, 97, 255, 0.12) 0%, 
+        rgba(186, 85, 211, 0.08) 50%, 
+        rgba(26, 31, 58, 0.85) 100%) !important;
+    border-color: rgba(123, 97, 255, 0.4) !important;
+    box-shadow: 
+        0 12px 32px rgba(123, 97, 255, 0.25),
+        0 0 30px rgba(186, 85, 211, 0.15),
+        inset 0 1px 2px rgba(186, 85, 211, 0.15),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.glass-panel-amber .metric-card:hover {
+    background: linear-gradient(135deg, 
+        rgba(245, 158, 11, 0.12) 0%, 
+        rgba(251, 191, 36, 0.08) 50%, 
+        rgba(26, 31, 58, 0.85) 100%) !important;
+    border-color: rgba(245, 158, 11, 0.4) !important;
+    box-shadow: 
+        0 12px 32px rgba(245, 158, 11, 0.25),
+        0 0 30px rgba(251, 191, 36, 0.15),
+        inset 0 1px 2px rgba(251, 191, 36, 0.15),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TETRIS-STYLE CARD STATS - Compact Grid Layout
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Tetris-style card-stats with border and grid layout */
+.card-stats-tetris {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0.65rem !important;
+    padding: 1rem !important;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    margin-top: var(--spacing-md);
+    min-height: 140px;
+    align-content: start;
+}
+
+/* Tetris pills - icon on left, text wraps on right */
+.card-stats-tetris span {
+    display: grid !important;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 0.65rem;
+    margin: 0 !important;
+    padding: 0.7rem 0.85rem !important;
+    font-size: 0.875rem !important;
+    white-space: normal;
+    text-align: left;
+    border-radius: 0 !important;
+    line-height: 1.4;
+}
+
+/* First pill - rounded top corners (Tetris block top) */
+.card-stats-tetris span:first-child {
+    border-radius: var(--radius-md) var(--radius-md) 0 0 !important;
+}
+
+/* Last pill - rounded bottom corners (Tetris block bottom) */
+.card-stats-tetris span:last-child {
+    border-radius: 0 0 var(--radius-md) var(--radius-md) !important;
+}
+
+/* Single pill - rounded all corners */
+.card-stats-tetris span:only-child {
+    border-radius: var(--radius-md) !important;
+}
+
+/* Icon styling */
+.card-stats-tetris span i {
+    font-size: 1.35rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Enhanced glow on hover for tetris layout */
+.card-stats-tetris .stat-primary:hover {
+    box-shadow: 0 4px 16px rgba(123, 97, 255, 0.4) !important;
+}
+
+.card-stats-tetris .stat-info:hover {
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4) !important;
+}
+
+.card-stats-tetris .stat-warning:hover {
+    box-shadow: 0 4px 16px rgba(245, 158, 11, 0.4) !important;
+}
+

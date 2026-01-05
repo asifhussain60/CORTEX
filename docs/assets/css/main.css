@@ -333,8 +333,34 @@ body {
     height: 500px;
     margin: 0 auto 2rem;
     display: block;
-    animation: fadeInScale 1s ease-out;
-    filter: drop-shadow(0 0 40px rgba(0, 212, 255, 0.6));
+    animation: electric-aura 3s ease-in-out infinite, fadeInScale 1s ease-out;
+    filter: drop-shadow(0 0 40px rgba(0, 212, 255, 0.6))
+            drop-shadow(0 0 80px rgba(123, 97, 255, 0.4));
+    transition: all 0.4s ease;
+    cursor: pointer;
+}
+
+/* Electric Aura Animation */
+@keyframes electric-aura {
+    0%, 100% { 
+        filter: drop-shadow(0 0 40px rgba(0, 212, 255, 0.6))
+                drop-shadow(0 0 80px rgba(123, 97, 255, 0.4));
+        transform: scale(1);
+    }
+    50% { 
+        filter: drop-shadow(0 0 60px rgba(0, 212, 255, 0.9))
+                drop-shadow(0 0 120px rgba(123, 97, 255, 0.6))
+                drop-shadow(0 0 160px rgba(0, 212, 255, 0.3));
+        transform: scale(1.02);
+    }
+}
+
+/* Hover: Intensify the electric field */
+.hero-logo:hover {
+    filter: drop-shadow(0 0 80px rgba(0, 212, 255, 1))
+            drop-shadow(0 0 140px rgba(123, 97, 255, 0.8))
+            drop-shadow(0 0 200px rgba(0, 212, 255, 0.4)) !important;
+    transform: scale(1.05) !important;
 }
 
 /* Logo responsive breakpoints */
@@ -349,8 +375,22 @@ body {
     .hero-logo {
         width: 250px;
         height: 250px;
-        filter: drop-shadow(0 0 25px rgba(0, 212, 255, 0.5));
+        filter: drop-shadow(0 0 25px rgba(0, 212, 255, 0.5))
+                drop-shadow(0 0 50px rgba(123, 97, 255, 0.3));
         transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    /* Scale down particle container for mobile */
+    .energy-particles {
+        width: 350px;
+        height: 350px;
+        margin: -175px 0 0 -175px;
+    }
+    
+    .energy-particle {
+        width: 6px;
+        height: 6px;
+        margin: -3px 0 0 -3px;
     }
     
     /* Expanded state for mobile when at top of page */
@@ -367,8 +407,22 @@ body {
     .hero-logo {
         width: 200px;
         height: 200px;
-        filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.4));
+        filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.4))
+                drop-shadow(0 0 40px rgba(123, 97, 255, 0.2));
         transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    /* Further scale down for small mobile */
+    .energy-particles {
+        width: 280px;
+        height: 280px;
+        margin: -140px 0 0 -140px;
+    }
+    
+    .energy-particle {
+        width: 4px;
+        height: 4px;
+        margin: -2px 0 0 -2px;
     }
     
     /* Expanded state for small mobile when at top of page */
@@ -3295,10 +3349,124 @@ footer,
    ============================================ */
 .logo-container {
     margin-bottom: var(--spacing-xl);
+    position: relative;
+    display: inline-block;
 }
 
 .logo-container .hero-logo {
-    filter: drop-shadow(0 0 40px rgba(0, 212, 255, 0.6));
+    filter: drop-shadow(0 0 40px rgba(0, 212, 255, 0.6))
+            drop-shadow(0 0 80px rgba(123, 97, 255, 0.4));
+}
+
+/* Electric Ring System - Pure CSS */
+.logo-container::before,
+.logo-container::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 550px;
+    height: 550px;
+    margin: -275px 0 0 -275px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: rgba(0, 212, 255, 0.6);
+    border-right-color: rgba(0, 212, 255, 0.3);
+    pointer-events: none;
+    z-index: -1;
+}
+
+.logo-container::before {
+    animation: electric-spin 4s linear infinite;
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.4),
+                inset 0 0 30px rgba(0, 212, 255, 0.2);
+}
+
+.logo-container::after {
+    width: 600px;
+    height: 600px;
+    margin: -300px 0 0 -300px;
+    border-top-color: rgba(123, 97, 255, 0.5);
+    border-left-color: rgba(123, 97, 255, 0.2);
+    animation: electric-spin-reverse 6s linear infinite;
+    box-shadow: 0 0 40px rgba(123, 97, 255, 0.3),
+                inset 0 0 40px rgba(123, 97, 255, 0.15);
+}
+
+@keyframes electric-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes electric-spin-reverse {
+    from { transform: rotate(360deg); }
+    to { transform: rotate(0deg); }
+}
+
+/* Pulsing Energy Orbs */
+.logo-container .hero-logo::before,
+.logo-container .hero-logo::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 212, 255, 1) 0%, rgba(0, 212, 255, 0) 70%);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.8);
+    pointer-events: none;
+    z-index: 10;
+}
+
+.logo-container .hero-logo::before {
+    top: -10px;
+    left: 50%;
+    margin-left: -10px;
+    animation: orb-pulse 2s ease-in-out infinite, orb-orbit 8s linear infinite;
+}
+
+.logo-container .hero-logo::after {
+    bottom: -10px;
+    left: 50%;
+    margin-left: -10px;
+    background: radial-gradient(circle, rgba(123, 97, 255, 1) 0%, rgba(123, 97, 255, 0) 70%);
+    box-shadow: 0 0 20px rgba(123, 97, 255, 0.8);
+    animation: orb-pulse 2s ease-in-out infinite 1s, orb-orbit-reverse 8s linear infinite;
+}
+
+@keyframes orb-pulse {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.5); opacity: 1; }
+}
+
+@keyframes orb-orbit {
+    from { transform: rotate(0deg) translateX(260px) rotate(0deg); }
+    to { transform: rotate(360deg) translateX(260px) rotate(-360deg); }
+}
+
+@keyframes orb-orbit-reverse {
+    from { transform: rotate(360deg) translateX(280px) rotate(-360deg); }
+    to { transform: rotate(0deg) translateX(280px) rotate(0deg); }
+}
+
+/* Hover: Intensify rings */
+.logo-container:hover::before,
+.logo-container:hover::after {
+    border-width: 4px;
+    box-shadow: 0 0 60px rgba(0, 212, 255, 0.8),
+                inset 0 0 60px rgba(0, 212, 255, 0.4);
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    .hero-logo {
+        animation: fadeInScale 1s ease-out !important;
+    }
+    .logo-container::before,
+    .logo-container::after,
+    .logo-container .hero-logo::before,
+    .logo-container .hero-logo::after {
+        display: none !important;
+    }
 }
 
 /* ============================================
@@ -8815,10 +8983,10 @@ h1, h2, h3, h4, h5, h6, p, span, div {
 /* Hero-specific larger icon */
 .hero-introduction .card-header-centered i {
     font-size: 3.3rem;
-    padding: var(--spacing-lg);
-    background: rgba(100, 181, 246, 0.1);
-    border-radius: var(--radius-lg);
-    border: 1px solid rgba(100, 181, 246, 0.2);
+    padding: 0;
+    background: none;
+    border-radius: 0;
+    border: none;
 }
 
 .card-header-centered .card-title {
@@ -8853,6 +9021,11 @@ a.glass-card-clickable .card-header-centered,
     margin-bottom: var(--spacing-lg);
     text-align: left;
     width: 100%;
+}
+
+/* Fixed height for card descriptions in cards with tetris stats */
+.glass-card-clickable:has(.card-stats-tetris) .card-description {
+    min-height: 120px;
 }
 
 /* Ensure descriptions in tetris cards are left-aligned */
@@ -11247,6 +11420,112 @@ code[style*="color:"][style*="background:"] {
     /* Single column for docs cards on mobile */
     .docs-card-grid {
         grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================
+   MODERN FOOTER STYLES (v1.4.0)
+   Centered Horizontal Layout (All Screen Sizes)
+   ============================================ */
+
+/* Modern Footer Container */
+.glass-footer-modern {
+    background: rgba(26, 31, 58, 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 2rem 1rem;
+    margin-top: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Footer Content Layout (Horizontal at all sizes) */
+.footer-modern-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* CORTEX Logo (100x100px PNG) */
+.cortex-logo-footer {
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
+    filter: drop-shadow(0 0 20px rgba(123, 97, 255, 0.5));
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.cortex-logo-footer:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.7));
+}
+
+/* Copyright Text */
+.footer-copyright-modern {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* Gradient Author Name Styling */
+.footer-author-modern,
+.copyright-author {
+    background: linear-gradient(135deg, #7b61ff 0%, #00d4ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 600;
+}
+
+/* Desktop (1024px+) - Increased Spacing */
+@media (min-width: 1024px) {
+    .glass-footer-modern {
+        padding: 2.5rem 2rem;
+    }
+    
+    .footer-modern-content {
+        gap: 2rem;
+    }
+}
+
+/* Mobile (<768px) - Smaller Logo */
+@media (max-width: 767px) {
+    .cortex-logo-footer {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .footer-copyright-modern {
+        font-size: 0.875rem;
+    }
+    
+    .footer-modern-content {
+        gap: 1rem;
+    }
+}
+
+/* Landscape Mode (<600px height) - Compact Layout */
+@media (orientation: landscape) and (max-height: 600px) {
+    .glass-footer-modern {
+        padding: 1.5rem 1rem;
+        margin-top: 2rem;
+    }
+    
+    .cortex-logo-footer {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .footer-modern-content {
+        gap: 1rem;
     }
 }
 
