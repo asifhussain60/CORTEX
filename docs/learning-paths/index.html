@@ -1,116 +1,194 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="CORTEX Learning Paths - Interactive programming journeys from Beginner to Expert with quizzes, code playgrounds, and progressive challenges">
-    <meta name="keywords" content="CORTEX, learning paths, interactive learning, code playground, programming courses">
-    <meta name="author" content="Asif Hussain">
-    <title>Learning Paths | CORTEX 4.0</title>
-    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
-    <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02-v5">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-
-<style>
-/* Mobile font optimization */
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <meta content="CORTEX Learning Paths - Interactive programming journeys from Beginner to Expert with quizzes, code playgrounds, and progressive challenges" name="description"/>
+  <meta content="CORTEX, learning paths, interactive learning, code playground, programming courses" name="keywords"/>
+  <meta content="Asif Hussain" name="author"/>
+  <title>
+   Learning Paths | CORTEX 4.0
+  </title>
+  <link href="../assets/images/CORTEX-logo.png" rel="icon" type="image/png"/>
+  <link href="../assets/css/main.css?v=2026-01-02-v5" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js">
+  </script>
+  <script src="https://d3js.org/d3.v7.min.js">
+  </script>
+  <style>
+   /* Mobile font optimization */
 html {
     -webkit-text-size-adjust: 100%;
     -moz-text-size-adjust: 100%;
     text-size-adjust: 100%;
 }
-</style>
-</head>
-<body>
-    <!-- Glass Header Navigation -->
-    <header class="glass-header">
-        <div class="header-content">
-            <nav class="header-nav">
-                <a href="../index.html" class="nav-logo">
-                    <img src="../assets/images/CORTEX-logo-200.png" alt="CORTEX" class="cortex-logo" />
-                </a>
-            </nav>
-        </div>
-    </header>
-    
-    <!-- Main Content -->
-    <main class="container" id="main-content">
-        <!-- Hero Section with Robot Head -->
-        <div class="hero-section-wrapper">
-            <div class="hero-robot-container">
-                <a href="../index.html" title="Back to Home">
-                    <img src="../assets/images/CORTEX-logo-200.png" alt="CORTEX Robot" class="hero-robot-head" />
-                </a>
-            </div>
-            <div class="hero-divider-line"></div>
-        </div>
-        
-        <!-- Page Title Card -->
-        <section class="glass-card-display hero-introduction glass-panel-amber">
-            <div class="card-header-centered">
-                <i class="card-icon-primary fas fa-graduation-cap"></i>
-                <h2>Learning Paths</h2>
-            </div>
-            <p class="hero-description">
-                Comprehensive interactive programming courses from Beginner to Expert. 80 modules with 55 hours of content, 
+  </style>
+ </head>
+ <body>
+  <!-- Glass Header Navigation -->
+  <header class="glass-header">
+   <div class="header-content">
+    <nav class="header-nav">
+     <a class="nav-logo" href="../index.html">
+      <img alt="CORTEX" class="cortex-logo" src="../assets/images/CORTEX-logo-200.png"/>
+     </a>
+    </nav>
+   </div>
+  </header>
+  <!-- Main Content -->
+  <main class="container" id="main-content">
+   <!-- Hero Section with Robot Head -->
+   <div class="hero-section-wrapper">
+    <div class="hero-robot-container">
+     <a href="../index.html" title="Back to Home">
+      <img alt="CORTEX Robot" class="hero-robot-head" src="../assets/images/CORTEX-logo-200.png"/>
+     </a>
+    </div>
+    <div class="hero-divider-line">
+    </div>
+   </div>
+   <!-- Page Title Card -->
+   <section class="glass-card-display hero-introduction glass-panel-amber">
+    <div class="card-header-centered">
+     <i class="card-icon-primary fas fa-graduation-cap">
+     </i>
+     <h2>
+      Learning Paths
+     </h2>
+    </div>
+    <p class="hero-description">
+     Comprehensive interactive programming courses from Beginner to Expert. 80 modules with 55 hours of content, 
                 220 quizzes, 33 live code playgrounds, and 20 progressive challenges across 4 learning paths.
-            </p>
-            <div class="hero-stats">
-                <span class="stat-pill">4 Paths</span>
-                <span class="stat-pill">80 Modules</span>
-                <span class="stat-pill">55 Hours</span>
-                <span class="stat-pill">220 Quizzes</span>
-            </div>
-        </section>
-
-        <!-- What Are Learning Paths? -->
-        <section class="glass-card-display animation-t1 glass-panel-cyan">
-            <h2 class="section-title">
-                <i class="fas fa-info-circle"></i>
-                What Are Learning Paths?
-            </h2>
-            
-            <p class="intro-text">Learning Paths are <strong>comprehensive, interactive programming courses</strong> designed to take you from foundational concepts to expert-level mastery. Each path combines theoretical knowledge with hands-on practice through quizzes, live code playgrounds, and progressive challenges.</p>
-            
-            <div class="highlight-box">
-                <div class="highlight-icon">
-                    <i class="fas fa-star"></i>
-                </div>
-                <div class="highlight-content">
-                    <h3>Key Features</h3>
-                    <ul class="feature-list">
-                        <li><i class="fas fa-check-circle"></i><strong>Progressive Difficulty:</strong> Beginner → Intermediate → Advanced → Expert</li>
-                        <li><i class="fas fa-check-circle"></i><strong>Interactive Quizzes:</strong> Test comprehension after each module</li>
-                        <li><i class="fas fa-check-circle"></i><strong>Live Code Playgrounds:</strong> Monaco editor with real-time execution</li>
-                        <li><i class="fas fa-check-circle"></i><strong>Progressive Challenges:</strong> Apply knowledge to real-world scenarios</li>
-                        <li><i class="fas fa-check-circle"></i><strong>D3.js Visualizations:</strong> Interactive diagrams for complex concepts</li>
-                        <li><i class="fas fa-check-circle"></i><strong>Completion Tracking:</strong> Monitor progress across all modules</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- Learning Journey Visualization -->
-        <section class="glass-card-display animation-t1 glass-panel-teal">
-            <h2 class="section-title">
-                <i class="fas fa-map-marked-alt"></i>
-                Your Learning Journey
-            </h2>
-            
-            <p class="intro-text">Each Learning Path follows a proven pedagogical structure designed to maximize knowledge retention and practical skill development.</p>
-            
-            <div class="diagram-container">
-                <div class="mermaid">
-graph LR
-    Start["🎯 Start<br/>Learning Path"] --> Theory["📚 Theory<br/>Conceptual Overview"]
-    Theory --> Visual["📊 Visualization<br/>D3.js Diagrams"]
-    Visual --> Quiz["❓ Quiz<br/>Test Knowledge"]
-    Quiz --> Playground["💻 Playground<br/>Hands-On Coding"]
-    Playground --> Challenge["🏆 Challenge<br/>Real-World Scenario"]
-    Challenge --> Next{More<br/>Modules?}
-    Next -->|Yes| Theory
-    Next -->|No| Complete["✅ Path Complete<br/>Certificate"]
+    </p>
+    <div class="hero-stats">
+     <span class="stat-pill">
+      4 Paths
+     </span>
+     <span class="stat-pill">
+      80 Modules
+     </span>
+     <span class="stat-pill">
+      55 Hours
+     </span>
+     <span class="stat-pill">
+      220 Quizzes
+     </span>
+    </div>
+   </section>
+   <!-- What Are Learning Paths? -->
+   <section class="glass-card-display animation-t1">
+    <h2 class="section-title">
+     <i class="fas fa-info-circle">
+     </i>
+     What Are Learning Paths?
+    </h2>
+    <p class="intro-text">
+     Learning Paths are
+     <strong>
+      comprehensive, interactive programming courses
+     </strong>
+     designed to take you from foundational concepts to expert-level mastery. Each path combines theoretical knowledge with hands-on practice through quizzes, live code playgrounds, and progressive challenges.
+    </p>
+    <div class="highlight-box">
+     <div class="highlight-icon">
+      <i class="fas fa-star">
+      </i>
+     </div>
+     <div class="highlight-content">
+      <h3>
+       Key Features
+      </h3>
+      <ul class="feature-list">
+       <li>
+        <i class="fas fa-check-circle">
+        </i>
+        <strong>
+         Progressive Difficulty:
+        </strong>
+        Beginner → Intermediate → Advanced → Expert
+       </li>
+       <li>
+        <i class="fas fa-check-circle">
+        </i>
+        <strong>
+         Interactive Quizzes:
+        </strong>
+        Test comprehension after each module
+       </li>
+       <li>
+        <i class="fas fa-check-circle">
+        </i>
+        <strong>
+         Live Code Playgrounds:
+        </strong>
+        Monaco editor with real-time execution
+       </li>
+       <li>
+        <i class="fas fa-check-circle">
+        </i>
+        <strong>
+         Progressive Challenges:
+        </strong>
+        Apply knowledge to real-world scenarios
+       </li>
+       <li>
+        <i class="fas fa-check-circle">
+        </i>
+        <strong>
+         D3.js Visualizations:
+        </strong>
+        Interactive diagrams for complex concepts
+       </li>
+       <li>
+        <i class="fas fa-check-circle">
+        </i>
+        <strong>
+         Completion Tracking:
+        </strong>
+        Monitor progress across all modules
+       </li>
+      </ul>
+     </div>
+    </div>
+   </section>
+   <!-- Learning Journey Visualization -->
+   <section class="glass-card-display animation-t1">
+    <h2 class="section-title">
+     <i class="fas fa-map-marked-alt">
+     </i>
+     Your Learning Journey
+    </h2>
+    <p class="intro-text">
+     Each Learning Path follows a proven pedagogical structure designed to maximize knowledge retention and practical skill development.
+    </p>
+    <div class="diagram-container">
+     <div class="mermaid">
+      graph LR
+    Start["🎯 Start
+      <br/>
+      Learning Path"] --&gt; Theory["📚 Theory
+      <br/>
+      Conceptual Overview"]
+    Theory --&gt; Visual["📊 Visualization
+      <br/>
+      D3.js Diagrams"]
+    Visual --&gt; Quiz["❓ Quiz
+      <br/>
+      Test Knowledge"]
+    Quiz --&gt; Playground["💻 Playground
+      <br/>
+      Hands-On Coding"]
+    Playground --&gt; Challenge["🏆 Challenge
+      <br/>
+      Real-World Scenario"]
+    Challenge --&gt; Next{More
+      <br/>
+      Modules?}
+    Next --&gt;|Yes| Theory
+    Next --&gt;|No| Complete["✅ Path Complete
+      <br/>
+      Certificate"]
     
     style Start fill:#7b61ff,stroke:#9f87ff,stroke-width:3px,color:#fff
     style Theory fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
@@ -119,411 +197,679 @@ graph LR
     style Playground fill:#f97316,stroke:#fb923c,stroke-width:2px,color:#fff
     style Challenge fill:#ef4444,stroke:#f87171,stroke-width:2px,color:#fff
     style Complete fill:#8b5cf6,stroke:#a78bfa,stroke-width:3px,color:#fff
-                </div>
-            </div>
-        </section>
-
-        <!-- Featured Learning Paths -->
-        <section class="glass-card-display animation-t1 glass-panel-purple">
-            <h2 class="section-title">
-                <i class="fas fa-route"></i>
-                Available Learning Paths
-            </h2>
-            
-            <p class="intro-text">Choose a path that aligns with your learning goals. Each path contains multiple modules, building from foundational principles to advanced techniques.</p>
-            
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; margin-top: 2rem;">
-                <!-- API Design Path -->
-                <a href="../knowledge/api-design-hub.html" class="glass-card-clickable animation-t1" style="text-decoration: none; display: block; border: 2px solid rgba(16, 185, 129, 0.3); background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(0, 212, 255, 0.1) 100%);">
-                    <div class="card-icon" style="background: linear-gradient(135deg, #10b981 0%, #00d4ff 100%); font-size: 3rem; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; border-radius: 20px; margin: 0 auto 1.5rem;">🌐</div>
-                    <h3 class="card-title" style="font-size: 1.75rem; margin-bottom: 1rem; min-height: 2.5rem;">API Design</h3>
-                    <p class="card-description" style="margin-bottom: 1.5rem; min-height: 5rem;">Master REST, GraphQL, and API versioning through 5 interactive modules covering design principles, authentication patterns, and best practices.</p>
-                    
-                    <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 1rem; margin-top: 1rem;">
-                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1rem;">
-                            <div style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px; padding: 1rem; text-align: center;">
-                                <div style="font-size: 2rem; font-weight: 700; color: #10b981; margin-bottom: 0.25rem;">5</div>
-                                <div style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">Modules</div>
-                            </div>
-                            <div style="background: rgba(0, 212, 255, 0.15); border: 1px solid rgba(0, 212, 255, 0.3); border-radius: 12px; padding: 1rem; text-align: center;">
-                                <div style="font-size: 2rem; font-weight: 700; color: #00d4ff; margin-bottom: 0.25rem;">3.5h</div>
-                                <div style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">Duration</div>
-                            </div>
-                        </div>
-                        
-                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
-                            <span style="padding: 0.35rem 0.85rem; background: rgba(123, 97, 255, 0.25); border-radius: 12px; font-size: 0.85rem; color: var(--text-secondary);">📊 50 quizzes</span>
-                            <span style="padding: 0.35rem 0.85rem; background: rgba(123, 97, 255, 0.25); border-radius: 12px; font-size: 0.85rem; color: var(--text-secondary);">💻 6 playgrounds</span>
-                            <span style="padding: 0.35rem 0.85rem; background: rgba(123, 97, 255, 0.25); border-radius: 12px; font-size: 0.85rem; color: var(--text-secondary);">🏆 4 challenges</span>
-                        </div>
-                    </div>
-                    
-                    <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(16, 185, 129, 0.1); border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.3);">
-                        <div style="font-weight: 600; margin-bottom: 0.5rem; color: var(--text-primary);">📖 You'll Learn:</div>
-                        <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.9rem; color: var(--text-secondary);">
-                            <li style="margin-bottom: 0.25rem;">• RESTful design principles & resource modeling</li>
-                            <li style="margin-bottom: 0.25rem;">• GraphQL schema design & query optimization</li>
-                            <li style="margin-bottom: 0.25rem;">• API versioning strategies & deprecation</li>
-                            <li style="margin-bottom: 0.25rem;">• Authentication patterns (JWT, OAuth 2.0)</li>
-                            <li>• Performance optimization & caching</li>
-                        </ul>
-                    </div>
-                </a>
-                
-                <!-- Testing Path -->
-                <a href="../knowledge/testing-hub.html" class="glass-card-clickable animation-t1" style="text-decoration: none; display: block; border: 2px solid rgba(251, 191, 36, 0.3); background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(251, 191, 36, 0.1) 100%);">
-                    <div class="card-icon" style="background: linear-gradient(135deg, #10b981 0%, #fbbf24 100%); font-size: 3rem; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; border-radius: 20px; margin: 0 auto 1.5rem;">🧪</div>
-                    <h3 class="card-title" style="font-size: 1.75rem; margin-bottom: 1rem; min-height: 2.5rem;">Testing Mastery</h3>
-                    <p class="card-description" style="margin-bottom: 1.5rem; min-height: 5rem;">Learn TDD, unit testing, BDD/E2E, coverage analysis, and CI/CD integration through comprehensive testing workflows.</p>
-                    
-                    <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 1rem; margin-top: 1rem;">
-                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1rem;">
-                            <div style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px; padding: 1rem; text-align: center;">
-                                <div style="font-size: 2rem; font-weight: 700; color: #10b981; margin-bottom: 0.25rem;">5</div>
-                                <div style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">Modules</div>
-                            </div>
-                            <div style="background: rgba(251, 191, 36, 0.15); border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 12px; padding: 1rem; text-align: center;">
-                                <div style="font-size: 2rem; font-weight: 700; color: #fbbf24; margin-bottom: 0.25rem;">3h</div>
-                                <div style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">Duration</div>
-                            </div>
-                        </div>
-                        
-                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
-                            <span style="padding: 0.35rem 0.85rem; background: rgba(123, 97, 255, 0.25); border-radius: 12px; font-size: 0.85rem; color: var(--text-secondary);">📊 50 quizzes</span>
-                            <span style="padding: 0.35rem 0.85rem; background: rgba(123, 97, 255, 0.25); border-radius: 12px; font-size: 0.85rem; color: var(--text-secondary);">💻 8 playgrounds</span>
-                            <span style="padding: 0.35rem 0.85rem; background: rgba(123, 97, 255, 0.25); border-radius: 12px; font-size: 0.85rem; color: var(--text-secondary);">🏆 5 challenges</span>
-                        </div>
-                    </div>
-                    
-                    <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(251, 191, 36, 0.1); border-radius: 12px; border: 1px solid rgba(251, 191, 36, 0.3);">
-                        <div style="font-weight: 600; margin-bottom: 0.5rem; color: var(--text-primary);">📖 You'll Learn:</div>
-                        <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.9rem; color: var(--text-secondary);">
-                            <li style="margin-bottom: 0.25rem;">• TDD RED→GREEN→REFACTOR workflow</li>
-                            <li style="margin-bottom: 0.25rem;">• Unit testing with Jest, pytest, JUnit</li>
-                            <li style="margin-bottom: 0.25rem;">• BDD with Cucumber & E2E with Playwright</li>
-                            <li style="margin-bottom: 0.25rem;">• Coverage analysis & mutation testing</li>
-                            <li>• CI/CD integration & test automation</li>
-                        </ul>
-                    </div>
-                </a>
-                
-                <!-- Security Path -->
-                <a href="../knowledge/security-hub.html" class="glass-card-clickable animation-t1" style="text-decoration: none; display: block; border: 2px solid rgba(239, 68, 68, 0.3); background: linear-gradient(135deg, rgba(249, 115, 22, 0.1) 0%, rgba(239, 68, 68, 0.1) 100%);">
-                    <div class="card-icon" style="background: linear-gradient(135deg, #f97316 0%, #ef4444 100%); font-size: 3rem; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; border-radius: 20px; margin: 0 auto 1.5rem;">🔐</div>
-                    <h3 class="card-title" style="font-size: 1.75rem; margin-bottom: 1rem; min-height: 2.5rem;">Security Fundamentals</h3>
-                    <p class="card-description" style="margin-bottom: 1.5rem; min-height: 5rem;">Master OWASP Top 10, authentication patterns, cryptography, threat modeling, and incident response protocols.</p>
-                    
-                    <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 1rem; margin-top: 1rem;">
-                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1rem;">
-                            <div style="background: rgba(249, 115, 22, 0.15); border: 1px solid rgba(249, 115, 22, 0.3); border-radius: 12px; padding: 1rem; text-align: center;">
-                                <div style="font-size: 2rem; font-weight: 700; color: #f97316; margin-bottom: 0.25rem;">5</div>
-                                <div style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">Modules</div>
-                            </div>
-                            <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px; padding: 1rem; text-align: center;">
-                                <div style="font-size: 2rem; font-weight: 700; color: #ef4444; margin-bottom: 0.25rem;">4h</div>
-                                <div style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">Duration</div>
-                            </div>
-                        </div>
-                        
-                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
-                            <span style="padding: 0.35rem 0.85rem; background: rgba(123, 97, 255, 0.25); border-radius: 12px; font-size: 0.85rem; color: var(--text-secondary);">📊 60 quizzes</span>
-                            <span style="padding: 0.35rem 0.85rem; background: rgba(123, 97, 255, 0.25); border-radius: 12px; font-size: 0.85rem; color: var(--text-secondary);">💻 7 playgrounds</span>
-                            <span style="padding: 0.35rem 0.85rem; background: rgba(123, 97, 255, 0.25); border-radius: 12px; font-size: 0.85rem; color: var(--text-secondary);">🏆 5 challenges</span>
-                        </div>
-                    </div>
-                    
-                    <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(239, 68, 68, 0.1); border-radius: 12px; border: 1px solid rgba(239, 68, 68, 0.3);">
-                        <div style="font-weight: 600; margin-bottom: 0.5rem; color: var(--text-primary);">📖 You'll Learn:</div>
-                        <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.9rem; color: var(--text-secondary);">
-                            <li style="margin-bottom: 0.25rem;">• OWASP Top 10 vulnerabilities & mitigations</li>
-                            <li style="margin-bottom: 0.25rem;">• Authentication (JWT, OAuth 2.0, SAML)</li>
-                            <li style="margin-bottom: 0.25rem;">• Cryptography basics & secure storage</li>
-                            <li style="margin-bottom: 0.25rem;">• Threat modeling & risk assessment</li>
-                            <li>• Incident response & security monitoring</li>
-                        </ul>
-                    </div>
-                </a>
-                
-                <!-- Design Patterns Path -->
-                <a href="../knowledge/design-patterns-hub.html" class="glass-card-clickable animation-t1" style="text-decoration: none; display: block; border: 2px solid rgba(139, 92, 246, 0.3); background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(167, 139, 250, 0.1) 100%);">
-                    <div class="card-icon" style="background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%); font-size: 3rem; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; border-radius: 20px; margin: 0 auto 1.5rem;">🎨</div>
-                    <h3 class="card-title" style="font-size: 1.75rem; margin-bottom: 1rem; min-height: 2.5rem;">Design Patterns</h3>
-                    <p class="card-description" style="margin-bottom: 1.5rem; min-height: 5rem;">Gang of Four patterns: creational, structural, behavioral, anti-patterns to avoid, and real-world application examples.</p>
-                    
-                    <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 1rem; margin-top: 1rem;">
-                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1rem;">
-                            <div style="background: rgba(139, 92, 246, 0.15); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 12px; padding: 1rem; text-align: center;">
-                                <div style="font-size: 2rem; font-weight: 700; color: #8b5cf6; margin-bottom: 0.25rem;">5</div>
-                                <div style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">Modules</div>
-                            </div>
-                            <div style="background: rgba(167, 139, 250, 0.15); border: 1px solid rgba(167, 139, 250, 0.3); border-radius: 12px; padding: 1rem; text-align: center;">
-                                <div style="font-size: 2rem; font-weight: 700; color: #a78bfa; margin-bottom: 0.25rem;">4h</div>
-                                <div style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">Duration</div>
-                            </div>
-                        </div>
-                        
-                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
-                            <span style="padding: 0.35rem 0.85rem; background: rgba(123, 97, 255, 0.25); border-radius: 12px; font-size: 0.85rem; color: var(--text-secondary);">📊 60 quizzes</span>
-                            <span style="padding: 0.35rem 0.85rem; background: rgba(123, 97, 255, 0.25); border-radius: 12px; font-size: 0.85rem; color: var(--text-secondary);">💻 12 playgrounds</span>
-                            <span style="padding: 0.35rem 0.85rem; background: rgba(123, 97, 255, 0.25); border-radius: 12px; font-size: 0.85rem; color: var(--text-secondary);">🏆 6 challenges</span>
-                        </div>
-                    </div>
-                    
-                    <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(139, 92, 246, 0.1); border-radius: 12px; border: 1px solid rgba(139, 92, 246, 0.3);">
-                        <div style="font-weight: 600; margin-bottom: 0.5rem; color: var(--text-primary);">📖 You'll Learn:</div>
-                        <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.9rem; color: var(--text-secondary);">
-                            <li style="margin-bottom: 0.25rem;">• Creational patterns (Factory, Singleton, Builder)</li>
-                            <li style="margin-bottom: 0.25rem;">• Structural patterns (Adapter, Decorator, Facade)</li>
-                            <li style="margin-bottom: 0.25rem;">• Behavioral patterns (Observer, Strategy, Command)</li>
-                            <li style="margin-bottom: 0.25rem;">• Anti-patterns to avoid</li>
-                            <li>• Real-world pattern selection & implementation</li>
-                        </ul>
-                    </div>
-                </a>
-            </div>
-        </section>
-
-        <!-- Module Structure -->
-        <section class="glass-card-display animation-t1 glass-panel-teal">
-            <h2 class="section-title">
-                <i class="fas fa-cubes"></i>
-                Module Structure
-            </h2>
-            
-            <p class="intro-text">Each module within a Learning Path follows a consistent structure designed to reinforce learning through progressive engagement.</p>
-            
-            <div class="masonry-grid">
-                <div class="glass-card-display animation-t1">
-                    <div style="font-size: 2.5rem; text-align: center; margin-bottom: 1rem;">📚</div>
-                    <h3 class="card-title" style="text-align: center;">1. Theory</h3>
-                    <p class="card-description">Conceptual overview with real-world context, industry best practices, and common pitfalls to avoid.</p>
-                </div>
-                
-                <div class="glass-card-display animation-t1" style="border: 2px solid rgba(0, 212, 255, 0.3);">
-                    <div style="font-size: 2.5rem; text-align: center; margin-bottom: 1rem;">📊</div>
-                    <h3 class="card-title" style="text-align: center;">2. Visualization</h3>
-                    <p class="card-description">Interactive D3.js diagrams showing data flows, architecture patterns, and system interactions.</p>
-                </div>
-                
-                <div class="glass-card-display animation-t1" style="border: 2px solid rgba(251, 191, 36, 0.3);">
-                    <div style="font-size: 2.5rem; text-align: center; margin-bottom: 1rem;">❓</div>
-                    <h3 class="card-title" style="text-align: center;">3. Quiz</h3>
-                    <p class="card-description">Multiple-choice questions testing comprehension, with immediate feedback and detailed explanations.</p>
-                </div>
-                
-                <div class="glass-card-display animation-t1" style="border: 2px solid rgba(249, 115, 22, 0.3);">
-                    <div style="font-size: 2.5rem; text-align: center; margin-bottom: 1rem;">💻</div>
-                    <h3 class="card-title" style="text-align: center;">4. Code Playground</h3>
-                    <p class="card-description">Monaco editor with syntax highlighting, auto-completion, and real-time code execution.</p>
-                </div>
-                
-                <div class="glass-card-display animation-t1" style="border: 2px solid rgba(239, 68, 68, 0.3);">
-                    <div style="font-size: 2.5rem; text-align: center; margin-bottom: 1rem;">🏆</div>
-                    <h3 class="card-title" style="text-align: center;">5. Challenge</h3>
-                    <p class="card-description">Real-world scenario requiring application of learned concepts to solve complex problems.</p>
-                </div>
-                
-                <div class="glass-card-display animation-t1" style="border: 2px solid rgba(139, 92, 246, 0.3);">
-                    <div style="font-size: 2.5rem; text-align: center; margin-bottom: 1rem;">✅</div>
-                    <h3 class="card-title" style="text-align: center;">6. Validation</h3>
-                    <p class="card-description">Automated test suite validates solution correctness, providing instant feedback and hints.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Difficulty Levels -->
-        <section class="glass-card-display animation-t1 glass-panel-cyan">
-            <h2 class="section-title">
-                <i class="fas fa-signal"></i>
-                Difficulty Progression
-            </h2>
-            
-            <p class="intro-text">Modules are tagged with difficulty levels to help you track your progress from foundational knowledge to expert mastery.</p>
-            
-            <div class="two-column-grid">
-                <div class="info-box">
-                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                        <span style="padding: 0.5rem 1rem; background: #10b981; border-radius: 12px; font-weight: 700; color: white;">BEGINNER</span>
-                        <span style="color: var(--text-secondary);">Level 1</span>
-                    </div>
-                    <p style="margin: 0; color: var(--text-secondary);">Foundational concepts, basic syntax, simple examples. No prerequisites required.</p>
-                </div>
-                
-                <div class="info-box" style="border: 2px solid rgba(251, 191, 36, 0.3); background: rgba(251, 191, 36, 0.05);">
-                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                        <span style="padding: 0.5rem 1rem; background: #fbbf24; border-radius: 12px; font-weight: 700; color: #0a0e27;">INTERMEDIATE</span>
-                        <span style="color: var(--text-secondary);">Level 2</span>
-                    </div>
-                    <p style="margin: 0; color: var(--text-secondary);">Practical application, common patterns, moderate complexity. Basic knowledge assumed.</p>
-                </div>
-                
-                <div class="info-box" style="border: 2px solid rgba(249, 115, 22, 0.3); background: rgba(249, 115, 22, 0.05);">
-                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                        <span style="padding: 0.5rem 1rem; background: #f97316; border-radius: 12px; font-weight: 700; color: white;">ADVANCED</span>
-                        <span style="color: var(--text-secondary);">Level 3</span>
-                    </div>
-                    <p style="margin: 0; color: var(--text-secondary);">Complex scenarios, optimization techniques, architectural decisions. Strong fundamentals required.</p>
-                </div>
-                
-                <div class="info-box" style="border: 2px solid rgba(139, 92, 246, 0.3); background: rgba(139, 92, 246, 0.05);">
-                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                        <span style="padding: 0.5rem 1rem; background: #8b5cf6; border-radius: 12px; font-weight: 700; color: white;">EXPERT</span>
-                        <span style="color: var(--text-secondary);">Level 4</span>
-                    </div>
-                    <p style="margin: 0; color: var(--text-secondary);">Cutting-edge techniques, performance engineering, system design. Production experience assumed.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Learning Path Statistics -->
-        <section class="glass-card-display animation-t1 glass-panel-pink">
-            <h2 class="section-title">
-                <i class="fas fa-chart-bar"></i>
-                Learning Path Statistics
-            </h2>
-            
-            <div class="metrics-grid">
-                <div class="metric-card">
-                    <div class="metric-icon">
-                        <i class="fas fa-route"></i>
-                    </div>
-                    <div class="metric-value">4</div>
-                    <div class="metric-label">Learning Paths</div>
-                </div>
-                
-                <div class="metric-card">
-                    <div class="metric-icon">
-                        <i class="fas fa-book-open"></i>
-                    </div>
-                    <div class="metric-value">80</div>
-                    <div class="metric-label">Total Modules</div>
-                </div>
-                
-                <div class="metric-card">
-                    <div class="metric-icon">
-                        <i class="fas fa-clock"></i>
-                    </div>
-                    <div class="metric-value">55h</div>
-                    <div class="metric-label">Total Duration</div>
-                </div>
-                
-                <div class="metric-card">
-                    <div class="metric-icon">
-                        <i class="fas fa-question-circle"></i>
-                    </div>
-                    <div class="metric-value">220</div>
-                    <div class="metric-label">Quizzes</div>
-                </div>
-                
-                <div class="metric-card">
-                    <div class="metric-icon">
-                        <i class="fas fa-code"></i>
-                    </div>
-                    <div class="metric-value">33</div>
-                    <div class="metric-label">Code Playgrounds</div>
-                </div>
-                
-                <div class="metric-card">
-                    <div class="metric-icon">
-                        <i class="fas fa-trophy"></i>
-                    </div>
-                    <div class="metric-value">20</div>
-                    <div class="metric-label">Challenges</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Coming Soon -->
-        <section class="glass-card-display animation-t1 glass-panel-indigo">
-            <h2 class="section-title">
-                <i class="fas fa-rocket"></i>
-                Coming Soon
-            </h2>
-            
-            <p class="intro-text">We're continuously expanding our Learning Path library. Here's what's on the roadmap:</p>
-            
-            <div class="masonry-grid">
-                <div class="glass-card-display animation-t1" style="opacity: 0.7;">
-                    <div style="font-size: 2.5rem; text-align: center; margin-bottom: 1rem;">☁️</div>
-                    <h3 class="card-title" style="text-align: center;">Cloud Architecture</h3>
-                    <p class="card-description" style="text-align: center;">AWS, Azure, GCP best practices, serverless patterns, microservices deployment.</p>
-                    <div style="text-align: center; margin-top: 1rem; font-size: 0.85rem; color: var(--accent-primary);">Q2 2026</div>
-                </div>
-                
-                <div class="glass-card-display animation-t1" style="opacity: 0.7;">
-                    <div style="font-size: 2.5rem; text-align: center; margin-bottom: 1rem;">🤖</div>
-                    <h3 class="card-title" style="text-align: center;">Machine Learning</h3>
-                    <p class="card-description" style="text-align: center;">ML fundamentals, neural networks, model training, deployment strategies.</p>
-                    <div style="text-align: center; margin-top: 1rem; font-size: 0.85rem; color: var(--accent-primary);">Q3 2026</div>
-                </div>
-                
-                <div class="glass-card-display animation-t1" style="opacity: 0.7;">
-                    <div style="font-size: 2.5rem; text-align: center; margin-bottom: 1rem;">📱</div>
-                    <h3 class="card-title" style="text-align: center;">Mobile Development</h3>
-                    <p class="card-description" style="text-align: center;">React Native, Flutter, native iOS/Android, cross-platform patterns.</p>
-                    <div style="text-align: center; margin-top: 1rem; font-size: 0.85rem; color: var(--accent-primary);">Q4 2026</div>
-                </div>
-                
-                <div class="glass-card-display animation-t1" style="opacity: 0.7;">
-                    <div style="font-size: 2.5rem; text-align: center; margin-bottom: 1rem;">🎮</div>
-                    <h3 class="card-title" style="text-align: center;">Game Development</h3>
-                    <p class="card-description" style="text-align: center;">Unity, Unreal Engine, game loops, physics engines, multiplayer.</p>
-                    <div style="text-align: center; margin-top: 1rem; font-size: 0.85rem; color: var(--accent-primary);">Q1 2027</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Related Resources -->
-        <section class="glass-card-display animation-t1 glass-panel-pink">
-            <h2 class="section-title">
-                <i class="fas fa-link"></i>
-                Related Resources
-            </h2>
-            
-            <div class="reference-grid">
-                <div class="reference-section">
-                    <h3>CORTEX Knowledge</h3>
-                    <ul class="reference-list">
-                        <li><a href="../knowledge/index.html">Best Practices Library</a></li>
-                        <li><a href="../architecture/index.html">Architecture Overview</a></li>
-                        <li><a href="../orchestrators/index.html">Orchestrators</a></li>
-                    </ul>
-                </div>
-                
-                <div class="reference-section">
-                    <h3>Development Tools</h3>
-                    <ul class="reference-list">
-                        <li><a href="../toolkit-manager/index.html">Toolkit Manager</a></li>
-                        <li><a href="../lens/index.html">CORTEX Lens</a></li>
-                        <li><a href="../token-optimization/index.html">Token Optimization</a></li>
-                    </ul>
-                </div>
-                
-                <div class="reference-section">
-                    <h3>Getting Started</h3>
-                    <ul class="reference-list">
-                        <li><a href="../getting-started/index.html">Installation Guide</a></li>
-                        <li><a href="../index.html#security-panel">Security Features</a></li>
-                        <li><a href="../index.html">Home</a></li>
-                    </ul>
-                </div>
-                
-                <div class="reference-section">
-                    <h3>External Resources</h3>
-                    <ul class="reference-list">
-                        <li><a href="https://github.com/asifhussain60/CORTEX" target="_blank">GitHub Repository</a></li>
-                        <li><a href="https://github.com/asifhussain60/CORTEX/issues" target="_blank">Report Issues</a></li>
-                        <li><a href="https://github.com/asifhussain60/CORTEX/discussions" target="_blank">Community Discussions</a></li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- Initialize Mermaid -->
-    <script>
-        mermaid.initialize({ 
+     </div>
+    </div>
+   </section>
+   <!-- Featured Learning Paths -->
+   <section class="glass-card-display animation-t1 glass-panel-purple">
+    <h2 class="section-title">
+     <i class="fas fa-route">
+     </i>
+     Available Learning Paths
+    </h2>
+    <p class="intro-text">
+     Choose a path that aligns with your learning goals. Each path contains multiple modules, building from foundational principles to advanced techniques.
+    </p>
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; margin-top: 2rem;">
+     <!-- API Design Path -->
+     <a class="glass-card-clickable animation-t1" href="../knowledge/api-design-hub.html" style="text-decoration: none; display: block; border: 2px solid rgba(16, 185, 129, 0.3); background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(0, 212, 255, 0.1) 100%);">
+      <div class="card-icon" style="background: linear-gradient(135deg, #10b981 0%, #00d4ff 100%); font-size: 3rem; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; border-radius: 20px; margin: 0 auto 1.5rem;">
+       🌐
+      </div>
+      <h3 class="card-title" style="font-size: 1.75rem; margin-bottom: 1rem; min-height: 2.5rem;">
+       API Design
+      </h3>
+      <p class="card-description" style="margin-bottom: 1.5rem; min-height: 5rem;">
+       Master REST, GraphQL, and API versioning through 5 interactive modules covering design principles, authentication patterns, and best practices.
+      </p>
+      <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 1rem; margin-top: 1rem;">
+       <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1rem;">
+        <div style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px; padding: 1rem; text-align: center;">
+         <div style="font-size: 2rem; font-weight: 700; color: #10b981; margin-bottom: 0.25rem;">
+          5
+         </div>
+         <div style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">
+          Modules
+         </div>
+        </div>
+        <div style="background: rgba(0, 212, 255, 0.15); border: 1px solid rgba(0, 212, 255, 0.3); border-radius: 12px; padding: 1rem; text-align: center;">
+         <div style="font-size: 2rem; font-weight: 700; color: #00d4ff; margin-bottom: 0.25rem;">
+          3.5h
+         </div>
+         <div style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">
+          Duration
+         </div>
+        </div>
+       </div>
+       <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
+        <span style="padding: 0.35rem 0.85rem; background: rgba(123, 97, 255, 0.25); border-radius: 12px; font-size: 0.85rem; color: var(--text-secondary);">
+         📊 50 quizzes
+        </span>
+        <span style="padding: 0.35rem 0.85rem; background: rgba(123, 97, 255, 0.25); border-radius: 12px; font-size: 0.85rem; color: var(--text-secondary);">
+         💻 6 playgrounds
+        </span>
+        <span style="padding: 0.35rem 0.85rem; background: rgba(123, 97, 255, 0.25); border-radius: 12px; font-size: 0.85rem; color: var(--text-secondary);">
+         🏆 4 challenges
+        </span>
+       </div>
+      </div>
+      <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(16, 185, 129, 0.1); border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.3);">
+       <div style="font-weight: 600; margin-bottom: 0.5rem; color: var(--text-primary);">
+        📖 You'll Learn:
+       </div>
+       <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.9rem; color: var(--text-secondary);">
+        <li style="margin-bottom: 0.25rem;">
+         • RESTful design principles &amp; resource modeling
+        </li>
+        <li style="margin-bottom: 0.25rem;">
+         • GraphQL schema design &amp; query optimization
+        </li>
+        <li style="margin-bottom: 0.25rem;">
+         • API versioning strategies &amp; deprecation
+        </li>
+        <li style="margin-bottom: 0.25rem;">
+         • Authentication patterns (JWT, OAuth 2.0)
+        </li>
+        <li>
+         • Performance optimization &amp; caching
+        </li>
+       </ul>
+      </div>
+     </a>
+     <!-- Testing Path -->
+     <a class="glass-card-clickable animation-t1" href="../knowledge/testing-hub.html" style="text-decoration: none; display: block; border: 2px solid rgba(251, 191, 36, 0.3); background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(251, 191, 36, 0.1) 100%);">
+      <div class="card-icon" style="background: linear-gradient(135deg, #10b981 0%, #fbbf24 100%); font-size: 3rem; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; border-radius: 20px; margin: 0 auto 1.5rem;">
+       🧪
+      </div>
+      <h3 class="card-title" style="font-size: 1.75rem; margin-bottom: 1rem; min-height: 2.5rem;">
+       Testing Mastery
+      </h3>
+      <p class="card-description" style="margin-bottom: 1.5rem; min-height: 5rem;">
+       Learn TDD, unit testing, BDD/E2E, coverage analysis, and CI/CD integration through comprehensive testing workflows.
+      </p>
+      <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 1rem; margin-top: 1rem;">
+       <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1rem;">
+        <div style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px; padding: 1rem; text-align: center;">
+         <div style="font-size: 2rem; font-weight: 700; color: #10b981; margin-bottom: 0.25rem;">
+          5
+         </div>
+         <div style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">
+          Modules
+         </div>
+        </div>
+        <div style="background: rgba(251, 191, 36, 0.15); border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 12px; padding: 1rem; text-align: center;">
+         <div style="font-size: 2rem; font-weight: 700; color: #fbbf24; margin-bottom: 0.25rem;">
+          3h
+         </div>
+         <div style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">
+          Duration
+         </div>
+        </div>
+       </div>
+       <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
+        <span style="padding: 0.35rem 0.85rem; background: rgba(123, 97, 255, 0.25); border-radius: 12px; font-size: 0.85rem; color: var(--text-secondary);">
+         📊 50 quizzes
+        </span>
+        <span style="padding: 0.35rem 0.85rem; background: rgba(123, 97, 255, 0.25); border-radius: 12px; font-size: 0.85rem; color: var(--text-secondary);">
+         💻 8 playgrounds
+        </span>
+        <span style="padding: 0.35rem 0.85rem; background: rgba(123, 97, 255, 0.25); border-radius: 12px; font-size: 0.85rem; color: var(--text-secondary);">
+         🏆 5 challenges
+        </span>
+       </div>
+      </div>
+      <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(251, 191, 36, 0.1); border-radius: 12px; border: 1px solid rgba(251, 191, 36, 0.3);">
+       <div style="font-weight: 600; margin-bottom: 0.5rem; color: var(--text-primary);">
+        📖 You'll Learn:
+       </div>
+       <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.9rem; color: var(--text-secondary);">
+        <li style="margin-bottom: 0.25rem;">
+         • TDD RED→GREEN→REFACTOR workflow
+        </li>
+        <li style="margin-bottom: 0.25rem;">
+         • Unit testing with Jest, pytest, JUnit
+        </li>
+        <li style="margin-bottom: 0.25rem;">
+         • BDD with Cucumber &amp; E2E with Playwright
+        </li>
+        <li style="margin-bottom: 0.25rem;">
+         • Coverage analysis &amp; mutation testing
+        </li>
+        <li>
+         • CI/CD integration &amp; test automation
+        </li>
+       </ul>
+      </div>
+     </a>
+     <!-- Security Path -->
+     <a class="glass-card-clickable animation-t1" href="../knowledge/security-hub.html" style="text-decoration: none; display: block; border: 2px solid rgba(239, 68, 68, 0.3); background: linear-gradient(135deg, rgba(249, 115, 22, 0.1) 0%, rgba(239, 68, 68, 0.1) 100%);">
+      <div class="card-icon" style="background: linear-gradient(135deg, #f97316 0%, #ef4444 100%); font-size: 3rem; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; border-radius: 20px; margin: 0 auto 1.5rem;">
+       🔐
+      </div>
+      <h3 class="card-title" style="font-size: 1.75rem; margin-bottom: 1rem; min-height: 2.5rem;">
+       Security Fundamentals
+      </h3>
+      <p class="card-description" style="margin-bottom: 1.5rem; min-height: 5rem;">
+       Master OWASP Top 10, authentication patterns, cryptography, threat modeling, and incident response protocols.
+      </p>
+      <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 1rem; margin-top: 1rem;">
+       <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1rem;">
+        <div style="background: rgba(249, 115, 22, 0.15); border: 1px solid rgba(249, 115, 22, 0.3); border-radius: 12px; padding: 1rem; text-align: center;">
+         <div style="font-size: 2rem; font-weight: 700; color: #f97316; margin-bottom: 0.25rem;">
+          5
+         </div>
+         <div style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">
+          Modules
+         </div>
+        </div>
+        <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px; padding: 1rem; text-align: center;">
+         <div style="font-size: 2rem; font-weight: 700; color: #ef4444; margin-bottom: 0.25rem;">
+          4h
+         </div>
+         <div style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">
+          Duration
+         </div>
+        </div>
+       </div>
+       <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
+        <span style="padding: 0.35rem 0.85rem; background: rgba(123, 97, 255, 0.25); border-radius: 12px; font-size: 0.85rem; color: var(--text-secondary);">
+         📊 60 quizzes
+        </span>
+        <span style="padding: 0.35rem 0.85rem; background: rgba(123, 97, 255, 0.25); border-radius: 12px; font-size: 0.85rem; color: var(--text-secondary);">
+         💻 7 playgrounds
+        </span>
+        <span style="padding: 0.35rem 0.85rem; background: rgba(123, 97, 255, 0.25); border-radius: 12px; font-size: 0.85rem; color: var(--text-secondary);">
+         🏆 5 challenges
+        </span>
+       </div>
+      </div>
+      <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(239, 68, 68, 0.1); border-radius: 12px; border: 1px solid rgba(239, 68, 68, 0.3);">
+       <div style="font-weight: 600; margin-bottom: 0.5rem; color: var(--text-primary);">
+        📖 You'll Learn:
+       </div>
+       <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.9rem; color: var(--text-secondary);">
+        <li style="margin-bottom: 0.25rem;">
+         • OWASP Top 10 vulnerabilities &amp; mitigations
+        </li>
+        <li style="margin-bottom: 0.25rem;">
+         • Authentication (JWT, OAuth 2.0, SAML)
+        </li>
+        <li style="margin-bottom: 0.25rem;">
+         • Cryptography basics &amp; secure storage
+        </li>
+        <li style="margin-bottom: 0.25rem;">
+         • Threat modeling &amp; risk assessment
+        </li>
+        <li>
+         • Incident response &amp; security monitoring
+        </li>
+       </ul>
+      </div>
+     </a>
+     <!-- Design Patterns Path -->
+     <a class="glass-card-clickable animation-t1" href="../knowledge/design-patterns-hub.html" style="text-decoration: none; display: block; border: 2px solid rgba(139, 92, 246, 0.3); background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(167, 139, 250, 0.1) 100%);">
+      <div class="card-icon" style="background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%); font-size: 3rem; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; border-radius: 20px; margin: 0 auto 1.5rem;">
+       🎨
+      </div>
+      <h3 class="card-title" style="font-size: 1.75rem; margin-bottom: 1rem; min-height: 2.5rem;">
+       Design Patterns
+      </h3>
+      <p class="card-description" style="margin-bottom: 1.5rem; min-height: 5rem;">
+       Gang of Four patterns: creational, structural, behavioral, anti-patterns to avoid, and real-world application examples.
+      </p>
+      <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 1rem; margin-top: 1rem;">
+       <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1rem;">
+        <div style="background: rgba(139, 92, 246, 0.15); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 12px; padding: 1rem; text-align: center;">
+         <div style="font-size: 2rem; font-weight: 700; color: #8b5cf6; margin-bottom: 0.25rem;">
+          5
+         </div>
+         <div style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">
+          Modules
+         </div>
+        </div>
+        <div style="background: rgba(167, 139, 250, 0.15); border: 1px solid rgba(167, 139, 250, 0.3); border-radius: 12px; padding: 1rem; text-align: center;">
+         <div style="font-size: 2rem; font-weight: 700; color: #a78bfa; margin-bottom: 0.25rem;">
+          4h
+         </div>
+         <div style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">
+          Duration
+         </div>
+        </div>
+       </div>
+       <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
+        <span style="padding: 0.35rem 0.85rem; background: rgba(123, 97, 255, 0.25); border-radius: 12px; font-size: 0.85rem; color: var(--text-secondary);">
+         📊 60 quizzes
+        </span>
+        <span style="padding: 0.35rem 0.85rem; background: rgba(123, 97, 255, 0.25); border-radius: 12px; font-size: 0.85rem; color: var(--text-secondary);">
+         💻 12 playgrounds
+        </span>
+        <span style="padding: 0.35rem 0.85rem; background: rgba(123, 97, 255, 0.25); border-radius: 12px; font-size: 0.85rem; color: var(--text-secondary);">
+         🏆 6 challenges
+        </span>
+       </div>
+      </div>
+      <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(139, 92, 246, 0.1); border-radius: 12px; border: 1px solid rgba(139, 92, 246, 0.3);">
+       <div style="font-weight: 600; margin-bottom: 0.5rem; color: var(--text-primary);">
+        📖 You'll Learn:
+       </div>
+       <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.9rem; color: var(--text-secondary);">
+        <li style="margin-bottom: 0.25rem;">
+         • Creational patterns (Factory, Singleton, Builder)
+        </li>
+        <li style="margin-bottom: 0.25rem;">
+         • Structural patterns (Adapter, Decorator, Facade)
+        </li>
+        <li style="margin-bottom: 0.25rem;">
+         • Behavioral patterns (Observer, Strategy, Command)
+        </li>
+        <li style="margin-bottom: 0.25rem;">
+         • Anti-patterns to avoid
+        </li>
+        <li>
+         • Real-world pattern selection &amp; implementation
+        </li>
+       </ul>
+      </div>
+     </a>
+    </div>
+   </section>
+   <!-- Module Structure -->
+   <section class="glass-card-display animation-t1">
+    <h2 class="section-title">
+     <i class="fas fa-cubes">
+     </i>
+     Module Structure
+    </h2>
+    <p class="intro-text">
+     Each module within a Learning Path follows a consistent structure designed to reinforce learning through progressive engagement.
+    </p>
+    <div class="masonry-grid">
+     <div class="glass-card-display animation-t1">
+      <div style="font-size: 2.5rem; text-align: center; margin-bottom: 1rem;">
+       📚
+      </div>
+      <h3 class="card-title" style="text-align: center;">
+       1. Theory
+      </h3>
+      <p class="card-description">
+       Conceptual overview with real-world context, industry best practices, and common pitfalls to avoid.
+      </p>
+     </div>
+     <div class="glass-card-display animation-t1" style="border: 2px solid rgba(0, 212, 255, 0.3);">
+      <div style="font-size: 2.5rem; text-align: center; margin-bottom: 1rem;">
+       📊
+      </div>
+      <h3 class="card-title" style="text-align: center;">
+       2. Visualization
+      </h3>
+      <p class="card-description">
+       Interactive D3.js diagrams showing data flows, architecture patterns, and system interactions.
+      </p>
+     </div>
+     <div class="glass-card-display animation-t1" style="border: 2px solid rgba(251, 191, 36, 0.3);">
+      <div style="font-size: 2.5rem; text-align: center; margin-bottom: 1rem;">
+       ❓
+      </div>
+      <h3 class="card-title" style="text-align: center;">
+       3. Quiz
+      </h3>
+      <p class="card-description">
+       Multiple-choice questions testing comprehension, with immediate feedback and detailed explanations.
+      </p>
+     </div>
+     <div class="glass-card-display animation-t1" style="border: 2px solid rgba(249, 115, 22, 0.3);">
+      <div style="font-size: 2.5rem; text-align: center; margin-bottom: 1rem;">
+       💻
+      </div>
+      <h3 class="card-title" style="text-align: center;">
+       4. Code Playground
+      </h3>
+      <p class="card-description">
+       Monaco editor with syntax highlighting, auto-completion, and real-time code execution.
+      </p>
+     </div>
+     <div class="glass-card-display animation-t1" style="border: 2px solid rgba(239, 68, 68, 0.3);">
+      <div style="font-size: 2.5rem; text-align: center; margin-bottom: 1rem;">
+       🏆
+      </div>
+      <h3 class="card-title" style="text-align: center;">
+       5. Challenge
+      </h3>
+      <p class="card-description">
+       Real-world scenario requiring application of learned concepts to solve complex problems.
+      </p>
+     </div>
+     <div class="glass-card-display animation-t1" style="border: 2px solid rgba(139, 92, 246, 0.3);">
+      <div style="font-size: 2.5rem; text-align: center; margin-bottom: 1rem;">
+       ✅
+      </div>
+      <h3 class="card-title" style="text-align: center;">
+       6. Validation
+      </h3>
+      <p class="card-description">
+       Automated test suite validates solution correctness, providing instant feedback and hints.
+      </p>
+     </div>
+    </div>
+   </section>
+   <!-- Difficulty Levels -->
+   <section class="glass-card-display animation-t1">
+    <h2 class="section-title">
+     <i class="fas fa-signal">
+     </i>
+     Difficulty Progression
+    </h2>
+    <p class="intro-text">
+     Modules are tagged with difficulty levels to help you track your progress from foundational knowledge to expert mastery.
+    </p>
+    <div class="two-column-grid">
+     <div class="info-box">
+      <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+       <span style="padding: 0.5rem 1rem; background: #10b981; border-radius: 12px; font-weight: 700; color: white;">
+        BEGINNER
+       </span>
+       <span style="color: var(--text-secondary);">
+        Level 1
+       </span>
+      </div>
+      <p style="margin: 0; color: var(--text-secondary);">
+       Foundational concepts, basic syntax, simple examples. No prerequisites required.
+      </p>
+     </div>
+     <div class="info-box" style="border: 2px solid rgba(251, 191, 36, 0.3); background: rgba(251, 191, 36, 0.05);">
+      <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+       <span style="padding: 0.5rem 1rem; background: #fbbf24; border-radius: 12px; font-weight: 700; color: #0a0e27;">
+        INTERMEDIATE
+       </span>
+       <span style="color: var(--text-secondary);">
+        Level 2
+       </span>
+      </div>
+      <p style="margin: 0; color: var(--text-secondary);">
+       Practical application, common patterns, moderate complexity. Basic knowledge assumed.
+      </p>
+     </div>
+     <div class="info-box" style="border: 2px solid rgba(249, 115, 22, 0.3); background: rgba(249, 115, 22, 0.05);">
+      <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+       <span style="padding: 0.5rem 1rem; background: #f97316; border-radius: 12px; font-weight: 700; color: white;">
+        ADVANCED
+       </span>
+       <span style="color: var(--text-secondary);">
+        Level 3
+       </span>
+      </div>
+      <p style="margin: 0; color: var(--text-secondary);">
+       Complex scenarios, optimization techniques, architectural decisions. Strong fundamentals required.
+      </p>
+     </div>
+     <div class="info-box" style="border: 2px solid rgba(139, 92, 246, 0.3); background: rgba(139, 92, 246, 0.05);">
+      <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+       <span style="padding: 0.5rem 1rem; background: #8b5cf6; border-radius: 12px; font-weight: 700; color: white;">
+        EXPERT
+       </span>
+       <span style="color: var(--text-secondary);">
+        Level 4
+       </span>
+      </div>
+      <p style="margin: 0; color: var(--text-secondary);">
+       Cutting-edge techniques, performance engineering, system design. Production experience assumed.
+      </p>
+     </div>
+    </div>
+   </section>
+   <!-- Learning Path Statistics -->
+   <section class="glass-card-display animation-t1">
+    <h2 class="section-title">
+     <i class="fas fa-chart-bar">
+     </i>
+     Learning Path Statistics
+    </h2>
+    <div class="metrics-grid">
+     <div class="metric-card">
+      <div class="metric-icon">
+       <i class="fas fa-route">
+       </i>
+      </div>
+      <div class="metric-value">
+       4
+      </div>
+      <div class="metric-label">
+       Learning Paths
+      </div>
+     </div>
+     <div class="metric-card">
+      <div class="metric-icon">
+       <i class="fas fa-book-open">
+       </i>
+      </div>
+      <div class="metric-value">
+       80
+      </div>
+      <div class="metric-label">
+       Total Modules
+      </div>
+     </div>
+     <div class="metric-card">
+      <div class="metric-icon">
+       <i class="fas fa-clock">
+       </i>
+      </div>
+      <div class="metric-value">
+       55h
+      </div>
+      <div class="metric-label">
+       Total Duration
+      </div>
+     </div>
+     <div class="metric-card">
+      <div class="metric-icon">
+       <i class="fas fa-question-circle">
+       </i>
+      </div>
+      <div class="metric-value">
+       220
+      </div>
+      <div class="metric-label">
+       Quizzes
+      </div>
+     </div>
+     <div class="metric-card">
+      <div class="metric-icon">
+       <i class="fas fa-code">
+       </i>
+      </div>
+      <div class="metric-value">
+       33
+      </div>
+      <div class="metric-label">
+       Code Playgrounds
+      </div>
+     </div>
+     <div class="metric-card">
+      <div class="metric-icon">
+       <i class="fas fa-trophy">
+       </i>
+      </div>
+      <div class="metric-value">
+       20
+      </div>
+      <div class="metric-label">
+       Challenges
+      </div>
+     </div>
+    </div>
+   </section>
+   <!-- Coming Soon -->
+   <section class="glass-card-display animation-t1">
+    <h2 class="section-title">
+     <i class="fas fa-rocket">
+     </i>
+     Coming Soon
+    </h2>
+    <p class="intro-text">
+     We're continuously expanding our Learning Path library. Here's what's on the roadmap:
+    </p>
+    <div class="masonry-grid">
+     <div class="glass-card-display animation-t1" style="opacity: 0.7;">
+      <div style="font-size: 2.5rem; text-align: center; margin-bottom: 1rem;">
+       ☁️
+      </div>
+      <h3 class="card-title" style="text-align: center;">
+       Cloud Architecture
+      </h3>
+      <p class="card-description" style="text-align: center;">
+       AWS, Azure, GCP best practices, serverless patterns, microservices deployment.
+      </p>
+      <div style="text-align: center; margin-top: 1rem; font-size: 0.85rem; color: var(--accent-primary);">
+       Q2 2026
+      </div>
+     </div>
+     <div class="glass-card-display animation-t1" style="opacity: 0.7;">
+      <div style="font-size: 2.5rem; text-align: center; margin-bottom: 1rem;">
+       🤖
+      </div>
+      <h3 class="card-title" style="text-align: center;">
+       Machine Learning
+      </h3>
+      <p class="card-description" style="text-align: center;">
+       ML fundamentals, neural networks, model training, deployment strategies.
+      </p>
+      <div style="text-align: center; margin-top: 1rem; font-size: 0.85rem; color: var(--accent-primary);">
+       Q3 2026
+      </div>
+     </div>
+     <div class="glass-card-display animation-t1" style="opacity: 0.7;">
+      <div style="font-size: 2.5rem; text-align: center; margin-bottom: 1rem;">
+       📱
+      </div>
+      <h3 class="card-title" style="text-align: center;">
+       Mobile Development
+      </h3>
+      <p class="card-description" style="text-align: center;">
+       React Native, Flutter, native iOS/Android, cross-platform patterns.
+      </p>
+      <div style="text-align: center; margin-top: 1rem; font-size: 0.85rem; color: var(--accent-primary);">
+       Q4 2026
+      </div>
+     </div>
+     <div class="glass-card-display animation-t1" style="opacity: 0.7;">
+      <div style="font-size: 2.5rem; text-align: center; margin-bottom: 1rem;">
+       🎮
+      </div>
+      <h3 class="card-title" style="text-align: center;">
+       Game Development
+      </h3>
+      <p class="card-description" style="text-align: center;">
+       Unity, Unreal Engine, game loops, physics engines, multiplayer.
+      </p>
+      <div style="text-align: center; margin-top: 1rem; font-size: 0.85rem; color: var(--accent-primary);">
+       Q1 2027
+      </div>
+     </div>
+    </div>
+   </section>
+   <!-- Related Resources -->
+   <section class="glass-card-display animation-t1">
+    <h2 class="section-title">
+     <i class="fas fa-link">
+     </i>
+     Related Resources
+    </h2>
+    <div class="reference-grid">
+     <div class="reference-section">
+      <h3>
+       CORTEX Knowledge
+      </h3>
+      <ul class="reference-list">
+       <li>
+        <a href="../knowledge/index.html">
+         Best Practices Library
+        </a>
+       </li>
+       <li>
+        <a href="../architecture/index.html">
+         Architecture Overview
+        </a>
+       </li>
+       <li>
+        <a href="../orchestrators/index.html">
+         Orchestrators
+        </a>
+       </li>
+      </ul>
+     </div>
+     <div class="reference-section">
+      <h3>
+       Development Tools
+      </h3>
+      <ul class="reference-list">
+       <li>
+        <a href="../toolkit-manager/index.html">
+         Toolkit Manager
+        </a>
+       </li>
+       <li>
+        <a href="../lens/index.html">
+         CORTEX Lens
+        </a>
+       </li>
+       <li>
+        <a href="../token-optimization/index.html">
+         Token Optimization
+        </a>
+       </li>
+      </ul>
+     </div>
+     <div class="reference-section">
+      <h3>
+       Getting Started
+      </h3>
+      <ul class="reference-list">
+       <li>
+        <a href="../getting-started/index.html">
+         Installation Guide
+        </a>
+       </li>
+       <li>
+        <a href="../index.html#security-panel">
+         Security Features
+        </a>
+       </li>
+       <li>
+        <a href="../index.html">
+         Home
+        </a>
+       </li>
+      </ul>
+     </div>
+     <div class="reference-section">
+      <h3>
+       External Resources
+      </h3>
+      <ul class="reference-list">
+       <li>
+        <a href="https://github.com/asifhussain60/CORTEX" target="_blank">
+         GitHub Repository
+        </a>
+       </li>
+       <li>
+        <a href="https://github.com/asifhussain60/CORTEX/issues" target="_blank">
+         Report Issues
+        </a>
+       </li>
+       <li>
+        <a href="https://github.com/asifhussain60/CORTEX/discussions" target="_blank">
+         Community Discussions
+        </a>
+       </li>
+      </ul>
+     </div>
+    </div>
+   </section>
+  </main>
+  <!-- Initialize Mermaid -->
+  <script>
+   mermaid.initialize({ 
             startOnLoad: true,
             theme: 'dark',
             themeVariables: {
@@ -535,6 +881,6 @@ graph LR
                 tertiaryColor: '#f59e0b'
             }
         });
-    </script>
-</body>
+  </script>
+ </body>
 </html>

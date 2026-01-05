@@ -1,303 +1,499 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="CORTEX Best Practices - 35 Guidelines for Implementation across Frontend, Backend, Data, Cloud, and Software Craft">
-    <meta name="keywords" content="CORTEX, best practices, guidelines, software craft, code quality">
-    <meta name="author" content="Asif Hussain">
-    <title>Best Practices | CORTEX 4.0</title>
-    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
-    <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02-v4">
-    <link rel="stylesheet" href="../assets/css/learning-hub.css?v=2026-01-02">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-
-<style>
-/* Mobile font optimization */
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <meta content="CORTEX Best Practices - 35 Guidelines for Implementation across Frontend, Backend, Data, Cloud, and Software Craft" name="description"/>
+  <meta content="CORTEX, best practices, guidelines, software craft, code quality" name="keywords"/>
+  <meta content="Asif Hussain" name="author"/>
+  <title>
+   Best Practices | CORTEX 4.0
+  </title>
+  <link href="../assets/images/CORTEX-logo.png" rel="icon" type="image/png"/>
+  <link href="../assets/css/main.css?v=2026-01-02-v4" rel="stylesheet"/>
+  <link href="../assets/css/learning-hub.css?v=2026-01-02" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js">
+  </script>
+  <script src="https://d3js.org/d3.v7.min.js">
+  </script>
+  <style>
+   /* Mobile font optimization */
 html {
     -webkit-text-size-adjust: 100%;
     -moz-text-size-adjust: 100%;
     text-size-adjust: 100%;
 }
-</style>
-</head>
-<body>
-    <!-- Glass Header Navigation -->
-    <header class="glass-header">
-        <div class="header-content">
-            <nav class="header-nav">
-                <a href="../index.html" class="nav-logo">
-                    <img src="../assets/images/CORTEX-logo-200.png" alt="CORTEX" class="cortex-logo" />
-                </a>
-            </nav>
-        </div>
-    </header>
-    
-    <!-- Main Content -->
-    <main class="container" id="main-content">
-        <!-- Hero Section with Robot Head -->
-        <div class="hero-section-wrapper">
-            <div class="hero-robot-container">
-                <a href="../index.html" title="Back to Home">
-                    <img src="../assets/images/CORTEX-logo-200.png" alt="CORTEX Robot" class="hero-robot-head" />
-                </a>
-            </div>
-            <div class="hero-divider-line"></div>
-        </div>
-        
-        <!-- Page Title Card -->
-        <section class="glass-card-display hero-introduction glass-panel-amber">
-            <div class="card-header-centered">
-                <i class="card-icon-primary fas fa-book"></i>
-                <h2>CORTEX Best Practices</h2>
-            </div>
-            <p class="hero-description">
-                80 interactive learning modules across 17 domain hubs providing 55 hours of comprehensive training. 
+  </style>
+ </head>
+ <body>
+  <!-- Glass Header Navigation -->
+  <header class="glass-header">
+   <div class="header-content">
+    <nav class="header-nav">
+     <a class="nav-logo" href="../index.html">
+      <img alt="CORTEX" class="cortex-logo" src="../assets/images/CORTEX-logo-200.png"/>
+     </a>
+    </nav>
+   </div>
+  </header>
+  <!-- Main Content -->
+  <main class="container" id="main-content">
+   <!-- Hero Section with Robot Head -->
+   <div class="hero-section-wrapper">
+    <div class="hero-robot-container">
+     <a href="../index.html" title="Back to Home">
+      <img alt="CORTEX Robot" class="hero-robot-head" src="../assets/images/CORTEX-logo-200.png"/>
+     </a>
+    </div>
+    <div class="hero-divider-line">
+    </div>
+   </div>
+   <!-- Page Title Card -->
+   <section class="glass-card-display hero-introduction glass-panel-amber">
+    <div class="card-header-centered">
+     <i class="card-icon-primary fas fa-book">
+     </i>
+     <h2>
+      CORTEX Best Practices
+     </h2>
+    </div>
+    <p class="hero-description">
+     80 interactive learning modules across 17 domain hubs providing 55 hours of comprehensive training. 
                 35 core guidelines stored in Tier 2 Knowledge Graph, automatically consulted during implementation.
-            </p>
-            <div class="hero-stats">
-                <span class="stat-pill">80 Modules</span>
-                <span class="stat-pill">55 Hours</span>
-                <span class="stat-pill">35 Guidelines</span>
-                <span class="stat-pill">17 Domains</span>
-            </div>
-        </section>
-
-        <!-- Executive Summary -->
-        <section class="glass-card-display animation-t1 glass-panel-emerald">
-            <h2 class="section-title">
-                <i class="fas fa-clipboard-list"></i>
-                What Are CORTEX Best Practices?
-            </h2>
-            
-            <p class="intro-text">CORTEX maintains a <strong>comprehensive knowledge library</strong> of 35 best practice guidelines that inform every line of code it generates. These guidelines are stored in <strong>Tier 2 Knowledge Graph</strong> and automatically consulted during implementation, ensuring consistent quality across all domains.</p>
-            
-            <div class="highlight-box">
-                <div class="highlight-icon">
-                    <i class="fas fa-lightbulb"></i>
-                </div>
-                <div class="highlight-content">
-                    <h3>Key Benefits</h3>
-                    <ul class="feature-list">
-                        <li><i class="fas fa-check-circle"></i><strong>Consistent Quality:</strong> Every implementation follows proven patterns</li>
-                        <li><i class="fas fa-check-circle"></i><strong>Domain Expertise:</strong> Specialized guidelines for Frontend, Backend, Data, Cloud, Craft</li>
-                        <li><i class="fas fa-check-circle"></i><strong>Automatic Enforcement:</strong> CORTEX consults guidelines without prompting</li>
-                        <li><i class="fas fa-check-circle"></i><strong>Living Documentation:</strong> Guidelines evolve with industry best practices</li>
-                        <li><i class="fas fa-check-circle"></i><strong>Knowledge Graph Integration:</strong> Semantic relationships between practices</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- Featured Learning Paths -->
-        <section class="glass-card-display animation-t1 glass-panel-emerald">
-            <h2 class="section-title">
-                <i class="fas fa-route"></i>
-                Featured Learning Paths
-            </h2>
-            
-            <p class="intro-text">Explore 17 comprehensive learning domains with structured modules covering enterprise software development.</p>
-            
-            <div class="masonry-grid">
-                <!-- Database Design -->
-                <a href="database-hub.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-primary">
-                        <i class="fas fa-database"></i>
-                    </div>
-                    <h3 class="card-title">Database Design</h3>
-                    <p class="card-description">Schema design, normalization, indexing strategies, query optimization, and data modeling best practices.</p>
-                    <div class="card-stats">
-                        <span class="stat-item"><i class="fas fa-graduation-cap"></i> 5 Modules</span>
-                    </div>
-                </a>
-
-                <!-- Cloud Architecture -->
-                <a href="cloud-hub.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-info">
-                        <i class="fas fa-cloud"></i>
-                    </div>
-                    <h3 class="card-title">Cloud Architecture</h3>
-                    <p class="card-description">Cloud design patterns, scalability, resilience, cost optimization, and multi-cloud strategies.</p>
-                    <div class="card-stats">
-                        <span class="stat-item"><i class="fas fa-graduation-cap"></i> 4 Modules</span>
-                    </div>
-                </a>
-
-                <!-- DevOps & CI/CD -->
-                <a href="devops-hub.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-warning">
-                        <i class="fas fa-infinity"></i>
-                    </div>
-                    <h3 class="card-title">DevOps & CI/CD</h3>
-                    <p class="card-description">Pipeline automation, continuous integration, deployment strategies, infrastructure as code, and monitoring.</p>
-                    <div class="card-stats">
-                        <span class="stat-item"><i class="fas fa-graduation-cap"></i> 5 Modules</span>
-                    </div>
-                </a>
-
-                <!-- Microservices -->
-                <a href="microservices-hub.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-success">
-                        <i class="fas fa-network-wired"></i>
-                    </div>
-                    <h3 class="card-title">Microservices</h3>
-                    <p class="card-description">Service decomposition, API gateways, service mesh, distributed tracing, and inter-service communication.</p>
-                    <div class="card-stats">
-                        <span class="stat-item"><i class="fas fa-graduation-cap"></i> 5 Modules</span>
-                    </div>
-                </a>
-
-                <!-- Domain-Driven Design -->
-                <a href="ddd-hub.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-primary">
-                        <i class="fas fa-cube"></i>
-                    </div>
-                    <h3 class="card-title">Domain-Driven Design</h3>
-                    <p class="card-description">Bounded contexts, aggregates, entities, value objects, domain events, and strategic design patterns.</p>
-                    <div class="card-stats">
-                        <span class="stat-item"><i class="fas fa-graduation-cap"></i> 6 Modules</span>
-                    </div>
-                </a>
-
-                <!-- Software Engineering -->
-                <a href="software-engineering-hub.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-info">
-                        <i class="fas fa-code"></i>
-                    </div>
-                    <h3 class="card-title">Software Engineering</h3>
-                    <p class="card-description">SDLC methodologies, version control, code review, refactoring techniques, and engineering best practices.</p>
-                    <div class="card-stats">
-                        <span class="stat-item"><i class="fas fa-graduation-cap"></i> 4 Modules</span>
-                    </div>
-                </a>
-
-                <!-- Frontend Development -->
-                <a href="frontend-hub.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-warning">
-                        <i class="fas fa-laptop-code"></i>
-                    </div>
-                    <h3 class="card-title">Frontend Development</h3>
-                    <p class="card-description">React patterns, state management, component architecture, performance optimization, and modern tooling.</p>
-                    <div class="card-stats">
-                        <span class="stat-item"><i class="fas fa-graduation-cap"></i> 5 Modules</span>
-                    </div>
-                </a>
-
-                <!-- Performance Engineering -->
-                <a href="performance-hub.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-success">
-                        <i class="fas fa-bolt"></i>
-                    </div>
-                    <h3 class="card-title">Performance Engineering</h3>
-                    <p class="card-description">Load testing, profiling, optimization techniques, caching strategies, and scalability patterns.</p>
-                    <div class="card-stats">
-                        <span class="stat-item"><i class="fas fa-graduation-cap"></i> 5 Modules</span>
-                    </div>
-                </a>
-
-                <!-- Mobile Development -->
-                <a href="mobile-hub.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-primary">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <h3 class="card-title">Mobile Development</h3>
-                    <p class="card-description">Native vs hybrid approaches, responsive design, offline capabilities, and mobile-first architecture.</p>
-                    <div class="card-stats">
-                        <span class="stat-item"><i class="fas fa-graduation-cap"></i> 4 Modules</span>
-                    </div>
-                </a>
-
-                <!-- Messaging & Events -->
-                <a href="messaging-hub.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-info">
-                        <i class="fas fa-comments"></i>
-                    </div>
-                    <h3 class="card-title">Messaging & Events</h3>
-                    <p class="card-description">Event-driven architecture, message queues, pub/sub patterns, event sourcing, and stream processing.</p>
-                    <div class="card-stats">
-                        <span class="stat-item"><i class="fas fa-graduation-cap"></i> 4 Modules</span>
-                    </div>
-                </a>
-
-                <!-- RAG Domains -->
-                <a href="rag-hub.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-warning">
-                        <i class="fas fa-robot"></i>
-                    </div>
-                    <h3 class="card-title">RAG Domains</h3>
-                    <p class="card-description">Retrieval-augmented generation, vector databases, semantic search, embeddings, and AI-powered knowledge systems.</p>
-                    <div class="card-stats">
-                        <span class="stat-item"><i class="fas fa-graduation-cap"></i> 3 Modules</span>
-                    </div>
-                </a>
-
-                <!-- UI/UX Design -->
-                <a href="ui-ux-hub.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-success">
-                        <i class="fas fa-paint-brush"></i>
-                    </div>
-                    <h3 class="card-title">UI/UX Design</h3>
-                    <p class="card-description">Design systems, accessibility, user research, prototyping, visual hierarchy, and interaction patterns.</p>
-                    <div class="card-stats">
-                        <span class="stat-item"><i class="fas fa-graduation-cap"></i> 4 Modules</span>
-                    </div>
-                </a>
-
-                <!-- Containers & K8s -->
-                <a href="containers-hub.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-primary">
-                        <i class="fab fa-docker"></i>
-                    </div>
-                    <h3 class="card-title">Containers & K8s</h3>
-                    <p class="card-description">Docker best practices, Kubernetes orchestration, container security, service discovery, and deployment strategies.</p>
-                    <div class="card-stats">
-                        <span class="stat-item"><i class="fas fa-graduation-cap"></i> 4 Modules</span>
-                    </div>
-                </a>
-            </div>
-        </section>
-
-        <!-- Five Major Categories -->
-        <section class="glass-card-display animation-t1 glass-panel-cyan">
-            <h2 class="section-title">
-                <i class="fas fa-th-large"></i>
-                Five Major Categories
-            </h2>
-            
-            <p class="intro-text">Best practices are organized into 5 major categories covering the complete software development lifecycle.</p>
-            
-            <div class="diagram-container">
-                <div class="mermaid">
-graph TB
-    CORTEX["🧠 CORTEX<br/>Knowledge Library<br/><small>35 Guidelines</small>"]
+    </p>
+    <div class="hero-stats">
+     <span class="stat-pill">
+      80 Modules
+     </span>
+     <span class="stat-pill">
+      55 Hours
+     </span>
+     <span class="stat-pill">
+      35 Guidelines
+     </span>
+     <span class="stat-pill">
+      17 Domains
+     </span>
+    </div>
+   </section>
+   <!-- Executive Summary -->
+   <section class="glass-card-display animation-t1 glass-panel-emerald">
+    <h2 class="section-title">
+     <i class="fas fa-clipboard-list">
+     </i>
+     What Are CORTEX Best Practices?
+    </h2>
+    <p class="intro-text">
+     CORTEX maintains a
+     <strong>
+      comprehensive knowledge library
+     </strong>
+     of 35 best practice guidelines that inform every line of code it generates. These guidelines are stored in
+     <strong>
+      Tier 2 Knowledge Graph
+     </strong>
+     and automatically consulted during implementation, ensuring consistent quality across all domains.
+    </p>
+    <div class="highlight-box">
+     <div class="highlight-icon">
+      <i class="fas fa-lightbulb">
+      </i>
+     </div>
+     <div class="highlight-content">
+      <h3>
+       Key Benefits
+      </h3>
+      <ul class="feature-list">
+       <li>
+        <i class="fas fa-check-circle">
+        </i>
+        <strong>
+         Consistent Quality:
+        </strong>
+        Every implementation follows proven patterns
+       </li>
+       <li>
+        <i class="fas fa-check-circle">
+        </i>
+        <strong>
+         Domain Expertise:
+        </strong>
+        Specialized guidelines for Frontend, Backend, Data, Cloud, Craft
+       </li>
+       <li>
+        <i class="fas fa-check-circle">
+        </i>
+        <strong>
+         Automatic Enforcement:
+        </strong>
+        CORTEX consults guidelines without prompting
+       </li>
+       <li>
+        <i class="fas fa-check-circle">
+        </i>
+        <strong>
+         Living Documentation:
+        </strong>
+        Guidelines evolve with industry best practices
+       </li>
+       <li>
+        <i class="fas fa-check-circle">
+        </i>
+        <strong>
+         Knowledge Graph Integration:
+        </strong>
+        Semantic relationships between practices
+       </li>
+      </ul>
+     </div>
+    </div>
+   </section>
+   <!-- Featured Learning Paths -->
+   <section class="glass-card-display animation-t1 glass-panel-emerald">
+    <h2 class="section-title">
+     <i class="fas fa-route">
+     </i>
+     Featured Learning Paths
+    </h2>
+    <p class="intro-text">
+     Explore 17 comprehensive learning domains with structured modules covering enterprise software development.
+    </p>
+    <div class="masonry-grid">
+     <!-- Database Design -->
+     <a class="glass-card-clickable animation-t1" href="database-hub.html">
+      <div class="card-icon card-icon-primary">
+       <i class="fas fa-database">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Database Design
+      </h3>
+      <p class="card-description">
+       Schema design, normalization, indexing strategies, query optimization, and data modeling best practices.
+      </p>
+      <div class="card-stats">
+       <span class="stat-item">
+        <i class="fas fa-graduation-cap">
+        </i>
+        5 Modules
+       </span>
+      </div>
+     </a>
+     <!-- Cloud Architecture -->
+     <a class="glass-card-clickable animation-t1" href="cloud-hub.html">
+      <div class="card-icon card-icon-info">
+       <i class="fas fa-cloud">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Cloud Architecture
+      </h3>
+      <p class="card-description">
+       Cloud design patterns, scalability, resilience, cost optimization, and multi-cloud strategies.
+      </p>
+      <div class="card-stats">
+       <span class="stat-item">
+        <i class="fas fa-graduation-cap">
+        </i>
+        4 Modules
+       </span>
+      </div>
+     </a>
+     <!-- DevOps & CI/CD -->
+     <a class="glass-card-clickable animation-t1" href="devops-hub.html">
+      <div class="card-icon card-icon-warning">
+       <i class="fas fa-infinity">
+       </i>
+      </div>
+      <h3 class="card-title">
+       DevOps &amp; CI/CD
+      </h3>
+      <p class="card-description">
+       Pipeline automation, continuous integration, deployment strategies, infrastructure as code, and monitoring.
+      </p>
+      <div class="card-stats">
+       <span class="stat-item">
+        <i class="fas fa-graduation-cap">
+        </i>
+        5 Modules
+       </span>
+      </div>
+     </a>
+     <!-- Microservices -->
+     <a class="glass-card-clickable animation-t1" href="microservices-hub.html">
+      <div class="card-icon card-icon-success">
+       <i class="fas fa-network-wired">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Microservices
+      </h3>
+      <p class="card-description">
+       Service decomposition, API gateways, service mesh, distributed tracing, and inter-service communication.
+      </p>
+      <div class="card-stats">
+       <span class="stat-item">
+        <i class="fas fa-graduation-cap">
+        </i>
+        5 Modules
+       </span>
+      </div>
+     </a>
+     <!-- Domain-Driven Design -->
+     <a class="glass-card-clickable animation-t1" href="ddd-hub.html">
+      <div class="card-icon card-icon-primary">
+       <i class="fas fa-cube">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Domain-Driven Design
+      </h3>
+      <p class="card-description">
+       Bounded contexts, aggregates, entities, value objects, domain events, and strategic design patterns.
+      </p>
+      <div class="card-stats">
+       <span class="stat-item">
+        <i class="fas fa-graduation-cap">
+        </i>
+        6 Modules
+       </span>
+      </div>
+     </a>
+     <!-- Software Engineering -->
+     <a class="glass-card-clickable animation-t1" href="software-engineering-hub.html">
+      <div class="card-icon card-icon-info">
+       <i class="fas fa-code">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Software Engineering
+      </h3>
+      <p class="card-description">
+       SDLC methodologies, version control, code review, refactoring techniques, and engineering best practices.
+      </p>
+      <div class="card-stats">
+       <span class="stat-item">
+        <i class="fas fa-graduation-cap">
+        </i>
+        4 Modules
+       </span>
+      </div>
+     </a>
+     <!-- Frontend Development -->
+     <a class="glass-card-clickable animation-t1" href="frontend-hub.html">
+      <div class="card-icon card-icon-warning">
+       <i class="fas fa-laptop-code">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Frontend Development
+      </h3>
+      <p class="card-description">
+       React patterns, state management, component architecture, performance optimization, and modern tooling.
+      </p>
+      <div class="card-stats">
+       <span class="stat-item">
+        <i class="fas fa-graduation-cap">
+        </i>
+        5 Modules
+       </span>
+      </div>
+     </a>
+     <!-- Performance Engineering -->
+     <a class="glass-card-clickable animation-t1" href="performance-hub.html">
+      <div class="card-icon card-icon-success">
+       <i class="fas fa-bolt">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Performance Engineering
+      </h3>
+      <p class="card-description">
+       Load testing, profiling, optimization techniques, caching strategies, and scalability patterns.
+      </p>
+      <div class="card-stats">
+       <span class="stat-item">
+        <i class="fas fa-graduation-cap">
+        </i>
+        5 Modules
+       </span>
+      </div>
+     </a>
+     <!-- Mobile Development -->
+     <a class="glass-card-clickable animation-t1" href="mobile-hub.html">
+      <div class="card-icon card-icon-primary">
+       <i class="fas fa-mobile-alt">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Mobile Development
+      </h3>
+      <p class="card-description">
+       Native vs hybrid approaches, responsive design, offline capabilities, and mobile-first architecture.
+      </p>
+      <div class="card-stats">
+       <span class="stat-item">
+        <i class="fas fa-graduation-cap">
+        </i>
+        4 Modules
+       </span>
+      </div>
+     </a>
+     <!-- Messaging & Events -->
+     <a class="glass-card-clickable animation-t1" href="messaging-hub.html">
+      <div class="card-icon card-icon-info">
+       <i class="fas fa-comments">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Messaging &amp; Events
+      </h3>
+      <p class="card-description">
+       Event-driven architecture, message queues, pub/sub patterns, event sourcing, and stream processing.
+      </p>
+      <div class="card-stats">
+       <span class="stat-item">
+        <i class="fas fa-graduation-cap">
+        </i>
+        4 Modules
+       </span>
+      </div>
+     </a>
+     <!-- RAG Domains -->
+     <a class="glass-card-clickable animation-t1" href="rag-hub.html">
+      <div class="card-icon card-icon-warning">
+       <i class="fas fa-robot">
+       </i>
+      </div>
+      <h3 class="card-title">
+       RAG Domains
+      </h3>
+      <p class="card-description">
+       Retrieval-augmented generation, vector databases, semantic search, embeddings, and AI-powered knowledge systems.
+      </p>
+      <div class="card-stats">
+       <span class="stat-item">
+        <i class="fas fa-graduation-cap">
+        </i>
+        3 Modules
+       </span>
+      </div>
+     </a>
+     <!-- UI/UX Design -->
+     <a class="glass-card-clickable animation-t1" href="ui-ux-hub.html">
+      <div class="card-icon card-icon-success">
+       <i class="fas fa-paint-brush">
+       </i>
+      </div>
+      <h3 class="card-title">
+       UI/UX Design
+      </h3>
+      <p class="card-description">
+       Design systems, accessibility, user research, prototyping, visual hierarchy, and interaction patterns.
+      </p>
+      <div class="card-stats">
+       <span class="stat-item">
+        <i class="fas fa-graduation-cap">
+        </i>
+        4 Modules
+       </span>
+      </div>
+     </a>
+     <!-- Containers & K8s -->
+     <a class="glass-card-clickable animation-t1" href="containers-hub.html">
+      <div class="card-icon card-icon-primary">
+       <i class="fab fa-docker">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Containers &amp; K8s
+      </h3>
+      <p class="card-description">
+       Docker best practices, Kubernetes orchestration, container security, service discovery, and deployment strategies.
+      </p>
+      <div class="card-stats">
+       <span class="stat-item">
+        <i class="fas fa-graduation-cap">
+        </i>
+        4 Modules
+       </span>
+      </div>
+     </a>
+    </div>
+   </section>
+   <!-- Five Major Categories -->
+   <section class="glass-card-display animation-t1">
+    <h2 class="section-title">
+     <i class="fas fa-th-large">
+     </i>
+     Five Major Categories
+    </h2>
+    <p class="intro-text">
+     Best practices are organized into 5 major categories covering the complete software development lifecycle.
+    </p>
+    <div class="diagram-container">
+     <div class="mermaid">
+      graph TB
+    CORTEX["🧠 CORTEX
+      <br/>
+      Knowledge Library
+      <br/>
+      <small>
+       35 Guidelines
+      </small>
+      "]
     
-    CORTEX --> Frontend["🎨 Frontend & UI<br/><small>6 Guidelines</small>"]
-    CORTEX --> Backend["⚙️ Backend & APIs<br/><small>8 Guidelines</small>"]
-    CORTEX --> Data["💾 Data & Storage<br/><small>7 Guidelines</small>"]
-    CORTEX --> Cloud["☁️ Cloud & Infrastructure<br/><small>6 Guidelines</small>"]
-    CORTEX --> Craft["🛠️ Software Craft<br/><small>8 Guidelines</small>"]
+    CORTEX --&gt; Frontend["🎨 Frontend &amp; UI
+      <br/>
+      <small>
+       6 Guidelines
+      </small>
+      "]
+    CORTEX --&gt; Backend["⚙️ Backend &amp; APIs
+      <br/>
+      <small>
+       8 Guidelines
+      </small>
+      "]
+    CORTEX --&gt; Data["💾 Data &amp; Storage
+      <br/>
+      <small>
+       7 Guidelines
+      </small>
+      "]
+    CORTEX --&gt; Cloud["☁️ Cloud &amp; Infrastructure
+      <br/>
+      <small>
+       6 Guidelines
+      </small>
+      "]
+    CORTEX --&gt; Craft["🛠️ Software Craft
+      <br/>
+      <small>
+       8 Guidelines
+      </small>
+      "]
     
-    Frontend --> F1["React Best Practices"]
-    Frontend --> F2["Accessibility Standards"]
-    Frontend --> F3["UI/UX Patterns"]
+    Frontend --&gt; F1["React Best Practices"]
+    Frontend --&gt; F2["Accessibility Standards"]
+    Frontend --&gt; F3["UI/UX Patterns"]
     
-    Backend --> B1["REST API Design"]
-    Backend --> B2["Authentication"]
-    Backend --> B3["Error Handling"]
+    Backend --&gt; B1["REST API Design"]
+    Backend --&gt; B2["Authentication"]
+    Backend --&gt; B3["Error Handling"]
     
-    Data --> D1["Database Design"]
-    Data --> D2["Data Modeling"]
-    Data --> D3["Query Optimization"]
+    Data --&gt; D1["Database Design"]
+    Data --&gt; D2["Data Modeling"]
+    Data --&gt; D3["Query Optimization"]
     
-    Cloud --> C1["Docker Practices"]
-    Cloud --> C2["CI/CD Pipelines"]
-    Cloud --> C3["Monitoring"]
+    Cloud --&gt; C1["Docker Practices"]
+    Cloud --&gt; C2["CI/CD Pipelines"]
+    Cloud --&gt; C3["Monitoring"]
     
-    Craft --> S1["SOLID Principles"]
-    Craft --> S2["Clean Code"]
-    Craft --> S3["Testing Strategies"]
+    Craft --&gt; S1["SOLID Principles"]
+    Craft --&gt; S2["Clean Code"]
+    Craft --&gt; S3["Testing Strategies"]
     
     style CORTEX fill:#7b61ff,stroke:#9f87ff,stroke-width:3px,color:#fff
     style Frontend fill:#e91e63,stroke:#f06292,stroke-width:2px,color:#fff
@@ -305,482 +501,769 @@ graph TB
     style Data fill:#4caf50,stroke:#66bb6a,stroke-width:2px,color:#fff
     style Cloud fill:#ff9800,stroke:#ffa726,stroke-width:2px,color:#fff
     style Craft fill:#9c27b0,stroke:#ab47bc,stroke-width:2px,color:#fff
-                </div>
-            </div>
-        </section>
-
-        <!-- Guidelines by Category -->
-        <section class="glass-card-display animation-t1 glass-panel-purple">
-            <h2 class="section-title">
-                <i class="fas fa-list-check"></i>
-                Guidelines by Category
-            </h2>
-            
-            <p class="intro-text">35 comprehensive best practice guidelines organized by domain expertise.</p>
-
-            <!-- Frontend & UI -->
-            <div class="masonry-grid">
-                <a href="react.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-primary">
-                        <i class="fab fa-react"></i>
-                    </div>
-                    <h3 class="card-title">React Best Practices</h3>
-                    <p class="card-description">Component composition, hooks, state management, performance optimization.</p>
-                    <div class="card-badge badge-frontend">Frontend</div>
-                </a>
-                
-                <a href="accessibility.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-info">
-                        <i class="fas fa-universal-access"></i>
-                    </div>
-                    <h3 class="card-title">Accessibility Standards</h3>
-                    <p class="card-description">WCAG AA compliance, ARIA labels, keyboard navigation, screen readers.</p>
-                    <div class="card-badge badge-frontend">Frontend</div>
-                </a>
-                
-                <a href="ui-ux.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-warning">
-                        <i class="fas fa-palette"></i>
-                    </div>
-                    <h3 class="card-title">UI/UX Design Patterns</h3>
-                    <p class="card-description">Design systems, component libraries, responsive design, visual hierarchy.</p>
-                    <div class="card-badge badge-frontend">Frontend</div>
-                </a>
-                
-                <a href="css.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-success">
-                        <i class="fab fa-css3-alt"></i>
-                    </div>
-                    <h3 class="card-title">CSS Architecture</h3>
-                    <p class="card-description">BEM methodology, CSS-in-JS, custom properties, modular CSS.</p>
-                    <div class="card-badge badge-frontend">Frontend</div>
-                </a>
-                
-                <a href="state-management.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-primary">
-                        <i class="fas fa-sitemap"></i>
-                    </div>
-                    <h3 class="card-title">State Management</h3>
-                    <p class="card-description">Redux, Context API, local vs global state, state machines.</p>
-                    <div class="card-badge badge-frontend">Frontend</div>
-                </a>
-                
-                <a href="frontend-testing.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-info">
-                        <i class="fas fa-vial"></i>
-                    </div>
-                    <h3 class="card-title">Frontend Testing</h3>
-                    <p class="card-description">Unit tests, integration tests, E2E testing, visual regression.</p>
-                    <div class="card-badge badge-frontend">Frontend</div>
-                </a>
-
-                <!-- Backend & APIs -->
-                <a href="rest-api.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-warning">
-                        <i class="fas fa-exchange-alt"></i>
-                    </div>
-                    <h3 class="card-title">REST API Design</h3>
-                    <p class="card-description">Resource naming, HTTP verbs, status codes, versioning, pagination.</p>
-                    <div class="card-badge badge-backend">Backend</div>
-                </a>
-                
-                <a href="authentication.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-success">
-                        <i class="fas fa-lock"></i>
-                    </div>
-                    <h3 class="card-title">Authentication & Authorization</h3>
-                    <p class="card-description">JWT, OAuth 2.0, role-based access control, session management.</p>
-                    <div class="card-badge badge-backend">Backend</div>
-                </a>
-                
-                <a href="error-handling.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-primary">
-                        <i class="fas fa-exclamation-triangle"></i>
-                    </div>
-                    <h3 class="card-title">Error Handling</h3>
-                    <p class="card-description">Structured errors, logging, monitoring, graceful degradation.</p>
-                    <div class="card-badge badge-backend">Backend</div>
-                </a>
-                
-                <a href="caching.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-info">
-                        <i class="fas fa-server"></i>
-                    </div>
-                    <h3 class="card-title">Caching Strategies</h3>
-                    <p class="card-description">Redis, CDN, cache invalidation, cache-aside pattern.</p>
-                    <div class="card-badge badge-backend">Backend</div>
-                </a>
-                
-                <a href="api-security.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-warning">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3 class="card-title">API Security</h3>
-                    <p class="card-description">Rate limiting, CORS, input validation, SQL injection prevention.</p>
-                    <div class="card-badge badge-backend">Backend</div>
-                </a>
-                
-                <a href="async-processing.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-success">
-                        <i class="fas fa-clock"></i>
-                    </div>
-                    <h3 class="card-title">Async Processing</h3>
-                    <p class="card-description">Message queues, background jobs, retry mechanisms, idempotency.</p>
-                    <div class="card-badge badge-backend">Backend</div>
-                </a>
-                
-                <a href="microservices.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-primary">
-                        <i class="fas fa-cubes"></i>
-                    </div>
-                    <h3 class="card-title">Microservices Architecture</h3>
-                    <p class="card-description">Service boundaries, API gateways, circuit breakers, saga pattern.</p>
-                    <div class="card-badge badge-backend">Backend</div>
-                </a>
-                
-                <a href="distributed-systems.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-info">
-                        <i class="fas fa-project-diagram"></i>
-                    </div>
-                    <h3 class="card-title">Distributed Systems</h3>
-                    <p class="card-description">CAP theorem, eventual consistency, distributed tracing, service mesh.</p>
-                    <div class="card-badge badge-backend">Backend</div>
-                </a>
-
-                <!-- Data & Storage -->
-                <a href="database-design.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-warning">
-                        <i class="fas fa-database"></i>
-                    </div>
-                    <h3 class="card-title">Database Design</h3>
-                    <p class="card-description">Normalization, denormalization, foreign keys, constraints.</p>
-                    <div class="card-badge badge-data">Data</div>
-                </a>
-                
-                <a href="indexing.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-success">
-                        <i class="fas fa-search"></i>
-                    </div>
-                    <h3 class="card-title">Indexing Strategy</h3>
-                    <p class="card-description">B-tree indexes, composite indexes, covering indexes, query optimization.</p>
-                    <div class="card-badge badge-data">Data</div>
-                </a>
-                
-                <a href="data-modeling.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-primary">
-                        <i class="fas fa-object-group"></i>
-                    </div>
-                    <h3 class="card-title">Data Modeling</h3>
-                    <p class="card-description">Entity-relationship diagrams, domain modeling, aggregates.</p>
-                    <div class="card-badge badge-data">Data</div>
-                </a>
-                
-                <a href="transactions.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-info">
-                        <i class="fas fa-sync-alt"></i>
-                    </div>
-                    <h3 class="card-title">Transaction Management</h3>
-                    <p class="card-description">ACID properties, isolation levels, deadlock prevention, optimistic locking.</p>
-                    <div class="card-badge badge-data">Data</div>
-                </a>
-                
-                <a href="migration.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-warning">
-                        <i class="fas fa-arrow-right"></i>
-                    </div>
-                    <h3 class="card-title">Data Migration</h3>
-                    <p class="card-description">Version control, rollback strategies, zero-downtime migrations.</p>
-                    <div class="card-badge badge-data">Data</div>
-                </a>
-                
-                <a href="backup.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-success">
-                        <i class="fas fa-save"></i>
-                    </div>
-                    <h3 class="card-title">Backup & Recovery</h3>
-                    <p class="card-description">Automated backups, point-in-time recovery, disaster recovery.</p>
-                    <div class="card-badge badge-data">Data</div>
-                </a>
-                
-                <a href="data-security.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-primary">
-                        <i class="fas fa-key"></i>
-                    </div>
-                    <h3 class="card-title">Data Security</h3>
-                    <p class="card-description">Encryption at rest/transit, PII handling, GDPR compliance.</p>
-                    <div class="card-badge badge-data">Data</div>
-                </a>
-
-                <!-- Cloud & Infrastructure -->
-                <a href="containers.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-info">
-                        <i class="fab fa-docker"></i>
-                    </div>
-                    <h3 class="card-title">Docker Best Practices</h3>
-                    <p class="card-description">Multi-stage builds, layer caching, security scanning, minimal images.</p>
-                    <div class="card-badge badge-cloud">Cloud</div>
-                </a>
-                
-                <a href="devops.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-warning">
-                        <i class="fas fa-infinity"></i>
-                    </div>
-                    <h3 class="card-title">CI/CD Pipelines</h3>
-                    <p class="card-description">Automated testing, deployment strategies, rollback mechanisms.</p>
-                    <div class="card-badge badge-cloud">Cloud</div>
-                </a>
-                
-                <a href="monitoring.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-success">
-                        <i class="fas fa-chart-area"></i>
-                    </div>
-                    <h3 class="card-title">Monitoring & Observability</h3>
-                    <p class="card-description">Metrics, logs, traces, alerting, dashboards.</p>
-                    <div class="card-badge badge-cloud">Cloud</div>
-                </a>
-                
-                <a href="iac.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-primary">
-                        <i class="fas fa-balance-scale"></i>
-                    </div>
-                    <h3 class="card-title">Infrastructure as Code</h3>
-                    <p class="card-description">Terraform, CloudFormation, version control, state management.</p>
-                    <div class="card-badge badge-cloud">Cloud</div>
-                </a>
-                
-                <a href="scaling.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-info">
-                        <i class="fas fa-expand-arrows-alt"></i>
-                    </div>
-                    <h3 class="card-title">Auto-Scaling</h3>
-                    <p class="card-description">Horizontal/vertical scaling, metrics-based, cost optimization.</p>
-                    <div class="card-badge badge-cloud">Cloud</div>
-                </a>
-                
-                <a href="cloud-security.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-warning">
-                        <i class="fas fa-shield-virus"></i>
-                    </div>
-                    <h3 class="card-title">Cloud Security</h3>
-                    <p class="card-description">IAM policies, network security, secrets management, compliance.</p>
-                    <div class="card-badge badge-cloud">Cloud</div>
-                </a>
-
-                <!-- Software Craft -->
-                <a href="solid.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-success">
-                        <i class="fas fa-shapes"></i>
-                    </div>
-                    <h3 class="card-title">SOLID Principles</h3>
-                    <p class="card-description">Single responsibility, open/closed, Liskov substitution, interface segregation, dependency inversion.</p>
-                    <div class="card-badge badge-craft">Craft</div>
-                </a>
-                
-                <a href="clean-code.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-primary">
-                        <i class="fas fa-broom"></i>
-                    </div>
-                    <h3 class="card-title">Clean Code</h3>
-                    <p class="card-description">Naming conventions, function length, code comments, refactoring.</p>
-                    <div class="card-badge badge-craft">Craft</div>
-                </a>
-                
-                <a href="testing.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-info">
-                        <i class="fas fa-flask"></i>
-                    </div>
-                    <h3 class="card-title">Testing Strategy</h3>
-                    <p class="card-description">Test pyramid, unit/integration/E2E tests, TDD, BDD.</p>
-                    <div class="card-badge badge-craft">Craft</div>
-                </a>
-                
-                <a href="design-patterns.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-warning">
-                        <i class="fas fa-puzzle-piece"></i>
-                    </div>
-                    <h3 class="card-title">Design Patterns</h3>
-                    <p class="card-description">Creational, structural, behavioral patterns, anti-patterns.</p>
-                    <div class="card-badge badge-craft">Craft</div>
-                </a>
-                
-                <a href="refactoring.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-success">
-                        <i class="fas fa-recycle"></i>
-                    </div>
-                    <h3 class="card-title">Refactoring Techniques</h3>
-                    <p class="card-description">Extract method, rename variable, simplify conditionals, remove duplication.</p>
-                    <div class="card-badge badge-craft">Craft</div>
-                </a>
-                
-                <a href="code-review.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-primary">
-                        <i class="fas fa-code-branch"></i>
-                    </div>
-                    <h3 class="card-title">Code Review</h3>
-                    <p class="card-description">Review checklist, constructive feedback, approval process.</p>
-                    <div class="card-badge badge-craft">Craft</div>
-                </a>
-                
-                <a href="documentation.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-info">
-                        <i class="fas fa-file-alt"></i>
-                    </div>
-                    <h3 class="card-title">Documentation</h3>
-                    <p class="card-description">API documentation, README files, inline comments, architecture docs.</p>
-                    <div class="card-badge badge-craft">Craft</div>
-                </a>
-                
-                <a href="version-control.html" class="glass-card-clickable animation-t1">
-                    <div class="card-icon card-icon-warning">
-                        <i class="fab fa-git-alt"></i>
-                    </div>
-                    <h3 class="card-title">Version Control</h3>
-                    <p class="card-description">Branching strategies, commit messages, pull requests, merge workflows.</p>
-                    <div class="card-badge badge-craft">Craft</div>
-                </a>
-            </div>
-        </section>
-
-        <!-- Knowledge Metrics -->
-        <section class="glass-card-display animation-t1 glass-panel-teal">
-            <h2 class="section-title">
-                <i class="fas fa-chart-pie"></i>
-                Knowledge Metrics
-            </h2>
-            
-            <div class="metrics-grid">
-                <div class="metric-card">
-                    <div class="metric-icon">
-                        <i class="fas fa-clipboard-list"></i>
-                    </div>
-                    <div class="metric-value">35</div>
-                    <div class="metric-label">Total Guidelines</div>
-                </div>
-                
-                <div class="metric-card">
-                    <div class="metric-icon">
-                        <i class="fas fa-file-alt"></i>
-                    </div>
-                    <div class="metric-value">17</div>
-                    <div class="metric-label">Domain Pages</div>
-                </div>
-                
-                <div class="metric-card">
-                    <div class="metric-icon">
-                        <i class="fas fa-layer-group"></i>
-                    </div>
-                    <div class="metric-value">5</div>
-                    <div class="metric-label">Major Categories</div>
-                </div>
-                
-                <div class="metric-card">
-                    <div class="metric-icon">
-                        <i class="fas fa-brain"></i>
-                    </div>
-                    <div class="metric-value">Tier 2</div>
-                    <div class="metric-label">Storage Location</div>
-                </div>
-                
-                <div class="metric-card">
-                    <div class="metric-icon">
-                        <i class="fas fa-robot"></i>
-                    </div>
-                    <div class="metric-value">100%</div>
-                    <div class="metric-label">Auto-Consulted</div>
-                </div>
-                
-                <div class="metric-card">
-                    <div class="metric-icon">
-                        <i class="fas fa-sync-alt"></i>
-                    </div>
-                    <div class="metric-value">Living</div>
-                    <div class="metric-label">Documentation</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Related Resources -->
-        <section class="glass-card-display animation-t1 glass-panel-purple">
-            <h2 class="section-title">
-                <i class="fas fa-link"></i>
-                Related Resources
-            </h2>
-            
-            <div class="masonry-grid">
-                <!-- Storage Location Card -->
-                <div class="glass-card-display animation-t1">
-                    <div class="card-icon card-icon-primary">
-                        <i class="fas fa-database"></i>
-                    </div>
-                    <h3 class="card-title">Storage Location</h3>
-                    <p class="card-description">Best practice guidelines are stored in Tier 2 Knowledge Graph with semantic relationships.</p>
-                    <div class="card-section">
-                        <ul class="feature-list-compact">
-                            <li><code>cortex-brain/tier2/knowledge-graph.yaml</code></li>
-                            <li><code>cortex-brain/knowledge-library/</code></li>
-                            <li>35 best practice markdown files</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <!-- Integration Card -->
-                <div class="glass-card-display animation-t1">
-                    <div class="card-icon card-icon-info">
-                        <i class="fas fa-project-diagram"></i>
-                    </div>
-                    <h3 class="card-title">Integration</h3>
-                    <p class="card-description">CORTEX automatically queries relevant guidelines during code generation based on context.</p>
-                    <div class="card-section">
-                        <ul class="feature-list-compact">
-                            <li>Tier 2 Knowledge Graph queries</li>
-                            <li>Semantic relationship traversal</li>
-                            <li>Context-aware guideline selection</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <!-- Related Documentation Card -->
-                <div class="glass-card-display animation-t1">
-                    <div class="card-icon card-icon-warning">
-                        <i class="fas fa-book"></i>
-                    </div>
-                    <h3 class="card-title">Related Documentation</h3>
-                    <p class="card-description">Explore related CORTEX documentation and system components.</p>
-                    <div class="card-section">
-                        <ul class="feature-list-compact">
-                            <li><a href="../architecture/index.html">Architecture Overview</a></li>
-                            <li><a href="../orchestrators/index.html">Orchestrators</a></li>
-                            <li><a href="../token-optimization/index.html">Token Optimization</a></li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <!-- Sharpen The Saw Card -->
-                <div class="glass-card-display animation-t1">
-                    <div class="card-icon card-icon-success">
-                        <i class="fas fa-tools"></i>
-                    </div>
-                    <h3 class="card-title">Sharpen The Saw</h3>
-                    <p class="card-description">Deep dive into specific best practice categories with comprehensive guides.</p>
-                    <div class="card-section">
-                        <ul class="feature-list-compact">
-                            <li><a href="../sharpen-the-saw/security.html">Security Best Practices</a></li>
-                            <li><a href="../sharpen-the-saw/performance.html">Performance Optimization</a></li>
-                            <li><a href="../sharpen-the-saw/architecture.html">Architecture Patterns</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    
-<!-- Modern Glass Footer -->
-
-    <!-- Scripts -->
-    <script>
-        mermaid.initialize({
+     </div>
+    </div>
+   </section>
+   <!-- Guidelines by Category -->
+   <section class="glass-card-display animation-t1 glass-panel-purple">
+    <h2 class="section-title">
+     <i class="fas fa-list-check">
+     </i>
+     Guidelines by Category
+    </h2>
+    <p class="intro-text">
+     35 comprehensive best practice guidelines organized by domain expertise.
+    </p>
+    <!-- Frontend & UI -->
+    <div class="masonry-grid">
+     <a class="glass-card-clickable animation-t1" href="react.html">
+      <div class="card-icon card-icon-primary">
+       <i class="fab fa-react">
+       </i>
+      </div>
+      <h3 class="card-title">
+       React Best Practices
+      </h3>
+      <p class="card-description">
+       Component composition, hooks, state management, performance optimization.
+      </p>
+      <div class="card-badge badge-frontend">
+       Frontend
+      </div>
+     </a>
+     <a class="glass-card-clickable animation-t1" href="accessibility.html">
+      <div class="card-icon card-icon-info">
+       <i class="fas fa-universal-access">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Accessibility Standards
+      </h3>
+      <p class="card-description">
+       WCAG AA compliance, ARIA labels, keyboard navigation, screen readers.
+      </p>
+      <div class="card-badge badge-frontend">
+       Frontend
+      </div>
+     </a>
+     <a class="glass-card-clickable animation-t1" href="ui-ux.html">
+      <div class="card-icon card-icon-warning">
+       <i class="fas fa-palette">
+       </i>
+      </div>
+      <h3 class="card-title">
+       UI/UX Design Patterns
+      </h3>
+      <p class="card-description">
+       Design systems, component libraries, responsive design, visual hierarchy.
+      </p>
+      <div class="card-badge badge-frontend">
+       Frontend
+      </div>
+     </a>
+     <a class="glass-card-clickable animation-t1" href="css.html">
+      <div class="card-icon card-icon-success">
+       <i class="fab fa-css3-alt">
+       </i>
+      </div>
+      <h3 class="card-title">
+       CSS Architecture
+      </h3>
+      <p class="card-description">
+       BEM methodology, CSS-in-JS, custom properties, modular CSS.
+      </p>
+      <div class="card-badge badge-frontend">
+       Frontend
+      </div>
+     </a>
+     <a class="glass-card-clickable animation-t1" href="state-management.html">
+      <div class="card-icon card-icon-primary">
+       <i class="fas fa-sitemap">
+       </i>
+      </div>
+      <h3 class="card-title">
+       State Management
+      </h3>
+      <p class="card-description">
+       Redux, Context API, local vs global state, state machines.
+      </p>
+      <div class="card-badge badge-frontend">
+       Frontend
+      </div>
+     </a>
+     <a class="glass-card-clickable animation-t1" href="frontend-testing.html">
+      <div class="card-icon card-icon-info">
+       <i class="fas fa-vial">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Frontend Testing
+      </h3>
+      <p class="card-description">
+       Unit tests, integration tests, E2E testing, visual regression.
+      </p>
+      <div class="card-badge badge-frontend">
+       Frontend
+      </div>
+     </a>
+     <!-- Backend & APIs -->
+     <a class="glass-card-clickable animation-t1" href="rest-api.html">
+      <div class="card-icon card-icon-warning">
+       <i class="fas fa-exchange-alt">
+       </i>
+      </div>
+      <h3 class="card-title">
+       REST API Design
+      </h3>
+      <p class="card-description">
+       Resource naming, HTTP verbs, status codes, versioning, pagination.
+      </p>
+      <div class="card-badge badge-backend">
+       Backend
+      </div>
+     </a>
+     <a class="glass-card-clickable animation-t1" href="authentication.html">
+      <div class="card-icon card-icon-success">
+       <i class="fas fa-lock">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Authentication &amp; Authorization
+      </h3>
+      <p class="card-description">
+       JWT, OAuth 2.0, role-based access control, session management.
+      </p>
+      <div class="card-badge badge-backend">
+       Backend
+      </div>
+     </a>
+     <a class="glass-card-clickable animation-t1" href="error-handling.html">
+      <div class="card-icon card-icon-primary">
+       <i class="fas fa-exclamation-triangle">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Error Handling
+      </h3>
+      <p class="card-description">
+       Structured errors, logging, monitoring, graceful degradation.
+      </p>
+      <div class="card-badge badge-backend">
+       Backend
+      </div>
+     </a>
+     <a class="glass-card-clickable animation-t1" href="caching.html">
+      <div class="card-icon card-icon-info">
+       <i class="fas fa-server">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Caching Strategies
+      </h3>
+      <p class="card-description">
+       Redis, CDN, cache invalidation, cache-aside pattern.
+      </p>
+      <div class="card-badge badge-backend">
+       Backend
+      </div>
+     </a>
+     <a class="glass-card-clickable animation-t1" href="api-security.html">
+      <div class="card-icon card-icon-warning">
+       <i class="fas fa-shield-alt">
+       </i>
+      </div>
+      <h3 class="card-title">
+       API Security
+      </h3>
+      <p class="card-description">
+       Rate limiting, CORS, input validation, SQL injection prevention.
+      </p>
+      <div class="card-badge badge-backend">
+       Backend
+      </div>
+     </a>
+     <a class="glass-card-clickable animation-t1" href="async-processing.html">
+      <div class="card-icon card-icon-success">
+       <i class="fas fa-clock">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Async Processing
+      </h3>
+      <p class="card-description">
+       Message queues, background jobs, retry mechanisms, idempotency.
+      </p>
+      <div class="card-badge badge-backend">
+       Backend
+      </div>
+     </a>
+     <a class="glass-card-clickable animation-t1" href="microservices.html">
+      <div class="card-icon card-icon-primary">
+       <i class="fas fa-cubes">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Microservices Architecture
+      </h3>
+      <p class="card-description">
+       Service boundaries, API gateways, circuit breakers, saga pattern.
+      </p>
+      <div class="card-badge badge-backend">
+       Backend
+      </div>
+     </a>
+     <a class="glass-card-clickable animation-t1" href="distributed-systems.html">
+      <div class="card-icon card-icon-info">
+       <i class="fas fa-project-diagram">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Distributed Systems
+      </h3>
+      <p class="card-description">
+       CAP theorem, eventual consistency, distributed tracing, service mesh.
+      </p>
+      <div class="card-badge badge-backend">
+       Backend
+      </div>
+     </a>
+     <!-- Data & Storage -->
+     <a class="glass-card-clickable animation-t1" href="database-design.html">
+      <div class="card-icon card-icon-warning">
+       <i class="fas fa-database">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Database Design
+      </h3>
+      <p class="card-description">
+       Normalization, denormalization, foreign keys, constraints.
+      </p>
+      <div class="card-badge badge-data">
+       Data
+      </div>
+     </a>
+     <a class="glass-card-clickable animation-t1" href="indexing.html">
+      <div class="card-icon card-icon-success">
+       <i class="fas fa-search">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Indexing Strategy
+      </h3>
+      <p class="card-description">
+       B-tree indexes, composite indexes, covering indexes, query optimization.
+      </p>
+      <div class="card-badge badge-data">
+       Data
+      </div>
+     </a>
+     <a class="glass-card-clickable animation-t1" href="data-modeling.html">
+      <div class="card-icon card-icon-primary">
+       <i class="fas fa-object-group">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Data Modeling
+      </h3>
+      <p class="card-description">
+       Entity-relationship diagrams, domain modeling, aggregates.
+      </p>
+      <div class="card-badge badge-data">
+       Data
+      </div>
+     </a>
+     <a class="glass-card-clickable animation-t1" href="transactions.html">
+      <div class="card-icon card-icon-info">
+       <i class="fas fa-sync-alt">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Transaction Management
+      </h3>
+      <p class="card-description">
+       ACID properties, isolation levels, deadlock prevention, optimistic locking.
+      </p>
+      <div class="card-badge badge-data">
+       Data
+      </div>
+     </a>
+     <a class="glass-card-clickable animation-t1" href="migration.html">
+      <div class="card-icon card-icon-warning">
+       <i class="fas fa-arrow-right">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Data Migration
+      </h3>
+      <p class="card-description">
+       Version control, rollback strategies, zero-downtime migrations.
+      </p>
+      <div class="card-badge badge-data">
+       Data
+      </div>
+     </a>
+     <a class="glass-card-clickable animation-t1" href="backup.html">
+      <div class="card-icon card-icon-success">
+       <i class="fas fa-save">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Backup &amp; Recovery
+      </h3>
+      <p class="card-description">
+       Automated backups, point-in-time recovery, disaster recovery.
+      </p>
+      <div class="card-badge badge-data">
+       Data
+      </div>
+     </a>
+     <a class="glass-card-clickable animation-t1" href="data-security.html">
+      <div class="card-icon card-icon-primary">
+       <i class="fas fa-key">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Data Security
+      </h3>
+      <p class="card-description">
+       Encryption at rest/transit, PII handling, GDPR compliance.
+      </p>
+      <div class="card-badge badge-data">
+       Data
+      </div>
+     </a>
+     <!-- Cloud & Infrastructure -->
+     <a class="glass-card-clickable animation-t1" href="containers.html">
+      <div class="card-icon card-icon-info">
+       <i class="fab fa-docker">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Docker Best Practices
+      </h3>
+      <p class="card-description">
+       Multi-stage builds, layer caching, security scanning, minimal images.
+      </p>
+      <div class="card-badge badge-cloud">
+       Cloud
+      </div>
+     </a>
+     <a class="glass-card-clickable animation-t1" href="devops.html">
+      <div class="card-icon card-icon-warning">
+       <i class="fas fa-infinity">
+       </i>
+      </div>
+      <h3 class="card-title">
+       CI/CD Pipelines
+      </h3>
+      <p class="card-description">
+       Automated testing, deployment strategies, rollback mechanisms.
+      </p>
+      <div class="card-badge badge-cloud">
+       Cloud
+      </div>
+     </a>
+     <a class="glass-card-clickable animation-t1" href="monitoring.html">
+      <div class="card-icon card-icon-success">
+       <i class="fas fa-chart-area">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Monitoring &amp; Observability
+      </h3>
+      <p class="card-description">
+       Metrics, logs, traces, alerting, dashboards.
+      </p>
+      <div class="card-badge badge-cloud">
+       Cloud
+      </div>
+     </a>
+     <a class="glass-card-clickable animation-t1" href="iac.html">
+      <div class="card-icon card-icon-primary">
+       <i class="fas fa-balance-scale">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Infrastructure as Code
+      </h3>
+      <p class="card-description">
+       Terraform, CloudFormation, version control, state management.
+      </p>
+      <div class="card-badge badge-cloud">
+       Cloud
+      </div>
+     </a>
+     <a class="glass-card-clickable animation-t1" href="scaling.html">
+      <div class="card-icon card-icon-info">
+       <i class="fas fa-expand-arrows-alt">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Auto-Scaling
+      </h3>
+      <p class="card-description">
+       Horizontal/vertical scaling, metrics-based, cost optimization.
+      </p>
+      <div class="card-badge badge-cloud">
+       Cloud
+      </div>
+     </a>
+     <a class="glass-card-clickable animation-t1" href="cloud-security.html">
+      <div class="card-icon card-icon-warning">
+       <i class="fas fa-shield-virus">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Cloud Security
+      </h3>
+      <p class="card-description">
+       IAM policies, network security, secrets management, compliance.
+      </p>
+      <div class="card-badge badge-cloud">
+       Cloud
+      </div>
+     </a>
+     <!-- Software Craft -->
+     <a class="glass-card-clickable animation-t1" href="solid.html">
+      <div class="card-icon card-icon-success">
+       <i class="fas fa-shapes">
+       </i>
+      </div>
+      <h3 class="card-title">
+       SOLID Principles
+      </h3>
+      <p class="card-description">
+       Single responsibility, open/closed, Liskov substitution, interface segregation, dependency inversion.
+      </p>
+      <div class="card-badge badge-craft">
+       Craft
+      </div>
+     </a>
+     <a class="glass-card-clickable animation-t1" href="clean-code.html">
+      <div class="card-icon card-icon-primary">
+       <i class="fas fa-broom">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Clean Code
+      </h3>
+      <p class="card-description">
+       Naming conventions, function length, code comments, refactoring.
+      </p>
+      <div class="card-badge badge-craft">
+       Craft
+      </div>
+     </a>
+     <a class="glass-card-clickable animation-t1" href="testing.html">
+      <div class="card-icon card-icon-info">
+       <i class="fas fa-flask">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Testing Strategy
+      </h3>
+      <p class="card-description">
+       Test pyramid, unit/integration/E2E tests, TDD, BDD.
+      </p>
+      <div class="card-badge badge-craft">
+       Craft
+      </div>
+     </a>
+     <a class="glass-card-clickable animation-t1" href="design-patterns.html">
+      <div class="card-icon card-icon-warning">
+       <i class="fas fa-puzzle-piece">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Design Patterns
+      </h3>
+      <p class="card-description">
+       Creational, structural, behavioral patterns, anti-patterns.
+      </p>
+      <div class="card-badge badge-craft">
+       Craft
+      </div>
+     </a>
+     <a class="glass-card-clickable animation-t1" href="refactoring.html">
+      <div class="card-icon card-icon-success">
+       <i class="fas fa-recycle">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Refactoring Techniques
+      </h3>
+      <p class="card-description">
+       Extract method, rename variable, simplify conditionals, remove duplication.
+      </p>
+      <div class="card-badge badge-craft">
+       Craft
+      </div>
+     </a>
+     <a class="glass-card-clickable animation-t1" href="code-review.html">
+      <div class="card-icon card-icon-primary">
+       <i class="fas fa-code-branch">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Code Review
+      </h3>
+      <p class="card-description">
+       Review checklist, constructive feedback, approval process.
+      </p>
+      <div class="card-badge badge-craft">
+       Craft
+      </div>
+     </a>
+     <a class="glass-card-clickable animation-t1" href="documentation.html">
+      <div class="card-icon card-icon-info">
+       <i class="fas fa-file-alt">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Documentation
+      </h3>
+      <p class="card-description">
+       API documentation, README files, inline comments, architecture docs.
+      </p>
+      <div class="card-badge badge-craft">
+       Craft
+      </div>
+     </a>
+     <a class="glass-card-clickable animation-t1" href="version-control.html">
+      <div class="card-icon card-icon-warning">
+       <i class="fab fa-git-alt">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Version Control
+      </h3>
+      <p class="card-description">
+       Branching strategies, commit messages, pull requests, merge workflows.
+      </p>
+      <div class="card-badge badge-craft">
+       Craft
+      </div>
+     </a>
+    </div>
+   </section>
+   <!-- Knowledge Metrics -->
+   <section class="glass-card-display animation-t1">
+    <h2 class="section-title">
+     <i class="fas fa-chart-pie">
+     </i>
+     Knowledge Metrics
+    </h2>
+    <div class="metrics-grid">
+     <div class="metric-card">
+      <div class="metric-icon">
+       <i class="fas fa-clipboard-list">
+       </i>
+      </div>
+      <div class="metric-value">
+       35
+      </div>
+      <div class="metric-label">
+       Total Guidelines
+      </div>
+     </div>
+     <div class="metric-card">
+      <div class="metric-icon">
+       <i class="fas fa-file-alt">
+       </i>
+      </div>
+      <div class="metric-value">
+       17
+      </div>
+      <div class="metric-label">
+       Domain Pages
+      </div>
+     </div>
+     <div class="metric-card">
+      <div class="metric-icon">
+       <i class="fas fa-layer-group">
+       </i>
+      </div>
+      <div class="metric-value">
+       5
+      </div>
+      <div class="metric-label">
+       Major Categories
+      </div>
+     </div>
+     <div class="metric-card">
+      <div class="metric-icon">
+       <i class="fas fa-brain">
+       </i>
+      </div>
+      <div class="metric-value">
+       Tier 2
+      </div>
+      <div class="metric-label">
+       Storage Location
+      </div>
+     </div>
+     <div class="metric-card">
+      <div class="metric-icon">
+       <i class="fas fa-robot">
+       </i>
+      </div>
+      <div class="metric-value">
+       100%
+      </div>
+      <div class="metric-label">
+       Auto-Consulted
+      </div>
+     </div>
+     <div class="metric-card">
+      <div class="metric-icon">
+       <i class="fas fa-sync-alt">
+       </i>
+      </div>
+      <div class="metric-value">
+       Living
+      </div>
+      <div class="metric-label">
+       Documentation
+      </div>
+     </div>
+    </div>
+   </section>
+   <!-- Related Resources -->
+   <section class="glass-card-display animation-t1 glass-panel-purple">
+    <h2 class="section-title">
+     <i class="fas fa-link">
+     </i>
+     Related Resources
+    </h2>
+    <div class="masonry-grid">
+     <!-- Storage Location Card -->
+     <div class="glass-card-display animation-t1">
+      <div class="card-icon card-icon-primary">
+       <i class="fas fa-database">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Storage Location
+      </h3>
+      <p class="card-description">
+       Best practice guidelines are stored in Tier 2 Knowledge Graph with semantic relationships.
+      </p>
+      <div class="card-section">
+       <ul class="feature-list-compact">
+        <li>
+         <code>
+          cortex-brain/tier2/knowledge-graph.yaml
+         </code>
+        </li>
+        <li>
+         <code>
+          cortex-brain/knowledge-library/
+         </code>
+        </li>
+        <li>
+         35 best practice markdown files
+        </li>
+       </ul>
+      </div>
+     </div>
+     <!-- Integration Card -->
+     <div class="glass-card-display animation-t1">
+      <div class="card-icon card-icon-info">
+       <i class="fas fa-project-diagram">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Integration
+      </h3>
+      <p class="card-description">
+       CORTEX automatically queries relevant guidelines during code generation based on context.
+      </p>
+      <div class="card-section">
+       <ul class="feature-list-compact">
+        <li>
+         Tier 2 Knowledge Graph queries
+        </li>
+        <li>
+         Semantic relationship traversal
+        </li>
+        <li>
+         Context-aware guideline selection
+        </li>
+       </ul>
+      </div>
+     </div>
+     <!-- Related Documentation Card -->
+     <div class="glass-card-display animation-t1">
+      <div class="card-icon card-icon-warning">
+       <i class="fas fa-book">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Related Documentation
+      </h3>
+      <p class="card-description">
+       Explore related CORTEX documentation and system components.
+      </p>
+      <div class="card-section">
+       <ul class="feature-list-compact">
+        <li>
+         <a href="../architecture/index.html">
+          Architecture Overview
+         </a>
+        </li>
+        <li>
+         <a href="../orchestrators/index.html">
+          Orchestrators
+         </a>
+        </li>
+        <li>
+         <a href="../token-optimization/index.html">
+          Token Optimization
+         </a>
+        </li>
+       </ul>
+      </div>
+     </div>
+     <!-- Sharpen The Saw Card -->
+     <div class="glass-card-display animation-t1">
+      <div class="card-icon card-icon-success">
+       <i class="fas fa-tools">
+       </i>
+      </div>
+      <h3 class="card-title">
+       Sharpen The Saw
+      </h3>
+      <p class="card-description">
+       Deep dive into specific best practice categories with comprehensive guides.
+      </p>
+      <div class="card-section">
+       <ul class="feature-list-compact">
+        <li>
+         <a href="../sharpen-the-saw/security.html">
+          Security Best Practices
+         </a>
+        </li>
+        <li>
+         <a href="../sharpen-the-saw/performance.html">
+          Performance Optimization
+         </a>
+        </li>
+        <li>
+         <a href="../sharpen-the-saw/architecture.html">
+          Architecture Patterns
+         </a>
+        </li>
+       </ul>
+      </div>
+     </div>
+    </div>
+   </section>
+  </main>
+  <!-- Modern Glass Footer -->
+  <!-- Scripts -->
+  <script>
+   mermaid.initialize({
             startOnLoad: true,
             theme: 'dark',
             themeVariables: {
@@ -807,6 +1290,6 @@ graph TB
                 }
             });
         });
-    </script>
-</body>
+  </script>
+ </body>
 </html>

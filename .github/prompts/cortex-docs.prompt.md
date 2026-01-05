@@ -16,6 +16,38 @@
 3. **Atomic Operations**: Single source of truth per change
 4. **Git Checkpoints**: Mandatory snapshots before destructive operations
 5. **CSS Registry**: Centralized class tracking prevents inline style reversion
+6. **🚫 PYTHON-ONLY GENERATION**: Copilot NEVER modifies HTML directly - ALWAYS delegate to Python scripts
+
+---
+
+## 🚨 CRITICAL ENFORCEMENT RULE
+
+**❌ COPILOT MUST NOT DIRECTLY EDIT HTML FILES**
+
+**✅ CORRECT WORKFLOW:**
+```
+User: "Standardize architecture/index.html"
+Copilot: 
+  1. Creates/updates Python script: scripts/standardize_level1_view.py
+  2. Invokes via terminal: python scripts/standardize_level1_view.py architecture/index.html
+  3. Reports results from script output
+```
+
+**❌ FORBIDDEN WORKFLOW:**
+```
+User: "Standardize architecture/index.html"
+Copilot:
+  1. Uses replace_string_in_file on architecture/index.html ❌ VIOLATION
+  2. Uses multi_replace_string_in_file on HTML ❌ VIOLATION
+  3. Manually edits HTML sections ❌ VIOLATION
+```
+
+**RATIONALE:**
+- **Consistency**: Python scripts ensure uniform transformations
+- **Testability**: Scripts can be validated before execution
+- **Auditability**: Git history shows script changes, not manual edits
+- **Scalability**: One script standardizes 12 Level 1 views, not 12 manual edits
+- **State Tracking**: Scripts update html-standardization-state.json automatically
 
 ---
 
@@ -391,11 +423,15 @@ def apply_css_classes_only(page, classes: List[str]):
 
 | Tool | Purpose | Atomic | Pre-Conditions | Post-Conditions |
 |------|---------|--------|----------------|-----------------|
-| `remove-inline-styles.py` | Delete ALL `style=""` attributes | ✅ Yes | HTML file exists | Zero inline styles |
-| `apply-css-classes.py` | Add glass-panel-{color} classes | ✅ Yes | No inline styles | Classes in HTML + CSS registry |
-| `validate-color-scheme.py` | Check class registry consistency | ✅ Yes | HTML + CSS exist | Exit 0 = pass, 1 = fail |
-| `create-git-checkpoint.py` | Tag current state | ✅ Yes | Git repo | Tag created |
-| `rollback-to-checkpoint.py` | Restore from tag | ✅ Yes | Tag exists | State restored |
+| `scripts/remove-inline-styles.py` | Delete ALL `style=""` attributes | ✅ Yes | HTML file exists | Zero inline styles |
+| `scripts/standardize_level1_view.py` | Apply approved pattern to Level 1 views | ✅ Yes | No inline styles | Standardized HTML |
+| `scripts/validate-color-scheme.py` | Check class registry consistency | ✅ Yes | HTML + CSS exist | Exit 0 = pass, 1 = fail |
+| `scripts/create-git-checkpoint.py` | Tag current state | ✅ Yes | Git repo | Tag created |
+
+**🚫 DEPRECATED TOOLS (DO NOT USE):**
+- ❌ `replace_string_in_file` on HTML files
+- ❌ `multi_replace_string_in_file` on HTML files
+- ❌ Manual HTML editing by Copilot
 
 ---
 
