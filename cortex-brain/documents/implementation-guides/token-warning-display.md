@@ -153,7 +153,7 @@ pytest tests/test_token_warning_display.py -v
 
 ### Demo Script
 
-**File:** `demo_token_warning_display.py`
+**File:** `scripts/demos/demo_token_warning_display.py`
 
 **Demonstrates:**
 - Token monitoring during phase execution
@@ -163,7 +163,7 @@ pytest tests/test_token_warning_display.py -v
 
 **Run Demo:**
 ```bash
-python demo_token_warning_display.py
+python scripts/demos/demo_token_warning_display.py
 ```
 
 ---

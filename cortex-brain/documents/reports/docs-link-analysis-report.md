@@ -252,7 +252,7 @@ To implement changes:
 
 2. **After moving files:** Run the analysis again to verify:
    ```bash
-   python analyze_docs_links.py
+   python scripts/analysis/analyze_docs_links.py
    ```
 
 3. **Test navigation:** Manually verify all hub pages still load correctly

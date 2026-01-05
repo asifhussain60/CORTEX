@@ -146,7 +146,7 @@ This enhancement naturally integrates with **Phase 4.5: Cross-Session Context Mi
    - Lines 233-247: Dry-run message appending
    - Lines 260-280: Completion message appending
 
-2. **demo_vacuum_token_monitoring.py** (NEW)
+2. **scripts/demos/demo_vacuum_token_monitoring.py** (NEW)
    - 162 lines: Integration demonstration
    - Workflow examples
    - Benefits documentation
@@ -160,7 +160,7 @@ This enhancement naturally integrates with **Phase 4.5: Cross-Session Context Mi
 ## 🧪 Demo Execution
 
 ```bash
-python3 demo_vacuum_token_monitoring.py
+python3 scripts/demos/demo_vacuum_token_monitoring.py
 ```
 
 **Output:**

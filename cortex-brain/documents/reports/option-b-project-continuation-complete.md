@@ -148,7 +148,7 @@ Rewrote Cross-Session Context Awareness section with:
 
 ### 6. Demonstration Script
 
-**File:** `demo_project_continuation.py` (230+ lines)
+**File:** `scripts/demos/demo_project_continuation.py` (230+ lines)
 
 Interactive demo showing:
 1. Planning Orchestrator writing project state
@@ -278,7 +278,7 @@ pytest tests/orchestrators/test_context_middleware_project.py -v
 
 ### Demo Script
 ```bash
-python3 demo_project_continuation.py
+python3 scripts/demos/demo_project_continuation.py
 # Result: ✅ All steps completed successfully
 ```
 
@@ -339,7 +339,7 @@ last_orchestrator = middleware.get_last_orchestrator(user_input)
 | `tests/tier1/test_project_tracker.py` | +360 | New | ProjectTracker tests (22 tests) |
 | `tests/orchestrators/test_context_middleware_project.py` | +330 | New | Middleware integration tests (14 tests) |
 | `.github/prompts/CORTEX.prompt.md` | +60 | Modified | Updated continuation documentation |
-| `demo_project_continuation.py` | +230 | New | Interactive demonstration script |
+| `scripts/demos/demo_project_continuation.py` | +230 | New | Interactive demonstration script |
 
 **Total:** 7 files, 1,540+ lines added/modified
 
