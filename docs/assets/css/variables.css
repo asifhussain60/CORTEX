@@ -255,3 +255,85 @@
     /* Reserved for future light mode implementation */
     /* Currently CORTEX uses dark mode exclusively */
 }
+
+/* ============================================
+   7-COLOR GLASSMORPHISM PANEL BACKGROUNDS
+   ============================================ 
+   
+   Randomized color palette for Level 1 hub page sections.
+   Apply to glass-card-display sections for visual variety.
+   
+   Usage: <section class="glass-card-display glass-panel-cyan">
+   
+   Color Palette:
+   - Cyan: Primary accent
+   - Purple: Warmth accent  
+   - Teal: Bridge accent
+   - Indigo: Deep accent
+   - Pink: Vibrant accent
+   - Emerald: Success accent
+   - Amber: Energy accent
+*/
+
+/* Cyan Panel */
+.glass-panel-cyan {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.08) 0%, rgba(0, 212, 255, 0.06) 50%, rgba(26, 31, 58, 0.65) 100%) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 212, 255, 0.15) !important;
+    box-shadow: 0 8px 32px rgba(0, 212, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Purple Panel */
+.glass-panel-purple {
+    background: linear-gradient(135deg, rgba(123, 97, 255, 0.08) 0%, rgba(186, 85, 211, 0.06) 50%, rgba(26, 31, 58, 0.65) 100%) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(123, 97, 255, 0.15) !important;
+    box-shadow: 0 8px 32px rgba(123, 97, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Teal Panel */
+.glass-panel-teal {
+    background: linear-gradient(135deg, rgba(20, 184, 166, 0.08) 0%, rgba(20, 184, 166, 0.06) 50%, rgba(26, 31, 58, 0.65) 100%) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(20, 184, 166, 0.15) !important;
+    box-shadow: 0 8px 32px rgba(20, 184, 166, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Indigo Panel */
+.glass-panel-indigo {
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.08) 0%, rgba(99, 102, 241, 0.06) 50%, rgba(26, 31, 58, 0.65) 100%) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(79, 70, 229, 0.15) !important;
+    box-shadow: 0 8px 32px rgba(79, 70, 229, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Pink Panel */
+.glass-panel-pink {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.08) 0%, rgba(244, 114, 182, 0.06) 50%, rgba(26, 31, 58, 0.65) 100%) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(236, 72, 153, 0.15) !important;
+    box-shadow: 0 8px 32px rgba(236, 72, 153, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Emerald Panel */
+.glass-panel-emerald {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(52, 211, 153, 0.06) 50%, rgba(26, 31, 58, 0.65) 100%) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(16, 185, 129, 0.15) !important;
+    box-shadow: 0 8px 32px rgba(16, 185, 129, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Amber Panel */
+.glass-panel-amber {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(251, 191, 36, 0.06) 50%, rgba(26, 31, 58, 0.65) 100%) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(245, 158, 11, 0.15) !important;
+    box-shadow: 0 8px 32px rgba(245, 158, 11, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
