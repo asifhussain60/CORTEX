@@ -70,7 +70,7 @@ class CleanupOrchestratorV2(BaseOrchestratorV4_1):
     
     def __init__(
         self,
-        config_path: str,
+        config_path: Optional[str] = None,
         state_db: Optional[PlanningStateDB] = None,
         plan_id: Optional[str] = None,
         workspace_root: Optional[Path] = None
@@ -79,11 +79,15 @@ class CleanupOrchestratorV2(BaseOrchestratorV4_1):
         Initialize Cleanup Orchestrator v2.
         
         Args:
-            config_path: Path to cleanup-orchestrator-v2.yaml manifest
-            state_db: PlanningStateDB instance for state persistence (creates new if None)
-            plan_id: Optional existing plan ID to resume
-            workspace_root: Optional workspace root (defaults to current directory)
+            config_path: Path to cleanup-v2-config.yaml (defaults to cortex-brain/config/cleanup-v2-default.yaml)
+            state_db: PlanningStateDB instance for state tracking
+            plan_id: Optional plan ID for tracking
+            workspace_root: Root directory for cleanup operations
         """
+        # Load default config if not provided
+        if config_path is None:
+            config_path = "cortex-brain/config/cleanup-v2-default.yaml"
+        
         # Initialize database if not provided
         if state_db is None:
             db_path = "cortex-brain/database/planning_state.db"

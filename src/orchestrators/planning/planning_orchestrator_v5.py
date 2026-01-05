@@ -75,12 +75,16 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
     
     def __init__(
         self,
-        config_path: str,
+        config_path: Optional[str] = None,
         state_db: Optional[PlanningStateDB] = None,
         plan_id: Optional[str] = None,
         template_dir: Optional[str] = None
     ):
         """Initialize Planning Orchestrator v5."""
+        # Load default config if not provided
+        if config_path is None:
+            config_path = "cortex-brain/config/planning-v5-default.yaml"
+        
         # Initialize database if not provided
         if state_db is None:
             db_path = "cortex-brain/database/planning_state.db"

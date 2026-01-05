@@ -742,9 +742,12 @@ Which track would you like to pursue first?"""
         threat_analysis: dict = None,
         dor_status: dict = None,
         dod_status: dict = None,
-        next_action: str = "Continue execution..."
+        next_action: str = "Continue execution...",
+        orchestrator_name: str = "CORTEX",
+        orchestrator_title: str = "Autonomous Execution",
+        mode: str = "concise"
     ) -> str:
-        """Render the autonomous execution progress template with full visual progress.
+        """Render the autonomous execution progress template with full visual progress (verbose) or minimal updates (concise).
         
         Args:
             plan_name: Name of the plan being executed
@@ -762,6 +765,9 @@ Which track would you like to pursue first?"""
             dor_status: Optional DoR dict with keys: passed, violations
             dod_status: Optional DoD dict with keys: passed, remaining
             next_action: Next action text
+            orchestrator_name: Orchestrator name (e.g., "Planning System 5.0")
+            orchestrator_title: Orchestrator title for header (e.g., "Planning System Execution")
+            mode: Display mode - "concise" (default, WCAG AA) or "verbose" (full details)
             
         Returns:
             Formatted progress template string
@@ -781,6 +787,21 @@ Which track would you like to pursue first?"""
         else:
             status_emoji = '🏁'
         
+        # CONCISE MODE (Default - Accessibility-first, WCAG AA)
+        if mode == "concise":
+            # Minimal output for cognitive load management
+            # Only show: header, progress bar, current phase/task, next action
+            return f"""## 🛡️🧠 CORTEX {orchestrator_title}
+
+`{overall_bar}` **{overall_percentage:.0f}%** {status_emoji}
+
+**Phase {current_phase}/{total_phases}:** {current_phase_name}  
+**Task:** {current_task[:60]}
+
+**Next:** {next_action}
+"""
+        
+        # VERBOSE MODE (Full details - used for debugging or user-requested detail)
         # Truncate plan name for display
         plan_name_truncated = plan_name[:50] + '...' if len(plan_name) > 50 else plan_name
         
@@ -791,9 +812,9 @@ Which track would you like to pursue first?"""
         # Generate phase rows
         phase_rows = self.generate_phase_rows(phases)
         
-        # Build template
-        output = f"""## 🧠 CORTEX Plan Execution
-**Author:** Asif Hussain | **Plan:** {plan_name}
+        # Build template with 🛡️ shield icon
+        output = f"""## 🛡️🧠 CORTEX {orchestrator_title}
+**Author:** Asif Hussain | **Orchestrator:** {orchestrator_name} | **Plan:** {plan_name}
 
 ---
 

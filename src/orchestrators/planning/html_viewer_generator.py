@@ -553,6 +553,45 @@ h2 {{
     font-size: 1.25rem;
 }}
 
+.phase-progress {{
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
+}}
+
+/* Status Badges */
+.status-badge {{
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}}
+
+.status-complete {{
+    background: linear-gradient(135deg, #059669 0%, #10B981 100%);
+    color: white;
+}}
+
+.status-in-progress {{
+    background: linear-gradient(135deg, #D97706 0%, #F59E0B 100%);
+    color: white;
+}}
+
+.status-failed {{
+    background: linear-gradient(135deg, #DC2626 0%, #EF4444 100%);
+    color: white;
+}}
+
+.status-not-started {{
+    background: rgba(75, 85, 99, 0.8);
+    color: rgba(255, 255, 255, 0.9);
+}}
+
 /* Milestones List */
 .milestones-list {{
     display: flex;
@@ -682,12 +721,25 @@ class PlanViewerAutoRefresh {{
     
     async checkForUpdates() {{
         const data = await this.fetchTrackerData();
-        if (!data) return;
+        if (!data) {{
+            console.error('No data fetched from tracker');
+            return;
+        }}
         
-        // Check if data has changed
-        if (this.lastModified !== data.last_updated) {{
-            this.lastModified = data.last_updated;
+        console.log('Tracker data loaded:', {{
+            phases: data.phases?.length,
+            updated_date: data.updated_date,
+            plan_name: data.plan_name
+        }});
+        
+        // Check if data has changed (use updated_date or last_updated)
+        const lastUpdate = data.updated_date || data.last_updated;
+        if (this.lastModified !== lastUpdate) {{
+            console.log('Data changed, updating viewer');
+            this.lastModified = lastUpdate;
             this.updateViewer(data);
+        }} else {{
+            console.log('No changes detected');
         }}
     }}
     
@@ -726,20 +778,30 @@ class PlanViewerAutoRefresh {{
     }}
     
     updateFeatureViewer(data) {{
+        // Calculate stats from phases array
+        const phases = data.phases || [];
+        const totalPhases = phases.length;
+        const completedPhases = phases.filter(p => p.status === 'complete').length;
+        const overallProgress = totalPhases > 0 ? (completedPhases / totalPhases * 100) : 0;
+        const currentPhase = phases.find(p => p.status === 'in_progress')?.number || 
+                           phases.find(p => p.status === 'not_started')?.number || 
+                           totalPhases;
+        const actualHours = phases.reduce((sum, p) => sum + (p.actual_hours || 0), 0);
+        
         // Update stats
         document.getElementById('feature-progress').textContent = 
-            Math.round(data.overall_progress) + '%';
+            Math.round(overallProgress) + '%';
         document.getElementById('phases-complete').textContent = 
-            `${{data.completed_phases}}/${{data.total_phases}}`;
+            `${{completedPhases}}/${{totalPhases}}`;
         document.getElementById('current-phase').textContent = 
-            `Phase ${{data.current_phase}}`;
+            `Phase ${{currentPhase}}`;
         document.getElementById('hours-spent').textContent = 
-            Math.round(data.actual_hours) + 'h';
+            Math.round(actualHours) + 'h';
         
         // Update overall progress bar
         const progressBar = document.getElementById('overall-progress-bar');
         const progressText = document.getElementById('progress-text');
-        const progress = Math.round(data.overall_progress);
+        const progress = Math.round(overallProgress);
         progressBar.style.width = progress + '%';
         progressBar.setAttribute('aria-valuenow', progress);
         progressText.textContent = progress + '%';
@@ -782,32 +844,51 @@ class PlanViewerAutoRefresh {{
     
     updatePhases(phases) {{
         const container = document.getElementById('phases-container');
-        if (!container) return;
+        if (!container) {{
+            console.error('phases-container not found!');
+            return;
+        }}
         
+        console.log(`Updating ${{phases.length}} phase cards`);
         container.innerHTML = '';
         
         phases.forEach(phase => {{
+            // Map status to emoji and label
+            const statusMap = {{
+                'complete': {{ emoji: '✅', label: 'Complete', class: 'status-complete' }},
+                'in_progress': {{ emoji: '🔄', label: 'In Progress', class: 'status-in-progress' }},
+                'failed': {{ emoji: '❌', label: 'Failed', class: 'status-failed' }},
+                'not_started': {{ emoji: '🔲', label: 'Not Started', class: 'status-not-started' }}
+            }};
+            
+            const statusInfo = statusMap[phase.status] || statusMap['not_started'];
+            
+            // Calculate progress (100% if complete, 50% if in progress, 0% otherwise)
+            const progress = phase.status === 'complete' ? 100 : 
+                           phase.status === 'in_progress' ? 50 : 0;
+            
             const card = document.createElement('div');
             card.className = 'phase-card';
             card.innerHTML = `
                 <div class="phase-header">
-                    <span class="phase-number">Phase ${{phase.phase_number}}</span>
-                    <span class="phase-name">${{phase.phase_name}}</span>
-                    <span class="phase-status" aria-label="${{phase.status}}">${{phase.status_emoji}}</span>
+                    <span class="phase-number">Phase ${{phase.number}}</span>
+                    <span class="phase-name">${{phase.name}}</span>
+                    <span class="status-badge ${{statusInfo.class}}">${{statusInfo.emoji}} ${{statusInfo.label}}</span>
                 </div>
                 <div class="phase-progress">
-                    Progress: ${{Math.round(phase.progress)}}% • 
-                    Tasks: ${{phase.tasks_complete}}/${{phase.total_tasks}} • 
-                    Hours: ${{Math.round(phase.actual_hours)}}/${{Math.round(phase.estimated_hours)}}
+                    Est: ${{phase.estimated_hours || 0}}h • 
+                    Outputs: ${{(phase.outputs || []).length}}
                 </div>
                 <div class="progress-bar" style="height: 24px; margin-top: 0.5rem;">
-                    <div class="progress-bar-fill" style="width: ${{phase.progress}}%; font-size: 0.75rem;">
-                        ${{Math.round(phase.progress)}}%
+                    <div class="progress-bar-fill" style="width: ${{progress}}%; font-size: 0.75rem;">
+                        ${{Math.round(progress)}}%
                     </div>
                 </div>
             `;
             container.appendChild(card);
         }});
+        
+        console.log(`✅ Rendered ${{phases.length}} phase cards`);
     }}
     
     updateMilestones(milestones) {{

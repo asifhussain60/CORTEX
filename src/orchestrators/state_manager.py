@@ -180,6 +180,38 @@ class StateManager:
             f"Updated execution: {orchestrator_id} → {status}"
         )
     
+    def log_execution(
+        self,
+        orchestrator: str,
+        phase: str,
+        status: str,
+        metrics: Dict[str, Any]
+    ) -> None:
+        """
+        Log execution event to database.
+        
+        Wrapper around PlanningStateDB.log_execution() for convenience.
+        Provides simpler interface for orchestrators to log phase execution.
+        
+        Args:
+            orchestrator: Orchestrator name
+            phase: Phase identifier
+            status: Execution status (started/completed/failed)
+            metrics: Execution metrics dictionary
+        """
+        self.db.log_execution(
+            orchestrator_id=orchestrator,
+            status=status,
+            parameters={
+                'phase': phase,
+                'metrics': metrics
+            }
+        )
+        
+        self.logger.info(
+            f"Logged execution: {orchestrator}/{phase} - {status}"
+        )
+    
     def complete_execution(
         self,
         orchestrator_id: str,

@@ -569,29 +569,40 @@ class TDDOrchestrator:
     
     def __init__(
         self,
-        brain_connector,
-        knowledge_graph,
-        mcp_gateway,
+        brain_connector=None,
+        knowledge_graph=None,
+        mcp_gateway=None,
         config: Optional[Dict[str, Any]] = None,
         llm_client: Optional[Any] = None,
         # Phase 5 Components (optional DI)
         multi_agent_orchestrator: Optional[MultiAgentOrchestrator] = None,
         learning_engine: Optional[AgentLearningEngine] = None,
-        context_validator: Optional[ContextValidator] = None
+        context_validator: Optional[ContextValidator] = None,
+        # State coordination (for interface compatibility)
+        state_db: Optional[Any] = None
     ):
+        # Store parameters (allow None for testing/standalone instantiation)
         self.brain = brain_connector
         self.kg = knowledge_graph
         self.mcp = mcp_gateway
         self.config = config or {}
+        self.state_db = state_db  # Store for potential future use
         
-        # Initialize adaptive learning
-        self.tech_discovery = TechnologyDiscoveryEngine(brain_connector, knowledge_graph)
+        # Initialize adaptive learning (only if brain and kg are available)
+        if self.brain and self.kg:
+            self.tech_discovery = TechnologyDiscoveryEngine(brain_connector, knowledge_graph)
+        else:
+            self.tech_discovery = None
         self.clean_code = CleanCodeEnforcer()
         
         # Phase 5 Components: Multi-Agent Collaboration (Day 1)
         self.multi_agent_orchestrator = multi_agent_orchestrator or MultiAgentOrchestrator()
-        self.learning_engine = learning_engine or AgentLearningEngine(knowledge_graph)
-        self.context_validator = context_validator or ContextValidator(knowledge_graph)
+        if self.kg:
+            self.learning_engine = learning_engine or AgentLearningEngine(knowledge_graph)
+            self.context_validator = context_validator or ContextValidator(knowledge_graph)
+        else:
+            self.learning_engine = None
+            self.context_validator = None
         
         logger.info("🎭 Phase 5 components initialized: MultiAgent, Learning, ContextValidator")
         

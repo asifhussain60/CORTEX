@@ -7,9 +7,13 @@ Purpose:
 
 Key Features:
     1. Phase Boundary Validation - Checkpoint at phase start/complete
-    2. SKULL Rule Enforcement - Validate 61 governance rules at runtime
+    2. SKULL Rule Enforcement - Validate 83 governance rules at runtime (SQLite-backed)
     3. Audit Logging - Record all governance decisions in JSONL
     4. Master Orchestrator Integration - Pre/post execution hooks
+
+Backend:
+    Uses SQLite database (cortex-brain/tier0/governance.db) instead of YAML.
+    Migration completed in C150 Phase 14 (2026-01-04).
 
 Usage:
     from orchestrators.middleware.governance_checkpoint import GovernanceCheckpoint
@@ -20,24 +24,27 @@ Usage:
     checkpoint.checkpoint_phase_start(phase_number=1, orchestrator="planning_v5")
 
     # Operation validation
-    checkpoint.checkpoint_operation("file_creation", context={"path": "src/new_file.py"})
+    checkpoint.checkpoint_operation("file_creation", "planning_v5", context={"path": "src/new_file.py"})
 
     # Phase completion validation
-    checkpoint.checkpoint_phase_complete(phase_number=1, artifacts={"files_created": 5})
+    checkpoint.checkpoint_phase_complete(phase_number=1, orchestrator="planning_v5", artifacts={"files_created": 5})
 
-Version: 1.0
+Version: 2.0 (SQLite Backend - C150 Phase 14)
 Author: CORTEX
 Created: 2026-01-04
+Updated: 2026-01-04 (YAML→SQLite Migration)
 Sub-Plan: C50-03 (Knowledge Library Phase -1 + Gap 2 Remediation)
 """
 
 import json
-import yaml
 from dataclasses import dataclass, field, asdict
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Any
 from enum import Enum
+
+# Import GovernanceDB for SQLite-based rule loading
+from src.cortex_core.governance_db import GovernanceDB
 
 
 class CheckpointType(Enum):
@@ -105,50 +112,48 @@ class GovernanceCheckpoint:
             workspace_path: Root workspace path (defaults to current directory)
         """
         self.workspace_path = Path(workspace_path or Path.cwd())
-        self.rules_path = self.workspace_path / "cortex-brain" / "brain-protection-rules.yaml"
+        
+        # Initialize GovernanceDB for SQLite-based rule loading
+        db_path = self.workspace_path / "cortex-brain" / "tier0" / "governance.db"
+        self.governance_db = GovernanceDB(db_path=db_path)
+        
         self.audit_path = self.workspace_path / "tracking" / "governance-audit.jsonl"
 
-        # Load rules
+        # Load rules from database
         self.rules = self._load_rules()
 
         # Ensure audit directory exists
         self.audit_path.parent.mkdir(parents=True, exist_ok=True)
 
     def _load_rules(self) -> Dict:
-        """Load SKULL rules from brain-protection-rules.yaml"""
-        if not self.rules_path.exists():
-            print(f"⚠️  Warning: {self.rules_path} not found, using empty rules")
-            return {}
-
+        """Load SKULL rules from governance.db (SQLite)"""
         try:
-            with open(self.rules_path, "r") as f:
-                content = f.read()
-
-            # Parse YAML safely - handle multi-document format
+            # Get all enabled rules from database
+            all_rules_data = self.governance_db.get_all_rules() if hasattr(self.governance_db, 'get_all_rules') else []
+            
+            # Convert to dictionary format for backward compatibility
             rules = {}
-            # Split by document separator and parse each
-            documents = content.split("\n---\n")
-            for doc in documents:
-                try:
-                    parsed = yaml.safe_load(doc)
-                    if isinstance(parsed, dict):
-                        # Top-level document with metadata
-                        if "schema_version" in parsed or "categories" in parsed:
-                            continue
-                        # Single rule document
-                        if "rule_id" in parsed:
-                            rules[parsed["rule_id"]] = parsed
-                    elif isinstance(parsed, list):
-                        # List of rules
-                        for item in parsed:
-                            if isinstance(item, dict) and "rule_id" in item:
-                                rules[item["rule_id"]] = item
-                except yaml.YAMLError:
-                    continue  # Skip malformed documents
-
+            for rule_data in all_rules_data:
+                # Handle both GovernanceRule objects and dict responses
+                if hasattr(rule_data, 'rule_id'):
+                    # GovernanceRule object
+                    rules[rule_data.rule_id] = {
+                        'rule_id': rule_data.rule_id,
+                        'name': rule_data.name,
+                        'severity': rule_data.severity,
+                        'description': rule_data.description,
+                        'layer_id': rule_data.layer_id,
+                        'enabled': rule_data.enabled,
+                        'version': rule_data.version
+                    }
+                elif isinstance(rule_data, dict):
+                    # Dict response
+                    rules[rule_data['rule_id']] = rule_data
+            
+            print(f"✅ Loaded {len(rules)} governance rules from database")
             return rules
         except Exception as e:
-            print(f"⚠️  Warning: Error loading rules: {e}, using empty rules")
+            print(f"⚠️  Warning: Error loading rules from database: {e}, using empty rules")
             return {}
 
     def _log_audit(self, result: CheckpointResult):

@@ -179,6 +179,28 @@ class GovernanceDB:
         finally:
             conn.close()
     
+    def get_all_rules(self, enabled_only: bool = True) -> List[Dict[str, Any]]:
+        """
+        Get all governance rules (lightweight - returns dicts not full GovernanceRule objects).
+        
+        Args:
+            enabled_only: If True, only return enabled rules
+            
+        Returns:
+            List of rule dictionaries with basic fields
+        """
+        conn = self._connect()
+        try:
+            query = "SELECT rule_id, name, severity, description, layer_id, enabled, version, created_at, updated_at FROM governance_rules"
+            if enabled_only:
+                query += " WHERE enabled = 1"
+            query += " ORDER BY rule_id"
+            
+            cursor = conn.execute(query)
+            return [dict(row) for row in cursor.fetchall()]
+        finally:
+            conn.close()
+    
     def get_rules_by_severity(self, severity: str) -> List[str]:
         """Get rule IDs by severity level (BLOCKED, ERROR, WARNING, INFO)."""
         conn = self._connect()

@@ -157,7 +157,13 @@ class SanitizationOrchestrator(BaseOrchestrator):
         reporter: ReportGenerator instance for audit reports
     """
     
-    def __init__(self, target_directory: Optional[str] = None, cortex_root: Optional[str] = None, dry_run: bool = False):
+    def __init__(
+        self,
+        target_directory: Optional[str] = None,
+        cortex_root: Optional[str] = None,
+        dry_run: bool = False,
+        state_db: Optional[Any] = None  # For interface compatibility
+    ):
         """
         Initialize Sanitization Orchestrator
         
@@ -165,6 +171,7 @@ class SanitizationOrchestrator(BaseOrchestrator):
             target_directory: Path to directory to sanitize (defaults to current directory)
             cortex_root: Path to CORTEX root (auto-detected if None)
             dry_run: If True, simulate without modifying files
+            state_db: State database for coordination (optional)
         """
         # Call parent constructor with config
         config = {
@@ -174,6 +181,9 @@ class SanitizationOrchestrator(BaseOrchestrator):
             "log_level": "INFO"
         }
         super().__init__(config=config)
+        
+        # Store state_db for potential future use
+        self.state_db = state_db
         
         # Sanitization-specific initialization
         if target_directory is None:

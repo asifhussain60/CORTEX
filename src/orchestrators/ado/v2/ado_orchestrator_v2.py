@@ -133,14 +133,18 @@ class ADOOrchestratorV2(BaseOrchestratorV4_1):
         - wizard: Multi-turn conversational refinement
     """
     
-    def __init__(self, config_path: str, state_db: Optional[PlanningStateDB] = None):
+    def __init__(self, config_path: Optional[str] = None, state_db: Optional[PlanningStateDB] = None):
         """
         Initialize ADO Orchestrator v2.
         
         Args:
-            config_path: Path to ado-v2-config.yaml
+            config_path: Path to ado-v2-config.yaml (defaults to cortex-brain/config/ado-v2-default.yaml)
             state_db: PlanningStateDB instance for state tracking (creates new if None)
         """
+        # Load default config if not provided
+        if config_path is None:
+            config_path = "cortex-brain/config/ado-v2-default.yaml"
+        
         # Initialize database if not provided
         if state_db is None:
             db_path = "cortex-brain/database/planning_state.db"

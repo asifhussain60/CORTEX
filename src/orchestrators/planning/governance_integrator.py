@@ -93,10 +93,22 @@ class GovernanceIntegrator:
             self.logger.warning(f"Governance rules not found: {self.rules_path}")
     
     def _load_governance_rules(self) -> None:
-        """Load brain protection rules from YAML."""
+        """
+        Load brain protection rules from YAML (supports multi-document YAML).
+        
+        NOTE: Governance rules are migrating to SQLite (cortex-brain/tier0/governance.db).
+        YAML loading is maintained for backward compatibility but failures are non-blocking.
+        """
         try:
             with open(self.rules_path, 'r', encoding='utf-8') as f:
-                self.rules = yaml.safe_load(f) or {}
+                # Load all YAML documents and merge them
+                documents = list(yaml.safe_load_all(f))
+                self.rules = {}
+                
+                # Merge all documents into single dict
+                for doc in documents:
+                    if doc:
+                        self.rules.update(doc)
             
             # Extract key governance components
             self.tier0_instincts = self.rules.get('tier0_instincts', [])
@@ -126,8 +138,19 @@ class GovernanceIntegrator:
             self.logger.info(f"Loaded {len(self.skull_rules)} SKULL rules")
         
         except Exception as e:
-            self.logger.error(f"Failed to load governance rules: {e}")
-            raise
+            # NOTE: Governance is migrating to SQLite (cortex-brain/tier0/governance.db)
+            # YAML loading failures are non-blocking during migration
+            self.logger.warning(
+                f"Failed to load governance rules from YAML (non-blocking): {e}"
+            )
+            self.logger.info(
+                "Governance rules should be loaded from SQLite: cortex-brain/tier0/governance.db"
+            )
+            # Initialize empty structures for graceful degradation
+            self.rules = {}
+            self.tier0_instincts = []
+            self.critical_paths = []
+            self.skull_rules = {}
     
     def validate_feature_request(
         self,

@@ -7,7 +7,7 @@ plan_name: "C150 Remediation - Fix HTML Alignment Plan Gaps"
 created_date: "2026-01-04"
 author: "CORTEX Planning System v5"
 priority: "P0_CRITICAL"
-estimated_total_hours: 111
+estimated_total_hours: 116
 
 # Plan metadata
 metadata:
@@ -971,8 +971,508 @@ phases:
       - "reports/plan-viewer-generation-validation.md"
   
   - number: 17
-    name: "Integrate Plan Viewer Generation into ADO Orchestrator v2"
-    description: "Auto-generate ado-work-items-viewer.html for ADO work item dashboards"
+    name: "Enhance Orchestrators to Generate Complete YAML for Modal Display"
+    description: "Update planning_v5 and ado_v2 orchestrators to generate YAML with ALL fields required for modal card rendering (description, validation, dependencies, executor, trigger, root_cause)"
+    estimated_hours: 5.0
+    python_executor: "scripts/orchestration/enhance_orchestrator_yaml_generation.py"
+    trigger: "Modal cards display 'No description available' due to missing YAML fields in progress-tracker.json"
+    root_cause: "Orchestrators generate minimal YAML (only name, status, estimated_hours). Modal viewer expects: description, validation_criteria, dependencies, python_executor, trigger, root_cause, outputs"
+    
+    problem_analysis:
+      current_state: "progress-tracker.json contains minimal phase metadata"
+      example_current_yaml: |
+        phases:
+          - number: 1
+            name: "Fix Planning Orchestrator v5"
+            status: "complete"
+            estimated_hours: 4.0
+            actual_hours: 3.8
+            outputs: ["artifacts/planning_v5_fix.patch"]
+      
+      missing_fields:
+        - field: "description"
+          purpose: "Detailed explanation of phase purpose for modal display"
+          example: "Fix SyntaxError in planning_orchestrator_v5.py line 718 (f-string backslash)"
+        
+        - field: "validation_criteria"
+          purpose: "List of acceptance tests for modal checklist display"
+          example: ["Planning orchestrator instantiates without errors", "Can create FEATURE-mode plans"]
+        
+        - field: "dependencies"
+          purpose: "Show phase dependencies in modal (prerequisite phases)"
+          example: [0, 15]  # Phase 1 depends on Phase 0 (setup) and Phase 15 (architecture fix)
+        
+        - field: "python_executor"
+          purpose: "Display automation script path for transparency"
+          example: "scripts/orchestration/fix_planning_v5_syntax.py"
+        
+        - field: "trigger"
+          purpose: "Explain why phase was created (root cause context)"
+          example: "SyntaxError prevents planning orchestrator instantiation"
+        
+        - field: "root_cause"
+          purpose: "Technical diagnosis for engineering context"
+          example: "f-string contains backslash on line 718 (invalid Python 3.12+ syntax)"
+    
+    required_enhancements:
+      planning_orchestrator_v5:
+        file: "src/orchestrators/planning/planning_orchestrator_v5.py"
+        method: "_create_progress_tracker()"
+        current_implementation: |
+          # Current: Minimal phase metadata
+          phases.append({
+              "number": phase_num,
+              "name": phase_name,
+              "status": "not_started",
+              "estimated_hours": estimated_hours,
+              "outputs": []
+          })
+        
+        required_implementation: |
+          # Enhanced: Complete modal-ready metadata
+          phases.append({
+              "number": phase_num,
+              "name": phase_name,
+              "description": phase.get("description", "No description provided"),
+              "status": "not_started",
+              "estimated_hours": estimated_hours,
+              "actual_hours": None,
+              "start_time": None,
+              "end_time": None,
+              "outputs": [],
+              "validation_criteria": phase.get("validation", []),
+              "dependencies": phase.get("dependencies", []),
+              "python_executor": phase.get("python_executor", "N/A"),
+              "trigger": phase.get("trigger", "N/A"),
+              "root_cause": phase.get("root_cause", "N/A")
+          })
+        
+        changes_required:
+          - action: "Read master plan YAML to extract phase metadata"
+            location: "_create_progress_tracker() method"
+            implementation: "Load 00-{plan_name}.yaml, parse phases array, extract all fields"
+          
+          - action: "Validate required fields exist in master plan"
+            validation_rules:
+              - "Each phase MUST have: number, name, description, estimated_hours"
+              - "Each phase SHOULD have: validation, dependencies, python_executor, trigger"
+              - "Missing fields get default values (not errors)"
+          
+          - action: "Update progress tracker schema documentation"
+            file: "cortex-brain/manifests/schemas/progress-tracker-schema.json"
+            add_fields: ["description", "validation_criteria", "dependencies", "python_executor", "trigger", "root_cause"]
+      
+      ado_orchestrator_v2:
+        file: "src/orchestrators/ado/ado_orchestrator_v2.py"
+        method: "_generate_work_items_tracker()"
+        similar_enhancement: "Generate complete work item metadata for modal display"
+        required_fields:
+          - "description: Work item purpose"
+          - "acceptance_criteria: ADO acceptance criteria list"
+          - "dependencies: Prerequisite work items"
+          - "story_points: Effort estimation"
+          - "assigned_to: Team member assignment"
+          - "labels: ADO tags"
+    
+    modal_display_mapping:
+      description: "Maps YAML fields to modal card sections (CONDITIONAL rendering based on data presence)"
+      philosophy: "Show what matters, hide what's missing. Modal sections render ONLY when data exists."
+      
+      mandatory_sections:
+        - section: "⏱️ Time & Progress"
+          yaml_fields: ["estimated_hours", "actual_hours", "start_time", "end_time"]
+          display: "Stats grid (always shown, uses 0 or 'Not started' defaults)"
+          conditional: false
+          rationale: "Every phase has time tracking"
+        
+        - section: "📋 Status"
+          yaml_field: "status"
+          display: "Status badge with timestamps"
+          conditional: false
+          rationale: "Every phase has status (not_started/in_progress/complete/failed)"
+      
+      conditional_sections:
+        - section: "📋 Description"
+          yaml_field: "description"
+          display: "Full text in modal body"
+          show_if: "description exists AND != 'No description provided'"
+          hide_if: "description is null, empty, or placeholder text"
+          rationale: "Only show if orchestrator provided meaningful description"
+        
+        - section: "✅ Validation Criteria"
+          yaml_field: "validation_criteria"
+          display: "Bulleted checklist"
+          show_if: "validation_criteria is non-empty list"
+          hide_if: "validation_criteria is [], null, or ['N/A']"
+          rationale: "Many phases don't have formal acceptance tests"
+        
+        - section: "🔗 Dependencies"
+          yaml_field: "dependencies"
+          display: "Phase links (e.g., 'Depends on: Phase 0, Phase 15')"
+          show_if: "dependencies is non-empty list"
+          hide_if: "dependencies is [], null, or [0] (Phase 0 is implicit setup)"
+          rationale: "Not all phases have prerequisites"
+        
+        - section: "📦 Deliverables"
+          yaml_field: "outputs"
+          display: "List of artifacts"
+          show_if: "outputs is non-empty list OR phase is complete"
+          hide_if: "outputs is [] AND status is not_started"
+          rationale: "Show section when artifacts exist or phase completed"
+        
+        - section: "🐍 Automation"
+          yaml_field: "python_executor"
+          display: "Script path with clickable link"
+          show_if: "python_executor exists AND != 'N/A' AND != 'Manual execution'"
+          hide_if: "python_executor is 'N/A', null, or manual workflow"
+          rationale: "Many phases are manual (especially in small plans)"
+        
+        - section: "🔍 Context"
+          yaml_fields: ["trigger", "root_cause"]
+          display: "Two-line grid (Trigger + Root Cause)"
+          show_if: "trigger OR root_cause != 'N/A'"
+          hide_if: "Both trigger AND root_cause are 'N/A', null, or empty"
+          rationale: "Context useful for remediation plans, not feature plans"
+      
+      rendering_logic:
+        example_minimal_phase: |
+          # Phase with only mandatory fields (2 sections)
+          phases:
+            - number: 1
+              name: "Setup Environment"
+              estimated_hours: 1.0
+              status: "not_started"
+          
+          # Modal renders:
+          # 1. ⏱️ Time & Progress (mandatory)
+          # 2. 📋 Status (mandatory)
+          # Total: 2 sections
+        
+        example_complete_phase: |
+          # Phase with all optional fields (7 sections)
+          phases:
+            - number: 5
+              name: "Fix Runtime Governance"
+              description: "Implement SKULL middleware for runtime rule enforcement"
+              estimated_hours: 4.0
+              status: "in_progress"
+              outputs: ["artifacts/governance_middleware.patch"]
+              validation_criteria: ["Middleware intercepts orchestrator calls", "Rules enforced at runtime"]
+              dependencies: [0, 3]
+              python_executor: "scripts/orchestration/implement_governance_middleware.py"
+              trigger: "SKULL rules documented but not enforced"
+              root_cause: "Missing middleware layer between orchestrator calls"
+          
+          # Modal renders:
+          # 1. 📋 Description (has meaningful text)
+          # 2. ✅ Validation Criteria (2 criteria)
+          # 3. � Dependencies (Phase 0, Phase 3)
+          # 4. �📦 Deliverables (1 artifact)
+          # 5. 🐍 Automation (Python script path)
+          # 6. 🔍 Context (trigger + root cause)
+          # 7. ⏱️ Time & Progress (mandatory)
+          # 8. 📋 Status (mandatory)
+          # Total: 8 sections
+        
+        example_feature_plan_phase: |
+          # Typical feature plan phase (4 sections)
+          phases:
+            - number: 3
+              name: "Implement User Authentication"
+              description: "Add OAuth2 login with JWT tokens"
+              estimated_hours: 6.0
+              status: "not_started"
+              dependencies: [2]
+              validation_criteria: ["Users can login", "JWT tokens expire after 1h"]
+          
+          # Modal renders:
+          # 1. 📋 Description (has meaningful text)
+          # 2. ✅ Validation Criteria (2 criteria)
+          # 3. 🔗 Dependencies (Phase 2)
+          # 4. ⏱️ Time & Progress (mandatory)
+          # 5. 📋 Status (mandatory)
+          # Total: 5 sections (no automation, no context, no deliverables yet)
+    
+    viewer_script_updates:
+      file: "scripts/generate_feature_plan_viewer.py"
+      changes:
+        - action: "Add modal sections for missing fields"
+          location: "Line 165-200 (modal HTML generation)"
+          add_sections:
+            - "📋 Description section (render phase_description)"
+            - "✅ Validation Criteria section (render phase_validation as list)"
+            - "🔗 Dependencies section (render phase_dependencies as links)"
+            - "🐍 Automation section (render phase_python_executor as code block)"
+            - "🔍 Context section (render trigger + root_cause)"
+        
+        - action: "Handle missing fields gracefully"
+          fallback_behavior: "Display 'N/A' or 'Not provided' instead of hiding section"
+        
+        - action: "Add CSS styles for new sections"
+          location: "Line 210-400 (CSS styles)"
+          new_classes:
+            - ".modal-description: Full-width text block"
+            - ".modal-validation-list: Checklist with checkboxes"
+            - ".modal-dependencies: Phase link badges"
+            - ".modal-executor: Code block with copy button"
+            - ".modal-context: Two-row grid (trigger + root_cause)"
+    
+    integration_points:
+      planning_v5_update:
+        file: "src/orchestrators/planning/planning_orchestrator_v5.py"
+        method: "_create_progress_tracker()"
+        implementation_steps:
+          - step: "Load master plan YAML file"
+            code_snippet: |
+              with open(self.plan_path / f"00-{self.plan_id}.yaml") as f:
+                  master_plan = yaml.safe_load(f)
+              phases_data = master_plan.get("phases", [])
+          
+          - step: "Extract ALL phase metadata fields"
+            code_snippet: |
+              for phase_data in phases_data:
+                  phase_entry = {
+                      "number": phase_data.get("number"),
+                      "name": phase_data.get("name"),
+                      "description": phase_data.get("description", "No description provided"),
+                      "status": "not_started",
+                      "estimated_hours": phase_data.get("estimated_hours", 0),
+                      "actual_hours": None,
+                      "start_time": None,
+                      "end_time": None,
+                      "outputs": phase_data.get("outputs", []),
+                      "validation_criteria": phase_data.get("validation", []),
+                      "dependencies": phase_data.get("dependencies", []),
+                      "python_executor": phase_data.get("python_executor", "N/A"),
+                      "trigger": phase_data.get("trigger", "N/A"),
+                      "root_cause": phase_data.get("root_cause", "N/A")
+                  }
+                  tracker_phases.append(phase_entry)
+          
+          - step: "Write enhanced progress tracker"
+            validation: "Ensure all modal-required fields present"
+      
+      ado_v2_update:
+        file: "src/orchestrators/ado/ado_orchestrator_v2.py"
+        method: "_generate_work_items_tracker()"
+        similar_approach: "Extract work item metadata from ADO plan YAML"
+        required_fields:
+          - "description"
+          - "acceptance_criteria"
+          - "dependencies"
+          - "story_points"
+          - "assigned_to"
+          - "labels"
+      
+      viewer_script_update:
+        file: "scripts/generate_feature_plan_viewer.py"
+        changes:
+          - location: "Lines 165-200 (modal HTML generation)"
+            action: "Add CONDITIONAL rendering for modal sections"
+            rendering_strategy: "Check field presence/validity before generating HTML"
+            new_sections_html: |
+              <!-- CONDITIONAL: Description Section -->
+              {f'''
+              <div class="modal-section">
+                  <h3>📋 Description</h3>
+                  <p style="color: rgba(255,255,255,0.9); line-height: 1.6;">
+                      {phase_description}
+                  </p>
+              </div>
+              ''' if phase_description and phase_description not in ['No description provided', 'N/A', ''] else ''}
+              
+              <!-- CONDITIONAL: Validation Criteria Section -->
+              {f'''
+              <div class="modal-section">
+                  <h3>✅ Validation Criteria</h3>
+                  <ul class="modal-validation-list">
+                      {''.join([f'<li>☐ {criterion}</li>' for criterion in phase_validation])}
+                  </ul>
+              </div>
+              ''' if phase_validation and phase_validation not in [[], ['N/A']] else ''}
+              
+              <!-- CONDITIONAL: Dependencies Section -->
+              {f'''
+              <div class="modal-section">
+                  <h3>🔗 Dependencies</h3>
+                  <div class="modal-dependencies">
+                      {' '.join([f'<span class="dependency-badge">Phase {dep}</span>' for dep in phase_dependencies if dep != 0])}
+                  </div>
+              </div>
+              ''' if phase_dependencies and len([d for d in phase_dependencies if d != 0]) > 0 else ''}
+              
+              <!-- CONDITIONAL: Deliverables Section (show if outputs exist OR phase complete) -->
+              {f'''
+              <div class="modal-section">
+                  <h3>📦 Deliverables ({len(phase_outputs)})</h3>
+                  {outputs_html}
+              </div>
+              ''' if phase_outputs or phase_status == 'complete' else ''}
+              
+              <!-- CONDITIONAL: Automation Section -->
+              {f'''
+              <div class="modal-section">
+                  <h3>🐍 Automation</h3>
+                  <code class="modal-executor">{phase_python_executor}</code>
+              </div>
+              ''' if phase_python_executor and phase_python_executor not in ['N/A', 'Manual execution', ''] else ''}
+              
+              <!-- CONDITIONAL: Context Section -->
+              {f'''
+              <div class="modal-section">
+                  <h3>🔍 Context</h3>
+                  <div class="modal-context-grid">
+                      {f'<div><strong>Trigger:</strong> {phase_trigger}</div>' if phase_trigger and phase_trigger != 'N/A' else ''}
+                      {f'<div><strong>Root Cause:</strong> {phase_root_cause}</div>' if phase_root_cause and phase_root_cause != 'N/A' else ''}
+                  </div>
+              </div>
+              ''' if (phase_trigger and phase_trigger != 'N/A') or (phase_root_cause and phase_root_cause != 'N/A') else ''}
+              
+              <!-- MANDATORY: Time & Progress Section (ALWAYS SHOWN) -->
+              <div class="modal-section">
+                  <h3>⏱️ Time & Progress</h3>
+                  <div class="modal-stats-grid">
+                      <div class="modal-stat-tile">
+                          <div class="modal-stat-label">⏳ Estimated</div>
+                          <div class="modal-stat-value">{phase_estimated}h</div>
+                      </div>
+                      <div class="modal-stat-tile">
+                          <div class="modal-stat-label">📊 Actual</div>
+                          <div class="modal-stat-value">{phase_actual or 0}h</div>
+                      </div>
+                  </div>
+              </div>
+              
+              <!-- MANDATORY: Status Section (ALWAYS SHOWN) -->
+              <div class="modal-section" style="border-left: 4px solid {progress_color};">
+                  <h3>📋 Status</h3>
+                  <p style="font-size: 1.1em; font-weight: 600; color: white;">
+                      {progress_emoji} {phase_status.replace('_', ' ').title()}
+                  </p>
+                  {f'<p style="color: rgba(255,255,255,0.7); font-size: 0.9em; margin-top: 0.5rem;">⏰ Started: {phase_start}</p>' if phase_start not in ["Not started", "None", None] else ''}
+                  {f'<p style="color: rgba(255,255,255,0.7); font-size: 0.9em;">🏁 Completed: {phase_end}</p>' if phase_end not in ["Not completed", "None", None] else ''}
+              </div>
+          
+          - location: "CSS section"
+            action: "Add styles for CONDITIONAL modal sections"
+            note: "Styles only apply when sections render"
+            new_styles_css: |
+              .modal-validation-list {{
+                  list-style: none;
+                  padding: 0;
+              }}
+              
+              .modal-validation-list li {{
+                  padding: 8px 12px;
+                  margin: 6px 0;
+                  background: rgba(255,255,255,0.05);
+                  border-radius: 6px;
+                  border-left: 3px solid var(--accent);
+              }}
+              
+              .modal-dependencies {{
+                  display: flex;
+                  flex-wrap: wrap;
+                  gap: 8px;
+              }}
+              
+              .dependency-badge {{
+                  display: inline-block;
+                  padding: 6px 12px;
+                  background: rgba(109, 40, 217, 0.3);
+                  border: 1px solid rgba(109, 40, 217, 0.6);
+                  border-radius: 8px;
+                  font-size: 0.9em;
+                  color: #C4B5FD;
+              }}
+              
+              .modal-executor {{
+                  display: block;
+                  padding: 12px;
+                  background: rgba(0,0,0,0.3);
+                  border-radius: 6px;
+                  color: #A5F3FC;
+                  font-family: 'Monaco', 'Courier New', monospace;
+                  font-size: 0.9em;
+                  overflow-x: auto;
+              }}
+              
+              .modal-context-grid {{
+                  display: grid;
+                  gap: 12px;
+              }}
+              
+              .modal-context-grid > div {{
+                  padding: 12px;
+                  background: rgba(255,255,255,0.05);
+                  border-radius: 6px;
+                  border-left: 3px solid var(--warning);
+              }}
+              
+              .modal-context-grid strong {{
+                  color: var(--warning);
+                  display: block;
+                  margin-bottom: 4px;
+              }}
+    
+    validation:
+      - "progress-tracker.json contains all available modal fields (no forced placeholders)"
+      - "Modal cards render 2-8 sections based on data presence (not fixed count)"
+      - "Minimal phases show 2 sections (Time/Progress + Status)"
+      - "Complete phases show up to 8 sections (when all data present)"
+      - "No 'N/A' placeholders rendered in UI (sections hidden instead)"
+      - "Conditional rendering logic works correctly (if/else in HTML generation)"
+      - "CSS styles apply correctly to rendered sections only"
+      - "Planning orchestrator v5 generates YAML with available data (no forced fields)"
+      - "Feature plans show 4-5 sections average (description, validation, dependencies, time, status)"
+      - "Remediation plans show 6-8 sections average (adds automation, context, deliverables)"
+    
+    design_philosophy:
+      principle: "Progressive Disclosure"
+      rationale: "Show complexity when it exists, hide it when it doesn't"
+      benefits:
+        - "Small plans stay simple (2-4 sections per phase)"
+        - "Complex plans show full detail (6-8 sections per phase)"
+        - "No visual clutter from empty sections"
+        - "Users see what matters for each phase type"
+      
+      anti_pattern_avoided: "Forcing all 8 sections with 'N/A' placeholders creates noise"
+      correct_approach: "Conditional rendering = Clean, context-appropriate modals"
+    
+    testing:
+      - test_file: "tests/orchestrators/test_planning_v5_yaml_generation.py"
+        test_cases:
+          - name: "test_progress_tracker_contains_available_fields"
+            validates: "Generated progress-tracker.json has fields orchestrator can populate (no forced null values)"
+          
+          - name: "test_modal_viewer_renders_conditionally"
+            validates: "Modal sections render based on data presence (2-8 sections depending on phase)"
+          
+          - name: "test_minimal_phase_renders_2_sections"
+            validates: "Phase with only name, estimated_hours, status renders exactly 2 sections (Time/Progress, Status)"
+          
+          - name: "test_complete_phase_renders_8_sections"
+            validates: "Phase with all fields renders all 8 sections"
+          
+          - name: "test_no_na_placeholders_in_ui"
+            validates: "Sections with 'N/A' values are hidden (not rendered with placeholder text)"
+          
+          - name: "test_feature_plan_typical_sections"
+            validates: "Typical feature plan phase shows 4-5 sections (not all 8)"
+          
+          - name: "test_remediation_plan_typical_sections"
+            validates: "Typical remediation phase shows 6-8 sections (includes automation, context)"
+    
+    outputs:
+      - "artifacts/planning_v5_enhanced_yaml_generation.patch"
+      - "artifacts/viewer_script_modal_sections.patch"
+      - "artifacts/progress_tracker_schema_v2.json"
+      - "reports/modal-field-completeness-validation.md"
+      - "cortex-brain/documents/planning/active/c150-remediation-plan/progress-tracker-enhanced.json"
+  
+  - number: 18
+    name: "Integrate ADO Viewer Generation into ADO Orchestrator v2"
+    description: "Auto-generate ado-work-items-viewer.html for ADO work item dashboards (moved from Phase 17)"
     estimated_hours: 5.0
     python_executor: "scripts/orchestration/integrate_ado_viewer_generation.py"
     trigger: "ADO orchestrator generates JSON work items but no visual dashboard"
@@ -1215,11 +1715,16 @@ validation:
       pass_criteria: "All misleading language replaced, architecture clarified, icon changed to 🎯"
     
     - id: "AC-12"
-      description: "Plan viewer generation integrated into Planning Orchestrator v5"
-      validation: "Create new FEATURE-mode plan, verify plan-viewer.html + launch_plan_viewer.py auto-generated"
-      pass_criteria: "HTML viewer with 60s auto-refresh, modal popups, 200x200 logo, glassmorphism UI, real-time progress tracking"
+      description: "Orchestrators generate YAML with available data (no forced fields)"
+      validation: "Verify progress-tracker.json contains fields orchestrator can populate. No 'N/A' placeholders for unavailable data."
+      pass_criteria: "Modal cards render 2-8 sections conditionally based on data presence. Minimal phases show 2 sections, complete phases show up to 8 sections."
     
     - id: "AC-13"
+      description: "Plan viewer generation integrated into Planning Orchestrator v5"
+      validation: "Create new FEATURE-mode plan, verify plan-viewer.html + launch_plan_viewer.py auto-generated"
+      pass_criteria: "HTML viewer with 60s auto-refresh, enhanced modal popups, 200x200 logo, glassmorphism UI, real-time progress tracking"
+    
+    - id: "AC-14"
       description: "ADO viewer generation integrated into ADO Orchestrator v2"
       validation: "Generate ADO work items, verify ado-work-items-viewer.html auto-generated with hierarchy visualization"
       pass_criteria: "HTML viewer shows epic/feature/story/task cards, story point tracking, 60s auto-refresh, Azure DevOps export"
@@ -1248,14 +1753,14 @@ skull_compliance:
 
 # Estimated timeline
 timeline:
-  total_hours: 111
-  total_days: 14  # Business days (8 hours/day)
+  total_hours: 116
+  total_days: 15  # Business days (8 hours/day)
   breakdown:
     critical_path: "Phases 2-5 (orchestrator + middleware fixes): 19 hours"
     documentation: "Phases 7-9 (CORTEX-5.0 docs): 22 hours"
     deployment: "Phase 11 (staging + production): 48 hours (mostly monitoring)"
     automation: "Phases 13-15 (validation automation + architecture fix): 18 hours"
-    viewer_integration: "Phases 16-17 (plan + ADO viewers): 11 hours"
+    viewer_integration: "Phases 16-18 (plan viewer enhancement + ADO viewer): 16 hours"
     cleanup: "Phases 10, 12, 999: 7 hours"
   
   milestones:
@@ -1283,9 +1788,9 @@ timeline:
       phases: [11, 13, 14, 15]
       deliverable: "Deployment validated, automation in place, architecture fixed"
     
-    - day: 14
-      phases: [16, 17, 999]
-      deliverable: "Plan viewer + ADO viewer integrated, plan complete"
+    - day: 15
+      phases: [16, 17, 18, 999]
+      deliverable: "Plan viewer enhanced with complete modal data, ADO viewer integrated, plan complete"
 
 # Success metrics
 success_metrics:
