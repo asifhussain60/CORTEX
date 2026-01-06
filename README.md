@@ -62,6 +62,50 @@ Every new chat session, Copilot forgets everything from previous conversations. 
 
 ## 🚀 Quick Start
 
+### Installation
+
+CORTEX can be installed via pip for production use or in editable mode for development.
+
+**Production Installation:**
+```bash
+# From wheel distribution
+pip install dist/cortex_ai-3.2.0-py3-none-any.whl
+
+# Verify installation
+cortex "version"
+```
+
+**Development Installation:**
+```bash
+# Clone repository
+git clone https://github.com/asifhussain60/CORTEX.git
+cd CORTEX
+
+# Install in editable mode
+pip install -e .
+
+# Verify installation
+cortex "version"
+```
+
+**Complete installation guide:** [docs/deployment/production-install-guide.md](docs/deployment/production-install-guide.md)
+
+### CLI Commands
+
+CORTEX provides several CLI entry points:
+
+```bash
+# Main command
+cortex "version"                    # Check version
+cortex "help"                       # Show available operations
+cortex "system maintenance"         # Run maintenance workflow
+
+# Planning commands
+cortex-plan "implement auth system" # Create execution plan
+cortex-approve <plan-id>            # Approve plan for execution
+cortex-reject <plan-id>             # Reject and delete plan
+```
+
 ### Using CORTEX Entry Point
 
 **In GitHub Copilot Chat:**
@@ -175,6 +219,60 @@ CORTEX (formerly KDS - Key Data Streams) is a sophisticated AI assistant enhance
 6. **Quality Protection** - Challenges risky changes with evidence-based recommendations
 7. **Real-Time Performance Analytics** - Track metrics, health scores, and trends across projects
 8. **Community Feedback Loop** - Share insights via GitHub Gists, aggregate cross-project data
+
+---
+
+## 🏗️ How CORTEX Works
+
+### Integration Model
+
+CORTEX enhances GitHub Copilot through **AI-augmented instructions**, not traditional CLI dispatch. It works seamlessly through two interfaces:
+
+**Primary Interface: GitHub Copilot Chat**
+```
+User: "plan authentication feature"
+  ↓
+Copilot reads .github/copilot-instructions.md
+  ↓
+Copilot follows structured CORTEX instructions
+  ↓
+User gets guided planning workflow with context
+```
+
+**Secondary Interface: Python CLI**
+```bash
+python -m src.main "plan authentication"
+  ↓
+CortexEntry.process() → IntentRouter → PlanningOrchestrator
+  ↓
+Generates plan with DoR/DoD validation
+```
+
+### Entry Point Architecture
+
+```
+User Command
+  ↓
+src/main.py (CLI entry)
+  ↓
+CortexEntry.process() (main dispatcher)
+  ↓
+IntentRouter.execute() (routing logic from cortex-operations.yaml)
+  ↓
+AgentExecutor.execute_routing_decision()
+  ↓
+[Orchestrators: Planning, TDD, System Maintenance, ADO, etc.]
+  ↓
+[Agents: Coding Agent, Planning Agent]
+```
+
+**Key Components:**
+
+1. **CortexEntry** (`src/entry_point/cortex_entry.py`) - Main request processor and dispatcher
+2. **IntentRouter** (`src/intent_router.py`) - Routes commands to appropriate orchestrators
+3. **Operations Config** (`cortex-operations.yaml`) - Defines command→orchestrator mappings
+4. **Orchestrators** (`src/orchestrators/`) - Implement complex multi-step workflows
+5. **Agents** (`src/cortex_agents/`) - Execute specific tasks (coding, planning)
 
 ---
 
@@ -613,6 +711,23 @@ dotnet run --project Tools/PromptMetrics -- report --last 7d
 | **2.1.0** | 2025-11-01 | Added Rule #20 (KDTR), test registry system |
 | **2.0.0** | 2025-10-31 | Major governance overhaul, centralized Step -1 |
 | **1.0.0** | 2025-09-01 | Initial KDS system release |
+
+---
+
+## ⚠️ Known Limitations
+
+1. **GitHub Copilot Integration**: Primary interface is GitHub Copilot Chat, which requires a GitHub Copilot license ($10-$20/month)
+2. **Test Collection**: Some legacy test files are scripts rather than proper pytest tests - being migrated to pytest format
+3. **Integration Tests**: End-to-end workflow tests are being expanded (planning E2E, TDD E2E, brain persistence tests in progress)
+4. **Orchestrator Cleanup**: Some duplicate orchestrators exist from iterative development - consolidation planned
+5. **Python 3.8+**: Requires Python 3.8 or higher for async features and type annotations
+6. **Windows Primary**: Developed and tested primarily on Windows with PowerShell; Linux/Mac support available but less tested
+
+**Roadmap:**
+- ✅ Phase 1: Fix test collection (v5.2.1)
+- 🚧 Phase 2: Complete E2E integration tests (v5.3.0)
+- 📋 Phase 3: Orchestrator consolidation (v5.4.0)
+- 📋 Phase 4: Cross-platform testing expansion (v5.5.0)
 
 ---
 

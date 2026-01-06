@@ -1,2134 +1,249 @@
-version: '2.2'
-type: governance
-name: Brain Protection Rules
-description: Automated architectural protection challenges
+schema_version: '5.0'
+categories:
+- development_workflow
+- architecture_integrity
+- quality_gates
+- orchestration_lifecycle
+- security_privacy
+- portability
 rules:
-  total_count: 44
-  layers: 17
-  severity_levels:
-  - blocked
-  - warning
-  - info
-  enforcement: automated via Brain Protector agent
-  instinct_immutability: Tier 0 instincts cannot be bypassed
-  critical_path_protection: Core CORTEX paths trigger high-level protection
-  application_isolation: Application-specific code isolated from CORTEX core
-  brain_state_protection: Brain state files protected from unintended commits
-  multi_layer_defense: 8 protection layers provide comprehensive coverage
-  incremental_planning: YAML plans created incrementally to avoid response length limits
-  test_location_isolation: Application tests in user repo, CORTEX tests in CORTEX folder
-  document_organization: All documentation in cortex-brain/documents/, NEVER repository root
-critical_paths:
-- CORTEX/src/tier0/
-- prompts/internal/
-- governance/rules.md
-- cortex-brain/tier0/
-- .cortex-version
-- cortex-brain/migrations/
-tier0_instincts:
-- INCREMENTAL_PLAN_GENERATION
-- TDD_ENFORCEMENT
-- RED_PHASE_VALIDATION
-- GREEN_PHASE_VALIDATION
-- DEFINITION_OF_READY
-- DEFINITION_OF_DONE
-- SOLID_PRINCIPLES
-- SOLID_SRP
-- SOLID_DIP
-- CODE_STYLE_CONSISTENCY
-- LOCAL_FIRST
-- BRAIN_PROTECTION_TESTS_MANDATORY
-- MACHINE_READABLE_FORMATS
-- SKULL_TEST_BEFORE_CLAIM
-- SKULL_INTEGRATION_VERIFICATION
-- SKULL_VISUAL_REGRESSION
-- SKULL_RETRY_WITHOUT_LEARNING
-- SKULL_TRANSFORMATION_VERIFICATION
-- SKULL_PRIVACY_PROTECTION
-- SKULL_FACULTY_INTEGRITY
-- GIT_ISOLATION_ENFORCEMENT
-- DISTRIBUTED_DATABASE_ARCHITECTURE
-- CORTEX_PROMPT_FILE_PROTECTION
-- GIT_CHECKPOINT_ENFORCEMENT
-- PREVENT_DIRTY_STATE_WORK
-- GIT_COMMIT_PRIVACY_VALIDATION
-- SECURITY_INJECTION
-- SECURITY_AUTHENTICATION
-- THREAT_MODELING_ENFORCEMENT
-- BRAIN_ARCHITECTURE_INTEGRITY
-- DEPLOYMENT_VERSION_TRACKING
-- UPGRADE_BRAIN_PRESERVATION
-- SCHEMA_MIGRATION_ENFORCEMENT
-- TEST_LOCATION_SEPARATION
-- DOCUMENT_ORGANIZATION_ENFORCEMENT
-- GIT_HISTORY_CONTEXT_REQUIRED
-- API_DOCUMENTATION_REQUIRED
-- OPERATIONAL_READINESS_ENFORCEMENT
-- DEBUG_MARKER_REMOVAL_ENFORCEMENT
-application_paths:
-- SPA/
-- KSESSIONS/
-- NOOR/
-- blazor
-- signalr
-- canvas
-brain_state_files:
-- conversation-history.jsonl
-- conversation-context.jsonl
-- events.jsonl
-- development-context.yaml
-- protection-events.jsonl
-protection_layers:
-- layer_id: instinct_immutability
-  name: Instinct Immutability
-  description: Tier 0 governance rules cannot be bypassed
-  priority: 1
-  rules:
-  - rule_id: INCREMENTAL_PLAN_GENERATION
-    name: Incremental YAML Plan Generation
-    severity: blocked
-    description: When generating YAML planning documents, create file first then add phases incrementally to avoid response length limits
-    detection:
-      combined_keywords:
-        planning_generation:
-        - create plan
-        - generate plan
-        - planning document
-        - migration plan
-        - comprehensive plan
-        yaml_format:
-        - .yaml
-        - yaml plan
-        response_length_risk:
-        - comprehensive
-        - complete
-        - detailed phases
-      scope:
-      - intent
-      - description
-      logic: AND
-    alternatives:
-    - 'STEP 1: Create planning YAML file with metadata and structure only'
-    - 'STEP 2: Add Phase 1 details to file'
-    - 'STEP 3: Add Phase 2 details to file (separate response)'
-    - 'STEP 4: Add Phase 3 details to file (separate response)'
-    - 'STEP 5: Add remaining phases incrementally'
-    - Each step writes to file, NOT to chat response (avoid length limit)
-    evidence_template: '#file:documents/evidence-templates/planning/INCREMENTAL_PLAN_GENERATION.md'
-    rationale: '#file:documents/rationales/INCREMENTAL_PLAN_GENERATION.md'
-  - rule_id: TDD_ENFORCEMENT
-    name: Test-Driven Development Enforcement
-    severity: blocked
-    description: Attempt to bypass Test-Driven Development requirement
-    detection:
-      keywords:
-      - skip test
-      - bypass tdd
-      - no tests
-      - disable tdd
-      - skip validation
-      scope:
-      - intent
-      - description
-    alternatives:
-    - Write failing test first (RED phase)
-    - Create spike branch for exploration (throwaway)
-    - "Use TDD cycle: RED \u2192 GREEN \u2192 REFACTOR"
-    evidence_template: 'Intent: ''{intent}'''
-  - rule_id: RED_PHASE_VALIDATION
-    name: RED Phase Validation (Test Must Fail First)
-    severity: blocked
-    description: "Tests must fail before implementation exists (RED \u2192 GREEN enforcement)"
-    detection:
-      keywords:
-      - implement before test
-      - code first then test
-      - skip red phase
-      - test after implementation
-      scope:
-      - intent
-      - description
-    alternatives:
-    - Write failing test first (RED phase)
-    - Verify test fails with 'no implementation' error
-    - Only proceed to GREEN phase after RED confirmed
-    evidence_template: 'Intent: ''{intent}'''
-    rationale: "RED Phase Purpose:\n- Validates test actually tests something (not false positive)\n- Forces specification before implementation\n- Prevents over-engineering (only implement what's needed)\n\nWorkflow:\n1. Write test for desired behavior\n2. Run test \u2192 MUST FAIL (no implementation yet)\n3. Confirm failure message is meaningful\n4. Only then proceed to GREEN phase\n"
-  - rule_id: GREEN_PHASE_VALIDATION
-    name: GREEN Phase Validation (Minimal Implementation)
-    severity: blocked
-    description: Implementation must pass previously failing tests with minimal code
-    detection:
-      keywords:
-      - skip green phase
-      - implement everything at once
-      - over-engineer
-      - add features not in test
-      scope:
-      - intent
-      - description
-    alternatives:
-    - Implement ONLY what makes test pass
-    - Resist adding extra features (YAGNI)
-    - Save improvements for REFACTOR phase
-    evidence_template: 'Intent: ''{intent}'''
-    rationale: "GREEN Phase Purpose:\n- Minimal implementation (simplest code to pass test)\n- Prevents over-engineering and scope creep\n- Forces incremental development\n\nWorkflow:\n1. Test is RED (failing)\n2. Write simplest code to make test GREEN (passing)\n3. Run test \u2192 MUST PASS\n4. Do NOT add features beyond test requirements\n5. Proceed to REFACTOR phase for improvements\n"
-  - rule_id: SOLID_SRP
-    name: Single Responsibility Principle
-    severity: blocked
-    description: Class/function violates Single Responsibility Principle
-    detection:
-      keywords:
-      - class does too much
-      - multiple responsibilities
-      - god class
-      - long method
-      scope:
-      - analysis
-      - description
-    alternatives:
-    - Extract separate classes for each responsibility
-    - Split into smaller, focused functions
-    - Use composition over inheritance
-    evidence_template: 'Violation: ''{description}'''
-    rationale: 'SRP Enforcement:
-
-      - Each class should have ONE reason to change
-
-      - Functions should do ONE thing well
-
-      - Improves testability and maintainability
-
-
-      Indicators of Violation:
-
-      - Class > 250 lines
-
-      - Function > 30 lines
-
-      - Class name contains "And" or "Manager"
-
-      - Multiple import groups (data, network, UI)
-
-      '
-  - rule_id: SOLID_DIP
-    name: Dependency Inversion Principle
-    severity: blocked
-    description: Code depends on concrete implementations instead of abstractions
-    detection:
-      keywords:
-      - concrete dependency
-      - tight coupling
-      - cannot mock
-      - hard to test
-      scope:
-      - analysis
-      - description
-    alternatives:
-    - Depend on interfaces/protocols, not classes
-    - Inject dependencies via constructor
-    - Use dependency injection framework
-    evidence_template: 'Violation: ''{description}'''
-    rationale: "DIP Enforcement:\n- High-level modules shouldn't depend on low-level modules\n- Both should depend on abstractions (interfaces)\n- Enables testing with mocks\n\nExample:\n\u274C BAD:\nclass UserService:\n    def __init__(self):\n        self.db = PostgresDatabase()  # Concrete dependency\n\n\u2705 GOOD:\nclass UserService:\n    def __init__(self, db: IDatabase):  # Abstract dependency\n        self.db = db\n"
-  - rule_id: SECURITY_INJECTION
-    name: Security - Injection Prevention
-    severity: blocked
-    description: Code vulnerable to SQL injection, XSS, or command injection
-    detection:
-      keywords:
-      - string concatenation
-      - execute raw sql
-      - eval(
-      - exec(
-      - innerHTML
-      scope:
-      - code
-      - description
-    alternatives:
-    - Use parameterized queries (SQL)
-    - Use prepared statements
-    - Sanitize user input
-    - Use template engines with auto-escaping
-    evidence_template: 'Security risk: ''{description}'''
-    rationale: "Injection Prevention:\n- NEVER concatenate user input into SQL/commands\n- ALWAYS use parameterized queries\n- ALWAYS validate and sanitize input\n\nExample:\n\u274C BAD:\nquery = f\"SELECT * FROM users WHERE id = {user_id}\"  # SQL injection\n\n\u2705 GOOD:\nquery = \"SELECT * FROM users WHERE id = ?\"\ncursor.execute(query, (user_id,))  # Parameterized\n"
-  - rule_id: SECURITY_AUTHENTICATION
-    name: Security - Authentication Best Practices
-    severity: blocked
-    description: Authentication/authorization implementation has security issues
-    detection:
-      keywords:
-      - plaintext password
-      - hardcoded secret
-      - no authentication
-      - skip authorization
-      scope:
-      - code
-      - description
-    alternatives:
-    - Hash passwords with bcrypt/argon2
-    - Use environment variables for secrets
-    - Implement proper authentication middleware
-    - Check authorization before resource access
-    evidence_template: 'Security risk: ''{description}'''
-    rationale: "Authentication Security:\n- NEVER store plaintext passwords\n- NEVER hardcode secrets in code\n- ALWAYS verify authentication before protected operations\n- ALWAYS check authorization (user can access resource)\n\nExample:\n\u274C BAD:\npassword = user_input  # Plaintext storage\nAPI_KEY = \"sk-1234567890\"  # Hardcoded secret\n\n\u2705 GOOD:\nhashed = bcrypt.hashpw(password, bcrypt.gensalt())\nAPI_KEY = os.getenv(\"API_KEY\")  # Environment variable\n"
-  - rule_id: THREAT_MODELING_ENFORCEMENT
-    name: Security - Threat Modeling Required
-    severity: blocked
-    description: Planning workflow executed without STRIDE threat analysis
-    detection:
-      keywords:
-      - skip threat
-      - bypass threat
-      - no threat analysis
-      - threat analysis disabled
-      scope:
-      - intent
-      - flags
-      - workflow
-      workflow_triggers:
-      - operation: planning
-        required_stages:
-        - threat_analysis
-        stage_config:
-          name: threat_analysis
-          required: true
-          timeout: 600
-          on_failure: block
-    alternatives:
-    - Execute STRIDE threat analysis (Stage 4 in planning_with_threats.yaml)
-    - Use --allow-skip-threats flag for exceptional cases (triggers warning)
-    - Review identified threats and mitigations before proceeding
-    evidence_template: 'Threat modeling required: ''{description}'''
-    rationale: '#file:documents/rationales/THREAT_MODELING_ENFORCEMENT.md'
-    exceptions:
-    - flag: --allow-skip-threats
-      action: warn
-      message: Threat analysis bypassed by user request (not recommended - security risks unassessed)
-    - condition: workflow == 'planning_with_threats.yaml'
-      action: enforce_stage_completion
-      stage: threat_analysis
-      on_failure: block
-  - rule_id: BRAIN_ARCHITECTURE_INTEGRITY
-    name: Brain Architecture Integrity
-    severity: blocked
-    description: Changes threaten 4-tier brain architecture integrity
-    detection:
-      keywords:
-      - merge tiers
-      - monolithic database
-      - skip tier
-      - bypass brain
-      scope:
-      - intent
-      - description
-    alternatives:
-    - Preserve Tier 0-3 separation
-    - Use distributed database architecture
-    - Follow brain integration patterns
-    evidence_template: 'Architecture risk: ''{description}'''
-    rationale: 'Brain Architecture Protection:
-
-      - Tier 0: Instincts (immutable, <10ms)
-
-      - Tier 1: Working memory (conversation context, <100ms)
-
-      - Tier 2: Knowledge graph (learned patterns, <150ms)
-
-      - Tier 3: Development context (project-specific, <1ms cached)
-
-
-      Threats:
-
-      - Merging tiers into monolithic database
-
-      - Bypassing tier hierarchy
-
-      - Direct access to tier internals
-
-      - Synchronous blocking on slow tiers
-
-      '
-  - rule_id: DEFINITION_OF_DONE
-    name: Definition of Done
-    severity: blocked
-    description: Attempt to bypass Definition of Done (zero errors, zero warnings)
-    detection:
-      keywords:
-      - skip validation
-      - bypass done
-      - disable error check
-      - allow warnings
-      scope:
-      - intent
-      - description
-    alternatives:
-    - Fix all warnings before proceeding
-    - Add exception rule if truly needed
-    - Update test to expect new behavior
-    evidence_template: 'Description: ''{description}'''
-  - rule_id: DEFINITION_OF_READY
-    name: Definition of Ready
-    severity: blocked
-    description: Work item does not meet DoR criteria
-    detection:
-      keywords:
-      - skip DoR
-      - bypass ready
-      - start without requirements
-      scope:
-      - intent
-      - description
-    alternatives:
-    - Define acceptance criteria first
-    - Get stakeholder clarification
-    - Create refined user story
-    evidence_template: 'Missing DoR criteria: ''{description}'''
-  - rule_id: BRAIN_PROTECTION_TESTS_MANDATORY
-    name: Brain Protection Tests - 100% Pass Rate Mandatory
-    severity: blocked
-    description: Brain protection tests MUST pass - no exceptions
-    detection:
-      keywords:
-      - skip brain protection
-      - ignore test failures
-      - brain tests failing
-      - disable brain tests
-      - bypass protection tests
-      - xfail brain
-      - skip tier0 tests
-      scope:
-      - intent
-      - description
-    alternatives:
-    - Fix the failing tests immediately
-    - Revert changes that broke protection
-    - Do not proceed until 100% pass rate achieved
-    evidence_template: 'Brain protection tests are CRITICAL. Intent: ''{intent}'''
-    rationale: 'Brain protection tests validate core CORTEX integrity:
-
-      - Path handling (cross-platform compatibility)
-
-      - Protection layer logic (architectural safeguards)
-
-      - Conversation tracking (memory system)
-
-      - YAML configuration loading (governance rules)
-
-
-      If these fail, CORTEX has fundamental issues that MUST be resolved.
-
-      100% pass rate is MANDATORY before any other work continues.
-
-      '
-  - rule_id: MACHINE_READABLE_FORMATS
-    name: Use Machine-Readable Formats for Efficiency
-    severity: warning
-    description: Non-user files should use YAML/JSON, not Markdown
-    detection:
-      combined_keywords:
-        markdown_creation:
-        - create markdown
-        - new .md
-        - add .md
-        structured_data:
-        - structured data
-        - configuration
-        - capability matrix
-        - status table
-        - metrics
-        - statistics
-        - code example
-        - implementation pattern
-      scope:
-      - intent
-      - description
-      logic: AND
-    alternatives:
-    - Use YAML for structured data (capabilities, rules, config)
-    - Use JSON for metrics, statistics, logs
-    - Reserve Markdown for user-facing narratives only
-    - Use code files with docstrings for examples
-    evidence_template: 'Description: ''{description}'''
-    rationale: '#file:documents/rationales/MACHINE_READABLE_FORMATS.md'
-  - rule_id: ACTIVE_NARRATOR_VOICE
-    name: Active Narrator Voice (Not Passive Documentation)
-    severity: warning
-    description: Story uses passive/clinical narrator voice instead of active storytelling
-    detection:
-      passive_verbs:
-      - Asif Codeinstein designed
-      - Asif Codeinstein created
-      - Asif Codeinstein wrote
-      - Asif Codeinstein implemented
-      - Asif Codeinstein developed
-      - He wrote routines
-      - He created routines
-      - He implemented
-      - He developed
-      documentary_markers:
-      - One evening, while
-      - One morning, while
-      - One day, while
-      - One night, while
-      - After completing
-      - After finishing
-      - ', while reviewing'
-      - During the
-      scope:
-      - file_content
-      file_patterns:
-      - docs/story/**/*.md
-      - prompts/shared/story.md
-    alternatives:
-    - 'Use active storytelling: ''So Asif built'' (adds momentum)'
-    - 'Show immediate action: ''grabbed keyboard and coded'' (not ''wrote routines'')'
-    - 'Vivid scene-setting: ''That evening, knee-deep in'' (not ''One evening, while'')'
-    - 'Present-tense urgency: ''The refactor complete, Asif leaned back'' (not ''After completing'')'
-    - 'Energy verbs: ''dove into'', ''attacked'', ''grabbed'', ''swept'' (not ''designed'', ''created'')'
-    evidence_template: "Passive narrator detected: '{match}'\n\nStory should be ACTIVE third-person narrative, not clinical documentation.\n\nExamples:\n\u274C \"Asif Codeinstein designed...\" \u2190 documentation\n\u2705 \"So Asif built...\" \u2190 storytelling\n\n\u274C \"He wrote routines for...\" \u2190 neutral observer  \n\u2705 \"He grabbed his keyboard and...\" \u2190 immediate action\n\n\u274C \"One evening, while reviewing...\" \u2190 documentary\n\u2705 \"That evening, knee-deep in...\" \u2190 vivid scene\n"
-    rationale: '#file:documents/rationales/ACTIVE_NARRATOR_VOICE.md'
-  - rule_id: CORTEX_PROMPT_FILE_PROTECTION
-    name: CORTEX.prompt.md Protection (Never Rename, Safe Update)
-    severity: blocked
-    description: Prevent renaming CORTEX.prompt.md and enforce safe update procedure
-    detection:
-      combined_keywords:
-        rename_attempt:
-        - rename CORTEX.prompt.md
-        - CORTEX.prompt.md to
-        - move CORTEX.prompt.md
-        - cortex-lite
-        - cortex-backup
-        - cortex-fixed
-        - CORTEX-
-        or_unsafe_edit:
-        - edit CORTEX.prompt.md directly
-        - modify in place
-      scope:
-      - intent
-      - description
-      - file_operation
-      logic: OR
-    alternatives:
-    - "Use safe update: temp file \u2192 optimize \u2192 DELETE original \u2192 copy \u2192 delete temp"
-    - Create .github/prompts/temp-cortex-update.md with optimized content
-    - DELETE ALL content of CORTEX.prompt.md (clear file completely)
-    - Copy complete instructions from temp to CORTEX.prompt.md
-    - Delete temporary file after successful copy
-    evidence_template: '#file:documents/evidence-templates/misc/CORTEX_PROMPT_FILE_PROTECTION.md'
-    rationale: '#file:documents/rationales/CORTEX_PROMPT_FILE_PROTECTION.md'
-  - rule_id: GIT_CHECKPOINT_ENFORCEMENT
-    name: Git Checkpoint Before Development Work
-    severity: blocked
-    description: Require git checkpoint (commit/tag) before starting any development work
-    detection:
-      combined_keywords:
-        development_start:
-        - implement feature
-        - start development
-        - begin implementation
-        - fix bug
-        - refactor code
-        - add functionality
-        - create new
-        - modify existing
-        and_no_checkpoint:
-        - no checkpoint
-        - skip checkpoint
-        - without commit
-        - uncommitted changes
-      scope:
-      - intent
-      - description
-      - git_status
-      logic: AND
-    alternatives:
-    - 'Create git checkpoint: git commit -m ''checkpoint: before [feature] development'''
-    - 'Create git tag: git tag -a checkpoint-YYYY-MM-DD-HH-MM -m ''Checkpoint before [feature]'''
-    - 'Stash changes if needed: git stash save ''WIP: checkpoint before [feature]'''
-    - Use git_checkpoint_module for automated checkpoint creation
-    evidence_template: '#file:documents/evidence-templates/git/GIT_CHECKPOINT_ENFORCEMENT.md'
-    rationale: '#file:documents/rationales/GIT_CHECKPOINT_ENFORCEMENT.md'
-  - rule_id: PREVENT_DIRTY_STATE_WORK
-    name: Prevent Development on Dirty Branches
-    severity: warning
-    description: Never work on branches with uncommitted changes without explicit user consent
-    detection:
-      combined_keywords:
-        development_work:
-        - implement
-        - refactor
-        - fix
-        - modify
-        - create
-        - update
-        and_dirty_state:
-        - uncommitted changes
-        - modified files
-        - untracked files
-        - staged changes
-      scope:
-      - intent
-      - description
-      - git_status
-      logic: AND
-    alternatives:
-    - 'Commit your changes first (recommended): git add . && git commit -m ''description'''
-    - 'Stash changes and continue: git stash save ''WIP: description'''
-    - 'Proceed anyway with explicit consent: CORTEX will checkpoint current state'
-    - 'Review changes first: git status && git diff'
-    evidence_template: '#file:documents/evidence-templates/git/PREVENT_DIRTY_STATE_WORK.md'
-    rationale: '#file:documents/rationales/PREVENT_DIRTY_STATE_WORK.md'
-- layer_id: tier_boundary
-  name: Tier Boundary Protection
-  description: Data stored in correct tier
-  priority: 2
-  rules:
-  - rule_id: TIER0_APPLICATION_DATA
-    name: No Application Data in Tier 0
-    severity: blocked
-    description: Application-specific path in Tier 0 (immutable governance)
-    detection:
-      path_patterns:
-      - tier0/**
-      - governance/**
-      contains_any: '{{application_paths}}'
-    alternatives:
-    - Store in Tier 2 with scope='application'
-    - Keep generic principles in Tier 0
-    - Create application-specific tier
-    evidence: Tier 0 is for generic CORTEX principles only
-  - rule_id: TIER2_CONVERSATION_DATA
-    name: No Conversation Data in Tier 2
-    severity: warning
-    description: Conversation data should be in Tier 1, not Tier 2
-    detection:
-      path_patterns:
-      - tier2/**
-      contains: conversation
-    alternatives:
-    - Move to Tier 1 (conversation-history.jsonl)
-    - Store aggregated patterns in Tier 2
-    - Keep raw data in Tier 1, patterns in Tier 2
-    evidence: Tier 2 is for aggregated patterns, not raw conversations
-- layer_id: solid_compliance
-  name: SOLID Compliance
-  description: No God Objects, proper separation
-  priority: 3
-  rules:
-  - rule_id: SINGLE_RESPONSIBILITY
-    name: Single Responsibility Principle
-    severity: warning
-    description: Potential God Object pattern detected (adding multiple responsibilities)
-    detection:
-      keywords:
-      - add mode
-      - add switch
-      - handle all
-      - do everything
-      scope:
-      - intent
-    alternatives:
-    - Create dedicated agent for new responsibility
-    - Use composition instead of adding modes
-    - Extract to separate module
-    evidence_template: 'Intent: ''{intent}'''
-  - rule_id: DEPENDENCY_INVERSION
-    name: Dependency Inversion Principle
-    severity: warning
-    description: Hardcoded dependency detected (violates DIP)
-    detection:
-      keywords:
-      - hardcode path
-      - fixed path
-      - absolute path
-      - inline config
-      scope:
-      - description
-    alternatives:
-    - Use dependency injection
-    - Load from configuration file
-    - Pass as parameter
-    evidence_template: 'Description: ''{description}'''
-  - rule_id: OPEN_CLOSED
-    name: Open/Closed Principle
-    severity: warning
-    description: Modifying existing behavior instead of extending
-    detection:
-      keywords:
-      - change behavior
-      - modify existing
-      - alter functionality
-      scope:
-      - intent
-      - description
-    alternatives:
-    - Create new implementation via extension
-    - Use strategy pattern
-    - Add decorator or wrapper
-    evidence_template: Consider extension over modification
-  - rule_id: CORTEX_WORKSPACE_ISOLATION
-    name: CORTEX Workspace Isolation
-    severity: blocked
-    description: All CORTEX-generated documentation for application repos MUST be within CORTEX/Workspaces/ folder
-    detection:
-      combined_keywords:
-        cortex_generation:
-        - onboard application
-        - generate documentation
-        - create docs
-        - application onboarding
-        root_output:
-        - /docs/
-        - \docs\
-        - root_path / 'docs'
-        - project_root / 'docs'
-      scope:
-      - code
-      - file_path
-      - intent
-      logic: AND
-    verification_required:
-    - type: output_path_validation
-      description: Verify all generated files within CORTEX/Workspaces/
-      requirement: Output paths MUST contain 'CORTEX/Workspaces/[app-name]/'
-    - type: no_root_pollution
-      description: Verify no files created in application repository root or docs/
-      requirement: git status MUST show zero new files outside CORTEX/
-    - type: workspace_structure
-      description: Verify proper workspace folder structure created
-      requirement: CORTEX/Workspaces/[app-name]/{docs,diagrams,references}/
-    alternatives:
-    - Use CORTEX/Workspaces/[app-name]/docs/ for all generated documentation
-    - Use CORTEX/Workspaces/[app-name]/diagrams/ for architecture diagrams
-    - Use CORTEX/Workspaces/[app-name]/references/ for quick references
-    - 'Add .gitignore: CORTEX/ (exclude entire CORTEX folder from user repo)'
-    evidence_template: '#file:documents/evidence-templates/misc/CORTEX_WORKSPACE_ISOLATION.md'
-    rationale: '#file:documents/rationales/CORTEX_WORKSPACE_ISOLATION.md'
-  - rule_id: CODE_STYLE_CONSISTENCY
-    name: Adopt User's Code Style
-    severity: warning
-    description: Generated code should match existing codebase style conventions
-    detection:
-      combined_keywords:
-        code_generation:
-        - generate code
-        - create file
-        - implement
-        - write function
-        - add class
-        style_mismatch:
-        - different style
-        - inconsistent formatting
-        - foreign conventions
-      scope:
-      - code
-      - file_content
-      logic: AND
-    alternatives:
-    - Analyze existing codebase style before generating
-    - Match indentation (tabs vs spaces, 2 vs 4 spaces)
-    - Match naming conventions (camelCase, snake_case, PascalCase)
-    - Match bracket style (K&R, Allman, etc.)
-    - Match quote style (single vs double quotes)
-    - Match comment style and documentation format
-    - Use linter configs (.editorconfig, .pylintrc, etc.) if available
-    evidence_template: 'Code style inconsistency detected: ''{mismatch}''
-
-
-      User''s codebase style:
-
-      - Indentation: {user_indent}
-
-      - Naming: {user_naming}
-
-      - Quotes: {user_quotes}
-
-      - Brackets: {user_brackets}
-
-
-      Generated code should blend seamlessly with existing style.
-
-      '
-    rationale: '#file:documents/rationales/CODE_STYLE_CONSISTENCY.md'
-  - rule_id: NO_EMOJIS_IN_SCRIPTS
-    name: No Emojis in Generated Scripts
-    severity: warning
-    description: Scripts (Python, PowerShell, Bash, etc.) should not contain emojis
-    detection:
-      combined_keywords:
-        script_generation:
-        - generate script
-        - create .py
-        - create .ps1
-        - create .sh
-        - write script
-        emoji_usage:
-        - "\u2705"
-        - "\u274C"
-        - "\u26A0\uFE0F"
-        - "\U0001F50D"
-        - "\U0001F4CA"
-        - "\U0001F9E0"
-        - emoji
-      scope:
-      - code
-      - file_content
-      logic: AND
-    alternatives:
-    - 'Use plain text markers: [OK], [FAIL], [WARN]'
-    - 'Use ASCII art or text symbols: +, -, *, !'
-    - Reserve emojis for documentation and user-facing text only
-    - 'Use logging levels: INFO, ERROR, WARNING instead of emojis'
-    evidence_template: 'Emoji detected in script: ''{file_path}''
-
-
-      Emojis found: {emoji_list}
-
-
-      Scripts should use plain text for maximum compatibility:
-
-      - Encoding issues across platforms
-
-      - Terminal rendering problems
-
-      - Copy/paste issues in some editors
-
-      - Professional appearance
-
-      '
-    rationale: '#file:documents/rationales/NO_EMOJIS_IN_SCRIPTS.md'
-  - rule_id: NO_ROOT_SUMMARY_DOCUMENTS
-    name: No Documents in Repository Root - STRICT ENFORCEMENT
-    severity: blocked
-    description: ALL documentation MUST be in cortex-brain/documents/, NEVER repository root - applies to both standalone and embedded CORTEX installations
-    detection:
-      combined_keywords:
-        root_level_creation:
-        - create file in root
-        - save to repository root
-        - .md in d:\PROJECTS\CORTEX\
-        - .md in d:\PROJECTS\NOOR CANVAS\
-        - .md in /Users/asifhussain/PROJECTS/CORTEX/
-        - .md in /Users/
-        - .md in /home/
-        - 'repository_root / '
-        - 'project_root / '
-        - 'workspace_root / '
-        summary_markers:
-        - summary
-        - report
-        - analysis
-        - status
-        - completion
-        - investigation
-        - update
-        - changelog
-        - notes
-        - documentation
-      scope:
-      - intent
-      - file_path
-      - operation
-      logic: AND
-    verification_required:
-    - type: path_validation
-      description: Verify document created in cortex-brain/documents/
-      requirement: File path MUST contain 'cortex-brain/documents/'
-    - type: category_check
-      description: Verify document placed in appropriate category
-      requirement: Must be in reports/, analysis/, summaries/, etc.
-    alternatives:
-    - Use CORTEX/cortex-brain/documents/reports/ for completion reports
-    - Use CORTEX/cortex-brain/documents/analysis/ for investigations
-    - Use CORTEX/cortex-brain/documents/summaries/ for quick overviews
-    - Use CORTEX/cortex-brain/documents/conversation-captures/ for strategic conversations
-    - Use CORTEX/cortex-brain/documents/planning/ for planning documents
-    - See CORTEX/cortex-brain/documents/README.md for full structure
-    evidence_template: '#file:documents/evidence-templates/misc/NO_ROOT_SUMMARY_DOCUMENTS.md'
-    rationale: '#file:documents/rationales/NO_ROOT_SUMMARY_DOCUMENTS.md'
-  - rule_id: YAML_ONLY_PLANNING
-    name: YAML-Only Planning Documents (No Markdown Plans)
-    severity: blocked
-    description: ALL planning documents MUST be created in YAML format, NEVER Markdown - prevents documentation bloat and enforces machine-readable standards
-    detection:
-      combined_keywords:
-        planning_document:
-        - plan
-        - planning
-        - roadmap
-        - design
-        - consolidation
-        - implementation plan
-        - comprehensive plan
-        and_markdown_format:
-        - .md
-        - markdown
-        - create markdown plan
-        not_user_facing:
-        - '!story'
-        - '!guide'
-        - '!tutorial'
-      scope:
-      - file_path
-      - description
-      - operation
-      logic: AND
-    verification_required:
-    - type: format_validation
-      description: Verify plan document created as YAML, not Markdown
-      requirement: File extension MUST be .yaml, NOT .md
-    - type: location_validation
-      description: Verify plan placed in planning folder
-      requirement: File path MUST be cortex-brain/documents/planning/
-    - type: schema_validation
-      description: Verify YAML follows structured planning schema
-      requirement: YAML MUST validate against planning schema
-    alternatives:
-    - Create YAML plan in cortex-brain/documents/planning/[name].yaml
-    - Use structured YAML schemas for all planning documents
-    - 'Reference existing YAML plans: YAML-PHASE-TRACKER-DESIGN.yaml'
-    - Use cortex-brain/CORTEX-UNIFIED-ARCHITECTURE.yaml as template
-    evidence_template: '#file:documents/evidence-templates/misc/YAML_ONLY_PLANNING.md'
-    rationale: '#file:documents/rationales/YAML_ONLY_PLANNING.md'
-- layer_id: hemisphere_specialization
-  name: Hemisphere Specialization
-  description: Strategic vs tactical separation
-  priority: 4
-  rules:
-  - rule_id: LEFT_BRAIN_TACTICAL
-    name: Left Brain Tactical Only
-    severity: warning
-    description: Strategic planning logic in tactical executor
-    detection:
-      files:
-      - code-executor.md
-      - test-generator.md
-      - error-corrector.md
-      keywords:
-      - create plan
-      - estimate time
-      - assess risk
-      - strategy
-      scope:
-      - intent
-    alternatives:
-    - Move planning logic to work-planner.md
-    - Keep execution logic in code-executor.md
-    - Use corpus callosum for coordination
-    evidence: LEFT brain should execute, not plan
-  - rule_id: RIGHT_BRAIN_STRATEGIC
-    name: Right Brain Strategic Only
-    severity: warning
-    description: Tactical execution logic in strategic planner
-    detection:
-      files:
-      - work-planner.md
-      - intent-router.md
-      keywords:
-      - write code
-      - run test
-      - execute
-      - implement
-      scope:
-      - intent
-    alternatives:
-    - Delegate execution to LEFT brain agents
-    - Keep planning in RIGHT brain
-    - Use agent coordination
-    evidence: RIGHT brain should plan, not execute
-- layer_id: skull_protection
-  name: SKULL Protection Layer
-  description: Test validation and quality enforcement (prevents November 9th incident)
-  priority: 5
-  rules:
-  - rule_id: SKULL_TEST_BEFORE_CLAIM
-    name: Test Before Claim (SKULL-001)
-    severity: blocked
-    description: Never claim a fix is complete without test validation
-    detection:
-      keywords:
-      - "fixed \u2705"
-      - "complete \u2705"
-      - "done \u2705"
-      - "implemented \u2705"
-      without_keywords:
-      - test passed
-      - test verified
-      - validated by test
-      - pytest
-      scope:
-      - response
-    alternatives:
-    - Create automated test before claiming fix
-    - Run test and include results in response
-    - "Show test output: 'Fixed \u2705 (Verified by: test_button_color)'"
-    evidence_template: 'Claim: ''{match}'' without test validation'
-    rationale: "SKULL-001: Test Before Claim\n\nReal incident (2025-11-09):\n- CSS fixes claimed \"Fixed \u2705\" three times\n- Vision API claimed \"Auto-engages \u2705\" \n- Zero tests run to validate\n- User had to report \"not working\" each time\n\nSKULL prevents this by BLOCKING any success claim without test validation.\n"
-  - rule_id: SKULL_INTEGRATION_VERIFICATION
-    name: Integration Verification (SKULL-002)
-    severity: blocked
-    description: Integration must be tested end-to-end
-    detection:
-      keywords:
-      - integration complete
-      - components connected
-      - API integrated
-      - auto-engages
-      without_keywords:
-      - end-to-end test
-      - integration test
-      - e2e test
-      scope:
-      - description
-    alternatives:
-    - Create end-to-end integration test
-    - "Test full call chain: A \u2192 B \u2192 C"
-    - Verify actual execution path, not just config
-    evidence_template: 'Integration claim without E2E test: ''{match}'''
-    rationale: 'SKULL-002: Integration Verification
-
-
-      Real incident (2025-11-09):
-
-      - Vision API "integration" claimed complete
-
-      - Only config was changed
-
-      - No test of actual call chain
-
-      - Vision API was never actually called
-
-
-      SKULL prevents this by requiring end-to-end integration tests.
-
-      '
-  - rule_id: SKULL_VISUAL_REGRESSION
-    name: Visual Regression (SKULL-003)
-    severity: warning
-    description: CSS/UI changes require visual validation
-    detection:
-      keywords:
-      - css fixed
-      - style updated
-      - color changed
-      - UI improved
-      without_keywords:
-      - visual test
-      - computed style
-      - playwright
-      - browser test
-      scope:
-      - description
-    alternatives:
-    - Add visual regression test (Playwright/Puppeteer)
-    - Verify computed style in browser
-    - Include before/after screenshot comparison
-    evidence_template: 'CSS/UI change without visual test: ''{match}'''
-    rationale: "SKULL-003: Visual Regression\n\nReal incident (2025-11-09):\n- CSS rules applied to fix title color\n- Claimed \"Fixed \u2705\" without checking browser\n- Cache wasn't cleared, changes not visible\n- Repeated 3 times with same approach\n\nSKULL prevents this by requiring visual validation of CSS changes.\n"
-  - rule_id: SKULL_RETRY_WITHOUT_LEARNING
-    name: Retry Without Learning (SKULL-004)
-    severity: warning
-    description: Must diagnose failures before retrying same approach
-    detection:
-      combined_keywords:
-        retry_marker:
-        - try again
-        - retry
-        - attempt 2
-        - attempt 3
-        no_diagnosis:
-        - same fix
-        - reapply
-        - rebuild again
-      without_keywords:
-      - diagnosed
-      - root cause
-      - cache cleared
-      - verified
-      scope:
-      - description
-      logic: AND
-    alternatives:
-    - Diagnose WHY previous fix failed
-    - 'Check: file contents, browser cache, build output, computed styles'
-    - Change approach based on diagnosis
-    - Add test to prevent regression
-    evidence_template: 'Retry without diagnosis: ''{description}'''
-    rationale: "SKULL-004: Retry Without Learning\n\nReal incident (2025-11-09):\n- CSS fix applied\n- User: \"didn't work\"\n- Same CSS fix applied again\n- User: \"still didn't work\"  \n- Same CSS fix applied THIRD time\n- No diagnosis of why it failed\n\nSKULL prevents this by requiring root cause analysis before retries.\n"
-  - rule_id: SKULL_TRANSFORMATION_VERIFICATION
-    name: Transformation Verification (SKULL-005)
-    severity: blocked
-    description: Operations claiming transformation MUST produce measurable changes
-    detection:
-      combined_keywords:
-        transformation_claim:
-        - transformation complete
-        - refresh complete
-        - converted
-        - updated documentation
-        - generated
-        success_claim:
-        - success
-        - completed successfully
-        - "fixed \u2705"
-        - "done \u2705"
-      scope:
-      - description
-      - log_output
-      logic: AND
-    verification_required:
-    - type: file_hash_comparison
-      description: Compare file hash before/after operation
-      requirement: Hashes MUST differ for transformation operations
-    - type: git_diff_check
-      description: Verify git diff shows actual changes
-      requirement: git diff MUST show modifications, not empty output
-    - type: content_analysis
-      description: Validate transformation logic executed
-      requirement: Operation MUST NOT be pass-through (input != output)
-    alternatives:
-    - Implement actual transformation logic (not pass-through)
-    - Mark operation as 'validation-only' if no transformation needed
-    - Add integration test verifying file changes occur
-    - Change success message to reflect pass-through behavior
-    evidence_template: Operation '{operation_name}' claims transformation but produces no changes
-    rationale: '#file:documents/rationales/SKULL_TRANSFORMATION_VERIFICATION.md'
-  - rule_id: SKULL_PRIVACY_PROTECTION
-    name: Privacy Protection (SKULL-006)
-    severity: blocked
-    description: Publish operations MUST NOT include files with machine-specific paths or private data
-    detection:
-      patterns:
-      - AHHOME
-      - '.coverage.*.* '
-      - C:\\
-      - D:\\
-      - /home/[a-z]+
-      - /Users/[a-z]+
-      file_types:
-      - '**/*.log'
-      - '**/logs/**'
-      - '**/.coverage.*'
-      - '**/health-reports/**'
-      - '**/__pycache__/**'
-      scope:
-      - published_files
-    verification_required:
-    - type: privacy_scan
-      description: Scan all published files for machine-specific paths
-      requirement: Zero files with absolute paths (C:\, D:\, /home/, AHHOME)
-    - type: exclusion_test
-      description: Test that publish script excludes privacy-leaking files
-      requirement: Test MUST verify .coverage.*, logs/, health-reports/ excluded
-    - type: config_sanitization
-      description: Verify config files use template values, not real paths
-      requirement: cortex.config.json MUST use placeholders, not AHHOME paths
-    alternatives:
-    - Add file patterns to EXCLUDE_PATTERNS in publish script
-    - Create .publishignore file with privacy exclusions
-    - Add pre-publish scan that fails on privacy leak
-    - Use template configs with placeholder paths
-    evidence_template: 'Published file contains privacy data: ''{file_path}'' - found ''{privacy_leak}'''
-    rationale: '#file:documents/rationales/SKULL_PRIVACY_PROTECTION.md'
-  - rule_id: GIT_COMMIT_PRIVACY_VALIDATION
-    name: Git Commit Privacy Validation (Tier 0 Instinct)
-    severity: blocked
-    description: Git commits MUST NOT contain files with absolute paths or machine-specific data
-    detection:
-      patterns:
-      - C:\\
-      - D:\\
-      - /home/[a-z]+
-      - /Users/[a-z]+
-      - AHHOME
-      - HOSTNAME
-      - '[A-Z]+-PC'
-      scope:
-      - staged_files
-      - git_diff
-    verification_required:
-    - type: pre_commit_privacy_scan
-      description: Scan all staged files for absolute paths before commit
-      requirement: Zero files with absolute paths (C:\, D:\, /home/, /Users/, machine names)
-    - type: git_diff_validation
-      description: Validate git diff contains only relative paths
-      requirement: All file references MUST use relative paths from repo root
-    - type: merge_content_validation
-      description: Validate merged content does not introduce privacy leaks
-      requirement: Git merge operations MUST scan resulting files before accepting
-    alternatives:
-    - 'Use relative paths: src/, cortex-brain/, tests/'
-    - Use Path() objects with relative references
-    - 'Use environment variables: os.getenv(''CORTEX_ROOT'')'
-    - 'Use config templates with placeholders: {{CORTEX_ROOT}}'
-    evidence_template: 'Staged file ''{file_path}'' line {line_num} contains absolute path: ''{privacy_leak}'''
-    rationale: '#file:documents/rationales/GIT_COMMIT_PRIVACY_VALIDATION.md'
-  - rule_id: SKULL_HEADER_FOOTER_IN_RESPONSE
-    name: Faculty Integrity Check (SKULL-007)
-    severity: blocked
-    description: Publish package MUST contain ALL essential CORTEX faculties for full operation
-    detection:
-      missing_faculties:
-      - Tier 0 (SKULL) not found
-      - Tier 1 (Memory) not found
-      - Tier 2 (Knowledge) not found
-      - Tier 3 (Context) not found
-      - Agents missing
-      - Operations missing
-      - Entry point missing
-      scope:
-      - published_files
-    verification_required:
-    - type: comprehensive_faculty_test
-      description: Test that verifies ALL CORTEX faculties exist in publish package
-      requirement: test_cortex_fully_operational MUST pass
-    - type: tier_verification
-      description: Verify all 4 tiers (Tier 0-3) present
-      requirement: brain_protector.py, conversation_manager.py, knowledge_graph/, context_intelligence.py
-    - type: agent_verification
-      description: Verify 10 specialist agents present
-      requirement: cortex_agents/ directory with base_agent.py and agent implementations
-    - type: entry_point_verification
-      description: Verify GitHub Copilot integration files
-      requirement: CORTEX.prompt.md and copilot-instructions.md in .github/
-    - type: documentation_verification
-      description: Verify user documentation present
-      requirement: story.md, setup-guide.md, technical-reference.md, etc.
-    alternatives:
-    - Use inclusion-based publish (copy ONLY essential files)
-    - Create comprehensive faculty test that blocks publish if faculties missing
-    - Maintain ESSENTIAL_FILES list of required CORTEX components
-    evidence_template: 'Published CORTEX missing faculty: ''{faculty_name}'' - file not found: ''{file_path}'''
-    rationale: '#file:documents/rationales/SKULL_HEADER_FOOTER_IN_RESPONSE.md'
-  - rule_id: SKULL_HEADER_FOOTER_IN_RESPONSE_LEGACY
-    name: Header/Footer in Copilot Response (Legacy)
-    severity: blocked
-    description: Operation orchestrators MUST include formatted headers/footers in Copilot Chat response
-    detection:
-      combined_keywords:
-        orchestrator_execution:
-        - execute operation
-        - orchestrator.execute
-        - operation complete
-        missing_header_footer:
-        - 'formatted_header: None'
-        - 'formatted_footer: None'
-        - no header in response
-      scope:
-      - code
-      - test_output
-      logic: AND
-    verification_required:
-    - type: result_object_check
-      description: Verify OperationResult contains formatted_header/footer
-      requirement: result.formatted_header MUST NOT be None
-    - type: response_formatter_check
-      description: Verify ResponseFormatter uses stored headers
-      requirement: Chat response MUST include header/footer in code blocks
-    - type: visual_inspection
-      description: Verify header appears in Copilot Chat window
-      requirement: User MUST see copyright header + purpose + accomplishments
-    alternatives:
-    - Use format_minimalist_header() and store in result.formatted_header
-    - Use format_completion_footer() and store in result.formatted_footer
-    - Ensure ResponseFormatter wraps headers in code blocks for display
-    - Add integration test verifying header presence in formatted response
-    evidence_template: "Operation '{operation_name}' executed but headers not in Copilot response\n\nExpected in Copilot Chat:\n```\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n  CORTEX {operation_name} Orchestrator v{version}\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n\nProfile: {profile} \u2502 Mode: {mode} \u2502 Started: {timestamp}\n\n\U0001F4CB Purpose: {purpose}\n\n\xA9 2024-2025 Asif Hussain \u2502 Proprietary \u2502 github.com/asifhussain60/CORTEX\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n```\n\nActual: Header missing or only in terminal\n"
-    rationale: '#file:documents/rationales/SKULL_HEADER_FOOTER_IN_RESPONSE_LEGACY.md'
-  - rule_id: SKULL_ALL_TESTS_MUST_PASS
-    name: All Tests Must Pass (SKULL-007)
-    severity: blocked
-    description: Test suite MUST have 100% pass rate before claiming any work complete
-    detection:
-      keywords:
-      - "fixed \u2705"
-      - "complete \u2705"
-      - "done \u2705"
-      - "implemented \u2705"
-      - ready for review
-      - PR ready
-      with_test_failures:
-      - failed
-      - FAILED
-      - ERROR
-      - test failures
-      - X passed, Y failed
-      scope:
-      - response
-      - test_output
-    verification_required:
-    - type: full_test_suite
-      description: Run complete test suite (not just new tests)
-      requirement: pytest exit code MUST be 0 (100% pass rate)
-    - type: no_skipped_critical_tests
-      description: Verify no critical tests are skipped
-      requirement: Core functionality tests MUST run (not skipped)
-    - type: test_count_validation
-      description: Ensure test count doesn't decrease unexpectedly
-      requirement: Total tests should increase or stay same (not decrease)
-    alternatives:
-    - Fix ALL failing tests before claiming completion
-    - Mark work as 'IN PROGRESS' until tests pass
-    - Revert changes if they break existing tests
-    - Fix pre-existing failures first (clean baseline)
-    evidence_template: "Work claimed complete but tests failing!\n\nTest Results: {test_summary}\n- Passed: {passed_count}\n- Failed: {failed_count}  \u274C\n- Skipped: {skipped_count}\n\nSKULL-007 VIOLATION: Cannot claim \"done \u2705\" with {failed_count} failures\n"
-    rationale: '#file:documents/rationales/SKULL_ALL_TESTS_MUST_PASS.md'
-  - rule_id: SKULL_MULTI_TRACK_VALIDATION
-    name: Multi-Track Configuration Validation (SKULL-008)
-    severity: blocked
-    description: Multi-track mode MUST have valid configuration with proper phase distribution
-    detection:
-      keywords:
-      - enable multi-track
-      - activate multi-track
-      - create tracks
-      - split tracks
-      - multi-machine mode
-      scope:
-      - intent
-      - description
-    verification_required:
-    - type: track_balance_check
-      description: Verify workload balanced across tracks
-      requirement: Track estimated hours MUST not differ by >30%
-    - type: dependency_isolation_check
-      description: Verify no cross-track dependencies
-      requirement: Phase groups MUST be self-contained per track
-    - type: machine_assignment_check
-      description: Verify each machine assigned to exactly one track
-      requirement: No machine overlap, no unassigned machines
-    - type: fun_name_uniqueness
-      description: Verify track names are unique and generated properly
-      requirement: Track names MUST be deterministic and collision-free
-    alternatives:
-    - Run track distribution algorithm to validate balance
-    - Use PhaseDistributor.distribute() to check dependency isolation
-    - Verify machine count matches track count
-    - Test track name generation for collision resistance
-    evidence_template: 'Multi-track mode validation failed!
-
-
-      Configuration Issues:
-
-      - Track balance: {balance_check}
-
-      - Dependencies: {dependency_check}
-
-      - Machines: {machine_check}
-
-      - Track names: {name_check}
-
-
-      SKULL-008: Multi-track MUST be properly configured before use
-
-      '
-    rationale: '#file:documents/rationales/SKULL_MULTI_TRACK_VALIDATION.md'
-  - rule_id: SKULL_TRACK_ISOLATION
-    name: Track Work Isolation (SKULL-009)
-    severity: blocked
-    description: Work on Track A MUST NOT modify Track B's assigned modules
-    detection:
-      combined_keywords:
-        track_context:
-        - continue implementation for
-        - working on track
-        - active track
-        cross_modification:
-        - modified module
-        - updated file
-        - changed
-      scope:
-      - intent
-      - log_output
-      logic: AND
-    verification_required:
-    - type: module_ownership_check
-      description: Verify modified modules belong to active track
-      requirement: All changed files MUST be in active track's module list
-    - type: phase_boundary_check
-      description: Verify work stays within assigned phases
-      requirement: Modified files MUST belong to active track's phases
-    - type: git_diff_validation
-      description: Verify git changes match track scope
-      requirement: git diff MUST only show files from active track
-    alternatives:
-    - Filter implementation state by active track
-    - Validate module ownership before allowing changes
-    - Add pre-commit hook checking track boundaries
-    - Switch to correct track before making changes
-    evidence_template: 'Track isolation violation detected!
-
-
-      Active Track: {active_track}
-
-      Modified Files: {modified_files}
-
-      Violations: {violations}
-
-
-      Files belong to: {actual_track}
-
-
-      SKULL-009: Tracks MUST NOT cross-modify each other''s work
-
-      '
-    rationale: '#file:documents/rationales/SKULL_TRACK_ISOLATION.md'
-  - rule_id: SKULL_CONSOLIDATION_INTEGRITY
-    name: Track Consolidation Integrity (SKULL-010)
-    severity: blocked
-    description: Consolidation MUST merge all track progress accurately without data loss
-    detection:
-      keywords:
-      - consolidate tracks
-      - merge tracks
-      - reset to single-track
-      - design sync consolidation
-      scope:
-      - intent
-      - operation_name
-    verification_required:
-    - type: progress_preservation_check
-      description: Verify no completed modules lost in merge
-      requirement: Consolidated count MUST equal sum of track counts
-    - type: conflict_resolution_audit
-      description: Log all conflict resolutions with justification
-      requirement: Conflicts MUST be documented in archive
-    - type: archive_completeness_check
-      description: Verify split docs archived before deletion
-      requirement: All split docs MUST exist in archive before removal
-    - type: git_commit_validation
-      description: Verify consolidation tracked in git history
-      requirement: Git commit MUST reference both tracks and merge details
-    alternatives:
-    - Run consolidation with --verify flag
-    - Review conflict resolution log before committing
-    - Keep split docs until archive verified
-    - Add integration test for consolidation accuracy
-    evidence_template: 'Consolidation integrity check failed!
-
-
-      Pre-Consolidation:
-
-      - Track A: {track_a_completed}/{track_a_total} modules
-
-      - Track B: {track_b_completed}/{track_b_total} modules
-
-      - Total: {pre_total_completed} modules
-
-
-      Post-Consolidation:
-
-      - Unified: {post_total_completed} modules
-
-
-      Discrepancy: {discrepancy} modules
-
-      Conflicts Resolved: {conflicts}
-
-      Archive Status: {archive_status}
-
-
-      SKULL-010: Consolidation MUST preserve all progress
-
-      '
-    rationale: '#file:documents/rationales/SKULL_CONSOLIDATION_INTEGRITY.md'
-- layer_id: knowledge_quality
-  name: Knowledge Quality
-  description: Pattern validation and confidence thresholds
-  priority: 6
-  rules:
-  - rule_id: MIN_OCCURRENCES
-    name: Minimum Occurrences for High Confidence
-    severity: warning
-    description: High confidence (>0.50) with single occurrence
-    detection:
-      combined_keywords:
-        high_confidence:
-        - 'confidence: 1.0'
-        - confidence=1.0
-        - 'confidence: 0.95'
-        single_event:
-        - first occurrence
-        - single event
-        - 'occurrences: 1'
-      scope:
-      - description
-      logic: AND
-    alternatives:
-    - "Start with confidence \u22640.50 for single event"
-    - Wait for 3+ occurrences before high confidence
-    - Mark as provisional pattern
-    evidence: Require 3+ occurrences for confidence >0.50
-  - rule_id: PATTERN_VALIDATION
-    name: Pattern Validation
-    severity: warning
-    description: Pattern lacks validation evidence
-    detection:
-      keywords:
-      - add pattern without validation
-      - no evidence
-      - unverified pattern
-      scope:
-      - description
-    alternatives:
-    - Add validation test
-    - Link to source documentation
-    - Mark as hypothesis for validation
-    evidence: Patterns require empirical validation
-- layer_id: commit_integrity
-  name: Commit Integrity
-  description: Brain state files excluded from commits
-  priority: 7
-  rules:
-  - rule_id: BRAIN_STATE_GITIGNORE
-    name: Brain State Files Not Committed
-    severity: warning
-    description: Brain state file should not be committed
-    detection:
-      files: '{{brain_state_files}}'
-      keywords:
-      - commit
-      scope:
-      - intent
-    alternatives:
-    - Add to .gitignore
-    - Keep local-only
-    - Export as snapshot if needed for sharing
-    evidence: Add to .gitignore to prevent pollution
-  - rule_id: TEMP_FILES_COMMIT
-    name: Temporary Files Not Committed
-    severity: warning
-    description: Temporary or generated files should not be committed
-    detection:
-      path_patterns:
-      - '**/*.tmp'
-      - '**/temp_*'
-      - '**/__pycache__/**'
-      - '**/node_modules/**'
-      keywords:
-      - commit
-      scope:
-      - intent
-    alternatives:
-    - Update .gitignore
-    - Clean before commit
-    - Use .gitkeep for empty directories
-    evidence: Temporary files pollute repository
-- layer_id: git_isolation
-  name: Git Isolation Enforcement
-  description: CORTEX code MUST NEVER be committed to user application repositories
-  priority: 8
-  rules:
-  - rule_id: GIT_ISOLATION_ENFORCEMENT
-    name: CORTEX Code Isolation from User Repos
-    severity: blocked
-    description: 'CRITICAL: CORTEX source code, brain files, or internal components being committed to user application repository'
-    detection:
-      path_patterns:
-      - '**/src/tier0/**'
-      - '**/src/tier1/**'
-      - '**/src/tier2/**'
-      - '**/src/tier3/**'
-      - '**/src/cortex_agents/**'
-      - '**/src/plugins/**'
-      - '**/src/crawlers/**'
-      - '**/cortex-brain/**'
-      - '**/prompts/**'
-      - '**/scripts/cortex/**'
-      - '**/CORTEX/**'
-      in_repo: user_application
-    alternatives:
-    - Keep CORTEX as separate repository/package
-    - Install CORTEX via pip/npm (when distributed)
-    - Use git submodule if local development required
-    - Ensure .gitignore excludes CORTEX directories
-    evidence_template: "\U0001F6A8 CRITICAL VIOLATION: Git Isolation Breach\n\nCORTEX code detected in user application repository!\nFile: '{path}'\n\nCORTEX MUST remain isolated from user application code:\n- User App Repo: Application-specific code only\n- CORTEX Repo: Framework code (separate repository)\n- Knowledge Sharing: Via exported YAML (team-knowledge/)\n\nBrain knowledge (cortex-brain/) is LOCAL ONLY - never committed anywhere.\n"
-    rationale: '#file:documents/rationales/GIT_ISOLATION_ENFORCEMENT.md'
-  - rule_id: GIT_HOOKS_INSTALLATION
-    name: Git Hooks Must Be Installed During Setup
-    severity: blocked
-    description: Setup process must install git hooks to prevent accidental CORTEX code commits
-    detection:
-      keywords:
-      - skip git hooks
-      - disable hooks
-      - bypass hook installation
-      scope:
-      - intent
-      - description
-    alternatives:
-    - Run 'cortex init' to install hooks automatically
-    - Manually run setup script with hooks enabled
-    - Never bypass hook installation (critical protection)
-    evidence_template: Git hooks are MANDATORY for CORTEX isolation protection
-    rationale: 'Git hooks provide automatic enforcement:
-
-
-      pre-commit hook:
-
-      - Scans staged files for CORTEX paths
-
-      - Blocks commit if any CORTEX code detected
-
-      - Shows clear error message with alternatives
-
-
-      pre-push hook:
-
-      - Final safety check before push
-
-      - Prevents accidental exposure of CORTEX code
-
-
-      Installation: Automatic during ''cortex init''
-
-      Location: UserApp/.git/hooks/ (user''s repo, not CORTEX repo)
-
-      '
-- layer_id: namespace_protection
-  name: Knowledge Namespace Boundaries
-  description: Enforce separation between CORTEX framework and workspace knowledge
-  priority: 6
-  rules:
-  - rule_id: NAMESPACE-001
-    name: Protected CORTEX Namespace
-    severity: blocked
-    description: Prevent user code from writing to cortex.* namespace
-    detection:
-      combined_keywords:
-        namespace_write:
-        - learn_pattern
-        - store_pattern
-        - add pattern
-        cortex_namespace:
-        - cortex.*
-        - namespace='cortex.
-        - namespace="cortex.
-        not_framework:
-        - is_cortex_internal=False
-        - user code
-      scope:
-      - code
-      - intent
-      logic: AND
-    alternatives:
-    - Use workspace.* namespace for application patterns
-    - workspace.myapp.* for your project-specific knowledge
-    - Only CORTEX framework code can write to cortex.* namespace
-    evidence_template: "NAMESPACE PROTECTION VIOLATION\n\nAttempted write to protected cortex.* namespace from user code!\n\nCode: '{code_snippet}'\n\nCORTEX namespaces are PROTECTED:\n- cortex.* \u2192 Framework knowledge only (read-only for users)\n- workspace.* \u2192 Application knowledge (user read/write)\n\nUse: learn_pattern(..., namespace=\"workspace.myapp.*\", is_cortex_internal=False)\n"
-    rationale: '#file:documents/rationales/NAMESPACE-001.md'
-  - rule_id: NAMESPACE-002
-    name: Workspace Isolation
-    severity: warning
-    description: Isolate workspace patterns by owner/project
-    detection:
-      combined_keywords:
-        cross_workspace:
-        - workspace.projectA
-        - workspace.projectB
-        shared_pattern:
-        - pattern applies to both
-        - copy to other project
-      scope:
-      - intent
-      - description
-      logic: AND
-    alternatives:
-    - Store pattern in each workspace separately
-    - Use cortex.* for truly generic framework patterns
-    - Create explicit cross-workspace link if needed
-    evidence_template: "CROSS-WORKSPACE CONTAMINATION RISK\n\nPattern appears to span multiple workspaces: '{description}'\n\nBest Practices:\n- workspace.projectA.* \u2192 Project A only\n- workspace.projectB.* \u2192 Project B only\n- cortex.* \u2192 Framework generic knowledge\n\nIf truly shared, use explicit relationship links, not duplicate storage.\n"
-    rationale: '#file:documents/rationales/NAMESPACE-002.md'
-  - rule_id: NAMESPACE-003
-    name: No Namespace Mixing
-    severity: blocked
-    description: Prevent patterns from spanning multiple namespaces
-    detection:
-      combined_keywords:
-        multi_namespace:
-        - namespaces=['cortex.
-        - namespaces=['workspace.a', 'workspace.b']
-        pattern_storage:
-        - store_pattern
-        - learn_pattern
-      scope:
-      - code
-      logic: AND
-    alternatives:
-    - Store pattern in single primary namespace
-    - Use relationship links for cross-namespace references
-    - Duplicate pattern if truly applicable to both (rare)
-    evidence_template: "NAMESPACE MIXING VIOLATION\n\nPattern assigned to multiple namespaces: '{namespaces}'\n\nA pattern MUST belong to exactly ONE namespace.\n\nIf pattern applies to multiple contexts, use explicit links:\n- Primary: workspace.myapp.auth_pattern\n- Link: cortex.security_patterns \u2192 workspace.myapp.auth_pattern\n\nThis maintains clear ownership and prevents ambiguity.\n"
-    rationale: '#file:documents/rationales/NAMESPACE-003.md'
-- layer_id: database_architecture
-  name: Distributed Database Architecture
-  description: CORTEX uses tier-specific databases, never monolithic cortex-brain.db
-  priority: 9
-  rules:
-  - rule_id: DISTRIBUTED_DATABASE_ARCHITECTURE
-    name: Use Tier-Specific Databases (Never Monolithic)
-    severity: blocked
-    description: Code referencing monolithic cortex-brain.db instead of tier-specific databases
-    detection:
-      combined_keywords:
-        monolithic_reference:
-        - cortex-brain/cortex-brain.db
-        - cortex-brain.db
-        - 'db_path: str = "cortex-brain.db"'
-        - default='cortex-brain/cortex-brain.db'
-        not_test_file:
-        - '!**/tests/**'
-        - '!**/test-*.py'
-        - '!**/benchmark-*.ts'
-      scope:
-      - code
-      - file_path
-      logic: AND
-    alternatives:
-    - 'Tier 1 (Conversations): Use cortex-brain/tier1/conversations.db'
-    - 'Tier 1 (Working Memory): Use cortex-brain/tier1/working_memory.db'
-    - 'Tier 2 (Knowledge Graph): Use cortex-brain/tier2/knowledge_graph.db'
-    - 'Tier 3 (Context): Use cortex-brain/tier3/context.db'
-    - Use ConfigManager to get correct tier-specific path
-    evidence_template: "\U0001F6A8 DATABASE ARCHITECTURE VIOLATION\n\nMonolithic database reference detected: '{path}'\n\nCORTEX uses distributed database architecture:\n\u274C WRONG: cortex-brain/cortex-brain.db (doesn't exist!)\n\n\u2705 CORRECT:\n- Tier 1: cortex-brain/tier1/conversations.db (chat history)\n- Tier 1: cortex-brain/tier1/working_memory.db (active context)\n- Tier 2: cortex-brain/tier2/knowledge_graph.db (learned patterns)\n- Tier 3: cortex-brain/tier3/context.db (development metrics)\n\nFile: {file}\nLine: {line}\n"
-    rationale: '#file:documents/rationales/DISTRIBUTED_DATABASE_ARCHITECTURE.md'
-- layer_id: template_architecture
-  name: Template Architecture Protection
-  description: Protect URT v3.0 intelligent template system architectural invariants
-  priority: 11
-  rules:
-  - rule_id: TEMPLATE_TOKEN_BUDGET_ENFORCEMENT
-    name: Token Budget Limits Enforced
-    severity: blocked
-    description: 'Token budget limits must remain: CONCISE=400, SUMMARIZED=600, DETAILED=800, VISUAL=500'
-    detection:
-      path_patterns:
-      - src/core/template_renderer.py
-      - cortex-brain/response-templates/*.yaml
-      combined_keywords:
-        token_budget_change:
-        - token_budget
-        - budget =
-        invalid_value:
-        - 'token_budget: int = 1200'
-        - 'token_budget: int = 300'
-        - budget = 1000
-      scope:
-      - code
-      logic: AND
-    alternatives:
-    - 'CONCISE format: 400 tokens (quick info, status checks)'
-    - 'SUMMARIZED format: 600 tokens (summary + collapsible details)'
-    - 'DETAILED format: 800 tokens (full subsections)'
-    - 'VISUAL format: 500 tokens (tables, progress bars)'
-    - Document rationale for any budget changes with performance data
-    evidence_template: "Token budget modification detected: '{code_snippet}'\n\nCRITICAL: URT v3.0 token budgets are optimized values\n- 42% token reduction achieved (800 \u2192 466 avg)\n- Validated with 21 integration tests\n\nChanges require performance analysis validation.\n"
-    rationale: 'URT v3.0 token budgets are carefully optimized:
-
-      - CONCISE: 400 tokens (simple help/status queries)
-
-      - SUMMARIZED: 600 tokens (implementation summaries)
-
-      - DETAILED: 800 tokens (complex planning/analysis)
-
-      - VISUAL: 500 tokens (metrics/diagrams)
-
-
-      Changes must be validated with performance metrics.
-
-      '
-  - rule_id: CHALLENGE_MODE_ROUTING_INTEGRITY
-    name: Challenge Mode Routing Logic
-    severity: blocked
-    description: Challenge mode routing (SKIP/ACCEPT_ONLY/CHALLENGE_ONLY/MIXED/INTELLIGENT) must remain valid
-    detection:
-      path_patterns:
-      - src/core/template_renderer.py
-      combined_keywords:
-        challenge_logic:
-        - ChallengeMode
-        - _determine_challenge_mode
-        bypass_pattern:
-        - return ChallengeMode.SKIP
-        - '# Bypass all validation'
-      scope:
-      - code
-      logic: AND
-    alternatives:
-    - Preserve intelligent routing based on context analysis
-    - SKIP mode only for simple info requests (help, status)
-    - INTELLIGENT mode for complex planning/validation
-    - Document any routing logic changes with test cases
-    evidence_template: 'Challenge routing bypass detected: ''{code_snippet}'''
-    rationale: 'Challenge mode routing is core to URT v3.0:
-
-      - Eliminates forced challenge display when unnecessary
-
-      - Intelligent validation for complex requests
-
-      - User feedback: "No more forced challenge when nothing to validate"
-
-      '
-  - rule_id: TEMPLATE_SCHEMA_VALIDATION
-    name: Template Orchestration Metadata Schema
-    severity: warning
-    description: 'Templates must include orchestration metadata: relevance_keywords, priority, composability'
-    detection:
-      path_patterns:
-      - cortex-brain/response-templates/*.yaml
-      keywords:
-      - new template
-      - 'template_id:'
-      without_keywords:
-      - 'orchestration:'
-      - 'relevance_keywords:'
-      scope:
-      - code
-    alternatives:
-    - Add orchestration metadata block with relevance_keywords, priority, category
-    - 'Include composability rules: compatible_with, conflicts_with'
-    - See cortex-brain/response-templates/base-template-v2.yaml for schema
-    evidence_template: 'Template missing orchestration metadata: ''{template_id}'''
-- layer_id: context_management_architecture
-  name: Context Management Architecture Protection
-  description: Protect unified context management system (Phase 1-2) architectural invariants
-  priority: 12
-  rules:
-  - rule_id: TIER_BOUNDARY_ISOLATION
-    name: Tier Boundary Isolation Enforcement
-    severity: blocked
-    description: T1/T2/T3 must be accessed through UnifiedContextManager, no direct cross-tier database access
-    detection:
-      path_patterns:
-      - src/tier1/**/*.py
-      - src/tier2/**/*.py
-      - src/tier3/**/*.py
-      - src/cortex_agents/**/*.py
-      combined_keywords:
-        cross_tier_access:
-        - from src.tier2
-        - from src.tier3
-        - tier2.query_directly
-        - tier3.get_insights
-        not_unified_context:
-        - '!UnifiedContextManager'
-      scope:
-      - code
-      logic: AND
-    alternatives:
-    - Use UnifiedContextManager for all cross-tier context access
-    - UnifiedContextManager orchestrates T1/T2/T3 loading with relevance scoring
-    - Agents receive unified_context from UnifiedContextManager
-    evidence_template: "Direct cross-tier access detected: '{code_snippet}'\n\nVIOLATION: Bypassing UnifiedContextManager\n\n\u2705 CORRECT:\ncontext = unified_context_manager.build_context(...)\n# UnifiedContextManager handles T1/T2/T3 coordination\n"
-    rationale: 'UnifiedContextManager enforces architectural boundaries:
-
-      - Tier isolation (T1/T2/T3 separation)
-
-      - Relevance-based loading prioritization
-
-      - Token budget allocation fairness
-
-      - Context deduplication and merging
-
-      '
-  - rule_id: TOKEN_BUDGET_ALLOCATION_FAIRNESS
-    name: Token Budget Allocation Must Be Proportional
-    severity: blocked
-    description: Token budget allocation must be proportional to relevance scores, not fixed percentages
-    detection:
-      path_patterns:
-      - src/core/context_management/token_budget_manager.py
-      combined_keywords:
-        unfair_allocation:
-        - 'tier1: total_budget * 0.9'
-        - fixed allocation
-        - / len(tier_relevance)
-        not_proportional:
-        - '!tier_relevance'
-        - '!relevance_score'
-      scope:
-      - code
-      logic: AND
-    alternatives:
-    - Allocate budget proportionally to tier relevance scores
-    - High relevance = more tokens, low relevance = fewer tokens
-    - "Ensure total allocation \u2264 total_budget (no overflow)"
-    evidence_template: 'Unfair token allocation detected: ''{code_snippet}'''
-    rationale: "Token budget allocation algorithm ensures fairness:\n- Proportional to relevance (high relevance \u2192 more tokens)\n- Dynamic allocation (not fixed percentages)\n- Sum constraint enforced (total \u2264 budget)\n"
-  - rule_id: STALENESS_THRESHOLD_ENFORCEMENT
-    name: Staleness Thresholds Must Be Enforced
-    severity: blocked
-    description: 'Staleness thresholds: T1=24h, T2=90d, T3=7d must be enforced'
-    detection:
-      path_patterns:
-      - src/core/context_management/context_quality_monitor.py
-      combined_keywords:
-        staleness_bypass:
-        - def check_staleness
-        - return False
-        or_threshold_change:
-        - 'tier1'': 168'
-        - 'tier2'': 180'
-        - 'tier3'': 14'
-      scope:
-      - code
-      logic: OR
-    alternatives:
-    - 'T1 staleness: 24 hours (conversations)'
-    - 'T2 staleness: 90 days (learned patterns)'
-    - 'T3 staleness: 7 days (git metrics/insights)'
-    - Document rationale for any threshold changes
-    evidence_template: 'Staleness detection compromised: ''{code_snippet}'''
-    rationale: 'Staleness thresholds prevent using outdated context:
-
-      - T1: 24h (recent conversations relevant)
-
-      - T2: 90d (patterns valid longer term)
-
-      - T3: 7d (metrics need frequent refresh)
-
-      '
-  - rule_id: CROSS_TIER_LINKING_SCHEMA
-    name: Cross-Tier Linking Schema Integrity
-    severity: warning
-    description: Cross-tier linking fields (used_patterns, used_metrics) must be maintained
-    detection:
-      path_patterns:
-      - src/core/context_management/migrate_cross_tier_linking.py
-      - src/tier1/**/*.py
-      - src/tier2/**/*.py
-      keywords:
-      - used_patterns
-      - used_metrics
-      - applied_in_conversations
-      without_keywords:
-      - JSON serialization
-      - json.dumps
-      scope:
-      - code
-    alternatives:
-    - Store linking data as JSON-serialized lists
-    - "Update bidirectionally (T1 \u2192 T2 and T2 \u2192 T1)"
-    - Include context_quality_score for monitoring
-    evidence_template: 'Cross-tier linking schema violation: ''{code_snippet}'''
-- layer_id: multi_template_composition
-  name: Multi-Template Composition Rules Protection
-  description: Protect Multi-Template Orchestrator architectural invariants
-  priority: 13
-  rules:
-  - rule_id: RELEVANCE_SCORING_WEIGHTS
-    name: Relevance Scoring Weight Immutability
-    severity: warning
-    description: 'Relevance scoring weights: keyword=0.4, trigger=0.3, context=0.2, category=0.1 (sum=1.0)'
-    detection:
-      path_patterns:
-      - src/response_templates/multi_template_orchestrator.py
-      combined_keywords:
-        weight_modification:
-        - keyword_weight
-        - trigger_weight
-        - context_weight
-        - category_weight
-        invalid_values:
-        - keyword_weight = 0.6
-        - trigger_weight = 0.5
-      scope:
-      - code
-      logic: AND
-    alternatives:
-    - 'Preserve validated weights: keyword=0.4, trigger=0.3, context=0.2, category=0.1'
-    - Changes require A/B testing with 1000+ queries for validation
-    - Ensure weights sum to 1.0 (mathematical constraint)
-    evidence_template: 'Relevance weight modification detected: ''{code_snippet}''
-
-
-      Weights are validated through extensive testing.
-
-      Changes require performance analysis.
-
-      '
-    rationale: 'Relevance scoring weights are empirically validated:
-
-      - keyword=0.4 (strongest signal)
-
-      - trigger=0.3 (explicit phrases)
-
-      - context=0.2 (metadata match)
-
-      - category=0.1 (general relevance)
-
-      '
-  - rule_id: CONFLICT_RESOLUTION_PRIORITY
-    name: Conflict Resolution Priority Map
-    severity: blocked
-    description: 'Priority map: error=100, security=90, planning=80, execution=70, validation=60, help=50, status=40, general=30'
-    detection:
-      path_patterns:
-      - src/response_templates/multi_template_orchestrator.py
-      combined_keywords:
-        priority_change:
-        - PRIORITY_MAP
-        - '''error'':'
-        invalid_priority:
-        - '''error'': 50'
-        - '''general'': 100'
-      scope:
-      - code
-      logic: AND
-    alternatives:
-    - error=100 (highest priority - user blocked)
-    - security=90 (critical security issues)
-    - planning=80 (important strategic work)
-    - Preserve priority hierarchy for conflict resolution
-    evidence_template: 'Priority map violation detected: ''{code_snippet}'''
-    rationale: "Priority map ensures critical templates win conflicts:\n- Errors block users \u2192 highest priority\n- Security issues \u2192 second highest\n- General info \u2192 lowest priority\n"
-  - rule_id: MAX_TEMPLATES_LIMIT
-    name: Max Templates Composition Limit
-    severity: warning
-    description: max_templates=3 limit enforced (composition complexity management)
-    detection:
-      path_patterns:
-      - src/response_templates/multi_template_orchestrator.py
-      - cortex-brain/response-templates/*.yaml
-      combined_keywords:
-        limit_increase:
-        - max_templates
-        - = 5
-        - = 10
-      scope:
-      - code
-      logic: AND
-    alternatives:
-    - max_templates=3 (validated composition complexity limit)
-    - 'Performance target: < 500ms composition time'
-    - Changes require composition time benchmarking
-    evidence_template: 'Max templates limit increase detected: ''{code_snippet}'''
-    rationale: 'max_templates=3 limit prevents:
-
-      - Excessive composition complexity
-
-      - Response token bloat
-
-      - Performance degradation (target: < 500ms)
-
-      '
-  - rule_id: TEMPLATE_COMPATIBILITY_MATRIX
-    name: Template Compatibility Matrix Integrity
-    severity: warning
-    description: Template compatibility declarations must be reciprocal and conflict-free
-    detection:
-      path_patterns:
-      - cortex-brain/response-templates-enhanced.yaml
-      combined_keywords:
-        compatibility_violation:
-        - compatible_with
-        - conflicts_with
-        circular_logic:
-        - 'compatible_with: [template_b]'
-        - 'conflicts_with: [template_b]'
-      scope:
-      - code
-      logic: AND
-    alternatives:
-    - Ensure compatible_with declarations are reciprocal
-    - Prevent circular conflicts (A compatible with B, A conflicts with B)
-    - Validate compatibility matrix with automated tests
-    evidence_template: 'Template compatibility violation: ''{code_snippet}'''
-severity_levels:
-  safe:
-    decision: ALLOW
-    override_required: false
-    message: "\u2705 Modification appears safe. No violations detected."
-  warning:
-    decision: WARN
-    override_required: false
-    message: "\u26A0\uFE0F WARNING: Risky patterns detected. Proceed with caution."
-  blocked:
-    decision: BLOCK
-    override_required: true
-    message: "\U0001F6E1\uFE0F BLOCKED: Critical architectural violations detected."
-challenge_template: "\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n\U0001F9E0 BRAIN PROTECTION CHALLENGE\n\nTimestamp: {timestamp}\nSeverity: {severity}\nDecision: {decision}\n\n{message}\n\nSAFE ALTERNATIVES:\n{alternatives}\n\n\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n\nOptions:\n  1. Accept recommended alternative (SAFE)\n  2. Provide different approach (REVIEW)\n  3. Type 'OVERRIDE' with justification (RISKY)\n\nYour choice:\n\n# Layer 10: Implementation Velocity Protection (Anti-Inefficiency Patterns)\n# Based on\
-  \ Phase 0 conversation analysis - prevent time waste patterns that caused 3x development time\nlayer_10_efficiency_protection:\n  layer_name: \"Implementation Velocity Protection\"\n  description: \"Prevent inefficiency patterns that waste development time\"\n  scope: \"implementation_approach\"\n  \n  rules:\n    - rule_id: \"EFFICIENCY_REALITY_CHECK_FIRST\"\n      name: \"Reality Check Before Documentation Trust (Anti-Pattern #1)\"\n      severity: \"warning\"\n      description: \"Prevent trusting status documents without verifying current reality\"\n      \n      detection:\n        keywords:\n          - \"according to documentation\"\n          - \"status document says\" \n          - \"documented as complete\"\n          - \"based on the specs\"\n        scope: [\"intent\", \"description\", \"approach\"]\n      \n      acceleration_pattern: \"Check current reality \u2192 Update understanding \u2192 Take action\"\n      time_saved_per_instance: \"10-15 minutes of incorrect baseline\"\
-  \n      \n      alternatives:\n        - \"Check actual current state first\"\n        - \"Verify implementation reality before planning\"\n        - \"Update documentation after reality check\"\n      \n      evidence_template: \"Documentation trust pattern: '{description}'\"\n    \n    - rule_id: \"EFFICIENCY_BATCH_FIXES_OVER_MICRO_CYCLES\"\n      name: \"Batch Operations Over Micro-Cycles (Anti-Pattern #2)\"\n      severity: \"warning\"\n      description: \"Prevent inefficient micro-cycles of fix\u2192test\u2192fix\u2192test\"\n      \n      detection:\n        keywords:\n          - \"fix one test\"\n          - \"run full suite\"\n          - \"individual test fix\"\n          - \"micro-optimization\"\n        scope: [\"intent\", \"description\", \"approach\"]\n      \n      acceleration_pattern: \"Group related operations \u2192 Execute batch \u2192 Verify once\"\n      time_saved_per_instance: \"30-60 seconds per micro-cycle overhead\"\n      \n      alternatives:\n        - \"\
-  Fix all integration tests \u2192 Run integration suite\"\n        - \"Fix all template tests \u2192 Run template suite\"\n        - \"Batch related fixes by category\"\n      \n      evidence_template: \"Micro-cycle pattern detected: '{intent}'\"\n    \n    - rule_id: \"EFFICIENCY_ROOT_CAUSE_BEFORE_SYMPTOMS\"\n      name: \"Systematic Debugging (Anti-Pattern #3)\"\n      severity: \"warning\"\n      description: \"Prevent symptom-chasing when root cause analysis would be faster\"\n      \n      detection:\n        keywords:\n          - \"debug individual\"\n          - \"investigate symptoms\"\n          - \"try different approach\"\n          - \"troubleshoot each\"\n        scope: [\"intent\", \"description\", \"approach\"]\n      \n      acceleration_pattern: \"Check fundamental assumptions \u2192 Fix root cause \u2192 Validate fix\"\n      time_saved_per_instance: \"15-45 minutes of symptom investigation\"\n      \n      systematic_checks:\n        - \"UTC vs local time assumptions\"\
-  \n        - \"Schema/column name mismatches\"  \n        - \"Relative vs absolute imports\"\n        - \"Test expectations vs implementation reality\"\n      \n      alternatives:\n        - \"Check UTC timestamp handling first\"\n        - \"Verify schema consistency first\"\n        - \"Validate fundamental assumptions first\"\n      \n      evidence_template: \"Symptom debugging pattern: '{description}'\"\n    \n    - rule_id: \"EFFICIENCY_EXISTING_TOOLS_DURING_CRISIS\"\n      name: \"Use Existing Tools During Active Work (Anti-Pattern #4)\"\n      severity: \"warning\"\n      description: \"Prevent creating debug tools during active troubleshooting\"\n      \n      detection:\n        keywords:\n          - \"create debug script\"\n          - \"write tool to\"\n          - \"build utility for\"\n          - \"make script to analyze\"\n        context_indicators:\n          - \"failing tests\"\n          - \"active debugging\"\n          - \"urgent fix\"\n        scope: [\"intent\"\
-  , \"description\", \"approach\"]\n      \n      acceleration_pattern: \"Use existing methods \u2192 Create tools for future use only\"\n      time_saved_per_instance: \"5-10 minutes per debug tool creation\"\n      \n      alternatives:\n        - \"Use existing debugging methods for now\"\n        - \"Create optimization tools after crisis resolved\"\n        - \"Focus on immediate problem resolution\"\n      \n      evidence_template: \"Tool creation during crisis: '{intent}'\"\n    \n    - rule_id: \"EFFICIENCY_ACTION_OVER_EXCESSIVE_SEARCH\"\n      name: \"Direct Action Over Search-Driven Development (Anti-Pattern #5)\"\n      severity: \"warning\"\n      description: \"Prevent excessive searching when direct action would be faster\"\n      \n      detection:\n        keywords:\n          - \"search for existing\"\n          - \"look for similar\"\n          - \"find reference implementation\"\n          - \"research how others\"\n        threshold_indicators:\n          - \"simple\
-  \ implementation request\"\n          - \"straightforward task\"\n          - \"basic functionality\"\n        scope: [\"intent\", \"description\", \"approach\"]\n      \n      acceleration_pattern: \"Check if X exists \u2192 Create X if not \u2192 No extended search required\"\n      time_saved_per_instance: \"5-10 minutes per search session\"\n      \n      alternatives:\n        - \"Implement directly if task is clear\"\n        - \"Search only for complex architectural decisions\"\n        - \"Use existing patterns for simple tasks\"\n      \n      evidence_template: \"Excessive search pattern: '{intent}'\"\n\n# Layer 7: Deployment Architecture Protection\n- layer_id: \"deployment_architecture\"\n  name: \"Deployment Architecture Protection\"\n  description: \"Enforce upgrade/setup separation and brain preservation during deployments\"\n  priority: 7\n  \n  rules:\n    - rule_id: \"DEPLOYMENT_VERSION_TRACKING\"\n      name: \"Version Tracking File Required\"\n      severity: \"blocked\"\
-  \n      description: \".cortex-version file MUST exist in all CORTEX deployments for upgrade detection\"\n      \n      detection:\n        combined_keywords:\n          deployment_operation:\n            - \"deploy cortex\"\n            - \"install cortex\"\n            - \"setup cortex\"\n            - \"build package\"\n          missing_version:\n            - \"no .cortex-version\"\n            - \"version file missing\"\n            - \"cannot detect version\"\n        scope: [\"operation\", \"validation\"]\n        logic: \"AND\"\n      \n      alternatives:\n        - \"Create .cortex-version file with version metadata\"\n        - \"Include version in all publish packages\"\n        - \"Validate version file presence in setup/upgrade workflows\"\n      \n      evidence_template: |\n        Deployment without version tracking detected!\n        \n        Operation: '{operation}'\n        \n        CRITICAL: .cortex-version file is MANDATORY for:\n        - Upgrade detection (setup\
-  \ vs upgrade)\n        - Schema migration tracking\n        - Rollback capability\n        - Version compatibility checks\n        \n        Required file structure:\n        ```json\n        {\n          \"cortex_version\": \"5.2.0\",\n          \"schema_version\": \"1.0\",\n          \"installed_date\": \"2025-11-23T14:30:00Z\",\n          \"last_upgrade\": \"2025-11-23T14:30:00Z\",\n          \"workspace_id\": \"a7b3c4d5e6f7\"\n        }\n        ```\n        \n        File location: CORTEX/.cortex-version\n      \n      rationale: |\n        Version tracking enables intelligent upgrade/setup detection:\n        - NO version file \u2192 Initial setup (create empty brain)\n        - Version file exists \u2192 Upgrade (preserve brain, update core)\n        - Version comparison \u2192 Determine upgrade path & migrations needed\n    \n    - rule_id: \"UPGRADE_BRAIN_PRESERVATION\"\n      name: \"Brain Data Preservation During Upgrades\"\n      severity: \"blocked\"\n      description: \"\
-  Upgrade operations MUST NEVER overwrite brain data (conversations, patterns, documents)\"\n      \n      detection:\n        combined_keywords:\n          upgrade_operation:\n            - \"upgrade cortex\"\n            - \"update cortex\"\n            - \"replace cortex\"\n          and_overwrite_risk:\n            - \"overwrite all\"\n            - \"replace cortex-brain\"\n            - \"delete CORTEX\"\n            - \"rm -rf CORTEX\"\n            - \"Remove-Item CORTEX\"\n        scope: [\"operation\", \"command\"]\n        logic: \"AND\"\n      \n      alternatives:\n        - \"Use selective file replacement (core only, preserve brain)\"\n        - \"Backup brain data before any upgrade\"\n        - \"Use upgrade package (not full package)\"\n        - \"Verify brain preservation in validation gates\"\n      \n      evidence_template: |\n        Brain data overwrite risk detected!\n        \n        Operation: '{operation}'\n        Command: '{command}'\n        \n        CRITICAL:\
-  \ NEVER overwrite these directories during upgrades:\n        - cortex-brain/tier1/*.db (conversations)\n        - cortex-brain/tier2/*.db (patterns)\n        - cortex-brain/tier3/*.db (development context)\n        - cortex-brain/documents/ (user documents)\n        - cortex-brain/user-dictionary.yaml (learned terms)\n        - cortex.config.json (workspace configuration)\n        \n        SAFE upgrade procedure:\n        1. Backup brain data first\n        2. Replace ONLY: src/, scripts/, .github/\n        3. Merge configs: response-templates.yaml, capabilities.yaml\n        4. Preserve brain: All .db files, documents/, user-dictionary.yaml\n        5. Apply schema migrations if needed\n        6. Validate brain integrity\n      \n      rationale: |\n        Brain data represents workspace-specific learning that cannot be regenerated:\n        - Conversation history (127+ conversations typical)\n        - Learned patterns (43+ patterns typical)\n        - User documents (89+ files typical)\n\
-  \        - Custom configurations\n        \n        Loss of brain data = loss of CORTEX intelligence for that workspace.\n    \n    - rule_id: \"SCHEMA_MIGRATION_ENFORCEMENT\"\n      name: \"Database Schema Migration Required\"\n      severity: \"blocked\"\n      description: \"Database schema changes MUST include migration files, never destructive updates\"\n      \n      detection:\n        combined_keywords:\n          schema_change:\n            - \"alter table\"\n            - \"drop table\"\n            - \"change schema\"\n            - \"modify database\"\n          without_migration:\n            - \"no migration\"\n            - \"skip migration\"\n            - \"direct schema change\"\n        scope: [\"operation\", \"sql\"]\n        logic: \"AND\"\n      \n      alternatives:\n        - \"Create migration file in cortex-brain/migrations/\"\n        - \"Use migration runner to apply changes\"\n        - \"Write rollback SQL in migration\"\n        - \"Test migration on backup\
-  \ database first\"\n      \n      evidence_template: |\n        Database schema change without migration detected!\n        \n        Operation: '{operation}'\n        Schema change: '{schema_change}'\n        \n        CRITICAL: Schema changes MUST use migration files!\n        \n        Required migration structure:\n        ```sql\n        -- Migration: 003_add_deployment_tracking.sql\n        -- Version: 5.3.0\n        -- Date: 2025-11-23\n        -- Description: Add deployment tracking to tier2\n        \n        BEGIN TRANSACTION;\n        \n        -- Forward migration\n        CREATE TABLE IF NOT EXISTS tier2_deployments (\n            deployment_id TEXT PRIMARY KEY,\n            version TEXT NOT NULL,\n            deployed_at TEXT NOT NULL\n        );\n        \n        -- Update schema version\n        PRAGMA user_version = 3;\n        \n        COMMIT;\n        \n        -- Rollback migration (commented)\n        -- DROP TABLE IF EXISTS tier2_deployments;\n        -- PRAGMA\
-  \ user_version = 2;\n        ```\n        \n        Migration location: cortex-brain/migrations/XXX_description.sql\n        \n        Why migrations matter:\n        - Preserves data during schema changes\n        - Provides rollback capability\n        - Documents schema evolution\n        - Enables automated upgrades\n      \n      rationale: |\n        Schema migrations are MANDATORY for:\n        1. Data preservation: No data loss during schema changes\n        2. Upgrade automation: Apply migrations during upgrade workflow\n        3. Rollback safety: Revert schema if upgrade fails\n        4. Version tracking: PRAGMA user_version marks schema state\n        5. Team coordination: All deployments use same schema version\n    \n    - rule_id: \"DEPLOYMENT_TYPE_DETECTION\"\n      name: \"Intelligent Deployment Type Detection\"\n      severity: \"warning\"\n      description: \"Deployment operations should auto-detect setup vs upgrade mode\"\n      \n      detection:\n        keywords:\n\
-  \          - \"manual deployment\"\n          - \"copy folder\"\n          - \"replace directory\"\n          - \"user must choose\"\n        scope: [\"operation\", \"workflow\"]\n      \n      alternatives:\n        - \"Auto-detect: No CORTEX/ \u2192 Setup mode\"\n        - \"Auto-detect: CORTEX/ exists \u2192 Upgrade mode\"\n        - \"Check .cortex-version for version comparison\"\n        - \"Provide dry-run mode for preview\"\n      \n      evidence_template: |\n        Manual deployment workflow detected: '{operation}'\n        \n        CORTEX should auto-detect deployment type:\n        \n        Detection Logic:\n        ```python\n        if not cortex_dir.exists():\n            return DeploymentType.INITIAL_SETUP\n        elif not version_file.exists():\n            return DeploymentType.LEGACY_UPGRADE\n        elif current_version < latest_version:\n            return DeploymentType.UPGRADE\n        else:\n            return DeploymentType.UP_TO_DATE\n        ```\n       \
-  \ \n        User Experience:\n        - \"setup cortex\" \u2192 Auto-detects mode\n        - \"upgrade cortex\" \u2192 Auto-detects mode\n        - No manual decision needed\n      \n      rationale: |\n        Intelligent detection improves user experience:\n        - No \"am I upgrading or setting up?\" confusion\n        - Automatic brain preservation in upgrade mode\n        - Correct package download (full vs upgrade)\n        - Reduced human error\n    \n    - rule_id: \"CONFIG_MERGE_INTELLIGENCE\"\n      name: \"Config Files Require 3-Way Merge\"\n      severity: \"blocked\"\n      description: \"Config files (YAML) must use 3-way merge during upgrades, not overwrite\"\n      \n      detection:\n        combined_keywords:\n          upgrade_operation:\n            - \"upgrade\"\n            - \"update config\"\n          and_overwrite:\n            - \"overwrite yaml\"\n            - \"replace config\"\n            - \"copy config\"\n        scope: [\"operation\"]\n        logic:\
-  \ \"AND\"\n      \n      alternatives:\n        - \"Use 3-way merge: Base + Local + Upgrade \u2192 Merged\"\n        - \"Preserve user customizations (local changes)\"\n        - \"Add new features from upgrade\"\n        - \"Detect conflicts and offer resolution\"\n      \n      evidence_template: |\n        Config overwrite detected during upgrade!\n        \n        File: '{file_path}'\n        Operation: '{operation}'\n        \n        CRITICAL: Config files need intelligent merging!\n        \n        3-Way Merge Process:\n        ```\n        Base Config (v5.1.0 - original)\n            +\n        Local Config (user customizations)\n            +\n        Upgrade Config (v5.2.0 - new features)\n            =\n        Merged Config (customizations + new features)\n        ```\n        \n        Example - response-templates.yaml:\n        Base: triggers: [\"help\"]\n        Local: triggers: [\"help\", \"cortex help\"] \u2190 User added\n        Upgrade: triggers: [\"help\"], new_template:\
-  \ admin_help\n        Merged: triggers: [\"help\", \"cortex help\"], new_template: admin_help\n        \n        Preserve:\n        - User-added triggers\n        - Custom templates\n        - Modified capabilities\n        \n        Add:\n        - New templates from upgrade\n        - New capabilities\n        - New operations\n      \n      rationale: |\n        Config merging prevents loss of user customizations:\n        - User spent time configuring CORTEX\n        - Custom triggers, templates, operations\n        - Should be preserved during upgrades\n        - New features added alongside customizations\n    \n    - rule_id: \"PUBLISH_PACKAGE_VALIDATION\"\n      name: \"Publish Package Content Validation\"\n      severity: \"blocked\"\n      description: \"Published packages MUST NOT contain brain data or machine-specific files\"\n      \n      detection:\n        combined_keywords:\n          publish_operation:\n            - \"build package\"\n            - \"create publish\"\
-  \n            - \"generate release\"\n          privacy_risk:\n            - \"*.db included\"\n            - \"brain data included\"\n            - \"machine paths included\"\n        scope: [\"operation\", \"validation\"]\n        logic: \"AND\"\n      \n      alternatives:\n        - \"Exclude all .db files from publish\"\n        - \"Exclude cortex.config.json (machine-specific)\"\n        - \"Exclude .platform_state.json\"\n        - \"Use publish-config.yaml validation rules\"\n      \n      evidence_template: |\n        Privacy/data leak risk in publish package!\n        \n        Package: '{package_path}'\n        Risk: '{risk_type}'\n        \n        CRITICAL: Published packages MUST NOT contain:\n        - *.db files (brain data)\n        - cortex.config.json (machine-specific paths)\n        - .platform_state.json (hostname)\n        - .coverage.* (machine names)\n        - conversation-history.jsonl (private conversations)\n        \n        Validation checklist:\n       \
-  \ \u2705 No .db files\n        \u2705 No machine-specific configs\n        \u2705 No hostnames/usernames\n        \u2705 No conversation data\n        \u2705 Only core CORTEX code\n        \n        Use forbidden_patterns from publish-config.yaml\n      \n      rationale: |\n        Privacy protection in published packages:\n        - Brain data is workspace-specific (never shared)\n        - Machine paths reveal private directory structure\n        - Conversation history is confidential\n        - Published packages = clean core only\n\n# Layer 8: Test Location Isolation\n- layer_id: \"test_location_isolation\"\n  name: \"Test Location Isolation\"\n  description: \"Application tests in user repo, CORTEX tests in CORTEX folder - maintain brain knowledge from both\"\n  priority: 8\n  \n  rules:\n    - rule_id: \"TEST_LOCATION_SEPARATION\"\n      name: \"Test Location Separation\"\n      severity: \"blocked\"\n      description: \"When running in development environments, application tests\
-  \ MUST be created in user repo (NOT CORTEX folder). Only CORTEX-related tests reside in CORTEX. CORTEX MUST use user's existing test framework and feed brain with knowledge learned from application tests.\"\n      \n      detection:\n        combined_keywords:\n          test_generation:\n            - \"generate test\"\n            - \"create test\"\n            - \"write test\"\n            - \"tdd workflow\"\n          application_code:\n            - \"user application\"\n            - \"user code\"\n            - \"application feature\"\n            - \"business logic\"\n          wrong_location:\n            - \"tests/fixtures\"\n            - \"CORTEX/tests\"\n            - \"cortex-brain/tests\"\n        scope: [\"intent\", \"target_path\"]\n        logic: \"AND\"\n      \n      alternatives:\n        - \"STEP 1: Detect user repository root (outside CORTEX folder)\"\n        - \"STEP 2: Discover user's existing test framework (pytest, jest, xunit, etc.)\"\n        - \"STEP 3: Create\
-  \ tests in user repo following their conventions\"\n        - \"STEP 4: Run tests using user's framework\"\n        - \"STEP 5: Capture test patterns, framework usage, and insights\"\n        - \"STEP 6: Store learned patterns in CORTEX brain (Tier 1/Tier 2)\"\n        - \"EXAMPLE: User app at /Users/user/myapp \u2192 Tests at /Users/user/myapp/tests/\"\n        - \"EXAMPLE: CORTEX tests \u2192 Stay in /CORTEX/tests/\"\n      \n      evidence_template: |\n        Test location violation detected!\n        \n        Target: '{target_path}'\n        Test Type: '{test_type}'\n        \n        \u274C WRONG: Application test being created in CORTEX folder\n        - Path: CORTEX/tests/test_user_feature.py\n        - Reason: Application tests don't belong in CORTEX\n        - Impact: Pollutes CORTEX with application-specific code\n        \n        \u2705 CORRECT: Application test in user repository\n        - Path: /Users/user/myapp/tests/test_user_feature.py\n        - Framework: {user's\
-  \ framework} (pytest/jest/xunit/etc.)\n        - Conventions: {user's naming patterns}\n        - Brain Learning: Test patterns stored in cortex-brain/tier2/\n        \n        **CORTEX Tests (stay in CORTEX folder):**\n        - Brain protection tests\n        - Agent functionality tests\n        - Workflow orchestration tests\n        - CORTEX infrastructure tests\n        \n        **Application Tests (go in user repo):**\n        - Business logic tests\n        - Feature tests\n        - Integration tests\n        - E2E tests\n        \n        **Knowledge Capture (automatic):**\n        - Test framework detection \u2192 Tier 2\n        - Naming conventions \u2192 Tier 2\n        - Test patterns \u2192 Tier 2\n        - Code coverage insights \u2192 Tier 1\n        - Common failure patterns \u2192 Tier 2\n      \n      rationale: |\n        TEST_LOCATION_SEPARATION: Architectural Clarity & Brain Intelligence\n        \n        Problem Scenario:\n        - User developing \"payment\
-  \ processing\" feature\n        - CORTEX generates test_payment.py in CORTEX/tests/\n        - Test contains application-specific logic\n        - CORTEX repo polluted with user's business logic\n        - User can't find tests in their own repo\n        - Tests don't use user's existing framework\n        \n        Correct Approach:\n        1. **Detect Context:**\n           - Working directory: /Users/user/myapp\n           - Test framework: pytest (detected from requirements.txt)\n           - Convention: tests/ folder with test_*.py pattern\n        \n        2. **Generate Tests in User Repo:**\n           - Path: /Users/user/myapp/tests/test_payment.py\n           - Framework: pytest (user's choice)\n           - Style: Matches user's existing tests\n        \n        3. **Capture Knowledge for Brain:**\n           - Pattern: \"Payment tests use mock stripe API\"\n           - Pattern: \"User prefers parametrized fixtures\"\n           - Insight: \"Payment tests fail when DB not\
-  \ seeded\"\n           - Store: cortex-brain/tier2/knowledge-graph.yaml\n        \n        4. **Benefits:**\n           - User repo self-contained with its tests\n           - CORTEX stays focused on CORTEX functionality\n           - Brain learns from user patterns (not polluted with user code)\n           - User's test framework honored\n           - Proper separation of concerns\n        \n        Brain Learning Mechanism:\n        - Monitor test execution results\n        - Track framework usage patterns\n        - Identify common anti-patterns\n        - Store generalized insights (not specific code)\n        - Use insights to improve future test generation\n        \n        Exception:\n        Only CORTEX-related tests (brain, agents, workflows) stay in CORTEX folder.\n\n# Layer 9: Git History Context Validation\n- layer_id: \"git_history_context_validation\"\n  name: \"Git History Context Validation\"\n  description: \"Universal rule: All requests MUST check git history to build\
-  \ stronger context before analysis\"\n  priority: 9\n  \n  rules:\n    - rule_id: \"GIT_HISTORY_CONTEXT_REQUIRED\"\n      name: \"Git History Context Required\"\n      severity: \"blocked\"\n      description: \"All requests that analyze code files MUST check git history first. This provides critical context: recurring issues, security patterns, subject matter experts, change frequency, and related files.\"\n      \n      detection:\n        combined_keywords:\n          code_analysis:\n            - \"analyze\"\n            - \"review\"\n            - \"plan\"\n            - \"implement\"\n            - \"refactor\"\n            - \"security review\"\n            - \"gap analysis\"\n          file_targets:\n            - \".py\"\n            - \".js\"\n            - \".ts\"\n            - \".cs\"\n            - \".java\"\n            - \".go\"\n            - \".rb\"\n            - \".php\"\n          missing_context:\n            - \"has_git_history_context: false\"\n            - \"\
-  git_history_context: null\"\n        scope: [\"intent\", \"target_files\", \"context\"]\n        logic: \"AND\"\n      \n      alternatives:\n        - \"STEP 1: Run git log analysis (6 months lookback)\"\n        - \"STEP 2: Run git grep for security keywords (1 year)\"\n        - \"STEP 3: Run git shortlog for contributor analysis\"\n        - \"STEP 4: Run git blame for line-level history\"\n        - \"STEP 5: Extract PR/issue references from commits\"\n        - \"STEP 6: Identify files that change together\"\n        - \"STEP 7: Build context enrichment dictionary\"\n        - \"STEP 8: Proceed with analysis using enriched context\"\n      \n      evidence_template: |\n        Git history context missing for code analysis!\n        \n        Files: '{target_files}'\n        Operation: '{operation}'\n        \n        \u274C BLOCKED: Cannot proceed without git history context\n        \n        WHY GIT HISTORY MATTERS:\n        \n        Without Git History:\n        - Analyze file\
-  \ in isolation\n        - Miss recurring patterns\n        - Don't know who to ask\n        - Treat all code equally\n        - Risk repeating past mistakes\n        \n        With Git History:\n        - Identify high-churn files (23 commits = unstable)\n        - Detect security patterns (4 hotfixes = sensitive)\n        - Find subject matter experts (Dev C wrote 3 hotfixes)\n        - Prioritize based on history (SQL injection fixed 3 times)\n        - Learn from past solutions (related PR references)\n        \n        REQUIRED ACTIONS:\n        \n        1. **Recent Activity Analysis (6 months):**\n           ```bash\n           git log --oneline --since=6.months.ago [file]\n           git log --numstat --since=6.months.ago [file]\n           ```\n           Captures: Commit count, churn rate, change frequency\n        \n        2. **Security Pattern Detection (1 year):**\n           ```bash\n           git log --grep=\"security|vulnerability|CVE|exploit|bypass|injection|XSS|CSRF|authentication|authorization|password|encryption|hotfix|rollback\"\
-  \ -i --since=1.year.ago [file]\n           ```\n           Captures: Security commits, hotfixes, rollbacks\n        \n        3. **Contributor Analysis:**\n           ```bash\n           git shortlog -sn [file]\n           git shortlog -sn --since=3.months.ago [file]\n           ```\n           Captures: Top contributors, recent maintainers, SME identification\n        \n        4. **Related Work Discovery:**\n           ```bash\n           git log --grep=\"#[0-9]\" --oneline [file]\n           ```\n           Captures: PR references, issue tracker links\n        \n        5. **Temporal Patterns:**\n           ```bash\n           git log --format=%ad --date=short --since=6.months.ago [file]\n           ```\n           Captures: Change frequency, spike detection, maintenance windows\n        \n        CONTEXT ENRICHMENT EXAMPLE:\n        \n        File: Login.cs\n        \n        \u2705 Git History Context Found:\n        - Recent Commits: 23 (HIGH CHURN - unstable file)\n        - Security\
-  \ Hotfixes: 4 in last 6 months\n          \u2022 SQL injection fix (3 months ago)\n          \u2022 Auth bypass fix (6 months ago)\n          \u2022 Password hashing fix (1 month ago)\n          \u2022 Session timeout fix (2 weeks ago)\n        - Top Contributors:\n          \u2022 Dev A: 48% (original author)\n          \u2022 Dev B: 33% (recent features)\n          \u2022 Dev C: 17% (hotfix specialist) \u2190 SME for security\n        - Related Issues: #1234, #1567, #1890 (all security-related)\n        - Change Frequency: Very High (2-3 times per week)\n        \n        ANALYSIS PRIORITIES (based on history):\n        1. Focus on authentication/authorization gaps (history shows bypass)\n        2. Review password handling thoroughly (recent hotfix)\n        3. Validate SQL queries rigorously (injection history)\n        4. Consult Dev C for security concerns (SME)\n        5. Check related files (SessionManager.cs, AuthService.cs)\n        \n        BENEFITS OF GIT HISTORY CONTEXT:\n\
-  \        - 40% better gap detection (historical patterns reveal systemic issues)\n        - 25% time savings (prioritize high-risk areas first)\n        - 60% better prioritization (security history drives urgency)\n        - Zero redundant fixes (learn from past solutions)\n        \n        VALIDATOR: GitHistoryValidator\n        CONFIG: cortex-brain/config/git-history-rules.yaml\n      \n      rationale: |\n        GIT_HISTORY_CONTEXT_REQUIRED: Universal Rule for Context Quality\n        \n        Real-World Impact:\n        \n        Scenario 1: SQL Injection Gap\n        - Without History: \"Check for SQL injection in Login.cs\"\n        - With History: \"Login.cs has SQL injection fixed 3 times in past year. This indicates systemic validation problem, not one-off bug. Recommend comprehensive input validation strategy.\"\n        \n        Scenario 2: Authentication Bypass\n        - Without History: \"Auth logic looks okay\"\n        - With History: \"Auth bypass hotfix 6 months\
-  \ ago suggests server-side validation was weak. Current client-side checks insufficient. Recent session timeout fix 2 weeks ago indicates session management still problematic.\"\n        \n        Scenario 3: High-Churn File\n        - Without History: \"Implement feature in Login.cs\"\n        - With History: \"Login.cs has 23 commits in 6 months (HIGH CHURN). File is unstable. Consider refactoring before adding features. Risk of introducing bugs is elevated.\"\n        \n        Scenario 4: Subject Matter Expert\n        - Without History: \"Need security review\"\n        - With History: \"Dev C has written 3 of 4 security hotfixes. Suggest including Dev C in security review. They have deep context on vulnerability patterns.\"\n        \n        Scenario 5: Related File Dependencies\n        - Without History: \"Update Login.cs\"\n        - With History: \"Login.cs and SessionManager.cs always change together (10 of 15 commits). Update SessionManager.cs in parallel to avoid integration\
-  \ issues.\"\n        \n        Implementation Strategy:\n        \n        1. **Automatic Validation:**\n           - GitHistoryValidator runs before every code analysis\n           - BLOCKING enforcement (cannot proceed without history)\n           - 5-part analysis checklist (activity, security, contributors, related work, temporal)\n        \n        2. **Context Enrichment:**\n           - Git history results stored in request context\n           - Available to all agents via has_git_history_context flag\n           - Quality score (0-100%) indicates context completeness\n        \n        3. **Configuration:**\n           - Security keywords: 14 terms (security, vulnerability, CVE, exploit, bypass, injection, XSS, CSRF, auth, password, encryption, hotfix, rollback)\n           - High-risk thresholds: 15 commits/6mo churn, 3 hotfix count, 30 days recent security fix\n           - Exemptions: *.md, *.txt, *.json, *.yaml files\n        \n        4. **User Experience:**\n           -\
-  \ Transparent to users (runs automatically)\n           - No commands to remember\n           - Better results (40% detection improvement)\n           - Faster analysis (25% time savings from prioritization)\n        \n        Metrics & Benefits:\n        \n        Context Quality Score (0-100%):\n        - 90-100%: Excellent (full context, all checks passed)\n        - 70-89%: Good (adequate context, minor gaps)\n        - 50-69%: Adequate (basic context, improvement recommended)\n        - 0-49%: Poor (insufficient context, BLOCKED)\n        \n        Measured Improvements:\n        - Gap Detection: 40% better (recurring issues identified)\n        - Time Efficiency: 25% faster (high-risk areas prioritized)\n        - Prioritization: 60% improvement (history-driven urgency)\n        - Redundant Fixes: Zero (learn from past solutions)\n        \n        This universal rule transforms CORTEX from reactive to proactive analysis.\n\n# Layer 10: Operational Readiness Enforcement\n- layer_id:\
-  \ \"operational_readiness_enforcement\"\n  name: \"Operational Readiness Enforcement\"\n  description: \"Block deployment/upgrade if CORTEX is not fully operational in target environment\"\n  priority: 10\n  \n  rules:\n    - rule_id: \"OPERATIONAL_READINESS_ENFORCEMENT\"\n      name: \"Operational Readiness Enforcement\"\n      severity: \"blocked\"\n      description: \"Deployment or upgrade completion MUST be validated with operational readiness checks: dependencies installed, imports work, databases accessible, configs valid. Failure triggers automatic rollback.\"\n      \n      detection:\n        combined_keywords:\n          deployment_actions:\n            - \"deploy cortex\"\n            - \"upgrade cortex\"\n            - \"publish cortex\"\n            - \"release cortex\"\n            - \"upgrade complete\"\n            - \"deployment complete\"\n          missing_validation:\n            - \"operational_validation: false\"\n            - \"dependencies_validated: false\"\n\
-  \            - \"imports_validated: false\"\n        scope: [\"intent\", \"operation_status\"]\n        logic: \"AND\"\n      \n      alternatives:\n        - \"STEP 1: Validate environment prerequisites (Python 3.8+, pip, git, disk space)\"\n        - \"STEP 2: Validate core dependencies installed (pytest, PyYAML, watchdog, psutil, send2trash)\"\n        - \"STEP 3: Validate optional dependencies (NumPy, scikit-learn - warn if missing)\"\n        - \"STEP 4: Validate core imports work (tier1, tier2, tier3 modules)\"\n        - \"STEP 5: Validate databases accessible (tier1, tier2, tier3 DBs exist)\"\n        - \"STEP 6: Validate operations config valid (cortex-operations.yaml)\"\n        - \"STEP 7: Validate response templates valid (response-templates.yaml)\"\n        - \"STEP 8: Validate brain protection rules valid (brain-protection-rules.yaml)\"\n        - \"STEP 9: Validate test suite discoverable (pytest --collect-only)\"\n        - \"STEP 10: Run smoke test (test_brain_protector.py\
-  \ or similar)\"\n        - \"STEP 11: If ANY critical check fails \u2192 ROLLBACK deployment\"\n        - \"STEP 12: If all checks pass \u2192 Declare 'CORTEX operational'\"\n      \n      evidence_template: |\n        Operational readiness validation required!\n        \n        Operation: '{operation}'\n        Status: '{status}'\n        \n        \u274C BLOCKED: Cannot declare deployment/upgrade complete without operational validation\n        \n        **Real-World Failure (upgrade-issue.md):**\n        - User upgraded CORTEX (files copied successfully)\n        - NumPy failed to install (missing C compiler)\n        - Tests not discoverable (incorrect path)\n        - Manual verification took 45+ minutes\n        - Declared \"success\" but CORTEX was not operational\n        \n        **Required Validation Gates:**\n        \n        Gate 1: Environment Prerequisites\n        - [ ] Python 3.8+ available\n        - [ ] pip functional\n        - [ ] git available\n        - [ ] Disk\
-  \ space sufficient (500+ MB)\n        - [ ] Write permissions verified\n        - [ ] C compiler available (optional, warn if missing)\n        \n        Gate 2: Core Dependencies\n        - [ ] pytest installed and importable\n        - [ ] PyYAML installed and importable\n        - [ ] watchdog installed and importable\n        - [ ] psutil installed and importable\n        - [ ] send2trash installed and importable\n        \n        Gate 3: Optional Dependencies (warn only)\n        - [ ] NumPy installed (ML features)\n        - [ ] scikit-learn installed (ML features)\n        - [ ] pandas installed (data analysis)\n        \n        Gate 4: Core Imports\n        - [ ] from tier1.working_memory import WorkingMemory\n        - [ ] from tier3.development_context import DevelopmentContext\n        - [ ] No import errors\n        \n        Gate 5: Database Accessibility\n        - [ ] cortex-brain/tier1/working_memory.db exists\n        - [ ] cortex-brain/tier2/knowledge_graph.db exists\
-  \ (or auto-init)\n        - [ ] cortex-brain/tier3/development_context.db exists\n        \n        Gate 6: Configuration Validation\n        - [ ] cortex-operations.yaml exists and valid\n        - [ ] response-templates.yaml exists and valid\n        - [ ] brain-protection-rules.yaml exists and valid\n        \n        Gate 7: Test Suite Validation\n        - [ ] pytest --collect-only succeeds\n        - [ ] At least 10 tests discovered\n        - [ ] Smoke test passes (optional, warn only)\n        \n        **Rollback Triggers (Critical Failures):**\n        - Core dependency import fails\n        - Core module import fails\n        - Tier 1 or Tier 3 database missing\n        - Operations config invalid\n        - Response templates invalid\n        - Brain protection rules invalid\n        \n        **Success Criteria:**\n        \u2705 ALL gates pass (or warnings only)\n        \u2705 Time to operational: <5 minutes\n        \u2705 Zero manual intervention required\n        \u2705\
-  \ User sees clear validation summary\n        \n        **Implementation:**\n        - upgrade_orchestrator.py: Call _validate_dependencies(), _validate_operational_readiness(), _validate_test_suite()\n        - validate_deployment.py: Add check_environment_prerequisites()\n        - Bootstrap verification: Enhanced with operational checks\n        - Auto-rollback: If critical checks fail\n      \n      rationale: |\n        OPERATIONAL_READINESS_ENFORCEMENT: User Trust & Time Savings\n        \n        **Problem Scenario (From upgrade-issue.md):**\n        \n        Timeline:\n        - Minute 0-5: Backup & file copy (SUCCESS)\n        - Minute 5-25: NumPy build failure (20 min wasted)\n        - Minute 25-35: Test discovery failure (10 min wasted)\n        - Minute 35-45: Manual verification (15 min wasted)\n        - Total: 45+ minutes to operational state\n        \n        Root Cause:\n        - Deployment validated SOURCE repository health\n        - Did NOT validate TARGET environment\
-  \ readiness\n        - Assumed \"files copied = operational\"\n        - No environment prerequisites check\n        - No dependency installation validation\n        - No operational smoke test\n        \n        Impact:\n        - Poor user experience (\"Where are the tests?\")\n        - Wasted time on manual troubleshooting\n        - Eroded trust in upgrade process\n        - Risk of incomplete installation\n        \n        **Correct Approach:**\n        \n        1. **Pre-Flight Environment Check:**\n           - Check Python version (3.8+)\n           - Check pip availability\n           - Check git availability\n           - Check disk space (500+ MB)\n           - Check write permissions\n           - Check C compiler (warn if missing)\n           - BLOCK if critical checks fail\n        \n        2. **Post-Copy Dependency Validation:**\n           - Install core dependencies (pytest, PyYAML, etc.)\n           - Verify all imports successful\n           - Warn if optional deps\
-  \ fail (NumPy, scikit-learn)\n           - ROLLBACK if core deps fail\n        \n        3. **Operational Readiness Validation:**\n           - Test core imports (tier1, tier2, tier3)\n           - Verify databases accessible\n           - Validate config files (YAML syntax)\n           - Run pytest --collect-only\n           - ROLLBACK if operational checks fail\n        \n        4. **Success Declaration:**\n           - Only after ALL gates pass\n           - Show validation summary\n           - Display time to operational\n           - List any warnings (optional deps)\n        \n        **Benefits:**\n        - Time to operational: 45 min \u2192 <5 min (90% reduction)\n        - Manual intervention: Required \u2192 None (100% reduction)\n        - User confidence: Low \u2192 High\n        - Rollback safety: Automatic on failure\n        \n        **Metrics:**\n        - Environment validation: <30 seconds\n        - Dependency validation: <2 minutes\n        - Operational validation:\
-  \ <1 minute\n        - Total overhead: <5 minutes\n        - User time saved: 40+ minutes\n        \n        **Edge Cases:**\n        - Windows without C compiler: Warn, continue (NumPy skipped)\n        - Tests not found: Warn, continue (non-critical)\n        - Optional deps fail: Warn, continue (graceful degradation)\n        - Core imports fail: ERROR, rollback (critical)\n        \n        This rule ensures CORTEX is ACTUALLY operational, not just \"deployed\".\n    \n    - rule_id: \"DEBUG_MARKER_REMOVAL_ENFORCEMENT\"\n      name: \"Debug Marker Removal Enforcement\"\n      severity: \"blocked\"\n      description: \"Git commits containing debug markers (MARKER, DEBUG, FIXME, TODO, BREAKPOINT) MUST be blocked to prevent debugging artifacts from reaching production\"\n      \n      detection:\n        combined_keywords:\n          commit_attempt:\n            - \"git commit\"\n            - \"commit changes\"\n            - \"stage files\"\n            - \"ready to commit\"\n    \
-  \      marker_patterns:\n            - \"# MARKER:\"\n            - \"# DEBUG:\"\n            - \"# FIXME:\"\n            - \"# TODO:\"\n            - \"# BREAKPOINT:\"\n        scope: [\"intent\", \"file_content\"]\n        logic: \"AND\"\n      \n      alternatives:\n        - \"STEP 1: Run debug marker scanner: python src/utils/debug_markers.py scan src/\"\n        - \"STEP 2: Review found markers and determine if they should be removed\"\n        - \"STEP 3: Remove markers: python src/utils/debug_markers.py remove <file>\"\n        - \"STEP 4: Or manually remove marker comments from code\"\n        - \"STEP 5: Verify markers removed: python src/utils/debug_markers.py scan src/\"\n        - \"STEP 6: Stage cleaned files: git add <files>\"\n        - \"STEP 7: Retry commit (pre-commit hook will validate)\"\n      \n      evidence_template: |\n        Debug markers detected in staged files!\n        \n        Operation: '{operation}'\n        Markers found: {marker_count}\n        \n\
-  \        \u274C BLOCKED: Cannot commit code with debug markers\n        \n        **Why Debug Markers Must Be Removed:**\n        \n        1. **Production Readiness**\n           - Debug markers indicate incomplete/temporary code\n           - MARKER: Used during development to track execution\n           - DEBUG: Code meant for debugging only\n           - FIXME: Temporary fixes needing proper implementation\n           - TODO: Incomplete implementations\n           - BREAKPOINT: Execution pause points\n        \n        2. **Code Quality**\n           - Markers clutter codebase\n           - Confuse future developers\n           - Indicate lack of review\n           - Suggest rushed implementation\n        \n        3. **Professional Standards**\n           - Clean code ready for review\n           - No debugging artifacts\n           - Proper implementation complete\n           - Ready for production\n        \n        **Marker Types Detected:**\n        \n        {marker_details}\n\
-  \        \n        **Automated Removal Available:**\n        \n        ```bash\n        # Scan for all markers\n        python src/utils/debug_markers.py scan src/\n        \n        # Remove from specific file\n        python src/utils/debug_markers.py remove src/orchestrators/example.py\n        \n        # Dry-run to see what would be removed\n        python src/utils/debug_markers.py remove src/orchestrators/example.py --dry-run\n        ```\n        \n        **Git Pre-Commit Hook Protection:**\n        \n        The git pre-commit hook automatically scans staged Python files for markers:\n        - Located: `.git/hooks/pre-commit`\n        - Auto-scans: All staged .py files\n        - Blocks commit: If any markers found\n        - Clear guidance: Shows exact locations\n        \n        **Manual Removal:**\n        \n        1. Open files listed above\n        2. Find lines with markers (MARKER:, DEBUG:, etc.)\n        3. Remove marker comments\n        4. Ensure code still functions\n\
-  \        5. Stage cleaned files: git add <files>\n        6. Retry commit\n        \n        **Exceptions:**\n        \n        - If marker is intentional (e.g., TODO in documentation): Convert to proper format\n        - If marker is critical for tracking: Move to issue tracker or planning document\n        - If fixing marker is complex: Create separate task and remove marker\n        \n        **Benefits of Clean Commits:**\n        - Professional code quality\n        - Clear git history\n        - Production-ready code\n        - Easy code review\n        - No confusion for future developers\n        \n        **Pre-Commit Hook Installation:**\n        \n        Copy the hook to your .git/hooks directory:\n        ```bash\n        cp scripts/git-hooks/pre-commit .git/hooks/pre-commit\n        chmod +x .git/hooks/pre-commit  # Unix/Mac only\n        ```\n        \n        The hook will automatically validate all future commits.\n"
-logging:
-  enabled: true
-  path: cortex-brain/corpus-callosum/protection-events.jsonl
-  format: jsonl
-  include_fields:
-  - timestamp
-  - event
-  - request
-  - violations
-  - decision
-  - severity
-  - alternatives_suggested
-  - user_decision
-  - override_justification
-  - override_required
-validation:
-- check: rules_complete
-  scope: protection_layers
-  required: true
-  params:
-    all_layers_have_rules: true
-    all_rules_have_detection: true
-    all_rules_have_alternatives: true
-- check: severity_valid
-  scope: rules
-  required: true
-  params:
-    valid_severities:
-    - safe
-    - warning
-    - blocked
-- check: templates_valid
-  scope: challenge_template
-  required: true
-  params:
-    has_placeholders: true
-    has_options: true
+- rule_id: PATH_PORTABILITY
+  category: portability
+  severity: blocked
+  name: Portable Path Resolution Required
+  description: 'NEVER use hardcoded absolute paths. ALWAYS use relative paths or dynamic detection.
+
+    CORTEX must work across different installations (Windows, macOS, Linux) with different install locations.
+
+    '
+  enforcement:
+    trigger: code_change
+    action: block_if_hardcoded_path
+  validation:
+  - No hardcoded paths like /Users/username/... or C:\Users\...
+  - Use src.utils.project_root.get_project_root() for dynamic detection
+  - Use Path(__file__).resolve() for relative resolution
+  - Config files use relative paths only
+  implementation:
+    utility: src.utils.project_root
+    pattern: get_project_root()
+  examples:
+    pass:
+    - from src.utils.project_root import get_project_root; root = get_project_root()
+    - Path(__file__).parent.parent / "cortex-brain"
+    - project_root / "scripts" / "utilities"
+    fail:
+    - workspace = "/Users/asifhussain/PROJECTS/CORTEX"
+    - docs_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/docs")
+    - C:\Users\username\CORTEX\brain
+- rule_id: SETUP_VERIFICATION
+  category: orchestration_lifecycle
+  severity: blocked
+  name: 'Phase -2: Setup Verification Mandatory'
+  description: 'ALL orchestrators MUST run Phase -2 setup verification before execution.
+
+    This prevents false positives and ensures dependencies are ACTUALLY complete.
+
+    '
+  enforcement:
+    trigger: orchestrator_execution_start
+    action: block_if_verification_fails
+  validation:
+  - Dependencies must pass implementation tests (not just file existence)
+  - False positive detection must run
+  - VSCode cache state must be checked
+  - Governance compliance must be validated
+  implementation:
+    middleware: src.orchestrators.middleware.setup_verification.SetupVerifier
+    hook: pre_execution
+    priority: 1
+  examples:
+    pass:
+    - C50-03 verifies C50-00C tests ACTUALLY pass (pytest execution)
+    - Planning v5 detects broken dependency file (import test fails)
+    fail:
+    - Orchestrator starts without running SetupVerifier
+    - Dependency file exists but broken (false positive not detected)
+- rule_id: TEARDOWN_REFACTOR
+  category: orchestration_lifecycle
+  severity: blocked
+  name: 'Phase N+1: Teardown + REFACTOR + Commit Mandatory'
+  description: 'ALL orchestrators MUST run Phase N+1 teardown after execution.
+
+    This ensures code cleanup and atomic git commits follow /cortex-git-commit pattern.
+
+    '
+  enforcement:
+    trigger: orchestrator_execution_complete
+    action: block_if_refactor_fails
+  validation:
+  - Whole-file REFACTOR must run (remove unused imports, orphaned code)
+  - All modified files must be refactored
+  - Git commit must follow /cortex-git-commit pattern
+  - Commit message must include orchestrator name + phase summary
+  implementation:
+    middleware: src.orchestrators.middleware.teardown_refactor.TeardownRefactor
+    hook: post_execution
+    priority: 30
+  examples:
+    pass:
+    - Orchestrator completes → REFACTOR runs → Git commit with Co-authored-by
+    - 5 files modified → All refactored → Atomic commit
+    fail:
+    - Orchestrator completes but no REFACTOR cycle
+    - Git commit without /cortex-git-commit pattern
+- rule_id: TDD_ENFORCEMENT
+  category: development_workflow
+  severity: blocked
+  name: Test-Driven Development Mandatory
+  description: 'Tests MUST be written BEFORE implementation (RED → GREEN → REFACTOR).
+
+    This prevents untested code from entering the codebase.
+
+    '
+  enforcement:
+    trigger: code_change
+    action: block_if_no_test_first
+  validation:
+  - Test file must exist before implementation file
+  - Test must fail initially (RED phase)
+  - Implementation makes test pass (GREEN phase)
+  - REFACTOR phase removes code smells
+  examples:
+    pass:
+    - test_feature.py created → RED → feature.py created → GREEN → REFACTOR
+    fail:
+    - feature.py created without test_feature.py
+    - Test never fails (not actually testing anything)
+
+- rule_id: PLAN_FILE_ORGANIZATION
+  category: architecture_integrity
+  severity: blocked
+  name: Plan Files Must Live Within Plan Folder Structure
+  description: 'ALL files related to epics, plans, features, and implementations MUST be housed within the plan folder structure in designated subfolders.
+
+    Root-level file creation is DISCOURAGED unless absolutely necessary (e.g., core project files like README.md, requirements.txt).
+
+    This prevents workspace clutter and maintains clear plan boundaries.
+
+    '
+  enforcement:
+    trigger: file_creation
+    action: block_if_root_level_plan_file
+  validation:
+  - Plan artifacts must be in plan_folder/artifacts/
+  - Analysis documents must be in plan_folder/analysis/
+  - Progress reports must be in plan_folder/reports/
+  - Context documents must be in plan_folder/context/
+  - Scripts must be in plan_folder/scripts/
+  - Tracking data must be in plan_folder/tracking/
+  - No plan-related files in workspace root
+  - No plan-related files in cortex-brain root
+  implementation:
+    detector: src.orchestrators.middleware.governance.plan_file_validator.py
+    hook: pre_file_creation
+    priority: 5
+  folder_structure:
+    required_subfolders:
+      - analysis/       # Analysis documents, gap reports, risk assessments
+      - artifacts/      # Generated code, configs, templates
+      - context/        # Discovery docs, architecture analysis, requirements
+      - reports/        # Completion reports, progress summaries, metrics
+      - scripts/        # Plan-specific utility scripts
+      - tracking/       # Progress tracker, task registry, state files
+      - phases/         # Phase-specific implementation plans (optional)
+      - architecture/   # Architecture documents, specs, designs (optional)
+    allowed_root_files:
+      - epic-manifest.yaml         # Plan metadata and phase definitions
+      - README.md                  # Quick start guide
+      - CONTINUATION-PROMPT.md     # Auto-generated continuation instructions
+      - plan-viewer.html           # Auto-generated progress viewer
+      - launch-plan-viewer.sh      # Viewer launcher script
+      - launch-plan-viewer.py      # Viewer launcher script
+  examples:
+    pass:
+      - "cortex-brain/documents/planning/active/cortex5-snowball/analysis/GAP-ANALYSIS.md"
+      - "cortex-brain/documents/planning/active/cortex5-snowball/reports/P01-COMPLETION-REPORT.md"
+      - "cortex-brain/documents/planning/active/cortex5-snowball/artifacts/database-schema.sql"
+      - "cortex-brain/documents/planning/active/cortex5-snowball/tracking/progress-tracker.json"
+      - "cortex-brain/documents/planning/active/cortex5-snowball/epic-manifest.yaml"
+    fail:
+      - "cortex-brain/documents/planning/GAP-ANALYSIS.md (should be in plan_folder/analysis/)"
+      - "cortex-brain/P01-COMPLETION-REPORT.md (should be in plan_folder/reports/)"
+      - "database-schema.sql (should be in plan_folder/artifacts/)"
+      - "cortex-brain/documents/analysis/cortex5-gap-report.md (should be in plan folder)"
+  rationale: |
+    Plan file organization prevents:
+    1. Workspace clutter (root-level files scattered everywhere)
+    2. Unclear plan boundaries (which files belong to which plan?)
+    3. Merge conflicts (multiple plans creating same-named files)
+    4. Cleanup difficulty (can't easily archive a plan)
+    5. Discovery failures (can't find plan-related files)
+    
+    Benefits of plan folder structure:
+    1. Self-contained plans (all artifacts in one place)
+    2. Easy archival (mv plan_folder to archives/)
+    3. Clear ownership (file path shows which plan it belongs to)
+    4. Parallel development (multiple plans don't interfere)
+    5. Holistic cleanup (delete plan folder = delete all plan files)
+
+- rule_id: SCRIPT_ORGANIZATION_ENFORCEMENT
+  category: architecture_integrity
+  severity: blocked
+  name: Script Consolidation & Cataloging Required
+  description: 'ALL utility scripts MUST be properly organized via Cortex Toolkit Orchestrator with child orchestrators for cataloging.
+
+    Multiple scripts doing the same functionality MUST be consolidated into unified modules.
+
+    Script sprawl prevention is critical for maintainability and efficiency.
+
+    '
+  enforcement:
+    trigger: script_creation
+    action: block_if_uncataloged_or_duplicate
+  validation:
+  - Scripts must be cataloged by Cortex Toolkit Orchestrator
+  - Duplicate functionality detection scanner must run
+  - Similar scripts must be consolidated into single module
+  - Orphaned scripts (unused) must be archived
+  - Child orchestrators manage script organization per domain
+  implementation:
+    orchestrator: cortex_toolkit
+    scanner: src.orchestrators.toolkit.duplicate_script_detector
+    catalog: cortex-brain/toolkit/script-catalog.yaml
+  examples:
+    pass:
+    - Planning scripts consolidated into planning_orchestrator_v5.py modules
+    - Duplicate detectors merged into single duplicate_detector.py
+    - Scripts registered in toolkit catalog with clear ownership
+    fail:
+    - 10+ *.py files in src/orchestrators/planning/ doing similar tasks
+    - Multiple duplicate detection scripts (orphan_detector.py, duplicate_detector.py, similarity_checker.py)
+    - Uncataloged scripts in random directories
+  remediation:
+    scan_command: python3 -m src.orchestrators.toolkit.scan_duplicate_scripts
+    consolidate_command: python3 -m src.orchestrators.toolkit.consolidate_scripts --domain planning
+    report: cortex-brain/documents/reports/script-consolidation-{timestamp}.md
+  rationale: |
+    Script organization prevents:
+    1. Code duplication (multiple scripts doing same thing)
+    2. Discovery failures (which script does what?)
+    3. Maintenance burden (updating logic in 5 places)
+    4. Import confusion (which module to import from?)
+    5. Testing gaps (duplicate scripts = duplicate tests needed)
+    
+    Benefits of script consolidation:
+    1. Single source of truth per functionality
+    2. Easier maintenance (one place to update)
+    3. Clear module boundaries
+    4. Better test coverage
+    5. Reduced codebase size
+
+governance:
+  enforcement_level: strict
+  override_allowed: false
+  audit_logging:
+    enabled: true
+    log_path: tracking/governance-audit.jsonl
+    track_violations: true
+    track_overrides: false

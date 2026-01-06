@@ -64,6 +64,8 @@ capabilities:
     footprint_impact: "small"
     priority: "high"
     readiness: 60
+    cortex_version: "4.0"
+    target_release: "Q2 2026"
     current_capabilities:
       - "Change Governor reviews CORTEX architecture changes"
       - "Brain Protector challenges risky proposals"
@@ -77,6 +79,33 @@ capabilities:
     design_docs:
       - "cortex-brain/cortex-2.0-design/27-pr-review-team-collaboration.md"
       - "cortex-brain/cortex-2.0-design/27-PR-REVIEW-QUICK-REFERENCE.md"
+    cortex_4_0_enhancements:
+      pr_review_automation:
+        platforms:
+          - "Azure DevOps (REST API integration)"
+          - "GitHub (GitHub Actions, REST API)"
+          - "GitLab (GitLab CI, REST API)"
+          - "BitBucket (Pipelines integration)"
+        features:
+          - "Automated PR comment posting on code diffs"
+          - "Line-by-line review with SOLID/pattern validation"
+          - "Security vulnerability scanning (OWASP Top 10)"
+          - "Test coverage regression detection"
+          - "Performance anti-pattern detection"
+          - "Code style consistency enforcement"
+          - "Duplicate code detection with AST analysis"
+          - "Dependency analysis and outdated package warnings"
+        workflow:
+          - "PR opened → CORTEX triggered via webhook"
+          - "Analyze diff → Run all checks in parallel"
+          - "Post comments → Inline suggestions with severity"
+          - "Summary report → Overall health score (0-100)"
+          - "Auto-approve option → If score >95 and no blocking issues"
+        team_collaboration:
+          - "Shared review templates per repository"
+          - "Custom rule configuration per team"
+          - "Review history and trend tracking"
+          - "Integration with ADO work items for traceability"
     checks_planned:
       - "SOLID principle violations"
       - "Test coverage regressions"
@@ -87,15 +116,22 @@ capabilities:
       - "Duplicate code detection"
       - "Dependency analysis"
     enhancement_estimate:
-      development_hours: 15
-      testing_hours: 5
-      footprint_kb: 40
+      development_hours: 40
+      testing_hours: 15
+      footprint_kb: 120
+      phase: "CORTEX 4.0 Phase 3"
     integration_points:
       - "Azure DevOps REST API"
       - "GitHub Actions"
       - "GitLab CI"
       - "BitBucket Pipelines"
-    recommendation: "enhance_high_value"
+    success_criteria:
+      - "95%+ accuracy on SOLID violation detection"
+      - "Zero false positives on security scans"
+      - "Sub-30s review time for <500 LOC PRs"
+      - "Integration with all 4 major platforms"
+      - "Team adoption >80% within 2 months"
+    recommendation: "cortex_4_0_priority_feature"
     
   - id: "code_rewrite"
     name: "Code Rewrite"
@@ -350,7 +386,7 @@ capabilities:
       risk_awareness: "Built-in Conway's Law and integration buffers"
     documentation:
       user_guide: "cortex-brain/documents/implementation-guides/swagger-entry-point-guide.md"
-      response_template: "timeframe_estimate in response-templates.yaml"
+      response_template: "timeframe_estimate in response-templates-v4.yaml"
     recommendation: "ready_to_use"
     
   - id: "backend_testing"
@@ -361,6 +397,8 @@ capabilities:
     footprint_impact: "none"
     priority: "high"
     readiness: 95
+    cortex_version: "4.0"
+    target_release: "Q2 2026"
     features:
       - "Unit test generation (pytest, unittest)"
       - "Integration test generation"
@@ -372,7 +410,51 @@ capabilities:
       - "Performance test generation"
       - "Load test scenarios"
       - "Contract testing support"
-    recommendation: "ready_with_minor_enhancements"
+    cortex_4_0_enhancements:
+      performance_testing_integration:
+        frameworks:
+          - "Locust (Python-based load testing)"
+          - "k6 (JavaScript-based performance testing)"
+          - "Apache JMeter (Java-based load testing)"
+          - "Gatling (Scala-based performance testing)"
+        features:
+          - "Automatic performance test generation from API specs"
+          - "Load profile creation (ramp-up, sustained, spike)"
+          - "Response time assertions (p50, p95, p99)"
+          - "Throughput validation (requests/second)"
+          - "Concurrent user simulation (1-10k users)"
+          - "Resource utilization monitoring (CPU, memory, DB)"
+          - "Performance regression detection (baseline comparison)"
+          - "Bottleneck identification with flame graphs"
+        workflow:
+          - "Analyze API → Generate load scenarios"
+          - "Define SLAs → Create performance assertions"
+          - "Run tests → Capture metrics (time, throughput, errors)"
+          - "Compare baselines → Detect regressions"
+          - "Generate report → Visualizations + recommendations"
+        integration:
+          - "CI/CD pipeline integration (run on every merge)"
+          - "Database query analysis (slow query detection)"
+          - "APM integration (New Relic, DataDog, AppInsights)"
+          - "Alert triggers for performance degradation"
+        metrics_collected:
+          - "Response time percentiles (p50, p90, p95, p99)"
+          - "Throughput (requests/second)"
+          - "Error rate percentage"
+          - "Resource utilization (CPU, memory, network I/O)"
+          - "Database connection pool usage"
+          - "Cache hit/miss ratios"
+    enhancement_estimate:
+      development_hours: 30
+      testing_hours: 12
+      footprint_kb: 80
+      phase: "CORTEX 4.0 Phase 2"
+    success_criteria:
+      - "Auto-generate performance tests for 95% of REST APIs"
+      - "Detect 90%+ of performance regressions (>20% degradation)"
+      - "Sub-5min test execution for standard load profiles"
+      - "Integration with 3+ major APM platforms"
+    recommendation: "cortex_4_0_phase_2_feature"
     
   - id: "mobile_testing"
     name: "Mobile Testing"
@@ -382,16 +464,67 @@ capabilities:
     footprint_impact: "large"
     priority: "medium"
     readiness: 0
+    cortex_version: "4.0"
+    target_release: "Q3 2026"
     requirements:
       - "Appium integration"
       - "Cross-platform support (iOS/Android)"
       - "Selector generation and stability"
       - "Visual regression testing"
       - "Device farm integration"
+    cortex_4_0_enhancements:
+      mobile_app_testing:
+        frameworks:
+          - "Appium (cross-platform iOS/Android automation)"
+          - "XCUITest (native iOS testing)"
+          - "Espresso (native Android testing)"
+          - "Detox (React Native testing)"
+        platforms:
+          - "iOS (iPhone, iPad - simulators + real devices)"
+          - "Android (phones, tablets - emulators + real devices)"
+        features:
+          - "Element discovery (accessibility IDs, XPath, coordinates)"
+          - "Gesture simulation (tap, swipe, pinch, rotate)"
+          - "Native UI interaction (alerts, pickers, keyboards)"
+          - "Cross-platform selector strategy (shared test code)"
+          - "Visual regression testing (screenshot comparison)"
+          - "Network mocking and stubbing"
+          - "App state management (fresh install, logged in, etc.)"
+          - "Performance metrics (app launch time, memory usage)"
+        workflow:
+          - "Analyze app screens → Discover elements"
+          - "Generate test scenarios → User flows (login, checkout, etc.)"
+          - "Create selectors → Stable element identification"
+          - "Execute tests → Parallel execution on device farm"
+          - "Capture results → Screenshots, videos, logs"
+          - "Visual regression → Compare screenshots with baseline"
+        device_farm_integration:
+          - "AWS Device Farm (cloud-based real devices)"
+          - "BrowserStack App Automate (1000+ devices)"
+          - "Sauce Labs (real device cloud)"
+          - "Local device management (via Appium Desktop)"
+        selector_stability:
+          - "Prefer accessibility IDs over XPath"
+          - "Fallback strategy (ID → accessibility label → XPath)"
+          - "Auto-heal selectors when elements change"
+        test_types:
+          - "Functional testing (UI interactions)"
+          - "Regression testing (existing flows)"
+          - "Visual regression (screenshot comparison)"
+          - "Performance testing (launch time, memory leaks)"
+          - "Accessibility testing (screen reader compatibility)"
     enhancement_estimate:
-      development_hours: 40
-      testing_hours: 20
-      footprint_kb: 150
+      development_hours: 80
+      testing_hours: 40
+      footprint_kb: 250
+      phase: "CORTEX 4.0 Phase 3"
+    success_criteria:
+      - "Cross-platform test execution (iOS + Android from single codebase)"
+      - "95%+ selector stability (auto-heal on element changes)"
+      - "Device farm integration with 3+ major providers"
+      - "Visual regression detection with <5% false positive rate"
+      - "Sub-10min test suite execution on device farm"
+    recommendation: "cortex_4_0_phase_3_feature"
     plugin: "mobile_testing_plugin"
     recommendation: "phase_2_candidate"
     
@@ -469,17 +602,69 @@ capabilities:
     footprint_impact: "large"
     priority: "low"
     readiness: 0
+    cortex_version: "4.0"
+    target_release: "Q3 2026"
     requirements:
       - "Figma API integration"
       - "Design token extraction"
       - "Component generation (React/Vue/Angular)"
       - "Responsive layout generation"
       - "Style system generation"
+    cortex_4_0_enhancements:
+      figma_ui_generation:
+        figma_integration:
+          - "Figma REST API authentication (OAuth 2.0)"
+          - "Design file parsing (frames, components, variants)"
+          - "Asset export (SVG, PNG for icons/images)"
+          - "Plugin integration (direct Figma plugin for CORTEX)"
+        design_token_extraction:
+          - "Color palette extraction (CSS variables, Sass, Tailwind)"
+          - "Typography system (font families, sizes, weights, line heights)"
+          - "Spacing scale (margins, paddings, gaps)"
+          - "Border radius, shadows, opacity values"
+          - "Breakpoints for responsive design"
+        component_generation:
+          frameworks:
+            - "React (TypeScript + styled-components/Emotion/Tailwind)"
+            - "Vue 3 (Composition API + Sass/Tailwind)"
+            - "Angular (TypeScript + Angular Material)"
+            - "Svelte (Svelte + Tailwind)"
+          features:
+            - "Component structure from Figma components"
+            - "Props generation from Figma variants"
+            - "Event handlers (onClick, onChange, etc.)"
+            - "Accessibility attributes (ARIA labels, roles)"
+            - "Responsive layout (CSS Grid, Flexbox)"
+            - "Dark mode support (CSS variables)"
+        workflow:
+          - "Connect to Figma → Authenticate via OAuth"
+          - "Select design file → Choose frames/components"
+          - "Extract design tokens → Generate theme files"
+          - "Generate components → Choose framework (React/Vue/Angular)"
+          - "Apply styling → Styled-components or Tailwind"
+          - "Export code → TypeScript + tests"
+        style_system_generation:
+          - "CSS-in-JS theme objects (styled-components, Emotion)"
+          - "Tailwind config generation (colors, spacing, typography)"
+          - "CSS variable files for vanilla CSS"
+          - "Sass variable files with mixins"
+        quality_assurance:
+          - "Visual regression testing (Figma design vs generated component)"
+          - "Accessibility compliance (WCAG 2.1 AA)"
+          - "Component story generation (Storybook)"
+          - "Responsive preview (mobile, tablet, desktop)"
     enhancement_estimate:
-      development_hours: 60
-      testing_hours: 20
-      footprint_kb: 200
-    recommendation: "phase_3_if_demand"
+      development_hours: 100
+      testing_hours: 40
+      footprint_kb: 300
+      phase: "CORTEX 4.0 Phase 4"
+    success_criteria:
+      - "95%+ visual accuracy (Figma design vs generated component)"
+      - "Support for 3+ major frameworks (React, Vue, Angular)"
+      - "Automatic design token extraction with zero manual config"
+      - "WCAG 2.1 AA compliance for generated components"
+      - "Storybook story generation for all components"
+    recommendation: "cortex_4_0_phase_4_feature"
     
   - id: "ui_from_server_spec"
     name: "UI from Server Spec"
@@ -523,6 +708,89 @@ capabilities:
       testing_hours: 20
       footprint_kb: 180
     recommendation: "phase_3_if_demand"
+    
+  - id: "community_feedback_aggregation"
+    name: "Community Feedback Aggregation"
+    status: "partial"
+    can_do: true
+    enhancement_needed: "moderate"
+    footprint_impact: "medium"
+    priority: "high"
+    readiness: 40
+    cortex_version: "4.0"
+    target_release: "Q1 2026"
+    current_capabilities:
+      - "Feedback collection via GitHub Gists (TDD workflow)"
+      - "Markdown feedback reports with timing data"
+      - "Local feedback session storage (Tier 2 database)"
+    missing_features:
+      - "Cross-user feedback aggregation"
+      - "Community pattern sharing"
+      - "Anonymized metrics collection"
+      - "Feedback analytics dashboard"
+      - "Trend detection across projects"
+    cortex_4_0_enhancements:
+      community_feedback_system:
+        collection:
+          - "Automatic feedback capture after TDD GREEN phase"
+          - "Manual feedback submission (via 'feedback' command)"
+          - "Performance metrics (timing data from debug sessions)"
+          - "Code smell detection results"
+          - "Refactoring suggestions with confidence scores"
+          - "User satisfaction ratings (1-5 stars)"
+        aggregation:
+          - "Centralized feedback repository (GitHub repo or cloud storage)"
+          - "Anonymization layer (strip PII, repo-specific data)"
+          - "Cross-project pattern aggregation"
+          - "Statistical analysis (mean, median, p95 for metrics)"
+          - "Trend detection (performance improvements over time)"
+        analytics:
+          - "Community dashboard (aggregate metrics across all users)"
+          - "Pattern popularity ranking (most-used patterns)"
+          - "Success rate tracking (TDD pass rates, refactor effectiveness)"
+          - "Performance benchmarks (average timing by operation type)"
+          - "Code smell frequency analysis"
+        privacy:
+          - "Opt-in participation (default: local-only feedback)"
+          - "Anonymization of all submitted data"
+          - "No PII collection (no usernames, emails, repo names)"
+          - "Encrypted transmission (HTTPS + signed payloads)"
+          - "User control (view, edit, delete submitted feedback)"
+        sharing:
+          - "Pattern library (community-curated successful patterns)"
+          - "Best practices repository (data-driven recommendations)"
+          - "Performance optimization tips (from aggregate metrics)"
+          - "Code smell remediation strategies (proven effective)"
+        workflow:
+          - "User completes TDD workflow → Feedback auto-captured"
+          - "User opts in → Anonymized feedback uploaded to central repo"
+          - "System aggregates → Statistical analysis across all users"
+          - "Community dashboard → Visualizations and insights"
+          - "CORTEX downloads → Updated patterns and recommendations"
+        integration:
+          - "GitHub Gists (current implementation - enhanced)"
+          - "GitHub Discussions (community Q&A)"
+          - "Dedicated feedback API (REST endpoint for submissions)"
+          - "Elasticsearch (for fast analytics queries)"
+        metrics_collected:
+          - "TDD phase completion times (RED, GREEN, REFACTOR)"
+          - "Test pass rates (first run, after debug)"
+          - "Code smell detection confidence scores"
+          - "Refactoring effectiveness (performance improvements)"
+          - "Pattern usage frequency"
+          - "User satisfaction ratings"
+    enhancement_estimate:
+      development_hours: 50
+      testing_hours: 20
+      footprint_kb: 150
+      phase: "CORTEX 4.0 Phase 1"
+    success_criteria:
+      - "100% anonymization (zero PII leaks)"
+      - "Opt-in participation with >20% adoption rate"
+      - "Community dashboard with real-time metrics"
+      - "Pattern library with 50+ community-curated patterns"
+      - "Trend detection with 90%+ accuracy"
+    recommendation: "cortex_4_0_phase_1_priority_feature"
 
 # Prioritization matrix
 prioritization:
@@ -531,6 +799,7 @@ prioritization:
     - "code_rewrite"
     - "backend_testing"
     - "code_documentation"
+    - "community_feedback_aggregation"
   enhance_high_value:
     - "code_review"
     - "web_testing"
@@ -542,53 +811,128 @@ prioritization:
   phase_3_if_demand:
     - "ui_from_figma"
     - "ab_testing"
+  cortex_4_0_priorities:
+    phase_1:
+      - "community_feedback_aggregation"
+      - "code_review"
+    phase_2:
+      - "backend_testing (performance testing)"
+    phase_3:
+      - "mobile_testing"
+    phase_4:
+      - "ui_from_figma"
 
 # Implementation roadmap
 roadmap:
-  phase_1:
-    duration_weeks: 2
-    capabilities:
-      - id: "code_review"
-        tasks:
-          - "Implement PR review plugin"
-          - "Add Azure DevOps API integration"
-          - "Add security scanning"
-          - "Add pattern violation checks"
-      - id: "web_testing"
-        tasks:
-          - "Add Lighthouse integration"
-          - "Add axe-core accessibility"
-          - "Add Core Web Vitals monitoring"
-    estimated_hours: 30
-    
-  phase_2:
-    duration_weeks: 4
-    capabilities:
-      - id: "mobile_testing"
-        tasks:
-          - "Appium integration"
-          - "Selector generation"
-          - "Visual regression"
-          - "Device farm setup"
-      - id: "reverse_engineering"
-        tasks:
-          - "Complexity analysis"
-          - "Technical debt detection"
-          - "Diagram generation"
-    estimated_hours: 80
-    
-  phase_3:
-    duration_weeks: 8
-    condition: "market_demand_validated"
-    capabilities:
-      - id: "ui_from_figma"
-        tasks:
-          - "Figma API integration"
-          - "Component generation"
-          - "Style system generation"
-      - id: "ab_testing"
-        tasks:
-          - "Feature flag integration"
-          - "Statistical analysis"
-          - "Reporting dashboard"
-    estimated_hours: 150
+  cortex_4_0:
+    phase_1:
+      duration_weeks: 6
+      priority: "high"
+      capabilities:
+        - id: "community_feedback_aggregation"
+          tasks:
+            - "Design anonymization layer"
+            - "Implement centralized feedback repository"
+            - "Build community dashboard"
+            - "Create pattern library"
+            - "Add opt-in consent UI"
+        - id: "code_review"
+          tasks:
+            - "Implement PR review plugin"
+            - "Add Azure DevOps API integration"
+            - "Add GitHub Actions integration"
+            - "Add GitLab CI integration"
+            - "Add security scanning"
+            - "Add pattern violation checks"
+      estimated_hours: 90
+      
+    phase_2:
+      duration_weeks: 4
+      priority: "medium"
+      capabilities:
+        - id: "backend_testing"
+          tasks:
+            - "Integrate Locust for load testing"
+            - "Add k6 for performance testing"
+            - "Implement APM integration (New Relic, DataDog)"
+            - "Build performance regression detection"
+            - "Add bottleneck identification"
+      estimated_hours: 42
+      
+    phase_3:
+      duration_weeks: 8
+      priority: "medium"
+      capabilities:
+        - id: "mobile_testing"
+          tasks:
+            - "Appium integration"
+            - "XCUITest integration (iOS)"
+            - "Espresso integration (Android)"
+            - "Selector generation and auto-heal"
+            - "Visual regression testing"
+            - "Device farm setup (AWS, BrowserStack)"
+      estimated_hours: 120
+      
+    phase_4:
+      duration_weeks: 10
+      priority: "low"
+      condition: "market_demand_validated"
+      capabilities:
+        - id: "ui_from_figma"
+          tasks:
+            - "Figma API integration with OAuth"
+            - "Design token extraction"
+            - "Component generation (React/Vue/Angular)"
+            - "Style system generation"
+            - "Visual regression testing"
+            - "Storybook story generation"
+      estimated_hours: 140
+      
+  legacy_roadmap:
+    phase_1:
+      duration_weeks: 2
+      capabilities:
+        - id: "code_review"
+          tasks:
+            - "Implement PR review plugin"
+            - "Add Azure DevOps API integration"
+            - "Add security scanning"
+            - "Add pattern violation checks"
+        - id: "web_testing"
+          tasks:
+            - "Add Lighthouse integration"
+            - "Add axe-core accessibility"
+            - "Add Core Web Vitals monitoring"
+      estimated_hours: 30
+      
+    phase_2:
+      duration_weeks: 4
+      capabilities:
+        - id: "mobile_testing"
+          tasks:
+            - "Appium integration"
+            - "Selector generation"
+            - "Visual regression"
+            - "Device farm setup"
+        - id: "reverse_engineering"
+          tasks:
+            - "Complexity analysis"
+            - "Technical debt detection"
+            - "Diagram generation"
+      estimated_hours: 80
+      
+    phase_3:
+      duration_weeks: 8
+      condition: "market_demand_validated"
+      capabilities:
+        - id: "ui_from_figma"
+          tasks:
+            - "Figma API integration"
+            - "Component generation"
+            - "Style system generation"
+        - id: "ab_testing"
+          tasks:
+            - "Feature flag integration"
+            - "Statistical analysis"
+            - "Reporting dashboard"
+      estimated_hours: 150
