@@ -60,7 +60,8 @@ class CortexEntry:
             self._register_core_orchestrators()
         
         # Initialize state database
-        self.state_db = PlanningStateDB()
+        db_path = str(self.brain_path / "state" / "planning.db")
+        self.state_db = PlanningStateDB(db_path=db_path)
         
         # Initialize master orchestrator
         master_config = str(self.brain_path / "config" / "master-orchestrator.yaml")
