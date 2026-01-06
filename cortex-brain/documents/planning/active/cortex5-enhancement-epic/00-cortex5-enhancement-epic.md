@@ -239,7 +239,7 @@ Created missing infrastructure:
 | **Unit Tests** | 43 | 40+ | 46 | ~40 | ~169 |
 | **Files Created** | 12 | 20+ | 6 | ~8 | ~46 |
 | **Stubs Replaced** | 0 | 9 | 6 | 0 | 15 |
-| **Commits** | 21a59ae28 | 4ae91c241 | a1d7701bd | TBD | 3 |
+| **Commits** | 21a59ae28 | 4ae91c241, 18ac9d599 | 4b95d6489, 47e0625d2, a1d7701bd, 3147bfb29 | TBD | 7 |
 
 **Epic Completion:** ~60% (3 of 5 phases)
 
@@ -328,7 +328,83 @@ Created missing infrastructure:
 
 ---
 
-**Next Action:** Execute Phase 3 with pre-flight checklist
+## 📊 Plan Viewer Maintenance
+
+**Location:** `tracking/plan-viewer.html`
+
+### Update Protocol
+
+**MANDATORY after each phase milestone:**
+
+1. **Update Progress Metrics** (lines 175-195):
+   - `overallProgress` percentage (JavaScript: line 175)
+   - `progressBar` width and text (lines 180-183)
+   - Total metrics: `totalLines`, `totalTests`, `totalFiles`, `totalCommits` (lines 185-195)
+
+2. **Update Phase Cards** (lines 200-450):
+   - Change phase status class: `pending` → `in-progress` → `complete`
+   - Update phase icon: `⏳` → `🔄` → `✅`
+   - Update status badge: `status-pending` → `status-progress` → `status-complete`
+   - Add actual metrics when phase completes
+   - Move deliverables from `pending` to confirmed
+   - Add commit badges with actual commit hashes
+
+3. **Update Timeline** (lines 500-550):
+   - Add milestone completion dates
+   - Change timeline item class: `pending` → current → `complete`
+   - Update timeline content with actual numbers
+
+4. **Update Last Modified** (line 635):
+   - Auto-updates via JavaScript on page load
+   - Verify date reflects recent commit
+
+### Quick Update Commands
+
+**After Phase 4 Completion:**
+```bash
+# Update progress to 80%
+sed -i '' 's/60%/80%/g' tracking/plan-viewer.html
+sed -i '' 's/width: 60%/width: 80%/' tracking/plan-viewer.html
+sed -i '' 's/3 of 5 Phases/4 of 5 Phases/' tracking/plan-viewer.html
+
+# Update Phase 4 card status
+sed -i '' 's/phase-card in-progress/phase-card complete/' tracking/plan-viewer.html
+# (line for Phase 4 card)
+
+# Add Phase 4 commit badge
+# (manually add commit hash after completion)
+```
+
+**After Phase 5 Completion:**
+```bash
+# Update to 100%
+sed -i '' 's/80%/100%/g' tracking/plan-viewer.html
+sed -i '' 's/width: 80%/width: 100%/' tracking/plan-viewer.html
+sed -i '' 's/4 of 5 Phases/5 of 5 Phases - Epic Complete/' tracking/plan-viewer.html
+```
+
+### Validation Checklist
+
+Before committing plan-viewer.html updates:
+- [ ] Progress percentage matches epic completion
+- [ ] All completed phases show green ✅ icons
+- [ ] Metrics (lines, tests, files) match epic totals
+- [ ] Commit badges match actual git commits
+- [ ] Timeline reflects accurate dates
+- [ ] Browser preview shows correct status
+- [ ] No JavaScript console errors
+
+### Automation Opportunity
+
+**Future Enhancement:** Create `update-plan-viewer.py` script that:
+1. Reads epic markdown for phase status
+2. Extracts metrics from progress table
+3. Updates HTML automatically via template substitution
+4. Validates HTML structure integrity
+
+---
+
+**Next Action:** Execute Phase 4 with pre-flight checklist
 
 **Author:** Asif Hussain  
 **Copyright:** © 2025-2026 Asif Hussain. All rights reserved.
