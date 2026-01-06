@@ -461,6 +461,19 @@ class CortexEntry:
             # Route to appropriate agent(s)
             routing_response = self.router.execute(request)
             
+            # P01 FIX: Check if routing indicates planning orchestrator bypass
+            if routing_response.success:
+                # Check metadata from routing response (not result)
+                detection_method = routing_response.metadata.get('classification_metadata', {}).get('detection_method') if routing_response.metadata else None
+                
+                # Also check routing_decision result for classification_metadata
+                if not detection_method and routing_response.result:
+                    detection_method = routing_response.result.get('classification_metadata', {}).get('detection_method')
+                
+                if detection_method == 'planning_orchestrator_routing':
+                    self.logger.info("🛡️ P01: Routing decision indicates Planning Orchestrator - bypassing agents")
+                    return self._execute_orchestrator_directly(request, conversation_id, format_type)
+            
             # Execute the actual agents based on routing decision
             if routing_response.success and routing_response.result:
                 response = self.agent_executor.execute_routing_decision(

@@ -646,20 +646,35 @@ class IntentRouter(BaseAgent):
             'remediation plan', 'generate plan'
         ]
         
+        # Epic continuation keywords (continue with next phase, next epic phase, etc.)
+        epic_continuation_keywords = [
+            'continue with next epic phase',
+            'next epic phase',
+            'continue epic',
+            'resume epic',
+            'continue with phase',
+            'next phase',
+            'proceed with epic'
+        ]
+        
         planning_context_keywords = [
             'architecture', 'threat model', 'security', 'authentication',
             'authorization', 'api', 'integration', 'deployment',
             'migration', 'user story', 'feature request', 'autonomous'
         ]
         
+        # Check for epic continuation (high priority)
+        has_epic_continuation = any(kw in message_lower for kw in epic_continuation_keywords)
+        
         # Check if this is a planning orchestrator request
         has_planning_keyword = any(kw in message_lower for kw in planning_orchestrator_keywords)
         has_planning_context = any(kw in message_lower for kw in planning_context_keywords)
         
-        if has_planning_keyword or (has_planning_context and 'plan' in message_lower):
+        if has_epic_continuation or has_planning_keyword or (has_planning_context and 'plan' in message_lower):
             self.logger.info("🛡️ P01: Detected PLANNING intent → Route to Planning Orchestrator")
             metadata['detection_method'] = 'planning_orchestrator_routing'
             metadata['planning_keywords_matched'] = [kw for kw in planning_orchestrator_keywords if kw in message_lower]
+            metadata['epic_continuation_keywords_matched'] = [kw for kw in epic_continuation_keywords if kw in message_lower]
             metadata['context_keywords_matched'] = [kw for kw in planning_context_keywords if kw in message_lower]
             
             return IntentClassificationResult(

@@ -5,6 +5,8 @@ First orchestrator built on BaseOrchestrator v4.1 with complete Master Orchestra
 integration. Generates structured plans with folder hierarchy, context discovery,
 and database state tracking.
 
+CORTEX v5.0 Epic P03: TodoManager Integration for real-time task tracking.
+
 Author: Asif Hussain
 Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
@@ -43,6 +45,8 @@ from src.orchestrators.planning.acceptance_validator import (
     PhaseNotReadyError,
     PhaseIncompleteError
 )
+# CORTEX v5.0 Epic P03: TodoManager Integration
+from src.orchestrators.master.todo_manager import TodoManager, Task, TaskStatus
 
 
 class PlanningOrchestratorV5(BaseOrchestratorV4_1):
@@ -121,7 +125,11 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
         # Initialize acceptance criteria validator (C50-10: Gap 1 remediation)
         self.acceptance_validator = None  # Initialized per-plan in execute()
         
-        self.logger.info("PlanningOrchestratorV5 initialized with governance + knowledge graph")
+        # Initialize TodoManager for phase tracking (v6 upgrade - P03)
+        plan_root = "tracking"
+        self.todo_manager = TodoManager(plan_dir=plan_root)
+        
+        self.logger.info("PlanningOrchestratorV5 initialized with governance + knowledge graph + TodoManager")
     
     def execute_phase(
         self,
@@ -262,14 +270,35 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
                 except Exception as e:
                     self.logger.warning(f"⚠️  Acceptance validator init failed (non-blocking): {e}")
             
+            # v6 Upgrade (P03): Create phase tasks for tracking
+            phase_tasks = [
+                ("Knowledge Library", "Consult governance and knowledge graph"),
+                ("Context Discovery", "Search workspace for relevant context"),
+                ("Architecture Analysis", "Parse codebase and analyze structure"),
+                ("Plan Generation", "Create structured plan document"),
+                ("Folder Creation", "Create directory structure for plan"),
+                ("Validation", "Validate plan structure and completeness")
+            ]
+            
+            self.phase_task_ids = []
+            for phase_name, phase_desc in phase_tasks:
+                task_id = self.todo_manager.create_task(
+                    title=phase_name,
+                    description=phase_desc
+                )
+                self.phase_task_ids.append(task_id)
+                self.logger.debug(f"Created task {task_id}: {phase_name}")
+            
             # Phase -1: Knowledge Library (Governance Consultation)
             # Execute BEFORE Phase 0 to consult Tier 0/2 governance
+            self.todo_manager.start_task(self.phase_task_ids[0])
             governance_result = self.execute_phase(
                 -1,
                 {'name': 'Knowledge Library', 'description': 'Consult governance and knowledge graph'},
                 feature_name=feature_name,
                 user_request=user_request
             )
+            self.todo_manager.complete_task(self.phase_task_ids[0])
             
             # Check for blocking governance violations
             if governance_result and hasattr(governance_result, 'data'):
@@ -282,42 +311,52 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
                         raise ValueError(f"Governance violations prevent planning: {blocking_violations}")
             
             # Phase 1: Context Discovery
+            self.todo_manager.start_task(self.phase_task_ids[1])
             context_result = self.execute_phase(
                 0,
                 {'name': 'Context Discovery', 'description': 'Search workspace'},
                 feature_name=feature_name,
                 governance_context=governance_result
             )
+            self.todo_manager.complete_task(self.phase_task_ids[1])
             
             # Phase 2: Architecture Analysis
+            self.todo_manager.start_task(self.phase_task_ids[2])
             analysis_result = self.execute_phase(
                 1,
                 {'name': 'Architecture Analysis', 'description': 'Parse codebase'},
                 feature_name=feature_name,
                 context=context_result
             )
+            self.todo_manager.complete_task(self.phase_task_ids[2])
             
             # Phase 3: Plan Generation
+            self.todo_manager.start_task(self.phase_task_ids[3])
             generation_result = self.execute_phase(
                 2,
                 {'name': 'Plan Generation', 'description': 'Create plan document'},
                 feature_name=feature_name,
                 analysis=analysis_result
             )
+            self.todo_manager.complete_task(self.phase_task_ids[3])
             
             # Phase 4: Folder Structure Creation
+            self.todo_manager.start_task(self.phase_task_ids[4])
             folder_result = self.execute_phase(
                 3,
                 {'name': 'Folder Creation', 'description': 'Create directory structure'},
                 feature_name=feature_name
             )
+            self.todo_manager.complete_task(self.phase_task_ids[4])
             
             # Phase 5: Validation
+            self.todo_manager.start_task(self.phase_task_ids[5])
             validation_result = self.execute_phase(
                 4,
                 {'name': 'Validation', 'description': 'Validate plan structure'},
                 feature_name=feature_name
             )
+            self.todo_manager.complete_task(self.phase_task_ids[5])
             
             # Mark plan complete
             self.state_db.update_plan_status(self.plan_id, 'completed')

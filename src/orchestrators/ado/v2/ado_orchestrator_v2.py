@@ -34,6 +34,9 @@ from src.database.planning_state_db import PlanningStateDB
 # Import wizard
 from src.orchestrators.ado.ado_conversational_wizard import ADOConversationalWizard
 
+# Import TodoManager for phase tracking (v3 upgrade - P04)
+from src.orchestrators.master.todo_manager import TodoManager, Task, TaskStatus
+
 # Configure module logger
 logger = logging.getLogger(__name__)
 
@@ -173,7 +176,11 @@ class ADOOrchestratorV2(BaseOrchestratorV4_1):
         # Current phase tracking
         self.current_phase = ADOPhaseV2.DISCOVERY
         
-        logger.info("ADO Orchestrator v2 initialized")
+        # Initialize TodoManager for phase tracking (v3 upgrade - P04)
+        plan_root = "tracking"
+        self.todo_manager = TodoManager(plan_dir=plan_root)
+        
+        logger.info("ADO Orchestrator v2 initialized with TodoManager")
     
     def _get_vision_api(self) -> Optional[Any]:
         """
@@ -341,32 +348,56 @@ class ADOOrchestratorV2(BaseOrchestratorV4_1):
         
         logs.append(f"✅ Created plan in database: {plan_id}")
         
+        # v3 Upgrade (P04): Create phase tasks for tracking
+        phase_tasks = [
+            ("Discovery", "Context gathering and complexity analysis"),
+            ("Validation", "DoR refinement and authentication check"),
+            ("Generation", "Work item hierarchy and story points"),
+            ("Approval", "Template preview and approval gate"),
+            ("Execution", "ADO API batch creation and linking"),
+            ("Completion", "URL generation and progress visualization")
+        ]
+        
+        self.phase_task_ids = []
+        for phase_name, phase_desc in phase_tasks:
+            task_id = self.todo_manager.create_task(
+                title=phase_name,
+                description=phase_desc
+            )
+            self.phase_task_ids.append(task_id)
+            logger.debug(f"Created task {task_id}: {phase_name}")
+        
         try:
             # ===== PHASE 1: DISCOVERY =====
             self._transition_phase(ADOPhaseV2.DISCOVERY, logs)
-            phase_id = self.state_db.start_phase(plan_id, 0, {'name': 'DISCOVERY'})
+            self.todo_manager.start_task(self.phase_task_ids[0])
+            phase_id = self.state_db.start_phase(plan_id=plan_id, phase_number=0, config={'name': 'DISCOVERY'})
             
             discovery_result = self._phase_discovery(feature_name, params)
             logs.extend(discovery_result.get('logs', []))
             warnings.extend(discovery_result.get('warnings', []))
             
-            self.state_db.complete_phase(phase_id, data=discovery_result)
+            self.state_db.complete_phase(phase_id, result=discovery_result)
+            self.todo_manager.complete_task(self.phase_task_ids[0])
             logs.append("✅ Discovery phase complete")
             
             # ===== PHASE 2: VALIDATION =====
             self._transition_phase(ADOPhaseV2.VALIDATION, logs)
-            phase_id = self.state_db.start_phase(plan_id, 1, {'name': 'VALIDATION'})
+            self.todo_manager.start_task(self.phase_task_ids[1])
+            phase_id = self.state_db.start_phase(plan_id=plan_id, phase_number=1, config={'name': 'VALIDATION'})
             
             validation_result = self._phase_validation(feature_name, params)
             logs.extend(validation_result.get('logs', []))
             warnings.extend(validation_result.get('warnings', []))
             
-            self.state_db.complete_phase(phase_id, data=validation_result)
+            self.state_db.complete_phase(phase_id, result=validation_result)
+            self.todo_manager.complete_task(self.phase_task_ids[1])
             logs.append("✅ Validation phase complete")
             
             # ===== PHASE 3: GENERATION =====
             self._transition_phase(ADOPhaseV2.GENERATION, logs)
-            phase_id = self.state_db.start_phase(plan_id, 2, {'name': 'GENERATION'})
+            self.todo_manager.start_task(self.phase_task_ids[2])
+            phase_id = self.state_db.start_phase(plan_id=plan_id, phase_number=2, config={'name': 'GENERATION'})
             
             generation_result = self._phase_generation(
                 feature_name, 
@@ -375,18 +406,21 @@ class ADOOrchestratorV2(BaseOrchestratorV4_1):
             )
             logs.extend(generation_result.get('logs', []))
             
-            self.state_db.complete_phase(phase_id, data=generation_result)
+            self.state_db.complete_phase(phase_id, result=generation_result)
+            self.todo_manager.complete_task(self.phase_task_ids[2])
             logs.append("✅ Generation phase complete")
             
             # ===== PHASE 4: APPROVAL =====
             if not auto_approve:
                 self._transition_phase(ADOPhaseV2.APPROVAL, logs)
-                phase_id = self.state_db.start_phase(plan_id, 3, {'name': 'APPROVAL'})
+                self.todo_manager.start_task(self.phase_task_ids[3])
+                phase_id = self.state_db.start_phase(plan_id=plan_id, phase_number=3, config={'name': 'APPROVAL'})
                 
                 approval_result = self._phase_approval(generation_result)
                 logs.extend(approval_result.get('logs', []))
                 
-                self.state_db.complete_phase(phase_id, data=approval_result)
+                self.state_db.complete_phase(phase_id, result=approval_result)
+                self.todo_manager.complete_task(self.phase_task_ids[3])
                 
                 if not approval_result.get('approved', False):
                     logs.append("⚠️  User did not approve, aborting")
@@ -407,16 +441,21 @@ class ADOOrchestratorV2(BaseOrchestratorV4_1):
             # ===== PHASE 5: EXECUTION =====
             if not test_mode:
                 self._transition_phase(ADOPhaseV2.EXECUTION, logs)
-                phase_id = self.state_db.start_phase(plan_id, 4, {'name': 'EXECUTION'})
+                self.todo_manager.start_task(self.phase_task_ids[4])
+                phase_id = self.state_db.start_phase(plan_id=plan_id, phase_number=4, config={'name': 'EXECUTION'})
                 
                 execution_result = self._phase_execution(generation_result)
                 logs.extend(execution_result.get('logs', []))
                 errors.extend(execution_result.get('errors', []))
                 
-                self.state_db.complete_phase(phase_id, data=execution_result)
+                self.state_db.complete_phase(phase_id, result=execution_result)
+                self.todo_manager.complete_task(self.phase_task_ids[4])
                 logs.append("✅ Execution phase complete")
             else:
                 logs.append("⏩ Execution phase skipped (test_mode=True)")
+                # Still mark task complete even if skipped
+                self.todo_manager.start_task(self.phase_task_ids[4])
+                self.todo_manager.complete_task(self.phase_task_ids[4])
                 execution_result = {
                     'items_created': 0,
                     'work_item_links': []
@@ -424,7 +463,8 @@ class ADOOrchestratorV2(BaseOrchestratorV4_1):
             
             # ===== PHASE 6: COMPLETION =====
             self._transition_phase(ADOPhaseV2.COMPLETION, logs)
-            phase_id = self.state_db.start_phase(plan_id, 5, {'name': 'COMPLETION'})
+            self.todo_manager.start_task(self.phase_task_ids[5])
+            phase_id = self.state_db.start_phase(plan_id=plan_id, phase_number=5, config={'name': 'COMPLETION'})
             
             completion_result = self._phase_completion(
                 feature_name,
@@ -433,8 +473,9 @@ class ADOOrchestratorV2(BaseOrchestratorV4_1):
             )
             logs.extend(completion_result.get('logs', []))
             
-            self.state_db.complete_phase(phase_id, data=completion_result)
+            self.state_db.complete_phase(phase_id, result=completion_result)
             self.state_db.complete_plan(plan_id)
+            self.todo_manager.complete_task(self.phase_task_ids[5])
             logs.append("✅ Completion phase complete")
             
             # Build final result

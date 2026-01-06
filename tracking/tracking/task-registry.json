@@ -1,0 +1,463 @@
+{
+  "version": "1.0.0",
+  "updated_at": "2026-01-06T04:07:08.974874",
+  "task_count": 43,
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Knowledge Library",
+      "description": "Consult governance and knowledge graph",
+      "status": "not-started",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-05T19:29:59.532856",
+      "updated_at": "2026-01-05T19:29:59.532856"
+    },
+    {
+      "id": 2,
+      "title": "Knowledge Library",
+      "description": "Consult governance and knowledge graph",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-05T19:30:23.900326",
+      "updated_at": "2026-01-05T19:30:23.916794",
+      "completed_at": "2026-01-05T19:30:23.916805"
+    },
+    {
+      "id": 3,
+      "title": "Context Discovery",
+      "description": "Search workspace for relevant context",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-05T19:30:23.900652",
+      "updated_at": "2026-01-05T19:30:42.577619",
+      "completed_at": "2026-01-05T19:30:42.577629"
+    },
+    {
+      "id": 4,
+      "title": "Architecture Analysis",
+      "description": "Parse codebase and analyze structure",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-05T19:30:23.900868",
+      "updated_at": "2026-01-05T19:30:42.586676",
+      "completed_at": "2026-01-05T19:30:42.586685"
+    },
+    {
+      "id": 5,
+      "title": "Plan Generation",
+      "description": "Create structured plan document",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-05T19:30:23.901078",
+      "updated_at": "2026-01-05T19:30:42.595519",
+      "completed_at": "2026-01-05T19:30:42.595529"
+    },
+    {
+      "id": 6,
+      "title": "Folder Creation",
+      "description": "Create directory structure for plan",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-05T19:30:23.901283",
+      "updated_at": "2026-01-05T19:30:42.611619",
+      "completed_at": "2026-01-05T19:30:42.611634"
+    },
+    {
+      "id": 7,
+      "title": "Validation",
+      "description": "Validate plan structure and completeness",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-05T19:30:23.901547",
+      "updated_at": "2026-01-05T19:30:42.623036",
+      "completed_at": "2026-01-05T19:30:42.623052"
+    },
+    {
+      "id": 8,
+      "title": "Discovery",
+      "description": "Context gathering and complexity analysis",
+      "status": "in-progress",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-05T19:36:35.545805",
+      "updated_at": "2026-01-05T19:36:35.547494"
+    },
+    {
+      "id": 9,
+      "title": "Validation",
+      "description": "DoR refinement and authentication check",
+      "status": "not-started",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-05T19:36:35.546140",
+      "updated_at": "2026-01-05T19:36:35.546140"
+    },
+    {
+      "id": 10,
+      "title": "Generation",
+      "description": "Work item hierarchy and story points",
+      "status": "not-started",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-05T19:36:35.546389",
+      "updated_at": "2026-01-05T19:36:35.546389"
+    },
+    {
+      "id": 11,
+      "title": "Approval",
+      "description": "Template preview and approval gate",
+      "status": "not-started",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-05T19:36:35.546637",
+      "updated_at": "2026-01-05T19:36:35.546637"
+    },
+    {
+      "id": 12,
+      "title": "Execution",
+      "description": "ADO API batch creation and linking",
+      "status": "not-started",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-05T19:36:35.546923",
+      "updated_at": "2026-01-05T19:36:35.546923"
+    },
+    {
+      "id": 13,
+      "title": "Completion",
+      "description": "URL generation and progress visualization",
+      "status": "not-started",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-05T19:36:35.547182",
+      "updated_at": "2026-01-05T19:36:35.547182"
+    },
+    {
+      "id": 14,
+      "title": "Discovery",
+      "description": "Context gathering and complexity analysis",
+      "status": "in-progress",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-05T19:38:05.410275",
+      "updated_at": "2026-01-05T19:38:05.412426"
+    },
+    {
+      "id": 15,
+      "title": "Validation",
+      "description": "DoR refinement and authentication check",
+      "status": "not-started",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-05T19:38:05.410711",
+      "updated_at": "2026-01-05T19:38:05.410711"
+    },
+    {
+      "id": 16,
+      "title": "Generation",
+      "description": "Work item hierarchy and story points",
+      "status": "not-started",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-05T19:38:05.411043",
+      "updated_at": "2026-01-05T19:38:05.411043"
+    },
+    {
+      "id": 17,
+      "title": "Approval",
+      "description": "Template preview and approval gate",
+      "status": "not-started",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-05T19:38:05.411406",
+      "updated_at": "2026-01-05T19:38:05.411406"
+    },
+    {
+      "id": 18,
+      "title": "Execution",
+      "description": "ADO API batch creation and linking",
+      "status": "not-started",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-05T19:38:05.411727",
+      "updated_at": "2026-01-05T19:38:05.411727"
+    },
+    {
+      "id": 19,
+      "title": "Completion",
+      "description": "URL generation and progress visualization",
+      "status": "not-started",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-05T19:38:05.412061",
+      "updated_at": "2026-01-05T19:38:05.412061"
+    },
+    {
+      "id": 20,
+      "title": "Discovery",
+      "description": "Context gathering and complexity analysis",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-05T19:38:48.706293",
+      "updated_at": "2026-01-05T19:38:48.709364",
+      "completed_at": "2026-01-05T19:38:48.709365"
+    },
+    {
+      "id": 21,
+      "title": "Validation",
+      "description": "DoR refinement and authentication check",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-05T19:38:48.706776",
+      "updated_at": "2026-01-05T19:38:48.710226",
+      "completed_at": "2026-01-05T19:38:48.710227"
+    },
+    {
+      "id": 22,
+      "title": "Generation",
+      "description": "Work item hierarchy and story points",
+      "status": "in-progress",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-05T19:38:48.707235",
+      "updated_at": "2026-01-05T19:38:48.710721"
+    },
+    {
+      "id": 23,
+      "title": "Approval",
+      "description": "Template preview and approval gate",
+      "status": "not-started",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-05T19:38:48.707632",
+      "updated_at": "2026-01-05T19:38:48.707632"
+    },
+    {
+      "id": 24,
+      "title": "Execution",
+      "description": "ADO API batch creation and linking",
+      "status": "not-started",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-05T19:38:48.708043",
+      "updated_at": "2026-01-05T19:38:48.708043"
+    },
+    {
+      "id": 25,
+      "title": "Completion",
+      "description": "URL generation and progress visualization",
+      "status": "not-started",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-05T19:38:48.708442",
+      "updated_at": "2026-01-05T19:38:48.708442"
+    },
+    {
+      "id": 26,
+      "title": "Knowledge Library",
+      "description": "Consult governance and knowledge graph",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T04:02:35.041623",
+      "updated_at": "2026-01-06T04:02:35.063147",
+      "completed_at": "2026-01-06T04:02:35.063161"
+    },
+    {
+      "id": 27,
+      "title": "Context Discovery",
+      "description": "Search workspace for relevant context",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T04:02:35.042380",
+      "updated_at": "2026-01-06T04:02:54.017489",
+      "completed_at": "2026-01-06T04:02:54.017502"
+    },
+    {
+      "id": 28,
+      "title": "Architecture Analysis",
+      "description": "Parse codebase and analyze structure",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T04:02:35.042976",
+      "updated_at": "2026-01-06T04:02:54.027597",
+      "completed_at": "2026-01-06T04:02:54.027605"
+    },
+    {
+      "id": 29,
+      "title": "Plan Generation",
+      "description": "Create structured plan document",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T04:02:35.043499",
+      "updated_at": "2026-01-06T04:02:54.037016",
+      "completed_at": "2026-01-06T04:02:54.037025"
+    },
+    {
+      "id": 30,
+      "title": "Folder Creation",
+      "description": "Create directory structure for plan",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T04:02:35.044025",
+      "updated_at": "2026-01-06T04:02:54.057494",
+      "completed_at": "2026-01-06T04:02:54.057512"
+    },
+    {
+      "id": 31,
+      "title": "Validation",
+      "description": "Validate plan structure and completeness",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T04:02:35.044537",
+      "updated_at": "2026-01-06T04:02:54.070603",
+      "completed_at": "2026-01-06T04:02:54.070620"
+    },
+    {
+      "id": 32,
+      "title": "Knowledge Library",
+      "description": "Consult governance and knowledge graph",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T04:04:31.076879",
+      "updated_at": "2026-01-06T04:04:31.095439",
+      "completed_at": "2026-01-06T04:04:31.095451"
+    },
+    {
+      "id": 33,
+      "title": "Context Discovery",
+      "description": "Search workspace for relevant context",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T04:04:31.077553",
+      "updated_at": "2026-01-06T04:04:50.015104",
+      "completed_at": "2026-01-06T04:04:50.015115"
+    },
+    {
+      "id": 34,
+      "title": "Architecture Analysis",
+      "description": "Parse codebase and analyze structure",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T04:04:31.078098",
+      "updated_at": "2026-01-06T04:04:50.024771",
+      "completed_at": "2026-01-06T04:04:50.024780"
+    },
+    {
+      "id": 35,
+      "title": "Plan Generation",
+      "description": "Create structured plan document",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T04:04:31.078665",
+      "updated_at": "2026-01-06T04:04:50.034773",
+      "completed_at": "2026-01-06T04:04:50.034781"
+    },
+    {
+      "id": 36,
+      "title": "Folder Creation",
+      "description": "Create directory structure for plan",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T04:04:31.079188",
+      "updated_at": "2026-01-06T04:04:50.051717",
+      "completed_at": "2026-01-06T04:04:50.051730"
+    },
+    {
+      "id": 37,
+      "title": "Validation",
+      "description": "Validate plan structure and completeness",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T04:04:31.079704",
+      "updated_at": "2026-01-06T04:04:50.064069",
+      "completed_at": "2026-01-06T04:04:50.064092"
+    },
+    {
+      "id": 38,
+      "title": "Knowledge Library",
+      "description": "Consult governance and knowledge graph",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T04:06:49.628307",
+      "updated_at": "2026-01-06T04:06:49.649163",
+      "completed_at": "2026-01-06T04:06:49.649173"
+    },
+    {
+      "id": 39,
+      "title": "Context Discovery",
+      "description": "Search workspace for relevant context",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T04:06:49.629084",
+      "updated_at": "2026-01-06T04:07:08.923018",
+      "completed_at": "2026-01-06T04:07:08.923031"
+    },
+    {
+      "id": 40,
+      "title": "Architecture Analysis",
+      "description": "Parse codebase and analyze structure",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T04:06:49.629715",
+      "updated_at": "2026-01-06T04:07:08.932876",
+      "completed_at": "2026-01-06T04:07:08.932885"
+    },
+    {
+      "id": 41,
+      "title": "Plan Generation",
+      "description": "Create structured plan document",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T04:06:49.630403",
+      "updated_at": "2026-01-06T04:07:08.942420",
+      "completed_at": "2026-01-06T04:07:08.942430"
+    },
+    {
+      "id": 42,
+      "title": "Folder Creation",
+      "description": "Create directory structure for plan",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T04:06:49.631115",
+      "updated_at": "2026-01-06T04:07:08.961369",
+      "completed_at": "2026-01-06T04:07:08.961385"
+    },
+    {
+      "id": 43,
+      "title": "Validation",
+      "description": "Validate plan structure and completeness",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T04:06:49.631902",
+      "updated_at": "2026-01-06T04:07:08.974848",
+      "completed_at": "2026-01-06T04:07:08.974863"
+    }
+  ]
+}
