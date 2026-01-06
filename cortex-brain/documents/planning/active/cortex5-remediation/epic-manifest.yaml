@@ -1,19 +1,43 @@
 # CORTEX v5.0 Remediation Epic - Python-Based Autonomous Orchestrator Manifest
-# Version: 6.0.0 | Created: January 5, 2026 | Author: Asif Hussain
+# Version: 6.1.0 | Created: January 5, 2026 | Updated: January 6, 2026 | Author: Asif Hussain
 # Architecture: 100% Python autonomous execution via terminal invocation
+# Changelog: v6.1.0 - Added P14-P17 (verification gates, audit logging, plugins, risk mitigation)
 
 epic_metadata:
   epic_id: cortex5-remediation
   epic_name: "CORTEX 5.0 Architecture Enhancement & Remediation"
-  version: "6.0.0"
+  version: "6.1.0"
   created: "2026-01-05"
+  updated: "2026-01-06"
   author: "Asif Hussain"
   status: planning
   execution_mode: autonomous_python
   
+  # Version History
+  version_history:
+    - version: "6.1.0"
+      date: "2026-01-06"
+      changes:
+        - "Added Phase P14: Sequential Verification Gate System (2 days, P0_CRITICAL)"
+        - "Added Phase P15: Enterprise Audit Logger Integration (3 days, P0_CRITICAL)"
+        - "Added Phase P16: Plugin-Based Governance Architecture (5 days, P1_HIGH)"
+        - "Added Phase P17: Risk Mitigation Implementation (2 days, P0_CRITICAL)"
+        - "Updated dependencies: P05-P13 now depend on P17 completion"
+        - "Total phase count: 14 → 18 phases"
+        - "Total duration: 8-9 weeks → 10-11 weeks"
+      rationale: "Holistic Design Review identified 4 critical gaps preventing maximum autonomous execution efficiency"
+    
+    - version: "6.0.0"
+      date: "2026-01-05"
+      changes:
+        - "Initial epic structure with 14 phases"
+        - "Database schema consolidation (P00)"
+        - "Master orchestrator integration (P01-P04)"
+        - "Orchestrator upgrades (P05-P13)"
+  
   # Epic Objectives
   objectives:
-    primary: "Complete CORTEX 5.0 transition to Python-based autonomous orchestrators"
+    primary: "Complete CORTEX 5.0 transition to Python-based autonomous orchestrators with maximum efficiency"
     secondary:
       - "Eliminate all markdown-based workflow execution"
       - "Implement Master Orchestrator task tracking system"
@@ -22,8 +46,12 @@ epic_metadata:
       - "Fix 6 orchestrator instantiation failures (P0 blocker)"
       - "Verify ResponseRenderer renders to user (continuation prompt issue)"
       - "Verify SKULL middleware invokes during execution (setup/teardown hooks)"
+      - "🆕 Implement sequential verification gates (P14)"
+      - "🆕 Integrate enterprise audit logging (P15)"
+      - "🆕 Enable plugin-based governance extensibility (P16)"
+      - "🆕 Mitigate 13 critical risks (P17)"
   
-  # Success Criteria (Enhanced with Investigation Findings)
+  # Success Criteria (Enhanced with Investigation Findings + New Phases)
   success_criteria:
     functional:
       - "All orchestrators execute via python3 -m src.main invocation"
@@ -32,18 +60,32 @@ epic_metadata:
       - "ResponseRenderer confirmed rendering to user (continuation prompts display)"
       - "SKULL middleware invoked on all executions (SetupVerifier, GovernanceCheckpoint, TeardownRefactor)"
       - "Zero markdown files used for workflow execution"
+      - "🆕 Verification gates enforce dependency validation before phase start (P14)"
+      - "🆕 All orchestrators log audit events with decision capture (P15)"
+      - "🆕 Governance rules add via plugins without code changes (P16)"
+      - "🆕 4 critical risks mitigated (atomic migrations, thread-safe tasks, lazy loading, renderer retry) (P17)"
     
     architectural:
       - "Database schemas consolidated (zero schema mismatch errors)"
       - "Knowledge graph queries work (tier2_patterns vs patterns resolved)"
       - "User profile operations work (response_detail column exists)"
       - "Duplicate databases eliminated (knowledge-graph.db vs knowledge_graph.db)"
+      - "🆕 Plugin architecture supports dynamic governance rule injection"
+      - "🆕 Extensibility framework prevents architecture churn from late realizations"
     
     integration:
       - "Plan viewers auto-refresh with progress updates"
       - "All phases tracked in JSON with real-time updates"
       - "manage_todo_list used consistently across all orchestrators"
       - "Governance rules from brain-protection-rules.yaml enforced at runtime"
+      - "🆕 Audit logs integrated with verification gates for phase validation"
+      - "🆕 Vision API enforcement plugin demonstrates governance extensibility"
+    
+    efficiency:
+      - "🆕 Phase-to-phase transitions require explicit verification and approval"
+      - "🆕 Audit logs provide 'why did this happen' traceability"
+      - "🆕 Governance rule addition time reduced from 3-5 days to 2-4 hours (90% reduction)"
+      - "🆕 Risk mitigation prevents production failures and expensive rework"
 
 # Python Orchestrator Architecture
 orchestrator_architecture:
@@ -532,6 +574,458 @@ phases:
       - "Task-tracked operations"
     dependencies: ["P00", "P01"]
     
+  # ============================================================================
+  # NEW PHASES: P14-P17 - Critical Infrastructure Enhancements
+  # Added: 2026-01-06 per Holistic Design Review
+  # Total Duration: 12 days
+  # ============================================================================
+  
+  - phase_id: "P14"
+    name: "Sequential Verification Gate System"
+    type: autonomous_python
+    script: "scripts/phase_14_verification_gates.py"
+    duration: "2 days"
+    priority: P0_CRITICAL
+    status: planning
+    description: "Implement phase-to-phase verification gates with dependency validation and acceptance criteria checks"
+    
+    # Why Critical
+    justification: "Prevents blind phase execution that could cascade failures. Without verification gates, phases P05-P13 could execute even if dependencies fail validation, creating technical debt and requiring expensive rework."
+    
+    # Sub-phases
+    sub_phases:
+      - "P14.1: PhaseExecutor with Pre/Post Verification (8h)"
+      - "P14.2: Dependency Acceptance Criteria Validator (6h)"
+      - "P14.3: Auto-Approval vs Manual-Approval Logic (4h)"
+      - "P14.4: Integration Testing & Documentation (2h)"
+    
+    # Deliverables
+    deliverables:
+      - "src/orchestrators/epic/phase_executor.py (PhaseExecutor class)"
+      - "src/orchestrators/epic/verification_gate.py (VerificationGate class)"
+      - "src/orchestrators/epic/acceptance_validator.py (AcceptanceCriteriaValidator)"
+      - "cortex-brain/config/verification-gate-rules.yaml (auto-approve thresholds)"
+      - "tests/integration/test_verification_gates.py (gate enforcement tests)"
+      - "cortex-brain/documents/architecture/VERIFICATION-GATE-SPECIFICATION.md"
+    
+    # Implementation Details
+    features:
+      pre_flight_checks:
+        - "Verify all dependency phases marked complete"
+        - "Validate acceptance criteria met for each dependency"
+        - "Check audit logs exist and verified"
+        - "Ensure deliverables present and valid"
+      
+      verification_gate:
+        - "Load dependency acceptance criteria from manifest"
+        - "Check functional criteria (e.g., 'All orchestrators execute without errors')"
+        - "Check performance criteria (e.g., 'Query time <50ms')"
+        - "Check data integrity criteria (e.g., 'Zero data loss')"
+        - "Generate verification report with pass/fail for each criterion"
+      
+      post_flight_checks:
+        - "Validate all deliverables created"
+        - "Run automated tests for phase"
+        - "Check metrics against targets"
+        - "Generate completion report"
+      
+      approval_logic:
+        - "Auto-approve if: All criteria met + No manual_approval flag"
+        - "Manual-approve if: P0_CRITICAL phase OR manual_approval=true"
+        - "Block if: Any critical criterion failed"
+    
+    acceptance_criteria:
+      functional:
+        - "✅ PhaseExecutor enforces dependency verification before phase start"
+        - "✅ Acceptance criteria validator checks all criteria types (functional, performance, data integrity)"
+        - "✅ Verification gate blocks phase start if dependencies incomplete"
+        - "✅ Auto-approval works for P1-P2 phases with criteria met"
+        - "✅ Manual approval prompts for P0_CRITICAL phases"
+      
+      architectural:
+        - "✅ Clear separation: Verification logic in VerificationGate class"
+        - "✅ Configurable: Rules in YAML, not hardcoded"
+        - "✅ Extensible: New criteria types easy to add"
+      
+      testing:
+        - "✅ Integration tests verify gate enforcement (phase blocked when dependency fails)"
+        - "✅ Unit tests for AcceptanceCriteriaValidator (100% coverage)"
+        - "✅ End-to-end test: P14 → P15 with verification gate in between"
+    
+    metrics:
+      phase_blocking_success_rate:
+        baseline: "0% (no enforcement)"
+        target: "100% (all incomplete dependencies block)"
+        measurement: "Integration test: attempt phase start with failed dependency"
+      
+      false_negative_rate:
+        baseline: "N/A (no gates)"
+        target: "<1% (gates rarely block valid phases)"
+        measurement: "Manual review of 100 phase transitions"
+    
+    dependencies: ["P01", "P02", "P03", "P04"]
+    blocks: ["P15", "P16", "P17", "P05", "P06", "P07", "P08", "P09", "P10", "P11", "P12", "P13"]
+  
+  - phase_id: "P15"
+    name: "Enterprise Audit Logger Integration"
+    type: autonomous_python
+    script: "scripts/phase_15_audit_logger.py"
+    duration: "3 days"
+    priority: P0_CRITICAL
+    status: planning
+    description: "Implement comprehensive audit logging with decision capture, reasoning, and verification trail"
+    
+    # Why Critical
+    justification: "Epic requires audit logging but ZERO orchestrators currently implement it. Without audit logs, verification gates (P14) cannot validate 'why did this decision happen?' and phase completion cannot be verified."
+    
+    # Sub-phases
+    sub_phases:
+      - "P15.1: AuditLogger Class with Decision Capture (10h)"
+      - "P15.2: Integration into 4 Completed Orchestrators (8h)"
+      - "P15.3: Verification Gate Audit Log Checks (4h)"
+      - "P15.4: Audit Viewer Dashboard (6h)"
+    
+    # Deliverables
+    deliverables:
+      - "src/orchestrators/audit/audit_logger.py (AuditLogger class)"
+      - "src/orchestrators/audit/audit_viewer.py (Dashboard for audit log exploration)"
+      - "cortex-brain/audit-logs/schema.sql (SQLite schema for audit storage)"
+      - "src/orchestrators/planning/planning_orchestrator_v5.py (AuditLogger integration)"
+      - "src/orchestrators/ado/ado_orchestrator_v2.py (AuditLogger integration)"
+      - "src/orchestrators/tdd/tdd_orchestrator.py (AuditLogger integration)"
+      - "src/orchestrators/refinement/refinement_orchestrator.py (AuditLogger integration)"
+      - "tests/integration/test_audit_logging.py (audit capture verification)"
+      - "cortex-brain/documents/architecture/AUDIT-LOGGING-SPECIFICATION.md"
+    
+    # Implementation Details
+    features:
+      audit_events:
+        - "Orchestrator entry (timestamp, request, context)"
+        - "Decision points (action, reasoning, alternatives, confidence)"
+        - "Resource usage (time, memory, disk I/O)"
+        - "Error conditions (exception type, stack trace, recovery action)"
+        - "User interactions (prompts, responses)"
+        - "Phase transitions (start, complete, blocked)"
+      
+      audit_storage:
+        - "SQLite database: cortex-brain/audit-logs/audit.db"
+        - "Schema: audit_events (id, timestamp, orchestrator, phase, event_type, payload)"
+        - "Indexed on: timestamp, orchestrator, phase, event_type"
+        - "Retention: 90 days (configurable)"
+      
+      audit_viewer:
+        - "Web-based dashboard at http://localhost:8200/audit-viewer"
+        - "Filter by: orchestrator, phase, date range, event type"
+        - "Visualize: Decision tree, resource usage graphs, timeline"
+        - "Export: CSV, JSON for external analysis"
+      
+      verification_integration:
+        - "VerificationGate checks audit log exists for dependency phases"
+        - "Validates audit log has 'phase_completion' event"
+        - "Checks audit log verified flag (manual or auto-verified)"
+    
+    acceptance_criteria:
+      functional:
+        - "✅ AuditLogger captures all event types (entry, decision, error, completion)"
+        - "✅ All 4 orchestrators (planning, ado, tdd, refinement) log audit events"
+        - "✅ Audit logs stored in SQLite with indexed queries"
+        - "✅ Audit viewer displays logs with filtering and search"
+        - "✅ VerificationGate validates audit logs exist and verified"
+      
+      performance:
+        - "✅ Audit logging adds <5ms overhead per orchestrator execution"
+        - "✅ Audit viewer loads <1s for 10k events"
+        - "✅ Database size <100MB for 90 days retention"
+      
+      security:
+        - "✅ Audit logs immutable (append-only)"
+        - "✅ No PII/secrets logged (sanitized before storage)"
+        - "✅ Access control: Only admins can view audit logs"
+      
+      testing:
+        - "✅ Integration tests verify audit events captured for each orchestrator"
+        - "✅ Performance benchmarks confirm <5ms overhead"
+        - "✅ Security tests verify no PII leakage"
+    
+    metrics:
+      audit_coverage:
+        baseline: "0% (no audit logging)"
+        target: "100% (all orchestrators log events)"
+        measurement: "Code analysis + integration tests"
+      
+      audit_log_completeness:
+        baseline: "N/A"
+        target: "100% (all decision points logged)"
+        measurement: "Manual review of 50 orchestrator executions"
+    
+    dependencies: ["P14"]
+    blocks: ["P16", "P17", "P05", "P06", "P07", "P08", "P09", "P10", "P11", "P12", "P13"]
+  
+  - phase_id: "P16"
+    name: "Plugin-Based Governance Architecture"
+    type: autonomous_python
+    script: "scripts/phase_16_governance_plugins.py"
+    duration: "5 days"
+    priority: P1_HIGH
+    status: planning
+    description: "Implement dynamic governance rule injection via plugins to handle late-stage realizations without architecture changes"
+    
+    # Why High Priority
+    justification: "Late-stage realizations (e.g., 'Vision API should be governance-enforced') currently require 3-5 days of architecture refactoring. Plugin architecture reduces this to 2-4 hours (90% time reduction), preventing architecture churn and technical debt."
+    
+    # Sub-phases
+    sub_phases:
+      - "P16.1: GovernancePluginLoader with Discovery (10h)"
+      - "P16.2: BaseGovernancePlugin Contract (6h)"
+      - "P16.3: Vision API Enforcement Plugin (Example) (8h)"
+      - "P16.4: Hot-Reload Capability (4h)"
+      - "P16.5: Documentation + 3 Sample Plugins (8h)"
+    
+    # Deliverables
+    deliverables:
+      - "src/governance/plugin_loader.py (GovernancePluginLoader class)"
+      - "src/governance/base_plugin.py (BaseGovernancePlugin abstract class)"
+      - "src/governance/plugin_metadata.py (PluginMetadata dataclass)"
+      - "cortex-brain/governance/plugins/vision_api_enforcement.py (example plugin)"
+      - "cortex-brain/governance/plugins/tdd_enforcement.py (migrated from hardcoded)"
+      - "cortex-brain/governance/plugins/planning_isolation.py (migrated from hardcoded)"
+      - "src/orchestrators/middleware/governance_checkpoint.py (plugin injection)"
+      - "tests/integration/test_governance_plugins.py (plugin loading + enforcement)"
+      - "cortex-brain/documents/architecture/GOVERNANCE-PLUGIN-GUIDE.md"
+      - "cortex-brain/documents/architecture/PLUGIN-DEVELOPMENT-TUTORIAL.md"
+    
+    # Implementation Details
+    features:
+      plugin_discovery:
+        - "Scan cortex-brain/governance/plugins/ directory"
+        - "Load all .py files matching *_plugin.py or *_enforcement.py"
+        - "Validate plugin implements BaseGovernancePlugin contract"
+        - "Register valid plugins in GovernanceCheckpoint middleware"
+      
+      plugin_contract:
+        - "metadata: PluginMetadata (rule_id, name, version, triggers, severity)"
+        - "validate(context): Check if rule satisfied, return ValidationResult"
+        - "remediate(context): Auto-fix violations if possible"
+        - "get_documentation(): Return user-facing rule explanation"
+      
+      hot_reload:
+        - "File watcher on cortex-brain/governance/plugins/"
+        - "Reload plugins on file change (dev mode only)"
+        - "Validate plugins before hot-reload (fail-safe)"
+        - "Log plugin reload events to audit log"
+      
+      governance_integration:
+        - "GovernanceCheckpoint calls plugin_loader.discover_plugins() on init"
+        - "Each plugin registered as middleware rule"
+        - "Plugins execute in priority order (severity: blocked > warning > info)"
+        - "Plugin failures logged to audit log"
+    
+    # Example: Vision API Enforcement Plugin
+    example_plugin:
+      rule_id: "VISION_API_ENFORCEMENT"
+      trigger: "image_attachment_detected"
+      action: "block_if_no_vision_analysis"
+      implementation: |
+        class VisionAPIEnforcementPlugin(BaseGovernancePlugin):
+            metadata = PluginMetadata(
+                rule_id="VISION_API_ENFORCEMENT",
+                name="Vision API Mandatory Analysis",
+                triggers=["image_attachment"],
+                severity="blocked"
+            )
+            
+            def validate(self, context):
+                has_images = 'image_attachments' in context
+                has_analysis = 'vision_analysis' in context
+                
+                if has_images and not has_analysis:
+                    return ValidationResult.fail(
+                        "Images detected but no Vision API analysis",
+                        remediation="Inject VisionContextMiddleware"
+                    )
+                return ValidationResult.pass_()
+    
+    acceptance_criteria:
+      functional:
+        - "✅ GovernancePluginLoader discovers all plugins in plugins/ directory"
+        - "✅ Plugins validate and inject into GovernanceCheckpoint"
+        - "✅ Vision API enforcement plugin blocks executions with unanalyzed images"
+        - "✅ Hot-reload works in dev mode (plugins reload without restart)"
+        - "✅ Plugin failures logged to audit log"
+      
+      architectural:
+        - "✅ New governance rules add via plugin (no orchestrator code changes)"
+        - "✅ Plugin contract enforces validation + remediation methods"
+        - "✅ Plugins execute in priority order (severity-based)"
+      
+      extensibility:
+        - "✅ 3 sample plugins provided (Vision API, TDD, Planning Isolation)"
+        - "✅ Plugin development tutorial with step-by-step guide"
+        - "✅ BaseGovernancePlugin contract documented"
+      
+      testing:
+        - "✅ Integration tests verify plugin loading + enforcement"
+        - "✅ Unit tests for each sample plugin (100% coverage)"
+        - "✅ Hot-reload tested (plugin change → immediate effect)"
+    
+    metrics:
+      governance_rule_addition_time:
+        baseline: "3-5 days (architecture refactoring)"
+        target: "2-4 hours (write plugin)"
+        measurement: "Time to add new rule (manual measurement)"
+      
+      plugin_load_success_rate:
+        baseline: "N/A"
+        target: "100% (all valid plugins load)"
+        measurement: "pytest tests/integration/test_governance_plugins.py"
+    
+    dependencies: ["P15"]
+    blocks: ["P17", "P05", "P06", "P07", "P08", "P09", "P10", "P11", "P12", "P13"]
+  
+  - phase_id: "P17"
+    name: "Risk Mitigation Implementation"
+    type: autonomous_python
+    script: "scripts/phase_17_risk_mitigation.py"
+    duration: "2 days"
+    priority: P0_CRITICAL
+    status: planning
+    description: "Implement mitigations for 4 critical risks identified in HOLISTIC-RISK-ANALYSIS.md"
+    
+    # Why Critical
+    justification: "13 critical risks identified but ZERO mitigations in current plan. Unaddressed risks will cause production failures: database corruption (RISK-001), race conditions (RISK-002), circular imports (RISK-003), renderer failures (RISK-004)."
+    
+    # Sub-phases
+    sub_phases:
+      - "P17.1: Atomic Database Migrations (RISK-001) (6h)"
+      - "P17.2: Thread-Safe Task Registry (RISK-002) (6h)"
+      - "P17.3: Circular Import Resolution (RISK-003) (8h)"
+      - "P17.4: ResponseRenderer Retry Logic (RISK-004) (4h)"
+    
+    # Deliverables
+    deliverables:
+      - "src/database/atomic_migrator.py (AtomicMigrator with transaction + rollback)"
+      - "src/database/migrations/migration_base.py (base class with savepoint support)"
+      - "src/orchestrators/master/thread_safe_task_registry.py (SQLite-based task storage)"
+      - "src/orchestrators/master/migrate_tasks_json_to_db.py (migration script)"
+      - "src/orchestrators/lazy_loader.py (lazy orchestrator loading via DI)"
+      - "src/orchestrators/orchestrator_factory.py (factory pattern for orchestrators)"
+      - "src/orchestrators/response_renderer.py (retry logic + fallback template)"
+      - "tests/integration/test_atomic_migrations.py (rollback verification)"
+      - "tests/integration/test_concurrent_task_updates.py (race condition tests)"
+      - "tests/unit/test_lazy_loading.py (circular import prevention)"
+      - "tests/unit/test_response_renderer_retry.py (retry logic verification)"
+      - "cortex-brain/documents/architecture/RISK-MITIGATION-REPORT.md"
+    
+    # Risk Mitigations
+    risk_mitigations:
+      RISK_001_atomic_migrations:
+        problem: "Database migrations lack rollback, risk data corruption"
+        solution: "Implement AtomicMigrator with savepoints + automatic rollback"
+        implementation: |
+          class AtomicMigrator:
+              def migrate(self, migration):
+                  with self.db.transaction():
+                      self.db.savepoint('pre_migration')
+                      try:
+                          for step in migration.steps:
+                              step.execute()
+                              self.db.savepoint(f'after_{step.id}')
+                          self.db.commit()
+                      except Exception as e:
+                          self.db.rollback_to('pre_migration')
+                          raise MigrationFailedError(e)
+      
+      RISK_002_task_race_condition:
+        problem: "JSON-based task registry not thread-safe, write-write conflicts"
+        solution: "Migrate to SQLite-based storage with automatic locking"
+        implementation: |
+          class ThreadSafeTaskRegistry:
+              def __init__(self):
+                  self.db = sqlite3.connect('tracking/tasks.db')
+                  self.db.execute("CREATE TABLE IF NOT EXISTS tasks (...)")
+              
+              def add_task(self, task):
+                  with self.db:  # Automatic transaction + row locking
+                      self.db.execute("INSERT INTO tasks VALUES (?)", task)
+      
+      RISK_003_circular_imports:
+        problem: "6 orchestrators have circular import dependencies"
+        solution: "Lazy loading via factory pattern + dependency injection"
+        implementation: |
+          # Replace direct imports
+          from src.orchestrators.planning import PlanningOrchestrator
+          
+          # With lazy loading
+          def get_orchestrator(name):
+              if name == 'planning':
+                  from src.orchestrators.planning import PlanningOrchestrator
+                  return PlanningOrchestrator()
+      
+      RISK_004_renderer_failure:
+        problem: "ResponseRenderer has no retry logic, silent failures possible"
+        solution: "Add exponential backoff retry + fallback template"
+        implementation: |
+          class ResilientResponseRenderer:
+              def render(self, template, context, retries=3):
+                  for attempt in range(retries):
+                      try:
+                          return self._render(template, context)
+                      except TemplateError as e:
+                          if attempt == retries - 1:
+                              return self._fallback_template(context)
+                          time.sleep(0.1 * (2 ** attempt))
+    
+    acceptance_criteria:
+      functional:
+        - "✅ AtomicMigrator rolls back on migration failure (tested with intentional error)"
+        - "✅ ThreadSafeTaskRegistry handles 10 concurrent writers without conflicts"
+        - "✅ Lazy loader resolves all 6 circular import issues"
+        - "✅ ResponseRenderer retries 3 times + uses fallback on persistent failure"
+      
+      testing:
+        - "✅ Integration test: Force migration failure, verify rollback"
+        - "✅ Concurrency test: 10 threads update tasks, verify no data loss"
+        - "✅ Unit test: Import orchestrators in different orders, no circular errors"
+        - "✅ Unit test: Mock template error, verify retry + fallback"
+      
+      data_integrity:
+        - "✅ Migration rollback leaves database in pre-migration state"
+        - "✅ Concurrent task updates result in all tasks saved (no lost writes)"
+        - "✅ No data corruption during migration"
+      
+      performance:
+        - "✅ SQLite task registry <10ms per operation"
+        - "✅ Lazy loading adds <50ms to first orchestrator instantiation"
+        - "✅ ResponseRenderer retry adds <100ms on failure (negligible on success)"
+    
+    metrics:
+      migration_rollback_success_rate:
+        baseline: "0% (no rollback logic)"
+        target: "100% (all failed migrations rollback)"
+        measurement: "Integration test with intentional migration errors"
+      
+      task_write_conflict_rate:
+        baseline: "~10% (observed with 5+ concurrent writers)"
+        target: "0% (SQLite ACID guarantees)"
+        measurement: "Concurrency test: 10 threads, 100 writes each"
+      
+      circular_import_errors:
+        baseline: "6 occurrences"
+        target: "0 occurrences"
+        measurement: "pytest --import-mode=importlib (all import orders)"
+      
+      renderer_failure_rate:
+        baseline: "~1% (silent failures observed)"
+        target: "<0.01% (retry + fallback)"
+        measurement: "Load test: 10k renders with 1% error injection"
+    
+    dependencies: ["P16"]
+    blocks: ["P05", "P06", "P07", "P08", "P09", "P10", "P11", "P12", "P13"]
+  
+  # ============================================================================
+  # ORIGINAL PHASES: P05-P13 (Now depend on P17 completion)
+  # ============================================================================
+  
   - phase_id: "P05"
     name: "Vacuum Orchestrator v3 - Python Autonomous"
     type: autonomous_python
@@ -544,7 +1038,7 @@ phases:
       - "src/orchestrators/vacuum/vacuum_orchestrator_v3.py"
       - "Python-based deep cleanup"
       - "Task integration"
-    dependencies: ["P00", "P01"]
+    dependencies: ["P17"]  # Updated: Must wait for verification gates, audit logging, plugins, and risk mitigation
     
   - phase_id: "P06"
     name: "Investigation Orchestrator v3 - Python Autonomous"
@@ -558,7 +1052,7 @@ phases:
       - "src/orchestrators/investigation/investigation_orchestrator_v3.py"
       - "Python-based root cause analysis"
       - "Task-tracked investigations"
-    dependencies: ["P00", "P01"]
+    dependencies: ["P17"]  # Updated: Must wait for verification gates, audit logging, plugins, and risk mitigation
     
   - phase_id: "P07"
     name: "Sanitization Orchestrator v3 - Python Autonomous"
@@ -572,7 +1066,7 @@ phases:
       - "src/orchestrators/sanitization/sanitization_orchestrator_v3.py"
       - "Python-based PII/secret removal"
       - "Task integration"
-    dependencies: ["P00", "P01"]
+    dependencies: ["P17"]  # Updated: Must wait for verification gates, audit logging, plugins, and risk mitigation
     
   - phase_id: "P08"
     name: "TDD Orchestrator v3 - Python Autonomous"
@@ -586,7 +1080,7 @@ phases:
       - "src/orchestrators/tdd/tdd_orchestrator_v3.py"
       - "Python-based RED→GREEN→REFACTOR"
       - "Task-tracked TDD cycles"
-    dependencies: ["P00", "P01"]
+    dependencies: ["P17"]  # Updated: Must wait for verification gates, audit logging, plugins, and risk mitigation
     
   - phase_id: "P09"
     name: "Refinement Orchestrator v3 - Python Autonomous"
@@ -600,7 +1094,7 @@ phases:
       - "src/orchestrators/refinement/refinement_orchestrator_v3.py"
       - "Python-based code improvement"
       - "Task integration"
-    dependencies: ["P00", "P01"]
+    dependencies: ["P17"]  # Updated: Must wait for verification gates, audit logging, plugins, and risk mitigation
     
   - phase_id: "P10"
     name: "Debug Orchestrator v3 - Python Autonomous"
@@ -614,7 +1108,7 @@ phases:
       - "src/orchestrators/debug/debug_orchestrator_v3.py"
       - "Python-based debugging"
       - "Task-tracked debug sessions"
-    dependencies: ["P00", "P01"]
+    dependencies: ["P17"]  # Updated: Must wait for verification gates, audit logging, plugins, and risk mitigation
     
   - phase_id: "P11"
     name: "Maintenance Orchestrator v3 - Python Autonomous"
@@ -628,7 +1122,7 @@ phases:
       - "src/orchestrators/maintenance/maintenance_orchestrator_v3.py"
       - "Python-based 12-phase maintenance"
       - "Task integration"
-    dependencies: ["P00", "P01"]
+    dependencies: ["P17"]  # Updated: Must wait for verification gates, audit logging, plugins, and risk mitigation
     
   - phase_id: "P12"
     name: "Plan Viewer v3 - Task Tracking UI"
@@ -644,7 +1138,7 @@ phases:
       - "Task list visualization"
       - "Progress bars and metrics"
       - "Real-time JSON updates"
-    dependencies: ["P00", "P01", "P02"]
+    dependencies: ["P17"]  # Updated: Must wait for verification gates, audit logging, plugins, and risk mitigation
     
   - phase_id: "P13"
     name: "Master Orchestrator Request Transformer"
@@ -658,7 +1152,7 @@ phases:
       - "src/orchestrators/master/request_transformer.py"
       - "Context injection system"
       - "Domain-aware transformations"
-    dependencies: ["P00", "P01"]
+    dependencies: ["P17"]  # Updated: Must wait for verification gates, audit logging, plugins, and risk mitigation
     
   - phase_id: "P05"
     name: "Scripts/Utilities Toolkit Consolidation"
