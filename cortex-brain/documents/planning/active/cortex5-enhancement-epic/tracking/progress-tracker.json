@@ -1,223 +1,414 @@
 {
-  "epic_id": "cortex5-enhancement-epic",
-  "plan_id": "plan-c34db247-f34d-44d3-8f3d-4da3487227b9",
-  "last_updated": "2026-01-06T00:00:00Z",
-  "overall_progress": 50,
-  "status": "PLANNING_COMPLETE",
-  "current_phase": "Phase 0",
-  "features": [
-    {
-      "id": "F001",
-      "name": "Planning System",
-      "priority": "CRITICAL",
-      "progress": 80,
-      "status": "PARTIAL",
-      "phases": ["0", "1"],
-      "blockers": [],
-      "dependencies": {
-        "requires": ["F002"],
-        "enables": ["F007", "F008", "F009"]
-      }
-    },
-    {
-      "id": "F002",
-      "name": "Governance Rules",
-      "priority": "HIGH",
-      "progress": 70,
-      "status": "PARTIAL",
-      "phases": ["0", "1.5"],
-      "blockers": ["Rule #7 enforcement pending Phase 7"],
-      "dependencies": {
-        "requires": [],
-        "enables": ["F001", "F003", "F004"]
-      }
-    },
-    {
-      "id": "F003",
-      "name": "Toolkit Orchestration",
-      "priority": "URGENT",
-      "progress": 20,
-      "status": "NOT_STARTED",
-      "phases": ["1.5"],
-      "blockers": [],
-      "dependencies": {
-        "requires": ["F001", "F002"],
-        "enables": ["F004"]
-      }
-    },
-    {
-      "id": "F004",
-      "name": "Testing Framework",
-      "priority": "HIGH",
-      "progress": 20,
-      "status": "NOT_STARTED",
-      "phases": ["3", "7"],
-      "blockers": [],
-      "dependencies": {
-        "requires": ["F001", "F003"],
-        "enables": ["F005"]
-      }
-    },
-    {
-      "id": "F005",
-      "name": "Response Templates",
-      "priority": "MEDIUM",
-      "progress": 10,
-      "status": "NOT_STARTED",
-      "phases": ["4"],
-      "blockers": [],
-      "dependencies": {
-        "requires": ["F002"],
-        "enables": ["F006"]
-      }
-    },
-    {
-      "id": "F006",
-      "name": "Continuation System",
-      "priority": "MEDIUM",
-      "progress": 10,
-      "status": "NOT_STARTED",
-      "phases": ["5"],
-      "blockers": [],
-      "dependencies": {
-        "requires": ["F001"],
-        "enables": ["F010"]
-      }
-    },
-    {
-      "id": "F007",
-      "name": "Plan Viewer",
-      "priority": "MEDIUM",
-      "progress": 15,
-      "status": "NOT_STARTED",
-      "phases": ["1", "6"],
-      "blockers": [],
-      "dependencies": {
-        "requires": ["F001"],
-        "enables": ["F010"]
-      }
-    },
-    {
-      "id": "F008",
-      "name": "Goal Detection",
-      "priority": "HIGH",
-      "progress": 20,
-      "status": "NOT_STARTED",
-      "phases": ["0", "1"],
-      "blockers": ["20-pattern library needs finalization"],
-      "dependencies": {
-        "requires": ["F001"],
-        "enables": ["F009"]
-      }
-    },
-    {
-      "id": "F009",
-      "name": "Goal Inheritance",
-      "priority": "HIGH",
-      "progress": 0,
-      "status": "NOT_STARTED",
-      "phases": ["2"],
-      "blockers": [],
-      "dependencies": {
-        "requires": ["F008"],
-        "enables": ["F004", "F006"]
-      }
-    },
-    {
-      "id": "F010",
-      "name": "Knowledge Integration",
-      "priority": "LOW",
-      "progress": 0,
-      "status": "NOT_STARTED",
-      "phases": ["8"],
-      "blockers": [],
-      "dependencies": {
-        "requires": ["F006"],
-        "enables": []
-      }
-    }
-  ],
+  "epic_metadata": {
+    "epic_id": "cortex5-enhancement-epic-v2",
+    "version": "2.0.0",
+    "status": "ACTIVE",
+    "created_date": "2026-01-06",
+    "total_phases": 11,
+    "timeline_weeks": 9,
+    "complexity_tier": 5
+  },
+  "overall_progress": {
+    "phases_completed": 0,
+    "phases_in_progress": 0,
+    "phases_not_started": 11,
+    "completion_percentage": 0,
+    "current_week": 1,
+    "on_schedule": true
+  },
   "phases": [
     {
-      "id": "P000",
-      "name": "Foundation & Discovery",
+      "phase_number": 1,
+      "name": "Knowledge Extension Layer",
+      "track": 1,
+      "status": "NOT_STARTED",
+      "progress_percentage": 0,
       "duration_weeks": 2,
-      "progress": 90,
-      "status": "NEAR_COMPLETE"
+      "start_week": 1,
+      "end_week": 2,
+      "dependencies": [],
+      "deliverables": [
+        {"name": "Company knowledge folder structure", "status": "NOT_STARTED"},
+        {"name": "CompanyKnowledgeProvider implementation", "status": "NOT_STARTED"},
+        {"name": "Knowledge merge logic", "status": "NOT_STARTED"},
+        {"name": "Validation tests", "status": "NOT_STARTED"}
+      ],
+      "success_criteria": [
+        "Company knowledge folder created",
+        "CompanyKnowledgeProvider queries company knowledge",
+        "Merge logic: Company overrides CORTEX",
+        "Validation: Query returns company override"
+      ]
     },
     {
-      "id": "P001",
-      "name": "Planning Core Implementation",
-      "duration_weeks": 3,
-      "progress": 0,
-      "status": "PENDING"
+      "phase_number": 2,
+      "name": "Orchestrator Registry System",
+      "track": 1,
+      "status": "NOT_STARTED",
+      "progress_percentage": 0,
+      "duration_weeks": 1,
+      "start_week": 3,
+      "end_week": 3,
+      "dependencies": [1],
+      "deliverables": [
+        {"name": "orchestrator-registry.yaml", "status": "NOT_STARTED"},
+        {"name": "RegistryManager implementation", "status": "NOT_STARTED"},
+        {"name": "Dynamic routing logic", "status": "NOT_STARTED"},
+        {"name": "Registry validation tests", "status": "NOT_STARTED"}
+      ],
+      "success_criteria": [
+        "Registry YAML created with 10 core orchestrators",
+        "RegistryManager routes via registry",
+        "Adding orchestrator = YAML edit only",
+        "Test orchestrator routing works"
+      ]
     },
     {
-      "id": "P001.5",
-      "name": "Toolkit Orchestration",
+      "phase_number": 3,
+      "name": "Intelligent Goal Detection",
+      "track": 1,
+      "status": "NOT_STARTED",
+      "progress_percentage": 0,
+      "duration_weeks": 1,
+      "start_week": 3,
+      "end_week": 3,
+      "dependencies": [2],
+      "deliverables": [
+        {"name": "LLM-based goal analyzer", "status": "NOT_STARTED"},
+        {"name": "Dependency graph generator", "status": "NOT_STARTED"},
+        {"name": "Goal inheritance resolver", "status": "NOT_STARTED"},
+        {"name": "Goal detection tests", "status": "NOT_STARTED"}
+      ],
+      "success_criteria": [
+        "LLM analyzes user requests for implicit goals",
+        "Dependency graph shows goal relationships",
+        "Inheritance resolver prevents duplicate goals",
+        "Validation: Complex request analyzed correctly"
+      ]
+    },
+    {
+      "phase_number": 4,
+      "name": "Knowledge Merge & Override Logic",
+      "track": 1,
+      "status": "NOT_STARTED",
+      "progress_percentage": 0,
+      "duration_weeks": 1,
+      "start_week": 4,
+      "end_week": 4,
+      "dependencies": [1, 2],
+      "deliverables": [
+        {"name": "Priority-based merge system", "status": "NOT_STARTED"},
+        {"name": "Conflict resolution engine", "status": "NOT_STARTED"},
+        {"name": "Merge validation framework", "status": "NOT_STARTED"},
+        {"name": "100+ merge test cases", "status": "NOT_STARTED"}
+      ],
+      "success_criteria": [
+        "Company knowledge overrides CORTEX where defined",
+        "CORTEX fills gaps where company undefined",
+        "Merge accuracy >95%",
+        "Conflict resolution automated"
+      ]
+    },
+    {
+      "phase_number": 5,
+      "name": "Custom Orchestrator Framework",
+      "track": 2,
+      "status": "NOT_STARTED",
+      "progress_percentage": 0,
       "duration_weeks": 2,
-      "progress": 0,
-      "status": "PENDING"
+      "start_week": 5,
+      "end_week": 6,
+      "dependencies": [2],
+      "deliverables": [
+        {"name": "BaseCustomOrchestrator class", "status": "NOT_STARTED"},
+        {"name": "Manifest schema definition", "status": "NOT_STARTED"},
+        {"name": "Lifecycle hooks implementation", "status": "NOT_STARTED"},
+        {"name": "Custom namespace isolation", "status": "NOT_STARTED"}
+      ],
+      "success_criteria": [
+        "Base class with lifecycle hooks operational",
+        "Manifest schema validates orchestrator metadata",
+        "Custom orchestrators inherit CORTEX rules",
+        "Minimal custom orchestrator created and validated"
+      ]
     },
     {
-      "id": "P002",
-      "name": "Goal Inheritance",
-      "duration_weeks": 2,
-      "progress": 0,
-      "status": "PENDING"
+      "phase_number": 6,
+      "name": "Selenium→Playwright Reference Implementation",
+      "track": 2,
+      "status": "NOT_STARTED",
+      "progress_percentage": 0,
+      "duration_weeks": 1,
+      "start_week": 7,
+      "end_week": 7,
+      "dependencies": [5],
+      "deliverables": [
+        {"name": "SeleniumToPlaywrightOrchestrator", "status": "NOT_STARTED"},
+        {"name": "AST-based Selenium parser", "status": "NOT_STARTED"},
+        {"name": "Playwright code generator", "status": "NOT_STARTED"},
+        {"name": "TDD enforcement integration", "status": "NOT_STARTED"}
+      ],
+      "success_criteria": [
+        "Complete orchestrator converts Selenium→Playwright",
+        "Follows TDD (inherits from CORTEX TDD)",
+        "Applies company coding standards",
+        "Sample Selenium test converted successfully"
+      ]
     },
     {
-      "id": "P003",
+      "phase_number": 7,
+      "name": "Rule Layering System",
+      "track": 2,
+      "status": "NOT_STARTED",
+      "progress_percentage": 0,
+      "duration_weeks": 1,
+      "start_week": 7,
+      "end_week": 7,
+      "dependencies": [4],
+      "deliverables": [
+        {"name": "3-layer governance middleware", "status": "NOT_STARTED"},
+        {"name": "Conflict resolution engine", "status": "NOT_STARTED"},
+        {"name": "Exemption workflow system", "status": "NOT_STARTED"},
+        {"name": "Rule validation framework", "status": "NOT_STARTED"}
+      ],
+      "success_criteria": [
+        "Core + Company + Domain rules merge correctly",
+        "Core rules cannot be overridden",
+        "Conflict resolution automated",
+        "Exemption workflow operational"
+      ]
+    },
+    {
+      "phase_number": 8,
       "name": "TDD Test Harness",
-      "duration_weeks": 2,
-      "progress": 0,
-      "status": "PENDING"
-    },
-    {
-      "id": "P004",
-      "name": "Response Templates",
-      "duration_weeks": 1.5,
-      "progress": 0,
-      "status": "PENDING"
-    },
-    {
-      "id": "P005",
-      "name": "Continuation System",
-      "duration_weeks": 2,
-      "progress": 0,
-      "status": "PENDING"
-    },
-    {
-      "id": "P006",
-      "name": "Plan Viewer Enhancements",
+      "track": 3,
+      "status": "NOT_STARTED",
+      "progress_percentage": 0,
       "duration_weeks": 1,
-      "progress": 0,
-      "status": "PENDING"
+      "start_week": 5,
+      "end_week": 6,
+      "dependencies": [5],
+      "deliverables": [
+        {"name": "Autonomous test generator", "status": "NOT_STARTED"},
+        {"name": "RED→GREEN→REFACTOR enforcer", "status": "NOT_STARTED"},
+        {"name": "Test coverage analyzer", "status": "NOT_STARTED"},
+        {"name": "TDD workflow validator", "status": "NOT_STARTED"}
+      ],
+      "success_criteria": [
+        "Tests generated automatically from specs",
+        "RED→GREEN→REFACTOR enforced",
+        "Test coverage >90%",
+        "TDD workflow validated per SKULL rules"
+      ]
     },
     {
-      "id": "P007",
-      "name": "Script Testing",
+      "phase_number": 9,
+      "name": "Plan Viewer Modernization",
+      "track": 3,
+      "status": "NOT_STARTED",
+      "progress_percentage": 0,
       "duration_weeks": 1,
-      "progress": 0,
-      "status": "PENDING"
+      "start_week": 5,
+      "end_week": 6,
+      "dependencies": [],
+      "deliverables": [
+        {"name": "CSS standardization", "status": "NOT_STARTED"},
+        {"name": "Responsive design implementation", "status": "NOT_STARTED"},
+        {"name": "Phase navigation UI", "status": "NOT_STARTED"},
+        {"name": "Accessibility (WCAG AA)", "status": "NOT_STARTED"}
+      ],
+      "success_criteria": [
+        "CSS standardized across all viewers",
+        "Responsive design works on mobile/tablet/desktop",
+        "Phase navigation intuitive",
+        "WCAG AA compliance achieved"
+      ]
     },
     {
-      "id": "P008",
-      "name": "Knowledge Integration",
-      "duration_weeks": 2,
-      "progress": 0,
-      "status": "PENDING"
+      "phase_number": 10,
+      "name": "Response Template Optimization",
+      "track": 3,
+      "status": "NOT_STARTED",
+      "progress_percentage": 0,
+      "duration_weeks": 1,
+      "start_week": 7,
+      "end_week": 7,
+      "dependencies": [],
+      "deliverables": [
+        {"name": "INSTANT mode (1-3 lines)", "status": "NOT_STARTED"},
+        {"name": "FOCUSED mode (concise)", "status": "NOT_STARTED"},
+        {"name": "STRUCTURED mode (detailed)", "status": "NOT_STARTED"},
+        {"name": "COMPREHENSIVE mode (exhaustive)", "status": "NOT_STARTED"}
+      ],
+      "success_criteria": [
+        "4 response modes operational",
+        "Mode selection automated based on context",
+        "Token usage reduced by 30%",
+        "User satisfaction improved"
+      ]
+    },
+    {
+      "phase_number": 11,
+      "name": "End-to-End Integration Testing",
+      "track": 4,
+      "status": "NOT_STARTED",
+      "progress_percentage": 0,
+      "duration_weeks": 1,
+      "start_week": 8,
+      "end_week": 9,
+      "dependencies": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      "deliverables": [
+        {"name": "Integration test suite", "status": "NOT_STARTED"},
+        {"name": "Performance benchmarks", "status": "NOT_STARTED"},
+        {"name": "Knowledge merge validation", "status": "NOT_STARTED"},
+        {"name": "Final validation report", "status": "NOT_STARTED"}
+      ],
+      "success_criteria": [
+        "All 10 core + 1 custom orchestrator tested",
+        "Knowledge merge validated (>95% accuracy)",
+        "Performance <50ms overhead",
+        "Zero regression (all tests pass)"
+      ]
     }
   ],
-  "metrics": {
-    "feature_completion": 20,
-    "test_coverage": 0,
-    "script_reduction": 0,
-    "regression_rate": 0
+  "tracks": {
+    "track_1_core_intelligence": {
+      "phases": [1, 2, 3, 4],
+      "status": "NOT_STARTED",
+      "priority": "CRITICAL",
+      "description": "Foundation - blocks other tracks"
+    },
+    "track_2_business_extensibility": {
+      "phases": [5, 6, 7],
+      "status": "NOT_STARTED",
+      "priority": "HIGH",
+      "description": "Custom orchestrators + rule layering"
+    },
+    "track_3_quality_ux": {
+      "phases": [8, 9, 10],
+      "status": "NOT_STARTED",
+      "priority": "MEDIUM",
+      "description": "Quality improvements + UX enhancements"
+    },
+    "track_4_validation": {
+      "phases": [11],
+      "status": "NOT_STARTED",
+      "priority": "CRITICAL",
+      "description": "Final integration testing"
+    }
   },
-  "timeline": {
-    "start_date": "2026-01-06",
-    "target_completion": "2026-05-31",
-    "total_duration_weeks": 18.5
-  }
+  "milestones": [
+    {
+      "week": 2,
+      "name": "Foundation Complete",
+      "phases": [1],
+      "status": "NOT_STARTED"
+    },
+    {
+      "week": 3,
+      "name": "Registry & Goal Detection",
+      "phases": [2, 3],
+      "status": "NOT_STARTED"
+    },
+    {
+      "week": 4,
+      "name": "Merge Logic Validated",
+      "phases": [4],
+      "status": "NOT_STARTED"
+    },
+    {
+      "week": 6,
+      "name": "Custom Framework + TDD + Viewer",
+      "phases": [5, 8, 9],
+      "status": "NOT_STARTED"
+    },
+    {
+      "week": 7,
+      "name": "Selenium→Playwright + Rule Layering",
+      "phases": [6, 7, 10],
+      "status": "NOT_STARTED"
+    },
+    {
+      "week": 9,
+      "name": "Final Validation & Go-Live",
+      "phases": [11],
+      "status": "NOT_STARTED"
+    }
+  ],
+  "risks": [
+    {
+      "id": "R1",
+      "description": "Knowledge merge accuracy <95%",
+      "impact": "HIGH",
+      "probability": "MEDIUM",
+      "mitigation": "Phase 4 includes 100+ merge test cases",
+      "status": "OPEN"
+    },
+    {
+      "id": "R2",
+      "description": "Custom orchestrator corruption of CORTEX core",
+      "impact": "CRITICAL",
+      "probability": "LOW",
+      "mitigation": "Namespace isolation + Git pre-commit hooks",
+      "status": "OPEN"
+    },
+    {
+      "id": "R3",
+      "description": "Performance degradation >50ms",
+      "impact": "MEDIUM",
+      "probability": "MEDIUM",
+      "mitigation": "Phase 11 benchmarks and caching",
+      "status": "OPEN"
+    },
+    {
+      "id": "R4",
+      "description": "Parallel execution conflicts (Weeks 5-7)",
+      "impact": "MEDIUM",
+      "probability": "HIGH",
+      "mitigation": "Clear module boundaries + integration tests",
+      "status": "OPEN"
+    }
+  ],
+  "success_metrics": {
+    "functional": {
+      "companies_registered": {"target": 3, "current": 0},
+      "custom_orchestrators_deployed": {"target": 2, "current": 0},
+      "knowledge_merge_accuracy": {"target": 95, "current": 0, "unit": "%"},
+      "cortex_core_corruption": {"target": 0, "current": 0, "unit": "files"}
+    },
+    "performance": {
+      "knowledge_query_overhead_ms": {"target": 50, "current": 0, "unit": "ms"},
+      "custom_orchestrator_routing_ms": {"target": 100, "current": 0, "unit": "ms"},
+      "performance_regression": {"target": 0, "current": 0, "unit": "%"}
+    },
+    "quality": {
+      "test_coverage": {"target": 100, "current": 0, "unit": "%"},
+      "critical_bugs": {"target": 0, "current": 0},
+      "skull_rule_compliance": {"target": 100, "current": 100, "unit": "%"}
+    },
+    "adoption": {
+      "developers_trained": {"target": 2, "current": 0},
+      "documentation_complete": {"target": 100, "current": 0, "unit": "%"},
+      "production_deployments": {"target": 1, "current": 0}
+    }
+  },
+  "next_actions": [
+    {
+      "action": "Read Phase 1 document",
+      "file": "phases/phase-01-knowledge-extension.md",
+      "priority": "CRITICAL"
+    },
+    {
+      "action": "Create company knowledge folder structure",
+      "phase": 1,
+      "priority": "CRITICAL"
+    },
+    {
+      "action": "Implement CompanyKnowledgeProvider",
+      "phase": 1,
+      "priority": "CRITICAL"
+    }
+  ],
+  "updated_at": "2026-01-06T00:00:00Z",
+  "updated_by": "CORTEX Planning System v5"
 }

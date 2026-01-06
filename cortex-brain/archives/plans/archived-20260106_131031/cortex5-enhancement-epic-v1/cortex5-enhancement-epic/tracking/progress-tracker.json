@@ -1,0 +1,223 @@
+{
+  "epic_id": "cortex5-enhancement-epic",
+  "plan_id": "plan-c34db247-f34d-44d3-8f3d-4da3487227b9",
+  "last_updated": "2026-01-06T00:00:00Z",
+  "overall_progress": 50,
+  "status": "PLANNING_COMPLETE",
+  "current_phase": "Phase 0",
+  "features": [
+    {
+      "id": "F001",
+      "name": "Planning System",
+      "priority": "CRITICAL",
+      "progress": 80,
+      "status": "PARTIAL",
+      "phases": ["0", "1"],
+      "blockers": [],
+      "dependencies": {
+        "requires": ["F002"],
+        "enables": ["F007", "F008", "F009"]
+      }
+    },
+    {
+      "id": "F002",
+      "name": "Governance Rules",
+      "priority": "HIGH",
+      "progress": 70,
+      "status": "PARTIAL",
+      "phases": ["0", "1.5"],
+      "blockers": ["Rule #7 enforcement pending Phase 7"],
+      "dependencies": {
+        "requires": [],
+        "enables": ["F001", "F003", "F004"]
+      }
+    },
+    {
+      "id": "F003",
+      "name": "Toolkit Orchestration",
+      "priority": "URGENT",
+      "progress": 20,
+      "status": "NOT_STARTED",
+      "phases": ["1.5"],
+      "blockers": [],
+      "dependencies": {
+        "requires": ["F001", "F002"],
+        "enables": ["F004"]
+      }
+    },
+    {
+      "id": "F004",
+      "name": "Testing Framework",
+      "priority": "HIGH",
+      "progress": 20,
+      "status": "NOT_STARTED",
+      "phases": ["3", "7"],
+      "blockers": [],
+      "dependencies": {
+        "requires": ["F001", "F003"],
+        "enables": ["F005"]
+      }
+    },
+    {
+      "id": "F005",
+      "name": "Response Templates",
+      "priority": "MEDIUM",
+      "progress": 10,
+      "status": "NOT_STARTED",
+      "phases": ["4"],
+      "blockers": [],
+      "dependencies": {
+        "requires": ["F002"],
+        "enables": ["F006"]
+      }
+    },
+    {
+      "id": "F006",
+      "name": "Continuation System",
+      "priority": "MEDIUM",
+      "progress": 10,
+      "status": "NOT_STARTED",
+      "phases": ["5"],
+      "blockers": [],
+      "dependencies": {
+        "requires": ["F001"],
+        "enables": ["F010"]
+      }
+    },
+    {
+      "id": "F007",
+      "name": "Plan Viewer",
+      "priority": "MEDIUM",
+      "progress": 15,
+      "status": "NOT_STARTED",
+      "phases": ["1", "6"],
+      "blockers": [],
+      "dependencies": {
+        "requires": ["F001"],
+        "enables": ["F010"]
+      }
+    },
+    {
+      "id": "F008",
+      "name": "Goal Detection",
+      "priority": "HIGH",
+      "progress": 20,
+      "status": "NOT_STARTED",
+      "phases": ["0", "1"],
+      "blockers": ["20-pattern library needs finalization"],
+      "dependencies": {
+        "requires": ["F001"],
+        "enables": ["F009"]
+      }
+    },
+    {
+      "id": "F009",
+      "name": "Goal Inheritance",
+      "priority": "HIGH",
+      "progress": 0,
+      "status": "NOT_STARTED",
+      "phases": ["2"],
+      "blockers": [],
+      "dependencies": {
+        "requires": ["F008"],
+        "enables": ["F004", "F006"]
+      }
+    },
+    {
+      "id": "F010",
+      "name": "Knowledge Integration",
+      "priority": "LOW",
+      "progress": 0,
+      "status": "NOT_STARTED",
+      "phases": ["8"],
+      "blockers": [],
+      "dependencies": {
+        "requires": ["F006"],
+        "enables": []
+      }
+    }
+  ],
+  "phases": [
+    {
+      "id": "P000",
+      "name": "Foundation & Discovery",
+      "duration_weeks": 2,
+      "progress": 90,
+      "status": "NEAR_COMPLETE"
+    },
+    {
+      "id": "P001",
+      "name": "Planning Core Implementation",
+      "duration_weeks": 3,
+      "progress": 0,
+      "status": "PENDING"
+    },
+    {
+      "id": "P001.5",
+      "name": "Toolkit Orchestration",
+      "duration_weeks": 2,
+      "progress": 0,
+      "status": "PENDING"
+    },
+    {
+      "id": "P002",
+      "name": "Goal Inheritance",
+      "duration_weeks": 2,
+      "progress": 0,
+      "status": "PENDING"
+    },
+    {
+      "id": "P003",
+      "name": "TDD Test Harness",
+      "duration_weeks": 2,
+      "progress": 0,
+      "status": "PENDING"
+    },
+    {
+      "id": "P004",
+      "name": "Response Templates",
+      "duration_weeks": 1.5,
+      "progress": 0,
+      "status": "PENDING"
+    },
+    {
+      "id": "P005",
+      "name": "Continuation System",
+      "duration_weeks": 2,
+      "progress": 0,
+      "status": "PENDING"
+    },
+    {
+      "id": "P006",
+      "name": "Plan Viewer Enhancements",
+      "duration_weeks": 1,
+      "progress": 0,
+      "status": "PENDING"
+    },
+    {
+      "id": "P007",
+      "name": "Script Testing",
+      "duration_weeks": 1,
+      "progress": 0,
+      "status": "PENDING"
+    },
+    {
+      "id": "P008",
+      "name": "Knowledge Integration",
+      "duration_weeks": 2,
+      "progress": 0,
+      "status": "PENDING"
+    }
+  ],
+  "metrics": {
+    "feature_completion": 20,
+    "test_coverage": 0,
+    "script_reduction": 0,
+    "regression_rate": 0
+  },
+  "timeline": {
+    "start_date": "2026-01-06",
+    "target_completion": "2026-05-31",
+    "total_duration_weeks": 18.5
+  }
+}
