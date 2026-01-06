@@ -1,0 +1,51 @@
+{
+  "registry_version": "1.0.0",
+  "epic_id": "docs-orchestrator-v2",
+  "epic_name": "Documentation Orchestrator v2.0",
+  "last_updated": "2026-01-06T00:00:00Z",
+  "tasks": [],
+  "statistics": {
+    "total": 0,
+    "not_started": 0,
+    "in_progress": 0,
+    "completed": 0,
+    "blocked": 0
+  },
+  "schema": {
+    "task": {
+      "id": "string (UUID)",
+      "title": "string",
+      "description": "string",
+      "phase_id": "string (references 00-docs-orchestrator-v2.md phases)",
+      "status": "enum [not_started, in_progress, completed, blocked]",
+      "priority": "enum [P0_CRITICAL, P1, P2, P3]",
+      "created": "ISO 8601 datetime",
+      "updated": "ISO 8601 datetime",
+      "completed": "ISO 8601 datetime (nullable)",
+      "dependencies": "array of task IDs",
+      "assignee": "string (default: CORTEX)",
+      "estimated_hours": "number",
+      "actual_hours": "number (nullable)",
+      "progress_percentage": "number (0-100)"
+    }
+  },
+  "integration": {
+    "manage_todo_list": {
+      "enabled": true,
+      "sync_on_update": true,
+      "tool": "Master Orchestrator todo_manager.py"
+    },
+    "progress_tracker": {
+      "file": "tracking/progress-tracker.json",
+      "auto_recalculate": true,
+      "update_on_task_change": true
+    }
+  },
+  "notes": [
+    "Tasks are created dynamically as phases begin execution",
+    "Task status updates trigger progress-tracker.json recalculation",
+    "Use Master Orchestrator todo_manager.py (manage_todo_list tool) for task CRUD",
+    "Dependencies must be satisfied before task can start",
+    "Follows standard from cortex5-remediation/tracking/task-registry.json"
+  ]
+}

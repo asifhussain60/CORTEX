@@ -995,18 +995,25 @@ def test_generate_diagrams():
 ## 🔗 Dependencies
 
 ### Internal Dependencies
-- Master Orchestrator v5.0
-- Audit Logger (`src/orchestrators/audit_logger.py`)
-- Brain Protection Rules (PYTHON_ONLY_GENERATION)
-- Knowledge Base (Tier 0, 2, 3)
+- ✅ **Master Orchestrator v5.0** - Routing and intent classification
+- ✅ **Audit Logger** (`src/orchestrators/audit_logger.py`) - Event tracking
+- ✅ **Brain Protection Rules (SKULL)** - PYTHON_ONLY_GENERATION enforcement
+- ✅ **Knowledge Base** - Tier 0, 2, 3 inheritance
+- ⚠️ **BaseOrchestrator v6** - Universal orchestrator foundation (Phase P02 of cortex5-remediation)
+  - **Status:** Planned in cortex5-remediation epic
+  - **Documentation:** `cortex-brain/documents/planning/active/cortex5-remediation/architecture/BASE-ORCHESTRATOR-V6-SPECIFICATION.md`
+  - **Impact:** docs-orchestrator-v2 will extend BaseOrchestrator when Phase P02 completes
+  - **Benefits:** Automatic SKULL enforcement, audit logging, knowledge integration, SOLID/DRY compliance
+  - **Current:** Orchestrator implements governance/audit manually; will inherit from BaseOrchestrator post-P02
 
 ### External Dependencies
-- Python 3.11+
-- BeautifulSoup4 (HTML parsing)
-- Click (CLI framework)
-- Jinja2 (template rendering)
-- Mermaid CLI (diagram generation)
-- D3.js (interactive diagrams)
+- ✅ **Python 3.11+** - Core runtime
+- ✅ **BeautifulSoup4** - HTML parsing
+- ✅ **Click** - CLI framework
+- ✅ **Jinja2** - Template rendering
+- ⚠️ **Mermaid CLI** - Diagram generation (`npm install -g @mermaid-js/mermaid-cli`)
+- ⚠️ **D3.js** - Interactive diagrams (included via CDN)
+- ⚠️ **scikit-learn** - TF-IDF uniqueness validation (`pip install scikit-learn`)
 
 ---
 

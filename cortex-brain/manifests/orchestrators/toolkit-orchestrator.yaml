@@ -1,9 +1,10 @@
-# CORTEX Toolkit Orchestrator v1.0
+# CORTEX Toolkit Orchestrator v1.1
 # Centralized utilities for documentation, planning, and routing operations
+# INTEGRATES with existing cortex-toolkit/ infrastructure (Phase P05)
 
 orchestrator_id: "toolkit_orchestrator"
 name: "CORTEX Toolkit Orchestrator"
-version: "1.0.0"
+version: "1.1.0"
 status: "production"
 type: "utility"
 
@@ -12,11 +13,30 @@ metadata:
   created_at: "2026-01-06"
   last_updated: "2026-01-06"
   description: |
-    Centralized toolkit orchestrator that consolidates scattered Python utilities
-    into a unified CLI interface. Provides documentation maintenance, plan validation,
-    and routing management capabilities across three strategic categories.
+    Centralized toolkit orchestrator that integrates with existing cortex-toolkit/
+    infrastructure (ToolkitManager, AuditLogger, ToolkitRegistry, CapabilityMatrix).
+    Consolidates scattered Python utilities from scripts/utilities/ into unified CLI.
+    Provides documentation maintenance, plan validation, routing management, and
+    lifecycle management (create, use, archive, delete) with usage intelligence.
   
   copyright: "© 2025-2026 Asif Hussain. All rights reserved."
+  
+  integration:
+    existing_infrastructure:
+      - component: "cortex-toolkit/core/toolkit_manager.py"
+        purpose: "ToolkitManager - execution engine with audit logging"
+      - component: "cortex-toolkit/core/audit_logger.py"
+        purpose: "AuditLogger - event tracking (execution, security)"
+      - component: "cortex-toolkit/shared/toolkit_registry.py"
+        purpose: "Tool discovery and invocation"
+      - component: "cortex-toolkit/core/capability_matrix.py"
+        purpose: "Tool overlap detection"
+    
+    alignment_with_phase_p05:
+      epic: "cortex5-remediation"
+      phase: "P05 - Scripts/Utilities Toolkit Consolidation"
+      objective: "Consolidate scripts/utilities/ with audit logging and intelligence"
+      reference: "cortex-brain/documents/planning/active/cortex5-remediation/phases/P05-SCRIPTS-UTILITIES-TOOLKIT-CONSOLIDATION.md"
   
   tags:
     - toolkit
