@@ -106,6 +106,59 @@ CORTEX 5.0 Remediation with maximum snowball effect - progressive system activat
 
 ---
 
+### Phase 1.5: Script Consolidation Governance ⚡ URGENT
+**Duration:** 3 days  
+**Status:** ⏸️ Not Started  
+**Inherits:** G001 (audit logs), G002 (atomic ops), G003 (governance), G004 (brittleness), G005 (compatibility)
+
+**Phase-Specific Goals:**
+- P1.5-001: Catalog all utility scripts via Cortex Toolkit Orchestrator
+- P1.5-002: Detect and eliminate duplicate functionality scripts
+- P1.5-003: Consolidate similar scripts into unified modules
+
+**Problem:** Multiple *.py files in `src/orchestrators/planning/` doing similar tasks (duplicate_detector.py, orphan_detector.py, similarity_checker.py, etc.) causing code duplication, maintenance burden, and discovery failures.
+
+**Solution:** Enforce `SCRIPT_ORGANIZATION_ENFORCEMENT` governance rule (brain-protection-rules.yaml)
+
+**Tasks:**
+1. Create Cortex Toolkit Orchestrator with child orchestrators
+   - Scanner child: Duplicate script detection
+   - Consolidator child: Merge similar scripts
+   - Cataloger child: Register scripts in central catalog
+2. Scan `src/orchestrators/planning/` for duplicate functionality
+   - AST-based similarity detection
+   - Function signature matching
+   - Purpose overlap analysis
+3. Consolidate duplicate scripts
+   - Merge duplicate_detector.py + orphan_detector.py → unified code_analyzer.py
+   - Archive unused scripts to cortex-brain/archives/scripts/
+   - Update imports across codebase
+4. Create script catalog registry
+   - `cortex-brain/toolkit/script-catalog.yaml`
+   - Document each script: purpose, owner, dependencies
+   - Enforce registration for new scripts
+
+**Deliverables:**
+- `src/orchestrators/toolkit/cortex_toolkit_orchestrator.py` (Master)
+- `src/orchestrators/toolkit/duplicate_script_detector.py` (Child)
+- `src/orchestrators/toolkit/script_consolidator.py` (Child)
+- `src/orchestrators/toolkit/script_cataloger.py` (Child)
+- `cortex-brain/toolkit/script-catalog.yaml` (Registry)
+- `cortex-brain/documents/reports/script-consolidation-2026-01-06.md` (Report)
+
+**Goal Validation:**
+- ✅ Audit logs created (G001) - Track all consolidation actions
+- ✅ Operations atomic (G002) - Consolidation with rollback
+- ✅ Governance validated (G003) - SCRIPT_ORGANIZATION_ENFORCEMENT rule enforced
+
+**Acceptance Criteria:**
+- <10 scripts in src/orchestrators/planning/ (down from 15+)
+- Zero duplicate functionality detected
+- All scripts registered in catalog
+- SCRIPT_ORGANIZATION_ENFORCEMENT rule active
+
+---
+
 ### Phase 2: Goal Inheritance Resolver
 **Duration:** 2 weeks  
 **Status:** ⏸️ Not Started  

@@ -187,6 +187,58 @@ rules:
     4. Parallel development (multiple plans don't interfere)
     5. Holistic cleanup (delete plan folder = delete all plan files)
 
+- rule_id: SCRIPT_ORGANIZATION_ENFORCEMENT
+  category: architecture_integrity
+  severity: blocked
+  name: Script Consolidation & Cataloging Required
+  description: 'ALL utility scripts MUST be properly organized via Cortex Toolkit Orchestrator with child orchestrators for cataloging.
+
+    Multiple scripts doing the same functionality MUST be consolidated into unified modules.
+
+    Script sprawl prevention is critical for maintainability and efficiency.
+
+    '
+  enforcement:
+    trigger: script_creation
+    action: block_if_uncataloged_or_duplicate
+  validation:
+  - Scripts must be cataloged by Cortex Toolkit Orchestrator
+  - Duplicate functionality detection scanner must run
+  - Similar scripts must be consolidated into single module
+  - Orphaned scripts (unused) must be archived
+  - Child orchestrators manage script organization per domain
+  implementation:
+    orchestrator: cortex_toolkit
+    scanner: src.orchestrators.toolkit.duplicate_script_detector
+    catalog: cortex-brain/toolkit/script-catalog.yaml
+  examples:
+    pass:
+    - Planning scripts consolidated into planning_orchestrator_v5.py modules
+    - Duplicate detectors merged into single duplicate_detector.py
+    - Scripts registered in toolkit catalog with clear ownership
+    fail:
+    - 10+ *.py files in src/orchestrators/planning/ doing similar tasks
+    - Multiple duplicate detection scripts (orphan_detector.py, duplicate_detector.py, similarity_checker.py)
+    - Uncataloged scripts in random directories
+  remediation:
+    scan_command: python3 -m src.orchestrators.toolkit.scan_duplicate_scripts
+    consolidate_command: python3 -m src.orchestrators.toolkit.consolidate_scripts --domain planning
+    report: cortex-brain/documents/reports/script-consolidation-{timestamp}.md
+  rationale: |
+    Script organization prevents:
+    1. Code duplication (multiple scripts doing same thing)
+    2. Discovery failures (which script does what?)
+    3. Maintenance burden (updating logic in 5 places)
+    4. Import confusion (which module to import from?)
+    5. Testing gaps (duplicate scripts = duplicate tests needed)
+    
+    Benefits of script consolidation:
+    1. Single source of truth per functionality
+    2. Easier maintenance (one place to update)
+    3. Clear module boundaries
+    4. Better test coverage
+    5. Reduced codebase size
+
 governance:
   enforcement_level: strict
   override_allowed: false

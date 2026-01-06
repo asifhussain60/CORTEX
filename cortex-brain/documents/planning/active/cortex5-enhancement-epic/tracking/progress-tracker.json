@@ -1,0 +1,20 @@
+{
+  "plan_id": "cortex5-enhancement-epic",
+  "created": "2026-01-06",
+  "status": "active",
+  "overall_progress": 0,
+  "phases": [
+    {
+      "phase": 0,
+      "name": "Planning",
+      "status": "complete",
+      "progress": 100
+    },
+    {
+      "phase": 1,
+      "name": "Implementation",
+      "status": "not_started",
+      "progress": 0
+    }
+  ]
+}

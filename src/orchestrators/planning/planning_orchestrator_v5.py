@@ -1530,8 +1530,18 @@ Check `tracking/progress-tracker.json` for current status.
         # Create folder name with ID prefix: a01-enterprise-aud-log
         folder_name = f"{folder_id_prefix}-{abbreviated_name}"
         
-        # Create at active plans path
-        plan_dir = Path(f"cortex-brain/documents/planning/active/{folder_name}")
+        # Check if there's an epic parent folder in master_context
+        epic_parent_path = self.master_context.get('epic_parent_path')
+        
+        # Create at active plans path (inside epic if parent specified)
+        if epic_parent_path:
+            # Child plan inside epic folder
+            plan_dir = Path(epic_parent_path) / folder_name
+            self.logger.info(f"📁 Creating child plan inside epic: {epic_parent_path}/{folder_name}")
+        else:
+            # Root-level plan (epic or standalone feature)
+            plan_dir = Path(f"cortex-brain/documents/planning/active/{folder_name}")
+            self.logger.info(f"📁 Creating root-level plan: {folder_name}")
         
         # Standard folders for all plan types
         folders = [
