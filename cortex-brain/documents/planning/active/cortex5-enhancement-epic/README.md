@@ -1,7 +1,7 @@
 # CORTEX5 Enhancement Epic - Quick Start Guide
 
 **Epic Version:** 2.0.0  
-**Status:** 🟢 ACTIVE  
+**Status:** 🟢 ACTIVE - READY FOR CLEAN START  
 **Last Updated:** 2026-01-06
 
 ---
@@ -16,6 +16,65 @@
 - **Rule Layering:** Core + Company + Domain governance rules merge intelligently
 
 **Timeline:** 9 weeks | **Phases:** 11 (3 parallel tracks) | **Complexity:** Tier 5 (Architectural)
+
+---
+
+## 🆕 CLEAN START STRATEGY (CORTEX-5.5)
+
+**🚨 IMPORTANT:** This epic executes on a **new CORTEX-5.5 branch** with 85% file reduction.
+
+### Why Clean Start?
+
+**Current CORTEX-5.0 has accumulated technical debt:**
+- ❌ ~1000 files (many obsolete, orphaned, or duplicated)
+- ❌ Multiple versions of same components (orchestration_4_0, cortex_3_0, etc.)
+- ❌ Unused sample apps, old documentation, historical backups
+- ❌ Cluttered structure prevents clear architectural vision
+
+**CORTEX-5.5 approach:**
+- ✅ Start with ~150 essential files (85% reduction)
+- ✅ Pull from CORTEX-5.0 only when explicitly needed (tracked & justified)
+- ✅ Zero technical debt carried forward
+- ✅ Clean foundation for 9-week transformation
+
+### Quick Start for CORTEX-5.5
+
+**Step 1: Create Branch (5 minutes)**
+```powershell
+# Run automated migration script
+.\create-cortex-5.5-branch.ps1
+
+# Review and commit
+git status
+git commit -m "feat: Initialize CORTEX-5.5 clean branch"
+git push -u origin CORTEX-5.5
+```
+
+**Step 2: Start Phase 1 (2 weeks)**
+```powershell
+# Open Phase 1 implementation guide
+code phases/phase-01-knowledge-extension.md
+
+# Implement CompanyKnowledgeProvider (TDD cycle)
+# Write failing tests → Implement → Refactor → Repeat
+```
+
+**Step 3: Pull from CORTEX-5.0 (as needed)**
+```powershell
+# Example: Phase 3 needs LLM utilities
+.\pull-from-cortex-5.0.ps1 `
+    -Phase 3 `
+    -Files @("src/llm/llm_provider.py") `
+    -Justification "LLM-based goal detection" `
+    -Category "llm_utilities"
+```
+
+### Migration Documents
+
+📄 **CORTEX-5.5-MIGRATION-STRATEGY.md** - Full technical strategy (85% reduction rationale)  
+📄 **CORTEX-5.5-EXECUTION-GUIDE.md** - Step-by-step migration execution  
+📄 **00-cortex5-epic.md** - Epic master plan (updated with CORTEX-5.0 reference strategy)  
+📄 **tracking/pulls-from-cortex-5.0.json** - Live tracking of pulls (max 20 files)
 
 ---
 

@@ -1,32 +1,78 @@
 {
   "epic_metadata": {
     "epic_id": "cortex5-enhancement-epic-v2",
-    "version": "2.0.0",
-    "status": "ACTIVE",
+    "version": "2.1.0",
+    "status": "BLOCKED_ON_PHASE_0",
     "created_date": "2026-01-06",
-    "total_phases": 11,
-    "timeline_weeks": 9,
+    "total_phases": 12,
+    "timeline_weeks": "15 minutes (Phase 0) + 9 weeks (Phases 1-11)",
     "complexity_tier": 5
   },
   "overall_progress": {
     "phases_completed": 0,
     "phases_in_progress": 0,
-    "phases_not_started": 11,
+    "phases_not_started": 12,
+    "phases_blocked": 11,
     "completion_percentage": 0,
-    "current_week": 1,
-    "on_schedule": true
+    "current_phase": 0,
+    "on_schedule": false,
+    "blocking_reason": "Phase 0 (Clean Branch Migration) must be completed first"
   },
   "phases": [
+    {
+      "phase_number": 0,
+      "name": "Clean Branch Migration",
+      "track": 0,
+      "status": "NOT_STARTED",
+      "progress_percentage": 0,
+      "duration": "15 minutes",
+      "start_week": 0,
+      "end_week": 0,
+      "dependencies": [],
+      "blocks_phases": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+      "deliverables": [
+        {"name": "CORTEX-5.5 branch created from main", "status": "NOT_STARTED"},
+        {"name": "~150 essential files copied from CORTEX-5.0", "status": "NOT_STARTED"},
+        {"name": "Phase 1 scaffolding (src/knowledge/)", "status": "NOT_STARTED"},
+        {"name": "Pull tracking system operational", "status": "NOT_STARTED"},
+        {"name": "Migration validation passed", "status": "NOT_STARTED"}
+      ],
+      "success_criteria": [
+        "CORTEX-5.5 branch created and pushed to remote",
+        "File count ~150 (85% reduction from ~1000)",
+        "NO obsolete directories (cortex_3_0, orchestration_4_0, backups)",
+        "Essential files verified (master_orchestrator.py, brain-protection-rules.yaml)",
+        "Phase 1 scaffolding exists (src/knowledge/company_knowledge_provider.py)",
+        "Pull tracking operational (pulls-from-cortex-5.0.json shows 0/20)",
+        "Python syntax check passes (zero errors)"
+      ],
+      "execution_steps": [
+        "Run create-cortex-5.5-branch.ps1",
+        "Validate using MIGRATION-CHECKLIST.md",
+        "Verify file count ~150 (not 1000+)",
+        "Check no obsolete directories",
+        "Test Python syntax (all files compile)",
+        "Commit and push CORTEX-5.5",
+        "Verify branch on GitHub"
+      ],
+      "go_no_go": {
+        "status": "PENDING",
+        "go_criteria_met": 0,
+        "go_criteria_total": 7,
+        "no_go_triggered": false
+      }
+    },
     {
       "phase_number": 1,
       "name": "Knowledge Extension Layer",
       "track": 1,
-      "status": "NOT_STARTED",
+      "status": "BLOCKED",
+      "blocked_by": "Phase 0",
       "progress_percentage": 0,
       "duration_weeks": 2,
       "start_week": 1,
       "end_week": 2,
-      "dependencies": [],
+      "dependencies": ["Phase 0"],
       "deliverables": [
         {"name": "Company knowledge folder structure", "status": "NOT_STARTED"},
         {"name": "CompanyKnowledgeProvider implementation", "status": "NOT_STARTED"},
