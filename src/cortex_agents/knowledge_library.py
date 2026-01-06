@@ -1131,7 +1131,25 @@ if __name__ == "__main__":
     # Demo usage
     import sys
 
-    workspace = sys.argv[1] if len(sys.argv) > 1 else "/Users/asifhussain/PROJECTS/CORTEX"
+    # Detect project root dynamically
+    from pathlib import Path
+    import sys
+    
+    # Try to import project_root utility
+    try:
+        from src.utils.project_root import get_project_root
+        workspace = str(get_project_root())
+    except ImportError:
+        # Fallback: use current file location to find root
+        current = Path(__file__).resolve()
+        for parent in [current.parent] + list(current.parents):
+            if (parent / "cortex.config.json").exists():
+                workspace = str(parent)
+                break
+        else:
+            workspace = str(current.parent.parent.parent)  # src/cortex_agents -> root
+    
+    workspace = sys.argv[1] if len(sys.argv) > 1 else workspace
     feature = sys.argv[2] if len(sys.argv) > 2 else None
 
     print("🧠 CORTEX Knowledge Library - Phase -1 Discovery")

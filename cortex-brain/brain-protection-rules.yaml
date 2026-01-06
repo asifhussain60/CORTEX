@@ -5,7 +5,37 @@ categories:
 - quality_gates
 - orchestration_lifecycle
 - security_privacy
+- portability
 rules:
+- rule_id: PATH_PORTABILITY
+  category: portability
+  severity: blocked
+  name: Portable Path Resolution Required
+  description: 'NEVER use hardcoded absolute paths. ALWAYS use relative paths or dynamic detection.
+
+    CORTEX must work across different installations (Windows, macOS, Linux) with different install locations.
+
+    '
+  enforcement:
+    trigger: code_change
+    action: block_if_hardcoded_path
+  validation:
+  - No hardcoded paths like /Users/username/... or C:\Users\...
+  - Use src.utils.project_root.get_project_root() for dynamic detection
+  - Use Path(__file__).resolve() for relative resolution
+  - Config files use relative paths only
+  implementation:
+    utility: src.utils.project_root
+    pattern: get_project_root()
+  examples:
+    pass:
+    - from src.utils.project_root import get_project_root; root = get_project_root()
+    - Path(__file__).parent.parent / "cortex-brain"
+    - project_root / "scripts" / "utilities"
+    fail:
+    - workspace = "/Users/asifhussain/PROJECTS/CORTEX"
+    - docs_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/docs")
+    - C:\Users\username\CORTEX\brain
 - rule_id: SETUP_VERIFICATION
   category: orchestration_lifecycle
   severity: blocked

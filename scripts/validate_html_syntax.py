@@ -56,7 +56,20 @@ def validate_html_file(file_path: Path) -> Dict[str, any]:
 
 def main():
     """Validate all modified HTML files"""
-    docs_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/docs")
+    # Detect project root dynamically
+    from pathlib import Path
+    import sys
+    
+    # Add src to path for imports
+    script_dir = Path(__file__).resolve().parent
+    project_root = script_dir.parent
+    sys.path.insert(0, str(project_root))
+    
+    try:
+        from src.utils.project_root import get_project_root
+        docs_dir = get_project_root() / "docs"
+    except ImportError:
+        docs_dir = project_root / "docs"
     
     # Get all HTML files (except story/viewer.html which wasn't modified by cleanup)
     html_files = []

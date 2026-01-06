@@ -427,6 +427,10 @@ class MasterOrchestratorAudit:
             
             evidence.append(f"✅ {priority_count}/{len(rules)} routing rules have priority")
             
+            # Initialize defaults
+            phases = []
+            phase_priority_count = 0
+            
             # Check for priority in plan phases
             c150_plan = self.workspace_root / "cortex-brain/documents/planning/active/c150-remediation-plan/00-c150-remediation-plan.yaml"
             if c150_plan.exists():

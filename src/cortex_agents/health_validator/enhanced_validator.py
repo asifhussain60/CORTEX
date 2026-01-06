@@ -312,7 +312,20 @@ class EnhancedHealthValidator(BaseHealthValidator):
     async def _find_component_files(self, component_name: str) -> List[str]:
         """Find files associated with a component"""
         # Simple heuristic - would be enhanced with actual component discovery
-        workspace_root = Path('/Users/asifhussain/PROJECTS/CORTEX')
+        # Detect project root dynamically
+        from pathlib import Path
+        try:
+            from src.utils.project_root import get_project_root
+            workspace_root = get_project_root()
+        except ImportError:
+            # Fallback: use current file location
+            current = Path(__file__).resolve()
+            for parent in [current.parent] + list(current.parents):
+                if (parent / "cortex.config.json").exists():
+                    workspace_root = parent
+                    break
+            else:
+                workspace_root = current.parent.parent.parent
         potential_files = []
         
         for ext in ['.py', '.cs', '.js', '.ts', '.razor', '.tsx', '.jsx']:
