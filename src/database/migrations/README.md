@@ -295,7 +295,7 @@ This migration system is the implementation of **Phase P00: Database Schema Cons
 
 ## References
 
-- **Phase P00 Manifest:** `cortex-brain/documents/planning/active/cortex-v5-remediation-epic/epic-manifest.yaml`
+- **Phase P00 Manifest:** `cortex-brain/documents/planning/active/cortex5-remediation/epic-manifest.yaml`
 - **Schema Audit Report:** `cortex-brain/documents/analysis/database-schema-audit-report-2026-01-05.md`
 - **Schema Files:** `cortex-brain/schema.sql`, `cortex-brain/schemas/*.sql`
 - **Pattern Search Fix:** `src/tier2/knowledge_graph/patterns/pattern_search.py`

@@ -619,12 +619,12 @@ class SecurityDashboard:
         <div class="glass-card">
             <h3><i class="fas fa-list-check"></i> OWASP Top 10 Coverage</h3>
             <div class="owasp-grid" style="margin-top: 1rem;">
-                {''.join([f'''
+                {''.join([f"""
                 <div class="owasp-item {owasp[oid]['status'].lower()}">
                     <span>{oid}: {owasp[oid]['name']}</span>
                     <span style="font-weight: 600;">{owasp[oid]['findings']}</span>
                 </div>
-                ''' for oid in owasp])}
+                """ for oid in owasp])}
             </div>
         </div>
         

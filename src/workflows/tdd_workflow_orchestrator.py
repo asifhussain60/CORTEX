@@ -68,10 +68,10 @@ if str(src_path) not in sys.path:
 if str(cortex_brain_path) not in sys.path:
     sys.path.insert(0, str(cortex_brain_path))
 
+from src.utils.resource_resolver import get_root_path
 try:
     from agents.view_discovery_agent import ViewDiscoveryAgent
     from agents.feedback_agent import FeedbackAgent
-from src.utils.resource_resolver import get_root_path
 except ImportError:
     # Fallback for different project structures
     ViewDiscoveryAgent = None

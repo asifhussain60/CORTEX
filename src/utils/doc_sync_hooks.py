@@ -352,7 +352,7 @@ def main():
         --force: Force doc sync even if no changes detected
     """
     import sys
-from src.utils.resource_resolver import get_root_path
+    from src.utils.resource_resolver import get_root_path
     
     repo_path = get_root_path()
     hook = DocSyncHook(repo_path)

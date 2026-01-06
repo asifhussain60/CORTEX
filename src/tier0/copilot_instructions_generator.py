@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Dict, Any, Optional
 from datetime import datetime
 import logging
+from src.utils.resource_resolver import get_root_path
 
 from .cortex_implants_loader import (
     CortexImplants,
@@ -40,8 +41,7 @@ class CopilotInstructionsGenerator:
         generator.save(repo_path, output)
     """
     
-    from src.utils.resource_resolver import get_root_path
-CORTEX_PROMPT_PATH = get_root_path() / ".github" / "prompts" / "CORTEX.prompt.md"
+    CORTEX_PROMPT_PATH = get_root_path() / ".github" / "prompts" / "CORTEX.prompt.md"
     
     def __init__(self):
         """Initialize generator."""

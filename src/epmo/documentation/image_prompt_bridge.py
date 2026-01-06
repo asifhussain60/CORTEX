@@ -25,8 +25,8 @@ except ImportError:
     ImagePromptGenerator = None
     logging.warning("ImagePromptGenerator not available - visual prompts will be limited")
 
-from .models import (
 from src.utils.resource_resolver import get_root_path
+from .models import (
     EPMDocumentationModel, ImagePrompt, FileAnalysis, ArchitectureMetrics,
     DependencyRelation, HealthMetrics
 )

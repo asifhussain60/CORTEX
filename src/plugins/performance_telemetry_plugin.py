@@ -28,6 +28,7 @@ License: Proprietary
 from pathlib import Path
 from typing import Dict, List, Optional, Any
 from datetime import datetime, timedelta
+from src.utils.resource_resolver import get_root_path
 from dataclasses import dataclass
 import sqlite3
 import yaml
@@ -1293,7 +1294,6 @@ class PerformanceTelemetryPlugin(BasePlugin):
     def _save_config(self, config: Dict[str, Any], path: Path) -> None:
         """Save configuration file"""
         import json
-from src.utils.resource_resolver import get_root_path
         with open(path, 'w') as f:
             json.dump(config, f, indent=2)
 
