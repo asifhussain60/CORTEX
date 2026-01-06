@@ -1,6 +1,6 @@
 # 🚀 CORTEX Upgrade System - Pull & Wire Latest Enhancements
 
-**Version:** 1.0.0 | **Status:** ✅ PRODUCTION | **Type:** Automated Upgrade Orchestrator  
+**Version:** 2.0.0 | **Status:** ✅ PRODUCTION | **Type:** Automated Upgrade Orchestrator  
 **Author:** Asif Hussain | **Last Updated:** January 6, 2026  
 **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
@@ -90,9 +90,15 @@ python3 -m src.main "upgrade cortex" --format markdown
    - `.github/prompts/CORTEX.prompt.md`
    - `.github/copilot-instructions.md`
    - `cortex-brain/config/master-orchestrator.yaml`
-   - Active plans in `cortex-brain/documents/planning/active/`
+   - Active plans in `cortex-brain/documents/planning/active/` (full structure)
+   - Level 1 HTML pages in `docs/` (architecture, orchestrators, features, etc.)
+   - Plan templates and standards from `cortex-brain/documents/planning/active/html-glassmorphism-alignment/`
 3. Record current commit SHA
-4. Create rollback script
+4. Create rollback script with plan structure restoration
+5. Generate backup manifest:
+   - List of backed up files with checksums
+   - Plan structure snapshots (folder hierarchy)
+   - Documentation site state (HTML/CSS versions)
 
 **Artifacts:**
 - `backups/upgrade-{timestamp}/`
@@ -183,9 +189,91 @@ python3 -m src.main "upgrade cortex" --format markdown
 
 ---
 
+### Phase 7.5: Plan Structure Validation & Upgrade
+**Duration:** 2 minutes  
+**Goal:** Validate active plans against latest structure requirements and upgrade/archive as needed
+
+**Actions:**
+1. Scan active plans directory:
+   - `cortex-brain/documents/planning/active/`
+   - Identify all plan folders and master plan files
+2. Validate plan structure:
+   - **5-Subfolder Structure Required:**
+     - `analysis/` - Deep analysis and investigation reports
+     - `artifacts/` - Generated artifacts
+     - `context/` - Context discovery documents (discovery.md, architecture-analysis.md)
+     - `reports/` - Progress reports and validation reports
+     - `tracking/` - State tracking (progress-tracker.json, CONTINUATION-PROMPT.md)
+   - **Master Plan File Requirements:**
+     - Filename pattern: `00-{plan-name}.md` (meaningful name, max 22 chars, kebab-case)
+     - Must include: metadata block, phases, tasks, DoR/DoD sections
+     - Filename governance: 10-45 characters (excluding extension)
+   - **README.md Required:** Quick start guide in plan root
+3. Detect invalid plans:
+   - Missing subfolder structure (old 4-folder layout)
+   - Root-level markdown files (not in `00-{name}.md` format)
+   - Excessively long filenames (>45 chars)
+   - Missing context discovery documents
+   - No progress tracker or continuation prompt
+4. Upgrade valid plans:
+   - Create missing subfolders (add `context/` if absent)
+   - Rename master plan to `00-{name}.md` format (preserve content)
+   - Generate missing README.md from plan metadata
+   - Create `context/discovery.md` and `context/architecture-analysis.md` stubs
+   - Initialize `tracking/progress-tracker.json` if missing
+5. Archive invalid plans:
+   - Move to `cortex-brain/archives/plans/invalid-{timestamp}/`
+   - Create `ARCHIVE-REASON.md` explaining why archived:
+     - Non-compliant structure
+     - Missing critical components
+     - Obsolete format (pre-v5.0)
+   - Preserve original for reference
+6. Generate upgrade report:
+   - Plans validated (compliant vs non-compliant)
+   - Plans upgraded (structure fixes applied)
+   - Plans archived (moved with reasons)
+   - Recommendations for manual review
+
+**Plan Validation Schema:**
+```yaml
+required_structure:
+  subfolders:
+    - analysis
+    - artifacts
+    - context
+    - reports
+    - tracking
+  master_plan:
+    pattern: "^00-[a-z0-9-]{10,22}\\.md$"
+    max_chars: 22
+  readme:
+    required: true
+    location: "plan-root/README.md"
+  context_files:
+    - "context/discovery.md"
+    - "context/architecture-analysis.md"
+  tracking_files:
+    - "tracking/progress-tracker.json"
+    - "tracking/CONTINUATION-PROMPT.md"
+
+filename_governance:
+  min_length: 10
+  max_length: 45
+  format: "kebab-case"
+  pattern: "{TYPE}-{ID}-{SHORT_TITLE}"
+```
+
+**Artifacts:**
+- `cortex-brain/documents/upgrades/{timestamp}/plan-validation-report.json`
+- `cortex-brain/documents/upgrades/{timestamp}/plan-upgrade-log.md`
+- `cortex-brain/documents/upgrades/{timestamp}/archived-plans-manifest.json`
+- `cortex-brain/archives/plans/invalid-{timestamp}/` (archived invalid plans)
+
+---
+
 ### Phase 8: Documentation Site Regeneration
 **Duration:** 3 minutes  
-**Goal:** Update Level 0, 1, 2 documentation for architecture changes
+**Goal:** Update Level 0, 1, 2 documentation for architecture changes and ensure Level 1 page uniqueness
 
 **Actions:**
 1. Run architecture change detection:
@@ -201,11 +289,45 @@ python3 -m src.main "upgrade cortex" --format markdown
      - `cortex-brain/documents/cortex-architecture-quick-ref.md`
      - `cortex-brain/documents/orchestrators/master-child-pattern.md`
      - `cortex-brain/documents/orchestrators/audit-logging-integration.md`
-3. Update diagrams:
-   - Architecture flow diagrams
-   - Orchestrator hierarchy charts
-   - Master/child orchestrator patterns
-4. Regenerate docs site HTML (if applicable)
+3. **Level 1 Page Uniqueness Validation:**
+   - Analyze all Level 1 pages: architecture, orchestrators, features, getting-started, knowledge, story, sts, toolkit-manager, token-optimization
+   - **Uniqueness Criteria:**
+     - Content focus: Architecture = HOW BUILT (structure), Orchestrators = WHAT DOES (operations)
+     - Diagram types: Architecture uses D3.js force-directed/Sankey, Orchestrators uses Mermaid state/sequence
+     - Sections: Each page has distinct section structure (no overlap >30%)
+     - Visual differentiation: Different glassmorphism color rotation per page
+   - **Validation Checks:**
+     - Zero orchestrator workflow content on architecture page
+     - 9+ architectural diagrams (Mermaid + D3.js) on architecture page
+     - 5+ distinct architectural sections (Brain, Components, Execution, SKULL, Modules)
+     - Visual overlap score <30% between pages
+   - **Auto-Fix Actions:**
+     - Remove orchestrator workflow content from architecture page
+     - Generate missing architectural diagrams (4-tier brain, system components, execution paths)
+     - Inject Mermaid/D3.js diagram placeholders
+     - Apply 7-color glassmorphism rotation uniquely per page
+4. Update diagrams:
+   - **Architecture Page (Structural Focus):**
+     - Four-Tier Brain Hierarchy (D3.js sunburst)
+     - System Component Overview (D3.js force-directed)
+     - Data Flow Pipeline (Mermaid flowchart)
+     - Agent Coordination Protocol (Mermaid sequence)
+     - Database Schema Relationships (Mermaid ER diagram)
+     - Tier Access Patterns (D3.js Sankey)
+     - Module Dependency Graph (D3.js chord)
+     - Git Checkpoint Architecture (Mermaid flowchart)
+     - SKULL Rule Enforcement Points (Mermaid deployment)
+   - **Orchestrators Page (Operational Focus):**
+     - Orchestrator Lifecycle (Mermaid state)
+     - Category Interaction Matrix (D3.js chord)
+     - TDD Cycle (Mermaid flowchart)
+     - Planning Phases (Mermaid timeline)
+     - Execution Pipeline (Mermaid sequence)
+5. Regenerate docs site HTML:
+   - Run `scripts/standardize_level1_views.py` with uniqueness enforcement
+   - Generate diagrams via `scripts/generate_architecture_diagrams.py`
+   - Validate against `cortex-brain/documents/planning/active/html-glassmorphism-alignment/standards/approved-panels.yaml`
+   - Ensure NO inline styles (CSS classes only)
 
 **Artifacts:**
 - `cortex-brain/documents/upgrades/{timestamp}/architecture-changes.json`
@@ -310,15 +432,33 @@ python3 -m src.main "upgrade cortex" --format markdown
    - Audit logging improvements
    - Architecture changes
    - Documentation updates
+   - Plan structure validation (5-subfolder standard)
+   - Level 1 page uniqueness improvements
+   - Diagram generation (Mermaid + D3.js)
 2. Generate guidance documents:
    - Quick start for new features
    - Migration guide for existing workflows
    - Master/child orchestrator tutorial
    - Audit log viewing guide
+   - Plan structure migration guide (4-folder → 5-folder)
+   - Level 1 documentation standards guide
 3. Create change visualization:
    - Before/after architecture diagram
    - Feature comparison matrix
    - Breaking changes (if any)
+   - Plan structure comparison (old vs new)
+   - Level 1 page uniqueness matrix
+4. **Automated Improvement Recommendations:**
+   - **Diagram Generation Script:** If missing architectural diagrams detected, auto-generate via `scripts/generate_architecture_diagrams.py`
+   - **Plan Upgrade Script:** If non-compliant plans found, offer to run `scripts/upgrade_plan_structures.py --auto-migrate`
+   - **Uniqueness Script:** If Level 1 overlap >30%, run `scripts/standardize_level1_views.py --enforce-uniqueness`
+   - **Next Steps Prompt:** Display actionable commands user can run immediately:
+     ```bash
+     # Recommended actions after upgrade:
+     python3 scripts/generate_architecture_diagrams.py --target architecture
+     python3 scripts/upgrade_plan_structures.py --validate-all
+     python3 scripts/standardize_level1_views.py --check-uniqueness
+     ```
 
 **Artifacts:**
 - `cortex-brain/documents/upgrades/{timestamp}/EXECUTIVE-SUMMARY.md`
@@ -339,12 +479,18 @@ python3 -m src.main "upgrade cortex" --format markdown
 - ✅ Master/child orchestrator wiring complete
 - ✅ Audit logging integrated across all orchestrators
 - ✅ Integration tests pass (>95% success rate)
+- ✅ **Plan structure validation:** All active plans comply with 5-subfolder standard
+- ✅ **Level 1 uniqueness:** Architecture vs Orchestrators visual overlap <30%
+- ✅ **Diagram generation:** 9+ architectural diagrams deployed
 
 ### Quality
 - ✅ Zero breaking changes to user workflows (unless documented)
 - ✅ Backward compatibility maintained for existing plans
 - ✅ Performance not degraded (within 10% of baseline)
 - ✅ Documentation clarity score >90% (readability metrics)
+- ✅ **Plan compliance rate:** >95% of active plans pass validation
+- ✅ **Filename governance:** All new files comply with 10-45 char limit
+- ✅ **Level 1 content differentiation:** Each page has unique focus (structure vs operations vs features)
 
 ### User Experience
 - ✅ Executive summary clear and actionable (<500 words)
@@ -371,7 +517,9 @@ powershell -ExecutionPolicy Bypass -File backups/upgrade-{timestamp}/rollback.ps
 2. Restore backed up config files
 3. Reinstall old dependencies (from backup requirements.txt)
 4. Restore old prompts and documentation
-5. Verify system functional with health check
+5. **Restore plan structures:** Move archived plans back to active directory (if upgrade modified structure)
+6. **Restore Level 1 pages:** Revert docs site HTML to backup versions
+7. Verify system functional with health check
 
 ---
 
@@ -409,16 +557,23 @@ cortex-brain/documents/upgrades/{timestamp}/
 ├── 05-conflicts.json                  # Merge conflicts (if any)
 ├── 06-dependency-changes.json         # Package updates
 ├── 07-pip-install-log.txt             # Pip install output
+├── 07.5-plan-validation-report.json   # 🆕 Plan structure validation results
+├── 07.5-plan-upgrade-log.md           # 🆕 Plan upgrade actions taken
+├── 07.5-archived-plans-manifest.json  # 🆕 Invalid plans archived
 ├── 08-orchestrator-changes.json       # Orchestrator additions/modifications
 ├── 09-prompt-changes.md               # Prompt file updates
 ├── 10-architecture-changes.json       # Architecture modifications
 ├── 11-docs-regeneration-log.txt       # Documentation build log
+├── 11.5-level1-uniqueness-report.json # 🆕 Level 1 page differentiation analysis
+├── 11.5-diagram-generation-log.txt    # 🆕 Architectural diagram generation
 ├── 12-audit-logger-wiring.json        # Audit logger integration details
 ├── 13-test-results.json               # Integration test results
 ├── 14-test-output.log                 # Detailed test output
 ├── EXECUTIVE-SUMMARY.md               # ⭐ User-facing summary (read this first)
 ├── NEW-FEATURES.md                    # New capabilities added
 ├── MIGRATION-GUIDE.md                 # How to use new features
+├── PLAN-MIGRATION-GUIDE.md            # 🆕 4-folder → 5-folder plan migration
+├── LEVEL1-STANDARDS-GUIDE.md          # 🆕 Level 1 documentation standards
 └── BREAKING-CHANGES.md                # Breaking changes (if any)
 
 backups/upgrade-{timestamp}/
@@ -431,6 +586,79 @@ backups/upgrade-{timestamp}/
 ├── rollback.sh                        # macOS/Linux rollback script
 └── rollback.ps1                       # Windows rollback script
 ```
+
+---
+
+## 🤖 Automated Action Scripts
+
+The upgrade orchestrator triggers these utility scripts automatically:
+
+### Plan Structure Validation & Migration
+```bash
+# Validate all active plans against 5-subfolder standard
+python3 scripts/validate_plan_structures.py --report-only
+
+# Auto-migrate plans to latest structure (adds missing folders, renames master plan)
+python3 scripts/upgrade_plan_structures.py --auto-migrate
+
+# Archive invalid plans (non-compliant with v5.0 standards)
+python3 scripts/upgrade_plan_structures.py --archive-invalid
+```
+
+### Level 1 Documentation Uniqueness
+```bash
+# Check Level 1 page overlap percentage
+python3 scripts/standardize_level1_views.py --check-uniqueness
+
+# Enforce uniqueness (remove duplicate content, regenerate sections)
+python3 scripts/standardize_level1_views.py --enforce-uniqueness
+
+# Validate glassmorphism theme consistency (7-color palette)
+python3 scripts/standardize_level1_views.py --validate-theme
+```
+
+### Architectural Diagram Generation
+```bash
+# Generate all architectural diagrams (Mermaid + D3.js)
+python3 scripts/generate_architecture_diagrams.py --target all
+
+# Generate only architecture page diagrams (9 structural diagrams)
+python3 scripts/generate_architecture_diagrams.py --target architecture
+
+# Generate only orchestrators page diagrams (5 operational diagrams)
+python3 scripts/generate_architecture_diagrams.py --target orchestrators
+```
+
+### Orchestrator Registration Check
+```bash
+# Verify all orchestrators registered in master-orchestrator.yaml
+python3 scripts/validate_orchestrator_registry.py
+
+# Auto-register new orchestrators (scans src/orchestrators/)
+python3 scripts/regenerate_routing_table.py --auto-register
+```
+
+### Filename Governance Validation
+```bash
+# Check all files for filename length compliance (10-45 chars)
+python3 scripts/validate_filename_governance.py --strict
+
+# Suggest shorter names for files exceeding 45 chars
+python3 scripts/validate_filename_governance.py --suggest-fixes
+
+# Auto-rename files to comply with governance (with backup)
+python3 scripts/validate_filename_governance.py --auto-fix --backup
+```
+
+**Triggered Automatically During Upgrade:**
+- Phase 3 (Backup): All backup operations executed before any modifications
+- Phase 7.5 (Plan Validation): `validate_plan_structures.py` + `upgrade_plan_structures.py`
+- Phase 8 (Docs Regen): `standardize_level1_views.py` + `generate_architecture_diagrams.py`
+- Phase 9 (Orchestrator Wiring): `regenerate_routing_table.py` + `validate_orchestrator_registry.py`
+- Phase 12 (Summary): `validate_filename_governance.py` (report mode)
+
+**Manual Invocation After Upgrade:**
+User receives recommended commands in EXECUTIVE-SUMMARY.md for optional manual improvements.
 
 ---
 
@@ -504,6 +732,53 @@ python3 -m src.main "upgrade cortex --dry-run"
 2. Regenerate routing: `python3 scripts/regenerate_routing_table.py`
 3. Clear pattern cache: `rm -rf cortex-brain/cache/routing/*.json`
 4. Test: `python3 -m src.main "help"`
+
+### Issue: Plan Structure Validation Failures
+**Symptoms:** Plans archived during upgrade, "non-compliant structure" warnings  
+**Solution:**
+1. Review archived plans: `cat cortex-brain/documents/upgrades/{timestamp}/archived-plans-manifest.json`
+2. Check what caused archival: `cat cortex-brain/archives/plans/invalid-{timestamp}/ARCHIVE-REASON.md`
+3. Manually migrate plan if needed:
+   ```bash
+   # Create 5-subfolder structure
+   cd cortex-brain/documents/planning/active/{plan-name}
+   mkdir -p analysis artifacts context reports tracking
+   
+   # Rename master plan
+   mv {old-name}.md 00-{short-name}.md
+   
+   # Generate required files
+   touch README.md
+   touch context/discovery.md
+   touch context/architecture-analysis.md
+   touch tracking/progress-tracker.json
+   touch tracking/CONTINUATION-PROMPT.md
+   ```
+4. Re-validate: `python3 scripts/validate_plan_structures.py --plan {plan-name}`
+
+### Issue: Level 1 Page Overlap Detected
+**Symptoms:** Warning: "Architecture page contains orchestrator workflow content (>30% overlap)"  
+**Solution:**
+1. Review overlap report: `cat cortex-brain/documents/upgrades/{timestamp}/level1-uniqueness-report.json`
+2. Run uniqueness enforcement: `python3 scripts/standardize_level1_views.py --enforce-uniqueness`
+3. Manually review architecture page: Remove sections like "Orchestrator Workflows", "TDD Cycle", "Planning Phases"
+4. Re-validate: `python3 scripts/standardize_level1_views.py --check-uniqueness`
+
+### Issue: Missing Architectural Diagrams
+**Symptoms:** Architecture page has <9 diagrams, placeholder divs visible  
+**Solution:**
+1. Check diagram generation log: `cat cortex-brain/documents/upgrades/{timestamp}/diagram-generation-log.txt`
+2. Regenerate diagrams: `python3 scripts/generate_architecture_diagrams.py --target architecture --force`
+3. Verify Mermaid CLI installed: `mermaid --version` (if not: `npm install -g @mermaid-js/mermaid-cli`)
+4. Check diagram injection: `grep -r "mermaid" docs/architecture/index.html`
+
+### Issue: Filename Too Long Warnings
+**Symptoms:** Files flagged with "exceeds 45 character limit"  
+**Solution:**
+1. Review violations: `python3 scripts/validate_filename_governance.py --report-only`
+2. Get suggested names: `python3 scripts/validate_filename_governance.py --suggest-fixes`
+3. Auto-rename with backup: `python3 scripts/validate_filename_governance.py --auto-fix --backup`
+4. Verify: Check `backups/filename-renames-{timestamp}/` for backup copies
 
 ---
 
@@ -595,6 +870,20 @@ python3 -m src.main "tdd generate html tests for login.html"
 ---
 
 ## 📝 Changelog
+
+### v2.0.0 (2026-01-06)
+- **🆕 Phase 7.5:** Plan structure validation & upgrade (5-subfolder standard)
+- **🆕 Automated Actions:** Plan migration, Level 1 uniqueness enforcement, diagram generation
+- **🆕 Filename Governance:** Validate 10-45 character filename limit
+- **🆕 Level 1 Uniqueness:** Ensure architecture vs orchestrators differentiation (HOW vs WHAT)
+- **🆕 Diagram Generation:** 9+ architectural diagrams (Mermaid + D3.js) for architecture page
+- **🆕 Invalid Plan Archival:** Auto-detect and archive non-compliant plan structures
+- **🆕 Backup Enhancement:** Include plan structures, Level 1 HTML, and documentation standards
+- **🆕 Rollback Enhancement:** Restore plan structures and documentation site state
+- **🆕 Troubleshooting:** Plan validation, Level 1 overlap, diagram generation, filename governance
+- **Enhancement:** Phase 8 now validates Level 1 page uniqueness and auto-fixes overlap
+- **Enhancement:** Phase 12 includes automated action recommendations with copy-paste commands
+- **Enhancement:** Success criteria include plan compliance rate and Level 1 visual differentiation
 
 ### v1.0.0 (2026-01-06)
 - Initial upgrade system implementation
