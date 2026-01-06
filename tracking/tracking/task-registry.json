@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
-  "updated_at": "2026-01-06T15:20:07.200426",
-  "task_count": 223,
+  "updated_at": "2026-01-06T15:42:00.968782",
+  "task_count": 229,
   "tasks": [
     {
       "id": 1,
@@ -2408,6 +2408,72 @@
       "created_at": "2026-01-06T15:19:47.502231",
       "updated_at": "2026-01-06T15:20:07.200397",
       "completed_at": "2026-01-06T15:20:07.200413"
+    },
+    {
+      "id": 224,
+      "title": "Knowledge Library",
+      "description": "Consult governance and knowledge graph",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T15:41:41.522826",
+      "updated_at": "2026-01-06T15:41:41.555988",
+      "completed_at": "2026-01-06T15:41:41.556000"
+    },
+    {
+      "id": 225,
+      "title": "Context Discovery",
+      "description": "Search workspace for relevant context",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T15:41:41.525619",
+      "updated_at": "2026-01-06T15:42:00.902248",
+      "completed_at": "2026-01-06T15:42:00.902255"
+    },
+    {
+      "id": 226,
+      "title": "Architecture Analysis",
+      "description": "Parse codebase and analyze structure",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T15:41:41.528276",
+      "updated_at": "2026-01-06T15:42:00.916508",
+      "completed_at": "2026-01-06T15:42:00.916517"
+    },
+    {
+      "id": 227,
+      "title": "Plan Generation",
+      "description": "Create structured plan document",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T15:41:41.531109",
+      "updated_at": "2026-01-06T15:42:00.931015",
+      "completed_at": "2026-01-06T15:42:00.931023"
+    },
+    {
+      "id": 228,
+      "title": "Folder Creation",
+      "description": "Create directory structure for plan",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T15:41:41.534024",
+      "updated_at": "2026-01-06T15:42:00.952785",
+      "completed_at": "2026-01-06T15:42:00.952798"
+    },
+    {
+      "id": 229,
+      "title": "Validation",
+      "description": "Validate plan structure and completeness",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T15:41:41.536707",
+      "updated_at": "2026-01-06T15:42:00.968759",
+      "completed_at": "2026-01-06T15:42:00.968771"
     }
   ]
 }

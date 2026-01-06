@@ -1,18 +1,20 @@
 {
   "epic_metadata": {
     "epic_id": "cortex5-enhancement-epic-v2",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "status": "BLOCKED_ON_PHASE_0",
     "created_date": "2026-01-06",
-    "total_phases": 12,
-    "timeline_weeks": "15 minutes (Phase 0) + 9 weeks (Phases 1-11)",
-    "complexity_tier": 5
+    "last_updated": "2026-01-06",
+    "total_phases": 13,
+    "timeline_weeks": "15 minutes (Phase 0) + 9 weeks (Phases 1-12)",
+    "complexity_tier": 5,
+    "last_changes": "Added Phase 9: Generic Vacuum Orchestrator v3"
   },
   "overall_progress": {
     "phases_completed": 0,
     "phases_in_progress": 0,
-    "phases_not_started": 12,
-    "phases_blocked": 11,
+    "phases_not_started": 13,
+    "phases_blocked": 12,
     "completion_percentage": 0,
     "current_phase": 0,
     "on_schedule": false,
@@ -29,7 +31,7 @@
       "start_week": 0,
       "end_week": 0,
       "dependencies": [],
-      "blocks_phases": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+      "blocks_phases": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
       "deliverables": [
         {"name": "CORTEX-5.5 branch created from main", "status": "NOT_STARTED"},
         {"name": "~150 essential files copied from CORTEX-5.0", "status": "NOT_STARTED"},
@@ -249,6 +251,34 @@
     },
     {
       "phase_number": 9,
+      "name": "Generic Vacuum Orchestrator v3",
+      "track": 3,
+      "status": "NOT_STARTED",
+      "progress_percentage": 0,
+      "duration_weeks": 1,
+      "duration_days": 5,
+      "start_week": 7,
+      "end_week": 7,
+      "dependencies": [1, 4],
+      "deliverables": [
+        {"name": "Rule engine & schema (YAML-based)", "status": "NOT_STARTED"},
+        {"name": "Pluggable analyzer system (4 analyzers)", "status": "NOT_STARTED"},
+        {"name": "Preset templates (4 presets)", "status": "NOT_STARTED"},
+        {"name": "Multi-format reporting (JSON/MD/HTML/CSV)", "status": "NOT_STARTED"},
+        {"name": "CLI & API enhancement", "status": "NOT_STARTED"},
+        {"name": "Testing & documentation", "status": "NOT_STARTED"}
+      ],
+      "success_criteria": [
+        "Rule engine parses and executes YAML rules",
+        "4 analyzers operational (Python AST, JS AST, content, metadata)",
+        "4 presets work (cortex-brain, python, node, generic)",
+        "Multi-format reports generated",
+        "CLI supports 3 modes (cortex-brain, project, custom)",
+        "Vacuum works on 3+ different project types"
+      ]
+    },
+    {
+      "phase_number": 10,
       "name": "Plan Viewer Modernization",
       "track": 3,
       "status": "NOT_STARTED",
@@ -272,6 +302,29 @@
     },
     {
       "phase_number": 10,
+      "name": "Plan Viewer Modernization",
+      "track": 3,
+      "status": "NOT_STARTED",
+      "progress_percentage": 0,
+      "duration_weeks": 1,
+      "start_week": 5,
+      "end_week": 6,
+      "dependencies": [],
+      "deliverables": [
+        {"name": "CSS standardization", "status": "NOT_STARTED"},
+        {"name": "Responsive design implementation", "status": "NOT_STARTED"},
+        {"name": "Phase navigation UI", "status": "NOT_STARTED"},
+        {"name": "Accessibility (WCAG AA)", "status": "NOT_STARTED"}
+      ],
+      "success_criteria": [
+        "CSS standardized across all viewers",
+        "Responsive design works on mobile/tablet/desktop",
+        "Phase navigation intuitive",
+        "WCAG AA compliance achieved"
+      ]
+    },
+    {
+      "phase_number": 11,
       "name": "Response Template Optimization",
       "track": 3,
       "status": "NOT_STARTED",
@@ -295,6 +348,29 @@
     },
     {
       "phase_number": 11,
+      "name": "Response Template Optimization",
+      "track": 3,
+      "status": "NOT_STARTED",
+      "progress_percentage": 0,
+      "duration_weeks": 1,
+      "start_week": 7,
+      "end_week": 7,
+      "dependencies": [],
+      "deliverables": [
+        {"name": "INSTANT mode (1-3 lines)", "status": "NOT_STARTED"},
+        {"name": "FOCUSED mode (concise)", "status": "NOT_STARTED"},
+        {"name": "STRUCTURED mode (detailed)", "status": "NOT_STARTED"},
+        {"name": "COMPREHENSIVE mode (exhaustive)", "status": "NOT_STARTED"}
+      ],
+      "success_criteria": [
+        "4 response modes operational",
+        "Mode selection automated based on context",
+        "Token usage reduced by 30%",
+        "User satisfaction improved"
+      ]
+    },
+    {
+      "phase_number": 12,
       "name": "End-to-End Integration Testing",
       "track": 4,
       "status": "NOT_STARTED",
