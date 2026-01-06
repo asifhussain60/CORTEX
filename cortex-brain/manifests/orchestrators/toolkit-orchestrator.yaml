@@ -1,0 +1,402 @@
+# CORTEX Toolkit Orchestrator v1.0
+# Centralized utilities for documentation, planning, and routing operations
+
+orchestrator_id: "toolkit_orchestrator"
+name: "CORTEX Toolkit Orchestrator"
+version: "1.0.0"
+status: "production"
+type: "utility"
+
+metadata:
+  author: "Asif Hussain"
+  created_at: "2026-01-06"
+  last_updated: "2026-01-06"
+  description: |
+    Centralized toolkit orchestrator that consolidates scattered Python utilities
+    into a unified CLI interface. Provides documentation maintenance, plan validation,
+    and routing management capabilities across three strategic categories.
+  
+  copyright: "© 2025-2026 Asif Hussain. All rights reserved."
+  
+  tags:
+    - toolkit
+    - utilities
+    - documentation
+    - planning
+    - routing
+    - validation
+    - cli
+
+# ═══════════════════════════════════════════════════════════════
+# ROUTING CONFIGURATION
+# ═══════════════════════════════════════════════════════════════
+
+routing:
+  patterns:
+    - pattern: "^(toolkit|tool|utility|cortex-toolkit).*$"
+      priority: 50
+      confidence: 0.9
+      match_type: "regex"
+      examples:
+        - "toolkit docs remove-inline-styles architecture/index.html"
+        - "cortex-toolkit validate template-compliance orchestrators/index.html"
+        - "tool planning validate-plan-structures"
+  
+  fallback_to_llm: false
+  requires_confirmation: false
+
+# ═══════════════════════════════════════════════════════════════
+# TOOLKIT CATEGORIES
+# ═══════════════════════════════════════════════════════════════
+
+categories:
+  documentation:
+    description: "HTML glassmorphism standardization and validation utilities"
+    base_path: "cortex-toolkit/orchestrators/documentation/"
+    scripts:
+      - name: "remove_inline_styles"
+        file: "remove_inline_styles.py"
+        description: "Remove all inline style attributes from HTML page"
+        cli_command: "docs remove-inline-styles"
+        args:
+          - name: "page_path"
+            type: "string"
+            required: true
+            description: "Path to HTML page"
+          - name: "backup"
+            type: "boolean"
+            default: true
+            description: "Create backup before modification"
+      
+      - name: "standardize_level1_views"
+        file: "standardize_level1_views.py"
+        description: "Standardize all Level 1 views with glassmorphism"
+        cli_command: "docs standardize-level1-views"
+        args:
+          - name: "check_uniqueness"
+            type: "boolean"
+            default: false
+            description: "Check content overlap between pages"
+          - name: "enforce_uniqueness"
+            type: "boolean"
+            default: false
+            description: "Auto-remove duplicate content"
+      
+      - name: "detect_inline_styles"
+        file: "detect_inline_styles.py"
+        description: "Detect inline styles in HTML pages"
+        cli_command: "docs detect-inline-styles"
+        args:
+          - name: "page_path"
+            type: "string"
+            required: true
+            description: "Path to HTML page"
+          - name: "report_only"
+            type: "boolean"
+            default: true
+            description: "Only report, don't fix"
+      
+      - name: "calculate_complexity"
+        file: "calculate_complexity.py"
+        description: "Calculate HTML structure complexity score"
+        cli_command: "docs calculate-complexity"
+        args:
+          - name: "page_path"
+            type: "string"
+            required: true
+            description: "Path to HTML page"
+      
+      - name: "generate_architecture_diagrams"
+        file: "generate_architecture_diagrams.py"
+        description: "Generate architectural diagrams (Mermaid + D3.js)"
+        cli_command: "docs generate-diagrams"
+        args:
+          - name: "target"
+            type: "choice"
+            choices: ["all", "architecture", "orchestrators"]
+            default: "all"
+            description: "Target page type"
+          - name: "force"
+            type: "boolean"
+            default: false
+            description: "Regenerate existing diagrams"
+      
+      - name: "validate_template_compliance"
+        file: "validate_template_compliance.py"
+        description: "Validate page against approved template"
+        cli_command: "validate template-compliance"
+        args:
+          - name: "page_path"
+            type: "string"
+            required: true
+            description: "Path to HTML page"
+          - name: "reference"
+            type: "string"
+            default: "docs/orchestrators/index.html"
+            description: "Reference template path"
+  
+  planning:
+    description: "Plan structure validation and migration utilities"
+    base_path: "cortex-toolkit/orchestrators/planning/"
+    scripts:
+      - name: "validate_plan_structures"
+        file: "validate_plan_structures.py"
+        description: "Validate active plans against 5-subfolder standard"
+        cli_command: "planning validate-plan-structures"
+        args:
+          - name: "report_only"
+            type: "boolean"
+            default: true
+            description: "Only report, don't fix"
+          - name: "plan_name"
+            type: "string"
+            required: false
+            description: "Specific plan to validate (optional)"
+      
+      - name: "upgrade_plan_structures"
+        file: "upgrade_plan_structures.py"
+        description: "Upgrade plans to latest structure (4-folder → 5-folder)"
+        cli_command: "planning upgrade-plan-structures"
+        args:
+          - name: "auto_migrate"
+            type: "boolean"
+            default: false
+            description: "Auto-migrate plans without confirmation"
+          - name: "archive_invalid"
+            type: "boolean"
+            default: false
+            description: "Archive non-compliant plans"
+  
+  routing:
+    description: "Orchestrator routing and registry management utilities"
+    base_path: "cortex-toolkit/orchestrators/routing/"
+    scripts:
+      - name: "validate_orchestrator_registry"
+        file: "validate_orchestrator_registry.py"
+        description: "Verify all orchestrators registered in master-orchestrator.yaml"
+        cli_command: "routing validate-orchestrator-registry"
+        args:
+          - name: "strict"
+            type: "boolean"
+            default: false
+            description: "Fail on missing registrations"
+      
+      - name: "regenerate_routing_table"
+        file: "regenerate_routing_table.py"
+        description: "Auto-register new orchestrators from src/orchestrators/"
+        cli_command: "routing regenerate-routing-table"
+        args:
+          - name: "auto_register"
+            type: "boolean"
+            default: false
+            description: "Auto-register without confirmation"
+          - name: "backup"
+            type: "boolean"
+            default: true
+            description: "Backup master-orchestrator.yaml"
+
+# ═══════════════════════════════════════════════════════════════
+# CLI INTERFACE
+# ═══════════════════════════════════════════════════════════════
+
+cli_interface:
+  enabled: true
+  entry_point: "cortex-toolkit/cli.py"
+  command: "cortex-toolkit"
+  framework: "click"
+  
+  usage_examples:
+    documentation:
+      - "python -m cortex_toolkit.cli docs remove-inline-styles architecture/index.html"
+      - "python -m cortex_toolkit.cli docs standardize-level1-views --check-uniqueness"
+      - "python -m cortex_toolkit.cli docs generate-diagrams --target architecture --force"
+      - "python -m cortex_toolkit.cli validate template-compliance orchestrators/index.html"
+    
+    planning:
+      - "python -m cortex_toolkit.cli planning validate-plan-structures --report-only"
+      - "python -m cortex_toolkit.cli planning upgrade-plan-structures --auto-migrate"
+      - "python -m cortex_toolkit.cli planning validate-plan-structures --plan docs-orchestrator-v2"
+    
+    routing:
+      - "python -m cortex_toolkit.cli routing validate-orchestrator-registry --strict"
+      - "python -m cortex_toolkit.cli routing regenerate-routing-table --auto-register"
+  
+  help_text: |
+    CORTEX Toolkit - Unified CLI for orchestrator utilities
+    
+    Usage:
+      cortex-toolkit [CATEGORY] [COMMAND] [OPTIONS]
+    
+    Categories:
+      docs        Documentation orchestrator utilities
+      planning    Plan validation and migration utilities
+      routing     Orchestrator routing management
+      validate    Validation commands (cross-category)
+    
+    Examples:
+      cortex-toolkit docs remove-inline-styles page.html
+      cortex-toolkit planning validate-plan-structures
+      cortex-toolkit routing regenerate-routing-table
+
+# ═══════════════════════════════════════════════════════════════
+# VALIDATORS INTEGRATION
+# ═══════════════════════════════════════════════════════════════
+
+validators:
+  enabled: true
+  registry_path: "cortex-toolkit/validators/"
+  
+  registered_validators:
+    - id: "template_compliance"
+      class: "TemplateComplianceValidator"
+      cli_command: "validate template-compliance"
+    
+    - id: "margins"
+      class: "MarginsValidator"
+      cli_command: "validate margins"
+    
+    - id: "logo_placement"
+      class: "LogoPlacementValidator"
+      cli_command: "validate logo-placement"
+    
+    - id: "inline_styles"
+      class: "InlineStyleValidator"
+      cli_command: "validate inline-styles"
+    
+    - id: "uniqueness"
+      class: "UniquenessValidator"
+      cli_command: "validate uniqueness"
+
+# ═══════════════════════════════════════════════════════════════
+# MIGRATION PLAN (Scattered → Centralized)
+# ═══════════════════════════════════════════════════════════════
+
+migration:
+  status: "planned"
+  
+  scripts_to_move:
+    - source: "scripts/remove-inline-styles.py"
+      destination: "cortex-toolkit/orchestrators/documentation/remove_inline_styles.py"
+      symlink: true
+      deprecation_warning: "Moved to cortex-toolkit. Use: cortex-toolkit docs remove-inline-styles"
+    
+    - source: "scripts/standardize_level1_views.py"
+      destination: "cortex-toolkit/orchestrators/documentation/standardize_level1_views.py"
+      symlink: true
+      deprecation_warning: "Moved to cortex-toolkit. Use: cortex-toolkit docs standardize-level1-views"
+    
+    - source: "scripts/detect-inline-styles.py"
+      destination: "cortex-toolkit/orchestrators/documentation/detect_inline_styles.py"
+      symlink: true
+      deprecation_warning: "Moved to cortex-toolkit. Use: cortex-toolkit docs detect-inline-styles"
+    
+    - source: "scripts/calculate-complexity.py"
+      destination: "cortex-toolkit/orchestrators/documentation/calculate_complexity.py"
+      symlink: true
+      deprecation_warning: "Moved to cortex-toolkit. Use: cortex-toolkit docs calculate-complexity"
+    
+    - source: "scripts/generate_architecture_diagrams.py"
+      destination: "cortex-toolkit/orchestrators/documentation/generate_architecture_diagrams.py"
+      symlink: true
+      deprecation_warning: "Moved to cortex-toolkit. Use: cortex-toolkit docs generate-diagrams"
+    
+    - source: "scripts/validate_plan_structures.py"
+      destination: "cortex-toolkit/orchestrators/planning/validate_plan_structures.py"
+      symlink: true
+      deprecation_warning: "Moved to cortex-toolkit. Use: cortex-toolkit planning validate-plan-structures"
+    
+    - source: "scripts/upgrade_plan_structures.py"
+      destination: "cortex-toolkit/orchestrators/planning/upgrade_plan_structures.py"
+      symlink: true
+      deprecation_warning: "Moved to cortex-toolkit. Use: cortex-toolkit planning upgrade-plan-structures"
+    
+    - source: "scripts/validate_orchestrator_registry.py"
+      destination: "cortex-toolkit/orchestrators/routing/validate_orchestrator_registry.py"
+      symlink: true
+      deprecation_warning: "Moved to cortex-toolkit. Use: cortex-toolkit routing validate-orchestrator-registry"
+    
+    - source: "scripts/regenerate_routing_table.py"
+      destination: "cortex-toolkit/orchestrators/routing/regenerate_routing_table.py"
+      symlink: true
+      deprecation_warning: "Moved to cortex-toolkit. Use: cortex-toolkit routing regenerate-routing-table"
+  
+  migration_script: "scripts/migrate_to_toolkit.py"
+  rollback_script: "scripts/rollback_toolkit_migration.py"
+
+# ═══════════════════════════════════════════════════════════════
+# AUDIT LOGGING
+# ═══════════════════════════════════════════════════════════════
+
+audit_logging:
+  enabled: true
+  log_directory: "logs/cortex-audit/toolkit/"
+  
+  event_types:
+    - toolkit_command_executed
+    - script_invoked
+    - validator_run
+    - migration_performed
+    - error_occurred
+  
+  tracked_metrics:
+    - commands_executed_count
+    - scripts_invoked_count
+    - validators_run_count
+    - validation_failures_count
+    - execution_time_ms
+  
+  redaction:
+    enabled: true
+    sensitive_fields:
+      - "file_path"  # Sanitize user paths
+      - "api_key"
+      - "token"
+
+# ═══════════════════════════════════════════════════════════════
+# SUCCESS CRITERIA
+# ═══════════════════════════════════════════════════════════════
+
+success_criteria:
+  functional:
+    - all_scripts_centralized: "9 scripts moved to cortex-toolkit/"
+    - cli_interface_working: "All CLI commands functional"
+    - validators_accessible: "5 validators exposed via CLI"
+    - symlinks_created: "Backward compatibility via symlinks"
+    - deprecation_warnings: "Old script locations display warnings"
+  
+  quality:
+    - zero_scattered_scripts: "No orphaned scripts in scripts/"
+    - unified_interface: "Single entry point for all utilities"
+    - help_text_comprehensive: "All commands documented in --help"
+    - error_messages_clear: "Actionable error messages with remediation"
+
+# ═══════════════════════════════════════════════════════════════
+# DOCUMENTATION
+# ═══════════════════════════════════════════════════════════════
+
+documentation:
+  main_doc: "cortex-brain/documents/orchestrators/toolkit-orchestrator.md"
+  cli_reference: "cortex-brain/documents/orchestrators/toolkit-cli-reference.md"
+  migration_guide: "cortex-brain/documents/orchestrators/toolkit-migration-guide.md"
+  
+  related_manifests:
+    - "cortex-brain/manifests/orchestrators/documentation-orchestrator.yaml"
+    - "cortex-brain/manifests/orchestrators/planning-orchestrator.yaml"
+    - "cortex-brain/config/master-orchestrator.yaml"
+
+# ═══════════════════════════════════════════════════════════════
+# VERSION HISTORY
+# ═══════════════════════════════════════════════════════════════
+
+changelog:
+  - version: "1.0.0"
+    date: "2026-01-06"
+    changes:
+      - "Initial toolkit orchestrator creation"
+      - "Centralized 9 scattered Python scripts"
+      - "Unified CLI interface (Click-based)"
+      - "3 categories: documentation, planning, routing"
+      - "5 validators integrated"
+      - "Audit logging support"
+      - "Migration plan defined"
+      - "Backward compatibility via symlinks"
