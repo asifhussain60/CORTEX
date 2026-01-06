@@ -1,0 +1,147 @@
+# Company ABC - Technology Stack
+# Version: 2.0.0
+# Last Updated: 2026-01-06
+
+company_id: company_abc
+company_name: ABC Corporation
+
+# Primary programming languages (ordered by usage)
+languages:
+  - name: C#
+    version: "12.0"
+    primary: true
+    frameworks:
+      - ASP.NET Core 8.0
+      - Entity Framework Core 8.0
+      - Minimal APIs
+  
+  - name: TypeScript
+    version: "5.3"
+    primary: false
+    frameworks:
+      - React 18
+      - Next.js 14
+  
+  - name: SQL
+    version: T-SQL
+    primary: false
+    use_case: database
+
+# Backend frameworks
+backend:
+  framework: ASP.NET Core
+  version: "8.0"
+  api_style: Minimal APIs  # Not Controllers
+  authentication: Azure AD OAuth2
+  authorization: Policy-based
+
+# Frontend frameworks
+frontend:
+  framework: React
+  version: "18.2"
+  meta_framework: Next.js
+  version_meta: "14.1"
+  state_management: Redux Toolkit
+  styling: Tailwind CSS
+
+# Cloud platform
+cloud:
+  provider: Azure
+  services:
+    - Azure Kubernetes Service (AKS)
+    - Azure SQL Database
+    - Azure Service Bus
+    - Azure API Management
+    - Azure Application Insights
+    - Azure Key Vault
+    - Azure Cosmos DB
+    - Azure Redis Cache
+    - Azure Blob Storage
+    - Azure Front Door
+
+# Databases
+databases:
+  primary:
+    type: Azure SQL Database
+    version: "16.0"
+    orm: Entity Framework Core 8.0
+  
+  nosql:
+    type: Azure Cosmos DB
+    api: SQL API
+  
+  cache:
+    type: Azure Redis Cache
+    version: "7.2"
+
+# Messaging & Events
+messaging:
+  message_bus:
+    type: Azure Service Bus
+    patterns:
+      - pub/sub (topics)
+      - point-to-point (queues)
+  
+  event_streaming:
+    type: Azure Event Hubs
+    use_case: event sourcing
+
+# DevOps Tools
+devops:
+  version_control: Azure DevOps Git
+  ci_cd: Azure DevOps Pipelines
+  container_registry: Azure Container Registry
+  orchestration: Azure Kubernetes Service
+  monitoring: Azure Application Insights
+  logging: Azure Log Analytics
+
+# Testing frameworks
+testing:
+  unit:
+    - xUnit
+    - NUnit
+  integration:
+    - WebApplicationFactory (ASP.NET Core)
+  e2e:
+    - Playwright
+  mocking:
+    - Moq
+    - NSubstitute
+
+# Package management
+package_managers:
+  backend: NuGet
+  frontend: npm
+  
+# Code quality
+code_quality:
+  linting:
+    backend: Roslyn Analyzers
+    frontend: ESLint
+  formatting:
+    backend: EditorConfig + StyleCop
+    frontend: Prettier
+  static_analysis: SonarQube
+
+# Development environment
+development:
+  ide: Visual Studio 2022 / VS Code
+  sdk: .NET 8 SDK
+  local_containers: Docker Desktop
+  local_k8s: Minikube (optional)
+
+# API standards
+api_standards:
+  style: RESTful
+  specification: OpenAPI 3.0
+  documentation: Swagger UI (built-in)
+  versioning: URL-based (/api/v1/, /api/v2/)
+  authentication: Bearer JWT tokens
+
+# Coding conventions
+conventions:
+  naming:
+    csharp: PascalCase (classes), camelCase (variables)
+    typescript: camelCase
+  line_length: 120
+  indentation: 4 spaces (C#), 2 spaces (TypeScript)
