@@ -15,6 +15,8 @@ from enum import Enum
 from pathlib import Path
 from typing import Dict, Any, Optional, List
 
+from .audit_logger import get_audit_logger, AuditCategory, AuditLevel
+
 
 class StateType(str, Enum):
     """Types of states managed by StateManager."""
@@ -91,6 +93,7 @@ class StateManager:
             state_file: Path to state persistence file
         """
         self.logger = logging.getLogger("cortex.orchestrators.state_manager")
+        self.audit = get_audit_logger()
         self.state_file = Path(state_file) if state_file else None
         self.states: Dict[str, Dict[str, Any]] = {}
         self.transitions: Dict[str, List[StateTransition]] = {}
@@ -100,6 +103,12 @@ class StateManager:
             self.load()
         
         self.logger.info("StateManager initialized")
+        self.audit.info(
+            AuditCategory.STATE_MANAGEMENT,
+            "StateManager",
+            "initialize",
+            f"StateManager initialized with state_file={state_file}"
+        )
     
     def create_state(
         self, 
@@ -132,6 +141,14 @@ class StateManager:
         }
         
         self.logger.debug(f"Created state: {state_id} (type: {state_type})")
+        self.audit.trace(
+            AuditCategory.STATE_MANAGEMENT,
+            "StateManager",
+            "create_state",
+            f"Created state: {state_id}",
+            context={"state_id": state_id, "state_type": state_type.value},
+            metadata={"data_keys": list(data.keys())}
+        )
         return True
     
     def get_state(self, state_id: str) -> Optional[Dict[str, Any]]:
