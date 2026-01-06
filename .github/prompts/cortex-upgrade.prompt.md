@@ -108,6 +108,97 @@ python3 -m src.main "upgrade cortex" --format markdown
 
 ---
 
+### Phase 3.5: Git Commit Intelligence Analysis
+**Duration:** 2 minutes  
+**Goal:** Analyze git commits to extract enhancement intelligence for automated wiring
+
+**Actions:**
+1. Run commit analyzer script:
+   ```bash
+   python scripts/analyze_git_commits.py --branch CORTEX-5.0 --limit 100 --output cortex-brain/documents/upgrades/{timestamp}/commit-analysis.json
+   ```
+
+2. **Extract Enhancement Intelligence:**
+   - **Architectural Changes:**
+     - New orchestrators (register in master-orchestrator.yaml)
+     - Manifest updates (validate and reload routing)
+     - Master orchestrator config changes (reload routing table)
+     - Audit logger updates (verify event types/metrics)
+     - BaseOrchestrator changes (validate all inheritance)
+   
+   - **Governance Rules:**
+     - PYTHON_ONLY_GENERATION (CRITICAL)
+     - CSS_REGISTRY_ENFORCEMENT (CRITICAL)
+     - INLINE_STYLE_PROHIBITION (CRITICAL)
+     - GIT_CHECKPOINT_REQUIRED (HIGH)
+     - STATE_PERSISTENCE (HIGH)
+     - TDD_ENFORCEMENT, HOLISTIC_DISCOVERY, etc.
+   
+   - **Documentation Intelligence:**
+     - Glassmorphism pattern updates (update CSS registry)
+     - Validator changes (register in documentation orchestrator)
+     - Level 1/Level 2 view modifications (run template compliance)
+     - Uniqueness enforcement requirements (run uniqueness validator)
+     - Diagram requirements (generate architectural diagrams)
+
+3. **Build Wiring Action Queue:**
+   ```json
+   {
+     "architectural_actions": [
+       {
+         "type": "register_orchestrator",
+         "name": "documentation_orchestrator_v2",
+         "manifest": "cortex-brain/manifests/orchestrators/documentation-orchestrator.yaml",
+         "priority": 25
+       },
+       {
+         "type": "reload_routing_table",
+         "file": "cortex-brain/config/master-orchestrator.yaml"
+       }
+     ],
+     "governance_actions": [
+       {
+         "type": "add_governance_rule",
+         "rule": "PYTHON_ONLY_GENERATION",
+         "priority": "CRITICAL",
+         "description": "Block Copilot HTML edits"
+       }
+     ],
+     "documentation_actions": [
+       {
+         "type": "register_validator",
+         "validators": ["TemplateComplianceValidator", "UniquenessValidator"],
+         "orchestrator": "documentation_orchestrator"
+       },
+       {
+         "type": "generate_diagrams",
+         "count": 9,
+         "target": "architecture",
+         "tools": ["mermaid", "d3.js"]
+       }
+     ]
+   }
+   ```
+
+4. **Categorize Commits:**
+   - Categories: architectural, governance, documentation, orchestrator, audit_logging
+   - Subsystems: orchestrators, prompts, documentation, audit_logging, configuration, html_views
+
+5. **Generate Summary Report:**
+   - Total commits analyzed
+   - Enhancements by category
+   - Affected subsystems
+   - Governance rules extracted
+   - Architectural changes detected
+   - Documentation intelligence identified
+
+**Artifacts:**
+- `cortex-brain/documents/upgrades/{timestamp}/commit-analysis.json` (full analysis)
+- `cortex-brain/documents/upgrades/{timestamp}/wiring-action-queue.json` (action plan)
+- `cortex-brain/documents/upgrades/{timestamp}/commit-intelligence-summary.md`
+
+---
+
 ### Phase 4: Git Pull & Merge
 **Duration:** 1 minute  
 **Goal:** Pull latest changes from remote
@@ -336,7 +427,196 @@ filename_governance:
 
 ---
 
-### Phase 9: Master/Child Orchestrator Setup
+### Phase 9: Architectural Change Wiring (Automated)
+**Duration:** 3 minutes  
+**Goal:** Wire architectural changes from commit analysis automatically
+
+**Actions:**
+1. **Process Wiring Action Queue:**
+   - Read `cortex-brain/documents/upgrades/{timestamp}/wiring-action-queue.json`
+   - Execute actions in priority order (critical → high → medium)
+
+2. **Orchestrator Registration:**
+   ```python
+   # For each new orchestrator in action queue
+   for action in architectural_actions:
+       if action["type"] == "register_orchestrator":
+           register_in_master_orchestrator(
+               name=action["name"],
+               manifest_path=action["manifest"],
+               priority=action["priority"]
+           )
+   ```
+
+3. **Manifest Validation:**
+   - For each orchestrator manifest update:
+     - Validate YAML syntax
+     - Check required fields (name, version, routing, phases, outputs)
+     - Verify audit logging integration
+     - Validate brain protection rules
+     - Check knowledge base inheritance
+
+4. **Routing Table Reload:**
+   - Reload master-orchestrator.yaml
+   - Validate all pattern regexes
+   - Check for priority conflicts
+   - Verify no duplicate patterns
+   - Update routing cache
+
+5. **Audit Logger Verification:**
+   - Verify all event types defined in AuditLogger
+   - Check metrics tracking configuration
+   - Validate log directory structure
+   - Test audit logging for each orchestrator
+
+6. **BaseOrchestrator Inheritance Check:**
+   - If BaseOrchestrator changed:
+     - Validate all orchestrators inherit correctly
+     - Check method signatures match
+     - Verify governance integration
+     - Test audit logging integration
+
+**Artifacts:**
+- `cortex-brain/config/master-orchestrator.yaml` (updated with new registrations)
+- `cortex-brain/documents/upgrades/{timestamp}/orchestrator-registration-log.json`
+- `cortex-brain/documents/upgrades/{timestamp}/routing-validation-report.json`
+- `cortex-brain/documents/upgrades/{timestamp}/audit-logger-verification.json`
+
+---
+
+### Phase 10: Governance Rule Integration (Automated)
+**Duration:** 2 minutes  
+**Goal:** Wire governance rules from commit analysis into brain protection system
+
+**Actions:**
+1. **Process Governance Actions:**
+   ```python
+   # For each governance action in queue
+   for action in governance_actions:
+       if action["type"] == "add_governance_rule":
+           add_to_brain_protection_rules(
+               rule_name=action["rule"],
+               priority=action["priority"],
+               description=action["description"]
+           )
+   ```
+
+2. **Update brain-protection-rules.yaml:**
+   - Add new rules to appropriate category:
+     - TDD_ENFORCEMENT
+     - HOLISTIC_DISCOVERY
+     - REFACTOR_CLEANUP
+     - GIT_ISOLATION
+     - PLANNING_ISOLATION
+     - HAND_OFF_PROTOCOL
+   - Set priority level (CRITICAL, HIGH, MEDIUM, LOW)
+   - Define enforcement action (BLOCK, WARN, LOG)
+   - Specify validation hooks
+
+3. **Governance Rule Validation:**
+   - Check for rule name conflicts
+   - Validate priority levels
+   - Verify enforcement actions are valid
+   - Test validation hooks exist
+
+4. **Update Documentation:**
+   - Regenerate governance documentation
+   - Update SKULL framework documentation
+   - Add rule to copilot-instructions.md
+
+5. **Test Governance Enforcement:**
+   - Run governance rule test suite
+   - Verify CRITICAL rules block operations
+   - Test WARN rules log properly
+   - Validate enforcement hooks trigger
+
+**Artifacts:**
+- `cortex-brain/brain-protection-rules.yaml` (updated with new rules)
+- `cortex-brain/documents/upgrades/{timestamp}/governance-rules-added.json`
+- `cortex-brain/documents/upgrades/{timestamp}/governance-validation-report.json`
+- `.github/copilot-instructions.md` (updated with new rules)
+
+---
+
+### Phase 11: Documentation Intelligence Wiring (Automated)
+**Duration:** 4 minutes  
+**Goal:** Wire documentation changes from commit analysis automatically
+
+**Actions:**
+1. **Process Documentation Actions:**
+   ```python
+   # For each documentation action in queue
+   for action in documentation_actions:
+       if action["type"] == "register_validator":
+           register_validators_in_orchestrator(
+               validators=action["validators"],
+               orchestrator=action["orchestrator"]
+           )
+       elif action["type"] == "generate_diagrams":
+           generate_architectural_diagrams(
+               count=action["count"],
+               target=action["target"],
+               tools=action["tools"]
+           )
+   ```
+
+2. **Validator Registration:**
+   - Add validators to documentation-orchestrator.yaml:
+     - TemplateComplianceValidator (margins, logo, hero, panels)
+     - MarginsValidator (pixel-perfect 2rem validation)
+     - LogoPlacementValidator (CORTEX logo atop intro panel)
+     - InlineStyleValidator (zero tolerance, CRITICAL)
+     - UniquenessValidator (TF-IDF, <30% overlap)
+   - Set validator priorities
+   - Define auto-run conditions
+   - Configure auto-remediation
+
+3. **CSS Registry Update:**
+   - For glassmorphism pattern updates:
+     - Extract new CSS classes from commits
+     - Add to cortex-brain/tier2/variables.css
+     - Update approved-panels.yaml
+     - Generate CSS documentation
+
+4. **Diagram Generation:**
+   - Generate required architectural diagrams:
+     - Four-Tier Brain Hierarchy (D3.js sunburst)
+     - System Component Overview (D3.js force-directed)
+     - Data Flow Pipeline (Mermaid flowchart)
+     - Agent Coordination Protocol (Mermaid sequence)
+     - Database Schema Relationships (Mermaid ER)
+     - Tier Access Patterns (D3.js Sankey)
+     - Module Dependency Graph (D3.js chord)
+     - Git Checkpoint Architecture (Mermaid flowchart)
+     - SKULL Rule Enforcement Points (Mermaid deployment)
+   - Embed diagrams in HTML views
+   - Validate diagram rendering
+
+5. **Level 1 View Standardization:**
+   - Run template compliance validator on all Level 1 views
+   - Apply glassmorphism standardization
+   - Remove inline styles (auto-remediation)
+   - Enforce uniqueness requirements
+   - Generate uniqueness report
+
+6. **Documentation Site Rebuild:**
+   ```bash
+   python scripts/standardize_level1_views.py --enforce-uniqueness
+   python scripts/generate_architecture_diagrams.py --target all
+   python scripts/validate_template_compliance.py --fix
+   ```
+
+**Artifacts:**
+- `cortex-brain/manifests/orchestrators/documentation-orchestrator.yaml` (updated with validators)
+- `cortex-brain/tier2/variables.css` (updated with new classes)
+- `docs/` (all Level 1 HTML views standardized)
+- `cortex-brain/documents/upgrades/{timestamp}/documentation-wiring-log.json`
+- `cortex-brain/documents/upgrades/{timestamp}/diagram-generation-report.json`
+- `cortex-brain/documents/upgrades/{timestamp}/uniqueness-validation-report.json`
+
+---
+
+### Phase 12: Master/Child Orchestrator Setup
 **Duration:** 2 minutes  
 **Goal:** Wire child orchestrators to master orchestrators
 
@@ -592,6 +872,60 @@ backups/upgrade-{timestamp}/
 ## 🤖 Automated Action Scripts
 
 The upgrade orchestrator triggers these utility scripts automatically:
+
+### Git Commit Intelligence Analysis
+```bash
+# Analyze git commits and extract enhancement intelligence
+python3 scripts/analyze_git_commits.py --branch CORTEX-5.0 --limit 100 \
+  --output cortex-brain/documents/upgrades/{timestamp}/commit-analysis.json
+
+# Build wiring action queue from commit analysis
+python3 scripts/build_wiring_queue.py \
+  --input cortex-brain/documents/upgrades/{timestamp}/commit-analysis.json \
+  --output cortex-brain/documents/upgrades/{timestamp}/wiring-action-queue.json
+```
+
+### Architectural Change Wiring
+```bash
+# Wire orchestrator registrations automatically
+python3 scripts/wire_architectural_changes.py \
+  cortex-brain/documents/upgrades/{timestamp}/wiring-action-queue.json
+
+# Validate all orchestrator manifests
+python3 scripts/validate_orchestrator_manifests.py --fix
+
+# Reload routing table and validate patterns
+python3 scripts/reload_routing_table.py --validate
+```
+
+### Governance Rule Integration
+```bash
+# Wire governance rules into brain protection system
+python3 scripts/wire_governance_rules.py \
+  cortex-brain/documents/upgrades/{timestamp}/wiring-action-queue.json
+
+# Validate governance rules
+python3 scripts/validate_governance_rules.py --strict
+
+# Update copilot-instructions.md with new rules
+python3 scripts/update_copilot_instructions.py --add-governance-rules
+```
+
+### Documentation Intelligence Wiring
+```bash
+# Register validators in documentation orchestrator
+python3 scripts/wire_documentation_intelligence.py \
+  cortex-brain/documents/upgrades/{timestamp}/wiring-action-queue.json
+
+# Update CSS registry with new glassmorphism classes
+python3 scripts/update_css_registry.py --from-commits
+
+# Generate architectural diagrams (9+ required)
+python3 scripts/generate_architecture_diagrams.py --target architecture --count 9
+
+# Run template compliance validation
+python3 scripts/validate_template_compliance.py --fix
+```
 
 ### Plan Structure Validation & Migration
 ```bash
