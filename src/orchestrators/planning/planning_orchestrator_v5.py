@@ -47,6 +47,9 @@ from src.orchestrators.planning.acceptance_validator import (
 )
 # CORTEX v5.0 Epic P03: TodoManager Integration
 from src.orchestrators.master.todo_manager import TodoManager, Task, TaskStatus
+# CORTEX5 Phase 1: Knowledge Extension Layer
+from src.knowledge.company_knowledge_provider import CompanyKnowledgeProvider
+from src.knowledge.knowledge_merger import KnowledgeMerger
 
 
 class PlanningOrchestratorV5(BaseOrchestratorV4_1):
@@ -129,7 +132,12 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
         plan_root = "tracking"
         self.todo_manager = TodoManager(plan_dir=plan_root)
         
-        self.logger.info("PlanningOrchestratorV5 initialized with governance + knowledge graph + TodoManager")
+        # CORTEX5 Phase 1: Initialize company knowledge system
+        self.company_knowledge_provider = None
+        self.knowledge_merger = KnowledgeMerger()
+        self._detect_and_load_company_knowledge()
+        
+        self.logger.info("PlanningOrchestratorV5 initialized with governance + knowledge graph + TodoManager + company knowledge")
     
     def execute_phase(
         self,
@@ -2317,4 +2325,92 @@ Execute phases as defined in the YAML plan file.
                 },
                 "error": str(e)
             }
+    
+    def _detect_and_load_company_knowledge(self) -> None:
+        """
+        Detect and load company-specific knowledge.
+        
+        CORTEX5 Phase 1: Knowledge Extension Layer integration.
+        Searches for company knowledge in cortex-brain/tier2/company-knowledge/
+        and loads the first available company. Gracefully handles missing companies.
+        """
+        try:
+            knowledge_base = Path("cortex-brain/tier2/company-knowledge")
+            
+            # Check if knowledge base exists
+            if not knowledge_base.exists():
+                self.logger.info("No company knowledge base found (expected for CORTEX core operations)")
+                return
+            
+            # Find first available company
+            company_dirs = [d for d in knowledge_base.iterdir() if d.is_dir() and not d.name.startswith('.')]
+            
+            if not company_dirs:
+                self.logger.info("Company knowledge base exists but no companies configured")
+                return
+            
+            # Load first company (future: support multiple or selection)
+            company_id = company_dirs[0].name
+            self.company_knowledge_provider = CompanyKnowledgeProvider(company_id)
+            
+            # Verify company knowledge loaded
+            if self.company_knowledge_provider.exists():
+                tech_stack = self.company_knowledge_provider.query_tech_stack()
+                primary_lang = self.company_knowledge_provider.get_primary_language()
+                cloud_provider = self.company_knowledge_provider.get_cloud_provider()
+                
+                self.logger.info(
+                    f"Company knowledge loaded: {company_id} "
+                    f"(Language: {primary_lang}, Cloud: {cloud_provider})"
+                )
+            else:
+                self.logger.warning(f"Company {company_id} directory exists but knowledge files missing")
+                self.company_knowledge_provider = None
+                
+        except Exception as e:
+            self.logger.error(f"Failed to load company knowledge: {e}")
+            self.company_knowledge_provider = None
+    
+    def _get_tech_stack_context(self) -> Dict[str, Any]:
+        """
+        Get tech stack context for plan generation.
+        
+        CORTEX5 Phase 1: Returns company-specific tech stack if available,
+        otherwise returns CORTEX defaults. This enables plans to use
+        company-specific languages, frameworks, and cloud providers.
+        
+        Returns:
+            Dict with tech_stack information (language, frameworks, cloud, etc.)
+        """
+        # Company knowledge takes priority
+        if self.company_knowledge_provider and self.company_knowledge_provider.exists():
+            try:
+                tech_stack = self.company_knowledge_provider.query_tech_stack()
+                
+                # Extract key fields for plan templates
+                return {
+                    "primary_language": self.company_knowledge_provider.get_primary_language(),
+                    "backend_framework": self.company_knowledge_provider.get_primary_framework("backend"),
+                    "frontend_framework": self.company_knowledge_provider.get_primary_framework("frontend"),
+                    "cloud_provider": self.company_knowledge_provider.get_cloud_provider(),
+                    "full_tech_stack": tech_stack.get("tech_stack", {}),
+                    "source": "company_knowledge"
+                }
+            except Exception as e:
+                self.logger.warning(f"Failed to query company tech stack: {e}, falling back to defaults")
+        
+        # CORTEX defaults (Python-based)
+        return {
+            "primary_language": "Python",
+            "backend_framework": "Flask",
+            "frontend_framework": "React",
+            "cloud_provider": "AWS",
+            "full_tech_stack": {
+                "languages": [{"name": "Python", "version": "3.9+", "primary": True}],
+                "backend": {"framework": "Flask", "version": "2.3+"},
+                "frontend": {"framework": "React", "version": "18+"}
+            },
+            "source": "cortex_defaults"
+        }
+
 
