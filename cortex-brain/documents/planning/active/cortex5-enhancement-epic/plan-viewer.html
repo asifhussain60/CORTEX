@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX5 Enhancement Epic - Interactive Plan Viewer</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #0d1117;
+            color: #c9d1d9;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #1f6feb 0%, #0969da 100%);
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(31, 111, 235, 0.3);
+        }
+        
+        header h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1em;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .status-active { background: #238636; color: white; }
+        .status-pending { background: #6e7681; color: white; }
+        .status-complete { background: #0969da; color: white; }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #21262d;
+        }
+        
+        .tab {
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            color: #8b949e;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.2s;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab:hover {
+            color: #c9d1d9;
+            background: rgba(110, 118, 129, 0.1);
+        }
+        
+        .tab.active {
+            color: #58a6ff;
+            border-bottom-color: #58a6ff;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .progress-section {
+            background: #161b22;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #30363d;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #21262d;
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #238636 0%, #2ea043 100%);
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .phase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .phase-card {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.2s;
+        }
+        
+        .phase-card:hover {
+            border-color: #58a6ff;
+            box-shadow: 0 4px 12px rgba(88, 166, 255, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .phase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .phase-title {
+            color: #58a6ff;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+        
+        .priority-high { color: #f85149; }
+        .priority-medium { color: #d29922; }
+        .priority-low { color: #7ee787; }
+        
+        .feature-list {
+            list-style: none;
+            margin-top: 15px;
+        }
+        
+        .feature-item {
+            background: #0d1117;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 6px;
+            border-left: 3px solid #58a6ff;
+        }
+        
+        .feature-item strong {
+            color: #58a6ff;
+        }
+        
+        .dependency-graph {
+            background: #161b22;
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+            overflow-x: auto;
+        }
+        
+        .dep-node {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #0969da;
+            color: white;
+            border-radius: 6px;
+            margin: 10px;
+            font-weight: 500;
+        }
+        
+        .dep-arrow {
+            display: inline-block;
+            color: #8b949e;
+            margin: 0 10px;
+            font-size: 1.2em;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .metric-card {
+            background: #161b22;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #58a6ff;
+            display: block;
+            margin: 10px 0;
+        }
+        
+        .metric-label {
+            color: #8b949e;
+            font-size: 0.9em;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #21262d;
+        }
+        
+        th {
+            background: #161b22;
+            color: #58a6ff;
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background: rgba(88, 166, 255, 0.05);
+        }
+        
+        code {
+            background: #161b22;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #f85149;
+            font-family: 'Monaco', 'Courier New', monospace;
+        }
+        
+        .info-box {
+            background: rgba(88, 166, 255, 0.1);
+            border-left: 4px solid #58a6ff;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 6px;
+        }
+        
+        @media (max-width: 768px) {
+            .phase-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            .tabs {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧠 CORTEX5 Enhancement Epic</h1>
+            <p>Interactive Plan Viewer | Plan ID: plan-c34db247-f34d-44d3-8f3d-4da3487227b9</p>
+            <p>
+                <span class="status-badge status-active">ACTIVE</span>
+                <span class="status-badge status-pending">Phase 0: 90% Complete</span>
+            </p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('overview')">📊 Overview</button>
+            <button class="tab" onclick="showTab('features')">📦 Features</button>
+            <button class="tab" onclick="showTab('phases')">🏗️ Phases</button>
+            <button class="tab" onclick="showTab('dependencies')">🔗 Dependencies</button>
+            <button class="tab" onclick="showTab('metrics')">📈 Metrics</button>
+        </div>
+
+        <!-- Overview Tab -->
+        <div id="overview" class="tab-content active">
+            <div class="progress-section">
+                <h2>Overall Progress</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 50%;">50% Complete</div>
+                </div>
+                <p><strong>Status:</strong> Phase 0-5 Planned | Ready for Phase 1 Execution</p>
+                <p><strong>Target Completion:</strong> May 2026 (18.5 weeks)</p>
+            </div>
+
+            <div class="info-box">
+                <h3>🎯 Epic Goal</h3>
+                <p>Transform CORTEX planning system into a world-class autonomous planning engine with epic parent detection, intelligent goal detection, script consolidation, TDD enforcement, cross-session continuation, and knowledge graph integration.</p>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <span class="metric-value">10</span>
+                    <span class="metric-label">Features</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-value">9</span>
+                    <span class="metric-label">Phases</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-value">18.5</span>
+                    <span class="metric-label">Weeks</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-value">61+</span>
+                    <span class="metric-label">Gov Rules</span>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px;">Phase Progress</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Phase</th>
+                        <th>Name</th>
+                        <th>Duration</th>
+                        <th>Progress</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>0</strong></td>
+                        <td>Foundation & Discovery</td>
+                        <td>2 weeks</td>
+                        <td>
+                            <div class="progress-bar" style="height: 20px; margin: 0;">
+                                <div class="progress-fill" style="width: 90%; font-size: 0.8em;">90%</div>
+                            </div>
+                        </td>
+                        <td><span class="status-badge status-complete">🟢 90%</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>1</strong></td>
+                        <td>Planning Core</td>
+                        <td>3 weeks</td>
+                        <td>
+                            <div class="progress-bar" style="height: 20px; margin: 0;">
+                                <div class="progress-fill" style="width: 0%; font-size: 0.8em;">0%</div>
+                            </div>
+                        </td>
+                        <td><span class="status-badge status-pending">⏸️ Pending</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>1.5</strong></td>
+                        <td>Toolkit Orchestration</td>
+                        <td>2 weeks</td>
+                        <td>
+                            <div class="progress-bar" style="height: 20px; margin: 0;">
+                                <div class="progress-fill" style="width: 0%; font-size: 0.8em;">0%</div>
+                            </div>
+                        </td>
+                        <td><span class="status-badge status-pending">⏸️ Pending</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>2</strong></td>
+                        <td>Goal Inheritance</td>
+                        <td>2 weeks</td>
+                        <td>
+                            <div class="progress-bar" style="height: 20px; margin: 0;">
+                                <div class="progress-fill" style="width: 0%; font-size: 0.8em;">0%</div>
+                            </div>
+                        </td>
+                        <td><span class="status-badge status-pending">⏸️ Pending</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>3</strong></td>
+                        <td>TDD Test Harness</td>
+                        <td>2 weeks</td>
+                        <td>
+                            <div class="progress-bar" style="height: 20px; margin: 0;">
+                                <div class="progress-fill" style="width: 0%; font-size: 0.8em;">0%</div>
+                            </div>
+                        </td>
+                        <td><span class="status-badge status-pending">⏸️ Pending</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>4</strong></td>
+                        <td>Response Templates</td>
+                        <td>1.5 weeks</td>
+                        <td>
+                            <div class="progress-bar" style="height: 20px; margin: 0;">
+                                <div class="progress-fill" style="width: 0%; font-size: 0.8em;">0%</div>
+                            </div>
+                        </td>
+                        <td><span class="status-badge status-pending">⏸️ Pending</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>5</strong></td>
+                        <td>Continuation System</td>
+                        <td>2 weeks</td>
+                        <td>
+                            <div class="progress-bar" style="height: 20px; margin: 0;">
+                                <div class="progress-fill" style="width: 0%; font-size: 0.8em;">0%</div>
+                            </div>
+                        </td>
+                        <td><span class="status-badge status-pending">⏸️ Pending</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>6</strong></td>
+                        <td>Plan Viewer Enhancements</td>
+                        <td>1 week</td>
+                        <td>
+                            <div class="progress-bar" style="height: 20px; margin: 0;">
+                                <div class="progress-fill" style="width: 0%; font-size: 0.8em;">0%</div>
+                            </div>
+                        </td>
+                        <td><span class="status-badge status-pending">⏸️ Pending</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>7</strong></td>
+                        <td>Script Testing</td>
+                        <td>1 week</td>
+                        <td>
+                            <div class="progress-bar" style="height: 20px; margin: 0;">
+                                <div class="progress-fill" style="width: 0%; font-size: 0.8em;">0%</div>
+                            </div>
+                        </td>
+                        <td><span class="status-badge status-pending">⏸️ Pending</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>8</strong></td>
+                        <td>Knowledge Integration</td>
+                        <td>2 weeks</td>
+                        <td>
+                            <div class="progress-bar" style="height: 20px; margin: 0;">
+                                <div class="progress-fill" style="width: 0%; font-size: 0.8em;">0%</div>
+                            </div>
+                        </td>
+                        <td><span class="status-badge status-pending">⏸️ Pending</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Features Tab -->
+        <div id="features" class="tab-content">
+            <h2>📦 Features Overview</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Feature</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                        <th>Phases</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>F001</strong></td>
+                        <td>Planning System</td>
+                        <td><span class="priority-high">🔥 CRITICAL</span></td>
+                        <td>🟡 80%</td>
+                        <td>0, 1</td>
+                    </tr>
+                    <tr>
+                        <td><strong>F002</strong></td>
+                        <td>Governance Rules</td>
+                        <td><span class="priority-high">🔥 HIGH</span></td>
+                        <td>🟡 70%</td>
+                        <td>0, 1.5</td>
+                    </tr>
+                    <tr>
+                        <td><strong>F003</strong></td>
+                        <td>Toolkit Orchestration</td>
+                        <td><span class="priority-high">⚡ URGENT</span></td>
+                        <td>🔴 20%</td>
+                        <td>1.5</td>
+                    </tr>
+                    <tr>
+                        <td><strong>F004</strong></td>
+                        <td>Testing Framework</td>
+                        <td><span class="priority-high">🔥 HIGH</span></td>
+                        <td>🔴 20%</td>
+                        <td>3, 7</td>
+                    </tr>
+                    <tr>
+                        <td><strong>F005</strong></td>
+                        <td>Response Templates</td>
+                        <td><span class="priority-medium">🟡 MEDIUM</span></td>
+                        <td>🔴 10%</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td><strong>F006</strong></td>
+                        <td>Continuation System</td>
+                        <td><span class="priority-medium">🟡 MEDIUM</span></td>
+                        <td>🔴 10%</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td><strong>F007</strong></td>
+                        <td>Plan Viewer</td>
+                        <td><span class="priority-medium">🟡 MEDIUM</span></td>
+                        <td>🔴 15%</td>
+                        <td>1, 6</td>
+                    </tr>
+                    <tr>
+                        <td><strong>F008</strong></td>
+                        <td>Goal Detection</td>
+                        <td><span class="priority-high">🔥 HIGH</span></td>
+                        <td>🔴 20%</td>
+                        <td>0, 1</td>
+                    </tr>
+                    <tr>
+                        <td><strong>F009</strong></td>
+                        <td>Goal Inheritance</td>
+                        <td><span class="priority-high">🔥 HIGH</span></td>
+                        <td>🔴 0%</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td><strong>F010</strong></td>
+                        <td>Knowledge Integration</td>
+                        <td><span class="priority-low">🟢 LOW</span></td>
+                        <td>🔴 0%</td>
+                        <td>8</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 style="margin-top: 30px;">Feature Details</h3>
+            <p>Click on feature IDs to view detailed specifications in <code>features/</code> folder:</p>
+            <ul style="list-style: none; margin-top: 15px;">
+                <li>📄 <a href="features/planning-system.md" style="color: #58a6ff;">planning-system.md</a></li>
+                <li>📄 <a href="features/governance-rules.md" style="color: #58a6ff;">governance-rules.md</a></li>
+                <li>📄 <a href="features/toolkit-orchestration.md" style="color: #58a6ff;">toolkit-orchestration.md</a></li>
+                <li>📄 <a href="features/testing-framework.md" style="color: #58a6ff;">testing-framework.md</a></li>
+                <li>📄 <a href="features/response-templates.md" style="color: #58a6ff;">response-templates.md</a></li>
+                <li>📄 <a href="features/continuation-system.md" style="color: #58a6ff;">continuation-system.md</a></li>
+                <li>📄 <a href="features/plan-viewer.md" style="color: #58a6ff;">plan-viewer.md</a></li>
+                <li>📄 <a href="features/goal-detection.md" style="color: #58a6ff;">goal-detection.md</a></li>
+                <li>📄 <a href="features/goal-inheritance.md" style="color: #58a6ff;">goal-inheritance.md</a></li>
+                <li>📄 <a href="features/knowledge-integration.md" style="color: #58a6ff;">knowledge-integration.md</a></li>
+            </ul>
+        </div>
+
+        <!-- Phases Tab -->
+        <div id="phases" class="tab-content">
+            <h2>🏗️ Phase Execution Plan</h2>
+            
+            <div class="phase-grid">
+                <div class="phase-card">
+                    <div class="phase-header">
+                        <div class="phase-title">Phase 0: Foundation</div>
+                        <span class="status-badge status-complete">🟢 90%</span>
+                    </div>
+                    <p><strong>Duration:</strong> 2 weeks</p>
+                    <p><strong>Priority:</strong> <span class="priority-high">🔥 CRITICAL</span></p>
+                    <ul class="feature-list">
+                        <li class="feature-item"><strong>F001</strong> Planning System (80%)</li>
+                        <li class="feature-item"><strong>F002</strong> Governance Rules (70%)</li>
+                        <li class="feature-item"><strong>F008</strong> Goal Detection (20%)</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><a href="phases/phase-0-foundation.md" style="color: #58a6ff;">View Phase Document →</a></p>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-header">
+                        <div class="phase-title">Phase 1: Planning Core</div>
+                        <span class="status-badge status-pending">⏸️ Pending</span>
+                    </div>
+                    <p><strong>Duration:</strong> 3 weeks</p>
+                    <p><strong>Priority:</strong> <span class="priority-high">🔥 CRITICAL</span></p>
+                    <ul class="feature-list">
+                        <li class="feature-item"><strong>F001</strong> Epic parent detection</li>
+                        <li class="feature-item"><strong>F008</strong> 20-pattern goal detection</li>
+                        <li class="feature-item"><strong>F007</strong> Plan viewer generation</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><a href="phases/phase-1-planning-core.md" style="color: #58a6ff;">View Phase Document →</a></p>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-header">
+                        <div class="phase-title">Phase 1.5: Toolkit</div>
+                        <span class="status-badge status-pending">⏸️ Pending</span>
+                    </div>
+                    <p><strong>Duration:</strong> 2 weeks</p>
+                    <p><strong>Priority:</strong> <span class="priority-high">⚡ URGENT</span></p>
+                    <ul class="feature-list">
+                        <li class="feature-item"><strong>F003</strong> Script consolidation (17→<10)</li>
+                        <li class="feature-item"><strong>F002</strong> Rule #7 enforcement</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><a href="phases/phase-1.5-toolkit.md" style="color: #58a6ff;">View Phase Document →</a></p>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-header">
+                        <div class="phase-title">Phase 2: Goal Inheritance</div>
+                        <span class="status-badge status-pending">⏸️ Pending</span>
+                    </div>
+                    <p><strong>Duration:</strong> 2 weeks</p>
+                    <p><strong>Priority:</strong> <span class="priority-high">🔥 HIGH</span></p>
+                    <ul class="feature-list">
+                        <li class="feature-item"><strong>F009</strong> Hierarchical inheritance</li>
+                        <li class="feature-item">Conflict detection & resolution</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><a href="phases/phase-2-goal-inheritance.md" style="color: #58a6ff;">View Phase Document →</a></p>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-header">
+                        <div class="phase-title">Phase 3: TDD Harness</div>
+                        <span class="status-badge status-pending">⏸️ Pending</span>
+                    </div>
+                    <p><strong>Duration:</strong> 2 weeks</p>
+                    <p><strong>Priority:</strong> <span class="priority-high">🔥 HIGH</span></p>
+                    <ul class="feature-list">
+                        <li class="feature-item"><strong>F004</strong> 15-test suite</li>
+                        <li class="feature-item">RED→GREEN→REFACTOR</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><a href="phases/phase-3-tdd-harness.md" style="color: #58a6ff;">View Phase Document →</a></p>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-header">
+                        <div class="phase-title">Phase 4: Templates</div>
+                        <span class="status-badge status-pending">⏸️ Pending</span>
+                    </div>
+                    <p><strong>Duration:</strong> 1.5 weeks</p>
+                    <p><strong>Priority:</strong> <span class="priority-medium">🟡 MEDIUM</span></p>
+                    <ul class="feature-list">
+                        <li class="feature-item"><strong>F005</strong> WCAG AA compliance</li>
+                        <li class="feature-item">Concise mode by default</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><a href="phases/phase-4-response-templates.md" style="color: #58a6ff;">View Phase Document →</a></p>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-header">
+                        <div class="phase-title">Phase 5: Continuation</div>
+                        <span class="status-badge status-pending">⏸️ Pending</span>
+                    </div>
+                    <p><strong>Duration:</strong> 2 weeks</p>
+                    <p><strong>Priority:</strong> <span class="priority-medium">🟡 MEDIUM</span></p>
+                    <ul class="feature-list">
+                        <li class="feature-item"><strong>F006</strong> Cross-session state</li>
+                        <li class="feature-item">Tier 1 persistence</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><a href="phases/phase-5-continuation-system.md" style="color: #58a6ff;">View Phase Document →</a></p>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-header">
+                        <div class="phase-title">Phase 6: Viewer</div>
+                        <span class="status-badge status-pending">⏸️ Pending</span>
+                    </div>
+                    <p><strong>Duration:</strong> 1 week</p>
+                    <p><strong>Priority:</strong> <span class="priority-medium">🟡 MEDIUM</span></p>
+                    <ul class="feature-list">
+                        <li class="feature-item"><strong>F007</strong> Real-time updates</li>
+                        <li class="feature-item">Dark mode & responsive</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><a href="phases/phase-6-plan-viewer-enhancements.md" style="color: #58a6ff;">View Phase Document →</a></p>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-header">
+                        <div class="phase-title">Phase 7: Script Testing</div>
+                        <span class="status-badge status-pending">⏸️ Pending</span>
+                    </div>
+                    <p><strong>Duration:</strong> 1 week</p>
+                    <p><strong>Priority:</strong> <span class="priority-high">🔥 HIGH</span></p>
+                    <ul class="feature-list">
+                        <li class="feature-item"><strong>F004</strong> Toolkit validation</li>
+                        <li class="feature-item">Zero regression</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><a href="phases/phase-7-script-testing.md" style="color: #58a6ff;">View Phase Document →</a></p>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-header">
+                        <div class="phase-title">Phase 8: Knowledge</div>
+                        <span class="status-badge status-pending">⏸️ Pending</span>
+                    </div>
+                    <p><strong>Duration:</strong> 2 weeks</p>
+                    <p><strong>Priority:</strong> <span class="priority-low">🟢 LOW</span></p>
+                    <ul class="feature-list">
+                        <li class="feature-item"><strong>F010</strong> Tier 2 integration</li>
+                        <li class="feature-item">Analytics dashboard</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><a href="phases/phase-8-knowledge-integration.md" style="color: #58a6ff;">View Phase Document →</a></p>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px;">Master Plan</h3>
+            <p><a href="phases/master-plan.md" style="color: #58a6ff; font-size: 1.1em;">📄 View Complete Master Plan Document →</a></p>
+        </div>
+
+        <!-- Dependencies Tab -->
+        <div id="dependencies" class="tab-content">
+            <h2>🔗 Dependency Chain</h2>
+            
+            <div class="dependency-graph">
+                <h3>Critical Path (13.5 weeks)</h3>
+                <div style="margin: 20px 0;">
+                    <span class="dep-node">Phase 0</span>
+                    <span class="dep-arrow">→</span>
+                    <span class="dep-node">Phase 1</span>
+                    <span class="dep-arrow">→</span>
+                    <span class="dep-node">Phase 2</span>
+                    <span class="dep-arrow">→</span>
+                    <span class="dep-node">Phase 5</span>
+                    <span class="dep-arrow">→</span>
+                    <span class="dep-node">Phase 8</span>
+                </div>
+
+                <h3 style="margin-top: 30px;">Parallel Tracks (saves 5 weeks)</h3>
+                <div style="margin: 20px 0;">
+                    <div style="margin: 10px 0;">
+                        <span class="dep-node">Phase 0</span>
+                        <span class="dep-arrow">→</span>
+                        <span class="dep-node">Phase 1.5</span>
+                        <span class="dep-arrow">→</span>
+                        <span class="dep-node">Phase 7</span>
+                    </div>
+                    <div style="margin: 10px 0;">
+                        <span class="dep-node">Phase 0</span>
+                        <span class="dep-arrow">→</span>
+                        <span class="dep-node">Phase 4</span>
+                        <span class="dep-arrow">→</span>
+                        <span class="dep-node">Phase 5</span>
+                    </div>
+                    <div style="margin: 10px 0;">
+                        <span class="dep-node">Phase 1</span>
+                        <span class="dep-arrow">→</span>
+                        <span class="dep-node">Phase 3</span>
+                        <span class="dep-arrow">→</span>
+                        <span class="dep-node">Phase 7</span>
+                    </div>
+                    <div style="margin: 10px 0;">
+                        <span class="dep-node">Phase 5</span>
+                        <span class="dep-arrow">→</span>
+                        <span class="dep-node">Phase 6</span>
+                        <span class="dep-arrow">→</span>
+                        <span class="dep-node">Phase 8</span>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px;">Feature Dependencies</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Requires</th>
+                        <th>Enables</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>F001</strong> Planning System</td>
+                        <td>F002 (Governance)</td>
+                        <td>F007, F008, F009</td>
+                    </tr>
+                    <tr>
+                        <td><strong>F002</strong> Governance Rules</td>
+                        <td>—</td>
+                        <td>F001, F003, F004</td>
+                    </tr>
+                    <tr>
+                        <td><strong>F003</strong> Toolkit Orchestration</td>
+                        <td>F001, F002</td>
+                        <td>F004</td>
+                    </tr>
+                    <tr>
+                        <td><strong>F004</strong> Testing Framework</td>
+                        <td>F001, F003</td>
+                        <td>F005</td>
+                    </tr>
+                    <tr>
+                        <td><strong>F005</strong> Response Templates</td>
+                        <td>F002</td>
+                        <td>F006</td>
+                    </tr>
+                    <tr>
+                        <td><strong>F006</strong> Continuation System</td>
+                        <td>F001</td>
+                        <td>F010</td>
+                    </tr>
+                    <tr>
+                        <td><strong>F007</strong> Plan Viewer</td>
+                        <td>F001</td>
+                        <td>F010</td>
+                    </tr>
+                    <tr>
+                        <td><strong>F008</strong> Goal Detection</td>
+                        <td>F001</td>
+                        <td>F009</td>
+                    </tr>
+                    <tr>
+                        <td><strong>F009</strong> Goal Inheritance</td>
+                        <td>F008</td>
+                        <td>F004, F006</td>
+                    </tr>
+                    <tr>
+                        <td><strong>F010</strong> Knowledge Integration</td>
+                        <td>F006</td>
+                        <td>—</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Metrics Tab -->
+        <div id="metrics" class="tab-content">
+            <h2>📈 Success Metrics</h2>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <span class="metric-label">Feature Completion</span>
+                    <span class="metric-value">2/10</span>
+                    <p style="margin-top: 10px; color: #8b949e;">Features at ≥70%</p>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-label">Test Coverage Target</span>
+                    <span class="metric-value">≥90%</span>
+                    <p style="margin-top: 10px; color: #8b949e;">Planning modules</p>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-label">Script Reduction</span>
+                    <span class="metric-value">41%</span>
+                    <p style="margin-top: 10px; color: #8b949e;">17 → <10 scripts</p>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-label">Regression Rate</span>
+                    <span class="metric-value">0%</span>
+                    <p style="margin-top: 10px; color: #8b949e;">Zero broken workflows</p>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px;">Phase Metrics</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Target</th>
+                        <th>Current</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Phase 0 Completion</td>
+                        <td>100%</td>
+                        <td>90%</td>
+                        <td><span class="status-badge status-complete">🟢 Near Complete</span></td>
+                    </tr>
+                    <tr>
+                        <td>Epic Parent Detection</td>
+                        <td>≥95%</td>
+                        <td>TBD</td>
+                        <td><span class="status-badge status-pending">Phase 1</span></td>
+                    </tr>
+                    <tr>
+                        <td>Goal Detection Accuracy</td>
+                        <td>≥85%</td>
+                        <td>TBD</td>
+                        <td><span class="status-badge status-pending">Phase 1</span></td>
+                    </tr>
+                    <tr>
+                        <td>Script Consolidation</td>
+                        <td>17 → <10</td>
+                        <td>17</td>
+                        <td><span class="status-badge status-pending">Phase 1.5</span></td>
+                    </tr>
+                    <tr>
+                        <td>Goal Inheritance Accuracy</td>
+                        <td>100%</td>
+                        <td>TBD</td>
+                        <td><span class="status-badge status-pending">Phase 2</span></td>
+                    </tr>
+                    <tr>
+                        <td>Test Suite</td>
+                        <td>15 tests</td>
+                        <td>TBD</td>
+                        <td><span class="status-badge status-pending">Phase 3</span></td>
+                    </tr>
+                    <tr>
+                        <td>WCAG AA Compliance</td>
+                        <td>100%</td>
+                        <td>TBD</td>
+                        <td><span class="status-badge status-pending">Phase 4</span></td>
+                    </tr>
+                    <tr>
+                        <td>State Restoration</td>
+                        <td>100%</td>
+                        <td>TBD</td>
+                        <td><span class="status-badge status-pending">Phase 5</span></td>
+                    </tr>
+                    <tr>
+                        <td>Plan Viewer Load Time</td>
+                        <td><2s</td>
+                        <td>TBD</td>
+                        <td><span class="status-badge status-pending">Phase 6</span></td>
+                    </tr>
+                    <tr>
+                        <td>Regression Rate</td>
+                        <td>0%</td>
+                        <td>TBD</td>
+                        <td><span class="status-badge status-pending">Phase 7</span></td>
+                    </tr>
+                    <tr>
+                        <td>Knowledge Coverage</td>
+                        <td>≥20 plans</td>
+                        <td>0</td>
+                        <td><span class="status-badge status-pending">Phase 8</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 style="margin-top: 30px;">Timeline</h3>
+            <div class="info-box">
+                <p><strong>Start Date:</strong> January 6, 2026 (Phase 0)</p>
+                <p><strong>Target Completion:</strong> May 2026</p>
+                <p><strong>Total Duration:</strong> 18.5 weeks</p>
+                <p><strong>Critical Path:</strong> 13.5 weeks (0 → 1 → 2 → 5 → 8)</p>
+                <p><strong>Parallel Tracks:</strong> Saves 5 weeks (1.5, 3, 4, 6, 7)</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Mark selected tab as active
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

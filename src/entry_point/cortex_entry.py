@@ -21,6 +21,7 @@ CORTEX 2.0 Implementation Requirement:
 from typing import Optional, Dict, Any
 from datetime import datetime
 import logging
+import re
 from pathlib import Path
 
 from src.cortex_agents.base_agent import AgentRequest, AgentResponse
@@ -1235,6 +1236,48 @@ Ready to continue! What would you like to do next?
         
         return False
     
+    def _detect_epic_parent_path(self, user_message: str) -> Optional[str]:
+        """
+        Detect if request is for a child plan inside an epic folder.
+        
+        Patterns detected:
+        - "continue plan cortex5-enhancement-epic from..."
+        - "begin implementing cortex-brain/documents/planning/active/cortex5-enhancement-epic"
+        - "plan [feature] inside cortex5-enhancement-epic"
+        
+        Args:
+            user_message: User request message
+            
+        Returns:
+            Epic parent folder path if detected, None otherwise
+        """
+        import re
+        from pathlib import Path
+        
+        message_lower = user_message.lower()
+        
+        # Pattern 1: "continue <epic-name>" or "begin implementing <epic-path>"
+        epic_patterns = [
+            r'continue\s+([a-zA-Z0-9\-]*(?:cortex|enhancement|remediation|snowball)[a-zA-Z0-9\-]*epic[a-zA-Z0-9\-]*)',
+            r'continue.*?plan\s+([a-zA-Z0-9\-]+(?:enhancement|remediation|snowball)[a-zA-Z0-9\-]*)',
+            r'begin\s+implementing\s+.*?planning/active/([a-zA-Z0-9\-]+)',
+            r'inside\s+([a-zA-Z0-9\-]+(?:enhancement|remediation|snowball)[a-zA-Z0-9\-]*)',
+            r'from\s+([a-zA-Z0-9\-]*(?:cortex|enhancement|remediation|snowball)[a-zA-Z0-9\-]*epic[a-zA-Z0-9\-]*)'
+        ]
+        
+        for pattern in epic_patterns:
+            match = re.search(pattern, message_lower, re.IGNORECASE)
+            if match:
+                epic_folder_name = match.group(1)
+                epic_path = Path(f"cortex-brain/documents/planning/active/{epic_folder_name}")
+                
+                # Verify epic folder exists
+                if epic_path.exists() and epic_path.is_dir():
+                    self.logger.info(f"✅ Detected epic parent folder: {epic_folder_name}")
+                    return str(epic_path)
+        
+        return None
+    
     def _execute_orchestrator_directly(
         self,
         request: AgentRequest,
@@ -1267,6 +1310,15 @@ Ready to continue! What would you like to do next?
             from src.orchestrators.planning.planning_orchestrator_v5 import PlanningOrchestratorV5
             from src.config import config
             
+            # Detect epic parent folder from request (e.g., "continue plan cortex5-enhancement-epic from...")
+            epic_parent_path = self._detect_epic_parent_path(request.user_message)
+            
+            # Build context with epic parent path if detected
+            orchestrator_context = {'user_request': request.user_message}
+            if epic_parent_path:
+                orchestrator_context['epic_parent_path'] = epic_parent_path
+                self.logger.info(f"📁 Detected epic parent folder: {epic_parent_path}")
+            
             # Initialize orchestrator with correct signature
             # PlanningOrchestratorV5.__init__(config_path, state_db, plan_id, template_dir, context, plan_type)
             orchestrator = PlanningOrchestratorV5(
@@ -1274,7 +1326,7 @@ Ready to continue! What would you like to do next?
                 state_db=None,  # Will use default
                 plan_id=None,  # New plan
                 template_dir=None,  # Will use default
-                context={'user_request': request.user_message},
+                context=orchestrator_context,
                 plan_type='epic'  # Epic planning for remediation
             )
             
