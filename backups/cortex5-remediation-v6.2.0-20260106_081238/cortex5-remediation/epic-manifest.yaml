@@ -6,7 +6,7 @@
 epic_metadata:
   epic_id: cortex5-remediation
   epic_name: "CORTEX 5.0 Architecture Enhancement & Remediation"
-  version: "6.1.0"
+  version: "6.2.0"
   created: "2026-01-05"
   updated: "2026-01-06"
   author: "Asif Hussain"
@@ -15,6 +15,16 @@ epic_metadata:
   
   # Version History
   version_history:
+    - version: "6.2.0"
+      date: "2026-01-06"
+      changes:
+        - "Added Phase P18: Governance Rules Collaborative Finalization (1-2 days, P0_CRITICAL)"
+        - "Updated dependencies: P05-P13 now depend on P18 completion (governance finalization checkpoint)"
+        - "Added human-in-the-loop checkpoint after infrastructure complete (P14-P17) before orchestrator upgrades"
+        - "Total phase count: 18 → 19 phases"
+        - "Total duration: 10-11 weeks → 10-11 weeks (no change, collaborative session replaces speculation time)"
+      rationale: "Governance rules should be finalized when architecture is stable (post P14-P17) but before orchestrator upgrades (P05-P13). This checkpoint prevents expensive rework and ensures rules are data-driven (based on P00-P17 violations) not speculative."
+    
     - version: "6.1.0"
       date: "2026-01-06"
       changes:
@@ -50,6 +60,7 @@ epic_metadata:
       - "🆕 Integrate enterprise audit logging (P15)"
       - "🆕 Enable plugin-based governance extensibility (P16)"
       - "🆕 Mitigate 13 critical risks (P17)"
+      - "🆕 Finalize governance rules via human-AI collaboration (P18)"
   
   # Success Criteria (Enhanced with Investigation Findings + New Phases)
   success_criteria:
@@ -64,6 +75,7 @@ epic_metadata:
       - "🆕 All orchestrators log audit events with decision capture (P15)"
       - "🆕 Governance rules add via plugins without code changes (P16)"
       - "🆕 4 critical risks mitigated (atomic migrations, thread-safe tasks, lazy loading, renderer retry) (P17)"
+      - "🆕 3-5 governance rules finalized via human-AI collaboration (P18)"
     
     architectural:
       - "Database schemas consolidated (zero schema mismatch errors)"
@@ -72,6 +84,7 @@ epic_metadata:
       - "Duplicate databases eliminated (knowledge-graph.db vs knowledge_graph.db)"
       - "🆕 Plugin architecture supports dynamic governance rule injection"
       - "🆕 Extensibility framework prevents architecture churn from late realizations"
+      - "🆕 Governance rules based on real violations (not speculative)"
     
     integration:
       - "Plan viewers auto-refresh with progress updates"
@@ -80,12 +93,14 @@ epic_metadata:
       - "Governance rules from brain-protection-rules.yaml enforced at runtime"
       - "🆕 Audit logs integrated with verification gates for phase validation"
       - "🆕 Vision API enforcement plugin demonstrates governance extensibility"
+      - "🆕 Governance checkpoint gates orchestrator upgrades (P18 blocks P05-P13)"
     
     efficiency:
       - "🆕 Phase-to-phase transitions require explicit verification and approval"
       - "🆕 Audit logs provide 'why did this happen' traceability"
       - "🆕 Governance rule addition time reduced from 3-5 days to 2-4 hours (90% reduction)"
       - "🆕 Risk mitigation prevents production failures and expensive rework"
+      - "🆕 Human-AI collaboration prevents speculative governance (data-driven rules)"
 
 # Python Orchestrator Architecture
 orchestrator_architecture:
@@ -1020,10 +1035,227 @@ phases:
         measurement: "Load test: 10k renders with 1% error injection"
     
     dependencies: ["P16"]
-    blocks: ["P05", "P06", "P07", "P08", "P09", "P10", "P11", "P12", "P13"]
+    blocks: ["P18"]
+  
+  - phase_id: "P18"
+    name: "Governance Rules Collaborative Finalization"
+    type: collaborative_human_in_loop
+    script: "N/A (requires human collaboration)"
+    duration: "1-2 days (collaborative session)"
+    priority: P0_CRITICAL
+    status: planning
+    description: "Human-AI collaborative session to finalize governance rules based on architecture stability and real-world pain points before proceeding with orchestrator upgrades"
+    
+    # Why Critical
+    justification: |
+      Architecture is now stable (P14-P17 complete). This is the optimal time to finalize 
+      governance rules before upgrading 8 orchestrators (P05-P13). Adding rules AFTER 
+      orchestrator upgrades risks expensive rework. This checkpoint ensures governance 
+      aligns with proven architecture patterns.
+    
+    # Checkpoint Criteria
+    checkpoint_criteria:
+      architecture_stability:
+        - "✅ Verification gates operational (P14)"
+        - "✅ Audit logging integrated (P15)"
+        - "✅ Plugin architecture validated (P16)"
+        - "✅ Critical risks mitigated (P17)"
+        - "✅ No major refactors for 1+ weeks"
+      
+      data_collection:
+        - "Review governance-audit.jsonl for pattern violations"
+        - "Analyze orchestrator execution logs for architectural issues"
+        - "Extract pain points from completed phases P00-P17"
+      
+      readiness_indicators:
+        - "Current 4 rules (PATH_PORTABILITY, SETUP_VERIFICATION, TEARDOWN_REFACTOR, TDD_ENFORCEMENT) enforced consistently"
+        - "3 placeholder categories (Architecture Integrity, Quality Gates, Security/Privacy) ready for population"
+        - "Plugin system enables fast rule addition (2-4 hours per rule)"
+    
+    # Collaborative Session Structure
+    session_structure:
+      phase_0_git_intelligence:
+        duration: "30 minutes (automated)"
+        type: "pre_session_automation"
+        description: "Automated git commit analysis to extract governance intelligence from P00-P17 implementation history"
+        activities:
+          - "Run git commit analyzer: python3 scripts/analyze_git_commits.py --since P00-start --until P17-complete"
+          - "Extract violation patterns from commit messages (fix, bug, broken, revert)"
+          - "Identify refactoring clusters (files touched 5+ times in P00-P17)"
+          - "Detect rollback events (reverted commits indicate failed approaches)"
+          - "Find integration failures (merge conflict resolution commits)"
+          - "Discover security patches (commits with security, credential, PII keywords)"
+          - "Generate governance intelligence report with rule candidates"
+        
+        git_analysis_queries:
+          violation_patterns:
+            query: "git log --grep='fix\\|bug\\|broken\\|error' --since='2026-01-05' --until='2026-01-06' --oneline"
+            purpose: "Identify recurring architectural issues requiring governance"
+          
+          refactoring_clusters:
+            query: "git log --since='2026-01-05' --until='2026-01-06' --name-only --pretty=format: | sort | uniq -c | sort -rn | head -20"
+            purpose: "Find brittle files touched repeatedly (architecture integrity issues)"
+          
+          rollback_events:
+            query: "git log --grep='Revert\\|rollback\\|undo' --since='2026-01-05' --until='2026-01-06' --oneline"
+            purpose: "Discover failed approaches needing guardrails"
+          
+          security_indicators:
+            query: "git log --grep='security\\|credential\\|PII\\|token\\|secret' --since='2026-01-05' --until='2026-01-06' --oneline"
+            purpose: "Identify security gaps requiring governance rules"
+          
+          architecture_changes:
+            query: "git log --grep='refactor\\|redesign\\|migrate\\|consolidate' --since='2026-01-05' --until='2026-01-06' --oneline"
+            purpose: "Extract architectural evolution patterns"
+        
+        deliverables:
+          - "cortex-brain/documents/planning/active/cortex5-remediation/analysis/GIT-COMMIT-INTELLIGENCE-P00-P17.md"
+          - "cortex-brain/documents/planning/active/cortex5-remediation/analysis/GOVERNANCE-RULE-CANDIDATES-FROM-GIT.json"
+          - "cortex-brain/documents/planning/active/cortex5-remediation/analysis/VIOLATION-HEATMAP.json"
+        
+        automated_insights:
+          - "Top 10 most-modified files (brittleness indicators)"
+          - "Commit message sentiment analysis (frustration vs confidence keywords)"
+          - "Author collaboration patterns (who fixes whose code = coupling issues)"
+          - "Time-to-fix analysis (how long between bug intro and fix)"
+          - "Governance rule candidates ranked by violation frequency"
+      
+      phase_1_review:
+        duration: "2-3 hours"
+        type: "human_ai_collaborative"
+        dependencies: ["phase_0_git_intelligence"]
+        activities:
+          - "Review git commit intelligence report (automated from Phase 0)"
+          - "Review existing 4 governance rules effectiveness"
+          - "Analyze violations from tracking/governance-audit.jsonl"
+          - "Cross-reference git patterns with audit log violations"
+          - "Extract architectural patterns from P00-P17 execution"
+          - "Identify repeated mistakes/pain points (data-driven from git + audit logs)"
+      
+      phase_2_design:
+        duration: "3-4 hours"
+        activities:
+          - "Prioritize governance gaps (Architecture Integrity, Quality Gates, Security)"
+          - "Draft 3-5 new rules based on real violations"
+          - "Define enforcement triggers and validation criteria"
+          - "Design rule interaction patterns (no conflicts)"
+      
+      phase_3_validation:
+        duration: "2 hours"
+        activities:
+          - "Test new rules against P00-P17 execution history"
+          - "Verify rules don't conflict with existing 4"
+          - "Confirm plugin-based implementation feasible"
+          - "Create acceptance criteria for each rule"
+      
+      phase_4_implementation_prep:
+        duration: "1 hour"
+        activities:
+          - "Document finalized rules in brain-protection-rules.yaml"
+          - "Create plugin stubs for new rules"
+          - "Update governance documentation"
+          - "Define P19 implementation tasks"
+    
+    # Deliverables
+    deliverables:
+      - "cortex-brain/documents/planning/active/cortex5-remediation/analysis/GIT-COMMIT-INTELLIGENCE-P00-P17.md (Phase 0 automated)"
+      - "cortex-brain/documents/planning/active/cortex5-remediation/analysis/GOVERNANCE-RULE-CANDIDATES-FROM-GIT.json (Phase 0 automated)"
+      - "cortex-brain/documents/planning/active/cortex5-remediation/analysis/VIOLATION-HEATMAP.json (Phase 0 automated)"
+      - "cortex-brain/brain-protection-rules.yaml (updated with 3-5 new rules)"
+      - "cortex-brain/documents/governance/GOVERNANCE-RULES-V2-SPECIFICATION.md (design doc)"
+      - "cortex-brain/documents/governance/RULES-RATIONALE.md (why each rule exists)"
+      - "src/orchestrators/middleware/governance/plugins/ (rule plugin stubs)"
+      - "cortex-brain/documents/planning/active/cortex5-remediation/phases/P19-GOVERNANCE-RULES-IMPLEMENTATION.md"
+      - "cortex-brain/documents/analysis/GOVERNANCE-GAP-ANALYSIS.md (violations from P00-P17)"
+    
+    # Candidate Rules (To Be Validated in Session)
+    candidate_rules:
+      architecture_integrity:
+        - "ORCHESTRATOR_BASE_COMPLIANCE: All orchestrators must inherit from BaseOrchestrator"
+        - "DEPENDENCY_INJECTION: No hardcoded dependencies, use DI pattern"
+        - "ASYNC_SAFETY: All async operations must use asyncio.Lock for shared state"
+        - "STATE_IMMUTABILITY: State modifications logged in audit trail"
+      
+      quality_gates:
+        - "CODE_COVERAGE_THRESHOLD: New code must maintain >80% test coverage"
+        - "COMPLEXITY_LIMIT: Cyclomatic complexity <15 per function"
+        - "TYPE_SAFETY: All public APIs must have type hints"
+        - "DOCUMENTATION_REQUIRED: All orchestrators must have docstrings"
+      
+      security_privacy:
+        - "GIT_ISOLATION: CORTEX code never commits to user repos (from SKULL)"
+        - "PII_DETECTION: Automated PII scanning before file writes"
+        - "CREDENTIAL_SCANNING: Pre-commit hooks block credential exposure"
+        - "ACCESS_CONTROL: User data accessible only to authorized orchestrators"
+    
+    # Success Criteria
+    acceptance_criteria:
+      collaborative_alignment:
+        - "Human and AI agree on 3-5 high-value governance rules"
+        - "All rules have clear enforcement triggers"
+        - "No conflicts with existing 4 rules"
+        - "Rules address real pain points (not speculative)"
+      
+      implementation_ready:
+        - "brain-protection-rules.yaml updated with v6.0 schema"
+        - "Plugin stubs created for all new rules"
+        - "P19 implementation plan detailed"
+        - "Acceptance tests defined for each rule"
+      
+      documentation_complete:
+        - "Each rule has rationale (why it exists)"
+        - "Enforcement strategy documented"
+        - "Validation criteria specified"
+        - "Examples (pass/fail) provided"
+    
+    # Metrics
+    metrics:
+      governance_coverage:
+        baseline: "4 rules across 2/6 categories (33% populated)"
+        target: "8-10 rules across 5/6 categories (83% populated)"
+        measurement: "brain-protection-rules.yaml category coverage"
+      
+      violation_prevention:
+        baseline: "N/A (new rules not yet enforced)"
+        target: ">90% (violations prevented by plugins)"
+        measurement: "Audit log analysis after P19 implementation"
+      
+      rule_addition_time:
+        baseline: "3-5 days per rule (speculative design)"
+        target: "2-4 hours per rule (plugin-based, data-driven)"
+        measurement: "Time from rule design to enforcement"
+    
+    # Dependencies & Blocking
+    dependencies: ["P17"]  # Must complete risk mitigation before governance finalization
+    blocks: ["P05", "P06", "P07", "P08", "P09", "P10", "P11", "P12", "P13"]  # Block orchestrator upgrades until governance finalized
+    
+    # Human-AI Collaboration Protocol
+    collaboration_protocol:
+      cortex_role:
+        - "🆕 Phase 0: Run automated git commit intelligence analysis (30 min)"
+        - "🆕 Phase 0: Extract violation patterns, refactoring clusters, rollbacks from git history"
+        - "🆕 Phase 0: Generate governance rule candidates ranked by violation frequency"
+        - "Phase 1: Analyze governance-audit.jsonl for patterns"
+        - "Phase 1: Cross-reference git commit patterns with audit log violations"
+        - "Phase 1: Extract architectural pain points from P00-P17"
+        - "Phase 2: Propose rule candidates based on violations (git + audit data)"
+        - "Phase 2: Draft enforcement logic and validation tests"
+      
+      human_role:
+        - "Prioritize governance gaps (business context)"
+        - "Validate rule candidates (strategic alignment)"
+        - "Approve final rule set (3-5 rules)"
+        - "Define acceptance criteria (domain expertise)"
+      
+      stopping_conditions:
+        - "✅ 3-5 high-value rules identified and approved"
+        - "✅ All rules have enforcement plugins designed"
+        - "✅ P19 implementation plan accepted"
+        - "⛔ Maximum 2-day duration reached (time-box)"
+        - "⛔ No clear violations found (defer to post-P13 review)"
   
   # ============================================================================
-  # ORIGINAL PHASES: P05-P13 (Now depend on P17 completion)
+  # ORIGINAL PHASES: P05-P13 (Now depend on P18 completion)
   # ============================================================================
   
   - phase_id: "P05"
@@ -1038,7 +1270,7 @@ phases:
       - "src/orchestrators/vacuum/vacuum_orchestrator_v3.py"
       - "Python-based deep cleanup"
       - "Task integration"
-    dependencies: ["P17"]  # Updated: Must wait for verification gates, audit logging, plugins, and risk mitigation
+    dependencies: ["P18"]  # Updated: Must wait for governance finalization before orchestrator upgrades
     
   - phase_id: "P06"
     name: "Investigation Orchestrator v3 - Python Autonomous"
@@ -1052,7 +1284,7 @@ phases:
       - "src/orchestrators/investigation/investigation_orchestrator_v3.py"
       - "Python-based root cause analysis"
       - "Task-tracked investigations"
-    dependencies: ["P17"]  # Updated: Must wait for verification gates, audit logging, plugins, and risk mitigation
+    dependencies: ["P18"]  # Updated: Must wait for governance finalization before orchestrator upgrades
     
   - phase_id: "P07"
     name: "Sanitization Orchestrator v3 - Python Autonomous"
@@ -1066,7 +1298,7 @@ phases:
       - "src/orchestrators/sanitization/sanitization_orchestrator_v3.py"
       - "Python-based PII/secret removal"
       - "Task integration"
-    dependencies: ["P17"]  # Updated: Must wait for verification gates, audit logging, plugins, and risk mitigation
+    dependencies: ["P18"]  # Updated: Must wait for governance finalization before orchestrator upgrades
     
   - phase_id: "P08"
     name: "TDD Orchestrator v3 - Python Autonomous"
@@ -1080,7 +1312,7 @@ phases:
       - "src/orchestrators/tdd/tdd_orchestrator_v3.py"
       - "Python-based RED→GREEN→REFACTOR"
       - "Task-tracked TDD cycles"
-    dependencies: ["P17"]  # Updated: Must wait for verification gates, audit logging, plugins, and risk mitigation
+    dependencies: ["P18"]  # Updated: Must wait for governance finalization before orchestrator upgrades
     
   - phase_id: "P09"
     name: "Refinement Orchestrator v3 - Python Autonomous"
@@ -1094,7 +1326,7 @@ phases:
       - "src/orchestrators/refinement/refinement_orchestrator_v3.py"
       - "Python-based code improvement"
       - "Task integration"
-    dependencies: ["P17"]  # Updated: Must wait for verification gates, audit logging, plugins, and risk mitigation
+    dependencies: ["P18"]  # Updated: Must wait for governance finalization before orchestrator upgrades
     
   - phase_id: "P10"
     name: "Debug Orchestrator v3 - Python Autonomous"
@@ -1108,7 +1340,7 @@ phases:
       - "src/orchestrators/debug/debug_orchestrator_v3.py"
       - "Python-based debugging"
       - "Task-tracked debug sessions"
-    dependencies: ["P17"]  # Updated: Must wait for verification gates, audit logging, plugins, and risk mitigation
+    dependencies: ["P18"]  # Updated: Must wait for governance finalization before orchestrator upgrades
     
   - phase_id: "P11"
     name: "Maintenance Orchestrator v3 - Python Autonomous"
@@ -1122,7 +1354,7 @@ phases:
       - "src/orchestrators/maintenance/maintenance_orchestrator_v3.py"
       - "Python-based 12-phase maintenance"
       - "Task integration"
-    dependencies: ["P17"]  # Updated: Must wait for verification gates, audit logging, plugins, and risk mitigation
+    dependencies: ["P18"]  # Updated: Must wait for governance finalization before orchestrator upgrades
     
   - phase_id: "P12"
     name: "Plan Viewer v3 - Task Tracking UI"
@@ -1138,7 +1370,7 @@ phases:
       - "Task list visualization"
       - "Progress bars and metrics"
       - "Real-time JSON updates"
-    dependencies: ["P17"]  # Updated: Must wait for verification gates, audit logging, plugins, and risk mitigation
+    dependencies: ["P18"]  # Updated: Must wait for governance finalization before orchestrator upgrades
     
   - phase_id: "P13"
     name: "Master Orchestrator Request Transformer"
@@ -1152,7 +1384,7 @@ phases:
       - "src/orchestrators/master/request_transformer.py"
       - "Context injection system"
       - "Domain-aware transformations"
-    dependencies: ["P17"]  # Updated: Must wait for verification gates, audit logging, plugins, and risk mitigation
+    dependencies: ["P18"]  # Updated: Must wait for governance finalization before orchestrator upgrades
     
   - phase_id: "P05"
     name: "Scripts/Utilities Toolkit Consolidation"

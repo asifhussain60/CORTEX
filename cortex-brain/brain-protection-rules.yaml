@@ -115,6 +115,78 @@ rules:
     fail:
     - feature.py created without test_feature.py
     - Test never fails (not actually testing anything)
+
+- rule_id: PLAN_FILE_ORGANIZATION
+  category: architecture_integrity
+  severity: blocked
+  name: Plan Files Must Live Within Plan Folder Structure
+  description: 'ALL files related to epics, plans, features, and implementations MUST be housed within the plan folder structure in designated subfolders.
+
+    Root-level file creation is DISCOURAGED unless absolutely necessary (e.g., core project files like README.md, requirements.txt).
+
+    This prevents workspace clutter and maintains clear plan boundaries.
+
+    '
+  enforcement:
+    trigger: file_creation
+    action: block_if_root_level_plan_file
+  validation:
+  - Plan artifacts must be in plan_folder/artifacts/
+  - Analysis documents must be in plan_folder/analysis/
+  - Progress reports must be in plan_folder/reports/
+  - Context documents must be in plan_folder/context/
+  - Scripts must be in plan_folder/scripts/
+  - Tracking data must be in plan_folder/tracking/
+  - No plan-related files in workspace root
+  - No plan-related files in cortex-brain root
+  implementation:
+    detector: src.orchestrators.middleware.governance.plan_file_validator.py
+    hook: pre_file_creation
+    priority: 5
+  folder_structure:
+    required_subfolders:
+      - analysis/       # Analysis documents, gap reports, risk assessments
+      - artifacts/      # Generated code, configs, templates
+      - context/        # Discovery docs, architecture analysis, requirements
+      - reports/        # Completion reports, progress summaries, metrics
+      - scripts/        # Plan-specific utility scripts
+      - tracking/       # Progress tracker, task registry, state files
+      - phases/         # Phase-specific implementation plans (optional)
+      - architecture/   # Architecture documents, specs, designs (optional)
+    allowed_root_files:
+      - epic-manifest.yaml         # Plan metadata and phase definitions
+      - README.md                  # Quick start guide
+      - CONTINUATION-PROMPT.md     # Auto-generated continuation instructions
+      - plan-viewer.html           # Auto-generated progress viewer
+      - launch-plan-viewer.sh      # Viewer launcher script
+      - launch-plan-viewer.py      # Viewer launcher script
+  examples:
+    pass:
+      - "cortex-brain/documents/planning/active/cortex5-snowball/analysis/GAP-ANALYSIS.md"
+      - "cortex-brain/documents/planning/active/cortex5-snowball/reports/P01-COMPLETION-REPORT.md"
+      - "cortex-brain/documents/planning/active/cortex5-snowball/artifacts/database-schema.sql"
+      - "cortex-brain/documents/planning/active/cortex5-snowball/tracking/progress-tracker.json"
+      - "cortex-brain/documents/planning/active/cortex5-snowball/epic-manifest.yaml"
+    fail:
+      - "cortex-brain/documents/planning/GAP-ANALYSIS.md (should be in plan_folder/analysis/)"
+      - "cortex-brain/P01-COMPLETION-REPORT.md (should be in plan_folder/reports/)"
+      - "database-schema.sql (should be in plan_folder/artifacts/)"
+      - "cortex-brain/documents/analysis/cortex5-gap-report.md (should be in plan folder)"
+  rationale: |
+    Plan file organization prevents:
+    1. Workspace clutter (root-level files scattered everywhere)
+    2. Unclear plan boundaries (which files belong to which plan?)
+    3. Merge conflicts (multiple plans creating same-named files)
+    4. Cleanup difficulty (can't easily archive a plan)
+    5. Discovery failures (can't find plan-related files)
+    
+    Benefits of plan folder structure:
+    1. Self-contained plans (all artifacts in one place)
+    2. Easy archival (mv plan_folder to archives/)
+    3. Clear ownership (file path shows which plan it belongs to)
+    4. Parallel development (multiple plans don't interfere)
+    5. Holistic cleanup (delete plan folder = delete all plan files)
+
 governance:
   enforcement_level: strict
   override_allowed: false

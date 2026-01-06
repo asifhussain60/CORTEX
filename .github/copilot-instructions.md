@@ -135,6 +135,7 @@ Defer to `CORTEX.prompt.md` for full spec. Summary:
 | HOLISTIC_DISCOVERY | Search before create (prevent duplication) |
 | GIT_ISOLATION | CORTEX code never commits to user repos |
 | PLANNING_ISOLATION | Planning commands create plans ONLY, never implement |
+| PLAN_FILE_ORGANIZATION | All plan files MUST live in subfolders (analysis/, artifacts/, context/, reports/, scripts/, tracking/, phases/, architecture/) |
 | HAND_OFF_PROTOCOL | 🛡️ AUTONOMOUS orchestrators execute independently |
 
 **Full rules:** `cortex-brain/brain-protection-rules.yaml`
