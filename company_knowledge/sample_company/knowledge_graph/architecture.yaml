@@ -1,0 +1,11 @@
+# Sample Company Architecture
+company_id: sample_company
+architecture:
+  style: microservices
+  patterns:
+    - event-driven
+    - api-gateway
+  tech_stack:
+    - Python
+    - FastAPI
+    - PostgreSQL
