@@ -1,0 +1,323 @@
+f41226ad1d5b2dcf410a23c3afda3a496c4974b9|2026-01-06 09:26:37 -0500|Asif Hussain|chore: update architecture audit report post-consolidation
+d84d29c746680a2530ba5feb9d7beae86c2f9cc1|2026-01-06 09:26:14 -0500|Asif Hussain|chore(planning): consolidate active plans - 6 ΓåÆ 2 plans
+61ee0ef16b44656b5dabf453f18406cec28ca0c5|2026-01-06 09:03:00 -0500|Test|refactor(plans): consolidate html-glassmorphism-alignment into docs-orchestrator-v2
+1dc4061221277273441aff7427e17b519755c6d7|2026-01-06 09:02:02 -0500|Asif Hussain|chore: final audit report sync
+b61bdf2e2264da7974b92a52ee5d8f8e769da096|2026-01-06 09:01:42 -0500|Asif Hussain|chore: update architecture audit report timestamp
+83394d7999fe8c338d0a252e64fedeb2bf89e0b5|2026-01-06 09:01:23 -0500|Asif Hussain|feat(snowball): hierarchical goals system v1.0 - 70% maintenance reduction
+6ef934baf8c0b59e3eff279f1e5049d5156ad5ea|2026-01-06 08:01:27 -0500|Test|docs(upgrade): add execution summary for cortex-upgrade orchestrator
+01c49e2b1e2d6cb997a9c879813fe732934db825|2026-01-06 08:00:22 -0500|Test|chore: update requests log
+392078e179a9d24b42df21096b7fb4213586d462|2026-01-06 08:00:08 -0500|Test|feat(upgrade): complete cortex-upgrade orchestrator enhancements with alignment to cortex5-remediation standards
+ff4fa26ffc2b3c0ded0dbd86ee89f1c2a39dbd50|2026-01-06 07:50:55 -0500|Test|docs(upgrade): add comprehensive v2.1 git intelligence summary
+28dc1c752aad8f6caebdea1ff2049c96467046ac|2026-01-06 07:50:54 -0500|Asif Hussain|docs: add P14-P17 addition completion summary
+bc3699af7cff76971b7285f710cdf8be99ba2b40|2026-01-06 07:49:26 -0500|Test|feat(upgrade): add git commit intelligence analysis and automated wiring system
+c6946ff88ebde1822b859ce4c8e36f13597e0074|2026-01-06 07:46:31 -0500|Asif Hussain|docs: add holistic design review 2026-01-06
+d5a2e34c80ad51ac9924a23664b6093ce3c4d824|2026-01-06 07:46:13 -0500|Asif Hussain|feat(epic): add P14-P17 infrastructure phases to cortex5-remediation
+287ed1472bb4b705f9547db7cdf76cbbf60c90f8|2026-01-06 07:17:29 -0500|Test|chore: update chat log and cleanup obsolete doc
+ed5a1b44714d7f9fe7ef5b4751261467147d9aa8|2026-01-06 07:16:59 -0500|Test|feat(docs-orchestrator): create comprehensive v2.0 plan with validators and centralized toolkit
+e56a478ed0eab0d4ba8967ada80e5e8e32d0b55a|2026-01-06 07:05:49 -0500|Asif Hussain|chore: ignore audit report timestamps
+e75ac94910309d96b5bdd3b20a04bd35e76a1575|2026-01-06 07:05:40 -0500|Asif Hussain|auto: update audit report timestamp
+92c2c87716b69f70ce56d888733ebfbc498009aa|2026-01-06 07:05:09 -0500|Asif Hussain|auto: fix audit script UnboundLocalError, cleanup incorrect plans, sync 2026-01-06 07:05
+ce7c0989a91c9036b1dba85e38109bd9e9cf6622|2026-01-06 06:17:16 -0500|Test|feat(documentation): upgrade orchestrator to v3.0 with comprehensive generation system
+9d0219d8e0193aaf3b94292c759b3718f94ff553|2026-01-06 06:02:50 -0500|Test|refactor(prompts): archive cortex-docs and cortex-backlog - single CORTEX entry point
+7bc8636f9042a1d79ce01b8570b3cb4293b231a3|2026-01-06 05:58:40 -0500|Test|feat(docs): create documentation orchestrator v2.0 with audit logging
+c7a8e2ce7a54cf5fb7b033634019601dbd7f7431|2026-01-06 05:54:01 -0500|Test|feat(upgrade): enhance orchestrator v2.0 with plan validation and Level 1 uniqueness
+16e88b577e8533e18337350c283f0d5405711fa1|2026-01-06 05:36:06 -0500|Asif Hussain|feat: CORTEX v5.0 Upgrade System - Complete implementation
+aaab4f9842de1cbe56332909217720e3c5c059ae|2026-01-06 05:06:54 -0500|Asif Hussain|feat(cortex5-remediation): Add Phase P05 - Scripts/Utilities Toolkit Consolidation
+dcc8d20db0ff8e2c5b0f9e65583d2e95748e2739|2026-01-06 04:24:01 -0500|Asif Hussain|auto: gap registry complete + 8 gaps documented (39K words) - 2026-01-06
+be7db24df0805d0fb5119267f8d29a0da2a444e0|2026-01-05 19:11:50 -0500|Asif Hussain|chore: Sync all planning artifacts
+45521f8ddf15e80b93577298a86e5d1e46412220|2026-01-05 17:52:49 -0500|Asif Hussain|Enhanced cortex-v5-remediation-epic with holistic findings from 4 investigation reports
+30bf28a182abfae61f8760a9d87683b4e7593a4e|2026-01-05 17:28:23 -0500|Asif Hussain|feat: complete enterprise audit logger implementation with self-healing
+bebfa925d1cd7befc4677f0cd36e44154c830b59|2026-01-05 16:20:35 -0500|Asif Hussain|auto: infrastructure fixes + user profile setup 2026-01-05 16:20
+2717fed3f7222197ade58a6d66db31c087bd9233|2026-01-05 15:35:42 -0500|Test|feat(docs): Add Level 1 Standardization Orchestrator with complexity-driven visual treatment
+2eb80aaa11d9764c3b8302f172251e3b3fcf4827|2026-01-05 15:07:08 -0500|Test|refactor(docs): Migrate inline styles to glass-level1.css
+a8a2ab60d8039332b9449dc4f7f3eb2b00e7fd6f|2026-01-05 14:55:36 -0500|Test|feat(docs): Enforce Python-only HTML generation + Level 1 theme cleanup
+0a0f66ca6f441f66c9b6eedf955ae902cb0c4271|2026-01-05 14:49:31 -0500|Test|chore: Update documentation styling and brain structure
+5aa02d91892f2d1962d3ec879c3f613b35e45d44|2026-01-05 14:48:05 -0500|Test|feat(docs): Add card prominence styling for orchestrators page
+a8ed2af87af394d884e43f0c78eadb645dbe7032|2026-01-05 14:34:56 -0500|Test|feat(glassmorphism): Apply 7-color palette with glass effects to orchestrators page
+8e801d95ddd3ef1df4b775e1a50df99ec301a003|2026-01-05 14:21:02 -0500|Asif Hussain|feat(plan-viewer): Standardize glassmorphism viewer with modal details and smart server manager
+4f18823c486a0fb582b7f1bcf28ff2a136b9110c|2026-01-05 13:48:51 -0500|Asif Hussain|chore: Phase 0 Foundation Repair complete - 4 critical fixes + database init
+efe9593d261ee84cca85a0f1571a1472b34d7c41|2026-01-05 12:03:57 -0500|Test|feat(intelligence): Upgrade cortex-docs.prompt.md to v1.2.0 - Single next view + global script generation
+4d7ebbea074913e1cb94d9a0526250ec5c9ea186|2026-01-05 12:02:49 -0500|Asif Hussain|feat(audit-logger): Implement RBAC Manager (Task 4.3)
+a8beef7a8f9e8cbd911e281812d7d62ad7320bb5|2026-01-05 11:56:28 -0500|Test|feat(intelligence): Enhance cortex-docs.prompt.md with v1.1.0 + complete plan refactoring
+ba23d7010a0805f55078fedebf2a0448a1664c7c|2026-01-05 11:56:13 -0500|Test|feat(intelligence): Enhance cortex-docs.prompt.md with v1.1.0 intelligence features
+c7a376da00422093964d5747890dcc39a1629ee9|2026-01-05 11:47:29 -0500|Test|refactor(plan): Reorganize html-glassmorphism-alignment into structured YAML architecture
+b5358d0d2afc117406be39c226fed4e85949d55b|2026-01-05 11:45:14 -0500|Test|docs(guide): Add CORTEX-DOCS-USAGE-GUIDE for intelligent prompt usage
+a45ddc878137f77cfba1285c23c8d8b43606fbd8|2026-01-05 11:44:06 -0500|Test|feat(prompt): Create intelligent cortex-docs.prompt.md for holistic HTML standardization
+c189c88d8e5372454c09b2e9b908e0e399eabc70|2026-01-05 11:35:12 -0500|Test|feat(ui): Batch update knowledge hub pages with standardized hero headers
+075526dbc1cad0ff181157e2b1e4ee2175a3964c|2026-01-05 11:34:04 -0500|Test|feat(ui): Standardize hero headers across all Level 2 views (Security & Orchestrators)
+06818af0a682e7e9b2a3760cce752b6640f841c4|2026-01-05 11:24:36 -0500|Test|feat(ui): Apply standardized hero header to security/access-control.html
+44e0f9190c75e5c77be45cbe8a3a4f37909289e6|2026-01-05 11:22:31 -0500|Test|feat(ui): Standardize hero header across all Level 1 views with clickable robot logo
+5f9d9f25c54710f0acd84af5f50d2214e369d2cf|2026-01-05 11:15:20 -0500|Test|fix(ui): Remove duplicate logo from header, add top margin to robot head
+a279844a38c1f1389f9f6fcf6a6914252cb7dd7d|2026-01-05 11:13:20 -0500|Test|feat(ui): Fix robot head cutoff - position above hero panel with divider line
+6066539fffc7ef1c20b591247d21b060f5e6c2ab|2026-01-05 11:01:23 -0500|Test|feat(ui): Enhance hero panel borders and icon padding
+7ec4ad0a7f99667de778749082e419993b24cf3d|2026-01-05 10:59:29 -0500|Test|feat(ui): Increase hero introduction font sizes by 10%
+6a54ae35c6fce1faf35bd1fe4f282d5c4b56480c|2026-01-05 10:57:23 -0500|Test|feat(ui): Center hero introduction description and stat pills
+2ee99a62a99bcbd052cbc097332276e118809c84|2026-01-05 10:55:52 -0500|Test|feat(ui): Add rich hero-style background to orchestrators introduction panel
+83bce9a8bda4224624d1a4f39d6e41a1f21a6120|2026-01-05 10:50:11 -0500|Test|feat(ui): Unify orchestrators page into single glassmorphism panel with improved styling
+d2247077f0b5951a89596abf4b7404df1e3ecda4|2026-01-05 10:41:24 -0500|Test|docs(patterns): Add Pattern C53 for CSS inheritance override fixes
+9fecac292417d6680bf0c44090543d93701c7034|2026-01-05 10:40:36 -0500|Test|fix(css): Remove CSS inheritance conflicts blocking tetris-style centered layout
+fb003cd23fd5457c6ad9b37af1d1399a736747f0|2026-01-05 10:35:44 -0500|Test|fix(ui): Convert to true tetris-style layout with centered icon+title (Pattern C52)
+e091c10bf30f13e7d654631ec901f34dd6c48045|2026-01-05 10:30:41 -0500|Test|feat(ui): Add tetris-style color rotation to stat badges (Pattern C51)
+345486739ea40737c3ba108d32d6e3391fe1c53d|2026-01-05 10:25:03 -0500|Test|fix(ui): Correct glassmorphism panel wrapping - full section not heading-only
+038ee685c8d146112ba047b5c1d2733ded5d7dbb|2026-01-05 10:18:09 -0500|Test|feat(ui): Enforce glassmorphism standards with Pattern C50 color rotation
+2fd6f39439c49120297fdb260fdbcaa9a34235ea|2026-01-05 09:55:56 -0500|Test|feat(validation): Add automated HTML structure validation to prevent broken views
+44c92f8cfcad229be6ae7d1681ffdde830194916|2026-01-05 09:36:40 -0500|Test|fix(ui): Add container class and glass-header for proper margins
+f8b4d7513748bcbce06c145657e9359873affd30|2026-01-05 09:33:11 -0500|Test|fix(ui): Correct CSS class names in orchestrators hub
+6cee73d5d8e7a93fe64b4852cbc7e9b5ba106799|2026-01-05 09:30:25 -0500|Test|feat(ui): Reconstruct orchestrators hub with glassmorphism (Pattern C52)
+c64a7b1221d266432c745c1ac8d5b26224e7708d|2026-01-05 09:29:50 -0500|Asif Hussain|chore: update audit report timestamp
+0a7b1e28a569595670713ea9aae4d8db24eb12c9|2026-01-05 09:28:37 -0500|Asif Hussain|sync: architecture enforcement + all fixes (2026-01-05)
+48a0d42beb63c37dd45e52d1ff7d2115eb3d1c8b|2026-01-05 09:25:02 -0500|Asif Hussain|feat(enforcement): Add architecture audit automation (pre-commit + CI/CD)
+129716932f5cbecb9c139a27f87d45ce9c1ad4a8|2026-01-05 09:21:10 -0500|Asif Hussain|feat(architecture): Fix text-based handoff language + add architecture contract (audit score: 84.38% ΓåÆ 96.88%)
+047f3f319109bc2fc39e05d9b8168e2502e4c43c|2026-01-05 09:08:41 -0500|Test|feat(governance): Holistic workspace reorganization and cleanup
+29b7ee430df3bdb22e8cf557e1d2d0c3f44c4509|2026-01-05 09:02:31 -0500|Asif Hussain|fix(config): Resolve 4 critical orchestrator configuration errors
+9821506546d5785589659e239b41c8c5cb0bc4cb|2026-01-05 08:58:02 -0500|Test|refactor(planning): Streamline Glass-Exec to Snowball 2.0 for exponential throughput
+ad6a4663516c9331be2844b2f3b4ad94e54adc12|2026-01-05 08:48:42 -0500|Test|docs(planning): Update Glass-Exec and sitemap references
+9d722acd56e7132690bc9b4ab6d2494d4068c668|2026-01-05 08:43:11 -0500|Test|fix(ui): Recreate Knowledge Hub with proper structure
+79b384fbe021fdd4594c34ac1fa44c6957be3d9a|2026-01-05 08:08:27 -0500|Asif Hussain|arch: C150 Phase 2 complete - planning_v5 orchestrator fixed
+155d80807f474b6359fb62ebea99ecef41955fa4|2026-01-05 06:41:45 -0500|Test|feat(ui): Transform Knowledge Hub with Tetris-style glassmorphism cards
+eb854219bcb1b0ac7507062bd3808770556bcdeb|2026-01-05 05:29:27 -0500|Asif Hussain|C150 Remediation: Brittleness test analysis & plan updates
+a06f2cdce122fc44286cd01fd899f6ea22e4a7fc|2026-01-05 05:12:02 -0500|Asif Hussain|feat(c150): Complete Phase 999 - Teardown + REFACTOR + Commit
+0df11f44eca634ea7575f6ab1144ea67282c236f|2026-01-04 21:44:29 -0500|Asif Hussain|auto: sync 2026-01-04 21:44
+82b8111088dbe16e26e662b3675c8310b8b98fce|2026-01-04 20:12:14 -0500|Asif Hussain|feat(c150): Add plan viewer with glassmorphism UI and real-time progress tracking
+19ef260cb513ea0335964d11ce411fda72fc5289|2026-01-04 19:13:38 -0500|Asif Hussain|feat(orchestrators): Add Investigation Orchestrator v2 - Autonomous Root Cause Analysis
+1f3ed5fd518cef70f03a4f5db5f48cd1924a1e79|2026-01-04 18:59:46 -0500|Asif Hussain|auto: C50 Epic 100% complete - autonomous execution (73.7%ΓåÆ100%), 5 plans executed, all dependencies resolved [2026-01-04 18:59]
+6cd98e22f5c98c87d1102d595c108b9042579edd|2026-01-04 18:19:28 -0500|Test|feat(docs): Restore beautiful interactive ROI calculator to token-optimization page
+665c802eac0868ef1c6cbda5af6e10540cedf19e|2026-01-04 18:12:18 -0500|Test|style(docs): Apply glassmorphism formatting to 4 pages with CSS-only styling
+250be541bb87f08802a1ae3bdd557ed649ea5c65|2026-01-04 17:58:46 -0500|Test|fix(docs): Restore proper HTML structure for 8 index pages
+69dcaf647e51518112988ece4cd8ba505ee08366|2026-01-04 17:55:12 -0500|Test|Before restoring views
+c71e30d3aae87bd200196b98335293a025193b4d|2026-01-04 17:50:39 -0500|Test|Fix broken Key Features panels in learning-paths and toolkit-manager
+35cebafe257f5846841c0cb9172599014a193d71|2026-01-04 17:47:12 -0500|Test|Phase 16b: Expand Level 1 Feature Pages with remaining Key Features
+d6d86b97112320e1469b89de8a79a6243f103935|2026-01-04 17:41:02 -0500|Test|Toolkit Integration: Add Python script references to HTML glassmorphism plan
+7140a4c5a4f9defadf8d233b65803f2edd6620d6|2026-01-04 17:34:51 -0500|Asif Hussain|feat(C50): Update plan viewer color scheme to status-based system
+60846b658b6276b7838479825160b762e840cd27|2026-01-04 17:30:20 -0500|Asif Hussain|docs(C50-05): Complete C50-05 Context Middleware Enhancement
+c3cd96953497e2f7193bd21aa6f96403a15dd01c|2026-01-04 17:25:12 -0500|Asif Hussain|feat(C50-05): Phase 4 - Token budget enforcement with priority-based trimming
+ffea94d9d4f85fc6b967b618aba5822b8a5d27ea|2026-01-04 17:18:38 -0500|Asif Hussain|feat(C50-05): Phase 2 - File Relationship Analysis Complete
+50ab6fa49d510aea02fc8908ec54942b9cada6d7|2026-01-04 17:14:17 -0500|Asif Hussain|feat(C50-05): Phase 1 - Vision API Integration Complete
+8e0a4e5e03798ce10c5e1b95b3617e117bae0ac8|2026-01-04 17:06:54 -0500|Asif Hussain|feat(C50-02): Complete Debug Orchestrator - 692 LOC, 33 tests, 75% coverage
+dc6650792b638e457cc5bd84310ed8135b6d3633|2026-01-04 16:38:54 -0500|Asif Hussain|feat(C50-04): AST scanning integration - injection point detection, security scanning, performance analysis
+c08aaedb8925ba03e03f5b0b2f5d2fd1db0400df|2026-01-04 15:57:02 -0500|Asif Hussain|C50-10: Phase-Level Acceptance Criteria (Gap 1 Remediation)
+61635bc1595b783004020072cf8f443e0efb45f6|2026-01-04 15:14:20 -0500|Test|feat(docs): Modern tab system with D3.js brain architecture visualization
+336e593f178e6f9170326ceac0b9f42b119397fb|2026-01-04 14:48:04 -0500|Asif Hussain|chore: Auto-sync remaining C50-00D and refinement artifacts
+f9edd74d79131c552cf2582537d08bb50671cf0b|2026-01-04 14:46:26 -0500|Asif Hussain|feat(C50-01): Complete Refinement Orchestrator implementation
+3ad7aa3b073fd7bec1fe3522e25e7df5345d0292|2026-01-04 13:51:42 -0500|Asif Hussain|auto: C50 auto-wiring + metric formatting fix (8.6x format)
+cca103c038ddcc5cbf4e717e5e60b70da244d4aa|2026-01-04 13:48:39 -0500|Test|feat: HTML View Orchestrator - Master orchestrator integration with brain system
+5eea7ff3a06a1ce7ed24585569c6e721d265f19f|2026-01-04 13:16:57 -0500|Test|Phase 14.5 Complete: four-tier-brain.html modernization
+7b1f91d63b0a19cb2dc8d7089afe0b03f736312e|2026-01-04 12:44:35 -0500|Asif Hussain|style(C50): Darken plan-viewer theme and add CORTEX logo
+bb100a799d72e67ddeec22b3bf28f5c7a67a08ba|2026-01-04 12:41:07 -0500|Asif Hussain|fix(C50): Update plan-viewer theme and add localhost:8000 server requirement
+395313fb9d705d59994c66b5b7673b8c312dd408|2026-01-04 12:33:42 -0500|Asif Hussain|feat(C50): Add plan viewer HTML and autonomous orchestrator
+a6b75ec4d990623374c673f2a7bcb3f9fea9d591|2026-01-04 12:23:57 -0500|Asif Hussain|auto: sync 2026-01-04 12:23
+c5d38149ece885f4411cdbee880758051684443f|2026-01-04 12:12:54 -0500|Test|Update Plan Tracker: Add Extension Phases 13-15
+97016b82da8a8c220aa05a5e44fc4914e5f43bab|2026-01-04 12:05:53 -0500|Test|Transform four-tier-brain.html: Stub ΓåÆ Full Content Page
+d066e3e514eae78ce3283c0fd5c99de0a8576e29|2026-01-04 12:01:43 -0500|Test|Complete Purpose-Driven Design Phase 1 Report
+ed25c4454f525f77c2383d26e30e6dd395ed7731|2026-01-04 12:00:06 -0500|Test|Purpose-Driven Design Implementation
+dd900cd9335d3603516f87149e43e88883d0f2ca|2026-01-04 11:34:45 -0500|Test|≡ƒÄë HTML Glassmorphism Plan COMPLETE - Certification Issued
+91698e5cc21b8c4594c029c8e2fe45d5306ad485|2026-01-04 11:33:33 -0500|Test|Phase 12 Complete: REFACTOR with Intelligence & Automation
+518a4722119902dd81e815a6affe4ef54d7d0e04|2026-01-04 11:27:56 -0500|Asif Hussain|feat(planning): standardize to plan-viewer.html across all plans
+e67ebd0fac1fac72c2e7f1942eedc1e918ed3a08|2026-01-04 11:15:09 -0500|Asif Hussain|feat(epic): implement EPIC mode for plan_orchestrator.py
+59c468bc4b7c8f214e19d35ee0290fc10ec401f2|2026-01-04 11:10:41 -0500|Test|Phase 11 Complete: Deployment Validation (3 comprehensive docs, 95% readiness, 60+ checklist items, 4-tier rollback plan)
+b7458c81489c70e095ee172c89ccca0c53849bf5|2026-01-04 11:01:37 -0500|Asif Hussain|feat(governance): complete database code integration
+7186a8395a793e6f80e0b661c5b06b1376ba3716|2026-01-04 10:51:31 -0500|Asif Hussain|feat(governance): Migrate brain-protection-rules.yaml to SQLite (Phase 2)
+d201c02e460a52f1bf11d5362cbf057733608fb0|2026-01-04 10:39:53 -0500|Test|refactor(git-commit): autonomous mode v3.0 - 55% bloat reduction, zero user prompts
+c63516ce3aa17fba7019e7fa8cdbf187fe82dfa3|2026-01-04 10:29:51 -0500|Test|force pushed
+6e6146be93055ce33739fb633b966a0152dde6f0|2026-01-04 10:11:09 -0500|Asif Hussain|feat(CORTEX-5.0): Enforce epic folder structure + integrate brittleness testing
+235c539de1361f7a4f9d69eaf0babc83d486eb82|2026-01-04 09:57:46 -0500|Asif Hussain|refactor(CORTEX-5.0): Prioritize Sub-Plan 00D for immediate VSCode cache integration
+cba67d6faf370bff00c7b01588be8ea8e9382e6f|2026-01-04 09:49:55 -0500|Test|Add Phase 9b Overview & Complete Phase 9 Summary
+236287297cbbed7d6839d51347010da6717005d5|2026-01-04 09:48:23 -0500|Test|Add Phase 9b: Mobile & Responsive Compliance Testing
+fd4d09e53592b7299296d8a6b12fe2ce47948647|2026-01-04 09:48:10 -0500|Asif Hussain|feat(CORTEX-5.0): Implement VSCodeCacheManager + integrate pre-flight hooks
+ddd80e7332a73b8eeeb42b75e72fd095eb7395b8|2026-01-04 09:44:45 -0500|Test|Phase 9 Complete: Performance & Accessibility Testing (Lighthouse >90/95, WCAG 2.1 AA compliant, 4 comprehensive reports)
+5d9d09b56f8002d63488760040a35adca7f8610b|2026-01-04 09:41:22 -0500|Asif Hussain|feat(CORTEX-5.0): Add Sub-Plan 00D VSCode Cache Optimization
+60a094d79bf3e8665ac1df2ce889aca7ab7c0a98|2026-01-04 09:34:46 -0500|Test|push
+012e02029c99859e376ce40c105802b86a7841ca|2026-01-04 09:27:36 -0500|Test|Phase 8 Complete: Edge Case & Security Analysis (4 reports: 11 edge cases, 18 failure modes, security 8.3/10)
+567edc1e4225c46c8736d33cc36b039ab007fe95|2026-01-04 09:24:23 -0500|Test|backlog item
+de5a565d49792e466d99ba573ff4eacb69b2f470|2026-01-04 09:17:14 -0500|Test|Add version display audit report (Phase 7e deliverable)
+51e418b0605555fcb5a27c6ae6d9a42cf33a8112|2026-01-04 09:16:38 -0500|Test|Phase 7e Complete: Version Display Audit (0 version displays found - first launch requirement met)
+6376f0b1383e8dfdd48560e01cf47e9132fed22b|2026-01-04 09:06:49 -0500|Test|Phase 7d Complete: Diagram & Illustration Updates (All CORTEX-5.0 diagrams verified, plan progress updated to 69%)
+de834ec4c66e0e5cbdb16ade5b5f91bd23e1406a|2026-01-04 09:06:04 -0500|Test|Phase 7c Complete: Feature Documentation (Phase -1 Knowledge Library, Visual Progress, AST Scanning, REFACTOR Enforcement documented in Planning v5 and SKULL)
+5fd3df88847ae32758f5cae61483a51b6e8211f4|2026-01-04 09:03:43 -0500|Test|Phase 7b Complete: Critical Orchestrator Docs (10 orchestrators documented, Refinement + Debug pages updated with CORTEX-5.0 status, ecosystem diagram created)
+2a6eb6522ace3da8e74066849b71c49f9365390b|2026-01-04 08:54:58 -0500|Test|docs(html-alignment): Phase 7a Complete - CORTEX-5.0 Gap Analysis (7 features, 9 diagrams identified)
+04a8e3d8cc13f349a60e2c13cf6c9e6c8aec4d41|2026-01-04 08:48:58 -0500|Test|docs(html-alignment): Expand Phase 7 scope for CORTEX-LENS Plan Viewer + Epic/Feature split
+8b8e2fbc0b63812fa6d6eb41cf9147149ae4d7b7|2026-01-04 08:23:19 -0500|Test|cortex-docs: Architecture gap validation for html-glassmorphism-alignment plan
+a88c207452fa9d9d05d210fe381bca09e3911dc8|2026-01-04 08:10:49 -0500|Test|Plan Upgrade Complete: HTML Glassmorphism Alignment v5 (CORTEX-5.0 compliant, 7 files, 44% complete)
+804fbe0168ac1616be83839bd9c3c3ec68f62f8a|2026-01-04 09:33:14 -0500|Asif Hussain|Γ£à Sub-Plan 00B Phase 00 Complete - Epic & Feature Planner Architecture
+ff800b6bd764960d346bbf786bc9365df7e8e959|2026-01-04 09:17:52 -0500|Asif Hussain|feat(orchestrators): Add shared infrastructure for Planning & ADO orchestrators
+f2f0926732a742641568af63a2a7e4ba5e6093bd|2026-01-04 08:43:31 -0500|Asif Hussain|feat(epic): Transform CORTEX-5.0 to Epic Plan architecture
+7da3f4c994a807d882030ff18cba112a4421b175|2026-01-04 08:00:17 -0500|Test|Update CORTEX documentation and planning files - Master orchestrator wiring and prompt refinements
+ece99359f02d270b162588915326d7b5cbba1720|2026-01-04 07:23:03 -0500|Asif Hussain|feat(plan-upgrade): Add autonomous plan migration orchestrator with Copilot Chat entry point
+bc2e58c12213e925a516b2a1aae022b70ef626cc|2026-01-04 07:07:39 -0500|Asif Hussain|feat(cortex-5.0): Add Production Validation Pipeline + 8 Core Enhancements + GIT_NO_PUSH_ENFORCEMENT
+3d6681d114c82067b7191a07dc41b9a2b933c42f|2026-01-04 06:19:43 -0500|Asif Hussain|feat(acceptance-validation): Add Sub-Plan 10 - Enhanced Acceptance Validation System
+753bcd20d9a2fc2db54e4f7f667b28ba347415e0|2026-01-04 05:29:31 -0500|Asif Hussain|feat(debug+planning): Complete Debug Orchestrator & Pre-Execution Analysis (Sub-Plans 02 & Planning Enhancement)
+b1177f518e894ce9cf6d8e58d5d2ad9216d9b12d|2026-01-03 20:16:24 -0500|Asif Hussain|feat(refinement): Complete Refinement Orchestrator Implementation (Sub-Plan 01)
+b6813198e3424652e4b6d35eb9a0b83c1316550a|2026-01-03 20:02:25 -0500|Asif Hussain|test(coverage): Complete Test Coverage Sprint (Sub-Plan 00) - 110 tests
+d35ce3910215bb2608e17ff3ee8a06e604baa3ba|2026-01-03 19:46:06 -0500|Asif Hussain|≡ƒôè Test Coverage Sprint Completion Report
+1d9f8e8ae325c570db82b6696a49cfac05239519|2026-01-03 19:44:50 -0500|Asif Hussain|Γ£à Complete Test Coverage Sprint Phases 4-8 (39 tests)
+b406eaecdb4ca4ce43473e106780fb2355c2b51a|2026-01-03 19:40:46 -0500|Asif Hussain|feat(tests): Phase 3 - Middleware Tests Complete (11 tests)
+d597c2037053fb9174407bba53385a6c6f42cf0f|2026-01-03 19:38:27 -0500|Asif Hussain|feat(tests): Phase 2 - Common Orchestrator Tests Complete (33 tests)
+47392f6eac983acd69763583417ee18d7babbef1|2026-01-03 19:35:27 -0500|Asif Hussain|feat(tests): Phase 1 - Brain Protection Tests Complete (51 tests)
+9b1ac1ac8af3f1299b86b24656366ea60480bf0a|2026-01-03 19:08:31 -0500|Test|docs: Update sitemap for design system and panel viewer integration
+bc499a6e789bc3c1bce9d64d32817be8334a9688|2026-01-03 19:01:43 -0500|Test|feat: Enhanced panel viewer UI with glassmorphism updates
+541b5c6dcba73c86c30674c9de289dc214e57328|2026-01-03 17:48:06 -0500|Test|docs: Complete orchestrators cleanup (73% ΓåÆ 91%)
+0a945cfd9138b96623995fb20fdde494fc8719f3|2026-01-03 18:29:38 -0500|Asif Hussain|feat(planning): Add interactive Plan Orchestrator for CORTEX-5.0
+42df62cf3c9e475d10a95223f111da155d4fe44e|2026-01-03 18:04:41 -0500|Asif Hussain|docs(orchestrators): Add shield indicator for autonomous hand-offs
+06ac653b2ec6b904863183ae693984cfcb998d79|2026-01-03 17:55:16 -0500|Asif Hussain|chore: Clean active plans folder - archive completed V5 work
+0990aa227f311f0354613af57b5917eb8ff51ab2|2026-01-03 17:37:41 -0500|Asif Hussain|fix: Transform CORTEX.prompt.md into Master Orchestrator proxy (v5.0.1)
+478e9b43f89e90f5abb94b515ff5cb920aea80a6|2026-01-03 17:22:52 -0500|Test|feat(glassmorphism): Complete CSS standardization v4.0.1 with tetris panel refinements
+79bc67d3be2de25a147daf1cb64992c1e45e56b6|2026-01-03 15:30:32 -0500|Asif Hussain|fix(architecture): Remove orphaned continuation prompt files
+29ebbf89de2feb50478899f60ae2b50631fbbb0e|2026-01-03 15:08:12 -0500|Asif Hussain|force push
+0937537a972e5153d5837dad49c44aee3ddb440a|2026-01-03 15:07:36 -0500|Asif Hussain|feat(accessibility): Add WCAG AA concise mode for autonomous orchestrators
+a0926be9b3421ffd39c94e720dba16b08836a073|2026-01-03 14:41:02 -0500|Asif Hussain|feat(plan): Add Phase 6.4.5 - CORTEX.prompt.md Lean Transformation
+abb308f3db265416876762c9955ff5a7e4fc3b37|2026-01-03 14:31:34 -0500|Test|chore: Add cleanup script for backtick-n fix
+fd53451c67e89e4f040929ca4b1c6d0035172d32|2026-01-03 14:31:34 -0500|Test|fix: Remove stray backtick-n characters from HTML files
+90c04f24aebbf360212281e3e9af78f1f06798f5|2026-01-03 14:24:42 -0500|Test|Γ£¿ feat: Implement meaningful master plan filenames
+ca65a8a9b84fafd18ddddded8a0ed6033f6701fb|2026-01-03 14:06:10 -0500|Asif Hussain|feat(sanitization): Implement Phase 3 - 5 Specialized Engines (2,355 lines)
+6d5d3c8256d0dbee08479cb4fb689f8c09909466|2026-01-03 13:58:13 -0500|Test|refactor(docs): standardize CORTEX Lens capability tiles to glassmorphism v4.2.7
+9050dd6cc74ba176865a62aab0db87f650b9d4da|2026-01-03 13:48:39 -0500|Test|Restored Level 1
+03f8d631b51582cf20becbfa3f0cd47c9873f8fa|2026-01-03 13:46:14 -0500|Test|feat(docs): Complete Level 1 audit with tetris panel standardization
+219a71c6585e765faa5ca0334a1132336b290bc9|2026-01-03 13:17:36 -0500|Asif Hussain|feat(orchestrators): Implement Response Rendering Pipeline with centralized message injection
+0f21e707a691e7f96728d904cceea580f39c19de|2026-01-03 11:39:56 -0500|Asif Hussain|Γ£à Phase 7 COMPLETE: System Integration + Master Orchestrator Validation
+ed511b25b481c9e78883b9f108ef80b5b7e19ba0|2026-01-03 11:27:54 -0500|Asif Hussain|feat(phase-6): Complete holistic review testing and add Master Orchestrator wiring protocol
+41463d2b13d59bda19f7c731032bd8c13b9c0ba1|2026-01-03 11:25:19 -0500|Test|chore(toolkit): Add validation tool backups and report artifacts
+ced200bfb728c089727b4e73b4cef44b7999a623|2026-01-03 11:19:15 -0500|Test|chore: Update chat01.md context
+d682a7bc5e88e84456dc746641b5cfb170093e94|2026-01-03 11:18:57 -0500|Test|feat(docs): Add icon-title spacing validation tool and fix 29 spacing issues
+f650db790cb24b61a21303e10f6ee8684c015223|2026-01-03 11:13:37 -0500|Asif Hussain|docs(planning): Add V4 deprecation fix summary report
+c5121ca9b01c02ffe000dc5646071f2fb8a8ec82|2026-01-03 11:09:31 -0500|Asif Hussain|feat(planning): Add V4 deprecation rule to migration script
+b58c2e0b2d5125ef58e25f01e5b3969021b80720|2026-01-03 10:50:53 -0500|Test|docs(git): Add large changeset automation rules to GitCommit workflow
+9fefdb752df3f40ba3ba2fc49aedd232c293437b|2026-01-03 10:50:38 -0500|Asif Hussain|feat(planning): Add V4 to V5 plan migration toolkit with Master Orchestrator integration
+1cf4e7d65b4c2ffbec1e5ba7eb27978c503cbbbc|2026-01-03 10:50:22 -0500|Test|fix(docs): Add Font Awesome 6.x icon prefixes to all 1,406 icons
+2dc87cce3d05515db79056f54f56107448a45007|2026-01-03 10:32:32 -0500|Test|docs: Clean up documentation structure - archive orphaned files, fix CSS paths, and reorganize STS section
+4d45bd8cabf119f7003a439b64f2a2761b346235|2026-01-03 10:05:21 -0500|Test|Force push
+285ee251235a30070c3cd30905981ef1f01c588a|2026-01-03 10:02:26 -0500|Test|docs(cleanup): Stage 2 - Core sections and archives removal
+92bceb3d55d48746cd1180994404db1bb916353a|2026-01-03 10:02:03 -0500|Test|docs(cleanup): Phase 12 - Glassmorphism compliance & CSS cleanup
+7714cd15e1c0a409a8eaca2106252fd5dfde6308|2026-01-03 09:02:39 -0500|Test|feat: Add glassmorphism standard compliance validation (Phase 11)
+96f777bfb0e542fa66a8f53cde289600bf4b21fb|2026-01-03 08:58:59 -0500|Test|feat: Add CSS quality validation to documentation cleanup orchestrator
+0837b241c02c1e65d1b4d5d3cf64cc3c5e95c570|2026-01-03 08:48:22 -0500|Test|refactor: Replace D3.js principles with HTML cards per glassmorphism v4.1.4
+0380caa277554d59ac7c7c27c6ae11658dcabeba|2026-01-03 08:43:10 -0500|Test|docs: Update glassmorphism standard v4.1.4 with content-driven layout intelligence
+7f12b9e4d713cee059811ea898e57ab45c819cc1|2026-01-03 08:39:26 -0500|Test|refactor: Simplify architecture page to 2-column layout with card-based tiles
+8e32809e0deb13fc5ba8631df76a0d9a6c0ee3c7|2026-01-03 08:35:18 -0500|Test|feat: Add D3.js interactive visualizations to architecture page
+7df61e917bb4607320bdc16a7b9933343204969e|2026-01-03 08:27:28 -0500|Test|docs: Fix glassmorphism compliance in testing-hub.html - remove 22 inline styles
+20895c4bda49d46c0a9517c5f595ecf16526a2fd|2026-01-03 08:21:30 -0500|Test|docs: Add comprehensive glassmorphism compliance to master plan v4.2.1 - impossible to miss
+62b09342625b4be48dfb095c2d0be6d3a4780509|2026-01-03 08:16:27 -0500|Test|docs: Update master plan v4.2.0 with efficiency priorities + orchestrators multi-panel (2x3 grid)
+3d616f7bc676df96fd2a8cb2fbd56f7c9531b233|2026-01-03 08:10:39 -0500|Test|docs: Complete phase 6 docs cleanup - sync validation and final report
+069d3bec63c87b1a1ce9f615ea327b1be3307a18|2026-01-03 07:30:19 -0500|Test|chore: Merge documentation and prompts from CORTEX-4.0
+93c9c4e24f38c3ae11214cd363242507e0bbaf15|2026-01-03 07:29:01 -0500|Test|docs(cleanup): Comprehensive documentation cleanup and stub generation
+01644cf2e405e88342abcdadd9cc566309b8802e|2026-01-02 19:15:56 -0500|Asif Hussain|fix(tests): Repair MCP test mock patching strategy
+e4fcb73da43f142058a0addf51901c6d9a3fc1cf|2026-01-02 19:01:50 -0500|Asif Hussain|feat(orchestrators): Complete Phase 2 brittleness elimination - 100% instantiation success
+701084edccc4a38c2f85ee592905af59c5d51b55|2026-01-02 18:52:54 -0500|Asif Hussain|feat(validation): Complete Phase 1 brittleness mitigation
+ce24031046cfbfca52f2286ce87166e2451a4ec6|2026-01-02 18:30:27 -0500|Asif Hussain|feat(vacuum-v2): Complete migration with schema validation system
+c5e065c81d85ca956ba3d8a186ce15ba62457e32|2026-01-02 18:19:40 -0500|Test|feat(docs): Complete TDD Fundamentals + Learning Hub Phase 1 infrastructure
+8c450439dc8d69d46707370a9c80543129652b15|2026-01-02 17:20:13 -0500|Asif Hussain|Add continuation prompt for Phase 6.3 (Vacuum v2 Migration)
+2c9235589888a62e849e240dbccc3113a0f4bf56|2026-01-02 17:19:18 -0500|Asif Hussain|Phase 6.2 COMPLETE: Cleanup Orchestrator v2 Migration
+ced6eefa5b28cdc47e1e2a18a9da450c050e4786|2026-01-02 17:02:30 -0500|Test|feat(docs): Add Best Practices Learning Hub architecture (v5.0)
+2a995f4c480fad5b4633b36be1490d5ec4dd6045|2026-01-02 16:45:43 -0500|Asif Hussain|chore(ado-v2): Add remaining migration artifacts and context documentation
+872cced6231c1f31e246e77bb84a2e181c280385|2026-01-02 16:44:28 -0500|Asif Hussain|feat(ado-v2): Complete Phase 1 backfill - all helper methods, execution, and completion metrics implemented
+b679bcccffdee79c116b7b4627a57dcd27275b17|2026-01-02 16:44:22 -0500|Test|feat(ui): Apply glassmorphism v4 to metrics and metadata with soft animations
+593ad5bbe01d119d93a47b73c3d2a650a104903d|2026-01-02 16:34:28 -0500|Asif Hussain|Γ£à Phase 6.1.5 Complete: Master Orchestrator Activation
+8d7b082ff971ac9d90d7f2c57e5dce565a4ea722|2026-01-02 16:28:57 -0500|Asif Hussain|Γ£à Phase 6.1.4 Complete: Testing & Validation
+9b3a267f10aa06b58a692f27f571bf7c1d0b439b|2026-01-02 16:18:17 -0500|Asif Hussain|Γ£à Phase 6.1.3 Complete: Config & Templates + Phase 1 Assessment
+a021837ba691c0cfd58083feae24dad637836db7|2026-01-02 16:10:15 -0500|Asif Hussain|Γ£à Phase 6.1.2 Complete: ADO Wizard Integration
+51606df60b5f82f428c3c9f9bf25cc9b2e01bdea|2026-01-02 15:47:24 -0500|Test|docs(compliance): Complete glassmorphism v4.1.0 migration for all orchestrator pages
+36d2867dd751cbde4632c7e3071e299f44c238d8|2026-01-02 15:13:08 -0500|Test|feat(compliance): Add comprehensive Mermaid visualizations and interactive progress tracking
+ffdc01470bb0409dd061b76c40b922360fd13fa2|2026-01-02 15:10:15 -0500|Asif Hussain|Γ£à TDD Orchestrator v2 Approved for Autonomous Conversion
+61e788ca61535798007ec72dc511b2a17a6d0e97|2026-01-02 15:09:36 -0500|Test|feat(security): Phase 1 - Extract embedded CSS to main.css for glassmorphism compliance
+0759f23c20845283777ead1c58de2dc3da4b8313|2026-01-02 15:05:26 -0500|Test|docs: Complete holistic tile complexity analysis and Level 1 architecture validation
+d73f10ca45cb82a28bab9ff2b304361be23be70d|2026-01-02 14:44:12 -0500|Asif Hussain|docs: Add Level 1 Spec Generation Guide + Acceptance Criteria Documentation
+002174ef228511569956fcf4dfd433c6a5ff2486|2026-01-02 14:43:09 -0500|Asif Hussain|Update Phase 5 checkpoint with commit hash 52a53a613
+52a53a6138bbe5d355fbef385d822b581ccc402c|2026-01-02 14:42:48 -0500|Asif Hussain|Phase 5 COMPLETE: Migration Plans Generated (ADO v2, Vacuum v2, Cleanup v2, GUIDED Assessment)
+ad104a367d65f6c15fbaaf64f87e11a5c4e48f36|2026-01-02 14:33:05 -0500|Test|refactor(ui): Shorten masonry card link names for cleaner visual layout
+d1e51b062f4cbd2c77c0c8ab9f014f3266d0d941|2026-01-02 14:00:12 -0500|Asif Hussain|feat: Implement Option B - Project-level continuation with Tier 1 integration
+07ac460fe9031248bb71a7a685d24b57ae6421d2|2026-01-02 13:39:17 -0500|Asif Hussain|Plan Update: TDD-Master orchestrator requires discussion before enhancement
+2f4dc497cc4a606d519af3dc16f2d160cb3f1357|2026-01-02 13:34:55 -0500|Asif Hussain|Phase 5.1a COMPLETE: ADO Conversational Wizard Enhancement
+41af1f01c721b3bdd7ec4a48e5e0f7bc24968b11|2026-01-02 13:25:19 -0500|Test|docs(orchestrators): Add v5 documentation files from CORTEX4-refactor
+88a5edbfaa4803b5ea3161ee4409e0cd9c544b09|2026-01-02 13:23:20 -0500|Test|docs(orchestrators): Update v5 architecture docs with governance + ADO wizard
+be00a1f7b84f34fdc8abf04f770532b29ff85896|2026-01-02 13:07:00 -0500|Test|feat(planning): Add Tier 0 Governance + Knowledge Graph integration to Planning v5
+3820651249ded6ae46083c19e04a70a663d10aba|2026-01-02 13:04:47 -0500|Asif Hussain|docs(orchestrators): Comprehensive refactor guide with master orchestrator architecture
+e6a5ece54501919c9ef8db9e189006d0b88da4c7|2026-01-02 12:45:47 -0500|Test|≡ƒôè Update master plan: Phase 4.5 complete, Bootstrap 100%
+d14ddbd8587c4ba7b38b9a45e73a9d22da45607a|2026-01-02 12:44:08 -0500|Test|Γ£à Phase 4.5: Cross-Session Context Middleware complete
+28507f5c5d2267950c2e92a35b9242fce711b438|2026-01-02 11:53:09 -0500|Test|Phase 3 Complete: BaseOrchestrator v4.1 + Master Orchestrator
+65d2a0be1d5c76d8e99bf877126b605a4f7149dd|2026-01-02 11:38:49 -0500|Test|refactor: Simplify continuation prompt to minimal format
+747145c0b67b78977e5e518284d569f8aac75390|2026-01-02 11:32:32 -0500|Test|demo: Add interactive continuation prompt demonstration
+6d2ac9e1bdfa552c2779cf55060fb2540ae96322|2026-01-02 11:31:17 -0500|Test|docs(v5-plan): Update checkpoints with continuation prompt activation
+40abf77afc72942781606ae559207dff367fe444|2026-01-02 11:30:59 -0500|Test|feat: Activate session management continuation prompt system
+ff19b7886e589358846c50504e5d2531ce2c706c|2026-01-02 11:21:36 -0500|Test|docs(v5-plan): Update checkpoints with session management commit hash
+a93860329e6359ce93575ec039787e75b90d1b6d|2026-01-02 11:21:19 -0500|Test|feat(v5-plan): Add session management continuation prompt system
+3c6743ff4ff8f0f07b7a96d713d3363dae43decc|2026-01-02 11:10:37 -0500|Test|docs: Add holistic review checkpoint
+35329a224a250f37565d43d1aace311754aaf53f|2026-01-02 11:10:23 -0500|Test|docs: Add Master Orchestrator context to Phases 0-2
+6b42c1e79035639194819bcee4732bef6d72d0ae|2026-01-02 11:06:44 -0500|Test|docs: Add progressive activation checkpoint
+4568a2f52cac94d657e61bdfa4ed17283d7b90b8|2026-01-02 11:06:32 -0500|Test|feat: Master Orchestrator progressive activation strategy
+6f38f196810c7fe4995b71983e43968fd8f736ca|2026-01-02 11:01:37 -0500|Test|docs: Add Master Orchestrator integration checkpoint to plan
+87a081529fb0f1b25efc0b6052ede5f554226fc7|2026-01-02 11:01:21 -0500|Test|feat: Integrate Master Orchestrator into CORTEX v5 plan
+5ef21a9800fefdc231466c70c14fa82d5a38b5c1|2026-01-02 10:47:18 -0500|Test|Update plan: Phase 2 complete with checkpoints
+3a081949e0682d52913f336802daa5462ca5d0e6|2026-01-02 10:46:53 -0500|Test|Phase 2 complete: Planning State Database
+9015319046f7657ee0505be6c7b67eda338826f3|2026-01-02 10:24:57 -0500|Test|Phase 1 Complete: MCP Tool Infrastructure
+c042c4a445e9855dc62d19c84984d9e522df662f|2026-01-02 10:07:53 -0500|Test|Phase 1 Task 1.1: MCP Server Foundation complete
+1f44c48bde9f9826651b2a55019a478d91ac76db|2026-01-02 09:59:21 -0500|Test|docs(v5): Phase 0 completion report and progress tracking
+654340376950102b633c8dce4f430895ad2048b6|2026-01-02 09:58:09 -0500|Test|feat(v5): Phase 0 - Foundation Setup Complete
+b8002f1fb189fa56c43830efe9553e279bb61ca3|2026-01-02 09:45:02 -0500|Test|refactor(planning): Consolidate v5 autonomous orchestrator plans
+6bb819df5db65ef0b2df6615443833d392d5bc5f|2026-01-02 08:22:15 -0500|Asif Hussain|feat(docs): CSS layout validator + equal-height card fixes + sitemap instructions
+658aaecff43ef51d272498b2c7751672cccd6535|2026-01-02 08:06:39 -0500|Asif Hussain|feat(docs,backlog): security HTML fixes + YAML-first backlog system
+7506251576443d6f24416c05eadac9aa562be7bb|2026-01-02 07:50:46 -0500|Test|refactor(planning): consolidate orchestrator plans into unified autonomous-orchestrator-v5
+e7fb9c2fec26a90360aec2e3d83c5d68be247010|2026-01-02 07:31:40 -0500|Test|refactor(planning): remove redundant planning-system-v5 subfolder
+04a724e9879577c243f30ab6ac14096d11f102a7|2026-01-02 07:23:35 -0500|Test|refactor(planning): rename planning-system-v5 folder to orchestrator-enhancement
+b776bb8dbed441188347618d0c7818d0c2c628ca|2026-01-02 07:21:18 -0500|Asif Hussain|docs(prompts): refactor CORTEX-GitCommit v2.0.0 with multi-machine sync
+46fea0f46e834f82cb5455c28d1d05d3504d61a6|2026-01-02 07:10:24 -0500|Asif Hussain|chore(planning): archive inactive planning folders older than 24 hours
+cd6a879355a191fc8cea8e79c20c07d89541db3f|2026-01-02 06:25:07 -0500|Asif Hussain|feat(planning): Add Planning System v5 and orchestrator enhancement plans
+3e59e2cccbb02f29a3a87bab883bc752ac289423|2026-01-02 06:22:23 -0500|Test|fix(docs): add missing BWC CSS and fix Awakening image display
+0842238f7ceee68db5cb67d5047c43f555626bff|2026-01-02 06:03:28 -0500|Test|docs: update sitemapd.md - Level 0 home page now 100% compliant
+e87cd31b9eb7f6b702a4e03c8abd2e059da53fd6|2026-01-02 06:02:59 -0500|Test|fix: extract embedded CSS to external files for Glassmorphism v4.0.1 compliance
+d3ad82559aecc6466e19e3a5613c896bfab91428|2026-01-02 05:57:48 -0500|Test|docs: add Level 0 home page violations report
+b0ca581f82c8906e4d86b9f8b20cb7b31429d91c|2026-01-02 05:12:16 -0500|Test|docs(compliance): Complete three-panel glassmorphism audit
+49c19102ef06b57617f2d2806e364304f6c8e49b|2026-01-02 04:46:06 -0500|Asif Hussain|feat(security): streamline compliance and training views
+7effa9a17228a7d21ee4a8baaa40be5ffd13ab48|2026-01-01 20:07:34 -0500|Asif Hussain|feat(docs): create Compliance and Response security views
+72ca8c0c243936fbe5f1708a1227896e027c8f33|2026-01-01 19:55:08 -0500|Asif Hussain|docs: optimize Level1-spec & glassmorphism standard (v3.5.0/v4.0.2)
+2a0b216bb3a23be684f79eb768a910e1418bc8e4|2026-01-01 19:45:56 -0500|Asif Hussain|feat(docs): Standardize Level 1 security page headers to Home-only navigation
+b9cdf646f1398ac498430adcdd8902c4a18ecdb8|2026-01-01 19:31:21 -0500|Asif Hussain|feat(docs): Complete Security Assessment views with enhanced visualizations
+a46a9bf7dd448ec86e2c08948c4f680fc1624d89|2026-01-01 19:15:22 -0500|Asif Hussain|docs(documentation): Complete multi-panel discovery analysis and sitemap consolidation
+804345fc12da1ed51059959f5385ffb541bcc0cb|2026-01-01 17:50:20 -0500|Asif Hussain|feat(docs): Restore original hub pages from git history
+73c6d0ffb2f86113484e8f640dc925a547d16138|2026-01-01 16:54:06 -0500|Asif Hussain|feat(docs): Phase 2.1.1 complete - Security Hub Level 1 page
+3b4e69d9550fb3fd0aa3a7271d47b68daffe349d|2026-01-01 15:02:25 -0500|Test|feat(docs): implement responsive 3-column layout with adaptive typography
+7ed3a4291554b75fa65d6b17730aa599f4182213|2026-01-01 14:45:48 -0500|Test|fix(css): Standardize spacing system to 24px and add missing category panel styles
+a131d2243023fdeb1668d533192435968ac71b7e|2026-01-01 14:36:02 -0500|Test|docs: Update backlog with newer governance analysis files
+7423f320302c7bd4e2e7d8800dc63b682349b465|2026-01-01 14:30:38 -0500|Test|docs: Add spacing rules to design standard v4.0.1 and master plan v6.0.1
+44892cdc06a159601c225b6882cd9ada5ce6d2ba|2026-01-01 14:26:18 -0500|Test|refactor: Rename plan to cortex-documentation with clean structure
+008e89a980be04a7b712f27e7697b6b132f8abea|2026-01-01 14:23:54 -0500|Test|docs: Add corrected master plan v6.0.0 with level-based recursive phasing
+e8f7919f03343a00a8b4b65384973e16b49faf77|2026-01-01 12:37:58 -0500|Asif Hussain|refactor: rename cortex-optimize ΓåÆ cortex-refactor + add pre-decomposition validation
+26e762b22b26df2779c1f9991c6e023fbb1c8d4d|2026-01-01 11:30:01 -0500|Test|feat(glassmorphism): Security Level 1 views recreated + validation toolkit
+77017e907b8fef7c7e28ae5d62e295ef19b9ad98|2026-01-01 10:06:28 -0500|Test|feat(glassmorphism): Production-ready master plan with masonry validation
+bf91762dc351438a8fa83fde45a4ba3b76fa4629|2026-01-01 09:20:05 -0500|Test|feat(planning): Refine glassmorphism standardization plan for autonomous execution
+4b9d7377e6c82dd2c049d37082dfd4599b8273cb|2026-01-01 09:06:03 -0500|Test|feat(design): Add 7-color glassmorphism palette with randomized distribution
+6946363251a6927834af25da60f8cc2bf0622584|2026-01-01 06:38:07 -0500|Test|feat(ux-ui): Integrate comprehensive UX/UI best practices into glassmorphism plan
+480865db3ff7d5a7dc125de68b4382b53a4c51e1|2025-12-31 19:10:08 -0500|Asif Hussain|docs(glassmorphism): Add Animation Tier System v3.2.0
+b9ba5dca4d51c44d9a7f5b67b64e711f4527d976|2025-12-31 19:01:45 -0500|Asif Hussain|feat(docs): Add D3.js knowledge graph visualization with 54 patterns
+83b78896b943c804dcd02bc3bd2f96b24c03501e|2025-12-31 18:49:13 -0500|Asif Hussain|feat(docs): glassmorphism v3.1 documentation modernization
+a06f2bf8bbce836b10a12dc7c57aa46985faf0b4|2025-12-31 17:16:11 -0500|Asif Hussain|docs(toolkit-manager): redesign with Level 1 glassmorphism standard and D3.js/Mermaid diagrams
+f2e0620e3e7c24a227c9d6eff120471fc4c29643|2025-12-31 17:13:18 -0500|Test|chore(cleanup): Remove cortex-docgen system and all related files
+456ff3bbe92482d98f1b4b3540d8d7e1486ce37f|2025-12-31 17:10:16 -0500|Test|feat(design): Modernize glassmorphism design standard to v3.0
+4b2f626c4705ac3ff7475765dc27b0dd21d8386b|2025-12-31 17:01:50 -0500|Asif Hussain|docs(views): standardize hero sections across 12 first-level doc pages
+91eda2909655e718fe527174890ec4355e1592e5|2025-12-31 16:18:14 -0500|Asif Hussain|feat(docs): redesign security index with glassmorphism panel alternation
+f41eec58c7252717bd716b846befc4a4bbff272c|2025-12-31 14:56:05 -0500|Asif Hussain|feat(docgen): Optimize cortex-docgen.prompt.md - modular decomposition v3.0
+c607f6733417bcacf9bc4bd98908757c636316b3|2025-12-31 14:40:47 -0500|Asif Hussain|feat(toolkit-manager): Complete Toolkit Manager implementation (9/9 phases)
+e012d9c15da997b267c2c866529a78c609971dc6|2025-12-31 12:37:25 -0500|Asif Hussain|feat(prompts): integrate optimize delegation + docgen governance
+ea6605efea6cf493ccf0bbcff2a4537ca3a7fd68|2025-12-31 12:28:20 -0500|Test|maintenance: System health check complete (v2.0)
+7f52e9b7dfcdccd0358ce78c3c8cbecc36d8a89d|2025-12-31 12:07:25 -0500|Asif Hussain|feat(docgen): Add documentation generation system
+ea3eda091496cfc69722e750654338093f828661|2025-12-31 11:58:37 -0500|Test|refactor: decompose cortex-maintenance.prompt.md (4844ΓåÆ2119 lines, 80% reduction)
+bc13d3f9ce7390e373df226338bfdc2a5c7fb37d|2025-12-31 11:39:30 -0500|Asif Hussain|feat(backlog): Add holistic analysis and TDD evaluation to backlog system v4.0.0
+54c65694d27823b9444b48b65dc9e97b3dc6fb0e|2025-12-31 11:38:18 -0500|Test|feat(optimization): Add comprehensive optimization engine with decomposition strategies
+8d788fb0b6e275f49843ecb45846f6a62fa0f63d|2025-12-31 11:00:53 -0500|Test|feat(vacuum): add comprehensive filesystem cleanup orchestrator
+9cea07388d1120d73e7824f1748d8f9a6fcd8eaa|2025-12-31 10:03:15 -0500|Test|refactor(brain): migrate tier0 to BrainProtector, archive obsolete GovernanceEngine
+7d215e465c4891c3d134759f554ab982238b4876|2025-12-31 09:49:18 -0500|Test|feat(skull): Achieve 100% SKULL test coverage (404 tests, 63/63 rules)
+c5864d50c689ac106405a0e2c40b949ad9bf8613|2025-12-31 08:55:55 -0500|Asif Hussain|docs(homepage): enhance What is CORTEX and Vision panels with dual achievement cards
+4a9df9cd2b24a09b67049dfb20d06fc86c9844d7|2025-12-31 07:20:40 -0500|Test|feat(maintenance): Complete Phase 10 & 11 - LLM intent routing enhancements
+1ef9d9004c53edf747d42ad72060444f36bb4195|2025-12-31 07:09:14 -0500|Asif Hussain|feat(planning): Add COMPOSABLE-TEMPLATES-001 plan with clickable links
+41b7dee17e58bf75be511cafb5f0d6097f3347bf|2025-12-31 06:31:15 -0500|Asif Hussain|feat(backlog): Add orchestrator-specific templates enhancement plan
+29c2c3c5336f2c9d7fb85a9e9e8ff90d876986ee|2025-12-31 05:32:55 -0500|Test|feat(docs): enhance mobile responsiveness and Built with CORTEX panel styling
+3b506a711a4482f5817d13c70d3270e7c08d28aa|2025-12-31 04:57:34 -0500|Test|first draft
+65f88cd4ac6275428287b7e98f22d843525d9213|2025-12-30 20:24:07 -0500|Asif Hussain|feat(docs): Add ROI Calculator page and enhance Built with CORTEX panel
+8f33a4bf70e64a5b4fd1b8022a6867a5feca7868|2025-12-30 19:32:01 -0500|Asif Hussain|fix(docs): optimize Awakening image load performance
+72e83f04b84705a9294540aa9b0fc6e8fee9aca5|2025-12-30 19:20:23 -0500|Asif Hussain|feat(docs): add glassmorphism loading spinner + image optimization
+632fe1bb4d78ed2c07675bdb681a1b6eac9acb48|2025-12-30 16:52:29 -0500|Test|feat(security): Add Phase 1 security knowledge library documents
+149cc7b470806029bad5c7c3a9abb736f7037725|2025-12-30 13:23:38 -0500|Test|feat(orchestrators): Add HAND-OFF system with shield icon visual confirmation
+8e854e9e2e41867f2d023579480b47c1bef5bd1d|2025-12-30 12:35:52 -0500|Test|feat(toolkit,devops): Complete toolkit consolidation and git sync automation
+3f0cf9dbc214be75d41bf19881e316547576071a|2025-12-30 12:18:33 -0500|Test|refactor(templates): Complete response template consolidation
+f847e6faf10fdcdf463cab281a2b4a3ac4f40b13|2025-12-30 11:37:54 -0500|Test|[OPTIMIZATION/DOC] Consolidated 131 duplicate documents
+7c4e84075333212b99bc1987811a4d26f331f593|2025-12-30 11:37:50 -0500|Test|[OPTIMIZATION/HIGH] Document pattern as best practice
+20531532445a2db62a7db1f297bc7c267bc94dc2|2025-12-30 10:28:47 -0500|Asif Hussain|chore(backlog): Reorganize backlog items with priority-based numbering
+04261b892cd7a3d62023503a498fffc56022b025|2025-12-30 10:23:05 -0500|Asif Hussain|refactor(backlog): Complete backlog system overhaul + cleanup fixes
