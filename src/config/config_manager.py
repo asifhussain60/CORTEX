@@ -173,6 +173,14 @@ class CortexConfig:
         # Assume workspace structure: {repo}/cortex-brain
         return Path.cwd() / "cortex-brain"
     
+    @property
+    def root_path(self) -> Path:
+        """
+        Backward compatibility property for legacy code expecting config.root_path.
+        Returns: Path to CORTEX root directory (current working directory)
+        """
+        return Path.cwd()
+    
     def ensure_paths_exist(self) -> None:
         """
         Create essential CORTEX directories if they don't exist.

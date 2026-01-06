@@ -69,23 +69,47 @@ class WorkPlanner(BaseAgent):
         self.pattern_storage = PatternStorage(tier2_kg)
         
         # Initialize Planning Orchestrator for enhanced features
+        # DISABLED: P01 Fix - Planning intents should route directly to orchestrator, not through agent
+        # Architecture violation: Orchestrators expect autonomous terminal execution, not nested agent calls
         self._planning_orchestrator = None
-        if PLANNING_ORCHESTRATOR_AVAILABLE:
-            try:
-                from src.config import config
-                self._planning_orchestrator = PlanningOrchestrator(cortex_root=str(config.root_path))
-                self.logger.info("✅ Planning Orchestrator initialized for enhanced planning")
-            except Exception as e:
-                self.logger.warning(f"Planning Orchestrator initialization failed: {e}")
-                self._planning_orchestrator = None
+        # if PLANNING_ORCHESTRATOR_AVAILABLE:
+        #     try:
+        #         from src.config import config
+        #         self._planning_orchestrator = PlanningOrchestrator(cortex_root=str(config.root_path))
+        #         self.logger.info("✅ Planning Orchestrator initialized for enhanced planning")
+        #     except Exception as e:
+        #         self.logger.warning(f"Planning Orchestrator initialization failed: {e}")
+        #         self._planning_orchestrator = None
     
     def can_handle(self, request: AgentRequest) -> bool:
-        """Check if this agent can handle the request."""
+        """
+        Check if this agent can handle the request.
+        
+        P01 FIX: WorkPlanner now handles ONLY task breakdown/estimation.
+        Planning intents should route to Planning Orchestrator via MasterOrchestrator.
+        
+        Valid intents:
+        - TASK_BREAKDOWN: "estimate", "breakdown", "how long"
+        - Simple decomposition requests (no architecture review, no threat modeling)
+        
+        Invalid intents (route to Planning Orchestrator instead):
+        - "plan feature", "create plan", "plan for" (comprehensive planning)
+        - Requests mentioning architecture/security/threat model
+        """
+        # P01 FIX: Explicitly reject "plan" intents (should route to orchestrator)
+        message_lower = request.user_message.lower()
+        
+        # If message contains "plan" + planning keywords, reject (orchestrator handles it)
+        planning_keywords = ['plan feature', 'create plan', 'plan for', 'planning', 
+                            'architecture', 'threat model', 'security', 'proceed with', 'epic']
+        if any(keyword in message_lower for keyword in planning_keywords):
+            return False
+        
+        # Accept only task breakdown intents
         valid_intents = [
             IntentType.FEATURE.value,
             IntentType.BUG.value,
             IntentType.REFACTOR.value,
-            "plan",
             "breakdown",
             "estimate",
             "tasks"
@@ -338,7 +362,9 @@ class WorkPlanner(BaseAgent):
             )
             
         except Exception as e:
-            self.logger.error(f"Orchestrator execution failed: {e}")
+            self.logger.error(f"Orchestrator execution failed: {e}", exc_info=True)
+            import traceback
+            traceback.print_exc()
             # Fallback to simple planning
             self.logger.warning("Falling back to simple task breakdown")
             return self._execute_simple_breakdown(request)

@@ -1,0 +1,287 @@
+{{
+
+  "schema_version": "2.0",  "schema_version": "1.0",
+
+  "registry_type": "phase_metadata",  "registry_type": "child_plan_metadata",
+
+  "epic_id": "C50",  "epic_id": "C50",
+
+  "epic_name": "CORTEX v5.0 Remediation Epic",  "last_updated": "2026-01-04T00:00:00Z",
+
+  "epic_version": "6.0.0",  "total_child_plans": 18,
+
+  "last_updated": "2026-01-05T18:30:00.000000",  "child_plans": [
+
+  "total_phases": 14,    {
+
+  "phases": [      "id": "epic-structure-cleanup",
+
+    {      "order": "00A",
+
+      "phase_id": "P01",      "name": "Epic Structure Cleanup",
+
+      "order": 1,      "type": "infrastructure",
+
+      "name": "Master Orchestrator Task Management",      "priority": "critical",
+
+      "wave": "Wave 1: Foundation",      "folder_path": "C50-00A/",
+
+      "priority": "P0_CRITICAL",      "master_plan_file": "C50-00A/00-epic-structure-cleanup.md",
+
+      "type": "infrastructure",      "tracking_file": "C50-00A/tracking/progress-tracker.json",
+
+      "folder_path": "phases/P01-master-orchestrator-task-management/",      "viewer_file": "C50-00A/epic-structure-cleanup-plan-viewer.html",
+
+      "master_plan_file": "phases/P01-master-orchestrator-task-management/00-master-orchestrator-task-management.md",      "complexity": "simple",
+
+      "tracking_file": "phases/P01-master-orchestrator-task-management/tracking/progress-tracker.json",      "estimated_hours": 2,
+
+      "complexity": "moderate",      "blocking": true
+
+      "estimated_duration": "3 days",    },
+
+      "total_tasks": 4,    {
+
+      "completed_tasks": 1,      "id": "epic-feature-planner",
+
+      "status": "in_progress",      "order": "00B",
+
+      "dependencies": [],      "name": "Epic & Feature Planner Implementation",
+
+      "blocking": true,      "type": "infrastructure",
+
+      "deliverables": [      "priority": "critical",
+
+        "src/operations/master_orchestrator/todo_manager.py",      "folder_path": "C50-00B/",
+
+        "cortex-brain/tracking/task-registry.json",      "master_plan_file": "C50-00B/00-epic-feature-planner.md",
+
+        "Unit tests for todo_manager.py",      "tracking_file": "C50-00B/tracking/progress-tracker.json",
+
+        "Master Orchestrator integration"      "viewer_file": "C50-00B/epic-feature-planner-plan-viewer.html",
+
+      ]      "complexity": "complex",
+
+    },      "estimated_hours": 120,
+
+    {      "blocking": true
+
+      "phase_id": "P02",    },
+
+      "order": 2,    {
+
+      "name": "Planning Orchestrator v6",      "id": "test-coverage-sprint",
+
+      "wave": "Wave 1: Foundation",      "order": "00C",
+
+      "priority": "P0_CRITICAL",      "name": "Test Coverage Sprint",
+
+      "type": "core_orchestrator",      "type": "validation",
+
+      "folder_path": "phases/P02-planning-orchestrator-v6/",      "priority": "critical",
+
+      "complexity": "complex",      "folder_path": "C50-00C/",
+
+      "estimated_duration": "4 days",      "master_plan_file": "C50-00C/00-test-coverage-sprint.md",
+
+      "total_tasks": 5,      "tracking_file": "C50-00C/tracking/progress-tracker.json",
+
+      "status": "pending",      "viewer_file": "C50-00C/test-coverage-sprint-plan-viewer.html",
+
+      "dependencies": ["P01"],      "complexity": "moderate",
+
+      "blocking": true      "estimated_hours": 120,
+
+    },      "blocking": true
+
+    {    }
+
+      "phase_id": "P03",  ]
+
+      "order": 3,}
+      "name": "ADO Orchestrator v3",
+      "wave": "Wave 2: Core Orchestrators",
+      "priority": "P1_HIGH",
+      "type": "core_orchestrator",
+      "folder_path": "phases/P03-ado-orchestrator-v3/",
+      "complexity": "moderate",
+      "estimated_duration": "2 days",
+      "status": "pending",
+      "dependencies": ["P01"]
+    },
+    {
+      "phase_id": "P04",
+      "order": 4,
+      "name": "TDD Orchestrator v3",
+      "wave": "Wave 2: Core Orchestrators",
+      "priority": "P1_HIGH",
+      "type": "core_orchestrator",
+      "folder_path": "phases/P04-tdd-orchestrator-v3/",
+      "complexity": "moderate",
+      "estimated_duration": "2 days",
+      "status": "pending",
+      "dependencies": ["P01"]
+    },
+    {
+      "phase_id": "P05",
+      "order": 5,
+      "name": "Refinement Orchestrator v3",
+      "wave": "Wave 2: Core Orchestrators",
+      "priority": "P1_HIGH",
+      "type": "core_orchestrator",
+      "folder_path": "phases/P05-refinement-orchestrator-v3/",
+      "complexity": "moderate",
+      "estimated_duration": "2 days",
+      "status": "pending",
+      "dependencies": ["P01"]
+    },
+    {
+      "phase_id": "P06",
+      "order": 6,
+      "name": "Debug Orchestrator v3",
+      "wave": "Wave 2: Core Orchestrators",
+      "priority": "P1_HIGH",
+      "type": "core_orchestrator",
+      "folder_path": "phases/P06-debug-orchestrator-v3/",
+      "complexity": "moderate",
+      "estimated_duration": "2 days",
+      "status": "pending",
+      "dependencies": ["P01"]
+    },
+    {
+      "phase_id": "P07",
+      "order": 7,
+      "name": "Vacuum Orchestrator v3",
+      "wave": "Wave 3: Utility Orchestrators",
+      "priority": "P2_MEDIUM",
+      "type": "utility_orchestrator",
+      "folder_path": "phases/P07-vacuum-orchestrator-v3/",
+      "complexity": "moderate",
+      "estimated_duration": "2 days",
+      "status": "pending",
+      "dependencies": ["P01"]
+    },
+    {
+      "phase_id": "P08",
+      "order": 8,
+      "name": "Cleanup Orchestrator v3",
+      "wave": "Wave 3: Utility Orchestrators",
+      "priority": "P2_MEDIUM",
+      "type": "utility_orchestrator",
+      "folder_path": "phases/P08-cleanup-orchestrator-v3/",
+      "complexity": "moderate",
+      "estimated_duration": "2 days",
+      "status": "pending",
+      "dependencies": ["P01"]
+    },
+    {
+      "phase_id": "P09",
+      "order": 9,
+      "name": "Sanitization Orchestrator v3",
+      "wave": "Wave 3: Utility Orchestrators",
+      "priority": "P2_MEDIUM",
+      "type": "utility_orchestrator",
+      "folder_path": "phases/P09-sanitization-orchestrator-v3/",
+      "complexity": "moderate",
+      "estimated_duration": "2 days",
+      "status": "pending",
+      "dependencies": ["P01"]
+    },
+    {
+      "phase_id": "P10",
+      "order": 10,
+      "name": "Investigation Orchestrator v3",
+      "wave": "Wave 3: Utility Orchestrators",
+      "priority": "P2_MEDIUM",
+      "type": "utility_orchestrator",
+      "folder_path": "phases/P10-investigation-orchestrator-v3/",
+      "complexity": "complex",
+      "estimated_duration": "3 days",
+      "status": "pending",
+      "dependencies": ["P01"]
+    },
+    {
+      "phase_id": "P11",
+      "order": 11,
+      "name": "Maintenance Orchestrator v3",
+      "wave": "Wave 3: Utility Orchestrators",
+      "priority": "P2_MEDIUM",
+      "type": "utility_orchestrator",
+      "folder_path": "phases/P11-maintenance-orchestrator-v3/",
+      "complexity": "moderate",
+      "estimated_duration": "2 days",
+      "status": "pending",
+      "dependencies": ["P01"]
+    },
+    {
+      "phase_id": "P12",
+      "order": 12,
+      "name": "Progress Tracking Integration",
+      "wave": "Wave 1: Foundation",
+      "priority": "P0_CRITICAL",
+      "type": "infrastructure",
+      "folder_path": "phases/P12-progress-tracking-integration/",
+      "complexity": "complex",
+      "estimated_duration": "3 days",
+      "status": "pending",
+      "dependencies": ["P01", "P02"]
+    },
+    {
+      "phase_id": "P13",
+      "order": 13,
+      "name": "Integration Testing",
+      "wave": "Deferred",
+      "priority": "P0_CRITICAL",
+      "type": "validation",
+      "folder_path": "phases/P13-integration-testing/",
+      "complexity": "complex",
+      "estimated_duration": "4 days",
+      "status": "deferred",
+      "dependencies": ["P02", "P03", "P04", "P05", "P06", "P07", "P08", "P09", "P10", "P11", "P12"]
+    },
+    {
+      "phase_id": "P14",
+      "order": 14,
+      "name": "Documentation & Deployment",
+      "wave": "Deferred",
+      "priority": "P0_CRITICAL",
+      "type": "documentation",
+      "folder_path": "phases/P14-documentation-deployment/",
+      "complexity": "moderate",
+      "estimated_duration": "2 days",
+      "status": "deferred",
+      "dependencies": ["P13"]
+    }
+  ],
+  "wave_summary": {
+    "wave_1_foundation": {
+      "phases": ["P01", "P02", "P12"],
+      "total": 3,
+      "completed": 0,
+      "in_progress": 1,
+      "pending": 2
+    },
+    "wave_2_core_orchestrators": {
+      "phases": ["P03", "P04", "P05", "P06"],
+      "total": 4,
+      "completed": 0,
+      "in_progress": 0,
+      "pending": 4
+    },
+    "wave_3_utility_orchestrators": {
+      "phases": ["P07", "P08", "P09", "P10", "P11"],
+      "total": 5,
+      "completed": 0,
+      "in_progress": 0,
+      "pending": 5
+    },
+    "deferred": {
+      "phases": ["P13", "P14"],
+      "total": 2,
+      "completed": 0,
+      "in_progress": 0,
+      "pending": 0,
+      "deferred": 2
+    }
+  }
+}

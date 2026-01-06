@@ -623,6 +623,8 @@ class IntentRouter(BaseAgent):
         """
         Classify user intent and attach relevant rule context.
         
+        P01 FIX: Enhanced to distinguish PLANNING (orchestrator) from TASK_BREAKDOWN (agent).
+        
         This is the enhanced classification method that returns rich context
         for intelligent rule enforcement. Replaces legacy _classify_intent().
         
@@ -635,24 +637,81 @@ class IntentRouter(BaseAgent):
         message_lower = request.user_message.lower()
         metadata = {}
         
-        # UNIVERSAL PLANNING GATE: ALL requests go through planning first
-        # No keyword triggers needed - planning is mandatory for all work
-        # Exception: Meta-commands (help, status, feedback) skip planning
+        # P01 FIX: Planning Intent Detection (Routes to Orchestrator)
+        # Check for planning keywords that indicate full feature planning
+        # (architecture review, threat modeling, TDD integration, progress tracking)
+        planning_orchestrator_keywords = [
+            'plan feature', 'create plan', 'plan for', 'planning',
+            'proceed with', 'execute plan', 'run plan', 'epic',
+            'remediation plan', 'generate plan'
+        ]
         
-        meta_commands = ["help", "status", "healthcheck", "feedback", "resume", "continue"]
-        is_meta_command = any(cmd in message_lower for cmd in meta_commands)
+        planning_context_keywords = [
+            'architecture', 'threat model', 'security', 'authentication',
+            'authorization', 'api', 'integration', 'deployment',
+            'migration', 'user story', 'feature request', 'autonomous'
+        ]
         
-        if not is_meta_command:
-            self.logger.info("🛡️ Universal Planning Gate: All requests require planning - creating temp plan")
-            metadata['detection_method'] = 'universal_planning_gate'
-            metadata['requires_temp_plan'] = True
+        # Check if this is a planning orchestrator request
+        has_planning_keyword = any(kw in message_lower for kw in planning_orchestrator_keywords)
+        has_planning_context = any(kw in message_lower for kw in planning_context_keywords)
+        
+        if has_planning_keyword or (has_planning_context and 'plan' in message_lower):
+            self.logger.info("🛡️ P01: Detected PLANNING intent → Route to Planning Orchestrator")
+            metadata['detection_method'] = 'planning_orchestrator_routing'
+            metadata['planning_keywords_matched'] = [kw for kw in planning_orchestrator_keywords if kw in message_lower]
+            metadata['context_keywords_matched'] = [kw for kw in planning_context_keywords if kw in message_lower]
             
             return IntentClassificationResult(
                 intent=IntentType.PLAN,
-                confidence=1.0,  # Absolute confidence - planning is mandatory
+                confidence=1.0,  # High confidence for explicit planning
                 rule_context=self.INTENT_RULE_CONTEXT.get(IntentType.PLAN, {}),
                 metadata=metadata
             )
+        
+        # P01 FIX: Task Breakdown Detection (Routes to WorkPlanner Agent)
+        # Check for estimation/breakdown keywords that indicate simple task breakdown
+        task_breakdown_keywords = [
+            'estimate', 'breakdown', 'how long', 'time estimate', 
+            'effort', 'decompose', 'split tasks', 'task list'
+        ]
+        
+        has_breakdown_keyword = any(kw in message_lower for kw in task_breakdown_keywords)
+        
+        if has_breakdown_keyword and not has_planning_keyword:
+            self.logger.info("🛡️ P01: Detected TASK_BREAKDOWN intent → Route to WorkPlanner Agent")
+            metadata['detection_method'] = 'task_breakdown_agent_routing'
+            metadata['breakdown_keywords_matched'] = [kw for kw in task_breakdown_keywords if kw in message_lower]
+            
+            # Return custom intent for task breakdown (not PLAN)
+            return IntentClassificationResult(
+                intent=IntentType.FEATURE,  # WorkPlanner can handle feature breakdown
+                confidence=0.9,
+                rule_context=self.INTENT_RULE_CONTEXT.get(IntentType.FEATURE, {}),
+                metadata=metadata
+            )
+        
+        # UNIVERSAL PLANNING GATE: TEMPORARILY DISABLED (P01 Fix)
+        # Issue: Forces all requests to planning, but planning intent routing broken
+        # TODO: Re-enable after P01 (Intent Routing Architecture) is complete
+        # Original intent: ALL requests go through planning first
+        # No keyword triggers needed - planning is mandatory for all work
+        # Exception: Meta-commands (help, status, feedback) skip planning
+        
+        # meta_commands = ["help", "status", "healthcheck", "feedback", "resume", "continue"]
+        # is_meta_command = any(cmd in message_lower for cmd in meta_commands)
+        
+        # if not is_meta_command:
+        #     self.logger.info("🛡️ Universal Planning Gate: All requests require planning - creating temp plan")
+        #     metadata['detection_method'] = 'universal_planning_gate'
+        #     metadata['requires_temp_plan'] = True
+        #     
+        #     return IntentClassificationResult(
+        #         intent=IntentType.PLAN,
+        #         confidence=1.0,  # Absolute confidence - planning is mandatory
+        #         rule_context=self.INTENT_RULE_CONTEXT.get(IntentType.PLAN, {}),
+        #         metadata=metadata
+        #     )
         
         # Check if there's an image attachment in context - this takes priority
         if request.context:

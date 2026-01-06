@@ -405,6 +405,11 @@ class CortexEntry:
                 f"conv_id={conversation_id}"
             )
             
+            # P01 FIX: Check if this is a planning intent that should bypass agents
+            # Planning intents route directly to Planning Orchestrator via terminal
+            if self._should_bypass_agents_for_orchestrator(request):
+                return self._execute_orchestrator_directly(request, conversation_id, format_type)
+            
             # Build unified context from all tiers (Phase 2: Context Management)
             try:
                 context_data = self.context_manager.build_context(
@@ -1186,6 +1191,124 @@ Ready to continue! What would you like to do next?
                 "timestamp": datetime.now().isoformat()
             }
         )
+    
+    def _should_bypass_agents_for_orchestrator(self, request: AgentRequest) -> bool:
+        """
+        P01 FIX: Check if request should bypass agent layer and route directly to orchestrator.
+        
+        Planning intents detected by IntentRouter should invoke Planning Orchestrator via
+        terminal (python3 -m src.main), NOT through agent framework.
+        
+        Args:
+            request: Parsed agent request
+            
+        Returns:
+            True if should bypass agents, False to use normal agent routing
+        """
+        # Check if intent is PLAN and has planning metadata from IntentRouter
+        if request.intent.upper() == "PLAN":
+            # IntentRouter sets metadata['detection_method'] = 'planning_orchestrator_routing'
+            # when it detects planning keywords
+            if request.context and request.context.get('unified_context', {}).get('metadata', {}).get('detection_method') == 'planning_orchestrator_routing':
+                self.logger.info("🛡️ P01: Bypassing agents - routing directly to Planning Orchestrator")
+                return True
+            
+            # Also check message for explicit planning keywords
+            message_lower = request.user_message.lower()
+            planning_keywords = ['plan feature', 'create plan', 'proceed with', 'execute plan', 'epic', 'remediation']
+            if any(kw in message_lower for kw in planning_keywords):
+                self.logger.info("🛡️ P01: Bypassing agents - detected planning keywords in message")
+                return True
+        
+        return False
+    
+    def _execute_orchestrator_directly(
+        self,
+        request: AgentRequest,
+        conversation_id: str,
+        format_type: str = "markdown"
+    ) -> str:
+        """
+        P01 FIX: Execute Planning Orchestrator directly, bypassing agent layer.
+        
+        This invokes the orchestrator autonomously via Python, which enables:
+        - Architectural review (REQ-003)
+        - Threat modeling integration (REQ-007)
+        - Visual progress tracking
+        - Git checkpoints
+        - TDD integration
+        - manage_todo_list tracking
+        
+        Args:
+            request: Parsed agent request
+            conversation_id: Conversation ID for tracking
+            format_type: Response format (markdown/json/text)
+            
+        Returns:
+            Formatted orchestrator output
+        """
+        try:
+            self.logger.info("🚀 P01: Executing Planning Orchestrator directly (autonomous mode)")
+            
+            # Import Planning Orchestrator
+            from src.orchestrators.planning.planning_orchestrator_v5 import PlanningOrchestratorV5
+            from src.config import config
+            
+            # Initialize orchestrator with correct signature
+            # PlanningOrchestratorV5.__init__(config_path, state_db, plan_id, template_dir, context, plan_type)
+            orchestrator = PlanningOrchestratorV5(
+                config_path=str(config.brain_path / "config" / "planning-v5-default.yaml"),
+                state_db=None,  # Will use default
+                plan_id=None,  # New plan
+                template_dir=None,  # Will use default
+                context={'user_request': request.user_message},
+                plan_type='epic'  # Epic planning for remediation
+            )
+            
+            # Extract feature requirements from request
+            feature_requirements = request.user_message
+            
+            # Execute with orchestrator (returns OrchestratorResult)
+            result = orchestrator.execute(user_request=feature_requirements)
+            
+            # P02.2 FIX: Use ResponseRenderer instead of manual markdown construction
+            from src.orchestrators.response_renderer import ResponseRenderer
+            
+            renderer = ResponseRenderer()
+            
+            # Build context for continuation prompt generation
+            context = {
+                'orchestrator_type': 'planning_v5',
+                'orchestrator_name': 'Planning Orchestrator V5',
+                'plan_id': result.data.get('plan_id') if result.data else None,
+                'multi_phase_operation': True,
+                'files_modified': True
+            }
+            
+            # Render response using template-driven approach
+            response_msg = renderer.render(
+                result=result,
+                tier='STRUCTURED',  # Planning responses are always multi-faceted
+                context=context
+            )
+            
+            # Log to Tier 1
+            self.tier1.process_message(
+                conversation_id,
+                role="assistant",
+                content=response_msg
+            )
+            
+            return response_msg
+                
+        except Exception as e:
+            self.logger.error(f"Direct orchestrator execution failed: {e}", exc_info=True)
+            import traceback
+            error_msg = f"❌ **P01 Error:** Direct orchestrator execution failed\n\n"
+            error_msg += f"**Error:** {str(e)}\n\n"
+            error_msg += f"**Traceback:**\n```\n{traceback.format_exc()}\n```\n\n"
+            error_msg += f"**Fallback:** Routing through agent layer (may cause architectural violations)\n"
+            return error_msg
     
     def cleanup(self) -> None:
         """

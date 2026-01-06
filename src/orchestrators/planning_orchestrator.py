@@ -25,7 +25,7 @@ from src.workflows.incremental_plan_generator import IncrementalPlanGenerator
 from src.workflows.streaming_plan_writer import CheckpointedPlanWriter
 from src.orchestrators.git_checkpoint_orchestrator import GitCheckpointOrchestrator
 from src.agents.security.threat_modeler_agent import ThreatModelerAgent
-from src.agents.base_agent import AgentRequest
+from src.cortex_agents.base_agent import AgentRequest
 
 logger = logging.getLogger(__name__)
 
@@ -40,18 +40,28 @@ class PlanningOrchestrator:
         Args:
             cortex_root: Path to CORTEX root directory
         """
+        logger.info(f"Initializing PlanningOrchestrator with cortex_root: {cortex_root}")
+        
         self.cortex_root = Path(cortex_root)
         self.schema_path = self.cortex_root / "cortex-brain" / "config" / "plan-schema.yaml"
         self.plans_dir = self.cortex_root / "cortex-brain" / "documents" / "planning" / "features"
         self.active_plans_dir = self.plans_dir / "active"
         self.completed_plans_dir = self.plans_dir / "completed"
+        
+        logger.debug(f"schema_path: {self.schema_path}")
+        logger.debug(f"plans_dir: {self.plans_dir}")
+        logger.debug(f"active_plans_dir: {self.active_plans_dir}")
+        logger.debug(f"completed_plans_dir: {self.completed_plans_dir}")
+        
         self.schema = self._load_schema()
         
         # NEW Sprint 2: Initialize document organizer
         brain_path = self.cortex_root / "cortex-brain"
+        logger.debug(f"Initializing DocumentOrganizer with brain_path: {brain_path}")
         self.document_organizer = DocumentOrganizer(brain_path)
         
         # NEW Sprint 3: Initialize incremental planning components
+        logger.debug("Initializing IncrementalPlanGenerator")
         self.incremental_generator = IncrementalPlanGenerator(
             brain_path=str(brain_path),
             skeleton_token_limit=200,
@@ -59,22 +69,34 @@ class PlanningOrchestrator:
         )
         
         # NEW: Initialize git checkpoint orchestrator for planning workflow
+        logger.debug("Initializing GitCheckpointOrchestrator")
         self.git_checkpoint = GitCheckpointOrchestrator(project_root=str(self.cortex_root))
         
         # NEW: Initialize ThreatModelerAgent for security analysis
+        logger.debug("Initializing ThreatModelerAgent")
         self.threat_modeler = ThreatModelerAgent()
+        
+        logger.info("PlanningOrchestrator initialization complete")
     
     def _load_schema(self) -> Dict[str, Any]:
         """Load plan schema from YAML file."""
+        logger.debug(f"Loading plan schema from {self.schema_path}")
+        
         try:
             if not self.schema_path.exists():
                 logger.warning(f"Schema not found at {self.schema_path}, using minimal defaults")
                 return self._get_default_schema()
             
             with open(self.schema_path, 'r', encoding='utf-8') as f:
-                return yaml.safe_load(f)
+                schema = yaml.safe_load(f)
+            
+            logger.info(f"Schema loaded successfully from {self.schema_path}")
+            logger.debug(f"Schema version: {schema.get('schema', {}).get('version', 'unknown')}")
+            return schema
+            
         except Exception as e:
-            logger.error(f"Failed to load schema: {e}")
+            logger.error(f"Failed to load schema from {self.schema_path}: {e}", exc_info=True)
+            logger.warning("Falling back to default schema")
             return self._get_default_schema()
     
     def _get_default_schema(self) -> Dict[str, Any]:
@@ -96,48 +118,87 @@ class PlanningOrchestrator:
         Returns:
             Tuple of (is_valid, error_messages)
         """
+        plan_id = plan_data.get("metadata", {}).get("plan_id", "UNKNOWN")
+        logger.info(f"Starting plan validation for plan_id: {plan_id}")
+        logger.debug(f"Plan data keys: {list(plan_data.keys())}")
+        
         errors = []
         
-        required_fields = self.schema.get("schema", {}).get("required_fields", [])
-        for field in required_fields:
-            if field not in plan_data:
-                errors.append(f"Missing required field: {field}")
+        try:
+            required_fields = self.schema.get("schema", {}).get("required_fields", [])
+            logger.debug(f"Required fields from schema: {required_fields}")
+            
+            for field in required_fields:
+                if field not in plan_data:
+                    error_msg = f"Missing required field: {field}"
+                    logger.warning(error_msg)
+                    errors.append(error_msg)
+            
+            if "metadata" in plan_data:
+                logger.debug("Validating metadata section")
+                metadata_errors = self._validate_metadata(plan_data["metadata"])
+                errors.extend(metadata_errors)
+            
+            if "phases" in plan_data:
+                logger.debug(f"Validating {len(plan_data['phases'])} phases")
+                phase_errors = self._validate_phases(plan_data["phases"])
+                errors.extend(phase_errors)
+            
+            if "definition_of_ready" in plan_data:
+                if not isinstance(plan_data["definition_of_ready"], list):
+                    error_msg = "definition_of_ready must be a list"
+                    logger.warning(error_msg)
+                    errors.append(error_msg)
+                elif len(plan_data["definition_of_ready"]) == 0:
+                    error_msg = "definition_of_ready must have at least 1 item"
+                    logger.warning(error_msg)
+                    errors.append(error_msg)
+            
+            if "definition_of_done" in plan_data:
+                if not isinstance(plan_data["definition_of_done"], list):
+                    error_msg = "definition_of_done must be a list"
+                    logger.warning(error_msg)
+                    errors.append(error_msg)
+                elif len(plan_data["definition_of_done"]) == 0:
+                    error_msg = "definition_of_done must have at least 1 item"
+                    logger.warning(error_msg)
+                    errors.append(error_msg)
+            
+            if "risks" in plan_data:
+                logger.debug(f"Validating {len(plan_data['risks'])} risks")
+                risk_errors = self._validate_risks(plan_data["risks"])
+                errors.extend(risk_errors)
         
-        if "metadata" in plan_data:
-            metadata_errors = self._validate_metadata(plan_data["metadata"])
-            errors.extend(metadata_errors)
+        except Exception as e:
+            error_msg = f"Exception during plan validation: {e}"
+            logger.error(error_msg, exc_info=True)
+            errors.append(error_msg)
         
-        if "phases" in plan_data:
-            phase_errors = self._validate_phases(plan_data["phases"])
-            errors.extend(phase_errors)
+        is_valid = len(errors) == 0
         
-        if "definition_of_ready" in plan_data:
-            if not isinstance(plan_data["definition_of_ready"], list):
-                errors.append("definition_of_ready must be a list")
-            elif len(plan_data["definition_of_ready"]) == 0:
-                errors.append("definition_of_ready must have at least 1 item")
+        if is_valid:
+            logger.info(f"Plan validation successful for plan_id: {plan_id}")
+        else:
+            logger.warning(f"Plan validation failed for plan_id: {plan_id} with {len(errors)} error(s)")
+            for error in errors:
+                logger.debug(f"  - {error}")
         
-        if "definition_of_done" in plan_data:
-            if not isinstance(plan_data["definition_of_done"], list):
-                errors.append("definition_of_done must be a list")
-            elif len(plan_data["definition_of_done"]) == 0:
-                errors.append("definition_of_done must have at least 1 item")
-        
-        if "risks" in plan_data:
-            risk_errors = self._validate_risks(plan_data["risks"])
-            errors.extend(risk_errors)
-        
-        return (len(errors) == 0, errors)
+        return (is_valid, errors)
     
     def _validate_metadata(self, metadata: Dict[str, Any]) -> List[str]:
         """Validate metadata section."""
+        logger.debug("Validating metadata section")
         errors = []
         
         # Required metadata fields
         required = ["plan_id", "title", "created_date", "created_by", "status", "priority", "estimated_hours"]
+        logger.debug(f"Required metadata fields: {required}")
+        
         for field in required:
             if field not in metadata:
-                errors.append(f"metadata: Missing required field '{field}'")
+                error_msg = f"metadata: Missing required field '{field}'"
+                logger.debug(error_msg)
+                errors.append(error_msg)
         
         if "plan_id" in metadata:
             if not re.match(r'^[A-Z0-9-]+$', metadata["plan_id"]):
@@ -165,14 +226,19 @@ class PlanningOrchestrator:
     
     def _validate_phases(self, phases: List[Dict[str, Any]]) -> List[str]:
         """Validate phases section."""
+        logger.debug(f"Validating {len(phases)} phases")
         errors = []
         
         if not isinstance(phases, list):
-            errors.append("phases: Must be a list")
+            error_msg = "phases: Must be a list"
+            logger.warning(error_msg)
+            errors.append(error_msg)
             return errors
         
         if len(phases) == 0:
-            errors.append("phases: Must have at least 1 phase")
+            error_msg = "phases: Must have at least 1 phase"
+            logger.warning(error_msg)
+            errors.append(error_msg)
             return errors
         
         task_ids = set()
@@ -287,13 +353,17 @@ class PlanningOrchestrator:
         Returns:
             Markdown-formatted string
         """
+        metadata = plan_data.get("metadata", {})
+        plan_id = metadata.get('plan_id', 'UNKNOWN')
+        logger.info(f"Generating Markdown view for plan_id: {plan_id}")
+        
         md = []
         
         # Title (H1)
-        metadata = plan_data.get("metadata", {})
         md.append(f"# {metadata.get('title', 'Untitled Plan')}\n")
         
         # Metadata table
+        logger.debug("Generating metadata section")
         md.append("## Plan Metadata\n")
         md.append("| Field | Value |")
         md.append("|-------|-------|")
@@ -322,12 +392,18 @@ class PlanningOrchestrator:
         md.append("")
         
         # Definition of Ready
+        if "definition_of_ready" not in plan_data:
+            logger.warning("Missing 'definition_of_ready' section in plan data")
+        
         md.append("## Definition of Ready\n")
         for item in plan_data.get("definition_of_ready", []):
             md.append(f"- [ ] {item}")
         md.append("")
         
         # Implementation Phases
+        if "phases" not in plan_data:
+            logger.warning("Missing 'phases' section in plan data")
+        
         md.append("## Implementation Phases\n")
         for phase in plan_data.get("phases", []):
             phase_num = phase.get("phase_number", "?")

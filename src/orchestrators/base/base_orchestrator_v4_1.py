@@ -9,6 +9,7 @@ Enhanced base class for CORTEX v5.0 with:
 - Session management and continuation prompts
 - Checkpoint/rollback support
 - Artifact registry
+- SKULL Middleware Integration (Phase -2, runtime, Phase N+1)
 
 Author: Asif Hussain
 Copyright © 2025-2026 Asif Hussain. All rights reserved.
@@ -36,6 +37,14 @@ from src.orchestrators.base.base_orchestrator import (
     ValidationResult,
     OrchestratorResult,
     ErrorResult
+)
+
+# P02.3: SKULL Middleware Integration
+from src.orchestrators.middleware import (
+    SetupVerifier,
+    SetupVerificationResult,
+    TeardownRefactor,
+    TeardownResult
 )
 
 
@@ -174,9 +183,20 @@ class BaseOrchestratorV4_1(ABC):
         self.current_phase_id: Optional[str] = None
         self.artifacts: List[ArtifactMetadata] = []
         
+        # P02.3: SKULL Middleware initialization
+        workspace_root = Path.cwd()  # Assume CWD is workspace root
+        self.setup_verifier = SetupVerifier(
+            workspace_root=workspace_root,
+            brain_rules_path=workspace_root / "cortex-brain" / "brain-protection-rules.yaml"
+        )
+        self.teardown_refactor = TeardownRefactor(
+            workspace_root=workspace_root
+        )
+        self.middleware_enabled = self.config.get('execution', {}).get('middleware_enabled', True)
+        
         self.logger.info(
             f"Initialized {self.name} v{self.version} "
-            f"(config={config_path}, plan_id={plan_id})"
+            f"(config={config_path}, plan_id={plan_id}, middleware={'enabled' if self.middleware_enabled else 'disabled'})"
         )
     
     def load_config(self) -> dict:
@@ -630,10 +650,8 @@ class BaseOrchestratorV4_1(ABC):
             }
         
         # Get completed phases from database
-        completed_phases = self.state_db.get_plan_progress(self.plan_id)
-        completed_count = sum(
-            1 for p in completed_phases if p.get('status') == 'completed'
-        )
+        progress = self.state_db.get_plan_progress(self.plan_id)
+        completed_count = progress.get('completed_phases', 0)
         
         # Heuristic: ~1000 tokens per phase interaction
         estimated_tokens = self._estimate_phase_tokens(completed_count)
@@ -667,6 +685,131 @@ class BaseOrchestratorV4_1(ABC):
                 f"⚠️ TOKEN WARNING: Estimated {estimated_tokens} tokens "
                 f"({percentage:.1f}% of {self.token_warning_threshold} threshold). "
                 f"Consider copying continuation prompt for session handoff."
+            )
+        
+        return result
+    
+    # ==================== SKULL Middleware Hooks (P02.3) ====================
+    
+    def _run_setup_verification(
+        self,
+        dependencies: Optional[List[str]] = None
+    ) -> SetupVerificationResult:
+        """
+        Phase -2: Run setup verification middleware before execution.
+        
+        Verifies:
+        - Dependencies are ACTUALLY complete (not just file existence)
+        - False positive detection (files exist but broken)
+        - VSCode cache state check
+        - Governance compliance validation
+        
+        Args:
+            dependencies: List of dependency IDs to validate (optional)
+        
+        Returns:
+            SetupVerificationResult with validation details
+        
+        Raises:
+            RuntimeError: If verification fails and enforcement is BLOCKING
+        """
+        if not self.middleware_enabled:
+            self.logger.info("SKULL middleware disabled, skipping Phase -2")
+            return SetupVerificationResult(
+                passed=True,
+                dependencies_validated=[],
+                cache_check=None,
+                governance_compliant=True,
+                errors=[],
+                timestamp=datetime.now().isoformat()
+            )
+        
+        self.logger.info("🛡️ Phase -2: SKULL Setup Verification")
+        
+        # Get dependencies from config if not provided
+        if dependencies is None:
+            dependencies = self.config.get('dependencies', {}).get('required', [])
+        
+        # Run verification
+        result = self.setup_verifier.verify_setup(
+            orchestrator_name=self.name,
+            dependencies=dependencies,
+            cache_check_enabled=True
+        )
+        
+        # Log results
+        if result.passed:
+            self.logger.info(f"✅ Setup verification passed ({len(result.dependencies_validated)} dependencies checked)")
+        else:
+            self.logger.error(f"❌ Setup verification FAILED: {len(result.errors)} errors")
+            for error in result.errors:
+                self.logger.error(f"  - {error}")
+            
+            # BLOCKING enforcement: Fail execution
+            raise RuntimeError(
+                f"SKULL Setup Verification failed:\n" + "\n".join(result.errors)
+            )
+        
+        return result
+    
+    def _run_teardown_refactor(
+        self,
+        modified_files: List[Path],
+        commit_message: str
+    ) -> TeardownResult:
+        """
+        Phase N+1: Run teardown refactor middleware after execution.
+        
+        Ensures:
+        - Whole-file REFACTOR runs (remove unused imports, orphaned code)
+        - All modified files are refactored
+        - Git commit follows /cortex-git-commit pattern
+        - Commit message includes orchestrator name + phase summary
+        
+        Args:
+            modified_files: List of files modified during execution
+            commit_message: Git commit message
+        
+        Returns:
+            TeardownResult with refactor and commit status
+        
+        Raises:
+            RuntimeError: If refactor/commit fails and enforcement is BLOCKING
+        """
+        if not self.middleware_enabled:
+            self.logger.info("SKULL middleware disabled, skipping Phase N+1")
+            return TeardownResult(
+                passed=True,
+                refactored_files=[],
+                git_commit_sha=None,
+                errors=[],
+                timestamp=datetime.now().isoformat()
+            )
+        
+        self.logger.info("🛡️ Phase N+1: SKULL Teardown Refactor")
+        
+        # Run teardown
+        result = self.teardown_refactor.run_teardown(
+            orchestrator_name=self.name,
+            modified_files=[str(f) for f in modified_files],
+            commit_message=commit_message
+        )
+        
+        # Log results
+        if result.passed:
+            self.logger.info(
+                f"✅ Teardown refactor passed "
+                f"({len(result.refactored_files)} files refactored, "
+                f"commit={result.git_commit_sha[:8] if result.git_commit_sha else 'N/A'})"
+            )
+        else:
+            self.logger.error(f"❌ Teardown refactor FAILED: {len(result.errors)} errors")
+            for error in result.errors:
+                self.logger.error(f"  - {error}")
+            
+            # BLOCKING enforcement: Fail execution
+            raise RuntimeError(
+                f"SKULL Teardown Refactor failed:\n" + "\n".join(result.errors)
             )
         
         return result

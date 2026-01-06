@@ -1077,6 +1077,11 @@
         const TRACKING_FILE = 'tracking/epic-progress-tracker.json';
         const REFRESH_INTERVAL = 10000; // 10 seconds
         const CHILD_PLAN_REGISTRY = 'tracking/child-plan-registry.json';
+        
+        // Cache busting helper
+        function cacheBust(url) {
+            return `${url}?t=${Date.now()}`;
+        }
 
         // State
         let epicData = null;
@@ -1092,14 +1097,14 @@
         // Load epic data from JSON
         async function loadEpicData() {
             try {
-                const response = await fetch(TRACKING_FILE);
+                const response = await fetch(cacheBust(TRACKING_FILE));
                 if (!response.ok) {
                     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
                 epicData = await response.json();
                 
                 // Load child plan registry
-                const childResponse = await fetch(CHILD_PLAN_REGISTRY);
+                const childResponse = await fetch(cacheBust(CHILD_PLAN_REGISTRY));
                 if (childResponse.ok) {
                     childPlans = await childResponse.json();
                 }

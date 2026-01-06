@@ -265,6 +265,33 @@ class PlanningStateDB:
             }
         }
     
+    def get_plan_progress(self, plan_id: str) -> Dict[str, Any]:
+        """
+        Get plan progress summary for token usage tracking.
+        
+        Returns completed phases count and total phases count.
+        
+        Args:
+            plan_id: Plan identifier
+        
+        Returns:
+            Dictionary with 'completed_phases' and 'total_phases' keys
+        """
+        # Get phases
+        phases = self._conn.execute("""
+            SELECT status FROM phases WHERE plan_id = ? ORDER BY phase_number
+        """, (plan_id,)).fetchall()
+        
+        if not phases:
+            return {"completed_phases": 0, "total_phases": 0}
+        
+        completed_count = sum(1 for p in phases if dict(p)["status"] == "completed")
+        
+        return {
+            "completed_phases": completed_count,
+            "total_phases": len(phases)
+        }
+    
     # ========================================
     # Phase Operations
     # ========================================

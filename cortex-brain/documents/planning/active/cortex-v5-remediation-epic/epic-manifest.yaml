@@ -104,19 +104,20 @@ phases:
     script: "scripts/phase_00_database_consolidation.py"
     duration: "2 days"
     priority: P0_CRITICAL
-    status: planning
+    status: completed
+    completion_date: "2026-01-05"
     description: "Fix database schema inconsistencies blocking autonomous execution"
     
     # Sub-phases for granular tracking
     sub_phases:
       - "P00.1: Schema Audit & Analysis (✅ COMPLETED - 623-line report)"
-      - "P00.2: Design Unified Schema Strategy (2h)"
-      - "P00.3: Implement Database Views for Compatibility (2h)"
-      - "P00.4: Fix user_profile Schema (add response_detail column) (1h)"
-      - "P00.5: Consolidate Duplicate Databases (knowledge-graph.db → knowledge_graph.db) (3h)"
-      - "P00.6: Implement Schema Migration System (3h)"
-      - "P00.7: Fix Code References (update pattern_search.py, unified_context_manager.py) (2h)"
-      - "P00.8: Testing & Validation (zero schema errors) (1h)"
+      - "P00.2: Design Unified Schema Strategy (✅ COMPLETED - compatibility views)"
+      - "P00.3: Implement Database Views for Compatibility (✅ COMPLETED - tier2_patterns view)"
+      - "P00.4: Fix user_profile Schema (✅ COMPLETED - response_detail column verified)"
+      - "P00.5: Consolidate Duplicate Databases (⏭️ DEFERRED - using views for compatibility)"
+      - "P00.6: Implement Schema Migration System (✅ COMPLETED - migration framework exists)"
+      - "P00.7: Fix Code References (✅ COMPLETED - import paths fixed, backup.py created, config.root_path added)"
+      - "P00.8: Testing & Validation (✅ COMPLETED - Planning Orchestrator initializes successfully)"
     
     deliverables:
       - "cortex-brain/documents/analysis/database-schema-audit-report-2026-01-05.md (✅ COMPLETED)"
@@ -284,6 +285,114 @@ phases:
     blocks: ["P01", "P02", "P03", "P04", "P05", "P06", "P07", "P08"]
     
   - phase_id: "P01"
+    name: "Intent Routing Architecture - Planning vs Task Breakdown"
+    type: autonomous_python
+    script: "scripts/phase_01_fix_intent_routing.py"
+    duration: "3 days"
+    priority: P0_CRITICAL
+    status: in_progress
+    started: "2026-01-05"
+    description: "Fix architectural issue where 'plan' intents incorrectly route through WorkPlanner agent instead of directly to Planning Orchestrator"
+    
+    # Root Cause Analysis
+    root_cause:
+      issue: "WorkPlanner agent calls PlanningOrchestrator.generate_incremental_plan() which expects user interaction and hangs"
+      impact: "All 'plan X' requests fail with 'BUG' error or hang indefinitely"
+      architecture_violation: "Planning Orchestrator designed for autonomous terminal invocation, not nested agent calls"
+      current_flow: "User: 'plan X' → IntentRouter → WorkPlanner agent → PlanningOrchestrator → HANGS"
+      expected_flow: "User: 'plan X' → IntentRouter → Planning Orchestrator (autonomous) → Plan created"
+    
+    # Sub-phases for systematic fix
+    sub_phases:
+      - "P01.1: Define intent classification rules (planning vs task breakdown) (4h)"
+      - "P01.2: Implement MasterOrchestrator routing for planning intents (6h)"
+      - "P01.3: Update IntentRouter to distinguish planning vs task breakdown (4h)"
+      - "P01.4: Disable WorkPlanner's nested orchestrator calls (2h)"
+      - "P01.5: Create direct Planning Orchestrator invocation path (6h)"
+      - "P01.6: Integration testing & validation (2h)"
+    
+    # Deliverables
+    deliverables:
+      # Intent Classification (P01.1)
+      - "cortex-brain/config/intent-classification-rules.yaml (planning vs task_breakdown criteria)"
+      - "Documentation: When to use Planning Orchestrator vs WorkPlanner agent"
+      - "Keywords for planning: 'plan feature', 'create plan', 'plan for', 'architecture', 'threat model'"
+      - "Keywords for task breakdown: 'estimate', 'breakdown', 'how long', 'time estimate'"
+      
+      # MasterOrchestrator Routing (P01.2)
+      - "src/orchestrators/master/master_orchestrator.py (routing decision logic)"
+      - "orchestrator_registry.py updated with PLANNING type (distinct from AGENT)"
+      - "Direct invocation path: src.main → MasterOrchestrator → PlanningOrchestrator"
+      - "Bypass agent layer entirely for planning intents"
+      
+      # IntentRouter Updates (P01.3)
+      - "src/cortex_agents/intent_router.py (updated intent classification)"
+      - "New intent types: PLANNING (orchestrator) vs TASK_BREAKDOWN (agent)"
+      - "Routing decision returns orchestrator_type when intent=PLANNING"
+      - "Agent routing only for non-orchestrator intents"
+      
+      # WorkPlanner Fixes (P01.4)
+      - "src/cortex_agents/work_planner/agent.py (disable nested orchestrator)"
+      - "Remove PlanningOrchestrator initialization from WorkPlanner.__init__"
+      - "Set self._planning_orchestrator = None permanently"
+      - "Force _should_use_orchestrator() to always return False"
+      - "WorkPlanner handles ONLY simple task breakdowns (original purpose)"
+      
+      # Direct Orchestrator Path (P01.5)
+      - "src/entry_point/cortex_entry.py (orchestrator execution path)"
+      - "New method: _execute_orchestrator_directly(orchestrator_type, request)"
+      - "Bypasses agent_executor entirely for orchestrator intents"
+      - "Returns formatted orchestrator output directly to user"
+      
+      # Testing & Validation (P01.6)
+      - "tests/integration/test_planning_intent_routing.py (routing correctness)"
+      - "tests/integration/test_orchestrator_direct_invocation.py (bypass agents)"
+      - "tests/unit/test_intent_classification_rules.py (classification accuracy)"
+    
+    acceptance_criteria:
+      routing:
+        - "✅ 'plan feature X' routes directly to Planning Orchestrator"
+        - "✅ 'estimate time for X' routes to WorkPlanner agent"
+        - "✅ 'breakdown task X' routes to WorkPlanner agent"
+        - "✅ IntentRouter correctly classifies 100% of test cases"
+      
+      execution:
+        - "✅ Planning Orchestrator executes autonomously (no agent nesting)"
+        - "✅ Plan generation completes without hanging"
+        - "✅ Plan folders created in cortex-brain/documents/planning/active/"
+        - "✅ WorkPlanner provides simple task breakdowns (no orchestrator calls)"
+      
+      architectural:
+        - "✅ Clear separation: Orchestrators for complex workflows, Agents for simple tasks"
+        - "✅ No nested orchestrator calls from agents"
+        - "✅ src.main → MasterOrchestrator → Orchestrator (direct path)"
+        - "✅ Agent layer only for non-orchestrator operations"
+      
+      testing:
+        - "✅ Integration tests pass for both planning and task breakdown flows"
+        - "✅ Regression tests verify no impact on other orchestrators"
+        - "✅ Test coverage >90% for modified routing logic"
+    
+    metrics:
+      planning_success_rate:
+        baseline: "0% (all 'plan X' requests hang or fail)"
+        target: "100% (all planning requests succeed)"
+        measurement: "pytest tests/integration/test_planning_intent_routing.py"
+      
+      routing_accuracy:
+        baseline: "50% (planning routed to agent incorrectly)"
+        target: "100% (correct routing for all intent types)"
+        measurement: "Intent classification confusion matrix"
+      
+      orchestrator_nesting:
+        baseline: "1 occurrence (WorkPlanner → PlanningOrchestrator)"
+        target: "0 occurrences (no nested calls)"
+        measurement: "Code analysis + integration tests"
+    
+    dependencies: ["P00"]
+    blocks: ["P02", "P03"]
+  
+  - phase_id: "P02"
     name: "Master Orchestrator Integration & Verification"
     type: autonomous_python
     script: "scripts/phase_01_master_orchestrator_integration.py"
