@@ -1,17 +1,17 @@
 {
   "audit_metadata": {
-    "timestamp": "2026-01-05T12:02:50.004108",
+    "timestamp": "2026-01-06T07:05:25.448490",
     "workspace": "/Users/asifhussain/PROJECTS/CORTEX",
     "auditor": "CORTEX System Verification"
   },
   "summary": {
     "total_checks": 8,
-    "passed": 7,
+    "passed": 6,
     "failed": 0,
-    "warnings": 1,
-    "overall_score": 0.96875,
-    "grade": "EXCELLENT",
-    "status": "\u2705 COMPLIANT"
+    "warnings": 2,
+    "overall_score": 0.875,
+    "grade": "GOOD",
+    "status": "\u26a0\ufe0f  MOSTLY COMPLIANT"
   },
   "checks": [
     {
@@ -24,11 +24,11 @@
         "\u274c Missing: src/orchestrators/base_orchestrator_v4_1.py",
         "\u2705 Found: src/entry_point/cortex_entry.py",
         "\u2705 Found: src/cortex_agents/llm_intent_classifier.py",
+        "\u26a0\ufe0f  Potential text-based orchestration in: cortex-upgrade.prompt.md",
         "\u26a0\ufe0f  Potential text-based orchestration in: cortex-vacuum.prompt.md",
         "\u26a0\ufe0f  Potential text-based orchestration in: cortex-maintenance.prompt.md",
         "\u26a0\ufe0f  Potential text-based orchestration in: cortex-refactor.prompt.md",
         "\u26a0\ufe0f  Potential text-based orchestration in: cortex-plan-upgrade.prompt.md",
-        "\u26a0\ufe0f  Potential text-based orchestration in: cortex-backlog.prompt.md",
         "\u26a0\ufe0f  Potential text-based orchestration in: CORTEX.prompt.md",
         "\u26a0\ufe0f  Potential text-based orchestration in: cortex-investigate.prompt.md",
         "\u26a0\ufe0f  Potential text-based orchestration in: cortex-git-commit.prompt.md"
@@ -37,16 +37,14 @@
     {
       "name": "Work Defined in YAML (No Textual Ambiguity)",
       "status": "PASS",
-      "score": 1.0,
-      "details": "Found 4/4 YAML work definitions",
+      "score": 0.75,
+      "details": "Found 3/4 YAML work definitions",
       "evidence": [
         "\u2705 YAML config: cortex-brain/config/master-orchestrator.yaml",
         "   \u2713 Valid YAML structure",
         "\u2705 YAML config: cortex-brain/config/mcp-server.yaml",
         "   \u2713 Valid YAML structure",
         "\u2705 YAML config: cortex-brain/manifests/orchestrators/planning-system-5.0-manifest.yaml",
-        "   \u2713 Valid YAML structure",
-        "\u2705 YAML config: cortex-brain/documents/planning/active/c150-remediation-plan/00-c150-remediation-plan.yaml",
         "   \u2713 Valid YAML structure"
       ]
     },
@@ -69,7 +67,8 @@
       "evidence": [
         "\u2705 Planning orchestrator script exists",
         "\u2705 Planning script loads YAML plans",
-        "\u2705 Found 10 YAML plan files",
+        "\u2705 Found 1 YAML plan files",
+        "\u2705 Valid plan structure: epic-manifest.yaml",
         "\u2705 Planning state database exists (structured tracking)"
       ]
     },
@@ -92,19 +91,17 @@
       "details": "Routing defined in YAML configuration",
       "evidence": [
         "\u2705 Master orchestrator YAML exists",
-        "\u2705 Found 11 routing rules in YAML",
-        "\u2705 11/11 rules have valid structure"
+        "\u2705 Found 14 routing rules in YAML",
+        "\u2705 14/14 rules have valid structure"
       ]
     },
     {
       "name": "Priority Management YAML-Defined",
-      "status": "PASS",
-      "score": 1.0,
+      "status": "WARNING",
+      "score": 0.5,
       "details": "Priorities defined in YAML, not inferred from text",
       "evidence": [
-        "\u2705 11/11 routing rules have priority",
-        "\u2705 Plan has priority: P0_CRITICAL",
-        "\u2705 31/31 phases have priority/time data"
+        "\u2705 14/14 routing rules have priority"
       ]
     },
     {
