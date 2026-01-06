@@ -26,3 +26,7 @@ class CrossSessionContextMiddleware:
     def detect_continuation(self, user_input: str) -> Optional[Dict[str, Any]]:
         """Detect if request is a continuation."""
         return None
+    
+    def enrich_context(self, user_input: str, context: Dict[str, Any]) -> Dict[str, Any]:
+        """Enrich context with cross-session data."""
+        return context
