@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
-  "updated_at": "2026-01-06T14:17:20.740006",
-  "task_count": 193,
+  "updated_at": "2026-01-06T15:20:07.200426",
+  "task_count": 223,
   "tasks": [
     {
       "id": 1,
@@ -2083,6 +2083,331 @@
       "created_at": "2026-01-06T14:17:01.868856",
       "updated_at": "2026-01-06T14:17:20.739974",
       "completed_at": "2026-01-06T14:17:20.739992"
+    },
+    {
+      "id": 194,
+      "title": "Knowledge Library",
+      "description": "Consult governance and knowledge graph",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T14:38:02.845266",
+      "updated_at": "2026-01-06T14:38:02.883993",
+      "completed_at": "2026-01-06T14:38:02.884005"
+    },
+    {
+      "id": 195,
+      "title": "Context Discovery",
+      "description": "Search workspace for relevant context",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T14:38:02.847843",
+      "updated_at": "2026-01-06T14:38:22.411268",
+      "completed_at": "2026-01-06T14:38:22.411277"
+    },
+    {
+      "id": 196,
+      "title": "Architecture Analysis",
+      "description": "Parse codebase and analyze structure",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T14:38:02.850281",
+      "updated_at": "2026-01-06T14:38:22.424968",
+      "completed_at": "2026-01-06T14:38:22.424976"
+    },
+    {
+      "id": 197,
+      "title": "Plan Generation",
+      "description": "Create structured plan document",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T14:38:02.852725",
+      "updated_at": "2026-01-06T14:38:22.438608",
+      "completed_at": "2026-01-06T14:38:22.438615"
+    },
+    {
+      "id": 198,
+      "title": "Folder Creation",
+      "description": "Create directory structure for plan",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T14:38:02.855155",
+      "updated_at": "2026-01-06T14:38:22.461766",
+      "completed_at": "2026-01-06T14:38:22.461778"
+    },
+    {
+      "id": 199,
+      "title": "Validation",
+      "description": "Validate plan structure and completeness",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T14:38:02.857614",
+      "updated_at": "2026-01-06T14:38:22.477606",
+      "completed_at": "2026-01-06T14:38:22.477621"
+    },
+    {
+      "id": 200,
+      "title": "Knowledge Library",
+      "description": "Consult governance and knowledge graph",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T14:43:56.479928",
+      "updated_at": "2026-01-06T14:43:56.511856",
+      "completed_at": "2026-01-06T14:43:56.511865"
+    },
+    {
+      "id": 201,
+      "title": "Context Discovery",
+      "description": "Search workspace for relevant context",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T14:43:56.482462",
+      "updated_at": "2026-01-06T14:44:15.884450",
+      "completed_at": "2026-01-06T14:44:15.884460"
+    },
+    {
+      "id": 202,
+      "title": "Architecture Analysis",
+      "description": "Parse codebase and analyze structure",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T14:43:56.485196",
+      "updated_at": "2026-01-06T14:44:15.897994",
+      "completed_at": "2026-01-06T14:44:15.898003"
+    },
+    {
+      "id": 203,
+      "title": "Plan Generation",
+      "description": "Create structured plan document",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T14:43:56.487748",
+      "updated_at": "2026-01-06T14:44:15.911578",
+      "completed_at": "2026-01-06T14:44:15.911586"
+    },
+    {
+      "id": 204,
+      "title": "Folder Creation",
+      "description": "Create directory structure for plan",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T14:43:56.490232",
+      "updated_at": "2026-01-06T14:44:15.932508",
+      "completed_at": "2026-01-06T14:44:15.932523"
+    },
+    {
+      "id": 205,
+      "title": "Validation",
+      "description": "Validate plan structure and completeness",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T14:43:56.492614",
+      "updated_at": "2026-01-06T14:44:15.948504",
+      "completed_at": "2026-01-06T14:44:15.948520"
+    },
+    {
+      "id": 206,
+      "title": "Knowledge Library",
+      "description": "Consult governance and knowledge graph",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T14:44:25.153431",
+      "updated_at": "2026-01-06T14:44:25.185132",
+      "completed_at": "2026-01-06T14:44:25.185141"
+    },
+    {
+      "id": 207,
+      "title": "Context Discovery",
+      "description": "Search workspace for relevant context",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T14:44:25.156224",
+      "updated_at": "2026-01-06T14:44:44.638400",
+      "completed_at": "2026-01-06T14:44:44.638412"
+    },
+    {
+      "id": 208,
+      "title": "Architecture Analysis",
+      "description": "Parse codebase and analyze structure",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T14:44:25.158726",
+      "updated_at": "2026-01-06T14:44:44.652207",
+      "completed_at": "2026-01-06T14:44:44.652216"
+    },
+    {
+      "id": 209,
+      "title": "Plan Generation",
+      "description": "Create structured plan document",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T14:44:25.161226",
+      "updated_at": "2026-01-06T14:44:44.666020",
+      "completed_at": "2026-01-06T14:44:44.666027"
+    },
+    {
+      "id": 210,
+      "title": "Folder Creation",
+      "description": "Create directory structure for plan",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T14:44:25.163753",
+      "updated_at": "2026-01-06T14:44:44.686927",
+      "completed_at": "2026-01-06T14:44:44.686939"
+    },
+    {
+      "id": 211,
+      "title": "Validation",
+      "description": "Validate plan structure and completeness",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T14:44:25.166318",
+      "updated_at": "2026-01-06T14:44:44.702663",
+      "completed_at": "2026-01-06T14:44:44.702678"
+    },
+    {
+      "id": 212,
+      "title": "Knowledge Library",
+      "description": "Consult governance and knowledge graph",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T15:00:24.121251",
+      "updated_at": "2026-01-06T15:00:24.155416",
+      "completed_at": "2026-01-06T15:00:24.155430"
+    },
+    {
+      "id": 213,
+      "title": "Context Discovery",
+      "description": "Search workspace for relevant context",
+      "status": "in-progress",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T15:00:24.123989",
+      "updated_at": "2026-01-06T15:00:24.158175"
+    },
+    {
+      "id": 214,
+      "title": "Architecture Analysis",
+      "description": "Parse codebase and analyze structure",
+      "status": "not-started",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T15:00:24.126907",
+      "updated_at": "2026-01-06T15:00:24.126907"
+    },
+    {
+      "id": 215,
+      "title": "Plan Generation",
+      "description": "Create structured plan document",
+      "status": "not-started",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T15:00:24.130060",
+      "updated_at": "2026-01-06T15:00:24.130060"
+    },
+    {
+      "id": 216,
+      "title": "Folder Creation",
+      "description": "Create directory structure for plan",
+      "status": "not-started",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T15:00:24.132637",
+      "updated_at": "2026-01-06T15:00:24.132637"
+    },
+    {
+      "id": 217,
+      "title": "Validation",
+      "description": "Validate plan structure and completeness",
+      "status": "not-started",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T15:00:24.135371",
+      "updated_at": "2026-01-06T15:00:24.135371"
+    },
+    {
+      "id": 218,
+      "title": "Knowledge Library",
+      "description": "Consult governance and knowledge graph",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T15:19:47.487878",
+      "updated_at": "2026-01-06T15:19:47.521960",
+      "completed_at": "2026-01-06T15:19:47.521968"
+    },
+    {
+      "id": 219,
+      "title": "Context Discovery",
+      "description": "Search workspace for relevant context",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T15:19:47.490854",
+      "updated_at": "2026-01-06T15:20:07.132532",
+      "completed_at": "2026-01-06T15:20:07.132541"
+    },
+    {
+      "id": 220,
+      "title": "Architecture Analysis",
+      "description": "Parse codebase and analyze structure",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T15:19:47.493753",
+      "updated_at": "2026-01-06T15:20:07.146821",
+      "completed_at": "2026-01-06T15:20:07.146830"
+    },
+    {
+      "id": 221,
+      "title": "Plan Generation",
+      "description": "Create structured plan document",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T15:19:47.496771",
+      "updated_at": "2026-01-06T15:20:07.161364",
+      "completed_at": "2026-01-06T15:20:07.161372"
+    },
+    {
+      "id": 222,
+      "title": "Folder Creation",
+      "description": "Create directory structure for plan",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T15:19:47.499454",
+      "updated_at": "2026-01-06T15:20:07.183573",
+      "completed_at": "2026-01-06T15:20:07.183587"
+    },
+    {
+      "id": 223,
+      "title": "Validation",
+      "description": "Validate plan structure and completeness",
+      "status": "completed",
+      "priority": 2,
+      "dependencies": [],
+      "created_at": "2026-01-06T15:19:47.502231",
+      "updated_at": "2026-01-06T15:20:07.200397",
+      "completed_at": "2026-01-06T15:20:07.200413"
     }
   ]
 }

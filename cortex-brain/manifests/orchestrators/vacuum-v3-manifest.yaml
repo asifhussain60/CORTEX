@@ -1,0 +1,140 @@
+# Vacuum Orchestrator v3 Manifest
+
+orchestrator:
+  name: "Vacuum v3"
+  version: "3.0.0"
+  description: "Autonomous file/folder management with CORTEX governance enforcement"
+  author: "Asif Hussain"
+  enabled: true
+  
+  # Trigger patterns for master orchestrator routing
+  trigger_patterns:
+    - "^vacuum"
+    - "^deep clean"
+    - "^organize files"
+    - "^cleanup workspace"
+  
+  # Priority for orchestrator selection (higher = more priority)
+  priority: 45
+
+operations:
+  # Backup settings
+  backup_enabled: true
+  backup_retention_days: 7
+  compression_enabled: true
+  
+  # Execution settings
+  dry_run_default: false
+  max_parallel_tasks: 4
+  verbose_logging: false
+  
+  # Operation modes
+  modes:
+    - name: "analyze"
+      description: "Analyze workspace structure and compliance"
+      destructive: false
+    - name: "reorganize"
+      description: "Reorganize folders per CORTEX specifications"
+      destructive: true
+    - name: "consolidate"
+      description: "Consolidate redundant reports and artifacts"
+      destructive: true
+    - name: "detect-redundancy"
+      description: "Detect redundant files"
+      destructive: false
+    - name: "enforce-governance"
+      description: "Enforce brain protection rules"
+      destructive: true
+
+paths:
+  backup_dir: "cortex-brain/backups/"
+  compliance_db: "cortex-brain/tier0/vacuum-compliance.db"
+  log_dir: "logs/"
+  archive_dir: "cortex-brain/archives/"
+
+detection:
+  # Redundancy detection thresholds
+  exact_match_threshold: 1.0  # SHA256 hash match
+  near_match_threshold: 0.95  # Fuzzy hash similarity
+  semantic_match_threshold: 0.90  # AST similarity for code
+  
+  # File types to analyze
+  analyze_extensions:
+    - ".py"
+    - ".md"
+    - ".json"
+    - ".yaml"
+    - ".yml"
+    - ".txt"
+  
+  # Ignore patterns (glob)
+  ignore_patterns:
+    - "**/__pycache__/**"
+    - "**/*.pyc"
+    - "**/.git/**"
+    - "**/node_modules/**"
+    - "**/.venv/**"
+    - "**/venv/**"
+
+consolidation:
+  # Report consolidation settings
+  min_similarity_for_merge: 0.85
+  preserve_latest: true
+  archive_merged: true
+  
+  # Target directories for consolidation
+  target_directories:
+    - "cortex-brain/documents/reports/"
+    - "cortex-brain/cleanup-reports/"
+    - "cortex-brain/documents/analysis/"
+
+governance:
+  # Brain protection rules enforcement
+  enforce_skull_rules: true
+  enforce_tier_structure: true
+  enforce_naming_conventions: true
+  
+  # Compliance scoring weights
+  weights:
+    folder_structure: 0.30
+    naming_conventions: 0.20
+    tier_compliance: 0.25
+    documentation_organization: 0.15
+    redundancy_score: 0.10
+
+performance:
+  # Performance limits
+  max_file_size_mb: 100  # Skip files larger than this
+  max_analysis_time_seconds: 300  # 5 minutes max
+  chunk_size: 1000  # Process files in chunks
+  parallel_workers: 4
+
+reporting:
+  # Output formats
+  formats:
+    - "json"
+    - "markdown"
+    - "html"
+  
+  # Report destinations
+  output_dir: "cortex-brain/documents/reports/"
+  include_recommendations: true
+  include_metrics: true
+
+integration:
+  # Integration with other orchestrators
+  delegate_to_cleanup: true
+  notify_planning_system: true
+  update_compliance_tracker: true
+  
+  # Child orchestrator spawning
+  enable_child_spawning: true
+  max_child_orchestrators: 4
+  child_timeout_seconds: 600
+
+metadata:
+  created: "2026-01-06"
+  last_updated: "2026-01-06"
+  status: "active"
+  phase: "P0 - cortex5-enhancement-epic"
+  documentation: "cortex-brain/documents/planning/active/cortex5-enhancement-epic/phases/phase-0-vacuum-v3.md"

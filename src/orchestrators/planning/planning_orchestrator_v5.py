@@ -473,12 +473,8 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
                 from src.servers import start_plan_viewer
                 from pathlib import Path
                 
-                # Get plan folder
-                master_plan_filename = self._generate_master_plan_filename(feature_name)
-                folder_id_prefix = master_plan_filename.split('-')[0].lower()
-                abbreviated_name = self._abbreviate_feature_name(feature_name, max_length=22)
-                folder_name = f"{folder_id_prefix}-{abbreviated_name}"
-                plan_folder = Path(f"cortex-brain/documents/planning/active/{folder_name}")
+                # Use centralized plan directory method (prevents stray folder creation)
+                plan_folder = self._get_plan_directory(feature_name)
                 
                 # Start server (reuses existing if running)
                 viewer_url = start_plan_viewer(plan_folder)
@@ -603,6 +599,43 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
         
         return abbreviated_name
     
+    def _get_plan_directory(self, feature_name: str) -> Path:
+        """
+        Get standardized plan directory path with ID prefix and abbreviation.
+        
+        CRITICAL: This is the SINGLE SOURCE OF TRUTH for plan directory paths.
+        ALL methods must use this to prevent stray folder creation.
+        
+        Args:
+            feature_name: Feature name (kebab-case)
+        
+        Returns:
+            Path object for plan directory
+        
+        Examples:
+            "oauth2-authentication-system" → 
+                cortex-brain/documents/planning/active/a01-oauth2-auth-sys
+        """
+        # Generate master plan filename to extract ID prefix
+        master_plan_filename = self._generate_master_plan_filename(feature_name)
+        folder_id_prefix = master_plan_filename.split('-')[0].lower()  # Extract "a01" from "A01-..."
+        
+        # Abbreviate feature name (max 22 chars)
+        abbreviated_name = self._abbreviate_feature_name(feature_name, max_length=22)
+        
+        # Create folder name with ID prefix: a01-oauth2-auth-sys
+        folder_name = f"{folder_id_prefix}-{abbreviated_name}"
+        
+        # Check if there's an epic parent folder in master_context
+        epic_parent_path = self.master_context.get('epic_parent_path') if hasattr(self, 'master_context') else None
+        
+        if epic_parent_path:
+            # Child plan inside epic folder
+            return Path(epic_parent_path) / folder_name
+        else:
+            # Root-level plan (epic or standalone feature)
+            return Path(f"cortex-brain/documents/planning/active/{folder_name}")
+    
     def _generate_master_plan_filename(self, feature_name: str) -> str:
         """
         Generate meaningful master plan filename with 3-char ID prefix.
@@ -654,6 +687,9 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
         Returns:
             Plan metadata dictionary
         """
+        # Use centralized plan directory method for consistency
+        plan_dir = self._get_plan_directory(feature_name)
+        
         return {
             'feature_name': feature_name,
             'user_request': user_request,
@@ -662,7 +698,7 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
             'version': self.version,
             'complexity_tier': self._estimate_complexity(user_request),
             'estimated_days': 0,  # To be calculated during analysis
-            'folder_path': f'cortex-brain/documents/planning/active/{feature_name}'
+            'folder_path': str(plan_dir)
         }
     
     def _estimate_complexity(self, user_request: str) -> int:
@@ -851,7 +887,8 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
 (Pattern detection will be implemented in future iteration)
 """
         
-        plan_dir = Path(f"cortex-brain/documents/planning/active/{feature_name}")
+        # Use centralized plan directory method (prevents stray folder creation)
+        plan_dir = self._get_plan_directory(feature_name)
         context_path = plan_dir / "context" / "discovery.md"
         
         artifact_id = self.create_artifact(
@@ -909,7 +946,8 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
 - Master Orchestrator
 """
         
-        plan_dir = Path(f"cortex-brain/documents/planning/active/{feature_name}")
+        # Use centralized plan directory method (prevents stray folder creation)
+        plan_dir = self._get_plan_directory(feature_name)
         analysis_path = plan_dir / "context" / "architecture-analysis.md"
         
         self.create_artifact(
@@ -1033,7 +1071,8 @@ and documentation.
 **Database:** `plan_id="{self.plan_id}"`
 """
         
-        plan_dir = Path(f"cortex-brain/documents/planning/active/{feature_name}")
+        # Use centralized plan directory method (prevents stray folder creation)
+        plan_dir = self._get_plan_directory(feature_name)
         master_plan_filename = self._generate_master_plan_filename(feature_name)
         plan_path = plan_dir / master_plan_filename
         
@@ -1103,14 +1142,12 @@ Check `tracking/progress-tracker.json` for current status.
         
         self.logger.info("Generating plan YAML...")
         
+        # Use centralized plan directory method (prevents stray folder creation)
+        plan_dir = self._get_plan_directory(feature_name)
+        
         # Generate master plan filename to extract ID
         master_plan_filename = self._generate_master_plan_filename(feature_name)
         folder_id_prefix = master_plan_filename.split('-')[0].upper()
-        
-        # Get plan folder with correct naming
-        abbreviated_name = self._abbreviate_feature_name(feature_name, max_length=22)
-        folder_name = f"{folder_id_prefix.lower()}-{abbreviated_name}"
-        plan_dir = Path(f"cortex-brain/documents/planning/active/{folder_name}")
         
         # Ensure plan folder exists
         plan_dir.mkdir(parents=True, exist_ok=True)
@@ -1180,11 +1217,11 @@ Check `tracking/progress-tracker.json` for current status.
         master_plan_filename = self._generate_master_plan_filename(feature_name)
         plan_id = master_plan_filename.split('-')[0]
         
-        # Get plan folder with correct naming
-        folder_id_prefix = plan_id.lower()
-        abbreviated_name = self._abbreviate_feature_name(feature_name, max_length=22)
-        folder_name = f"{folder_id_prefix}-{abbreviated_name}"
-        plan_dir = Path(f"cortex-brain/documents/planning/active/{folder_name}")
+        # Use centralized plan directory method (prevents stray folder creation)
+        plan_dir = self._get_plan_directory(feature_name)
+        
+        # Audit log folder creation
+        self.logger.info(f"📁 AUDIT: Ensuring plan directory exists: {plan_dir} (method=_generate_plan_viewer_html)")
         
         # Ensure plan folder exists
         plan_dir.mkdir(parents=True, exist_ok=True)
@@ -1520,28 +1557,11 @@ Check `tracking/progress-tracker.json` for current status.
         """
         self.logger.info("Creating folder structure...")
         
-        # Generate master plan filename to extract ID prefix
-        master_plan_filename = self._generate_master_plan_filename(feature_name)
-        folder_id_prefix = master_plan_filename.split('-')[0].lower()  # Extract "a01" from "A01-..."
+        # Use centralized plan directory method (prevents stray folder creation)
+        plan_dir = self._get_plan_directory(feature_name)
+        folder_name = plan_dir.name  # Extract folder name from path
         
-        # Abbreviate feature name (reuse helper method)
-        abbreviated_name = self._abbreviate_feature_name(feature_name, max_length=22)
-        
-        # Create folder name with ID prefix: a01-enterprise-aud-log
-        folder_name = f"{folder_id_prefix}-{abbreviated_name}"
-        
-        # Check if there's an epic parent folder in master_context
-        epic_parent_path = self.master_context.get('epic_parent_path')
-        
-        # Create at active plans path (inside epic if parent specified)
-        if epic_parent_path:
-            # Child plan inside epic folder
-            plan_dir = Path(epic_parent_path) / folder_name
-            self.logger.info(f"📁 Creating child plan inside epic: {epic_parent_path}/{folder_name}")
-        else:
-            # Root-level plan (epic or standalone feature)
-            plan_dir = Path(f"cortex-brain/documents/planning/active/{folder_name}")
-            self.logger.info(f"📁 Creating root-level plan: {folder_name}")
+        self.logger.info(f"📁 Creating plan directory: {plan_dir}")
         
         # Standard folders for all plan types
         folders = [
@@ -1565,13 +1585,27 @@ Check `tracking/progress-tracker.json` for current status.
             folders.append(plan_dir / "dependencies")  # Parent plan dependencies
             self.logger.info(f"📦 Creating sub-plan folder: dependencies/")
         
+        # Audit log folder creation (track which folders are created)
+        import inspect
+        caller_frame = inspect.currentframe().f_back
+        caller_method = caller_frame.f_code.co_name if caller_frame else "unknown"
+        
         for folder in folders:
+            # Log BEFORE creating folder
+            self.logger.info(
+                f"📁 AUDIT: Creating folder: {folder} "
+                f"(plan_id={self.plan_id}, feature={feature_name}, "
+                f"caller={caller_method}, plan_type={self.plan_type})"
+            )
             folder.mkdir(parents=True, exist_ok=True)
             # Create .gitkeep
             (folder / ".gitkeep").touch()
         
         # Create progress tracker (type-specific)
         tracker_filename = self._get_progress_tracker_filename()
+        
+        # Extract folder_id_prefix from folder_name (e.g., "a01" from "a01-oauth2-auth-sys")
+        folder_id_prefix = folder_name.split('-')[0]
         
         progress_content = {
             "plan_id": self.plan_id,
@@ -2027,7 +2061,9 @@ Check `tracking/progress-tracker.json` for current status.
         abbreviated_name = self._abbreviate_feature_name(feature_name, max_length=22)
         expected_folder_name = f"{folder_id_prefix}-{abbreviated_name}"
         
-        plan_dir = Path(f"cortex-brain/documents/planning/active/{expected_folder_name}")
+        # Use centralized plan directory method (prevents stray folder creation)
+        plan_dir = self._get_plan_directory(feature_name)
+        expected_folder_name = plan_dir.name
         
         # Validate folder exists with correct naming
         if not plan_dir.exists():
