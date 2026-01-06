@@ -77,6 +77,33 @@ routing_rules:
       description: "Test-Driven Development orchestrator"
       autonomous: false
   
+  # Documentation Standardization Orchestrator v2.0
+  # State-aware HTML glassmorphism standardization with audit logging
+  - pattern: "^(standardize|apply glassmorphism|glassmorphism standardization|docs standardization).*$"
+    orchestrator: "documentation_orchestrator"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 25
+    metadata:
+      description: "Documentation standardization with state-aware validation"
+      autonomous: true
+      version: "2.0"
+      features:
+        - "Pre-flight validation (git checkpoints, inline style detection)"
+        - "Approved pattern library integration"
+        - "CSS class registry enforcement"
+        - "State persistence (prevents duplicate applications)"
+        - "Atomic operations with rollback"
+        - "Audit logging integration"
+        - "Python-only generation (no Copilot HTML edits)"
+      phases:
+        - "Pre-Flight Validation"
+        - "State Query & Pattern Matching"
+        - "Inline Style Removal (Atomic)"
+        - "CSS Class Application (Atomic)"
+        - "State Persistence & Approval"
+        - "Validation & Reporting"
+  
   # ADO Operations v2 - Wizard Mode (Interactive)
   - pattern: "^(ado wizard|ado interactive).*$"
     orchestrator: "ado_orchestrator_v2"
