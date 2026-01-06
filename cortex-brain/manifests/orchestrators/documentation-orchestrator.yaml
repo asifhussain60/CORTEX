@@ -1,9 +1,9 @@
-# Documentation Orchestrator v3.0
-# Comprehensive glassmorphism generation system with D3.js, Mermaid, and Python-based creation
+# Documentation Standardization Orchestrator v2.0
+# State-aware HTML glassmorphism orchestration with audit logging
 
 orchestrator_id: "documentation_orchestrator"
-name: "Documentation Generation & Standardization Orchestrator"
-version: "3.0.0"
+name: "Documentation Standardization Orchestrator"
+version: "2.0.0"
 status: "production"
 type: "autonomous"
 
@@ -12,27 +12,20 @@ metadata:
   created_at: "2026-01-06"
   last_updated: "2026-01-06"
   description: |
-    Comprehensive documentation orchestration system that combines:
-    - Glassmorphism theme standardization with 7-color palette
-    - Content discovery and intelligent refresh evaluation
-    - Rich visualizations (D3.js, Mermaid, Chart.js, Plotly)
-    - Python-based script generation for all views
-    - Responsive design (mobile, tablet, landscape/portrait)
-    - CSS-only architecture with animation and effects
-    - Knowledge library consultation and internet enhancement
-    - State-aware execution with audit logging
+    State-aware orchestration system for HTML glassmorphism standardization
+    that prevents duplicate content, preserves color schemes, and enforces
+    CSS-only architecture through mandatory pre-flight validation and state tracking.
   
   copyright: "© 2025-2026 Asif Hussain. All rights reserved."
   
   tags:
     - documentation
+    - html
+    - css
     - glassmorphism
-    - d3js
-    - mermaid
-    - visualization
-    - python-generation
-    - responsive-design
-    - content-discovery
+    - standardization
+    - level1
+    - level2
     - audit-logging
 
 # ═══════════════════════════════════════════════════════════════
@@ -41,38 +34,14 @@ metadata:
 
 routing:
   patterns:
-    # Generation Patterns
-    - pattern: "^(generate docs?|create docs?|build documentation).*$"
-      priority: 25
-      confidence: 1.0
-      match_type: "regex"
-      mode: "generation"
-      examples:
-        - "generate docs for orchestrators"
-        - "create documentation with diagrams"
-        - "build comprehensive docs"
-    
-    # Standardization Patterns
     - pattern: "^(standardize|apply glassmorphism|glassmorphism standardization).*$"
       priority: 25
       confidence: 1.0
       match_type: "regex"
-      mode: "standardization"
       examples:
         - "standardize architecture/index.html"
         - "apply glassmorphism to orchestrators page"
         - "glassmorphism standardization for all Level 1 pages"
-    
-    # Enhancement/Refresh Patterns
-    - pattern: "^(enhance|refresh|update|modernize) (docs?|documentation|page).*$"
-      priority: 26
-      confidence: 0.95
-      match_type: "regex"
-      mode: "enhancement"
-      examples:
-        - "enhance docs with new diagrams"
-        - "refresh orchestrators page"
-        - "update documentation with latest content"
   
   fallback_to_llm: false
   requires_confirmation: true
@@ -179,95 +148,6 @@ knowledge_inheritance:
       - source: "cortex-brain/cache/html-standardization-state.json"
         type: "persistent_state"
         version: "dynamic"
-      
-      - source: "cortex-brain/cognitive-framework/design-principles.yaml"
-        type: "design_best_practices"
-        version: "1.0"
-    
-    visualization_libraries:
-      d3js:
-        version: "7.8.5"
-        cdn: "https://d3js.org/d3.v7.min.js"
-        capabilities:
-          - "force-directed graphs"
-          - "hierarchical trees"
-          - "network diagrams"
-          - "animated transitions"
-          - "interactive visualizations"
-        use_cases:
-          - "architecture diagrams"
-          - "dependency graphs"
-          - "orchestrator relationships"
-      
-      mermaid:
-        version: "10.6.1"
-        cdn: "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs"
-        capabilities:
-          - "flowcharts"
-          - "sequence diagrams"
-          - "class diagrams"
-          - "state diagrams"
-          - "entity relationship diagrams"
-          - "gantt charts"
-        use_cases:
-          - "workflow diagrams"
-          - "system architecture"
-          - "process flows"
-      
-      chartjs:
-        version: "4.4.1"
-        cdn: "https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"
-        capabilities:
-          - "bar charts"
-          - "line charts"
-          - "pie charts"
-          - "radar charts"
-          - "animated updates"
-        use_cases:
-          - "metrics dashboards"
-          - "performance graphs"
-          - "trend analysis"
-      
-      plotly:
-        version: "2.27.1"
-        cdn: "https://cdn.plot.ly/plotly-2.27.1.min.js"
-        capabilities:
-          - "3D visualizations"
-          - "scientific plots"
-          - "interactive dashboards"
-          - "statistical charts"
-        use_cases:
-          - "complex data visualization"
-          - "analytics dashboards"
-          - "scientific documentation"
-      
-      threejs:
-        version: "0.160.0"
-        cdn: "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"
-        capabilities:
-          - "3D graphics"
-          - "animated scenes"
-          - "interactive 3D models"
-        use_cases:
-          - "architecture visualization"
-          - "system topology"
-          - "immersive demonstrations"
-    
-    github_pages_constraints:
-      static_only: true
-      no_server_side: true
-      supported_formats:
-        - "HTML"
-        - "CSS"
-        - "JavaScript"
-        - "SVG"
-        - "JSON"
-      max_file_size: "100MB"
-      cdn_recommended: true
-      build_systems:
-        - "Jekyll (native)"
-        - "Plain HTML (recommended)"
-        - "Static site generators"
   
   tier3_dev_context:
     reference_implementations:
@@ -280,320 +160,12 @@ knowledge_inheritance:
         git_tag: "v5.0-glassmorphism-approved"
 
 # ═══════════════════════════════════════════════════════════════
-# EXECUTION PHASES (Enhanced v3.0)
+# EXECUTION PHASES
 # ═══════════════════════════════════════════════════════════════
 
 phases:
-  # ═══════════════════════════════════════════════════════════════
-  # PHASE 0: Content Discovery & Evaluation
-  # ═══════════════════════════════════════════════════════════════
-  - id: 0
-    name: "Content Discovery & Evaluation"
-    duration_estimate: "2-5 minutes"
-    mandatory: true
-    mode_applicable: ["generation", "enhancement"]
-    
-    description: |
-      Intelligent content discovery to determine what needs to be documented:
-      - Scan workspace for undocumented features/modules
-      - Analyze existing documentation for staleness
-      - Evaluate content gaps against codebase
-      - Identify diagram opportunities
-      - Assess enhancement potential
-    
-    tasks:
-      - name: "Scan Workspace Structure"
-        script: "scripts/documentation/scan_workspace.py"
-        args:
-          - "--workspace": "{workspace_root}"
-          - "--output": "reports/workspace-scan.json"
-        output: "workspace_structure"
-      
-      - name: "Analyze Existing Documentation"
-        script: "scripts/documentation/analyze_existing_docs.py"
-        args:
-          - "--docs-dir": "docs/"
-          - "--output": "reports/docs-analysis.json"
-        output: "docs_inventory"
-      
-      - name: "Identify Content Gaps"
-        script: "scripts/documentation/identify_gaps.py"
-        args:
-          - "--workspace": "{workspace_structure}"
-          - "--docs": "{docs_inventory}"
-          - "--output": "reports/content-gaps.json"
-        output: "content_gaps"
-      
-      - name: "Evaluate Staleness"
-        script: "scripts/documentation/evaluate_staleness.py"
-        args:
-          - "--docs": "{docs_inventory}"
-          - "--git-history": true
-          - "--threshold-days": 30
-          - "--output": "reports/staleness-report.json"
-        output: "stale_docs"
-      
-      - name: "Identify Diagram Opportunities"
-        script: "scripts/documentation/identify_diagram_opportunities.py"
-        args:
-          - "--workspace": "{workspace_structure}"
-          - "--gaps": "{content_gaps}"
-          - "--output": "reports/diagram-opportunities.json"
-        output: "diagram_opportunities"
-      
-      - name: "Consult Knowledge Library"
-        script: "scripts/documentation/consult_knowledge_library.py"
-        args:
-          - "--topic": "{documentation_topic}"
-          - "--library": "cortex-brain/tier2/knowledge-graph.yaml"
-          - "--output": "reports/knowledge-insights.json"
-        output: "knowledge_insights"
-    
-    success_criteria:
-      - workspace_scanned: true
-      - gaps_identified: true
-      - staleness_evaluated: true
-      - diagram_opportunities_found: true
-    
-    audit_events:
-      - "phase_start"
-      - "content_discovery"
-      - "gap_analysis"
-      - "phase_complete"
-
-  # ═══════════════════════════════════════════════════════════════
-  # PHASE 1: Design System & Theme Planning
-  # ═══════════════════════════════════════════════════════════════
   - id: 1
-    name: "Design System & Theme Planning"
-    duration_estimate: "1-2 minutes"
-    mandatory: true
-    mode_applicable: ["generation", "standardization", "enhancement"]
-    
-    description: |
-      Plan visual design following glassmorphism standards:
-      - Load approved glassmorphism patterns
-      - Generate color scheme (7-color palette)
-      - Plan responsive breakpoints
-      - Design CSS animations and effects
-      - Consult best practices from knowledge library
-    
-    tasks:
-      - name: "Load Glassmorphism Standards"
-        script: "scripts/documentation/load_glassmorphism_standards.py"
-        args:
-          - "--standards": "cortex-brain/documents/planning/active/html-glassmorphism-alignment/standards/approved-panels.yaml"
-          - "--css-registry": "docs/assets/css/variables.css"
-        output: "design_system"
-      
-      - name: "Generate Color Scheme"
-        script: "scripts/documentation/generate_color_scheme.py"
-        args:
-          - "--palette-size": 7
-          - "--base-colors": ["cyan", "purple", "teal", "indigo", "pink", "emerald", "amber"]
-          - "--glassmorphism-mode": true
-          - "--output": "reports/color-scheme.json"
-        output: "color_scheme"
-      
-      - name: "Plan Responsive Design"
-        script: "scripts/documentation/plan_responsive_design.py"
-        args:
-          - "--breakpoints": ["mobile: 320px", "tablet: 768px", "desktop: 1024px", "wide: 1440px"]
-          - "--orientations": ["portrait", "landscape"]
-          - "--output": "reports/responsive-plan.json"
-        output: "responsive_plan"
-      
-      - name: "Design CSS Effects"
-        script: "scripts/documentation/design_css_effects.py"
-        args:
-          - "--effects": ["blur", "glow", "shimmer", "pulse", "gradient-shift"]
-          - "--subtlety-level": "professional"
-          - "--output": "reports/css-effects.json"
-        output: "css_effects"
-      
-      - name: "Consult Best Practices"
-        script: "scripts/documentation/consult_best_practices.py"
-        args:
-          - "--sources": ["knowledge_library", "internet"]
-          - "--topics": ["glassmorphism", "responsive-design", "accessibility", "performance"]
-          - "--output": "reports/best-practices.json"
-        output: "best_practices"
-    
-    success_criteria:
-      - design_system_loaded: true
-      - color_scheme_generated: true
-      - responsive_plan_created: true
-      - effects_designed: true
-      - best_practices_consulted: true
-    
-    audit_events:
-      - "phase_start"
-      - "design_planning"
-      - "phase_complete"
-
-  # ═══════════════════════════════════════════════════════════════
-  # PHASE 2: Diagram & Visualization Generation
-  # ═══════════════════════════════════════════════════════════════
-  - id: 2
-    name: "Diagram & Visualization Generation"
-    duration_estimate: "3-10 minutes"
-    mandatory: false
-    condition: "len(diagram_opportunities) > 0"
-    mode_applicable: ["generation", "enhancement"]
-    
-    description: |
-      Generate rich visual diagrams and illustrations:
-      - D3.js force-directed graphs for architecture
-      - Mermaid flowcharts for workflows
-      - Chart.js metrics visualizations
-      - SVG illustrations for concepts
-      - 3D visualizations (Three.js) for complex systems
-    
-    tasks:
-      - name: "Generate D3.js Architecture Diagrams"
-        script: "scripts/documentation/generate_d3_architecture.py"
-        args:
-          - "--opportunities": "{diagram_opportunities}"
-          - "--workspace": "{workspace_structure}"
-          - "--diagram-types": ["force-directed", "hierarchical-tree", "network"]
-          - "--output-dir": "docs/assets/diagrams/d3/"
-        output: "d3_diagrams"
-      
-      - name: "Generate Mermaid Flowcharts"
-        script: "scripts/documentation/generate_mermaid_diagrams.py"
-        args:
-          - "--opportunities": "{diagram_opportunities}"
-          - "--diagram-types": ["flowchart", "sequence", "class", "state", "er"]
-          - "--theme": "dark"
-          - "--output-dir": "docs/assets/diagrams/mermaid/"
-        output: "mermaid_diagrams"
-      
-      - name: "Generate Chart.js Metrics"
-        script: "scripts/documentation/generate_chartjs_metrics.py"
-        args:
-          - "--metrics": "{workspace_structure.metrics}"
-          - "--chart-types": ["bar", "line", "radar", "pie"]
-          - "--animated": true
-          - "--output-dir": "docs/assets/diagrams/charts/"
-        output: "chartjs_visualizations"
-      
-      - name: "Generate SVG Illustrations"
-        script: "scripts/documentation/generate_svg_illustrations.py"
-        args:
-          - "--concepts": "{content_gaps.concepts}"
-          - "--style": "glassmorphism"
-          - "--output-dir": "docs/assets/illustrations/"
-        output: "svg_illustrations"
-      
-      - name: "Generate 3D Visualizations (Optional)"
-        script: "scripts/documentation/generate_threejs_visualizations.py"
-        condition: "complexity_score > 70"
-        args:
-          - "--systems": "{workspace_structure.complex_systems}"
-          - "--output-dir": "docs/assets/visualizations/3d/"
-        output: "threejs_visualizations"
-    
-    success_criteria:
-      - diagrams_generated: true
-      - visualizations_created: true
-      - assets_organized: true
-    
-    audit_events:
-      - "phase_start"
-      - "diagram_generation"
-      - "visualization_creation"
-      - "phase_complete"
-
-  # ═══════════════════════════════════════════════════════════════
-  # PHASE 3: Content Generation (Python Scripts)
-  # ═══════════════════════════════════════════════════════════════
-  - id: 3
-    name: "Content Generation (Python Scripts)"
-    duration_estimate: "5-15 minutes"
-    mandatory: true
-    mode_applicable: ["generation"]
-    
-    description: |
-      Generate comprehensive documentation content via Python scripts:
-      - API documentation from code analysis
-      - Architecture documentation from workspace scan
-      - Tutorial content from usage patterns
-      - Integration guides from dependencies
-      - All content generated, not manually written
-    
-    tasks:
-      - name: "Generate API Documentation"
-        script: "scripts/documentation/generate_api_docs.py"
-        args:
-          - "--workspace": "{workspace_structure}"
-          - "--format": "html"
-          - "--glassmorphism-theme": true
-          - "--output-dir": "docs/api/"
-        output: "api_docs"
-      
-      - name: "Generate Architecture Documentation"
-        script: "scripts/documentation/generate_architecture_docs.py"
-        args:
-          - "--workspace": "{workspace_structure}"
-          - "--diagrams": "{d3_diagrams}"
-          - "--mermaid": "{mermaid_diagrams}"
-          - "--output-dir": "docs/architecture/"
-        output: "architecture_docs"
-      
-      - name: "Generate Tutorial Content"
-        script: "scripts/documentation/generate_tutorials.py"
-        args:
-          - "--usage-patterns": "{workspace_structure.usage_patterns}"
-          - "--examples": true
-          - "--interactive": true
-          - "--output-dir": "docs/tutorials/"
-        output: "tutorial_docs"
-      
-      - name: "Generate Integration Guides"
-        script: "scripts/documentation/generate_integration_guides.py"
-        args:
-          - "--dependencies": "{workspace_structure.dependencies}"
-          - "--output-dir": "docs/integrations/"
-        output: "integration_guides"
-      
-      - name: "Generate Comprehensive Content"
-        script: "scripts/documentation/generate_comprehensive_content.py"
-        args:
-          - "--gaps": "{content_gaps}"
-          - "--insights": "{knowledge_insights}"
-          - "--best-practices": "{best_practices}"
-          - "--output-dir": "docs/"
-        output: "comprehensive_content"
-    
-    success_criteria:
-      - api_docs_generated: true
-      - architecture_docs_created: true
-      - tutorials_generated: true
-      - integration_guides_created: true
-    
-    audit_events:
-      - "phase_start"
-      - "content_generation"
-      - "phase_complete"
-
-  # ═══════════════════════════════════════════════════════════════
-  # PHASE 4: Pre-Flight Validation (from v2.0)
-  # ═══════════════════════════════════════════════════════════════
-  - id: 4
     name: "Pre-Flight Validation"
-    duration_estimate: "30 seconds"
-    mandatory: true
-    mode_applicable: ["standardization", "enhancement"]
-    
-    description: |
-      State-aware validation BEFORE any changes:
-      - Git checkpoint creation
-      - Approved panel library query
-      - Current HTML structure parsing
-      - CSS class registry validation
-      - Inline style detection (CRITICAL)
-      - Duplicate section detection
-      - Complexity scoring
     duration_estimate: "30 seconds"
     mandatory: true
     
@@ -659,147 +231,6 @@ phases:
       - "phase_start"
       - "validation_check"
       - "git_checkpoint"
-      - "phase_complete"
-
-  # ═══════════════════════════════════════════════════════════════
-  # PHASE 5: HTML View Generation (Python Scripts Only)
-  # ═══════════════════════════════════════════════════════════════
-  - id: 5
-    name: "HTML View Generation (Python Scripts Only)"
-    duration_estimate: "2-5 minutes"
-    mandatory: true
-    mode_applicable: ["generation", "enhancement"]
-    
-    description: |
-      Generate complete HTML views via Python scripts (NO manual HTML editing):
-      - Level 1 index pages with glassmorphism theme
-      - Level 2 detail pages with responsive design
-      - Interactive dashboards with D3.js/Chart.js
-      - Documentation viewers with Mermaid diagrams
-      - Mobile/tablet-optimized layouts
-    
-    tasks:
-      - name: "Generate Level 1 Index Pages"
-        script: "scripts/documentation/generate_level1_views.py"
-        args:
-          - "--pages": "{content_gaps.level1_pages}"
-          - "--color-scheme": "{color_scheme}"
-          - "--design-system": "{design_system}"
-          - "--diagrams": "{d3_diagrams}"
-          - "--responsive": true
-          - "--output-dir": "docs/"
-        output: "level1_pages"
-      
-      - name: "Generate Level 2 Detail Pages"
-        script: "scripts/documentation/generate_level2_views.py"
-        args:
-          - "--pages": "{content_gaps.level2_pages}"
-          - "--parent-pages": "{level1_pages}"
-          - "--mermaid-diagrams": "{mermaid_diagrams}"
-          - "--interactive": true
-          - "--output-dir": "docs/"
-        output: "level2_pages"
-      
-      - name: "Generate Interactive Dashboards"
-        script: "scripts/documentation/generate_interactive_dashboards.py"
-        args:
-          - "--metrics": "{workspace_structure.metrics}"
-          - "--chartjs": "{chartjs_visualizations}"
-          - "--d3": "{d3_diagrams}"
-          - "--output-dir": "docs/dashboards/"
-        output: "dashboards"
-      
-      - name: "Generate Mobile-Optimized Views"
-        script: "scripts/documentation/generate_responsive_views.py"
-        args:
-          - "--pages": "{level1_pages} + {level2_pages}"
-          - "--responsive-plan": "{responsive_plan}"
-          - "--test-viewports": ["320px", "375px", "768px", "1024px", "1440px"]
-          - "--orientations": ["portrait", "landscape"]
-        output: "responsive_validation"
-      
-      - name: "Apply CSS Effects & Animations"
-        script: "scripts/documentation/apply_css_effects.py"
-        args:
-          - "--pages": "all"
-          - "--effects": "{css_effects}"
-          - "--subtlety": "professional"
-          - "--performance-budget": "60fps"
-        output: "effects_applied"
-    
-    success_criteria:
-      - level1_pages_generated: true
-      - level2_pages_generated: true
-      - dashboards_created: true
-      - responsive_validated: true
-      - effects_applied: true
-    
-    audit_events:
-      - "phase_start"
-      - "view_generation"
-      - "responsive_validation"
-      - "phase_complete"
-
-  # ═══════════════════════════════════════════════════════════════
-  # PHASE 6: State Persistence & Validation (from v2.0)
-  # ═══════════════════════════════════════════════════════════════
-  - id: 6
-    name: "State Persistence & Validation"
-    duration_estimate: "15 seconds"
-    mandatory: true
-    mode_applicable: ["generation", "standardization", "enhancement"]
-    
-    description: |
-      Final validation and state persistence:
-      - Update html-standardization-state.json
-      - Validate all pages (zero inline styles, CSS registry compliance)
-      - Generate comprehensive report
-      - Create git checkpoint for rollback
-    
-    tasks:
-      - name: "Validate All Generated Pages"
-        script: "scripts/documentation/validate_all_pages.py"
-        args:
-          - "--pages": "{level1_pages} + {level2_pages} + {dashboards}"
-          - "--checks": ["zero_inline_styles", "css_registry_compliance", "responsive_design", "accessibility"]
-          - "--output": "reports/validation-report.json"
-        output: "validation_results"
-      
-      - name: "Update State File"
-        script: "scripts/save-page-state.py"
-        args:
-          - "--pages": "all"
-          - "--state-file": "cortex-brain/cache/html-standardization-state.json"
-          - "--mode": "{mode}"
-          - "--diagrams-generated": "{d3_diagrams} + {mermaid_diagrams}"
-        output: "state_updated"
-      
-      - name: "Generate Comprehensive Report"
-        script: "scripts/documentation/generate_comprehensive_report.py"
-        args:
-          - "--phase-results": "all"
-          - "--metrics": "{tracked_metrics}"
-          - "--output": "reports/documentation-orchestrator-report-{timestamp}.md"
-        output: "final_report"
-      
-      - name: "Create Final Git Checkpoint"
-        script: "scripts/create-git-checkpoint.py"
-        args:
-          - "--tag": "docs-v3-{timestamp}"
-          - "--message": "Documentation Orchestrator v3.0 execution complete"
-        output: "final_checkpoint"
-    
-    success_criteria:
-      - all_pages_validated: true
-      - state_persisted: true
-      - report_generated: true
-      - checkpoint_created: true
-    
-    audit_events:
-      - "phase_start"
-      - "validation_check"
-      - "state_persistence"
-      - "orchestrator_complete"
       - "phase_complete"
 
   - id: 2
@@ -983,14 +414,144 @@ phases:
       - "orchestrator_complete"
 
 # ═══════════════════════════════════════════════════════════════
+# VALIDATORS REGISTRY
+# ═══════════════════════════════════════════════════════════════
+
+validators:
+  enabled: true
+  registry_path: "cortex-toolkit/validators/"
+  
+  registered_validators:
+    - id: "template_compliance"
+      class: "TemplateComplianceValidator"
+      priority: "critical"
+      auto_run: true
+      reference_template: "docs/orchestrators/index.html"
+      description: "Validates Level 1 pages against approved template standards"
+      checks:
+        - margins_match: "Left/right body margins match orchestrators/index.html"
+        - logo_placement: "CORTEX logo atop introduction panel"
+        - hero_image: "Hero-robot-head image present"
+        - panel_structure: "Glassmorphism panel structure valid"
+      failure_action: "warn"
+      
+    - id: "margins"
+      class: "MarginsValidator"
+      priority: "high"
+      auto_run: true
+      approved_margins:
+        body_left: "2rem"
+        body_right: "2rem"
+        content_max_width: "1400px"
+      description: "Validates body left/right margins are exactly 2rem"
+      checks:
+        - body_left_margin: "2rem"
+        - body_right_margin: "2rem"
+        - content_max_width: "1400px"
+      failure_action: "warn"
+    
+    - id: "logo_placement"
+      class: "LogoPlacementValidator"
+      priority: "high"
+      auto_run: true
+      expected_position: "atop_introduction_panel"
+      description: "Verifies CORTEX logo placed atop introduction panel"
+      checks:
+        - logo_exists: "CORTEX logo image found"
+        - logo_position: "Logo before introduction panel in DOM"
+        - visual_position: "Logo visually above introduction panel"
+      failure_action: "warn"
+    
+    - id: "inline_styles"
+      class: "InlineStyleValidator"
+      priority: "critical"
+      auto_run: true
+      tolerance: 0
+      description: "Zero tolerance for inline styles (CRITICAL brain protection rule)"
+      checks:
+        - inline_style_count: "Zero inline style attributes"
+        - style_attribute_forbidden: "No 'style=' attributes in HTML"
+      failure_action: "block"
+      auto_remediation:
+        enabled: true
+        script: "cortex-toolkit/orchestrators/documentation/remove_inline_styles.py"
+        message: "Auto-removing inline styles before proceeding..."
+    
+    - id: "uniqueness"
+      class: "UniquenessValidator"
+      priority: "medium"
+      auto_run: false  # Manual trigger only
+      threshold: 0.30  # <30% overlap
+      description: "Validates Level 1 page content uniqueness (overlap <30%)"
+      compare_pages:
+        - ["docs/architecture/index.html", "docs/orchestrators/index.html"]
+        - ["docs/architecture/index.html", "docs/features/index.html"]
+      metrics:
+        - heading_similarity: "Section heading overlap percentage"
+        - text_similarity: "Paragraph text similarity via TF-IDF"
+        - diagram_overlap: "Diagram type overlap percentage"
+        - visual_overlap: "Visual component overlap percentage"
+      weighting:
+        headings: 0.3
+        text: 0.4
+        diagrams: 0.2
+        visual: 0.1
+      failure_action: "warn"
+      auto_remediation:
+        enabled: true
+        script: "cortex-toolkit/orchestrators/documentation/standardize_level1_views.py"
+        args: ["--enforce-uniqueness"]
+        message: "Auto-enforcing uniqueness (removing duplicate content)..."
+  
+  validation_pipeline:
+    pre_flight:
+      - inline_styles     # CRITICAL: Blocks if fails
+      - template_compliance
+      - margins
+      - logo_placement
+    
+    post_execution:
+      - inline_styles     # Verify removal worked
+      - uniqueness        # Check content differentiation (if enabled)
+  
+  failure_handling:
+    critical_failures:
+      - validator: "inline_styles"
+        condition: "inline_count > 0"
+        action: "block"
+        message: "CRITICAL: {inline_count} inline styles detected. Auto-remediating..."
+        auto_remediation: true
+      
+    high_failures:
+      - validator: "template_compliance"
+        condition: "failures > 2"
+        action: "warn"
+        message: "Multiple template violations detected. Consider regeneration."
+        recommendation: "Run: python -m cortex_toolkit.cli docs regenerate {page_path}"
+      
+      - validator: "margins"
+        condition: "any_margin_mismatch"
+        action: "warn"
+        message: "Margin mismatch detected. Expected: {expected}, Got: {actual}"
+        recommendation: "Update CSS variables in docs/assets/css/variables.css"
+    
+    medium_failures:
+      - validator: "uniqueness"
+        condition: "overlap_score > 0.30"
+        action: "warn"
+        message: "Content overlap {overlap_score:.1%} exceeds 30% threshold"
+        recommendation: "Run: python -m cortex_toolkit.cli docs standardize-level1-views --enforce-uniqueness"
+
+# ═══════════════════════════════════════════════════════════════
 # EXECUTION STRATEGY (Decision Tree)
 # ═══════════════════════════════════════════════════════════════
 
 execution_strategy:
   decision_tree:
     - condition: "inline_styles_count > 0"
-      action: "BLOCK"
-      message: "Cannot apply CSS classes over inline styles. Run Phase 3 first."
+      action: "AUTO_REMEDIATE"
+      message: "Inline styles detected. Auto-removing before proceeding..."
+      script: "cortex-toolkit/orchestrators/documentation/remove_inline_styles.py"
     
     - condition: "page_state.status == 'approved' AND user_confirmed == false"
       action: "PROMPT"
@@ -1006,7 +567,18 @@ execution_strategy:
       message: "High complexity detected. Consider DELETE_AND_REGENERATE strategy."
       strategy: "DELETE_AND_REGENERATE"
     
-    - condition: "complexity_score <= 50 AND inline_styles_count == 0"
+    - condition: "template_compliance_failures > 2"
+      action: "RECOMMEND_REGENERATION"
+      message: "Multiple template violations. Regeneration recommended."
+      command: "python -m cortex_toolkit.cli docs regenerate {page_path}"
+    
+    - condition: "uniqueness_score > 0.30"
+      action: "ENFORCE_UNIQUENESS"
+      message: "Content overlap exceeds threshold. Enforcing uniqueness..."
+      script: "cortex-toolkit/orchestrators/documentation/standardize_level1_views.py"
+      args: ["--enforce-uniqueness"]
+    
+    - condition: "complexity_score <= 50 AND inline_styles_count == 0 AND template_compliance_passed"
       action: "PROCEED"
       strategy: "SCRIPT_DRIVEN"
 
@@ -1169,31 +741,6 @@ documentation:
 # ═══════════════════════════════════════════════════════════════
 
 changelog:
-  - version: "3.0.0"
-    date: "2026-01-06"
-    changes:
-      - "🆕 Content Discovery & Evaluation phase (Phase 0)"
-      - "🆕 Design System & Theme Planning phase (Phase 1)"
-      - "🆕 Diagram & Visualization Generation phase (Phase 2)"
-      - "🆕 Content Generation via Python scripts (Phase 3)"
-      - "🆕 HTML View Generation - Python-only (Phase 5)"
-      - "🆕 D3.js force-directed architecture diagrams"
-      - "🆕 Mermaid flowcharts, sequence, class, ER diagrams"
-      - "🆕 Chart.js interactive metrics visualizations"
-      - "🆕 Plotly scientific/analytics dashboards"
-      - "🆕 Three.js 3D system visualizations"
-      - "🆕 Responsive design validation (mobile/tablet/desktop)"
-      - "🆕 Portrait/landscape orientation support"
-      - "🆕 CSS effects: blur, glow, shimmer, pulse, gradient-shift"
-      - "🆕 Knowledge library consultation"
-      - "🆕 Internet enhancement capability"
-      - "🆕 Staleness evaluation for refresh decisions"
-      - "🆕 Comprehensive content gap analysis"
-      - "🆕 GitHub Pages constraint compliance"
-      - "✨ Enhanced with visual design best practices"
-      - "✨ Professional subtle animations"
-      - "✨ Complete Python-based generation (no manual HTML)"
-  
   - version: "2.0.0"
     date: "2026-01-06"
     changes:
@@ -1214,235 +761,3 @@ changelog:
       - "Initial cortex-docs prompt created"
       - "Basic glassmorphism standardization"
       - "7-color palette support"
-
-# ═══════════════════════════════════════════════════════════════
-# PYTHON SCRIPT TEMPLATES & REQUIREMENTS
-# ═══════════════════════════════════════════════════════════════
-
-python_scripts:
-  directory: "scripts/documentation/"
-  
-  required_libraries:
-    - name: "beautifulsoup4"
-      version: ">=4.12.0"
-      purpose: "HTML parsing and manipulation"
-    
-    - name: "jinja2"
-      version: ">=3.1.0"
-      purpose: "Template rendering for HTML generation"
-    
-    - name: "pyyaml"
-      version: ">=6.0"
-      purpose: "YAML configuration loading"
-    
-    - name: "markdown"
-      version: ">=3.5"
-      purpose: "Markdown to HTML conversion"
-    
-    - name: "pygments"
-      version: ">=2.17"
-      purpose: "Code syntax highlighting"
-  
-  script_manifest:
-    phase_0_content_discovery:
-      - "scan_workspace.py"
-      - "analyze_existing_docs.py"
-      - "identify_gaps.py"
-      - "evaluate_staleness.py"
-      - "identify_diagram_opportunities.py"
-      - "consult_knowledge_library.py"
-    
-    phase_1_design_planning:
-      - "load_glassmorphism_standards.py"
-      - "generate_color_scheme.py"
-      - "plan_responsive_design.py"
-      - "design_css_effects.py"
-      - "consult_best_practices.py"
-    
-    phase_2_diagram_generation:
-      - "generate_d3_architecture.py"
-      - "generate_mermaid_diagrams.py"
-      - "generate_chartjs_metrics.py"
-      - "generate_svg_illustrations.py"
-      - "generate_threejs_visualizations.py"
-    
-    phase_3_content_generation:
-      - "generate_api_docs.py"
-      - "generate_architecture_docs.py"
-      - "generate_tutorials.py"
-      - "generate_integration_guides.py"
-      - "generate_comprehensive_content.py"
-    
-    phase_5_view_generation:
-      - "generate_level1_views.py"
-      - "generate_level2_views.py"
-      - "generate_interactive_dashboards.py"
-      - "generate_responsive_views.py"
-      - "apply_css_effects.py"
-    
-    phase_6_validation:
-      - "validate_all_pages.py"
-      - "generate_comprehensive_report.py"
-  
-  template_structure:
-    header: |
-      #!/usr/bin/env python3
-      \"\"\"
-      {script_name}
-      {description}
-      
-      Part of CORTEX Documentation Orchestrator v3.0
-      Author: Asif Hussain
-      Copyright: © 2026 Asif Hussain. All rights reserved.
-      \"\"\"
-      
-      import sys
-      import json
-      from pathlib import Path
-      from typing import Dict, Any, List
-      
-      # Add project root to path
-      project_root = Path(__file__).parent.parent.parent
-      sys.path.insert(0, str(project_root))
-    
-    argparse_template: |
-      import argparse
-      
-      def parse_args():
-          parser = argparse.ArgumentParser(description="{description}")
-          {arg_definitions}
-          return parser.parse_args()
-    
-    main_structure: |
-      def main():
-          args = parse_args()
-          
-          # Load inputs
-          {input_loading}
-          
-          # Execute core logic
-          result = {core_function}(inputs)
-          
-          # Save outputs
-          save_output(result, args.output)
-          
-          print(f"✅ {script_name} complete")
-          return 0
-      
-      if __name__ == "__main__":
-          sys.exit(main())
-
-# ═══════════════════════════════════════════════════════════════
-# RESPONSIVE DESIGN SPECIFICATIONS
-# ═══════════════════════════════════════════════════════════════
-
-responsive_design:
-  breakpoints:
-    mobile:
-      min_width: 320px
-      max_width: 767px
-      grid_columns: 1
-      font_scale: 0.9
-      card_spacing: "var(--space-sm)"
-    
-    tablet:
-      min_width: 768px
-      max_width: 1023px
-      grid_columns: 2
-      font_scale: 1.0
-      card_spacing: "var(--space-md)"
-    
-    desktop:
-      min_width: 1024px
-      max_width: 1439px
-      grid_columns: 3
-      font_scale: 1.0
-      card_spacing: "var(--space-lg)"
-    
-    wide:
-      min_width: 1440px
-      grid_columns: 4
-      font_scale: 1.1
-      card_spacing: "var(--space-lg)"
-  
-  orientations:
-    portrait:
-      aspect_ratio: "9:16"
-      optimizations:
-        - "Single column layout for mobile"
-        - "Vertical scrolling emphasis"
-        - "Touch-friendly spacing (min 44px)"
-    
-    landscape:
-      aspect_ratio: "16:9"
-      optimizations:
-        - "Multi-column layout"
-        - "Horizontal navigation"
-        - "Reduced vertical spacing"
-  
-  accessibility:
-    wcag_level: "AA"
-    requirements:
-      - "Color contrast ratio >= 4.5:1"
-      - "Touch targets >= 44x44px"
-      - "Keyboard navigation support"
-      - "Screen reader compatibility"
-      - "Focus indicators visible"
-      - "No autoplay animations"
-
-# ═══════════════════════════════════════════════════════════════
-# CSS EFFECTS LIBRARY
-# ═══════════════════════════════════════════════════════════════
-
-css_effects:
-  glassmorphism_effects:
-    blur:
-      property: "backdrop-filter"
-      values: ["blur(10px)", "blur(20px)", "blur(30px)"]
-      fallback: "background: rgba(26, 31, 58, 0.95)"
-    
-    glow:
-      property: "box-shadow"
-      values:
-        - "0 0 20px rgba(0, 212, 255, 0.3)"
-        - "0 0 40px rgba(0, 212, 255, 0.4)"
-        - "0 0 60px rgba(0, 212, 255, 0.5)"
-      animation: "pulse 3s ease-in-out infinite"
-    
-    shimmer:
-      property: "background"
-      values:
-        - "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%)"
-      animation: "shimmer 2s linear infinite"
-    
-    gradient_shift:
-      property: "background"
-      values:
-        - "linear-gradient(135deg, color1, color2)"
-      animation: "gradient-shift 10s ease infinite"
-  
-  animation_keyframes:
-    pulse: |
-      @keyframes pulse {
-        0%, 100% { opacity: 0.8; transform: scale(1); }
-        50% { opacity: 1; transform: scale(1.02); }
-      }
-    
-    shimmer: |
-      @keyframes shimmer {
-        0% { background-position: -1000px 0; }
-        100% { background-position: 1000px 0; }
-      }
-    
-    gradient_shift: |
-      @keyframes gradient-shift {
-        0%, 100% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-      }
-    
-    float: |
-      @keyframes float {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-10px); }
-      }
-
