@@ -26,6 +26,32 @@ routing_rules:
         - "Git checkpoints"
         - "Snowball effect measurement"
   
+  # CORTEX Upgrade System - Enhanced v2.0
+  # Pulls latest enhancements, validates plans, regenerates docs
+  - pattern: "^(upgrade cortex|cortex upgrade|pull enhancements|sync enhancements).*$"
+    orchestrator: "upgrade_orchestrator"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 15
+    metadata:
+      description: "Upgrade system with plan validation and Level 1 uniqueness"
+      autonomous: true
+      version: "2.0"
+      phases:
+        - "Pre-Flight Validation"
+        - "Remote Analysis"
+        - "Backup & Rollback Preparation"
+        - "Git Pull & Merge"
+        - "Dependency Synchronization"
+        - "Orchestrator Wiring Analysis"
+        - "Prompt Rebuilding"
+        - "Plan Structure Validation & Upgrade"
+        - "Documentation Site Regeneration"
+        - "Master/Child Orchestrator Setup"
+        - "Audit Logger Integration"
+        - "Integration Testing"
+        - "Feature Summary & User Guidance"
+  
   # Planning System (Alias for planning_v5)
   # Both planning_system and planning_v5 exist in registry
   - pattern: "^(planning system).*$"
@@ -56,6 +82,33 @@ routing_rules:
     metadata:
       description: "Test-Driven Development orchestrator"
       autonomous: false
+  
+  # Documentation Standardization Orchestrator v2.0
+  # State-aware HTML glassmorphism standardization with audit logging
+  - pattern: "^(standardize|apply glassmorphism|glassmorphism standardization|docs standardization).*$"
+    orchestrator: "documentation_orchestrator"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 25
+    metadata:
+      description: "Documentation standardization with state-aware validation"
+      autonomous: true
+      version: "2.0"
+      features:
+        - "Pre-flight validation (git checkpoints, inline style detection)"
+        - "Approved pattern library integration"
+        - "CSS class registry enforcement"
+        - "State persistence (prevents duplicate applications)"
+        - "Atomic operations with rollback"
+        - "Audit logging integration"
+        - "Python-only generation (no Copilot HTML edits)"
+      phases:
+        - "Pre-Flight Validation"
+        - "State Query & Pattern Matching"
+        - "Inline Style Removal (Atomic)"
+        - "CSS Class Application (Atomic)"
+        - "State Persistence & Approval"
+        - "Validation & Reporting"
   
   # ADO Operations v2 - Wizard Mode (Interactive)
   - pattern: "^(ado wizard|ado interactive).*$"

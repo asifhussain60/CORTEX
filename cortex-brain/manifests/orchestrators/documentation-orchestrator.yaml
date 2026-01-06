@@ -1,0 +1,1448 @@
+# Documentation Orchestrator v3.0
+# Comprehensive glassmorphism generation system with D3.js, Mermaid, and Python-based creation
+
+orchestrator_id: "documentation_orchestrator"
+name: "Documentation Generation & Standardization Orchestrator"
+version: "3.0.0"
+status: "production"
+type: "autonomous"
+
+metadata:
+  author: "Asif Hussain"
+  created_at: "2026-01-06"
+  last_updated: "2026-01-06"
+  description: |
+    Comprehensive documentation orchestration system that combines:
+    - Glassmorphism theme standardization with 7-color palette
+    - Content discovery and intelligent refresh evaluation
+    - Rich visualizations (D3.js, Mermaid, Chart.js, Plotly)
+    - Python-based script generation for all views
+    - Responsive design (mobile, tablet, landscape/portrait)
+    - CSS-only architecture with animation and effects
+    - Knowledge library consultation and internet enhancement
+    - State-aware execution with audit logging
+  
+  copyright: "© 2025-2026 Asif Hussain. All rights reserved."
+  
+  tags:
+    - documentation
+    - glassmorphism
+    - d3js
+    - mermaid
+    - visualization
+    - python-generation
+    - responsive-design
+    - content-discovery
+    - audit-logging
+
+# ═══════════════════════════════════════════════════════════════
+# ROUTING CONFIGURATION
+# ═══════════════════════════════════════════════════════════════
+
+routing:
+  patterns:
+    # Generation Patterns
+    - pattern: "^(generate docs?|create docs?|build documentation).*$"
+      priority: 25
+      confidence: 1.0
+      match_type: "regex"
+      mode: "generation"
+      examples:
+        - "generate docs for orchestrators"
+        - "create documentation with diagrams"
+        - "build comprehensive docs"
+    
+    # Standardization Patterns
+    - pattern: "^(standardize|apply glassmorphism|glassmorphism standardization).*$"
+      priority: 25
+      confidence: 1.0
+      match_type: "regex"
+      mode: "standardization"
+      examples:
+        - "standardize architecture/index.html"
+        - "apply glassmorphism to orchestrators page"
+        - "glassmorphism standardization for all Level 1 pages"
+    
+    # Enhancement/Refresh Patterns
+    - pattern: "^(enhance|refresh|update|modernize) (docs?|documentation|page).*$"
+      priority: 26
+      confidence: 0.95
+      match_type: "regex"
+      mode: "enhancement"
+      examples:
+        - "enhance docs with new diagrams"
+        - "refresh orchestrators page"
+        - "update documentation with latest content"
+  
+  fallback_to_llm: false
+  requires_confirmation: true
+
+# ═══════════════════════════════════════════════════════════════
+# AUDIT LOGGING CONFIGURATION
+# ═══════════════════════════════════════════════════════════════
+
+audit_logging:
+  enabled: true
+  log_directory: "logs/cortex-audit/documentation/"
+  
+  event_types:
+    - orchestrator_start
+    - orchestrator_complete
+    - phase_start
+    - phase_complete
+    - validation_check
+    - git_checkpoint
+    - inline_style_removal
+    - css_class_application
+    - state_persistence
+    - error
+  
+  tracked_metrics:
+    - inline_styles_removed
+    - css_classes_applied
+    - git_checkpoints_created
+    - pages_standardized
+    - validation_failures
+    - pattern_matches
+    - complexity_score
+    - execution_time_ms
+  
+  redaction:
+    enabled: true
+    sensitive_fields:
+      - "api_key"
+      - "password"
+      - "token"
+      - "secret"
+
+# ═══════════════════════════════════════════════════════════════
+# BRAIN PROTECTION (SKULL) INTEGRATION
+# ═══════════════════════════════════════════════════════════════
+
+brain_protection:
+  enabled: true
+  rules_file: "cortex-brain/brain-protection-rules.yaml"
+  
+  enforced_rules:
+    - PYTHON_ONLY_GENERATION:
+        severity: "CRITICAL"
+        description: "Copilot must NOT directly edit HTML files"
+        enforcement: "block_copilot_edits"
+        violation_action: "reject_request"
+    
+    - CSS_REGISTRY_ENFORCEMENT:
+        severity: "CRITICAL"
+        description: "All CSS classes must exist in registry before application"
+        enforcement: "pre_flight_validation"
+        violation_action: "error_with_remediation"
+    
+    - INLINE_STYLE_PROHIBITION:
+        severity: "CRITICAL"
+        description: "Zero tolerance for inline style attributes"
+        enforcement: "atomic_removal"
+        violation_action: "auto_remove_before_proceed"
+    
+    - GIT_CHECKPOINT_REQUIRED:
+        severity: "HIGH"
+        description: "Mandatory checkpoints before destructive operations"
+        enforcement: "pre_operation_snapshot"
+        violation_action: "auto_create_checkpoint"
+    
+    - STATE_PERSISTENCE:
+        severity: "HIGH"
+        description: "State tracking prevents duplicate applications"
+        enforcement: "state_file_update"
+        violation_action: "warn_user_approved_page"
+
+# ═══════════════════════════════════════════════════════════════
+# KNOWLEDGE BASE INHERITANCE
+# ═══════════════════════════════════════════════════════════════
+
+knowledge_inheritance:
+  tier0_governance:
+    - file: "cortex-brain/brain-protection-rules.yaml"
+      rules:
+        - "PYTHON_ONLY_GENERATION"
+        - "CSS_ONLY_ARCHITECTURE"
+        - "STATE_FIRST_VALIDATION"
+  
+  tier2_knowledge_graph:
+    patterns:
+      - source: "cortex-brain/documents/planning/active/html-glassmorphism-alignment/standards/approved-panels.yaml"
+        type: "approved_html_patterns"
+        version: "2.0"
+      
+      - source: "docs/assets/css/variables.css"
+        type: "css_class_registry"
+        version: "dynamic"
+      
+      - source: "cortex-brain/cache/html-standardization-state.json"
+        type: "persistent_state"
+        version: "dynamic"
+      
+      - source: "cortex-brain/cognitive-framework/design-principles.yaml"
+        type: "design_best_practices"
+        version: "1.0"
+    
+    visualization_libraries:
+      d3js:
+        version: "7.8.5"
+        cdn: "https://d3js.org/d3.v7.min.js"
+        capabilities:
+          - "force-directed graphs"
+          - "hierarchical trees"
+          - "network diagrams"
+          - "animated transitions"
+          - "interactive visualizations"
+        use_cases:
+          - "architecture diagrams"
+          - "dependency graphs"
+          - "orchestrator relationships"
+      
+      mermaid:
+        version: "10.6.1"
+        cdn: "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs"
+        capabilities:
+          - "flowcharts"
+          - "sequence diagrams"
+          - "class diagrams"
+          - "state diagrams"
+          - "entity relationship diagrams"
+          - "gantt charts"
+        use_cases:
+          - "workflow diagrams"
+          - "system architecture"
+          - "process flows"
+      
+      chartjs:
+        version: "4.4.1"
+        cdn: "https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"
+        capabilities:
+          - "bar charts"
+          - "line charts"
+          - "pie charts"
+          - "radar charts"
+          - "animated updates"
+        use_cases:
+          - "metrics dashboards"
+          - "performance graphs"
+          - "trend analysis"
+      
+      plotly:
+        version: "2.27.1"
+        cdn: "https://cdn.plot.ly/plotly-2.27.1.min.js"
+        capabilities:
+          - "3D visualizations"
+          - "scientific plots"
+          - "interactive dashboards"
+          - "statistical charts"
+        use_cases:
+          - "complex data visualization"
+          - "analytics dashboards"
+          - "scientific documentation"
+      
+      threejs:
+        version: "0.160.0"
+        cdn: "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"
+        capabilities:
+          - "3D graphics"
+          - "animated scenes"
+          - "interactive 3D models"
+        use_cases:
+          - "architecture visualization"
+          - "system topology"
+          - "immersive demonstrations"
+    
+    github_pages_constraints:
+      static_only: true
+      no_server_side: true
+      supported_formats:
+        - "HTML"
+        - "CSS"
+        - "JavaScript"
+        - "SVG"
+        - "JSON"
+      max_file_size: "100MB"
+      cdn_recommended: true
+      build_systems:
+        - "Jekyll (native)"
+        - "Plain HTML (recommended)"
+        - "Static site generators"
+  
+  tier3_dev_context:
+    reference_implementations:
+      - file: "docs/orchestrators/index.html"
+        description: "Reference Level 1 page with approved glassmorphism"
+        git_tag: "v5.0-glassmorphism-approved"
+      
+      - file: "docs/panel-viewer.html"
+        description: "Panel library showcase (approved patterns)"
+        git_tag: "v5.0-glassmorphism-approved"
+
+# ═══════════════════════════════════════════════════════════════
+# EXECUTION PHASES (Enhanced v3.0)
+# ═══════════════════════════════════════════════════════════════
+
+phases:
+  # ═══════════════════════════════════════════════════════════════
+  # PHASE 0: Content Discovery & Evaluation
+  # ═══════════════════════════════════════════════════════════════
+  - id: 0
+    name: "Content Discovery & Evaluation"
+    duration_estimate: "2-5 minutes"
+    mandatory: true
+    mode_applicable: ["generation", "enhancement"]
+    
+    description: |
+      Intelligent content discovery to determine what needs to be documented:
+      - Scan workspace for undocumented features/modules
+      - Analyze existing documentation for staleness
+      - Evaluate content gaps against codebase
+      - Identify diagram opportunities
+      - Assess enhancement potential
+    
+    tasks:
+      - name: "Scan Workspace Structure"
+        script: "scripts/documentation/scan_workspace.py"
+        args:
+          - "--workspace": "{workspace_root}"
+          - "--output": "reports/workspace-scan.json"
+        output: "workspace_structure"
+      
+      - name: "Analyze Existing Documentation"
+        script: "scripts/documentation/analyze_existing_docs.py"
+        args:
+          - "--docs-dir": "docs/"
+          - "--output": "reports/docs-analysis.json"
+        output: "docs_inventory"
+      
+      - name: "Identify Content Gaps"
+        script: "scripts/documentation/identify_gaps.py"
+        args:
+          - "--workspace": "{workspace_structure}"
+          - "--docs": "{docs_inventory}"
+          - "--output": "reports/content-gaps.json"
+        output: "content_gaps"
+      
+      - name: "Evaluate Staleness"
+        script: "scripts/documentation/evaluate_staleness.py"
+        args:
+          - "--docs": "{docs_inventory}"
+          - "--git-history": true
+          - "--threshold-days": 30
+          - "--output": "reports/staleness-report.json"
+        output: "stale_docs"
+      
+      - name: "Identify Diagram Opportunities"
+        script: "scripts/documentation/identify_diagram_opportunities.py"
+        args:
+          - "--workspace": "{workspace_structure}"
+          - "--gaps": "{content_gaps}"
+          - "--output": "reports/diagram-opportunities.json"
+        output: "diagram_opportunities"
+      
+      - name: "Consult Knowledge Library"
+        script: "scripts/documentation/consult_knowledge_library.py"
+        args:
+          - "--topic": "{documentation_topic}"
+          - "--library": "cortex-brain/tier2/knowledge-graph.yaml"
+          - "--output": "reports/knowledge-insights.json"
+        output: "knowledge_insights"
+    
+    success_criteria:
+      - workspace_scanned: true
+      - gaps_identified: true
+      - staleness_evaluated: true
+      - diagram_opportunities_found: true
+    
+    audit_events:
+      - "phase_start"
+      - "content_discovery"
+      - "gap_analysis"
+      - "phase_complete"
+
+  # ═══════════════════════════════════════════════════════════════
+  # PHASE 1: Design System & Theme Planning
+  # ═══════════════════════════════════════════════════════════════
+  - id: 1
+    name: "Design System & Theme Planning"
+    duration_estimate: "1-2 minutes"
+    mandatory: true
+    mode_applicable: ["generation", "standardization", "enhancement"]
+    
+    description: |
+      Plan visual design following glassmorphism standards:
+      - Load approved glassmorphism patterns
+      - Generate color scheme (7-color palette)
+      - Plan responsive breakpoints
+      - Design CSS animations and effects
+      - Consult best practices from knowledge library
+    
+    tasks:
+      - name: "Load Glassmorphism Standards"
+        script: "scripts/documentation/load_glassmorphism_standards.py"
+        args:
+          - "--standards": "cortex-brain/documents/planning/active/html-glassmorphism-alignment/standards/approved-panels.yaml"
+          - "--css-registry": "docs/assets/css/variables.css"
+        output: "design_system"
+      
+      - name: "Generate Color Scheme"
+        script: "scripts/documentation/generate_color_scheme.py"
+        args:
+          - "--palette-size": 7
+          - "--base-colors": ["cyan", "purple", "teal", "indigo", "pink", "emerald", "amber"]
+          - "--glassmorphism-mode": true
+          - "--output": "reports/color-scheme.json"
+        output: "color_scheme"
+      
+      - name: "Plan Responsive Design"
+        script: "scripts/documentation/plan_responsive_design.py"
+        args:
+          - "--breakpoints": ["mobile: 320px", "tablet: 768px", "desktop: 1024px", "wide: 1440px"]
+          - "--orientations": ["portrait", "landscape"]
+          - "--output": "reports/responsive-plan.json"
+        output: "responsive_plan"
+      
+      - name: "Design CSS Effects"
+        script: "scripts/documentation/design_css_effects.py"
+        args:
+          - "--effects": ["blur", "glow", "shimmer", "pulse", "gradient-shift"]
+          - "--subtlety-level": "professional"
+          - "--output": "reports/css-effects.json"
+        output: "css_effects"
+      
+      - name: "Consult Best Practices"
+        script: "scripts/documentation/consult_best_practices.py"
+        args:
+          - "--sources": ["knowledge_library", "internet"]
+          - "--topics": ["glassmorphism", "responsive-design", "accessibility", "performance"]
+          - "--output": "reports/best-practices.json"
+        output: "best_practices"
+    
+    success_criteria:
+      - design_system_loaded: true
+      - color_scheme_generated: true
+      - responsive_plan_created: true
+      - effects_designed: true
+      - best_practices_consulted: true
+    
+    audit_events:
+      - "phase_start"
+      - "design_planning"
+      - "phase_complete"
+
+  # ═══════════════════════════════════════════════════════════════
+  # PHASE 2: Diagram & Visualization Generation
+  # ═══════════════════════════════════════════════════════════════
+  - id: 2
+    name: "Diagram & Visualization Generation"
+    duration_estimate: "3-10 minutes"
+    mandatory: false
+    condition: "len(diagram_opportunities) > 0"
+    mode_applicable: ["generation", "enhancement"]
+    
+    description: |
+      Generate rich visual diagrams and illustrations:
+      - D3.js force-directed graphs for architecture
+      - Mermaid flowcharts for workflows
+      - Chart.js metrics visualizations
+      - SVG illustrations for concepts
+      - 3D visualizations (Three.js) for complex systems
+    
+    tasks:
+      - name: "Generate D3.js Architecture Diagrams"
+        script: "scripts/documentation/generate_d3_architecture.py"
+        args:
+          - "--opportunities": "{diagram_opportunities}"
+          - "--workspace": "{workspace_structure}"
+          - "--diagram-types": ["force-directed", "hierarchical-tree", "network"]
+          - "--output-dir": "docs/assets/diagrams/d3/"
+        output: "d3_diagrams"
+      
+      - name: "Generate Mermaid Flowcharts"
+        script: "scripts/documentation/generate_mermaid_diagrams.py"
+        args:
+          - "--opportunities": "{diagram_opportunities}"
+          - "--diagram-types": ["flowchart", "sequence", "class", "state", "er"]
+          - "--theme": "dark"
+          - "--output-dir": "docs/assets/diagrams/mermaid/"
+        output: "mermaid_diagrams"
+      
+      - name: "Generate Chart.js Metrics"
+        script: "scripts/documentation/generate_chartjs_metrics.py"
+        args:
+          - "--metrics": "{workspace_structure.metrics}"
+          - "--chart-types": ["bar", "line", "radar", "pie"]
+          - "--animated": true
+          - "--output-dir": "docs/assets/diagrams/charts/"
+        output: "chartjs_visualizations"
+      
+      - name: "Generate SVG Illustrations"
+        script: "scripts/documentation/generate_svg_illustrations.py"
+        args:
+          - "--concepts": "{content_gaps.concepts}"
+          - "--style": "glassmorphism"
+          - "--output-dir": "docs/assets/illustrations/"
+        output: "svg_illustrations"
+      
+      - name: "Generate 3D Visualizations (Optional)"
+        script: "scripts/documentation/generate_threejs_visualizations.py"
+        condition: "complexity_score > 70"
+        args:
+          - "--systems": "{workspace_structure.complex_systems}"
+          - "--output-dir": "docs/assets/visualizations/3d/"
+        output: "threejs_visualizations"
+    
+    success_criteria:
+      - diagrams_generated: true
+      - visualizations_created: true
+      - assets_organized: true
+    
+    audit_events:
+      - "phase_start"
+      - "diagram_generation"
+      - "visualization_creation"
+      - "phase_complete"
+
+  # ═══════════════════════════════════════════════════════════════
+  # PHASE 3: Content Generation (Python Scripts)
+  # ═══════════════════════════════════════════════════════════════
+  - id: 3
+    name: "Content Generation (Python Scripts)"
+    duration_estimate: "5-15 minutes"
+    mandatory: true
+    mode_applicable: ["generation"]
+    
+    description: |
+      Generate comprehensive documentation content via Python scripts:
+      - API documentation from code analysis
+      - Architecture documentation from workspace scan
+      - Tutorial content from usage patterns
+      - Integration guides from dependencies
+      - All content generated, not manually written
+    
+    tasks:
+      - name: "Generate API Documentation"
+        script: "scripts/documentation/generate_api_docs.py"
+        args:
+          - "--workspace": "{workspace_structure}"
+          - "--format": "html"
+          - "--glassmorphism-theme": true
+          - "--output-dir": "docs/api/"
+        output: "api_docs"
+      
+      - name: "Generate Architecture Documentation"
+        script: "scripts/documentation/generate_architecture_docs.py"
+        args:
+          - "--workspace": "{workspace_structure}"
+          - "--diagrams": "{d3_diagrams}"
+          - "--mermaid": "{mermaid_diagrams}"
+          - "--output-dir": "docs/architecture/"
+        output: "architecture_docs"
+      
+      - name: "Generate Tutorial Content"
+        script: "scripts/documentation/generate_tutorials.py"
+        args:
+          - "--usage-patterns": "{workspace_structure.usage_patterns}"
+          - "--examples": true
+          - "--interactive": true
+          - "--output-dir": "docs/tutorials/"
+        output: "tutorial_docs"
+      
+      - name: "Generate Integration Guides"
+        script: "scripts/documentation/generate_integration_guides.py"
+        args:
+          - "--dependencies": "{workspace_structure.dependencies}"
+          - "--output-dir": "docs/integrations/"
+        output: "integration_guides"
+      
+      - name: "Generate Comprehensive Content"
+        script: "scripts/documentation/generate_comprehensive_content.py"
+        args:
+          - "--gaps": "{content_gaps}"
+          - "--insights": "{knowledge_insights}"
+          - "--best-practices": "{best_practices}"
+          - "--output-dir": "docs/"
+        output: "comprehensive_content"
+    
+    success_criteria:
+      - api_docs_generated: true
+      - architecture_docs_created: true
+      - tutorials_generated: true
+      - integration_guides_created: true
+    
+    audit_events:
+      - "phase_start"
+      - "content_generation"
+      - "phase_complete"
+
+  # ═══════════════════════════════════════════════════════════════
+  # PHASE 4: Pre-Flight Validation (from v2.0)
+  # ═══════════════════════════════════════════════════════════════
+  - id: 4
+    name: "Pre-Flight Validation"
+    duration_estimate: "30 seconds"
+    mandatory: true
+    mode_applicable: ["standardization", "enhancement"]
+    
+    description: |
+      State-aware validation BEFORE any changes:
+      - Git checkpoint creation
+      - Approved panel library query
+      - Current HTML structure parsing
+      - CSS class registry validation
+      - Inline style detection (CRITICAL)
+      - Duplicate section detection
+      - Complexity scoring
+    duration_estimate: "30 seconds"
+    mandatory: true
+    
+    description: |
+      State-aware validation BEFORE any changes:
+      - Git checkpoint creation
+      - Approved panel library query
+      - Current HTML structure parsing
+      - CSS class registry validation
+      - Inline style detection (CRITICAL)
+      - Duplicate section detection
+      - Complexity scoring
+    
+    tasks:
+      - name: "Create Git Checkpoint"
+        script: "scripts/create-git-checkpoint.py"
+        args: ["--target", "{page_path}", "--reason", "{change_type}"]
+        output: "checkpoint_tag"
+      
+      - name: "Load Approved Panel Library"
+        script: "scripts/load-approved-panels.py"
+        args: ["--library", "cortex-brain/documents/planning/active/html-glassmorphism-alignment/standards/approved-panels.yaml"]
+        output: "approved_patterns"
+      
+      - name: "Parse HTML Structure"
+        script: "scripts/parse-html-structure.py"
+        args: ["--file", "{page_path}"]
+        output: "html_structure"
+      
+      - name: "Query CSS Registry"
+        script: "scripts/query-css-registry.py"
+        args: ["--css-file", "docs/assets/css/variables.css"]
+        output: "css_registry"
+      
+      - name: "Detect Inline Styles"
+        script: "scripts/detect-inline-styles.py"
+        args: ["--file", "{page_path}"]
+        output: "inline_styles_count"
+        critical: true
+      
+      - name: "Calculate Complexity"
+        script: "scripts/calculate-complexity.py"
+        args: ["--html-structure", "{html_structure}"]
+        output: "complexity_score"
+    
+    success_criteria:
+      - git_checkpoint_created: true
+      - library_loaded: true
+      - html_parsed: true
+      - registry_validated: true
+    
+    failure_handling:
+      - condition: "inline_styles_count > 0"
+        action: "block"
+        message: "ERROR: {inline_styles_count} inline styles detected. Run remove-inline-styles.py FIRST."
+      
+      - condition: "complexity_score > 50"
+        action: "warn"
+        message: "Complexity > 50 - Fresh regeneration recommended"
+        suggestion: "strategy = DELETE_AND_REGENERATE"
+    
+    audit_events:
+      - "phase_start"
+      - "validation_check"
+      - "git_checkpoint"
+      - "phase_complete"
+
+  # ═══════════════════════════════════════════════════════════════
+  # PHASE 5: HTML View Generation (Python Scripts Only)
+  # ═══════════════════════════════════════════════════════════════
+  - id: 5
+    name: "HTML View Generation (Python Scripts Only)"
+    duration_estimate: "2-5 minutes"
+    mandatory: true
+    mode_applicable: ["generation", "enhancement"]
+    
+    description: |
+      Generate complete HTML views via Python scripts (NO manual HTML editing):
+      - Level 1 index pages with glassmorphism theme
+      - Level 2 detail pages with responsive design
+      - Interactive dashboards with D3.js/Chart.js
+      - Documentation viewers with Mermaid diagrams
+      - Mobile/tablet-optimized layouts
+    
+    tasks:
+      - name: "Generate Level 1 Index Pages"
+        script: "scripts/documentation/generate_level1_views.py"
+        args:
+          - "--pages": "{content_gaps.level1_pages}"
+          - "--color-scheme": "{color_scheme}"
+          - "--design-system": "{design_system}"
+          - "--diagrams": "{d3_diagrams}"
+          - "--responsive": true
+          - "--output-dir": "docs/"
+        output: "level1_pages"
+      
+      - name: "Generate Level 2 Detail Pages"
+        script: "scripts/documentation/generate_level2_views.py"
+        args:
+          - "--pages": "{content_gaps.level2_pages}"
+          - "--parent-pages": "{level1_pages}"
+          - "--mermaid-diagrams": "{mermaid_diagrams}"
+          - "--interactive": true
+          - "--output-dir": "docs/"
+        output: "level2_pages"
+      
+      - name: "Generate Interactive Dashboards"
+        script: "scripts/documentation/generate_interactive_dashboards.py"
+        args:
+          - "--metrics": "{workspace_structure.metrics}"
+          - "--chartjs": "{chartjs_visualizations}"
+          - "--d3": "{d3_diagrams}"
+          - "--output-dir": "docs/dashboards/"
+        output: "dashboards"
+      
+      - name: "Generate Mobile-Optimized Views"
+        script: "scripts/documentation/generate_responsive_views.py"
+        args:
+          - "--pages": "{level1_pages} + {level2_pages}"
+          - "--responsive-plan": "{responsive_plan}"
+          - "--test-viewports": ["320px", "375px", "768px", "1024px", "1440px"]
+          - "--orientations": ["portrait", "landscape"]
+        output: "responsive_validation"
+      
+      - name: "Apply CSS Effects & Animations"
+        script: "scripts/documentation/apply_css_effects.py"
+        args:
+          - "--pages": "all"
+          - "--effects": "{css_effects}"
+          - "--subtlety": "professional"
+          - "--performance-budget": "60fps"
+        output: "effects_applied"
+    
+    success_criteria:
+      - level1_pages_generated: true
+      - level2_pages_generated: true
+      - dashboards_created: true
+      - responsive_validated: true
+      - effects_applied: true
+    
+    audit_events:
+      - "phase_start"
+      - "view_generation"
+      - "responsive_validation"
+      - "phase_complete"
+
+  # ═══════════════════════════════════════════════════════════════
+  # PHASE 6: State Persistence & Validation (from v2.0)
+  # ═══════════════════════════════════════════════════════════════
+  - id: 6
+    name: "State Persistence & Validation"
+    duration_estimate: "15 seconds"
+    mandatory: true
+    mode_applicable: ["generation", "standardization", "enhancement"]
+    
+    description: |
+      Final validation and state persistence:
+      - Update html-standardization-state.json
+      - Validate all pages (zero inline styles, CSS registry compliance)
+      - Generate comprehensive report
+      - Create git checkpoint for rollback
+    
+    tasks:
+      - name: "Validate All Generated Pages"
+        script: "scripts/documentation/validate_all_pages.py"
+        args:
+          - "--pages": "{level1_pages} + {level2_pages} + {dashboards}"
+          - "--checks": ["zero_inline_styles", "css_registry_compliance", "responsive_design", "accessibility"]
+          - "--output": "reports/validation-report.json"
+        output: "validation_results"
+      
+      - name: "Update State File"
+        script: "scripts/save-page-state.py"
+        args:
+          - "--pages": "all"
+          - "--state-file": "cortex-brain/cache/html-standardization-state.json"
+          - "--mode": "{mode}"
+          - "--diagrams-generated": "{d3_diagrams} + {mermaid_diagrams}"
+        output: "state_updated"
+      
+      - name: "Generate Comprehensive Report"
+        script: "scripts/documentation/generate_comprehensive_report.py"
+        args:
+          - "--phase-results": "all"
+          - "--metrics": "{tracked_metrics}"
+          - "--output": "reports/documentation-orchestrator-report-{timestamp}.md"
+        output: "final_report"
+      
+      - name: "Create Final Git Checkpoint"
+        script: "scripts/create-git-checkpoint.py"
+        args:
+          - "--tag": "docs-v3-{timestamp}"
+          - "--message": "Documentation Orchestrator v3.0 execution complete"
+        output: "final_checkpoint"
+    
+    success_criteria:
+      - all_pages_validated: true
+      - state_persisted: true
+      - report_generated: true
+      - checkpoint_created: true
+    
+    audit_events:
+      - "phase_start"
+      - "validation_check"
+      - "state_persistence"
+      - "orchestrator_complete"
+      - "phase_complete"
+
+  - id: 2
+    name: "State Query & Pattern Matching"
+    duration_estimate: "15 seconds"
+    mandatory: true
+    
+    description: |
+      Load previous state and match against approved patterns:
+      - Load html-standardization-state.json
+      - Check if page previously approved
+      - Match request against pattern library
+      - Determine execution strategy
+    
+    tasks:
+      - name: "Load Page State"
+        script: "scripts/load-page-state.py"
+        args: ["--page", "{page_path}", "--state-file", "cortex-brain/cache/html-standardization-state.json"]
+        output: "page_state"
+      
+      - name: "Check Approved Status"
+        condition: "page_state.status == 'approved'"
+        action: "prompt_user"
+        message: |
+          ⚠️ WARNING: Page previously approved on {page_state.approved_date}
+          Git tag: {page_state.git_tag}
+          Applied patterns: {page_state.applied_patterns}
+          
+          Overwrite approved state? [Y/n]
+      
+      - name: "Match Pattern"
+        script: "scripts/match-pattern.py"
+        args: ["--request", "{user_request}", "--library", "{approved_patterns}"]
+        output: "matched_pattern"
+    
+    success_criteria:
+      - state_loaded: true
+      - pattern_matched: true
+    
+    audit_events:
+      - "phase_start"
+      - "state_persistence"
+      - "pattern_matches"
+      - "phase_complete"
+
+  - id: 3
+    name: "Atomic Operation: Inline Style Removal"
+    duration_estimate: "20 seconds"
+    mandatory: true
+    condition: "inline_styles_count > 0"
+    
+    description: |
+      Remove ALL inline style attributes atomically.
+      This MUST complete before CSS class application.
+    
+    tasks:
+      - name: "Remove Inline Styles"
+        script: "scripts/remove-inline-styles.py"
+        args: ["--file", "{page_path}", "--backup"]
+        output: "removed_count"
+      
+      - name: "Validate Removal"
+        script: "scripts/validate-no-inline-styles.py"
+        args: ["--file", "{page_path}"]
+        assertion: "inline_count == 0"
+        critical: true
+    
+    success_criteria:
+      - inline_styles_removed: true
+      - validation_passed: true
+    
+    rollback_on_failure: true
+    
+    audit_events:
+      - "phase_start"
+      - "inline_style_removal"
+      - "validation_check"
+      - "phase_complete"
+
+  - id: 4
+    name: "Atomic Operation: CSS Class Application"
+    duration_estimate: "30 seconds"
+    mandatory: true
+    
+    description: |
+      Apply CSS classes from approved pattern library.
+      Pre-condition: Zero inline styles.
+    
+    tasks:
+      - name: "Apply Pattern HTML"
+        script: "scripts/standardize_level1_view.py"
+        args: ["--file", "{page_path}", "--pattern", "{matched_pattern}", "--css-registry", "{css_registry}"]
+        output: "applied_classes"
+      
+      - name: "Validate CSS Classes"
+        script: "scripts/validate-css-classes.py"
+        args: ["--file", "{page_path}", "--registry", "{css_registry}"]
+        output: "unregistered_classes"
+      
+      - name: "Assert No Unregistered Classes"
+        condition: "len(unregistered_classes) == 0"
+        assertion: true
+        critical: true
+    
+    success_criteria:
+      - css_classes_applied: true
+      - no_unregistered_classes: true
+    
+    rollback_on_failure: true
+    
+    audit_events:
+      - "phase_start"
+      - "css_class_application"
+      - "validation_check"
+      - "phase_complete"
+
+  - id: 5
+    name: "State Persistence & Approval"
+    duration_estimate: "10 seconds"
+    mandatory: true
+    
+    description: |
+      Save standardization state for future invocations.
+      Update approved panel library if new pattern created.
+    
+    tasks:
+      - name: "Update State File"
+        script: "scripts/save-page-state.py"
+        args:
+          - "--page": "{page_path}"
+          - "--state-file": "cortex-brain/cache/html-standardization-state.json"
+          - "--applied-patterns": "{applied_classes}"
+          - "--git-checkpoint": "{checkpoint_tag}"
+          - "--status": "approved"
+      
+      - name: "Update Approved Library"
+        condition: "new_pattern_created == true"
+        script: "scripts/add-to-approved-library.py"
+        args: ["--pattern", "{new_pattern}", "--library", "cortex-brain/documents/planning/active/html-glassmorphism-alignment/standards/approved-panels.yaml"]
+    
+    success_criteria:
+      - state_persisted: true
+      - library_updated: true
+    
+    audit_events:
+      - "phase_start"
+      - "state_persistence"
+      - "phase_complete"
+
+  - id: 6
+    name: "Validation & Reporting"
+    duration_estimate: "15 seconds"
+    mandatory: true
+    
+    description: |
+      Final validation and user-facing report generation.
+    
+    tasks:
+      - name: "Run Full Validation"
+        script: "scripts/validate-standardization.py"
+        args: ["--file", "{page_path}"]
+        checks:
+          - zero_inline_styles
+          - all_classes_registered
+          - glassmorphism_applied
+          - git_checkpoint_exists
+          - state_tracked
+      
+      - name: "Generate Report"
+        script: "scripts/generate-standardization-report.py"
+        args: ["--page", "{page_path}", "--output", "reports/standardization-{timestamp}.md"]
+    
+    success_criteria:
+      - validation_passed: true
+      - report_generated: true
+    
+    audit_events:
+      - "phase_start"
+      - "validation_check"
+      - "phase_complete"
+      - "orchestrator_complete"
+
+# ═══════════════════════════════════════════════════════════════
+# EXECUTION STRATEGY (Decision Tree)
+# ═══════════════════════════════════════════════════════════════
+
+execution_strategy:
+  decision_tree:
+    - condition: "inline_styles_count > 0"
+      action: "BLOCK"
+      message: "Cannot apply CSS classes over inline styles. Run Phase 3 first."
+    
+    - condition: "page_state.status == 'approved' AND user_confirmed == false"
+      action: "PROMPT"
+      message: "Page previously approved. Overwrite?"
+    
+    - condition: "matched_pattern == null"
+      action: "WARN"
+      message: "Pattern not in library. Creating new pattern for approval."
+      strategy: "CREATE_NEW_PATTERN"
+    
+    - condition: "complexity_score > 50"
+      action: "RECOMMEND"
+      message: "High complexity detected. Consider DELETE_AND_REGENERATE strategy."
+      strategy: "DELETE_AND_REGENERATE"
+    
+    - condition: "complexity_score <= 50 AND inline_styles_count == 0"
+      action: "PROCEED"
+      strategy: "SCRIPT_DRIVEN"
+
+# ═══════════════════════════════════════════════════════════════
+# ATOMIC OPERATIONS (Rollback-Safe Tools)
+# ═══════════════════════════════════════════════════════════════
+
+atomic_operations:
+  - name: "remove_inline_styles"
+    script: "scripts/remove-inline-styles.py"
+    atomic: true
+    rollback: true
+    pre_conditions:
+      - html_file_exists
+    post_conditions:
+      - zero_inline_styles
+    
+  - name: "apply_css_classes"
+    script: "scripts/standardize_level1_view.py"
+    atomic: true
+    rollback: true
+    pre_conditions:
+      - zero_inline_styles
+      - css_registry_loaded
+    post_conditions:
+      - all_classes_registered
+      - no_duplicate_sections
+    
+  - name: "create_git_checkpoint"
+    script: "scripts/create-git-checkpoint.py"
+    atomic: true
+    rollback: false
+    pre_conditions:
+      - git_repo_exists
+    post_conditions:
+      - git_tag_created
+    
+  - name: "validate_standardization"
+    script: "scripts/validate-standardization.py"
+    atomic: true
+    rollback: false
+    pre_conditions:
+      - html_file_exists
+    post_conditions:
+      - validation_report_generated
+
+# ═══════════════════════════════════════════════════════════════
+# SUCCESS CRITERIA
+# ═══════════════════════════════════════════════════════════════
+
+success_criteria:
+  functional:
+    - zero_inline_styles: "No inline style attributes in HTML"
+    - all_classes_registered: "All CSS classes exist in registry"
+    - glassmorphism_applied: "7-color glassmorphism pattern applied"
+    - git_checkpoint_created: "Rollback checkpoint exists"
+    - state_persisted: "Page state saved for future invocations"
+    - no_duplicates: "No duplicate content or sections created"
+    - validation_passed: "All validation checks pass"
+  
+  quality:
+    - color_scheme_preserved: "Applied patterns match approved library"
+    - css_only_architecture: "Zero inline styles (100% CSS classes)"
+    - approved_library_updated: "New patterns added to library after approval"
+    - complexity_reduced: "Complexity score within acceptable range"
+  
+  user_experience:
+    - clear_error_messages: "Actionable error messages with remediation steps"
+    - state_awareness: "User informed of previous approvals"
+    - rollback_capability: "Git checkpoints enable safe rollback"
+
+# ═══════════════════════════════════════════════════════════════
+# ERROR HANDLING & ROLLBACK
+# ═══════════════════════════════════════════════════════════════
+
+error_handling:
+  rollback_strategy:
+    - trigger: "validation_failure"
+      action: "rollback_to_checkpoint"
+      checkpoint: "{checkpoint_tag}"
+    
+    - trigger: "unregistered_css_class"
+      action: "error_with_remediation"
+      message: |
+        CRITICAL: Unregistered CSS classes detected: {unregistered_classes}
+        
+        Remediation:
+        1. Add classes to docs/assets/css/variables.css
+        2. Or remove classes from HTML
+        3. Re-run standardization
+    
+    - trigger: "inline_styles_detected"
+      action: "auto_remediate"
+      script: "scripts/remove-inline-styles.py"
+      message: "Auto-removing inline styles before proceeding..."
+  
+  assertion_failures:
+    - assertion: "inline_count == 0"
+      action: "block"
+      message: "CRITICAL: Inline styles still present after removal"
+    
+    - assertion: "len(unregistered_classes) == 0"
+      action: "block"
+      message: "CRITICAL: Unregistered CSS classes detected"
+    
+    - assertion: "git_checkpoint_exists"
+      action: "auto_create"
+      message: "Creating missing git checkpoint..."
+
+# ═══════════════════════════════════════════════════════════════
+# METRICS & OBSERVABILITY
+# ═══════════════════════════════════════════════════════════════
+
+metrics:
+  tracked:
+    - pages_standardized_count
+    - inline_styles_removed_total
+    - css_classes_applied_total
+    - git_checkpoints_created_count
+    - validation_failures_count
+    - rollbacks_triggered_count
+    - pattern_matches_success_rate
+    - complexity_score_average
+    - execution_time_ms_p50
+    - execution_time_ms_p95
+  
+  alerts:
+    - condition: "validation_failures_count > 5"
+      severity: "warning"
+      message: "High validation failure rate detected"
+    
+    - condition: "rollbacks_triggered_count > 3"
+      severity: "critical"
+      message: "Frequent rollbacks - review execution strategy"
+
+# ═══════════════════════════════════════════════════════════════
+# DOCUMENTATION REFERENCES
+# ═══════════════════════════════════════════════════════════════
+
+documentation:
+  prompt_file: ".github/prompts/cortex-docs.prompt.md"
+  version: "2.0.0"
+  
+  related_files:
+    - "cortex-brain/documents/planning/active/html-glassmorphism-alignment/standards/approved-panels.yaml"
+    - "docs/assets/css/variables.css"
+    - "cortex-brain/cache/html-standardization-state.json"
+    - "docs/design-system/migration-guide.md"
+  
+  scripts:
+    - "scripts/remove-inline-styles.py"
+    - "scripts/standardize_level1_view.py"
+    - "scripts/validate-standardization.py"
+    - "scripts/create-git-checkpoint.py"
+    - "scripts/load-page-state.py"
+    - "scripts/save-page-state.py"
+
+# ═══════════════════════════════════════════════════════════════
+# VERSION HISTORY
+# ═══════════════════════════════════════════════════════════════
+
+changelog:
+  - version: "3.0.0"
+    date: "2026-01-06"
+    changes:
+      - "🆕 Content Discovery & Evaluation phase (Phase 0)"
+      - "🆕 Design System & Theme Planning phase (Phase 1)"
+      - "🆕 Diagram & Visualization Generation phase (Phase 2)"
+      - "🆕 Content Generation via Python scripts (Phase 3)"
+      - "🆕 HTML View Generation - Python-only (Phase 5)"
+      - "🆕 D3.js force-directed architecture diagrams"
+      - "🆕 Mermaid flowcharts, sequence, class, ER diagrams"
+      - "🆕 Chart.js interactive metrics visualizations"
+      - "🆕 Plotly scientific/analytics dashboards"
+      - "🆕 Three.js 3D system visualizations"
+      - "🆕 Responsive design validation (mobile/tablet/desktop)"
+      - "🆕 Portrait/landscape orientation support"
+      - "🆕 CSS effects: blur, glow, shimmer, pulse, gradient-shift"
+      - "🆕 Knowledge library consultation"
+      - "🆕 Internet enhancement capability"
+      - "🆕 Staleness evaluation for refresh decisions"
+      - "🆕 Comprehensive content gap analysis"
+      - "🆕 GitHub Pages constraint compliance"
+      - "✨ Enhanced with visual design best practices"
+      - "✨ Professional subtle animations"
+      - "✨ Complete Python-based generation (no manual HTML)"
+  
+  - version: "2.0.0"
+    date: "2026-01-06"
+    changes:
+      - "State-aware pre-flight validation system"
+      - "Audit logging integration"
+      - "Brain protection (SKULL) rules enforcement"
+      - "Knowledge base inheritance (Tier 0, 2, 3)"
+      - "Atomic operation framework with rollback"
+      - "CSS class registry validation"
+      - "Inline style prohibition enforcement"
+      - "Approved pattern library integration"
+      - "Git checkpoint automation"
+      - "Python-only generation mandate"
+  
+  - version: "1.4.0"
+    date: "2026-01-05"
+    changes:
+      - "Initial cortex-docs prompt created"
+      - "Basic glassmorphism standardization"
+      - "7-color palette support"
+
+# ═══════════════════════════════════════════════════════════════
+# PYTHON SCRIPT TEMPLATES & REQUIREMENTS
+# ═══════════════════════════════════════════════════════════════
+
+python_scripts:
+  directory: "scripts/documentation/"
+  
+  required_libraries:
+    - name: "beautifulsoup4"
+      version: ">=4.12.0"
+      purpose: "HTML parsing and manipulation"
+    
+    - name: "jinja2"
+      version: ">=3.1.0"
+      purpose: "Template rendering for HTML generation"
+    
+    - name: "pyyaml"
+      version: ">=6.0"
+      purpose: "YAML configuration loading"
+    
+    - name: "markdown"
+      version: ">=3.5"
+      purpose: "Markdown to HTML conversion"
+    
+    - name: "pygments"
+      version: ">=2.17"
+      purpose: "Code syntax highlighting"
+  
+  script_manifest:
+    phase_0_content_discovery:
+      - "scan_workspace.py"
+      - "analyze_existing_docs.py"
+      - "identify_gaps.py"
+      - "evaluate_staleness.py"
+      - "identify_diagram_opportunities.py"
+      - "consult_knowledge_library.py"
+    
+    phase_1_design_planning:
+      - "load_glassmorphism_standards.py"
+      - "generate_color_scheme.py"
+      - "plan_responsive_design.py"
+      - "design_css_effects.py"
+      - "consult_best_practices.py"
+    
+    phase_2_diagram_generation:
+      - "generate_d3_architecture.py"
+      - "generate_mermaid_diagrams.py"
+      - "generate_chartjs_metrics.py"
+      - "generate_svg_illustrations.py"
+      - "generate_threejs_visualizations.py"
+    
+    phase_3_content_generation:
+      - "generate_api_docs.py"
+      - "generate_architecture_docs.py"
+      - "generate_tutorials.py"
+      - "generate_integration_guides.py"
+      - "generate_comprehensive_content.py"
+    
+    phase_5_view_generation:
+      - "generate_level1_views.py"
+      - "generate_level2_views.py"
+      - "generate_interactive_dashboards.py"
+      - "generate_responsive_views.py"
+      - "apply_css_effects.py"
+    
+    phase_6_validation:
+      - "validate_all_pages.py"
+      - "generate_comprehensive_report.py"
+  
+  template_structure:
+    header: |
+      #!/usr/bin/env python3
+      \"\"\"
+      {script_name}
+      {description}
+      
+      Part of CORTEX Documentation Orchestrator v3.0
+      Author: Asif Hussain
+      Copyright: © 2026 Asif Hussain. All rights reserved.
+      \"\"\"
+      
+      import sys
+      import json
+      from pathlib import Path
+      from typing import Dict, Any, List
+      
+      # Add project root to path
+      project_root = Path(__file__).parent.parent.parent
+      sys.path.insert(0, str(project_root))
+    
+    argparse_template: |
+      import argparse
+      
+      def parse_args():
+          parser = argparse.ArgumentParser(description="{description}")
+          {arg_definitions}
+          return parser.parse_args()
+    
+    main_structure: |
+      def main():
+          args = parse_args()
+          
+          # Load inputs
+          {input_loading}
+          
+          # Execute core logic
+          result = {core_function}(inputs)
+          
+          # Save outputs
+          save_output(result, args.output)
+          
+          print(f"✅ {script_name} complete")
+          return 0
+      
+      if __name__ == "__main__":
+          sys.exit(main())
+
+# ═══════════════════════════════════════════════════════════════
+# RESPONSIVE DESIGN SPECIFICATIONS
+# ═══════════════════════════════════════════════════════════════
+
+responsive_design:
+  breakpoints:
+    mobile:
+      min_width: 320px
+      max_width: 767px
+      grid_columns: 1
+      font_scale: 0.9
+      card_spacing: "var(--space-sm)"
+    
+    tablet:
+      min_width: 768px
+      max_width: 1023px
+      grid_columns: 2
+      font_scale: 1.0
+      card_spacing: "var(--space-md)"
+    
+    desktop:
+      min_width: 1024px
+      max_width: 1439px
+      grid_columns: 3
+      font_scale: 1.0
+      card_spacing: "var(--space-lg)"
+    
+    wide:
+      min_width: 1440px
+      grid_columns: 4
+      font_scale: 1.1
+      card_spacing: "var(--space-lg)"
+  
+  orientations:
+    portrait:
+      aspect_ratio: "9:16"
+      optimizations:
+        - "Single column layout for mobile"
+        - "Vertical scrolling emphasis"
+        - "Touch-friendly spacing (min 44px)"
+    
+    landscape:
+      aspect_ratio: "16:9"
+      optimizations:
+        - "Multi-column layout"
+        - "Horizontal navigation"
+        - "Reduced vertical spacing"
+  
+  accessibility:
+    wcag_level: "AA"
+    requirements:
+      - "Color contrast ratio >= 4.5:1"
+      - "Touch targets >= 44x44px"
+      - "Keyboard navigation support"
+      - "Screen reader compatibility"
+      - "Focus indicators visible"
+      - "No autoplay animations"
+
+# ═══════════════════════════════════════════════════════════════
+# CSS EFFECTS LIBRARY
+# ═══════════════════════════════════════════════════════════════
+
+css_effects:
+  glassmorphism_effects:
+    blur:
+      property: "backdrop-filter"
+      values: ["blur(10px)", "blur(20px)", "blur(30px)"]
+      fallback: "background: rgba(26, 31, 58, 0.95)"
+    
+    glow:
+      property: "box-shadow"
+      values:
+        - "0 0 20px rgba(0, 212, 255, 0.3)"
+        - "0 0 40px rgba(0, 212, 255, 0.4)"
+        - "0 0 60px rgba(0, 212, 255, 0.5)"
+      animation: "pulse 3s ease-in-out infinite"
+    
+    shimmer:
+      property: "background"
+      values:
+        - "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%)"
+      animation: "shimmer 2s linear infinite"
+    
+    gradient_shift:
+      property: "background"
+      values:
+        - "linear-gradient(135deg, color1, color2)"
+      animation: "gradient-shift 10s ease infinite"
+  
+  animation_keyframes:
+    pulse: |
+      @keyframes pulse {
+        0%, 100% { opacity: 0.8; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.02); }
+      }
+    
+    shimmer: |
+      @keyframes shimmer {
+        0% { background-position: -1000px 0; }
+        100% { background-position: 1000px 0; }
+      }
+    
+    gradient_shift: |
+      @keyframes gradient-shift {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+      }
+    
+    float: |
+      @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+      }
+
