@@ -1,0 +1,127 @@
+#!/bin/bash
+#
+# CORTEX 6.0 Pre-Commit Hook
+# 
+# Validates before every commit:
+# 1. Architecture compliance (test structure, core components)
+# 2. Audit trail verification (ensures work is logged)
+# 3. SKULL rule compliance (brain protection)
+#
+# Author: Asif Hussain
+# Copyright © 2025-2026 Asif Hussain. All rights reserved.
+#
+# Installation:
+#   cp scripts/pre-commit .git/hooks/pre-commit
+#   chmod +x .git/hooks/pre-commit
+#
+# To bypass (emergency only):
+#   git commit --no-verify
+#
+
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+
+echo ""
+echo "🧠 CORTEX 6.0 Pre-Commit Validation"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+# Check if we have staged changes
+STAGED_COUNT=$(git diff --cached --name-only | wc -l | tr -d ' ')
+if [ "$STAGED_COUNT" -eq "0" ]; then
+    echo "⚠️  No staged changes detected"
+    exit 0
+fi
+
+echo "📁 Staged files: $STAGED_COUNT"
+
+# ============================================================================
+# Step 1: Audit Trail Verification
+# ============================================================================
+echo ""
+echo "📝 Step 1: Audit Trail Verification"
+echo "------------------------------------------------------------"
+
+if [ -f "$PROJECT_ROOT/scripts/verify_audit_trail.py" ]; then
+    python3 "$PROJECT_ROOT/scripts/verify_audit_trail.py"
+    AUDIT_EXIT=$?
+    
+    if [ $AUDIT_EXIT -ne 0 ]; then
+        echo ""
+        echo "❌ AUDIT TRAIL VERIFICATION FAILED"
+        echo ""
+        echo "Your work must be logged before committing."
+        echo ""
+        echo "💡 Quick fix:"
+        echo "   python3 .asif/AI-Learning/cortex6/source-of-truth/update_session.py --log 'description of work'"
+        echo ""
+        echo "⚠️  To bypass (EMERGENCY ONLY): git commit --no-verify"
+        exit 1
+    fi
+else
+    echo "⚠️  Audit verification script not found - skipping"
+fi
+
+# ============================================================================
+# Step 2: Architecture Audit
+# ============================================================================
+echo ""
+echo "🔍 Step 2: Architecture Compliance"
+echo "------------------------------------------------------------"
+
+if [ -f "$PROJECT_ROOT/scripts/audit_architecture.py" ]; then
+    python3 "$PROJECT_ROOT/scripts/audit_architecture.py"
+    ARCH_EXIT=$?
+    
+    if [ $ARCH_EXIT -ne 0 ]; then
+        echo ""
+        echo "❌ ARCHITECTURE AUDIT FAILED"
+        echo ""
+        echo "Fix the architecture issues before committing."
+        echo ""
+        echo "⚠️  To bypass (EMERGENCY ONLY): git commit --no-verify"
+        exit 1
+    fi
+else
+    echo "⚠️  Architecture audit script not found - skipping"
+fi
+
+# ============================================================================
+# Step 3: Quick SKULL Checks (inline for speed)
+# ============================================================================
+echo ""
+echo "🛡️  Step 3: SKULL Quick Checks"
+echo "------------------------------------------------------------"
+
+# Check for test files outside tests/
+TESTS_OUTSIDE=$(git diff --cached --name-only | grep -E "^test_.*\.py$" | grep -v "^tests/" || true)
+if [ -n "$TESTS_OUTSIDE" ]; then
+    echo "❌ SKULL VIOLATION: Test files outside tests/ directory:"
+    echo "$TESTS_OUTSIDE"
+    echo ""
+    echo "Move test files to tests/ directory"
+    exit 1
+fi
+
+# Check for sensitive data patterns (basic check)
+SENSITIVE=$(git diff --cached -U0 | grep -iE "(password|secret|api_key|token)\s*=" | head -5 || true)
+if [ -n "$SENSITIVE" ]; then
+    echo "⚠️  WARNING: Possible sensitive data detected:"
+    echo "$SENSITIVE"
+    echo ""
+    echo "Review before committing. Use environment variables for secrets."
+fi
+
+echo "✓ SKULL checks passed"
+
+# ============================================================================
+# Success
+# ============================================================================
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "✅ ALL CHECKS PASSED - Commit allowed"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+
+exit 0
