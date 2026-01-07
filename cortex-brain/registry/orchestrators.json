@@ -21,6 +21,45 @@
     "tags": {},
     "enabled": true
   },
+  "review_v2": {
+    "id": "review_v2",
+    "name": "CORTEX Review Orchestrator",
+    "version": "2.0.0",
+    "type": "autonomous",
+    "category": "quality_assurance",
+    "class_name": "ReviewOrchestratorV2",
+    "module_path": "src.orchestrators.review.review_orchestrator_v2",
+    "description": "Comprehensive epic plan and implementation validation with 7-phase analysis pipeline",
+    "manifest_path": "cortex-brain/manifests/orchestrators/review-orchestrator-v2.yaml",
+    "patterns": [
+      "^review\\s+epic$",
+      "^verify\\s+plan$",
+      "^cortex\\s+review$",
+      "^check\\s+alignment$",
+      "^validate\\s+implementation$",
+      "^review\\s+(.+?)\\s+plan$",
+      "^verify\\s+(.+?)\\s+epic$"
+    ],
+    "dependencies": [
+      "state_db",
+      "governance_rules",
+      "knowledge_library"
+    ],
+    "capabilities": [
+      "epic_validation",
+      "architecture_analysis",
+      "governance_enforcement",
+      "phase_progression_blocking",
+      "implementation_fidelity_check",
+      "static_analysis_integration"
+    ],
+    "tags": {
+      "phase_integration": "Phase 4 (Orchestrator Registry System)",
+      "epic": "cortex5-epic-v3",
+      "converted_from": "cortex-review.prompt.md"
+    },
+    "enabled": true
+  },
   "vacuum": {
     "id": "vacuum",
     "name": "Vacuum Orchestrator v2",
