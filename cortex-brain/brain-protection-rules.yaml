@@ -207,6 +207,128 @@ categories:
     4. Code duplicates file content (already accessible)
     5. Users explicitly request no code snippets
 
+- rule_id: NO_CONTINUATION_BLOAT
+  category: response_formatting
+  severity: blocked
+  name: Minimal Continuation Prompt Token Budget
+  description: |
+    CONTINUATION-PROMPT.md MUST stay under strict token budget for efficient session resumption.
+    Historical context and explanatory text belong in referenced files, not the prompt itself.
+    
+    Use POINTER PATTERN: Reference files for context, don't duplicate content.
+    Enable LAZY LOADING: Let GitHub Copilot load context files on-demand.
+  
+  enforcement:
+    trigger: plan_update_completion
+    action: block_if_exceeds_limits
+    
+  validation:
+    - "Line count ≤12 lines"
+    - "Token count <500 tokens (estimate: chars ÷ 4.5)"
+    - "File size <2KB"
+    - "No historical change logs (use tracking/history.json)"
+    - "No explanatory context (use phases/phase-XX.md)"
+    - "No multi-step checklists (reference cortex-planner.prompt.md)"
+    
+  implementation:
+    middleware: src.orchestrators.middleware.continuation_validator.ContinuationValidator
+    hook: post_plan_update
+    priority: 9
+    auto_trim: true
+    
+  template_format: |
+    Execute Phase {N}: {phase_name}
+    
+    Plan: {plan_name} | Progress: {X}% | Phase {N}/{total}
+    
+    Context: tracking/progress-tracker.json, phases/phase-{NN}-{name}.md
+    
+    Requirements & acceptance criteria defined in phase file.
+    Post-execution: Update progress tracker, run vacuum, regenerate viewer.
+  
+  allowed_sections:
+    - "Execute Phase [N]: [Name]" (header line)
+    - "Plan: [name] | Progress: [%] | Phase [X/Y]" (metadata line)
+    - "Context: [file references]" (pointer line)
+    - "Requirements & acceptance criteria..." (standard line)
+    - "Post-execution: Update..." (standard line)
+    - Blank lines for readability (max 2)
+    
+  forbidden_sections:
+    - Historical change logs ("Recent Changes", "Previous Changes")
+    - Explanatory context ("Governance Rules Integration Context")
+    - Multi-paragraph rationales
+    - Detailed checklists (use universal pattern from planner prompt)
+    - Timestamps (tracked in progress-tracker.json)
+    - Pending items list (tracked in progress-tracker.json)
+    
+  context_migration_targets:
+    recent_changes: "tracking/progress-tracker.json:last_changes"
+    historical_changes: "tracking/history.json"
+    governance_context: "phases/phase-XX.md:context section"
+    post_execution_steps: "cortex-planner.prompt.md (universal pattern)"
+    
+  examples:
+    pass:
+      - |
+        Execute Phase 1: Critical Blocker Resolution
+        
+        Plan: cortex5-epic | Progress: 7% | Phase 1/14
+        
+        Context: tracking/progress-tracker.json, phases/phase-01-blocker-resolution.md
+        
+        Requirements & acceptance criteria defined in phase file.
+        Post-execution: Update progress tracker, run vacuum, regenerate viewer.
+      
+    fail:
+      - |
+        Execute Phase 1: Critical Blocker Resolution
+        
+        Plan: cortex5-epic | Progress: 7% | Phase 1/14
+        
+        **Recent Changes (2026-01-07T09:00:00Z):** Governance Enhancement
+        - Added 3 SKULL rules...
+        - Added response_formatting category...
+        
+        **Previous Changes (2026-01-07T08:00:00Z):** Review Orchestrator
+        - Converted cortex-review.prompt.md...
+        
+        **Governance Context:**
+        These rules address critical user pain points...
+        
+        (41 lines, ~1800 tokens - BLOCKED for excessive bloat)
+        
+  token_optimization:
+    target_reduction: "70-80%"
+    baseline_tokens: 1800
+    optimized_tokens: 500
+    savings_per_session: 1300
+    
+  references:
+    - ".github/copilot-instructions.md (CONCISE_DEFAULT accessibility rule)"
+    - "cortex-planner.prompt.md:593-620 (continuation prompt specification)"
+    - "cortex-planner.prompt.md:869 (original NO_CONTINUATION_BLOAT rule)"
+    
+  related_rules:
+    - NO_SUMMARY_FILE_GENERATION
+    - VISUAL_PROGRESS_RESPONSE_FORMAT
+    - INCREMENTAL_AUTONOMOUS_EXECUTION
+    
+  rationale: |
+    Minimal continuation prompts enable:
+    1. Token efficiency: 70-80% reduction per session (~1300 tokens saved)
+    2. Lazy loading: Context files loaded only when needed
+    3. Scalability: Works for long-running epics (no bloat accumulation)
+    4. Maintainability: Single source of truth (referenced files)
+    5. Accessibility: Cognitive load reduction (concise format)
+    
+    Bloated continuation prompts harm by:
+    1. Token waste: Duplicate content already in progress-tracker.json
+    2. Context pollution: Unnecessary history clutters prompt
+    3. Maintenance burden: Must update multiple locations
+    4. Rule violations: Exceeds <20 line target (cortex-planner.prompt.md:869)
+    5. User friction: Longer prompts = slower session startup
+
 - rule_id: TDD_ENFORCEMENTs
 - orchestration_lifecycle
 - response_formatting
