@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-01-07T18:01:41.603721",
+  "timestamp": "2026-01-07T18:03:58.958498",
   "success": true,
   "passed": [
     "\u2713 tests/__init__.py",
@@ -14,7 +14,7 @@
     "\u2713 Audit log directory exists",
     "\u2713 Found 84 recent audit log(s)",
     "\u2713 Session audit log has 6 entries",
-    "\u2713 Checked 25 staged file(s)"
+    "\u2713 Checked 1 staged file(s)"
   ],
   "warnings": [],
   "errors": []
