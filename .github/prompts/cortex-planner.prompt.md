@@ -222,20 +222,248 @@ analysis:
    - **Deferred:** Queue for later (low priority or high dependencies)
    - **Blocked:** Cannot proceed (missing critical dependencies)
 
-5. **Snowball Effect Optimization**
+5. **Governance Rule Integration** (If Request Contains New Rules)
+   
+   **When user request includes new governance rules:**
+   
+   a. **Load Existing Governance Context**
+      - Parse `cortex-brain/brain-protection-rules.yaml` (SKULL rules)
+      - Parse `cortex-brain/cleanup-rules.yaml` (vacuum rules)
+      - Parse `cortex-brain/governance-schema.sql` (database constraints)
+      - Parse `cortex-brain/operations-config.yaml` (orchestrator rules)
+   
+   b. **Analyze New Rule**
+      ```yaml
+      rule_analysis:
+        proposed_rule:
+          name: "NO_INLINE_SECRETS"
+          category: "security"
+          scope: "code_artifacts"
+          enforcement: "blocking"
+          description: "Block commits containing hardcoded secrets"
+        
+        similarity_check:
+          existing_rules:
+            - rule: "GIT_ISOLATION"
+              similarity: 0.3
+              overlap: "Both enforce git commit validation"
+            - rule: "SANITIZATION_MANDATORY"
+              similarity: 0.7
+              overlap: "Both prevent sensitive data exposure"
+          
+          verdict: "partial_overlap"
+          recommendation: "Merge with SANITIZATION_MANDATORY as sub-rule"
+      ```
+   
+   c. **Deduplication Strategy**
+      - **Duplicate (similarity ≥ 0.9):** Skip insertion, reference existing rule
+      - **High Overlap (0.7 ≤ similarity < 0.9):** Merge as sub-rule or enhancement
+      - **Partial Overlap (0.3 ≤ similarity < 0.7):** Create separate rule, add cross-reference
+      - **Novel (similarity < 0.3):** Insert as new standalone rule
+   
+   d. **Category Assignment**
+      
+      **Existing Categories:**
+      - `file_organization` → File structure, naming, folder hierarchy
+      - `code_quality` → Linting, formatting, type safety
+      - `security` → Authentication, secrets, injection prevention
+      - `performance` → Caching, query optimization, memory management
+      - `data_integrity` → Transactions, constraints, validation
+      - `testing` → Coverage, test isolation, fixture management
+      - `deployment` → CI/CD, rollback, monitoring
+      - `orchestration` → Workflow routing, state management, concurrency
+      - `compliance` → Licensing, audit logging, regulatory requirements
+      
+      **Category Selection Algorithm:**
+      ```python
+      def assign_category(rule: Dict) -> str:
+          keywords = extract_keywords(rule['description'])
+          
+          category_scores = {
+              'file_organization': count_matches(keywords, ['file', 'folder', 'directory', 'path', 'structure']),
+              'code_quality': count_matches(keywords, ['lint', 'format', 'type', 'style', 'refactor']),
+              'security': count_matches(keywords, ['secret', 'auth', 'permission', 'encrypt', 'sanitize']),
+              'performance': count_matches(keywords, ['cache', 'optimize', 'memory', 'speed', 'latency']),
+              'data_integrity': count_matches(keywords, ['transaction', 'constraint', 'validate', 'consistency']),
+              'testing': count_matches(keywords, ['test', 'coverage', 'mock', 'fixture', 'assertion']),
+              'deployment': count_matches(keywords, ['deploy', 'rollback', 'ci', 'cd', 'release']),
+              'orchestration': count_matches(keywords, ['workflow', 'route', 'state', 'orchestrate', 'pipeline']),
+              'compliance': count_matches(keywords, ['audit', 'license', 'compliance', 'regulatory', 'gdpr'])
+          }
+          
+          return max(category_scores, key=category_scores.get)
+      ```
+   
+   e. **Intelligent Insertion**
+      
+      **For YAML Files (brain-protection-rules.yaml, cleanup-rules.yaml):**
+      ```yaml
+      # Insert alphabetically within category
+      security:
+        - name: "GIT_ISOLATION"
+          severity: "critical"
+        
+        - name: "NO_INLINE_SECRETS"  # ← New rule inserted here
+          severity: "critical"
+          enforcement: "blocking"
+          validator: "src.validators.secret_scanner.SecretScanner"
+          patterns:
+            - "password\\s*=\\s*['\"].*['\"]"
+            - "api_key\\s*=\\s*['\"].*['\"]"
+            - "AWS_SECRET_ACCESS_KEY"
+          exceptions:
+            - "test_fixtures/"
+            - "*.example.*"
+        
+        - name: "SANITIZATION_MANDATORY"
+          severity: "critical"
+      ```
+      
+      **For SQL Schema (governance-schema.sql):**
+      ```sql
+      -- Insert constraint in appropriate table
+      CREATE TABLE governance_rules (
+          rule_id TEXT PRIMARY KEY,
+          category TEXT NOT NULL,
+          severity TEXT CHECK(severity IN ('info', 'warning', 'error', 'critical')),
+          enforcement TEXT CHECK(enforcement IN ('advisory', 'blocking')),
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          
+          -- New constraint added here
+          CONSTRAINT unique_rule_per_category UNIQUE(rule_id, category)
+      );
+      
+      -- Index optimization (auto-vacuum trigger)
+      CREATE INDEX IF NOT EXISTS idx_governance_category ON governance_rules(category);
+      CREATE INDEX IF NOT EXISTS idx_governance_severity ON governance_rules(severity);
+      ```
+      
+      **For Orchestrator Config (operations-config.yaml):**
+      ```yaml
+      orchestrators:
+        validation_hooks:
+          pre_commit:
+            - rule: "NO_INLINE_SECRETS"
+              orchestrator: "sanitization_v2"
+              priority: 1  # Run before other validators
+          
+          post_phase:
+            - rule: "VACUUM_MANDATORY"
+              orchestrator: "vacuum_v2"
+              priority: 10  # Run after phase completion
+      ```
+   
+   f. **SQLite Database Vacuum** (If Governance Schema Updated)
+      
+      **Vacuum Trigger Conditions:**
+      - New governance rules added (INSERT operations)
+      - Rules deleted (DELETE operations)
+      - Large batch updates (UPDATE > 100 rows)
+      - Database size > 10MB with fragmentation ≥ 20%
+      
+      **Vacuum Execution:**
+      ```python
+      import sqlite3
+      from pathlib import Path
+      
+      def vacuum_governance_db(db_path: Path) -> Dict[str, Any]:
+          """
+          Vacuum SQLite database to reclaim space and optimize performance.
+          
+          Returns:
+              Vacuum report with before/after metrics
+          """
+          conn = sqlite3.connect(db_path)
+          cursor = conn.cursor()
+          
+          # Get pre-vacuum metrics
+          cursor.execute("PRAGMA page_count")
+          page_count_before = cursor.fetchone()[0]
+          
+          cursor.execute("PRAGMA freelist_count")
+          freelist_before = cursor.fetchone()[0]
+          
+          # Calculate fragmentation
+          fragmentation = (freelist_before / page_count_before) * 100
+          
+          # Vacuum if needed
+          if fragmentation >= 20:
+              cursor.execute("VACUUM")
+              cursor.execute("ANALYZE")  # Update query planner statistics
+              
+              # Get post-vacuum metrics
+              cursor.execute("PRAGMA page_count")
+              page_count_after = cursor.fetchone()[0]
+              
+              cursor.execute("PRAGMA freelist_count")
+              freelist_after = cursor.fetchone()[0]
+              
+              space_reclaimed = (page_count_before - page_count_after) * 4096  # 4KB page size
+              
+              conn.close()
+              
+              return {
+                  "status": "vacuumed",
+                  "fragmentation_before": f"{fragmentation:.2f}%",
+                  "fragmentation_after": f"{(freelist_after / page_count_after) * 100:.2f}%",
+                  "space_reclaimed_kb": space_reclaimed / 1024,
+                  "page_count_reduction": page_count_before - page_count_after
+              }
+          else:
+              conn.close()
+              return {
+                  "status": "skipped",
+                  "reason": f"Fragmentation ({fragmentation:.2f}%) below threshold (20%)"
+              }
+      
+      # Execute vacuum
+      db_path = Path("cortex-brain/database/governance.db")
+      vacuum_report = vacuum_governance_db(db_path)
+      ```
+      
+      **Vacuum Schedule:**
+      - **Immediate:** After bulk governance rule changes (≥5 rules)
+      - **Deferred:** After single rule changes (batch with next bulk operation)
+      - **Periodic:** Weekly maintenance (via CRON or scheduler)
+   
+   g. **Cross-Reference Linking**
+      ```yaml
+      # Link related rules for orchestrator efficiency
+      rule_graph:
+        NO_INLINE_SECRETS:
+          enforced_by: "sanitization_v2"
+          validates_before: ["GIT_ISOLATION", "deployment_v2"]
+          related_rules:
+            - "SANITIZATION_MANDATORY"  # Parent category
+            - "GIT_ISOLATION"  # Sequential dependency
+          
+          conflict_resolution:
+            - rule: "SANITIZATION_MANDATORY"
+              strategy: "merge_patterns"
+              priority: "NO_INLINE_SECRETS has higher specificity"
+      ```
+
+6. **Snowball Effect Optimization**
    - Group related tasks for momentum
    - Schedule foundational work first
    - Parallel track independent streams
    - Front-load risk mitigation
+   - **If governance rules added:** Run vacuum + rule validation before execution
 
 **Output Structure:**
 ```yaml
 integration_plan:
   request_classification:
-    intent: "continue|add|modify|investigate|optimize"
+    intent: "continue|add|modify|investigate|optimize|add_governance_rule"
     affected_phases: [...]
     insertion_points: [...]
     conflicts: [...]
+    governance_changes:  # New section
+      new_rules_detected: true
+      rule_count: 1
+      categories_affected: ["security"]
+      deduplication_required: true
+      vacuum_required: true
   
   prioritization:
     immediate_tasks:
@@ -253,6 +481,41 @@ integration_plan:
       - task: "..."
         blocking_dependencies: [...]
         unblock_strategy: "..."
+  
+  governance_integration:  # New section for governance rule changes
+    analysis:
+      proposed_rules:
+        - name: "NO_INLINE_SECRETS"
+          category: "security"
+          similarity_to_existing: 0.7
+          verdict: "merge_with_SANITIZATION_MANDATORY"
+      
+      deduplication_results:
+        duplicates_found: 0
+        merges_required: 1
+        novel_rules: 0
+    
+    insertion_plan:
+      target_files:
+        - file: "cortex-brain/brain-protection-rules.yaml"
+          section: "security"
+          position: "after_GIT_ISOLATION"
+        
+        - file: "cortex-brain/governance-schema.sql"
+          operation: "ALTER TABLE governance_rules ADD CONSTRAINT..."
+          vacuum_required: true
+      
+      cross_references:
+        - source: "NO_INLINE_SECRETS"
+          links_to: ["SANITIZATION_MANDATORY", "GIT_ISOLATION"]
+          relationship: "enhances"
+    
+    database_maintenance:
+      vacuum_required: true
+      vacuum_trigger: "governance_schema_updated"
+      estimated_space_reclaim: "2.4 MB"
+      fragmentation_before: "23.5%"
+      fragmentation_after_estimate: "< 5%"
   
   snowball_strategy:
     momentum_groups: [...]
@@ -604,6 +867,10 @@ integration_plan:
 | **GIT_COMMIT_ATOMIC** | One commit per phase (via cortex-git-commit) |
 | **SNOWBALL_OPTIMIZATION** | Prioritize for momentum (foundational → complex) |
 | **NO_CONTINUATION_BLOAT** | CONTINUATION-PROMPT.md stays <20 lines, no summaries, only next action |
+| **GOVERNANCE_RULE_DEDUPLICATION** | Analyze new rules against existing rules; merge/link if similarity ≥ 0.7 |
+| **GOVERNANCE_CATEGORY_INTEGRITY** | Insert rules alphabetically within correct category; validate category assignment |
+| **DATABASE_VACUUM_ON_GOVERNANCE_CHANGE** | Vacuum SQLite database after governance schema changes (≥20% fragmentation) |
+| **CROSS_REFERENCE_ENFORCEMENT** | Link related governance rules; maintain rule dependency graph |
 
 ---
 
@@ -864,7 +1131,26 @@ integration_plan:
 
 ---
 
-### Example 4: Investigate Plan Issue
+### Example 4: Add Governance Rule
+```bash
+/cortex-planner cortex5-epic "add governance rule: NO_INLINE_SECRETS - block commits with hardcoded API keys, passwords, or tokens"
+```
+
+**Output:**
+- Analyzes proposed rule "NO_INLINE_SECRETS"
+- Loads existing governance rules from brain-protection-rules.yaml
+- Detects 70% similarity with "SANITIZATION_MANDATORY"
+- Verdict: Merge as enhancement (high specificity for secrets)
+- Inserts in `security` category (after GIT_ISOLATION)
+- Adds cross-reference links: SANITIZATION_MANDATORY ← NO_INLINE_SECRETS → GIT_ISOLATION
+- Updates governance-schema.sql with new constraint
+- Vacuums database: 23.5% fragmentation → 4.2% (reclaimed 2.4 MB)
+- Registers validation hook: pre_commit → sanitization_v2 orchestrator
+- NO plan phases modified (governance only)
+
+---
+
+### Example 5: Investigate Plan Issue
 ```bash
 /cortex-planner database-refactor-feature "investigate why tests failing in Phase 2"
 ```
