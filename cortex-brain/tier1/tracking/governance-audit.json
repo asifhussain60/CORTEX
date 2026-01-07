@@ -1,0 +1,1073 @@
+[
+  {
+    "file_path": "src/orchestrators/response_renderer.py",
+    "is_valid": false,
+    "errors": [
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/response_renderer.py",
+        "line_number": 21,
+        "message": "Function '__init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __init__(...) -> ReturnType:"
+      }
+    ],
+    "warnings": [],
+    "info": [],
+    "summary": "Validation FAILED: 1 errors, 0 warnings, 0 info"
+  },
+  {
+    "file_path": "src/orchestrators/state_manager.py",
+    "is_valid": false,
+    "errors": [
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/state_manager.py",
+        "line_number": 88,
+        "message": "Function '__init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __init__(...) -> ReturnType:"
+      }
+    ],
+    "warnings": [
+      {
+        "severity": "warning",
+        "category": "solid",
+        "rule": "SOLID-SRP-001",
+        "file_path": "src/orchestrators/state_manager.py",
+        "line_number": 76,
+        "message": "Class 'StateManager' has 12 public methods (>3), may violate SRP",
+        "fix_suggestion": "Consider splitting into smaller, focused classes"
+      }
+    ],
+    "info": [],
+    "summary": "Validation FAILED: 1 errors, 1 warnings, 0 info"
+  },
+  {
+    "file_path": "src/orchestrators/execution_engine.py",
+    "is_valid": false,
+    "errors": [
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/execution_engine.py",
+        "line_number": 93,
+        "message": "Function '__init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __init__(...) -> ReturnType:"
+      },
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/execution_engine.py",
+        "line_number": 332,
+        "message": "Function '__init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __init__(...) -> ReturnType:"
+      },
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/execution_engine.py",
+        "line_number": 379,
+        "message": "Function '__init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __init__(...) -> ReturnType:"
+      }
+    ],
+    "warnings": [
+      {
+        "severity": "warning",
+        "category": "solid",
+        "rule": "SOLID-SRP-001",
+        "file_path": "src/orchestrators/execution_engine.py",
+        "line_number": 81,
+        "message": "Class 'ExecutionEngine' has 7 public methods (>3), may violate SRP",
+        "fix_suggestion": "Consider splitting into smaller, focused classes"
+      }
+    ],
+    "info": [],
+    "summary": "Validation FAILED: 3 errors, 1 warnings, 0 info"
+  },
+  {
+    "file_path": "src/orchestrators/__init__.py",
+    "is_valid": true,
+    "errors": [],
+    "warnings": [],
+    "info": [],
+    "summary": "Validation PASSED: 0 errors, 0 warnings, 0 info"
+  },
+  {
+    "file_path": "src/orchestrators/master_orchestrator.py",
+    "is_valid": false,
+    "errors": [
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/master_orchestrator.py",
+        "line_number": 60,
+        "message": "Function '__init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __init__(...) -> ReturnType:"
+      }
+    ],
+    "warnings": [
+      {
+        "severity": "warning",
+        "category": "solid",
+        "rule": "SOLID-SRP-001",
+        "file_path": "src/orchestrators/master_orchestrator.py",
+        "line_number": 30,
+        "message": "Class 'MasterOrchestrator' has 6 public methods (>3), may violate SRP",
+        "fix_suggestion": "Consider splitting into smaller, focused classes"
+      },
+      {
+        "severity": "warning",
+        "category": "code_quality",
+        "rule": "QUALITY-001",
+        "file_path": "src/orchestrators/master_orchestrator.py",
+        "line_number": 192,
+        "message": "Function 'handle_request' has cyclomatic complexity 11 (>10)",
+        "fix_suggestion": "Refactor to reduce complexity (extract methods, simplify logic)"
+      }
+    ],
+    "info": [],
+    "summary": "Validation FAILED: 1 errors, 2 warnings, 0 info"
+  },
+  {
+    "file_path": "src/orchestrators/audit_logger.py",
+    "is_valid": false,
+    "errors": [
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/audit_logger.py",
+        "line_number": 398,
+        "message": "Function 'set_audit_logger' missing return type annotation",
+        "fix_suggestion": "Add return type: def set_audit_logger(...) -> ReturnType:"
+      },
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/audit_logger.py",
+        "line_number": 77,
+        "message": "Function '__init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __init__(...) -> ReturnType:"
+      },
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/audit_logger.py",
+        "line_number": 135,
+        "message": "Function 'log' missing return type annotation",
+        "fix_suggestion": "Add return type: def log(...) -> ReturnType:"
+      },
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/audit_logger.py",
+        "line_number": 210,
+        "message": "Function 'trace' missing return type annotation",
+        "fix_suggestion": "Add return type: def trace(...) -> ReturnType:"
+      },
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/audit_logger.py",
+        "line_number": 221,
+        "message": "Function 'info' missing return type annotation",
+        "fix_suggestion": "Add return type: def info(...) -> ReturnType:"
+      },
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/audit_logger.py",
+        "line_number": 232,
+        "message": "Function 'warning' missing return type annotation",
+        "fix_suggestion": "Add return type: def warning(...) -> ReturnType:"
+      },
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/audit_logger.py",
+        "line_number": 243,
+        "message": "Function 'error' missing return type annotation",
+        "fix_suggestion": "Add return type: def error(...) -> ReturnType:"
+      },
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/audit_logger.py",
+        "line_number": 254,
+        "message": "Function 'critical' missing return type annotation",
+        "fix_suggestion": "Add return type: def critical(...) -> ReturnType:"
+      },
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/audit_logger.py",
+        "line_number": 351,
+        "message": "Function 'export_session' missing return type annotation",
+        "fix_suggestion": "Add return type: def export_session(...) -> ReturnType:"
+      }
+    ],
+    "warnings": [
+      {
+        "severity": "warning",
+        "category": "solid",
+        "rule": "SOLID-SRP-001",
+        "file_path": "src/orchestrators/audit_logger.py",
+        "line_number": 64,
+        "message": "Class 'EnterpriseAuditLogger' has 9 public methods (>3), may violate SRP",
+        "fix_suggestion": "Consider splitting into smaller, focused classes"
+      },
+      {
+        "severity": "warning",
+        "category": "code_quality",
+        "rule": "QUALITY-001",
+        "file_path": "src/orchestrators/audit_logger.py",
+        "line_number": 265,
+        "message": "Function 'search' has cyclomatic complexity 18 (>10)",
+        "fix_suggestion": "Refactor to reduce complexity (extract methods, simplify logic)"
+      }
+    ],
+    "info": [],
+    "summary": "Validation FAILED: 9 errors, 2 warnings, 0 info"
+  },
+  {
+    "file_path": "src/orchestrators/context_middleware.py",
+    "is_valid": false,
+    "errors": [
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/context_middleware.py",
+        "line_number": 21,
+        "message": "Function '__init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __init__(...) -> ReturnType:"
+      }
+    ],
+    "warnings": [],
+    "info": [],
+    "summary": "Validation FAILED: 1 errors, 0 warnings, 0 info"
+  },
+  {
+    "file_path": "src/orchestrators/response_middleware.py",
+    "is_valid": false,
+    "errors": [
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/response_middleware.py",
+        "line_number": 21,
+        "message": "Function '__init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __init__(...) -> ReturnType:"
+      }
+    ],
+    "warnings": [],
+    "info": [],
+    "summary": "Validation FAILED: 1 errors, 0 warnings, 0 info"
+  },
+  {
+    "file_path": "src/orchestrators/pattern_router.py",
+    "is_valid": false,
+    "errors": [
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/pattern_router.py",
+        "line_number": 38,
+        "message": "Function '__post_init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __post_init__(...) -> ReturnType:"
+      },
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/pattern_router.py",
+        "line_number": 92,
+        "message": "Function '__init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __init__(...) -> ReturnType:"
+      }
+    ],
+    "warnings": [
+      {
+        "severity": "warning",
+        "category": "solid",
+        "rule": "SOLID-SRP-001",
+        "file_path": "src/orchestrators/pattern_router.py",
+        "line_number": 71,
+        "message": "Class 'PatternRouter' has 5 public methods (>3), may violate SRP",
+        "fix_suggestion": "Consider splitting into smaller, focused classes"
+      }
+    ],
+    "info": [],
+    "summary": "Validation FAILED: 2 errors, 1 warnings, 0 info"
+  },
+  {
+    "file_path": "src/orchestrators/middleware/governance_checkpoint.py",
+    "is_valid": false,
+    "errors": [
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/middleware/governance_checkpoint.py",
+        "line_number": 36,
+        "message": "Function '__post_init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __post_init__(...) -> ReturnType:"
+      },
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/middleware/governance_checkpoint.py",
+        "line_number": 57,
+        "message": "Function '__init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __init__(...) -> ReturnType:"
+      },
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/middleware/governance_checkpoint.py",
+        "line_number": 276,
+        "message": "Function 'enforce_blocking' missing return type annotation",
+        "fix_suggestion": "Add return type: def enforce_blocking(...) -> ReturnType:"
+      }
+    ],
+    "warnings": [
+      {
+        "severity": "warning",
+        "category": "docstrings",
+        "rule": "DOC-002",
+        "file_path": "src/orchestrators/middleware/governance_checkpoint.py",
+        "line_number": 36,
+        "message": "Function '__post_init__' missing docstring",
+        "fix_suggestion": "Add docstring with Args, Returns, Raises sections"
+      },
+      {
+        "severity": "warning",
+        "category": "solid",
+        "rule": "SOLID-SRP-001",
+        "file_path": "src/orchestrators/middleware/governance_checkpoint.py",
+        "line_number": 46,
+        "message": "Class 'GovernanceCheckpointMiddleware' has 7 public methods (>3), may violate SRP",
+        "fix_suggestion": "Consider splitting into smaller, focused classes"
+      },
+      {
+        "severity": "warning",
+        "category": "code_quality",
+        "rule": "QUALITY-001",
+        "file_path": "src/orchestrators/middleware/governance_checkpoint.py",
+        "line_number": 307,
+        "message": "Function 'get_summary' has cyclomatic complexity 11 (>10)",
+        "fix_suggestion": "Refactor to reduce complexity (extract methods, simplify logic)"
+      }
+    ],
+    "info": [],
+    "summary": "Validation FAILED: 3 errors, 3 warnings, 0 info"
+  },
+  {
+    "file_path": "src/orchestrators/middleware/__init__.py",
+    "is_valid": true,
+    "errors": [],
+    "warnings": [],
+    "info": [],
+    "summary": "Validation PASSED: 0 errors, 0 warnings, 0 info"
+  },
+  {
+    "file_path": "src/orchestrators/middleware/teardown_refactor.py",
+    "is_valid": false,
+    "errors": [
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/middleware/teardown_refactor.py",
+        "line_number": 41,
+        "message": "Function '__init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __init__(...) -> ReturnType:"
+      },
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/middleware/teardown_refactor.py",
+        "line_number": 61,
+        "message": "Function 'add_refactor_task' missing return type annotation",
+        "fix_suggestion": "Add return type: def add_refactor_task(...) -> ReturnType:"
+      }
+    ],
+    "warnings": [
+      {
+        "severity": "warning",
+        "category": "solid",
+        "rule": "SOLID-SRP-001",
+        "file_path": "src/orchestrators/middleware/teardown_refactor.py",
+        "line_number": 29,
+        "message": "Class 'TeardownRefactorMiddleware' has 8 public methods (>3), may violate SRP",
+        "fix_suggestion": "Consider splitting into smaller, focused classes"
+      }
+    ],
+    "info": [],
+    "summary": "Validation FAILED: 2 errors, 1 warnings, 0 info"
+  },
+  {
+    "file_path": "src/orchestrators/middleware/python_best_practices_validator.py",
+    "is_valid": false,
+    "errors": [
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/middleware/python_best_practices_validator.py",
+        "line_number": 514,
+        "message": "Function 'main' missing return type annotation",
+        "fix_suggestion": "Add return type: def main(...) -> ReturnType:"
+      },
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/middleware/python_best_practices_validator.py",
+        "line_number": 119,
+        "message": "Function '__init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __init__(...) -> ReturnType:"
+      }
+    ],
+    "warnings": [
+      {
+        "severity": "warning",
+        "category": "solid",
+        "rule": "SOLID-SRP-001",
+        "file_path": "src/orchestrators/middleware/python_best_practices_validator.py",
+        "line_number": 106,
+        "message": "Class 'PythonBestPracticesValidator' has 7 public methods (>3), may violate SRP",
+        "fix_suggestion": "Consider splitting into smaller, focused classes"
+      },
+      {
+        "severity": "warning",
+        "category": "code_quality",
+        "rule": "QUALITY-001",
+        "file_path": "src/orchestrators/middleware/python_best_practices_validator.py",
+        "line_number": 251,
+        "message": "Function 'validate_type_hints' has cyclomatic complexity 12 (>10)",
+        "fix_suggestion": "Refactor to reduce complexity (extract methods, simplify logic)"
+      }
+    ],
+    "info": [],
+    "summary": "Validation FAILED: 2 errors, 2 warnings, 0 info"
+  },
+  {
+    "file_path": "src/orchestrators/middleware/setup_verification.py",
+    "is_valid": false,
+    "errors": [
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/middleware/setup_verification.py",
+        "line_number": 39,
+        "message": "Function '__post_init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __post_init__(...) -> ReturnType:"
+      },
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/middleware/setup_verification.py",
+        "line_number": 62,
+        "message": "Function '__init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __init__(...) -> ReturnType:"
+      },
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/middleware/setup_verification.py",
+        "line_number": 399,
+        "message": "Function 'enforce_critical' missing return type annotation",
+        "fix_suggestion": "Add return type: def enforce_critical(...) -> ReturnType:"
+      },
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/middleware/setup_verification.py",
+        "line_number": 427,
+        "message": "Function 'add_verification' missing return type annotation",
+        "fix_suggestion": "Add return type: def add_verification(...) -> ReturnType:"
+      }
+    ],
+    "warnings": [
+      {
+        "severity": "warning",
+        "category": "docstrings",
+        "rule": "DOC-002",
+        "file_path": "src/orchestrators/middleware/setup_verification.py",
+        "line_number": 39,
+        "message": "Function '__post_init__' missing docstring",
+        "fix_suggestion": "Add docstring with Args, Returns, Raises sections"
+      },
+      {
+        "severity": "warning",
+        "category": "solid",
+        "rule": "SOLID-SRP-001",
+        "file_path": "src/orchestrators/middleware/setup_verification.py",
+        "line_number": 49,
+        "message": "Class 'SetupVerificationMiddleware' has 10 public methods (>3), may violate SRP",
+        "fix_suggestion": "Consider splitting into smaller, focused classes"
+      },
+      {
+        "severity": "warning",
+        "category": "code_quality",
+        "rule": "QUALITY-001",
+        "file_path": "src/orchestrators/middleware/setup_verification.py",
+        "line_number": 256,
+        "message": "Function 'verify_permissions' has cyclomatic complexity 12 (>10)",
+        "fix_suggestion": "Refactor to reduce complexity (extract methods, simplify logic)"
+      },
+      {
+        "severity": "warning",
+        "category": "code_quality",
+        "rule": "QUALITY-001",
+        "file_path": "src/orchestrators/middleware/setup_verification.py",
+        "line_number": 371,
+        "message": "Function 'get_summary' has cyclomatic complexity 12 (>10)",
+        "fix_suggestion": "Refactor to reduce complexity (extract methods, simplify logic)"
+      }
+    ],
+    "info": [],
+    "summary": "Validation FAILED: 4 errors, 4 warnings, 0 info"
+  },
+  {
+    "file_path": "src/orchestrators/vacuum/git_integration.py",
+    "is_valid": false,
+    "errors": [
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/vacuum/git_integration.py",
+        "line_number": 33,
+        "message": "Function '__init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __init__(...) -> ReturnType:"
+      }
+    ],
+    "warnings": [
+      {
+        "severity": "warning",
+        "category": "solid",
+        "rule": "SOLID-SRP-001",
+        "file_path": "src/orchestrators/vacuum/git_integration.py",
+        "line_number": 30,
+        "message": "Class 'GitStatusAnalyzer' has 6 public methods (>3), may violate SRP",
+        "fix_suggestion": "Consider splitting into smaller, focused classes"
+      },
+      {
+        "severity": "warning",
+        "category": "code_quality",
+        "rule": "QUALITY-001",
+        "file_path": "src/orchestrators/vacuum/git_integration.py",
+        "line_number": 43,
+        "message": "Function 'get_status' has cyclomatic complexity 12 (>10)",
+        "fix_suggestion": "Refactor to reduce complexity (extract methods, simplify logic)"
+      },
+      {
+        "severity": "warning",
+        "category": "code_quality",
+        "rule": "QUALITY-001",
+        "file_path": "src/orchestrators/vacuum/git_integration.py",
+        "line_number": 141,
+        "message": "Function 'get_untracked_by_category' has cyclomatic complexity 13 (>10)",
+        "fix_suggestion": "Refactor to reduce complexity (extract methods, simplify logic)"
+      },
+      {
+        "severity": "warning",
+        "category": "code_quality",
+        "rule": "QUALITY-001",
+        "file_path": "src/orchestrators/vacuum/git_integration.py",
+        "line_number": 220,
+        "message": "Function 'suggest_relocation' has cyclomatic complexity 11 (>10)",
+        "fix_suggestion": "Refactor to reduce complexity (extract methods, simplify logic)"
+      }
+    ],
+    "info": [],
+    "summary": "Validation FAILED: 1 errors, 4 warnings, 0 info"
+  },
+  {
+    "file_path": "src/orchestrators/vacuum/filesystem_engine.py",
+    "is_valid": false,
+    "errors": [
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/vacuum/filesystem_engine.py",
+        "line_number": 43,
+        "message": "Function '__init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __init__(...) -> ReturnType:"
+      },
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/vacuum/filesystem_engine.py",
+        "line_number": 407,
+        "message": "Function '__init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __init__(...) -> ReturnType:"
+      },
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/vacuum/filesystem_engine.py",
+        "line_number": 462,
+        "message": "Function 'walk' missing return type annotation",
+        "fix_suggestion": "Add return type: def walk(...) -> ReturnType:"
+      }
+    ],
+    "warnings": [
+      {
+        "severity": "warning",
+        "category": "solid",
+        "rule": "SOLID-SRP-001",
+        "file_path": "src/orchestrators/vacuum/filesystem_engine.py",
+        "line_number": 32,
+        "message": "Class 'FilesystemTransaction' has 6 public methods (>3), may violate SRP",
+        "fix_suggestion": "Consider splitting into smaller, focused classes"
+      },
+      {
+        "severity": "warning",
+        "category": "code_quality",
+        "rule": "QUALITY-001",
+        "file_path": "src/orchestrators/vacuum/filesystem_engine.py",
+        "line_number": 299,
+        "message": "Function 'rollback' has cyclomatic complexity 13 (>10)",
+        "fix_suggestion": "Refactor to reduce complexity (extract methods, simplify logic)"
+      }
+    ],
+    "info": [],
+    "summary": "Validation FAILED: 3 errors, 2 warnings, 0 info"
+  },
+  {
+    "file_path": "src/orchestrators/vacuum/organization_intelligence.py",
+    "is_valid": false,
+    "errors": [
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/vacuum/organization_intelligence.py",
+        "line_number": 78,
+        "message": "Function '__init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __init__(...) -> ReturnType:"
+      },
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/vacuum/organization_intelligence.py",
+        "line_number": 343,
+        "message": "Function '__init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __init__(...) -> ReturnType:"
+      }
+    ],
+    "warnings": [],
+    "info": [],
+    "summary": "Validation FAILED: 2 errors, 0 warnings, 0 info"
+  },
+  {
+    "file_path": "src/orchestrators/vacuum/safety_validator.py",
+    "is_valid": false,
+    "errors": [
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/vacuum/safety_validator.py",
+        "line_number": 84,
+        "message": "Function '__init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __init__(...) -> ReturnType:"
+      }
+    ],
+    "warnings": [],
+    "info": [],
+    "summary": "Validation FAILED: 1 errors, 0 warnings, 0 info"
+  },
+  {
+    "file_path": "src/orchestrators/vacuum/gitignore_manager.py",
+    "is_valid": false,
+    "errors": [
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/vacuum/gitignore_manager.py",
+        "line_number": 40,
+        "message": "Function '__init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __init__(...) -> ReturnType:"
+      }
+    ],
+    "warnings": [
+      {
+        "severity": "warning",
+        "category": "solid",
+        "rule": "SOLID-SRP-001",
+        "file_path": "src/orchestrators/vacuum/gitignore_manager.py",
+        "line_number": 17,
+        "message": "Class 'GitIgnoreManager' has 5 public methods (>3), may violate SRP",
+        "fix_suggestion": "Consider splitting into smaller, focused classes"
+      }
+    ],
+    "info": [],
+    "summary": "Validation FAILED: 1 errors, 1 warnings, 0 info"
+  },
+  {
+    "file_path": "src/orchestrators/vacuum/orphan_detector.py",
+    "is_valid": false,
+    "errors": [
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/vacuum/orphan_detector.py",
+        "line_number": 33,
+        "message": "Function '__init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __init__(...) -> ReturnType:"
+      }
+    ],
+    "warnings": [],
+    "info": [],
+    "summary": "Validation FAILED: 1 errors, 0 warnings, 0 info"
+  },
+  {
+    "file_path": "src/orchestrators/vacuum/vacuum_orchestrator_v2.py",
+    "is_valid": false,
+    "errors": [
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/vacuum/vacuum_orchestrator_v2.py",
+        "line_number": 54,
+        "message": "Function '__init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __init__(...) -> ReturnType:"
+      },
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/vacuum/vacuum_orchestrator_v2.py",
+        "line_number": 118,
+        "message": "Function 'filesystem_engine' missing return type annotation",
+        "fix_suggestion": "Add return type: def filesystem_engine(...) -> ReturnType:"
+      },
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/vacuum/vacuum_orchestrator_v2.py",
+        "line_number": 129,
+        "message": "Function 'safety_validator' missing return type annotation",
+        "fix_suggestion": "Add return type: def safety_validator(...) -> ReturnType:"
+      },
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/vacuum/vacuum_orchestrator_v2.py",
+        "line_number": 137,
+        "message": "Function 'duplicate_detector' missing return type annotation",
+        "fix_suggestion": "Add return type: def duplicate_detector(...) -> ReturnType:"
+      },
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/vacuum/vacuum_orchestrator_v2.py",
+        "line_number": 146,
+        "message": "Function 'orphan_detector' missing return type annotation",
+        "fix_suggestion": "Add return type: def orphan_detector(...) -> ReturnType:"
+      }
+    ],
+    "warnings": [
+      {
+        "severity": "warning",
+        "category": "solid",
+        "rule": "SOLID-SRP-001",
+        "file_path": "src/orchestrators/vacuum/vacuum_orchestrator_v2.py",
+        "line_number": 39,
+        "message": "Class 'VacuumOrchestratorV2' has 6 public methods (>3), may violate SRP",
+        "fix_suggestion": "Consider splitting into smaller, focused classes"
+      },
+      {
+        "severity": "warning",
+        "category": "code_quality",
+        "rule": "QUALITY-001",
+        "file_path": "src/orchestrators/vacuum/vacuum_orchestrator_v2.py",
+        "line_number": 157,
+        "message": "Function 'execute' has cyclomatic complexity 19 (>10)",
+        "fix_suggestion": "Refactor to reduce complexity (extract methods, simplify logic)"
+      }
+    ],
+    "info": [],
+    "summary": "Validation FAILED: 5 errors, 2 warnings, 0 info"
+  },
+  {
+    "file_path": "src/orchestrators/vacuum/duplicate_detector.py",
+    "is_valid": false,
+    "errors": [
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/vacuum/duplicate_detector.py",
+        "line_number": 38,
+        "message": "Function '__init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __init__(...) -> ReturnType:"
+      }
+    ],
+    "warnings": [],
+    "info": [],
+    "summary": "Validation FAILED: 1 errors, 0 warnings, 0 info"
+  },
+  {
+    "file_path": "src/orchestrators/planning/governance_integrator.py",
+    "is_valid": false,
+    "errors": [
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/planning/governance_integrator.py",
+        "line_number": 31,
+        "message": "Function '__init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __init__(...) -> ReturnType:"
+      }
+    ],
+    "warnings": [],
+    "info": [],
+    "summary": "Validation FAILED: 1 errors, 0 warnings, 0 info"
+  },
+  {
+    "file_path": "src/orchestrators/planning/acceptance_validator.py",
+    "is_valid": false,
+    "errors": [
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/planning/acceptance_validator.py",
+        "line_number": 31,
+        "message": "Function '__init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __init__(...) -> ReturnType:"
+      }
+    ],
+    "warnings": [],
+    "info": [],
+    "summary": "Validation FAILED: 1 errors, 0 warnings, 0 info"
+  },
+  {
+    "file_path": "src/orchestrators/planning/__init__.py",
+    "is_valid": true,
+    "errors": [],
+    "warnings": [],
+    "info": [],
+    "summary": "Validation PASSED: 0 errors, 0 warnings, 0 info"
+  },
+  {
+    "file_path": "src/orchestrators/planning/knowledge_graph_query.py",
+    "is_valid": false,
+    "errors": [
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/planning/knowledge_graph_query.py",
+        "line_number": 30,
+        "message": "Function '__init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __init__(...) -> ReturnType:"
+      }
+    ],
+    "warnings": [],
+    "info": [],
+    "summary": "Validation FAILED: 1 errors, 0 warnings, 0 info"
+  },
+  {
+    "file_path": "src/orchestrators/planning/ast_scanner.py",
+    "is_valid": false,
+    "errors": [
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/planning/ast_scanner.py",
+        "line_number": 22,
+        "message": "Function '__init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __init__(...) -> ReturnType:"
+      }
+    ],
+    "warnings": [],
+    "info": [],
+    "summary": "Validation FAILED: 1 errors, 0 warnings, 0 info"
+  },
+  {
+    "file_path": "src/orchestrators/planning/orphan_detector.py",
+    "is_valid": false,
+    "errors": [
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/planning/orphan_detector.py",
+        "line_number": 22,
+        "message": "Function '__init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __init__(...) -> ReturnType:"
+      }
+    ],
+    "warnings": [],
+    "info": [],
+    "summary": "Validation FAILED: 1 errors, 0 warnings, 0 info"
+  },
+  {
+    "file_path": "src/orchestrators/planning/duplicate_detector.py",
+    "is_valid": false,
+    "errors": [
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/planning/duplicate_detector.py",
+        "line_number": 21,
+        "message": "Function '__init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __init__(...) -> ReturnType:"
+      }
+    ],
+    "warnings": [],
+    "info": [],
+    "summary": "Validation FAILED: 1 errors, 0 warnings, 0 info"
+  },
+  {
+    "file_path": "src/orchestrators/planning/planning_orchestrator_v5.py",
+    "is_valid": false,
+    "errors": [
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/planning/planning_orchestrator_v5.py",
+        "line_number": 83,
+        "message": "Function '__init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __init__(...) -> ReturnType:"
+      }
+    ],
+    "warnings": [
+      {
+        "severity": "warning",
+        "category": "code_quality",
+        "rule": "QUALITY-001",
+        "file_path": "src/orchestrators/planning/planning_orchestrator_v5.py",
+        "line_number": 225,
+        "message": "Function 'execute' has cyclomatic complexity 19 (>10)",
+        "fix_suggestion": "Refactor to reduce complexity (extract methods, simplify logic)"
+      },
+      {
+        "severity": "warning",
+        "category": "code_quality",
+        "rule": "QUALITY-001",
+        "file_path": "src/orchestrators/planning/planning_orchestrator_v5.py",
+        "line_number": 2053,
+        "message": "Function '_validate_plan' has cyclomatic complexity 19 (>10)",
+        "fix_suggestion": "Refactor to reduce complexity (extract methods, simplify logic)"
+      }
+    ],
+    "info": [],
+    "summary": "Validation FAILED: 1 errors, 2 warnings, 0 info"
+  },
+  {
+    "file_path": "src/orchestrators/master/todo_manager.py",
+    "is_valid": false,
+    "errors": [
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/master/todo_manager.py",
+        "line_number": 44,
+        "message": "Function '__init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __init__(...) -> ReturnType:"
+      }
+    ],
+    "warnings": [],
+    "info": [],
+    "summary": "Validation FAILED: 1 errors, 0 warnings, 0 info"
+  },
+  {
+    "file_path": "src/orchestrators/master/__init__.py",
+    "is_valid": true,
+    "errors": [],
+    "warnings": [],
+    "info": [],
+    "summary": "Validation PASSED: 0 errors, 0 warnings, 0 info"
+  },
+  {
+    "file_path": "src/orchestrators/base/base_orchestrator.py",
+    "is_valid": false,
+    "errors": [
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/base/base_orchestrator.py",
+        "line_number": 40,
+        "message": "Function '__init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __init__(...) -> ReturnType:"
+      }
+    ],
+    "warnings": [],
+    "info": [],
+    "summary": "Validation FAILED: 1 errors, 0 warnings, 0 info"
+  },
+  {
+    "file_path": "src/orchestrators/base/__init__.py",
+    "is_valid": true,
+    "errors": [],
+    "warnings": [],
+    "info": [],
+    "summary": "Validation PASSED: 0 errors, 0 warnings, 0 info"
+  },
+  {
+    "file_path": "src/orchestrators/base/base_orchestrator_v4_1.py",
+    "is_valid": false,
+    "errors": [
+      {
+        "severity": "error",
+        "category": "type_hints",
+        "rule": "TYPE-001",
+        "file_path": "src/orchestrators/base/base_orchestrator_v4_1.py",
+        "line_number": 47,
+        "message": "Function '__init__' missing return type annotation",
+        "fix_suggestion": "Add return type: def __init__(...) -> ReturnType:"
+      }
+    ],
+    "warnings": [],
+    "info": [],
+    "summary": "Validation FAILED: 1 errors, 0 warnings, 0 info"
+  }
+]
