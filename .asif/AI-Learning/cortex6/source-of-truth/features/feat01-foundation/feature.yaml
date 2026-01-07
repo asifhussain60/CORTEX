@@ -48,17 +48,72 @@ feature:
     - feat03-governance
     
   # ============================================================================
-  # AUDIT REQUIREMENTS
+  # AUDIT REQUIREMENTS (ENHANCED - Audit-Driven Build Policy)
   # ============================================================================
   audit:
+    policy_ref: "policies/audit-driven-build-policy.yaml"
     mandatory: true
     log_to: "cortex-brain/audit-logs/"
+    session_log: ".asif/AI-Learning/cortex6/source-of-truth/session-audit.jsonl"
+    
+    # Categories this feature logs to
     categories:
-      - STATE_MANAGEMENT
-      - VALIDATION
-      - MIDDLEWARE
-      - EXECUTION
+      - BUILD_EXECUTION      # Task/phase execution
+      - STATE_MANAGEMENT     # StateManager operations
+      - VALIDATION           # Test execution, compliance
+      - TEST_EXECUTION       # TDD cycles
+      - MIDDLEWARE           # System initialization
+      
+    # Correlation ID format: FEAT01-P{phase}-{session}
     correlation_prefix: "FEAT01"
+    
+    # Pre-commit requirements
+    commit_requirements:
+      work_evidence: true       # Must have work category entries
+      success_evidence: true    # Must have SUCCESS status entries
+      error_handling: true      # Errors must be logged with context
+      
+    # Phase checkpoints
+    phase_checkpoints:
+      - phase: 1
+        checkpoint_name: "FEAT01-P1-test-infrastructure"
+        trigger: "All Phase 1 tasks complete"
+        validation:
+          - "pytest tests/ --collect-only passes"
+          - "9+ smoke tests passing"
+          
+      - phase: 2
+        checkpoint_name: "FEAT01-P2-state-manager"
+        trigger: "All Phase 2 tasks complete"
+        validation:
+          - "32 StateManager tests passing"
+          - "WAL mode verified"
+          - "Optimistic locking working"
+          
+      - phase: 3
+        checkpoint_name: "FEAT01-P3-audit-logger"
+        trigger: "All Phase 3 tasks complete"
+        validation:
+          - "AuditLogger tests passing"
+          - "Correlation tracking working"
+          
+      - phase: 4
+        checkpoint_name: "FEAT01-P4-pattern-router"
+        trigger: "All Phase 4 tasks complete"
+        validation:
+          - "PatternRouter tests passing"
+          - "<5ms lookup time verified"
+          
+    # Improvement triggers from audit analysis
+    improvement_triggers:
+      - condition: "ERROR entries > 5% of total"
+        action: "Create debug task for error pattern"
+        
+      - condition: "Test duration > 30 seconds"
+        action: "Create performance optimization task"
+        
+      - condition: "No checkpoint in 30 minutes"
+        action: "Warning - create manual checkpoint"
     
   # ============================================================================
   # DELIVERABLES
