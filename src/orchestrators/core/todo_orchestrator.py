@@ -1,0 +1,916 @@
+# ==============================================================================
+# CORTEX 6.0 - TODO Orchestrator with DAG-based Dependency Management
+# ==============================================================================
+# Author: Asif Hussain
+# Version: 6.0.0
+# Purpose: Orchestrate TODO items with dependency tracking
+# TDD: Tests in tests/unit/test_todo_orchestrator.py
+# ==============================================================================
+
+"""
+TODO Orchestrator for CORTEX 6.0.
+
+This module provides enterprise-grade TODO management with DAG-based dependency
+tracking. It integrates with StateManager for persistence and AuditLogger for
+comprehensive audit trails.
+
+Key Features:
+- DAG-based dependency management
+- State machine-enforced status transitions
+- Checkpoint and recovery
+- Parallel task identification
+- Rollback support
+- Audit logging integration
+
+Architecture:
+    TodoOrchestrator manages:
+    - todos: Dict[str, Todo] - All TODO items
+    - dag: DAG - Dependency graph
+    - state_manager: StateManager - Persistence layer
+    - audit_logger: EnterpriseAuditLogger - Audit trail
+
+State Machine:
+    NOT_STARTED → BLOCKED/READY
+    BLOCKED → READY
+    READY → IN_PROGRESS
+    IN_PROGRESS → COMPLETED/FAILED
+    FAILED → ROLLED_BACK/READY
+    COMPLETED → (terminal)
+    
+Performance Guarantees:
+    - create_todo: O(1)
+    - read_todo: O(1)
+    - update_todo: O(1)
+    - delete_todo: O(degree)
+    - list_todos: O(n) where n = matching todos
+    - get_ready_tasks: O(V)
+    - get_parallel_tasks: O(V+E)
+
+Usage:
+    >>> from src.orchestrators.core.todo_orchestrator import TodoOrchestrator
+    >>> orchestrator = TodoOrchestrator(state_manager, audit_logger)
+    >>> todo_id = orchestrator.create_todo(
+    ...     title="Implement feature",
+    ...     description="Add new feature to system",
+    ...     priority=Priority.P0_CRITICAL
+    ... )
+    >>> orchestrator.transition_status(todo_id, TodoStatus.IN_PROGRESS)
+    >>> orchestrator.create_checkpoint()
+"""
+
+from __future__ import annotations
+
+import json
+import logging
+import threading
+import uuid
+from dataclasses import dataclass, field, asdict
+from datetime import datetime
+from enum import Enum
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    Iterator,
+    List,
+    Optional,
+    Set,
+    Tuple,
+    Union,
+)
+
+from src.orchestrators.core.dag import (
+    DAG,
+    DAGNode,
+    DAGEdge,
+    NodeStatus,
+    EdgeType,
+    Priority,
+    DAGError,
+    DAGValidationError,
+    CyclicDependencyError,
+    NodeNotFoundError,
+)
+from src.orchestrators.state_manager import StateManager
+from src.orchestrators.audit_logger import EnterpriseAuditLogger, AuditCategory
+
+logger = logging.getLogger(__name__)
+
+
+# ==============================================================================
+# ENUMS
+# ==============================================================================
+
+
+class TodoStatus(str, Enum):
+    """Status of a TODO item (maps to DAG NodeStatus)."""
+    NOT_STARTED = "not_started"
+    BLOCKED = "blocked"
+    READY = "ready"
+    IN_PROGRESS = "in_progress"
+    COMPLETED = "completed"
+    FAILED = "failed"
+    ROLLED_BACK = "rolled_back"
+    CANCELLED = "cancelled"
+    
+    @property
+    def is_terminal(self) -> bool:
+        """Check if status is terminal."""
+        return self in {TodoStatus.COMPLETED, TodoStatus.CANCELLED}
+    
+    @property
+    def is_active(self) -> bool:
+        """Check if status indicates active work."""
+        return self == TodoStatus.IN_PROGRESS
+    
+    def to_node_status(self) -> NodeStatus:
+        """Convert to DAG NodeStatus."""
+        mapping = {
+            TodoStatus.NOT_STARTED: NodeStatus.NOT_STARTED,
+            TodoStatus.BLOCKED: NodeStatus.BLOCKED,
+            TodoStatus.READY: NodeStatus.NOT_STARTED,  # Ready is a computed state
+            TodoStatus.IN_PROGRESS: NodeStatus.IN_PROGRESS,
+            TodoStatus.COMPLETED: NodeStatus.COMPLETED,
+            TodoStatus.FAILED: NodeStatus.FAILED,
+            TodoStatus.ROLLED_BACK: NodeStatus.FAILED,
+            TodoStatus.CANCELLED: NodeStatus.CANCELLED,
+        }
+        return mapping[self]
+
+
+# ==============================================================================
+# EXCEPTIONS
+# ==============================================================================
+
+
+class TodoError(Exception):
+    """Base exception for TODO orchestrator errors."""
+    pass
+
+
+class TodoNotFoundError(TodoError):
+    """TODO item not found."""
+    pass
+
+
+class InvalidStatusTransitionError(TodoError):
+    """Invalid status transition attempted."""
+    pass
+
+
+class TodoValidationError(TodoError):
+    """TODO validation failed."""
+    pass
+
+
+class CheckpointError(TodoError):
+    """Checkpoint operation failed."""
+    pass
+
+
+# ==============================================================================
+# DATA CLASSES
+# ==============================================================================
+
+
+@dataclass
+class Todo:
+    """
+    TODO item with dependency tracking.
+    
+    Attributes:
+        id: Unique identifier
+        title: Brief title
+        description: Detailed description
+        status: Current status
+        priority: Task priority
+        tags: Set of tags for categorization
+        created_at: Creation timestamp
+        updated_at: Last update timestamp
+        started_at: When work started
+        completed_at: When work completed
+        dependencies: List of TODO IDs this depends on
+        dependents: List of TODO IDs that depend on this
+        data: Additional metadata
+        checkpoint_data: Checkpoint-specific data
+    """
+    id: str
+    title: str
+    description: str = ""
+    status: TodoStatus = TodoStatus.NOT_STARTED
+    priority: Priority = Priority.P2_NORMAL
+    tags: Set[str] = field(default_factory=set)
+    created_at: datetime = field(default_factory=datetime.now)
+    updated_at: datetime = field(default_factory=datetime.now)
+    started_at: Optional[datetime] = None
+    completed_at: Optional[datetime] = None
+    dependencies: List[str] = field(default_factory=list)
+    dependents: List[str] = field(default_factory=list)
+    data: Dict[str, Any] = field(default_factory=dict)
+    checkpoint_data: Dict[str, Any] = field(default_factory=dict)
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary."""
+        result = asdict(self)
+        # Convert sets to lists for JSON serialization
+        result["tags"] = list(self.tags)
+        # Convert datetime to ISO format
+        result["created_at"] = self.created_at.isoformat()
+        result["updated_at"] = self.updated_at.isoformat()
+        result["started_at"] = self.started_at.isoformat() if self.started_at else None
+        result["completed_at"] = self.completed_at.isoformat() if self.completed_at else None
+        return result
+    
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> Todo:
+        """Create from dictionary."""
+        # Convert lists back to sets
+        if "tags" in data:
+            data["tags"] = set(data["tags"])
+        # Convert ISO format back to datetime
+        if "created_at" in data and isinstance(data["created_at"], str):
+            data["created_at"] = datetime.fromisoformat(data["created_at"])
+        if "updated_at" in data and isinstance(data["updated_at"], str):
+            data["updated_at"] = datetime.fromisoformat(data["updated_at"])
+        if data.get("started_at"):
+            data["started_at"] = datetime.fromisoformat(data["started_at"])
+        if data.get("completed_at"):
+            data["completed_at"] = datetime.fromisoformat(data["completed_at"])
+        # Convert status string to enum
+        if "status" in data and isinstance(data["status"], str):
+            data["status"] = TodoStatus(data["status"])
+        if "priority" in data and isinstance(data["priority"], str):
+            data["priority"] = Priority(data["priority"])
+        return cls(**data)
+
+
+@dataclass
+class Checkpoint:
+    """
+    Checkpoint for TODO orchestrator state.
+    
+    Attributes:
+        id: Unique checkpoint identifier
+        timestamp: When checkpoint was created
+        todos: Snapshot of all TODO items
+        dag_state: Serialized DAG state
+        metadata: Additional checkpoint metadata
+    """
+    id: str
+    timestamp: datetime
+    todos: Dict[str, Todo]
+    dag_state: Dict[str, Any]
+    metadata: Dict[str, Any] = field(default_factory=dict)
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary."""
+        return {
+            "id": self.id,
+            "timestamp": self.timestamp.isoformat(),
+            "todos": {k: v.to_dict() for k, v in self.todos.items()},
+            "dag_state": self.dag_state,
+            "metadata": self.metadata,
+        }
+    
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> Checkpoint:
+        """Create from dictionary."""
+        return cls(
+            id=data["id"],
+            timestamp=datetime.fromisoformat(data["timestamp"]),
+            todos={k: Todo.from_dict(v) for k, v in data["todos"].items()},
+            dag_state=data["dag_state"],
+            metadata=data.get("metadata", {}),
+        )
+
+
+# ==============================================================================
+# TODO ORCHESTRATOR
+# ==============================================================================
+
+
+class TodoOrchestrator:
+    """
+    TODO Orchestrator with DAG-based dependency management.
+    
+    Manages TODO items with:
+    - Dependency tracking via DAG
+    - State machine-enforced transitions
+    - Checkpoint and recovery
+    - Parallel task identification
+    - Rollback support
+    - Comprehensive audit logging
+    """
+    
+    # Valid status transitions (state machine)
+    VALID_TRANSITIONS = {
+        TodoStatus.NOT_STARTED: {TodoStatus.BLOCKED, TodoStatus.READY, TodoStatus.IN_PROGRESS},
+        TodoStatus.BLOCKED: {TodoStatus.READY, TodoStatus.IN_PROGRESS},
+        TodoStatus.READY: {TodoStatus.IN_PROGRESS, TodoStatus.BLOCKED},
+        TodoStatus.IN_PROGRESS: {TodoStatus.COMPLETED, TodoStatus.FAILED, TodoStatus.BLOCKED},
+        TodoStatus.FAILED: {TodoStatus.ROLLED_BACK, TodoStatus.READY, TodoStatus.IN_PROGRESS},
+        TodoStatus.COMPLETED: set(),  # Terminal state
+        TodoStatus.ROLLED_BACK: {TodoStatus.READY, TodoStatus.IN_PROGRESS},
+        TodoStatus.CANCELLED: set(),  # Terminal state
+    }
+    
+    def __init__(
+        self,
+        state_manager: StateManager,
+        audit_logger: Optional[EnterpriseAuditLogger] = None,
+        name: str = "cortex-todo-orchestrator",
+        auto_checkpoint_interval: Optional[int] = None,
+    ):
+        """
+        Initialize TODO Orchestrator.
+        
+        Args:
+            state_manager: StateManager instance for persistence
+            audit_logger: Optional audit logger (creates new if None)
+            name: Name for this orchestrator instance
+            auto_checkpoint_interval: Auto-checkpoint every N operations (None = disabled)
+        """
+        self.name = name
+        self.state_manager = state_manager
+        self.audit_logger = audit_logger or EnterpriseAuditLogger()
+        
+        # Core state
+        self.todos: Dict[str, Todo] = {}
+        self.dag = DAG(name=f"{name}-dag")
+        
+        # Checkpoint management
+        self.checkpoints: List[Checkpoint] = []
+        self.auto_checkpoint_interval = auto_checkpoint_interval
+        self._operation_count = 0
+        
+        # Thread safety
+        self._lock = threading.RLock()
+        
+        # Statistics
+        self._stats = {
+            "total_created": 0,
+            "total_completed": 0,
+            "total_failed": 0,
+            "total_checkpoints": 0,
+            "total_recoveries": 0,
+        }
+        
+        logger.info(f"TodoOrchestrator '{name}' initialized")
+    
+    # ==========================================================================
+    # TODO CRUD OPERATIONS
+    # ==========================================================================
+    
+    def create_todo(
+        self,
+        title: str,
+        description: str = "",
+        priority: Priority = Priority.P2_NORMAL,
+        tags: Optional[Set[str]] = None,
+        dependencies: Optional[List[str]] = None,
+        data: Optional[Dict[str, Any]] = None,
+        todo_id: Optional[str] = None,
+    ) -> str:
+        """
+        Create a new TODO item.
+        
+        Args:
+            title: Brief title
+            description: Detailed description
+            priority: Task priority
+            tags: Optional set of tags
+            dependencies: Optional list of TODO IDs this depends on
+            data: Optional additional metadata
+            todo_id: Optional explicit ID (generates UUID if None)
+            
+        Returns:
+            Created TODO ID
+            
+        Raises:
+            TodoValidationError: If validation fails
+            CyclicDependencyError: If dependencies create a cycle
+        """
+        with self._lock:
+            # Generate ID
+            if todo_id is None:
+                todo_id = f"todo-{uuid.uuid4().hex[:12]}"
+            
+            # Validate title
+            if not title or not title.strip():
+                raise TodoValidationError("Title cannot be empty")
+            
+            # Create TODO
+            todo = Todo(
+                id=todo_id,
+                title=title.strip(),
+                description=description.strip(),
+                priority=priority,
+                tags=tags or set(),
+                dependencies=dependencies or [],
+                data=data or {},
+            )
+            
+            # Add to DAG
+            self.dag.add_node(
+                todo_id,
+                name=title,
+                priority=priority,
+                tags=tags or set(),
+                data={"todo": todo.to_dict()},
+            )
+            
+            # Add dependency edges
+            if dependencies:
+                for dep_id in dependencies:
+                    if dep_id not in self.todos:
+                        raise TodoValidationError(f"Dependency '{dep_id}' not found")
+                    self.dag.add_edge(dep_id, todo_id)
+            
+            # Store TODO
+            self.todos[todo_id] = todo
+            
+            # Update statistics
+            self._stats["total_created"] += 1
+            self._operation_count += 1
+            
+            # Audit log
+            self.audit_logger.log(
+                category=AuditCategory.EXECUTION,
+                component="todo_orchestrator",
+                operation="create_todo",
+                message=f"Created TODO '{title}'",
+                context={"todo_id": todo_id, "priority": priority.value},
+            )
+            
+            # Auto-checkpoint
+            self._auto_checkpoint_if_needed()
+            
+            return todo_id
+    
+    def read_todo(self, todo_id: str) -> Todo:
+        """
+        Read a TODO item.
+        
+        Args:
+            todo_id: TODO identifier
+            
+        Returns:
+            Todo object
+            
+        Raises:
+            TodoNotFoundError: If TODO not found
+        """
+        with self._lock:
+            if todo_id not in self.todos:
+                raise TodoNotFoundError(f"TODO '{todo_id}' not found")
+            return self.todos[todo_id]
+    
+    def update_todo(
+        self,
+        todo_id: str,
+        title: Optional[str] = None,
+        description: Optional[str] = None,
+        priority: Optional[Priority] = None,
+        tags: Optional[Set[str]] = None,
+        data: Optional[Dict[str, Any]] = None,
+    ) -> Todo:
+        """
+        Update a TODO item.
+        
+        Args:
+            todo_id: TODO identifier
+            title: Optional new title
+            description: Optional new description
+            priority: Optional new priority
+            tags: Optional new tags (replaces existing)
+            data: Optional data updates (merges with existing)
+            
+        Returns:
+            Updated Todo object
+            
+        Raises:
+            TodoNotFoundError: If TODO not found
+        """
+        with self._lock:
+            todo = self.read_todo(todo_id)
+            
+            # Update fields
+            if title is not None:
+                todo.title = title.strip()
+            if description is not None:
+                todo.description = description.strip()
+            if priority is not None:
+                todo.priority = priority
+            if tags is not None:
+                todo.tags = tags
+            if data is not None:
+                todo.data.update(data)
+            
+            todo.updated_at = datetime.now()
+            
+            # Update DAG node
+            self.dag.update_node(
+                todo_id,
+                name=todo.title,
+                priority=todo.priority,
+                tags=todo.tags,
+                data={"todo": todo.to_dict()},
+            )
+            
+            # Update statistics
+            self._operation_count += 1
+            
+            # Audit log
+            self.audit_logger.log(
+                category=AuditCategory.EXECUTION,
+                component="todo_orchestrator",
+                operation="update_todo",
+                message=f"Updated TODO '{todo.title}'",
+                context={"todo_id": todo_id},
+            )
+            
+            # Auto-checkpoint
+            self._auto_checkpoint_if_needed()
+            
+            return todo
+    
+    def delete_todo(self, todo_id: str) -> bool:
+        """
+        Delete a TODO item.
+        
+        Args:
+            todo_id: TODO identifier
+            
+        Returns:
+            True if deleted
+            
+        Raises:
+            TodoNotFoundError: If TODO not found
+            TodoValidationError: If TODO has active dependents
+        """
+        with self._lock:
+            todo = self.read_todo(todo_id)
+            
+            # Check for active dependents
+            dependents = self.dag.get_dependents(todo_id)
+            active_dependents = [
+                dep_id for dep_id in dependents
+                if not self.todos[dep_id].status.is_terminal
+            ]
+            if active_dependents:
+                raise TodoValidationError(
+                    f"Cannot delete TODO with active dependents: {active_dependents}"
+                )
+            
+            # Remove from DAG
+            self.dag.remove_node(todo_id)
+            
+            # Remove from storage
+            del self.todos[todo_id]
+            
+            # Update statistics
+            self._operation_count += 1
+            
+            # Audit log
+            self.audit_logger.log(
+                category=AuditCategory.EXECUTION,
+                component="todo_orchestrator",
+                operation="delete_todo",
+                message=f"Deleted TODO '{todo.title}'",
+                context={"todo_id": todo_id},
+            )
+            
+            # Auto-checkpoint
+            self._auto_checkpoint_if_needed()
+            
+            return True
+    
+    def list_todos(
+        self,
+        status: Optional[TodoStatus] = None,
+        priority: Optional[Priority] = None,
+        tags: Optional[Set[str]] = None,
+    ) -> List[Todo]:
+        """
+        List TODO items with optional filters.
+        
+        Args:
+            status: Optional status filter
+            priority: Optional priority filter
+            tags: Optional tag filter (TODO must have ALL tags)
+            
+        Returns:
+            List of matching Todo objects
+        """
+        with self._lock:
+            results = []
+            for todo in self.todos.values():
+                # Apply filters
+                if status and todo.status != status:
+                    continue
+                if priority and todo.priority != priority:
+                    continue
+                if tags and not tags.issubset(todo.tags):
+                    continue
+                results.append(todo)
+            return results
+    
+    # ==========================================================================
+    # STATUS TRANSITIONS
+    # ==========================================================================
+    
+    def transition_status(self, todo_id: str, new_status: TodoStatus) -> Todo:
+        """
+        Transition TODO to new status.
+        
+        Args:
+            todo_id: TODO identifier
+            new_status: Target status
+            
+        Returns:
+            Updated Todo object
+            
+        Raises:
+            TodoNotFoundError: If TODO not found
+            InvalidStatusTransitionError: If transition is invalid
+        """
+        with self._lock:
+            todo = self.read_todo(todo_id)
+            old_status = todo.status
+            
+            # Validate transition
+            if not self._validate_transition(old_status, new_status):
+                raise InvalidStatusTransitionError(
+                    f"Invalid transition: {old_status.value} → {new_status.value}"
+                )
+            
+            # Update status
+            todo.status = new_status
+            todo.updated_at = datetime.now()
+            
+            # Update timestamps
+            if new_status == TodoStatus.IN_PROGRESS and todo.started_at is None:
+                todo.started_at = datetime.now()
+            elif new_status == TodoStatus.COMPLETED:
+                todo.completed_at = datetime.now()
+                self._stats["total_completed"] += 1
+            elif new_status == TodoStatus.FAILED:
+                self._stats["total_failed"] += 1
+            
+            # Update DAG node
+            self.dag.update_node(
+                todo_id,
+                status=new_status.to_node_status(),
+                data={"todo": todo.to_dict()},
+            )
+            
+            # Update dependent statuses
+            self._update_dependent_statuses(todo_id)
+            
+            # Update statistics
+            self._operation_count += 1
+            
+            # Audit log
+            self.audit_logger.log(
+                category=AuditCategory.STATE_MANAGEMENT,
+                component="todo_orchestrator",
+                operation="transition_status",
+                message=f"TODO '{todo.title}' transitioned: {old_status.value} → {new_status.value}",
+                context={
+                    "todo_id": todo_id,
+                    "old_status": old_status.value,
+                    "new_status": new_status.value,
+                },
+            )
+            
+            # Auto-checkpoint
+            self._auto_checkpoint_if_needed()
+            
+            return todo
+    
+    def _validate_transition(self, from_status: TodoStatus, to_status: TodoStatus) -> bool:
+        """Validate if status transition is allowed."""
+        return to_status in self.VALID_TRANSITIONS.get(from_status, set())
+    
+    def _update_dependent_statuses(self, todo_id: str) -> None:
+        """Update statuses of dependent TODOs after status change."""
+        todo = self.todos[todo_id]
+        dependents = self.dag.get_dependents(todo_id)
+        
+        for dep_id in dependents:
+            dep_todo = self.todos[dep_id]
+            
+            # Skip terminal states
+            if dep_todo.status.is_terminal:
+                continue
+            
+            # Check if dependent should be unblocked
+            if dep_todo.status == TodoStatus.BLOCKED:
+                if self._is_ready(dep_id):
+                    self.transition_status(dep_id, TodoStatus.READY)
+            
+            # Check if dependent should be blocked
+            elif dep_todo.status in {TodoStatus.NOT_STARTED, TodoStatus.READY}:
+                if not self._is_ready(dep_id):
+                    self.transition_status(dep_id, TodoStatus.BLOCKED)
+    
+    def _is_ready(self, todo_id: str) -> bool:
+        """Check if TODO is ready to execute (all dependencies completed)."""
+        dependencies = self.dag.get_dependencies(todo_id)
+        return all(
+            self.todos[dep_id].status == TodoStatus.COMPLETED
+            for dep_id in dependencies
+        )
+    
+    # ==========================================================================
+    # PARALLEL TASK IDENTIFICATION
+    # ==========================================================================
+    
+    def get_ready_tasks(self) -> List[Todo]:
+        """
+        Get all TODO items that are ready to execute.
+        
+        A TODO is ready if:
+        - Status is READY or NOT_STARTED
+        - All dependencies are completed
+        
+        Returns:
+            List of ready Todo objects, sorted by priority
+        """
+        with self._lock:
+            ready_node_ids = self.dag.get_ready_tasks()
+            ready_todos = [
+                self.todos[node_id]
+                for node_id in ready_node_ids
+                if node_id in self.todos
+            ]
+            # Sort by priority (P0 first)
+            ready_todos.sort(key=lambda t: t.priority.value)
+            return ready_todos
+    
+    def get_parallel_tasks(self) -> List[List[Todo]]:
+        """
+        Get groups of TODO items that can execute in parallel.
+        
+        Returns:
+            List of TODO groups, where TODOs in each group can run in parallel
+        """
+        with self._lock:
+            parallel_node_groups = self.dag.get_parallel_groups()
+            parallel_todo_groups = [
+                [self.todos[node_id] for node_id in group if node_id in self.todos]
+                for group in parallel_node_groups
+            ]
+            return parallel_todo_groups
+    
+    # ==========================================================================
+    # CHECKPOINT & RECOVERY
+    # ==========================================================================
+    
+    def create_checkpoint(self, metadata: Optional[Dict[str, Any]] = None) -> str:
+        """
+        Create a checkpoint of current state.
+        
+        Args:
+            metadata: Optional checkpoint metadata
+            
+        Returns:
+            Checkpoint ID
+        """
+        with self._lock:
+            checkpoint = Checkpoint(
+                id=f"checkpoint-{uuid.uuid4().hex[:12]}",
+                timestamp=datetime.now(),
+                todos={k: v for k, v in self.todos.items()},  # Shallow copy
+                dag_state=self.dag.to_dict(),
+                metadata=metadata or {},
+            )
+            
+            self.checkpoints.append(checkpoint)
+            self._stats["total_checkpoints"] += 1
+            
+            # Audit log
+            self.audit_logger.log(
+                category=AuditCategory.STATE_MANAGEMENT,
+                component="todo_orchestrator",
+                operation="create_checkpoint",
+                message=f"Created checkpoint '{checkpoint.id}'",
+                context={"checkpoint_id": checkpoint.id, "todo_count": len(self.todos)},
+            )
+            
+            return checkpoint.id
+    
+    def load_checkpoint(self, checkpoint_id: str) -> None:
+        """
+        Load state from a checkpoint.
+        
+        Args:
+            checkpoint_id: Checkpoint identifier
+            
+        Raises:
+            CheckpointError: If checkpoint not found
+        """
+        with self._lock:
+            # Find checkpoint
+            checkpoint = None
+            for cp in self.checkpoints:
+                if cp.id == checkpoint_id:
+                    checkpoint = cp
+                    break
+            
+            if checkpoint is None:
+                raise CheckpointError(f"Checkpoint '{checkpoint_id}' not found")
+            
+            # Restore state
+            self.todos = {k: v for k, v in checkpoint.todos.items()}  # Shallow copy
+            self.dag = DAG.from_dict(checkpoint.dag_state)
+            
+            self._stats["total_recoveries"] += 1
+            
+            # Audit log
+            self.audit_logger.log(
+                category=AuditCategory.STATE_MANAGEMENT,
+                component="todo_orchestrator",
+                operation="load_checkpoint",
+                message=f"Loaded checkpoint '{checkpoint_id}'",
+                context={"checkpoint_id": checkpoint_id, "todo_count": len(self.todos)},
+            )
+    
+    def _auto_checkpoint_if_needed(self) -> None:
+        """Create checkpoint if auto-checkpoint interval reached."""
+        if self.auto_checkpoint_interval is None:
+            return
+        
+        if self._operation_count % self.auto_checkpoint_interval == 0:
+            self.create_checkpoint(metadata={"auto": True})
+    
+    # ==========================================================================
+    # PERSISTENCE
+    # ==========================================================================
+    
+    def persist(self) -> None:
+        """Persist current state to StateManager."""
+        with self._lock:
+            state_data = {
+                "todos": {k: v.to_dict() for k, v in self.todos.items()},
+                "dag_state": self.dag.to_dict(),
+                "stats": self._stats,
+            }
+            
+            self.state_manager.save_state(
+                key=f"{self.name}-state",
+                data=state_data,
+            )
+            
+            # Audit log
+            self.audit_logger.log(
+                category=AuditCategory.STATE_MANAGEMENT,
+                component="todo_orchestrator",
+                operation="persist",
+                message=f"Persisted orchestrator state",
+                context={"todo_count": len(self.todos)},
+            )
+    
+    def load(self) -> None:
+        """Load state from StateManager."""
+        with self._lock:
+            state_data = self.state_manager.load_state(key=f"{self.name}-state")
+            
+            if state_data:
+                # Restore TODOs
+                self.todos = {
+                    k: Todo.from_dict(v)
+                    for k, v in state_data.get("todos", {}).items()
+                }
+                
+                # Restore DAG
+                dag_state = state_data.get("dag_state")
+                if dag_state:
+                    self.dag = DAG.from_dict(dag_state)
+                
+                # Restore statistics
+                self._stats.update(state_data.get("stats", {}))
+                
+                # Audit log
+                self.audit_logger.log(
+                    category=AuditCategory.STATE_MANAGEMENT,
+                    component="todo_orchestrator",
+                    operation="load",
+                    message=f"Loaded orchestrator state",
+                    context={"todo_count": len(self.todos)},
+                )
+    
+    # ==========================================================================
+    # STATISTICS
+    # ==========================================================================
+    
+    def get_statistics(self) -> Dict[str, Any]:
+        """Get orchestrator statistics."""
+        with self._lock:
+            return {
+                **self._stats,
+                "total_todos": len(self.todos),
+                "ready_todos": len(self.get_ready_tasks()),
+                "in_progress": len([t for t in self.todos.values() if t.status == TodoStatus.IN_PROGRESS]),
+                "blocked": len([t for t in self.todos.values() if t.status == TodoStatus.BLOCKED]),
+            }
