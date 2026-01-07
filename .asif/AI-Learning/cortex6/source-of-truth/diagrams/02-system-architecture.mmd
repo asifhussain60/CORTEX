@@ -1,0 +1,79 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#4a90d9'}}}%%
+
+flowchart TB
+    subgraph L6["Layer 6: Presentation"]
+        P1[🤖 GitHub Copilot<br/>Terminal Proxy]
+        P2[⌨️ CLI<br/>python -m src]
+        P3[🔌 MCP Clients<br/>VS Code, etc]
+    end
+    
+    subgraph L5["Layer 5: API"]
+        API[🌐 MCP Server<br/>JSON-RPC 2.0<br/>Port 5000]
+    end
+    
+    subgraph L4["Layer 4: Orchestration"]
+        MO[🎯 Master Orchestrator<br/>Entry Point]
+        TODO[📋 TODO Orchestrator<br/>DAG-Based]
+        PR[🔀 Pattern Router<br/>O(1) Trie]
+        
+        subgraph Workflows["Workflow Orchestrators"]
+            W1[📐 Planning]
+            W2[🧪 TDD]
+            W3[📊 ADO]
+            W4[🧹 Vacuum]
+            W5[🗑️ Cleanup]
+            W6[🔍 Investigation]
+            W7[🔒 Sanitization]
+            W8[🐛 Debug]
+            W9[✨ Refinement]
+            W10[🔧 Maintenance]
+        end
+    end
+    
+    subgraph L3["Layer 3: Governance"]
+        GM[⚖️ Governance Merger<br/>4-Category]
+        AL[📝 Audit Logger<br/>Runtime]
+        RL[🚦 Resource Limiter<br/>Quotas]
+    end
+    
+    subgraph L2["Layer 2: State"]
+        SM[💾 State Manager<br/>SQLite + WAL]
+        CM[📍 Checkpoint Mgr<br/>Resume]
+        RM[↩️ Rollback Mgr<br/>Recovery]
+    end
+    
+    subgraph L1["Layer 1: Infrastructure"]
+        FIO[📁 File I/O<br/>pathlib]
+        MT[🔗 MCP Transport<br/>stdio/http]
+        LOG[📊 Logging<br/>JSON]
+    end
+    
+    subgraph DB["Database"]
+        SQLite[(🗄️ cortex.db<br/>WAL Mode)]
+    end
+    
+    P1 --> API
+    P2 --> MO
+    P3 --> API
+    
+    API --> MO
+    
+    MO --> PR
+    MO --> TODO
+    MO --> GM
+    MO --> AL
+    
+    PR --> W1 & W2 & W3 & W4 & W5 & W6 & W7 & W8 & W9 & W10
+    
+    W1 & W2 & W3 & W4 & W5 & W6 & W7 & W8 & W9 & W10 --> TODO
+    
+    TODO --> SM
+    GM --> SM
+    AL --> SM
+    
+    SM --> CM & RM
+    SM --> SQLite
+    
+    SM --> FIO
+    API --> MT
+    AL --> LOG

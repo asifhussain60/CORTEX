@@ -1,0 +1,912 @@
+# ==============================================================================
+# FEATURE: FEAT02-TODO-ORCHESTRATOR - DAG-Based TODO Manager
+# ==============================================================================
+# Purpose: Implement TODO Orchestrator with DAG-based work tracking
+# Executor: GitHub Copilot (transitions to CORTEX after completion)
+# Priority: P0_CRITICAL - HANDOFF POINT
+# 
+# CRITICAL: This feature enables CORTEX self-management
+# After completion, CORTEX can manage its own work items
+# 
+# Author: Asif Hussain
+# Version: 1.0.0
+# Created: 2026-01-07
+# ==============================================================================
+
+feature:
+  id: feat02-todo-orchestrator
+  name: "TODO Orchestrator (DAG-based)"
+  description: |
+    Implements the TODO Orchestrator with Directed Acyclic Graph (DAG) based
+    work tracking. This is the CRITICAL HANDOFF POINT where CORTEX gains
+    the ability to manage its own work items.
+    
+    After this feature completes:
+    - CORTEX can create TODOs from YAML plans
+    - CORTEX can track dependencies via DAG
+    - CORTEX can checkpoint and resume
+    - CORTEX can rollback on failure
+    - GitHub Copilot hands off control to CORTEX
+    
+  epic_id: CORTEX6-BUILD
+  priority: P0_CRITICAL
+  tier: 1
+  status: NOT_STARTED
+  progress: 0
+  is_handoff_point: true  # CRITICAL FLAG
+  
+  # ============================================================================
+  # METADATA
+  # ============================================================================
+  metadata:
+    created_date: "2026-01-07"
+    last_updated: "2026-01-07"
+    estimated_days: 14
+    actual_days: 0
+    executor: "GitHub Copilot"
+    post_completion_executor: "CORTEX"
+    
+  # ============================================================================
+  # DEPENDENCIES
+  # ============================================================================
+  dependencies:
+    required:
+      - feature_id: feat01-foundation
+        artifacts:
+          - "StateManager with WAL mode"
+          - "AuditLogger with correlation tracking"
+          - "Test infrastructure"
+    optional: []
+    
+  enables:
+    - feat04-core-orchestration
+    - "CORTEX_SELF_MANAGEMENT"  # Special flag
+    
+  # ============================================================================
+  # HANDOFF SPECIFICATION
+  # ============================================================================
+  handoff:
+    trigger_phase: 4
+    trigger_task: "4.5"
+    validation_requirements:
+      - "CORTEX can create TODOs from YAML"
+      - "CORTEX can execute TODOs in DAG order"
+      - "CORTEX can checkpoint progress"
+      - "CORTEX can resume from checkpoint"
+      - "CORTEX can rollback on failure"
+    handoff_procedure:
+      step_1: "Validate all handoff requirements pass"
+      step_2: "Update TODO tracker: current_executor = 'CORTEX TODO Manager'"
+      step_3: "CORTEX loads remaining features from tracker"
+      step_4: "CORTEX generates TODOs for feat03-governance"
+      step_5: "GitHub Copilot becomes advisory only"
+    fallback_if_failed: "Continue with GitHub Copilot execution"
+    
+  # ============================================================================
+  # AUDIT REQUIREMENTS
+  # ============================================================================
+  audit:
+    mandatory: true
+    log_to: "cortex-brain/audit-logs/"
+    categories:
+      - EXECUTION
+      - STATE_MANAGEMENT
+    correlation_prefix: "FEAT02"
+    
+  # ============================================================================
+  # DELIVERABLES
+  # ============================================================================
+  deliverables:
+    code:
+      - path: "src/orchestrators/core/dag.py"
+        description: "DAG data structure implementation"
+        type: "python"
+        
+      - path: "src/orchestrators/core/todo_orchestrator.py"
+        description: "TODO Orchestrator with DAG integration"
+        type: "python"
+        
+      - path: "src/orchestrators/core/checkpoint_manager.py"
+        description: "Checkpoint and recovery manager"
+        type: "python"
+        
+    tests:
+      - path: "tests/unit/test_dag.py"
+        coverage_target: "95%"
+        
+      - path: "tests/unit/test_todo_orchestrator.py"
+        coverage_target: "90%"
+        
+      - path: "tests/integration/test_todo_lifecycle.py"
+        description: "Full TODO lifecycle integration test"
+        
+    documentation:
+      - path: "docs/architecture/todo-orchestrator.md"
+        description: "TODO Orchestrator architecture documentation"
+        
+  # ============================================================================
+  # PHASES
+  # ============================================================================
+  phases:
+    # --------------------------------------------------------------------------
+    # Phase 1: DAG Core Implementation
+    # --------------------------------------------------------------------------
+    - id: 1
+      name: "DAG Core Implementation"
+      description: "Implement Directed Acyclic Graph data structure"
+      status: NOT_STARTED
+      progress: 0
+      estimated_hours: 24
+      
+      objectives:
+        - "Implement DAG node and edge operations"
+        - "Implement circular dependency detection"
+        - "Implement topological sort"
+        - "Handle >1000 node graphs efficiently"
+        
+      entry_criteria:
+        - "feat01-foundation complete"
+        - "StateManager available"
+        
+      exit_criteria:
+        - "DAG operations pass all unit tests"
+        - "Circular dependency detection works"
+        - "Topological sort produces correct order"
+        - "Performance acceptable for 1000+ nodes"
+        
+      audit_checkpoint:
+        correlation_id: "FEAT02-P1"
+        validation:
+          - "All DAG operations logged"
+          - "No circular dependencies created"
+          - "Performance metrics captured"
+        
+      tasks:
+        - id: "1.1"
+          name: "Design DAG data structures"
+          priority: P0_CRITICAL
+          estimated_minutes: 90
+          tdd_required: false  # Design task
+          dependencies: []
+          implementation:
+            action: "create_file"
+            path: "src/orchestrators/core/dag.py"
+            design:
+              classes:
+                - name: "DAGNode"
+                  attributes:
+                    - "id: str"
+                    - "data: Dict[str, Any]"
+                    - "status: NodeStatus"
+                    - "created_at: datetime"
+                    - "updated_at: datetime"
+                - name: "DAGEdge"
+                  attributes:
+                    - "source_id: str"
+                    - "target_id: str"
+                    - "edge_type: EdgeType"
+                - name: "DAG"
+                  attributes:
+                    - "nodes: Dict[str, DAGNode]"
+                    - "edges: List[DAGEdge]"
+                    - "adjacency_list: Dict[str, List[str]]"
+          validation:
+            type: "file_exists"
+            path: "src/orchestrators/core/dag.py"
+            
+        - id: "1.2"
+          name: "Write failing DAG tests"
+          priority: P0_CRITICAL
+          estimated_minutes: 120
+          tdd_required: true
+          tdd_phase: "RED"
+          dependencies: ["1.1"]
+          implementation:
+            action: "create_file"
+            path: "tests/unit/test_dag.py"
+            test_cases:
+              - name: "test_add_node"
+                description: "Adding node to DAG"
+              - name: "test_remove_node"
+                description: "Removing node from DAG"
+              - name: "test_update_node"
+                description: "Updating node data"
+              - name: "test_add_edge"
+                description: "Adding dependency edge"
+              - name: "test_remove_edge"
+                description: "Removing dependency edge"
+              - name: "test_get_dependencies"
+                description: "Getting node dependencies"
+              - name: "test_get_dependents"
+                description: "Getting nodes that depend on this node"
+              - name: "test_circular_dependency_detection"
+                description: "Detect and reject circular dependencies"
+              - name: "test_topological_sort"
+                description: "Topological sort for execution order"
+              - name: "test_valid_dag_invariant"
+                description: "DAG maintains valid state"
+          validation:
+            type: "tests_fail"
+            expected_failures: 10
+            
+        - id: "1.3"
+          name: "Implement DAG node operations"
+          priority: P0_CRITICAL
+          estimated_minutes: 180
+          tdd_required: true
+          tdd_phase: "GREEN"
+          dependencies: ["1.2"]
+          implementation:
+            action: "modify_file"
+            path: "src/orchestrators/core/dag.py"
+            implement:
+              - "DAG.add_node(node_id, data)"
+              - "DAG.remove_node(node_id)"
+              - "DAG.update_node(node_id, data)"
+              - "DAG.get_node(node_id)"
+              - "DAG.has_node(node_id)"
+          validation:
+            type: "tests_pass"
+            test_names: ["test_add_node", "test_remove_node", "test_update_node"]
+            
+        - id: "1.4"
+          name: "Implement DAG edge operations"
+          priority: P0_CRITICAL
+          estimated_minutes: 120
+          tdd_required: true
+          tdd_phase: "GREEN"
+          dependencies: ["1.3"]
+          implementation:
+            action: "modify_file"
+            path: "src/orchestrators/core/dag.py"
+            implement:
+              - "DAG.add_edge(source_id, target_id)"
+              - "DAG.remove_edge(source_id, target_id)"
+              - "DAG.get_dependencies(node_id)"
+              - "DAG.get_dependents(node_id)"
+          validation:
+            type: "tests_pass"
+            test_names: ["test_add_edge", "test_remove_edge", "test_get_dependencies", "test_get_dependents"]
+            
+        - id: "1.5"
+          name: "Implement circular dependency detection"
+          priority: P0_CRITICAL
+          estimated_minutes: 90
+          tdd_required: true
+          tdd_phase: "GREEN"
+          dependencies: ["1.4"]
+          implementation:
+            action: "modify_file"
+            path: "src/orchestrators/core/dag.py"
+            implement:
+              - "DAG._detect_cycle(start_node)"
+              - "DAG._dfs_cycle_check(node, visited, rec_stack)"
+              - "DAG.validate()"
+            algorithm: |
+              Use iterative DFS with explicit stack to avoid recursion limit:
+              1. For each unvisited node, start DFS
+              2. Track visited and in-recursion-stack sets
+              3. If node in rec_stack when visited -> cycle detected
+              4. Raise CircularDependencyError with cycle path
+          validation:
+            type: "tests_pass"
+            test_names: ["test_circular_dependency_detection", "test_valid_dag_invariant"]
+            
+        - id: "1.6"
+          name: "Implement topological sort"
+          priority: P0_CRITICAL
+          estimated_minutes: 60
+          tdd_required: true
+          tdd_phase: "GREEN"
+          dependencies: ["1.5"]
+          implementation:
+            action: "modify_file"
+            path: "src/orchestrators/core/dag.py"
+            implement:
+              - "DAG.topological_sort()"
+              - "DAG.get_execution_order()"
+            algorithm: |
+              Kahn's algorithm for topological sort:
+              1. Find all nodes with no incoming edges
+              2. Remove these nodes, add to result
+              3. Repeat until no nodes remain
+              4. If nodes remain but none have 0 in-degree -> cycle
+          validation:
+            type: "tests_pass"
+            test_names: ["test_topological_sort"]
+            
+        - id: "1.7"
+          name: "Add performance optimizations"
+          priority: P1_HIGH
+          estimated_minutes: 90
+          tdd_required: true
+          tdd_phase: "REFACTOR"
+          dependencies: ["1.6"]
+          implementation:
+            action: "modify_file"
+            path: "src/orchestrators/core/dag.py"
+            optimize:
+              - "Cache topological sort result"
+              - "Invalidate cache on modification"
+              - "Use adjacency list for O(1) neighbor lookup"
+              - "Implement snapshot() for copy-on-write"
+            performance_test:
+              path: "tests/performance/test_dag_performance.py"
+              sla: "<100ms for 1000 nodes"
+          validation:
+            type: "performance_test"
+            sla: "<100ms for 1000 nodes"
+            
+    # --------------------------------------------------------------------------
+    # Phase 2: TODO Manager Integration
+    # --------------------------------------------------------------------------
+    - id: 2
+      name: "TODO Manager Integration"
+      description: "Integrate DAG with TODO management"
+      status: NOT_STARTED
+      progress: 0
+      estimated_hours: 20
+      dependencies: [1]
+      
+      objectives:
+        - "Design TodoOrchestrator class"
+        - "Integrate DAG with StateManager"
+        - "Implement TODO CRUD operations"
+        - "Implement status transitions"
+        - "Identify parallel execution opportunities"
+        
+      entry_criteria:
+        - "Phase 1 complete"
+        - "DAG implementation tested"
+        
+      exit_criteria:
+        - "TodoOrchestrator passes all unit tests"
+        - "DAG persists correctly to database"
+        - "Status transitions enforce valid state machine"
+        - "Parallel tasks correctly identified"
+        
+      audit_checkpoint:
+        correlation_id: "FEAT02-P2"
+        validation:
+          - "All TODO operations logged"
+          - "State transitions recorded"
+          - "Parallel task identification logged"
+        
+      tasks:
+        - id: "2.1"
+          name: "Design TodoOrchestrator class"
+          priority: P0_CRITICAL
+          estimated_minutes: 60
+          tdd_required: false
+          dependencies: []
+          implementation:
+            action: "create_file"
+            path: "src/orchestrators/core/todo_orchestrator.py"
+            design:
+              class: "TodoOrchestrator"
+              attributes:
+                - "dag: DAG"
+                - "state_manager: StateManager"
+                - "audit_logger: EnterpriseAuditLogger"
+              state_machine:
+                states:
+                  - "NOT_STARTED"
+                  - "BLOCKED"
+                  - "READY"
+                  - "IN_PROGRESS"
+                  - "COMPLETED"
+                  - "FAILED"
+                  - "ROLLED_BACK"
+                transitions:
+                  - from: "NOT_STARTED"
+                    to: ["BLOCKED", "READY"]
+                  - from: "BLOCKED"
+                    to: ["READY"]
+                  - from: "READY"
+                    to: ["IN_PROGRESS"]
+                  - from: "IN_PROGRESS"
+                    to: ["COMPLETED", "FAILED"]
+                  - from: "FAILED"
+                    to: ["ROLLED_BACK", "READY"]
+                  - from: "COMPLETED"
+                    to: []  # Terminal state
+          validation:
+            type: "file_exists"
+            path: "src/orchestrators/core/todo_orchestrator.py"
+            
+        - id: "2.2"
+          name: "Write failing TodoOrchestrator tests"
+          priority: P0_CRITICAL
+          estimated_minutes: 90
+          tdd_required: true
+          tdd_phase: "RED"
+          dependencies: ["2.1"]
+          implementation:
+            action: "create_file"
+            path: "tests/unit/test_todo_orchestrator.py"
+            test_cases:
+              - "test_create_todo"
+              - "test_read_todo"
+              - "test_update_todo"
+              - "test_delete_todo"
+              - "test_status_transition_valid"
+              - "test_status_transition_invalid"
+              - "test_dag_persistence"
+              - "test_dag_recovery"
+              - "test_identify_parallel_tasks"
+              - "test_identify_ready_tasks"
+          validation:
+            type: "tests_fail"
+            expected_failures: 10
+            
+        - id: "2.3"
+          name: "Implement DAG-StateManager integration"
+          priority: P0_CRITICAL
+          estimated_minutes: 120
+          tdd_required: true
+          tdd_phase: "GREEN"
+          dependencies: ["2.2"]
+          implementation:
+            action: "modify_file"
+            path: "src/orchestrators/core/todo_orchestrator.py"
+            implement:
+              - "_serialize_dag()"
+              - "_deserialize_dag(data)"
+              - "persist_dag()"
+              - "load_dag()"
+          validation:
+            type: "tests_pass"
+            test_names: ["test_dag_persistence", "test_dag_recovery"]
+            
+        - id: "2.4"
+          name: "Implement TODO CRUD operations"
+          priority: P0_CRITICAL
+          estimated_minutes: 120
+          tdd_required: true
+          tdd_phase: "GREEN"
+          dependencies: ["2.3"]
+          implementation:
+            action: "modify_file"
+            path: "src/orchestrators/core/todo_orchestrator.py"
+            implement:
+              - "create_todo(todo_data) -> str"
+              - "read_todo(todo_id) -> Todo"
+              - "update_todo(todo_id, updates) -> Todo"
+              - "delete_todo(todo_id) -> bool"
+              - "list_todos(filters) -> List[Todo]"
+          validation:
+            type: "tests_pass"
+            test_names: ["test_create_todo", "test_read_todo", "test_update_todo", "test_delete_todo"]
+            
+        - id: "2.5"
+          name: "Implement status transitions"
+          priority: P0_CRITICAL
+          estimated_minutes: 90
+          tdd_required: true
+          tdd_phase: "GREEN"
+          dependencies: ["2.4"]
+          implementation:
+            action: "modify_file"
+            path: "src/orchestrators/core/todo_orchestrator.py"
+            implement:
+              - "_validate_transition(from_status, to_status)"
+              - "transition_status(todo_id, new_status)"
+              - "_update_dependent_statuses(todo_id)"
+          validation:
+            type: "tests_pass"
+            test_names: ["test_status_transition_valid", "test_status_transition_invalid"]
+            
+        - id: "2.6"
+          name: "Implement parallel task identification"
+          priority: P1_HIGH
+          estimated_minutes: 90
+          tdd_required: true
+          tdd_phase: "GREEN"
+          dependencies: ["2.5"]
+          implementation:
+            action: "modify_file"
+            path: "src/orchestrators/core/todo_orchestrator.py"
+            implement:
+              - "get_ready_tasks() -> List[Todo]"
+              - "get_parallel_tasks() -> List[List[Todo]]"
+              - "_calculate_critical_path()"
+          validation:
+            type: "tests_pass"
+            test_names: ["test_identify_parallel_tasks", "test_identify_ready_tasks"]
+            
+    # --------------------------------------------------------------------------
+    # Phase 3: Checkpoint & Recovery
+    # --------------------------------------------------------------------------
+    - id: 3
+      name: "Checkpoint & Recovery"
+      description: "Implement checkpoint creation and recovery"
+      status: NOT_STARTED
+      progress: 0
+      estimated_hours: 16
+      dependencies: [2]
+      
+      objectives:
+        - "Design checkpoint format"
+        - "Implement checkpoint creation"
+        - "Implement recovery from checkpoint"
+        - "Implement rollback functionality"
+        - "Implement automatic checkpoint intervals"
+        
+      entry_criteria:
+        - "Phase 2 complete"
+        - "TodoOrchestrator functional"
+        
+      exit_criteria:
+        - "Checkpoints created atomically"
+        - "Recovery restores exact state"
+        - "Rollback cascades correctly"
+        - "Auto-checkpoint works at configured intervals"
+        
+      audit_checkpoint:
+        correlation_id: "FEAT02-P3"
+        validation:
+          - "Checkpoint operations logged"
+          - "Recovery operations logged"
+          - "Rollback cascade logged"
+        
+      tasks:
+        - id: "3.1"
+          name: "Design checkpoint format"
+          priority: P0_CRITICAL
+          estimated_minutes: 45
+          tdd_required: false
+          dependencies: []
+          implementation:
+            action: "create_file"
+            path: "src/orchestrators/core/checkpoint_manager.py"
+            design:
+              checkpoint_format:
+                version: "1.0"
+                timestamp: "ISO8601"
+                dag_snapshot: "Serialized DAG"
+                state_snapshot: "All state at checkpoint"
+                metadata:
+                  - "correlation_id"
+                  - "executor"
+                  - "tasks_completed"
+                  - "tasks_remaining"
+              storage:
+                location: "cortex-brain/state/checkpoints/"
+                naming: "checkpoint_{timestamp}_{correlation_id}.json"
+                retention: "7 days"
+          validation:
+            type: "file_exists"
+            path: "src/orchestrators/core/checkpoint_manager.py"
+            
+        - id: "3.2"
+          name: "Write failing checkpoint tests"
+          priority: P0_CRITICAL
+          estimated_minutes: 60
+          tdd_required: true
+          tdd_phase: "RED"
+          dependencies: ["3.1"]
+          implementation:
+            action: "create_file"
+            path: "tests/unit/test_checkpoint_manager.py"
+            test_cases:
+              - "test_create_checkpoint"
+              - "test_checkpoint_content"
+              - "test_checkpoint_atomicity"
+              - "test_recover_from_checkpoint"
+              - "test_partial_recovery"
+              - "test_rollback_to_checkpoint"
+              - "test_rollback_cascade"
+              - "test_auto_checkpoint"
+              - "test_checkpoint_cleanup"
+          validation:
+            type: "tests_fail"
+            expected_failures: 9
+            
+        - id: "3.3"
+          name: "Implement checkpoint creation"
+          priority: P0_CRITICAL
+          estimated_minutes: 90
+          tdd_required: true
+          tdd_phase: "GREEN"
+          dependencies: ["3.2"]
+          implementation:
+            action: "modify_file"
+            path: "src/orchestrators/core/checkpoint_manager.py"
+            implement:
+              - "create_checkpoint(correlation_id) -> CheckpointId"
+              - "_serialize_state() -> Dict"
+              - "_write_checkpoint_atomic(data)"
+            atomic_write:
+              - "Write to .tmp file"
+              - "fsync()"
+              - "Atomic rename to final name"
+              - "Keep previous as .bak"
+          validation:
+            type: "tests_pass"
+            test_names: ["test_create_checkpoint", "test_checkpoint_content", "test_checkpoint_atomicity"]
+            
+        - id: "3.4"
+          name: "Implement recovery from checkpoint"
+          priority: P0_CRITICAL
+          estimated_minutes: 120
+          tdd_required: true
+          tdd_phase: "GREEN"
+          dependencies: ["3.3"]
+          implementation:
+            action: "modify_file"
+            path: "src/orchestrators/core/checkpoint_manager.py"
+            implement:
+              - "recover_from_checkpoint(checkpoint_id) -> bool"
+              - "_deserialize_state(data) -> State"
+              - "_validate_checkpoint(data) -> bool"
+              - "list_checkpoints() -> List[CheckpointInfo]"
+              - "get_latest_checkpoint() -> CheckpointId"
+          validation:
+            type: "tests_pass"
+            test_names: ["test_recover_from_checkpoint", "test_partial_recovery"]
+            
+        - id: "3.5"
+          name: "Implement rollback functionality"
+          priority: P0_CRITICAL
+          estimated_minutes: 120
+          tdd_required: true
+          tdd_phase: "GREEN"
+          dependencies: ["3.4"]
+          implementation:
+            action: "modify_file"
+            path: "src/orchestrators/core/checkpoint_manager.py"
+            implement:
+              - "rollback_to_checkpoint(checkpoint_id) -> bool"
+              - "_rollback_task(task_id)"
+              - "_rollback_dependents(task_id) -> List[TaskId]"
+              - "_cascade_rollback(task_ids)"
+          validation:
+            type: "tests_pass"
+            test_names: ["test_rollback_to_checkpoint", "test_rollback_cascade"]
+            
+        - id: "3.6"
+          name: "Implement automatic checkpointing"
+          priority: P1_HIGH
+          estimated_minutes: 60
+          tdd_required: true
+          tdd_phase: "GREEN"
+          dependencies: ["3.5"]
+          implementation:
+            action: "modify_file"
+            path: "src/orchestrators/core/checkpoint_manager.py"
+            implement:
+              - "configure_auto_checkpoint(interval=5)"
+              - "_should_checkpoint() -> bool"
+              - "_cleanup_old_checkpoints()"
+            config:
+              default_interval: 5  # tasks
+              max_checkpoints: 10
+              retention_days: 7
+          validation:
+            type: "tests_pass"
+            test_names: ["test_auto_checkpoint", "test_checkpoint_cleanup"]
+            
+    # --------------------------------------------------------------------------
+    # Phase 4: Self-Management Capability (HANDOFF ENABLER)
+    # --------------------------------------------------------------------------
+    - id: 4
+      name: "Self-Management Capability"
+      description: "Enable CORTEX to manage its own work items"
+      status: NOT_STARTED
+      progress: 0
+      estimated_hours: 12
+      dependencies: [3]
+      is_handoff_phase: true
+      
+      objectives:
+        - "Implement TODO generation from YAML plans"
+        - "Implement execution queue management"
+        - "Implement progress tracking API"
+        - "Full TODO lifecycle integration test"
+        - "HANDOFF VALIDATION"
+        
+      entry_criteria:
+        - "Phase 3 complete"
+        - "Checkpoint/recovery functional"
+        
+      exit_criteria:
+        - "CORTEX can generate TODOs from YAML"
+        - "CORTEX can execute in DAG order"
+        - "CORTEX can track progress"
+        - "CORTEX can checkpoint and resume"
+        - "HANDOFF VALIDATION passes"
+        
+      audit_checkpoint:
+        correlation_id: "FEAT02-P4"
+        validation:
+          - "YAML parsing logged"
+          - "TODO generation logged"
+          - "Execution progress logged"
+          - "HANDOFF validation logged"
+        
+      tasks:
+        - id: "4.1"
+          name: "Implement YAML to TODO conversion"
+          priority: P0_CRITICAL
+          estimated_minutes: 120
+          tdd_required: true
+          tdd_phase: "GREEN"
+          dependencies: []
+          implementation:
+            action: "modify_file"
+            path: "src/orchestrators/core/todo_orchestrator.py"
+            implement:
+              - "load_from_yaml(yaml_path) -> List[Todo]"
+              - "_parse_feature_yaml(data) -> List[Todo]"
+              - "_build_dag_from_tasks(tasks)"
+              - "_resolve_dependencies(tasks)"
+          validation:
+            type: "tests_pass"
+            test_names: ["test_load_from_yaml", "test_parse_feature_yaml"]
+            
+        - id: "4.2"
+          name: "Implement execution queue"
+          priority: P0_CRITICAL
+          estimated_minutes: 90
+          tdd_required: true
+          tdd_phase: "GREEN"
+          dependencies: ["4.1"]
+          implementation:
+            action: "modify_file"
+            path: "src/orchestrators/core/todo_orchestrator.py"
+            implement:
+              - "get_next_tasks() -> List[Todo]"
+              - "execute_task(task_id) -> TaskResult"
+              - "mark_complete(task_id, result)"
+              - "mark_failed(task_id, error)"
+            queue_strategy: |
+              Priority ordering:
+              1. READY tasks first
+              2. Critical path tasks prioritized
+              3. Parallel tasks grouped
+          validation:
+            type: "tests_pass"
+            test_names: ["test_execution_queue", "test_priority_ordering"]
+            
+        - id: "4.3"
+          name: "Implement progress tracking API"
+          priority: P0_CRITICAL
+          estimated_minutes: 60
+          tdd_required: true
+          tdd_phase: "GREEN"
+          dependencies: ["4.2"]
+          implementation:
+            action: "modify_file"
+            path: "src/orchestrators/core/todo_orchestrator.py"
+            implement:
+              - "get_progress() -> ProgressReport"
+              - "get_feature_progress(feature_id) -> ProgressReport"
+              - "get_phase_progress(feature_id, phase_id) -> ProgressReport"
+            progress_report:
+              fields:
+                - "total_tasks"
+                - "completed_tasks"
+                - "failed_tasks"
+                - "blocked_tasks"
+                - "percentage"
+                - "estimated_remaining_time"
+          validation:
+            type: "tests_pass"
+            test_names: ["test_get_progress", "test_update_progress"]
+            
+        - id: "4.4"
+          name: "Full TODO lifecycle integration test"
+          priority: P0_CRITICAL
+          estimated_minutes: 90
+          tdd_required: true
+          dependencies: ["4.3"]
+          implementation:
+            action: "create_file"
+            path: "tests/integration/test_todo_lifecycle.py"
+            test_cases:
+              - name: "test_full_lifecycle"
+                steps:
+                  - "Load YAML plan"
+                  - "Generate TODOs"
+                  - "Execute in order"
+                  - "Handle failure"
+                  - "Rollback"
+                  - "Resume"
+                  - "Complete"
+              - name: "test_checkpoint_resume_lifecycle"
+                steps:
+                  - "Execute partial plan"
+                  - "Create checkpoint"
+                  - "Simulate crash"
+                  - "Recover from checkpoint"
+                  - "Continue execution"
+          validation:
+            type: "integration_test_passes"
+            path: "tests/integration/test_todo_lifecycle.py"
+            
+        - id: "4.5"
+          name: "HANDOFF VALIDATION"
+          priority: P0_CRITICAL
+          estimated_minutes: 60
+          tdd_required: true
+          is_handoff_gate: true
+          dependencies: ["4.4"]
+          implementation:
+            action: "create_file"
+            path: "tests/integration/test_cortex_self_management.py"
+            test_cases:
+              - name: "test_cortex_can_manage_own_todos"
+                description: "CORTEX creates and executes TODOs from this epic"
+                steps:
+                  - "CORTEX loads feat03-governance feature.yaml"
+                  - "CORTEX generates TODOs"
+                  - "CORTEX creates DAG"
+                  - "CORTEX identifies ready tasks"
+                  - "CORTEX can checkpoint"
+                  - "CORTEX can resume"
+              - name: "test_cortex_audit_trail"
+                description: "CORTEX operations are audited"
+              - name: "test_cortex_rollback_capability"
+                description: "CORTEX can rollback on failure"
+          validation:
+            type: "handoff_gate"
+            requirements:
+              - "test_cortex_can_manage_own_todos PASSES"
+              - "test_cortex_audit_trail PASSES"
+              - "test_cortex_rollback_capability PASSES"
+          on_success:
+            action: "INITIATE_HANDOFF"
+            update_tracker: true
+            new_executor: "CORTEX TODO Manager"
+          on_failure:
+            action: "DEFER_HANDOFF"
+            continue_with: "GitHub Copilot"
+            retry_at: "Next checkpoint"
+
+  # ============================================================================
+  # FEATURE COMPLETION
+  # ============================================================================
+  completion:
+    validation:
+      - "All 4 phases complete"
+      - "All unit tests pass"
+      - "Integration tests pass"
+      - "HANDOFF VALIDATION passes"
+      - "Coverage >90% for core components"
+      
+    audit_analysis:
+      correlation_id_range: "FEAT02-P1 to FEAT02-P4"
+      checks:
+        - "Full audit trace available"
+        - "Zero unresolved ERROR entries"
+        - "HANDOFF validation logged"
+        - "Self-management capability verified"
+        
+    deliverables_checklist:
+      - path: "src/orchestrators/core/dag.py"
+        status: NOT_DELIVERED
+      - path: "src/orchestrators/core/todo_orchestrator.py"
+        status: NOT_DELIVERED
+      - path: "src/orchestrators/core/checkpoint_manager.py"
+        status: NOT_DELIVERED
+      - path: "tests/integration/test_cortex_self_management.py"
+        status: NOT_DELIVERED
+        
+    handoff_execution:
+      trigger: "All validation passes"
+      steps:
+        - step: 1
+          action: "Update TODO tracker"
+          details: "current_executor = 'CORTEX TODO Manager'"
+        - step: 2
+          action: "CORTEX loads remaining features"
+          details: "feat03 through feat08 from tracker"
+        - step: 3
+          action: "CORTEX generates first work batch"
+          details: "TODOs for feat03-governance"
+        - step: 4
+          action: "GitHub Copilot notification"
+          details: "Handoff complete, advisory role only"
+          
+    next_feature: "feat03-governance"
+    next_executor: "CORTEX TODO Manager"

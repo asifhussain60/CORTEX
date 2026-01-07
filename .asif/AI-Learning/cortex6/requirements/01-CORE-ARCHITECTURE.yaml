@@ -1,0 +1,539 @@
+# CORTEX-6 Core Architecture (Greenfield)
+# Component Specifications and Relationships
+# Generated: 2026-01-07T17:05:00Z
+
+metadata:
+  document_type: core_architecture
+  cortex_version: '6.0.0-greenfield'
+  architecture_type: event_driven_dag_orchestration
+  generated_timestamp: '2026-01-07T17:05:00Z'
+  author: Asif Hussain
+  target_platforms:
+    - "macOS (Apple Silicon + Intel)"
+    - "Windows 11"
+    - "Linux (Ubuntu 22.04+)"
+
+# =============================================================================
+# SYSTEM ARCHITECTURE OVERVIEW
+# =============================================================================
+
+system_overview:
+  architecture_style: "Layered event-driven microkernel"
+  core_principles:
+    - "Single entry point (MasterOrchestrator)"
+    - "Plugin architecture (orchestrators dynamically loaded)"
+    - "State machine-based lifecycle"
+    - "Database-backed coordination (SQLite WAL)"
+    - "Asynchronous event propagation"
+    - "Mandatory audit trail"
+    - "Knowledge-driven decisions"
+  
+  layer_architecture:
+    layer_1_interface:
+      name: "User Interface Layer"
+      components: ["GitHub Copilot Chat", "Terminal CLI", "Vision API"]
+      responsibility: "Accept natural language requests + attachments"
+      
+    layer_2_routing:
+      name: "Intent Classification & Routing"
+      components: ["CORTEX.prompt.md", "PatternRouter (Trie)", "LLM Intent Classifier"]
+      responsibility: "Match request to orchestrator (O(1) performance)"
+      
+    layer_3_master:
+      name: "Master Orchestration Layer"
+      components: ["MasterOrchestrator", "TodoOrchestrator", "StateManager", "ExecutionEngine"]
+      responsibility: "Coordinate orchestrator execution, manage DAG work tracking"
+      
+    layer_4_governance:
+      name: "Governance & Intelligence Layer"
+      components: ["AuditLogger", "KnowledgeMerger", "GovernanceValidator", "MCPServer"]
+      responsibility: "Enforce SKULL rules, merge knowledge, standardize interfaces"
+      
+    layer_5_orchestrators:
+      name: "Specialized Orchestrators Layer"
+      components: ["PlanningOrchestrator", "TDDOrchestrator", "ReviewOrchestrator", "Custom"]
+      responsibility: "Execute domain-specific workflows"
+      
+    layer_6_data:
+      name: "Data Persistence Layer"
+      components: ["SQLite Database (WAL)", "OrchestratorRegistry (JSON)", "Knowledge Library (YAML)"]
+      responsibility: "Store state, audit logs, knowledge, configuration"
+
+# =============================================================================
+# CORE COMPONENT SPECIFICATIONS
+# =============================================================================
+
+core_components:
+  
+  # ---------------------------------------------------------------------------
+  # Component 1: MasterOrchestrator
+  # ---------------------------------------------------------------------------
+  
+  master_orchestrator:
+    name: "MasterOrchestrator"
+    version: "2.0.0"
+    location: "src/orchestrators/core/master_orchestrator.py"
+    category: "Routing & Lifecycle Management"
+    
+    purpose: |
+      Single entry point for all CORTEX requests. Routes to appropriate orchestrator,
+      manages execution lifecycle, coordinates multi-orchestrator workflows.
+    
+    responsibilities:
+      - "Accept requests from CLI (src/main.py)"
+      - "Route to orchestrator via PatternRouter"
+      - "Initialize TodoOrchestrator for new workflows"
+      - "Manage orchestrator lifecycle (load, execute, checkpoint, cleanup)"
+      - "Enforce governance rules pre/post execution"
+      - "Aggregate results from multi-orchestrator workflows"
+    
+    interface:
+      class_signature: |
+        class MasterOrchestrator:
+            def __init__(
+                self,
+                config_path: str,
+                registry: OrchestratorRegistry,
+                state_manager: StateManager,
+                pattern_router: PatternRouter,
+                audit_logger: AuditLogger
+            )
+            
+            def handle_request(self, request: str) -> ExecutionResult:
+                """Main entry point - route and execute."""
+                pass
+            
+            def continue_workflow(self, workflow_id: str) -> ExecutionResult:
+                """Resume from checkpoint."""
+                pass
+            
+            def get_status(self, workflow_id: str) -> WorkflowStatus:
+                """Query workflow state."""
+                pass
+    
+    state_machine:
+      states:
+        - IDLE: "Awaiting request"
+        - ROUTING: "Pattern matching in progress"
+        - ORCHESTRATOR_FOUND: "Orchestrator identified"
+        - LOADING: "Loading orchestrator module"
+        - VALIDATING: "Governance pre-checks"
+        - EXECUTING: "Orchestrator running"
+        - CHECKPOINTING: "Saving state"
+        - COMPLETED: "Workflow finished successfully"
+        - FAILED: "Workflow failed"
+        - RETRYING: "Retrying after transient failure"
+        - ROLLBACK: "Rolling back failed changes"
+      
+      transitions:
+        - "IDLE → ROUTING (user request received)"
+        - "ROUTING → ORCHESTRATOR_FOUND (pattern match success)"
+        - "ROUTING → FAILED (no match, confidence <0.7)"
+        - "ORCHESTRATOR_FOUND → LOADING"
+        - "LOADING → VALIDATING (orchestrator loaded)"
+        - "LOADING → FAILED (import error)"
+        - "VALIDATING → EXECUTING (governance checks passed)"
+        - "VALIDATING → FAILED (blocked rule violated)"
+        - "EXECUTING → CHECKPOINTING (phase complete)"
+        - "EXECUTING → FAILED (orchestrator exception)"
+        - "CHECKPOINTING → EXECUTING (more work)"
+        - "CHECKPOINTING → COMPLETED (no more work)"
+        - "FAILED → RETRYING (retry_count < max_retries)"
+        - "FAILED → ROLLBACK (retry exhausted)"
+        - "RETRYING → EXECUTING"
+        - "ROLLBACK → IDLE"
+        - "COMPLETED → IDLE"
+    
+    dependencies:
+      required:
+        - PatternRouter (for routing)
+        - OrchestratorRegistry (for orchestrator discovery)
+        - StateManager (for state persistence)
+        - AuditLogger (for audit trail)
+        - ExecutionEngine (for lifecycle management)
+      optional:
+        - LLMIntentClassifier (fallback routing)
+        - CrossSessionContextMiddleware (continuation detection)
+    
+    configuration:
+      config_file: "cortex-brain/config/master-orchestrator.yaml"
+      required_settings:
+        - max_retries: "Integer (default 3)"
+        - retry_backoff_seconds: "Float (default 1.0)"
+        - execution_timeout_seconds: "Integer (default 3600)"
+        - audit_enforcement: "Boolean (default true)"
+        - llm_fallback_enabled: "Boolean (default true)"
+        - llm_confidence_threshold: "Float (default 0.7)"
+    
+    error_handling:
+      exceptions:
+        - OrchestratorNotFoundException: "Pattern matched but orchestrator not registered"
+        - GovernanceViolationError: "Blocked SKULL rule violated"
+        - ExecutionTimeoutError: "Orchestrator exceeded timeout"
+        - AuditRequiredError: "Audit context not active"
+      
+      recovery_strategies:
+        - "OrchestratorNotFoundException → Return user-friendly error + suggest alternatives"
+        - "GovernanceViolationError → Block execution, log violation, return remediation guidance"
+        - "ExecutionTimeoutError → Kill orchestrator process, rollback state"
+        - "AuditRequiredError → Block execution (cannot bypass)"
+    
+    testing:
+      unit_tests:
+        - "test_handle_request_routing"
+        - "test_handle_request_execution"
+        - "test_state_machine_transitions"
+        - "test_error_handling"
+        - "test_governance_enforcement"
+      
+      integration_tests:
+        - "test_end_to_end_planning_workflow"
+        - "test_multi_orchestrator_coordination"
+        - "test_resume_from_checkpoint"
+        - "test_concurrent_workflows"
+  
+  # ---------------------------------------------------------------------------
+  # Component 2: TodoOrchestrator (DAG Work Tracker)
+  # ---------------------------------------------------------------------------
+  
+  todo_orchestrator:
+    name: "TodoOrchestrator"
+    version: "1.0.0"
+    location: "src/orchestrators/core/todo_orchestrator.py"
+    category: "Work Tracking & Dependency Management"
+    
+    purpose: |
+      Track all work as directed acyclic graph (DAG). Enable resumable execution,
+      parallel task execution, circular dependency detection, progress visualization.
+    
+    responsibilities:
+      - "Maintain DAG of tasks with dependencies"
+      - "Compute ready tasks (dependencies met)"
+      - "Detect circular dependencies (DFS algorithm)"
+      - "Calculate progress (completed / total tasks)"
+      - "Persist graph to database (checkpoints)"
+      - "Resume from checkpoint without narration"
+    
+    interface:
+      class_signature: |
+        class TodoOrchestrator:
+            def __init__(self, workflow_id: str, state_manager: StateManager)
+            
+            def add_task(
+                self,
+                orchestrator_id: str,
+                dependencies: List[str],
+                estimated_effort_hours: int,
+                metadata: Optional[Dict[str, Any]] = None
+            ) -> str:  # Returns task_id
+                """Add task to DAG."""
+                pass
+            
+            def get_ready_tasks(self) -> List[TaskNode]:
+                """Return tasks ready to execute (dependencies met)."""
+                pass
+            
+            def mark_complete(self, task_id: str, actual_effort_hours: int):
+                """Mark task complete, update dependent tasks."""
+                pass
+            
+            def mark_failed(self, task_id: str, error: str, retry: bool = True):
+                """Mark task failed, optionally retry or block dependents."""
+                pass
+            
+            def detect_circular_dependencies(self) -> List[List[str]]:
+                """Detect cycles in DAG (DFS algorithm). Returns list of cycles."""
+                pass
+            
+            def get_progress(self) -> ProgressReport:
+                """Calculate completion percentage, critical path remaining."""
+                pass
+            
+            def checkpoint(self):
+                """Persist current graph state to database."""
+                pass
+            
+            def resume() -> List[TaskNode]:
+                """Load graph from checkpoint, return ready + in-progress tasks."""
+                pass
+    
+    data_model:
+      task_node_schema:
+        task_id: "UUID (unique identifier)"
+        workflow_id: "UUID (parent workflow)"
+        orchestrator_id: "String (which orchestrator executes)"
+        status: "Enum: PENDING, READY, IN_PROGRESS, COMPLETED, FAILED, BLOCKED"
+        dependencies: "List[task_id] (tasks that must complete first)"
+        dependents: "List[task_id] (tasks blocked by this task)"
+        estimated_effort_hours: "Integer"
+        actual_effort_hours: "Integer (nullable)"
+        start_time: "Timestamp (nullable)"
+        end_time: "Timestamp (nullable)"
+        error_message: "String (nullable)"
+        retry_count: "Integer (default 0)"
+        max_retries: "Integer (default 3)"
+        metadata: "JSON (custom orchestrator data)"
+        created_at: "Timestamp"
+        updated_at: "Timestamp"
+      
+      edge_schema:
+        from_task: "UUID"
+        to_task: "UUID"
+        dependency_type: "Enum: HARD (blocking), SOFT (preferred order)"
+    
+    algorithms:
+      detect_circular_dependencies:
+        algorithm: "Depth-First Search (DFS) with visited set"
+        complexity: "O(V + E) where V=tasks, E=dependencies"
+        pseudocode: |
+          def detect_cycles(graph):
+              visited = set()
+              rec_stack = set()
+              cycles = []
+              
+              for node in graph.nodes:
+                  if node not in visited:
+                      if dfs(node, visited, rec_stack, [], cycles):
+                          pass  # Cycle found, added to cycles list
+              
+              return cycles
+          
+          def dfs(node, visited, rec_stack, path, cycles):
+              visited.add(node)
+              rec_stack.add(node)
+              path.append(node)
+              
+              for neighbor in node.dependencies:
+                  if neighbor not in visited:
+                      if dfs(neighbor, visited, rec_stack, path, cycles):
+                          return True
+                  elif neighbor in rec_stack:
+                      # Cycle detected
+                      cycle_start = path.index(neighbor)
+                      cycles.append(path[cycle_start:])
+                      return True
+              
+              rec_stack.remove(node)
+              path.pop()
+              return False
+      
+      get_ready_tasks:
+        algorithm: "Filter tasks where all dependencies COMPLETED"
+        complexity: "O(V) where V=tasks"
+        pseudocode: |
+          def get_ready_tasks(tasks):
+              ready = []
+              for task in tasks:
+                  if task.status == PENDING:
+                      dependencies_met = all(
+                          dep.status == COMPLETED
+                          for dep in task.dependencies
+                      )
+                      if dependencies_met:
+                          task.status = READY
+                          ready.append(task)
+              return ready
+      
+      get_progress:
+        algorithm: "Count completed vs total, compute critical path"
+        complexity: "O(V + E) for critical path"
+        pseudocode: |
+          def get_progress(tasks):
+              completed = sum(1 for t in tasks if t.status == COMPLETED)
+              total = len(tasks)
+              percentage = (completed / total) * 100
+              
+              critical_path = compute_longest_path(tasks)
+              remaining_hours = sum(
+                  t.estimated_effort_hours
+                  for t in critical_path
+                  if t.status != COMPLETED
+              )
+              
+              return ProgressReport(
+                  completed_tasks=completed,
+                  total_tasks=total,
+                  percentage=percentage,
+                  critical_path_remaining_hours=remaining_hours
+              )
+    
+    testing:
+      unit_tests:
+        - "test_add_task"
+        - "test_get_ready_tasks"
+        - "test_mark_complete_updates_dependents"
+        - "test_detect_circular_dependencies_simple"
+        - "test_detect_circular_dependencies_complex"
+        - "test_get_progress"
+        - "test_checkpoint_and_resume"
+      
+      integration_tests:
+        - "test_parallel_execution_independent_tasks"
+        - "test_sequential_execution_dependent_tasks"
+        - "test_resume_after_failure"
+        - "test_500_node_graph_performance"
+  
+  # ---------------------------------------------------------------------------
+  # Component 3: StateManager (SQLite + Optimistic Locking)
+  # ---------------------------------------------------------------------------
+  
+  state_manager:
+    name: "StateManager"
+    version: "2.0.0"
+    location: "src/orchestrators/state_manager.py"
+    category: "Concurrency-Safe State Persistence"
+    
+    purpose: |
+      Persist orchestrator state, TODO graphs, workflow metadata to SQLite database
+      with WAL mode for concurrent reads/writes and optimistic locking for conflict
+      detection.
+    
+    responsibilities:
+      - "Connect to SQLite database with WAL mode"
+      - "Create/read/update/delete state records"
+      - "Optimistic locking via version column"
+      - "Retry logic on version conflicts"
+      - "Transaction management"
+      - "Database backups (daily)"
+      - "Migration execution"
+    
+    interface:
+      class_signature: |
+        class StateManager:
+            def __init__(self, db_path: str, backup_dir: Optional[str] = None)
+            
+            def create_state(self, state_id: str, state_type: StateType, data: dict) -> bool:
+                """Create new state record (version=1)."""
+                pass
+            
+            def get_state(self, state_id: str) -> Optional[StateRecord]:
+                """Retrieve state by ID."""
+                pass
+            
+            def update_state(self, state_id: str, data: dict) -> bool:
+                """Update with optimistic locking. Raises VersionConflictError."""
+                pass
+            
+            def delete_state(self, state_id: str) -> bool:
+                """Soft delete (mark as deleted)."""
+                pass
+            
+            def get_states_by_type(self, state_type: StateType) -> List[StateRecord]:
+                """Query all states of given type."""
+                pass
+            
+            def backup_database(self) -> str:
+                """Create backup, return backup file path."""
+                pass
+            
+            def restore_from_backup(self, backup_path: str):
+                """Restore database from backup."""
+                pass
+    
+    database_configuration:
+      connection_settings:
+        - "PRAGMA journal_mode=WAL"
+        - "PRAGMA synchronous=NORMAL"
+        - "PRAGMA busy_timeout=5000"
+        - "PRAGMA foreign_keys=ON"
+        - "PRAGMA cache_size=-64000"  # 64MB cache
+      
+      wal_benefits:
+        - "Concurrent reads during writes"
+        - "Better performance for write-heavy workloads"
+        - "Atomic commits"
+        - "Crash recovery"
+      
+      backup_strategy:
+        frequency: "Daily at 2 AM local time"
+        retention: "Keep last 7 backups"
+        location: "cortex-brain/database/backups/"
+        format: "cortex-state-YYYYMMDD-HHMMSS.db"
+    
+    optimistic_locking:
+      mechanism: "Version column (integer, auto-incremented on update)"
+      conflict_detection: |
+        UPDATE states
+        SET data = ?, version = version + 1, updated_at = ?
+        WHERE state_id = ? AND version = ?
+        
+        -- If rowcount == 0, version conflict detected
+      
+      retry_logic: |
+        for attempt in range(max_retries):
+            try:
+                current_version = get_version(state_id)
+                update_with_version(state_id, data, current_version)
+                return True
+            except VersionConflictError:
+                if attempt == max_retries - 1:
+                    raise
+                time.sleep(backoff_seconds * (2 ** attempt))
+        
+        raise VersionConflictError(f"Failed after {max_retries} retries")
+    
+    error_handling:
+      exceptions:
+        - VersionConflictError: "State modified concurrently"
+        - DatabaseLockedError: "Database busy (timeout exceeded)"
+        - DatabaseCorruptionError: "Database file corrupted"
+        - MigrationError: "Schema migration failed"
+      
+      recovery:
+        - "VersionConflictError → Retry with exponential backoff"
+        - "DatabaseLockedError → Retry with longer timeout"
+        - "DatabaseCorruptionError → Restore from latest backup"
+        - "MigrationError → Rollback migration, restore backup"
+    
+    testing:
+      unit_tests:
+        - "test_create_state"
+        - "test_get_state"
+        - "test_update_state_success"
+        - "test_update_state_version_conflict"
+        - "test_delete_state"
+        - "test_backup_and_restore"
+      
+      integration_tests:
+        - "test_concurrent_updates_100_threads"
+        - "test_version_conflict_retry"
+        - "test_database_corruption_recovery"
+        - "test_migration_execution"
+
+# (Components 4-7 continue in next incremental file to avoid hitting limits)
+
+# =============================================================================
+# COMPONENT RELATIONSHIPS
+# =============================================================================
+
+component_relationships:
+  
+  master_orchestrator_dependencies:
+    - PatternRouter: "Routing requests to orchestrators"
+    - OrchestratorRegistry: "Discovering available orchestrators"
+    - StateManager: "Persisting workflow state"
+    - AuditLogger: "Recording execution audit trail"
+    - ExecutionEngine: "Managing orchestrator lifecycle"
+    - TodoOrchestrator: "Tracking DAG work"
+  
+  todo_orchestrator_dependencies:
+    - StateManager: "Persisting DAG graph"
+  
+  pattern_router_dependencies:
+    - OrchestratorRegistry: "Loading routing patterns"
+    - LLMIntentClassifier: "Fallback classification (optional)"
+  
+  audit_logger_dependencies:
+    - StateManager: "Persisting audit logs"
+  
+  knowledge_merger_dependencies:
+    - ConflictResolver: "Resolving merge conflicts"
+
+# =============================================================================
+# NEXT DOCUMENT
+# =============================================================================
+
+next_document:
+  name: "02-DATABASE-SCHEMAS.sql"
+  purpose: "Complete SQLite database schema with all tables, indexes, triggers"
+  status: "⏭️ NEXT"
