@@ -2,8 +2,214 @@ schema_version: '5.0'
 categories:
 - development_workflow
 - architecture_integrity
-- quality_gates
+- quality_ga    - "Git commit without /cortex-git-commit pattern"
+
+- rule_id: INCREMENTAL_AUTONOMOUS_EXECUTION
+  category: orchestration_lifecycle
+  severity: blocked
+  name: Small Incremental Autonomous Operations Required
+  description: 'ALL orchestrators MUST work in small, meaningful increments to prevent token limit errors and server failures (HTTP 502).
+
+    Large monolithic operations that exceed token context windows cause catastrophic failures.
+
+    Orchestrators MUST operate autonomously without manual intervention between increments.
+
+    '
+  enforcement:
+    trigger: orchestrator_execution_start
+    action: block_if_operation_too_large
+  validation:
+  - Operations split into <500 line increments per execution
+  - Each increment is independently executable
+  - State persisted between increments (continuation support)
+  - Token usage monitored and capped at 80% of limit
+  - Autonomous mode enabled by default (no user prompts mid-execution)
+  implementation:
+    middleware: src.orchestrators.middleware.incremental_executor.IncrementalExecutor
+    hook: pre_execution
+    priority: 8
+    token_monitor: src.utils.token_counter.TokenUsageMonitor
+  examples:
+    pass:
+    - "Phase 1: Process 50 files → Phase 2: Process next 50 files (incremental)"
+    - "Orchestrator completes Phase 1 autonomously → Auto-proceeds to Phase 2"
+    - "Token usage 75% → Checkpoint state → Continue in next turn"
+    fail:
+    - "Process all 1000 files in single execution (causes 502 error)"
+    - "Orchestrator pauses mid-execution waiting for user approval"
+    - "No state persistence between phases (restart from scratch)"
+  error_reference: "Server error 502 (request ID: c43bcffb-60ff-4d8c-ae4c-0c56e1c679cd) - Token limit exceeded"
+  rationale: |
+    Incremental execution prevents:
+    1. Token limit errors (HTTP 502, context overflow)
+    2. Loss of work (operation fails halfway, no state saved)
+    3. Manual intervention burden (user must approve every step)
+    4. Timeout failures (operation takes too long)
+    5. Memory exhaustion (processing too much data at once)
+    
+    Benefits of autonomous incremental execution:
+    1. Predictable resource usage (token budgets enforced)
+    2. Fault tolerance (state checkpoints enable recovery)
+    3. User-friendly (autonomous progress, no babysitting)
+    4. Scalable (handles large operations via chunking)
+    5. Reliable (small increments less likely to fail)
+
+- rule_id: NO_SUMMARY_FILE_GENERATION
+  category: response_formatting
+  severity: blocked
+  name: Block Summary/Report/Explanation File Creation
+  description: 'Orchestrators MUST NOT create markdown summary files (*-summary.md, *-report.md, *-explanation.md) at the end of each turn.
+
+    Users explicitly request NOT to create these files as they clutter the workspace and provide no value.
+
+    Executive summaries should be provided directly in the GitHub Copilot chat, NOT as files.
+
+    '
+  enforcement:
+    trigger: file_creation_attempt
+    action: block_if_summary_file
+  validation:
+  - No files matching patterns: *-summary.md, *-report.md, *-explanation.md, completion-*.md
+  - No files in root with "summary", "report", "explanation" in name
+  - Exception: Required reports in plan_folder/reports/ (validation-report.md, etc.)
+  - Exception: Required analysis in plan_folder/analysis/ (gap-analysis.md, etc.)
+  implementation:
+    middleware: src.orchestrators.middleware.file_creation_guard.FileCreationGuard
+    hook: pre_file_creation
+    priority: 2
+    blocklist_patterns:
+      - "*-summary.md"
+      - "*-report.md"
+      - "*-explanation.md"
+      - "completion-*.md"
+      - "executive-summary.md"
+      - "EXECUTIVE-SUMMARY.md"
+  examples:
+    pass:
+    - "Executive summary provided in chat response (no file created)"
+    - "cortex-brain/documents/planning/active/cortex5-epic/reports/validation-report.md (allowed)"
+    - "cortex-brain/documents/planning/active/cortex5-epic/analysis/gap-analysis.md (allowed)"
+    fail:
+    - "Created cortex-brain/documents/planning/active/cortex5-epic/EXECUTIVE-SUMMARY.md"
+    - "Created cortex-brain/documents/planning/active/cortex5-epic/completion-report.md"
+    - "Created cortex-brain/documents/planning/active/cortex5-epic/phase-1-summary.md"
+  user_feedback_reference: ".github/copilot/copilot-chats/chat01.md line 15: 'Do not create a summary document at the end. Give me an executive summary without code snippets.'"
+  rationale: |
+    Blocking summary files prevents:
+    1. Workspace clutter (unnecessary markdown files everywhere)
+    2. Redundancy (summary already in chat response)
+    3. Ignored files (users don't read these files)
+    4. Git noise (unnecessary commits for summary files)
+    5. Maintenance burden (orphaned summaries never updated)
+    
+    Benefits of chat-only summaries:
+    1. User sees summary immediately (in chat)
+    2. No workspace pollution (files stay organized)
+    3. Context-appropriate (summary tailored to conversation)
+    4. No cleanup needed (chat history is ephemeral)
+    5. User-requested behavior (explicit requirement)
+
+- rule_id: VISUAL_PROGRESS_RESPONSE_FORMAT
+  category: response_formatting
+  severity: blocked
+  name: Executive Summary with Visual Progress Bars Required
+  description: 'ALL orchestrator responses MUST provide executive summaries without code snippets, using visual progress bars.
+
+    Response format MUST follow cortex-maintenance.prompt.md visual progress bar style.
+
+    Code snippets clutter responses and reduce readability; users want high-level summaries only.
+
+    '
+  enforcement:
+    trigger: orchestrator_completion
+    action: block_if_code_snippets_or_missing_progress
+  validation:
+  - Response contains executive summary section
+  - Executive summary has NO code snippets (no ```...``` blocks)
+  - Visual progress bars present (█████░░░░░ style)
+  - Progress bars show phase completion percentage
+  - Response length ≤40 lines (concise format)
+  implementation:
+    middleware: src.orchestrators.middleware.response_formatter.ResponseFormatter
+    hook: post_execution
+    priority: 5
+    template_reference: "cortex-brain/response-templates-v4.yaml:autonomous_execution_progress"
+  response_template:
+    format: |
+      ## ✅ {Orchestrator Name} Complete
+      
+      **Progress:** {completed}/{total} phases ({percentage}%)
+      {visual_progress_bar}
+      
+      **Delivered:**
+      - {artifact_1}
+      - {artifact_2}
+      - {artifact_3}
+      
+      **Next:** {next_phase_name}
+      
+      ---
+      
+      📋 **Resume:** `continue plan {plan_name}` *(see `CONTINUATION-PROMPT.md`)*
+    
+    visual_progress_bar_format: |
+      Phase Progress: [████████░░] 80%
+      Overall Progress: [██████████] 100%
+  examples:
+    pass:
+    - |
+      ## ✅ Planning v5 Complete
+      
+      **Progress:** 3/5 phases (60%)
+      Phase Progress: [██████░░░░] 60%
+      
+      **Delivered:**
+      - 00-cortex5-epic.md (master plan)
+      - tracking/progress-tracker.json
+      - plan-viewer.html
+      
+      **Next:** Phase 4 - Validation
+    fail:
+    - |
+      ## ✅ Planning v5 Complete
+      
+      Here's the code I created:
+      
+      ```python
+      def execute(self, request: str):
+          # Implementation details...
+      ```
+      
+      (Contains code snippet - BLOCKED)
+    - |
+      ## ✅ Planning v5 Complete
+      
+      Tasks completed:
+      - Task 1
+      - Task 2
+      ...
+      - Task 50
+      
+      (No visual progress bar - BLOCKED)
+  reference_document: ".github/prompts/cortex-maintenance.prompt.md (visual progress bar formats)"
+  rationale: |
+    Visual progress responses enable:
+    1. Quick comprehension (no code to parse)
+    2. Progress visibility (bars show completion at a glance)
+    3. Cognitive load reduction (concise summaries vs verbose logs)
+    4. Accessibility (WCAG AA compliant - progress bars + text percentages)
+    5. Consistency (all orchestrators use same format)
+    
+    Code snippets harm responses because:
+    1. Users don't read code in chat (check files instead)
+    2. Code clutters response (reduces signal-to-noise ratio)
+    3. Code may be incorrect (summarized or simplified)
+    4. Code duplicates file content (already accessible)
+    5. Users explicitly request no code snippets
+
+- rule_id: TDD_ENFORCEMENTs
 - orchestration_lifecycle
+- response_formatting
 - security_privacy
 - portability
 rules:
