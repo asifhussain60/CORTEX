@@ -23,7 +23,7 @@ from src.database.planning_state_db import PlanningStateDB
 
 # CORTEX v5 Middleware (Phase -2, Runtime, Phase N+1)
 from src.orchestrators.middleware.setup_verification import SetupVerificationMiddleware
-from src.orchestrators.middleware.governance_checkpoint import GovernanceCheckpoint
+from src.orchestrators.middleware.governance_checkpoint import GovernanceCheckpointMiddleware
 from src.orchestrators.middleware.teardown_refactor import TeardownRefactorMiddleware
 
 
@@ -101,7 +101,7 @@ class MasterOrchestrator:
         
         # CORTEX v5 Universal Pattern Middleware (C50-20)
         self.setup_verifier = SetupVerificationMiddleware(workspace_root=Path.cwd())
-        self.governance_checkpoint = GovernanceCheckpoint(brain_path=Path.cwd() / "cortex-brain")
+        self.governance_checkpoint = GovernanceCheckpointMiddleware(brain_path=Path.cwd() / "cortex-brain")
         self.teardown_refactor = TeardownRefactorMiddleware(workspace_root=Path.cwd())
         
         # Execution tracking
