@@ -83,32 +83,34 @@ routing_rules:
       description: "Test-Driven Development orchestrator"
       autonomous: false
   
-  # Documentation Standardization Orchestrator v2.0
+  # Documentation Standardization Orchestrator v2.0 - DISABLED
+  # REASON: Python implementation missing (not migrated from CORTEX-5.0)
+  # TODO: BACKLOG-001 - Migrate documentation orchestrator implementation
   # State-aware HTML glassmorphism standardization with audit logging
-  - pattern: "^(standardize|apply glassmorphism|glassmorphism standardization|docs standardization).*$"
-    orchestrator: "documentation_orchestrator"
-    confidence: 1.0
-    match_type: "regex"
-    priority: 25
-    metadata:
-      description: "Documentation standardization with state-aware validation"
-      autonomous: true
-      version: "2.0"
-      features:
-        - "Pre-flight validation (git checkpoints, inline style detection)"
-        - "Approved pattern library integration"
-        - "CSS class registry enforcement"
-        - "State persistence (prevents duplicate applications)"
-        - "Atomic operations with rollback"
-        - "Audit logging integration"
-        - "Python-only generation (no Copilot HTML edits)"
-      phases:
-        - "Pre-Flight Validation"
-        - "State Query & Pattern Matching"
-        - "Inline Style Removal (Atomic)"
-        - "CSS Class Application (Atomic)"
-        - "State Persistence & Approval"
-        - "Validation & Reporting"
+  # - pattern: "^(standardize|apply glassmorphism|glassmorphism standardization|docs standardization).*$"
+  #   orchestrator: "documentation_orchestrator"
+  #   confidence: 1.0
+  #   match_type: "regex"
+  #   priority: 25
+  #   metadata:
+  #     description: "Documentation standardization with state-aware validation"
+  #     autonomous: true
+  #     version: "2.0"
+  #     features:
+  #       - "Pre-flight validation (git checkpoints, inline style detection)"
+  #       - "Approved pattern library integration"
+  #       - "CSS class registry enforcement"
+  #       - "State persistence (prevents duplicate applications)"
+  #       - "Atomic operations with rollback"
+  #       - "Audit logging integration"
+  #       - "Python-only generation (no Copilot HTML edits)"
+  #     phases:
+  #       - "Pre-Flight Validation"
+  #       - "State Query & Pattern Matching"
+  #       - "Inline Style Removal (Atomic)"
+  #       - "CSS Class Application (Atomic)"
+  #       - "State Persistence & Approval"
+  #       - "Validation & Reporting"
   
   # ADO Operations v2 - Wizard Mode (Interactive)
   - pattern: "^(ado wizard|ado interactive).*$"
@@ -232,20 +234,22 @@ routing_rules:
         - "Checkpoint rollback"
         - "CORTEX brain protection"
   
-  # Documentation Generator v1.0 (Glassmorphism Design System)
+  # Documentation Generator v1.0 (Glassmorphism Design System) - DISABLED
+  # REASON: Python implementation missing (not migrated from CORTEX-5.0)
+  # TODO: BACKLOG-001 - Migrate documentation orchestrator implementation
   # Intelligent documentation with template selection and responsive layouts
-  - pattern: "^(document|doc|generate docs|architecture docs|create documentation).*$"
-    orchestrator: "documentation_orchestrator"
-    confidence: 1.0
-    match_type: "regex"
-    priority: 65
-    metadata:
-      description: "Documentation generator with glassmorphism UI and intelligent template selection"
-      autonomous: true
-      version: "1.0"
-      features:
-        - "6 template categories (Executive/Architecture/Security/Performance/API/Features)"
-        - "7-color glassmorphism panel rotation"
+  # - pattern: "^(document|doc|generate docs|architecture docs|create documentation).*$"
+  #   orchestrator: "documentation_orchestrator"
+  #   confidence: 1.0
+  #   match_type: "regex"
+  #   priority: 65
+  #   metadata:
+  #     description: "Documentation generator with glassmorphism UI and intelligent template selection"
+  #     autonomous: true
+  #     version: "1.0"
+  #     features:
+  #       - "6 template categories (Executive/Architecture/Security/Performance/API/Features)"
+  #       - "7-color glassmorphism panel rotation"
         - "Responsive layouts (mobile/tablet/desktop)"
         - "D3.js + Mermaid visualization integration"
         - "Touch-friendly interfaces (44px targets)"
