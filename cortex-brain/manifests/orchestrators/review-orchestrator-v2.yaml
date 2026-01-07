@@ -1,0 +1,429 @@
+# CORTEX Review Orchestrator v2.0.0
+# Epic plan and implementation validation orchestrator
+
+orchestrator_id: "review_v2"
+version: "2.0.0"
+name: "CORTEX Review Orchestrator"
+type: "validation"
+priority: 3
+category: "quality_assurance"
+
+description: |
+  Comprehensive epic plan and implementation review orchestrator that validates:
+  - Strategic alignment with design goals
+  - Architecture integrity and coherence
+  - Autonomous execution capabilities
+  - Best practices enforcement
+  - Implementation fidelity (plan vs. code)
+  - Governance compliance (SKULL rules)
+  - Phase progression blocking for critical violations
+
+# Trigger Patterns
+patterns:
+  primary:
+    - regex: "^review\\s+epic$"
+      confidence: 1.0
+      description: "Review current epic plan"
+    
+    - regex: "^verify\\s+plan$"
+      confidence: 1.0
+      description: "Verify current plan implementation"
+    
+    - regex: "^cortex\\s+review$"
+      confidence: 1.0
+      description: "Comprehensive CORTEX review"
+    
+    - regex: "^check\\s+alignment$"
+      confidence: 0.9
+      description: "Check strategic alignment"
+    
+    - regex: "^validate\\s+implementation$"
+      confidence: 0.9
+      description: "Validate implementation fidelity"
+    
+    - regex: "^review\\s+(.+?)\\s+plan$"
+      confidence: 0.95
+      description: "Review specific plan"
+      capture_groups:
+        - name: "plan_name"
+          position: 1
+    
+    - regex: "^verify\\s+(.+?)\\s+epic$"
+      confidence: 0.95
+      description: "Verify specific epic"
+      capture_groups:
+        - name: "epic_name"
+          position: 1
+
+  secondary:
+    - "check plan health"
+    - "audit epic"
+    - "validate architecture"
+    - "review governance"
+    - "check implementation"
+
+# Parameters
+parameters:
+  - name: "epic_path"
+    type: "path"
+    required: true
+    description: "Path to epic folder (active/archived)"
+    default_behavior: "use_active_epic"
+    examples:
+      - "cortex5-epic"
+      - "active/cortex5-epic"
+      - "archived/cortex5-enhancement-epic-20260107"
+    validation:
+      must_exist: true
+      must_contain: ["progress-tracker.json", "CONTINUATION-PROMPT.md"]
+  
+  - name: "review_type"
+    type: "enum"
+    required: false
+    default: "comprehensive"
+    values:
+      - "baseline"       # Initial review before execution
+      - "progress"       # Mid-execution progress check
+      - "phase"          # Phase-specific review
+      - "final"          # Post-execution review
+      - "retrospective"  # Lessons learned analysis
+      - "comprehensive"  # Full 7-phase review
+    description: "Type of review to perform"
+  
+  - name: "phase_id"
+    type: "string"
+    required: false
+    description: "Specific phase to review (required if review_type=phase)"
+    examples:
+      - "phase-01"
+      - "phase-03"
+      - "phase-13"
+  
+  - name: "output_format"
+    type: "enum"
+    required: false
+    default: "yaml"
+    values: ["yaml", "markdown", "json"]
+    description: "Output format for review report"
+  
+  - name: "include_static_analysis"
+    type: "boolean"
+    required: false
+    default: true
+    description: "Run static analysis tools (mypy, pylint, pydocstyle)"
+  
+  - name: "include_audit_validation"
+    type: "boolean"
+    required: false
+    default: true
+    description: "Cross-check audit logs with current code"
+
+# Capabilities
+capabilities:
+  - epic_validation
+  - architecture_analysis
+  - governance_enforcement
+  - phase_progression_blocking
+  - implementation_fidelity_check
+  - static_analysis_integration
+  - audit_log_validation
+  - knowledge_integration_check
+  - orchestrator_registry_audit
+  - edge_case_detection
+
+# Dependencies
+dependencies:
+  tools:
+    - state_db
+    - governance_rules
+    - knowledge_library
+    - audit_logger
+  
+  orchestrators:
+    - investigation_v2  # For root cause analysis
+    - vacuum_v2         # For cleanup recommendations
+  
+  external:
+    - mypy              # Type checking
+    - pylint            # Linting
+    - pydocstyle        # Docstring validation
+    - black             # Code formatting
+    - isort             # Import sorting
+    - pytest            # Test execution
+    - coverage          # Code coverage
+
+# Execution
+execution:
+  mode: "autonomous"
+  timeout: 300  # 5 minutes max
+  parallelizable: false
+  requires_llm: false  # Pure Python execution
+  phases:
+    - name: "initialization"
+      description: "Load epic state and configuration"
+      timeout: 10
+    
+    - name: "structure_analysis"
+      description: "Phase 1: Epic Structure Analysis"
+      timeout: 30
+    
+    - name: "architecture_analysis"
+      description: "Phase 2: Architecture Coherence Review"
+      timeout: 45
+    
+    - name: "knowledge_analysis"
+      description: "Phase 3: Knowledge Integration Analysis"
+      timeout: 30
+    
+    - name: "registry_audit"
+      description: "Phase 4: Orchestrator Registry Audit"
+      timeout: 30
+    
+    - name: "edge_case_analysis"
+      description: "Phase 5: Edge Case & Failure Mode Analysis"
+      timeout: 45
+    
+    - name: "fidelity_check"
+      description: "Phase 6: Implementation Fidelity Check"
+      timeout: 60
+    
+    - name: "governance_validation"
+      description: "Phase 7: Best Practices & Governance Validation"
+      timeout: 60
+    
+    - name: "report_generation"
+      description: "Generate comprehensive review report"
+      timeout: 20
+
+# Output
+output:
+  format: "yaml"
+  location: "{epic_path}/reports/cortex-review/"
+  filename: "{timestamp}_{review_type}_review.yaml"
+  includes:
+    - overall_score
+    - phase_scores
+    - blocking_issues
+    - recommendations
+    - detailed_findings
+    - remediation_plan
+
+# Scoring System
+scoring:
+  overall:
+    min: 0
+    max: 100
+    pass_threshold: 70
+    critical_threshold: 50
+  
+  phase_weights:
+    structure: 0.15
+    architecture: 0.20
+    knowledge: 0.10
+    registry: 0.10
+    edge_cases: 0.15
+    fidelity: 0.15
+    governance: 0.15
+  
+  severity_levels:
+    - name: "critical"
+      range: [0, 49]
+      action: "block_execution"
+    - name: "warning"
+      range: [50, 69]
+      action: "require_review"
+    - name: "acceptable"
+      range: [70, 84]
+      action: "monitor"
+    - name: "excellent"
+      range: [85, 100]
+      action: "proceed"
+
+# Blocking Conditions
+blocking_conditions:
+  - name: "critical_overall_score"
+    condition: "overall_score < 70"
+    message: "Overall score below acceptable threshold (70)"
+    severity: "critical"
+  
+  - name: "blocked_violations"
+    condition: "any BLOCKED severity violations in audit log"
+    message: "Active BLOCKED violations found in audit log"
+    severity: "critical"
+  
+  - name: "architecture_coherence"
+    condition: "architecture_score < 65"
+    message: "Architecture coherence score below threshold (65)"
+    severity: "critical"
+  
+  - name: "implementation_fidelity"
+    condition: "fidelity_score < 60"
+    message: "Implementation fidelity score below threshold (60)"
+    severity: "critical"
+  
+  - name: "governance_compliance"
+    condition: "governance_score < 70"
+    message: "Governance compliance score below threshold (70)"
+    severity: "critical"
+  
+  - name: "static_analysis_failures"
+    condition: "mypy_errors > 0 OR pylint_score < 8.0 OR pydocstyle_errors > 0"
+    message: "Static analysis failures detected"
+    severity: "warning"
+  
+  - name: "test_coverage"
+    condition: "unit_coverage < 80% OR integration_coverage < 60%"
+    message: "Test coverage below thresholds (80% unit, 60% integration)"
+    severity: "warning"
+
+# Phase Progression Rules
+phase_progression:
+  block_if:
+    - "Any BLOCKED severity violations in audit log"
+    - "Static analysis errors (mypy --strict failures)"
+    - "Unchecked items in phase checklist"
+    - "Implementation gaps > 5%"
+    - "Test coverage < 80% (unit) or < 60% (integration)"
+    - "Previous phase unverified (no review report)"
+  
+  remediation_required:
+    - "Address all BLOCKED violations"
+    - "Fix all static analysis errors"
+    - "Complete all phase checklist items"
+    - "Implement missing features"
+    - "Increase test coverage"
+    - "Verify previous phase"
+
+# Integration
+integration:
+  master_orchestrator:
+    priority: 3
+    route_patterns:
+      - "review"
+      - "verify"
+      - "validate"
+      - "check alignment"
+      - "audit"
+  
+  cortex_prompt:
+    location: ".github/prompts/CORTEX.prompt.md"
+    section: "Intent Routing"
+    trigger_examples:
+      - "review epic"
+      - "verify plan"
+      - "cortex review"
+      - "check alignment"
+      - "validate implementation"
+  
+  state_db:
+    tables:
+      - "epic_reviews"
+      - "phase_validations"
+      - "blocking_issues"
+    operations:
+      - "log_review_start"
+      - "update_review_progress"
+      - "record_findings"
+      - "mark_review_complete"
+
+# Static Analysis Configuration
+static_analysis:
+  mypy:
+    command: "mypy --strict {source_files}"
+    required: true
+    fail_on_error: true
+  
+  pylint:
+    command: "pylint {source_files}"
+    required: true
+    min_score: 8.0
+  
+  pydocstyle:
+    command: "pydocstyle {source_files}"
+    required: true
+    fail_on_error: true
+  
+  black:
+    command: "black --check {source_files}"
+    required: false
+    auto_fix: true
+  
+  isort:
+    command: "isort --check {source_files}"
+    required: false
+    auto_fix: true
+
+# Testing Configuration
+testing:
+  pytest:
+    command: "pytest {test_files} --cov={source_dir} --cov-report=term-missing"
+    required: true
+    min_coverage:
+      unit: 80
+      integration: 60
+  
+  test_discovery:
+    patterns:
+      - "test_*.py"
+      - "*_test.py"
+    exclude:
+      - "test_fixtures.py"
+      - "conftest.py"
+
+# Audit Log Validation
+audit_validation:
+  required: true
+  checks:
+    - name: "operation_consistency"
+      description: "Verify logged operations match current code"
+    
+    - name: "timestamp_sequence"
+      description: "Check timestamp consistency"
+    
+    - name: "severity_escalation"
+      description: "Track unresolved BLOCKED violations"
+    
+    - name: "resolution_tracking"
+      description: "Verify all issues resolved or documented"
+
+# Recommendations Engine
+recommendations:
+  categories:
+    - architecture_improvements
+    - code_quality_enhancements
+    - test_coverage_gaps
+    - documentation_updates
+    - governance_violations
+    - performance_optimizations
+    - security_concerns
+  
+  priority_levels:
+    - critical   # Must fix before phase progression
+    - high       # Should fix in current phase
+    - medium     # Should fix in next phase
+    - low        # Nice to have
+
+# Metadata
+metadata:
+  author: "Asif Hussain"
+  created: "2026-01-07"
+  last_updated: "2026-01-07"
+  status: "active"
+  epic_integration: "cortex5-epic-v3"
+  phase_integration: "Phase 4 (Orchestrator Registry System)"
+  
+documentation:
+  readme: "cortex-brain/documents/orchestrators/review-orchestrator-v2.md"
+  examples: "cortex-brain/documents/orchestrators/examples/review-orchestrator-examples.md"
+  
+changelog:
+  - version: "2.0.0"
+    date: "2026-01-07"
+    changes:
+      - "Initial conversion from cortex-review.prompt.md"
+      - "Autonomous Python execution (no LLM required)"
+      - "7-phase validation pipeline"
+      - "Phase progression blocking rules"
+      - "Static analysis integration"
+      - "Audit log validation"
+      - "YAML/Markdown/JSON output formats"
