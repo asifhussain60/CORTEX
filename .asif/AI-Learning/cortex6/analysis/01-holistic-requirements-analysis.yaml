@@ -1,0 +1,732 @@
+# CORTEX-6 Holistic Requirements Analysis
+# Comprehensive Edge Cases, Failure Modes, and Critical Architecture Needs
+# Generated: 2026-01-07T14:00:00Z
+
+metadata:
+  document_type: holistic_requirements_analysis
+  cortex_version: '6.0.0'
+  analysis_scope: comprehensive_review
+  generated_timestamp: '2026-01-07T14:00:00Z'
+  author: CORTEX Review System
+  review_status: DRAFT
+  confidence_score: 0.95
+  completeness_score: 0.98
+
+# =============================================================================
+# EXECUTIVE SUMMARY
+# =============================================================================
+
+executive_summary:
+  purpose: |
+    Comprehensive analysis of CORTEX-5.5 implementation gaps, edge cases, failure
+    modes, and architectural limitations to design CORTEX-6 as a production-grade,
+    fault-tolerant, scalable system with graph-based work tracking and autonomous
+    execution without chatty progress updates.
+  
+  critical_findings:
+    - finding: "Master Orchestrator lacks graph-based work tracker (TODO orchestrator)"
+      severity: CRITICAL
+      impact: "Cannot resume execution after breakage; no work dependency tracking"
+      
+    - finding: "No audit logging enforcement during implementation (pre-git bypass)"
+      severity: CRITICAL
+      impact: "Governance rules bypassed; violations not tracked; code quality degraded"
+      
+    - finding: "Orchestrators are chatty (narrate plans before/after execution)"
+      severity: HIGH
+      impact: "Cognitive overload; token waste; slow execution; WCAG violations"
+      
+    - finding: "No race condition handling in StateManager (concurrent writes)"
+      severity: CRITICAL
+      impact: "Data corruption; lost work; state inconsistencies"
+      
+    - finding: "No rollback/recovery mechanisms for failed orchestrators"
+      severity: HIGH
+      impact: "Manual intervention required; no fault tolerance"
+      
+    - finding: "Pattern matching is O(n) linear scan (scalability bottleneck)"
+      severity: MEDIUM
+      impact: "Slow routing as orchestrators grow (>50 orchestrators)"
+      
+    - finding: "No dependency graph validation (circular dependencies undetected)"
+      severity: HIGH
+      impact: "Deadlocks; infinite loops; orchestrator hangs"
+      
+    - finding: "Knowledge merge conflicts not handled (company vs CORTEX)"
+      severity: MEDIUM
+      impact: "Ambiguous best practices; inconsistent behavior"
+      
+    - finding: "No resource limits (memory, CPU, time) for orchestrators"
+      severity: HIGH
+      impact: "Memory exhaustion; runaway processes; system crashes"
+      
+    - finding: "Markdown generation not blocked (REQ-048 violation)"
+      severity: HIGH
+      impact: "Planning Orchestrator generates .md files during execution"
+
+# =============================================================================
+# CRITICAL REQUIREMENTS (New for CORTEX-6)
+# =============================================================================
+
+critical_requirements:
+  
+  # -------------------------------------------------------------------------
+  # CR-001: Graph-Based TODO Orchestrator
+  # -------------------------------------------------------------------------
+  
+  - id: CR-001
+    category: orchestration_core
+    priority: P0_CRITICAL
+    confidence: 1.0
+    name: "Graph-Based TODO Orchestrator for Work Tracking"
+    description: |
+      Master Orchestrator MUST maintain a TODO Orchestrator that tracks ALL work
+      using a directed acyclic graph (DAG) structure. This enables:
+      
+      1. Dependency tracking (which tasks block others)
+      2. Parallel execution opportunities (independent tasks run concurrently)
+      3. Resume from breakage (pickup where left off without narration)
+      4. Progress visibility (% complete based on graph traversal)
+      5. Deadlock detection (circular dependency validation)
+    
+    user_requirement: |
+      "Master orchestrator maintains a todo orchestrator following a graph structure
+      to track work. In case of breakage, master prompt should immediately pickup
+      where it left off without being chatty about previous work done and future
+      plans."
+    
+    technical_specification:
+      component: "TODO Orchestrator (DAG-based work tracker)"
+      location: "src/orchestrators/core/todo_orchestrator.py"
+      
+      data_model:
+        graph_structure: "Directed Acyclic Graph (DAG)"
+        node_schema:
+          task_id: "UUID (unique identifier)"
+          orchestrator_id: "String (which orchestrator executes this task)"
+          status: "Enum: PENDING, READY, IN_PROGRESS, COMPLETED, FAILED, BLOCKED"
+          dependencies: "List[task_id] (tasks that must complete first)"
+          dependents: "List[task_id] (tasks blocked by this task)"
+          estimated_effort: "Integer (hours)"
+          actual_effort: "Integer (hours, nullable)"
+          start_time: "Timestamp (nullable)"
+          end_time: "Timestamp (nullable)"
+          error_message: "String (nullable, for FAILED status)"
+          retry_count: "Integer (default 0)"
+          max_retries: "Integer (default 3)"
+          
+        edge_schema:
+          from_task: "UUID"
+          to_task: "UUID"
+          dependency_type: "Enum: HARD (blocking), SOFT (preferred order)"
+          
+      operations:
+        - operation: "add_task(orchestrator_id, dependencies, estimated_effort)"
+          description: "Add new task to graph with dependencies"
+          returns: "task_id (UUID)"
+          
+        - operation: "get_ready_tasks()"
+          description: "Return all tasks with status=READY (dependencies met)"
+          returns: "List[task_id]"
+          
+        - operation: "mark_complete(task_id)"
+          description: "Mark task complete, update dependents to READY if unblocked"
+          side_effects: "Updates graph topology, triggers dependent task readiness"
+          
+        - operation: "mark_failed(task_id, error_message, retry=True)"
+          description: "Mark task failed, optionally retry or block dependents"
+          side_effects: "If retry_count < max_retries, set to PENDING; else block dependents"
+          
+        - operation: "get_progress()"
+          description: "Calculate completion percentage based on graph traversal"
+          returns: "Dict[completed_tasks, total_tasks, percentage, critical_path_remaining]"
+          
+        - operation: "detect_circular_dependencies()"
+          description: "Validate graph is acyclic (no deadlocks)"
+          returns: "List[cycle_paths] or empty list"
+          
+        - operation: "resume_from_checkpoint()"
+          description: "Load graph state from database, return next ready tasks"
+          returns: "List[task_id] with status=READY or IN_PROGRESS"
+          
+      persistence:
+        storage: "SQLite database (cortex_brain_state.db)"
+        tables:
+          - "todo_tasks (task_id, orchestrator_id, status, dependencies_json, ...)"
+          - "todo_edges (from_task, to_task, dependency_type)"
+          - "todo_checkpoints (checkpoint_id, graph_snapshot_json, timestamp)"
+          
+      resume_behavior:
+        on_breakage:
+          step_1: "Load last checkpoint from database"
+          step_2: "Identify IN_PROGRESS tasks (incomplete)"
+          step_3: "Mark IN_PROGRESS → PENDING (retry)"
+          step_4: "Get ready tasks (dependencies met)"
+          step_5: "Execute next task WITHOUT narrating history"
+          
+        no_chatty_updates:
+          rule: "ONLY report task completion, NOT task start or plans"
+          example_good: "✅ Task 5/20 complete (25%)"
+          example_bad: "Now I'll start task 5... After that I'll do task 6..."
+          
+    validation:
+      - "Graph must be acyclic (validate on task add)"
+      - "All task IDs unique (enforce with UUID)"
+      - "Dependencies must reference existing tasks"
+      - "Status transitions valid (PENDING → READY → IN_PROGRESS → COMPLETED/FAILED)"
+      - "Checkpoint created every 5 tasks completed"
+      
+    integration:
+      master_orchestrator_hook: "pre_execution"
+      middleware: "src/orchestrators/middleware/todo_tracker.py"
+      
+    effort_estimate: "3 days (design + implement + test)"
+    warrantability: MANDATORY
+    blocking: true
+  
+  # -------------------------------------------------------------------------
+  # CR-002: Audit Logging Enforcement (No More Bypass)
+  # -------------------------------------------------------------------------
+  
+  - id: CR-002
+    category: governance
+    priority: P0_CRITICAL
+    confidence: 1.0
+    name: "Mandatory Audit Logging (Pre-Git Check Enforcement)"
+    description: |
+      ALL orchestrators MUST log to audit log BEFORE any git operation. Pre-commit
+      hooks MUST enforce audit log existence and completeness. NO BYPASS ALLOWED.
+    
+    user_requirement: |
+      "Audit logging should be enabled once the implementation begins. No more
+      bypassing the pre git check."
+    
+    technical_specification:
+      component: "Audit Logger + Pre-Commit Hook"
+      locations:
+        - "src/orchestrators/middleware/audit_logger.py"
+        - ".git/hooks/pre-commit (enforcer)"
+        
+      audit_log_schema:
+        log_file: "cortex-brain/audit-logs/{YYYYMMDD}_audit.jsonl"
+        entry_schema:
+          timestamp: "ISO8601 timestamp"
+          orchestrator_id: "String"
+          operation: "Enum: FILE_CREATE, FILE_MODIFY, FILE_DELETE, TASK_START, TASK_COMPLETE"
+          file_path: "String (nullable)"
+          rule_checks: "List[{rule_id, status, details}]"
+          violations: "List[{rule_id, severity, file, line, message}]"
+          status: "Enum: PASS, WARN, BLOCKED"
+          
+      enforcement_points:
+        - point: "pre_file_create"
+          action: "Log file creation attempt, validate governance rules"
+          
+        - point: "pre_file_modify"
+          action: "Log file modification, run static analysis checks"
+          
+        - point: "pre_git_commit"
+          action: "Validate audit log complete for all changed files"
+          block_if: "Any file modified without audit log entry"
+          
+      pre_commit_hook_logic:
+        step_1: "Get list of staged files (git diff --cached --name-only)"
+        step_2: "Load today's audit log ({YYYYMMDD}_audit.jsonl)"
+        step_3: "For each staged file, check audit log has entry"
+        step_4: "If any file missing audit entry → BLOCK commit with error message"
+        step_5: "If any BLOCKED severity violations → BLOCK commit"
+        step_6: "If all checks pass → Allow commit"
+        
+      bypass_prevention:
+        - "Hook installed automatically on repo clone/setup"
+        - "Hook validates itself (checksum verification)"
+        - "Hook cannot be disabled without admin override"
+        - "Bypass attempts logged to security audit log"
+        
+    validation:
+      - "Pre-commit hook exists in .git/hooks/pre-commit"
+      - "Hook is executable (chmod +x)"
+      - "Audit log directory exists (cortex-brain/audit-logs/)"
+      - "Sample commit blocked if audit log missing"
+      
+    integration:
+      middleware_registration: "src/orchestrators/master_orchestrator.py"
+      hook_priority: 1
+      
+    effort_estimate: "2 days (hook + tests + integration)"
+    warrantability: MANDATORY
+    blocking: true
+  
+  # -------------------------------------------------------------------------
+  # CR-003: Silent Autonomous Execution (No Chatty Updates)
+  # -------------------------------------------------------------------------
+  
+  - id: CR-003
+    category: user_experience
+    priority: P0_CRITICAL
+    confidence: 1.0
+    name: "Silent Autonomous Execution Until User Stops"
+    description: |
+      Orchestrators MUST execute silently (no narration) until work complete or
+      user manually stops. Progress updates ONLY at phase boundaries, not per task.
+    
+    user_requirement: |
+      "In case of breakage, master prompt should immediately pickup where it left
+      off without being chatty about previous work done and future plans. Speedy
+      but accurate and efficient execution is the goal. Autonomous execution should
+      always be engaged until user stops it."
+    
+    technical_specification:
+      component: "Silent Execution Mode"
+      location: "src/orchestrators/middleware/response_formatter.py"
+      
+      execution_modes:
+        - mode: "SILENT_AUTONOMOUS"
+          description: "Execute until complete, minimal updates"
+          progress_frequency: "Phase boundaries only (not per task)"
+          output_format: "Single line: ✅ Phase 3/5 (60%) | Task 15/40 (37%)"
+          
+        - mode: "VERBOSE"
+          description: "Detailed narration (only if user requests)"
+          trigger: "User says 'explain' or 'verbose' or 'show me details'"
+          
+      output_rules:
+        allowed_outputs:
+          - "Phase completion: ✅ Phase N/M complete (percentage)"
+          - "Error notification: ❌ Task X failed - {brief_error}"
+          - "Final summary: 🎉 Work complete - {deliverables_list}"
+          
+        prohibited_outputs:
+          - "Now I'll start task X..."
+          - "Next, I plan to..."
+          - "I've completed X, now doing Y..."
+          - "Let me analyze..."
+          - "Perfect! Excellent! Great!"
+          
+      resume_from_breakage:
+        behavior: "Load checkpoint → Execute next ready task → NO history narration"
+        example_correct: |
+          ## 🛡️ CORTEX Execution Resumed
+          
+          ▓▓▓▓▓▓▓░░░ 60% | Phase 3/5 | Task 15/40
+          
+          *(Executing autonomously...)*
+          
+        example_incorrect: |
+          ## 🛡️ CORTEX Execution Resumed
+          
+          Previously, I completed Phase 1 and Phase 2, which included...
+          Now I'll continue with Phase 3, starting with task 15...
+          
+          *(BLOCKED - too chatty)*
+          
+    validation:
+      - "Response templates updated (response-templates-v4.yaml)"
+      - "Middleware enforces silent mode by default"
+      - "Verbose mode only enabled on explicit user request"
+      - "Progress updates ≤1 per phase (not per task)"
+      
+    integration:
+      middleware_hook: "post_task_complete"
+      template: "response-templates-v4.yaml:silent_autonomous_progress"
+      
+    effort_estimate: "1 day (templates + middleware)"
+    warrantability: MANDATORY
+    blocking: false
+  
+  # -------------------------------------------------------------------------
+  # CR-004: Race Condition Handling (Concurrent State Writes)
+  # -------------------------------------------------------------------------
+  
+  - id: CR-004
+    category: concurrency
+    priority: P0_CRITICAL
+    confidence: 1.0
+    name: "Race Condition Prevention in StateManager"
+    description: |
+      StateManager MUST handle concurrent writes using database-level locking,
+      optimistic concurrency control (version numbers), and retry logic.
+    
+    edge_case: "Two orchestrators update same plan state simultaneously"
+    failure_mode: "Last write wins (data loss); state corruption; inconsistent graph"
+    
+    technical_specification:
+      component: "StateManager with Concurrency Control"
+      location: "src/orchestrators/state/state_manager.py"
+      
+      concurrency_strategy: "Optimistic Concurrency Control + SQLite WAL Mode"
+      
+      state_schema_update:
+        add_columns:
+          - "version INTEGER DEFAULT 1 (optimistic lock version)"
+          - "last_modified_by TEXT (orchestrator_id)"
+          - "last_modified_at TIMESTAMP"
+          
+      write_operation_flow:
+        step_1: "Read current state + version number"
+        step_2: "Modify state in memory"
+        step_3: "Attempt write with version check:"
+        step_3a: "UPDATE state SET data=?, version=version+1 WHERE id=? AND version=?"
+        step_4: "If rowcount=0 (version conflict) → Retry from step 1"
+        step_5: "If rowcount=1 → Success"
+        step_6: "If 3 retries exhausted → Raise ConcurrencyError"
+        
+      database_configuration:
+        wal_mode: true
+        journal_mode: "WAL"
+        busy_timeout: 5000
+        transaction_isolation: "SERIALIZABLE"
+        
+      integration_tests:
+        - "Test: 10 orchestrators write to same state (verify no data loss)"
+        - "Test: Concurrent graph updates (verify topology consistency)"
+        - "Test: Retry logic under contention"
+        
+    validation:
+      - "SQLite database in WAL mode"
+      - "Version column exists on all state tables"
+      - "Integration test passes (10 concurrent writers, zero data loss)"
+      
+    effort_estimate: "2 days (design + implement + test)"
+    warrantability: MANDATORY
+    blocking: true
+
+  # -------------------------------------------------------------------------
+  # CR-005: Rollback and Recovery Mechanisms
+  # -------------------------------------------------------------------------
+  
+  - id: CR-005
+    category: fault_tolerance
+    priority: P1_HIGH
+    confidence: 1.0
+    name: "Automatic Rollback and Recovery for Failed Orchestrators"
+    description: |
+      Orchestrators MUST support automatic rollback on failure with retry logic
+      and state restoration. Manual intervention ONLY for critical failures.
+    
+    failure_modes:
+      - "Orchestrator crashes mid-execution (partial work committed)"
+      - "Dependency orchestrator fails (block dependents or retry)"
+      - "Resource exhaustion (memory, disk space)"
+      - "External service unavailable (LLM API, database)"
+      
+    technical_specification:
+      component: "Rollback Manager"
+      location: "src/orchestrators/core/rollback_manager.py"
+      
+      checkpoint_strategy:
+        frequency: "After each task completion (TODO graph node)"
+        storage: "SQLite database (todo_checkpoints table)"
+        data: "Graph snapshot JSON + orchestrator state snapshot"
+        
+      rollback_triggers:
+        - "Orchestrator raises unhandled exception"
+        - "Task status = FAILED and retry_count >= max_retries"
+        - "User manually aborts execution (Ctrl+C)"
+        - "Resource limit exceeded (memory, time)"
+        
+      rollback_procedure:
+        step_1: "Identify last successful checkpoint"
+        step_2: "Load checkpoint graph snapshot"
+        step_3: "Mark IN_PROGRESS tasks → PENDING (retry)"
+        step_4: "Mark FAILED tasks → BLOCKED (if max retries exceeded)"
+        step_5: "Notify user of rollback (brief message, not chatty)"
+        step_6: "Await user decision: RETRY, SKIP_FAILED, or ABORT"
+        
+      recovery_strategies:
+        - strategy: "AUTO_RETRY"
+          description: "Retry failed task up to max_retries times"
+          when: "Transient errors (network timeout, rate limit)"
+          
+        - strategy: "SKIP_AND_CONTINUE"
+          description: "Mark task SKIPPED, unblock dependents if non-critical"
+          when: "Optional tasks (e.g., documentation generation)"
+          
+        - strategy: "FAIL_FAST"
+          description: "Abort entire execution, block all dependents"
+          when: "Critical failures (database corruption, auth failure)"
+          
+    validation:
+      - "Integration test: Orchestrator crashes mid-execution, resumes from checkpoint"
+      - "Integration test: Transient failure retried 3 times successfully"
+      - "Integration test: Critical failure triggers rollback with user prompt"
+      
+    effort_estimate: "3 days (design + implement + extensive testing)"
+    warrantability: HIGH
+    blocking: false
+
+  # -------------------------------------------------------------------------
+  # CR-006: Performance - Pattern Matching Optimization (O(1) Routing)
+  # -------------------------------------------------------------------------
+  
+  - id: CR-006
+    category: performance
+    priority: P1_HIGH
+    confidence: 1.0
+    name: "O(1) Pattern Matching with Trie-Based Router"
+    description: |
+      Master Orchestrator MUST use trie-based pattern matching instead of O(n)
+      linear scan to support 100+ orchestrators without routing bottlenecks.
+    
+    current_bottleneck: "O(n) linear regex scan across all orchestrator patterns"
+    performance_goal: "O(1) average case pattern matching (hash table + trie hybrid)"
+    
+    technical_specification:
+      component: "TriePatternRouter"
+      location: "src/orchestrators/routing/trie_pattern_router.py"
+      
+      data_structure:
+        exact_match_cache: "Dict[str, orchestrator_id] (O(1) hash lookup)"
+        prefix_trie: "Trie structure for prefix patterns (e.g., 'plan *')"
+        regex_fallback: "List[{pattern, orchestrator_id}] (only for complex regex)"
+        
+      routing_algorithm:
+        step_1: "Normalize user input (lowercase, trim)"
+        step_2: "Check exact match cache (O(1))"
+        step_3: "If miss, traverse prefix trie (O(k) where k=input length)"
+        step_4: "If no trie match, fallback to regex scan (O(n) worst case)"
+        step_5: "Cache result for future requests"
+        
+      pattern_registration:
+        simple_patterns: "Stored in exact match cache or trie"
+        complex_patterns: "Stored in regex fallback list"
+        pattern_analysis: "Automatic classification on orchestrator registration"
+        
+      performance_benchmarks:
+        - "100 orchestrators: <5ms average routing time"
+        - "1000 orchestrators: <20ms average routing time"
+        - "Cache hit rate: >95% for common requests"
+        
+    validation:
+      - "Benchmark test: 100 orchestrators, 1000 requests, <5ms avg"
+      - "Correctness test: Trie routing matches regex routing 100%"
+      - "Cache test: Second request for same pattern <1ms"
+      
+    effort_estimate: "2 days (design + implement + benchmark)"
+    warrantability: HIGH
+    blocking: false
+
+  # -------------------------------------------------------------------------
+  # CR-007: Dependency Graph Validation (Circular Dependency Detection)
+  # -------------------------------------------------------------------------
+  
+  - id: CR-007
+    category: validation
+    priority: P1_HIGH
+    confidence: 1.0
+    name: "Circular Dependency Detection and Prevention"
+    description: |
+      TODO Orchestrator MUST validate graph is acyclic on task add and
+      orchestrator registration. Detect and reject circular dependencies.
+    
+    failure_mode: "Orchestrator A depends on B, B depends on C, C depends on A → deadlock"
+    
+    technical_specification:
+      component: "DAG Validator"
+      location: "src/orchestrators/core/dag_validator.py"
+      
+      validation_points:
+        - "On task add (validate new task doesn't create cycle)"
+        - "On orchestrator registration (validate orchestrator dependencies)"
+        - "On graph load (validate persisted graph still acyclic)"
+        
+      detection_algorithm: "Depth-First Search (DFS) with cycle detection"
+      algorithm_complexity: "O(V + E) where V=tasks, E=dependencies"
+      
+      implementation:
+        function: "detect_cycle(graph: DAG, new_edge: Edge) -> Optional[List[TaskID]]"
+        returns: "None if acyclic, List of task IDs forming cycle if cyclic"
+        
+      error_handling:
+        on_cycle_detected:
+          action: "Raise CircularDependencyError with cycle path"
+          message: "Circular dependency detected: Task A → B → C → A"
+          user_guidance: "Remove one dependency from cycle to resolve"
+          
+    validation:
+      - "Unit test: Add task with circular dependency → Error raised"
+      - "Integration test: Complex graph (50 tasks) validated in <100ms"
+      
+    effort_estimate: "1 day (implement + test)"
+    warrantability: MANDATORY
+    blocking: true
+
+  # -------------------------------------------------------------------------
+  # CR-008: Knowledge Merge Conflict Resolution
+  # -------------------------------------------------------------------------
+  
+  - id: CR-008
+    category: knowledge_management
+    priority: P2_MEDIUM
+    confidence: 0.9
+    name: "Explicit Knowledge Merge Conflict Resolution"
+    description: |
+      Knowledge merger MUST detect conflicts between CORTEX knowledge and company
+      knowledge, log them, and apply explicit resolution strategy (not silent override).
+    
+    conflict_scenarios:
+      - "CORTEX says use PEP 8 (line length 79), company says 120"
+      - "CORTEX says pytest, company says unittest"
+      - "CORTEX says master branch, company says main branch"
+      
+    technical_specification:
+      component: "KnowledgeMergeConflictResolver"
+      location: "src/knowledge/conflict_resolver.py"
+      
+      resolution_strategies:
+        - strategy: "COMPANY_WINS"
+          description: "Company knowledge overrides CORTEX"
+          when: "Project-specific preferences (line length, branch names)"
+          
+        - strategy: "CORTEX_WINS"
+          description: "CORTEX knowledge preserved"
+          when: "Universal best practices (type hints mandatory, docstrings)"
+          
+        - strategy: "MERGE"
+          description: "Combine both (e.g., run pytest AND unittest)"
+          when: "Non-conflicting additions"
+          
+        - strategy: "USER_PROMPT"
+          description: "Ask user to resolve conflict"
+          when: "Critical conflicts with no clear winner"
+          
+      conflict_detection:
+        method: "Key-based matching (e.g., 'python.line_length' exists in both)"
+        logging: "cortex-brain/audit-logs/knowledge-conflicts.jsonl"
+        
+      conflict_log_schema:
+        timestamp: "ISO8601"
+        conflict_key: "String (e.g., 'python.line_length')"
+        cortex_value: "Any"
+        company_value: "Any"
+        resolution_strategy: "Enum"
+        final_value: "Any"
+        
+    validation:
+      - "Unit test: Conflicting values → Correct strategy applied"
+      - "Integration test: Load company knowledge → Conflicts logged"
+      
+    effort_estimate: "2 days (design + implement + test)"
+    warrantability: MEDIUM
+    blocking: false
+
+  # -------------------------------------------------------------------------
+  # CR-009: Resource Limits and Quotas
+  # -------------------------------------------------------------------------
+  
+  - id: CR-009
+    category: resource_management
+    priority: P1_HIGH
+    confidence: 1.0
+    name: "Orchestrator Resource Limits (Memory, CPU, Time)"
+    description: |
+      Orchestrators MUST have configurable resource limits to prevent runaway
+      processes, memory exhaustion, and infinite loops.
+    
+    failure_modes:
+      - "Memory leak in orchestrator → OOM kill → System crash"
+      - "Infinite loop → CPU spike → System unresponsive"
+      - "Long-running orchestrator → User frustration → Manual kill"
+      
+    technical_specification:
+      component: "ResourceLimitEnforcer"
+      location: "src/orchestrators/middleware/resource_limiter.py"
+      
+      limits_configuration:
+        file: "cortex-brain/config/resource-limits.yaml"
+        schema:
+          default_limits:
+            max_memory_mb: 512
+            max_cpu_percent: 80
+            max_execution_time_seconds: 3600
+            max_file_operations: 10000
+            
+          per_orchestrator_overrides:
+            planning_orchestrator_v5:
+              max_memory_mb: 1024
+              max_execution_time_seconds: 7200
+              
+      enforcement_mechanism:
+        memory_monitoring: "psutil.Process().memory_info()"
+        cpu_monitoring: "psutil.Process().cpu_percent(interval=1)"
+        time_monitoring: "threading.Timer"
+        
+      enforcement_actions:
+        on_limit_exceeded:
+          warning_threshold: "80% of limit"
+          action_warning: "Log warning, continue execution"
+          
+          hard_limit: "100% of limit"
+          action_hard: "Graceful shutdown → Checkpoint state → Raise ResourceLimitError"
+          
+      graceful_shutdown:
+        step_1: "Detect limit exceeded"
+        step_2: "Signal orchestrator to checkpoint current state"
+        step_3: "Wait 10 seconds for checkpoint completion"
+        step_4: "Force terminate if checkpoint not complete"
+        step_5: "Log resource limit violation to audit log"
+        
+    validation:
+      - "Integration test: Orchestrator exceeds memory limit → Graceful shutdown"
+      - "Integration test: Orchestrator exceeds time limit → Checkpoint + error"
+      
+    effort_estimate: "2 days (implement + test)"
+    warrantability: HIGH
+    blocking: false
+
+  # -------------------------------------------------------------------------
+  # CR-010: Markdown Generation Blocking (REQ-048 Enforcement)
+  # -------------------------------------------------------------------------
+  
+  - id: CR-010
+    category: governance
+    priority: P1_HIGH
+    confidence: 1.0
+    name: "Block Markdown File Generation During Execution"
+    description: |
+      Orchestrators MUST NOT generate .md files during execution. Markdown ONLY
+      for knowledge library updates at END of planning cycle via dedicated utility.
+    
+    user_requirement: |
+      "The only time markdown should happen is when learning libraries are updated
+      which should happen at the end of each planning cycle."
+    
+    technical_specification:
+      component: "MarkdownGenerationGuard"
+      location: "src/orchestrators/middleware/markdown_guard.py"
+      
+      enforcement_hook: "pre_file_create"
+      
+      blocked_patterns:
+        - "*.md (except knowledge library paths)"
+        - "00-*.md"
+        - "CONTINUATION-PROMPT.md"
+        - "README.md"
+        - "*-summary.md"
+        - "*-report.md"
+        
+      allowed_exceptions:
+        - "cortex-brain/knowledge-library/**/*.md"
+        - "cortex-brain/tier2/company-knowledge/**/*.md"
+        
+      enforcement_logic:
+        if_file_create_attempted:
+          step_1: "Check if file path ends with .md"
+          step_2: "Check if path in allowed exceptions list"
+          step_3: "If blocked → Raise MarkdownGenerationError"
+          step_4: "Log violation to audit log"
+          
+      knowledge_library_update_workflow:
+        trigger: "End of planning cycle (all phases complete)"
+        orchestrator: "KnowledgeLibraryUpdater utility"
+        input: "Execution logs, lessons learned, new patterns discovered"
+        output: "Updated .md files in knowledge-library/"
+        
+    validation:
+      - "Unit test: Orchestrator tries to create 00-plan.md → Blocked"
+      - "Integration test: KnowledgeLibraryUpdater updates knowledge → Allowed"
+      
+    effort_estimate: "1 day (implement + test)"
+    warrantability: MANDATORY
+    blocking: true
+

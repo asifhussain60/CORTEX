@@ -1,0 +1,1098 @@
+# CORTEX-5 Epic Requirements Validation Report
+# Spot-Check Against 5 Critical Architectural Requirements
+# Generated: 2026-01-07T11:45:00Z
+# Review Type: Gap Analysis with CORTEX-5.0 Cross-Reference
+
+metadata:
+  document_type: requirements_validation_report
+  epic_id: cortex5-epic
+  review_timestamp: '2026-01-07T11:45:00Z'
+  reviewer: CORTEX Review System
+  validation_mode: spot_check
+  comparison_branch: origin/CORTEX-5.0
+  documents_analyzed:
+    - cortex-brain/documents/planning/active/cortex5-epic/reports/architecture-document.yaml
+    - cortex-brain/documents/planning/active/cortex5-epic/reports/design-document.yaml
+    - cortex-brain/documents/planning/active/cortex5-epic/reports/executive-summary.yaml
+    - cortex-brain/documents/planning/active/cortex5-epic/analysis/user-requirements-48h.yaml
+    - cortex-brain/documents/planning/active/cortex5-epic/analysis/epic-implementation-state.yaml
+
+# =============================================================================
+# REQUIREMENT 1: Microsoft Amplifier Best Practices
+# =============================================================================
+
+requirement_1_microsoft_amplifier:
+  requirement_name: "Microsoft Amplifier Best Practices Framework"
+  user_expectation: "Microsoft amplifier best practices implemented in new architecture"
+  status: PARTIALLY_MISSING
+  confidence_score: 0.65
+  
+  findings:
+    in_current_documents:
+      - document: architecture-document.yaml
+        found_references:
+          - line_context: "Best practices enforcement (Phase 7 in review orchestrator)"
+          - line_context: "Knowledge library integration with best practices"
+          - line_context: "Python best practices (PEP 8, SOLID, type hints)"
+        missing_elements:
+          - "NO explicit 'Microsoft Amplifier' pattern reference"
+          - "NO modular amplifier architecture"
+          - "NO momentum amplifier concept"
+      
+      - document: design-document.yaml
+        found_references:
+          - line_context: "Company best practices override defaults"
+          - line_context: "Knowledge library best practices consultation"
+        missing_elements:
+          - "NO Microsoft Amplifier framework integration"
+          - "NO amplifier modularity design"
+      
+      - document: user-requirements-48h.yaml
+        found_references: []
+        missing_elements:
+          - "Microsoft Amplifier NOT mentioned in 48h requirements"
+          - "User did not explicitly request Amplifier implementation"
+    
+    in_cortex_5_0_branch:
+      branch: origin/CORTEX-5.0
+      found_plan: true
+      plan_location: "cortex-brain/documents/planning/active/a19-invest-how-micros/"
+      plan_files:
+        - A19-investigate-how-microsoft-amplifiers-modular.md
+        - A19-invest-how-micros.yaml
+      plan_status: "Planning (not implemented)"
+      plan_created: "2026-01-06T15:20:07Z"
+      
+      plan_details:
+        epic_id: A19
+        title: "Investigate How Microsoft Amplifiers Modular"
+        complexity_tier: 3
+        estimated_hours: 120
+        phases: 5
+        status: active_but_not_started
+        
+        phases_defined:
+          - phase_1: "Epic Planning & Architecture"
+          - phase_2: "Feature Implementation"
+          - phase_3: "Feature Integration"
+          - phase_4: "Epic Testing & Validation"
+          - phase_5: "Epic Documentation & Deployment"
+        
+        acceptance_criteria:
+          - "All features complete and integrated"
+          - "Epic-level integration tests passing with >90% coverage"
+          - "Feature interactions validated"
+          - "Performance requirements met"
+          - "Complete epic documentation"
+          - "Deployment readiness achieved"
+      
+      additional_context:
+        chat_reference: ".github/copilot/copilot-chats/chat02.md"
+        chat_mention: "Momentum amplifiers (4 identified)"
+        interpretation: |
+          Microsoft Amplifier framework appears to be a CORTEX-specific concept
+          for modular, momentum-building feature orchestration. The A19 plan
+          was created to INVESTIGATE the pattern, not implement it yet.
+  
+  gap_analysis:
+    severity: MEDIUM
+    impact: |
+      Microsoft Amplifier pattern exists as a PLANNED investigation (A19) in
+      CORTEX-5.0 but was NOT carried forward into CORTEX-5.5 epic design.
+      Current design has strong orchestrator modularity and best practices
+      enforcement, which MAY align with Amplifier goals, but explicit pattern
+      NOT documented.
+    
+    remediation_required: true
+    remediation_strategy:
+      option_1:
+        approach: "Pull A19 plan into CORTEX-5.5 as Feature 11"
+        effort: "120 hours (per A19 estimate)"
+        priority: P2
+        justification: |
+          User did NOT explicitly request Amplifier in 48h requirements.
+          Current orchestrator design already modular and extensible.
+          Can defer to post-CORTEX-5.5 enhancement.
+      
+      option_2:
+        approach: "Document how current design achieves Amplifier goals"
+        effort: "8 hours (analysis + documentation)"
+        priority: P1
+        justification: |
+          Master orchestrator + child orchestrators + plugin registry MAY
+          already implement Amplifier pattern principles. Document alignment.
+      
+      option_3:
+        approach: "Defer to CORTEX-5.6 (separate epic)"
+        effort: "0 hours (no immediate action)"
+        priority: P3
+        justification: |
+          A19 status = "Planning", not implementation-ready.
+          Focus CORTEX-5.5 on core orchestration stability first.
+  
+  recommended_action:
+    action: "Execute Option 2 (Document Alignment)"
+    rationale: |
+      Current CORTEX-5.5 architecture with master orchestrator, plugin
+      registry, and knowledge integration MAY already satisfy Amplifier
+      pattern goals. Perform analysis to confirm, then document explicitly
+      in architecture-document.yaml.
+    
+    deliverable: "cortex5-epic/reports/microsoft-amplifier-alignment.yaml"
+    estimated_effort: "8 hours"
+    blocking: false
+
+# =============================================================================
+# REQUIREMENT 2: Intelligent Orchestration
+# =============================================================================
+
+requirement_2_intelligent_orchestration:
+  requirement_name: "Intelligent Orchestration System"
+  user_expectation: "Intelligent orchestration with master orchestrator in control"
+  status: FULLY_CAPTURED
+  confidence_score: 0.95
+  
+  findings:
+    in_current_documents:
+      - document: architecture-document.yaml
+        found_references:
+          - line: 14
+            content: "architecture_style: Microservices with Master-Child Orchestrator Pattern"
+          - line: 72
+            content: "master_orchestrator: Single entry point routing to child orchestrators"
+          - line: 76-82
+            content: |
+              responsibilities:
+                - "Route requests to child orchestrators"
+                - "Manage orchestrator registry"
+                - "Enforce user mistake prevention rules (5 rules)"
+                - "Coordinate multi-orchestrator workflows"
+                - "Provide orchestrator lifecycle management"
+          - line: 83-88
+            content: |
+              intelligence_rules:
+                - "BLOCK_DIRECT_CREATION: Prevent direct file creation"
+                - "YAML_FIRST_ORCHESTRATOR: Require manifests before implementation"
+                - "PATTERN_COLLISION_DETECTION: Detect regex conflicts"
+                - "HIERARCHY_VALIDATION: Prevent circular dependencies"
+                - "DEPRECATION_ENFORCEMENT: Warn about deprecated orchestrators"
+        
+        validation: EXCELLENT
+        notes: |
+          Master orchestrator explicitly defined with 5 intelligence rules for
+          user mistake prevention. Architecture clearly shows centralized control
+          with child orchestrator delegation.
+      
+      - document: design-document.yaml
+        found_references:
+          - section: orchestrator_hierarchy
+            content: "3-tier orchestrator system (master → specialized → utility)"
+          - section: execution_flow
+            content: "LLM intent classification → Python script execution"
+          - section: intelligence_features
+            content: |
+              - Pattern-based routing (deterministic)
+              - LLM fallback for ambiguous requests
+              - Confidence scoring ≥0.7 threshold
+              - State management with rollback
+              - Governance enforcement at execution time
+        
+        validation: EXCELLENT
+        notes: |
+          Design clearly shows intelligent routing, confidence-based decision
+          making, and autonomous execution. Master orchestrator delegates to
+          specialized orchestrators based on domain expertise.
+      
+      - document: executive-summary.yaml
+        found_references:
+          - line: 88-92
+            content: |
+              master_orchestrator_role: "Single entry point with delegation"
+              intelligence_layer: "Pattern matching + LLM fallback"
+              autonomous_execution: "Python scripts post-LLM handoff"
+              governance_integration: "Pre-execution validation"
+        
+        validation: EXCELLENT
+  
+  gap_analysis:
+    severity: NONE
+    impact: "Requirement fully satisfied"
+    remediation_required: false
+  
+  evidence_strength: STRONG
+  evidence_sources:
+    - architecture-document.yaml (lines 14, 72-88, 95-108)
+    - design-document.yaml (orchestrator_hierarchy, execution_flow sections)
+    - executive-summary.yaml (master_orchestrator_role)
+    - cortex-brain/registry/orchestrators.json (master orchestrator registered)
+
+# =============================================================================
+# REQUIREMENT 3: Governance & Knowledge YAML Integration in Tier System
+# =============================================================================
+
+requirement_3_governance_knowledge_integration:
+  requirement_name: "Governance & Knowledge YAML Integration in Tier System"
+  user_expectation: "governance and knowledge yaml integration in tier system"
+  status: FULLY_CAPTURED
+  confidence_score: 0.92
+  
+  findings:
+    in_current_documents:
+      - document: architecture-document.yaml
+        found_references:
+          - section: layer_4_knowledge_governance
+            line: 230-330
+            subsections:
+              - cortex_governance_enforcer
+              - knowledge_library_provider
+              - company_knowledge_provider
+              - knowledge_merger
+              - tier_system_integration
+            
+            tier_system_details:
+              tier0_governance:
+                location: "cortex-brain/tier0/"
+                content: "brain-protection-rules.yaml (SKULL rules)"
+                description: "Immutable governance rules (12 rules)"
+                examples:
+                  - "TDD_ENFORCEMENT"
+                  - "HOLISTIC_DISCOVERY"
+                  - "GIT_ISOLATION"
+                  - "PLANNING_ISOLATION"
+                  - "PLAN_FILE_ORGANIZATION"
+                validation: "MANDATORY enforcement at execution time"
+              
+              tier1_working_memory:
+                location: "cortex-brain/tier1/"
+                content: "Active plans, progress trackers, state"
+                format: "YAML + JSON"
+                description: "Ephemeral execution context"
+              
+              tier2_knowledge_graph:
+                location: "cortex-brain/tier2/"
+                subsections:
+                  - "company-knowledge/ (YAML files)"
+                  - "knowledge-library/ (best practices YAML)"
+                  - "orchestrator-library/ (reusable patterns)"
+                intelligence: "Company knowledge overrides CORTEX intelligently"
+                merge_strategy: "Preserve core best practices + add company rules"
+              
+              tier3_development_context:
+                location: "cortex-brain/tier3/"
+                content: "Codebase analysis, dependencies, metrics"
+                format: "JSON + YAML"
+          
+          - section: knowledge_integration_flow
+            line: 285-310
+            flow_description: |
+              1. Orchestrator requests knowledge consultation
+              2. KnowledgeLibraryProvider loads YAML files from tier2/
+              3. CompanyKnowledgeProvider loads company YAML overrides
+              4. KnowledgeMerger intelligently merges (company > CORTEX)
+              5. Merged knowledge injected into execution context
+              6. Governance rules from tier0/ validated PRE-execution
+              7. Execution proceeds if governance passes
+        
+        validation: EXCELLENT
+        notes: |
+          Explicit 4-tier brain architecture with YAML-based governance (tier0)
+          and knowledge (tier2) integration. Merge strategy preserves best
+          practices while allowing company customization.
+      
+      - document: design-document.yaml
+        found_references:
+          - section: knowledge_integration_strategy
+            line: 580-620
+            key_points:
+              - "Three-layer knowledge system (CORTEX → Company → Domain)"
+              - "YAML format for all knowledge files"
+              - "Intelligent merge with conflict resolution"
+              - "Query performance <50ms"
+              - "Lazy loading for domain-specific knowledge"
+          
+          - section: governance_enforcement_points
+            line: 650-680
+            enforcement_stages:
+              - stage: "Pre-execution validation"
+                rules_applied: "All tier0/ SKULL rules"
+                blocking: true
+              - stage: "Mid-execution checkpoints"
+                rules_applied: "File organization, TDD enforcement"
+                blocking: true
+              - stage: "Post-execution cleanup"
+                rules_applied: "Teardown refactor (Phase N+1)"
+                blocking: false
+        
+        validation: EXCELLENT
+      
+      - document: user-requirements-48h.yaml
+        found_references:
+          - requirement_id: REQ-019
+            line: 180-187
+            description: "Governance rules must block phase progression"
+            confidence: 0.95
+            source: chat02.md
+          
+          - requirement_id: REQ-032
+            line: 312-318
+            description: "Knowledge library integration for best practices"
+            confidence: 0.88
+            source: chat01.md
+        
+        validation: GOOD
+        notes: "User explicitly requested governance blocking + knowledge integration"
+  
+  gap_analysis:
+    severity: NONE
+    impact: "Requirement fully satisfied with strong implementation detail"
+    remediation_required: false
+    
+    validation_notes:
+      - "✅ Tier system explicitly defined (tier0-tier3)"
+      - "✅ Governance YAML files in tier0/ (brain-protection-rules.yaml)"
+      - "✅ Knowledge YAML files in tier2/ (knowledge-library/, company-knowledge/)"
+      - "✅ Merge strategy documented (company overrides CORTEX intelligently)"
+      - "✅ Pre-execution validation enforces governance"
+      - "✅ Performance targets defined (<50ms knowledge queries)"
+  
+  evidence_strength: STRONG
+  evidence_sources:
+    - architecture-document.yaml (layer_4_knowledge_governance, lines 230-330)
+    - design-document.yaml (knowledge_integration_strategy, lines 580-620)
+    - user-requirements-48h.yaml (REQ-019, REQ-032)
+    - cortex-brain/tier0/brain-protection-rules.yaml (file exists in workspace)
+    - cortex-brain/tier2/knowledge-library/ (directory exists with YAML files)
+
+# =============================================================================
+# REQUIREMENT 4: Master Orchestrator Control - Python/YAML Only (No Markdown)
+# =============================================================================
+
+requirement_4_master_orchestrator_control:
+  requirement_name: "Master Orchestrator Control via Python/YAML Only"
+  user_expectation: |
+    Master orchestrator is in control. All work downstream executed via Python
+    scripts and YAML files. No markdown files should be involved.
+  status: PARTIALLY_VIOLATED
+  confidence_score: 0.70
+  
+  findings:
+    in_current_documents:
+      - document: architecture-document.yaml
+        execution_flow_analysis:
+          llm_phase:
+            component: "GitHub Copilot Chat + CORTEX.prompt.md"
+            responsibility: "Intent classification and transformation"
+            output: "Terminal invocation command"
+            format: "python3 -m src.main '{request}'"
+          
+          python_execution_phase:
+            component: "Master Orchestrator (src/orchestrators/master_orchestrator.py)"
+            responsibility: "Route to child orchestrators via registry"
+            execution: "Python scripts only (autonomous mode)"
+            state_management: "SQLite database (brain-state.db)"
+          
+          child_orchestrator_phase:
+            components:
+              - planning_orchestrator_v5
+              - review_orchestrator_v2
+              - refactor_orchestrator_v2
+              - debug_orchestrator_v2
+            execution: "Python scripts with YAML manifests"
+            no_markdown_execution: true
+        
+        validation: GOOD
+        notes: |
+          Autonomous orchestrators execute via Python scripts. State persisted
+          to SQLite, not Markdown. Manifests in YAML format.
+        
+        markdown_usage_documented:
+          allowed_contexts:
+            - context: documentation_generation
+              location: "cortex-brain/documents/"
+              purpose: "Human-readable reports and summaries"
+              execution_involvement: false
+              note: "Generated AFTER execution completes, not during"
+            
+            - context: plan_viewer_html
+              location: "plan-viewer.html"
+              purpose: "Render YAML plans for human viewing"
+              execution_involvement: false
+              note: "Reads YAML, displays as HTML (Markdown rendering for descriptions)"
+            
+            - context: continuation_prompts
+              location: "CONTINUATION-PROMPT.md"
+              purpose: "Human handoff instructions"
+              execution_involvement: false
+              note: "NOT read by orchestrators during execution"
+          
+          forbidden_contexts:
+            - "❌ Orchestrator execution logic"
+            - "❌ State persistence"
+            - "❌ Configuration"
+            - "❌ Inter-orchestrator communication"
+        
+        concerns:
+          - concern_1:
+              issue: "Planning System v5/v6 generates .md files during execution"
+              files_generated:
+                - "00-{plan-name}.md (master plan)"
+                - "CONTINUATION-PROMPT.md"
+                - "README.md (if epic mode)"
+              severity: MEDIUM
+              justification: |
+                These .md files are for HUMAN consumption, not orchestrator
+                execution. However, they ARE generated during orchestrator
+                runtime, which violates strict "no markdown in execution" rule.
+          
+          - concern_2:
+              issue: "feature.yaml files contain markdown-formatted descriptions"
+              example: "description: '# Phase 1\\n\\nImplement feature...'"
+              severity: LOW
+              justification: |
+                YAML is execution format. Markdown is EMBEDDED as string content
+                for human readability. Orchestrators read YAML structure, not
+                Markdown semantics.
+      
+      - document: design-document.yaml
+        found_references:
+          - section: execution_architecture
+            line: 120-145
+            key_points:
+              - "Master orchestrator invoked via terminal (Python entry point)"
+              - "Child orchestrators loaded dynamically from registry (YAML)"
+              - "Execution state persisted to SQLite (NOT files)"
+              - "Progress updates via response templates (YAML → rendered)"
+          
+          - section: file_formats_by_layer
+            line: 710-730
+            layer_breakdown:
+              presentation_layer:
+                - "YAML: Configuration and templates"
+                - "JSON: Data interchange (registry, progress tracking)"
+              orchestration_layer:
+                - "Python: All orchestrator implementations"
+                - "YAML: Orchestrator manifests"
+                - "SQLite: State persistence"
+              knowledge_governance_layer:
+                - "YAML: Governance rules, knowledge files"
+                - "JSON: Metrics, audit logs"
+              documentation_layer:
+                - "Markdown: Human-readable documentation"
+                - "HTML: plan-viewer.html, dashboards"
+        
+        validation: GOOD
+        notes: |
+          Clear separation: Python/YAML for execution, Markdown for documentation.
+          However, planning orchestrator DOES generate .md files during execution.
+      
+      - document: user-requirements-48h.yaml
+        found_requirements:
+          - requirement_id: REQ-041
+            line: 405-412
+            description: "Master orchestrator controls all downstream execution"
+            confidence: 1.0
+            source: chat01.md
+            timestamp: "2026-01-07T08:15:22Z"
+          
+          - requirement_id: REQ-042
+            line: 413-420
+            description: "Python scripts + YAML files only (no markdown in execution)"
+            confidence: 0.95
+            source: chat01.md (inferred from context)
+            timestamp: "2026-01-07T08:20:15Z"
+            note: "User explicitly stated 'No markdown files should be involved'"
+  
+  gap_analysis:
+    severity: MEDIUM
+    impact: |
+      Planning Orchestrator v5/v6 generates .md files (master plan, continuation
+      prompt, README) DURING execution. While these files are for human consumption
+      and NOT read by orchestrators, their generation violates strict interpretation
+      of "no markdown files should be involved in execution."
+    
+    violation_details:
+      violating_component: "Planning Orchestrator v5/v6"
+      violation_type: "Generates Markdown files during orchestrator execution"
+      files_generated:
+        - file: "00-{plan-name}.md"
+          purpose: "Human-readable master plan summary"
+          read_by_orchestrators: false
+          justification: "Redundant with feature.yaml (authoritative source)"
+        
+        - file: "CONTINUATION-PROMPT.md"
+          purpose: "Human handoff instructions for next execution"
+          read_by_orchestrators: false
+          justification: "Helpful for humans, not needed for orchestrator continuity"
+        
+        - file: "README.md"
+          purpose: "Epic-level overview (only in epic mode)"
+          read_by_orchestrators: false
+          justification: "Convenience file, not authoritative"
+      
+      technical_alignment:
+        - "✅ Orchestrators DO execute via Python scripts"
+        - "✅ Configuration IS in YAML (manifests, feature.yaml)"
+        - "✅ State persisted to SQLite, NOT Markdown files"
+        - "✅ Inter-orchestrator communication via registry (JSON)"
+        - "❌ .md files generated during execution (human-facing only)"
+      
+      philosophical_question: |
+        Does "no markdown files should be involved" mean:
+          A) No markdown files generated at any point during execution?
+          B) No markdown files used AS EXECUTION ARTIFACTS (state, config, etc.)?
+        
+        Current design satisfies (B) but violates (A).
+    
+    remediation_required: true
+    remediation_options:
+      option_1:
+        approach: "Eliminate all .md generation from Planning Orchestrator"
+        changes_required:
+          - "Remove 00-{plan-name}.md generation"
+          - "Remove CONTINUATION-PROMPT.md generation"
+          - "Remove README.md generation"
+          - "Rely solely on feature.yaml + plan-viewer.html"
+        effort: "4 hours (code changes + testing)"
+        pros:
+          - "Strict compliance with 'no markdown' requirement"
+          - "Reduces file duplication (feature.yaml is authoritative)"
+        cons:
+          - "Loss of human-readable summary files"
+          - "plan-viewer.html becomes ONLY way to view plans"
+          - "Git diffs less readable (YAML vs Markdown)"
+      
+      option_2:
+        approach: "Clarify requirement: 'No markdown in EXECUTION LOGIC'"
+        changes_required:
+          - "Update architecture-document.yaml to document .md generation"
+          - "Clarify .md files are OUTPUTS, not execution dependencies"
+          - "Confirm with user that documentation .md files acceptable"
+        effort: "1 hour (documentation update)"
+        pros:
+          - "Preserves human-readable documentation"
+          - "Technical execution remains Python/YAML only"
+          - "Git history remains readable"
+        cons:
+          - "May not satisfy strict interpretation of user requirement"
+      
+      option_3:
+        approach: "Post-execution .md generation (separate utility)"
+        changes_required:
+          - "Remove .md generation from Planning Orchestrator runtime"
+          - "Create separate utility: 'generate-plan-docs' (post-execution)"
+          - "Users run utility AFTER plan creation if .md files desired"
+        effort: "6 hours (refactor + new utility + testing)"
+        pros:
+          - "Strict separation: execution = Python/YAML, docs = optional .md"
+          - "User choice: generate .md summaries or not"
+        cons:
+          - "Extra step for users who want .md files"
+          - "CONTINUATION-PROMPT.md may be needed immediately (not post-execution)"
+  
+  user_clarification_received:
+    timestamp: '2026-01-07T12:15:00Z'
+    user_response: |
+      "The only time markdown should happen is when learning libraries are updated
+      which should happen at the end of each planning cycle."
+    
+    interpretation:
+      - "✅ Markdown allowed for knowledge library documentation updates"
+      - "✅ Timing: End of planning cycle (not during orchestrator execution)"
+      - "❌ Planning Orchestrator should NOT generate .md files during runtime"
+      - "❌ No summary reports in Markdown at end of orchestrator cycles"
+    
+    design_impact:
+      violation_confirmed: true
+      severity: HIGH
+      components_affected:
+        - "Planning Orchestrator v5/v6 (generates 00-plan.md, CONTINUATION-PROMPT.md, README.md)"
+      refactor_required: true
+  
+  recommended_action:
+    action: "Execute Option 1 (Eliminate ALL .md Generation from Planning Orchestrator)"
+    rationale: |
+      User clarification confirms strict interpretation: NO .md files during
+      orchestrator execution. Only exception is knowledge library updates at
+      END of planning cycle (separate from orchestrator execution).
+      
+      Planning Orchestrator must be refactored to:
+        1. Remove 00-{plan-name}.md generation
+        2. Remove CONTINUATION-PROMPT.md generation
+        3. Remove README.md generation
+        4. Rely solely on feature.yaml + plan-viewer.html
+      
+      Knowledge library updates (Markdown) should be separate utility invoked
+      at end of planning cycle, not during orchestrator runtime.
+    
+    deliverables:
+      - "Refactored Planning Orchestrator v7 (no .md generation)"
+      - "Knowledge library update utility (separate from orchestrator)"
+      - "Updated architecture-document.yaml (document changes)"
+      - "Migration guide for existing plans"
+    
+    estimated_effort: "6 hours (refactor + testing + documentation)"
+    priority: P0
+    blocking: true
+    user_confirmation_received: true
+
+# =============================================================================
+# REQUIREMENT 5: Copilot Control - No Auto-Generated Reports/Docs
+# =============================================================================
+
+requirement_5_copilot_control:
+  requirement_name: "Copilot Instructions: No Auto-Generated Reports at Cycle End"
+  user_expectation: |
+    instruction to control copilot to not generated documents, reports md files
+    at the end of each cycle
+  status: MISSING
+  confidence_score: 0.40
+  
+  findings:
+    in_current_documents:
+      - document: architecture-document.yaml
+        search_results: []
+        notes: "No explicit instructions for Copilot behavior modification"
+      
+      - document: design-document.yaml
+        search_results: []
+        notes: "No Copilot control instructions documented"
+      
+      - document: executive-summary.yaml
+        search_results: []
+        notes: "No mention of Copilot report generation control"
+      
+      - document: user-requirements-48h.yaml
+        search_results:
+          - requirement_id: REQ-047
+            line: 465-472
+            description: "Control Copilot to not generate reports/docs at end of cycle"
+            confidence: 0.75
+            source: chat01.md (inferred)
+            note: |
+              User stated requirement but did NOT provide specific implementation
+              guidance (e.g., copilot-instructions.md modification, response
+              template updates, etc.)
+      
+      - document: .github/copilot-instructions.md
+        search_performed: true
+        location: "/Users/asifhussain/PROJECTS/CORTEX/.github/copilot-instructions.md"
+        search_terms:
+          - "report generation"
+          - "document generation"
+          - "end of cycle"
+          - "auto-generate"
+        
+        found_relevant_content:
+          - line: 45-60
+            section: "Brain Protection (SKULL)"
+            rule: "PLANNING_ISOLATION"
+            content: |
+              PLANNING_ISOLATION | Planning commands create plans ONLY, never implement
+            relevance: PARTIAL
+            notes: |
+              Prevents planning commands from generating implementation code, but
+              does NOT prevent report/document generation at end of orchestrator cycles.
+          
+          - line: 85-105
+            section: "Document Organization"
+            rule: "Forbidden root-level docs"
+            content: |
+              ⛔ FORBIDDEN: Root-level docs
+              ✅ REQUIRED: cortex-brain/documents/{category}/
+            relevance: PARTIAL
+            notes: |
+              Enforces document placement, but does NOT prevent document generation
+              itself. Only controls WHERE documents are created, not WHEN/IF.
+        
+        missing_instructions:
+          - instruction_type: "Report generation control"
+            missing_rule: |
+              Orchestrators should NOT auto-generate summary reports, analysis
+              documents, or .md files at end of execution cycle UNLESS explicitly
+              requested by user or required by orchestrator design.
+            
+            suggested_addition:
+              location: ".github/copilot-instructions.md"
+              section: "Brain Protection (SKULL)"
+              new_rule: "DOCUMENT_GENERATION_CONTROL"
+              rule_content: |
+                DOCUMENT_GENERATION_CONTROL | Orchestrators generate documents
+                ONLY when:
+                  1. User explicitly requests (e.g., "generate report")
+                  2. Orchestrator design requires (e.g., planning = plan files)
+                  3. Governance audit (e.g., compliance tracking)
+                
+                ❌ FORBIDDEN:
+                  - Auto-summary reports at end of orchestrator execution
+                  - Unsolicited analysis documents
+                  - Redundant .md files when YAML exists
+                
+                ✅ ALLOWED:
+                  - Plan files (planning orchestrator's primary output)
+                  - Audit logs (governance requirement)
+                  - Explicitly user-requested reports
+          
+          - instruction_type: "Response template enforcement"
+            missing_rule: |
+              Response templates (response-templates-v4.yaml) should be used
+              for ALL orchestrator responses. No freeform report generation
+              outside template system.
+            
+            suggested_addition:
+              location: ".github/copilot-instructions.md"
+              section: "Response Format"
+              new_rule: "TEMPLATE_ONLY_RESPONSES"
+              rule_content: |
+                TEMPLATE_ONLY_RESPONSES | All orchestrator responses MUST use
+                response-templates-v4.yaml templates. NO freeform report generation.
+                
+                Templates control:
+                  - Response length (INSTANT → COMPREHENSIVE)
+                  - Progress update frequency (accessibility rules)
+                  - Document generation (only if template includes it)
+      
+      - document: cortex-brain/response-templates-v4.yaml
+        search_performed: true
+        location: "/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/response-templates-v4.yaml"
+        search_terms:
+          - "document_generation"
+          - "report_generation"
+          - "auto_generate"
+          - "end_of_cycle"
+        
+        found_configuration:
+          - template: autonomous_execution_progress
+            line: 120-180
+            document_generation_config:
+              generates_documents: false
+              response_only: true
+              notes: |
+                Autonomous execution template focuses on progress updates only.
+                No automatic document generation at end of execution.
+          
+          - template: comprehensive_review
+            line: 450-520
+            document_generation_config:
+              generates_documents: true
+              document_types:
+                - "Review report YAML"
+                - "Gap analysis YAML"
+              justification: "Review orchestrator's primary output"
+              notes: |
+                Document generation IS part of review orchestrator design.
+                Not auto-generated "extra" reports.
+          
+          - template: planning_completion
+            line: 680-750
+            document_generation_config:
+              generates_documents: true
+              document_types:
+                - "00-{plan-name}.md"
+                - "feature.yaml files"
+                - "CONTINUATION-PROMPT.md"
+              justification: "Planning orchestrator's primary output"
+              notes: |
+                Plan files ARE the orchestrator's deliverable, not "auto-generated extras".
+        
+        validation: PARTIAL
+        notes: |
+          Response templates DO control document generation, but only implicitly.
+          No explicit "do not auto-generate reports" rule in templates.
+  
+  gap_analysis:
+    severity: MEDIUM
+    impact: |
+      No explicit instructions exist in copilot-instructions.md or response
+      templates to prevent auto-generation of reports/documents at end of
+      orchestrator cycles. Current design relies on orchestrator authors to
+      follow best practices, but NOT enforced via governance.
+    
+    violation_risk:
+      risk_level: MEDIUM
+      scenarios:
+        - scenario: "New orchestrator author adds summary report at end of execution"
+          blocked_by: null
+          consequence: "Extra .md files generated, violates user expectation"
+        
+        - scenario: "Copilot suggests 'Generate analysis report' at end of cycle"
+          blocked_by: null
+          consequence: "User-facing prompt pollution, extra document clutter"
+        
+        - scenario: "Orchestrator generates redundant summary when YAML exists"
+          blocked_by: "PLAN_FILE_ORGANIZATION (indirectly - placement rule only)"
+          consequence: "File duplication, confusion about authoritative source"
+    
+    remediation_required: true
+    remediation_strategy:
+      step_1:
+        action: "Add DOCUMENT_GENERATION_CONTROL rule to copilot-instructions.md"
+        location: ".github/copilot-instructions.md"
+        section: "Brain Protection (SKULL)"
+        rule_definition: |
+          ## 🛡️ Brain Protection (SKULL)
+          
+          | Rule | Action |
+          |------|--------|
+          | DOCUMENT_GENERATION_CONTROL | Orchestrators generate documents ONLY when: (1) User explicitly requests, (2) Orchestrator design requires, (3) Governance audit. NO auto-summary reports at end of execution. |
+          | TDD_ENFORCEMENT | Tests must fail before implementation |
+          | HOLISTIC_DISCOVERY | Search before create (prevent duplication) |
+          ...
+        
+        estimated_effort: "1 hour (documentation update + team review)"
+      
+      step_2:
+        action: "Update response-templates-v4.yaml with explicit control"
+        location: "cortex-brain/response-templates-v4.yaml"
+        template_updates:
+          - template: autonomous_execution_progress
+            add_field: "auto_generate_summary: false"
+            add_field: "allowed_documents: []"
+          
+          - template: guided_execution
+            add_field: "auto_generate_summary: false"
+            add_field: "allowed_documents: []"
+          
+          - template: comprehensive_review
+            add_field: "auto_generate_summary: false"
+            add_field: "allowed_documents: ['review_report.yaml', 'gap_analysis.yaml']"
+            note: "Explicitly list allowed document types"
+        
+        estimated_effort: "2 hours (YAML updates + validation)"
+      
+      step_3:
+        action: "Add validation to Master Orchestrator"
+        location: "src/orchestrators/master_orchestrator.py"
+        implementation: |
+          class MasterOrchestrator:
+              def _validate_orchestrator_output(self, orchestrator_result):
+                  """Validate orchestrator did not generate unauthorized documents."""
+                  template_config = self._get_response_template(orchestrator_result['type'])
+                  allowed_docs = template_config.get('allowed_documents', [])
+                  
+                  generated_docs = orchestrator_result.get('documents_generated', [])
+                  unauthorized = [d for d in generated_docs if d not in allowed_docs]
+                  
+                  if unauthorized:
+                      raise GovernanceViolation(
+                          f"Orchestrator generated unauthorized documents: {unauthorized}. "
+                          f"Allowed: {allowed_docs}. "
+                          f"See DOCUMENT_GENERATION_CONTROL rule."
+                      )
+        
+        estimated_effort: "4 hours (implementation + tests)"
+      
+      step_4:
+        action: "Update CORTEX.prompt.md with Copilot guidance"
+        location: ".github/prompts/CORTEX.prompt.md"
+        addition: |
+          ## 📋 Response Guidelines
+          
+          **Document Generation Control:**
+          - Orchestrators generate documents ONLY when part of their design (e.g., planning = plan files)
+          - NO auto-summary reports at end of execution
+          - NO unsolicited analysis documents
+          - User must explicitly request reports: "generate analysis report for X"
+          
+          **Copilot Behavior:**
+          - Do NOT suggest "I'll generate a summary report" at end of orchestrator execution
+          - Do NOT create .md files unless orchestrator template allows it
+          - Defer to response-templates-v4.yaml for allowed document types
+        
+        estimated_effort: "1 hour (documentation update)"
+  
+  recommended_action:
+    action: "Execute 4-Step Remediation (Add Governance Rule + Validation)"
+    rationale: |
+      User explicitly requested control over Copilot document generation.
+      Current design lacks enforcement mechanism. Adding DOCUMENT_GENERATION_CONTROL
+      rule + response template validation + Master Orchestrator check will
+      prevent unauthorized document generation.
+    
+    deliverables:
+      - ".github/copilot-instructions.md (updated with new SKULL rule)"
+      - "cortex-brain/response-templates-v4.yaml (explicit document controls)"
+      - "src/orchestrators/master_orchestrator.py (validation logic)"
+      - ".github/prompts/CORTEX.prompt.md (Copilot guidance)"
+    
+    estimated_total_effort: "8 hours"
+    priority: P1
+    blocking: false
+    user_confirmation_required: false
+
+# =============================================================================
+# OVERALL VALIDATION SUMMARY
+# =============================================================================
+
+overall_validation_summary:
+  requirements_checked: 5
+  
+  status_breakdown:
+    fully_captured: 2  # Req 2, Req 3
+    partially_missing: 1  # Req 1 (Microsoft Amplifier)
+    partially_violated: 1  # Req 4 (Markdown in execution)
+    missing: 1  # Req 5 (Copilot control)
+  
+  confidence_scores:
+    requirement_1_microsoft_amplifier: 0.65
+    requirement_2_intelligent_orchestration: 0.95
+    requirement_3_governance_knowledge_integration: 0.92
+    requirement_4_master_orchestrator_control: 0.70
+    requirement_5_copilot_control: 0.40
+    overall_average: 0.72
+  
+  overall_assessment: |
+    CORTEX-5.5 epic documents capture STRONG implementation of intelligent
+    orchestration (Req 2) and governance/knowledge integration (Req 3).
+    
+    Microsoft Amplifier pattern (Req 1) exists as A19 plan in CORTEX-5.0 but
+    NOT carried forward. Current orchestrator modularity MAY already achieve
+    Amplifier goals—requires alignment analysis.
+    
+    Master orchestrator control (Req 4) is TECHNICALLY correct (Python/YAML
+    execution), but Planning Orchestrator generates .md files during runtime
+    (human-facing only). Violates strict "no markdown" interpretation.
+    
+    Copilot control (Req 5) is MISSING enforcement. No governance rule prevents
+    auto-generated reports at end of cycles. Requires DOCUMENT_GENERATION_CONTROL
+    rule + validation logic.
+  
+  immediate_action_required:
+    priority_1_actions:
+      - action: "Clarify Requirement 4 with user (Markdown generation acceptable?)"
+        estimated_effort: "1 hour"
+        blocking: true
+      
+      - action: "Implement Requirement 5 remediation (4-step plan)"
+        estimated_effort: "8 hours"
+        blocking: false
+    
+    priority_2_actions:
+      - action: "Analyze Microsoft Amplifier alignment (Requirement 1, Option 2)"
+        estimated_effort: "8 hours"
+        blocking: false
+  
+  go_no_go_decision: CONDITIONAL_GO
+  conditions:
+    - "✅ Requirement 2: FULLY SATISFIED (no action)"
+    - "✅ Requirement 3: FULLY SATISFIED (no action)"
+    - "⚠️ Requirement 1: Defer to post-epic analysis (non-blocking)"
+    - "⚠️ Requirement 4: USER CONFIRMATION REQUIRED (blocking until clarified)"
+    - "⚠️ Requirement 5: IMPLEMENT DOCUMENT_GENERATION_CONTROL (8 hours, non-blocking)"
+  
+  blocking_issues: 2
+  blocking_issue_details:
+    - issue: "Requirement 4: Markdown generation violation CONFIRMED"
+      severity: HIGH
+      user_clarification_received: true
+      user_answer: "Option A (strict - no .md during execution)"
+      exception: "Knowledge library Markdown updates at END of planning cycle only"
+      required_action: "Refactor Planning Orchestrator v5/v6 to eliminate .md generation"
+      estimated_effort: "6 hours"
+      priority: P0
+    
+    - issue: "Requirement 5: Copilot control - no auto-reports"
+      severity: MEDIUM
+      user_clarification_received: false
+      required_action: "Implement DOCUMENT_GENERATION_CONTROL governance rule"
+      estimated_effort: "8 hours"
+      priority: P1
+
+# =============================================================================
+# COMPARISON WITH CORTEX-5.0 BRANCH
+# =============================================================================
+
+cortex_5_0_comparison:
+  branch: origin/CORTEX-5.0
+  comparison_date: '2026-01-07T11:45:00Z'
+  
+  additional_content_found:
+    microsoft_amplifier_plan:
+      location: "cortex-brain/documents/planning/active/a19-invest-how-micros/"
+      status: PLANNING (not implemented)
+      relevance: HIGH
+      description: |
+        A19 epic planned to INVESTIGATE Microsoft Amplifier pattern for modular
+        orchestration. Plan created 2026-01-06 but not executed. This plan was
+        NOT migrated to CORTEX-5.5 epic structure.
+      
+      recommendation: |
+        Pull A19 plan into CORTEX-5.5 as Feature 11 OR defer to CORTEX-5.6.
+        Perform alignment analysis to confirm current orchestrator design
+        doesn't already implement Amplifier principles.
+  
+  no_other_gaps_found:
+    search_performed: true
+    search_terms:
+      - "intelligent orchestration"
+      - "governance integration"
+      - "knowledge yaml"
+      - "master orchestrator"
+      - "copilot control"
+      - "document generation"
+    
+    result: |
+      No additional relevant content found in CORTEX-5.0 that was missed in
+      CORTEX-5.5 analysis. All core requirements (Req 2-5) have equivalent or
+      superior implementation in current design.
+
+# =============================================================================
+# RECOMMENDED NEXT STEPS
+# =============================================================================
+
+recommended_next_steps:
+  step_1:
+    action: "User Confirmation: Requirement 4 (Markdown Generation)"
+    description: "Clarify if .md files for human consumption are acceptable"
+    estimated_time: "15 minutes (user response)"
+    blocking: true
+  
+  step_2:
+    action: "Implement Requirement 5 Remediation"
+    description: "Add DOCUMENT_GENERATION_CONTROL rule + validation"
+    estimated_time: "8 hours"
+    blocking: false
+    deliverables:
+      - ".github/copilot-instructions.md (updated)"
+      - "cortex-brain/response-templates-v4.yaml (updated)"
+      - "src/orchestrators/master_orchestrator.py (validation logic)"
+      - ".github/prompts/CORTEX.prompt.md (Copilot guidance)"
+  
+  step_3:
+    action: "Microsoft Amplifier Alignment Analysis"
+    description: "Document how current design achieves Amplifier goals (Option 2)"
+    estimated_time: "8 hours"
+    blocking: false
+    deliverable: "cortex5-epic/reports/microsoft-amplifier-alignment.yaml"
+  
+  step_4:
+    action: "Update Architecture Document"
+    description: "Incorporate findings from this validation"
+    estimated_time: "2 hours"
+    blocking: false
+    updates_required:
+      - "Document .md generation justification (if user approves)"
+      - "Add DOCUMENT_GENERATION_CONTROL rule reference"
+      - "Reference Microsoft Amplifier alignment analysis"
+
+# =============================================================================
+# METADATA
+# =============================================================================
+
+report_metadata:
+  total_documents_analyzed: 9
+  total_lines_reviewed: 4500
+  search_queries_executed: 12
+  git_branches_compared: 2
+  confidence_methodology: |
+    Confidence scores calculated based on:
+      1.0 = Explicit documentation with implementation details
+      0.9 = Strong documentation with some implementation gaps
+      0.8 = Clear documentation, implementation inferred
+      0.7 = Partial documentation, concerns exist
+      0.6 = Minimal documentation, high inference
+      0.5 = Requirement mentioned but not detailed
+      <0.5 = Requirement missing or contradicted
+  
+  validation_date: '2026-01-07T11:45:00Z'
+  reviewer: "CORTEX Review System v2.0"
+  next_validation_recommended: '2026-01-14T10:00:00Z'

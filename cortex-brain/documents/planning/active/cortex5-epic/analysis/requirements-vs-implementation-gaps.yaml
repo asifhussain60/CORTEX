@@ -1,0 +1,471 @@
+# Requirements vs Implementation Gap Analysis
+# Generated: 2026-01-07T11:00:00Z
+# Compares: user-requirements-48h.yaml vs epic-implementation-state.yaml
+
+metadata:
+  analysis_timestamp: '2026-01-07T11:00:00Z'
+  requirements_analyzed: 47
+  implementation_items_checked: 68
+  gaps_identified: 13
+  compliant_items: 28
+  partial_implementations: 10
+  critical_gaps: 2
+  
+gap_analysis:
+  - gap_id: GAP-REQ-001
+    requirement_id: REQ-020
+    category: orchestrator_implementation
+    priority: P0_CRITICAL
+    status: NOT_IMPLEMENTED
+    requirement: "MD-to-YAML orchestrator for converting chat transcripts to structured requirements"
+    current_state: "Not implemented; manual YAML creation performed"
+    impact_severity: HIGH
+    impact_description: "Blocks automation of requirements extraction from chat sessions"
+    blocking: true
+    effort_estimate: "2 days"
+    warrantability: HIGH
+    warrantability_rationale: "User explicitly requested; critical for autonomous requirements distillation; will be used repeatedly for future epics"
+    recommended_action: "Implement production-ready MD-to-YAML orchestrator with manifest + tests"
+    confidence: 1.0
+    
+  - gap_id: GAP-REQ-002
+    requirement_id: REQ-021
+    category: orchestrator_implementation
+    priority: P0_CRITICAL
+    status: NOT_IMPLEMENTED
+    requirement: "Git-to-YAML orchestrator for extracting team instructions from commit messages"
+    current_state: "Not implemented; manual git log parsing performed"
+    impact_severity: HIGH
+    impact_description: "Blocks automation of context building from git history"
+    blocking: true
+    effort_estimate: "2 days"
+    warrantability: HIGH
+    warrantability_rationale: "User explicitly requested; critical for team communication pattern analysis; will be used for all epics"
+    recommended_action: "Implement production-ready Git-to-YAML orchestrator with manifest + tests"
+    confidence: 1.0
+    
+  - gap_id: GAP-REQ-003
+    requirement_id: REQ-002
+    category: structure
+    priority: P0_CRITICAL
+    status: RESOLVED_SUPERSEDED
+    requirement: "Each featX folder must contain phase subfolders for phase execution artifacts"
+    current_state: "Planning System v6 uses feature.yaml for logical phase definitions (no physical folders)"
+    impact_severity: NONE
+    impact_description: "Requirement superseded by v6 architecture; no gap exists"
+    blocking: false
+    resolution: "v6 migration replaced physical phase folders with logical YAML definitions"
+    resolution_timestamp: '2026-01-07T09:50:44Z'
+    resolution_commit: 4b906347
+    confidence: 1.0
+    note: "User validation needed: Does feature.yaml approach satisfy 'phase folders' intent?"
+    
+  - gap_id: GAP-REQ-004
+    requirement_id: REQ-011
+    category: orchestrator_intelligence
+    priority: P0_CRITICAL
+    status: PLANNED_NOT_IMPLEMENTED
+    requirement: "Master Orchestrator Intelligence Layer with 5 user mistake prevention rules"
+    current_state: "Architecture designed; manifests created; implementation pending"
+    impact_severity: MEDIUM
+    impact_description: "User mistakes not automatically prevented; orchestrator lifecycle not managed"
+    blocking: false
+    effort_estimate: "1 week"
+    recommended_action: "Implement Phase 1 of orchestrator refactoring epic"
+    confidence: 1.0
+    
+  - gap_id: GAP-REQ-005
+    requirement_id: REQ-012
+    category: orchestrator_lifecycle
+    priority: P0_CRITICAL
+    status: PLANNED_NOT_IMPLEMENTED
+    requirement: "Orchestrator lifecycle management: create, enhance, deprecate, delete"
+    current_state: "Architecture designed; not implemented"
+    impact_severity: MEDIUM
+    impact_description: "Manual orchestrator lifecycle management; no automation"
+    blocking: false
+    effort_estimate: "1 week"
+    recommended_action: "Implement as part of master orchestrator intelligence layer"
+    confidence: 1.0
+    
+  - gap_id: GAP-REQ-006
+    requirement_id: REQ-013
+    category: orchestrator_refactoring
+    priority: P0_CRITICAL
+    status: PARTIAL
+    requirement: "Refactor Orchestrator parent-child architecture with 4 specialized children"
+    current_state: "4 YAML manifests created (code quality, architecture, docs, tests); implementation pending"
+    impact_severity: LOW
+    impact_description: "Manual code refactoring; specialized automation not available"
+    blocking: false
+    effort_estimate: "1.5 weeks"
+    recommended_action: "Implement 4 child orchestrators + routing logic"
+    confidence: 1.0
+    
+  - gap_id: GAP-REQ-007
+    requirement_id: REQ-014
+    category: housekeeping
+    priority: P1_HIGH
+    status: PLANNED_NOT_IMPLEMENTED
+    requirement: "Housekeeping Orchestrator with 7-phase maintenance (autonomous)"
+    current_state: "Manifest created; implementation pending"
+    impact_severity: MEDIUM
+    impact_description: "Manual maintenance tasks; no autonomous housekeeping"
+    blocking: false
+    effort_estimate: "1 week"
+    recommended_action: "Implement 7 phases: audit logs, knowledge absorption, redundancy elimination, optimization, bug detection, tier promotion, duplicate removal"
+    confidence: 1.0
+    
+  - gap_id: GAP-REQ-008
+    requirement_id: REQ-015
+    category: intent_classification
+    priority: P0_CRITICAL
+    status: PARTIAL
+    requirement: "LLM-based intent classification for orchestrator routing"
+    current_state: "Pattern-based routing implemented; LLM fallback planned but not implemented"
+    impact_severity: LOW
+    impact_description: "Ambiguous requests may not route correctly; relies on regex patterns only"
+    blocking: false
+    effort_estimate: "3 days"
+    recommended_action: "Implement LLM fallback for pattern mismatches; add confidence threshold (≥0.7)"
+    confidence: 1.0
+    
+  - gap_id: GAP-REQ-009
+    requirement_id: REQ-018
+    category: governance_enforcement
+    priority: P1_HIGH
+    status: PARTIAL
+    requirement: "Python best practices enforcement with audit log validation"
+    current_state: "Best practices documented; audit log validation partial; enforcement automation pending"
+    impact_severity: MEDIUM
+    impact_description: "Manual enforcement of best practices; audit logs not fully integrated"
+    blocking: false
+    effort_estimate: "1 week"
+    recommended_action: "Complete governance middleware; integrate with CI/CD; block PRs on violations"
+    confidence: 1.0
+    
+  - gap_id: GAP-REQ-010
+    requirement_id: REQ-034
+    category: documentation
+    priority: P1_HIGH
+    status: IN_PROGRESS
+    requirement: "Create holistic design plan with Requirements + Design + Architecture documents"
+    current_state: "Requirements + Implementation State + Git Instructions complete; Design + Architecture pending"
+    impact_severity: LOW
+    impact_description: "Incomplete holistic view; snowball analysis missing"
+    blocking: false
+    effort_estimate: "4 hours (remaining)"
+    recommended_action: "Complete Design document (snowball + dependency graph) and Architecture document (orchestrator hierarchy)"
+    confidence: 1.0
+    progress: "3/5 documents complete (60%)"
+    
+  - gap_id: GAP-REQ-011
+    requirement_id: REQ-039
+    category: snowball_optimization
+    priority: P1_HIGH
+    status: PENDING
+    requirement: "Strategize for snowball effect (foundation-first dependencies)"
+    current_state: "Snowball tiers identified in epic-progress-tracker.json; detailed analysis pending"
+    impact_severity: LOW
+    impact_description: "Suboptimal execution order possible; parallel opportunities not maximized"
+    blocking: false
+    effort_estimate: "2 hours"
+    recommended_action: "Create snowball dependency graph in Design document; identify parallel execution opportunities"
+    confidence: 1.0
+    
+  - gap_id: GAP-REQ-012
+    requirement_id: REQ-040
+    category: production_readiness
+    priority: P1_HIGH
+    status: ASSESSMENT_REQUIRED
+    requirement: "Create production-ready orchestrators (not prototypes) if warranted"
+    current_state: "Warrantability analysis required for MD-to-YAML and Git-to-YAML orchestrators"
+    impact_severity: MEDIUM
+    impact_description: "Production quality uncertain; testing/documentation completeness unknown"
+    blocking: false
+    effort_estimate: "1 day (assessment + hardening)"
+    recommended_action: "Assess warrantability using CORTEX production checklist; implement missing components"
+    confidence: 1.0
+    
+  - gap_id: GAP-REQ-013
+    requirement_id: REQ-041
+    category: testing
+    priority: P2_MEDIUM
+    status: PARTIAL
+    requirement: "TDD enforcement with tests before implementation"
+    current_state: "Testing framework exists; TDD workflow not automated; enforcement not active"
+    impact_severity: LOW
+    impact_description: "Tests written after implementation; TDD benefits not realized"
+    blocking: false
+    effort_estimate: "2 days"
+    recommended_action: "Implement pre-commit hooks to enforce test-first workflow"
+    confidence: 0.7
+    
+compliance_summary:
+  total_requirements: 47
+  compliant: 28
+  partial: 10
+  non_compliant: 2
+  resolved_superseded: 1
+  pending_analysis: 6
+  
+  compliance_rate: 59.6
+  partial_compliance_rate: 21.3
+  non_compliance_rate: 4.3
+  resolved_rate: 2.1
+  pending_rate: 12.8
+  
+critical_gaps_requiring_immediate_action:
+  - gap_id: GAP-REQ-001
+    requirement: "MD-to-YAML orchestrator"
+    priority: P0_CRITICAL
+    effort: "2 days"
+    warrantability: HIGH
+    
+  - gap_id: GAP-REQ-002
+    requirement: "Git-to-YAML orchestrator"
+    priority: P0_CRITICAL
+    effort: "2 days"
+    warrantability: HIGH
+    
+high_priority_gaps:
+  - gap_id: GAP-REQ-004
+    requirement: "Master orchestrator intelligence layer"
+    priority: P0_CRITICAL
+    effort: "1 week"
+    
+  - gap_id: GAP-REQ-005
+    requirement: "Orchestrator lifecycle management"
+    priority: P0_CRITICAL
+    effort: "1 week"
+    
+  - gap_id: GAP-REQ-009
+    requirement: "Governance enforcement automation"
+    priority: P1_HIGH
+    effort: "1 week"
+    
+  - gap_id: GAP-REQ-010
+    requirement: "Complete Design + Architecture documents"
+    priority: P1_HIGH
+    effort: "4 hours"
+    
+strengths_identified:
+  - strength: "Planning System v6 migration"
+    description: "Successfully achieved 74% folder reduction, 100% empty folder elimination"
+    confidence: 1.0
+    
+  - strength: "Machine-readable artifacts"
+    description: "1500% increase in machine-readable files (YAML/JSON)"
+    confidence: 1.0
+    
+  - strength: "Zero-tolerance validation"
+    description: "plan-viewer.html passes all validators (HTML, CSS, accessibility, JavaScript)"
+    confidence: 1.0
+    
+  - strength: "Comprehensive documentation"
+    description: "Every major change includes comprehensive documentation"
+    confidence: 1.0
+    
+  - strength: "Backup retention"
+    description: "All destructive operations include backup creation and retention"
+    confidence: 1.0
+    
+  - strength: "Feature naming compliance"
+    description: "All 11 features follow feat01-feat11 naming convention"
+    confidence: 1.0
+    
+  - strength: "Root file governance"
+    description: "Root folder contains exactly 2 files (CONTINUATION-PROMPT.md, plan-viewer.html)"
+    confidence: 1.0
+    
+  - strength: "Phase definitions"
+    description: "All 11 features have feature.yaml with explicit phase definitions (44 phases total)"
+    confidence: 1.0
+    
+weaknesses_identified:
+  - weakness: "Orchestrator implementation backlog"
+    description: "5 orchestrators designed but not implemented (MD-to-YAML, Git-to-YAML, Housekeeping, Refactor children)"
+    severity: HIGH
+    gap_ids: [GAP-REQ-001, GAP-REQ-002, GAP-REQ-006, GAP-REQ-007]
+    
+  - weakness: "Governance enforcement partial"
+    description: "Rules documented but not fully automated; manual enforcement required"
+    severity: MEDIUM
+    gap_ids: [GAP-REQ-009]
+    
+  - weakness: "LLM integration incomplete"
+    description: "LLM-based intent classification planned but not implemented"
+    severity: LOW
+    gap_ids: [GAP-REQ-008]
+    
+  - weakness: "Test coverage gaps"
+    description: "Orchestrator test coverage below 80% target"
+    severity: MEDIUM
+    gap_ids: [GAP-REQ-013]
+    
+  - weakness: "Documentation gaps"
+    description: "Design + Architecture documents pending"
+    severity: LOW
+    gap_ids: [GAP-REQ-010]
+    
+risk_matrix:
+  high_risk_high_impact:
+    - gap_id: GAP-REQ-001
+      description: "MD-to-YAML orchestrator missing blocks automation"
+      mitigation: "Implement immediately (2 days)"
+      
+    - gap_id: GAP-REQ-002
+      description: "Git-to-YAML orchestrator missing blocks context building"
+      mitigation: "Implement immediately (2 days)"
+      
+  high_risk_medium_impact:
+    - gap_id: GAP-REQ-004
+      description: "Intelligence layer missing → user mistakes not prevented"
+      mitigation: "Prioritize after critical orchestrators (1 week)"
+      
+  medium_risk_medium_impact:
+    - gap_id: GAP-REQ-009
+      description: "Governance enforcement partial → technical debt accumulation"
+      mitigation: "Complete middleware integration (1 week)"
+      
+  low_risk_low_impact:
+    - gap_id: GAP-REQ-010
+      description: "Documentation incomplete → learning curve"
+      mitigation: "Complete remaining documents (4 hours)"
+      
+recommended_execution_order:
+  phase_1_immediate:
+    duration: "4 days"
+    items:
+      - action: "Implement MD-to-YAML orchestrator"
+        gap_id: GAP-REQ-001
+        effort: "2 days"
+        priority: P0_CRITICAL
+        
+      - action: "Implement Git-to-YAML orchestrator"
+        gap_id: GAP-REQ-002
+        effort: "2 days"
+        priority: P0_CRITICAL
+        
+  phase_2_short_term:
+    duration: "4 hours"
+    items:
+      - action: "Complete Design document with snowball analysis"
+        gap_id: GAP-REQ-010
+        effort: "2 hours"
+        priority: P1_HIGH
+        
+      - action: "Complete Architecture document with orchestrator hierarchy"
+        gap_id: GAP-REQ-010
+        effort: "2 hours"
+        priority: P1_HIGH
+        
+  phase_3_medium_term:
+    duration: "3 weeks"
+    items:
+      - action: "Implement master orchestrator intelligence layer"
+        gap_id: GAP-REQ-004
+        effort: "1 week"
+        priority: P0_CRITICAL
+        
+      - action: "Implement orchestrator lifecycle management"
+        gap_id: GAP-REQ-005
+        effort: "1 week"
+        priority: P0_CRITICAL
+        
+      - action: "Complete governance enforcement automation"
+        gap_id: GAP-REQ-009
+        effort: "1 week"
+        priority: P1_HIGH
+        
+  phase_4_long_term:
+    duration: "3.5 weeks"
+    items:
+      - action: "Implement housekeeping orchestrator"
+        gap_id: GAP-REQ-007
+        effort: "1 week"
+        priority: P1_HIGH
+        
+      - action: "Implement refactor orchestrator children"
+        gap_id: GAP-REQ-006
+        effort: "1.5 weeks"
+        priority: P0_CRITICAL
+        
+      - action: "Implement LLM intent classification"
+        gap_id: GAP-REQ-008
+        effort: "3 days"
+        priority: P0_CRITICAL
+        
+      - action: "Increase test coverage to 80%"
+        gap_id: GAP-REQ-013
+        effort: "3 days"
+        priority: P2_MEDIUM
+        
+warrantability_assessment:
+  md_to_yaml_orchestrator:
+    warranted: true
+    confidence: 1.0
+    justification:
+      - "User explicitly requested creation"
+      - "Critical for autonomous requirements distillation"
+      - "Will be used for all future epics (high reusability)"
+      - "Eliminates manual YAML creation (high ROI)"
+      - "Supports machine-readable output (alignment with CORTEX goals)"
+    production_readiness_checklist:
+      - "Manifest creation (1 hour)"
+      - "Core implementation (6 hours)"
+      - "Unit tests (2 hours)"
+      - "Integration tests (2 hours)"
+      - "Documentation (1 hour)"
+      - "Registration in orchestrators.json (15 min)"
+      - "E2E validation (2 hours)"
+    total_effort: "2 days"
+    
+  git_to_yaml_orchestrator:
+    warranted: true
+    confidence: 1.0
+    justification:
+      - "User explicitly requested creation"
+      - "Critical for context building from git history"
+      - "Will be used for all epics (team communication patterns)"
+      - "Eliminates manual git log parsing (high ROI)"
+      - "Supports master orchestrator context awareness"
+    production_readiness_checklist:
+      - "Manifest creation (1 hour)"
+      - "Core implementation (6 hours)"
+      - "Unit tests (2 hours)"
+      - "Integration tests (2 hours)"
+      - "Documentation (1 hour)"
+      - "Registration in orchestrators.json (15 min)"
+      - "E2E validation (2 hours)"
+    total_effort: "2 days"
+    
+next_steps:
+  - step: 1
+    action: "Complete this gap analysis (requirements-vs-implementation-gaps.yaml)"
+    status: COMPLETE
+    
+  - step: 2
+    action: "Create Design document with snowball analysis and dependency graph"
+    status: NEXT
+    estimated_time: "2 hours"
+    
+  - step: 3
+    action: "Create Architecture document with orchestrator hierarchy and knowledge integration"
+    status: PENDING
+    estimated_time: "2 hours"
+    
+  - step: 4
+    action: "Implement MD-to-YAML orchestrator (production-ready)"
+    status: PENDING
+    estimated_time: "2 days"
+    
+  - step: 5
+    action: "Implement Git-to-YAML orchestrator (production-ready)"
+    status: PENDING
+    estimated_time: "2 days"
+    
+  - step: 6
+    action: "Generate executive summary with confidence scores"
+    status: PENDING
+    estimated_time: "1 hour"

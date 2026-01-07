@@ -1,0 +1,965 @@
+# ==============================================================================
+# CORTEX-6 Epic 1: Windows Implementation (Slower Machine)
+# ==============================================================================
+
+metadata:
+  epic_id: "CORTEX6-EPIC1"
+  epic_name: "Windows Implementation"
+  version: "1.0.0"
+  created: "2026-01-07"
+  author: "Asif Hussain"
+  target_platform: "Windows 11 (slower machine)"
+  estimated_duration: "8 weeks (40 work days)"
+  parallelizable_with: "CORTEX6-EPIC2 (Mac Implementation)"
+  
+objective: |
+  Implement CORTEX-6 core architecture on Windows platform with focus on
+  stability, compatibility, and sequential execution strategy. This epic serves
+  as the foundational implementation ensuring all components work correctly
+  before parallel Mac optimization (Epic 2).
+
+constraints:
+  platform: "Windows 11 (Intel/AMD x64)"
+  hardware: "Slower development machine (4GB RAM, dual-core CPU)"
+  strategy: "Snowball (sequential phases, no skipping)"
+  validation: "Each phase fully tested before next phase"
+
+# ==============================================================================
+# PHASE 0: Foundational Components (MCP + Multi-Repo + Team) - 17 Days
+# ==============================================================================
+
+phase_0:
+  name: "Foundational Components"
+  duration: "17 work days (3.5 weeks)"
+  start_condition: "Epic approval + environment setup"
+  end_condition: "All CR-011 to CR-014 requirements implemented and tested"
+  
+  overview: |
+    Build new architectural layers required for CORTEX-6: MCP Server for
+    standardized orchestrator interfaces, Multi-Repo Manager for cross-repo
+    orchestration, Team Knowledge Aggregator for shared learning, and Config-
+    based Discovery for repository management.
+  
+  tasks:
+    # ---------------------------------------------------------------------
+    # Task 1: MCP Server Implementation (CR-011) - 5 days
+    # ---------------------------------------------------------------------
+    task_01_mcp_server:
+      task_id: "P0-T01"
+      name: "MCP Server Implementation"
+      requirement: "CR-011"
+      duration: "5 days"
+      dependencies: []
+      
+      deliverables:
+        - file: "src/mcp/mcp_server.py"
+          description: "MCP Server with JSON-RPC 2.0 over stdio"
+          
+        - file: "src/mcp/orchestrator_registry.py"
+          description: "Orchestrator → MCP tool transformation"
+          
+        - file: "src/mcp/capabilities.py"
+          description: "tools/list, tools/call, prompts/list, resources/list"
+          
+        - file: "tests/unit/test_mcp_server.py"
+          description: "Protocol compliance, error handling, timeouts"
+          
+        - file: "cortex-brain/config/mcp-server.yaml"
+          description: "MCP Server configuration (timeout, logging)"
+      
+      implementation_steps:
+        day_1:
+          - "Create JSON-RPC 2.0 message parser"
+          - "Implement stdio transport (read/write JSONL)"
+          - "Create error response formatting"
+          - "Write unit tests for protocol compliance"
+          
+        day_2:
+          - "Implement tools/list (load all orchestrator manifests)"
+          - "Transform manifest → MCP tool schema"
+          - "Add orchestrator registration caching"
+          - "Test with 10 orchestrator manifests"
+          
+        day_3:
+          - "Implement tools/call (route to orchestrator)"
+          - "Handle request validation (inputSchema)"
+          - "Capture orchestrator output → MCP response"
+          - "Test with planning_v5, tdd_v2, vacuum_v2"
+          
+        day_4:
+          - "Implement prompts/list and prompts/get"
+          - "Implement resources/list and resources/read"
+          - "Add knowledge library resource exposure"
+          - "Test GitHub Copilot MCP client integration"
+          
+        day_5:
+          - "Performance optimization (startup time <100ms)"
+          - "Error handling (orchestrator failures)"
+          - "Integration testing with GitHub Copilot"
+          - "Documentation: MCP server architecture"
+      
+      validation:
+        - "GitHub Copilot can discover CORTEX via MCP"
+        - "tools/list returns all orchestrators"
+        - "tools/call successfully invokes orchestrators"
+        - "Startup time <100ms"
+        - "100% protocol compliance (JSON-RPC 2.0)"
+    
+    # ---------------------------------------------------------------------
+    # Task 2: Multi-Repo Manager (CR-012) - 4 days
+    # ---------------------------------------------------------------------
+    task_02_multi_repo_manager:
+      task_id: "P0-T02"
+      name: "Multi-Repo Manager"
+      requirement: "CR-012"
+      duration: "4 days"
+      dependencies: ["P0-T01"]
+      
+      deliverables:
+        - file: "src/multi_repo/repo_manager.py"
+          description: "Repo context detection and management"
+          
+        - file: "src/multi_repo/config_loader.py"
+          description: "Parse ~/.cortex/repos.yaml"
+          
+        - file: "src/multi_repo/knowledge_hierarchy.py"
+          description: "Tier 3→2→1 knowledge merge"
+          
+        - file: "tests/integration/test_multi_repo.py"
+          description: "Cross-repo orchestration tests"
+          
+        - file: "cortex-brain/schemas/repos-config-schema.json"
+          description: "JSON schema for repos.yaml validation"
+      
+      implementation_steps:
+        day_1:
+          - "Create repos.yaml parser with validation"
+          - "Implement auto-discovery (scan cwd)"
+          - "Add fallback prompt if repo not found"
+          - "Test with 3 sample repos"
+          
+        day_2:
+          - "Implement repo context detection (cwd matching)"
+          - "Add isolated storage paths (.cortex/{plans,knowledge,tracking})"
+          - "Implement plan/knowledge/audit isolation"
+          - "Test plan creation in multiple repos"
+          
+        day_3:
+          - "Implement knowledge hierarchy resolver"
+          - "Tier 3 (repo) overrides Tier 2 (CORTEX) overrides Tier 1 (core)"
+          - "Add caching for merged knowledge"
+          - "Test knowledge merge with conflicts"
+          
+        day_4:
+          - "Integration testing with MCP Server"
+          - "Cross-repo orchestration workflow"
+          - "Hot reload on repos.yaml changes"
+          - "Documentation: Multi-repo setup guide"
+      
+      validation:
+        - "repos.yaml successfully parsed and validated"
+        - "cwd correctly maps to repo_id"
+        - "Plans isolated per repo"
+        - "Knowledge hierarchy merges correctly (Tier 3→2→1)"
+        - "Hot reload works (<5s detection)"
+    
+    # ---------------------------------------------------------------------
+    # Task 3: Team Knowledge Aggregator (CR-013) - 6 days
+    # ---------------------------------------------------------------------
+    task_03_team_knowledge:
+      task_id: "P0-T03"
+      name: "Team Knowledge Aggregator"
+      requirement: "CR-013"
+      duration: "6 days"
+      dependencies: ["P0-T02"]
+      
+      deliverables:
+        - file: "src/team_knowledge/aggregator.py"
+          description: "Extract patterns from completed work"
+          
+        - file: "src/team_knowledge/learning_extractor.py"
+          description: "LLM-assisted pattern recognition"
+          
+        - file: "src/team_knowledge/sync_service.py"
+          description: "Git/network drive sync"
+          
+        - file: "cortex-brain/schemas/team-learning-schema.json"
+          description: "Learning entry schema"
+          
+        - file: "tests/integration/test_team_knowledge.py"
+          description: "Learning extraction + sync tests"
+      
+      implementation_steps:
+        day_1:
+          - "Design team_knowledge storage structure"
+          - "Create learning entry schema (pattern, learning, evidence)"
+          - "Implement file-based storage (YAML)"
+          - "Test basic CRUD operations"
+          
+        day_2:
+          - "Implement contribution workflow (6 steps)"
+          - "Add triggers: plan completion, TDD cycles, refactoring"
+          - "Create learning extraction logic"
+          - "Test automatic trigger detection"
+          
+        day_3:
+          - "Implement LLM-assisted pattern recognition"
+          - "Add validation (is it a real pattern?)"
+          - "Deduplication (check existing patterns)"
+          - "Test with sample completed plans"
+          
+        day_4:
+          - "Implement team sync service (Git)"
+          - "Add conflict resolution (COMPANY_WINS, MERGE)"
+          - "Version tracking (changelog, contributors)"
+          - "Test sync between 2 local repos"
+          
+        day_5:
+          - "Add usage metrics (how often pattern applied)"
+          - "Implement knowledge evolution (update existing)"
+          - "Anti-pattern detection and flagging"
+          - "Test full contribution → sync → usage workflow"
+          
+        day_6:
+          - "Integration with Multi-Repo Manager"
+          - "Integration with MCP Server (expose as resources)"
+          - "Performance optimization (lazy loading)"
+          - "Documentation: Team knowledge workflow"
+      
+      validation:
+        - "Learnings automatically extracted after plan completion"
+        - "LLM validation filters out low-quality patterns"
+        - "Team sync successfully pushes/pulls learnings"
+        - "Knowledge hierarchy includes team learnings"
+        - "Conflict resolution works correctly"
+    
+    # ---------------------------------------------------------------------
+    # Task 4: Config-Based Discovery (CR-014) - 2 days
+    # ---------------------------------------------------------------------
+    task_04_config_discovery:
+      task_id: "P0-T04"
+      name: "Config-Based Discovery"
+      requirement: "CR-014"
+      duration: "2 days"
+      dependencies: ["P0-T02"]
+      
+      deliverables:
+        - file: "src/multi_repo/discovery.py"
+          description: "Auto-detect repos from repos.yaml"
+          
+        - file: "src/multi_repo/context_inference.py"
+          description: "Infer repo context from cwd"
+          
+        - file: "cortex-brain/config/default-repos.yaml"
+          description: "Template repos.yaml"
+          
+        - file: "tests/unit/test_config_discovery.py"
+          description: "Discovery + inference tests"
+      
+      implementation_steps:
+        day_1:
+          - "Implement repos.yaml scanner"
+          - "Validate paths exist and accessible"
+          - "Cache repo list in memory"
+          - "Add hot reload (watch repos.yaml)"
+          
+        day_2:
+          - "Implement context inference (cwd matching)"
+          - "Add prompt fallback if ambiguous"
+          - "Setup flow (create ~/.cortex/ on first run)"
+          - "Documentation: Config setup guide"
+      
+      validation:
+        - "repos.yaml scanned and cached <1s"
+        - "cwd correctly inferred to repo"
+        - "Hot reload detects changes <5s"
+        - "Setup flow creates default config"
+  
+  phase_0_exit_criteria:
+    - "✅ MCP Server running, GitHub Copilot connected"
+    - "✅ Multi-Repo Manager detects repos correctly"
+    - "✅ Team Knowledge extracted and synced"
+    - "✅ Config discovery setup complete"
+    - "✅ All unit tests passing (Phase 0: 100% coverage)"
+    - "✅ Integration tests passing (3 repos tested)"
+    - "✅ Documentation complete (MCP + Multi-Repo + Team Knowledge)"
+
+# ==============================================================================
+# PHASE 1: Core Orchestration (DAG + Audit + Silent) - 14 Days
+# ==============================================================================
+
+phase_1:
+  name: "Core Orchestration"
+  duration: "14 work days (2.8 weeks)"
+  start_condition: "Phase 0 exit criteria met"
+  end_condition: "All CR-001, CR-002, CR-003 requirements implemented"
+  
+  overview: |
+    Implement the heart of CORTEX-6: graph-based work tracking with DAG
+    orchestration, mandatory audit logging with bypass prevention, and silent
+    autonomous execution with minimal user interruption.
+  
+  tasks:
+    # ---------------------------------------------------------------------
+    # Task 5: TODO Orchestrator (CR-001) - 8 days
+    # ---------------------------------------------------------------------
+    task_05_todo_orchestrator:
+      task_id: "P1-T05"
+      name: "TODO Orchestrator (DAG)"
+      requirement: "CR-001"
+      duration: "8 days"
+      dependencies: ["P0-T01", "P0-T02"]
+      
+      deliverables:
+        - file: "src/orchestrators/todo/todo_orchestrator.py"
+          description: "DAG-based work tracking"
+          
+        - file: "src/orchestrators/todo/dag_operations.py"
+          description: "add_task, get_ready_tasks, mark_complete, etc."
+          
+        - file: "src/orchestrators/todo/circular_detector.py"
+          description: "DFS-based circular dependency detection"
+          
+        - file: "cortex-brain/database/schema/todo_orchestrator.sql"
+          description: "SQLite DDL for todo_tasks, todo_edges, todo_checkpoints"
+          
+        - file: "tests/unit/test_todo_orchestrator.py"
+          description: "DAG operations, circular detection, checkpoints"
+      
+      implementation_steps:
+        day_1:
+          - "Create SQLite schema (todo_tasks, todo_edges, todo_checkpoints)"
+          - "Implement database connection with WAL mode"
+          - "Add optimistic locking (version columns)"
+          - "Test schema creation and migrations"
+          
+        day_2:
+          - "Implement add_task operation"
+          - "Add task validation (required fields)"
+          - "Create edges (dependencies)"
+          - "Test task creation with dependencies"
+          
+        day_3:
+          - "Implement get_ready_tasks (dependency resolution)"
+          - "Filter for status=READY (all deps COMPLETED)"
+          - "Order by priority"
+          - "Test parallel task detection"
+          
+        day_4:
+          - "Implement mark_complete operation"
+          - "Update task status + completion timestamp"
+          - "Trigger dependent tasks (BLOCKED → READY)"
+          - "Test cascading status updates"
+          
+        day_5:
+          - "Implement circular dependency detection (DFS)"
+          - "Add detection on add_task (prevent cycles)"
+          - "Return error with cycle path"
+          - "Test with circular graphs"
+          
+        day_6:
+          - "Implement checkpoint system"
+          - "Save graph snapshot after each task"
+          - "resume_from_checkpoint operation"
+          - "Test breakage recovery"
+          
+        day_7:
+          - "Implement get_progress operation"
+          - "Calculate completion percentage"
+          - "Return progress bar data"
+          - "Test progress tracking"
+          
+        day_8:
+          - "Integration with Master Orchestrator"
+          - "Silent execution (no task narration)"
+          - "Performance testing (100 tasks)"
+          - "Documentation: TODO Orchestrator usage"
+      
+      validation:
+        - "DAG operations work correctly (add, get_ready, mark_complete)"
+        - "Circular dependencies detected and rejected"
+        - "Checkpoints save and restore graph state"
+        - "Resume from breakage works silently"
+        - "Progress tracking accurate (±1%)"
+        - "100 tasks processed in <10s"
+    
+    # ---------------------------------------------------------------------
+    # Task 6: Audit Logger (CR-002) - 3 days
+    # ---------------------------------------------------------------------
+    task_06_audit_logger:
+      task_id: "P1-T06"
+      name: "Audit Logger"
+      requirement: "CR-002"
+      duration: "3 days"
+      dependencies: []
+      
+      deliverables:
+        - file: "src/orchestrators/middleware/audit_logger.py"
+          description: "JSONL audit logging"
+          
+        - file: ".git/hooks/pre-commit"
+          description: "Pre-commit hook for audit validation"
+          
+        - file: "cortex-brain/audit-logs/.gitkeep"
+          description: "Audit log directory"
+          
+        - file: "tests/unit/test_audit_logger.py"
+          description: "Logging, enforcement, bypass prevention"
+      
+      implementation_steps:
+        day_1:
+          - "Create JSONL logger (append-only)"
+          - "Implement log entry schema"
+          - "Add enforcement hooks (pre_file_create, pre_file_modify)"
+          - "Test basic logging"
+          
+        day_2:
+          - "Implement pre-commit hook"
+          - "Validate all staged files logged"
+          - "Reject commit if blocked violations"
+          - "Test hook installation and validation"
+          
+        day_3:
+          - "Add query API (get_violations, get_file_history)"
+          - "Integration with orchestrators"
+          - "Performance testing (1000 log entries)"
+          - "Documentation: Audit logging"
+      
+      validation:
+        - "All file operations logged to JSONL"
+        - "Pre-commit hook rejects unlisted files"
+        - "Blocked violations prevent commits"
+        - "Query API returns correct results"
+        - "Bypass prevention 100% effective"
+    
+    # ---------------------------------------------------------------------
+    # Task 7: Silent Execution Mode (CR-003) - 3 days
+    # ---------------------------------------------------------------------
+    task_07_silent_execution:
+      task_id: "P1-T07"
+      name: "Silent Execution Mode"
+      requirement: "CR-003"
+      duration: "3 days"
+      dependencies: ["P1-T05"]
+      
+      deliverables:
+        - file: "src/orchestrators/execution/silent_executor.py"
+          description: "Silent autonomous execution engine"
+          
+        - file: "src/orchestrators/execution/progress_formatter.py"
+          description: "Progress bar rendering"
+          
+        - file: "cortex-brain/response-templates/silent-mode.yaml"
+          description: "Silent mode response templates"
+          
+        - file: "tests/integration/test_silent_execution.py"
+          description: "Silent execution tests"
+      
+      implementation_steps:
+        day_1:
+          - "Create silent executor (suppress task narration)"
+          - "Implement progress bar rendering"
+          - "Add phase boundary notifications only"
+          - "Test with sample 20-task plan"
+          
+        day_2:
+          - "Integration with TODO Orchestrator"
+          - "Implement SILENT_AUTONOMOUS mode flag"
+          - "Add error notifications (failures only)"
+          - "Test with planning_v5, tdd_v2"
+          
+        day_3:
+          - "Performance optimization (minimize overhead)"
+          - "Update response templates"
+          - "Integration testing (full plan execution)"
+          - "Documentation: Silent execution"
+      
+      validation:
+        - "Task completion narration suppressed"
+        - "Progress bar updates at phase boundaries"
+        - "Error notifications appear immediately"
+        - "Silent mode <5% overhead vs verbose"
+  
+  phase_1_exit_criteria:
+    - "✅ TODO Orchestrator fully functional (DAG operations)"
+    - "✅ Audit logging enforced (pre-commit hook active)"
+    - "✅ Silent execution mode working (minimal output)"
+    - "✅ All unit tests passing (Phase 1: 100% coverage)"
+    - "✅ Integration tests passing (3 orchestrators tested)"
+    - "✅ Documentation complete (TODO + Audit + Silent)"
+
+# ==============================================================================
+# PHASE 2: Resilience & Performance (Rollback + Optimization) - 9 Days
+# ==============================================================================
+
+phase_2:
+  name: "Resilience & Performance"
+  duration: "9 work days (1.8 weeks)"
+  start_condition: "Phase 1 exit criteria met"
+  end_condition: "All CR-004, CR-005, CR-006, CR-009 requirements implemented"
+  
+  overview: |
+    Harden CORTEX-6 with race condition handling, rollback mechanisms, sub-10ms
+    routing, and resource limit enforcement. Focus on production readiness.
+  
+  tasks:
+    # ---------------------------------------------------------------------
+    # Task 8: State Manager + Optimistic Locking (CR-004) - 3 days
+    # ---------------------------------------------------------------------
+    task_08_state_manager:
+      task_id: "P2-T08"
+      name: "State Manager (Concurrent State)"
+      requirement: "CR-004"
+      duration: "3 days"
+      dependencies: ["P1-T05"]
+      
+      deliverables:
+        - file: "src/orchestrators/state/state_manager.py"
+          description: "SQLite-based state with optimistic locking"
+          
+        - file: "cortex-brain/database/schema/state_manager.sql"
+          description: "orchestrator_state, execution_history tables"
+          
+        - file: "tests/unit/test_state_manager.py"
+          description: "Concurrency tests, version conflicts"
+      
+      implementation_steps:
+        day_1:
+          - "Create SQLite schema (orchestrator_state, execution_history)"
+          - "Implement version-based optimistic locking"
+          - "Add retry logic with exponential backoff"
+          - "Test concurrent writes (10 threads)"
+          
+        day_2:
+          - "Implement state read/write operations"
+          - "Add transaction handling"
+          - "WAL mode configuration"
+          - "Test race conditions (100 concurrent updates)"
+          
+        day_3:
+          - "Integration with orchestrators"
+          - "Performance benchmarking (write latency <100ms p99)"
+          - "Documentation: State management"
+      
+      validation:
+        - "Concurrent writes handled correctly (no data loss)"
+        - "Version conflicts detected and retried"
+        - "Write latency <100ms (99th percentile)"
+        - "100 concurrent threads: 0 failures"
+    
+    # ---------------------------------------------------------------------
+    # Task 9: Rollback & Recovery (CR-005) - 2 days
+    # ---------------------------------------------------------------------
+    task_09_rollback_recovery:
+      task_id: "P2-T09"
+      name: "Rollback & Recovery"
+      requirement: "CR-005"
+      duration: "2 days"
+      dependencies: ["P1-T05", "P2-T08"]
+      
+      deliverables:
+        - file: "src/orchestrators/recovery/rollback_manager.py"
+          description: "Rollback to checkpoint"
+          
+        - file: "src/orchestrators/recovery/recovery_strategies.py"
+          description: "AUTO_RETRY, SKIP_AND_CONTINUE, FAIL_FAST"
+          
+        - file: "tests/integration/test_rollback.py"
+          description: "Rollback scenarios"
+      
+      implementation_steps:
+        day_1:
+          - "Implement rollback_to_checkpoint operation"
+          - "Add recovery strategy selection"
+          - "Test rollback with sample failures"
+          
+        day_2:
+          - "Integration with TODO Orchestrator"
+          - "Add user prompt for critical failures"
+          - "Documentation: Recovery strategies"
+      
+      validation:
+        - "Rollback restores graph to checkpoint"
+        - "AUTO_RETRY retries transient errors (3x)"
+        - "SKIP_AND_CONTINUE marks failed task, proceeds"
+        - "FAIL_FAST aborts immediately on critical error"
+    
+    # ---------------------------------------------------------------------
+    # Task 10: Trie Pattern Router (CR-006) - 3 days
+    # ---------------------------------------------------------------------
+    task_10_trie_router:
+      task_id: "P2-T10"
+      name: "Trie Pattern Router"
+      requirement: "CR-006"
+      duration: "3 days"
+      dependencies: ["P0-T01"]
+      
+      deliverables:
+        - file: "src/orchestrators/routing/trie_pattern_router.py"
+          description: "O(1) pattern matching"
+          
+        - file: "src/orchestrators/routing/trie_node.py"
+          description: "Trie data structure"
+          
+        - file: "tests/performance/bench_routing.py"
+          description: "Routing performance benchmarks"
+      
+      implementation_steps:
+        day_1:
+          - "Implement TrieNode data structure"
+          - "Build trie from orchestrator patterns"
+          - "Add exact match cache (hash table)"
+          - "Test with 10 patterns"
+          
+        day_2:
+          - "Implement search algorithm (cache → trie → regex)"
+          - "Add LLM fallback (confidence ≥0.7)"
+          - "Cache management (LRU eviction)"
+          - "Test with 100 patterns"
+          
+        day_3:
+          - "Performance benchmarking"
+          - "Target: <5ms for 100 orchestrators"
+          - "Target: <50ms for 1000 orchestrators"
+          - "Documentation: Routing architecture"
+      
+      validation:
+        - "Routing time <5ms (100 orchestrators)"
+        - "Cache hit rate >99% (after warmup)"
+        - "Trie fallback <10ms"
+        - "Regex fallback <50ms"
+    
+    # ---------------------------------------------------------------------
+    # Task 11: Resource Limits (CR-009) - 1 day
+    # ---------------------------------------------------------------------
+    task_11_resource_limits:
+      task_id: "P2-T11"
+      name: "Resource Limit Enforcement"
+      requirement: "CR-009"
+      duration: "1 day"
+      dependencies: []
+      
+      deliverables:
+        - file: "src/orchestrators/middleware/resource_limiter.py"
+          description: "Memory, CPU, file operation limits"
+          
+        - file: "tests/unit/test_resource_limits.py"
+          description: "Limit enforcement tests"
+      
+      implementation_steps:
+        day_1:
+          - "Implement memory monitoring (psutil)"
+          - "Add CPU usage monitoring"
+          - "File operation counter"
+          - "Kill orchestrator if limits exceeded"
+          - "Test with resource-heavy orchestrators"
+      
+      validation:
+        - "Memory limit enforced (2GB)"
+        - "CPU limit enforced (80%)"
+        - "File operation limit enforced (1000)"
+        - "Orchestrator killed gracefully on violation"
+  
+  phase_2_exit_criteria:
+    - "✅ State Manager handles concurrency (100 threads)"
+    - "✅ Rollback mechanisms working (all strategies)"
+    - "✅ Trie Router <5ms (100 orchestrators)"
+    - "✅ Resource limits enforced"
+    - "✅ All unit + integration tests passing"
+    - "✅ Performance benchmarks met"
+
+# ==============================================================================
+# PHASE 3: Polish & Edge Cases (Knowledge + Edge Cases) - 25 Days
+# ==============================================================================
+
+phase_3:
+  name: "Polish & Edge Cases"
+  duration: "25 work days (5 weeks)"
+  start_condition: "Phase 2 exit criteria met"
+  end_condition: "All 25 edge cases mitigated, knowledge systems complete"
+  
+  overview: |
+    Address all 25 edge cases, implement remaining requirements (CR-007, CR-008,
+    CR-010), comprehensive testing, performance tuning, and production hardening.
+  
+  tasks:
+    # ---------------------------------------------------------------------
+    # Task 12: Circular Dependency Detection (CR-007) - 2 days
+    # ---------------------------------------------------------------------
+    task_12_circular_detection:
+      task_id: "P3-T12"
+      name: "Circular Dependency Detection"
+      requirement: "CR-007"
+      duration: "2 days"
+      dependencies: ["P1-T05"]
+      
+      deliverables:
+        - file: "src/orchestrators/todo/circular_detector.py"
+          description: "DFS-based cycle detection O(V+E)"
+          
+        - file: "tests/unit/test_circular_detection.py"
+          description: "Cycle detection tests"
+      
+      validation:
+        - "Detects simple cycles (A→B→A)"
+        - "Detects complex cycles (A→B→C→D→B)"
+        - "Returns cycle path in error message"
+        - "O(V+E) complexity validated"
+    
+    # ---------------------------------------------------------------------
+    # Task 13: Knowledge Merge Conflicts (CR-008) - 3 days
+    # ---------------------------------------------------------------------
+    task_13_knowledge_conflicts:
+      task_id: "P3-T13"
+      name: "Knowledge Merge Conflict Resolution"
+      requirement: "CR-008"
+      duration: "3 days"
+      dependencies: ["P0-T02", "P0-T03"]
+      
+      deliverables:
+        - file: "src/multi_repo/knowledge_merger.py"
+          description: "Tier 3→2→1 merge with conflict resolution"
+          
+        - file: "tests/integration/test_knowledge_merge.py"
+          description: "Merge conflict scenarios"
+      
+      validation:
+        - "COMPANY_WINS strategy prefers Tier 3"
+        - "CORTEX_WINS strategy prefers Tier 1"
+        - "MERGE strategy combines both"
+        - "USER_PROMPT asks for manual resolution"
+    
+    # ---------------------------------------------------------------------
+    # Task 14: Markdown Generation Blocking (CR-010) - 1 day
+    # ---------------------------------------------------------------------
+    task_14_markdown_blocking:
+      task_id: "P3-T14"
+      name: "Markdown Generation Blocking"
+      requirement: "CR-010"
+      duration: "1 day"
+      dependencies: ["P1-T06"]
+      
+      deliverables:
+        - file: "src/orchestrators/middleware/markdown_blocker.py"
+          description: "Block *.md creation during execution"
+          
+        - file: "tests/unit/test_markdown_blocker.py"
+          description: "Blocking enforcement tests"
+      
+      validation:
+        - "*.md creation blocked during execution"
+        - "Knowledge library updates allowed (end of cycle)"
+        - "Audit log records blocked attempts"
+        - "Pre-commit hook enforces rule"
+    
+    # ---------------------------------------------------------------------
+    # Task 15: Edge Case Mitigation (All 25 Cases) - 12 days
+    # ---------------------------------------------------------------------
+    task_15_edge_cases:
+      task_id: "P3-T15"
+      name: "Edge Case Mitigation"
+      requirements: "EDGE-RACE-001 to EDGE-PERF-005"
+      duration: "12 days"
+      dependencies: ["P1-T05", "P1-T06", "P2-T08", "P2-T10"]
+      
+      deliverables:
+        - file: "tests/edge_cases/test_all_edge_cases.py"
+          description: "Comprehensive edge case test suite"
+          
+        - file: "cortex-brain/documents/testing/edge-case-report.yaml"
+          description: "Edge case validation report"
+      
+      mitigation_schedule:
+        week_1: "EDGE-RACE-001 to EDGE-RACE-005 (concurrency)"
+        week_2: "EDGE-INT-001 to EDGE-INT-009 (integration failures)"
+        week_3: "EDGE-DEP-001 to EDGE-DEP-005 (deployment)"
+        week_4: "EDGE-SEC-001 to EDGE-SEC-004 (security)"
+        week_5: "EDGE-PERF-001 to EDGE-PERF-005 (performance)"
+      
+      validation:
+        - "All 25 edge cases have passing tests"
+        - "Mitigation strategies implemented 100%"
+        - "Edge case report generated"
+    
+    # ---------------------------------------------------------------------
+    # Task 16: Performance Tuning - 3 days
+    # ---------------------------------------------------------------------
+    task_16_performance_tuning:
+      task_id: "P3-T16"
+      name: "Performance Tuning"
+      duration: "3 days"
+      dependencies: ["P2-T10", "P3-T15"]
+      
+      deliverables:
+        - file: "tests/performance/bench_full_workflow.py"
+          description: "End-to-end performance benchmarks"
+          
+        - file: "cortex-brain/documents/testing/performance-report.yaml"
+          description: "Performance benchmark results"
+      
+      optimization_targets:
+        - "Routing time <5ms (100 orchestrators)"
+        - "State write <100ms (p99)"
+        - "Checkpoint overhead <10%"
+        - "Memory usage <2GB (typical)"
+        - "Cold start <500ms"
+      
+      validation:
+        - "All performance targets met"
+        - "No regressions from Phase 2"
+        - "Benchmark report generated"
+    
+    # ---------------------------------------------------------------------
+    # Task 17: Production Hardening - 4 days
+    # ---------------------------------------------------------------------
+    task_17_production_hardening:
+      task_id: "P3-T17"
+      name: "Production Hardening"
+      duration: "4 days"
+      dependencies: ["P3-T15", "P3-T16"]
+      
+      deliverables:
+        - file: "cortex-brain/schemas/migration-5-to-6.sql"
+          description: "Database migration script"
+          
+        - file: "scripts/setup/install-windows.ps1"
+          description: "Windows installation script"
+          
+        - file: "docs/user-guide-windows.md"
+          description: "Windows user guide"
+          
+        - file: "cortex-brain/documents/deployment/windows-deployment-guide.yaml"
+          description: "Deployment checklist"
+      
+      hardening_checklist:
+        - "Database backup/restore scripts"
+        - "Error recovery procedures"
+        - "Logging configuration"
+        - "Security audit (sandboxing, secrets)"
+        - "Installation automation"
+        - "User documentation"
+      
+      validation:
+        - "Fresh install works on clean Windows 11"
+        - "Migration from CORTEX-5.5 successful"
+        - "All documentation complete"
+        - "Security audit passed"
+  
+  phase_3_exit_criteria:
+    - "✅ All CR-001 to CR-014 requirements implemented"
+    - "✅ All 25 edge cases mitigated and tested"
+    - "✅ Performance benchmarks met"
+    - "✅ Production hardening complete"
+    - "✅ Documentation complete (user + developer)"
+    - "✅ Security audit passed"
+    - "✅ Installation automated"
+    - "✅ Ready for Epic 2 integration"
+
+# ==============================================================================
+# EPIC 1 COMPLETION CRITERIA
+# ==============================================================================
+
+completion_criteria:
+  functional_completeness:
+    - "✅ All 14 critical requirements (CR-001 to CR-014) implemented"
+    - "✅ All 25 edge cases mitigated and tested"
+    - "✅ MCP Server operational (GitHub Copilot integration)"
+    - "✅ Multi-Repo Manager operational (3+ repos tested)"
+    - "✅ TODO Orchestrator operational (DAG + checkpoints)"
+    - "✅ Audit logging enforced (bypass prevention 100%)"
+    - "✅ Silent execution working (minimal output)"
+    
+  performance_targets:
+    - "✅ Routing <5ms (100 orchestrators)"
+    - "✅ State write <100ms (p99)"
+    - "✅ Checkpoint overhead <10%"
+    - "✅ Memory usage <2GB"
+    - "✅ Cold start <500ms"
+    
+  quality_gates:
+    - "✅ Unit test coverage ≥85%"
+    - "✅ Integration tests passing (100%)"
+    - "✅ Edge case tests passing (100%)"
+    - "✅ Performance benchmarks met (100%)"
+    - "✅ Security audit passed"
+    
+  documentation:
+    - "✅ Architecture document complete"
+    - "✅ User guide complete"
+    - "✅ Developer guide complete"
+    - "✅ Deployment guide complete"
+    - "✅ API reference complete"
+
+# ==============================================================================
+# INTEGRATION WITH EPIC 2
+# ==============================================================================
+
+integration_handoff:
+  shared_components:
+    - "MCP Server (platform-agnostic)"
+    - "Multi-Repo Manager (platform-agnostic)"
+    - "TODO Orchestrator (SQLite cross-platform)"
+    - "Audit Logger (JSONL cross-platform)"
+    
+  platform_specific:
+    - "Installation scripts (PowerShell → Shell)"
+    - "Resource limits (Windows → Mac)"
+    - "Performance tuning (Windows hardware → Mac hardware)"
+    
+  validation_strategy:
+    - "Run Epic 1 test suite on Mac (Epic 2 platform)"
+    - "Verify cross-platform database compatibility"
+    - "Test shared MCP Server on both platforms"
+    - "Validate multi-repo workflow on mixed platforms"
+
+# ==============================================================================
+# RISK MANAGEMENT
+# ==============================================================================
+
+risks:
+  risk_1_performance_windows:
+    description: "Slower Windows machine may not meet performance targets"
+    likelihood: "MEDIUM"
+    impact: "HIGH"
+    mitigation: "Optimize critical path (routing, state writes), accept relaxed targets"
+    
+  risk_2_database_corruption:
+    description: "SQLite corruption on Windows (antivirus interference)"
+    likelihood: "LOW"
+    impact: "CRITICAL"
+    mitigation: "WAL mode, daily backups, corruption detection + auto-restore"
+    
+  risk_3_scope_creep:
+    description: "Additional edge cases discovered during testing"
+    likelihood: "HIGH"
+    impact: "MEDIUM"
+    mitigation: "Defer non-critical edge cases to Phase 3, maintain strict scope"
+    
+  risk_4_dependency_delays:
+    description: "Phase dependencies cause delays (Phase 1 waits for Phase 0)"
+    likelihood: "MEDIUM"
+    impact: "MEDIUM"
+    mitigation: "Snowball strategy ensures sequential stability, accept linear timeline"
+
+# ==============================================================================
+# SUCCESS METRICS
+# ==============================================================================
+
+success_metrics:
+  velocity:
+    target_velocity: "5 days per week (40 days total)"
+    actual_velocity: "TBD (tracked during execution)"
+    
+  quality:
+    target_defect_rate: "<5 defects per 1000 LOC"
+    target_test_coverage: "≥85%"
+    target_performance_pass_rate: "100%"
+    
+  timeline:
+    planned_completion: "8 weeks from start"
+    actual_completion: "TBD"
+    variance: "TBD"
+
+# ==============================================================================
+# END OF EPIC 1
+# ==============================================================================
