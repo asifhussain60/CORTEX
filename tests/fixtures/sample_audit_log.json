@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CORTEX Sample Audit Log",
+  "description": "Test fixture for audit logging testing",
+  "version": "1.0.0",
+  "session": {
+    "id": "session-test-001",
+    "started_at": "2026-01-07T10:00:00Z",
+    "executor": "test-suite"
+  },
+  "entries": [
+    {
+      "id": "entry-001",
+      "timestamp": "2026-01-07T10:00:00Z",
+      "level": "INFO",
+      "category": "STATE_MANAGEMENT",
+      "component": "state_manager",
+      "operation": "initialize",
+      "message": "StateManager initialized successfully",
+      "correlation_id": "TEST-CORR-001",
+      "context": {
+        "state_file": "/tmp/test_state.json",
+        "wal_mode": true
+      },
+      "metadata": {
+        "version": "6.0.0"
+      },
+      "duration_ms": 5.2
+    },
+    {
+      "id": "entry-002",
+      "timestamp": "2026-01-07T10:00:01Z",
+      "level": "INFO",
+      "category": "EXECUTION",
+      "component": "plan_executor",
+      "operation": "start_phase",
+      "message": "Starting Phase 1: Setup Phase",
+      "correlation_id": "TEST-CORR-001",
+      "context": {
+        "phase_id": 1,
+        "phase_name": "Setup Phase"
+      },
+      "metadata": {},
+      "duration_ms": null
+    },
+    {
+      "id": "entry-003",
+      "timestamp": "2026-01-07T10:00:15Z",
+      "level": "INFO",
+      "category": "VALIDATION",
+      "component": "validator",
+      "operation": "validate_task",
+      "message": "Task 1.1 validation passed",
+      "correlation_id": "TEST-CORR-001",
+      "context": {
+        "task_id": "1.1",
+        "validation_type": "directory_exists"
+      },
+      "metadata": {
+        "result": "PASS"
+      },
+      "duration_ms": 2.1
+    },
+    {
+      "id": "entry-004",
+      "timestamp": "2026-01-07T10:01:00Z",
+      "level": "WARNING",
+      "category": "PERFORMANCE",
+      "component": "router",
+      "operation": "route_intent",
+      "message": "Routing took longer than expected",
+      "correlation_id": "TEST-CORR-001",
+      "context": {
+        "intent": "test intent",
+        "expected_ms": 5,
+        "actual_ms": 8
+      },
+      "metadata": {},
+      "duration_ms": 8.0
+    },
+    {
+      "id": "entry-005",
+      "timestamp": "2026-01-07T10:02:00Z",
+      "level": "ERROR",
+      "category": "EXECUTION",
+      "component": "task_executor",
+      "operation": "execute_task",
+      "message": "Task execution failed",
+      "correlation_id": "TEST-CORR-001",
+      "context": {
+        "task_id": "2.2",
+        "error_type": "ValidationError",
+        "error_message": "Test did not fail first"
+      },
+      "metadata": {
+        "retry_count": 0,
+        "recoverable": true
+      },
+      "duration_ms": 150.5
+    }
+  ],
+  "summary": {
+    "total_entries": 5,
+    "by_level": {
+      "INFO": 3,
+      "WARNING": 1,
+      "ERROR": 1
+    },
+    "by_category": {
+      "STATE_MANAGEMENT": 1,
+      "EXECUTION": 2,
+      "VALIDATION": 1,
+      "PERFORMANCE": 1
+    }
+  }
+}

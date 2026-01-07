@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CORTEX Sample DAG",
+  "description": "Test fixture for DAG/dependency resolution testing",
+  "version": "1.0.0",
+  "metadata": {
+    "name": "Test Dependency Graph",
+    "created": "2026-01-07",
+    "author": "Asif Hussain"
+  },
+  "nodes": {
+    "feat01-foundation": {
+      "id": "feat01-foundation",
+      "name": "Foundation Layer",
+      "type": "feature",
+      "status": "NOT_STARTED",
+      "dependencies": [],
+      "priority": 0,
+      "estimated_hours": 96
+    },
+    "feat02-todo-orchestrator": {
+      "id": "feat02-todo-orchestrator",
+      "name": "TODO Orchestrator",
+      "type": "feature",
+      "status": "NOT_STARTED",
+      "dependencies": ["feat01-foundation"],
+      "priority": 1,
+      "estimated_hours": 72
+    },
+    "feat03-governance": {
+      "id": "feat03-governance",
+      "name": "Governance Engine",
+      "type": "feature",
+      "status": "NOT_STARTED",
+      "dependencies": ["feat01-foundation"],
+      "priority": 2,
+      "estimated_hours": 64
+    },
+    "feat04-risk-manager": {
+      "id": "feat04-risk-manager",
+      "name": "Risk Manager",
+      "type": "feature",
+      "status": "NOT_STARTED",
+      "dependencies": ["feat02-todo-orchestrator", "feat03-governance"],
+      "priority": 3,
+      "estimated_hours": 48
+    },
+    "feat05-quality-gate": {
+      "id": "feat05-quality-gate",
+      "name": "Quality Gate",
+      "type": "feature",
+      "status": "NOT_STARTED",
+      "dependencies": ["feat04-risk-manager"],
+      "priority": 4,
+      "estimated_hours": 56
+    }
+  },
+  "edges": [
+    {"from": "feat01-foundation", "to": "feat02-todo-orchestrator", "type": "enables"},
+    {"from": "feat01-foundation", "to": "feat03-governance", "type": "enables"},
+    {"from": "feat02-todo-orchestrator", "to": "feat04-risk-manager", "type": "requires"},
+    {"from": "feat03-governance", "to": "feat04-risk-manager", "type": "requires"},
+    {"from": "feat04-risk-manager", "to": "feat05-quality-gate", "type": "requires"}
+  ],
+  "execution_order": [
+    "feat01-foundation",
+    "feat02-todo-orchestrator",
+    "feat03-governance",
+    "feat04-risk-manager",
+    "feat05-quality-gate"
+  ],
+  "critical_path": [
+    "feat01-foundation",
+    "feat02-todo-orchestrator",
+    "feat04-risk-manager",
+    "feat05-quality-gate"
+  ]
+}
