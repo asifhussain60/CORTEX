@@ -167,6 +167,10 @@ class PlanConverterOrchestrator:
         if self.mode == "EPIC":
             features_changes = self._convert_features()
             changes['features_converted'] = features_changes
+            
+            # Populate phase folders in existing feature folders
+            phase_changes = self._populate_feature_phases()
+            changes['phase_folders_created'] = phase_changes
         
         # Reorganize root files
         root_changes = self._reorganize_root()
@@ -215,12 +219,22 @@ class PlanConverterOrchestrator:
                 
                 # Create feature folder structure
                 feature_folder.mkdir(exist_ok=True)
-                (feature_folder / "phases").mkdir(exist_ok=True)
+                phases_folder = feature_folder / "phases"
+                phases_folder.mkdir(exist_ok=True)
                 (feature_folder / "analysis").mkdir(exist_ok=True)
                 (feature_folder / "artifacts").mkdir(exist_ok=True)
                 (feature_folder / "context").mkdir(exist_ok=True)
                 (feature_folder / "reports").mkdir(exist_ok=True)
                 (feature_folder / "tracking").mkdir(exist_ok=True)
+                
+                # Create standard phase subfolders (phase-0 through phase-3)
+                for phase_num in range(4):
+                    phase_folder = phases_folder / f"phase-{phase_num}"
+                    phase_folder.mkdir(exist_ok=True)
+                    (phase_folder / "artifacts").mkdir(exist_ok=True)
+                    (phase_folder / "reports").mkdir(exist_ok=True)
+                    (phase_folder / "tracking").mkdir(exist_ok=True)
+                    self._log(f"Created phase-{phase_num}/ in {feature_name}")
                 
                 # Move .md file into context/
                 target = feature_folder / "context" / item.name
@@ -230,6 +244,37 @@ class PlanConverterOrchestrator:
                 self._log(f"Converted feature: {feature_name}")
         
         return converted
+    
+    def _populate_feature_phases(self) -> List[str]:
+        """
+        Populate phase subfolders in existing feature folders.
+        
+        Returns:
+            List of features with phases populated
+        """
+        features_folder = self.plan_path / "features"
+        if not features_folder.exists():
+            return []
+        
+        populated = []
+        
+        for feature_folder in features_folder.iterdir():
+            if feature_folder.is_dir():
+                phases_folder = feature_folder / "phases"
+                if phases_folder.exists() and not any(phases_folder.iterdir()):
+                    # phases/ folder exists but is empty - populate it
+                    for phase_num in range(4):
+                        phase_folder = phases_folder / f"phase-{phase_num}"
+                        if not phase_folder.exists():
+                            phase_folder.mkdir(exist_ok=True)
+                            (phase_folder / "artifacts").mkdir(exist_ok=True)
+                            (phase_folder / "reports").mkdir(exist_ok=True)
+                            (phase_folder / "tracking").mkdir(exist_ok=True)
+                            self._log(f"Created phase-{phase_num}/ in {feature_folder.name}")
+                    
+                    populated.append(feature_folder.name)
+        
+        return populated
     
     def _reorganize_root(self) -> List[str]:
         """
@@ -386,6 +431,13 @@ if __name__ == "__main__":
                         for subfolder in required_subfolders:
                             if not (feature / subfolder).exists():
                                 errors.append(f"Missing {subfolder}/ in feature: {feature.name}")
+                        
+                        # Check that phases/ folder has phase subfolders
+                        phases_folder = feature / "phases"
+                        if phases_folder.exists():
+                            phase_subfolders = [f for f in phases_folder.iterdir() if f.is_dir() and f.name.startswith('phase-')]
+                            if len(phase_subfolders) == 0:
+                                warnings.append(f"Empty phases/ folder in feature: {feature.name}")
         
         return {
             'passed': len(errors) == 0,

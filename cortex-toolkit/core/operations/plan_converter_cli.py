@@ -51,6 +51,11 @@ def main():
             for feature in changes['features_converted']:
                 print(f"    ↻ {feature}")
         
+        if changes.get('phase_folders_created'):
+            print(f"\n  Features with Phases Populated ({len(changes['phase_folders_created'])}):")
+            for feature in changes['phase_folders_created']:
+                print(f"    📁 {feature} (phase-0, phase-1, phase-2, phase-3)")
+        
         if changes['files_moved']:
             print(f"\n  Files Moved ({len(changes['files_moved'])}):")
             for move in changes['files_moved']:
