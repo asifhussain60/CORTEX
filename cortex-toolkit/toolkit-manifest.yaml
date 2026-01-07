@@ -98,6 +98,14 @@ categories:
         platforms: [windows, linux, macos]
         requires_admin: false
         execution_method: cli
+        
+      - name: plan-converter
+        command: cortex-plan-converter
+        script: core/operations/plan_converter_cli.py
+        description: Convert plan folders to Planning System v5 structure
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
 
   analytics:
     description: Analysis and reporting
