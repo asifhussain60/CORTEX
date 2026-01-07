@@ -1,0 +1,59 @@
+%%{init: {'theme': 'base'}}%%
+
+flowchart TB
+    subgraph CORTEX["🧠 CORTEX Repository"]
+        MCP[🌐 MCP Server<br/>JSON-RPC 2.0<br/>localhost:5000]
+        MRM[📦 Multi-Repo Manager]
+        REG[📋 repos.yaml<br/>Repository Registry]
+        
+        subgraph Brain["CORTEX Brain"]
+            T0[🛡️ Tier 0<br/>Core Governance]
+            T1[💭 Tier 1<br/>Working Memory]
+            T2[🧠 Tier 2<br/>Knowledge Graph]
+        end
+    end
+    
+    subgraph RepoA["📁 Company ABC Repository"]
+        A_SRC[/src/]
+        A_GOV[/.cortex/<br/>governance/<br/>best-practices/]
+        A_BRAIN[Company ABC<br/>Brain Partition]
+        
+        subgraph A_Domains["Domains"]
+            A_D1[💰 Finance]
+            A_D2[🏥 HSA/FSA]
+            A_D3[🚌 Commuter]
+        end
+    end
+    
+    subgraph RepoB["📁 Company XYZ Repository"]
+        B_SRC[/src/]
+        B_GOV[/.cortex/<br/>governance/<br/>best-practices/]
+        B_BRAIN[Company XYZ<br/>Brain Partition]
+        
+        subgraph B_Domains["Domains"]
+            B_D1[🛒 Retail]
+            B_D2[📦 Inventory]
+            B_D3[💳 POS]
+        end
+    end
+    
+    subgraph RepoC["📁 Personal Repository"]
+        C_SRC[/src/]
+        C_NOTE[No .cortex/<br/>Uses CORTEX Tier 0 only]
+    end
+    
+    MCP <--> MRM
+    MRM <--> REG
+    MRM <--> Brain
+    
+    MRM <-->|"cortex.plan()<br/>cortex.execute()"| A_GOV
+    MRM <-->|"cortex.plan()<br/>cortex.execute()"| B_GOV
+    MRM <-->|"cortex.plan()<br/>cortex.execute()"| C_SRC
+    
+    A_GOV --> A_BRAIN
+    B_GOV --> B_BRAIN
+    
+    A_BRAIN --> A_D1 & A_D2 & A_D3
+    B_BRAIN --> B_D1 & B_D2 & B_D3
+    
+    T0 -.->|"Base rules for all"| A_GOV & B_GOV & C_SRC
