@@ -202,6 +202,8 @@ class PlanConverterOrchestrator:
     def _convert_features(self) -> List[str]:
         """
         Convert feature .md files to folder structures with phases/.
+        Features are numbered feat01-, feat02-, etc.
+        Phases are numbered phase1-, phase2-, etc.
         
         Returns:
             List of converted feature names
@@ -211,43 +213,50 @@ class PlanConverterOrchestrator:
             return []
         
         converted = []
+        feature_num = 1
         
-        for item in features_folder.iterdir():
-            if item.is_file() and item.suffix == '.md':
-                feature_name = item.stem
-                feature_folder = features_folder / feature_name
-                
-                # Create feature folder structure
-                feature_folder.mkdir(exist_ok=True)
-                phases_folder = feature_folder / "phases"
-                phases_folder.mkdir(exist_ok=True)
-                (feature_folder / "analysis").mkdir(exist_ok=True)
-                (feature_folder / "artifacts").mkdir(exist_ok=True)
-                (feature_folder / "context").mkdir(exist_ok=True)
-                (feature_folder / "reports").mkdir(exist_ok=True)
-                (feature_folder / "tracking").mkdir(exist_ok=True)
-                
-                # Create standard phase subfolders (phase-0 through phase-3)
-                for phase_num in range(4):
-                    phase_folder = phases_folder / f"phase-{phase_num}"
-                    phase_folder.mkdir(exist_ok=True)
-                    (phase_folder / "artifacts").mkdir(exist_ok=True)
-                    (phase_folder / "reports").mkdir(exist_ok=True)
-                    (phase_folder / "tracking").mkdir(exist_ok=True)
-                    self._log(f"Created phase-{phase_num}/ in {feature_name}")
-                
-                # Move .md file into context/
-                target = feature_folder / "context" / item.name
-                shutil.move(str(item), str(target))
-                
-                converted.append(feature_name)
-                self._log(f"Converted feature: {feature_name}")
+        # Sort features alphabetically for consistent numbering
+        feature_files = sorted([f for f in features_folder.iterdir() if f.is_file() and f.suffix == '.md'])
+        
+        for item in feature_files:
+            feature_name = item.stem
+            # Create feat0X- prefixed folder name
+            feature_folder_name = f"feat{feature_num:02d}-{feature_name}"
+            feature_folder = features_folder / feature_folder_name
+            
+            # Create feature folder structure
+            feature_folder.mkdir(exist_ok=True)
+            phases_folder = feature_folder / "phases"
+            phases_folder.mkdir(exist_ok=True)
+            (feature_folder / "analysis").mkdir(exist_ok=True)
+            (feature_folder / "artifacts").mkdir(exist_ok=True)
+            (feature_folder / "context").mkdir(exist_ok=True)
+            (feature_folder / "reports").mkdir(exist_ok=True)
+            (feature_folder / "tracking").mkdir(exist_ok=True)
+            
+            # Create standard phase subfolders (phase1- through phase4-)
+            for phase_num in range(1, 5):
+                phase_folder = phases_folder / f"phase{phase_num}-execution"
+                phase_folder.mkdir(exist_ok=True)
+                (phase_folder / "artifacts").mkdir(exist_ok=True)
+                (phase_folder / "reports").mkdir(exist_ok=True)
+                (phase_folder / "tracking").mkdir(exist_ok=True)
+                self._log(f"Created phase{phase_num}-execution/ in {feature_folder_name}")
+            
+            # Move .md file into context/
+            target = feature_folder / "context" / item.name
+            shutil.move(str(item), str(target))
+            
+            converted.append(feature_folder_name)
+            self._log(f"Converted feature: {feature_name} → {feature_folder_name}")
+            feature_num += 1
         
         return converted
     
     def _populate_feature_phases(self) -> List[str]:
         """
         Populate phase subfolders in existing feature folders.
+        Also renames non-compliant features to feat0X- format.
         
         Returns:
             List of features with phases populated
@@ -257,22 +266,59 @@ class PlanConverterOrchestrator:
             return []
         
         populated = []
+        feature_folders = sorted([f for f in features_folder.iterdir() if f.is_dir()])
         
-        for feature_folder in features_folder.iterdir():
-            if feature_folder.is_dir():
-                phases_folder = feature_folder / "phases"
-                if phases_folder.exists() and not any(phases_folder.iterdir()):
-                    # phases/ folder exists but is empty - populate it
-                    for phase_num in range(4):
-                        phase_folder = phases_folder / f"phase-{phase_num}"
-                        if not phase_folder.exists():
-                            phase_folder.mkdir(exist_ok=True)
-                            (phase_folder / "artifacts").mkdir(exist_ok=True)
-                            (phase_folder / "reports").mkdir(exist_ok=True)
-                            (phase_folder / "tracking").mkdir(exist_ok=True)
-                            self._log(f"Created phase-{phase_num}/ in {feature_folder.name}")
-                    
-                    populated.append(feature_folder.name)
+        # First pass: Rename features that don't follow feat0X- convention
+        feature_num = 1
+        rename_map = {}
+        
+        for feature_folder in feature_folders:
+            if not feature_folder.name.startswith('feat'):
+                # Extract base name
+                base_name = feature_folder.name
+                new_name = f"feat{feature_num:02d}-{base_name}"
+                new_path = feature_folder.parent / new_name
+                
+                # Store rename operation
+                rename_map[feature_folder] = new_path
+                self._log(f"Will rename: {feature_folder.name} → {new_name}")
+            
+            feature_num += 1
+        
+        # Execute renames
+        for old_path, new_path in rename_map.items():
+            if not new_path.exists():
+                shutil.move(str(old_path), str(new_path))
+                self._log(f"Renamed: {old_path.name} → {new_path.name}")
+        
+        # Second pass: Populate/fix phases in all features
+        feature_folders = sorted([f for f in features_folder.iterdir() if f.is_dir()])
+        
+        for feature_folder in feature_folders:
+            phases_folder = feature_folder / "phases"
+            if not phases_folder.exists():
+                phases_folder.mkdir(exist_ok=True)
+            
+            # Check existing phase folders
+            existing_phases = list(phases_folder.iterdir())
+            
+            # Delete old phase-0, phase-1 format folders
+            for phase in existing_phases:
+                if phase.is_dir() and phase.name.startswith('phase-'):
+                    shutil.rmtree(phase)
+                    self._log(f"Deleted non-compliant phase: {feature_folder.name}/{phase.name}")
+            
+            # Create phase1- through phase4- folders
+            for phase_num in range(1, 5):
+                phase_folder = phases_folder / f"phase{phase_num}-execution"
+                if not phase_folder.exists():
+                    phase_folder.mkdir(exist_ok=True)
+                    (phase_folder / "artifacts").mkdir(exist_ok=True)
+                    (phase_folder / "reports").mkdir(exist_ok=True)
+                    (phase_folder / "tracking").mkdir(exist_ok=True)
+                    self._log(f"Created phase{phase_num}-execution/ in {feature_folder.name}")
+            
+            populated.append(feature_folder.name)
         
         return populated
     
@@ -432,12 +478,21 @@ if __name__ == "__main__":
                             if not (feature / subfolder).exists():
                                 errors.append(f"Missing {subfolder}/ in feature: {feature.name}")
                         
-                        # Check that phases/ folder has phase subfolders
+                        # Check that phases/ folder has phase subfolders with correct naming (phase1-, phase2-, etc.)
                         phases_folder = feature / "phases"
                         if phases_folder.exists():
-                            phase_subfolders = [f for f in phases_folder.iterdir() if f.is_dir() and f.name.startswith('phase-')]
+                            phase_subfolders = [f for f in phases_folder.iterdir() if f.is_dir() and f.name.startswith('phase') and not f.name.startswith('phase-')]
                             if len(phase_subfolders) == 0:
-                                warnings.append(f"Empty phases/ folder in feature: {feature.name}")
+                                warnings.append(f"Empty or incorrectly named phases/ folder in feature: {feature.name}")
+                            
+                            # Check for old-style phase- naming
+                            old_style_phases = [f for f in phases_folder.iterdir() if f.is_dir() and f.name.startswith('phase-')]
+                            if old_style_phases:
+                                errors.append(f"Non-compliant phase naming (phase- instead of phase1-) in feature: {feature.name}")
+                        
+                        # Check feature naming (should start with feat0X-)
+                        if not feature.name.startswith('feat'):
+                            errors.append(f"Non-compliant feature naming (missing feat0X- prefix): {feature.name}")
         
         return {
             'passed': len(errors) == 0,
