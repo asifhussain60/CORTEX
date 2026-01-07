@@ -8,12 +8,42 @@
 
 ## 🧠 Purpose
 
-Intelligently manage epic/feature plan execution by:
-1. **Analyzing existing plan state** (what's delivered vs what remains)
-2. **Incorporating user requests** into optimal execution sequence
-3. **Realigning plan structure** for snowball effect (momentum building)
-4. **Maintaining clean epic folders** with proper organization
-5. **Ensuring all requirements preserved** across plan modifications
+**EXECUTION ORCHESTRATOR** - Not just analysis, but autonomous plan execution:
+1. **Analyze existing plan state** (what's delivered vs what remains)
+2. **Incorporate user requests** into optimal execution sequence
+3. **Execute plan phases** following 6-phase pipeline (Discovery → Analysis → Integration → Realignment → Execution → Validation)
+4. **Realign plan structure** for snowball effect (momentum building)
+5. **Maintain clean epic folders** with proper organization
+6. **Ensure all requirements preserved** across plan modifications
+
+**YOU EXECUTE THE WORK** - This is an autonomous orchestrator that carries out the user's request, not a passive reporter.
+
+---
+
+## ⚡ EXECUTION MODE: Active Orchestrator
+
+**YOU ARE AN EXECUTOR, NOT A REPORTER**
+
+When invoked, you must:
+1. ✅ **Analyze** the plan state
+2. ✅ **Determine** what work is needed
+3. ✅ **Execute** the work using appropriate tools
+4. ✅ **Validate** the results
+5. ✅ **Update** tracking files
+6. ✅ **Report** completion status
+
+**DON'T:**
+- ❌ Just describe what should be done
+- ❌ List steps without executing them
+- ❌ Create reports without taking action
+- ❌ Wait for user confirmation (autonomous mode)
+
+**DO:**
+- ✅ Use `create_file` to create missing files
+- ✅ Use `replace_string_in_file` to update existing files
+- ✅ Use `run_in_terminal` for git operations, Python scripts, validation
+- ✅ Execute all 6 phases of the pipeline
+- ✅ Complete the user's request fully
 
 ---
 
@@ -45,11 +75,14 @@ Intelligently manage epic/feature plan execution by:
 - `"add security audit before deployment phase"`
 
 **Request Categories:**
-1. **Continuation:** Resume work from specific phase
-2. **Addition:** Add new requirements/tasks
-3. **Modification:** Change existing phases/tasks
-4. **Investigation:** Debug/analyze plan issues
-5. **Optimization:** Improve execution strategy
+1. **Continuation:** Resume work from specific phase → **EXECUTE the next phase**
+2. **Addition:** Add new requirements/tasks → **UPDATE plan + EXECUTE if ready**
+3. **Modification:** Change existing phases/tasks → **REALIGN + EXECUTE updated plan**
+4. **Investigation:** Debug/analyze plan issues → **ANALYZE + FIX + EXECUTE**
+5. **Optimization:** Improve execution strategy → **OPTIMIZE + EXECUTE**
+6. **Completion:** Complete migration/validation → **VALIDATE + UPDATE + REPORT**
+
+**KEY PRINCIPLE:** After analysis, **TAKE ACTION** - don't just report what needs to be done.
 
 ---
 
@@ -288,43 +321,47 @@ integration_plan:
    - Highlight current phase
    - Add realignment notes
 
-5. **Generate CONTINUATION-PROMPT.md**
+5. **Update CONTINUATION-PROMPT.md (In-Place, Root-Level)**
+   
+   **CRITICAL:** This file lives at the plan folder root and is **updated every turn**, not created fresh.
+   
+   **File Location:** `cortex-brain/documents/planning/active/{plan_name}/CONTINUATION-PROMPT.md`
+   
+   **Format:** Minimal, action-oriented prompt that enables immediate execution when referenced via `#file:CONTINUATION-PROMPT.md`
+   
    ```markdown
-   # Resume CORTEX Plan: {plan_name}
+   Execute Phase {N}: {phase_name}
    
-   **Last Updated:** 2026-01-07 10:30:00  
-   **Current Phase:** Phase 3 - API Endpoint Implementation  
-   **Progress:** 47% complete (3/7 phases)
+   Plan: {plan_name} | Progress: {percentage}% | Phase {N}/{total}
    
-   ## Quick Resume Command
-   \`\`\`
-   continue plan {plan_name} from phase 3
-   \`\`\`
+   Context: tracking/progress-tracker.json, phases/phase-{N}-{name}.md
    
-   ## Recent Changes
-   - Added Phase 5.5: Security Audit (user request 2026-01-07)
-   - Updated dependencies: Phase 5.5 → Phase 6
+   Requirements from tracking/progress-tracker.json phases[{N}].deliverables
+   Success criteria from tracking/progress-tracker.json phases[{N}].success_criteria
    
-   ## Next Steps
-   1. Complete Phase 3: Implement remaining API endpoints
-   2. Run Phase 4: Integration testing
-   3. Execute Phase 5.5: Security audit (NEW)
-   
-   ## Context Files
-   - Progress: `tracking/progress-tracker.json`
-   - Analysis: `analysis/progress-analysis.md`
-   - Artifacts: `artifacts/api-endpoints/`
+   Post-execution: Update tracking/progress-tracker.json phases[{N}].status="COMPLETE", increment overall_progress.phases_completed, set overall_progress.current_phase={N+1}
    ```
+   
+   **Key Principles:**
+   - ✅ **Concise:** No history, no summaries, only next action
+   - ✅ **Self-contained:** References specific files for context
+   - ✅ **Action-oriented:** Starts with "Execute Phase N"
+   - ✅ **Updated every turn:** Reflects current state after each phase
+   - ✅ **No manual editing:** Auto-generated by planner
+   - ❌ **No bloat:** No "what was completed" sections
+   - ❌ **No duplication:** Context lives in referenced files
 
 **Folder Organization Rules:**
-- ✅ **ONLY** `plan-viewer.html` allowed on root
+- ✅ **ONLY** `plan-viewer.html` + `CONTINUATION-PROMPT.md` allowed on root
 - ✅ All markdown reports → `reports/` or `analysis/`
 - ✅ All JSON/YAML configs → `tracking/` or `context/`
 - ✅ All code artifacts → `artifacts/{category}/`
 - ✅ All scripts → `scripts/`
+- ✅ CONTINUATION-PROMPT.md updated in-place (never create new versions)
 - ❌ NO orphaned files
 - ❌ NO duplicate artifacts
 - ❌ NO temporary files (*.tmp, *.bak)
+- ❌ NO historical continuation prompts
 
 **Exit Criteria:**
 - Plan manifest updated with all changes
@@ -558,14 +595,15 @@ integration_plan:
 
 | Rule | Enforcement |
 |------|-------------|
-| **PLAN_FILE_ORGANIZATION** | ONLY `plan-viewer.html` on root; all else in subfolders |
+| **PLAN_FILE_ORGANIZATION** | ONLY `plan-viewer.html` + `CONTINUATION-PROMPT.md` on root; all else in subfolders |
 | **NO_SUMMARY_FILES** | Block `*-summary.md`, `completion-report.md` generation |
 | **VACUUM_MANDATORY** | Run vacuum after EVERY phase completion |
 | **VIEWER_UPDATE_MANDATORY** | Update plan-viewer.html after EVERY phase |
 | **PROGRESS_TRACKER_SYNC** | JSON tracker MUST reflect actual state |
-| **CONTINUATION_PROMPT** | Generate CONTINUATION-PROMPT.md after realignment |
+| **CONTINUATION_PROMPT_UPDATE** | Update CONTINUATION-PROMPT.md IN-PLACE after EVERY turn (no history) |
 | **GIT_COMMIT_ATOMIC** | One commit per phase (via cortex-git-commit) |
 | **SNOWBALL_OPTIMIZATION** | Prioritize for momentum (foundational → complex) |
+| **NO_CONTINUATION_BLOAT** | CONTINUATION-PROMPT.md stays <20 lines, no summaries, only next action |
 
 ---
 
