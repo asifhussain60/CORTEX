@@ -4,6 +4,8 @@ Pattern Router - Machine-Readable Intent Routing.
 Deterministic pattern matching engine for orchestrator routing without LLM dependency.
 Supports exact matches, regex patterns, and confidence scoring.
 
+CORTEX 6.0: Enhanced with Trie-based O(1) routing via TrieRouter integration.
+
 Author: Asif Hussain
 Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
@@ -16,6 +18,13 @@ from enum import Enum
 from pathlib import Path
 import yaml
 
+# CORTEX 6.0: Import Trie router for O(1) performance
+try:
+    from .routing.trie_router import TrieRouter, RouteMatch as TrieRouteMatch, MatchType as TrieMatchType
+    TRIE_ROUTER_AVAILABLE = True
+except ImportError:
+    TRIE_ROUTER_AVAILABLE = False
+
 
 class MatchType(str, Enum):
     """Pattern match type."""
@@ -23,6 +32,8 @@ class MatchType(str, Enum):
     REGEX = "regex"
     FUZZY = "fuzzy"
     NONE = "none"
+    PREFIX = "prefix"  # CORTEX 6.0: Added prefix match type
+    KEYWORD = "keyword"  # CORTEX 6.0: Added keyword match type
 
 
 @dataclass
@@ -56,6 +67,7 @@ class OrchestratorMatch:
     match_type: MatchType
     matched_pattern: Optional[str] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
+    lookup_time_ms: float = 0.0  # CORTEX 6.0: Added timing
     
     @property
     def is_matched(self) -> bool:
@@ -66,6 +78,26 @@ class OrchestratorMatch:
     def is_high_confidence(self) -> bool:
         """Check if match confidence is high (>= 0.9)."""
         return self.confidence >= 0.9
+    
+    @classmethod
+    def from_trie_match(cls, trie_match: 'TrieRouteMatch') -> 'OrchestratorMatch':
+        """Convert TrieRouteMatch to OrchestratorMatch for backwards compatibility."""
+        # Map Trie match types to legacy match types
+        match_type_map = {
+            'exact': MatchType.EXACT,
+            'prefix': MatchType.PREFIX,
+            'keyword': MatchType.KEYWORD,
+            'regex': MatchType.REGEX,
+            'none': MatchType.NONE,
+        }
+        return cls(
+            orchestrator_id=trie_match.orchestrator_id,
+            confidence=trie_match.confidence,
+            match_type=match_type_map.get(trie_match.match_type.value, MatchType.NONE),
+            matched_pattern=trie_match.matched_pattern,
+            metadata=trie_match.metadata,
+            lookup_time_ms=trie_match.lookup_time_ms
+        )
 
 
 class PatternRouter:
@@ -75,9 +107,14 @@ class PatternRouter:
     Provides deterministic routing without LLM dependency through
     exact pattern matching and regex patterns with confidence scoring.
     
+    CORTEX 6.0: Enhanced with Trie-based O(1) routing for improved performance.
+    Uses TrieRouter internally when available, falls back to linear search.
+    
     Features:
-    - Exact string matching (case-insensitive)
-    - Regex pattern matching
+    - Exact string matching (case-insensitive) - O(1) with Trie
+    - Prefix matching - O(k) with Trie (k = words in input)
+    - Keyword matching - O(w) with Trie (w = words in input)
+    - Regex pattern matching - O(n*m) fallback
     - Priority-based rule ordering
     - Confidence scoring
     - Pattern compilation caching
@@ -89,12 +126,13 @@ class PatternRouter:
             print(f"Route to: {match.orchestrator_id}")
     """
     
-    def __init__(self, config_path: str):
+    def __init__(self, config_path: str, use_trie: bool = True):
         """
         Initialize router with configuration file.
         
         Args:
             config_path: Path to YAML routing configuration
+            use_trie: Use Trie-based O(1) routing (CORTEX 6.0 feature)
         """
         self.config_path = Path(config_path)
         self.logger = logging.getLogger("cortex.orchestrators.pattern_router")
@@ -103,6 +141,12 @@ class PatternRouter:
         self.rules: List[RoutingRule] = []
         self.fallback_config: Dict[str, Any] = {}
         self._compiled_patterns: Dict[str, re.Pattern] = {}
+        
+        # CORTEX 6.0: Initialize Trie router if available and enabled
+        self._use_trie = use_trie and TRIE_ROUTER_AVAILABLE
+        self._trie_router: Optional[TrieRouter] = None
+        if self._use_trie:
+            self._trie_router = TrieRouter(enable_logging=False)
         
         self._load_routing_rules()
         
@@ -146,6 +190,10 @@ class PatternRouter:
                         re.IGNORECASE
                     )
                 
+                # CORTEX 6.0: Add rule to Trie router for O(1) lookup
+                if self._trie_router is not None:
+                    self._add_rule_to_trie(rule)
+                
             except Exception as e:
                 self.logger.error(
                     f"Failed to parse rule {idx}: {rule_dict} - {e}"
@@ -160,9 +208,43 @@ class PatternRouter:
         
         self.logger.info(f"Loaded {len(self.rules)} routing rules")
     
+    def _add_rule_to_trie(self, rule: RoutingRule) -> None:
+        """
+        Add a routing rule to the Trie router for O(1) lookup.
+        
+        CORTEX 6.0: Hybrid routing - Trie for O(1), fallback to regex.
+        
+        Args:
+            rule: Routing rule to add
+        """
+        if self._trie_router is None:
+            return
+        
+        # Map MatchType to Trie route type
+        if rule.match_type == MatchType.EXACT:
+            self._trie_router.add_exact_route(
+                phrase=rule.pattern.lower(),
+                orchestrator_id=rule.orchestrator_id,
+                confidence=rule.confidence,
+                priority=rule.priority,
+                metadata=rule.metadata or {}
+            )
+        elif rule.match_type == MatchType.REGEX:
+            self._trie_router.add_regex_route(
+                pattern=rule.pattern,
+                orchestrator_id=rule.orchestrator_id,
+                confidence=rule.confidence,
+                priority=rule.priority,
+                metadata=rule.metadata or {}
+            )
+        # Note: PREFIX and KEYWORD types can be added as needed
+    
     def match_intent(self, user_input: str) -> OrchestratorMatch:
         """
         Match user input against routing patterns.
+        
+        CORTEX 6.0: Uses Trie router for O(1) lookup when available,
+        with fallback to traditional regex matching.
         
         Args:
             user_input: User's natural language input
@@ -180,7 +262,19 @@ class PatternRouter:
         # Normalize input
         normalized_input = user_input.strip().lower()
         
-        # Try each rule in priority order
+        # CORTEX 6.0: Try Trie router first for O(1) performance
+        if self._use_trie and self._trie_router is not None:
+            trie_match = self._trie_router.match(normalized_input)
+            if trie_match.is_matched:
+                result = OrchestratorMatch.from_trie_match(trie_match)
+                self.logger.info(
+                    f"Trie matched: '{user_input}' → {result.orchestrator_id} "
+                    f"(confidence={result.confidence:.2f}, "
+                    f"type={result.match_type.value})"
+                )
+                return result
+        
+        # Fallback: Try each rule in priority order
         for rule in self.rules:
             match_result = self._try_match_rule(normalized_input, rule)
             
