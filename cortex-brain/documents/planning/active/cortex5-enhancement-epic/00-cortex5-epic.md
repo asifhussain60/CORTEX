@@ -187,15 +187,6 @@ Write-Host "Pull Budget: $($tracking.pull_budget.current_pull_count)/$($tracking
 - Visual feedback via shield icon (🛡️) in chat + plan viewer integration
 - Incorporated thoughts replaced with concise confirmation messages
 
-**🆕 Generic Vacuum Orchestrator v3:**
-- Transform Vacuum v2 from CORTEX-specific to generic, reusable system
-- YAML-based rule engine for configurable cleanup (any directory structure)
-- 4 pluggable analyzers: Python AST, JavaScript AST, content hash, metadata
-- 4 preset templates: cortex-brain, python-project, node-project, generic
-- Multi-format reporting: JSON, Markdown, HTML (interactive), CSV
-- Safety features: dry-run, archive-before-delete, Git awareness, size thresholds
-- Enables user project automation and CI/CD integration
-
 ---
 
 ## 🔄 CORTEX-5.0 Reference Strategy
@@ -429,9 +420,8 @@ Knowledge Extension Layer
 | Phase | Name | Duration | Dependencies | Deliverables |
 |-------|------|----------|--------------|--------------|
 | **8** | **TDD Test Harness** | 1 week | Phase 5 | Autonomous test generation, RED→GREEN→REFACTOR enforcement |
-| **9** | **Generic Vacuum Orchestrator v3** | 1 week (5 days) | Phase 1, 4 | Rule engine, pluggable analyzers, 4 presets, multi-format reports |
-| **10** | **Plan Viewer Modernization** | 1 week | None | CSS standardization, responsive design, phase navigation |
-| **11** | **Response Template Optimization** | 1 week | None | INSTANT/FOCUSED/STRUCTURED/COMPREHENSIVE modes |
+| **9** | **Plan Viewer Modernization** | 1 week | None | CSS standardization, responsive design, phase navigation |
+| **10** | **Response Template Optimization** | 1 week | None | INSTANT/FOCUSED/STRUCTURED/COMPREHENSIVE modes |
 
 **Track Priority:** MEDIUM (quality improvements)
 
@@ -441,7 +431,7 @@ Knowledge Extension Layer
 
 | Phase | Name | Duration | Dependencies | Deliverables |
 |-------|------|----------|--------------|--------------|
-| **12** | **End-to-End Integration** | 1 week | All phases | Integration tests, performance benchmarks, validation reports |
+| **11** | **End-to-End Integration** | 1 week | All phases | Integration tests, performance benchmarks, validation reports |
 
 **Track Priority:** CRITICAL (go/no-go decision)
 
@@ -475,15 +465,7 @@ Knowledge Extension Layer
 - ✅ Applies company coding standards (from `rules.yaml`)
 - ✅ Validation: Convert sample Selenium test, verify Playwright output
 
-**Phase 9 (Generic Vacuum Orchestrator v3):**
-- ✅ Rule engine parses and executes YAML-based vacuum rules
-- ✅ 4 pluggable analyzers (Python AST, JavaScript AST, content hash, metadata)
-- ✅ 4 preset templates (cortex-brain, python-project, node-project, generic)
-- ✅ Multi-format reporting (JSON, Markdown, HTML, CSV)
-- ✅ CLI supports 3 modes (cortex-brain, project, custom)
-- ✅ Validation: Vacuum 3 different project types successfully
-
-**Phase 12 (Integration):**
+**Phase 11 (Integration):**
 - ✅ All 10 core orchestrators + 1 custom orchestrator tested
 - ✅ Knowledge merge validated (CORTEX + company)
 - ✅ Performance: <50ms overhead for knowledge queries
