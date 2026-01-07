@@ -92,7 +92,7 @@ from src.orchestrators.core.dag import (
     NodeNotFoundError,
 )
 from src.orchestrators.state_manager import StateManager
-from src.orchestrators.audit_logger import EnterpriseAuditLogger, AuditCategory
+from src.orchestrators.audit_logger import EnterpriseAuditLogger, AuditCategory, AuditLevel
 
 logger = logging.getLogger(__name__)
 
@@ -198,7 +198,7 @@ class Todo:
     title: str
     description: str = ""
     status: TodoStatus = TodoStatus.NOT_STARTED
-    priority: Priority = Priority.P2_NORMAL
+    priority: Priority = Priority.P2_MEDIUM
     tags: Set[str] = field(default_factory=set)
     created_at: datetime = field(default_factory=datetime.now)
     updated_at: datetime = field(default_factory=datetime.now)
@@ -365,7 +365,7 @@ class TodoOrchestrator:
         self,
         title: str,
         description: str = "",
-        priority: Priority = Priority.P2_NORMAL,
+        priority: Priority = Priority.P2_MEDIUM,
         tags: Optional[Set[str]] = None,
         dependencies: Optional[List[str]] = None,
         data: Optional[Dict[str, Any]] = None,
@@ -435,6 +435,7 @@ class TodoOrchestrator:
             
             # Audit log
             self.audit_logger.log(
+                level=AuditLevel.INFO,
                 category=AuditCategory.EXECUTION,
                 component="todo_orchestrator",
                 operation="create_todo",
@@ -522,6 +523,7 @@ class TodoOrchestrator:
             
             # Audit log
             self.audit_logger.log(
+                level=AuditLevel.INFO,
                 category=AuditCategory.EXECUTION,
                 component="todo_orchestrator",
                 operation="update_todo",
@@ -573,6 +575,7 @@ class TodoOrchestrator:
             
             # Audit log
             self.audit_logger.log(
+                level=AuditLevel.INFO,
                 category=AuditCategory.EXECUTION,
                 component="todo_orchestrator",
                 operation="delete_todo",
@@ -657,10 +660,15 @@ class TodoOrchestrator:
             elif new_status == TodoStatus.FAILED:
                 self._stats["total_failed"] += 1
             
-            # Update DAG node
+            # Update DAG node status
+            self.dag.set_node_status(
+                todo_id,
+                status=new_status.to_node_status()
+            )
+            
+            # Also update node data to keep TODO in sync
             self.dag.update_node(
                 todo_id,
-                status=new_status.to_node_status(),
                 data={"todo": todo.to_dict()},
             )
             
@@ -672,6 +680,7 @@ class TodoOrchestrator:
             
             # Audit log
             self.audit_logger.log(
+                level=AuditLevel.INFO,
                 category=AuditCategory.STATE_MANAGEMENT,
                 component="todo_orchestrator",
                 operation="transition_status",
@@ -791,6 +800,7 @@ class TodoOrchestrator:
             
             # Audit log
             self.audit_logger.log(
+                level=AuditLevel.INFO,
                 category=AuditCategory.STATE_MANAGEMENT,
                 component="todo_orchestrator",
                 operation="create_checkpoint",
@@ -829,6 +839,7 @@ class TodoOrchestrator:
             
             # Audit log
             self.audit_logger.log(
+                level=AuditLevel.INFO,
                 category=AuditCategory.STATE_MANAGEMENT,
                 component="todo_orchestrator",
                 operation="load_checkpoint",
@@ -857,13 +868,30 @@ class TodoOrchestrator:
                 "stats": self._stats,
             }
             
-            self.state_manager.save_state(
-                key=f"{self.name}-state",
-                data=state_data,
-            )
+            state_key = f"{self.name}-state"
+            
+            # Try to read existing state to determine if we need create or update
+            existing_state = self.state_manager.read_state(state_key)
+            
+            if existing_state is None:
+                # Create new state
+                self.state_manager.create_state(
+                    key=state_key,
+                    value=state_data,
+                    metadata={"orchestrator": self.name}
+                )
+            else:
+                # Update existing state with optimistic locking
+                self.state_manager.update_state(
+                    key=state_key,
+                    value=state_data,
+                    expected_version=existing_state["version"],
+                    metadata={"orchestrator": self.name, "updated_at": datetime.utcnow().isoformat()}
+                )
             
             # Audit log
             self.audit_logger.log(
+                level=AuditLevel.INFO,
                 category=AuditCategory.STATE_MANAGEMENT,
                 component="todo_orchestrator",
                 operation="persist",
@@ -874,9 +902,12 @@ class TodoOrchestrator:
     def load(self) -> None:
         """Load state from StateManager."""
         with self._lock:
-            state_data = self.state_manager.load_state(key=f"{self.name}-state")
+            state_key = f"{self.name}-state"
+            state_result = self.state_manager.read_state(state_key)
             
-            if state_data:
+            if state_result:
+                state_data = state_result["value"]
+                
                 # Restore TODOs
                 self.todos = {
                     k: Todo.from_dict(v)
@@ -893,11 +924,15 @@ class TodoOrchestrator:
                 
                 # Audit log
                 self.audit_logger.log(
+                    level=AuditLevel.INFO,
                     category=AuditCategory.STATE_MANAGEMENT,
                     component="todo_orchestrator",
                     operation="load",
-                    message=f"Loaded orchestrator state",
-                    context={"todo_count": len(self.todos)},
+                    message=f"Loaded orchestrator state (version {state_result['version']})",
+                    context={
+                        "todo_count": len(self.todos),
+                        "version": state_result["version"]
+                    },
                 )
     
     # ==========================================================================
