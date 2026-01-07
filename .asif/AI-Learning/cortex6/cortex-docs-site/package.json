@@ -1,0 +1,18 @@
+{
+  "name": "cortex-docs",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "docusaurus start",
+    "build": "docusaurus build",
+    "serve": "docusaurus serve",
+    "swizzle": "docusaurus swizzle",
+    "deploy": "docusaurus deploy"
+  },
+  "dependencies": {
+    "@docusaurus/core": "^3.6.0",
+    "@docusaurus/preset-classic": "^3.6.0",
+    "@mdx-js/react": "^3.0.0",
+    "@docusaurus/theme-mermaid": "^3.6.0"
+  }
+}
