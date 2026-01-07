@@ -1,0 +1,358 @@
+# Housekeeping Orchestrator - Autonomous CORTEX Maintenance
+# Author: Asif Hussain
+# Copyright © 2025-2026 Asif Hussain. All rights reserved.
+
+schema_version: "5.0"
+
+orchestrator:
+  name: "housekeeping_orchestrator"
+  version: "1.0.0"
+  type: "autonomous"
+  description: "Automated CORTEX maintenance for efficiency, accuracy, and bug detection"
+  implementation: "src/orchestrators/housekeeping/housekeeping_orchestrator.py"
+  base_class: "BaseOrchestratorV4_1"
+  
+  # Runs at various frequencies strategically
+  execution_schedule:
+    frequencies:
+      - name: "hourly"
+        enabled: false
+        tasks: ["audit_log_analysis"]
+      
+      - name: "daily"
+        enabled: true
+        tasks: ["audit_log_analysis", "knowledge_absorption", "cache_cleanup"]
+      
+      - name: "weekly"
+        enabled: true
+        tasks: ["vacuum", "duplicate_detection", "conflict_resolution", "orchestrator_optimization"]
+      
+      - name: "monthly"
+        enabled: true
+        tasks: ["deep_cleanup", "knowledge_consolidation", "regression_testing"]
+      
+      - name: "on_demand"
+        enabled: true
+        tasks: ["all"]  # User-triggered comprehensive housekeeping
+  
+  phases:
+    - id: 1
+      name: "AUDIT_LOG_ANALYSIS"
+      description: "Search and destroy bugs by analyzing execution audit logs"
+      activities:
+        - "Load all audit logs from cortex-brain/tier1/audit-logs/"
+        - "Parse logs by orchestrator_id, severity, status"
+        - "Identify patterns: repeated failures, timeouts, state corruption"
+        - "Generate bug report with root cause analysis"
+        - "Create fix recommendations (code changes, config updates)"
+      outputs:
+        - "cortex-brain/tier2/housekeeping/bug-reports/audit-analysis-{timestamp}.yaml"
+      metrics:
+        - "total_violations_found"
+        - "critical_bugs_detected"
+        - "repeated_failures_count"
+        - "fix_recommendations_count"
+    
+    - id: 2
+      name: "KNOWLEDGE_ABSORPTION"
+      description: "Absorb knowledge from tiers and business domains"
+      activities:
+        - "Scan tier1 (working memory) for valuable knowledge"
+        - "Extract reusable patterns from execution logs"
+        - "Identify knowledge gaps (missing best practices)"
+        - "Promote tier1 → tier2 knowledge (if valuable)"
+        - "Update business domain knowledge (company-specific learnings)"
+      outputs:
+        - "cortex-brain/tier2/housekeeping/knowledge-absorption-{timestamp}.yaml"
+      metrics:
+        - "knowledge_items_absorbed"
+        - "tier1_to_tier2_promotions"
+        - "business_domain_updates"
+        - "knowledge_gaps_identified"
+    
+    - id: 3
+      name: "REDUNDANCY_ELIMINATION"
+      description: "Remove redundancies, duplications, conflicts"
+      activities:
+        - "Detect duplicate orchestrator manifests"
+        - "Find conflicting configuration entries"
+        - "Identify redundant middleware implementations"
+        - "Consolidate duplicate knowledge entries"
+        - "Remove obsolete files (old manifests, deprecated configs)"
+      outputs:
+        - "cortex-brain/tier2/housekeeping/redundancy-report-{timestamp}.yaml"
+      metrics:
+        - "duplicates_removed"
+        - "conflicts_resolved"
+        - "obsolete_files_deleted"
+        - "space_reclaimed_mb"
+    
+    - id: 4
+      name: "ORCHESTRATOR_OPTIMIZATION"
+      description: "Optimize toolkits and orchestrators based on usage metrics"
+      activities:
+        - "Analyze orchestrator usage frequency (from audit logs)"
+        - "Identify underutilized orchestrators (candidates for deprecation)"
+        - "Detect performance bottlenecks (slow phases, memory leaks)"
+        - "Generate optimization recommendations (refactor, merge, deprecate)"
+        - "Update orchestrator priorities based on usage patterns"
+      outputs:
+        - "cortex-brain/tier2/housekeeping/orchestrator-optimization-{timestamp}.yaml"
+      metrics:
+        - "orchestrators_optimized"
+        - "orchestrators_deprecated"
+        - "performance_improvements_percent"
+        - "priority_adjustments"
+    
+    - id: 5
+      name: "CACHE_CLEANUP"
+      description: "Clean up caches, temporary files, expired state"
+      activities:
+        - "Clear expired knowledge cache entries"
+        - "Remove stale state database entries (>30 days old)"
+        - "Clean up temporary execution files"
+        - "Vacuum SQLite databases (VACUUM command)"
+        - "Prune old audit logs (keep 90 days)"
+      outputs:
+        - "cortex-brain/tier2/housekeeping/cache-cleanup-{timestamp}.yaml"
+      metrics:
+        - "cache_entries_cleared"
+        - "stale_state_removed"
+        - "temp_files_deleted"
+        - "space_reclaimed_mb"
+    
+    - id: 6
+      name: "CONFLICT_RESOLUTION"
+      description: "Resolve conflicts in knowledge, configs, manifests"
+      activities:
+        - "Detect conflicting orchestrator patterns (overlapping regex)"
+        - "Find conflicting knowledge entries (CORTEX vs company)"
+        - "Identify configuration conflicts (duplicate keys)"
+        - "Resolve conflicts using priority rules"
+        - "Update conflict resolution audit log"
+      outputs:
+        - "cortex-brain/tier2/housekeeping/conflict-resolution-{timestamp}.yaml"
+      metrics:
+        - "conflicts_detected"
+        - "conflicts_resolved"
+        - "conflicts_remaining"
+        - "resolution_method"
+    
+    - id: 7
+      name: "VALIDATION"
+      description: "Validate CORTEX integrity after housekeeping"
+      activities:
+        - "Run SKULL test suite"
+        - "Validate all orchestrator manifests (schema validation)"
+        - "Check orchestrator registry integrity"
+        - "Verify knowledge library links (no broken references)"
+        - "Test master orchestrator routing (pattern validation)"
+      outputs:
+        - "cortex-brain/tier2/housekeeping/validation-{timestamp}.yaml"
+      metrics:
+        - "skull_tests_passed"
+        - "manifests_validated"
+        - "broken_references_found"
+        - "routing_tests_passed"
+
+# Audit Log Analysis Patterns
+audit_log_patterns:
+  repeated_failures:
+    description: "Same orchestrator failing repeatedly (>3 times in 24h)"
+    severity: "critical"
+    action: "generate_bug_report"
+    investigation:
+      - "Analyze stack traces"
+      - "Identify common failure points"
+      - "Check state database consistency"
+      - "Review recent code changes"
+  
+  timeout_patterns:
+    description: "Orchestrators timing out (execution_time > timeout)"
+    severity: "high"
+    action: "performance_optimization_recommendation"
+    investigation:
+      - "Profile execution time per phase"
+      - "Identify slow operations (I/O, network, computation)"
+      - "Suggest incremental execution"
+      - "Recommend caching or optimization"
+  
+  state_corruption:
+    description: "State database corruption (SQLite errors, JSON parse errors)"
+    severity: "critical"
+    action: "rollback_and_repair"
+    investigation:
+      - "Backup corrupted state"
+      - "Rollback to last valid checkpoint"
+      - "Analyze corruption cause (concurrent writes?)"
+      - "Implement locking or WAL mode"
+  
+  governance_violations:
+    description: "Repeated governance rule violations (same rule, same file)"
+    severity: "high"
+    action: "automated_fix_or_block"
+    investigation:
+      - "Identify violation patterns (missing type hints, docstrings)"
+      - "Generate automated fix (if possible)"
+      - "Block orchestrator execution until fixed"
+
+# Knowledge Absorption Rules
+knowledge_absorption:
+  tier1_promotion_criteria:
+    - "Used in ≥3 different orchestrators"
+    - "Generalizable pattern (not project-specific)"
+    - "High value (improves efficiency, accuracy, reliability)"
+    - "Well-documented (examples, rationale)"
+  
+  business_domain_update_criteria:
+    - "Company-specific knowledge (not in CORTEX core)"
+    - "Overrides CORTEX best practices (intelligently)"
+    - "Validated by domain experts"
+    - "Relevant to ≥2 business domains"
+  
+  knowledge_gap_detection:
+    - "Missing best practices (identified in audit logs)"
+    - "Frequent user questions (not in knowledge library)"
+    - "External knowledge sources (Stack Overflow, GitHub issues)"
+
+# Redundancy Elimination Rules
+redundancy_rules:
+  duplicate_manifests:
+    detection: "File hash comparison + semantic similarity"
+    action: "Consolidate into single manifest + create aliases"
+  
+  conflicting_configs:
+    detection: "Duplicate keys with different values"
+    resolution: "Priority order: tier0 > tier2 > tier3"
+  
+  redundant_middleware:
+    detection: "Same logic in multiple middleware classes"
+    action: "Extract to shared utility + refactor"
+  
+  obsolete_files:
+    detection: "Not referenced in any active orchestrator or config"
+    action: "Move to cortex-brain/archives/ (safe deletion)"
+
+# Orchestrator Optimization Metrics
+orchestrator_metrics:
+  usage_tracking:
+    - metric: "invocation_count_30d"
+      threshold_low: 5  # <5 invocations in 30 days = underutilized
+      action: "deprecation_candidate"
+    
+    - metric: "average_execution_time"
+      threshold_high: 300  # >300s = performance bottleneck
+      action: "performance_optimization_required"
+    
+    - metric: "failure_rate_percent"
+      threshold_high: 10  # >10% failure rate = reliability issue
+      action: "stability_improvement_required"
+    
+    - metric: "user_satisfaction_score"
+      threshold_low: 3.0  # <3.0/5.0 = poor user experience
+      action: "ux_improvement_required"
+
+# Integration with Master Orchestrator
+master_orchestrator_integration:
+  automatic_triggers:
+    - event: "orchestrator_failure"
+      frequency: "immediate"
+      phases: ["AUDIT_LOG_ANALYSIS"]
+    
+    - event: "daily_schedule"
+      frequency: "daily"
+      phases: ["AUDIT_LOG_ANALYSIS", "KNOWLEDGE_ABSORPTION", "CACHE_CLEANUP"]
+    
+    - event: "weekly_schedule"
+      frequency: "weekly"
+      phases: ["REDUNDANCY_ELIMINATION", "ORCHESTRATOR_OPTIMIZATION", "CONFLICT_RESOLUTION"]
+    
+    - event: "monthly_schedule"
+      frequency: "monthly"
+      phases: ["VALIDATION"]
+  
+  manual_triggers:
+    - pattern: "^(housekeeping|system health|cortex maintenance).*$"
+      phases: ["all"]
+      requires_confirmation: false
+
+# Outputs
+outputs:
+  consolidated_report:
+    path: "cortex-brain/tier2/housekeeping/consolidated-report-{timestamp}.yaml"
+    format: "yaml"
+    schema:
+      metadata:
+        execution_frequency: str
+        started_at: datetime
+        completed_at: datetime
+        duration_seconds: int
+      
+      audit_log_analysis:
+        bugs_detected: int
+        critical_bugs: List[Dict[str, Any]]
+        repeated_failures: List[Dict[str, Any]]
+        fix_recommendations: List[str]
+      
+      knowledge_absorption:
+        knowledge_absorbed: int
+        tier1_to_tier2_promotions: int
+        business_domain_updates: int
+        knowledge_gaps: List[str]
+      
+      redundancy_elimination:
+        duplicates_removed: int
+        conflicts_resolved: int
+        obsolete_files_deleted: int
+        space_reclaimed_mb: float
+      
+      orchestrator_optimization:
+        orchestrators_optimized: int
+        orchestrators_deprecated: List[str]
+        performance_improvements: List[Dict[str, Any]]
+        priority_adjustments: List[Dict[str, Any]]
+      
+      cache_cleanup:
+        cache_entries_cleared: int
+        stale_state_removed: int
+        temp_files_deleted: int
+        space_reclaimed_mb: float
+      
+      conflict_resolution:
+        conflicts_detected: int
+        conflicts_resolved: int
+        conflicts_remaining: List[Dict[str, Any]]
+      
+      validation:
+        skull_tests_passed: int
+        skull_tests_failed: int
+        manifests_validated: int
+        broken_references: List[str]
+        routing_tests_passed: int
+
+# Response Template
+response_template:
+  format: "autonomous_execution_progress"
+  display_rules:
+    phase_updates_only: true
+    no_task_narration: true
+    progress_bars: true
+    max_lines: 40
+  
+  completion_message:
+    template: |
+      ## ✅ Housekeeping Complete
+      
+      **Frequency:** {execution_frequency}
+      **Progress:** {completed}/{total} phases ({percentage}%)
+      {visual_progress_bar}
+      
+      **Key Findings:**
+      - 🐛 Bugs Detected: {bugs_detected}
+      - 📚 Knowledge Absorbed: {knowledge_absorbed}
+      - 🧹 Duplicates Removed: {duplicates_removed}
+      - ⚡ Orchestrators Optimized: {orchestrators_optimized}
+      
+      **Space Reclaimed:** {space_reclaimed_mb} MB
+      
+      **Report:** {report_path}

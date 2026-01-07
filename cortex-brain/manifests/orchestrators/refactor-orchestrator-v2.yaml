@@ -1,0 +1,302 @@
+# Refactor Orchestrator v2 - Master Refactoring Coordinator
+# Author: Asif Hussain
+# Copyright © 2025-2026 Asif Hussain. All rights reserved.
+
+schema_version: "5.0"
+
+orchestrator:
+  name: "refactor_orchestrator"
+  version: "2.0.0"
+  type: "autonomous"
+  description: "Master refactoring coordinator that routes to specialized child refactoring orchestrators"
+  implementation: "src/orchestrators/refactor/refactor_orchestrator_v2.py"
+  base_class: "BaseOrchestratorV4_1"
+  
+  # Parent orchestrator - delegates to children based on request analysis
+  orchestration_model: "parent_child"
+  
+  phases:
+    - id: 1
+      name: "ANALYSIS"
+      description: "Analyze request and determine which child orchestrators to engage"
+      activities:
+        - "Parse refactor request (scope, target files, refactor type)"
+        - "Classify refactor type (code quality, architecture, documentation, tests)"
+        - "Determine child orchestrator sequence"
+        - "Create in-memory todo list for master orchestrator"
+    
+    - id: 2
+      name: "ORCHESTRATION"
+      description: "Invoke child orchestrators in determined order"
+      activities:
+        - "Execute child orchestrators sequentially or in parallel"
+        - "Track completion status in todo list"
+        - "Handle failures and rollback if needed"
+        - "Aggregate results from all children"
+    
+    - id: 3
+      name: "VALIDATION"
+      description: "Verify refactoring quality and completeness"
+      activities:
+        - "Run static analysis (mypy, pylint, black, isort)"
+        - "Execute test suite (pytest)"
+        - "Check coverage (≥80% unit, ≥60% integration)"
+        - "Validate no regressions introduced"
+    
+    - id: 4
+      name: "COMPLETION"
+      description: "Generate consolidated report and commit changes"
+      activities:
+        - "Aggregate metrics from all child orchestrators"
+        - "Generate refactor report (YAML format)"
+        - "Create git checkpoint"
+        - "Update audit logs"
+
+# Child Orchestrators (Registered in orchestrators.json)
+child_orchestrators:
+  code_quality:
+    orchestrator_id: "refactor_code_quality"
+    description: "Code quality improvements (complexity, duplication, naming)"
+    triggers:
+      - "improve code quality"
+      - "reduce complexity"
+      - "remove duplication"
+    capabilities:
+      - "cyclomatic_complexity_reduction"
+      - "duplicate_code_elimination"
+      - "naming_standardization"
+      - "import_optimization"
+  
+  architecture:
+    orchestrator_id: "refactor_architecture"
+    description: "Architectural refactoring (SOLID, design patterns)"
+    triggers:
+      - "refactor architecture"
+      - "apply design pattern"
+      - "improve modularity"
+    capabilities:
+      - "solid_principles_enforcement"
+      - "design_pattern_application"
+      - "dependency_injection"
+      - "module_restructuring"
+  
+  documentation:
+    orchestrator_id: "refactor_documentation"
+    description: "Documentation improvements (docstrings, comments, README)"
+    triggers:
+      - "improve documentation"
+      - "fix docstrings"
+      - "update readme"
+    capabilities:
+      - "docstring_generation"
+      - "google_style_enforcement"
+      - "type_hint_validation"
+      - "readme_synchronization"
+  
+  tests:
+    orchestrator_id: "refactor_tests"
+    description: "Test refactoring (coverage, quality, performance)"
+    triggers:
+      - "improve tests"
+      - "increase coverage"
+      - "refactor test suite"
+    capabilities:
+      - "coverage_gap_analysis"
+      - "test_quality_improvement"
+      - "fixture_optimization"
+      - "assertion_enhancement"
+
+# Routing Intelligence (How parent decides which children to invoke)
+routing_rules:
+  - trigger_pattern: "refactor|improve|optimize"
+    analysis_method: "llm_classification"  # Use LLM to classify refactor type
+    fallback: "code_quality"  # Default if classification ambiguous
+  
+  - trigger_pattern: "code quality|complexity|duplication"
+    child_orchestrators: ["code_quality"]
+    sequence: "sequential"
+  
+  - trigger_pattern: "architecture|solid|design pattern"
+    child_orchestrators: ["architecture"]
+    sequence: "sequential"
+  
+  - trigger_pattern: "documentation|docstrings|readme"
+    child_orchestrators: ["documentation"]
+    sequence: "sequential"
+  
+  - trigger_pattern: "tests|coverage|fixtures"
+    child_orchestrators: ["tests"]
+    sequence: "sequential"
+  
+  - trigger_pattern: "comprehensive|full|complete"
+    child_orchestrators: ["code_quality", "architecture", "documentation", "tests"]
+    sequence: "sequential"  # Must run in order (quality → arch → docs → tests)
+
+# Todo List Management (In-Memory State for Master Orchestrator)
+todo_list:
+  structure:
+    - orchestrator_id: str
+    - status: "pending" | "in_progress" | "completed" | "failed"
+    - start_time: datetime
+    - end_time: datetime
+    - result: Dict[str, Any]
+    - error: Optional[str]
+  
+  tracking_method: "state_db"  # Persist to PlanningStateDB
+  state_key: "refactor_orchestrator_todo"
+
+# Static Analysis Integration
+static_analysis:
+  tools:
+    - name: "mypy"
+      command: "mypy src/ --strict --show-error-codes"
+      pass_criteria: "zero_errors"
+      severity: "blocked"
+    
+    - name: "pylint"
+      command: "pylint src/ --rcfile=.pylintrc"
+      pass_criteria: "score_gte_8_0"
+      severity: "blocked"
+    
+    - name: "pydocstyle"
+      command: "pydocstyle src/ --convention=google"
+      pass_criteria: "zero_errors"
+      severity: "blocked"
+    
+    - name: "black"
+      command: "black src/ --check --line-length=100"
+      pass_criteria: "zero_diffs"
+      severity: "warning"
+    
+    - name: "isort"
+      command: "isort src/ --check-only --profile=black"
+      pass_criteria: "zero_diffs"
+      severity: "warning"
+    
+    - name: "pytest"
+      command: "pytest tests/ -v"
+      pass_criteria: "100_percent_pass"
+      severity: "blocked"
+    
+    - name: "coverage"
+      command: "coverage run -m pytest && coverage report"
+      pass_criteria: "unit_80_integration_60"
+      severity: "blocked"
+
+# Outputs
+outputs:
+  report:
+    path: "cortex-brain/tier1/refactor-reports/refactor-{timestamp}.yaml"
+    format: "yaml"
+    schema:
+      metadata:
+        orchestrator_id: str
+        version: str
+        started_at: datetime
+        completed_at: datetime
+        duration_seconds: int
+      
+      request:
+        original: str
+        parsed: Dict[str, Any]
+        classified_types: List[str]
+      
+      execution:
+        child_orchestrators_invoked: List[str]
+        sequence: str
+        todo_list: List[Dict[str, Any]]
+      
+      validation:
+        static_analysis_results: Dict[str, Any]
+        test_results: Dict[str, Any]
+        coverage: Dict[str, float]
+        regressions: List[str]
+      
+      metrics:
+        files_refactored: int
+        lines_changed: int
+        complexity_before: float
+        complexity_after: float
+        complexity_improvement_percent: float
+        test_coverage_before: float
+        test_coverage_after: float
+        coverage_improvement_percent: float
+      
+      artifacts:
+        files_created: List[str]
+        files_modified: List[str]
+        files_deleted: List[str]
+        git_checkpoint: Optional[str]
+      
+      recommendations:
+        immediate: List[str]
+        short_term: List[str]
+        long_term: List[str]
+
+# Governance Integration
+governance:
+  audit_logging: true
+  audit_log_path: "cortex-brain/tier1/audit-logs/refactor-audit-{timestamp}.jsonl"
+  
+  rules_enforced:
+    - "PYTHON_TYPE_HINTS_MANDATORY"
+    - "PYTHON_DOCSTRINGS_MANDATORY"
+    - "PYTHON_ERROR_HANDLING_REQUIRED"
+    - "PYTHON_SOLID_PRINCIPLES_REQUIRED"
+    - "PYTHON_IMPORT_ORGANIZATION_REQUIRED"
+    - "PYTHON_CODE_FORMATTING_REQUIRED"
+  
+  blocking_rules:
+    - rule_id: "PYTHON_TYPE_HINTS_MANDATORY"
+      action: "block_phase_progression"
+      validation: "mypy --strict passes"
+    
+    - rule_id: "PYTHON_DOCSTRINGS_MANDATORY"
+      action: "block_phase_progression"
+      validation: "pydocstyle passes"
+
+# Response Template
+response_template:
+  format: "autonomous_execution_progress"
+  template_path: "cortex-brain/response-templates-v4.yaml:863"
+  
+  display_rules:
+    phase_updates_only: true
+    no_task_narration: true
+    progress_bars: true
+    max_lines: 40
+    
+  completion_message:
+    template: |
+      ## ✅ Refactor Complete
+      
+      **Orchestrators:** {child_orchestrators} ({count})
+      **Progress:** {completed}/{total} phases ({percentage}%)
+      {visual_progress_bar}
+      
+      **Delivered:**
+      - {artifact_1}
+      - {artifact_2}
+      - {artifact_3}
+      
+      **Quality Metrics:**
+      - Complexity: {complexity_improvement}% improvement
+      - Coverage: {coverage_improvement}% improvement
+      - Static Analysis: {static_analysis_status}
+      
+      **Report:** {report_path}
+
+# Master Orchestrator Integration
+master_orchestrator_integration:
+  registration_required: true
+  pattern: "^(refactor|improve code|optimize code|clean up code).*$"
+  priority: 35
+  
+  handoff_protocol:
+    - "MasterOrchestrator receives refactor request"
+    - "MasterOrchestrator matches pattern → routes to RefactorOrchestrator"
+    - "RefactorOrchestrator analyzes request → determines child orchestrators"
+    - "RefactorOrchestrator executes children → tracks in todo list"
+    - "RefactorOrchestrator validates results → generates report"
+    - "RefactorOrchestrator returns to MasterOrchestrator"
+    - "MasterOrchestrator renders response → displays to user"
