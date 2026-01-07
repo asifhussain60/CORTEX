@@ -1,0 +1,24 @@
+source: multi-threaded-crawler
+patterns:
+  api_auth: none
+  service_naming: I{Name} interface
+  test_test_types:
+  - e2e
+  - unit
+  test_selector_strategy: id
+  ui_di_pattern: none
+  api_versioning: url-path
+  service_di_registration: Program.cs
+  ui_component_structure: feature-based
+  service_layering: service-only
+  test_framework: Playwright
+  ui_naming: PascalCase
+  api_routing: attribute-based
+last_updated: 2025-11-04T10:26:42Z
+sources:
+- Test
+- API
+- UI
+- Service
+confidence: 0.8500000000000001
+

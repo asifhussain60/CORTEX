@@ -1,0 +1,415 @@
+{
+  "compliance_score": {
+    "overall_compliance": 74.34,
+    "low_violations": 405,
+    "critical_violations": 0,
+    "grade": "C",
+    "medium_violations": 0,
+    "high_violations": 3
+  },
+  "recommendations": [
+    "Fix 3 animation tier violations (use T1 only on Level 1)",
+    "Replace 87 bullet lists with card-based layouts",
+    "Reduce CSS redundancy from 34.6% to <2%",
+    "Delete 871 unused CSS classes",
+    "Fix 734 missing CSS classes",
+    "Improve mobile-friendliness from B+ to A+"
+  ],
+  "glassmorphism_compliance": {
+    "violations": {
+      "bullet_list_violations": {
+        "instances": [
+          {
+            "issue": "Visual content using <ul> (should use cards per Principle 13)",
+            "line": 302,
+            "severity": "LOW",
+            "file": "faq.html",
+            "action": "REPLACE with .capability-tiles or .principle-card-grid"
+          },
+          {
+            "issue": "Visual content using <ul> (should use cards per Principle 13)",
+            "line": 776,
+            "severity": "LOW",
+            "file": "index.html",
+            "action": "REPLACE with .capability-tiles or .principle-card-grid"
+          },
+          {
+            "issue": "Visual content using <ul> (should use cards per Principle 13)",
+            "line": 799,
+            "severity": "LOW",
+            "file": "index.html",
+            "action": "REPLACE with .capability-tiles or .principle-card-grid"
+          },
+          {
+            "issue": "Visual content using <ul> (should use cards per Principle 13)",
+            "line": 801,
+            "severity": "LOW",
+            "file": "api-design.html",
+            "action": "REPLACE with .capability-tiles or .principle-card-grid"
+          },
+          {
+            "issue": "Visual content using <ul> (should use cards per Principle 13)",
+            "line": 812,
+            "severity": "LOW",
+            "file": "api-design.html",
+            "action": "REPLACE with .capability-tiles or .principle-card-grid"
+          },
+          {
+            "issue": "Visual content using <ul> (should use cards per Principle 13)",
+            "line": 659,
+            "severity": "LOW",
+            "file": "cloud.html",
+            "action": "REPLACE with .capability-tiles or .principle-card-grid"
+          },
+          {
+            "issue": "Visual content using <ul> (should use cards per Principle 13)",
+            "line": 763,
+            "severity": "LOW",
+            "file": "containers.html",
+            "action": "REPLACE with .capability-tiles or .principle-card-grid"
+          },
+          {
+            "issue": "Visual content using <ul> (should use cards per Principle 13)",
+            "line": 731,
+            "severity": "LOW",
+            "file": "database.html",
+            "action": "REPLACE with .capability-tiles or .principle-card-grid"
+          },
+          {
+            "issue": "Visual content using <ul> (should use cards per Principle 13)",
+            "line": 753,
+            "severity": "LOW",
+            "file": "database.html",
+            "action": "REPLACE with .capability-tiles or .principle-card-grid"
+          },
+          {
+            "issue": "Visual content using <ul> (should use cards per Principle 13)",
+            "line": 775,
+            "severity": "LOW",
+            "file": "database.html",
+            "action": "REPLACE with .capability-tiles or .principle-card-grid"
+          },
+          {
+            "issue": "Visual content using <ul> (should use cards per Principle 13)",
+            "line": 897,
+            "severity": "LOW",
+            "file": "database.html",
+            "action": "REPLACE with .capability-tiles or .principle-card-grid"
+          },
+          {
+            "issue": "Visual content using <ul> (should use cards per Principle 13)",
+            "line": 584,
+            "severity": "LOW",
+            "file": "ddd.html",
+            "action": "REPLACE with .capability-tiles or .principle-card-grid"
+          },
+          {
+            "issue": "Visual content using <ul> (should use cards per Principle 13)",
+            "line": 595,
+            "severity": "LOW",
+            "file": "ddd.html",
+            "action": "REPLACE with .capability-tiles or .principle-card-grid"
+          },
+          {
+            "issue": "Visual content using <ul> (should use cards per Principle 13)",
+            "line": 566,
+            "severity": "LOW",
+            "file": "devops.html",
+            "action": "REPLACE with .capability-tiles or .principle-card-grid"
+          },
+          {
+            "issue": "Visual content using <ul> (should use cards per Principle 13)",
+            "line": 577,
+            "severity": "LOW",
+            "file": "devops.html",
+            "action": "REPLACE with .capability-tiles or .principle-card-grid"
+          },
+          {
+            "issue": "Visual content using <ul> (should use cards per Principle 13)",
+            "line": 228,
+            "severity": "LOW",
+            "file": "engineering.html",
+            "action": "REPLACE with .capability-tiles or .principle-card-grid"
+          },
+          {
+            "issue": "Visual content using <ul> (should use cards per Principle 13)",
+            "line": 250,
+            "severity": "LOW",
+            "file": "engineering.html",
+            "action": "REPLACE with .capability-tiles or .principle-card-grid"
+          },
+          {
+            "issue": "Visual content using <ul> (should use cards per Principle 13)",
+            "line": 272,
+            "severity": "LOW",
+            "file": "engineering.html",
+            "action": "REPLACE with .capability-tiles or .principle-card-grid"
+          },
+          {
+            "issue": "Visual content using <ul> (should use cards per Principle 13)",
+            "line": 297,
+            "severity": "LOW",
+            "file": "engineering.html",
+            "action": "REPLACE with .capability-tiles or .principle-card-grid"
+          },
+          {
+            "issue": "Visual content using <ul> (should use cards per Principle 13)",
+            "line": 307,
+            "severity": "LOW",
+            "file": "engineering.html",
+            "action": "REPLACE with .capability-tiles or .principle-card-grid"
+          }
+        ],
+        "count": 87,
+        "severity": "LOW"
+      },
+      "hierarchy_violations": {
+        "instances": [
+          {
+            "depth": 3,
+            "action": "FLATTEN hierarchy or consolidate into Level 1 page",
+            "severity": "LOW",
+            "issue": "Page depth (3) exceeds Level 1 maximum (Principle 8)",
+            "file": "faq.html",
+            "path": "D:\\PROJECTS\\CORTEX\\docs\\faq.html"
+          },
+          {
+            "depth": 3,
+            "action": "FLATTEN hierarchy or consolidate into Level 1 page",
+            "severity": "LOW",
+            "issue": "Page depth (3) exceeds Level 1 maximum (Principle 8)",
+            "file": "index.html",
+            "path": "D:\\PROJECTS\\CORTEX\\docs\\index.html"
+          },
+          {
+            "depth": 3,
+            "action": "FLATTEN hierarchy or consolidate into Level 1 page",
+            "severity": "LOW",
+            "issue": "Page depth (3) exceeds Level 1 maximum (Principle 8)",
+            "file": "sitemap.html",
+            "path": "D:\\PROJECTS\\CORTEX\\docs\\sitemap.html"
+          },
+          {
+            "depth": 4,
+            "action": "FLATTEN hierarchy or consolidate into Level 1 page",
+            "severity": "LOW",
+            "issue": "Page depth (4) exceeds Level 1 maximum (Principle 8)",
+            "file": "agent-system.html",
+            "path": "D:\\PROJECTS\\CORTEX\\docs\\architecture\\agent-system.html"
+          },
+          {
+            "depth": 4,
+            "action": "FLATTEN hierarchy or consolidate into Level 1 page",
+            "severity": "LOW",
+            "issue": "Page depth (4) exceeds Level 1 maximum (Principle 8)",
+            "file": "four-tier-brain.html",
+            "path": "D:\\PROJECTS\\CORTEX\\docs\\architecture\\four-tier-brain.html"
+          },
+          {
+            "depth": 4,
+            "action": "FLATTEN hierarchy or consolidate into Level 1 page",
+            "severity": "LOW",
+            "issue": "Page depth (4) exceeds Level 1 maximum (Principle 8)",
+            "file": "index.html",
+            "path": "D:\\PROJECTS\\CORTEX\\docs\\architecture\\index.html"
+          },
+          {
+            "depth": 4,
+            "action": "FLATTEN hierarchy or consolidate into Level 1 page",
+            "severity": "LOW",
+            "issue": "Page depth (4) exceeds Level 1 maximum (Principle 8)",
+            "file": "knowledge-graph.html",
+            "path": "D:\\PROJECTS\\CORTEX\\docs\\architecture\\knowledge-graph.html"
+          },
+          {
+            "depth": 4,
+            "action": "FLATTEN hierarchy or consolidate into Level 1 page",
+            "severity": "LOW",
+            "issue": "Page depth (4) exceeds Level 1 maximum (Principle 8)",
+            "file": "multi-repo.html",
+            "path": "D:\\PROJECTS\\CORTEX\\docs\\architecture\\multi-repo.html"
+          },
+          {
+            "depth": 4,
+            "action": "FLATTEN hierarchy or consolidate into Level 1 page",
+            "severity": "LOW",
+            "issue": "Page depth (4) exceeds Level 1 maximum (Principle 8)",
+            "file": "orchestrator-ecosystem.html",
+            "path": "D:\\PROJECTS\\CORTEX\\docs\\architecture\\orchestrator-ecosystem.html"
+          },
+          {
+            "depth": 4,
+            "action": "FLATTEN hierarchy or consolidate into Level 1 page",
+            "severity": "LOW",
+            "issue": "Page depth (4) exceeds Level 1 maximum (Principle 8)",
+            "file": "skull-protection.html",
+            "path": "D:\\PROJECTS\\CORTEX\\docs\\architecture\\skull-protection.html"
+          },
+          {
+            "depth": 4,
+            "action": "FLATTEN hierarchy or consolidate into Level 1 page",
+            "severity": "LOW",
+            "issue": "Page depth (4) exceeds Level 1 maximum (Principle 8)",
+            "file": "working-memory.html",
+            "path": "D:\\PROJECTS\\CORTEX\\docs\\architecture\\working-memory.html"
+          },
+          {
+            "depth": 4,
+            "action": "FLATTEN hierarchy or consolidate into Level 1 page",
+            "severity": "LOW",
+            "issue": "Page depth (4) exceeds Level 1 maximum (Principle 8)",
+            "file": "index.html",
+            "path": "D:\\PROJECTS\\CORTEX\\docs\\best-practices\\index.html"
+          },
+          {
+            "depth": 5,
+            "action": "FLATTEN hierarchy or consolidate into Level 1 page",
+            "severity": "LOW",
+            "issue": "Page depth (5) exceeds Level 1 maximum (Principle 8)",
+            "file": "coding-standards.html",
+            "path": "D:\\PROJECTS\\CORTEX\\docs\\best-practices\\best-practices\\coding-standards.html"
+          },
+          {
+            "depth": 5,
+            "action": "FLATTEN hierarchy or consolidate into Level 1 page",
+            "severity": "LOW",
+            "issue": "Page depth (5) exceeds Level 1 maximum (Principle 8)",
+            "file": "collaboration-patterns.html",
+            "path": "D:\\PROJECTS\\CORTEX\\docs\\best-practices\\best-practices\\collaboration-patterns.html"
+          },
+          {
+            "depth": 5,
+            "action": "FLATTEN hierarchy or consolidate into Level 1 page",
+            "severity": "LOW",
+            "issue": "Page depth (5) exceeds Level 1 maximum (Principle 8)",
+            "file": "planning-guidelines.html",
+            "path": "D:\\PROJECTS\\CORTEX\\docs\\best-practices\\best-practices\\planning-guidelines.html"
+          },
+          {
+            "depth": 4,
+            "action": "FLATTEN hierarchy or consolidate into Level 1 page",
+            "severity": "LOW",
+            "issue": "Page depth (4) exceeds Level 1 maximum (Principle 8)",
+            "file": "ado-operations.html",
+            "path": "D:\\PROJECTS\\CORTEX\\docs\\features\\ado-operations.html"
+          },
+          {
+            "depth": 4,
+            "action": "FLATTEN hierarchy or consolidate into Level 1 page",
+            "severity": "LOW",
+            "issue": "Page depth (4) exceeds Level 1 maximum (Principle 8)",
+            "file": "dashboard-system.html",
+            "path": "D:\\PROJECTS\\CORTEX\\docs\\features\\dashboard-system.html"
+          },
+          {
+            "depth": 4,
+            "action": "FLATTEN hierarchy or consolidate into Level 1 page",
+            "severity": "LOW",
+            "issue": "Page depth (4) exceeds Level 1 maximum (Principle 8)",
+            "file": "execution-orchestrator.html",
+            "path": "D:\\PROJECTS\\CORTEX\\docs\\features\\execution-orchestrator.html"
+          },
+          {
+            "depth": 4,
+            "action": "FLATTEN hierarchy or consolidate into Level 1 page",
+            "severity": "LOW",
+            "issue": "Page depth (4) exceeds Level 1 maximum (Principle 8)",
+            "file": "git-operations.html",
+            "path": "D:\\PROJECTS\\CORTEX\\docs\\features\\git-operations.html"
+          },
+          {
+            "depth": 4,
+            "action": "FLATTEN hierarchy or consolidate into Level 1 page",
+            "severity": "LOW",
+            "issue": "Page depth (4) exceeds Level 1 maximum (Principle 8)",
+            "file": "holistic-discovery.html",
+            "path": "D:\\PROJECTS\\CORTEX\\docs\\features\\holistic-discovery.html"
+          }
+        ],
+        "count": 318,
+        "severity": "LOW"
+      },
+      "spacing_violations": {
+        "instances": null,
+        "count": 0,
+        "severity": "MEDIUM"
+      },
+      "animation_tier_violations": {
+        "instances": [
+          {
+            "issue": "Level 1 pages must use animation-t1 only (found t2)",
+            "line": 420,
+            "severity": "HIGH",
+            "file": "index.html",
+            "action": "REPLACE with animation-t1"
+          },
+          {
+            "issue": "Level 1 pages must use animation-t1 only (found t2)",
+            "line": 424,
+            "severity": "HIGH",
+            "file": "index.html",
+            "action": "REPLACE with animation-t1"
+          },
+          {
+            "issue": "Level 1 pages must use animation-t1 only (found t2)",
+            "line": 428,
+            "severity": "HIGH",
+            "file": "index.html",
+            "action": "REPLACE with animation-t1"
+          }
+        ],
+        "count": 3,
+        "severity": "HIGH"
+      },
+      "inline_styles": {
+        "instances": null,
+        "count": 0,
+        "severity": "CRITICAL"
+      }
+    },
+    "total_html_files": 318,
+    "core_principles_compliance": {
+      "principle_10_responsive": {
+        "compliant": true,
+        "viewport_meta_tags": "100%"
+      },
+      "principle_9_no_inline_styles": {
+        "compliant": true,
+        "violations": 0
+      },
+      "principle_13_cards_over_bullets": {
+        "compliant": false,
+        "violations": 87
+      },
+      "principle_17_20_css_quality": {
+        "principle_20_mobile_first": {
+          "compliant": false,
+          "threshold": 95.0,
+          "grade": "B+",
+          "score": 87.2
+        },
+        "principle_17_zero_duplicates": {
+          "redundancy_percentage": 34.6,
+          "compliant": false,
+          "threshold": 2.0
+        },
+        "principle_18_100_usage": {
+          "unused_percentage": 58.14,
+          "compliant": false,
+          "threshold": 5.0
+        },
+        "principle_19_zero_missing": {
+          "compliant": false,
+          "missing_count": 734,
+          "threshold": 0
+        }
+      },
+      "principle_11_spacing": {
+        "compliant": true,
+        "violations": 0
+      }
+    },
+    "standard_version": "4.2.0"
+  },
+  "scan_timestamp": "2026-01-03T09:35:38.3752157-05:00"
+}

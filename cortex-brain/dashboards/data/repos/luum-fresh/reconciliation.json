@@ -1,0 +1,37 @@
+{
+  "reconciliation_timestamp": "2025-12-07T17:07:57.645178",
+  "reconciliation_version": "1.0.0",
+  "repository": "luum-fresh",
+  "execution_time_ms": 0.04601478576660156,
+  "reconciled_data": {
+    "security_score": 0,
+    "quality_score": 0,
+    "maintainability_score": 0,
+    "architecture_score": 0,
+    "test_coverage": 0,
+    "critical_vulnerabilities": 0,
+    "high_vulnerabilities": 0,
+    "security_hotspots": 0,
+    "code_smells": 0,
+    "cyclomatic_complexity": 1.33,
+    "modularity_score": 0,
+    "overall_score": 0.0
+  },
+  "violations": [],
+  "anomalies": [],
+  "audit_trail": {
+    "changes": [],
+    "rules_triggered": 0,
+    "anomalies_detected": 0,
+    "execution_time_ms": 0.04601478576660156
+  },
+  "metrics": {
+    "total_adjustments": 0,
+    "total_score_delta": 0,
+    "rules_triggered": 0,
+    "violations_count": 0,
+    "anomalies_count": 0,
+    "confidence_average": 0.0,
+    "execution_time_ms": 0.04601478576660156
+  }
+}

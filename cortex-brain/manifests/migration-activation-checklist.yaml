@@ -1,0 +1,350 @@
+schema_version: '1.0'
+last_updated: '2025-12-19'
+purpose: |
+  Migration Activation Checklist - Prevents "developed but not activated" failures
+  
+  CRITICAL RULE: For EVERY CORTEX 3.0 → 4.0 migration:
+  1. NEW functionality MUST be activated (referenced in copilot-instructions.md)
+  2. OLD functionality MUST be physically deleted from filesystem
+  3. Tests MUST reference new paths only
+  4. Documentation MUST be updated
+
+# ==============================================================================
+# ENFORCEMENT MECHANISM
+# ==============================================================================
+
+enforcement:
+  validation_script: scripts/validate_migration_activation.py
+  run_frequency: after_every_orchestrator_migration
+  blocking: true  # Migration not complete until validation passes
+  
+  checks:
+    - name: new_code_activated
+      description: New 4.0 code referenced in instructions/config
+      severity: CRITICAL
+      
+    - name: old_code_deleted
+      description: Old 3.0 code physically removed
+      severity: CRITICAL
+      
+    - name: tests_updated
+      description: Tests reference new paths only
+      severity: HIGH
+      
+    - name: docs_updated
+      description: Documentation points to new implementation
+      severity: MEDIUM
+
+# ==============================================================================
+# MIGRATION REGISTRY
+# ==============================================================================
+
+migrations:
+  # RESOLVED: Response templates activation complete
+  response_templates:
+    status: COMPLETE
+    new_path: cortex-brain/response-templates-v4.yaml
+    old_path: cortex-brain/core/response-templates-v4.yaml
+    activated_in:
+      - .github/copilot-instructions.md
+      - .github/prompts/CORTEX.prompt.md
+    deleted:
+      - status: COMPLETE
+        paths:
+          - cortex-brain/core/response-templates-v4.yaml
+        deleted_date: '2025-12-19'
+    notes: "v4.0 adaptive tiers activated, v3.0 15,851-line bloat deleted"
+    completion_date: '2025-12-19'
+    
+  # Phase 1 Foundation - COMPLETE
+  base_orchestrator:
+    status: COMPLETE
+    new_path: src/orchestration_4_0/base/base_orchestrator.py
+    old_path: null  # New component, no 3.0 equivalent
+    activated_in:
+      - src/orchestration_4_0/orchestrators/execution_orchestrator_v4.py
+      - src/orchestration_4_0/orchestrators/documentation_orchestrator_v4.py
+    deleted: []
+    completion_date: '2025-12-18'
+    
+  brain_tiers:
+    status: COMPLETE
+    new_path: src/brain/interface.py
+    old_path: null  # Refactored, not deleted
+    activated_in:
+      - src/orchestration_4_0/base/base_orchestrator.py
+      - .github/copilot-instructions.md
+    deleted: []
+    completion_date: '2025-12-18'
+    
+  di_container:
+    status: COMPLETE
+    new_path: src/di/container.py
+    old_path: null  # New component
+    activated_in:
+      - src/orchestration_4_0/base/base_orchestrator.py
+    deleted: []
+    completion_date: '2025-12-18'
+    
+  # Phase 3 Orchestrator Migrations
+  execution_orchestrator:
+    status: COMPLETE
+    new_path: src/orchestration_4_0/orchestrators/execution/execution_orchestrator.py
+    old_path: src/orchestrators/execution/execution_orchestrator.py
+    activated_in:
+      - CORTEX4-STATUS.md (milestone marker)
+    deleted:
+      - status: COMPLETE
+        paths:
+          - src/orchestrators/execution/execution_orchestrator.py
+        deleted_date: '2025-12-19'
+    notes: "First orchestrator migration - foundation validator"
+    completion_date: '2025-12-18'
+    
+  documentation_orchestrator:
+    status: COMPLETE
+    new_path: src/orchestration_4_0/orchestrators/documentation/documentation_orchestrator.py
+    old_path: src/orchestrators/documentation/
+    activated_in:
+      - CORTEX4-STATUS.md (milestone marker)
+    deleted:
+      - status: COMPLETE
+        paths:
+          - src/orchestrators/documentation/
+        deleted_date: '2025-12-19'
+    notes: "Second orchestrator - self-documentation capability"
+    completion_date: '2025-12-19'
+
+  # Phase 3 - PENDING (13 orchestrators remaining)
+  tdd_orchestrator:
+    status: PENDING
+    new_path: src/orchestration_4_0/orchestrators/tdd_orchestrator.py
+    old_path: src/tdd/*.py
+    activated_in: []
+    deleted: []
+    target_date: '2025-12-20'  # Week 7 Day 6-7
+    
+  planning_orchestrator:
+    status: PENDING
+    new_path: src/orchestration_4_0/orchestrators/planning_orchestrator_v4.py
+    old_path: src/planning/*.py
+    activated_in: []
+    deleted: []
+    target_date: '2025-12-24'  # Week 8
+    
+  # ... (11 more orchestrators to track)
+
+# ==============================================================================
+# VALIDATION RULES
+# ==============================================================================
+
+validation_rules:
+  new_code_activated:
+    description: |
+      New 4.0 implementation must be referenced in at least one of:
+      - .github/copilot-instructions.md (primary instructions)
+      - .github/prompts/CORTEX.prompt.md (full instructions)
+      - cortex.config.json (configuration)
+      - cortex-brain/manifests/ (orchestrator manifests)
+    checks:
+      - file_exists: "{new_path}"
+      - grep_match:
+          patterns:
+            - "{new_filename}"
+            - "{orchestrator_class_name}"
+          search_paths:
+            - .github/copilot-instructions.md
+            - .github/prompts/CORTEX.prompt.md
+            - cortex.config.json
+            - cortex-brain/manifests/*.yaml
+          min_matches: 1
+    failure_message: |
+      ❌ ACTIVATION FAILURE: {component_name}
+      
+      New code exists but is NOT activated:
+      - File: {new_path} ✅ EXISTS
+      - Referenced in instructions: ❌ NOT FOUND
+      
+      REQUIRED ACTION:
+      Update .github/copilot-instructions.md to reference new implementation
+      
+  old_code_deleted:
+    description: |
+      Old 3.0 implementation must be physically deleted from filesystem
+      Archives in archive/ directory are allowed
+    checks:
+      - file_not_exists: "{old_path}"
+      - directory_not_exists: "{old_directory}"
+      - allowed_exceptions:
+          - "archive/**"
+          - ".backup-archive/**"
+          - "cortex-brain/backups/**"
+    failure_message: |
+      ❌ DELETION FAILURE: {component_name}
+      
+      Old code still exists:
+      - Old: {old_path} ❌ STILL EXISTS
+      - New: {new_path} ✅ EXISTS
+      
+      REQUIRED ACTION:
+      1. Verify new code is activated and tested
+      2. Delete old implementation: rm -rf {old_path}
+      3. Run tests to confirm no breakage
+      
+  tests_updated:
+    description: |
+      Test files must reference new 4.0 paths, not old 3.0 paths
+      Search all test files for old path references
+    checks:
+      - grep_search:
+          patterns:
+            - "{old_path_pattern}"
+          search_paths:
+            - "tests/**/*.py"
+          max_matches: 0  # Zero matches = tests updated
+    failure_message: |
+      ❌ TEST UPDATE FAILURE: {component_name}
+      
+      Tests still reference old paths:
+      - Found {match_count} references to {old_path}
+      
+      REQUIRED ACTION:
+      Update test files to import from new paths:
+      - OLD: from src.orchestrators.planning import PlanningOrchestrator
+      - NEW: from src.orchestration_4_0.orchestrators.planning_orchestrator_v4 import PlanningOrchestratorV4
+      
+  docs_updated:
+    description: |
+      Documentation must point to new implementation
+      Check README files, architecture docs, MASTER-PLAN
+    checks:
+      - grep_search:
+          patterns:
+            - "{old_path_pattern}"
+          search_paths:
+            - "docs/**/*.md"
+            - "cortex-brain/documents/**/*.md"
+            - "README.md"
+          max_matches: 5  # Allow some historical references
+    failure_message: |
+      ⚠️  DOCUMENTATION WARNING: {component_name}
+      
+      Documentation may reference old paths
+      
+      RECOMMENDED ACTION:
+      Update architecture docs to reference new 4.0 paths
+
+# ==============================================================================
+# AUTOMATION HOOKS
+# ==============================================================================
+
+automation:
+  pre_commit_hook:
+    enabled: true
+    script: scripts/validate_migration_activation.py
+    run_when:
+      - files_changed: "src/orchestration_4_0/**/*.py"
+      - files_changed: "cortex-brain/manifests/migration-activation-checklist.yaml"
+    failure_action: BLOCK_COMMIT
+    
+  orchestrator_completion:
+    enabled: true
+    trigger: orchestrator.complete()
+    actions:
+      - update_migration_registry:
+          status: COMPLETE
+          completion_date: "{current_date}"
+      - run_validation:
+          migration: "{orchestrator_name}"
+      - update_master_plan:
+          metrics:
+            - orchestrators_migrated: +1
+            - completion_percentage: recalculate
+            
+  weekly_audit:
+    enabled: true
+    schedule: "every Sunday at 23:00"
+    actions:
+      - generate_report: migration_status_report.md
+      - check_for_orphaned_3_0_code
+      - verify_all_complete_migrations_activated
+
+# ==============================================================================
+# REPORTING
+# ==============================================================================
+
+reporting:
+  migration_status_dashboard:
+    path: cortex-brain/documents/reports/migration-activation-status.md
+    update_frequency: after_every_migration
+    sections:
+      - migration_progress:
+          format: progress_bar
+          show_completion_dates: true
+      - activation_failures:
+          highlight_color: red
+          show_remediation_steps: true
+      - old_code_cleanup:
+          list_files_to_delete: true
+      - test_update_status:
+          show_affected_files: true
+    
+  weekly_summary:
+    path: cortex-brain/documents/reports/weekly-migration-summary-{date}.md
+    format: executive_summary
+    include:
+      - migrations_completed_this_week
+      - activation_failures
+      - cleanup_completed
+      - tests_updated
+      - blockers
+
+# ==============================================================================
+# ROLLBACK PROCEDURE
+# ==============================================================================
+
+rollback:
+  trigger_conditions:
+    - activation_validation_fails
+    - tests_fail_after_deletion
+    - critical_bug_in_new_code
+    
+  procedure:
+    1_pause_deletion:
+      description: Stop deletion of old 3.0 code
+      action: Mark old_path as DO_NOT_DELETE
+      
+    2_deactivate_new:
+      description: Remove references to new 4.0 code
+      action: Revert copilot-instructions.md changes
+      
+    3_reactivate_old:
+      description: Restore old 3.0 code if deleted
+      action: Restore from archive/ or git history
+      
+    4_run_tests:
+      description: Verify old code still works
+      action: pytest tests/
+      
+    5_create_incident:
+      description: Document rollback reason
+      path: cortex-brain/documents/investigations/migration-rollback-{date}.md
+
+# ==============================================================================
+# METRICS
+# ==============================================================================
+
+metrics:
+  track:
+    - total_migrations_planned: 17  # 2 complete + 15 pending
+    - migrations_completed: 2
+    - migrations_activated: 1  # ExecutionOrchestrator only
+    - migrations_with_cleanup: 0  # None deleted yet
+    - activation_failures: 1  # response-templates-v4
+    - average_activation_time: null
+    - cleanup_lag_days: null
+    
+  targets:
+    - activation_rate: 100%  # All new code must be activated
+    - cleanup_within_days: 7  # Delete old code within 1 week
+    - zero_orphaned_code: true  # No unused 3.0 code at GA

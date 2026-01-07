@@ -1,0 +1,13 @@
+{
+  "operations_count": 24,
+  "modules_count": 45,
+  "categories": [
+    "Memory & Context",
+    "Documentation Generation",
+    "Code Analysis",
+    "Natural Language Interface",
+    "Testing & Validation",
+    "Security & Governance",
+    "Operations & Workflows"
+  ]
+}

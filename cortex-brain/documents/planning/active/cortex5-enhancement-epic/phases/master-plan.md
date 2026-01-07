@@ -91,25 +91,13 @@ src/orchestrators/custom/
 
 ---
 
-## 📅 Implementation Timeline (10 Weeks, 4 Parallel Tracks)
+## 📅 Implementation Timeline (9 Weeks, 3 Parallel Tracks)
 
-### Track 0: Infrastructure Cleanup (Week 1) 🧹 FOUNDATION HYGIENE
-
-| Phase | Name | Duration | Dependencies | Priority |
-|-------|------|----------|--------------|----------|
-| **P0** | Vacuum Orchestrator v3 | 1 week | Phase 0 | 🔥 CRITICAL |
-
-**Track Goal:** Clean and optimize CORTEX infrastructure before building new features
-
-**Snowball Effect:** Clean folder structure reduces complexity for all subsequent phases
-
----
-
-### Track 1: Core Intelligence (Weeks 2-5) 🎯 FOUNDATION
+### Track 1: Core Intelligence (Weeks 1-4) 🎯 FOUNDATION
 
 | Phase | Name | Duration | Dependencies | Priority |
 |-------|------|----------|--------------|----------|
-| **P1** | Company Knowledge Extension | 2 weeks | P0 | 🔥 CRITICAL |
+| **P1** | Company Knowledge Extension | 2 weeks | Phase 0 | 🔥 CRITICAL |
 | **P2** | Orchestrator Registry System | 1 week | P1 | 🔥 CRITICAL |
 | **P3** | Intelligent Goal Detection | 1 week | P2 | 🔥 HIGH |
 
@@ -117,7 +105,7 @@ src/orchestrators/custom/
 
 ---
 
-### Track 2: Business Extensibility (Weeks 4-7) 🚀 CAPABILITY
+### Track 2: Business Extensibility (Weeks 3-6) 🚀 CAPABILITY
 
 | Phase | Name | Duration | Dependencies | Priority |
 |-------|------|----------|--------------|----------|
@@ -129,7 +117,7 @@ src/orchestrators/custom/
 
 ---
 
-### Track 3: Quality & UX (Weeks 6-9) ✨ POLISH
+### Track 3: Quality & UX (Weeks 5-8) ✨ POLISH
 
 | Phase | Name | Duration | Dependencies | Priority |
 |-------|------|----------|--------------|----------|
@@ -141,7 +129,7 @@ src/orchestrators/custom/
 
 ---
 
-### Track 4: Integration & Validation (Weeks 9-10) ✅ DELIVERY
+### Track 4: Integration & Validation (Weeks 8-9) ✅ DELIVERY
 
 | Phase | Name | Duration | Dependencies | Priority |
 |-------|------|----------|--------------|----------|
@@ -156,73 +144,47 @@ src/orchestrators/custom/
 
 ### Phase Sequencing Strategy
 
-**Week 1: Infrastructure Cleanup (P0)**
-- **P0: Vacuum Orchestrator v3**
-- Reorganizes folder structures per CORTEX specifications
-- Consolidates redundant reports and artifacts
-- Enforces governance rules for clean file management
-- **Snowball:** Clean codebase reduces cognitive load and accelerates all subsequent development
-
-**Week 2-3: Foundation Phase (P1)**
+**Week 1-2: Foundation Phase (P1)**
 - **P1: Company Knowledge Extension**
 - Establishes company knowledge folder structure
 - Creates `CompanyKnowledgeProvider` class
-- **Snowball:** All subsequent phases benefit from company knowledge context + clean folder structure
+- **Snowball:** All subsequent phases benefit from company knowledge context
 
-**Week 4: Registry Infrastructure (P2 + P3 start)**
-- **P2: Orchestrator Registry** (completes Week 4)
-- **P3: Goal Detection** (starts Week 4, continues Week 5)
+**Week 3: Registry Infrastructure (P2 + P3 start)**
+- **P2: Orchestrator Registry** (completes Week 3)
+- **P3: Goal Detection** (starts Week 3, continues Week 4)
 - Registry enables custom orchestrators
 - **Snowball:** Custom orchestrators can be registered immediately after P2
 
-**Week 5-6: Parallel Execution (P3 + P4)**
-- **P3: Goal Detection** (completes Week 5)
-- **P4: Custom Orchestrator Framework** (Weeks 5-6, parallel with P3)
+**Week 4-5: Parallel Execution (P3 + P4)**
+- **P3: Goal Detection** (completes Week 4)
+- **P4: Custom Orchestrator Framework** (Weeks 4-5, parallel with P3)
 - Independent streams maximize throughput
 - **Snowball:** Goal detection improves all orchestrators, framework enables customization
 
-**Week 6-7: Business Integration (P5 + P6 + P7 start)**
-- **P5: Knowledge Merge Logic** (Week 6)
-- **P6: Selenium→Playwright** (Week 7)
-- **P7: Goal Inheritance** (starts Week 6, parallel)
+**Week 5-6: Business Integration (P5 + P6 + P7 start)**
+- **P5: Knowledge Merge Logic** (Week 5)
+- **P6: Selenium→Playwright** (Week 6)
+- **P7: Goal Inheritance** (starts Week 5, parallel)
 - Reference implementation validates entire architecture
 - **Snowball:** Selenium→Playwright demonstrates value to stakeholders
 
-**Week 7-9: Quality Pipeline (P7 + P8 + P9)**
-- **P7: Goal Inheritance** (completes Week 7)
-- **P8: TDD Harness** (Week 8)
-- **P9: Plan Viewer + UX** (Week 9)
+**Week 6-8: Quality Pipeline (P7 + P8 + P9)**
+- **P7: Goal Inheritance** (completes Week 6)
+- **P8: TDD Harness** (Week 7)
+- **P9: Plan Viewer + UX** (Week 8)
 - Quality gates prevent technical debt
 - **Snowball:** TDD ensures all prior work is tested
 
-**Week 9-10: Final Integration (P10 + P11)**
-- **P10: E2E Testing** (Week 9)
-- **P11: Optimization + Docs** (Week 10)
+**Week 8-9: Final Integration (P10 + P11)**
+- **P10: E2E Testing** (Week 8)
+- **P11: Optimization + Docs** (Week 9)
 - End-to-end validation catches integration issues
 - **Snowball:** Performance optimization benefits all components
 
 ---
 
 ## 📦 Deliverables by Track
-
-### Track 0: Infrastructure Cleanup
-
-**P0 Deliverables:**
-- `src/orchestrators/vacuum/vacuum_orchestrator_v3.py` (enhanced version)
-- Child orchestrator spawning framework
-- Folder reorganization engine with CORTEX spec compliance
-- Intelligent report consolidator (reduces footprint by 40%+)
-- Redundant file detection with AST-based similarity analysis
-- Governance rule enforcement middleware
-- Integration with cleanup orchestrator and brain protection rules
-- Real-time folder analysis dashboard
-- Automated backup system (pre-destructive operations)
-- Compliance tracker (cortex-brain tier structure validation)
-- Recursive directory traversal with pattern matching (glob + regex)
-- `cortex-brain/manifests/orchestrators/vacuum-v3-manifest.yaml`
-- Vacuum operation audit trail (JSON + SQLite)
-
----
 
 ### Track 1: Core Intelligence
 
@@ -309,20 +271,18 @@ src/orchestrators/custom/
 
 **Critical Path (Longest):**
 ```
-P0 (1w) → P1 (2w) → P2 (1w) → P4 (2w) → P5 (1w) → P6 (1w) → P10 (1w) → P11 (1w) = 10 weeks
+P1 (2w) → P2 (1w) → P4 (2w) → P5 (1w) → P6 (1w) → P10 (1w) → P11 (1w) = 9 weeks
 ```
 
 **Parallel Streams:**
-- **Stream 0:** P0 (Infrastructure Hygiene - enables all others)
-- **Stream A:** P0 → P1 → P2 → P4 → P5 → P6 (Foundation + Extensibility)
+- **Stream A:** P1 → P2 → P4 → P5 → P6 (Foundation + Extensibility)
 - **Stream B:** P2 → P3 → P7 → P8 → P9 (Registry + Quality)
 - **Stream C:** P10 → P11 (Integration)
 
 **Efficiency Gain:**
-- Sequential execution: 15 weeks
-- Parallel execution: 10 weeks
-- **Time saved: 5 weeks (33% faster)**
-- **Bonus:** P0 clean infrastructure reduces debugging time by ~20% across all phases
+- Sequential execution: 14 weeks
+- Parallel execution: 9 weeks
+- **Time saved: 5 weeks (36% faster)**
 
 ---
 
@@ -392,25 +352,13 @@ P0 (1w) → P1 (2w) → P2 (1w) → P4 (2w) → P5 (1w) → P6 (1w) → P10 (1w)
 
 ## 🎯 Next Steps
 
-### Immediate Actions (Phase 0 - Week 1) 🧹 INFRASTRUCTURE CLEANUP
-1. Implement `VacuumOrchestratorV3` with child orchestrator spawning
-2. Build folder reorganization engine (CORTEX spec compliance)
-3. Create intelligent report consolidator (AST-based deduplication)
-4. Implement redundant file detection (similarity analysis)
-5. Add governance rule enforcement middleware
-6. Integrate with cleanup orchestrator and brain protection rules
-7. Build real-time folder analysis dashboard
-8. Create automated backup system (pre-destructive operations)
-9. Add compliance tracker (tier structure validation)
-10. Implement recursive directory traversal (glob + regex patterns)
-
-### Following Actions (Phase 1 - Week 2-3)
-1. Create `cortex-brain/tier2/company-knowledge/` folder structure (using cleaned structure from P0)
+### Immediate Actions (Phase 1 - Week 1)
+1. Create `cortex-brain/tier2/company-knowledge/` folder structure
 2. Implement `CompanyKnowledgeProvider` class
 3. Design company knowledge schema (architecture.md, tech-stack.yaml)
 4. Update CORTEX knowledge library query logic
 
-### Following Actions (Phase 2 - Week 4)
+### Following Actions (Phase 2 - Week 3)
 1. Create `orchestrator-registry.yaml` schema
 2. Implement `OrchestratorRegistry` class
 3. Update Master Orchestrator to query registry
@@ -424,121 +372,10 @@ P0 (1w) → P1 (2w) → P2 (1w) → P4 (2w) → P5 (1w) → P6 (1w) → P10 (1w)
 - **Brain Protection Rules:** `cortex-brain/brain-protection-rules.yaml`
 - **Orchestrator Manifests:** `cortex-brain/manifests/orchestrators/`
 - **Knowledge Library:** `docs/knowledge/`
-- **Vacuum v2 Reference:** `cortex-brain/manifests/orchestrators/vacuum-v2-manifest.yaml`
-- **Cleanup Rules:** `cortex-brain/cleanup-rules.yaml`
 
 ---
 
 **Epic Owner:** Asif Hussain  
 **Last Updated:** 2026-01-06  
-**Status:** ✅ Ready for Phase 0 Execution (Vacuum Orchestrator v3)  
-**Estimated Completion:** 2026-03-17 (10 weeks from start)
-
----
-
-## 📋 Phase 0 Detailed Specification: Vacuum Orchestrator v3
-
-### Overview
-Enhanced autonomous file/folder management system that enforces CORTEX governance, consolidates artifacts, and maintains clean architecture.
-
-### Core Capabilities
-
-#### 1. Child Orchestrator Spawning
-- Dynamic orchestrator instantiation following CORTEX design patterns
-- Orchestrator lifecycle management (spawn → execute → collect results → terminate)
-- Resource pooling for parallel folder processing
-- Error isolation per child orchestrator
-
-#### 2. Folder Structure Reorganization
-- CORTEX specification compliance engine
-- Automatic folder structure validation against `cortex-brain/brain-protection-rules.yaml`
-- Migration plans for non-compliant structures
-- Dry-run mode with preview reports
-
-#### 3. Intelligent Report Consolidation
-- AST-based similarity detection (40%+ footprint reduction target)
-- Temporal consolidation (merge reports by date ranges)
-- Content deduplication (hash-based + semantic similarity)
-- Archival of consolidated reports to `cortex-brain/archives/`
-
-#### 4. Redundant File Detection
-- Multi-strategy detection:
-  - Exact duplicates (SHA256 hashing)
-  - Near-duplicates (fuzzy hashing + Levenshtein distance)
-  - Semantic duplicates (AST comparison for code files)
-- Whitelist management (preserve critical redundancy)
-- Interactive deletion mode (confirm before remove)
-
-#### 5. Governance Rule Enforcement
-- Real-time validation against brain protection rules
-- Automatic fixes for common violations
-- Violation reporting with remediation suggestions
-- Integration with `cortex-brain/compliance-tracking-schema.sql`
-
-#### 6. Integration Points
-- **Cleanup Orchestrator:** Delegates cache/log cleanup tasks
-- **Brain Protection Rules:** Enforces SKULL rules during reorganization
-- **Planning System:** Creates cleanup plans for complex migrations
-- **Tier Structure:** Validates tier0/tier1/tier2/tier3 organization
-
-#### 7. Real-Time Analysis Dashboard
-- Live folder statistics (size, file count, compliance score)
-- Interactive tree visualization
-- Hot-path analysis (frequently accessed folders)
-- Compliance metrics dashboard
-
-#### 8. Automated Backup System
-- Pre-operation snapshots (before any destructive action)
-- Incremental backups to `cortex-brain/backups/vacuum-{timestamp}/`
-- Rollback capability (restore from snapshot)
-- Retention policy (7 days default)
-
-#### 9. Compliance Tracking
-- Tier structure validation (cortex-brain/tier0-3 compliance)
-- Document organization checks (reports/, analysis/, summaries/ categorization)
-- Naming convention enforcement
-- SQLite audit trail (`cortex-brain/tier0/vacuum-compliance.db`)
-
-#### 10. Recursive Traversal
-- Glob pattern matching (e.g., `**/*.{json,yaml,md}`)
-- Regex filtering for complex patterns
-- Ignore rules (`.gitignore` + custom patterns)
-- Depth limits and cycle detection
-
-### Technical Architecture
-
-**Module Structure:**
-```
-src/orchestrators/vacuum/
-├── vacuum_orchestrator_v3.py (main orchestrator)
-├── child_spawner.py (dynamic orchestrator instantiation)
-├── folder_reorganizer.py (CORTEX spec compliance)
-├── report_consolidator.py (AST-based deduplication)
-├── redundancy_detector.py (multi-strategy detection)
-├── governance_enforcer.py (rule validation)
-├── backup_manager.py (snapshot/restore)
-├── compliance_tracker.py (tier validation)
-└── traversal_engine.py (recursive directory walking)
-```
-
-**Dependencies:**
-- `ast` (Python AST parsing)
-- `hashlib` (SHA256 hashing)
-- `pathlib` (path manipulation)
-- `sqlite3` (audit trail)
-- `yaml` (configuration)
-- `gitignore_parser` (ignore rules)
-
-### Success Metrics
-- ✅ 40%+ reduction in artifact footprint
-- ✅ 100% compliance with brain protection rules
-- ✅ <1% false positive rate on redundancy detection
-- ✅ <5 minutes execution time for typical CORTEX workspace
-- ✅ Zero data loss (backup/restore validation)
-
-### Testing Requirements
-- Unit tests for each module (95%+ coverage)
-- Integration tests with cleanup orchestrator
-- End-to-end tests on sample workspace
-- Performance benchmarks (large workspace: 10K+ files)
-- Rollback validation tests
+**Status:** ✅ Ready for Phase 1 Execution  
+**Estimated Completion:** 2026-03-10 (9 weeks from start)

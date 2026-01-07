@@ -1,0 +1,762 @@
+{
+  "schema_version": "1.0",
+  "plan_type": "epic",
+  "plan_id": "cortex-v5-gap-remediation",
+  "plan_name": "CORTEX v5 Gap Remediation & Completion",
+  "created_date": "2026-01-03",
+  "last_updated": "2026-01-04T00:00:00Z",
+  "overall_progress": {
+    "percentage": 5.26,
+    "completed_sub_plans": 1,
+    "total_sub_plans": 19,
+    "current_phase": "Phase 1",
+    "current_sub_plan": "00D",
+    "next_action": "Integrate VSCode Cache Manager into orchestrators"
+  },
+  "total_plans": 19,
+  "completed_plans": 1,
+  "total_phases": 72,
+  "completed_phases": 0,
+  "estimated_days": 70,
+  "status": "not_started",
+  "child_plans": [
+    {
+      "order": "00A",
+      "id": "epic-structure-cleanup",
+      "name": "Epic Structure Cleanup",
+      "folder": "00A-epic-structure-cleanup/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 4,
+      "duration": "2h",
+      "status": "in_progress",
+      "status_emoji": "⏳",
+      "dependencies": [],
+      "viewer_url": "00A-epic-structure-cleanup/epic-structure-cleanup-plan-viewer.html",
+      "start_date": "2026-01-04T09:21:47.583295"
+    },
+    {
+      "order": "00B",
+      "id": "epic-feature-planner",
+      "name": "Epic & Feature Planner Implementation",
+      "folder": "00B-epic-feature-planner/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 6,
+      "duration": "2-3w",
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": [
+        "epic-structure-cleanup"
+      ],
+      "dependency_rule": "Structure must be valid",
+      "viewer_url": "00B-epic-feature-planner/epic-feature-planner-plan-viewer.html"
+    },
+    {
+      "order": "00C",
+      "id": "test-coverage-sprint",
+      "name": "Test Coverage Sprint",
+      "folder": "00C-test-coverage-sprint/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 8,
+      "duration": "2-3w",
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": [
+        "epic-feature-planner"
+      ],
+      "dependency_rule": "Epic infrastructure must exist",
+      "viewer_url": "00C-test-coverage-sprint/test-coverage-sprint-plan-viewer.html"
+    },
+    {
+      "order": "00D",
+      "id": "vscode-cache-optimization",
+      "name": "VSCode Cache Optimization",
+      "folder": "00D-vscode-cache-optimization/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 4,
+      "duration": "2-3h",
+      "status": "urgent",
+      "status_emoji": "🚀",
+      "dependencies": [],
+      "dependency_rule": "No blockers - can run in parallel",
+      "viewer_url": "00D-vscode-cache-optimization/vscode-cache-optimization-plan-viewer.html",
+      "priority": "IMMEDIATE",
+      "priority_reason": "VSCodeCacheManager already implemented - ready for immediate integration into 4 orchestrators",
+      "implementation_status": "PHASE 1 COMPLETE - Core utility ready, integration pending"
+    },
+    {
+      "order": "01",
+      "id": "refinement-orchestrator",
+      "name": "Refinement Orchestrator",
+      "folder": "01-refinement-orchestrator/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 5,
+      "duration": "1w",
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": [
+        "test-coverage-sprint"
+      ],
+      "dependency_rule": "Test Coverage ≥50%",
+      "viewer_url": "01-refinement-orchestrator/refinement-orchestrator-plan-viewer.html"
+    },
+    {
+      "order": "02",
+      "id": "debug-orchestrator",
+      "name": "Debug Orchestrator",
+      "folder": "02-debug-orchestrator/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 5,
+      "duration": "1w",
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": [
+        "test-coverage-sprint"
+      ],
+      "dependency_rule": "Test Coverage ≥50%",
+      "viewer_url": "02-debug-orchestrator/debug-orchestrator-plan-viewer.html"
+    },
+    {
+      "order": "03",
+      "id": "knowledge-library-phase",
+      "name": "Phase -1 Knowledge Library",
+      "folder": "03-knowledge-library-phase/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 4,
+      "duration": "3-4d",
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": [
+        "test-coverage-sprint"
+      ],
+      "dependency_rule": "Planning v5 tests pass",
+      "viewer_url": "03-knowledge-library-phase/knowledge-library-phase-plan-viewer.html"
+    },
+    {
+      "order": "04",
+      "id": "ast-scanning-planning",
+      "name": "AST Scanning Integration",
+      "folder": "04-ast-scanning-planning/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 4,
+      "duration": "3-4d",
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": [
+        "test-coverage-sprint"
+      ],
+      "dependency_rule": "Planning v5 tests pass",
+      "viewer_url": "04-ast-scanning-planning/ast-scanning-planning-plan-viewer.html"
+    },
+    {
+      "order": "05",
+      "id": "context-middleware",
+      "name": "Context Middleware Enhancement",
+      "folder": "05-context-middleware/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 4,
+      "duration": "2-3d",
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": [
+        "test-coverage-sprint"
+      ],
+      "dependency_rule": "Test Coverage ≥50%",
+      "viewer_url": "05-context-middleware/context-middleware-plan-viewer.html"
+    },
+    {
+      "order": "06",
+      "id": "visual-progress",
+      "name": "Visual Progress Generation",
+      "folder": "06-visual-progress/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 4,
+      "duration": "2d",
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": [
+        "epic-feature-planner"
+      ],
+      "dependency_rule": "Planning v5 functional with epic support",
+      "viewer_url": "06-visual-progress/visual-progress-plan-viewer.html"
+    },
+    {
+      "order": "07",
+      "id": "refactor-enforcement",
+      "name": "REFACTOR Task Enforcement",
+      "folder": "07-refactor-enforcement/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 4,
+      "duration": "2d",
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": [
+        "epic-feature-planner"
+      ],
+      "dependency_rule": "Planning v5 functional with epic support",
+      "viewer_url": "07-refactor-enforcement/refactor-enforcement-plan-viewer.html"
+    },
+    {
+      "order": "08",
+      "id": "orchestrator-migrations",
+      "name": "Orchestrator Migrations",
+      "folder": "08-orchestrator-migrations/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 6,
+      "duration": "1-2w",
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": [
+        "refinement-orchestrator",
+        "debug-orchestrator",
+        "context-middleware"
+      ],
+      "dependency_rule": "All core features complete",
+      "viewer_url": "08-orchestrator-migrations/orchestrator-migrations-plan-viewer.html"
+    },
+    {
+      "order": "09",
+      "id": "final-validation",
+      "name": "Final Validation & DoD",
+      "folder": "09-final-validation/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 5,
+      "duration": "3-4d",
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": [
+        "production-validation-pipeline"
+      ],
+      "dependency_rule": "Production validation complete",
+      "viewer_url": "09-final-validation/final-validation-plan-viewer.html"
+    },
+    {
+      "order": "10",
+      "id": "acceptance-validation-system",
+      "name": "Acceptance Validation System",
+      "folder": "10-acceptance-validation-system/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 4,
+      "duration": "3-4d",
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": [
+        "epic-feature-planner"
+      ],
+      "dependency_rule": "Planning v5 functional",
+      "viewer_url": "10-acceptance-validation-system/acceptance-validation-system-plan-viewer.html"
+    },
+    {
+      "order": "11",
+      "id": "cortex-lens-admin",
+      "name": "CORTEX-LENS Admin Dashboard",
+      "folder": "11-cortex-lens-admin/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 5,
+      "duration": "1w",
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": [
+        "knowledge-library-phase",
+        "ast-scanning-planning"
+      ],
+      "dependency_rule": "Phase -1 and AST complete",
+      "viewer_url": "11-cortex-lens-admin/cortex-lens-admin-plan-viewer.html"
+    },
+    {
+      "order": "12",
+      "id": "production-validation-pipeline",
+      "name": "Production Validation Pipeline",
+      "folder": "12-production-validation-pipeline/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 5,
+      "duration": "1w",
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": [
+        "orchestrator-migrations",
+        "cortex-lens-admin"
+      ],
+      "dependency_rule": "All sub-plans 00-11 complete",
+      "viewer_url": "12-production-validation-pipeline/production-validation-pipeline-plan-viewer.html"
+    },
+    {
+      "order": "13",
+      "id": "onboarding-system",
+      "name": "Onboarding System",
+      "folder": "13-onboarding-system/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 4,
+      "duration": "1w",
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": [
+        "production-validation-pipeline"
+      ],
+      "dependency_rule": "Production ready",
+      "viewer_url": "13-onboarding-system/onboarding-system-plan-viewer.html"
+    },
+    {
+      "order": "14",
+      "id": "demo-tutorials",
+      "name": "Demo & Tutorial System",
+      "folder": "14-demo-tutorials/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 4,
+      "duration": "1w",
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": [
+        "onboarding-system"
+      ],
+      "dependency_rule": "Onboarding complete",
+      "viewer_url": "14-demo-tutorials/demo-tutorials-plan-viewer.html"
+    },
+    {
+      "order": "15",
+      "id": "user-response-templates",
+      "name": "User Response Templates",
+      "folder": "15-user-response-templates/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 4,
+      "duration": "1w",
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": [
+        "onboarding-system"
+      ],
+      "dependency_rule": "Onboarding complete",
+      "viewer_url": "15-user-response-templates/user-response-templates-plan-viewer.html"
+    }
+  ],
+  "dependency_graph": {
+    "epic-structure-cleanup": [],
+    "epic-feature-planner": [
+      "epic-structure-cleanup"
+    ],
+    "test-coverage-sprint": [
+      "epic-feature-planner"
+    ],
+    "vscode-cache-optimization": [],
+    "refinement-orchestrator": [
+      "test-coverage-sprint"
+    ],
+    "debug-orchestrator": [
+      "test-coverage-sprint"
+    ],
+    "knowledge-library-phase": [
+      "test-coverage-sprint"
+    ],
+    "ast-scanning-planning": [
+      "test-coverage-sprint"
+    ],
+    "context-middleware": [
+      "test-coverage-sprint"
+    ],
+    "visual-progress": [
+      "epic-feature-planner"
+    ],
+    "refactor-enforcement": [
+      "epic-feature-planner"
+    ],
+    "acceptance-validation-system": [
+      "epic-feature-planner"
+    ],
+    "cortex-lens-admin": [
+      "knowledge-library-phase",
+      "ast-scanning-planning"
+    ],
+    "orchestrator-migrations": [
+      "refinement-orchestrator",
+      "debug-orchestrator",
+      "context-middleware"
+    ],
+    "production-validation-pipeline": [
+      "orchestrator-migrations",
+      "cortex-lens-admin"
+    ],
+    "final-validation": [
+      "production-validation-pipeline"
+    ],
+    "onboarding-system": [
+      "production-validation-pipeline"
+    ],
+    "demo-tutorials": [
+      "onboarding-system"
+    ],
+    "user-response-templates": [
+      "onboarding-system"
+    ]
+  },
+  "sub_plans": [
+    {
+      "order": "00A",
+      "id": "epic-structure-cleanup",
+      "name": "Epic Structure Cleanup",
+      "folder": "00A-epic-structure-cleanup/",
+      "progress": 100,
+      "phases_complete": 0,
+      "total_phases": 4,
+      "duration": "2h",
+      "status": "complete",
+      "status_emoji": "⏳",
+      "dependencies": [],
+      "viewer_url": "00A-epic-structure-cleanup/epic-structure-cleanup-plan-viewer.html",
+      "start_date": "2026-01-04T09:21:47.583295",
+      "end_date": "2026-01-04T09:22:00.727386"
+    },
+    {
+      "order": "00B",
+      "id": "epic-feature-planner",
+      "name": "Epic & Feature Planner Implementation",
+      "folder": "00B-epic-feature-planner/",
+      "progress": 15,
+      "phases_complete": 0,
+      "total_phases": 6,
+      "duration": "2-3w",
+      "status": "in_progress",
+      "status_emoji": "🔒",
+      "dependencies": [
+        "epic-structure-cleanup"
+      ],
+      "dependency_rule": "Structure must be valid",
+      "viewer_url": "00B-epic-feature-planner/epic-feature-planner-plan-viewer.html",
+      "start_date": "2026-01-04T09:22:43.393642"
+    },
+    {
+      "order": "00C",
+      "id": "test-coverage-sprint",
+      "name": "Test Coverage Sprint",
+      "folder": "00C-test-coverage-sprint/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 8,
+      "duration": "2-3w",
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": [
+        "epic-feature-planner"
+      ],
+      "dependency_rule": "Epic infrastructure must exist",
+      "viewer_url": "00C-test-coverage-sprint/test-coverage-sprint-plan-viewer.html"
+    },
+    {
+      "order": "00D",
+      "id": "vscode-cache-optimization",
+      "name": "VSCode Cache Optimization",
+      "folder": "00D-vscode-cache-optimization/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 4,
+      "duration": "2-3h",
+      "status": "urgent",
+      "status_emoji": "🚀",
+      "dependencies": [],
+      "dependency_rule": "No blockers - can run in parallel",
+      "viewer_url": "00D-vscode-cache-optimization/vscode-cache-optimization-plan-viewer.html",
+      "priority": "IMMEDIATE",
+      "priority_reason": "VSCodeCacheManager already implemented - ready for immediate integration into 4 orchestrators",
+      "implementation_status": "PHASE 1 COMPLETE - Core utility ready, integration pending"
+    },
+    {
+      "order": "01",
+      "id": "refinement-orchestrator",
+      "name": "Refinement Orchestrator",
+      "folder": "01-refinement-orchestrator/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 5,
+      "duration": "1w",
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": [
+        "test-coverage-sprint"
+      ],
+      "dependency_rule": "Test Coverage ≥50%",
+      "viewer_url": "01-refinement-orchestrator/refinement-orchestrator-plan-viewer.html"
+    },
+    {
+      "order": "02",
+      "id": "debug-orchestrator",
+      "name": "Debug Orchestrator",
+      "folder": "02-debug-orchestrator/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 5,
+      "duration": "1w",
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": [
+        "test-coverage-sprint"
+      ],
+      "dependency_rule": "Test Coverage ≥50%",
+      "viewer_url": "02-debug-orchestrator/debug-orchestrator-plan-viewer.html"
+    },
+    {
+      "order": "03",
+      "id": "knowledge-library-phase",
+      "name": "Phase -1 Knowledge Library",
+      "folder": "03-knowledge-library-phase/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 4,
+      "duration": "3-4d",
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": [
+        "test-coverage-sprint"
+      ],
+      "dependency_rule": "Planning v5 tests pass",
+      "viewer_url": "03-knowledge-library-phase/knowledge-library-phase-plan-viewer.html"
+    },
+    {
+      "order": "04",
+      "id": "ast-scanning-planning",
+      "name": "AST Scanning Integration",
+      "folder": "04-ast-scanning-planning/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 4,
+      "duration": "3-4d",
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": [
+        "test-coverage-sprint"
+      ],
+      "dependency_rule": "Planning v5 tests pass",
+      "viewer_url": "04-ast-scanning-planning/ast-scanning-planning-plan-viewer.html"
+    },
+    {
+      "order": "05",
+      "id": "context-middleware",
+      "name": "Context Middleware Enhancement",
+      "folder": "05-context-middleware/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 4,
+      "duration": "2-3d",
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": [
+        "test-coverage-sprint"
+      ],
+      "dependency_rule": "Test Coverage ≥50%",
+      "viewer_url": "05-context-middleware/context-middleware-plan-viewer.html"
+    },
+    {
+      "order": "06",
+      "id": "visual-progress",
+      "name": "Visual Progress Generation",
+      "folder": "06-visual-progress/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 4,
+      "duration": "2d",
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": [
+        "epic-feature-planner"
+      ],
+      "dependency_rule": "Planning v5 functional with epic support",
+      "viewer_url": "06-visual-progress/visual-progress-plan-viewer.html"
+    },
+    {
+      "order": "07",
+      "id": "refactor-enforcement",
+      "name": "REFACTOR Task Enforcement",
+      "folder": "07-refactor-enforcement/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 4,
+      "duration": "2d",
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": [
+        "epic-feature-planner"
+      ],
+      "dependency_rule": "Planning v5 functional with epic support",
+      "viewer_url": "07-refactor-enforcement/refactor-enforcement-plan-viewer.html"
+    },
+    {
+      "order": "08",
+      "id": "orchestrator-migrations",
+      "name": "Orchestrator Migrations",
+      "folder": "08-orchestrator-migrations/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 6,
+      "duration": "1-2w",
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": [
+        "refinement-orchestrator",
+        "debug-orchestrator",
+        "context-middleware"
+      ],
+      "dependency_rule": "All core features complete",
+      "viewer_url": "08-orchestrator-migrations/orchestrator-migrations-plan-viewer.html"
+    },
+    {
+      "order": "09",
+      "id": "final-validation",
+      "name": "Final Validation & DoD",
+      "folder": "09-final-validation/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 5,
+      "duration": "3-4d",
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": [
+        "production-validation-pipeline"
+      ],
+      "dependency_rule": "Production validation complete",
+      "viewer_url": "09-final-validation/final-validation-plan-viewer.html"
+    },
+    {
+      "order": "10",
+      "id": "acceptance-validation-system",
+      "name": "Acceptance Validation System",
+      "folder": "10-acceptance-validation-system/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 4,
+      "duration": "3-4d",
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": [
+        "epic-feature-planner"
+      ],
+      "dependency_rule": "Planning v5 functional",
+      "viewer_url": "10-acceptance-validation-system/acceptance-validation-system-plan-viewer.html"
+    },
+    {
+      "order": "11",
+      "id": "cortex-lens-admin",
+      "name": "CORTEX-LENS Admin Dashboard",
+      "folder": "11-cortex-lens-admin/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 5,
+      "duration": "1w",
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": [
+        "knowledge-library-phase",
+        "ast-scanning-planning"
+      ],
+      "dependency_rule": "Phase -1 and AST complete",
+      "viewer_url": "11-cortex-lens-admin/cortex-lens-admin-plan-viewer.html"
+    },
+    {
+      "order": "12",
+      "id": "production-validation-pipeline",
+      "name": "Production Validation Pipeline",
+      "folder": "12-production-validation-pipeline/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 5,
+      "duration": "1w",
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": [
+        "orchestrator-migrations",
+        "cortex-lens-admin"
+      ],
+      "dependency_rule": "All sub-plans 00-11 complete",
+      "viewer_url": "12-production-validation-pipeline/production-validation-pipeline-plan-viewer.html"
+    },
+    {
+      "order": "13",
+      "id": "onboarding-system",
+      "name": "Onboarding System",
+      "folder": "13-onboarding-system/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 4,
+      "duration": "1w",
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": [
+        "production-validation-pipeline"
+      ],
+      "dependency_rule": "Production ready",
+      "viewer_url": "13-onboarding-system/onboarding-system-plan-viewer.html"
+    },
+    {
+      "order": "14",
+      "id": "demo-tutorials",
+      "name": "Demo & Tutorial System",
+      "folder": "14-demo-tutorials/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 4,
+      "duration": "1w",
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": [
+        "onboarding-system"
+      ],
+      "dependency_rule": "Onboarding complete",
+      "viewer_url": "14-demo-tutorials/demo-tutorials-plan-viewer.html"
+    },
+    {
+      "order": "15",
+      "id": "user-response-templates",
+      "name": "User Response Templates",
+      "folder": "15-user-response-templates/",
+      "progress": 0.0,
+      "phases_complete": 0,
+      "total_phases": 4,
+      "duration": "1w",
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": [
+        "onboarding-system"
+      ],
+      "dependency_rule": "Onboarding complete",
+      "viewer_url": "15-user-response-templates/user-response-templates-plan-viewer.html"
+    }
+  ],
+  "milestones": [
+    {
+      "name": "Gate 1: 50% Coverage",
+      "status": "not_started",
+      "target_date": "Week 3",
+      "criteria": "50%+ test coverage"
+    },
+    {
+      "name": "Gate 2: 80% Coverage",
+      "status": "not_started",
+      "target_date": "Week 4",
+      "criteria": "80%+ test coverage"
+    }
+  ],
+  "metrics": {
+    "acceptance_criteria": {
+      "total": 130,
+      "implemented": 78,
+      "tested": 20,
+      "implementation_rate": 0.6,
+      "test_coverage_rate": 0.15
+    }
+  }
+}

@@ -1,0 +1,941 @@
+# TDD Orchestrator Manifest
+# Unified, clean, adaptive TDD workflow with technology discovery
+#
+# Version: 4.0.0
+# Author: CORTEX Development Team
+# Created: 2025-12-19
+# Status: ACTIVE - Phase 3 Complete
+# Parent: planning-system-4.0-manifest.yaml
+
+schema_version: "1.0"
+
+# ========================================
+# Metadata
+# ========================================
+
+metadata:
+  orchestrator_name: "tdd_orchestrator"
+  version: "4.0.0"
+  description: "Unified TDD orchestrator with adaptive learning, clean architecture, and AI-driven refactoring"
+  category: "tdd"
+  deployment_tier: "cortex"
+  status: "active"
+  created_date: "2025-12-19"
+  last_updated: "2025-12-19"
+  maintainer: "CORTEX TDD Team"
+  parent_orchestrator: "planning_orchestrator"
+  related_orchestrators:
+    - "planning_orchestrator"
+    - "maintenance_orchestrator"
+    - "code_sanitization_orchestrator"
+  documentation_path: ".github/prompts/modules/tdd-orchestrator-guide.md"
+  source_file: "src/orchestrators/tdd/tdd_orchestrator.py"
+
+# ========================================
+# Architecture
+# ========================================
+
+architecture:
+  pattern: "strategy"
+  description: "Strategy pattern for phase execution with dependency injection"
+  
+  core_components:
+    - name: "TDDOrchestrator"
+      path: "src/orchestrators/tdd/tdd_orchestrator.py"
+      purpose: "Main orchestrator coordinating RED→GREEN→REFACTOR workflow"
+      dependencies:
+        - "brain_connector"
+        - "knowledge_graph"
+        - "mcp_gateway"
+        - "tech_discovery"
+        - "clean_code_enforcer"
+    
+    - name: "TechnologyDiscoveryEngine"
+      path: "src/orchestrators/tdd/tdd_orchestrator.py"
+      purpose: "Discover and adapt to new technologies and frameworks"
+      features:
+        - "Language and framework detection"
+        - "Test framework discovery"
+        - "Version tracking"
+        - "Pattern learning"
+        - "Best practice retrieval"
+    
+    - name: "CleanCodeEnforcer"
+      path: "src/orchestrators/tdd/tdd_orchestrator.py"
+      purpose: "Enforce clean code principles (SOLID, DRY, KISS, YAGNI)"
+      features:
+        - "Function length validation"
+        - "Complexity analysis"
+        - "Duplicate detection"
+        - "Naming convention checks"
+        - "God object detection"
+  
+  strategies:
+    - name: "REDPhaseStrategy"
+      path: "src/orchestrators/tdd/strategies/red_phase_strategy.py"
+      purpose: "Generate comprehensive failing tests"
+      features:
+        - "Edge case analysis"
+        - "Domain knowledge integration (Tier 2)"
+        - "AI-driven test generation"
+        - "Parametrized testing"
+        - "Property-based testing"
+        - "Vision API integration"
+        - "Security test generation"  # Phase 2: Security Enhancement
+      
+      # Phase 2: Security Enhancement - Security Test Generation
+      security_test_generation:
+        enabled: true
+        description: "Phase 2 Security Enhancement - Automatic security test generation in RED phase"
+        trigger: "ALWAYS (for all features)"
+        security_test_categories:
+          - category: "authentication"
+            test_patterns:
+              - "test_authentication_required_for_protected_endpoints"
+              - "test_invalid_credentials_rejected"
+              - "test_session_timeout_enforced"
+              - "test_password_complexity_validation"
+            applicable_when: ["auth", "login", "password", "session", "token"]
+            
+          - category: "authorization"
+            test_patterns:
+              - "test_unauthorized_access_denied"
+              - "test_role_based_access_enforced"
+              - "test_privilege_escalation_prevented"
+              - "test_resource_ownership_validated"
+            applicable_when: ["permission", "role", "rbac", "authorize", "access"]
+            
+          - category: "input_validation"
+            test_patterns:
+              - "test_sql_injection_prevented"
+              - "test_xss_attack_prevented"
+              - "test_command_injection_prevented"
+              - "test_path_traversal_prevented"
+              - "test_invalid_input_rejected"
+            applicable_when: ["input", "form", "user input", "api", "request"]
+            
+          - category: "data_protection"
+            test_patterns:
+              - "test_sensitive_data_encrypted_at_rest"
+              - "test_sensitive_data_encrypted_in_transit"
+              - "test_pii_not_logged"
+              - "test_data_masking_applied"
+            applicable_when: ["data", "pii", "sensitive", "encrypt", "database"]
+            
+          - category: "rate_limiting"
+            test_patterns:
+              - "test_rate_limiting_enforced"
+              - "test_brute_force_protection_active"
+              - "test_concurrent_request_limiting"
+            applicable_when: ["api", "endpoint", "request", "rate"]
+            
+        security_test_templates:
+          authentication_test: |
+            def test_authentication_required_for_{endpoint}():
+                \"\"\"Verify that {endpoint} requires authentication.\"\"\"
+                response = client.get("/{endpoint}", headers={})
+                assert response.status_code == 401
+                assert "authentication required" in response.json().get("error", "").lower()
+          
+          injection_test: |
+            @pytest.mark.parametrize("malicious_input", [
+                "'; DROP TABLE users; --",
+                "<script>alert('xss')</script>",
+                "| cat /etc/passwd",
+                "../../../etc/passwd",
+            ])
+            def test_{input_field}_injection_prevented(malicious_input):
+                \"\"\"Verify that {input_field} rejects injection attacks.\"\"\"
+                response = client.post("/endpoint", json={{"{input_field}": malicious_input}})
+                assert response.status_code in [400, 422]
+          
+          authorization_test: |
+            def test_unauthorized_access_to_{resource}_denied():
+                \"\"\"Verify that unauthorized users cannot access {resource}.\"\"\"
+                response = client.get("/{resource}", headers={"Authorization": "Bearer invalid"})
+                assert response.status_code == 403
+        
+        knowledge_references:
+          - "cortex-brain/knowledge-library/security/owasp-top-10-guide.md"
+          - "cortex-brain/knowledge-library/security/api-security-foundations.md"
+          - "cortex-brain/knowledge-library/security/access-control-patterns.md"
+      
+    - name: "GREENPhaseStrategy"
+      path: "src/orchestrators/tdd/strategies/green_phase_strategy.py"
+      purpose: "Minimal implementation to pass tests"
+      features:
+        - "AI-driven code generation"
+        - "Over-engineering detection"
+        - "Coverage tracking"
+        - "Continuous test execution"
+        - "Clean code validation"
+        - "Security implementation patterns"  # Phase 2: Security Enhancement
+      
+      # Phase 2: Security Enhancement - Secure Implementation Patterns
+      security_implementation:
+        enabled: true
+        description: "Phase 2 Security Enhancement - Apply secure coding patterns in GREEN phase"
+        patterns:
+          - pattern: "input_validation"
+            implementation: "Validate and sanitize all user input before processing"
+          - pattern: "parameterized_queries"
+            implementation: "Use parameterized queries for all database operations"
+          - pattern: "output_encoding"
+            implementation: "Encode output to prevent XSS attacks"
+          - pattern: "secure_headers"
+            implementation: "Set security headers (CSP, X-Frame-Options, etc.)"
+          - pattern: "secure_configuration"
+            implementation: "Remove debug info, use secure defaults"
+      
+    - name: "REFACTORPhaseStrategy"
+      path: "src/orchestrators/tdd/strategies/refactor_phase_strategy.py"
+      purpose: "AI-driven code improvement"
+      features:
+        - "Code smell detection"
+        - "AI-driven refactoring suggestions"
+        - "Incremental application with validation"
+        - "Pattern learning"
+        - "Quality improvement tracking"
+        - "Security vulnerability remediation"  # Phase 2: Security Enhancement
+      
+      # Phase 2: Security Enhancement - Security Code Review
+      security_refactoring:
+        enabled: true
+        description: "Phase 2 Security Enhancement - Security-focused refactoring in REFACTOR phase"
+        checks:
+          - "Remove hardcoded secrets"
+          - "Eliminate insecure random number generation"
+          - "Fix improper error handling exposing sensitive info"
+          - "Address potential timing attacks"
+          - "Ensure proper resource cleanup"
+        tools:
+          - "OWASP dependency-check"
+          - "bandit (Python)"
+          - "npm audit (JavaScript)"
+    
+    # Phase 4: Documentation Enhancement - DOCUMENT Phase Strategy
+    - name: "DOCUMENTPhaseStrategy"
+      path: "src/orchestrators/tdd/strategies/document_phase_strategy.py"
+      purpose: "Auto-generate documentation with Mermaid diagrams"
+      description: "Phase 4 Enhancement - Generate comprehensive documentation after REFACTOR"
+      features:
+        - "Code structure analysis for diagram selection"
+        - "Mermaid diagram auto-generation"
+        - "API documentation extraction"
+        - "Architecture visualization"
+        - "Threat model diagram generation"
+        - "Integration with knowledge library standards"
+      
+      diagram_types:
+        - type: "architecture"
+          description: "C4 model component diagrams"
+          triggers: ["new_module", "class_hierarchy", "service_layer"]
+          template: "cortex-brain/templates/mermaid-diagrams/architecture-diagram-template.mmd"
+          
+        - type: "sequence"
+          description: "API call flows and interactions"
+          triggers: ["api_endpoints", "message_passing", "async_operations"]
+          template: "cortex-brain/templates/mermaid-diagrams/sequence-diagram-template.mmd"
+          
+        - type: "entity-relationship"
+          description: "Database schema and data models"
+          triggers: ["db_models", "orm_classes", "data_structures"]
+          template: "cortex-brain/templates/mermaid-diagrams/entity-relationship-template.mmd"
+          
+        - type: "state-machine"
+          description: "State transitions and workflows"
+          triggers: ["state_machine", "workflow_engine", "status_tracking"]
+          template: "cortex-brain/templates/mermaid-diagrams/state-machine-template.mmd"
+          
+        - type: "threat-model"
+          description: "Security threat models (STRIDE)"
+          triggers: ["security_feature", "auth_system", "data_protection"]
+          template: "cortex-brain/templates/mermaid-diagrams/threat-model-diagram-template.mmd"
+          
+        - type: "data-flow"
+          description: "Data processing pipelines"
+          triggers: ["data_pipeline", "etl_process", "message_queue"]
+          template: "cortex-brain/templates/mermaid-diagrams/data-flow-diagram-template.mmd"
+          
+        - type: "deployment"
+          description: "Infrastructure and deployment architecture"
+          triggers: ["deployment_config", "docker", "kubernetes", "cloud_infra"]
+          template: "cortex-brain/templates/mermaid-diagrams/deployment-diagram-template.mmd"
+      
+      analysis_engine:
+        ast_analysis: true
+        pattern_matching: true
+        code_metrics: true
+        security_scanning: true
+      
+      output:
+        formats: ["markdown", "svg", "png"]
+        location: "docs/diagrams/"
+        naming_convention: "{module_name}-{diagram_type}.mmd"
+
+# ========================================
+# Workflow
+# ========================================
+
+workflow:
+  name: "RED→GREEN→REFACTOR→DOCUMENT Cycle"
+  description: "Classic TDD workflow with adaptive learning, security integration, and automated documentation"
+  
+  # Phase 2: Security Enhancement - Security integrated into all TDD phases
+  security_integration:
+    enabled: true
+    description: "Phase 2 Security Enhancement - Security considerations mandatory in TDD workflow"
+    enforcement_level: "mandatory"
+    
+  phases:
+    - id: "RED"
+      name: "Generate Failing Tests"
+      strategy: "REDPhaseStrategy"
+      dor:
+        - "Feature name defined"
+        - "Acceptance criteria provided"
+        - "No existing tests for feature"
+        - "Git working directory clean"
+        - "Test framework detected"
+        - "Security test categories identified (Phase 2)"  # Phase 2: Security Enhancement
+      dod:
+        - "Test file created"
+        - "Tests run successfully"
+        - "ALL tests FAIL (RED validation)"
+        - "Git checkpoint created"
+        - "Documentation generated"
+        - "At least 1 edge case covered"
+        - "Security tests included (auth, input validation, etc.)"  # Phase 2: Security Enhancement
+      rollback: "Delete test file, revert git commit"
+      
+      # Phase 2: Security Enhancement - RED phase security requirements
+      security_requirements:
+        description: "Security tests MUST be generated in RED phase"
+        mandatory_tests:
+          - "Authentication tests (if feature handles auth)"
+          - "Authorization tests (if feature handles access control)"
+          - "Input validation tests (if feature accepts user input)"
+          - "Injection prevention tests (if feature interacts with DB/system)"
+        test_pattern_reference: "architecture.strategies[0].security_test_generation"
+      
+    - id: "GREEN"
+      name: "Minimal Implementation"
+      strategy: "GREENPhaseStrategy"
+      dor:
+        - "Test file exists"
+        - "Tests are failing"
+        - "No passing tests"
+        - "Security tests identified in test file"  # Phase 2: Security Enhancement
+      dod:
+        - "Implementation file created"
+        - "All (or most) tests passing (>90%)"
+        - "No over-engineering detected"
+        - "Quality score acceptable (>= 7.0)"
+        - "Git checkpoint created"
+        - "Documentation updated"
+        - "Test coverage acceptable (>= 80%)"
+        - "Security tests passing (auth, authz, input validation)"  # Phase 2: Security Enhancement
+      rollback: "Delete implementation, revert git commit"
+      
+      # Phase 2: Security Enhancement - GREEN phase security requirements
+      security_requirements:
+        description: "Secure implementation patterns MUST be applied in GREEN phase"
+        mandatory_patterns:
+          - "Input validation on all user-provided data"
+          - "Parameterized queries for database operations"
+          - "Output encoding for rendered content"
+          - "Proper error handling (no sensitive info leakage)"
+        implementation_reference: "architecture.strategies[1].security_implementation"
+      
+    - id: "REFACTOR"
+      name: "Code Improvement"
+      strategy: "REFACTORPhaseStrategy"
+      dor:
+        - "Implementation file exists"
+        - "Tests are passing"
+        - "No failing tests"
+        - "Security tests included and passing"  # Phase 2: Security Enhancement
+      dod:
+        - "All tests still passing"
+        - "Quality score improved or maintained"
+        - "At least one smell eliminated (if any existed)"
+        - "No new code smells introduced"
+        - "Git checkpoint created"
+        - "Documentation updated"
+        - "No security vulnerabilities introduced"  # Phase 2: Security Enhancement
+        - "Hardcoded secrets removed"  # Phase 2: Security Enhancement
+      rollback: "Revert git commit to restore original"
+      
+      # Phase 2: Security Enhancement - REFACTOR phase security requirements
+      security_requirements:
+        description: "Security code review MUST be performed in REFACTOR phase"
+        mandatory_checks:
+          - "No hardcoded secrets (API keys, passwords, tokens)"
+          - "No insecure random number generation"
+          - "No sensitive data in error messages or logs"
+          - "Proper resource cleanup (file handles, connections)"
+          - "No timing vulnerabilities in auth code"
+        security_tools:
+          python: ["bandit", "safety"]
+          javascript: ["npm audit", "snyk"]
+          general: ["OWASP dependency-check", "trufflehog"]
+        refactoring_reference: "architecture.strategies[2].security_refactoring"
+    
+    # Phase 4: Documentation Enhancement - DOCUMENT phase after REFACTOR
+    - id: "DOCUMENT"
+      name: "Generate Documentation with Diagrams"
+      strategy: "DOCUMENTPhaseStrategy"
+      description: "Phase 4 Security Enhancement - Generate Mermaid diagrams and documentation"
+      dor:
+        - "REFACTOR phase completed"
+        - "All tests passing"
+        - "Code quality score >= 7.0"
+        - "Implementation files exist"
+      dod:
+        - "README.md updated (if applicable)"
+        - "Mermaid diagrams generated for complex logic"
+        - "API documentation updated"
+        - "Architecture diagrams created for new modules"
+        - "Git checkpoint created"
+      rollback: "Revert documentation changes, restore previous docs"
+      
+      # Phase 4: DOCUMENT phase diagram generation
+      diagram_generation:
+        enabled: true
+        description: "Phase 4 Enhancement - Auto-generate Mermaid diagrams from code"
+        triggers:
+          - trigger: "new_module"
+            diagram_type: "architecture"
+            template: "cortex-brain/templates/mermaid-diagrams/architecture-diagram-template.mmd"
+          - trigger: "api_endpoints"
+            diagram_type: "sequence"
+            template: "cortex-brain/templates/mermaid-diagrams/sequence-diagram-template.mmd"
+          - trigger: "data_models"
+            diagram_type: "entity-relationship"
+            template: "cortex-brain/templates/mermaid-diagrams/entity-relationship-template.mmd"
+          - trigger: "state_logic"
+            diagram_type: "state-machine"
+            template: "cortex-brain/templates/mermaid-diagrams/state-machine-template.mmd"
+          - trigger: "security_feature"
+            diagram_type: "threat-model"
+            template: "cortex-brain/templates/mermaid-diagrams/threat-model-diagram-template.mmd"
+          - trigger: "data_processing"
+            diagram_type: "data-flow"
+            template: "cortex-brain/templates/mermaid-diagrams/data-flow-diagram-template.mmd"
+          - trigger: "deployment"
+            diagram_type: "deployment"
+            template: "cortex-brain/templates/mermaid-diagrams/deployment-diagram-template.mmd"
+        
+        analysis_rules:
+          - rule: "class_count > 3"
+            action: "Generate architecture diagram"
+          - rule: "api_endpoints >= 1"
+            action: "Generate sequence diagram"
+          - rule: "db_models >= 1"
+            action: "Generate ER diagram"
+          - rule: "state_machine_patterns"
+            action: "Generate state diagram"
+          - rule: "security_relevant"
+            action: "Generate threat model diagram"
+        
+        output_location: "docs/diagrams/{module_name}/"
+        
+        knowledge_references:
+          - "cortex-brain/knowledge-library/standards/diagram-guidelines.md"
+          - "cortex-brain/templates/mermaid-diagrams/"
+
+# ========================================
+# Key Features
+# ========================================
+
+features:
+  adaptive_learning:
+    enabled: true
+    description: "Learn from technology trends and adapt to new frameworks"
+    components:
+      - "TechnologyDiscoveryEngine"
+      - "Pattern learning from successful cycles"
+      - "Best practice retrieval"
+      - "Confidence scoring"
+    
+  clean_code_enforcement:
+    enabled: true
+    description: "Enforce SOLID, DRY, KISS, YAGNI principles"
+    components:
+      - "CleanCodeEnforcer"
+      - "Quality scoring (0-10)"
+      - "Violation detection and reporting"
+      - "Actionable recommendations"
+    
+  ai_driven_generation:
+    enabled: true
+    description: "Use AI for test generation, implementation, and refactoring"
+    components:
+      - "LLM integration via MCP"
+      - "Context-aware code generation"
+      - "Refactoring suggestion generation"
+      - "Best practice application"
+    
+  brain_integration:
+    enabled: true
+    description: "Full integration with CORTEX Brain (Tier 1 + 2)"
+    components:
+      - "Tier 2 knowledge graph for patterns"
+      - "Pattern learning from cycles"
+      - "Domain knowledge retrieval"
+      - "Confidence tracking"
+    
+  rollback_safety:
+    enabled: true
+    description: "Automatic rollback on DoD failures"
+    per_phase: true
+    mechanism: "Git commit revert + file cleanup"
+
+# ========================================
+# Integration Points
+# ========================================
+
+integrations:
+  mcp_gateway:
+    description: "Model Context Protocol integration"
+    tools_used:
+      - "test_runner" # Run tests programmatically
+      - "git_operations" # Create checkpoints
+      - "vision_api" # Screenshot analysis for UI tests
+      - "llm_code_generation" # AI-driven code generation
+      - "code_analysis" # AST and complexity analysis
+  
+  brain_tiers:
+    tier1:
+      component: "SessionManager"
+      purpose: "Session persistence and state management"
+    tier2:
+      component: "KnowledgeGraph"
+      purpose: "Pattern storage and retrieval"
+  
+  planning_system:
+    parent: "planning_orchestrator"
+    integration: "TDD included in all Planning System plans"
+    relationship: "Child orchestrator for implementation phases"
+
+# ========================================
+# Configuration
+# ========================================
+
+configuration:
+  default_settings:
+    max_iterations_green: 10
+    min_quality_score: 7.0
+    min_test_coverage: 80
+    max_complexity: 10
+    max_function_lines: 20
+    over_engineering_threshold_loc_per_test: 20
+    
+  quality_thresholds:
+    red_phase:
+      min_tests: 1
+      all_must_fail: true
+    green_phase:
+      min_pass_rate: 0.9  # 90%
+      min_coverage: 80
+      max_over_engineering_score: 0.3
+    refactor_phase:
+      min_quality_improvement: 0.0  # No regression allowed
+      target_quality_score: 8.0
+  
+  learning_settings:
+    pattern_confidence_threshold: 0.7
+    tech_profile_cache_days: 7
+    best_practices_cache_hours: 24
+
+# ========================================
+# Metrics
+# ========================================
+
+metrics:
+  tracked:
+    - name: "total_cycles"
+      description: "Total TDD cycles executed"
+    - name: "successful_cycles"
+      description: "Cycles completed without errors"
+    - name: "patterns_learned"
+      description: "Patterns stored in knowledge graph"
+    - name: "technologies_discovered"
+      description: "Unique tech stacks discovered"
+    - name: "avg_quality_improvement"
+      description: "Average quality score improvement per cycle"
+    - name: "avg_tests_per_feature"
+      description: "Average tests generated per feature"
+  
+  success_criteria:
+    min_success_rate: 0.85  # 85%
+    min_avg_quality: 7.5
+    min_patterns_per_cycle: 2
+
+# ========================================
+# Comparison with Legacy
+# ========================================
+
+improvements_over_v3:
+  architecture:
+    v3: "Dual implementations (orchestration_3_0 + workflows)"
+    v4: "Single unified implementation with strategy pattern"
+    benefit: "Clear responsibility, easier maintenance"
+  
+  line_count:
+    orchestration_3_0: 382
+    workflows: 1233
+    v4_total: ~600
+    benefit: "Balanced between minimal and feature-rich"
+  
+  extensibility:
+    v3: "Moderate (orchestration_3_0) or Low (workflows monolith)"
+    v4: "High (strategy pattern allows easy phase additions)"
+    benefit: "Can add new phases without modifying orchestrator"
+  
+  ai_integration:
+    v3: "None"
+    v4: "Full LLM integration for generation and refactoring"
+    benefit: "Intelligent code generation and improvement"
+  
+  learning:
+    v3: "Limited (workflows only)"
+    v4: "Comprehensive adaptive learning from tech trends"
+    benefit: "Stays current with emerging technologies"
+  
+  clean_code:
+    v3: "Basic refactoring"
+    v4: "Enforced SOLID principles with quality scoring"
+    benefit: "Consistent high-quality code output"
+  
+  rollback:
+    v3: "None"
+    v4: "Per-phase automatic rollback on failures"
+    benefit: "Safe experimentation and error recovery"
+
+# ========================================
+# Usage
+# ========================================
+
+usage:
+  invocation:
+    method: "Direct call or via Planning System"
+    examples:
+      - "orchestrator.execute_tdd_cycle(feature_name, acceptance_criteria, project_path)"
+      - "plan 'Implement user authentication' (auto-includes TDD)"
+  
+  typical_workflow:
+    - "User requests feature implementation"
+    - "Planning System creates plan with TDD phases"
+    - "TDD Orchestrator discovers tech stack"
+    - "RED: Generate failing tests"
+    - "GREEN: Implement minimally"
+    - "REFACTOR: Improve quality"
+    - "Learn patterns and store in Tier 2"
+  
+  completion_signal:
+    pattern: "🎭 Orchestrator completing: ✅ ALL WORK COMPLETE"
+    template: "tdd_workflow_complete"
+
+# ========================================
+# Testing
+# ========================================
+
+testing:
+  unit_tests:
+    location: "tests/orchestrators/tdd/"
+    coverage_target: 90
+    files:
+      - "test_tdd_orchestrator.py"
+      - "test_red_phase_strategy.py"
+      - "test_green_phase_strategy.py"
+      - "test_refactor_phase_strategy.py"
+      - "test_technology_discovery.py"
+      - "test_clean_code_enforcer.py"
+  
+  integration_tests:
+    location: "tests/integration/tdd/"
+    scenarios:
+      - "Full RED→GREEN→REFACTOR cycle"
+      - "Multi-language project handling"
+      - "Rollback on DoD failure"
+      - "Pattern learning from successful cycles"
+
+# ========================================
+# Future Enhancements
+# ========================================
+
+future:
+  v4_1:
+    - "Performance testing phase (optional)"
+    - "Security testing integration"
+    - "Mutation testing for test quality"
+  
+  v4_2:
+    - "Multi-file refactoring"
+    - "Architecture-level refactoring"
+    - "Dependency injection pattern enforcement"
+  
+  v5_0:
+    - "AST-based refactoring engine"
+    - "Visual test generation from UI mockups"
+    - "Contract-driven development support"
+
+# ========================================
+# Response Templates (Composable System)
+# ========================================
+
+response_templates:
+  use_algorithm: true
+  algorithm_version: "1.0"
+  algorithm_source: "cortex-brain/response-templates-v4.yaml::template_selection_algorithm"
+  
+  operations:
+    red_phase:
+      description: "RED phase - failing tests"
+      context_signals:
+        operation_type: "execution"
+        response_phase: "in_progress"
+        complexity_tier: "FOCUSED"
+        orchestrator_type: "tdd"
+        orchestrator_engaged: false
+      blocks:
+        mandatory: ["cortex_header", "tdd_cycle_status", "test_results_summary", "next_action"]
+        conditional: ["coverage_metrics", "vision_analysis"]
+        orchestrator_specific: ["tdd_cycle_status", "test_results_summary", "coverage_metrics", "vision_analysis"]
+      rendering_order: ["cortex_header", "vision_analysis", "tdd_cycle_status", "test_results_summary", "next_action"]
+    
+    green_phase:
+      description: "GREEN phase - tests passing"
+      context_signals:
+        operation_type: "execution"
+        response_phase: "in_progress"
+        complexity_tier: "FOCUSED"
+        orchestrator_type: "tdd"
+        orchestrator_engaged: false
+      blocks:
+        mandatory: ["cortex_header", "tdd_cycle_status", "test_results_summary", "next_action"]
+        conditional: ["coverage_metrics", "changes", "vision_analysis"]
+        orchestrator_specific: ["tdd_cycle_status", "test_results_summary", "coverage_metrics", "vision_analysis"]
+      rendering_order: ["cortex_header", "vision_analysis", "tdd_cycle_status", "test_results_summary", "coverage_metrics", "changes", "next_action"]
+    
+    refactor_phase:
+      description: "REFACTOR phase - code cleanup"
+      context_signals:
+        operation_type: "execution"
+        response_phase: "complete"
+        complexity_tier: "STRUCTURED"
+        orchestrator_type: "tdd"
+        orchestrator_engaged: false
+      blocks:
+        mandatory: ["cortex_header", "tdd_cycle_status", "test_results_summary", "next_action"]
+        conditional: ["coverage_metrics", "changes", "vision_analysis"]
+        orchestrator_specific: ["tdd_cycle_status", "test_results_summary", "coverage_metrics", "vision_analysis"]
+      rendering_order: ["cortex_header", "vision_analysis", "tdd_cycle_status", "test_results_summary", "coverage_metrics", "changes", "next_action"]
+
+# Vision API Integration (Automatic Image Analysis)
+# ==================================================
+
+vision_api_integration:
+  enabled: true
+  visual_indicator:
+    required: true
+    icon: "📷"
+    header_format: "## 📷🧠 CORTEX TDD Mastery (Vision Engaged)"
+  
+  image_detection:
+    automatic: true
+    supported_formats: ["PNG", "JPG", "JPEG", "WEBP", "GIF"]
+    trigger_condition: "Any image attachment detected in user request"
+  
+  analysis_configuration:
+    comprehensive_extraction:
+      priority_1_ui_elements:
+        - "Interactive components (buttons, inputs, dropdowns, modals)"
+        - "Text content (labels, placeholders, error messages)"
+        - "Icons and imagery"
+        - "Layout structure and hierarchy"
+      
+      priority_2_technical_details:
+        - "URL extraction from address bar or visible links"
+        - "Technology indicators (frameworks, libraries)"
+        - "Responsive design patterns"
+        - "Accessibility features"
+      
+      priority_3_test_automation:
+        - "Element identification strategies"
+        - "Recommended selectors (data-testid, aria-label, id)"
+        - "Interaction points for testing"
+        - "Expected behaviors and validations"
+    
+    output_format:
+      structured_sections:
+        - name: "image_metadata"
+          includes: ["dimensions", "format", "url_context"]
+        
+        - name: "ui_element_inventory"
+          includes: ["element_type", "label", "recommended_selector", "test_id"]
+        
+        - name: "layout_structure"
+          includes: ["inferred_html", "css_selectors", "component_hierarchy"]
+        
+        - name: "test_automation_strategy"
+          includes: ["selector_recommendations", "test_scenarios", "expected_behaviors"]
+        
+        - name: "accessibility_audit"
+          includes: ["wcag_compliance", "aria_labels", "contrast_ratios", "keyboard_navigation"]
+  
+  tdd_specific_integration:
+    red_phase:
+      when: "Image shows UI mockup, design, or target interface"
+      action: "Generate failing test selectors and assertions"
+      output_template: |
+        ### 📷 Vision Analysis - Test Automation Strategy
+        
+        **UI Element Inventory:**
+        {{#each ui_elements}}
+        | Element | Type | Label | Test Selector | Test Scenario |
+        |---------|------|-------|---------------|---------------|
+        | {{element_name}} | {{element_type}} | "{{label}}" | `{{test_selector}}` | {{test_description}} |
+        {{/each}}
+        
+        **RED Phase Test Generation:**
+        ```python
+        # Test selectors extracted from vision analysis
+        {{#each test_cases}}
+        def test_{{test_name}}(self):
+            """{{test_description}}"""
+            element = driver.find_element(By.CSS_SELECTOR, "{{css_selector}}")
+            assert element.{{assertion_method}}() == {{expected_value}}
+        {{/each}}
+        ```
+        
+        **Recommended Selector Strategy:**
+        1. Primary: data-testid attributes (most stable)
+        2. Fallback: aria-label (accessible and semantic)
+        3. Last resort: CSS classes (if component-specific)
+      
+      integration_points:
+        - "test_file_generation"
+        - "selector_recommendation"
+        - "assertion_strategy"
+    
+    green_phase:
+      when: "Image shows expected UI state or passing condition"
+      action: "Validate implementation matches visual requirements"
+      output_template: |
+        ### 📷 Vision Analysis - Implementation Validation
+        
+        **Expected vs. Actual:**
+        {{#each visual_requirements}}
+        - [ ] {{requirement_name}}
+          - Visual Reference: {{screenshot_section}}
+          - Test Status: {{test_result}}
+          - Selector Used: `{{selector}}`
+        {{/each}}
+      
+      integration_points:
+        - "implementation_validation"
+        - "visual_regression_check"
+    
+    refactor_phase:
+      when: "Image shows code improvements or refactoring suggestions"
+      action: "Extract refactoring opportunities from visual comparison"
+      output_template: |
+        ### 📷 Vision Analysis - Refactoring Opportunities
+        
+        **Detected Improvements:**
+        {{#each improvements}}
+        - {{improvement_area}}
+          - Current: {{current_state}}
+          - Suggested: {{suggested_state}}
+          - Test Impact: {{test_changes_needed}}
+        {{/each}}
+      
+      integration_points:
+        - "refactoring_guidance"
+        - "test_update_requirements"
+  
+  selector_best_practices:
+    priority_order:
+      - selector_type: "data-testid"
+        stability: "high"
+        format: "data-testid='{{kebab-case-name}}'"
+        example: "data-testid='login-button'"
+        when_to_use: "Always preferred - most stable"
+      
+      - selector_type: "aria-label"
+        stability: "high"
+        format: "[aria-label='{{label text}}']"
+        example: "[aria-label='Submit form']"
+        when_to_use: "When element has accessible label"
+      
+      - selector_type: "id"
+        stability: "medium"
+        format: "#{{id-name}}"
+        example: "#email-input"
+        when_to_use: "If unique and meaningful"
+      
+      - selector_type: "class"
+        stability: "low"
+        format: ".{{component-class}}"
+        example: ".btn-primary"
+        when_to_use: "Component-based classes only"
+      
+      - selector_type: "xpath"
+        stability: "very-low"
+        format: "//{{complex-path}}"
+        example: "//div[@class='container']/button[1]"
+        when_to_use: "Last resort - very fragile"
+    
+    naming_conventions:
+      test_id_format: "kebab-case"
+      examples:
+        - "data-testid='login-form'"
+        - "data-testid='email-input-field'"
+        - "data-testid='submit-button'"
+        - "data-testid='error-message-container'"
+    
+    validation_checks:
+      - "Verify selector uniqueness across page"
+      - "Check stability across responsive breakpoints"
+      - "Ensure shadow DOM compatibility"
+      - "Validate accessibility support"
+  
+  test_generation_templates:
+    ui_interaction_test: |
+      def test_{{element_name}}_interaction(page):
+          """Test {{element_description}} interaction"""
+          element = page.locator("{{recommended_selector}}")
+          element.{{action}}({{action_params}})
+          assert element.{{assertion_method}}() == {{expected_result}}
+    
+    visual_regression_test: |
+      def test_{{component_name}}_visual(page):
+          """Visual regression test for {{component_description}}"""
+          component = page.locator("{{component_selector}}")
+          screenshot = component.screenshot()
+          assert_visual_match(screenshot, "{{baseline_image}}")
+    
+    accessibility_test: |
+      def test_{{element_name}}_accessibility(page):
+          """Accessibility test for {{element_description}}"""
+          element = page.locator("{{recommended_selector}}")
+          assert element.get_attribute("aria-label") is not None
+          assert element.is_visible()
+          assert element.is_enabled()
+  
+  error_handling:
+    vision_api_unavailable:
+      action: "Continue without vision analysis"
+      message: "⚠️ Vision API unavailable - proceeding without image analysis"
+    
+    image_analysis_failed:
+      action: "Log error and continue"
+      message: "⚠️ Image analysis failed - manual review required"
+    
+    no_ui_elements_detected:
+      action: "Provide generic image description"
+      message: "📷 Image analyzed but no UI elements detected - may be diagram or non-UI content"
+
+

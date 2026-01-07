@@ -1,0 +1,521 @@
+{
+  "schema_version": "1.0",
+  "plan_id": "debug-orchestrator",
+  "plan_name": "C50-02: Debug Orchestrator Implementation",
+  "parent_plan": "cortex-v5-gap-remediation",
+  "created_date": "2026-01-04",
+  "last_updated": "2026-01-04T19:00:00.000000",
+  "status": "ready",
+  "overall_progress": 0.0,
+  "phases": [
+    {
+      "phase_number": 1,
+      "phase_name": "RED (Failing Tests)",
+      "description": "Write comprehensive failing tests for DebugOrchestrator",
+      "estimated_hours": 4,
+      "progress": 0.0,
+      "status": "pending",
+      "status_emoji": "⏸️",
+      "tasks": [
+        {
+          "task_id": "1.1",
+          "name": "Setup Test Infrastructure",
+          "estimated_hours": 1,
+          "status": "pending",
+          "deliverables": [
+            "tests/orchestrators/debug/test_debug_orchestrator.py",
+            "pytest fixtures configured",
+            "test database setup",
+            "mock data generators"
+          ]
+        },
+        {
+          "task_id": "1.2",
+          "name": "Write Unit Tests",
+          "estimated_hours": 2,
+          "status": "pending",
+          "deliverables": [
+            "20-25 failing unit tests",
+            "Constructor tests",
+            "Symptom analysis tests",
+            "Hypothesis generation tests",
+            "Evidence collection tests",
+            "Root cause identification tests",
+            "Fix strategy generation tests"
+          ]
+        },
+        {
+          "task_id": "1.3",
+          "name": "Write Integration Tests",
+          "estimated_hours": 1,
+          "status": "pending",
+          "deliverables": [
+            "6-8 failing integration tests",
+            "Full workflow tests",
+            "Master Orchestrator integration tests",
+            "State persistence tests"
+          ]
+        }
+      ],
+      "deliverables": [
+        "test_debug_orchestrator.py (20-25 failing tests)",
+        "test_debug_integration.py (6-8 failing integration tests)",
+        "reports/PHASE-1-RED-REPORT.md"
+      ]
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "GREEN (Passing Tests)",
+      "description": "Implement minimal DebugOrchestrator to pass all tests",
+      "estimated_hours": 12,
+      "progress": 0.0,
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": ["Phase 1 complete"],
+      "tasks": [
+        {
+          "task_id": "2.1",
+          "name": "Core Class Implementation",
+          "estimated_hours": 4,
+          "status": "blocked",
+          "deliverables": [
+            "DebugOrchestrator class (800-1000 LOC)",
+            "Constructor with config",
+            "analyze_symptom method",
+            "generate_hypotheses method",
+            "collect_evidence method",
+            "identify_root_cause method",
+            "generate_fix_strategy method",
+            "execute_workflow method"
+          ]
+        },
+        {
+          "task_id": "2.2",
+          "name": "Tool Implementations",
+          "estimated_hours": 4,
+          "status": "blocked",
+          "deliverables": [
+            "Symptom analyzer (stack trace parsing)",
+            "Hypothesis generator (LLM-assisted ranking)",
+            "Evidence collector (code + logs + stack traces)",
+            "Root cause identifier (causal chain analysis)",
+            "Fix strategy generator (architecture-level solutions)"
+          ]
+        },
+        {
+          "task_id": "2.3",
+          "name": "State Management",
+          "estimated_hours": 2,
+          "status": "blocked",
+          "deliverables": [
+            "Investigation state tracking",
+            "Checkpoint system for evidence",
+            "Progress persistence"
+          ]
+        },
+        {
+          "task_id": "2.4",
+          "name": "Master Orchestrator Integration",
+          "estimated_hours": 2,
+          "status": "blocked",
+          "deliverables": [
+            "Routing pattern in master-orchestrator.yaml",
+            "Response template configuration",
+            "Orchestrator registry update"
+          ]
+        }
+      ],
+      "deliverables": [
+        "src/orchestrators/debug/debug_orchestrator.py (800-1000 LOC)",
+        "All unit tests passing (20-25 tests)",
+        "All integration tests passing (6-8 tests)",
+        "reports/PHASE-2-GREEN-REPORT.md"
+      ]
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "REFACTOR (Code Cleanup)",
+      "description": "Clean up implementation while maintaining green tests",
+      "estimated_hours": 4,
+      "progress": 0.0,
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": ["Phase 2 complete"],
+      "tasks": [
+        {
+          "task_id": "3.1",
+          "name": "Code Quality Improvements",
+          "estimated_hours": 2,
+          "status": "blocked",
+          "deliverables": [
+            "Remove code duplication",
+            "Extract reusable methods",
+            "Simplify complex logic",
+            "Add type hints",
+            "Improve error handling"
+          ]
+        },
+        {
+          "task_id": "3.2",
+          "name": "Documentation Enhancement",
+          "estimated_hours": 1,
+          "status": "blocked",
+          "deliverables": [
+            "Comprehensive docstrings",
+            "Edge case documentation",
+            "Usage examples",
+            "API reference updates"
+          ]
+        },
+        {
+          "task_id": "3.3",
+          "name": "Performance Optimization",
+          "estimated_hours": 1,
+          "status": "blocked",
+          "deliverables": [
+            "Optimized hypothesis ranking",
+            "Cached evidence collection",
+            "Improved error pattern matching"
+          ]
+        }
+      ],
+      "deliverables": [
+        "Refactored debug_orchestrator.py",
+        "Updated tests (100% passing)",
+        "reports/PHASE-3-REFACTOR-REPORT.md"
+      ]
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "INTEGRATION (System Integration)",
+      "description": "Integrate with Master Orchestrator and validate routing",
+      "estimated_hours": 6,
+      "progress": 0.0,
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": ["Phase 3 complete"],
+      "tasks": [
+        {
+          "task_id": "4.1",
+          "name": "Master Orchestrator Configuration",
+          "estimated_hours": 2,
+          "status": "blocked",
+          "deliverables": [
+            "Updated master-orchestrator.yaml",
+            "Routing pattern: ^(debug|fix bug|troubleshoot).*$",
+            "Guided execution mode configured",
+            "Priority set to 50"
+          ]
+        },
+        {
+          "task_id": "4.2",
+          "name": "Response Template Integration",
+          "estimated_hours": 2,
+          "status": "blocked",
+          "deliverables": [
+            "Debug execution template",
+            "Progress tracking blocks",
+            "Report formatting configuration",
+            "Template rendering tests"
+          ]
+        },
+        {
+          "task_id": "4.3",
+          "name": "End-to-End Testing",
+          "estimated_hours": 2,
+          "status": "blocked",
+          "deliverables": [
+            "Full workflow test (input to fix strategy)",
+            "Routing decision validation",
+            "State persistence verification",
+            "Report generation validation"
+          ]
+        }
+      ],
+      "deliverables": [
+        "Updated master-orchestrator.yaml",
+        "Debug response template",
+        "Integration test results",
+        "reports/PHASE-4-INTEGRATION-REPORT.md"
+      ]
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "VALIDATION (Quality Gates)",
+      "description": "Validate against C50-02 Definition of Done",
+      "estimated_hours": 4,
+      "progress": 0.0,
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": ["Phase 4 complete"],
+      "tasks": [
+        {
+          "task_id": "5.1",
+          "name": "Test Coverage Validation",
+          "estimated_hours": 1,
+          "status": "blocked",
+          "deliverables": [
+            "Coverage report ≥80%",
+            "Edge case identification",
+            "Missing test additions"
+          ]
+        },
+        {
+          "task_id": "5.2",
+          "name": "Performance Testing",
+          "estimated_hours": 1,
+          "status": "blocked",
+          "deliverables": [
+            "Symptom analysis benchmarks",
+            "Hypothesis generation benchmarks",
+            "Load testing (concurrent sessions)",
+            "Memory leak verification"
+          ]
+        },
+        {
+          "task_id": "5.3",
+          "name": "Security Validation",
+          "estimated_hours": 1,
+          "status": "blocked",
+          "deliverables": [
+            "No sensitive data in logs",
+            "Input sanitization tests",
+            "Error handling validation",
+            "Injection vulnerability checks"
+          ]
+        },
+        {
+          "task_id": "5.4",
+          "name": "Documentation Review",
+          "estimated_hours": 1,
+          "status": "blocked",
+          "deliverables": [
+            "All public APIs documented",
+            "Code examples tested",
+            "Usage guide reviewed",
+            "Architectural diagrams updated"
+          ]
+        }
+      ],
+      "deliverables": [
+        "Coverage report (≥80%)",
+        "Performance benchmarks",
+        "Security audit results",
+        "reports/PHASE-5-VALIDATION-REPORT.md"
+      ]
+    },
+    {
+      "phase_number": 6,
+      "phase_name": "DOCUMENTATION (User & Developer Guides)",
+      "description": "Create comprehensive documentation",
+      "estimated_hours": 4,
+      "progress": 0.0,
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": ["Phase 5 complete"],
+      "tasks": [
+        {
+          "task_id": "6.1",
+          "name": "User Guide",
+          "estimated_hours": 2,
+          "status": "blocked",
+          "deliverables": [
+            "Usage guide (markdown)",
+            "Example workflows",
+            "Common debugging scenarios",
+            "Troubleshooting guide"
+          ]
+        },
+        {
+          "task_id": "6.2",
+          "name": "Developer Guide",
+          "estimated_hours": 1,
+          "status": "blocked",
+          "deliverables": [
+            "Architecture documentation",
+            "Extension points explained",
+            "API reference",
+            "Testing strategy documentation"
+          ]
+        },
+        {
+          "task_id": "6.3",
+          "name": "Integration Guide",
+          "estimated_hours": 1,
+          "status": "blocked",
+          "deliverables": [
+            "Master Orchestrator integration steps",
+            "Configuration examples",
+            "Routing pattern documentation",
+            "Response template customization"
+          ]
+        }
+      ],
+      "deliverables": [
+        "User guide (markdown)",
+        "Developer guide (markdown)",
+        "API reference (auto-generated)",
+        "reports/PHASE-6-DOCUMENTATION-REPORT.md"
+      ]
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "COMPLETION (Final Validation)",
+      "description": "Final validation, update epic progress, prepare handoff",
+      "estimated_hours": 6,
+      "progress": 0.0,
+      "status": "blocked",
+      "status_emoji": "🔒",
+      "dependencies": ["Phase 6 complete"],
+      "tasks": [
+        {
+          "task_id": "7.1",
+          "name": "Final Testing",
+          "estimated_hours": 2,
+          "status": "blocked",
+          "deliverables": [
+            "Full test suite run (26-33 tests)",
+            "100% pass rate verification",
+            "Coverage ≥80% confirmation",
+            "Smoke test end-to-end workflow"
+          ]
+        },
+        {
+          "task_id": "7.2",
+          "name": "Epic Progress Update",
+          "estimated_hours": 2,
+          "status": "blocked",
+          "deliverables": [
+            "Updated epic-progress-tracker.json",
+            "C50-02 status set to 'complete'",
+            "Dependency graph updated",
+            "C50-08 unblocked (if C50-05 also complete)"
+          ]
+        },
+        {
+          "task_id": "7.3",
+          "name": "Knowledge Transfer",
+          "estimated_hours": 2,
+          "status": "blocked",
+          "deliverables": [
+            "Completion report",
+            "Lessons learned documented",
+            "Continuation prompt for next plan",
+            "Tier 2 Knowledge Graph updated"
+          ]
+        }
+      ],
+      "deliverables": [
+        "reports/PHASE-7-COMPLETION-REPORT.md",
+        "Updated epic-progress-tracker.json",
+        "tracking/CONTINUATION-PROMPT.md",
+        "Lessons learned in cortex-brain/lessons-learned.yaml"
+      ]
+    }
+  ],
+  "definition_of_ready": [
+    "✅ C50-00C complete (720 tests, 89% pass rate)",
+    "✅ C50-01 reference implementation available",
+    "✅ Master Orchestrator config accessible",
+    "✅ Test infrastructure functional"
+  ],
+  "definition_of_done": [
+    "DebugOrchestrator class implemented (800-1000 LOC)",
+    "20-25 unit tests written (100% pass rate)",
+    "6-8 integration tests passing",
+    "Master Orchestrator routing configured",
+    "Documentation complete (usage guide, API reference)",
+    "C50-02 folder structure validated",
+    "Epic progress tracker updated",
+    "C50-08 unblocked (if C50-05 complete)"
+  ],
+  "success_metrics": {
+    "implementation_loc": {
+      "target": "800-1000",
+      "validation": "Line count in debug_orchestrator.py"
+    },
+    "unit_tests": {
+      "target": "20-25",
+      "validation": "Count in test_debug_orchestrator.py"
+    },
+    "integration_tests": {
+      "target": "6-8",
+      "validation": "Count in test_debug_integration.py"
+    },
+    "test_pass_rate": {
+      "target": "100%",
+      "validation": "pytest execution"
+    },
+    "code_coverage": {
+      "target": "≥80%",
+      "validation": "Coverage report"
+    },
+    "duration": {
+      "target": "40 hours (1 week)",
+      "validation": "Time tracking"
+    },
+    "master_orchestrator": {
+      "target": "Configured",
+      "validation": "Routing test"
+    },
+    "documentation": {
+      "target": "Complete",
+      "validation": "Review checklist"
+    }
+  },
+  "dependencies": {
+    "upstream": [
+      {
+        "id": "test-coverage-sprint",
+        "name": "C50-00C: Test Coverage Sprint",
+        "status": "complete",
+        "completion_date": "2026-01-04T13:39:36.596352"
+      },
+      {
+        "id": "refinement-orchestrator",
+        "name": "C50-01: Refinement Orchestrator",
+        "status": "complete",
+        "completion_date": "2026-01-04T14:45:00.000000",
+        "note": "Reference implementation available"
+      }
+    ],
+    "downstream": [
+      {
+        "id": "orchestrator-migrations",
+        "name": "C50-08: Orchestrator Migrations",
+        "blocked_by": [
+          "refinement-orchestrator (complete)",
+          "debug-orchestrator (in progress)",
+          "context-middleware (pending)"
+        ]
+      }
+    ],
+    "parallel_options": [
+      {
+        "id": "knowledge-library-phase",
+        "name": "C50-03: Knowledge Library Phase -1"
+      },
+      {
+        "id": "context-middleware",
+        "name": "C50-05: Context Middleware Enhancement"
+      }
+    ]
+  },
+  "reference_materials": {
+    "c50_01_pattern": {
+      "implementation": "src/orchestrators/refinement/refinement_orchestrator.py",
+      "tests": "tests/orchestrators/refinement/test_refinement_orchestrator.py",
+      "reports": "C50-01/reports/PHASE-*-REPORT.md"
+    },
+    "configuration": {
+      "master_orchestrator": "cortex-brain/config/master-orchestrator.yaml",
+      "response_templates": "cortex-brain/response-templates-v4.yaml",
+      "orchestrator_registry": "cortex-brain/config/mcp-server.yaml"
+    },
+    "architecture": {
+      "gap_analysis": "cortex-brain/documents/analysis/gap-analysis-v5.md",
+      "orchestrator_quick_ref": "cortex-brain/documents/orchestrators-quick-ref.md",
+      "architecture_quick_ref": "cortex-brain/documents/cortex-architecture-quick-ref.md"
+    }
+  }
+}

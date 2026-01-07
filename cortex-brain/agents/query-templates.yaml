@@ -1,0 +1,212 @@
+# Brain Query Templates & Patterns
+# Version: 2.0
+# Purpose: Query patterns, search strategies, and response formatting
+
+query_patterns:
+  
+  code_location:
+    trigger: "where is|find|locate"
+    strategy: "file_relationships search"
+    response_format:
+      - "File path"
+      - "Line number range"
+      - "Snippet preview"
+    
+    example:
+      query: "Where is the AuthService?"
+      search: "file_relationships.yaml → Services/**/*AuthService*"
+      response: "Services/AuthService.cs (lines 15-120)"
+  
+  how_does_work:
+    trigger: "how does|how is|explain"
+    strategy: "code analysis + knowledge_graph"
+    response_format:
+      - "High-level explanation"
+      - "Key components"
+      - "Code example"
+      - "Related files"
+    
+    example:
+      query: "How does authentication work?"
+      analysis: "AuthService → AuthController → JWT tokens"
+      response: "Detailed explanation with code flow"
+  
+  what_is_pattern:
+    trigger: "what is|what's the"
+    strategy: "pattern_library search"
+    response_format:
+      - "Pattern name"
+      - "Use cases"
+      - "Example implementation"
+      - "Related patterns"
+  
+  when_to_use:
+    trigger: "when should|when to"
+    strategy: "best_practices + lessons_learned"
+    response_format:
+      - "Recommendation"
+      - "Conditions"
+      - "Trade-offs"
+      - "Examples"
+
+search_strategies:
+  
+  file_search:
+    sources:
+      - "file_relationships.yaml"
+      - "workspace file tree"
+      - "git history"
+    
+    scoring:
+      exact_match: 100
+      partial_match: 75
+      fuzzy_match: 50
+      related_files: 25
+  
+  pattern_search:
+    sources:
+      - "knowledge_graph.yaml"
+      - "lessons_learned.yaml"
+      - "module_definitions.yaml"
+    
+    scoring:
+      exact_pattern: 100
+      similar_pattern: 80
+      related_pattern: 60
+      general_guidance: 40
+  
+  historical_search:
+    sources:
+      - "conversation_history (Tier 1)"
+      - "git commit messages"
+      - "PR descriptions"
+    
+    scoring:
+      recent_similar_work: 100
+      past_implementation: 75
+      related_discussion: 50
+
+response_formatting:
+  
+  concise_mode:
+    when: "Quick question, simple answer"
+    format:
+      - "Direct answer (1-2 sentences)"
+      - "Optional: link to more info"
+    
+    example:
+      query: "What's the primary key for Users table?"
+      response: "UserId (GUID). See: Users.cs line 12"
+  
+  detailed_mode:
+    when: "Complex question, needs explanation"
+    format:
+      - "Overview"
+      - "Key points (bulleted)"
+      - "Code example"
+      - "Related resources"
+    
+    example:
+      query: "Explain the session sharing implementation"
+      response: "Full explanation with architecture diagram"
+  
+  comparison_mode:
+    when: "Asking about differences or choices"
+    format:
+      - "Option A vs Option B table"
+      - "Pros/cons"
+      - "Recommendation"
+      - "Examples of each"
+
+confidence_scoring:
+  
+  high_confidence:
+    threshold: ">= 80%"
+    conditions:
+      - "Exact match in codebase"
+      - "Well-documented pattern"
+      - "Recent implementation"
+    
+    response: "Definitive answer with evidence"
+  
+  medium_confidence:
+    threshold: "50-79%"
+    conditions:
+      - "Partial match"
+      - "Similar pattern"
+      - "Older implementation"
+    
+    response: "Qualified answer with caveats"
+  
+  low_confidence:
+    threshold: "< 50%"
+    conditions:
+      - "No direct match"
+      - "Fuzzy pattern"
+      - "Speculation needed"
+    
+    response: "Suggestion + ask user to verify"
+
+brain_tier_routing:
+  
+  tier_1_queries:
+    when: "Recent work, active session"
+    sources:
+      - "working_memory"
+      - "current_session_plan"
+      - "recent_file_modifications"
+    
+    examples:
+      - "What was I working on?"
+      - "What's next in the plan?"
+      - "What files did I change?"
+  
+  tier_2_queries:
+    when: "Knowledge, patterns, relationships"
+    sources:
+      - "knowledge_graph"
+      - "file_relationships"
+      - "lessons_learned"
+    
+    examples:
+      - "How does X work?"
+      - "What files use AuthService?"
+      - "What's the pattern for feature flags?"
+  
+  tier_3_queries:
+    when: "Historical, metrics, insights"
+    sources:
+      - "context_intelligence"
+      - "metrics_history"
+      - "test_coverage_data"
+    
+    examples:
+      - "How often does this component break?"
+      - "What's our test coverage?"
+      - "Which files are modified together?"
+
+query_optimization:
+  
+  caching:
+    strategy: "Cache frequent queries"
+    ttl: "5 minutes"
+    invalidate_on:
+      - "File modification"
+      - "Session change"
+      - "Brain update"
+  
+  lazy_loading:
+    strategy: "Load only needed data"
+    examples:
+      - "Don't load entire knowledge graph for simple query"
+      - "Stream large results"
+      - "Paginate if > 50 results"
+  
+  parallel_search:
+    strategy: "Search multiple sources concurrently"
+    sources:
+      - "Tier 1 (working memory)"
+      - "Tier 2 (knowledge graph)"
+      - "Tier 3 (historical data)"
+    
+    merge: "Combine results by relevance score"

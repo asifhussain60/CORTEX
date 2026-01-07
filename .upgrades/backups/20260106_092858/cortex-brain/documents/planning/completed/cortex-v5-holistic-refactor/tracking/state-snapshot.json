@@ -1,0 +1,121 @@
+{
+  "plan_id": "cortex-v5-holistic-refactor",
+  "status": "NOT_STARTED",
+  "created": "2026-01-02T00:00:00Z",
+  "last_updated": "2026-01-02T00:00:00Z",
+  "current_phase": 0,
+  "phases": [
+    {
+      "phase_id": 0,
+      "name": "Foundation Setup",
+      "status": "NOT_STARTED",
+      "progress": 0,
+      "started": null,
+      "completed": null,
+      "tasks_total": 4,
+      "tasks_completed": 0
+    },
+    {
+      "phase_id": 1,
+      "name": "MCP Tool Infrastructure",
+      "status": "NOT_STARTED",
+      "progress": 0,
+      "started": null,
+      "completed": null,
+      "tasks_total": 5,
+      "tasks_completed": 0
+    },
+    {
+      "phase_id": 2,
+      "name": "State Database",
+      "status": "NOT_STARTED",
+      "progress": 0,
+      "started": null,
+      "completed": null,
+      "tasks_total": 4,
+      "tasks_completed": 0
+    },
+    {
+      "phase_id": 3,
+      "name": "BaseOrchestrator v4.1",
+      "status": "NOT_STARTED",
+      "progress": 0,
+      "started": null,
+      "completed": null,
+      "tasks_total": 6,
+      "tasks_completed": 0
+    },
+    {
+      "phase_id": 4,
+      "name": "Planning Orchestrator v5",
+      "status": "NOT_STARTED",
+      "progress": 0,
+      "started": null,
+      "completed": null,
+      "tasks_total": 8,
+      "tasks_completed": 0
+    },
+    {
+      "phase_id": 5,
+      "name": "Use v5 to Plan Migrations",
+      "status": "NOT_STARTED",
+      "progress": 0,
+      "started": null,
+      "completed": null,
+      "tasks_total": 2,
+      "tasks_completed": 0
+    },
+    {
+      "phase_id": 6,
+      "name": "Execute Migration Plans",
+      "status": "NOT_STARTED",
+      "progress": 0,
+      "started": null,
+      "completed": null,
+      "tasks_total": 12,
+      "tasks_completed": 0
+    },
+    {
+      "phase_id": 7,
+      "name": "System Integration",
+      "status": "NOT_STARTED",
+      "progress": 0,
+      "started": null,
+      "completed": null,
+      "tasks_total": 4,
+      "tasks_completed": 0
+    },
+    {
+      "phase_id": 8,
+      "name": "Testing & Validation",
+      "status": "NOT_STARTED",
+      "progress": 0,
+      "started": null,
+      "completed": null,
+      "tasks_total": 6,
+      "tasks_completed": 0
+    },
+    {
+      "phase_id": 9,
+      "name": "Documentation",
+      "status": "NOT_STARTED",
+      "progress": 0,
+      "started": null,
+      "completed": null,
+      "tasks_total": 3,
+      "tasks_completed": 0
+    },
+    {
+      "phase_id": 10,
+      "name": "REFACTOR & Cleanup",
+      "status": "NOT_STARTED",
+      "progress": 0,
+      "started": null,
+      "completed": null,
+      "tasks_total": 5,
+      "tasks_completed": 0
+    }
+  ],
+  "artifacts": [],
+  "validations": []
+}

@@ -1,0 +1,81 @@
+# Phase 2: Architecture Synchronization
+# Version: 1.0.0
+# Priority: 3
+# Status: Not Started
+# Estimated Effort: 15 hours
+
+metadata:
+  phase_id: "phase_2"
+  name: "Architecture Synchronization"
+  priority: 3
+  status: "not-started"
+  description: "Auto-update ARCHITECTURE.md and key files during deployments to keep documentation live"
+  rationale: "Documentation drift creates confusion; must stay synchronized with code"
+  total_estimated_effort: "15 hours"
+
+objectives:
+  - "Trigger architecture updates during deploy (not align)"
+  - "Identify all files CORTEX checks for planning/enhancements"
+  - "Keep documentation 'live' through automated synchronization"
+
+deliverables:
+  - id: "2.1"
+    name: "Deploy-Triggered Architecture Updates"
+    description: "Move architecture synchronization from align CLI to deploy CLI"
+    challenge_raised: true
+    challenge_details: |
+      CHALLENGE: Updating architecture during 'align' is too frequent and noisy. 
+      RECOMMENDATION: Move to deploy orchestrator - it's version-gated, less frequent, 
+      and captures significant changes. Architecture updates should align with version bumps.
+    files_affected:
+      - "src/orchestrators/deploy_orchestrator.py"
+      - "src/orchestrators/align_orchestrator.py"
+      - "docs/ARCHITECTURE.md"
+      - "cortex-brain/operations-config.yaml"
+    acceptance_criteria:
+      - "deploy_cortex.py includes architecture sync step"
+      - "ARCHITECTURE.md updated with latest features before version bump"
+      - "align_orchestrator.py NO LONGER updates architecture"
+      - "Sync only triggers during deploy, not align"
+    estimated_effort: "5 hours"
+    
+  - id: "2.2"
+    name: "Key Files Inventory for Planning"
+    description: "Identify all files CORTEX references during planning and ensure they stay current"
+    files_affected:
+      - "src/orchestrators/planning_orchestrator.py"
+      - "cortex-brain/TRUTH-SOURCES.yaml"
+      - "cortex-brain/documents/planning/KEY-FILES-INVENTORY.md"
+    acceptance_criteria:
+      - "Document lists all files checked during planning (ARCHITECTURE.md, capabilities.yaml, etc.)"
+      - "Each file tagged with update frequency (deploy/weekly/manual)"
+      - "Automated check verifies key files updated in last 30 days"
+    estimated_effort: "4 hours"
+    
+  - id: "2.3"
+    name: "Live Documentation System"
+    description: "Implement auto-update hooks for documentation based on code changes"
+    files_affected:
+      - "src/utils/doc_sync_hooks.py"
+      - ".git/hooks/post-commit"
+      - "cortex-brain/doc-generation-rules.yaml"
+    acceptance_criteria:
+      - "Git hook triggers doc sync after commits to src/"
+      - "Doc sync identifies which documentation files need updates"
+      - "Sync runs during deploy, not during development"
+      - "Manual override available: 'cortex sync docs'"
+    estimated_effort: "6 hours"
+
+dependencies:
+  - "phase_0 (Clean code needed before doc sync)"
+  - "phase_1 (Setup must work before deployment changes)"
+
+testing_requirements:
+  - "Test deploy triggers architecture update"
+  - "Verify align does NOT trigger architecture update"
+  - "Validate key files inventory complete"
+  - "Test doc sync hook doesn't slow down commits"
+
+notes:
+  - "Deploy-triggered updates align with version bumps"
+  - "Live documentation prevents drift between code and docs"

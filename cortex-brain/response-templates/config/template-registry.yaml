@@ -1,0 +1,112 @@
+version: '1.0'
+generated: '2025-12-05T19:22:16.033586'
+template_count: 27
+templates:
+  hands_on_tutorial:
+    file: operations/help/help.yaml
+    category: operations/help
+    line_count: 49
+  cleanup:
+    file: operations/general/general.yaml
+    category: operations/general
+    line_count: 48
+  publish_branch:
+    file: operations/admin/admin.yaml
+    category: operations/admin
+    line_count: 37
+  optimize_cortex:
+    file: operations/general/general.yaml
+    category: operations/general
+    line_count: 49
+  design_sync:
+    file: operations/general/general.yaml
+    category: operations/general
+    line_count: 48
+  demo_generation:
+    file: operations/general/general.yaml
+    category: operations/general
+    line_count: 41
+  diagram_regeneration:
+    file: operations/diagram/diagram.yaml
+    category: operations/diagram
+    line_count: 43
+  holistic_cleanup:
+    file: operations/general/general.yaml
+    category: operations/general
+    line_count: 36
+  user_cleanup:
+    file: operations/general/general.yaml
+    category: operations/general
+    line_count: 41
+  optimize_system:
+    file: operations/general/general.yaml
+    category: operations/general
+    line_count: 41
+  planning:
+    file: orchestrators/planning/planning.yaml
+    category: orchestrators/planning
+    line_count: 62
+  application_health:
+    file: operations/general/general.yaml
+    category: operations/general
+    line_count: 48
+  git_checkpoint:
+    file: orchestrators/git-checkpoint/git-checkpoint.yaml
+    category: orchestrators/git-checkpoint
+    line_count: 58
+  manager_report:
+    file: operations/general/general.yaml
+    category: operations/general
+    line_count: 49
+  onboarding_acknowledgment:
+    file: operations/onboarding/onboarding.yaml
+    category: operations/onboarding
+    line_count: 57
+  plan_execution:
+    file: operations/general/general.yaml
+    category: operations/general
+    line_count: 57
+  ado_agent:
+    file: specialized/ado-integration/ado-integration.yaml
+    category: specialized/ado-integration
+    line_count: 50
+  compliance_dashboard_agent:
+    file: specialized/dashboard/dashboard.yaml
+    category: specialized/dashboard
+    line_count: 48
+  learning_capture_agent:
+    file: operations/general/general.yaml
+    category: operations/general
+    line_count: 51
+  profile_agent:
+    file: operations/general/general.yaml
+    category: operations/general
+    line_count: 50
+  rca_agent:
+    file: operations/general/general.yaml
+    category: operations/general
+    line_count: 50
+  welcome_banner_agent:
+    file: operations/general/general.yaml
+    category: operations/general
+    line_count: 44
+  architecture_intelligence_agent:
+    file: operations/general/general.yaml
+    category: operations/general
+    line_count: 45
+  feedback_agent:
+    file: operations/feedback/feedback.yaml
+    category: operations/feedback
+    line_count: 53
+  view_discovery_agent:
+    file: operations/general/general.yaml
+    category: operations/general
+    line_count: 62
+  threat_modeler_agent:
+    file: specialized/threat-modeling/threat-modeling.yaml
+    category: specialized/threat-modeling
+    line_count: 65
+  leadership_showcase:
+    file: operations/general/general.yaml
+    category: operations/general
+    line_count: 288

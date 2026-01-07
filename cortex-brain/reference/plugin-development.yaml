@@ -1,0 +1,384 @@
+plugin_development:
+  name: "CORTEX Plugin Development API"
+  version: "2.0"
+  philosophy: "Zero-footprint architecture - plugins use only existing CORTEX brain intelligence"
+  
+  overview:
+    plugin_principle: "No external APIs, additional tools, or network dependencies"
+    intelligence_source: "CORTEX brain tiers (Tier 2 patterns, Tier 3 context)"
+    architecture: "Natural language routing and command registration"
+    
+  base_plugin_architecture:
+    BasePlugin:
+      location: "src/plugins/base_plugin.py"
+      purpose: "Foundation class for all CORTEX plugins"
+      
+      required_methods:
+        __init__:
+          parameters:
+            name: "string (plugin identifier)"
+            version: "string (semantic version)"
+            description: "string (plugin purpose)"
+            author: "string (developer name)"
+          example: |
+            super().__init__(
+                name="my-custom-plugin",
+                version="1.0.0", 
+                description="Does something useful",
+                author="Your Name"
+            )
+            
+        validate:
+          purpose: "Validate inputs before execution"
+          parameters:
+            context: "Dict[str, Any] (execution context)"
+          returns: "boolean (True if valid inputs)"
+          example: |
+            def validate(self, context: Dict[str, Any]) -> bool:
+                required = ["input_data", "options"]
+                return all(field in context for field in required)
+                
+        execute:
+          purpose: "Main plugin execution logic"
+          parameters:
+            context: "Dict[str, Any] (execution context)"
+          returns: "Dict[str, Any] (result data)"
+          example: |
+            def execute(self, context: Dict[str, Any]) -> Dict[str, Any]:
+                result = self.process_data(context["input_data"])
+                return {
+                    "success": True,
+                    "data": result,
+                    "metadata": {"timestamp": datetime.now().isoformat()}
+                }
+
+      optional_methods:
+        get_natural_language_patterns:
+          purpose: "Register natural language triggers"
+          returns: "List[str] (trigger phrases)"
+          example: |
+            def get_natural_language_patterns(self):
+                return [
+                    "recommend improvements",
+                    "suggest optimizations", 
+                    "analyze code quality"
+                ]
+                
+        cleanup:
+          purpose: "Optional cleanup after execution" 
+          example: |
+            def cleanup(self):
+                # Clean up resources, temp files, etc.
+                pass
+
+  plugin_lifecycle_hooks:
+    execution_hooks:
+      on_before_execute:
+        purpose: "Called before main execution"
+        parameters: ["context"]
+        example: |
+          def on_before_execute(self, context):
+              print(f"Starting {self.name}")
+              
+      on_after_execute:
+        purpose: "Called after execution"
+        parameters: ["result"]
+        example: |
+          def on_after_execute(self, result):
+              print(f"Completed: {result['success']}")
+              
+      on_error:
+        purpose: "Called if execution fails"
+        parameters: ["error"]
+        example: |
+          def on_error(self, error):
+              print(f"Error: {error}")
+              # Log to Tier 4
+              
+      on_validate_failed:
+        purpose: "Called if validation fails"
+        parameters: ["context"]
+        example: |
+          def on_validate_failed(self, context):
+              print("Validation failed")
+
+  brain_tier_access:
+    tier2_knowledge_graph:
+      purpose: "Access learned patterns from past implementations"
+      available_methods:
+        search_patterns:
+          usage: "Find similar past solutions"
+          example: |
+            patterns = self.knowledge_graph.search_patterns(
+                query="code quality analysis",
+                filters={"pattern_type": "workflow", "min_confidence": 0.7}
+            )
+            
+        get_file_relationships:
+          usage: "Understand file dependencies"
+          example: |
+            relationships = self.knowledge_graph.get_file_relationships(
+                file_path="AuthService.cs",
+                relationship_types=["co_modification", "dependency"]
+            )
+            
+    tier3_context_intelligence:
+      purpose: "Access development context and file stability analysis"
+      available_methods:
+        get_file_stability:
+          usage: "Assess file modification risk"
+          example: |
+            stability = self.context_intelligence.get_file_stability(
+                file_path="HostControlPanel.razor"
+            )
+            # Returns: "stable", "unstable", or "volatile"
+            
+        analyze_git_activity:
+          usage: "Understand project health and velocity"
+          example: |
+            analysis = self.context_intelligence.analyze_git_activity(
+                lookback_days=30
+            )
+            # Returns: commit_velocity, file_hotspots, health_score
+            
+        get_development_insights:
+          usage: "Access productivity patterns"
+          example: |
+            insights = self.context_intelligence.get_development_insights()
+            # Returns: productivity_patterns, workflow_effectiveness
+
+  plugin_registration:
+    PluginManager:
+      location: "src/core/plugin_manager.py"
+      purpose: "Register and execute plugins"
+      
+      registration_process:
+        register_plugin:
+          parameters:
+            plugin_instance: "BasePlugin subclass instance"
+          example: |
+            from src.core.plugin_manager import PluginManager
+            
+            manager = PluginManager()
+            manager.register_plugin(MyCustomPlugin())
+            
+        execute_plugin:
+          parameters:
+            plugin_name: "string"
+            context: "Dict[str, Any]"
+          returns: "execution result"
+          example: |
+            result = manager.execute_plugin(
+                plugin_name="my-custom-plugin",
+                context={
+                    "input_data": [...],
+                    "options": {...}
+                }
+            )
+
+  flagship_example_recommendation_api:
+    RecommendationAPIPlugin:
+      location: "src/plugins/recommendation_api_plugin.py"
+      purpose: "Intelligent code recommendations using only CORTEX brain intelligence"
+      dependencies: "Zero external dependencies"
+      
+      implementation_highlights:
+        natural_language_patterns:
+          - "recommend improvements"
+          - "suggest optimizations"
+          - "analyze code quality"
+          - "what should I refactor?"
+          
+        brain_intelligence_usage:
+          tier2_patterns: "Learned improvement patterns from past work"
+          tier3_stability: "File stability and hotspot analysis"
+          recommendation_engine: "Pure CORTEX implementation"
+          
+        zero_footprint_approach:
+          no_external_apis: "No calls to external services"
+          no_additional_tools: "Uses only CORTEX brain tiers"
+          no_network_dependencies: "Works completely offline"
+          
+        sample_execution: |
+          def execute(self, request, context):
+              # Use Tier 2 for learned patterns
+              patterns = self.knowledge_graph.search_patterns(
+                  query="code improvement",
+                  filters={"scope": "application", "min_confidence": 0.7}
+              )
+              
+              # Use Tier 3 for file stability analysis  
+              file_path = context.get("file_path")
+              stability = self.context_intelligence.get_file_stability(file_path)
+              
+              # Generate intelligent recommendations
+              recommendations = self._analyze_and_recommend(patterns, stability)
+              
+              return {
+                  "success": True,
+                  "recommendations": recommendations,
+                  "intelligence_source": "CORTEX brain tiers only"
+              }
+
+  current_active_plugins:
+    recommendation_api:
+      status: "Production ready"
+      purpose: "Code quality recommendations"
+      dependencies: "Zero external"
+      
+    platform_switch:
+      status: "Production ready" 
+      purpose: "Auto-detect Mac/Windows/Linux"
+      dependencies: "OS detection only"
+      
+    system_refactor:
+      status: "Active development"
+      purpose: "Code restructuring guidance"
+      dependencies: "Zero external"
+      
+    doc_refresh:
+      status: "Production ready"
+      purpose: "Documentation generation"
+      dependencies: "Zero external"
+      
+    extension_scaffold:
+      status: "Production ready"
+      purpose: "VS Code extension creation"
+      dependencies: "Zero external"
+      
+    configuration_wizard:
+      status: "Production ready"
+      purpose: "Setup assistance"
+      dependencies: "Zero external"
+      
+    code_review:
+      status: "Active development"
+      purpose: "Quality analysis"
+      dependencies: "Zero external"
+      
+    cleanup:
+      status: "Production ready"
+      purpose: "Workspace maintenance"
+      dependencies: "Zero external"
+
+  plugin_template:
+    minimal_plugin: |
+      class MyPlugin(BasePlugin):
+          def __init__(self):
+              super().__init__(
+                  name="my-plugin",
+                  version="1.0.0",
+                  description="Does something useful",
+                  author="Your Name"
+              )
+          
+          def get_natural_language_patterns(self):
+              return ["analyze code quality", "review code", "check quality"]
+          
+          def validate(self, context):
+              return "file_path" in context
+          
+          def execute(self, context):
+              # Access CORTEX brain tiers (no external dependencies)
+              tier2_data = self.knowledge_graph.search_patterns(
+                  query=context.get("query", "")
+              )
+              tier3_data = self.context_intelligence.get_file_stability(
+                  context["file_path"]
+              )
+              
+              # Your plugin logic here
+              results = self._analyze_with_cortex_intelligence(tier2_data, tier3_data)
+              
+              return {"success": True, "data": results}
+              
+          def _analyze_with_cortex_intelligence(self, patterns, stability):
+              # Pure CORTEX brain-based analysis
+              recommendations = []
+              
+              # Use learned patterns
+              for pattern in patterns:
+                  if pattern["confidence"] > 0.8:
+                      recommendations.append({
+                          "type": "pattern_based",
+                          "suggestion": pattern["title"],
+                          "confidence": pattern["confidence"]
+                      })
+              
+              # Use file stability insights
+              if stability == "volatile":
+                  recommendations.append({
+                      "type": "stability_based",
+                      "suggestion": "Consider refactoring - file is volatile",
+                      "priority": "high"
+                  })
+                  
+              return recommendations
+
+  development_guidelines:
+    zero_footprint_principle:
+      - "Never add external API dependencies"
+      - "Use only CORTEX brain tiers for intelligence"
+      - "No network calls or external services"
+      - "Maintain offline-first architecture"
+      
+    brain_tier_usage:
+      tier2_patterns: "Learn from past successful implementations"
+      tier3_context: "Understand current project state"
+      tier1_memory: "Access recent conversation context"
+      tier0_governance: "Respect architectural principles"
+      
+    plugin_quality:
+      error_handling: "Graceful failure with meaningful messages"
+      performance: "Leverage CORTEX caching and indexing"
+      testing: "Unit tests with mock brain tier data"
+      documentation: "Clear usage examples and integration guide"
+
+  integration_patterns:
+    natural_language_activation:
+      user_says: "recommend improvements for this file"
+      cortex_routes: "to recommendation_api plugin"
+      plugin_executes: "using brain tier intelligence only"
+      result_integration: "seamlessly into conversation"
+      
+    workflow_enhancement:
+      tdd_integration: "Plugins can suggest test scenarios"
+      agent_coordination: "Plugins work with specialist agents"
+      memory_integration: "Results stored in conversation history"
+      learning_feedback: "Success patterns stored in Tier 2"
+
+  testing_framework:
+    plugin_testing:
+      mock_brain_tiers: "Test plugins with simulated brain data"
+      integration_tests: "Test full plugin workflow"
+      performance_tests: "Ensure <100ms execution time"
+      
+    test_example: |
+      def test_recommendation_plugin():
+          plugin = RecommendationAPIPlugin()
+          
+          # Mock brain tier data
+          mock_context = {
+              "file_path": "AuthService.cs",
+              "query": "code quality"
+          }
+          
+          # Execute plugin
+          result = plugin.execute(mock_context)
+          
+          # Validate results
+          assert result["success"] == True
+          assert "recommendations" in result
+          assert len(result["recommendations"]) > 0
+
+  performance_considerations:
+    execution_time: "Target <100ms for most plugins"
+    memory_usage: "Leverage CORTEX caching systems"
+    brain_tier_queries: "Optimize database queries"
+    result_caching: "Cache expensive computations"
+
+  deployment:
+    plugin_discovery: "Auto-discovery from src/plugins/"
+    hot_reloading: "Plugins can be updated without restart"
+    version_management: "Semantic versioning for plugin compatibility"
+    dependency_validation: "Ensure zero-footprint compliance"

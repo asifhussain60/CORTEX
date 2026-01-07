@@ -1,0 +1,537 @@
+# CORTEX 1.0 Rulebook Inventory
+# Complete governance system, Tier 0 instincts, and protection mechanisms
+
+version: "1.0.0"
+created: "2025-11-07"
+total_rules: 27
+critical_rules: 12
+
+# ============================================================================
+# TIER 0: IMMUTABLE INSTINCT RULES
+# ============================================================================
+# These rules define CORTEX's core DNA and cannot be changed
+
+tier0_rules:
+  # Cognitive Framework
+  - rule_id: "RULE_001"
+    rule_number: 1
+    name: "Cognitive Anchoring"
+    category: "cognitive_framework"
+    severity: "CRITICAL"
+    description: "Use anchor patterns and search before creating new patterns. Prefer REUSE over CREATE."
+    enforcement_mechanism: "Pattern search required before creation (Rule #27)"
+    violation_response: "Challenge with existing patterns, suggest reuse"
+    dependencies: ["RULE_027"]
+    status: "active"
+    tests:
+      - "tests/tier0/test_brain_protector_cognitive_anchors.py"
+    
+  - rule_id: "RULE_002"
+    rule_number: 2
+    name: "Definition of READY"
+    category: "quality_gates"
+    severity: "CRITICAL"
+    description: "Work must have clear requirements and acceptance criteria before starting"
+    enforcement_mechanism: "RIGHT BRAIN validates DoR before planning"
+    violation_response: "Reject plan, request clarification"
+    dependencies: []
+    status: "active"
+    tests:
+      - "tests/tier0/test_definition_of_ready.py"
+    
+  - rule_id: "RULE_003"
+    rule_number: 3
+    name: "Test-Driven Development (RED)"
+    category: "tdd"
+    severity: "CRITICAL"
+    description: "Always write failing test FIRST before implementation"
+    enforcement_mechanism: "LEFT BRAIN Tester agent enforces"
+    violation_response: "Halt execution, create test first"
+    dependencies: ["RULE_004", "RULE_005"]
+    status: "active"
+    tests:
+      - "tests/tier0/test_tdd_workflow.py"
+    
+  - rule_id: "RULE_004"
+    rule_number: 4
+    name: "Test-Driven Development (GREEN)"
+    category: "tdd"
+    severity: "CRITICAL"
+    description: "Implement minimum code to make tests pass"
+    enforcement_mechanism: "LEFT BRAIN Builder agent enforces"
+    violation_response: "Reject over-engineered solutions"
+    dependencies: ["RULE_003"]
+    status: "active"
+    tests:
+      - "tests/tier0/test_tdd_workflow.py"
+    
+  - rule_id: "RULE_005"
+    rule_number: 5
+    name: "Test-Driven Development (REFACTOR)"
+    category: "tdd"
+    severity: "CRITICAL"
+    description: "Clean up code after tests pass, maintain quality"
+    enforcement_mechanism: "LEFT BRAIN Inspector agent enforces"
+    violation_response: "Reject if code quality degrades"
+    dependencies: ["RULE_004", "RULE_006"]
+    status: "active"
+    tests:
+      - "tests/tier0/test_tdd_workflow.py"
+    
+  - rule_id: "RULE_006"
+    rule_number: 6
+    name: "Definition of DONE"
+    category: "quality_gates"
+    severity: "CRITICAL"
+    description: "Zero errors, zero warnings, all tests pass before completion"
+    enforcement_mechanism: "LEFT BRAIN Inspector validates"
+    violation_response: "Block commit until DoD met"
+    dependencies: []
+    status: "active"
+    tests:
+      - "tests/tier0/test_definition_of_done.py"
+    
+  - rule_id: "RULE_007"
+    rule_number: 7
+    name: "Challenge Risky Changes"
+    category: "protection"
+    severity: "HIGH"
+    description: "Brain MUST challenge proposals that violate Tier 0 rules"
+    enforcement_mechanism: "Brain Protector agent (RIGHT BRAIN)"
+    violation_response: "Present challenge with data, request justification"
+    dependencies: ["RULE_022"]
+    status: "active"
+    tests:
+      - "tests/tier0/test_brain_protector_challenges.py"
+    
+  - rule_id: "RULE_008"
+    rule_number: 8
+    name: "Single Responsibility Principle"
+    category: "solid"
+    severity: "HIGH"
+    description: "Each agent has ONE clear job, no mode switches"
+    enforcement_mechanism: "Architecture reviews, Change Governor"
+    violation_response: "Suggest creating dedicated agent"
+    dependencies: []
+    status: "active"
+    tests:
+      - "tests/unit/test_agent_responsibilities.py"
+    
+  - rule_id: "RULE_009"
+    rule_number: 9
+    name: "Interface Segregation"
+    category: "solid"
+    severity: "MEDIUM"
+    description: "Dedicated agents for each concern, no bloated interfaces"
+    enforcement_mechanism: "Architecture validation"
+    violation_response: "Suggest splitting agent"
+    dependencies: ["RULE_008"]
+    status: "active"
+    
+  - rule_id: "RULE_010"
+    rule_number: 10
+    name: "Dependency Inversion"
+    category: "solid"
+    severity: "MEDIUM"
+    description: "Use abstractions (session-loader, file-accessor) not concrete implementations"
+    enforcement_mechanism: "Code reviews, static analysis"
+    violation_response: "Refactor to use abstraction"
+    dependencies: []
+    status: "active"
+    
+  - rule_id: "RULE_011"
+    rule_number: 11
+    name: "Local-First Architecture"
+    category: "architecture"
+    severity: "HIGH"
+    description: "Zero external dependencies, works offline, 100% portable"
+    enforcement_mechanism: "Dependency audits"
+    violation_response: "Reject external API dependencies"
+    dependencies: []
+    status: "active"
+    tests:
+      - "tests/unit/test_local_first.py"
+    
+  - rule_id: "RULE_022"
+    rule_number: 22
+    name: "Brain Protection System"
+    category: "protection"
+    severity: "CRITICAL"
+    description: "Brain files protected against degradation, 5-layer protection system"
+    enforcement_mechanism: "Brain Protector agent + git hooks + validation"
+    violation_response: "Challenge changes with evidence, suggest safe alternatives"
+    dependencies: []
+    status: "active"
+    tests:
+      - "tests/tier0/test_brain_protector_conversation_tracking.py"
+      - "tests/tier0/test_brain_protector_tier_boundaries.py"
+      - "tests/tier0/test_brain_protector_solid_compliance.py"
+    protection_layers:
+      layer_1:
+        name: "Instinct Immutability"
+        detects: "Attempts to disable TDD, skip DoR/DoD, modify agent behavior"
+        action: "CHALLENGE user, suggest safe alternatives"
+      layer_2:
+        name: "Tier Boundary Protection"
+        detects: "Application paths in Tier 0, conversation data in Tier 2"
+        action: "Auto-migrate, warn on violations"
+      layer_3:
+        name: "SOLID Compliance"
+        detects: "Agents doing multiple jobs, mode switches, hardcoded dependencies"
+        action: "Challenge with SOLID alternative"
+      layer_4:
+        name: "Hemisphere Specialization"
+        detects: "Strategic planning in LEFT BRAIN, tactical execution in RIGHT BRAIN"
+        action: "Auto-route to correct hemisphere, warn on confusion"
+      layer_5:
+        name: "Knowledge Quality"
+        detects: "Low confidence patterns (<0.50), stale patterns (>90 days)"
+        action: "Pattern decay, anomaly detection, consolidation"
+    
+  - rule_id: "RULE_023"
+    rule_number: 23
+    name: "Incremental File Creation"
+    category: "response_optimization"
+    severity: "HIGH"
+    description: "Large files (>100 lines) created in 100-150 line increments to avoid length limits"
+    enforcement_mechanism: "Automatic chunking in file creation tools"
+    violation_response: "Auto-split into multiple tool calls"
+    dependencies: []
+    status: "active"
+    purpose: "Prevents 'response hit the length limit' errors"
+    
+  - rule_id: "RULE_024"
+    rule_number: 24
+    name: "Conversation Tracking"
+    category: "memory"
+    severity: "CRITICAL"
+    description: "All conversations MUST be tracked to Tier 1 for memory continuity"
+    enforcement_mechanism: "Conversation manager + capture scripts"
+    violation_response: "Warn about amnesia risk, provide tracking options"
+    dependencies: []
+    status: "active"
+    tests:
+      - "tests/tier0/test_brain_protector_conversation_tracking.py"
+    tracking_methods:
+      - "PowerShell capture script (cortex-capture.ps1)"
+      - "Python CLI (cortex_cli.py with auto-tracking)"
+      - "Manual recording (record-conversation.ps1)"
+    
+  - rule_id: "RULE_025"
+    rule_number: 25
+    name: "Hemisphere Coordination"
+    category: "architecture"
+    severity: "HIGH"
+    description: "RIGHT plans → Corpus Callosum delivers → LEFT executes"
+    enforcement_mechanism: "Message queue coordination"
+    violation_response: "Route to correct hemisphere"
+    dependencies: []
+    status: "active"
+    
+  - rule_id: "RULE_026"
+    rule_number: 26
+    name: "Pattern Confidence Thresholds"
+    category: "protection"
+    severity: "MEDIUM"
+    description: "Patterns require 3+ occurrences before auto-routing, <0.70 confidence triggers fallback"
+    enforcement_mechanism: "Brain Protector + Pattern Search"
+    violation_response: "Use pattern matching, don't auto-route"
+    dependencies: ["RULE_027"]
+    status: "active"
+    tests:
+      - "tests/tier2/test_pattern_confidence.py"
+    
+  - rule_id: "RULE_027"
+    rule_number: 27
+    name: "Pattern Search Before Create"
+    category: "cognitive_framework"
+    severity: "HIGH"
+    description: "ALWAYS search for existing patterns before creating new ones (REUSE > CREATE)"
+    enforcement_mechanism: "Mandatory pattern search in all code/component creation"
+    violation_response: "Suggest existing pattern with confidence score"
+    dependencies: []
+    status: "active"
+    tests:
+      - "tests/tier2/test_pattern_search.py"
+    metrics_tracked:
+      - "Total pattern searches"
+      - "REUSE vs CREATE decisions"
+      - "Pattern confidence scores"
+      - "Search performance (ms)"
+
+# Additional governance rules (numbered but not Tier 0)
+governance_rules:
+  - rule_id: "RULE_012"
+    rule_number: 12
+    name: "Git Commit Integrity"
+    category: "version_control"
+    severity: "MEDIUM"
+    description: "Semantic commit messages, auto-categorize (feat/fix/test/docs)"
+    enforcement_mechanism: "Commit Handler agent"
+    violation_response: "Reformat commit message"
+    status: "active"
+    
+  - rule_id: "RULE_013"
+    rule_number: 13
+    name: "Event Logging Standard"
+    category: "observability"
+    severity: "MEDIUM"
+    description: "All agents MUST log events to Tier 4 event stream"
+    enforcement_mechanism: "Agent base class requirement"
+    violation_response: "Add event logging"
+    status: "active"
+    
+  - rule_id: "RULE_014"
+    rule_number: 14
+    name: "FIFO Queue Management"
+    category: "memory"
+    severity: "HIGH"
+    description: "Tier 1 maintains exactly 20 conversations, oldest deleted when 21st arrives"
+    enforcement_mechanism: "Conversation Manager automatic FIFO"
+    violation_response: "Auto-delete oldest, preserve active"
+    status: "active"
+    tests:
+      - "tests/tier1/test_fifo_queue.py"
+    
+  - rule_id: "RULE_015"
+    rule_number: 15
+    name: "Performance Targets"
+    category: "performance"
+    severity: "MEDIUM"
+    description: "Tier 1: <50ms, Tier 2: <150ms, Tier 3: <5000ms"
+    enforcement_mechanism: "Performance monitoring + tests"
+    violation_response: "Optimize queries, add indexes"
+    status: "active"
+    tests:
+      - "tests/cortex-performance/benchmark-sql-js.spec.ts"
+
+# ============================================================================
+# PROTECTION MECHANISMS
+# ============================================================================
+
+protection_systems:
+  brain_protector:
+    agent: "brain-protector.md"
+    scope: "Prevents degradation of brain files and knowledge quality"
+    triggers:
+      - "Changes to Tier 0 files"
+      - "Low confidence patterns"
+      - "Tier boundary violations"
+      - "TDD workflow bypass attempts"
+    actions:
+      - "Present challenge with evidence"
+      - "Suggest safe alternatives"
+      - "Require OVERRIDE justification"
+    tests:
+      - "tests/tier0/test_brain_protector_challenges.py"
+      - "tests/tier0/test_brain_protector_conversation_tracking.py"
+      - "tests/tier0/test_brain_protector_solid_compliance.py"
+      - "tests/tier0/test_brain_protector_tier_boundaries.py"
+    
+  change_governor:
+    agent: "change-governor.md"
+    scope: "Reviews CORTEX architecture changes for SOLID compliance"
+    triggers:
+      - "Changes to agent files"
+      - "New agent creation"
+      - "Architecture modifications"
+    actions:
+      - "Validate SOLID principles"
+      - "Check for mode switches"
+      - "Ensure single responsibility"
+    tests:
+      - "tests/agents/test_change_governor.py"
+    
+  anomaly_detector:
+    scope: "Detects suspicious patterns in knowledge graph"
+    triggers:
+      - "High confidence with low occurrence (e.g., 0.98 with 1 use)"
+      - "Large confidence jumps (>0.15 per update)"
+      - "Perfect confidence (1.0) with <10 occurrences"
+    actions:
+      - "Flag for review"
+      - "Cap confidence"
+      - "Log anomaly"
+    
+  tier_boundary_enforcement:
+    scope: "Keeps data in correct tiers"
+    violations:
+      - "Application data in Tier 0 (should be Tier 2)"
+      - "Conversation data in Tier 2 (should be Tier 1)"
+      - "Generic patterns in Tier 1 (should be Tier 2)"
+    actions:
+      - "Auto-migrate to correct tier"
+      - "Warn on violation"
+      - "Update namespaces/scope"
+    
+  fifo_queue_protection:
+    scope: "Protects active conversations from deletion"
+    rules:
+      - "Active conversation never deleted"
+      - "Only complete/archived conversations eligible for FIFO"
+      - "Manual delete requires explicit confirmation"
+    actions:
+      - "Block deletion attempts on active"
+      - "Sort by completion time for FIFO"
+      - "Preserve last 20 complete conversations"
+
+# ============================================================================
+# ENFORCEMENT MECHANISMS
+# ============================================================================
+
+enforcement_mechanisms:
+  pre_commit_hooks:
+    location: "hooks/pre-commit"
+    validates:
+      - "Brain file integrity"
+      - "YAML schema compliance"
+      - "No secrets in commits"
+    
+  agent_validation:
+    agents_enforcing_rules:
+      - agent: "intent-router"
+        enforces: ["RULE_001", "RULE_027"]
+        method: "Pattern search before routing"
+      - agent: "work-planner"
+        enforces: ["RULE_002"]
+        method: "DoR validation before planning"
+      - agent: "test-generator"
+        enforces: ["RULE_003"]
+        method: "Test creation before implementation"
+      - agent: "code-executor"
+        enforces: ["RULE_004"]
+        method: "Minimum code to pass tests"
+      - agent: "health-validator"
+        enforces: ["RULE_005", "RULE_006"]
+        method: "Quality checks, DoD validation"
+      - agent: "brain-protector"
+        enforces: ["RULE_007", "RULE_022", "RULE_024"]
+        method: "Challenge risky changes"
+      - agent: "change-governor"
+        enforces: ["RULE_008", "RULE_009", "RULE_010"]
+        method: "SOLID compliance checks"
+    
+  automated_tests:
+    test_suites:
+      - suite: "tests/tier0/"
+        tests: 8
+        coverage: "100%"
+        enforces: ["RULE_002", "RULE_003", "RULE_004", "RULE_005", "RULE_006", "RULE_022"]
+      - suite: "tests/tier1/"
+        tests: 15
+        coverage: "100%"
+        enforces: ["RULE_014", "RULE_024"]
+      - suite: "tests/tier2/"
+        tests: 17
+        coverage: "100%"
+        enforces: ["RULE_001", "RULE_026", "RULE_027"]
+      - suite: "tests/tier3/"
+        tests: 15
+        coverage: "100%"
+        enforces: ["RULE_015"]
+      - suite: "tests/agents/"
+        tests: 5
+        coverage: "90%"
+        enforces: ["RULE_008", "RULE_009", "RULE_013"]
+    
+  runtime_validation:
+    checks:
+      - "Confidence threshold validation (Rule #26)"
+      - "Pattern occurrence validation (Rule #27)"
+      - "FIFO queue size enforcement (Rule #14)"
+      - "Performance targets monitoring (Rule #15)"
+      - "Hemisphere routing validation (Rule #25)"
+
+# ============================================================================
+# RULE DEPENDENCIES
+# ============================================================================
+
+rule_dependency_graph:
+  tdd_chain:
+    - "RULE_003 (RED) → RULE_004 (GREEN) → RULE_005 (REFACTOR)"
+    - "All depend on RULE_006 (DoD) for validation"
+  
+  protection_chain:
+    - "RULE_022 (Brain Protection) enables RULE_007 (Challenge Changes)"
+    - "RULE_026 (Confidence Thresholds) supports RULE_027 (Pattern Search)"
+  
+  solid_chain:
+    - "RULE_008 (SRP) foundation for RULE_009 (ISP)"
+    - "RULE_010 (DIP) enables flexible architecture"
+  
+  cognitive_chain:
+    - "RULE_001 (Cognitive Anchoring) implemented by RULE_027 (Pattern Search)"
+    - "Both reduce duplication and improve consistency"
+
+# ============================================================================
+# METRICS & MONITORING
+# ============================================================================
+
+rule_compliance_metrics:
+  tdd_compliance:
+    metric: "Percentage of features developed with test-first"
+    target: ">90%"
+    current: "94%"
+    tracking: "Event stream analysis"
+    
+  pattern_reuse_rate:
+    metric: "REUSE vs CREATE decisions"
+    target: ">60%"
+    current: "Unknown (tracking added in 2.0)"
+    tracking: "tier2_pattern_searches table"
+    
+  protection_challenges:
+    metric: "Number of risky proposals challenged"
+    target: "Low count = healthy system"
+    current: "2 in last week"
+    tracking: "protection-events.jsonl"
+    
+  fifo_queue_health:
+    metric: "Conversations within 20 limit"
+    target: "Always 20 or fewer"
+    current: "8/20 capacity"
+    tracking: "tier1_conversations table"
+    
+  performance_compliance:
+    metric: "Queries meeting performance targets"
+    target: "100% of queries"
+    current: "52% faster than target"
+    tracking: "Performance tests + monitoring"
+
+# ============================================================================
+# RULE EVOLUTION
+# ============================================================================
+
+rule_changes_v1:
+  added_in_v1:
+    - rule: "RULE_023"
+      date: "2025-11-05"
+      reason: "Prevent response length limit errors"
+    - rule: "RULE_024"
+      date: "2025-11-06"
+      reason: "Enforce conversation tracking for memory"
+    - rule: "RULE_027"
+      date: "2025-11-06"
+      reason: "Mandatory pattern search (Cognitive Anchoring)"
+  
+  modified_in_v1:
+    - rule: "RULE_022"
+      date: "2025-11-03"
+      change: "Enhanced to 5-layer protection system"
+      reason: "Comprehensive brain protection needed"
+  
+  deprecated_in_v1: []
+
+# ============================================================================
+# VALIDATION STATUS
+# ============================================================================
+
+validation_status:
+  rules_tested: 15
+  rules_enforced: 27
+  test_coverage: "100% for critical rules"
+  protection_active: true
+  anomaly_detection: true
+  last_audit: "2025-11-06"
+  audit_result: "PASS"
+  issues_found: 0

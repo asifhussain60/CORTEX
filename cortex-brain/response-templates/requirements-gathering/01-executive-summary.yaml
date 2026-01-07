@@ -1,0 +1,118 @@
+name: "Requirements Gathering - Executive Summary"
+phase: "Phase 1: Analysis & Summary"
+purpose: "Present high-level analysis of user request with current state assessment"
+audience: "User (for validation before proceeding)"
+
+template: |
+  ## 🧠 CORTEX Requirements Analysis
+  **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+  
+  ---
+  
+  ### 🎯 Understanding & Scope
+  {understanding}
+  
+  **Scope:** {scope}
+  
+  **Boundaries:** {boundaries}
+  
+  ---
+  
+  ### 📊 Current State Assessment
+  
+  **Existing Process/Implementation:**
+  {current_state}
+  
+  **Identified Sub-Steps:**
+  {sub_steps}
+  
+  **Dependencies Detected:**
+  {dependencies}
+  
+  **Edge Cases Identified:**
+  {edge_cases}
+  
+  ---
+  
+  ### 📈 High-Level Workflow
+  
+  ```mermaid
+  {workflow_diagram}
+  ```
+  
+  ---
+  
+  ### 🔍 Next Steps
+  
+  **Proceeding to Phase 2:** Discovery Context Injection
+  - Running Feature Discovery scan for existing features
+  - Analyzing codebase for related functionality
+  - Preparing evidence-based enhancement proposals
+  
+  **Your Feedback:** Does this summary accurately capture your requirements? Any corrections needed?
+
+variables:
+  understanding:
+    type: string
+    description: "What CORTEX understood from the user's request"
+    required: true
+    
+  scope:
+    type: string
+    description: "Clear boundaries of what's included"
+    required: true
+    
+  boundaries:
+    type: string
+    description: "What's explicitly out of scope"
+    required: true
+    
+  current_state:
+    type: string
+    description: "Current implementation/process (if exists)"
+    required: true
+    
+  sub_steps:
+    type: list
+    description: "Numbered list of identified sub-steps"
+    required: true
+    
+  dependencies:
+    type: list
+    description: "External dependencies, systems, or prerequisites"
+    required: true
+    
+  edge_cases:
+    type: list
+    description: "Potential failure scenarios or special conditions"
+    required: true
+    
+  workflow_diagram:
+    type: string
+    description: "Mermaid diagram showing high-level workflow"
+    required: true
+
+validation_rules:
+  - rule: "understanding must be 2-5 sentences"
+  - rule: "scope must explicitly state what's included"
+  - rule: "boundaries must explicitly state what's excluded"
+  - rule: "sub_steps must have at least 3 items"
+  - rule: "dependencies list can be empty if truly independent"
+  - rule: "edge_cases must identify at least 2 scenarios"
+  - rule: "workflow_diagram must be valid Mermaid syntax"
+
+examples:
+  - context: "User requests: 'Create orchestrator sub-plans with testing phases'"
+    output: |
+      Understanding: Create comprehensive sub-plans for each of the 9 orchestrators in the CORTEX 4.0 consolidation project, including detailed testing phases (RED-GREEN-REFACTOR-CUTOVER-CLEANUP).
+      
+      Scope: All 9 orchestrators + Feature Discovery module (10 total), 6-section template (Existing State, New Structure, Migration, Tests, Wiring, Removal).
+      
+      Boundaries: Does not include actual implementation (planning only), does not modify existing orchestrators yet.
+
+usage_notes:
+  - "Always run after initial user request parsing"
+  - "Do NOT proceed to Phase 2 without user confirmation"
+  - "If user says 'looks good' or 'correct', proceed to Discovery Context Injection"
+  - "If user provides corrections, regenerate this template with updates"
+  - "Keep workflow diagrams simple (5-8 boxes max)"

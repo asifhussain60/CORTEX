@@ -1,0 +1,39 @@
+{
+  "agents": [
+    "ado_agent",
+    "compliance_dashboard_agent",
+    "learning_capture_agent",
+    "profile_agent",
+    "rca_agent",
+    "welcome_banner_agent",
+    "architecture_intelligence_agent",
+    "feedback_agent",
+    "view_discovery_agent",
+    "threat_modeler_agent"
+  ],
+  "orchestrators": [
+    "planning",
+    "git_checkpoint",
+    "plan_execution"
+  ],
+  "operations": [
+    "cleanup",
+    "optimize_cortex",
+    "holistic_cleanup",
+    "user_cleanup",
+    "optimize_system",
+    "onboarding_acknowledgment"
+  ],
+  "specialized": [
+    "demo_generation"
+  ],
+  "uncategorized": [
+    "hands_on_tutorial",
+    "publish_branch",
+    "design_sync",
+    "diagram_regeneration",
+    "application_health",
+    "manager_report",
+    "leadership_showcase"
+  ]
+}

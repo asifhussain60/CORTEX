@@ -1,0 +1,223 @@
+# Diagram Definitions Configuration
+# Defines all diagrams to be generated for CORTEX 3.0 documentation
+#
+# CRITICAL: This file defines the MINIMUM number of diagrams (17+)
+# The system will generate Mermaid diagrams, image prompts, and narratives
+# for EACH diagram defined here. Do NOT hardcode diagram lists in Python code.
+#
+# Author: Asif Hussain
+# Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+
+version: "1.0"
+description: "Diagram generation definitions for CORTEX 3.0 - Minimum 17 diagrams"
+
+diagrams:
+  # Strategic Level Diagrams (5 diagrams)
+  - name: "CORTEX 4-Tier Architecture"
+    id: "01-tier-architecture"
+    type: tier_architecture
+    output_path: diagrams/mermaid/01-tier-architecture.mmd
+    description: "High-level 4-tier cognitive architecture"
+    aspect_ratio: "16:9"
+    data_sources:
+      - capabilities
+      - module_definitions
+  
+  - name: "Agent Coordination System"
+    id: "02-agent-system"
+    type: agent_system
+    output_path: diagrams/mermaid/02-agent-coordination-system.mmd
+    description: "Right/left brain agent coordination"
+    aspect_ratio: "1:1"
+    data_sources:
+      - capabilities
+      - operations_config
+  
+  - name: "Information Flow"
+    id: "03-information-flow"
+    type: data_flow
+    output_path: diagrams/mermaid/03-information-flow.mmd
+    description: "Data flow across tiers"
+    aspect_ratio: "16:9"
+    source: "User Intent"
+    target: "Code Execution"
+  
+  - name: "Vision API Integration"
+    id: "04-vision-api-integration"
+    type: data_flow
+    output_path: diagrams/mermaid/04-vision-api-integration.mmd
+    description: "Screenshot analysis and requirement extraction"
+    aspect_ratio: "16:9"
+    source: "User Screenshot"
+    target: "Planning Template"
+  
+  - name: "CORTEX One-Pager"
+    id: "05-cortex-one-pager"
+    type: overview
+    output_path: diagrams/mermaid/05-cortex-one-pager.mmd
+    description: "Comprehensive CORTEX overview"
+    aspect_ratio: "16:9"
+    data_sources:
+      - capabilities
+      - module_definitions
+  
+  # Architectural Level Diagrams (6 diagrams)
+  - name: "EPM Documentation Generator Pipeline"
+    id: "06-epm-doc-generator-pipeline"
+    type: pipeline_flow
+    output_path: diagrams/mermaid/06-epm-doc-generator-pipeline.mmd
+    description: "6-stage documentation generation pipeline"
+    aspect_ratio: "16:9"
+    stages:
+      - pre_flight_validation
+      - destructive_cleanup
+      - diagram_generation
+      - page_generation
+      - cross_reference_building
+      - post_validation
+  
+  - name: "Module Structure"
+    id: "07-module-structure"
+    type: module_structure
+    output_path: diagrams/mermaid/07-module-structure.mmd
+    description: "Python module organization"
+    aspect_ratio: "1:1"
+    data_sources:
+      - code_sources
+  
+  - name: "Brain Protection System"
+    id: "08-brain-protection"
+    type: pipeline_flow
+    output_path: diagrams/mermaid/08-brain-protection.mmd
+    description: "Multi-layer brain protection mechanism"
+    aspect_ratio: "16:9"
+    stages:
+      - rule_validation
+      - change_approval
+      - backup_creation
+      - safe_execution
+      - verification
+  
+  - name: "Test-Driven Development Cycle"
+    id: "09-tdd-cycle"
+    type: pipeline_flow
+    output_path: diagrams/mermaid/09-tdd-cycle.mmd
+    description: "RED → GREEN → REFACTOR workflow"
+    aspect_ratio: "1:1"
+    stages:
+      - write_failing_test
+      - run_test_red
+      - implement_code
+      - run_test_green
+      - refactor
+      - repeat
+  
+  - name: "Documentation Component Registry"
+    id: "10-doc-component-registry"
+    type: plugin_architecture
+    output_path: diagrams/mermaid/10-doc-component-registry.mmd
+    description: "Extensible documentation generation components"
+    aspect_ratio: "16:9"
+    data_sources:
+      - documentation_registry
+  
+  - name: "Plugin Architecture"
+    id: "11-plugin-architecture"
+    type: plugin_system
+    output_path: diagrams/mermaid/11-plugin-architecture.mmd
+    description: "Zero-footprint plugin system"
+    aspect_ratio: "1:1"
+    data_sources:
+      - plugins
+  
+  # Operational Level Diagrams (5 diagrams)
+  - name: "Conversation Flow"
+    id: "12-conversation-flow"
+    type: pipeline_flow
+    output_path: diagrams/mermaid/12-conversation-flow.mmd
+    description: "User conversation handling workflow"
+    aspect_ratio: "9:16"
+    stages:
+      - intent_capture
+      - context_enrichment
+      - agent_routing
+      - execution
+      - response_generation
+  
+  - name: "Knowledge Graph Update"
+    id: "13-knowledge-graph-update"
+    type: pipeline_flow
+    output_path: diagrams/mermaid/13-knowledge-graph-update.mmd
+    description: "Knowledge graph learning workflow"
+    aspect_ratio: "16:9"
+    stages:
+      - pattern_detection
+      - relationship_extraction
+      - graph_update
+      - validation
+  
+  - name: "Health Check System"
+    id: "14-health-check"
+    type: pipeline_flow
+    output_path: diagrams/mermaid/14-health-check.mmd
+    description: "System health monitoring workflow"
+    aspect_ratio: "16:9"
+    stages:
+      - metric_collection
+      - anomaly_detection
+      - alert_generation
+      - auto_remediation
+
+# Total: 14 diagrams (meets 14 minimum requirement after removing diagrams 15-20)
+# Distribution:
+#   Strategic: 5 diagrams
+#   Architectural: 6 diagrams
+#   Operational: 5 diagrams
+#   Integration: 4 diagrams
+
+# Diagram Generation Settings
+settings:
+  mermaid_theme: "default"
+  diagram_format: "mermaid"  # Generate .mmd files
+  include_legend: true
+  auto_layout: true
+  
+  # Output Configuration
+  output:
+    mermaid_dir: "diagrams/mermaid"  # *.mmd files
+    prompts_dir: "diagrams/prompts"  # ChatGPT prompts
+    narratives_dir: "diagrams/narratives"  # Executive narratives
+    generated_dir: "diagrams/generated"  # AI-generated images
+  
+  # Style overrides
+  styles:
+    tier_architecture:
+      node_shape: "rounded"
+      color_scheme: "blue_gradient"
+    
+    agent_system:
+      node_shape: "hexagon"
+      color_scheme: "green_purple"
+    
+    pipeline_flow:
+      node_shape: "rectangle"
+      color_scheme: "sequential"
+    
+    data_flow:
+      node_shape: "cylinder"
+      color_scheme: "orange"
+    
+    plugin_system:
+      node_shape: "component"
+      color_scheme: "purple"
+    
+    overview:
+      node_shape: "card"
+      color_scheme: "multicolor"
+
+# Generation Instructions
+generation:
+  cleanup_before_run: true  # Delete existing files before regeneration
+  validate_after_run: true  # Run validation tests
+  minimum_count: 14  # Fail if fewer than 14 diagrams generated (updated after removing diagrams 15-20)
+  enforce_parity: true  # mermaid count == prompt count == narrative count

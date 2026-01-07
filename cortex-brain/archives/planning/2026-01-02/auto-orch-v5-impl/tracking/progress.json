@@ -1,0 +1,128 @@
+{
+  "plan_id": "auto-orch-v5-impl",
+  "created": "2026-01-02",
+  "status": "not_started",
+  "overall_progress": 0,
+  "phases": [
+    {
+      "id": 0,
+      "name": "Foundation Setup",
+      "status": "not_started",
+      "progress": 0,
+      "duration_days": 1,
+      "started": null,
+      "completed": null,
+      "tasks": [
+        {
+          "id": "0.1",
+          "name": "Filename Convention & Monitor",
+          "status": "not_started",
+          "priority": "HIGH",
+          "duration_hours": 2
+        },
+        {
+          "id": "0.2",
+          "name": "Project Structure",
+          "status": "not_started",
+          "duration_hours": 3
+        },
+        {
+          "id": "0.3",
+          "name": "Architecture Baseline Doc",
+          "status": "not_started",
+          "duration_hours": 3
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "MCP Tool Infrastructure",
+      "status": "not_started",
+      "progress": 0,
+      "duration_days": 3
+    },
+    {
+      "id": 2,
+      "name": "Planning State Database",
+      "status": "not_started",
+      "progress": 0,
+      "duration_days": 2
+    },
+    {
+      "id": 3,
+      "name": "BaseOrchestrator v4.1",
+      "status": "not_started",
+      "progress": 0,
+      "duration_days": 2
+    },
+    {
+      "id": 4,
+      "name": "Planning Orchestrator v5",
+      "status": "not_started",
+      "progress": 0,
+      "duration_days": 4
+    },
+    {
+      "id": 5,
+      "name": "Config-Only Manifests",
+      "status": "not_started",
+      "progress": 0,
+      "duration_days": 1.5
+    },
+    {
+      "id": 6,
+      "name": "ADO Orchestrator v2",
+      "status": "not_started",
+      "progress": 0,
+      "duration_days": 3
+    },
+    {
+      "id": 7,
+      "name": "Vacuum Orchestrator v2",
+      "status": "not_started",
+      "progress": 0,
+      "duration_days": 2.5
+    },
+    {
+      "id": 8,
+      "name": "Cleanup Orchestrator v2",
+      "status": "not_started",
+      "progress": 0,
+      "duration_days": 2
+    },
+    {
+      "id": 9,
+      "name": "Testing & Validation",
+      "status": "not_started",
+      "progress": 0,
+      "duration_days": 3
+    },
+    {
+      "id": 10,
+      "name": "Migration & Documentation",
+      "status": "not_started",
+      "progress": 0,
+      "duration_days": 2
+    },
+    {
+      "id": 11,
+      "name": "REFACTOR & Cleanup",
+      "status": "not_started",
+      "progress": 0,
+      "duration_days": 2
+    }
+  ],
+  "filename_compliance": {
+    "enabled": true,
+    "max_length": 20,
+    "format": "kebab-case",
+    "violations": [],
+    "compliance_rate": 100
+  },
+  "metrics": {
+    "total_duration_days": 27,
+    "files_created": 0,
+    "tests_written": 0,
+    "test_coverage": 0
+  }
+}

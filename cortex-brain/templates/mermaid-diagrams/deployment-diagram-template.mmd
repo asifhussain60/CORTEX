@@ -1,0 +1,242 @@
+%% Deployment Diagram Template
+%% Template Version: 1.0.0
+%% Author: CORTEX Development Team
+%% Usage: Use for infrastructure architecture, cloud deployments, and system topology
+%%
+%% Variables to replace:
+%%   {{ENVIRONMENT}} - Environment name (dev, staging, prod)
+%%   {{REGION}} - Cloud region
+%%   {{SERVICE_N}} - Service names
+%%   {{INSTANCE_N}} - Instance specifications
+
+---
+%% Basic Cloud Architecture
+graph TB
+    subgraph "Internet 🌐"
+        USER[("👤 Users")]
+        CDN["☁️ CDN<br/>CloudFront"]
+    end
+    
+    subgraph "AWS Cloud ☁️"
+        subgraph "Public Subnet"
+            ALB["⚖️ ALB<br/>Application Load Balancer"]
+            NAT["🚪 NAT Gateway"]
+        end
+        
+        subgraph "Private Subnet - App Tier"
+            ECS["🐳 ECS Cluster"]
+            EC2_1["📦 EC2 Instance 1"]
+            EC2_2["📦 EC2 Instance 2"]
+        end
+        
+        subgraph "Private Subnet - Data Tier"
+            RDS[("💾 RDS<br/>PostgreSQL")]
+            REDIS[("⚡ ElastiCache<br/>Redis")]
+            S3[("📁 S3 Bucket")]
+        end
+    end
+    
+    USER --> CDN
+    CDN --> ALB
+    ALB --> EC2_1
+    ALB --> EC2_2
+    EC2_1 --> ECS
+    EC2_2 --> ECS
+    ECS --> RDS
+    ECS --> REDIS
+    ECS --> S3
+    EC2_1 --> NAT
+    
+    style ALB fill:#FF9900
+    style RDS fill:#3B48CC
+    style S3 fill:#569A31
+
+---
+%% Kubernetes Cluster Architecture
+graph TB
+    subgraph "Kubernetes Cluster 🎯"
+        subgraph "Control Plane"
+            API["🔌 API Server"]
+            ETCD[("📦 etcd")]
+            SCHED["📋 Scheduler"]
+            CM["⚙️ Controller Manager"]
+        end
+        
+        subgraph "Worker Node 1"
+            KUBELET1["🤖 Kubelet"]
+            POD1A["🐳 Pod: Web"]
+            POD1B["🐳 Pod: API"]
+        end
+        
+        subgraph "Worker Node 2"
+            KUBELET2["🤖 Kubelet"]
+            POD2A["🐳 Pod: Worker"]
+            POD2B["🐳 Pod: Cache"]
+        end
+        
+        subgraph "Worker Node 3"
+            KUBELET3["🤖 Kubelet"]
+            POD3A["🐳 Pod: DB"]
+            POD3B["🐳 Pod: Monitor"]
+        end
+    end
+    
+    subgraph "External"
+        INGRESS["🚪 Ingress Controller"]
+        LB["⚖️ Load Balancer"]
+    end
+    
+    LB --> INGRESS
+    INGRESS --> POD1A
+    INGRESS --> POD1B
+    API --> KUBELET1
+    API --> KUBELET2
+    API --> KUBELET3
+    API --> ETCD
+    
+    style API fill:#326CE5,color:white
+    style POD1A fill:#326CE5,color:white
+    style POD1B fill:#326CE5,color:white
+
+---
+%% Microservices Deployment
+graph TB
+    subgraph "API Gateway"
+        GW["🚪 Kong Gateway"]
+    end
+    
+    subgraph "Services"
+        subgraph "User Domain"
+            US["👤 User Service<br/>3 replicas"]
+            AUTH["🔐 Auth Service<br/>3 replicas"]
+        end
+        
+        subgraph "Order Domain"
+            OS["📦 Order Service<br/>5 replicas"]
+            PAY["💳 Payment Service<br/>3 replicas"]
+        end
+        
+        subgraph "Inventory Domain"
+            INV["📊 Inventory Service<br/>3 replicas"]
+            SHIP["🚚 Shipping Service<br/>2 replicas"]
+        end
+    end
+    
+    subgraph "Data Stores"
+        US_DB[("💾 User DB")]
+        OS_DB[("💾 Order DB")]
+        INV_DB[("💾 Inventory DB")]
+        CACHE[("⚡ Redis Cluster")]
+    end
+    
+    subgraph "Messaging"
+        KAFKA["📬 Kafka Cluster"]
+    end
+    
+    GW --> US
+    GW --> OS
+    GW --> INV
+    US --> US_DB
+    US --> AUTH
+    OS --> OS_DB
+    OS --> PAY
+    INV --> INV_DB
+    INV --> SHIP
+    
+    US --> KAFKA
+    OS --> KAFKA
+    INV --> KAFKA
+    
+    US --> CACHE
+    OS --> CACHE
+    
+    style GW fill:#003366,color:white
+    style KAFKA fill:#231F20,color:white
+
+---
+%% CI/CD Pipeline Infrastructure
+graph LR
+    subgraph "Source"
+        GIT["📂 GitHub"]
+    end
+    
+    subgraph "CI Pipeline"
+        BUILD["🔨 Build<br/>Docker Build"]
+        TEST["🧪 Test<br/>Unit + Integration"]
+        SCAN["🔍 Scan<br/>Security + Quality"]
+        PUSH["📤 Push<br/>Registry"]
+    end
+    
+    subgraph "Registry"
+        ECR["📦 ECR<br/>Container Registry"]
+    end
+    
+    subgraph "CD Pipeline"
+        DEPLOY_DEV["🚀 Deploy Dev"]
+        DEPLOY_STG["🚀 Deploy Staging"]
+        DEPLOY_PROD["🚀 Deploy Production"]
+    end
+    
+    subgraph "Environments"
+        DEV["🔧 Dev Cluster"]
+        STG["🧪 Staging Cluster"]
+        PROD["🏭 Production Cluster"]
+    end
+    
+    GIT -->|"Push"| BUILD
+    BUILD --> TEST
+    TEST --> SCAN
+    SCAN -->|"Pass"| PUSH
+    PUSH --> ECR
+    
+    ECR --> DEPLOY_DEV
+    DEPLOY_DEV --> DEV
+    DEV -->|"Approve"| DEPLOY_STG
+    DEPLOY_STG --> STG
+    STG -->|"Approve"| DEPLOY_PROD
+    DEPLOY_PROD --> PROD
+    
+    style GIT fill:#181717,color:white
+    style ECR fill:#FF9900
+    style PROD fill:#4CAF50
+
+---
+%% Multi-Region High Availability
+graph TB
+    subgraph "Global"
+        R53["🌐 Route 53<br/>DNS + Health Checks"]
+        CF["☁️ CloudFront<br/>Global CDN"]
+    end
+    
+    subgraph "US-East-1 🇺🇸"
+        ALB_US["⚖️ ALB"]
+        ECS_US["🐳 ECS Cluster"]
+        RDS_US[("💾 RDS Primary")]
+    end
+    
+    subgraph "EU-West-1 🇪🇺"
+        ALB_EU["⚖️ ALB"]
+        ECS_EU["🐳 ECS Cluster"]
+        RDS_EU[("💾 RDS Replica")]
+    end
+    
+    subgraph "AP-Southeast-1 🇸🇬"
+        ALB_AP["⚖️ ALB"]
+        ECS_AP["🐳 ECS Cluster"]
+        RDS_AP[("💾 RDS Replica")]
+    end
+    
+    R53 --> CF
+    CF --> ALB_US
+    CF --> ALB_EU
+    CF --> ALB_AP
+    
+    ALB_US --> ECS_US --> RDS_US
+    ALB_EU --> ECS_EU --> RDS_EU
+    ALB_AP --> ECS_AP --> RDS_AP
+    
+    RDS_US -.->|"Async Replication"| RDS_EU
+    RDS_US -.->|"Async Replication"| RDS_AP
+    
+    style R53 fill:#FF9900
+    style RDS_US fill:#3B48CC,color:white

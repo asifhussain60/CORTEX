@@ -1,0 +1,37 @@
+{
+  "optimization_result": {
+    "success": true,
+    "skipped": true,
+    "reason": "below_threshold",
+    "current_size_mb": 31.56395721435547,
+    "threshold_mb": 100
+  },
+  "health_check": {
+    "timestamp": "2026-01-04T10:13:16.857725",
+    "platform": "Windows",
+    "caches": {
+      "copilot_chat": {
+        "status": "healthy",
+        "size_mb": 31.56,
+        "path": "C:\\Users\\asifh\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat"
+      },
+      "extension_vsix": {
+        "status": "healthy",
+        "size_mb": 0.0,
+        "path": "C:\\Users\\asifh\\AppData\\Roaming\\Code\\CachedExtensionVSIXs"
+      },
+      "general_cache": {
+        "status": "healthy",
+        "size_mb": 15.63,
+        "path": "C:\\Users\\asifh\\AppData\\Roaming\\Code\\Cache"
+      },
+      "cached_data": {
+        "status": "healthy",
+        "size_mb": 10.64,
+        "path": "C:\\Users\\asifh\\AppData\\Roaming\\Code\\CachedData"
+      }
+    },
+    "total_size_mb": 57.83,
+    "recommendations": []
+  }
+}

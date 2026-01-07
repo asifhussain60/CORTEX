@@ -1,0 +1,146 @@
+{
+  "timestamp": "2025-11-20T04:48:07.511735",
+  "mode": "live",
+  "workspace_root": "D:\\PROJECTS\\CORTEX",
+  "rules_file": "D:\\PROJECTS\\CORTEX\\cortex-brain\\cleanup-rules.yaml",
+  "statistics": {
+    "files_scanned": 13,
+    "files_deleted": 13,
+    "files_archived": 0,
+    "folders_deleted": 0,
+    "space_freed_bytes": 203873,
+    "space_freed_mb": 0.1944284439086914,
+    "space_freed_gb": 0.00018987152725458145,
+    "categories_processed": 15,
+    "execution_time_seconds": 2.449805
+  },
+  "categories": {
+    "temp_historical_docs": {
+      "count": 13,
+      "size_mb": 0.1944284439086914
+    }
+  },
+  "items": [
+    {
+      "path": "temp-enhanced-story.md",
+      "category": "temp_historical_docs",
+      "action": "delete_all",
+      "size_bytes": 77526,
+      "size_mb": 0.07393455505371094,
+      "reason": "Root folder organization - delete misplaced files (historical/temporary)",
+      "risk_level": "medium"
+    },
+    {
+      "path": "DIRECT-IMPORT-IMPLEMENTATION-COMPLETE.md",
+      "category": "temp_historical_docs",
+      "action": "delete_all",
+      "size_bytes": 19169,
+      "size_mb": 0.018280982971191406,
+      "reason": "Root folder organization - delete misplaced files (historical/temporary)",
+      "risk_level": "medium"
+    },
+    {
+      "path": "MKDOCS-ENCODING-FIX-SUMMARY.md",
+      "category": "temp_historical_docs",
+      "action": "delete_all",
+      "size_bytes": 3484,
+      "size_mb": 0.003322601318359375,
+      "reason": "Root folder organization - delete misplaced files (historical/temporary)",
+      "risk_level": "medium"
+    },
+    {
+      "path": "MKDOCS-RESTORATION-COMPLETE.md",
+      "category": "temp_historical_docs",
+      "action": "delete_all",
+      "size_bytes": 13222,
+      "size_mb": 0.012609481811523438,
+      "reason": "Root folder organization - delete misplaced files (historical/temporary)",
+      "risk_level": "medium"
+    },
+    {
+      "path": "STORY-GENERATOR-ENHANCEMENT-COMPLETE.md",
+      "category": "temp_historical_docs",
+      "action": "delete_all",
+      "size_bytes": 8258,
+      "size_mb": 0.007875442504882812,
+      "reason": "Root folder organization - delete misplaced files (historical/temporary)",
+      "risk_level": "medium"
+    },
+    {
+      "path": "publish\\CORTEX\\src\\tier3\\IMPLEMENTATION-SUMMARY.md",
+      "category": "temp_historical_docs",
+      "action": "delete_all",
+      "size_bytes": 6370,
+      "size_mb": 0.0060749053955078125,
+      "reason": "Root folder organization - delete misplaced files (historical/temporary)",
+      "risk_level": "medium"
+    },
+    {
+      "path": "scripts\\temp\\FCO-INTEGRATION-GUIDE.md",
+      "category": "temp_historical_docs",
+      "action": "delete_all",
+      "size_bytes": 12240,
+      "size_mb": 0.0116729736328125,
+      "reason": "Root folder organization - delete misplaced files (historical/temporary)",
+      "risk_level": "medium"
+    },
+    {
+      "path": "scripts\\temp\\CORTEX-3.0-IMPLEMENTATION-COMPLETE.md",
+      "category": "temp_historical_docs",
+      "action": "delete_all",
+      "size_bytes": 5961,
+      "size_mb": 0.005684852600097656,
+      "reason": "Root folder organization - delete misplaced files (historical/temporary)",
+      "risk_level": "medium"
+    },
+    {
+      "path": "scripts\\temp\\COMPREHENSIVE-CORTEX-ANALYSIS-REPORT.md",
+      "category": "temp_historical_docs",
+      "action": "delete_all",
+      "size_bytes": 28264,
+      "size_mb": 0.02695465087890625,
+      "reason": "Root folder organization - delete misplaced files (historical/temporary)",
+      "risk_level": "medium"
+    },
+    {
+      "path": "scripts\\temp\\CACHING-IMPLEMENTATION-SUMMARY.md",
+      "category": "temp_historical_docs",
+      "action": "delete_all",
+      "size_bytes": 8212,
+      "size_mb": 0.007831573486328125,
+      "reason": "Root folder organization - delete misplaced files (historical/temporary)",
+      "risk_level": "medium"
+    },
+    {
+      "path": "scripts\\QUICK-CAPTURE-TOOLS.md",
+      "category": "temp_historical_docs",
+      "action": "delete_all",
+      "size_bytes": 7710,
+      "size_mb": 0.0073528289794921875,
+      "reason": "Root folder organization - delete misplaced files (historical/temporary)",
+      "risk_level": "medium"
+    },
+    {
+      "path": "scripts\\PUBLISH-TO-BRANCH-README.md",
+      "category": "temp_historical_docs",
+      "action": "delete_all",
+      "size_bytes": 7202,
+      "size_mb": 0.0068683624267578125,
+      "reason": "Root folder organization - delete misplaced files (historical/temporary)",
+      "risk_level": "medium"
+    },
+    {
+      "path": "scripts\\cortex\\AMBIENT-DAEMON-SESSION-INTEGRATION.md",
+      "category": "temp_historical_docs",
+      "action": "delete_all",
+      "size_bytes": 6255,
+      "size_mb": 0.005965232849121094,
+      "reason": "Root folder organization - delete misplaced files (historical/temporary)",
+      "risk_level": "medium"
+    }
+  ],
+  "errors": [
+    "Category 'root_clutter' failed: 'action'"
+  ],
+  "warnings": []
+}

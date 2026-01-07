@@ -1,0 +1,16 @@
+{
+  "plan_id": "plan-66c13577-89c1-494b-be2c-ac6b6fb58b79",
+  "plan_type": "epic",
+  "feature_name": "holistic-review-cortex",
+  "folder_name": "a19-holistic-review-cortex",
+  "master_plan_id": "A19",
+  "created_at": "2026-01-06T10:21:43.633503",
+  "status": "active",
+  "progress": {
+    "overall_percent": 0,
+    "current_phase": 1,
+    "total_phases": 4
+  },
+  "features": [],
+  "integration_status": "not-started"
+}

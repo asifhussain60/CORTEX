@@ -35,7 +35,7 @@ class OrchestratorCategory(Enum):
 class OrchestratorMetadata:
     """
     Metadata for orchestrator registration and discovery.
-    
+
     Attributes:
         id: Unique orchestrator identifier (e.g., "planning_v5")
         name: Human-readable name
@@ -52,7 +52,7 @@ class OrchestratorMetadata:
         tags: Additional metadata tags
         enabled: Whether orchestrator is active
     """
-    
+
     id: str
     name: str
     version: str
@@ -67,7 +67,7 @@ class OrchestratorMetadata:
     capabilities: List[str] = field(default_factory=list)
     tags: Dict[str, Any] = field(default_factory=dict)
     enabled: bool = True
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert metadata to dictionary."""
         return {
@@ -86,7 +86,7 @@ class OrchestratorMetadata:
             'tags': self.tags,
             'enabled': self.enabled,
         }
-    
+
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'OrchestratorMetadata':
         """Create metadata from dictionary."""
@@ -106,7 +106,7 @@ class OrchestratorMetadata:
             tags=data.get('tags', {}),
             enabled=data.get('enabled', True),
         )
-    
+
     def matches_pattern(self, user_input: str) -> bool:
         """Check if user input matches any registered patterns."""
         import re

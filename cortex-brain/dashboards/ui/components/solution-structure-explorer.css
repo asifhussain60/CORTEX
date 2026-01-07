@@ -1,0 +1,337 @@
+/**
+ * Solution Structure Explorer Styles
+ * D3.js tree visualization with zoom/pan controls
+ */
+
+.solution-structure-explorer {
+    position: relative;
+    width: 100%;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+/* Controls */
+.explorer-controls {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 10;
+    display: flex;
+    gap: 0.5rem;
+    background: white;
+    padding: 0.5rem;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.explorer-controls button {
+    padding: 0.5rem 1rem;
+    border: 1px solid #dee2e6;
+    background: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+}
+
+.explorer-controls button:hover {
+    background: #f8f9fa;
+    border-color: #3498db;
+}
+
+.explorer-controls button:active {
+    transform: scale(0.95);
+}
+
+/* SVG Container */
+.solution-structure-explorer svg {
+    display: block;
+    cursor: grab;
+}
+
+.solution-structure-explorer svg:active {
+    cursor: grabbing;
+}
+
+/* Tree Nodes */
+.node {
+    cursor: pointer;
+}
+
+.node-circle {
+    transition: all 0.3s;
+}
+
+.node-circle.root {
+    fill: #3498db;
+    stroke: #2c3e50;
+    stroke-width: 3;
+}
+
+.node-circle.solution {
+    stroke-width: 2.5;
+}
+
+.node-circle.solution.Active {
+    fill: #27ae60;
+}
+
+.node-circle.solution.Maintenance {
+    fill: #f39c12;
+}
+
+.node-circle.solution.Legacy {
+    fill: #e74c3c;
+}
+
+.node-circle.project {
+    stroke-width: 2;
+}
+
+.node-circle.project.Active {
+    fill: #2ecc71;
+}
+
+.node-circle.project.Maintenance {
+    fill: #f1c40f;
+}
+
+.node-circle.project.Legacy {
+    fill: #e67e22;
+}
+
+.node-circle.framework {
+    fill: #95a5a6;
+    stroke-width: 1.5;
+}
+
+.node:hover .node-circle {
+    stroke-width: 4;
+    filter: brightness(1.1);
+}
+
+.node text {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 12px;
+    fill: #2c3e50;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* Links */
+.link {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 2;
+    transition: stroke 0.3s;
+}
+
+.link:hover {
+    stroke: #3498db;
+    stroke-width: 3;
+}
+
+/* Legend */
+.explorer-legend {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    z-index: 10;
+    background: white;
+    padding: 1rem;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    font-size: 0.875rem;
+}
+
+.explorer-legend h4 {
+    margin: 0 0 0.75rem 0;
+    font-size: 1rem;
+    color: #2c3e50;
+}
+
+.legend-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.legend-circle {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid #2c3e50;
+}
+
+.legend-circle.active {
+    background: #27ae60;
+}
+
+.legend-circle.maintenance {
+    background: #f39c12;
+}
+
+.legend-circle.legacy {
+    background: #e74c3c;
+}
+
+.legend-label {
+    color: #6c757d;
+}
+
+/* Zoom Controls */
+.zoom-controls {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.zoom-controls button {
+    width: 36px;
+    height: 36px;
+    border: 1px solid #dee2e6;
+    background: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.zoom-controls button:hover {
+    background: #f8f9fa;
+    border-color: #3498db;
+}
+
+/* Tooltip */
+.tree-tooltip {
+    position: absolute;
+    background: rgba(44, 62, 80, 0.95);
+    color: white;
+    padding: 0.75rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    pointer-events: none;
+    z-index: 100;
+    max-width: 300px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.tree-tooltip h5 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    padding-bottom: 0.25rem;
+}
+
+.tree-tooltip p {
+    margin: 0.25rem 0;
+    line-height: 1.4;
+}
+
+/* Loading State */
+.solution-structure-explorer.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 600px;
+}
+
+.solution-structure-explorer.loading::before {
+    content: '⏳ Loading structure...';
+    font-size: 1.5rem;
+    color: #6c757d;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Empty State */
+.solution-structure-explorer.empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 600px;
+    color: #6c757d;
+}
+
+.solution-structure-explorer.empty::before {
+    content: '📁';
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.solution-structure-explorer.empty::after {
+    content: 'No solution structure data available';
+    font-size: 1.25rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .explorer-controls {
+        flex-direction: column;
+        top: 0.5rem;
+        right: 0.5rem;
+    }
+    
+    .explorer-controls button {
+        font-size: 0.75rem;
+        padding: 0.375rem 0.75rem;
+    }
+    
+    .explorer-legend {
+        bottom: 0.5rem;
+        left: 0.5rem;
+        font-size: 0.75rem;
+    }
+    
+    .zoom-controls {
+        top: 0.5rem;
+        left: 0.5rem;
+    }
+    
+    .zoom-controls button {
+        width: 32px;
+        height: 32px;
+        font-size: 1rem;
+    }
+}
+
+/* Animations */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Filter Highlight */
+.node.filtered .node-circle {
+    stroke: #3498db;
+    stroke-width: 4;
+    filter: drop-shadow(0 0 8px rgba(52, 152, 219, 0.5));
+}
+
+/* Collapsed Indicator */
+.node.has-children .node-circle {
+    stroke-dasharray: 3, 3;
+}
+
+.node.expanded .node-circle {
+    stroke-dasharray: none;
+}

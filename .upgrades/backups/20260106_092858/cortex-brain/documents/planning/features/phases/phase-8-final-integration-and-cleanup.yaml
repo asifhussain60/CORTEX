@@ -1,0 +1,154 @@
+# Phase 8: Final Integration & Cleanup
+# Part of CONSOLIDATED-IMPLEMENTATION-PLAN v1.0.0
+# Created: 2025-12-01
+
+phase_id: phase_8
+name: Final Integration & Cleanup
+priority: 9
+status: not-started
+description: Clean up old code, wire in all new CLI-wrapped functionality, and establish
+  patch release capability
+rationale: Consolidate all enhancements, remove deprecated code, ensure all features
+  accessible via CLI
+objectives:
+- Remove deprecated code and consolidate duplicate implementations
+- Wire all new orchestrators/agents into CLI entry points
+- Update file path references during cleanup reorganization
+- Establish patch release deployment for incremental updates
+- Validate complete system integration end-to-end
+deliverables:
+- id: '8.1'
+  name: Deprecated Code Removal
+  description: Remove all deprecated code paths, consolidate duplicates, clean up
+    technical debt
+  files_affected:
+  - src/**/*.py (audit for deprecated functions)
+  - cortex-brain/documents/planning/DEPRECATION-MANIFEST.md (new)
+  - scripts/cleanup/remove_deprecated.py (new)
+  acceptance_criteria:
+  - All functions marked @deprecated removed
+  - Duplicate implementations consolidated to single source
+  - Dead code (unreferenced functions) removed
+  - Deprecation manifest documents what was removed and why
+  - All tests updated to use new implementations
+  estimated_effort: 8 hours
+- id: '8.2'
+  name: CLI Wrapper Integration
+  description: Ensure all new orchestrators/agents accessible via natural language
+    CLI
+  files_affected:
+  - src/cortex_agents/intent_router.py
+  - cortex-brain/response-templates-v4.yaml
+  - cortex-brain/operations-config.yaml
+  - tests/integration/test_cli_integration.py (new)
+  acceptance_criteria:
+  - All Phase 0-7 orchestrators have CLI triggers
+  - Natural language commands mapped to new functionality
+  - Response templates exist for all new operations
+  - Integration tests verify CLI → orchestrator flow
+  - Help system updated with new commands
+  estimated_effort: 6 hours
+- id: '8.3'
+  name: Enhanced Cleanup CLI - Path Reference Updates
+  description: Update cleanup CLI to search and update file path references during
+    reorganization
+  challenge_raised: true
+  challenge_details: "CHALLENGE: When cleanup reorganizes files (e.g., moves deprecated\
+    \ code to archives/), \nother files may still reference old paths, causing import\
+    \ errors and broken functionality.\nSOLUTION: Add path reference scanner and updater\
+    \ to cleanup CLI:\n- Scan all Python files for import statements\n- Detect references\
+    \ to files being moved/renamed\n- Automatically update imports to new paths\n\
+    - Generate report of updated references\n- Support dry-run mode to preview changes\
+    \ before applying\n"
+  files_affected:
+  - src/orchestrators/holistic_cleanup_orchestrator.py
+  - src/utils/path_reference_scanner.py (new)
+  - src/utils/import_updater.py (new)
+  - scripts/cleanup/update_path_references.py (new)
+  - tests/utils/test_path_reference_scanner.py (new)
+  acceptance_criteria:
+  - Path scanner detects all import statements in Python files
+  - Scanner identifies references to files being moved
+  - Updater rewrites imports with new paths (relative/absolute)
+  - Dry-run mode shows preview without modifying files
+  - Generated report lists all updated references
+  - Supports undo operation (backup original files)
+  - Integrated into cleanup workflow (automatic step)
+  estimated_effort: 10 hours
+- id: '8.4'
+  name: Patch Release Deployment Strategy
+  description: Implement hot-fix/patch release system for incremental updates without
+    full reinstall
+  challenge_raised: true
+  challenge_details: 'CHALLENGE: Current deployment always publishes complete CORTEX
+    package. For bug fixes
+
+    or small feature additions, users must re-setup entirely. This is heavyweight
+    and risky.
+
+    SOLUTION: Add patch release capability to deployment system:
+
+    - Version format: X.Y.Z where Z = patch number
+
+    - Patch release includes only changed files + manifest
+
+    - Manifest specifies file operations (add/update/delete)
+
+    - Users run ''cortex patch apply'' to incrementally update
+
+    - Rollback support: ''cortex patch rollback <version>''
+
+    - Validation: Verify patch applies cleanly before committing
+
+    '
+  files_affected:
+  - scripts/deploy_cortex.py
+  - scripts/patch_builder.py (new)
+  - src/orchestrators/patch_orchestrator.py (new)
+  - cortex-brain/patches/ (new directory)
+  - tests/orchestrators/test_patch_orchestrator.py (new)
+  acceptance_criteria:
+  - Patch builder detects changed files since last release
+  - 'Patch manifest includes: version, files changed, operations, checksums'
+  - Patch orchestrator validates current version before applying
+  - Apply operation updates only changed files (preserves brain data)
+  - Rollback operation restores previous file versions
+  - 'Patch release tagged in git: vX.Y.Z-patch'
+  - 'Users can list available patches: ''cortex patch list'''
+  - Automated testing validates patch applies/rolls back correctly
+  estimated_effort: 14 hours
+- id: '8.5'
+  name: End-to-End Integration Validation
+  description: Comprehensive test suite validating all phases integrate correctly
+  files_affected:
+  - tests/integration/test_full_workflow.py (new)
+  - tests/integration/test_phase_integration.py (new)
+  - scripts/validate_integration.py (new)
+  acceptance_criteria:
+  - Test creates new feature using Planning (Phase 4)
+  - Test implements feature using TDD (Phase 3)
+  - Test validates threat modeling runs (Phase 6)
+  - Test verifies brain learning captures patterns (Phase 7)
+  - Test confirms response templates adapt to profile (Phase 5)
+  - All orchestrators callable via CLI (Phase 8.2)
+  - Cleanup preserves data and updates paths (Phase 8.3)
+  - Patch release applies and rolls back (Phase 8.4)
+  estimated_effort: 10 hours
+dependencies:
+- phase_0 (Foundation complete)
+- phase_1 (Setup working)
+- phase_2 (Architecture synchronized)
+- phase_3 (TDD integrated)
+- phase_4 (Incremental planning operational)
+- phase_5 (Response templates refactored)
+- phase_6 (Threat modeling integrated)
+- phase_7 (Brain systems active)
+testing_requirements:
+- Full system regression testing (all 656 existing tests pass)
+- Integration tests for all new CLI triggers
+- Path reference scanner tested with sample reorganization
+- Patch builder creates valid manifests
+- Patch application doesn't break brain data
+- Patch rollback restores exact previous state
+- End-to-end workflow test covers all phases
+total_estimated_effort: 48 hours

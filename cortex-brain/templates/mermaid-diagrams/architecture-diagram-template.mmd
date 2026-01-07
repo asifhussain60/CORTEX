@@ -1,0 +1,133 @@
+%% Architecture Diagram Template (C4 Model Pattern)
+%% Template Version: 1.0.0
+%% Author: CORTEX Development Team
+%% Usage: Use for visualizing system architecture, component relationships, and module dependencies
+%%
+%% Variables to replace:
+%%   {{SYSTEM_NAME}} - Name of the system/module
+%%   {{COMPONENT_N}} - Component names
+%%   {{DESCRIPTION_N}} - Component descriptions
+%%   {{RELATIONSHIP}} - Relationship descriptions
+
+---
+%% C4 Context Level - System Context
+graph TB
+    subgraph "System Context"
+        direction TB
+        USER[("👤 User")]
+        SYSTEM["🏢 {{SYSTEM_NAME}}<br/>Main System"]
+        EXTERNAL["☁️ External System"]
+        
+        USER -->|"Uses"| SYSTEM
+        SYSTEM -->|"Integrates with"| EXTERNAL
+    end
+    
+    style SYSTEM fill:#1168bd,stroke:#0b4884,color:white
+    style USER fill:#08427b,stroke:#052e56,color:white
+    style EXTERNAL fill:#999999,stroke:#666666,color:white
+
+---
+%% C4 Container Level - System Containers
+graph TB
+    subgraph "{{SYSTEM_NAME}} - Container View"
+        direction TB
+        
+        subgraph "Frontend Layer"
+            UI["🖥️ Web UI<br/>React/TypeScript"]
+            MOBILE["📱 Mobile App<br/>React Native"]
+        end
+        
+        subgraph "API Layer"
+            API["🔌 API Gateway<br/>REST/GraphQL"]
+            AUTH["🔐 Auth Service<br/>OAuth 2.0"]
+        end
+        
+        subgraph "Business Layer"
+            CORE["⚙️ Core Service<br/>Business Logic"]
+            WORKER["👷 Background Worker<br/>Async Processing"]
+        end
+        
+        subgraph "Data Layer"
+            DB[("💾 Database<br/>PostgreSQL")]
+            CACHE[("⚡ Cache<br/>Redis")]
+            QUEUE["📬 Message Queue<br/>RabbitMQ"]
+        end
+        
+        UI --> API
+        MOBILE --> API
+        API --> AUTH
+        API --> CORE
+        CORE --> DB
+        CORE --> CACHE
+        CORE --> QUEUE
+        WORKER --> QUEUE
+        WORKER --> DB
+    end
+    
+    style API fill:#1168bd,stroke:#0b4884,color:white
+    style CORE fill:#438dd5,stroke:#2e6295,color:white
+    style DB fill:#999999,stroke:#666666,color:white
+
+---
+%% C4 Component Level - Module Components
+graph TB
+    subgraph "{{COMPONENT_NAME}} - Component View"
+        direction TB
+        
+        CONTROLLER["📋 Controller<br/>Request Handling"]
+        SERVICE["⚙️ Service<br/>Business Logic"]
+        REPOSITORY["💾 Repository<br/>Data Access"]
+        MODEL["📦 Model<br/>Domain Entities"]
+        
+        CONTROLLER -->|"Calls"| SERVICE
+        SERVICE -->|"Uses"| REPOSITORY
+        SERVICE -->|"Creates/Updates"| MODEL
+        REPOSITORY -->|"Persists"| MODEL
+    end
+    
+    style CONTROLLER fill:#85bbf0,stroke:#5a9bd4,color:black
+    style SERVICE fill:#1168bd,stroke:#0b4884,color:white
+    style REPOSITORY fill:#438dd5,stroke:#2e6295,color:white
+    style MODEL fill:#999999,stroke:#666666,color:white
+
+---
+%% Class/Module Hierarchy
+classDiagram
+    class {{BASE_CLASS}} {
+        <<abstract>>
+        +id: UUID
+        +created_at: DateTime
+        +updated_at: DateTime
+        +save()
+        +delete()
+    }
+    
+    class {{DERIVED_CLASS_1}} {
+        +specific_field: Type
+        +specific_method()
+    }
+    
+    class {{DERIVED_CLASS_2}} {
+        +another_field: Type
+        +another_method()
+    }
+    
+    {{BASE_CLASS}} <|-- {{DERIVED_CLASS_1}}
+    {{BASE_CLASS}} <|-- {{DERIVED_CLASS_2}}
+
+---
+%% Dependency Graph
+graph LR
+    subgraph "Module Dependencies"
+        A["{{MODULE_A}}"] --> B["{{MODULE_B}}"]
+        A --> C["{{MODULE_C}}"]
+        B --> D["{{MODULE_D}}"]
+        C --> D
+        D --> E["{{MODULE_E}}"]
+    end
+    
+    style A fill:#ff6b6b,stroke:#ee5a5a
+    style B fill:#4ecdc4,stroke:#3dbdb5
+    style C fill:#45b7d1,stroke:#35a7c1
+    style D fill:#96ceb4,stroke:#7bbe9a
+    style E fill:#ffeaa7,stroke:#eed997

@@ -1,0 +1,173 @@
+---
+# HTML Glassmorphism Alignment Plan Configuration
+# Author: Asif Hussain
+# Date: 2026-01-05
+# Status: ACTIVE (Phase 16b)
+
+meta:
+  plan_name: html-glassmorphism-alignment
+  version: 5.0.0
+  status: ACTIVE
+  current_phase: 16b
+  start_date: 2026-01-03
+  approach: snowball_iterative_refinement
+  intelligence_layer: cortex-docs.prompt.md
+
+directories:
+  standards: standards/
+  prompts: prompts/
+  guides: guides/
+  context: context/
+  artifacts: artifacts/
+  reports: reports/
+  tracking: tracking/
+  phases: phases/
+
+standards:
+  - name: mermaid-diagrams
+    file: standards/mermaid-diagrams.yaml
+    status: APPROVED
+    date: 2026-01-04
+    applies_to: [level1, level2]
+    
+  - name: glassmorphism-patterns
+    file: standards/glassmorphism-patterns.yaml
+    status: APPROVED
+    date: 2026-01-04
+    patterns: [C50, C51, C52, C53]
+    
+  - name: level1-automation
+    file: standards/level1-automation.yaml
+    status: APPROVED
+    date: 2026-01-04
+    applies_to: [level1]
+
+prompts:
+  - name: glass-exec
+    file: prompts/glass-exec.yaml
+    version: 2.0.0
+    type: live_orchestrator
+    
+  - name: glassmorphism-styling
+    file: prompts/glassmorphism-styling.yaml
+    type: template
+    
+  - name: tetris-card-conversion
+    file: prompts/tetris-card-conversion.yaml
+    type: template
+
+guides:
+  - name: usage-guide
+    file: guides/usage-guide.md
+    target_audience: users
+    
+  - name: snowball-strategy
+    file: guides/snowball-strategy.md
+    target_audience: implementers
+
+phases:
+  phase_16a:
+    name: L1 Architecture Pages
+    pages: 4
+    status: COMPLETE
+    duration_hours: 8
+    standards_approved:
+      - level1_header_200px
+      - level2_header_100px
+      - mermaid_glassmorphism
+      - accordion_pattern
+      
+  phase_16b:
+    name: L1 Token Optimization Hub
+    pages: 1
+    status: ACTIVE
+    duration_hours: 2
+    current_page: token-optimization/index.html
+    
+  phase_16c:
+    name: L1 Feature Pages
+    pages: 4
+    status: PENDING
+    duration_hours: 6
+    
+  phase_16d:
+    name: L2 Detail Pages
+    pages: 24
+    status: PENDING
+    duration_hours: 12
+    
+  phase_17:
+    name: Production QA
+    pages: null
+    status: PENDING
+    duration_hours: 3
+
+progress:
+  total_pages: 34
+  completed: 1
+  remaining: 33
+  completion_percentage: 3
+  
+tools:
+  analysis:
+    - page-refresh-tool.py
+    - value-scoring-engine.py
+    - css-cleanup-engine.py
+  transform:
+    - fix-inline-styles.ps1
+    - validate-color-rotation.ps1
+    - validate-panel-wrapping.ps1
+  validation:
+    - validate-all-html.ps1
+    - pre-commit-glassmorphism-check.ps1
+  generation:
+    - purpose-driven-designer.py
+    - diagram-generator.py
+
+patterns:
+  C50:
+    name: Color Rotation (Card Grids)
+    description: 4-color cycle for card grids (primary→info→warning→success)
+    validated: true
+    applies_to: [card_grids]
+    
+  C51:
+    name: Tetris Stat Badges
+    description: 3-color rotation within each card
+    validated: true
+    applies_to: [stat_badges]
+    
+  C52:
+    name: Level 1 Hero Header
+    description: Clickable robot logo + standardized hero format
+    validated: true
+    applies_to: [level1]
+    
+  C53:
+    name: Full Section Panel Wrapping
+    description: Heading + content wrapped together in glassmorphism panel
+    validated: true
+    applies_to: [sections]
+
+complexity_thresholds:
+  targeted_edits:
+    min: 0
+    max: 20
+    strategy: manual_precision_fixes
+    
+  script_driven:
+    min: 21
+    max: 50
+    strategy: python_powershell_automation
+    
+  regenerate:
+    min: 51
+    max: 100
+    strategy: delete_and_recreate_with_templates
+
+quality_targets:
+  glassmorphism_compliance: 95
+  css_unused_classes: 20
+  inline_styles: 0
+  mobile_score: 95
+  wcag_aa_compliance: 100

@@ -1,0 +1,153 @@
+# Planning System v5.0 Manifest
+
+⚠️ PREVIEW FILE - NOT YET IMPLEMENTED
+Phase: 3 (Planning System v5 Core)
+Status: 📋 ARCHITECTURAL PREVIEW
+
+orchestrator:
+  name: "planning"
+  version: "5.0.0"
+  class: "PlanningOrchestratorV5"
+  module: "src.orchestrators.planning_orchestrator_v5"
+  status: "active"
+
+capabilities:
+  - plan_generation
+  - hierarchical_structure
+  - knowledge_library_integration
+  - auto_healing
+  - governance_compliance
+  - bloat_detection
+  - mcp_tool_integration
+
+configuration:
+  plan_generation:
+    hierarchical_structure: true
+    master_plan_max_lines: 500
+    phase_file_max_lines: 300
+    auto_decompose_on_bloat: true
+    two_way_linking: true
+    production_filenames: true
+  
+  governance:
+    require_phase_minus_one: true
+    require_refactor_phase: true
+    min_refactor_tasks: 15
+    target_compliance_score: 10.0
+    auto_heal_violations: true
+  
+  knowledge_library:
+    query_at_each_phase: true
+    extract_at_phase_end: true
+    update_brain_tiers: true
+  
+  progress_rendering:
+    enabled: true
+    style: "maintenance"
+    update_frequency: "per_task"
+    sync_json_tracker: true
+
+mcp_tool_schema:
+  name: "invoke_orchestrator"
+  parameters:
+    name:
+      type: "string"
+      value: "planning"
+    feature:
+      type: "string"
+      required: true
+      description: "Feature description"
+    complexity:
+      type: "string"
+      enum: ["tier-1", "tier-2", "tier-3", "tier-4"]
+      optional: true
+
+execution:
+  phases:
+    - phase: -1
+      name: "Knowledge Library Consultation"
+      tasks: 5
+      queries:
+        - orchestrator_patterns
+        - planning_patterns
+        - similar_features
+        - brain_tier_updates
+        - anti_patterns
+    
+    - phase: 0
+      name: "Discovery & Architecture"
+      tasks: 10
+      activities:
+        - gather_context
+        - analyze_requirements
+        - design_architecture
+        - estimate_complexity
+    
+    - phase: 1-N
+      name: "Implementation Phases"
+      dynamic: true
+      generate_phase_files: true
+    
+    - phase: N-1
+      name: "REFACTOR & Cleanup"
+      min_tasks: 15
+      categories:
+        - orphaned_code
+        - duplication
+        - dead_code
+        - formatting
+        - documentation
+    
+    - phase: N
+      name: "Knowledge Extraction"
+      tasks: 15
+      activities:
+        - extract_patterns
+        - update_tier_2
+        - update_tier_3
+        - generate_report
+
+validation:
+  pre_execution:
+    - validate_feature_description
+    - check_dependencies
+    - verify_brain_tier_access
+  
+  post_execution:
+    - validate_governance_compliance
+    - check_bloat_thresholds
+    - validate_filenames
+    - validate_links
+    - generate_compliance_report
+
+auto_healing:
+  enabled: true
+  fixes:
+    - missing_phase_minus_one
+    - missing_refactor_phase
+    - insufficient_refactor_tasks
+    - missing_progress_tracking
+    - missing_knowledge_extraction
+
+brain_tier_integration:
+  tier_2:
+    - knowledge_graph_updates
+    - pattern_additions
+    - relationship_mapping
+  
+  tier_3:
+    - development_context_updates
+    - project_history
+    - learned_patterns
+
+metrics:
+  track:
+    - execution_time
+    - phase_count
+    - task_count
+    - compliance_score
+    - knowledge_patterns_extracted
+    - brain_tier_updates
+
+# Implementation Timeline: Phase 3 (4 days)
+# References: phases/phase-03-planning-core.md

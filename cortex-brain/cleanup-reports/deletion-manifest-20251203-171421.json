@@ -1,0 +1,13 @@
+{
+  "timestamp": "2025-12-03T17:14:21.291934",
+  "summary": {
+    "total_analyzed": 76,
+    "total_candidates": 0,
+    "safe_to_delete": 0,
+    "space_to_free_bytes": 0,
+    "space_to_free_mb": 0.0
+  },
+  "risk_breakdown": {},
+  "reason_breakdown": {},
+  "candidates": []
+}

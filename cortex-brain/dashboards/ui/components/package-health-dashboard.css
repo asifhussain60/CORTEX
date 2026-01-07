@@ -1,0 +1,306 @@
+/**
+ * Package Health Dashboard Styles
+ * D3.js bar chart with color-coded health indicators
+ */
+
+.package-health-dashboard {
+    padding: 1.5rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Health Summary */
+.health-summary {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.health-summary h3 {
+    margin: 0 0 1rem 0;
+    font-size: 1.25rem;
+    color: #2c3e50;
+}
+
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.summary-card {
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 6px;
+    text-align: center;
+    transition: background-color 0.2s;
+}
+
+.summary-card.warning {
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+}
+
+.summary-label {
+    font-size: 0.875rem;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+}
+
+.summary-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+/* Chart Container */
+.chart-container {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+}
+
+#package-health-chart {
+    display: block;
+    margin: 0 auto;
+}
+
+/* Bar Colors */
+.bar {
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.bar:hover {
+    opacity: 0.8;
+}
+
+.bar.health-good {
+    fill: #28a745;  /* Green - below average */
+}
+
+.bar.health-caution {
+    fill: #ffc107;  /* Yellow - slightly above average */
+}
+
+.bar.health-warning {
+    fill: #fd7e14;  /* Orange - 1.5x average */
+}
+
+.bar.health-critical {
+    fill: #dc3545;  /* Red - 2x average */
+}
+
+/* Average Line */
+.average-line {
+    pointer-events: none;
+}
+
+.average-label {
+    font-weight: 600;
+    pointer-events: none;
+}
+
+/* Axes */
+.x-axis, .y-axis {
+    font-size: 11px;
+}
+
+.axis-label {
+    font-size: 13px;
+    fill: #495057;
+}
+
+.y-axis text {
+    font-size: 11px;
+    fill: #495057;
+}
+
+/* Tooltip */
+.package-health-tooltip {
+    font-size: 0.875rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.package-health-tooltip strong {
+    color: #2c3e50;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+/* Outliers Section */
+.outliers-section {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.outliers-section h4 {
+    margin: 0 0 1rem 0;
+    font-size: 1.125rem;
+    color: #2c3e50;
+}
+
+.outliers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+/* Outlier Card */
+.outlier-card {
+    border-radius: 6px;
+    padding: 1rem;
+    border: 2px solid;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.outlier-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.outlier-card.warning {
+    background: #fff3cd;
+    border-color: #ffc107;
+}
+
+.outlier-card.critical {
+    background: #f8d7da;
+    border-color: #dc3545;
+}
+
+.outlier-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.outlier-header h5 {
+    margin: 0;
+    font-size: 1rem;
+    color: #2c3e50;
+}
+
+.severity-badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.severity-badge.warning {
+    background: #ffc107;
+    color: #212529;
+}
+
+.severity-badge.critical {
+    background: #dc3545;
+    color: white;
+}
+
+/* Outlier Details */
+.outlier-details {
+    margin-bottom: 0.75rem;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.25rem 0;
+    font-size: 0.875rem;
+}
+
+.detail-row .label {
+    color: #6c757d;
+}
+
+.detail-row .value {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+/* Recommendation */
+.recommendation {
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    font-size: 0.8125rem;
+    color: #495057;
+    line-height: 1.5;
+}
+
+.recommendation strong {
+    color: #2c3e50;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .package-health-dashboard {
+        padding: 1rem;
+    }
+
+    .chart-container {
+        padding: 1rem;
+        overflow-x: scroll;
+    }
+
+    .summary-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .outliers-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Empty State */
+.package-health-dashboard.empty {
+    text-align: center;
+    padding: 3rem 1.5rem;
+    color: #6c757d;
+}
+
+.package-health-dashboard.empty::before {
+    content: '📦';
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+/* Loading State */
+.package-health-dashboard.loading {
+    text-align: center;
+    padding: 3rem 1.5rem;
+    color: #6c757d;
+}
+
+.package-health-dashboard.loading::before {
+    content: '⏳';
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 1rem;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}

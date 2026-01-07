@@ -1,0 +1,124 @@
+{
+  "app_id": "mock",
+  "tabs": [
+    {
+      "id": "overview",
+      "name": "Overview",
+      "icon": "📊",
+      "content_type": "overview",
+      "sections": [
+        {
+          "id": "stats",
+          "title": "Project Statistics",
+          "content_type": "metrics",
+          "data": {
+            "total_files": 487,
+            "total_lines": 52340,
+            "code_lines": 41280,
+            "health_score": 87.5
+          }
+        },
+        {
+          "id": "recent_activity",
+          "title": "Recent Activity",
+          "content_type": "list",
+          "data": {
+            "items": [
+              {
+                "type": "commit",
+                "message": "feat: Dashboard consolidation with TDD",
+                "author": "Asif Hussain",
+                "timestamp": "2025-12-04T15:00:00Z"
+              },
+              {
+                "type": "scan",
+                "message": "Code quality scan completed",
+                "result": "87.5% health score",
+                "timestamp": "2025-12-04T14:30:00Z"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "quality",
+      "name": "Code Quality",
+      "icon": "✨",
+      "content_type": "quality",
+      "sections": [
+        {
+          "id": "quality_metrics",
+          "title": "Quality Metrics",
+          "content_type": "metrics",
+          "data": {
+            "test_coverage": 67.8,
+            "code_duplication": 12.3,
+            "maintainability_index": 72.4
+          }
+        },
+        {
+          "id": "quality_issues",
+          "title": "Code Quality Issues",
+          "content_type": "table",
+          "data": {
+            "headers": ["Severity", "Issue Type", "Count", "Files Affected"],
+            "rows": [
+              ["High", "Complex Functions", 23, 18],
+              ["Medium", "Code Duplication", 45, 32],
+              ["Low", "Missing Docstrings", 89, 73]
+            ]
+          }
+        },
+        {
+          "id": "quality_trends",
+          "title": "Quality Trends",
+          "content_type": "chart",
+          "chart_type": "line",
+          "data": {
+            "labels": ["Week 1", "Week 2", "Week 3", "Week 4"],
+            "datasets": [
+              {
+                "label": "Test Coverage",
+                "data": [62.3, 64.8, 66.2, 67.8]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "security",
+      "name": "Security",
+      "icon": "🔒",
+      "content_type": "security",
+      "sections": [
+        {
+          "id": "security_summary",
+          "title": "Security Overview",
+          "content_type": "metrics",
+          "data": {
+            "security_score": 78.5,
+            "critical_vulnerabilities": 2,
+            "high_vulnerabilities": 8
+          }
+        },
+        {
+          "id": "dependency_notice",
+          "title": "Dependency Update Notice",
+          "content_type": "message",
+          "data": {
+            "message": "3 dependencies have available security updates. Run 'pip install -U' to update.",
+            "type": "warning"
+          }
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "last_updated": "2025-12-04T15:00:00Z",
+    "app_id": "mock",
+    "app_name": "Mock Enterprise Application",
+    "status": "healthy"
+  }
+}

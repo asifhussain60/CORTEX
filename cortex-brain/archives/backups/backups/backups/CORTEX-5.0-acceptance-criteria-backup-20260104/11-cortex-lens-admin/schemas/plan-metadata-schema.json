@@ -1,0 +1,410 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://cortex.dev/schemas/plan-metadata.json",
+  "title": "CORTEX Plan Metadata",
+  "description": "Machine-readable metadata for CORTEX planning orchestrator execution tracking",
+  "type": "object",
+  "required": ["plan_id", "title", "status", "created", "phases", "acceptance_criteria"],
+  "properties": {
+    "plan_id": {
+      "type": "string",
+      "description": "Unique identifier for the plan (kebab-case)",
+      "pattern": "^[a-z0-9-]+$",
+      "examples": ["user-auth-system-2026-01-03", "cortex-5-0-gap-remediation"]
+    },
+    "title": {
+      "type": "string",
+      "description": "Human-readable plan title",
+      "minLength": 5,
+      "maxLength": 200,
+      "examples": ["User Authentication System", "CORTEX v5 Gap Remediation"]
+    },
+    "status": {
+      "type": "string",
+      "description": "Overall plan status",
+      "enum": ["NOT_STARTED", "IN_PROGRESS", "COMPLETED", "BLOCKED", "FAILED"],
+      "default": "NOT_STARTED"
+    },
+    "created": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when plan was created",
+      "examples": ["2026-01-03T14:23:00Z"]
+    },
+    "updated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of last update",
+      "examples": ["2026-01-04T10:15:30Z"]
+    },
+    "started": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when execution started",
+      "examples": ["2026-01-03T15:00:00Z"]
+    },
+    "completed": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when plan completed",
+      "examples": ["2026-01-10T18:30:00Z"]
+    },
+    "parent_plan_id": {
+      "type": "string",
+      "description": "ID of parent plan (for sub-plans)",
+      "examples": ["cortex-5-0-gap-remediation"]
+    },
+    "phases": {
+      "type": "array",
+      "description": "Ordered list of plan execution phases",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "status", "progress"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Phase identifier (phase-0, phase-1, refactor)",
+            "pattern": "^[a-z0-9-]+$",
+            "examples": ["phase-0", "phase-1", "refactor"]
+          },
+          "name": {
+            "type": "string",
+            "description": "Human-readable phase name",
+            "examples": ["Discovery", "Implementation", "Testing"]
+          },
+          "status": {
+            "type": "string",
+            "enum": ["NOT_STARTED", "IN_PROGRESS", "COMPLETED", "BLOCKED"],
+            "default": "NOT_STARTED"
+          },
+          "progress": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100,
+            "description": "Percentage completion (0-100)"
+          },
+          "started": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When phase execution started"
+          },
+          "completed": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When phase completed"
+          },
+          "estimated_hours": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Estimated time in hours"
+          },
+          "actual_hours": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Actual time spent in hours"
+          },
+          "tasks": {
+            "type": "array",
+            "description": "List of tasks within phase",
+            "items": {
+              "type": "object",
+              "required": ["id", "description", "status"],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Task identifier",
+                  "examples": ["task-1", "task-2"]
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Task description"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": ["NOT_STARTED", "IN_PROGRESS", "COMPLETED"],
+                  "default": "NOT_STARTED"
+                },
+                "completed_at": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            }
+          },
+          "blockers": {
+            "type": "array",
+            "description": "Current blockers preventing progress",
+            "items": {
+              "type": "object",
+              "properties": {
+                "description": {"type": "string"},
+                "severity": {
+                  "type": "string",
+                  "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"]
+                },
+                "created": {"type": "string", "format": "date-time"},
+                "resolved": {"type": "string", "format": "date-time"}
+              }
+            }
+          }
+        }
+      }
+    },
+    "acceptance_criteria": {
+      "type": "array",
+      "description": "Plan acceptance criteria (validation requirements)",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "description", "status"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "AC identifier (AC-01, AC-02, etc.)",
+            "pattern": "^AC-[0-9]+$",
+            "examples": ["AC-01", "AC-02"]
+          },
+          "description": {
+            "type": "string",
+            "description": "What must be true for acceptance",
+            "examples": ["JWT token generation working", "All tests passing"]
+          },
+          "status": {
+            "type": "string",
+            "enum": ["PENDING", "IN_PROGRESS", "VALIDATED", "FAILED"],
+            "default": "PENDING",
+            "description": "Validation status"
+          },
+          "validated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When AC was validated"
+          },
+          "test_files": {
+            "type": "array",
+            "description": "Test files that validate this AC",
+            "items": {
+              "type": "string",
+              "description": "Relative path to test file",
+              "examples": ["tests/test_auth.py", "tests/integration/test_jwt.py"]
+            }
+          },
+          "linked_phases": {
+            "type": "array",
+            "description": "Phases that implement this AC",
+            "items": {
+              "type": "string",
+              "description": "Phase ID",
+              "examples": ["phase-1", "phase-2"]
+            }
+          },
+          "priority": {
+            "type": "string",
+            "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"],
+            "default": "MEDIUM"
+          }
+        }
+      }
+    },
+    "linked_files": {
+      "type": "array",
+      "description": "Files referenced/modified by this plan",
+      "items": {
+        "type": "string",
+        "description": "Relative path from workspace root",
+        "examples": [
+          "src/orchestrators/planning/planning_orchestrator.py",
+          "tests/orchestrators/test_planning.py"
+        ]
+      }
+    },
+    "dependencies": {
+      "type": "object",
+      "description": "Plan dependencies (must complete before starting)",
+      "properties": {
+        "sub_plans": {
+          "type": "array",
+          "description": "Other sub-plans that must complete first",
+          "items": {
+            "type": "string",
+            "description": "Plan ID of dependency"
+          }
+        },
+        "external": {
+          "type": "array",
+          "description": "External dependencies (tools, libraries, etc.)",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {"type": "string"},
+              "version": {"type": "string"},
+              "satisfied": {"type": "boolean"}
+            }
+          }
+        }
+      }
+    },
+    "estimated_hours": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Total estimated time in hours"
+    },
+    "actual_hours": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Total actual time spent in hours"
+    },
+    "metrics": {
+      "type": "object",
+      "description": "Additional metrics for effectiveness tracking",
+      "properties": {
+        "lines_added": {
+          "type": "number",
+          "description": "Lines of code added"
+        },
+        "lines_removed": {
+          "type": "number",
+          "description": "Lines of code removed"
+        },
+        "files_created": {
+          "type": "number",
+          "description": "Number of new files created"
+        },
+        "files_modified": {
+          "type": "number",
+          "description": "Number of existing files modified"
+        },
+        "commits": {
+          "type": "number",
+          "description": "Number of git commits"
+        },
+        "tests_added": {
+          "type": "number",
+          "description": "Number of new tests written"
+        },
+        "test_coverage_before": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Test coverage % before plan"
+        },
+        "test_coverage_after": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Test coverage % after plan"
+        }
+      }
+    },
+    "tags": {
+      "type": "array",
+      "description": "Categorization tags",
+      "items": {
+        "type": "string",
+        "examples": ["orchestrator", "testing", "refactoring", "feature"]
+      }
+    },
+    "knowledge_library_queries": {
+      "type": "array",
+      "description": "Queries made to Knowledge Library (Tier 0/2)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "query": {"type": "string"},
+          "timestamp": {"type": "string", "format": "date-time"},
+          "results_used": {"type": "boolean"}
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "plan_id": "user-auth-system-2026-01-03",
+      "title": "User Authentication System",
+      "status": "IN_PROGRESS",
+      "created": "2026-01-03T14:23:00Z",
+      "updated": "2026-01-04T10:15:30Z",
+      "started": "2026-01-03T15:00:00Z",
+      "phases": [
+        {
+          "id": "phase-0",
+          "name": "Discovery",
+          "status": "COMPLETED",
+          "progress": 100,
+          "started": "2026-01-03T15:00:00Z",
+          "completed": "2026-01-03T16:30:00Z",
+          "estimated_hours": 2,
+          "actual_hours": 1.5,
+          "tasks": [
+            {
+              "id": "task-1",
+              "description": "Review existing auth implementations",
+              "status": "COMPLETED",
+              "completed_at": "2026-01-03T15:45:00Z"
+            }
+          ]
+        },
+        {
+          "id": "phase-1",
+          "name": "Implementation",
+          "status": "IN_PROGRESS",
+          "progress": 43,
+          "started": "2026-01-03T16:30:00Z",
+          "estimated_hours": 8,
+          "actual_hours": 5.5,
+          "tasks": []
+        }
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "AC-01",
+          "description": "JWT token generation working",
+          "status": "VALIDATED",
+          "validated_at": "2026-01-03T17:00:00Z",
+          "test_files": ["tests/test_jwt.py"],
+          "linked_phases": ["phase-1"],
+          "priority": "HIGH"
+        },
+        {
+          "id": "AC-02",
+          "description": "Password hashing implemented",
+          "status": "VALIDATED",
+          "validated_at": "2026-01-03T18:00:00Z",
+          "test_files": ["tests/test_password.py"],
+          "linked_phases": ["phase-1"],
+          "priority": "HIGH"
+        },
+        {
+          "id": "AC-03",
+          "description": "Session management functional",
+          "status": "IN_PROGRESS",
+          "test_files": ["tests/test_sessions.py"],
+          "linked_phases": ["phase-1"],
+          "priority": "MEDIUM"
+        }
+      ],
+      "linked_files": [
+        "src/auth/jwt.py",
+        "src/auth/password.py",
+        "src/auth/sessions.py",
+        "tests/test_jwt.py",
+        "tests/test_password.py",
+        "tests/test_sessions.py"
+      ],
+      "estimated_hours": 40,
+      "actual_hours": 28,
+      "metrics": {
+        "lines_added": 1250,
+        "lines_removed": 320,
+        "files_created": 6,
+        "files_modified": 12,
+        "commits": 15,
+        "tests_added": 45,
+        "test_coverage_before": 65,
+        "test_coverage_after": 78
+      },
+      "tags": ["authentication", "security", "feature"]
+    }
+  ]
+}

@@ -1,0 +1,152 @@
+---
+title: Upgrade Capability - STS Validation
+description: Version upgrade with data preservation and rollback
+category: STS Capability
+priority: HIGH
+version: 4.0.0
+validation_date: 2025-12-26
+---
+
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+      'actorTextColor': '#fff',
+      'actorBkg': '#F39C12',
+      'actorBorder': '#D68910'
+    }
+  }
+}%%
+
+sequenceDiagram
+    participant STS as 🧪 STS Validator
+    participant Upgrade as 🔄 Upgrade Orchestrator
+    participant Backup as 💾 Backup Manager
+    participant DB as 🗄️ Database Manager
+    participant Files as 📁 File Manager
+    participant Verify as ✅ Verification Engine
+    
+    %% Phase 1: Pre-Upgrade Snapshot
+    rect rgb(74, 144, 226)
+        Note over STS,Verify: PHASE 1: PRE-UPGRADE SNAPSHOT
+        STS->>Upgrade: validate_upgrade_capability()
+        activate Upgrade
+        
+        Upgrade->>Upgrade: Get current version: 3.9.0
+        Upgrade->>Upgrade: Target version: 4.0.0
+        
+        Upgrade->>Backup: Create full backup
+        activate Backup
+        
+        Backup->>DB: Backup all databases<br/>• cortex-brain.db<br/>• cortex_metrics.db<br/>• cortex_alerts.db<br/>• cortex_status.db
+        DB-->>Backup: ✅ DBs backed up (15.2 MB)
+        
+        Backup->>Files: Backup config files<br/>• cortex.config.json<br/>• brain-protection-rules.yaml<br/>• response-templates-v4.yaml
+        Files-->>Backup: ✅ Configs backed up
+        
+        Backup->>Files: Backup conversation history<br/>• cortex-brain/conversation-context.jsonl<br/>• Tier 1 FIFO data
+        Files-->>Backup: ✅ History backed up (2.3 MB)
+        
+        Backup-->>Upgrade: ✅ Snapshot complete<br/>backup-2025-12-26-T10-30-00Z.tar.gz
+        deactivate Backup
+    end
+    
+    %% Phase 2: Data Preservation Check
+    rect rgb(80, 200, 120)
+        Note over STS,Verify: PHASE 2: DATA PRESERVATION
+        Upgrade->>DB: Count conversations (Tier 1)
+        DB-->>Upgrade: 68 conversations
+        
+        Upgrade->>DB: Count patterns (Tier 2)
+        DB-->>Upgrade: 142 patterns
+        
+        Upgrade->>DB: Count metrics (Tier 3)
+        DB-->>Upgrade: 1,247 metrics
+        
+        Upgrade->>Upgrade: Record baseline:<br/>• Conversations: 68<br/>• Patterns: 142<br/>• Metrics: 1,247<br/>• Config files: 15
+    end
+    
+    %% Phase 3: Upgrade Execution
+    rect rgb(231, 76, 60)
+        Note over STS,Verify: PHASE 3: UPGRADE EXECUTION
+        Upgrade->>Upgrade: Execute upgrade script<br/>scripts/upgrade_cortex.py
+        
+        Upgrade->>Files: Update source code<br/>git pull origin CORTEX-4.0
+        Files-->>Upgrade: ✅ Code updated
+        
+        Upgrade->>Files: Update dependencies<br/>pip install -r requirements.txt
+        Files-->>Upgrade: ✅ Dependencies updated
+        
+        Upgrade->>DB: Run database migrations<br/>ALTER TABLE conversations ADD COLUMN metadata
+        DB-->>Upgrade: ✅ Schema migrated
+        
+        Upgrade->>Files: Update config templates<br/>cortex.config.template.json → 4.0.0
+        Files-->>Upgrade: ✅ Configs updated
+        
+        Upgrade->>Upgrade: ⏱️ Measure upgrade time: 4.5s
+    end
+    
+    %% Phase 4: Post-Upgrade Verification
+    rect rgb(243, 156, 18)
+        Note over STS,Verify: PHASE 4: POST-UPGRADE VERIFICATION
+        Upgrade->>Verify: Verify data integrity
+        activate Verify
+        
+        Verify->>DB: Count conversations (post-upgrade)
+        DB-->>Verify: 68 conversations ✓
+        
+        Verify->>DB: Count patterns (post-upgrade)
+        DB-->>Verify: 142 patterns ✓
+        
+        Verify->>DB: Count metrics (post-upgrade)
+        DB-->>Verify: 1,247 metrics ✓
+        
+        Verify->>Verify: Calculate preservation:<br/>68/68 + 142/142 + 1247/1247 = 100%
+        
+        Verify->>Files: Verify config integrity
+        Files-->>Verify: ✅ All configs valid
+        
+        Verify->>Verify: Run smoke tests<br/>pytest tests/smoke/ -v
+        Verify-->>Upgrade: ✅ All smoke tests pass
+        deactivate Verify
+    end
+    
+    %% Phase 5: Rollback Test
+    rect rgb(155, 89, 182)
+        Note over STS,Verify: PHASE 5: ROLLBACK CAPABILITY
+        Upgrade->>Upgrade: Simulate upgrade failure<br/>(test rollback)
+        
+        Upgrade->>Backup: Initiate rollback
+        activate Backup
+        
+        Backup->>Files: Restore source code<br/>git checkout 3.9.0
+        Files-->>Backup: ✅ Code restored
+        
+        Backup->>DB: Restore databases<br/>from backup-2025-12-26.tar.gz
+        DB-->>Backup: ✅ DBs restored
+        
+        Backup->>Files: Restore config files
+        Files-->>Backup: ✅ Configs restored
+        
+        Backup-->>Upgrade: ✅ Rollback complete
+        deactivate Backup
+        
+        Upgrade->>Verify: Verify rollback integrity
+        activate Verify
+        Verify->>DB: Verify data matches baseline
+        DB-->>Verify: ✅ 100% data match
+        Verify-->>Upgrade: ✅ Rollback successful
+        deactivate Verify
+    end
+    
+    %% Metrics Collection
+    Upgrade->>Upgrade: Compile results:<br/>• Upgrade time: 4.5s<br/>• Data preservation: 100%<br/>• Rollback success: true<br/>• Smoke tests: PASS
+    
+    Upgrade->>Upgrade: Validate thresholds:<br/>• Time < 10s ✓<br/>• Preservation = 100% ✓<br/>• Rollback works ✓
+    
+    Upgrade-->>STS: ✅ Upgrade capability: PASS
+    deactivate Upgrade
+    
+    STS->>STS: Update sts-baseline.json<br/>capability 3/9 = PASS
+    
+    Note over STS,Verify: 🎉 Upgrade Capability Validated!<br/>Safe version migration confirmed

@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Features - Intelligent planning, TDD orchestration, ADO integration, and autonomous development workflows">
+    <title>Features | CORTEX 4.0</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    
+    <!-- CORTEX Styles -->
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
+    <link rel="stylesheet" href="../assets/css/modern-tabs.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600&family=Montserrat:wght@400;600;700&family=Raleway:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Mermaid.js for Diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs?v=20260104164746';
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                // Glassmorphism-aligned colors
+                primaryColor: 'rgba(26, 31, 58, 0.85)',
+                primaryTextColor: '#e2e8f0',
+                primaryBorderColor: 'rgba(0, 212, 255, 0.6)',
+                
+                secondaryColor: 'rgba(26, 31, 58, 0.75)',
+                secondaryTextColor: '#cbd5e0',
+                secondaryBorderColor: 'rgba(123, 97, 255, 0.5)',
+                
+                tertiaryColor: 'rgba(26, 31, 58, 0.65)',
+                tertiaryTextColor: '#a0aec0',
+                tertiaryBorderColor: 'rgba(16, 185, 129, 0.5)',
+                
+                // Node-specific colors (glassmorphism panels)
+                noteBkgColor: 'rgba(26, 31, 58, 0.9)',
+                noteTextColor: '#e2e8f0',
+                noteBorderColor: 'rgba(0, 212, 255, 0.4)',
+                
+                // Lines and connections
+                lineColor: 'rgba(0, 212, 255, 0.5)',
+                
+                // Background
+                background: 'transparent',
+                mainBkg: 'rgba(26, 31, 58, 0.8)',
+                secondBkg: 'rgba(15, 23, 42, 0.7)',
+                
+                // Text
+                textColor: '#e2e8f0',
+                labelTextColor: '#e2e8f0',
+                
+                // Typography - Modern sans-serif
+                fontSize: '15px',
+                fontFamily: "'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif"
+            },
+            flowchart: {
+                curve: 'basis',
+                useMaxWidth: true,
+                htmlLabels: true,
+                padding: 20
+            },
+            stateDiagram: {
+                useMaxWidth: true
+            }
+        });
+    </script>
+    <style>
+        /* Mermaid Container */
+        .mermaid-container {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+        
+        .mermaid-container:hover {
+            border-color: rgba(0, 212, 255, 0.4);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+                        0 0 20px rgba(0, 212, 255, 0.15),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+        
+        .mermaid-container .mermaid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        /* Mermaid SVG text enhancement */
+        .mermaid-container svg {
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+        
+        /* Compact Tetris Override */
+        .tetris-panel {
+            padding: 0 2.5rem;
+            width: 70%;
+            margin: 0 auto;
+        }
+        
+        .hero .token-metrics-tetris {
+            margin-top: var(--spacing-md, 1rem);
+            gap: 0.5rem;
+        }
+        
+        .hero .token-metric-tile {
+            padding: 1.875rem clamp(0.5rem, 2cqi, 0.75rem);
+            gap: clamp(0.4rem, 1.5cqi, 0.6rem);
+            flex-direction: row;
+            text-align: left;
+        }
+        
+        .hero .token-metric-tile i {
+            font-size: clamp(1.25rem, 4cqi + 0.25rem, 1.75rem);
+            width: clamp(32px, 7cqi, 48px);
+            height: clamp(32px, 7cqi, 48px);
+            flex-shrink: 0;
+        }
+        
+        .hero .token-metric-tile .metric-value {
+            font-size: clamp(1.125rem, 3.5cqi + 0.5rem, 1.5rem);
+            font-weight: 600;
+            line-height: 1.2;
+        }
+        
+        .hero .token-metric-tile .metric-label {
+            font-size: clamp(0.7rem, 2cqi + 0.2rem, 0.875rem);
+        }
+        
+        .tetris-panel {
+            background: var(--glass-bg, rgba(26, 31, 58, 0.7));
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+            border-radius: var(--radius-lg, 16px);
+            padding: var(--spacing-lg, 1.5rem);
+            box-shadow: var(--shadow, 0 8px 32px rgba(0, 0, 0, 0.37));
+        }
+    </style>
+<style>
+        /* FEATURES Theme - Level 1 */
+        .level1-features {
+            --theme-primary: #00d4ff;
+            --theme-accent: #00ff88;
+            --theme-success: #7c7cff;
+            --theme-warning: #ffd700;
+            --theme-glow: rgba(0, 212, 255, 0.3);
+            
+            /* Apply to glass effects */
+            --glass-border-color: #00d4ff33;
+            --pulse-glow-color: rgba(0, 212, 255, 0.3);
+        }
+        
+        /* Themed glass cards */
+        .level1-features .glass-card-clickable:hover {
+            border-color: #00d4ff66;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37),
+                        0 0 30px rgba(0, 212, 255, 0.3);
+        }
+        
+        /* Themed icons */
+        .level1-features .pulse-glow-glass--fast {
+            filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.3));
+        }
+        
+        /* Themed metric tiles */
+        .level1-features .token-metric-tile {
+            border-color: #00d4ff33;
+        }
+        
+        .level1-features .token-metric-tile:hover {
+            border-color: #00d4ff66;
+            background: #00d4ff11;
+        }
+</style>
+
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+</head>
+<body>
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">→</span>
+        <span class="breadcrumb-current">Features</span>
+    </nav>
+
+    <!-- Hero Section with Logo and Title Row -->
+    <section class="hero" id="main-content">
+        <div class="level1-hero-header">
+            <!-- Logo -->
+            <a href="../index.html">
+                
+            </a>
+            <!-- Title and Metadata -->
+            <div class="level1-hero-content">
+                <h1 class="hero-title level1-hero-title">✨ CORTEX Features</h1>
+                <p class="hero-subtitle level1-hero-subtitle">Powerful AI-driven capabilities that transform your development workflow</p>
+                
+                <!-- Tetris-style metric tiles -->
+                <div class="tetris-panel">
+                    <div class="token-metrics-tetris">
+                        <a href="#planning" class="token-metric-tile tile-reduction">
+                        <i class="fas fa-clipboard-list pulse-glow-glass--fast"></i>
+                        <span class="metric-value">Planning</span>
+                        <span class="metric-label">System</span>
+                    </a>
+                    <a href="#tdd" class="token-metric-tile tile-savings">
+                        <i class="fas fa-check-double pulse-glow-glass--fast"></i>
+                        <span class="metric-value">TDD</span>
+                        <span class="metric-label">Orchestr</span>
+                    </a>
+                    <a href="#dashboard" class="token-metric-tile tile-architecture">
+                        <i class="fas fa-chart-line pulse-glow-glass--fast"></i>
+                        <span class="metric-value">Dashboard</span>
+                        <span class="metric-label">System</span>
+                    </a>
+                    <a href="#sanitization" class="token-metric-tile tile-access">
+                        <i class="fas fa-broom pulse-glow-glass--fast"></i>
+                        <span class="metric-value">Clean</span>
+                        <span class="metric-label">Code</span>
+                    </a>
+                    <a href="#maintenance" class="token-metric-tile tile-score">
+                        <i class="fas fa-wrench pulse-glow-glass--fast"></i>
+                        <span class="metric-value">Health</span>
+                        <span class="metric-label">System</span>
+                    </a>
+                    <a href="#updated" class="token-metric-tile tile-updated">
+                        <i class="fas fa-calendar-alt pulse-glow-glass--fast"></i>
+                        <span class="metric-value">Dec</span>
+                        <span class="metric-label">2025</span>
+                    </a>
+                </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container level1-features">
+
+        <!-- What Are CORTEX Features -->
+        <section class="section">
+            <div class="glass-card">
+                <h2 class="level1-section-header">
+                    <i class="fas fa-bullseye pulse-glow-glass--fast level1-section-header-icon"></i>
+                    What Are CORTEX Features?
+                </h2>
+                <p class="level1-intro-text">
+                    CORTEX Features are specialized capabilities built on top of the <strong>4-Tier Brain architecture</strong>, 
+                    providing autonomous workflows, intelligent automation, and real-time insights into your development process. 
+                    Each feature is designed to solve specific challenges faced by modern development teams.
+                </p>
+                <p class="level1-intro-text level1-intro-text--no-margin">
+                    From strategic planning to test-driven development, from code sanitization to system health monitoring—CORTEX 
+                    features work together as an <strong class="level1-highlight">integrated intelligence layer</strong> 
+                    that remembers context, learns from patterns, and continuously improves your workflow.
+                </p>
+            </div>
+        </section>
+
+        <!-- Core Features -->
+        <section class="section">
+            <h2 class="section-title"><i class="fas fa-rocket pulse-glow-glass--fast" aria-hidden="true"></i> Core Features</h2>
+            
+            <div class="feature-grid feature-grid-3">
+                <!-- Planning System -->
+                <a href="planning-system.html" class="glass-card feature-card level1-feature-card-link animation-t1">
+                    <div class="level1-feature-icon-container level1-feature-icon-container--primary">
+                        <i class="fas fa-clipboard-list pulse-glow-glass--fast level1-feature-icon-lg level1-feature-icon--primary"></i>
+                    </div>
+                    <h3 class="level1-feature-title">Planning System</h3>
+                    <p class="level1-feature-subtitle">Strategic Feature Planning</p>
+                    <p class="level1-feature-description">
+                        Transform vague requirements into crystal-clear, executable plans with automatic DoR/DoD validation, 
+                        multi-phase project detection, and test case generation.
+                    </p>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><i class="fas fa-check pulse-glow-glass--fast level1-check-icon"></i>4-folder structured planning</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="fas fa-check pulse-glow-glass--fast level1-check-icon"></i>DoR/DoD compliance checks</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="fas fa-check pulse-glow-glass--fast level1-check-icon"></i>Automatic TDD integration</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="fas fa-check pulse-glow-glass--fast level1-check-icon"></i>Phase-based execution</div>
+    </div>
+</div>
+                </a>
+
+                <!-- TDD Orchestrator -->
+                <a href="../orchestrators/tdd-orchestrator.html" class="glass-card feature-card level1-feature-card-link animation-t1">
+                    <div class="level1-feature-icon-container level1-feature-icon-container--success">
+                        <i class="fas fa-vial pulse-glow-glass--fast" class="level1-feature-icon-lg level1-feature-icon--success"></i>
+                    </div>
+                    <h3 class="level1-feature-title">TDD Orchestration</h3>
+                    <p class="level1-feature-subtitle">Test-Driven Development Mastery</p>
+                    <p class="level1-feature-description">
+                        Enforce RED→GREEN→REFACTOR discipline with automated test generation, continuous validation, 
+                        and intelligent refactoring suggestions.
+                    </p>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><i class="fas fa-check pulse-glow-glass--fast" class="level1-check-icon"></i>Automated test scaffolding</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="fas fa-check pulse-glow-glass--fast" class="level1-check-icon"></i>RED phase enforcement</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="fas fa-check pulse-glow-glass--fast" class="level1-check-icon"></i>Coverage tracking</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="fas fa-check pulse-glow-glass--fast" class="level1-check-icon"></i>Refactoring guidance</div>
+    </div>
+</div>
+                </a>
+
+                <!-- Dashboard System -->
+                <a href="dashboard-system.html" class="glass-card feature-card" class="level1-feature-card-link animation-t1">
+                    <div class="level1-feature-icon-container level1-feature-icon-container--purple">
+                        <i class="fas fa-search-plus pulse-glow-glass--fast" class="level1-feature-icon-lg level1-feature-icon--purple"></i>
+                    </div>
+                    <h3 class="level1-feature-title">CORTEX LENS</h3>
+                    <p class="level1-feature-subtitle">Real-Time Dashboard System</p>
+                    <p class="level1-feature-description">
+                        Beautiful glassmorphism dashboards with D3.js visualizations providing real-time insights into 
+                        orchestrators, system health, and development metrics.
+                    </p>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><i class="fas fa-check pulse-glow-glass--fast" class="level1-check-icon"></i>Interactive D3.js charts</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="fas fa-check pulse-glow-glass--fast" class="level1-check-icon"></i>Real-time metrics</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="fas fa-check pulse-glow-glass--fast" class="level1-check-icon"></i>System health monitoring</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="fas fa-check pulse-glow-glass--fast" class="level1-check-icon"></i>Glassmorphism design</div>
+    </div>
+</div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Intelligence & Automation -->
+        <section class="section">
+            <h2 class="section-title"><i class="fas fa-brain pulse-glow-glass--fast" aria-hidden="true"></i> Intelligence & Automation</h2>
+            
+            <div class="feature-grid feature-grid-3">
+                <!-- Holistic Discovery -->
+                <a href="holistic-discovery.html" class="glass-card feature-card" class="level1-feature-card-link animation-t1">
+                    <div class="level1-feature-icon-container level1-feature-icon-container--info">
+                        <i class="fas fa-search pulse-glow-glass--fast" class="level1-feature-icon-lg level1-feature-icon--info"></i>
+                    </div>
+                    <h3 class="level1-feature-title">Holistic Discovery</h3>
+                    <p class="level1-feature-subtitle">Prevent Code Duplication</p>
+                    <p class="level1-feature-description">
+                        Search-before-create enforcement that scans your entire codebase before generating new code, 
+                        preventing duplication and maintaining architectural consistency.
+                    </p>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><i class="fas fa-check pulse-glow-glass--fast" class="level1-check-icon"></i>Semantic code search</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="fas fa-check pulse-glow-glass--fast" class="level1-check-icon"></i>Pattern detection</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="fas fa-check pulse-glow-glass--fast" class="level1-check-icon"></i>Architecture analysis</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="fas fa-check pulse-glow-glass--fast" class="level1-check-icon"></i>Duplicate prevention</div>
+    </div>
+</div>
+                </a>
+
+                <!-- Response Templates -->
+                <a href="response-templates.html" class="glass-card feature-card" class="level1-feature-card-link animation-t1">
+                    <div class="level1-feature-icon-container level1-feature-icon-container--mixed">
+                        <i class="fas fa-comment-dots pulse-glow-glass--fast" class="level1-feature-icon-lg level1-feature-icon--primary"></i>
+                    </div>
+                    <h3 class="level1-feature-title">Response Templates</h3>
+                    <p class="level1-feature-subtitle">Adaptive Communication</p>
+                    <p class="level1-feature-description">
+                        Dynamic response formatting that scales from instant answers to comprehensive documentation, 
+                        with consistent branding and context-aware detail levels.
+                    </p>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><i class="fas fa-check pulse-glow-glass--fast" class="level1-check-icon"></i>5 complexity tiers</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="fas fa-check pulse-glow-glass--fast" class="level1-check-icon"></i>Consistent formatting</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="fas fa-check pulse-glow-glass--fast" class="level1-check-icon"></i>Brand compliance</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="fas fa-check pulse-glow-glass--fast" class="level1-check-icon"></i>Context scaling</div>
+    </div>
+</div>
+                </a>
+
+                <!-- Token Optimization -->
+                <a href="token-optimization.html" class="glass-card feature-card" class="level1-feature-card-link animation-t1">
+                    <div class="level1-feature-icon-container level1-feature-icon-container--warning">
+                        <i class="fas fa-bolt pulse-glow-glass--fast" class="level1-feature-icon-lg level1-feature-icon--warning"></i>
+                    </div>
+                    <h3 class="level1-feature-title">Token Optimization</h3>
+                    <p class="level1-feature-subtitle">Efficient Context Management</p>
+                    <p class="level1-feature-description">
+                        Intelligent token usage that maximizes context quality while minimizing costs through smart 
+                        summarization, caching, and context pruning.
+                    </p>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><i class="fas fa-check pulse-glow-glass--fast" class="level1-check-icon"></i>Context compression</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="fas fa-check pulse-glow-glass--fast" class="level1-check-icon"></i>Smart summarization</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="fas fa-check pulse-glow-glass--fast" class="level1-check-icon"></i>Cache utilization</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="fas fa-check pulse-glow-glass--fast" class="level1-check-icon"></i>Cost tracking</div>
+    </div>
+</div>
+                </a>
+            </div>
+        </section>
+
+        <!-- System Operations -->
+        <section class="section">
+            <h2 class="section-title"><i class="fas fa-tools pulse-glow-glass--fast" aria-hidden="true"></i> System Operations</h2>
+            
+            <div class="feature-grid feature-grid-2">
+                <!-- Sanitization Engine -->
+                <a href="../orchestrators/sanitization-engine.html" class="glass-card feature-card" class="level1-feature-card-link animation-t1">
+                    <div class="level1-feature-icon-container level1-feature-icon-container--success">
+                        <i class="fas fa-broom pulse-glow-glass--fast" class="level1-feature-icon-lg level1-feature-icon--success"></i>
+                    </div>
+                    <h3 class="level1-feature-title">Sanitization Engine</h3>
+                    <p class="level1-feature-subtitle">Code Privacy & Security</p>
+                    <p class="level1-feature-description">
+                        5-phase automated sanitization that removes sensitive data, PII, and proprietary information 
+                        while maintaining code functionality and architectural integrity.
+                    </p>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">✓ PII detection & removal</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✓ Secret redaction</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✓ Generic naming</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✓ Compliance validation</div>
+    </div>
+</div>
+                </a>
+
+                <!-- Git Operations -->
+                <a href="git-operations.html" class="glass-card feature-card" class="level1-feature-card-link animation-t1">
+                    <div class="level1-feature-icon-container level1-feature-icon-container--primary">
+                        <i class="fas fa-code-branch pulse-glow-glass--fast" class="level1-feature-icon-lg level1-feature-icon--primary"></i>
+                    </div>
+                    <h3 class="level1-feature-title">Git Operations</h3>
+                    <p class="level1-feature-subtitle--no-center">Intelligent Version Control</p>
+                    <p class="level1-feature-description">
+                        Smart Git workflow automation with checkpoint creation, branch management, and commit 
+                        message generation following conventional commit standards.
+                    </p>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">✓ Auto checkpoints</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✓ Branch strategies</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✓ Commit templates</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">✓ Rollback safety</div>
+    </div>
+</div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Integration Ecosystem -->
+        <section class="section">
+            <div class="glass-card">
+                <h2 class="level1-integration-header">
+                    <div class="level1-integration-icon-container level1-integration-icon-container--primary">
+                        <i class="fas fa-link pulse-glow-glass--fast" class="level1-integration-icon level1-feature-icon--primary"></i>
+                    </div>
+                    Integration Ecosystem
+                </h2>
+                
+                <div class="metrics-grid-4">
+                    <div class="metric-card">
+                        <div class="metric-value" class="level1-metric-value">Azure DevOps</div>
+                        <div class="metric-label" class="level1-metric-label">Work Items</div>
+                        <div class="level1-metric-detail">Stories & Features</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" class="level1-metric-value">GitHub</div>
+                        <div class="metric-label" class="level1-metric-label">Version Control</div>
+                        <div class="level1-metric-detail">Actions & Pages</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" class="level1-metric-value">VS Code</div>
+                        <div class="metric-label" class="level1-metric-label">IDE Integration</div>
+                        <div class="level1-metric-detail">Copilot Chat</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" class="level1-metric-value">D3.js</div>
+                        <div class="metric-label" class="level1-metric-label">Visualizations</div>
+                        <div class="level1-metric-detail">Interactive Charts</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why CORTEX Features Matter -->
+        <section class="section">
+            <div class="glass-card">
+                <h2 class="level1-integration-header">
+                    <div class="level1-integration-icon-container level1-integration-icon-container--warning">
+                        <i class="fas fa-lightbulb pulse-glow-glass--fast" class="level1-integration-icon level1-feature-icon--warning"></i>
+                    </div>
+                    Why CORTEX Features Matter
+                </h2>
+                
+                <div class="metrics-grid-2">
+                    <div class="level1-benefit-content">
+                        <h3 class="level1-benefit-title">For Development Teams</h3>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong class="level1-benefit-arrow">→</strong> <strong>Faster Delivery:</strong> Automated planning and TDD reduce cycle time</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong class="level1-benefit-arrow">→</strong> <strong>Higher Quality:</strong> Enforced standards prevent technical debt</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong class="level1-benefit-arrow">→</strong> <strong>Better Collaboration:</strong> Shared context and knowledge graphs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong class="level1-benefit-arrow">→</strong> <strong>Less Cognitive Load:</strong> AI handles routine tasks</div>
+    </div>
+</div>
+                    </div>
+                    <div class="level1-benefit-content">
+                        <h3 class="level1-benefit-title">For Business Value</h3>
+                        <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><strong class="level1-benefit-arrow">→</strong> <strong>Predictable Outcomes:</strong> Structured workflows ensure consistency</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong class="level1-benefit-arrow">→</strong> <strong>Reduced Risk:</strong> Automated testing and validation</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong class="level1-benefit-arrow">→</strong> <strong>Scalable Processes:</strong> Reusable patterns and templates</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><strong class="level1-benefit-arrow">→</strong> <strong>Real-Time Visibility:</strong> Dashboard insights for stakeholders</div>
+    </div>
+</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="section">
+            <div class="glass-card level1-cta-card">
+                <h2 class="level1-cta-title">Ready to Explore?</h2>
+                <p class="level1-cta-description">
+                    Dive into CORTEX orchestrators to see these features in action
+                </p>
+                <div class="level1-cta-buttons">
+                    <a href="../orchestrators/index.html" class="btn-hero btn-hero-primary level1-btn-hero level1-btn-hero--primary animation-t2">
+                        <i class="fas fa-crosshairs pulse-glow-glass--fast level1-btn-icon"></i>
+                        <span>View Orchestrators</span>
+                    </a>
+                    <a href="../getting-started/index.html" class="btn-hero btn-hero-secondary level1-btn-hero level1-btn-hero--secondary animation-t2">
+                        <i class="fas fa-rocket pulse-glow-glass--fast level1-btn-icon"></i>
+                        <span>Getting Started</span>
+                    </a>
+                    <a href="../architecture/index.html" class="btn-hero btn-hero-secondary level1-btn-hero level1-btn-hero--secondary animation-t2">
+                        <i class="fas fa-layer-group pulse-glow-glass--fast level1-btn-icon"></i>
+                        <span>Architecture</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <style>
+        /* Feature card hover effects */
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-primary);
+            box-shadow: 0 20px 60px 0 rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        /* Button hover effects */
+        .btn-hero:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+        }
+
+        .btn-hero-primary:hover {
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.5);
+        }
+
+        /* Metric card hover */
+        .metric-card {
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .metrics-grid-3,
+            .metrics-grid-2,
+            .metrics-grid-4 {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2rem !important;
+            }
+
+            h2 {
+                font-size: 1.5rem !important;
+            }
+        }
+    </style>
+</body>
+</html>

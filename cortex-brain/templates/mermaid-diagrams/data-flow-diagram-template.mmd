@@ -1,0 +1,217 @@
+%% Data Flow Diagram Template
+%% Template Version: 1.0.0
+%% Author: CORTEX Development Team
+%% Usage: Use for data processing pipelines, ETL flows, and system data movement
+%%
+%% Variables to replace:
+%%   {{DATA_SOURCE_N}} - Data source names
+%%   {{PROCESS_N}} - Process/transformation names
+%%   {{DATA_STORE_N}} - Data store names
+%%   {{DATA_FLOW_N}} - Data flow descriptions
+
+---
+%% Level 0 DFD - Context Diagram
+graph LR
+    subgraph "External Entities"
+        USER[("👤 User")]
+        PARTNER[("🤝 Partner System")]
+        ADMIN[("👨‍💼 Administrator")]
+    end
+    
+    SYSTEM["🏢 {{SYSTEM_NAME}}<br/>Main System"]
+    
+    USER -->|"Request Data"| SYSTEM
+    SYSTEM -->|"Response Data"| USER
+    PARTNER -->|"Integration Data"| SYSTEM
+    SYSTEM -->|"Sync Data"| PARTNER
+    ADMIN -->|"Configuration"| SYSTEM
+    SYSTEM -->|"Reports"| ADMIN
+    
+    style SYSTEM fill:#1168bd,stroke:#0b4884,color:white
+
+---
+%% Level 1 DFD - System Decomposition
+graph TB
+    subgraph "External"
+        EXT_USER[("👤 User")]
+        EXT_API[("☁️ External API")]
+    end
+    
+    subgraph "System Processes"
+        P1["1.0<br/>Receive Input"]
+        P2["2.0<br/>Validate Data"]
+        P3["3.0<br/>Transform Data"]
+        P4["4.0<br/>Store Data"]
+        P5["5.0<br/>Generate Output"]
+    end
+    
+    subgraph "Data Stores"
+        DS1[("D1<br/>Raw Data Store")]
+        DS2[("D2<br/>Processed Data")]
+        DS3[("D3<br/>Cache")]
+    end
+    
+    EXT_USER -->|"Raw Input"| P1
+    P1 -->|"Input Data"| P2
+    P2 -->|"Valid Data"| P3
+    P2 -.->|"Invalid Data"| EXT_USER
+    P3 -->|"Transformed"| P4
+    P3 -->|"Cache Data"| DS3
+    P4 -->|"Persist"| DS1
+    P4 -->|"Index"| DS2
+    P5 -->|"Read"| DS2
+    P5 -->|"Check"| DS3
+    P5 -->|"Output"| EXT_USER
+    EXT_API -->|"External Data"| P1
+    
+    style P1 fill:#4CAF50
+    style P2 fill:#2196F3
+    style P3 fill:#FF9800
+    style P4 fill:#9C27B0
+    style P5 fill:#E91E63
+
+---
+%% ETL Pipeline Flow
+graph LR
+    subgraph "Extract 📥"
+        SRC1[("📊 Database")]
+        SRC2[("📁 Files")]
+        SRC3[("🌐 API")]
+        
+        E1["Extract<br/>DB Connector"]
+        E2["Extract<br/>File Reader"]
+        E3["Extract<br/>API Client"]
+        
+        SRC1 --> E1
+        SRC2 --> E2
+        SRC3 --> E3
+    end
+    
+    subgraph "Transform ⚙️"
+        T1["Clean &<br/>Validate"]
+        T2["Normalize &<br/>Standardize"]
+        T3["Aggregate &<br/>Calculate"]
+        T4["Enrich &<br/>Join"]
+        
+        E1 --> T1
+        E2 --> T1
+        E3 --> T1
+        T1 --> T2
+        T2 --> T3
+        T3 --> T4
+    end
+    
+    subgraph "Load 📤"
+        L1["Load to<br/>Data Warehouse"]
+        L2["Load to<br/>Data Lake"]
+        L3["Load to<br/>Analytics DB"]
+        
+        DEST1[("🏢 DW")]
+        DEST2[("🌊 Lake")]
+        DEST3[("📈 Analytics")]
+        
+        T4 --> L1
+        T4 --> L2
+        T4 --> L3
+        L1 --> DEST1
+        L2 --> DEST2
+        L3 --> DEST3
+    end
+    
+    style T1 fill:#FF9800
+    style T2 fill:#FF9800
+    style T3 fill:#FF9800
+    style T4 fill:#FF9800
+
+---
+%% Message Queue Flow
+graph LR
+    subgraph "Producers 📤"
+        P1["🖥️ Web App"]
+        P2["📱 Mobile App"]
+        P3["🤖 Service A"]
+    end
+    
+    subgraph "Message Broker 📬"
+        Q1[["📮 Queue: Orders"]]
+        Q2[["📮 Queue: Events"]]
+        Q3[["📮 Queue: Notifications"]]
+        
+        EX["🔀 Exchange<br/>Topic Router"]
+    end
+    
+    subgraph "Consumers 📥"
+        C1["⚙️ Order Service"]
+        C2["📊 Analytics Service"]
+        C3["📧 Email Service"]
+        C4["📱 Push Service"]
+    end
+    
+    P1 --> EX
+    P2 --> EX
+    P3 --> EX
+    
+    EX -->|"order.*"| Q1
+    EX -->|"event.*"| Q2
+    EX -->|"notify.*"| Q3
+    
+    Q1 --> C1
+    Q2 --> C2
+    Q3 --> C3
+    Q3 --> C4
+    
+    style EX fill:#FF9800,stroke:#F57C00
+    style Q1 fill:#4CAF50
+    style Q2 fill:#2196F3
+    style Q3 fill:#9C27B0
+
+---
+%% Stream Processing Flow
+graph LR
+    subgraph "Data Sources"
+        S1["📡 IoT Sensors"]
+        S2["📜 Application Logs"]
+        S3["🖱️ Click Events"]
+    end
+    
+    subgraph "Ingestion Layer"
+        KAFKA["Apache Kafka<br/>Message Broker"]
+    end
+    
+    subgraph "Processing Layer"
+        SPARK["Apache Spark<br/>Stream Processing"]
+        
+        FLINK["Apache Flink<br/>CEP Engine"]
+    end
+    
+    subgraph "Storage Layer"
+        ES[("Elasticsearch<br/>Search")]
+        REDIS[("Redis<br/>Real-time")]
+        S3_STORE[("S3<br/>Archive")]
+    end
+    
+    subgraph "Presentation"
+        DASH["📊 Dashboard"]
+        ALERT["🚨 Alerts"]
+        API["🔌 API"]
+    end
+    
+    S1 --> KAFKA
+    S2 --> KAFKA
+    S3 --> KAFKA
+    
+    KAFKA --> SPARK
+    KAFKA --> FLINK
+    
+    SPARK --> ES
+    SPARK --> S3_STORE
+    FLINK --> REDIS
+    FLINK --> ALERT
+    
+    ES --> DASH
+    REDIS --> API
+    ES --> API
+    
+    style KAFKA fill:#231F20,color:white
+    style SPARK fill:#E25A1C,color:white
+    style FLINK fill:#E6526F,color:white

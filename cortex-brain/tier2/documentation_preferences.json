@@ -1,0 +1,3287 @@
+{
+  "preferences": {
+    "test_user": {
+      "user_id": "test_user",
+      "project_id": null,
+      "style": "technical",
+      "tone": "neutral",
+      "depth": "detailed",
+      "example_density": "balanced",
+      "preferred_format": "markdown",
+      "include_diagrams": true,
+      "include_toc": true,
+      "created_at": 1766353495.6116421,
+      "updated_at": 1766764624.9020128
+    },
+    "test_user:test_project": {
+      "user_id": "test_user",
+      "project_id": "test_project",
+      "style": "balanced",
+      "tone": "neutral",
+      "depth": "moderate",
+      "example_density": "balanced",
+      "preferred_format": "markdown",
+      "include_diagrams": true,
+      "include_toc": true,
+      "created_at": 1766401890.0178192,
+      "updated_at": 1766401890.0178194
+    },
+    "user1:proj1": {
+      "user_id": "user1",
+      "project_id": "proj1",
+      "style": "balanced",
+      "tone": "neutral",
+      "depth": "moderate",
+      "example_density": "balanced",
+      "preferred_format": "markdown",
+      "include_diagrams": true,
+      "include_toc": true,
+      "created_at": 1766401890.0267365,
+      "updated_at": 1766401890.0267367
+    },
+    "user1:proj2": {
+      "user_id": "user1",
+      "project_id": "proj2",
+      "style": "balanced",
+      "tone": "neutral",
+      "depth": "moderate",
+      "example_density": "balanced",
+      "preferred_format": "markdown",
+      "include_diagrams": true,
+      "include_toc": true,
+      "created_at": 1766401890.0288355,
+      "updated_at": 1766401890.028836
+    }
+  },
+  "update_history": {
+    "test_user": [
+      {
+        "preference_type": "depth",
+        "old_value": "moderate",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766353495.611854
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766353495.612897
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766353502.388646
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766353502.390302
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766353509.1441689
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766353509.145866
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766354387.8201768
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766354387.821845
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766354611.97452
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766354611.976126
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766354813.646861
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766354813.648475
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766354847.909438
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766354847.9110558
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766355435.6470358
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766355435.6485481
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766355441.579363
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766355441.581512
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766355834.2237928
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766355834.2252522
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766356979.8695512
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766356979.8717382
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766398714.0251212
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766398714.0312912
+      },
+      {
+        "preference_type": "style",
+        "old_value": "balanced",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766401957.2485116
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766402089.6279714
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766402134.7881112
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766427956.012049
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766427958.0107782
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766427958.012644
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766429325.12992
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766429327.1577
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766429327.159607
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766429908.873767
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766429910.889305
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766429910.891408
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766442332.9448829
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766442334.959349
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766442334.961227
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766443016.292803
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766443018.392713
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766443018.395668
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766485299.330484
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766485301.3822222
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766485301.3849542
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766491566.4459064
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766491570.4902968
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766491570.509503
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766491635.284203
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766491638.0196257
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766491638.027484
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766492063.502426
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766492066.268597
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766492066.2745001
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766492089.3383522
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766492092.0916574
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766492092.0981128
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766492123.9077785
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766492126.7584934
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766492126.76493
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766493467.6524837
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766493470.2465844
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766493470.2530022
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766493503.6420493
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766493506.4029148
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766493506.4121246
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766493646.5506566
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766493649.5811613
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766493649.5902047
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766493682.499746
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766493685.371084
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766493685.3785942
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766493757.7386227
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766493760.3814847
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766493760.3878355
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766493792.146661
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766493794.8779306
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766493794.8853607
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766493877.6038067
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766493880.2453945
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766493880.2545056
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766493912.488139
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766493915.1793864
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766493915.188278
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766494016.5153234
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766494019.2967532
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766494019.3034303
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766494051.8673162
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766494054.5738268
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766494054.5831108
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766494128.4138975
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766494131.074042
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766494131.0842452
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766494162.6620097
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766494165.3406754
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766494165.3478084
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766494242.5325353
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766494245.2683072
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766494245.2764544
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766494299.1627786
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766494301.864008
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766494301.8717782
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766494369.7953522
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766494372.423006
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766494372.4312227
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766494405.2341666
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766494407.8441367
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766494407.8584385
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766494483.7269826
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766494486.4101024
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766494486.4189322
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766494545.971723
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766494548.6258335
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766494548.6341355
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766494610.5601695
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766494613.1718576
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766494613.1793087
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766494644.086211
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766494646.6774223
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766494646.6858778
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766495414.0272546
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766495417.1987245
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766495417.2226815
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766495473.6765926
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766495476.3190308
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766495476.3268201
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766495560.8433814
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766495564.0399995
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766495564.0642145
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766495620.6949902
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766495623.4072611
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766495623.4156003
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766496573.0367222
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766496576.2047262
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766496576.2297091
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766496637.769025
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766496640.4477212
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766496640.4556782
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766499083.120376
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766499085.158835
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766499085.161747
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766499200.891124
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766499202.908064
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766499202.910898
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766503878.688991
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766503880.734654
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766503880.7376
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766503935.4129379
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766503937.43943
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766503937.4426298
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766516543.304631
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766516548.7275813
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766516548.7999234
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766516674.076503
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766516677.7293816
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766516677.7526588
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766517107.6032865
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766517111.1640978
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766517111.2018332
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766517177.6069582
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766517180.3539524
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766517180.3687472
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766517386.3555055
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766517389.4930232
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766517389.5203676
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766517448.734886
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766517451.4215364
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766517451.4308336
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766518042.202925
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766518044.307034
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766518044.312288
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766522398.055069
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766522400.985572
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766522400.99106
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766526455.122838
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766526457.554996
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766526457.5583072
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766527847.896944
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766527850.907169
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766527850.912965
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766528697.44947
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766528699.8771799
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766528699.8804638
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766581879.772616
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766581882.187579
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766581882.190988
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766582604.574406
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766582606.994667
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766582606.998327
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766582668.3101969
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766582670.7292721
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766582670.732706
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766583417.985616
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766583419.669396
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766583419.672833
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766583470.051792
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766583471.7302752
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766583471.733897
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766583614.6348999
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766583617.0639281
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766583617.0676239
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766590302.8563101
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766590305.895555
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766590305.901941
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766591020.924729
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766591023.367896
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766591023.3715599
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766591465.600093
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766591468.452373
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766591468.4586902
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766591740.103893
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766591742.973372
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766591742.979554
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766596029.7418911
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766596032.598167
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766596032.604073
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766597741.134214
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766597743.614227
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766597743.61809
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766598454.0847669
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766598456.555817
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766598456.559597
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766598590.6805
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766598593.140867
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766598593.144612
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766598666.2407339
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766598668.6984031
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766598668.702206
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766598752.194795
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766598754.675838
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766598754.679701
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766599176.407935
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766599178.868047
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766599178.871973
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766599371.043447
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766599373.5289469
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766599373.532744
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766599430.5573409
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766599433.0751271
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766599433.079543
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766599504.530918
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766599507.016757
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766599507.0207849
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766599793.2330382
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766599795.720351
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766599795.7244291
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766600070.377981
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766600072.8862011
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766600072.890209
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766606105.839422
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766606108.262061
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766606108.266002
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766606158.1920378
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766606160.6518972
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766606160.655972
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766606228.014497
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766606230.5858939
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766606230.589931
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766606327.059881
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766606329.5496252
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766606329.553662
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766606448.96629
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766606451.4538372
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766606451.457908
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766606632.849163
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766606635.329967
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766606635.334062
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766606706.050254
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766606708.557197
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766606708.561357
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766606807.503721
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766606809.5425391
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766606809.5465522
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766606816.719008
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766606818.779843
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766606818.784158
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766606840.3360052
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766606842.842548
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766606842.846706
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766606931.912004
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766606934.403544
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766606934.407785
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766607518.536372
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766607521.02306
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766607521.027403
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766607579.0521631
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766607581.547429
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766607581.5517051
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766608258.0700002
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766608260.519993
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766608260.5243251
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766608314.309741
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766608316.783165
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766608316.787741
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766609117.92878
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766609119.608255
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766609119.612629
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766609354.1166
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766609356.4604852
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766609356.465039
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766609487.618492
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766609489.945611
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766609489.9500842
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766609544.592969
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766609546.937291
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766609546.941845
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766609648.6183739
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766609650.311282
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766609650.315934
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766609713.199145
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766609714.886903
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766609714.891731
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766609967.184812
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766609968.871537
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766609968.8761659
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766610019.133803
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766610021.574971
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766610021.579813
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766610129.448717
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766610131.929825
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766610131.934485
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766610433.486731
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766610435.92826
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766610435.932907
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766610523.50835
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766610525.971228
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766610525.9760609
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766610747.58805
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766610750.091647
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766610750.09647
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766610877.587182
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766610880.075778
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766610880.080471
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766610931.405219
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766610933.8915389
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766610933.89631
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766611064.425558
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766611066.917632
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766611066.9223711
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766611118.436691
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766611120.9383922
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766611120.943316
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766611219.386985
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766611221.8998961
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766611221.904712
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766611387.61451
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766611389.681012
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766611389.686039
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766611620.899034
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766611622.998362
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766611623.003484
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766611918.727403
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766611920.792156
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766611920.797132
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766612709.7765708
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766612711.860023
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766612711.864981
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766612744.5920918
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766612746.686021
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766612746.691031
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766612809.130773
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766612811.213093
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766612811.218343
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766612844.1388748
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766612846.226934
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766612846.232243
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766612905.901164
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766612907.9943712
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766612907.999618
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766612940.820971
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766612942.90062
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766612942.906069
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766613002.604363
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766613004.684757
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766613004.690316
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766613037.5071769
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766613039.594314
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766613039.599499
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766613171.715185
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766613173.774657
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766613173.779883
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766613207.557051
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766613209.628108
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766613209.633433
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766613385.879192
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766613387.9430342
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766613387.948276
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766613421.8572721
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766613423.922174
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766613423.927458
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766613920.1517608
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766613922.215041
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766613922.220315
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766614566.6204102
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766614568.684139
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766614568.689636
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766619943.204525
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766620020.046049
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766620452.3338969
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766620454.481075
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766620454.490732
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766621103.26672
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766621105.324432
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766621105.330067
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766621366.8390589
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766621368.895158
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766621368.900626
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766621736.453082
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766621738.510588
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766621738.516068
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766622096.039304
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766622098.0986729
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766622098.104119
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766622407.0340202
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766622409.084654
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766622409.0901902
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766622597.9149172
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766622599.982212
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766622599.987565
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766658549.648045
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766658551.811379
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766658551.821292
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766661855.0023181
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766661857.063104
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766661857.068875
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766664096.9434218
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766664099.074917
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766664099.085492
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766665232.846455
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766665237.3297238
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766665237.339912
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766666511.889364
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766666515.3539999
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766666515.3601432
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766676252.1823978
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766676255.648065
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766676255.6539059
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766676403.944606
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766676407.446742
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766676407.4524648
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766676548.0864189
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766676551.60221
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766676551.608039
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766677525.225086
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766677528.701969
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766677528.70771
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766678159.659733
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766678163.130943
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766678163.136698
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766681201.917711
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766681205.417496
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766681205.423341
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766682254.701836
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766682258.187405
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766682258.193246
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766682975.92297
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766682979.392323
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766682979.398347
+      },
+      {
+        "preference_type": "style",
+        "old_value": "technical",
+        "new_value": "technical",
+        "reason": "user_feedback",
+        "timestamp": 1766764624.0132513
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "detailed",
+        "new_value": "concise",
+        "reason": "auto_learning",
+        "timestamp": 1766764624.8849652
+      },
+      {
+        "preference_type": "depth",
+        "old_value": "concise",
+        "new_value": "detailed",
+        "reason": "auto_learning",
+        "timestamp": 1766764624.9020152
+      }
+    ]
+  }
+}

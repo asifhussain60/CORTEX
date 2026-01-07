@@ -1,0 +1,2957 @@
+{
+  "OrphanedFiles": [
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-08/index.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-12/index.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-06/index.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/CORTEX/index.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/test-tabs.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/cortex-lens-output/mock-landing/tests/test-runner.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/technical/security/dashboard.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/database/oracle-best-practices.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/comparison/comparison.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/technical/index.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/visual-differentiation-demo.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/knowledge/database/sql-best-practices.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/roi-calculator/index.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/lens/diagnostics/dashboard-diagnostic.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-02/index.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-05/index.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-04/index.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-07/index.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Prologue/index.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/orchestrators/onboarding-orchestrator.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-03/index.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/testing/tdd.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/architecture/architecture-FULL.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/best-practices/index.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/tests/index.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/test-repo/index.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/technical/orchestrators/architectural-review.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-01/index.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/future/index.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/mega-menu-prototype.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/cortex-lens-output/index.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/mock-landing/index.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/ddd/ddd-fundamentals.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-13/index.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/technical/orchestrators/ado-planning.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-11/index.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/architecture/brain-tiers.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-09/index.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-10/index.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/architecture/development-context.html",
+    "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/validation/index.html"
+  ],
+  "LinkGraph": {
+    "BrokenLinks": 129,
+    "LinkedFiles": 318,
+    "OrphanedFiles": 42,
+    "MissingJS": 19,
+    "MissingImages": 34,
+    "MissingCSS": 383,
+    "TotalFiles": 360
+  },
+  "RootAnalysis": {
+    "Review": [],
+    "Move": [],
+    "Keep": [
+      "404.md",
+      "faq.html",
+      "index.html",
+      "search-index.json",
+      "sitemap.html"
+    ]
+  },
+  "DryRun": {
+    "IsPresent": true
+  },
+  "Actions": {
+    "FilesToDelete": [],
+    "LinksToUpdate": [],
+    "FilesToMove": [],
+    "FilesToArchive": [
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-08/index.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-12/index.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-06/index.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/CORTEX/index.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/test-tabs.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/cortex-lens-output/mock-landing/tests/test-runner.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/technical/security/dashboard.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/database/oracle-best-practices.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/comparison/comparison.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/technical/index.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/visual-differentiation-demo.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/knowledge/database/sql-best-practices.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/roi-calculator/index.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/lens/diagnostics/dashboard-diagnostic.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-02/index.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-05/index.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-04/index.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-07/index.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Prologue/index.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/orchestrators/onboarding-orchestrator.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-03/index.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/testing/tdd.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/architecture/architecture-FULL.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/best-practices/index.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/tests/index.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/test-repo/index.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/technical/orchestrators/architectural-review.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-01/index.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/future/index.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/mega-menu-prototype.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/cortex-lens-output/index.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/mock-landing/index.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/ddd/ddd-fundamentals.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-13/index.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/technical/orchestrators/ado-planning.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-11/index.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/architecture/brain-tiers.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-09/index.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-10/index.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/architecture/development-context.html",
+      "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/validation/index.html"
+    ]
+  },
+  "Timestamp": "2026-01-03T09:11:07.6417001-05:00",
+  "Validation": {
+    "BrokenLinks": [
+      {
+        "To": "orchestrators/planning-v5/phase-1-governance-validation.html",
+        "Type": "HTML",
+        "From": "orchestrators/planning-v5.html"
+      },
+      {
+        "To": "orchestrators/planning-v5/phase-2-knowledge-graph-analysis.html",
+        "Type": "HTML",
+        "From": "orchestrators/planning-v5.html"
+      },
+      {
+        "To": "orchestrators/planning-v5/phase-3-ast-impact-analysis.html",
+        "Type": "HTML",
+        "From": "orchestrators/planning-v5.html"
+      },
+      {
+        "To": "orchestrators/planning-v5/phase-4-complexity-scoring.html",
+        "Type": "HTML",
+        "From": "orchestrators/planning-v5.html"
+      },
+      {
+        "To": "orchestrators/planning-v5/phase-5-strategy-selection.html",
+        "Type": "HTML",
+        "From": "orchestrators/planning-v5.html"
+      },
+      {
+        "To": "orchestrators/planning-v5/phase-6-phase-breakdown.html",
+        "Type": "HTML",
+        "From": "orchestrators/planning-v5.html"
+      },
+      {
+        "To": "orchestrators/planning-v5/phase-7-tdd-integration.html",
+        "Type": "HTML",
+        "From": "orchestrators/planning-v5.html"
+      },
+      {
+        "To": "orchestrators/planning-v5/phase-8-token-optimization.html",
+        "Type": "HTML",
+        "From": "orchestrators/planning-v5.html"
+      },
+      {
+        "To": "orchestrators/planning-v5/phase-9-visualization-generation.html",
+        "Type": "HTML",
+        "From": "orchestrators/planning-v5.html"
+      },
+      {
+        "To": "orchestrators/planning-v5/phase-10-manifest-finalization.html",
+        "Type": "HTML",
+        "From": "orchestrators/planning-v5.html"
+      },
+      {
+        "To": "technical/orchestrators/code-sanitization.html",
+        "Type": "HTML",
+        "From": "getting-started/tutorial.html"
+      },
+      {
+        "To": "technical/orchestrators/refinement-orchestrator.html",
+        "Type": "HTML",
+        "From": "getting-started/tutorial.html"
+      },
+      {
+        "To": "knowledge/files-hub.html",
+        "Type": "HTML",
+        "From": "knowledge/files/files-hub.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/technical/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/technical/security/dashboard.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/technical/orchestrators/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/technical/security/dashboard.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/database/oracle-best-practices.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/database/oracle-best-practices.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/database.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/database/oracle-best-practices.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/database/sql-best-practices.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/database/oracle-best-practices.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/performance/profiling-analysis.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/database/oracle-best-practices.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/security/secure-coding-practices.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/database/oracle-best-practices.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/architecture/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/token-optimization/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/sts/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/knowledge/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/toolkit-manager/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/lens/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/getting-started/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/security/access-control.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/security/data-protection.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/security/audit-logging.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/security/threat-modeling.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/security/risk-assessment.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/security/vulnerability-assessment.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/security/penetration-testing.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/security/owasp.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/security/compliance.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/security/security-training.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/security/incident-response.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/security/threat-intelligence.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/security/dashboard.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/orchestrators/planning-system.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/orchestrators/ado-operations.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/orchestrators/pre-flight.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/orchestrators/architectural-review.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/orchestrators/tdd-orchestrator.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/orchestrators/execution-orchestrator.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/orchestrators/git-checkpoint.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/orchestrators/system-integrity.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/orchestrators/cleanup-orchestrator.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/orchestrators/upgrade.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/orchestrators/cortex-lens.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/orchestrators/intelligent-dashboard.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/orchestrators/onboarding-orchestrator.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/orchestrators/debug-orchestrator.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/orchestrators/rollback-orchestrator.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/technical/index.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/knowledge/database/sql-best-practices.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/knowledge/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/knowledge/database/sql-best-practices.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/knowledge/database.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/knowledge/database/sql-best-practices.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/knowledge/database/nosql-patterns.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/knowledge/database/sql-best-practices.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/knowledge/database/orm-best-practices.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/knowledge/database/sql-best-practices.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/knowledge/performance/query-optimization.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/knowledge/database/sql-best-practices.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/knowledge/security/data-protection.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/knowledge/database/sql-best-practices.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/roi-calculator/index.html"
+      },
+      {
+        "To": "documentation.html",
+        "Type": "HTML",
+        "From": "security/access-control.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/lens/diagnostics/cortex-lens-output/CORTEX/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/lens/diagnostics/dashboard-diagnostic.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/lens/diagnostics/prototypes/test-tabs.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/lens/diagnostics/dashboard-diagnostic.html"
+      },
+      {
+        "To": "documentation.html",
+        "Type": "HTML",
+        "From": "security/data-protection.html"
+      },
+      {
+        "To": "documentation.html",
+        "Type": "HTML",
+        "From": "security/risk-assessment.html"
+      },
+      {
+        "To": "technical/orchestrators/code-sanitization.html",
+        "Type": "HTML",
+        "From": "faq.html"
+      },
+      {
+        "To": "technical/orchestrators/refinement-orchestrator.html",
+        "Type": "HTML",
+        "From": "faq.html"
+      },
+      {
+        "To": "documentation.html",
+        "Type": "HTML",
+        "From": "security/audit-logging.html"
+      },
+      {
+        "To": "documentation.html",
+        "Type": "HTML",
+        "From": "security/penetration-testing.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/orchestrators/onboarding-orchestrator.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/getting-started/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/orchestrators/onboarding-orchestrator.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/getting-started/tutorial.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/orchestrators/onboarding-orchestrator.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/architecture/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/orchestrators/onboarding-orchestrator.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/testing/tdd.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/testing/tdd.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/testing.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/testing/tdd.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/testing/unit-testing.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/testing/tdd.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/testing/integration-testing.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/testing/tdd.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/engineering/clean-code.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/testing/tdd.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/engineering/refactoring.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/testing/tdd.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/architecture/architecture-FULL.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/architecture/skull-protection.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/architecture/architecture-FULL.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/best-practices/index.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/best-practices/best-practices/planning-guidelines.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/best-practices/index.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/best-practices/best-practices/coding-standards.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/best-practices/index.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/best-practices/best-practices/collaboration-patterns.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/best-practices/index.html"
+      },
+      {
+        "To": "index.html#security-panel",
+        "Type": "HTML",
+        "From": "learning-paths/index.html"
+      },
+      {
+        "To": "documentation.html",
+        "Type": "HTML",
+        "From": "security/threat-modeling.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/technical/orchestrators/architectural-review.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/technical/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/technical/orchestrators/architectural-review.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/technical/orchestrators/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/technical/orchestrators/architectural-review.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/orchestrators/architectural-review.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/technical/orchestrators/architectural-review.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/future/index.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/features/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/future/index.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/orchestrators/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/future/index.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/architecture/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/future/index.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/cortex-lens-output/index.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/cortex-lens-output/CORTEX/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/cortex-lens-output/index.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/cortex-lens-output/test-repo/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/cortex-lens-output/index.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/cortex-lens-output/mock-landing/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/cortex-lens-output/index.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/cortex-lens-output/comparison/comparison.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/cortex-lens-output/index.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/lens/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/cortex-lens-output/index.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/orchestrators/cortex-lens.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/cortex-lens-output/index.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/architecture/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/cortex-lens-output/index.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/ddd/ddd-fundamentals.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/ddd/ddd-fundamentals.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/ddd.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/ddd/ddd-fundamentals.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/ddd/bounded-contexts.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/ddd/ddd-fundamentals.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/ddd/aggregates.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/ddd/ddd-fundamentals.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/ddd/domain-events.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/ddd/ddd-fundamentals.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/microservices/service-design.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/ddd/ddd-fundamentals.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/technical/orchestrators/ado-planning.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/technical/orchestrators/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/technical/orchestrators/ado-planning.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/architecture/brain-tiers.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/architecture/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/architecture/brain-tiers.html"
+      },
+      {
+        "To": "documentation.html",
+        "Type": "HTML",
+        "From": "security/vulnerability-assessment.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/architecture/development-context.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/architecture/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/architecture/development-context.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/index.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/validation/index.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/validation/capabilities.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/validation/index.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/validation/metrics.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/validation/index.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/architecture/four-tier-brain.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/validation/index.html"
+      },
+      {
+        "To": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/governance/skull-rulebook.html",
+        "Type": "HTML",
+        "From": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/validation/index.html"
+      }
+    ],
+    "MissingAssets": {
+      "Images": [
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-08/illustrations/images/essentials/cortex-awakening-ch08-01.jpeg",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-08/illustrations/images/essentials/cortex-awakening-ch08-01.jpeg",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-08/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-12/illustrations/images/essentials/cortex-awakening-epilogue-01.jpeg",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-12/illustrations/images/essentials/cortex-awakening-epilogue-01.jpeg",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-12/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-06/illustrations/images/valuable/cortex-awakening-ch06-01.jpeg",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-06/illustrations/images/valuable/cortex-awakening-ch06-01.jpeg",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-06/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/cortex-lens-output/mock-landing/assets/CORTEX-logo.png",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/cortex-lens-output/mock-landing/assets/CORTEX-logo.png",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/cortex-lens-output/mock-landing/tests/test-runner.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/images/CORTEX-logo.png",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/images/CORTEX-logo.png",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/database/oracle-best-practices.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/images/CORTEX-logo.png",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/images/CORTEX-logo.png",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/assets/images/CORTEX-logo.png",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/assets/images/CORTEX-logo.png",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/technical/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/assets/images/CORTEX-logo.png",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/assets/images/CORTEX-logo.png",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/knowledge/database/sql-best-practices.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/images/CORTEX-logo.png",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/images/CORTEX-logo.png",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/roi-calculator/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-02/illustrations/images/essentials/cortex-awakening-ch02-01.jpeg",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-02/illustrations/images/essentials/cortex-awakening-ch02-01.jpeg",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-02/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-02/illustrations/images/essentials/cortex-awakening-ch02-02.jpeg",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-02/illustrations/images/essentials/cortex-awakening-ch02-02.jpeg",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-02/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-05/illustrations/images/valuable/cortex-awakening-ch05-01.jpeg",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-05/illustrations/images/valuable/cortex-awakening-ch05-01.jpeg",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-05/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-04/illustrations/images/essentials/cortex-awakening-ch04-01.jpeg",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-04/illustrations/images/essentials/cortex-awakening-ch04-01.jpeg",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-04/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-07/illustrations/images/essentials/cortex-awakening-ch07-01.jpeg",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-07/illustrations/images/essentials/cortex-awakening-ch07-01.jpeg",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-07/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-07/illustrations/images/valuable/cortex-awakening-ch07-02.jpeg",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-07/illustrations/images/valuable/cortex-awakening-ch07-02.jpeg",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-07/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Prologue/illustrations/images/essentials/cortex-awakening-prologue-01.jpeg",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Prologue/illustrations/images/essentials/cortex-awakening-prologue-01.jpeg",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Prologue/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Prologue/illustrations/images/essentials/cortex-awakening-prologue-02.jpeg",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Prologue/illustrations/images/essentials/cortex-awakening-prologue-02.jpeg",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Prologue/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-03/illustrations/images/essentials/cortex-awakening-ch03-01.jpeg",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-03/illustrations/images/essentials/cortex-awakening-ch03-01.jpeg",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-03/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/images/CORTEX-logo.png",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/images/CORTEX-logo.png",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/testing/tdd.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/images/CORTEX-logo.png",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/images/CORTEX-logo.png",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/technical/orchestrators/architectural-review.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-01/illustrations/images/valuable/cortex-awakening-ch01-02.jpeg",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-01/illustrations/images/valuable/cortex-awakening-ch01-02.jpeg",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-01/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-01/illustrations/images/essentials/cortex-awakening-ch01-03.jpeg",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-01/illustrations/images/essentials/cortex-awakening-ch01-03.jpeg",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-01/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-01/illustrations/images/essentials/cortex-awakening-ch01-01.jpeg",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-01/illustrations/images/essentials/cortex-awakening-ch01-01.jpeg",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-01/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/images/CORTEX-logo.png",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/images/CORTEX-logo.png",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/future/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/images/CORTEX-logo.png",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/images/CORTEX-logo.png",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/cortex-lens-output/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/mock-landing/assets/CORTEX-logo.png",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/mock-landing/assets/CORTEX-logo.png",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/mock-landing/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/images/CORTEX-logo.png",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/images/CORTEX-logo.png",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/ddd/ddd-fundamentals.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-13/illustrations/images/essentials/cortex-awakening-ch13-01.jpeg",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-13/illustrations/images/essentials/cortex-awakening-ch13-01.jpeg",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-13/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-11/illustrations/images/valuable/cortex-awakening-ch11-01.jpeg",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-11/illustrations/images/valuable/cortex-awakening-ch11-01.jpeg",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-11/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-11/illustrations/images/valuable/cortex-awakening-ch11-02.jpeg",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-11/illustrations/images/valuable/cortex-awakening-ch11-02.jpeg",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-11/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-09/illustrations/images/essentials/cortex-awakening-ch09-01.jpeg",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-09/illustrations/images/essentials/cortex-awakening-ch09-01.jpeg",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-09/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-09/illustrations/images/valuable/cortex-awakening-ch09-02.jpeg",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-09/illustrations/images/valuable/cortex-awakening-ch09-02.jpeg",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-09/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-10/illustrations/images/essentials/cortex-awakening-ch10-01.jpeg",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-10/illustrations/images/essentials/cortex-awakening-ch10-01.jpeg",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-10/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/images/CORTEX-logo.png",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/images/CORTEX-logo.png",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/validation/index.html"
+        }
+      ],
+      "CSS": [
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/story-styles.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/story-styles.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-08/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/story-styles.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/story-styles.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-12/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/best-practices/assets/css/variables.css",
+          "Asset": "best-practices/assets/css/variables.css",
+          "File": "best-practices/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/best-practices/assets/css/main.css",
+          "Asset": "best-practices/assets/css/main.css",
+          "File": "best-practices/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/orchestrators/assets/css/variables.css",
+          "Asset": "orchestrators/assets/css/variables.css",
+          "File": "orchestrators/ado-v2/wizard-stage-3-acceptance-criteria.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/orchestrators/assets/css/main.css",
+          "Asset": "orchestrators/assets/css/main.css",
+          "File": "orchestrators/ado-v2/wizard-stage-3-acceptance-criteria.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/getting-started/assets/css/variables.css",
+          "Asset": "getting-started/assets/css/variables.css",
+          "File": "getting-started/first-commands.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/getting-started/assets/css/main.css",
+          "Asset": "getting-started/assets/css/main.css",
+          "File": "getting-started/first-commands.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/orchestrators/assets/css/variables.css",
+          "Asset": "orchestrators/assets/css/variables.css",
+          "File": "orchestrators/ado-planning.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/orchestrators/assets/css/main.css",
+          "Asset": "orchestrators/assets/css/main.css",
+          "File": "orchestrators/ado-planning.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/sharpen-the-saw/assets/css/variables.css",
+          "Asset": "sharpen-the-saw/assets/css/variables.css",
+          "File": "sharpen-the-saw/security.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/sharpen-the-saw/assets/css/main.css",
+          "Asset": "sharpen-the-saw/assets/css/main.css",
+          "File": "sharpen-the-saw/security.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/microservices/service-mesh.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/microservices/service-mesh.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/sharpen-the-saw/assets/css/variables.css",
+          "Asset": "sharpen-the-saw/assets/css/variables.css",
+          "File": "sharpen-the-saw/solid.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/sharpen-the-saw/assets/css/main.css",
+          "Asset": "sharpen-the-saw/assets/css/main.css",
+          "File": "sharpen-the-saw/solid.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/orchestrators/onboarding-orchestrator.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/orchestrators/onboarding-orchestrator.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/security/vulnerability-assessment.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/security/vulnerability-assessment.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/ui-ux/design-systems.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/ui-ux/design-systems.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/story-styles.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/story-styles.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-06/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/microservices/fundamentals.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/microservices/fundamentals.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/engineering/solid-principles.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/engineering/solid-principles.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/security/security-training.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/security/security-training.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/files/files-hub.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/files/files-hub.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/orchestrators/ado-operations.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/orchestrators/ado-operations.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/CORTEX/cortex-unified.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/CORTEX/cortex-unified.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/CORTEX/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/security/access-control.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/security/access-control.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/files/security/secure-coding-practices.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/files/security/secure-coding-practices.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/cortex-lens-output/mock-landing/assets/cortex-unified.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/cortex-lens-output/mock-landing/assets/cortex-unified.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/cortex-lens-output/mock-landing/tests/test-runner.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/orchestrators/cortex-lens.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/orchestrators/cortex-lens.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/software-engineering/code-reviews.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/software-engineering/code-reviews.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/files/testing/api-testing-strategies.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/files/testing/api-testing-strategies.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/database/sql-fundamentals.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/database/sql-fundamentals.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/technical/orchestrators/shared-styles.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/technical/orchestrators/shared-styles.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/technical/security/dashboard.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/main.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/main.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/database/oracle-best-practices.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/architecture/assets/css/variables.css",
+          "Asset": "architecture/assets/css/variables.css",
+          "File": "architecture/multi-repo.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/architecture/assets/css/main.css",
+          "Asset": "architecture/assets/css/main.css",
+          "File": "architecture/multi-repo.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/architecture/assets/css/variables.css",
+          "Asset": "architecture/assets/css/variables.css",
+          "File": "architecture/orchestrator-ecosystem.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/architecture/assets/css/main.css",
+          "Asset": "architecture/assets/css/main.css",
+          "File": "architecture/orchestrator-ecosystem.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/security/assets/css/variables.css",
+          "Asset": "security/assets/css/variables.css",
+          "File": "security/compliance-standards.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/security/assets/css/main.css",
+          "Asset": "security/assets/css/main.css",
+          "File": "security/compliance-standards.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/microservices/saga-patterns.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/microservices/saga-patterns.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/api-design/api-gateway.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/api-design/api-gateway.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/orchestrators/assets/css/variables.css",
+          "Asset": "orchestrators/assets/css/variables.css",
+          "File": "orchestrators/ado-v2/wizard-stage-1-work-item-type.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/orchestrators/assets/css/main.css",
+          "Asset": "orchestrators/assets/css/main.css",
+          "File": "orchestrators/ado-v2/wizard-stage-1-work-item-type.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/orchestrators/system-integrity.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/orchestrators/system-integrity.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/variables.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/variables.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/main.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/main.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/glass-patterns.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/glass-patterns.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/micro-interactions.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/micro-interactions.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/prototypes/home-redesign-v2.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/orchestrators/assets/css/variables.css",
+          "Asset": "orchestrators/assets/css/variables.css",
+          "File": "orchestrators/sanitization-engine.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/orchestrators/assets/css/main.css",
+          "Asset": "orchestrators/assets/css/main.css",
+          "File": "orchestrators/sanitization-engine.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/orchestrators/tdd-orchestrator.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/orchestrators/tdd-orchestrator.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/assets/css/main.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/assets/css/main.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/technical/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/security/data-protection.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/security/data-protection.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/orchestrators/debug-orchestrator.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/orchestrators/debug-orchestrator.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/messaging/fundamentals.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/messaging/fundamentals.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/performance/react-performance.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/performance/react-performance.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/containers/kubernetes-core.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/containers/kubernetes-core.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/files/testing/tdd-best-practices.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/files/testing/tdd-best-practices.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/database/replication-strategies.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/database/replication-strategies.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/orchestrators/upgrade.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/orchestrators/upgrade.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/security/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/security/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/security/compliance.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/security/compliance.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/orchestrators/assets/css/variables.css",
+          "Asset": "orchestrators/assets/css/variables.css",
+          "File": "orchestrators/ado-v2/auto-phase-4-effort-calculation.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/orchestrators/assets/css/main.css",
+          "Asset": "orchestrators/assets/css/main.css",
+          "File": "orchestrators/ado-v2/auto-phase-4-effort-calculation.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/orchestrators/intelligent-dashboard.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/orchestrators/intelligent-dashboard.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/microservices/service-design.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/microservices/service-design.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/assets/css/main.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/assets/css/main.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/knowledge/database/sql-best-practices.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/main.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/main.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/roi-calculator/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/orchestrators/assets/css/variables.css",
+          "Asset": "orchestrators/assets/css/variables.css",
+          "File": "orchestrators/ado-v2/auto-phase-6-csv-generation.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/orchestrators/assets/css/main.css",
+          "Asset": "orchestrators/assets/css/main.css",
+          "File": "orchestrators/ado-v2/auto-phase-6-csv-generation.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/best-practices/assets/css/variables.css",
+          "Asset": "best-practices/assets/css/variables.css",
+          "File": "best-practices/best-practices/collaboration-patterns.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/best-practices/assets/css/main.css",
+          "Asset": "best-practices/assets/css/main.css",
+          "File": "best-practices/best-practices/collaboration-patterns.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/containers/helm-patterns.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/containers/helm-patterns.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/best-practices/assets/css/variables.css",
+          "Asset": "best-practices/assets/css/variables.css",
+          "File": "best-practices/best-practices/planning-guidelines.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/best-practices/assets/css/main.css",
+          "Asset": "best-practices/assets/css/main.css",
+          "File": "best-practices/best-practices/planning-guidelines.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/features/assets/css/variables.css",
+          "Asset": "features/assets/css/variables.css",
+          "File": "features/execution-orchestrator.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/features/assets/css/main.css",
+          "Asset": "features/assets/css/main.css",
+          "File": "features/execution-orchestrator.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/engineering/refactoring.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/engineering/refactoring.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/getting-started/assets/css/variables.css",
+          "Asset": "getting-started/assets/css/variables.css",
+          "File": "getting-started/multi-repo-setup.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/getting-started/assets/css/main.css",
+          "Asset": "getting-started/assets/css/main.css",
+          "File": "getting-started/multi-repo-setup.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/orchestrators/assets/css/variables.css",
+          "Asset": "orchestrators/assets/css/variables.css",
+          "File": "orchestrators/ado-v2/wizard-stage-7-preview-export.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/orchestrators/assets/css/main.css",
+          "Asset": "orchestrators/assets/css/main.css",
+          "File": "orchestrators/ado-v2/wizard-stage-7-preview-export.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/security/threat-modeling.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/security/threat-modeling.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/ddd/event-sourcing.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/ddd/event-sourcing.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/sts/assets/css/variables.css",
+          "Asset": "sts/assets/css/variables.css",
+          "File": "sts/sts/testing-strategies.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/sts/assets/css/main.css",
+          "Asset": "sts/assets/css/main.css",
+          "File": "sts/sts/testing-strategies.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/orchestrators/execution-orchestrator.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/orchestrators/execution-orchestrator.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/performance/caching-strategies.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/performance/caching-strategies.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/security/auth-authz.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/security/auth-authz.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/engineering-hub.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/engineering-hub.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/story-styles.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/story-styles.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-02/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/orchestrators/assets/css/variables.css",
+          "Asset": "orchestrators/assets/css/variables.css",
+          "File": "orchestrators/ado-v2/wizard-stage-5-hierarchy-relationships.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/orchestrators/assets/css/main.css",
+          "Asset": "orchestrators/assets/css/main.css",
+          "File": "orchestrators/ado-v2/wizard-stage-5-hierarchy-relationships.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/sts/assets/css/variables.css",
+          "Asset": "sts/assets/css/variables.css",
+          "File": "sts/sts/solid-principles.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/sts/assets/css/main.css",
+          "Asset": "sts/assets/css/main.css",
+          "File": "sts/sts/solid-principles.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/sts/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/sts/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/engineering/design-patterns.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/engineering/design-patterns.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/best-practices/assets/css/variables.css",
+          "Asset": "best-practices/assets/css/variables.css",
+          "File": "best-practices/best-practices/coding-standards.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/best-practices/assets/css/main.css",
+          "Asset": "best-practices/assets/css/main.css",
+          "File": "best-practices/best-practices/coding-standards.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/story-styles.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/story-styles.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-05/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/story-styles.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/story-styles.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-04/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/ddd/strategic-design.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/ddd/strategic-design.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/security/audit-logging.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/security/audit-logging.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/rag/production-rag.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/rag/production-rag.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/software-engineering/solid-principles.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/software-engineering/solid-principles.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/ddd/aggregates.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/ddd/aggregates.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/orchestrators/assets/css/variables.css",
+          "Asset": "orchestrators/assets/css/variables.css",
+          "File": "orchestrators/ado-v2/wizard-stage-6-metadata-tagging.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/orchestrators/assets/css/main.css",
+          "Asset": "orchestrators/assets/css/main.css",
+          "File": "orchestrators/ado-v2/wizard-stage-6-metadata-tagging.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/frontend/performance-optimization.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/frontend/performance-optimization.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/orchestrators/assets/css/variables.css",
+          "Asset": "orchestrators/assets/css/variables.css",
+          "File": "orchestrators/ado-v2/auto-phase-5-metadata-enrichment.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/orchestrators/assets/css/main.css",
+          "Asset": "orchestrators/assets/css/main.css",
+          "File": "orchestrators/ado-v2/auto-phase-5-metadata-enrichment.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/software-engineering/clean-code.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/software-engineering/clean-code.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/cloud/azure-patterns.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/cloud/azure-patterns.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/sts/assets/css/variables.css",
+          "Asset": "sts/assets/css/variables.css",
+          "File": "sts/sts/performance-optimization.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/sts/assets/css/main.css",
+          "Asset": "sts/assets/css/main.css",
+          "File": "sts/sts/performance-optimization.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/orchestrators/assets/css/variables.css",
+          "Asset": "orchestrators/assets/css/variables.css",
+          "File": "orchestrators/ado-v2/auto-phase-2-hierarchy-mapping.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/orchestrators/assets/css/main.css",
+          "Asset": "orchestrators/assets/css/main.css",
+          "File": "orchestrators/ado-v2/auto-phase-2-hierarchy-mapping.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/token-optimization/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/token-optimization/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/sts/assets/css/variables.css",
+          "Asset": "sts/assets/css/variables.css",
+          "File": "sts/sts/documentation-guidelines.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/sts/assets/css/main.css",
+          "Asset": "sts/assets/css/main.css",
+          "File": "sts/sts/documentation-guidelines.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/testing/unit-testing.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/testing/unit-testing.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/architecture/assets/css/variables.css",
+          "Asset": "architecture/assets/css/variables.css",
+          "File": "architecture/working-memory.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/architecture/assets/css/main.css",
+          "Asset": "architecture/assets/css/main.css",
+          "File": "architecture/working-memory.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/story-styles.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/story-styles.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-07/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/story-styles.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/story-styles.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Prologue/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/features/assets/css/variables.css",
+          "Asset": "features/assets/css/variables.css",
+          "File": "features/ado-operations.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/features/assets/css/main.css",
+          "Asset": "features/assets/css/main.css",
+          "File": "features/ado-operations.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/containers/helm-charts.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/containers/helm-charts.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/messaging/kafka-streams.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/messaging/kafka-streams.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/lens/assets/css/variables.css",
+          "Asset": "lens/assets/css/variables.css",
+          "File": "lens/diagnostics/prototypes/test-tabs.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/lens/assets/css/main.css",
+          "Asset": "lens/assets/css/main.css",
+          "File": "lens/diagnostics/prototypes/test-tabs.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/main.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/main.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/orchestrators/onboarding-orchestrator.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/orchestrators/assets/css/variables.css",
+          "Asset": "orchestrators/assets/css/variables.css",
+          "File": "orchestrators/ado-v2/auto-phase-3-acceptance-criteria-extraction.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/orchestrators/assets/css/main.css",
+          "Asset": "orchestrators/assets/css/main.css",
+          "File": "orchestrators/ado-v2/auto-phase-3-acceptance-criteria-extraction.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/story-styles.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/story-styles.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-03/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/main.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/main.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/testing/tdd.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/security/risk-assessment.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/security/risk-assessment.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/performance/scalability-patterns.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/performance/scalability-patterns.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/security/assets/css/variables.css",
+          "Asset": "security/assets/css/variables.css",
+          "File": "security/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/security/assets/css/main.css",
+          "Asset": "security/assets/css/main.css",
+          "File": "security/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/orchestrators/planning-system.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/orchestrators/planning-system.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/story/assets/css/variables.css",
+          "Asset": "story/assets/css/variables.css",
+          "File": "story/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/story/assets/css/main.css",
+          "Asset": "story/assets/css/main.css",
+          "File": "story/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/cloud/cloud-native-patterns.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/cloud/cloud-native-patterns.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/testing/integration-testing.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/testing/integration-testing.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/files/performance/caching-strategies.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/files/performance/caching-strategies.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/security/owasp.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/security/owasp.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/assets/css/variables.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/assets/css/variables.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/architecture/architecture-FULL.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/assets/css/main.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/assets/css/main.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/architecture/architecture-FULL.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/assets/css/glass-patterns.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/assets/css/glass-patterns.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/architecture/architecture-FULL.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/assets/css/micro-interactions.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/assets/css/micro-interactions.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/architecture/architecture-FULL.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/orchestrators/assets/css/variables.css",
+          "Asset": "orchestrators/assets/css/variables.css",
+          "File": "orchestrators/ado-v2/wizard-stage-4-effort-estimation.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/orchestrators/assets/css/main.css",
+          "Asset": "orchestrators/assets/css/main.css",
+          "File": "orchestrators/ado-v2/wizard-stage-4-effort-estimation.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/variables.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/variables.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/best-practices/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/glass-patterns.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/glass-patterns.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/best-practices/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/main.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/main.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/best-practices/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/messaging/event-sourcing.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/messaging/event-sourcing.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/mobile/flutter-fundamentals.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/mobile/flutter-fundamentals.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/test-repo/cortex-unified.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/test-repo/cortex-unified.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/test-repo/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/messaging/event-driven-patterns.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/messaging/event-driven-patterns.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/getting-started/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/getting-started/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/security/threat-intelligence.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/security/threat-intelligence.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/performance/profiling-monitoring.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/performance/profiling-monitoring.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/orchestrators/assets/css/variables.css",
+          "Asset": "orchestrators/assets/css/variables.css",
+          "File": "orchestrators/ado-v2/auto-phase-1-manifest-parsing.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/orchestrators/assets/css/main.css",
+          "Asset": "orchestrators/assets/css/main.css",
+          "File": "orchestrators/ado-v2/auto-phase-1-manifest-parsing.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/security/data-protection.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/security/data-protection.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/security/penetration-testing.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/security/penetration-testing.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/main.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/main.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/technical/orchestrators/architectural-review.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/security/cloud-security.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/security/cloud-security.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/knowledge/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/knowledge/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/story-styles.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/story-styles.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-01/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/getting-started/assets/css/variables.css",
+          "Asset": "getting-started/assets/css/variables.css",
+          "File": "getting-started/deployment.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/getting-started/assets/css/main.css",
+          "Asset": "getting-started/assets/css/main.css",
+          "File": "getting-started/deployment.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/cloud/twelve-factor-app.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/cloud/twelve-factor-app.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/architecture/assets/css/variables.css",
+          "Asset": "architecture/assets/css/variables.css",
+          "File": "architecture/four-tier-brain.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/architecture/assets/css/main.css",
+          "Asset": "architecture/assets/css/main.css",
+          "File": "architecture/four-tier-brain.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/performance/query-optimization.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/performance/query-optimization.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/security/dashboard.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/security/dashboard.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/orchestrators/git-checkpoint.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/orchestrators/git-checkpoint.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/main.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/main.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/future/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/sts/assets/css/variables.css",
+          "Asset": "sts/assets/css/variables.css",
+          "File": "sts/sts/code-quality.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/sts/assets/css/main.css",
+          "Asset": "sts/assets/css/main.css",
+          "File": "sts/sts/code-quality.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/frontend/vue-essentials.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/frontend/vue-essentials.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/main.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/main.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/cortex-lens-output/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/messaging/cqrs-pattern.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/messaging/cqrs-pattern.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/mobile/offline-first.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/mobile/offline-first.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/mock-landing/assets/cortex-unified.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/mock-landing/assets/cortex-unified.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/mock-landing/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/main.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/main.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/ddd/ddd-fundamentals.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/database/acid-transactions.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/database/acid-transactions.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/containers/docker-best-practices.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/containers/docker-best-practices.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/toolkit-manager/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/toolkit-manager/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/story-styles.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/story-styles.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-13/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/orchestrators/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/orchestrators/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/ui-ux/usability-testing.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/ui-ux/usability-testing.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/ddd/fundamentals.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/ddd/fundamentals.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/performance/database-optimization.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/performance/database-optimization.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/frontend/component-patterns.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/frontend/component-patterns.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/cloud/cloud-fundamentals.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/cloud/cloud-fundamentals.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/software-engineering/refactoring.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/software-engineering/refactoring.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/sts/assets/css/variables.css",
+          "Asset": "sts/assets/css/variables.css",
+          "File": "sts/sts/security-best-practices.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/sts/assets/css/main.css",
+          "Asset": "sts/assets/css/main.css",
+          "File": "sts/sts/security-best-practices.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/validation/assets/css/variables.css",
+          "Asset": "validation/assets/css/variables.css",
+          "File": "validation/capabilities.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/validation/assets/css/main.css",
+          "Asset": "validation/assets/css/main.css",
+          "File": "validation/capabilities.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/devops/gitops-workflows.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/devops/gitops-workflows.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/devops/ci-cd-fundamentals.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/devops/ci-cd-fundamentals.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/security/incident-response.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/security/incident-response.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/mobile/react-native.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/mobile/react-native.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/microservices/circuit-breaker.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/microservices/circuit-breaker.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/database/cap-theorem.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/database/cap-theorem.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/sharpen-the-saw/assets/css/variables.css",
+          "Asset": "sharpen-the-saw/assets/css/variables.css",
+          "File": "sharpen-the-saw/testing.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/sharpen-the-saw/assets/css/main.css",
+          "Asset": "sharpen-the-saw/assets/css/main.css",
+          "File": "sharpen-the-saw/testing.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/files/security/api-security-checklist.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/files/security/api-security-checklist.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/rag/fundamentals.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/rag/fundamentals.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/testing/chaos-engineering.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/testing/chaos-engineering.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/architecture/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/architecture/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/story-styles.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/story-styles.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-11/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/orchestrators/assets/css/variables.css",
+          "Asset": "orchestrators/assets/css/variables.css",
+          "File": "orchestrators/ado-v2/wizard-stage-2-title-description.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/orchestrators/assets/css/main.css",
+          "Asset": "orchestrators/assets/css/main.css",
+          "File": "orchestrators/ado-v2/wizard-stage-2-title-description.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/orchestrators/pre-flight.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/orchestrators/pre-flight.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/features/assets/css/variables.css",
+          "Asset": "features/assets/css/variables.css",
+          "File": "features/tdd-mastery.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/features/assets/css/main.css",
+          "Asset": "features/assets/css/main.css",
+          "File": "features/tdd-mastery.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/variables.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/variables.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/architecture/brain-tiers.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/main.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/main.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/architecture/brain-tiers.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/glass-patterns.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/glass-patterns.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/architecture/brain-tiers.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/micro-interactions.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/micro-interactions.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/architecture/brain-tiers.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/performance/profiling-analysis.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/performance/profiling-analysis.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/rag/vector-databases.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/rag/vector-databases.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/design-patterns/real-world-applications.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/design-patterns/real-world-applications.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/orchestrators/cleanup-orchestrator.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/orchestrators/cleanup-orchestrator.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/story-styles.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/story-styles.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-09/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/frontend/react-fundamentals.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/frontend/react-fundamentals.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/containers/service-mesh.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/containers/service-mesh.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/orchestrators/architectural-review.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/orchestrators/architectural-review.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/lens/assets/css/variables.css",
+          "Asset": "lens/assets/css/variables.css",
+          "File": "lens/diagnostics/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/lens/assets/css/main.css",
+          "Asset": "lens/assets/css/main.css",
+          "File": "lens/diagnostics/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/validation/assets/css/variables.css",
+          "Asset": "validation/assets/css/variables.css",
+          "File": "validation/metrics.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/validation/assets/css/main.css",
+          "Asset": "validation/assets/css/main.css",
+          "File": "validation/metrics.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/devops/sre-practices.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/devops/sre-practices.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/orchestrators/rollback-orchestrator.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/orchestrators/rollback-orchestrator.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/variables.css",
+          "Asset": "prototypes/assets/css/variables.css",
+          "File": "prototypes/lens/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/prototypes/assets/css/main.css",
+          "Asset": "prototypes/assets/css/main.css",
+          "File": "prototypes/lens/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/story-styles.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/story-styles.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/story/Chapter-10/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/cloud/multi-cloud-strategies.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/cloud/multi-cloud-strategies.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/devops/gitops.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/devops/gitops.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/containers/docker-fundamentals.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/containers/docker-fundamentals.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/database/nosql-patterns.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/database/nosql-patterns.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/microservices/observability.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/microservices/observability.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/assets/css/variables.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/assets/css/variables.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/architecture/development-context.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/assets/css/main.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/assets/css/main.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/architecture/development-context.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/assets/css/glass-patterns.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/assets/css/glass-patterns.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/architecture/development-context.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/assets/css/micro-interactions.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/assets/css/micro-interactions.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/architecture/development-context.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/architecture/assets/css/variables.css",
+          "Asset": "architecture/assets/css/variables.css",
+          "File": "architecture/agent-system.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/architecture/assets/css/main.css",
+          "Asset": "architecture/assets/css/main.css",
+          "File": "architecture/agent-system.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/orchestrators/assets/css/variables.css",
+          "Asset": "orchestrators/assets/css/variables.css",
+          "File": "orchestrators/ado-v2/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/orchestrators/assets/css/main.css",
+          "Asset": "orchestrators/assets/css/main.css",
+          "File": "orchestrators/ado-v2/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/main.css",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/css/main.css",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/validation/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/ui-ux/accessibility.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/ui-ux/accessibility.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/mobile/native-integrations.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/mobile/native-integrations.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/ui-ux/ux-patterns.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/ui-ux/ux-patterns.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/devops/iac.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/devops/iac.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/database/orm-best-practices.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/database/orm-best-practices.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/variables.css",
+          "Asset": "knowledge/assets/css/variables.css",
+          "File": "knowledge/performance/load-testing.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/knowledge/assets/css/main.css",
+          "Asset": "knowledge/assets/css/main.css",
+          "File": "knowledge/performance/load-testing.html"
+        }
+      ],
+      "JS": [
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/CORTEX/cortex-unified.js",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/CORTEX/cortex-unified.js",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/CORTEX/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/CORTEX/components/cortex-components.js",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/CORTEX/components/cortex-components.js",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/CORTEX/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/CORTEX/components/chart-builder.js",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/CORTEX/components/chart-builder.js",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/CORTEX/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/CORTEX/components/d3-force-graph.js",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/CORTEX/components/d3-force-graph.js",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/CORTEX/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/CORTEX/components/data-renderer.js",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/CORTEX/components/data-renderer.js",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/CORTEX/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/cortex-lens-output/mock-landing/assets/cortex-unified.js",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/cortex-lens-output/mock-landing/assets/cortex-unified.js",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/cortex-lens-output/mock-landing/tests/test-runner.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/cortex-lens-output/mock-landing/tests/landing-page.test.js",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/cortex-lens-output/mock-landing/tests/landing-page.test.js",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/cortex-lens-output/mock-landing/tests/test-runner.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/js/main.js",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/js/main.js",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/database/oracle-best-practices.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/assets/js/file-detail.js",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/assets/js/file-detail.js",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/knowledge/database/sql-best-practices.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/js/main.js",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/js/main.js",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/orchestrators/onboarding-orchestrator.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/js/file-detail.js",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/js/file-detail.js",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/testing/tdd.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/test-repo/cortex-unified.js",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/test-repo/cortex-unified.js",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/test-repo/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/test-repo/components/cortex-components.js",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/test-repo/components/cortex-components.js",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/test-repo/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/test-repo/components/chart-builder.js",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/test-repo/components/chart-builder.js",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/test-repo/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/test-repo/components/d3-force-graph.js",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/test-repo/components/d3-force-graph.js",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/test-repo/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/js/main.js",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/js/main.js",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/future/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/js/main.js",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/js/main.js",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/cortex-lens-output/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/mock-landing/assets/cortex-unified.js",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/mock-landing/assets/cortex-unified.js",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/cortex-lens-output/mock-landing/index.html"
+        },
+        {
+          "FullPath": "D:/PROJECTS/CORTEX/docs/archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/js/file-detail.js",
+          "Asset": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/assets/js/file-detail.js",
+          "File": "archives/cleanup-20260103-090641/archives/cleanup-20260103-071436/archives/cleanup-20260103-070859/knowledge/ddd/ddd-fundamentals.html"
+        }
+      ]
+    }
+  },
+  "DocsRoot": "D:\\PROJECTS\\CORTEX\\docs"
+}

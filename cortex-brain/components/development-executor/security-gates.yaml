@@ -1,0 +1,507 @@
+# CORTEX Development Executor - Security Gates
+# OWASP Top 10 automated security validation
+# Author: Asif Hussain | © 2024-2025
+
+version: "1.0.0"
+component: "development-executor"
+gate_type: "security"
+enforcement_level: "pragmatic"  # Block HIGH/CRITICAL, warn MEDIUM, ignore LOW
+
+# OWASP Top 10 (2021) Automated Checks
+owasp_top_10:
+  A01_broken_access_control:
+    category: "A01:2021 - Broken Access Control"
+    description: "Violations of principle of least privilege or authorization"
+    
+    automated_checks:
+      - check: "Detect missing authentication decorators"
+        tool: "custom_linter"
+        pattern: "@require_auth|@login_required|@authenticated"
+        severity: "high"
+        
+      - check: "Detect hardcoded role checks"
+        tool: "custom_linter"
+        pattern: 'if user\.role == "admin"'
+        severity: "medium"
+        suggestion: "Use role-based access control (RBAC) framework"
+        
+      - check: "Detect direct object reference vulnerabilities"
+        tool: "bandit"
+        rule: "B201"  # Flask debug mode
+        severity: "high"
+    
+    manual_review_required:
+      - "Authorization logic completeness"
+      - "Horizontal privilege escalation scenarios"
+      - "Vertical privilege escalation scenarios"
+  
+  A02_cryptographic_failures:
+    category: "A02:2021 - Cryptographic Failures"
+    description: "Failures related to cryptography leading to data exposure"
+    
+    automated_checks:
+      - check: "Detect weak hashing algorithms"
+        tool: "bandit"
+        rule: "B303"  # MD5, SHA1 usage
+        severity: "high"
+        message: "Use SHA-256 or bcrypt for password hashing"
+        
+      - check: "Detect hardcoded secrets"
+        tool: "detect-secrets"
+        patterns:
+          - "password|passwd|pwd"
+          - "api[_-]?key"
+          - "secret[_-]?key"
+          - "private[_-]?key"
+          - "token"
+        severity: "critical"
+        blocking: true
+        
+      - check: "Detect unencrypted sensitive data transmission"
+        tool: "bandit"
+        rule: "B501"  # Request without certificate validation
+        severity: "high"
+    
+    configuration:
+      allowed_hash_algorithms: ["sha256", "sha512", "bcrypt", "argon2"]
+      secrets_baseline: ".secrets.baseline"  # Known false positives
+  
+  A03_injection:
+    category: "A03:2021 - Injection"
+    description: "SQL, NoSQL, OS command injection vulnerabilities"
+    
+    automated_checks:
+      - check: "Detect SQL injection vulnerabilities"
+        tool: "bandit"
+        rule: "B608"  # SQL injection via string formatting
+        severity: "critical"
+        blocking: true
+        message: "Use parameterized queries or ORM"
+        
+      - check: "Detect command injection"
+        tool: "bandit"
+        rule: "B602"  # subprocess with shell=True
+        severity: "high"
+        message: "Avoid shell=True, use list arguments"
+        
+      - check: "Detect unsafe YAML loading"
+        tool: "bandit"
+        rule: "B506"  # yaml.load without Loader
+        severity: "medium"
+        message: "Use yaml.safe_load() instead"
+    
+    best_practices:
+      sql: "Always use parameterized queries: cursor.execute('SELECT * FROM users WHERE id = ?', (user_id,))"
+      command: "Use subprocess.run(['ls', '-la']) instead of shell=True"
+      yaml: "Use yaml.safe_load() to prevent arbitrary code execution"
+  
+  A04_insecure_design:
+    category: "A04:2021 - Insecure Design"
+    description: "Missing or ineffective control design"
+    
+    manual_review_required:
+      - "Threat modeling for sensitive features"
+      - "Rate limiting implementation"
+      - "Circuit breaker patterns for external dependencies"
+      - "Secure defaults validation"
+    
+    automated_checks:
+      - check: "Detect missing rate limiting"
+        tool: "custom_linter"
+        pattern: "@rate_limit|@throttle"
+        context: "API endpoints"
+        severity: "medium"
+  
+  A05_security_misconfiguration:
+    category: "A05:2021 - Security Misconfiguration"
+    description: "Insecure default configurations, incomplete setups"
+    
+    automated_checks:
+      - check: "Detect debug mode in production"
+        tool: "bandit"
+        rule: "B201"  # Flask debug=True
+        severity: "high"
+        
+      - check: "Detect default credentials"
+        tool: "detect-secrets"
+        patterns:
+          - "admin:admin"
+          - "root:root"
+          - "password:password"
+        severity: "critical"
+        
+      - check: "Detect permissive CORS settings"
+        tool: "custom_linter"
+        pattern: 'allow_origin.*\*'
+        severity: "medium"
+  
+  A06_vulnerable_components:
+    category: "A06:2021 - Vulnerable and Outdated Components"
+    description: "Using components with known vulnerabilities"
+    
+    automated_checks:
+      - check: "Detect vulnerable dependencies"
+        tool: "pip-audit"
+        command: "pip-audit --format json"
+        severity_mapping:
+          critical: "blocking"
+          high: "blocking"
+          medium: "warning"
+          low: "info"
+        
+      - check: "Detect outdated dependencies"
+        tool: "pip-outdated"
+        command: "pip list --outdated"
+        severity: "info"
+    
+    enforcement:
+      pre_commit: false  # Would be slow
+      pre_merge: true
+      scheduled: "daily"  # Run daily security scan
+  
+  A07_identification_authentication_failures:
+    category: "A07:2021 - Identification and Authentication Failures"
+    description: "Authentication implementation flaws"
+    
+    automated_checks:
+      - check: "Detect weak password requirements"
+        tool: "custom_linter"
+        pattern: "min_length.*[0-5]"
+        severity: "medium"
+        message: "Password minimum length should be >= 8"
+        
+      - check: "Detect missing session timeout"
+        tool: "custom_linter"
+        pattern: "session_timeout|SESSION_TIMEOUT"
+        context: "auth configuration"
+        severity: "medium"
+    
+    manual_review_required:
+      - "Multi-factor authentication implementation"
+      - "Account lockout policy"
+      - "Password complexity requirements"
+      - "Session management security"
+  
+  A08_software_data_integrity_failures:
+    category: "A08:2021 - Software and Data Integrity Failures"
+    description: "Code/infrastructure without integrity verification"
+    
+    automated_checks:
+      - check: "Detect insecure deserialization"
+        tool: "bandit"
+        rule: "B301"  # pickle usage
+        severity: "high"
+        message: "Avoid pickle, use JSON for data serialization"
+        
+      - check: "Detect unsigned/unverified packages"
+        tool: "custom_check"
+        validation: "pip install --require-hashes"
+        severity: "medium"
+  
+  A09_security_logging_monitoring_failures:
+    category: "A09:2021 - Security Logging and Monitoring Failures"
+    description: "Insufficient logging of security events"
+    
+    automated_checks:
+      - check: "Detect missing authentication logging"
+        tool: "custom_linter"
+        pattern: "logger\\.(info|warning|error)"
+        context: "login/logout functions"
+        severity: "medium"
+        
+      - check: "Detect logging of sensitive data"
+        tool: "custom_linter"
+        pattern: 'logger.*password|logger.*secret|logger.*token'
+        severity: "high"
+        message: "Never log passwords, secrets, or tokens"
+    
+    best_practices:
+      log_events:
+        - "Login attempts (success and failure)"
+        - "Password changes"
+        - "Authorization failures"
+        - "Input validation failures"
+        - "Application errors"
+      
+      dont_log:
+        - "Passwords"
+        - "Session tokens"
+        - "API keys"
+        - "Credit card numbers"
+        - "Personal identification numbers"
+  
+  A10_server_side_request_forgery:
+    category: "A10:2021 - Server-Side Request Forgery (SSRF)"
+    description: "Fetching remote resources without validating user-supplied URL"
+    
+    automated_checks:
+      - check: "Detect unvalidated URL fetching"
+        tool: "bandit"
+        rule: "B310"  # urllib without timeout
+        severity: "medium"
+        
+      - check: "Detect requests to user-supplied URLs"
+        tool: "custom_linter"
+        pattern: "requests\\.get\\(.*user.*\\)"
+        severity: "high"
+        message: "Validate and whitelist URLs before fetching"
+    
+    mitigation:
+      - "Validate URLs against whitelist"
+      - "Disable redirects"
+      - "Use network segmentation"
+      - "Sanitize user input"
+
+# Security Tool Configuration
+security_tools:
+  detect_secrets:
+    enabled: true
+    version: ">= 1.4.0"
+    
+    configuration:
+      plugins:
+        - "ArtifactoryDetector"
+        - "AWSKeyDetector"
+        - "AzureStorageKeyDetector"
+        - "BasicAuthDetector"
+        - "GitHubTokenDetector"
+        - "PrivateKeyDetector"
+        - "SlackDetector"
+      
+      baseline_file: ".secrets.baseline"
+      exclude_files: "tests/fixtures/*"
+      exclude_lines: "pragma: allowlist secret"
+    
+    commands:
+      scan: "detect-secrets scan --baseline .secrets.baseline"
+      audit: "detect-secrets audit .secrets.baseline"
+      update_baseline: "detect-secrets scan --baseline .secrets.baseline --update"
+    
+    enforcement:
+      stage: "pre-commit"
+      blocking: true
+  
+  bandit:
+    enabled: true
+    version: ">= 1.7.0"
+    
+    configuration:
+      severity_levels: ["LOW", "MEDIUM", "HIGH"]
+      confidence_levels: ["LOW", "MEDIUM", "HIGH"]
+      
+      exclude_paths:
+        - "*/tests/*"
+        - "*/migrations/*"
+      
+      skips:
+        - "B101"  # assert_used (okay in tests)
+        - "B601"  # paramiko_calls (if needed)
+    
+    commands:
+      scan: "bandit -r src/ -f json -o reports/bandit-report.json"
+      scan_verbose: "bandit -r src/ -ll -f screen"
+    
+    enforcement:
+      stage: "pre-commit"
+      blocking_severity: ["HIGH"]
+      warning_severity: ["MEDIUM"]
+  
+  pip_audit:
+    enabled: true
+    version: ">= 2.6.0"
+    
+    configuration:
+      ignore_vulns: []  # Vulnerabilities to ignore (with justification)
+      
+      severity_threshold: "medium"  # Block medium and above
+    
+    commands:
+      scan: "pip-audit --format json --output reports/pip-audit-report.json"
+      fix: "pip-audit --fix"
+    
+    enforcement:
+      stage: "pre-merge"
+      blocking_severity: ["CRITICAL", "HIGH"]
+      warning_severity: ["MEDIUM"]
+      scheduled: "daily"
+
+# Pragmatic Enforcement Rules
+enforcement:
+  blocking_violations:
+    - severity: "critical"
+      examples:
+        - "Hardcoded secrets detected"
+        - "SQL injection vulnerability"
+        - "Critical CVE in dependency (CVSS >= 9.0)"
+      
+      action: "Block commit/merge"
+      override: false  # Cannot be overridden
+    
+    - severity: "high"
+      examples:
+        - "Weak cryptographic algorithm"
+        - "Command injection vulnerability"
+        - "High CVE in dependency (CVSS >= 7.0)"
+      
+      action: "Block commit/merge"
+      override: true  # Can be overridden with justification
+      override_command: "git commit --no-verify (use sparingly)"
+  
+  warning_violations:
+    - severity: "medium"
+      examples:
+        - "Missing rate limiting"
+        - "Permissive CORS settings"
+        - "Medium CVE in dependency (CVSS >= 4.0)"
+      
+      action: "Warn but allow commit"
+      tracking: "Create ticket for remediation"
+    
+    - severity: "low"
+      examples:
+        - "Outdated dependency (no known CVE)"
+        - "Missing logging of non-critical events"
+      
+      action: "Informational only"
+      tracking: "Add to backlog for future work"
+  
+  false_positive_handling:
+    process:
+      - "Review flagged issue"
+      - "Confirm false positive"
+      - "Add to baseline/ignore list with comment"
+      - "Document justification"
+    
+    commands:
+      detect_secrets: "detect-secrets audit .secrets.baseline (mark false positives)"
+      bandit: "# nosec <issue_id> - <justification>"
+      pip_audit: "pip-audit --ignore-vuln <CVE-ID> # <justification>"
+
+# Pre-Commit Hook Integration
+pre_commit_hook:
+  file_path: ".git/hooks/pre-commit"
+  
+  checks:
+    - name: "Detect Secrets"
+      command: "detect-secrets-hook --baseline .secrets.baseline $(git diff --cached --name-only)"
+      blocking: true
+      
+    - name: "Bandit Security Scan"
+      command: "bandit -r src/ -ll -f json | python scripts/parse_bandit.py"
+      blocking: true  # Blocks on HIGH severity only
+      
+    - name: "Check for sensitive data in logs"
+      command: "git diff --cached | grep -iE 'password|secret|token' | grep -i 'log'"
+      blocking: true
+  
+  example_script: |
+    #!/bin/bash
+    # .git/hooks/pre-commit
+    
+    echo "Running security checks..."
+    
+    # Detect Secrets
+    if ! detect-secrets-hook --baseline .secrets.baseline $(git diff --cached --name-only); then
+      echo "❌ Hardcoded secrets detected. Remove before committing."
+      exit 1
+    fi
+    
+    # Bandit (HIGH severity only)
+    bandit_output=$(bandit -r src/ -ll -f json 2>/dev/null)
+    high_issues=$(echo "$bandit_output" | jq '[.results[] | select(.issue_severity == "HIGH")] | length')
+    
+    if [ "$high_issues" -gt 0 ]; then
+      echo "❌ High severity security issues detected:"
+      echo "$bandit_output" | jq -r '.results[] | select(.issue_severity == "HIGH") | "\(.filename):\(.line_number) - \(.issue_text)"'
+      exit 1
+    fi
+    
+    echo "✅ Security checks passed"
+    exit 0
+
+# Pre-Merge Gate Integration
+pre_merge_gate:
+  checks:
+    - name: "Dependency Security Scan"
+      command: "pip-audit --format json"
+      blocking_severity: ["CRITICAL", "HIGH"]
+      
+    - name: "Full Security Scan"
+      command: "bandit -r src/ -f json"
+      blocking_severity: ["HIGH"]
+      
+    - name: "Secrets Scan"
+      command: "detect-secrets scan --baseline .secrets.baseline"
+      blocking: true
+  
+  reports:
+    format: "json"
+    output_path: "reports/security/"
+    upload_to_dashboard: true
+
+# Security Dashboard Integration
+dashboard:
+  metrics:
+    - "Total vulnerabilities detected"
+    - "Critical/High/Medium/Low counts"
+    - "Vulnerable dependencies count"
+    - "Hardcoded secrets detected"
+    - "Trend over time"
+  
+  alerts:
+    - condition: "Critical vulnerability detected"
+      action: "Block merge + notify security team"
+    
+    - condition: "High vulnerabilities > 5"
+      action: "Warn + create ticket"
+
+# Developer Guidance
+developer_guidance:
+  on_violation:
+    hardcoded_secret: |
+      Hardcoded secret detected. Remediation:
+      1. Remove hardcoded value
+      2. Add to .env file (never commit .env)
+      3. Use environment variable: os.environ.get('SECRET_KEY')
+      4. Add .env to .gitignore
+    
+    sql_injection: |
+      SQL injection vulnerability detected. Remediation:
+      1. Use parameterized queries:
+         ✅ cursor.execute('SELECT * FROM users WHERE id = ?', (user_id,))
+         ❌ cursor.execute(f'SELECT * FROM users WHERE id = {user_id}')
+      2. Or use ORM (SQLAlchemy, Django ORM)
+    
+    vulnerable_dependency: |
+      Vulnerable dependency detected. Remediation:
+      1. Check advisory: https://osv.dev/{CVE_ID}
+      2. Update to patched version: pip install --upgrade {package}
+      3. If no patch available, consider alternative package
+      4. Document risk if must use vulnerable version
+  
+  best_practices:
+    secrets_management:
+      - "Use environment variables for secrets"
+      - "Use secret management service (AWS Secrets Manager, Azure Key Vault)"
+      - "Rotate secrets regularly"
+      - "Never log secrets"
+    
+    input_validation:
+      - "Validate all user input"
+      - "Use allowlists, not denylists"
+      - "Sanitize output to prevent XSS"
+      - "Validate file uploads (type, size, content)"
+    
+    authentication:
+      - "Use strong password hashing (bcrypt, argon2)"
+      - "Implement MFA where possible"
+      - "Use secure session management"
+      - "Implement account lockout"
+
+# References
+references:
+  owasp_top_10: "https://owasp.org/Top10/"
+  detect_secrets: "https://github.com/Yelp/detect-secrets"
+  bandit: "https://bandit.readthedocs.io/"
+  pip_audit: "https://pypi.org/project/pip-audit/"
+  security_checklist: "cortex-brain/templates/planning/dor-checklist.yaml (security_requirements section)"

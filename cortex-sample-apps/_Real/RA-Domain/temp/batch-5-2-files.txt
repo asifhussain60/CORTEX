@@ -1,0 +1,1 @@
+C:\PROJECTS\Product.Example\Libs\App.Example.Domain\Services\ExampleScheduledService.cs

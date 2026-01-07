@@ -20,5 +20,27 @@
     ],
     "tags": {},
     "enabled": true
+  },
+  "vacuum": {
+    "id": "vacuum",
+    "name": "Vacuum Orchestrator v2",
+    "version": "2.0.0",
+    "type": "autonomous",
+    "category": "maintenance",
+    "class_name": "VacuumOrchestratorV2",
+    "module_path": "src.orchestrators.vacuum.vacuum_orchestrator_v2",
+    "description": "Deep filesystem cleanup with duplicate detection and safe deletion",
+    "manifest_path": "cortex-brain/manifests/orchestrators/vacuum-orchestrator-v2.yaml",
+    "patterns": [
+      "^(vacuum|deep clean|organize files).*$"
+    ],
+    "dependencies": [],
+    "capabilities": [
+      "cleanup",
+      "duplicate_detection",
+      "file_organization"
+    ],
+    "tags": {},
+    "enabled": true
   }
 }

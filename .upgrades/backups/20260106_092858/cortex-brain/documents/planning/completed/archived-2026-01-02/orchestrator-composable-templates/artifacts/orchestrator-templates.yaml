@@ -1,0 +1,760 @@
+# Orchestrator-Specific Template Compositions
+
+**Generated:** 2025-12-31  
+**Purpose:** Phase 4 - Tailored template compositions for each orchestrator
+
+---
+
+## 📊 Overview
+
+This file defines how each orchestrator composes responses from composable blocks based on operation type and phase.
+
+---
+
+## 🎯 Planning Orchestrator Templates
+
+### Operation 1: Plan Creation
+
+**Context Signals:**
+```yaml
+operation_type: planning
+response_phase: start
+complexity_tier: STRUCTURED
+orchestrator_type: planning
+orchestrator_engaged: false
+```
+
+**Block Composition:**
+```yaml
+blocks:
+  mandatory:
+    - cortex_header
+    - next_action
+  
+  conditional:
+    - understanding        # If discovery_performed
+    - approach            # If has_technical_challenge
+    - plan_summary_table  # Always for plan_creation
+    - plan_structure_tree # Always for plan_creation
+    - plan_file_link      # Always after creation
+  
+  orchestrator_specific: []
+```
+
+**Rendering Order:**
+1. `cortex_header` - "Plan Created"
+2. `understanding` - Scope analysis
+3. `plan_summary_table` - Plan metrics
+4. `plan_structure_tree` - Folder structure
+5. `plan_file_link` - Clickable link
+6. `next_action` - "Review and execute plan"
+
+---
+
+### Operation 2: Plan Execution (In Progress)
+
+**Context Signals:**
+```yaml
+operation_type: execution
+response_phase: in_progress
+complexity_tier: COMPREHENSIVE
+orchestrator_type: planning
+orchestrator_engaged: true
+```
+
+**Block Composition:**
+```yaml
+blocks:
+  mandatory:
+    - cortex_header_shield  # Shield mode active
+    - progress_tracker_standard
+    - validation_status_dor_dod
+    - plan_file_link
+    - next_action
+  
+  conditional:
+    - threat_analysis       # If threat_analysis_enabled
+    - changes              # If files_modified
+    - deliverables_matrix  # If deliverables_tracked
+  
+  orchestrator_specific:
+    - All planning blocks
+```
+
+**Rendering Order:**
+1. `cortex_header_shield` - "Plan Execution"
+2. `progress_tracker_standard` - Phase progress
+3. `threat_analysis` - Security metrics (optional)
+4. `deliverables_matrix` - Deliverable status (optional)
+5. `validation_status_dor_dod` - DoR/DoD checks
+6. `changes` - Files modified (optional)
+7. `plan_file_link` - Link to plan
+8. `next_action` - Next phase or task
+
+---
+
+### Operation 3: Plan Completion
+
+**Context Signals:**
+```yaml
+operation_type: planning
+response_phase: complete
+complexity_tier: STRUCTURED
+orchestrator_type: planning
+orchestrator_engaged: true
+```
+
+**Block Composition:**
+```yaml
+blocks:
+  mandatory:
+    - cortex_header_shield
+    - progress_tracker_standard
+    - validation_status_dor_dod
+    - achievements
+  
+  conditional:
+    - changes              # If files_modified
+    - deliverables_matrix  # If deliverables_tracked
+    - plan_file_link
+  
+  orchestrator_specific: []
+  
+  completion_format: "🎉 CONGRATULATIONS"
+```
+
+**Rendering Order:**
+1. `cortex_header_shield` - "Plan Complete"
+2. `progress_tracker_standard` - All phases ✅
+3. `achievements` - What was accomplished
+4. `changes` - Final file summary
+5. `validation_status_dor_dod` - Final checks
+6. Completion banner - No next_action
+
+---
+
+## 🔴🟢🔄 TDD Orchestrator Templates
+
+### Operation 1: Test Run (RED Phase)
+
+**Context Signals:**
+```yaml
+operation_type: execution
+response_phase: in_progress
+complexity_tier: FOCUSED
+orchestrator_type: tdd
+orchestrator_engaged: false
+```
+
+**Block Composition:**
+```yaml
+blocks:
+  mandatory:
+    - cortex_header
+    - tdd_cycle_status
+    - test_results_summary
+    - next_action
+  
+  conditional:
+    - coverage_metrics     # If coverage_available
+  
+  orchestrator_specific:
+    - All TDD blocks
+```
+
+**Rendering Order:**
+1. `cortex_header` - "RED Phase - Test Execution"
+2. `tdd_cycle_status` - 🔴 RED (In Progress)
+3. `test_results_summary` - Test failures expected
+4. `next_action` - "Implement code to pass tests"
+
+---
+
+### Operation 2: GREEN Phase
+
+**Context Signals:**
+```yaml
+operation_type: execution
+response_phase: in_progress
+complexity_tier: FOCUSED
+orchestrator_type: tdd
+orchestrator_engaged: false
+```
+
+**Block Composition:**
+```yaml
+blocks:
+  mandatory:
+    - cortex_header
+    - tdd_cycle_status
+    - test_results_summary
+    - next_action
+  
+  conditional:
+    - coverage_metrics     # If coverage_available
+    - changes              # If files_modified
+  
+  orchestrator_specific:
+    - All TDD blocks
+```
+
+**Rendering Order:**
+1. `cortex_header` - "GREEN Phase - Tests Passing"
+2. `tdd_cycle_status` - 🟢 GREEN (Complete)
+3. `test_results_summary` - All tests passing
+4. `coverage_metrics` - Coverage report
+5. `changes` - Implementation files
+6. `next_action` - "Refactor code"
+
+---
+
+### Operation 3: REFACTOR Phase
+
+**Context Signals:**
+```yaml
+operation_type: execution
+response_phase: complete
+complexity_tier: STRUCTURED
+orchestrator_type: tdd
+orchestrator_engaged: false
+```
+
+**Block Composition:**
+```yaml
+blocks:
+  mandatory:
+    - cortex_header
+    - tdd_cycle_status
+    - test_results_summary
+    - next_action
+  
+  conditional:
+    - coverage_metrics     # Always for REFACTOR
+    - changes              # Refactored files
+  
+  orchestrator_specific:
+    - All TDD blocks
+```
+
+**Rendering Order:**
+1. `cortex_header` - "REFACTOR Phase - Code Cleanup"
+2. `tdd_cycle_status` - 🔄 REFACTOR (Complete)
+3. `test_results_summary` - Tests still passing
+4. `coverage_metrics` - Final coverage
+5. `changes` - Refactored files
+6. `next_action` - "✅ TDD cycle complete"
+
+---
+
+## 🐛 Debug Orchestrator Templates
+
+### Operation 1: Investigation Start
+
+**Context Signals:**
+```yaml
+operation_type: debug
+response_phase: start
+complexity_tier: STRUCTURED
+orchestrator_type: debug
+orchestrator_engaged: false
+```
+
+**Block Composition:**
+```yaml
+blocks:
+  mandatory:
+    - cortex_header
+    - bug_hypothesis
+    - next_action
+  
+  conditional:
+    - understanding        # Bug description
+    - approach            # Investigation strategy
+  
+  orchestrator_specific:
+    - All debug blocks
+```
+
+**Rendering Order:**
+1. `cortex_header` - "Bug Investigation"
+2. `understanding` - Bug symptoms
+3. `bug_hypothesis` - Initial hypothesis
+4. `approach` - Investigation plan
+5. `next_action` - "Run diagnostic tests"
+
+---
+
+### Operation 2: Root Cause Found
+
+**Context Signals:**
+```yaml
+operation_type: debug
+response_phase: in_progress
+complexity_tier: STRUCTURED
+orchestrator_type: debug
+orchestrator_engaged: false
+```
+
+**Block Composition:**
+```yaml
+blocks:
+  mandatory:
+    - cortex_header
+    - root_cause_analysis
+    - next_action
+  
+  conditional:
+    - bug_hypothesis      # Original hypothesis
+    - changes             # Fix candidates
+  
+  orchestrator_specific:
+    - All debug blocks
+```
+
+**Rendering Order:**
+1. `cortex_header` - "Root Cause Identified"
+2. `bug_hypothesis` - Original hypothesis (reference)
+3. `root_cause_analysis` - Actual cause
+4. `changes` - Proposed fix
+5. `next_action` - "Apply fix and verify"
+
+---
+
+### Operation 3: Fix Verified
+
+**Context Signals:**
+```yaml
+operation_type: debug
+response_phase: complete
+complexity_tier: STRUCTURED
+orchestrator_type: debug
+orchestrator_engaged: false
+```
+
+**Block Composition:**
+```yaml
+blocks:
+  mandatory:
+    - cortex_header
+    - fix_verification
+    - changes
+    - next_action
+  
+  conditional:
+    - root_cause_analysis  # Summary
+    - test_results_summary # Regression tests
+  
+  orchestrator_specific:
+    - All debug blocks
+```
+
+**Rendering Order:**
+1. `cortex_header` - "Bug Fixed"
+2. `root_cause_analysis` - Root cause summary
+3. `fix_verification` - Verification status
+4. `changes` - Fixed files
+5. `next_action` - "✅ Bug resolved"
+
+---
+
+## 📊 CORTEX Lens Templates
+
+### Operation 1: Dashboard Display
+
+**Context Signals:**
+```yaml
+operation_type: analysis
+response_phase: start
+complexity_tier: COMPREHENSIVE
+orchestrator_type: lens
+orchestrator_engaged: false
+```
+
+**Block Composition:**
+```yaml
+blocks:
+  mandatory:
+    - cortex_header
+    - analytics_summary
+    - health_metrics
+    - next_action
+  
+  conditional:
+    - system_recommendations  # If available
+  
+  orchestrator_specific:
+    - All lens blocks
+```
+
+**Rendering Order:**
+1. `cortex_header` - "CORTEX Lens Dashboard"
+2. `analytics_summary` - Key metrics
+3. `health_metrics` - Component health
+4. `system_recommendations` - AI recommendations
+5. `next_action` - "Review recommendations"
+
+---
+
+### Operation 2: Health Report
+
+**Context Signals:**
+```yaml
+operation_type: analysis
+response_phase: complete
+complexity_tier: STRUCTURED
+orchestrator_type: lens
+orchestrator_engaged: false
+```
+
+**Block Composition:**
+```yaml
+blocks:
+  mandatory:
+    - cortex_header
+    - health_metrics
+    - system_recommendations
+    - next_action
+  
+  conditional:
+    - cautions            # If risks_present
+  
+  orchestrator_specific:
+    - All lens blocks
+```
+
+**Rendering Order:**
+1. `cortex_header` - "System Health Report"
+2. `health_metrics` - Detailed health
+3. `cautions` - Risk warnings
+4. `system_recommendations` - Action items
+5. `next_action` - "Address critical issues"
+
+---
+
+## 🎨 Refinement Orchestrator Templates
+
+### Operation 1: Analysis Phase
+
+**Context Signals:**
+```yaml
+operation_type: refinement
+response_phase: start
+complexity_tier: STRUCTURED
+orchestrator_type: refinement
+orchestrator_engaged: false
+```
+
+**Block Composition:**
+```yaml
+blocks:
+  mandatory:
+    - cortex_header
+    - improvement_areas
+    - next_action
+  
+  conditional:
+    - understanding        # Scope
+    - approach            # Refinement strategy
+  
+  orchestrator_specific:
+    - All refinement blocks
+```
+
+**Rendering Order:**
+1. `cortex_header` - "Code Analysis"
+2. `understanding` - Analysis scope
+3. `improvement_areas` - Issues found
+4. `approach` - Refinement strategy
+5. `next_action` - "Begin refactoring"
+
+---
+
+### Operation 2: Improvement Complete
+
+**Context Signals:**
+```yaml
+operation_type: refinement
+response_phase: complete
+complexity_tier: COMPREHENSIVE
+orchestrator_type: refinement
+orchestrator_engaged: false
+```
+
+**Block Composition:**
+```yaml
+blocks:
+  mandatory:
+    - cortex_header
+    - code_quality_delta
+    - changes
+    - next_action
+  
+  conditional:
+    - improvement_areas   # What was improved
+    - test_results_summary # Tests still passing
+    - achievements        # Goals reached
+  
+  orchestrator_specific:
+    - All refinement blocks
+```
+
+**Rendering Order:**
+1. `cortex_header` - "Refinement Complete"
+2. `improvement_areas` - Areas addressed
+3. `code_quality_delta` - Before/after metrics
+4. `changes` - Refactored files
+5. `test_results_summary` - Tests passing
+6. `achievements` - Quality improvements
+7. `next_action` - "✅ Code quality improved"
+
+---
+
+## 🧹 Sanitization Orchestrator Templates
+
+### Operation 1: Scan Results
+
+**Context Signals:**
+```yaml
+operation_type: sanitization
+response_phase: in_progress
+complexity_tier: STRUCTURED
+orchestrator_type: sanitization
+orchestrator_engaged: false
+```
+
+**Block Composition:**
+```yaml
+blocks:
+  mandatory:
+    - cortex_header
+    - sanitization_findings
+    - next_action
+  
+  conditional:
+    - cautions            # If sensitive data found
+  
+  orchestrator_specific:
+    - All sanitization blocks
+```
+
+**Rendering Order:**
+1. `cortex_header` - "Sanitization Scan"
+2. `sanitization_findings` - What was found
+3. `cautions` - Data sensitivity warnings
+4. `next_action` - "Review and approve sanitization"
+
+---
+
+### Operation 2: Sanitization Complete
+
+**Context Signals:**
+```yaml
+operation_type: sanitization
+response_phase: complete
+complexity_tier: STRUCTURED
+orchestrator_type: sanitization
+orchestrator_engaged: false
+```
+
+**Block Composition:**
+```yaml
+blocks:
+  mandatory:
+    - cortex_header
+    - sanitization_findings
+    - changes
+    - next_action
+  
+  conditional:
+    - achievements        # Data protection goals
+  
+  orchestrator_specific:
+    - All sanitization blocks
+```
+
+**Rendering Order:**
+1. `cortex_header` - "Sanitization Complete"
+2. `sanitization_findings` - Summary
+3. `changes` - Sanitized files
+4. `achievements` - Protection achieved
+5. `next_action` - "✅ Code sanitized"
+
+---
+
+## 📚 Documentation Orchestrator Templates
+
+### Operation 1: Generation
+
+**Context Signals:**
+```yaml
+operation_type: documentation
+response_phase: in_progress
+complexity_tier: STRUCTURED
+orchestrator_type: documentation
+orchestrator_engaged: false
+```
+
+**Block Composition:**
+```yaml
+blocks:
+  mandatory:
+    - cortex_header
+    - doc_summary
+    - next_action
+  
+  conditional:
+    - coverage_report     # If coverage_calculated
+    - changes             # Generated doc files
+  
+  orchestrator_specific:
+    - All documentation blocks
+```
+
+**Rendering Order:**
+1. `cortex_header` - "Documentation Generation"
+2. `doc_summary` - Docs created
+3. `coverage_report` - Coverage metrics
+4. `changes` - Doc files
+5. `next_action` - "Review documentation"
+
+---
+
+### Operation 2: Coverage Report
+
+**Context Signals:**
+```yaml
+operation_type: documentation
+response_phase: complete
+complexity_tier: FOCUSED
+orchestrator_type: documentation
+orchestrator_engaged: false
+```
+
+**Block Composition:**
+```yaml
+blocks:
+  mandatory:
+    - cortex_header
+    - coverage_report
+    - next_action
+  
+  conditional:
+    - cautions            # Missing critical docs
+  
+  orchestrator_specific:
+    - All documentation blocks
+```
+
+**Rendering Order:**
+1. `cortex_header` - "Documentation Coverage"
+2. `coverage_report` - Component coverage
+3. `cautions` - Missing documentation
+4. `next_action` - "Address coverage gaps"
+
+---
+
+## 🎫 ADO Orchestrator Templates
+
+### Operation 1: Story Creation (In Progress)
+
+**Context Signals:**
+```yaml
+operation_type: ado
+response_phase: in_progress
+complexity_tier: COMPREHENSIVE
+orchestrator_type: ado
+orchestrator_engaged: true
+```
+
+**Block Composition:**
+```yaml
+blocks:
+  mandatory:
+    - cortex_header_shield
+    - progress_tracker_standard
+    - work_item_summary
+    - ado_auth_status
+    - plan_file_link
+    - next_action
+  
+  conditional:
+    - ado_links           # If work items created
+    - validation_status_dor_dod  # Always for ADO
+  
+  orchestrator_specific:
+    - All ADO blocks
+```
+
+**Rendering Order:**
+1. `cortex_header_shield` - "ADO Work Item Generation"
+2. `progress_tracker_standard` - Phase progress
+3. `work_item_summary` - Item counts/SP
+4. `ado_links` - ADO URLs (optional)
+5. `ado_auth_status` - Auth + DoR/DoD
+6. `plan_file_link` - Link to plan
+7. `next_action` - Next phase
+
+---
+
+### Operation 2: Feature Breakdown Complete
+
+**Context Signals:**
+```yaml
+operation_type: ado
+response_phase: complete
+complexity_tier: STRUCTURED
+orchestrator_type: ado
+orchestrator_engaged: true
+```
+
+**Block Composition:**
+```yaml
+blocks:
+  mandatory:
+    - cortex_header_shield
+    - progress_tracker_standard
+    - work_item_summary
+    - ado_links
+    - ado_auth_status
+    - achievements
+  
+  conditional:
+    - plan_file_link
+  
+  orchestrator_specific:
+    - All ADO blocks
+  
+  completion_format: "🎉 CONGRATULATIONS"
+```
+
+**Rendering Order:**
+1. `cortex_header_shield` - "ADO Work Items Complete"
+2. `progress_tracker_standard` - All phases ✅
+3. `work_item_summary` - Final counts
+4. `ado_links` - All work item links
+5. `achievements` - Work items created
+6. `ado_auth_status` - Final validation
+7. Completion banner - No next_action
+
+---
+
+## 📋 Summary Matrix
+
+| Orchestrator | Operations | Specialized Blocks | Avg Block Count |
+|--------------|-----------|-------------------|-----------------|
+| Planning | 3 | 4 | 6-8 |
+| TDD | 3 | 3 | 4-6 |
+| Debug | 3 | 3 | 4-6 |
+| CORTEX Lens | 2 | 3 | 5-6 |
+| Refinement | 2 | 2 | 5-7 |
+| Sanitization | 2 | 1 | 4-5 |
+| Documentation | 2 | 2 | 3-5 |
+| ADO | 2 | 3 | 7-8 |
+
+**Total Operations Defined:** 19  
+**Total Unique Block Combinations:** 19
+
+---
+
+**Phase 4 Complete:** ✅ All orchestrator templates defined  
+**Next Phase:** Manifest Updates

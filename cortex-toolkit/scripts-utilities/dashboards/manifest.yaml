@@ -1,0 +1,35 @@
+category_name: dashboards
+utility_count: 2
+utilities:
+- name: launch_admin_dashboard
+  file_path: /Users/asifhussain/PROJECTS/CORTEX/scripts/utilities/launch_admin_dashboard.py
+  category: dashboards
+  description: Launch CORTEX Admin Dashboard in current terminal.
+  capabilities: []
+  dependencies:
+  - time
+  - pathlib
+  - subprocess
+  - sys
+  - orchestrators
+  usage_stats:
+    execution_count: 0
+    last_used: null
+    avg_duration_ms: 0.0
+    success_rate: 100.0
+- name: debug_dashboard
+  file_path: /Users/asifhussain/PROJECTS/CORTEX/scripts/utilities/debug_dashboard.py
+  category: dashboards
+  description: Debug dashboard locally to identify tab loading issues.
+  capabilities: []
+  dependencies:
+  - traceback
+  - time
+  - pathlib
+  - sys
+  - orchestrators
+  usage_stats:
+    execution_count: 0
+    last_used: null
+    avg_duration_ms: 0.0
+    success_rate: 100.0

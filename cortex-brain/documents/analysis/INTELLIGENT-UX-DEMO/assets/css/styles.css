@@ -1,0 +1,334 @@
+/* CORTEX UX Enhancement Dashboard - Custom Styles */
+
+/* Toggle Switch */
+.toggle-checkbox {
+    appearance: none;
+    width: 44px;
+    height: 24px;
+    background-color: #d1d5db;
+    border-radius: 12px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.toggle-checkbox:checked {
+    background-color: #3b82f6;
+}
+
+.toggle-checkbox::before {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: white;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.3s;
+}
+
+.toggle-checkbox:checked::before {
+    transform: translateX(20px);
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+}
+
+/* Card Hover Effects */
+.metric-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.metric-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Progress Bar Animations */
+.progress-fill {
+    background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 50%, #3b82f6 100%);
+    background-size: 200% 100%;
+    animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Tab Button Enhancements */
+.tab-button {
+    transition: all 0.2s ease;
+    border-bottom: 2px solid transparent;
+}
+
+.tab-button:hover:not(.active) {
+    background-color: rgba(59, 130, 246, 0.1);
+}
+
+.tab-button.active {
+    color: var(--accent-color);
+    border-bottom-color: var(--accent-color);
+    background-color: rgba(59, 130, 246, 0.05);
+}
+
+/* Discovery Panel Animations */
+#discovery-panel {
+    animation: slideInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideInUp {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Score Color Classes */
+.score-good {
+    color: #10b981;
+}
+
+.score-warning {
+    color: #f59e0b;
+}
+
+.score-poor {
+    color: #ef4444;
+}
+
+/* Tooltip */
+.tooltip {
+    position: absolute;
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    border-radius: 4px;
+    font-size: 12px;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.tooltip.show {
+    opacity: 1;
+}
+
+/* Badge Styles */
+.badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.badge-critical {
+    background-color: #fee2e2;
+    color: #dc2626;
+}
+
+.badge-high {
+    background-color: #fed7aa;
+    color: #ea580c;
+}
+
+.badge-medium {
+    background-color: #fef3c7;
+    color: #d97706;
+}
+
+.badge-low {
+    background-color: #dbeafe;
+    color: #2563eb;
+}
+
+.badge-info {
+    background-color: #e0e7ff;
+    color: #4f46e5;
+}
+
+[data-theme="dark"] .badge-critical {
+    background-color: rgba(220, 38, 38, 0.2);
+    color: #fca5a5;
+}
+
+[data-theme="dark"] .badge-high {
+    background-color: rgba(234, 88, 12, 0.2);
+    color: #fdba74;
+}
+
+[data-theme="dark"] .badge-medium {
+    background-color: rgba(217, 119, 6, 0.2);
+    color: #fcd34d;
+}
+
+[data-theme="dark"] .badge-low {
+    background-color: rgba(37, 99, 235, 0.2);
+    color: #93c5fd;
+}
+
+[data-theme="dark"] .badge-info {
+    background-color: rgba(79, 70, 229, 0.2);
+    color: #c7d2fe;
+}
+
+/* List Styles */
+ul.issue-list {
+    list-style: none;
+    padding: 0;
+}
+
+ul.issue-list li {
+    padding: 12px;
+    margin-bottom: 8px;
+    background: var(--bg-secondary);
+    border-left: 4px solid var(--accent-color);
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+ul.issue-list li:hover {
+    transform: translateX(4px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Code Block Styling */
+pre[class*="language-"] {
+    border-radius: 8px;
+    margin: 16px 0;
+}
+
+code[class*="language-"] {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Loading Spinner */
+.spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid var(--border-color);
+    border-top-color: var(--accent-color);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--text-secondary);
+}
+
+.empty-state-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 768px) {
+    .container {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+    
+    .tab-button {
+        padding: 12px 16px;
+        font-size: 12px;
+    }
+    
+    #discovery-panel {
+        width: calc(100% - 32px);
+        right: 16px;
+        left: 16px;
+    }
+}
+
+@media (max-width: 640px) {
+    .metric-card {
+        padding: 16px;
+    }
+    
+    h2 {
+        font-size: 24px;
+    }
+    
+    h3 {
+        font-size: 18px;
+    }
+}
+
+/* Print Styles */
+@media print {
+    #discovery-panel,
+    #theme-toggle,
+    #always-enhance {
+        display: none !important;
+    }
+    
+    .tab-content {
+        display: block !important;
+        page-break-after: always;
+    }
+    
+    .metric-card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+}
+
+/* Accessibility */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* Focus Styles */
+button:focus,
+a:focus,
+input:focus {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+/* Dark Mode Transitions */
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}

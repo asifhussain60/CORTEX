@@ -1,0 +1,227 @@
+name: "Requirements Gathering - Iterative Refinement"
+phase: "Phase 4: Iterative Refinement"
+purpose: "Present updated requirements after user feedback and modifications"
+audience: "User (iterative review cycle)"
+
+template: |
+  ## 🔄 CORTEX Requirements Refinement (Iteration {iteration_number})
+  **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+  
+  ---
+  
+  ### 🎯 Updates Based on Your Feedback
+  
+  **Your Feedback:** {user_feedback}
+  
+  **Changes Made:** {changes_made}
+  
+  ---
+  
+  ### 📋 Updated Requirements
+  
+  {updated_requirements}
+  
+  ---
+  
+  ### 📊 Updated Gap Analysis
+  
+  | Requirement | Current State | Gap | Proposed Enhancement | Impact |
+  |-------------|---------------|-----|----------------------|--------|
+  {updated_gap_analysis}
+  
+  ---
+  
+  ### ✨ Revised Enhancements
+  
+  {revised_enhancements}
+  
+  ---
+  
+  ### 📈 Updated Complexity & Effort
+  
+  {updated_complexity}
+  
+  ---
+  
+  ### 🔍 Change Summary
+  
+  **Added:**
+  {added_items}
+  
+  **Modified:**
+  {modified_items}
+  
+  **Removed:**
+  {removed_items}
+  
+  **Rationale for Changes:**
+  {change_rationale}
+  
+  ---
+  
+  ### 🔍 Next Steps
+  
+  **Option 1:** Continue Refinement (if more changes needed)
+  - Provide additional feedback
+  - Iterate on requirements again
+  
+  **Option 2:** Proceed to Approval (if requirements are finalized)
+  - Move to Phase 5: Approval Gate
+  - Lock requirements for planning
+  - Generate requirements manifest
+  
+  **Your Feedback:** Are these refinements correct? Need more changes, or ready for approval?
+
+variables:
+  iteration_number:
+    type: integer
+    description: "Current iteration number (starts at 1)"
+    required: true
+    
+  user_feedback:
+    type: string
+    description: "User's feedback from previous iteration (quoted)"
+    required: true
+    
+  changes_made:
+    type: string
+    description: "Summary of changes made in response to feedback"
+    required: true
+    
+  updated_requirements:
+    type: string
+    description: "Complete updated requirements list"
+    required: true
+    
+  updated_gap_analysis:
+    type: string
+    description: "Updated gap analysis table rows"
+    required: true
+    
+  revised_enhancements:
+    type: string
+    description: "Updated enhancement descriptions reflecting feedback"
+    required: true
+    
+  updated_complexity:
+    type: string
+    description: "Updated complexity estimation"
+    required: true
+    
+  added_items:
+    type: list
+    description: "New requirements/enhancements added this iteration"
+    required: true
+    
+  modified_items:
+    type: list
+    description: "Requirements/enhancements modified this iteration"
+    required: true
+    
+  removed_items:
+    type: list
+    description: "Requirements/enhancements removed this iteration"
+    required: true
+    
+  change_rationale:
+    type: string
+    description: "Explanation of WHY changes were made (tie back to user feedback)"
+    required: true
+
+validation_rules:
+  - rule: "iteration_number must increment each refinement cycle"
+  - rule: "changes_made must be specific, not 'updated per feedback'"
+  - rule: "at least one of added/modified/removed must be non-empty"
+  - rule: "change_rationale must connect changes to user's stated concerns"
+  - rule: "updated_complexity must reflect impact of changes (increased/decreased/same)"
+
+examples:
+  - context: "User says 'Add validation to sub-plan generation script'"
+    output: |
+      Iteration: 2
+      
+      Your Feedback: "Add validation to sub-plan generation script"
+      
+      Changes Made:
+      - Added Enhancement #3: Sub-Plan Validation Engine
+      - Updated Enhancement #1: Sub-Plan Generation Script (now includes validation hooks)
+      - Updated Complexity: MEDIUM → HIGH (added 150 LOC for validation)
+      
+      Updated Requirements:
+      1. Sub-plan template exists (DONE)
+      2. Individual sub-plans generated (NEW - automated with validation)
+      3. Pre-populated orchestrator data (NEW - from metadata YAML)
+      4. Validation checks (NEW - ensure all 6 sections complete)
+      
+      Revised Enhancements:
+      1. **Sub-Plan Generation Script** (HIGH VALUE) - MODIFIED
+         - Added: Validation hooks for 6-section completeness
+         - Added: Error reporting for missing data
+         - LOC: 200 → 250
+      
+      3. **Sub-Plan Validation Engine** (NEW - HIGH VALUE)
+         - Rationale: Ensure generated sub-plans are complete and valid
+         - Implementation: Validation rules for each section (Existing State, New Structure, etc.)
+         - Checks: Section completeness, LOC estimates, test counts, migration phases
+         - Benefit: Catch errors early, ensure consistency across all 10 sub-plans
+      
+      Updated Complexity:
+      - Enhancement 1: MEDIUM → HIGH (250 LOC, 5 hours) - added validation
+      - Enhancement 2: LOW (100 LOC, 2 hours) - unchanged
+      - Enhancement 3: MEDIUM (150 LOC, 4 hours) - NEW
+      - Total: MEDIUM → HIGH (500 LOC, 11 hours)
+      
+      Change Summary:
+      - Added: Sub-Plan Validation Engine (Enhancement #3)
+      - Modified: Sub-Plan Generation Script - added validation hooks
+      - Removed: None
+      - Rationale: User requested validation to ensure generated sub-plans are complete and consistent.
+
+  - context: "User says 'Remove metadata YAML, just hardcode values'"
+    output: |
+      Iteration: 2
+      
+      Your Feedback: "Remove metadata YAML, just hardcode values"
+      
+      Changes Made:
+      - Removed Enhancement #2: Metadata Configuration File
+      - Updated Enhancement #1: Sub-Plan Generation Script (hardcode orchestrator data)
+      - Updated Complexity: MEDIUM → LOW (reduced 100 LOC)
+      
+      Revised Enhancements:
+      1. **Sub-Plan Generation Script** (HIGH VALUE) - MODIFIED
+         - Changed: Orchestrator metadata hardcoded in script (removed YAML dependency)
+         - Tradeoff: Faster implementation, but less flexible for future changes
+         - LOC: 200 → 180 (simpler without YAML parsing)
+      
+      Updated Complexity:
+      - Enhancement 1: MEDIUM → LOW (180 LOC, 3 hours) - simplified
+      - Enhancement 2: REMOVED
+      - Total: MEDIUM → LOW (180 LOC, 3 hours)
+      
+      Change Summary:
+      - Added: None
+      - Modified: Sub-Plan Generation Script - hardcode instead of YAML config
+      - Removed: Metadata Configuration File (Enhancement #2)
+      - Rationale: User prefers simpler implementation with hardcoded values over YAML config file.
+
+usage_notes:
+  - "This template is used AFTER user provides feedback on enhancement proposal"
+  - "Loop this template until user approves (no more changes needed)"
+  - "Track iteration_number to prevent infinite refinement loops (max 5 iterations)"
+  - "If user says 'looks good' or 'approved', proceed to Approval Gate (Phase 5)"
+  - "Always explain WHY changes were made (tie to user feedback)"
+  - "Show impact of changes on complexity/effort estimates"
+
+refinement_triggers:
+  - "User requests additions (add X, include Y)"
+  - "User requests modifications (change X to Y)"
+  - "User requests removals (remove X, don't need Y)"
+  - "User clarifies ambiguities (I meant X not Y)"
+  - "User changes priorities (X is more important than Y)"
+
+max_iterations: 5
+iteration_loop_exit:
+  - "If iteration_number > 5: Ask user to summarize final requirements for approval"
+  - "If user says 'approved/looks good/proceed': Move to Phase 5"
+  - "If user provides no feedback after 2 prompts: Assume approval, move to Phase 5"

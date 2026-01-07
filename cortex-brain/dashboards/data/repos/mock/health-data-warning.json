@@ -1,0 +1,89 @@
+{
+  "metadata": {
+    "repo_name": "Mock Application (Warning State)",
+    "repo_url": "https://github.com/example/warning-app",
+    "branch": "develop",
+    "commit_hash": "e5f6a7b8",
+    "commit_date": "2025-12-03T15:30:00-05:00",
+    "last_scan": "2025-12-04T10:00:00-05:00",
+    "scan_duration_seconds": 18.7,
+    "scanner_version": "CORTEX-3.5.5"
+  },
+  "health": {
+    "overall_score": 62,
+    "trend": "stable",
+    "status": "warning"
+  },
+  "code_metrics": {
+    "lines_of_code": 45000,
+    "file_count": 680,
+    "directory_count": 145,
+    "language_breakdown": {
+      "TypeScript": 20000,
+      "JavaScript": 12000,
+      "HTML/CSS": 8000,
+      "Python": 5000
+    }
+  },
+  "code_quality": {
+    "complexity_score": 58,
+    "maintainability_index": 54,
+    "cyclomatic_complexity_avg": 12.5,
+    "cognitive_complexity_avg": 9.8,
+    "code_duplication_pct": 15.2,
+    "comment_ratio_pct": 8.5
+  },
+  "testing": {
+    "coverage_pct": 42.3,
+    "unit_test_count": 180,
+    "integration_test_count": 35,
+    "test_pass_rate_pct": 89.4
+  },
+  "issues": {
+    "total_count": 67,
+    "by_severity": {
+      "critical": 3,
+      "high": 15,
+      "medium": 32,
+      "low": 17
+    },
+    "technical_debt_days": 18.5,
+    "code_smells_count": 145
+  },
+  "dependencies": {
+    "total": 285,
+    "direct": 45,
+    "transitive": 240,
+    "outdated": 32,
+    "vulnerable": 4,
+    "health_score": 58
+  },
+  "security": {
+    "score": 68,
+    "vulnerabilities": {
+      "critical": 0,
+      "high": 2,
+      "medium": 4,
+      "low": 8
+    },
+    "secrets_exposed": 1,
+    "last_scan": "2025-12-03T10:00:00-05:00"
+  },
+  "performance": {
+    "build_time_seconds": 185.6,
+    "test_execution_time_seconds": 92.4,
+    "deployment_frequency": "biweekly",
+    "mean_time_to_recovery_hours": 8.3
+  },
+  "activity": {
+    "commits_last_30_days": 58,
+    "contributors_active": 2,
+    "pull_requests_open": 12,
+    "pull_requests_merged_last_30_days": 8
+  },
+  "custom_metrics": {
+    "mock_data": true,
+    "scenario": "warning",
+    "repo_size": "large"
+  }
+}

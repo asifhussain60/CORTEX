@@ -1,0 +1,181 @@
+{
+  "phase": "Phase 12: Native IDE Extensions",
+  "version": "1.0.0",
+  "status": "IN_PROGRESS",
+  "startDate": "2025-12-29",
+  "targetEndDate": "2026-01-12",
+  "progress": {
+    "overall": 5,
+    "packages": {
+      "12.1": {
+        "name": "VS Code Extension Foundation",
+        "status": "IN_PROGRESS",
+        "progress": 17,
+        "estimatedHours": 24,
+        "actualHours": 4,
+        "tasks": {
+          "12.1.1": {
+            "name": "Extension Scaffold",
+            "status": "COMPLETED",
+            "estimatedHours": 4,
+            "actualHours": 4
+          },
+          "12.1.2": {
+            "name": "Command Palette Integration",
+            "status": "PENDING",
+            "estimatedHours": 6,
+            "actualHours": 0
+          },
+          "12.1.3": {
+            "name": "GitHub Copilot Chat Integration",
+            "status": "PENDING",
+            "estimatedHours": 8,
+            "actualHours": 0
+          },
+          "12.1.4": {
+            "name": "CORTEX Dashboard Webview",
+            "status": "PENDING",
+            "estimatedHours": 4,
+            "actualHours": 0
+          },
+          "12.1.5": {
+            "name": "Marketplace Preparation",
+            "status": "PENDING",
+            "estimatedHours": 2,
+            "actualHours": 0
+          }
+        }
+      },
+      "12.2": {
+        "name": "Visual Studio Extension Foundation",
+        "status": "PENDING",
+        "progress": 0,
+        "estimatedHours": 24,
+        "actualHours": 0
+      },
+      "12.3": {
+        "name": "Enhanced IDE Integration",
+        "status": "PENDING",
+        "progress": 0,
+        "estimatedHours": 16,
+        "actualHours": 0
+      },
+      "12.4": {
+        "name": "Marketplace Publication",
+        "status": "PENDING",
+        "progress": 0,
+        "estimatedHours": 8,
+        "actualHours": 0
+      },
+      "12.5": {
+        "name": "Cross-IDE Validation",
+        "status": "PENDING",
+        "progress": 0,
+        "estimatedHours": 8,
+        "actualHours": 0
+      }
+    }
+  },
+  "metrics": {
+    "totalEstimatedHours": 80,
+    "totalActualHours": 0,
+    "timeEfficiency": 0,
+    "testsPlanned": 55,
+    "testsPassing": 0,
+    "testPassRate": 0
+  },
+  "deliverables": {
+    "code": {
+      "vscodeExtension": {
+        "path": "extensions/vscode/",
+        "status": "NOT_STARTED",
+        "estimatedLOC": 2000
+      },
+      "vsExtension": {
+        "path": "extensions/visualstudio/",
+        "status": "NOT_STARTED",
+        "estimatedLOC": 1500
+      },
+      "sharedUtilities": {
+        "path": "extensions/shared/",
+        "status": "NOT_STARTED",
+        "estimatedLOC": 500
+      }
+    },
+    "documentation": {
+      "vscodeGuide": {
+        "path": "docs/extensions/vscode-extension-guide.md",
+        "status": "NOT_STARTED"
+      },
+      "vsGuide": {
+        "path": "docs/extensions/visualstudio-extension-guide.md",
+        "status": "NOT_STARTED"
+      },
+      "gettingStartedUpdate": {
+        "path": "docs/getting-started/index.html",
+        "status": "IN_PROGRESS"
+      },
+      "readmeUpdate": {
+        "path": "README.md",
+        "status": "PENDING"
+      }
+    },
+    "marketplace": {
+      "vscodeExtension": {
+        "url": "https://marketplace.visualstudio.com/items?itemName=asifhussain60.cortex",
+        "status": "NOT_PUBLISHED"
+      },
+      "vsExtension": {
+        "url": "https://marketplace.visualstudio.com/items?itemName=asifhussain60.cortex-vs",
+        "status": "NOT_PUBLISHED"
+      }
+    }
+  },
+  "risks": [
+    {
+      "id": "R12.1",
+      "description": "Marketplace review delays",
+      "likelihood": "MEDIUM",
+      "impact": "HIGH",
+      "mitigation": "Submit early (Day 8), build 20% buffer"
+    },
+    {
+      "id": "R12.2",
+      "description": "Copilot API changes",
+      "likelihood": "LOW",
+      "impact": "HIGH",
+      "mitigation": "Use stable APIs only, monitor changelog"
+    },
+    {
+      "id": "R12.3",
+      "description": "VS 2019 compatibility issues",
+      "likelihood": "MEDIUM",
+      "impact": "MEDIUM",
+      "mitigation": "Test on VS 2019/2022, document minimum versions"
+    }
+  ],
+  "successCriteria": {
+    "code": {
+      "bothExtensionsPublished": false,
+      "testsPassRate": 0.95,
+      "performanceLoadTime": 2.0,
+      "performanceCommandLatency": 0.5
+    },
+    "documentation": {
+      "guidesComplete": false,
+      "videoDemosPublished": false,
+      "migrationGuideCreated": false
+    },
+    "validation": {
+      "crossIDEValidationComplete": false,
+      "uatApprovalRate": 1.0,
+      "criticalBugsCount": 0
+    }
+  },
+  "nextSteps": [
+    "Execute Task 12.1.1: Extension Scaffold (4h)",
+    "Set up VS Code extension development environment",
+    "Generate extension using Yeoman generator",
+    "Verify extension activates in VS Code debugger"
+  ]
+}

@@ -1,0 +1,2926 @@
+{
+  "phase": 3,
+  "timestamp": "2025-12-07T19:29:35.552379",
+  "analysis": {
+    "total_candidates": 250,
+    "high_confidence": 1,
+    "medium_confidence": 44,
+    "low_confidence": 205
+  },
+  "execution": {
+    "consolidated": [
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "examples\\request_validator\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\agents\\estimation\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\agents\\security\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\application\\behaviors\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\application\\common\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\application\\validation\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\brain\\tier1\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\brain_transfer\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\caching\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\cognitive\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\collectors\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\conversation_capture\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\core\\context_management\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\cortex_agents\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\cortex_agents\\code_executor\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\cortex_agents\\code_executor\\operations\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\cortex_agents\\code_executor\\validators\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\cortex_agents\\error_corrector\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\cortex_agents\\error_corrector\\parsers\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\cortex_agents\\error_corrector\\strategies\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\cortex_agents\\error_corrector\\validators\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\cortex_agents\\health_validator\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\cortex_agents\\health_validator\\reporting\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\cortex_agents\\health_validator\\validators\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\cortex_agents\\strategic\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\cortex_agents\\tactical\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\cortex_agents\\test_generator\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\cortex_agents\\test_generator\\analyzers\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\cortex_agents\\test_generator\\generators\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\cortex_agents\\test_generator\\templates\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\cortex_agents\\work_planner\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\cortex_agents\\work_planner\\strategies\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\crawler\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\crawlers\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\crawlers\\analyzers\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\dashboard\\analyzers\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\dashboard\\application\\dtos\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\dashboard\\application\\use_cases\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\dashboard\\collectors\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\dashboard\\consolidation\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\dashboard\\domain\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\dashboard\\domain\\entities\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\dashboard\\domain\\repositories\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\dashboard\\infrastructure\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\dashboard\\infrastructure\\repositories\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\dashboard\\orchestrators\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\dashboard\\presentation\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\dashboard\\reconciliation\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\dashboard\\reconciliation\\models\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\dashboard\\reconciliation\\normalizers\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\dashboard\\reconciliation\\validators\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\dashboard\\schema\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\dashboard\\security\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\deployment\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\discovery\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\documentation\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\documentation\\discovery\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\domain\\common\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\domain\\events\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\domain\\repositories\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\domain\\specifications\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\domain\\value_objects\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\enrichers\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\entry_point\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\epmo\\brain\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\epmo\\documentation\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\epmo\\error_handling\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\epmo\\health\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\epmo\\health\\validators\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\epmo\\monitoring\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\epmo\\performance\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\epmo\\security\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\feedback\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\generators\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\governance\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\governance\\mixins\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\infrastructure\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\infrastructure\\persistence\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\infrastructure\\persistence\\repositories\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\intelligence\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\intelligence\\analyzers\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\intelligence\\parsers\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\learning\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\llm\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\llm\\adapters\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\metrics\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\operations\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\operations\\crawlers\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\operations\\modules\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\operations\\modules\\architectural\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\operations\\modules\\cleanup\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\operations\\modules\\conversations\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\operations\\modules\\dashboard\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\operations\\modules\\demo\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\operations\\modules\\deploy\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\operations\\modules\\design_sync\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\operations\\modules\\diagrams\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\operations\\modules\\feedback\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\operations\\modules\\feedback\\collectors\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\operations\\modules\\git_protection\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\operations\\modules\\ideas\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\operations\\modules\\learning\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\operations\\modules\\optimization\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\operations\\modules\\orchestration\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\operations\\modules\\publish\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\operations\\modules\\system\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\orchestrators\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\plugins\\integrations\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\policy\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\remediation\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\reporting\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\response_templates\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\setup\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\setup\\models\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\setup\\modules\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\tdd\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\test_discovery\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\tier0\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\tier1\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\tier1\\conversations\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\tier1\\entities\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\tier1\\fifo\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\tier1\\lifecycle\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\tier1\\messages\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\tier1\\sessions\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\tier2\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\tier2\\knowledge_graph\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\tier2\\knowledge_graph\\database\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\tier2\\knowledge_graph\\patterns\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\tier2\\knowledge_graph\\relationships\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\tier2\\knowledge_graph\\tags\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\tier3\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\tier3\\analysis\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\tier3\\metrics\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\tier3\\orchestrators\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\tier3\\privacy\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\tier3\\storage\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\tier3\\visualization\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\track_a\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\track_a\\integrations\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\utils\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\validation\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\validators\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\vision\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\workflows\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\workflows\\stages\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\agents\\code_executor\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\agents\\error_corrector\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\agents\\health_validator\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\benchmarks\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\caching\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\cognitive\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\discovery\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\edge_cases\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\generators\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\integration\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\intelligence\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\learning\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\mocks\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\operations\\admin\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\operations\\modules\\admin\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\operations\\modules\\conversations\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\operations\\modules\\optimize\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\performance\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\platform_tests\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\plugins\\refactor\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\remediation\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\reporting\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\response_templates\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\setup\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\staleness\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\test_generator\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\tier0\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\tier1\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\tier1\\conversations\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\tier1\\entities\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\tier1\\fifo\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\tier1\\messages\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\tier2\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\tier2\\knowledge_graph\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\tier3\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\tier3\\analysis\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\tier3\\metrics\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\tier3\\storage\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\unit\\application\\validation\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\unit\\domain\\specifications\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\unit\\infrastructure\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\validation\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\validators\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "tests\\workflows\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      },
+      {
+        "filename": "__init__.py",
+        "primary": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+        "removed": "src\\cortex_agents\\code_executor\\backup\\__init__.py",
+        "checkpoint": "checkpoint: before removing __init__.py"
+      }
+    ],
+    "failed": [],
+    "skipped": []
+  },
+  "import_redirects": {
+    "examples\\request_validator\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "examples.request_validator.__init__",
+      "confidence": 2160
+    },
+    "src\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.__init__",
+      "confidence": 2160
+    },
+    "src\\agents\\estimation\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.agents.estimation.__init__",
+      "confidence": 2160
+    },
+    "src\\agents\\security\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.agents.security.__init__",
+      "confidence": 2160
+    },
+    "src\\application\\behaviors\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.application.behaviors.__init__",
+      "confidence": 2160
+    },
+    "src\\application\\common\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.application.common.__init__",
+      "confidence": 2160
+    },
+    "src\\application\\validation\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.application.validation.__init__",
+      "confidence": 2160
+    },
+    "src\\brain\\tier1\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.brain.tier1.__init__",
+      "confidence": 2160
+    },
+    "src\\brain_transfer\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.brain_transfer.__init__",
+      "confidence": 2160
+    },
+    "src\\caching\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.caching.__init__",
+      "confidence": 2160
+    },
+    "src\\cognitive\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.cognitive.__init__",
+      "confidence": 2160
+    },
+    "src\\collectors\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.collectors.__init__",
+      "confidence": 2160
+    },
+    "src\\conversation_capture\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.conversation_capture.__init__",
+      "confidence": 2160
+    },
+    "src\\core\\context_management\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.core.context_management.__init__",
+      "confidence": 2160
+    },
+    "src\\cortex_agents\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.cortex_agents.__init__",
+      "confidence": 2160
+    },
+    "src\\cortex_agents\\code_executor\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.cortex_agents.code_executor.__init__",
+      "confidence": 2160
+    },
+    "src\\cortex_agents\\code_executor\\operations\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.cortex_agents.code_executor.operations.__init__",
+      "confidence": 2160
+    },
+    "src\\cortex_agents\\code_executor\\validators\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.cortex_agents.code_executor.validators.__init__",
+      "confidence": 2160
+    },
+    "src\\cortex_agents\\error_corrector\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.cortex_agents.error_corrector.__init__",
+      "confidence": 2160
+    },
+    "src\\cortex_agents\\error_corrector\\parsers\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.cortex_agents.error_corrector.parsers.__init__",
+      "confidence": 2160
+    },
+    "src\\cortex_agents\\error_corrector\\strategies\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.cortex_agents.error_corrector.strategies.__init__",
+      "confidence": 2160
+    },
+    "src\\cortex_agents\\error_corrector\\validators\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.cortex_agents.error_corrector.validators.__init__",
+      "confidence": 2160
+    },
+    "src\\cortex_agents\\health_validator\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.cortex_agents.health_validator.__init__",
+      "confidence": 2160
+    },
+    "src\\cortex_agents\\health_validator\\reporting\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.cortex_agents.health_validator.reporting.__init__",
+      "confidence": 2160
+    },
+    "src\\cortex_agents\\health_validator\\validators\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.cortex_agents.health_validator.validators.__init__",
+      "confidence": 2160
+    },
+    "src\\cortex_agents\\strategic\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.cortex_agents.strategic.__init__",
+      "confidence": 2160
+    },
+    "src\\cortex_agents\\tactical\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.cortex_agents.tactical.__init__",
+      "confidence": 2160
+    },
+    "src\\cortex_agents\\test_generator\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.cortex_agents.test_generator.__init__",
+      "confidence": 2160
+    },
+    "src\\cortex_agents\\test_generator\\analyzers\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.cortex_agents.test_generator.analyzers.__init__",
+      "confidence": 2160
+    },
+    "src\\cortex_agents\\test_generator\\generators\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.cortex_agents.test_generator.generators.__init__",
+      "confidence": 2160
+    },
+    "src\\cortex_agents\\test_generator\\templates\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.cortex_agents.test_generator.templates.__init__",
+      "confidence": 2160
+    },
+    "src\\cortex_agents\\work_planner\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.cortex_agents.work_planner.__init__",
+      "confidence": 2160
+    },
+    "src\\cortex_agents\\work_planner\\strategies\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.cortex_agents.work_planner.strategies.__init__",
+      "confidence": 2160
+    },
+    "src\\crawler\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.crawler.__init__",
+      "confidence": 2160
+    },
+    "src\\crawlers\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.crawlers.__init__",
+      "confidence": 2160
+    },
+    "src\\crawlers\\analyzers\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.crawlers.analyzers.__init__",
+      "confidence": 2160
+    },
+    "src\\dashboard\\analyzers\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.dashboard.analyzers.__init__",
+      "confidence": 2160
+    },
+    "src\\dashboard\\application\\dtos\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.dashboard.application.dtos.__init__",
+      "confidence": 2160
+    },
+    "src\\dashboard\\application\\use_cases\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.dashboard.application.use_cases.__init__",
+      "confidence": 2160
+    },
+    "src\\dashboard\\collectors\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.dashboard.collectors.__init__",
+      "confidence": 2160
+    },
+    "src\\dashboard\\consolidation\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.dashboard.consolidation.__init__",
+      "confidence": 2160
+    },
+    "src\\dashboard\\domain\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.dashboard.domain.__init__",
+      "confidence": 2160
+    },
+    "src\\dashboard\\domain\\entities\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.dashboard.domain.entities.__init__",
+      "confidence": 2160
+    },
+    "src\\dashboard\\domain\\repositories\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.dashboard.domain.repositories.__init__",
+      "confidence": 2160
+    },
+    "src\\dashboard\\infrastructure\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.dashboard.infrastructure.__init__",
+      "confidence": 2160
+    },
+    "src\\dashboard\\infrastructure\\repositories\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.dashboard.infrastructure.repositories.__init__",
+      "confidence": 2160
+    },
+    "src\\dashboard\\orchestrators\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.dashboard.orchestrators.__init__",
+      "confidence": 2160
+    },
+    "src\\dashboard\\presentation\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.dashboard.presentation.__init__",
+      "confidence": 2160
+    },
+    "src\\dashboard\\reconciliation\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.dashboard.reconciliation.__init__",
+      "confidence": 2160
+    },
+    "src\\dashboard\\reconciliation\\models\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.dashboard.reconciliation.models.__init__",
+      "confidence": 2160
+    },
+    "src\\dashboard\\reconciliation\\normalizers\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.dashboard.reconciliation.normalizers.__init__",
+      "confidence": 2160
+    },
+    "src\\dashboard\\reconciliation\\validators\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.dashboard.reconciliation.validators.__init__",
+      "confidence": 2160
+    },
+    "src\\dashboard\\schema\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.dashboard.schema.__init__",
+      "confidence": 2160
+    },
+    "src\\dashboard\\security\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.dashboard.security.__init__",
+      "confidence": 2160
+    },
+    "src\\deployment\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.deployment.__init__",
+      "confidence": 2160
+    },
+    "src\\discovery\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.discovery.__init__",
+      "confidence": 2160
+    },
+    "src\\documentation\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.documentation.__init__",
+      "confidence": 2160
+    },
+    "src\\documentation\\discovery\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.documentation.discovery.__init__",
+      "confidence": 2160
+    },
+    "src\\domain\\common\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.domain.common.__init__",
+      "confidence": 2160
+    },
+    "src\\domain\\events\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.domain.events.__init__",
+      "confidence": 2160
+    },
+    "src\\domain\\repositories\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.domain.repositories.__init__",
+      "confidence": 2160
+    },
+    "src\\domain\\specifications\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.domain.specifications.__init__",
+      "confidence": 2160
+    },
+    "src\\domain\\value_objects\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.domain.value_objects.__init__",
+      "confidence": 2160
+    },
+    "src\\enrichers\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.enrichers.__init__",
+      "confidence": 2160
+    },
+    "src\\entry_point\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.entry_point.__init__",
+      "confidence": 2160
+    },
+    "src\\epmo\\brain\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.epmo.brain.__init__",
+      "confidence": 2160
+    },
+    "src\\epmo\\documentation\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.epmo.documentation.__init__",
+      "confidence": 2160
+    },
+    "src\\epmo\\error_handling\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.epmo.error_handling.__init__",
+      "confidence": 2160
+    },
+    "src\\epmo\\health\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.epmo.health.__init__",
+      "confidence": 2160
+    },
+    "src\\epmo\\health\\validators\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.epmo.health.validators.__init__",
+      "confidence": 2160
+    },
+    "src\\epmo\\monitoring\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.epmo.monitoring.__init__",
+      "confidence": 2160
+    },
+    "src\\epmo\\performance\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.epmo.performance.__init__",
+      "confidence": 2160
+    },
+    "src\\epmo\\security\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.epmo.security.__init__",
+      "confidence": 2160
+    },
+    "src\\feedback\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.feedback.__init__",
+      "confidence": 2160
+    },
+    "src\\generators\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.generators.__init__",
+      "confidence": 2160
+    },
+    "src\\governance\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.governance.__init__",
+      "confidence": 2160
+    },
+    "src\\governance\\mixins\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.governance.mixins.__init__",
+      "confidence": 2160
+    },
+    "src\\infrastructure\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.infrastructure.__init__",
+      "confidence": 2160
+    },
+    "src\\infrastructure\\persistence\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.infrastructure.persistence.__init__",
+      "confidence": 2160
+    },
+    "src\\infrastructure\\persistence\\repositories\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.infrastructure.persistence.repositories.__init__",
+      "confidence": 2160
+    },
+    "src\\intelligence\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.intelligence.__init__",
+      "confidence": 2160
+    },
+    "src\\intelligence\\analyzers\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.intelligence.analyzers.__init__",
+      "confidence": 2160
+    },
+    "src\\intelligence\\parsers\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.intelligence.parsers.__init__",
+      "confidence": 2160
+    },
+    "src\\learning\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.learning.__init__",
+      "confidence": 2160
+    },
+    "src\\llm\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.llm.__init__",
+      "confidence": 2160
+    },
+    "src\\llm\\adapters\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.llm.adapters.__init__",
+      "confidence": 2160
+    },
+    "src\\metrics\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.metrics.__init__",
+      "confidence": 2160
+    },
+    "src\\operations\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.operations.__init__",
+      "confidence": 2160
+    },
+    "src\\operations\\crawlers\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.operations.crawlers.__init__",
+      "confidence": 2160
+    },
+    "src\\operations\\modules\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.operations.modules.__init__",
+      "confidence": 2160
+    },
+    "src\\operations\\modules\\architectural\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.operations.modules.architectural.__init__",
+      "confidence": 2160
+    },
+    "src\\operations\\modules\\cleanup\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.operations.modules.cleanup.__init__",
+      "confidence": 2160
+    },
+    "src\\operations\\modules\\conversations\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.operations.modules.conversations.__init__",
+      "confidence": 2160
+    },
+    "src\\operations\\modules\\dashboard\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.operations.modules.dashboard.__init__",
+      "confidence": 2160
+    },
+    "src\\operations\\modules\\demo\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.operations.modules.demo.__init__",
+      "confidence": 2160
+    },
+    "src\\operations\\modules\\deploy\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.operations.modules.deploy.__init__",
+      "confidence": 2160
+    },
+    "src\\operations\\modules\\design_sync\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.operations.modules.design_sync.__init__",
+      "confidence": 2160
+    },
+    "src\\operations\\modules\\diagrams\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.operations.modules.diagrams.__init__",
+      "confidence": 2160
+    },
+    "src\\operations\\modules\\feedback\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.operations.modules.feedback.__init__",
+      "confidence": 2160
+    },
+    "src\\operations\\modules\\feedback\\collectors\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.operations.modules.feedback.collectors.__init__",
+      "confidence": 2160
+    },
+    "src\\operations\\modules\\git_protection\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.operations.modules.git_protection.__init__",
+      "confidence": 2160
+    },
+    "src\\operations\\modules\\ideas\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.operations.modules.ideas.__init__",
+      "confidence": 2160
+    },
+    "src\\operations\\modules\\learning\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.operations.modules.learning.__init__",
+      "confidence": 2160
+    },
+    "src\\operations\\modules\\optimization\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.operations.modules.optimization.__init__",
+      "confidence": 2160
+    },
+    "src\\operations\\modules\\orchestration\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.operations.modules.orchestration.__init__",
+      "confidence": 2160
+    },
+    "src\\operations\\modules\\publish\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.operations.modules.publish.__init__",
+      "confidence": 2160
+    },
+    "src\\operations\\modules\\system\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.operations.modules.system.__init__",
+      "confidence": 2160
+    },
+    "src\\orchestrators\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.orchestrators.__init__",
+      "confidence": 2160
+    },
+    "src\\plugins\\integrations\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.plugins.integrations.__init__",
+      "confidence": 2160
+    },
+    "src\\policy\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.policy.__init__",
+      "confidence": 2160
+    },
+    "src\\remediation\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.remediation.__init__",
+      "confidence": 2160
+    },
+    "src\\reporting\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.reporting.__init__",
+      "confidence": 2160
+    },
+    "src\\response_templates\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.response_templates.__init__",
+      "confidence": 2160
+    },
+    "src\\setup\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.setup.__init__",
+      "confidence": 2160
+    },
+    "src\\setup\\models\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.setup.models.__init__",
+      "confidence": 2160
+    },
+    "src\\setup\\modules\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.setup.modules.__init__",
+      "confidence": 2160
+    },
+    "src\\tdd\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.tdd.__init__",
+      "confidence": 2160
+    },
+    "src\\test_discovery\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.test_discovery.__init__",
+      "confidence": 2160
+    },
+    "src\\tier0\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.tier0.__init__",
+      "confidence": 2160
+    },
+    "src\\tier1\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.tier1.__init__",
+      "confidence": 2160
+    },
+    "src\\tier1\\conversations\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.tier1.conversations.__init__",
+      "confidence": 2160
+    },
+    "src\\tier1\\entities\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.tier1.entities.__init__",
+      "confidence": 2160
+    },
+    "src\\tier1\\fifo\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.tier1.fifo.__init__",
+      "confidence": 2160
+    },
+    "src\\tier1\\lifecycle\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.tier1.lifecycle.__init__",
+      "confidence": 2160
+    },
+    "src\\tier1\\messages\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.tier1.messages.__init__",
+      "confidence": 2160
+    },
+    "src\\tier1\\sessions\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.tier1.sessions.__init__",
+      "confidence": 2160
+    },
+    "src\\tier2\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.tier2.__init__",
+      "confidence": 2160
+    },
+    "src\\tier2\\knowledge_graph\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.tier2.knowledge_graph.__init__",
+      "confidence": 2160
+    },
+    "src\\tier2\\knowledge_graph\\database\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.tier2.knowledge_graph.database.__init__",
+      "confidence": 2160
+    },
+    "src\\tier2\\knowledge_graph\\patterns\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.tier2.knowledge_graph.patterns.__init__",
+      "confidence": 2160
+    },
+    "src\\tier2\\knowledge_graph\\relationships\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.tier2.knowledge_graph.relationships.__init__",
+      "confidence": 2160
+    },
+    "src\\tier2\\knowledge_graph\\tags\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.tier2.knowledge_graph.tags.__init__",
+      "confidence": 2160
+    },
+    "src\\tier3\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.tier3.__init__",
+      "confidence": 2160
+    },
+    "src\\tier3\\analysis\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.tier3.analysis.__init__",
+      "confidence": 2160
+    },
+    "src\\tier3\\metrics\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.tier3.metrics.__init__",
+      "confidence": 2160
+    },
+    "src\\tier3\\orchestrators\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.tier3.orchestrators.__init__",
+      "confidence": 2160
+    },
+    "src\\tier3\\privacy\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.tier3.privacy.__init__",
+      "confidence": 2160
+    },
+    "src\\tier3\\storage\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.tier3.storage.__init__",
+      "confidence": 2160
+    },
+    "src\\tier3\\visualization\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.tier3.visualization.__init__",
+      "confidence": 2160
+    },
+    "src\\track_a\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.track_a.__init__",
+      "confidence": 2160
+    },
+    "src\\track_a\\integrations\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.track_a.integrations.__init__",
+      "confidence": 2160
+    },
+    "src\\utils\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.utils.__init__",
+      "confidence": 2160
+    },
+    "src\\validation\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.validation.__init__",
+      "confidence": 2160
+    },
+    "src\\validators\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.validators.__init__",
+      "confidence": 2160
+    },
+    "src\\vision\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.vision.__init__",
+      "confidence": 2160
+    },
+    "src\\workflows\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.workflows.__init__",
+      "confidence": 2160
+    },
+    "src\\workflows\\stages\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.workflows.stages.__init__",
+      "confidence": 2160
+    },
+    "tests\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.__init__",
+      "confidence": 2160
+    },
+    "tests\\agents\\code_executor\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.agents.code_executor.__init__",
+      "confidence": 2160
+    },
+    "tests\\agents\\error_corrector\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.agents.error_corrector.__init__",
+      "confidence": 2160
+    },
+    "tests\\agents\\health_validator\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.agents.health_validator.__init__",
+      "confidence": 2160
+    },
+    "tests\\benchmarks\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.benchmarks.__init__",
+      "confidence": 2160
+    },
+    "tests\\caching\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.caching.__init__",
+      "confidence": 2160
+    },
+    "tests\\cognitive\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.cognitive.__init__",
+      "confidence": 2160
+    },
+    "tests\\discovery\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.discovery.__init__",
+      "confidence": 2160
+    },
+    "tests\\edge_cases\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.edge_cases.__init__",
+      "confidence": 2160
+    },
+    "tests\\generators\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.generators.__init__",
+      "confidence": 2160
+    },
+    "tests\\integration\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.integration.__init__",
+      "confidence": 2160
+    },
+    "tests\\intelligence\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.intelligence.__init__",
+      "confidence": 2160
+    },
+    "tests\\learning\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.learning.__init__",
+      "confidence": 2160
+    },
+    "tests\\mocks\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.mocks.__init__",
+      "confidence": 2160
+    },
+    "tests\\operations\\admin\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.operations.admin.__init__",
+      "confidence": 2160
+    },
+    "tests\\operations\\modules\\admin\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.operations.modules.admin.__init__",
+      "confidence": 2160
+    },
+    "tests\\operations\\modules\\conversations\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.operations.modules.conversations.__init__",
+      "confidence": 2160
+    },
+    "tests\\operations\\modules\\optimize\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.operations.modules.optimize.__init__",
+      "confidence": 2160
+    },
+    "tests\\performance\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.performance.__init__",
+      "confidence": 2160
+    },
+    "tests\\platform_tests\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.platform_tests.__init__",
+      "confidence": 2160
+    },
+    "tests\\plugins\\refactor\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.plugins.refactor.__init__",
+      "confidence": 2160
+    },
+    "tests\\remediation\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.remediation.__init__",
+      "confidence": 2160
+    },
+    "tests\\reporting\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.reporting.__init__",
+      "confidence": 2160
+    },
+    "tests\\response_templates\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.response_templates.__init__",
+      "confidence": 2160
+    },
+    "tests\\setup\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.setup.__init__",
+      "confidence": 2160
+    },
+    "tests\\staleness\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.staleness.__init__",
+      "confidence": 2160
+    },
+    "tests\\test_generator\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.test_generator.__init__",
+      "confidence": 2160
+    },
+    "tests\\tier0\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.tier0.__init__",
+      "confidence": 2160
+    },
+    "tests\\tier1\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.tier1.__init__",
+      "confidence": 2160
+    },
+    "tests\\tier1\\conversations\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.tier1.conversations.__init__",
+      "confidence": 2160
+    },
+    "tests\\tier1\\entities\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.tier1.entities.__init__",
+      "confidence": 2160
+    },
+    "tests\\tier1\\fifo\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.tier1.fifo.__init__",
+      "confidence": 2160
+    },
+    "tests\\tier1\\messages\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.tier1.messages.__init__",
+      "confidence": 2160
+    },
+    "tests\\tier2\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.tier2.__init__",
+      "confidence": 2160
+    },
+    "tests\\tier2\\knowledge_graph\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.tier2.knowledge_graph.__init__",
+      "confidence": 2160
+    },
+    "tests\\tier3\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.tier3.__init__",
+      "confidence": 2160
+    },
+    "tests\\tier3\\analysis\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.tier3.analysis.__init__",
+      "confidence": 2160
+    },
+    "tests\\tier3\\metrics\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.tier3.metrics.__init__",
+      "confidence": 2160
+    },
+    "tests\\tier3\\storage\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.tier3.storage.__init__",
+      "confidence": 2160
+    },
+    "tests\\unit\\application\\validation\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.unit.application.validation.__init__",
+      "confidence": 2160
+    },
+    "tests\\unit\\domain\\specifications\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.unit.domain.specifications.__init__",
+      "confidence": 2160
+    },
+    "tests\\unit\\infrastructure\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.unit.infrastructure.__init__",
+      "confidence": 2160
+    },
+    "tests\\validation\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.validation.__init__",
+      "confidence": 2160
+    },
+    "tests\\validators\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.validators.__init__",
+      "confidence": 2160
+    },
+    "tests\\workflows\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "tests.workflows.__init__",
+      "confidence": 2160
+    },
+    "src\\cortex_agents\\code_executor\\backup\\__init__.py": {
+      "redirect_to": "cortex-brain\\admin\\scripts\\feedback\\__init__.py",
+      "primary_module": "cortex-brain.admin.scripts.feedback.__init__",
+      "secondary_module": "src.cortex_agents.code_executor.backup.__init__",
+      "confidence": 2160
+    },
+    "src\\operations\\base_operation_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\base_operation_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.base_operation_module",
+      "secondary_module": "src.operations.base_operation_module",
+      "confidence": 30
+    },
+    "src\\operations\\header_formatter.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\header_formatter.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.header_formatter",
+      "secondary_module": "src.operations.header_formatter",
+      "confidence": 30
+    },
+    "src\\operations\\header_utils.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\header_utils.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.header_utils",
+      "secondary_module": "src.operations.header_utils",
+      "confidence": 30
+    },
+    "src\\operations\\help_command.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\help_command.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.help_command",
+      "secondary_module": "src.operations.help_command",
+      "confidence": 30
+    },
+    "src\\operations\\operations_orchestrator.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\operations_orchestrator.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.operations_orchestrator",
+      "secondary_module": "src.operations.operations_orchestrator",
+      "confidence": 30
+    },
+    "src\\operations\\operation_factory.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\operation_factory.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.operation_factory",
+      "secondary_module": "src.operations.operation_factory",
+      "confidence": 30
+    },
+    "src\\operations\\crawlers\\brain_inspector.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\crawlers\\brain_inspector.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.crawlers.brain_inspector",
+      "secondary_module": "src.operations.crawlers.brain_inspector",
+      "confidence": 30
+    },
+    "src\\operations\\crawlers\\doc_mapper.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\crawlers\\doc_mapper.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.crawlers.doc_mapper",
+      "secondary_module": "src.operations.crawlers.doc_mapper",
+      "confidence": 30
+    },
+    "src\\operations\\crawlers\\file_scanner.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\crawlers\\file_scanner.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.crawlers.file_scanner",
+      "secondary_module": "src.operations.crawlers.file_scanner",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\cleanup\\file_scanner.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\crawlers\\file_scanner.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.crawlers.file_scanner",
+      "secondary_module": "src.operations.modules.cleanup.file_scanner",
+      "confidence": 30
+    },
+    "src\\operations\\crawlers\\git_analyzer.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\crawlers\\git_analyzer.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.crawlers.git_analyzer",
+      "secondary_module": "src.operations.crawlers.git_analyzer",
+      "confidence": 30
+    },
+    "src\\operations\\crawlers\\health_assessor.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\crawlers\\health_assessor.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.crawlers.health_assessor",
+      "secondary_module": "src.operations.crawlers.health_assessor",
+      "confidence": 30
+    },
+    "src\\operations\\crawlers\\plugin_registry.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\crawlers\\plugin_registry.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.crawlers.plugin_registry",
+      "secondary_module": "src.operations.crawlers.plugin_registry",
+      "confidence": 30
+    },
+    "src\\plugins\\plugin_registry.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\crawlers\\plugin_registry.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.crawlers.plugin_registry",
+      "secondary_module": "src.plugins.plugin_registry",
+      "confidence": 30
+    },
+    "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-user-v1.0.0\\src\\operations\\crawlers\\test_parser.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\crawlers\\test_parser.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.crawlers.test_parser",
+      "secondary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-user-v1.0.0.src.operations.crawlers.test_parser",
+      "confidence": 30
+    },
+    "src\\operations\\crawlers\\test_parser.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\crawlers\\test_parser.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.crawlers.test_parser",
+      "secondary_module": "src.operations.crawlers.test_parser",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\apply_narrator_voice_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\apply_narrator_voice_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.apply_narrator_voice_module",
+      "secondary_module": "src.operations.modules.apply_narrator_voice_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\brain_initialization_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\brain_initialization_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.brain_initialization_module",
+      "secondary_module": "src.operations.modules.brain_initialization_module",
+      "confidence": 30
+    },
+    "src\\setup\\modules\\brain_initialization_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\brain_initialization_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.brain_initialization_module",
+      "secondary_module": "src.setup.modules.brain_initialization_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\clear_python_cache_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\clear_python_cache_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.clear_python_cache_module",
+      "secondary_module": "src.operations.modules.clear_python_cache_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\conversation_tracking_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\conversation_tracking_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.conversation_tracking_module",
+      "secondary_module": "src.operations.modules.conversation_tracking_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\deploy_docs_preview_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\deploy_docs_preview_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.deploy_docs_preview_module",
+      "secondary_module": "src.operations.modules.deploy_docs_preview_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\evaluate_cortex_architecture_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\evaluate_cortex_architecture_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.evaluate_cortex_architecture_module",
+      "secondary_module": "src.operations.modules.evaluate_cortex_architecture_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\generate_cleanup_report_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\generate_cleanup_report_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.generate_cleanup_report_module",
+      "secondary_module": "src.operations.modules.generate_cleanup_report_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\generate_image_prompts_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\generate_image_prompts_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.generate_image_prompts_module",
+      "secondary_module": "src.operations.modules.generate_image_prompts_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\git_sync_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\git_sync_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.git_sync_module",
+      "secondary_module": "src.operations.modules.git_sync_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\load_protection_rules_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\load_protection_rules_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.load_protection_rules_module",
+      "secondary_module": "src.operations.modules.load_protection_rules_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\platform_detection_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\platform_detection_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.platform_detection_module",
+      "secondary_module": "src.operations.modules.platform_detection_module",
+      "confidence": 30
+    },
+    "src\\setup\\modules\\platform_detection_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\platform_detection_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.platform_detection_module",
+      "secondary_module": "src.setup.modules.platform_detection_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\project_validation_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\project_validation_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.project_validation_module",
+      "secondary_module": "src.operations.modules.project_validation_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\python_dependencies_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\python_dependencies_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modulesthon_dependencies_module",
+      "secondary_module": "src.operations.modulesthon_dependencies_module",
+      "confidence": 30
+    },
+    "src\\setup\\modules\\python_dependencies_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\python_dependencies_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modulesthon_dependencies_module",
+      "secondary_module": "src.setup.modulesthon_dependencies_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\refresh_design_docs_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\refresh_design_docs_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.refresh_design_docs_module",
+      "secondary_module": "src.operations.modules.refresh_design_docs_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\remove_orphaned_files_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\remove_orphaned_files_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.remove_orphaned_files_module",
+      "secondary_module": "src.operations.modules.remove_orphaned_files_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\scan_docstrings_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\scan_docstrings_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.scan_docstrings_module",
+      "secondary_module": "src.operations.modules.scan_docstrings_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\scan_temporary_files_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\scan_temporary_files_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.scan_temporary_files_module",
+      "secondary_module": "src.operations.modules.scan_temporary_files_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\setup_completion_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\setup_completion_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.setup_completion_module",
+      "secondary_module": "src.operations.modules.setup_completion_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\tooling_detection_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\tooling_detection_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.tooling_detection_module",
+      "secondary_module": "src.operations.modules.tooling_detection_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\tooling_installer_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\tooling_installer_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.tooling_installer_module",
+      "secondary_module": "src.operations.modules.tooling_installer_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\tooling_verification_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\tooling_verification_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.tooling_verification_module",
+      "secondary_module": "src.operations.modules.tooling_verification_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\vacuum_sqlite_databases_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\vacuum_sqlite_databases_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.vacuum_sqlite_databases_module",
+      "secondary_module": "src.operations.modules.vacuum_sqlite_databases_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\virtual_environment_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\virtual_environment_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.virtual_environment_module",
+      "secondary_module": "src.operations.modules.virtual_environment_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\vision_api_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\vision_api_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.vision_api_module",
+      "secondary_module": "src.operations.modules.vision_api_module",
+      "confidence": 30
+    },
+    "src\\setup\\modules\\vision_api_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\vision_api_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.vision_api_module",
+      "secondary_module": "src.setup.modules.vision_api_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\cleanup\\cleanup_orchestrator.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\cleanup\\cleanup_orchestrator.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.cleanup.cleanup_orchestrator",
+      "secondary_module": "src.operations.modules.cleanup.cleanup_orchestrator",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\orchestration\\cleanup_orchestrator.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\cleanup\\cleanup_orchestrator.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.cleanup.cleanup_orchestrator",
+      "secondary_module": "src.operations.modules.orchestration.cleanup_orchestrator",
+      "confidence": 30
+    },
+    "src\\plugins\\cleanup_orchestrator.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\cleanup\\cleanup_orchestrator.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.cleanup.cleanup_orchestrator",
+      "secondary_module": "src.plugins.cleanup_orchestrator",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\design_sync\\design_sync_orchestrator.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\design_sync\\design_sync_orchestrator.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.design_sync.design_sync_orchestrator",
+      "secondary_module": "src.operations.modules.design_sync.design_sync_orchestrator",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\design_sync\\track_config.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\design_sync\\track_config.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.design_sync.track_config",
+      "secondary_module": "src.operations.modules.design_sync.track_config",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\design_sync\\track_templates.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\design_sync\\track_templates.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.design_sync.track_templates",
+      "secondary_module": "src.operations.modules.design_sync.track_templates",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\optimization\\optimize_cortex_orchestrator.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\optimization\\optimize_cortex_orchestrator.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.optimization.optimize_cortex_orchestrator",
+      "secondary_module": "src.operations.modules.optimization.optimize_cortex_orchestrator",
+      "confidence": 30
+    },
+    "cortex-brain\\backups\\obsolete-code\\cleanup_20251204_063039\\src\\orchestrators\\git_checkpoint_orchestrator.py": {
+      "redirect_to": "cortex-brain\\backups\\obsolete-code\\cleanup_20251203_172219\\src\\orchestrators\\git_checkpoint_orchestrator.py",
+      "primary_module": "cortex-brain.backups.obsolete-code.cleanup_20251203_172219.src.orchestrators.git_checkpoint_orchestrator",
+      "secondary_module": "cortex-brain.backups.obsolete-code.cleanup_20251204_063039.src.orchestrators.git_checkpoint_orchestrator",
+      "confidence": 30
+    },
+    "cortex-brain\\backups\\obsolete-code\\cleanup_20251204_104559\\src\\orchestrators\\git_checkpoint_orchestrator.py": {
+      "redirect_to": "cortex-brain\\backups\\obsolete-code\\cleanup_20251203_172219\\src\\orchestrators\\git_checkpoint_orchestrator.py",
+      "primary_module": "cortex-brain.backups.obsolete-code.cleanup_20251203_172219.src.orchestrators.git_checkpoint_orchestrator",
+      "secondary_module": "cortex-brain.backups.obsolete-code.cleanup_20251204_104559.src.orchestrators.git_checkpoint_orchestrator",
+      "confidence": 30
+    },
+    "src\\orchestrators\\git_checkpoint_orchestrator.py": {
+      "redirect_to": "cortex-brain\\backups\\obsolete-code\\cleanup_20251203_172219\\src\\orchestrators\\git_checkpoint_orchestrator.py",
+      "primary_module": "cortex-brain.backups.obsolete-code.cleanup_20251203_172219.src.orchestrators.git_checkpoint_orchestrator",
+      "secondary_module": "src.orchestrators.git_checkpoint_orchestrator",
+      "confidence": 30
+    },
+    "cortex-brain\\backups\\obsolete-code\\cleanup_20251204_104559\\src\\orchestrators\\planning_orchestrator.py": {
+      "redirect_to": "cortex-brain\\backups\\obsolete-code\\cleanup_20251204_063039\\src\\orchestrators\\planning_orchestrator.py",
+      "primary_module": "cortex-brain.backups.obsolete-code.cleanup_20251204_063039.src.orchestrators.planning_orchestrator",
+      "secondary_module": "cortex-brain.backups.obsolete-code.cleanup_20251204_104559.src.orchestrators.planning_orchestrator",
+      "confidence": 30
+    },
+    "src\\orchestrators\\planning_orchestrator.py": {
+      "redirect_to": "cortex-brain\\backups\\obsolete-code\\cleanup_20251204_063039\\src\\orchestrators\\planning_orchestrator.py",
+      "primary_module": "cortex-brain.backups.obsolete-code.cleanup_20251204_063039.src.orchestrators.planning_orchestrator",
+      "secondary_module": "src.orchestrators.planning_orchestrator",
+      "confidence": 30
+    }
+  },
+  "manual_review_required": {
+    "medium_confidence": [
+      "base_operation_module.py",
+      "header_formatter.py",
+      "header_utils.py",
+      "help_command.py",
+      "operations_orchestrator.py",
+      "operation_factory.py",
+      "brain_inspector.py",
+      "doc_mapper.py",
+      "file_scanner.py",
+      "git_analyzer.py",
+      "health_assessor.py",
+      "plugin_registry.py",
+      "test_parser.py",
+      "apply_narrator_voice_module.py",
+      "brain_initialization_module.py",
+      "clear_python_cache_module.py",
+      "conversation_tracking_module.py",
+      "deploy_docs_preview_module.py",
+      "evaluate_cortex_architecture_module.py",
+      "generate_cleanup_report_module.py",
+      "generate_image_prompts_module.py",
+      "git_sync_module.py",
+      "load_protection_rules_module.py",
+      "platform_detection_module.py",
+      "project_validation_module.py",
+      "python_dependencies_module.py",
+      "refresh_design_docs_module.py",
+      "remove_orphaned_files_module.py",
+      "scan_docstrings_module.py",
+      "scan_temporary_files_module.py",
+      "setup_completion_module.py",
+      "tooling_detection_module.py",
+      "tooling_installer_module.py",
+      "tooling_verification_module.py",
+      "vacuum_sqlite_databases_module.py",
+      "virtual_environment_module.py",
+      "vision_api_module.py",
+      "cleanup_orchestrator.py",
+      "design_sync_orchestrator.py",
+      "track_config.py",
+      "track_templates.py",
+      "optimize_cortex_orchestrator.py",
+      "git_checkpoint_orchestrator.py",
+      "planning_orchestrator.py"
+    ],
+    "low_confidence": [
+      "conftest.py",
+      "config.py",
+      "context_injector.py",
+      "cortex_help.py",
+      "router.py",
+      "session_manager.py",
+      "conversation_manager.py",
+      "entity_extractor.py",
+      "file_tracker.py",
+      "request_logger.py",
+      "tier1_api.py",
+      "plugin_processor.py",
+      "plugin_schema.py",
+      "agent_types.py",
+      "base_agent.py",
+      "change_governor.py",
+      "commit_handler.py",
+      "error_corrector.py",
+      "exceptions.py",
+      "intent_router.py",
+      "learning_capture_agent.py",
+      "screenshot_analyzer.py",
+      "session_resumer.py",
+      "utils.py",
+      "agent.py",
+      "base_operation.py",
+      "batch_operation.py",
+      "create_operation.py",
+      "delete_operation.py",
+      "edit_operation.py",
+      "syntax_validator.py",
+      "base_parser.py",
+      "import_parser.py",
+      "linter_parser.py",
+      "pytest_parser.py",
+      "runtime_parser.py",
+      "syntax_parser.py",
+      "base_strategy.py",
+      "import_strategy.py",
+      "indentation_strategy.py",
+      "package_strategy.py",
+      "syntax_strategy.py",
+      "fix_validator.py",
+      "path_validator.py",
+      "analyzer.py",
+      "formatter.py",
+      "base_validator.py",
+      "database_validator.py",
+      "disk_validator.py",
+      "git_validator.py",
+      "performance_validator.py",
+      "test_validator.py",
+      "interactive_planner.py",
+      "question_generator.py",
+      "pattern_learner.py",
+      "test_counter.py",
+      "class_analyzer.py",
+      "code_analyzer.py",
+      "function_analyzer.py",
+      "template_manager.py",
+      "complexity_analyzer.py",
+      "dependency_manager.py",
+      "estimator.py",
+      "pattern_storage.py",
+      "priority_calculator.py",
+      "risk_assessor.py",
+      "velocity_tracker.py",
+      "workflow_finder.py",
+      "task_generator.py",
+      "base_crawler.py",
+      "orchestrator.py",
+      "tooling_crawler.py",
+      "ui_crawler.py",
+      "cortex_entry.py",
+      "cortex_entry_workflows.py",
+      "pagination.py",
+      "request_parser.py",
+      "response_formatter.py",
+      "setup_command.py",
+      "fallback_manager.py",
+      "memory_injector.py",
+      "types.py",
+      "anthropic_adapter.py",
+      "base.py",
+      "local_adapter.py",
+      "openai_adapter.py",
+      "run_all_migrations.py",
+      "test_migration.py",
+      "base_plugin.py",
+      "cleanup_plugin.py",
+      "code_review_plugin.py",
+      "command_registry.py",
+      "configuration_wizard_plugin.py",
+      "doc_refresh_plugin.py",
+      "extension_scaffold_plugin.py",
+      "hooks.py",
+      "platform_switch_plugin.py",
+      "system_refactor_plugin.py",
+      "azure_devops_integration.py",
+      "github_integration.py",
+      "template_loader.py",
+      "template_registry.py",
+      "template_renderer.py",
+      "base_setup_module.py",
+      "module_factory.py",
+      "setup_orchestrator.py",
+      "brain_protector.py",
+      "cleanup_hook.py",
+      "context_optimizer.py",
+      "coverage_reporter.py",
+      "git_isolation.py",
+      "governance_engine.py",
+      "integrity_checker.py",
+      "optimized_context_loader.py",
+      "skull_protector.py",
+      "test_analyzer.py",
+      "test_discovery.py",
+      "tier_validator.py",
+      "cache_monitor.py",
+      "migrate_tier1.py",
+      "ml_context_optimizer.py",
+      "session_token.py",
+      "test_tier1.py",
+      "token_metrics.py",
+      "vision_api.py",
+      "working_memory.py",
+      "work_state_manager.py",
+      "conversation_search.py",
+      "queue_manager.py",
+      "message_store.py",
+      "amnesia.py",
+      "migrate_add_boundaries.py",
+      "migrate_tier2.py",
+      "oracle_crawler.py",
+      "pattern_cleanup.py",
+      "personal_knowledge_archive.py",
+      "plan_models.py",
+      "database.py",
+      "knowledge_graph.py",
+      "connection.py",
+      "schema.py",
+      "pattern_decay.py",
+      "pattern_search.py",
+      "pattern_store.py",
+      "relationship_manager.py",
+      "tag_manager.py",
+      "context_intelligence.py",
+      "migrate_tier3.py",
+      "insight_generator.py",
+      "velocity_analyzer.py",
+      "file_metrics.py",
+      "git_metrics.py",
+      "context_store.py",
+      "checkpoint.py",
+      "feature_workflow.py",
+      "tdd_workflow.py",
+      "workflow_engine.py",
+      "workflow_pipeline.py",
+      "code_cleanup.py",
+      "doc_generator.py",
+      "dod_dor_clarifier.py",
+      "threat_modeler.py",
+      "plan_cli.py",
+      "run_alignment.py",
+      "run_cleanup.py",
+      "run_optimize.py",
+      "test_gate8_swagger.py",
+      "schema_migrator.py",
+      "brain_tests_module.py",
+      "class_test_generator.py",
+      "function_test_generator.py",
+      "incremental_test_runner.py",
+      "setup.py",
+      "dor_validator.py",
+      "conversation_handlers.py",
+      "cli.py",
+      "base_collector.py",
+      "brain_metrics_collector.py",
+      "coldfusion_analyzer.py",
+      "csharp_analyzer.py",
+      "javascript_analyzer.py",
+      "python_analyzer.py",
+      "typescript_analyzer.py",
+      "data_validator.py",
+      "architecture_graph_builder.py",
+      "template_engine.py",
+      "conversation_quality.py",
+      "remediation_engine.py",
+      "test_coverage_validator.py",
+      "report_generator.py",
+      "dashboard_generator.py",
+      "smart_hint_generator.py",
+      "brain_health_monitor.py",
+      "demo_orchestrator.py",
+      "documentation_generator.py",
+      "template_selector.py",
+      "test_integration.py",
+      "template_validator.py",
+      "relevance_scorer.py",
+      "test_git_checkpoint_integration.py",
+      "test_phase2_integration.py",
+      "test_csharp_analyzer.py",
+      "test_coldfusion_analyzer.py",
+      "test_question_router_performance.py",
+      "test_plan_cli.py"
+    ],
+    "count": 249
+  }
+}
