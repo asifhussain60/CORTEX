@@ -64,9 +64,11 @@ import json
 import logging
 import threading
 import uuid
+import yaml
 from dataclasses import dataclass, field, asdict
 from datetime import datetime
 from enum import Enum
+from pathlib import Path
 from typing import (
     Any,
     Callable,
@@ -793,6 +795,282 @@ class TodoOrchestrator:
             return [self.todos[node_id] for node_id in node_path if node_id in self.todos]
     
     # ==========================================================================
+    # EXECUTION QUEUE (Phase 4, task-2.4.2)
+    # ==========================================================================
+    
+    def get_next_tasks(self) -> List[Todo]:
+        """Get the next tasks ready for execution, prioritized.
+        
+        Returns tasks in priority order:
+        1. READY tasks first
+        2. Critical path tasks prioritized
+        3. High priority tasks first
+        
+        Returns:
+            List of Todo objects ready for execution, sorted by priority
+        """
+        with self._lock:
+            ready_tasks = self.get_ready_tasks()
+            
+            # Get critical path task IDs for prioritization
+            # Only apply critical path logic if there are actual dependencies
+            critical_path = self._calculate_critical_path()
+            has_dependencies = len(critical_path) > 1  # Single node = no dependencies
+            critical_ids = {t.id for t in critical_path} if has_dependencies else set()
+            
+            # Sort by: critical path first (if exists), then priority, then creation time
+            def sort_key(todo: Todo) -> Tuple[int, int, datetime]:
+                is_critical = 0 if todo.id in critical_ids else 1
+                priority_value = todo.priority.value
+                return (is_critical, priority_value, todo.created_at)
+            
+            sorted_tasks = sorted(ready_tasks, key=sort_key)
+            
+            # Log operation
+            self.audit_logger.log(
+                level=AuditLevel.INFO,
+                category=AuditCategory.EXECUTION,
+                component="todo_orchestrator",
+                operation="get_next_tasks",
+                message=f"Retrieved {len(sorted_tasks)} tasks for execution",
+                context={"task_count": len(sorted_tasks)},
+            )
+            
+            return sorted_tasks
+    
+    def execute_task(self, task_id: str) -> Dict[str, Any]:
+        """Mark a task as in progress and return execution context.
+        
+        Args:
+            task_id: TODO ID to execute
+            
+        Returns:
+            Dictionary with task info and execution context
+            
+        Raises:
+            ValueError: If task is not ready for execution
+        """
+        with self._lock:
+            todo = self.read_todo(task_id)
+            
+            # Verify task is ready
+            if todo.status != TodoStatus.READY:
+                raise ValueError(f"Task {task_id} is not ready (status: {todo.status})")
+            
+            # Transition to IN_PROGRESS
+            self.transition_status(task_id, TodoStatus.IN_PROGRESS)
+            
+            # Log execution start
+            self.audit_logger.log(
+                level=AuditLevel.INFO,
+                category=AuditCategory.EXECUTION,
+                component="todo_orchestrator",
+                operation="execute_task",
+                message=f"Started execution of task: {todo.title}",
+                context={"task_id": task_id, "title": todo.title},
+            )
+            
+            return {
+                "task_id": task_id,
+                "title": todo.title,
+                "description": todo.description,
+                "priority": todo.priority.value,
+                "started_at": datetime.utcnow().isoformat(),
+            }
+    
+    def mark_complete(self, task_id: str, result: Optional[Dict[str, Any]] = None) -> Todo:
+        """Mark a task as completed.
+        
+        Args:
+            task_id: TODO ID to complete
+            result: Optional result data
+            
+        Returns:
+            Updated Todo object
+        """
+        with self._lock:
+            # Transition to COMPLETED
+            todo = self.transition_status(task_id, TodoStatus.COMPLETED)
+            
+            # Store result if provided
+            if result:
+                todo.data = todo.data or {}
+                todo.data["result"] = result
+                self.todos[task_id] = todo
+            
+            # Log completion
+            self.audit_logger.log(
+                level=AuditLevel.INFO,
+                category=AuditCategory.EXECUTION,
+                component="todo_orchestrator",
+                operation="mark_complete",
+                message=f"Completed task: {todo.title}",
+                context={"task_id": task_id, "title": todo.title},
+            )
+            
+            return todo
+    
+    def mark_failed(self, task_id: str, error: str) -> Todo:
+        """Mark a task as failed.
+        
+        Args:
+            task_id: TODO ID that failed
+            error: Error message/description
+            
+        Returns:
+            Updated Todo object
+        """
+        with self._lock:
+            # Transition to FAILED
+            todo = self.transition_status(task_id, TodoStatus.FAILED)
+            
+            # Store error info
+            todo.data = todo.data or {}
+            todo.data["error"] = error
+            todo.data["failed_at"] = datetime.utcnow().isoformat()
+            self.todos[task_id] = todo
+            
+            # Log failure
+            self.audit_logger.log(
+                level=AuditLevel.ERROR,
+                category=AuditCategory.EXECUTION,
+                component="todo_orchestrator",
+                operation="mark_failed",
+                message=f"Task failed: {todo.title}",
+                context={"task_id": task_id, "title": todo.title, "error": error},
+            )
+            
+            return todo
+    
+    # ==========================================================================
+    # PROGRESS TRACKING (Phase 4, task-2.4.3)
+    # ==========================================================================
+    
+    def get_progress(self) -> Dict[str, Any]:
+        """Get overall TODO progress report.
+        
+        Returns:
+            Dictionary with progress metrics
+        """
+        with self._lock:
+            all_todos = list(self.todos.values())
+            total = len(all_todos)
+            
+            if total == 0:
+                return {
+                    "total_tasks": 0,
+                    "completed_tasks": 0,
+                    "failed_tasks": 0,
+                    "blocked_tasks": 0,
+                    "ready_tasks": 0,
+                    "in_progress_tasks": 0,
+                    "percentage": 0.0,
+                    "estimated_remaining_time": 0,
+                }
+            
+            completed = sum(1 for t in all_todos if t.status == TodoStatus.COMPLETED)
+            failed = sum(1 for t in all_todos if t.status == TodoStatus.FAILED)
+            blocked = sum(1 for t in all_todos if t.status == TodoStatus.BLOCKED)
+            ready = sum(1 for t in all_todos if t.status == TodoStatus.READY)
+            in_progress = sum(1 for t in all_todos if t.status == TodoStatus.IN_PROGRESS)
+            
+            percentage = (completed / total) * 100 if total > 0 else 0.0
+            
+            # Estimate remaining time based on TODO data
+            remaining_tasks = total - completed - failed
+            avg_time = 60  # Default 60 minutes per task
+            estimated_remaining = remaining_tasks * avg_time
+            
+            return {
+                "total_tasks": total,
+                "completed_tasks": completed,
+                "failed_tasks": failed,
+                "blocked_tasks": blocked,
+                "ready_tasks": ready,
+                "in_progress_tasks": in_progress,
+                "percentage": round(percentage, 2),
+                "estimated_remaining_time": estimated_remaining,
+            }
+    
+    def get_feature_progress(self, feature_id: str) -> Dict[str, Any]:
+        """Get progress for a specific feature.
+        
+        Args:
+            feature_id: Feature ID to get progress for
+            
+        Returns:
+            Dictionary with feature progress metrics
+        """
+        with self._lock:
+            # Filter TODOs by feature_id in data
+            feature_todos = [
+                t for t in self.todos.values()
+                if t.data and t.data.get("feature_id") == feature_id
+            ]
+            
+            if not feature_todos:
+                return {
+                    "feature_id": feature_id,
+                    "total_tasks": 0,
+                    "completed_tasks": 0,
+                    "percentage": 0.0,
+                }
+            
+            total = len(feature_todos)
+            completed = sum(1 for t in feature_todos if t.status == TodoStatus.COMPLETED)
+            percentage = (completed / total) * 100 if total > 0 else 0.0
+            
+            return {
+                "feature_id": feature_id,
+                "total_tasks": total,
+                "completed_tasks": completed,
+                "failed_tasks": sum(1 for t in feature_todos if t.status == TodoStatus.FAILED),
+                "blocked_tasks": sum(1 for t in feature_todos if t.status == TodoStatus.BLOCKED),
+                "ready_tasks": sum(1 for t in feature_todos if t.status == TodoStatus.READY),
+                "percentage": round(percentage, 2),
+            }
+    
+    def get_phase_progress(self, feature_id: str, phase_id: int) -> Dict[str, Any]:
+        """Get progress for a specific phase within a feature.
+        
+        Args:
+            feature_id: Feature ID
+            phase_id: Phase number
+            
+        Returns:
+            Dictionary with phase progress metrics
+        """
+        with self._lock:
+            # Filter TODOs by feature_id and phase_id in data
+            phase_todos = [
+                t for t in self.todos.values()
+                if t.data 
+                and t.data.get("feature_id") == feature_id
+                and t.data.get("phase_id") == phase_id
+            ]
+            
+            if not phase_todos:
+                return {
+                    "feature_id": feature_id,
+                    "phase_id": phase_id,
+                    "total_tasks": 0,
+                    "completed_tasks": 0,
+                    "percentage": 0.0,
+                }
+            
+            total = len(phase_todos)
+            completed = sum(1 for t in phase_todos if t.status == TodoStatus.COMPLETED)
+            percentage = (completed / total) * 100 if total > 0 else 0.0
+            
+            return {
+                "feature_id": feature_id,
+                "phase_id": phase_id,
+                "total_tasks": total,
+                "completed_tasks": completed,
+                "percentage": round(percentage, 2),
+            }
+    
+    # ==========================================================================
     # CHECKPOINT & RECOVERY
     # ==========================================================================
     
@@ -969,3 +1247,159 @@ class TodoOrchestrator:
                 "in_progress": len([t for t in self.todos.values() if t.status == TodoStatus.IN_PROGRESS]),
                 "blocked": len([t for t in self.todos.values() if t.status == TodoStatus.BLOCKED]),
             }
+
+    # ==========================================================================
+    # YAML LOADING (Phase 4, task-2.4.1)
+    # ==========================================================================
+    
+    def load_from_yaml(self, yaml_path: str) -> List[Todo]:
+        """Load TODOs from a YAML feature file.
+        
+        Args:
+            yaml_path: Path to the YAML feature file
+            
+        Returns:
+            List of created Todo objects
+            
+        Raises:
+            FileNotFoundError: If YAML file doesn't exist
+            yaml.YAMLError: If YAML is malformed
+        """
+        # Load YAML file
+        yaml_file = Path(yaml_path)
+        if not yaml_file.exists():
+            raise FileNotFoundError(f"YAML file not found: {yaml_path}")
+        
+        with open(yaml_file, "r", encoding="utf-8") as f:
+            data = yaml.safe_load(f)
+        
+        # Parse feature YAML
+        tasks = self._parse_feature_yaml(data)
+        
+        # Build DAG from tasks
+        task_mapping = self._build_dag_from_tasks(tasks)
+        
+        # Create TODO objects
+        todos = []
+        for task_id, todo_id in task_mapping.items():
+            todo = self.read_todo(todo_id)
+            todos.append(todo)
+        
+        # Log operation
+        self.audit_logger.log(
+            level=AuditLevel.INFO,
+            category=AuditCategory.EXECUTION,
+            component="todo_orchestrator",
+            operation="load_from_yaml",
+            message=f"Loaded {len(todos)} TODOs from YAML",
+            context={"yaml_path": yaml_path, "todo_count": len(todos)},
+        )
+        
+        return todos
+    
+    def _parse_feature_yaml(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """Parse feature YAML data into task list.
+        
+        Args:
+            data: Parsed YAML data
+            
+        Returns:
+            List of task dictionaries with id, name, priority, dependencies
+        """
+        tasks = []
+        feature = data.get("feature", {})
+        phases = feature.get("phases", [])
+        
+        for phase in phases:
+            phase_tasks = phase.get("tasks", [])
+            for task in phase_tasks:
+                tasks.append({
+                    "id": task.get("id"),
+                    "name": task.get("name"),
+                    "priority": task.get("priority", "P2_MEDIUM"),
+                    "estimated_minutes": task.get("estimated_minutes", 60),
+                    "dependencies": task.get("dependencies", []),
+                    "description": task.get("description", ""),
+                })
+        
+        return tasks
+    
+    def _build_dag_from_tasks(self, tasks: List[Dict[str, Any]]) -> Dict[str, str]:
+        """Build DAG and create TODOs from task list.
+        
+        Args:
+            tasks: List of task dictionaries
+            
+        Returns:
+            Mapping of task IDs to TODO IDs
+        """
+        task_mapping = {}
+        
+        # First pass: Create all TODOs (without dependencies)
+        for task in tasks:
+            task_id = task["id"]
+            priority_str = task["priority"]
+            
+            # Convert priority string to Priority enum
+            try:
+                priority = Priority[priority_str]
+            except KeyError:
+                priority = Priority.P2_MEDIUM
+            
+            # Create TODO
+            todo_id = self.create_todo(
+                title=task["name"],
+                description=task.get("description", ""),
+                priority=priority,
+                data={
+                    "task_id": task_id,
+                    "estimated_minutes": task.get("estimated_minutes", 60),
+                },
+            )
+            task_mapping[task_id] = todo_id
+        
+        # Second pass: Add dependencies
+        for task in tasks:
+            task_id = task["id"]
+            todo_id = task_mapping[task_id]
+            dependencies = task.get("dependencies", [])
+            
+            # Resolve dependencies
+            resolved_deps = self._resolve_dependencies(dependencies, task_mapping)
+            
+            # Add edges to DAG
+            for dep_id in resolved_deps:
+                self.dag.add_edge(dep_id, todo_id)
+            
+            # Update TODO status based on dependencies
+            todo = self.read_todo(todo_id)
+            if resolved_deps:
+                todo.status = TodoStatus.BLOCKED
+                self.dag.set_node_status(todo_id, NodeStatus.BLOCKED)
+            else:
+                # No dependencies - mark as READY
+                todo.status = TodoStatus.READY
+                self.dag.set_node_status(todo_id, NodeStatus.NOT_STARTED)
+            self.todos[todo_id] = todo
+        
+        return task_mapping
+    
+    def _resolve_dependencies(
+        self, 
+        task_deps: List[str], 
+        task_mapping: Dict[str, str]
+    ) -> List[str]:
+        """Resolve task IDs to TODO IDs.
+        
+        Args:
+            task_deps: List of task IDs
+            task_mapping: Mapping of task IDs to TODO IDs
+            
+        Returns:
+            List of TODO IDs
+        """
+        resolved = []
+        for task_id in task_deps:
+            if task_id in task_mapping:
+                resolved.append(task_mapping[task_id])
+        return resolved
