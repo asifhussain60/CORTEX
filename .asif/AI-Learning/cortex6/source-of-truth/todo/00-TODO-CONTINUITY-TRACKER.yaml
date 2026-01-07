@@ -27,9 +27,95 @@ tracker:
 # 5. On completion, update status and move to next item
 # 6. At END of session, save current_position
 # 7. Commit changes to preserve state
+# 8. **CRITICAL**: Update CONTINUATION-PROMPT.md with current position
 # ==============================================================================
 
-session_management:
+# ==============================================================================
+# SELF-HEALING PROTOCOL (MANDATORY FOR ALL TASKS)
+# ==============================================================================
+self_healing_protocol:
+  version: "1.0.0"
+  applies_to: "ALL tasks, phases, and features"
+  
+  pre_task_execution:
+    audit_review:
+      action: "Check audit logs for previous task errors"
+      command: "tail -50 cortex-brain/audit-logs/*.jsonl | grep -i error"
+      frequency: "Before EVERY task"
+    
+    validation_check:
+      action: "Verify previous task exit criteria met"
+      method: "Check validation.result in tracker"
+      frequency: "Before EVERY task"
+    
+    test_alignment:
+      action: "Ensure tests match implementation"
+      method: "Run pytest and compare with expected counts"
+      frequency: "Before EVERY task"
+  
+  during_execution:
+    audit_logging:
+      requirement: "Log ALL operations"
+      parameters: ["level", "category", "component", "operation", "correlation_id"]
+      example: "AuditLevel.INFO, AuditCategory.EXECUTION, 'todo_orchestrator', 'create_todo', 'FEAT02-P2-T2.2.3'"
+    
+    tdd_enforcement:
+      requirement: "Follow TDD when tdd_required=true"
+      sequence: "RED (write failing test) → GREEN (implement to pass) → REFACTOR (clean up)"
+      validation: "Test must fail first, then pass"
+    
+    incremental_commits:
+      requirement: "Keep changes manageable"
+      limit: "500 lines per commit"
+      method: "Split large changes into logical increments"
+  
+  post_task_execution:
+    exit_criteria:
+      action: "Verify ALL exit criteria before marking COMPLETED"
+      method: "Check validation section in task definition"
+      mandatory: true
+    
+    tracker_update:
+      action: "Update task status, add actual_minutes, deliverables"
+      fields: ["status", "completed_at", "actual_minutes", "validation.result"]
+      mandatory: true
+    
+    continuation_prompt_update:
+      action: "Update CONTINUATION-PROMPT.md with current position"
+      fields: ["current_position", "completed_count", "next_task"]
+      mandatory: true
+      frequency: "EVERY task completion"
+      automation: "python3 .asif/AI-Learning/cortex6/source-of-truth/update_continuation_prompt.py"
+    
+    checkpoint:
+      action: "Git commit to preserve state"
+      frequency: "Every 5 tasks OR phase completion"
+      message_format: "feat{XX}-p{Y}-t{Z}: {task_name}"
+  
+  phase_completion_review:
+    audit_trace_analysis:
+      action: "Review ALL audit entries for phase"
+      command: "grep FEAT{XX}-P{Y} cortex-brain/audit-logs/*.jsonl"
+      check_for: ["ERROR", "CRITICAL", "incomplete operations"]
+    
+    error_remediation:
+      requirement: "Fix ALL errors immediately"
+      exception: "May defer if ROI analysis justifies (MUST document reason)"
+      documentation: "Add to risk/00-RISK-REGISTRY.yaml"
+    
+    test_coverage:
+      requirement: "Minimum 80% coverage per phase"
+      command: "pytest --cov --cov-report=term-missing"
+      action_if_below: "Add missing tests before proceeding"
+    
+    balance_check:
+      accuracy: "Verify implementation matches requirements"
+      efficiency: "Ensure reasonable execution time"
+      adjustment: "Re-plan future phases if needed"
+
+# ==============================================================================
+# SESSION MANAGEMENT
+# ==============================================================================
   last_session:
     id: "session-000"
     date: "2026-01-07"
@@ -664,6 +750,26 @@ feat02_todo_orchestrator:
       estimated_hours: 20
       dependencies: ["phase-1"]
       
+      # SELF-HEALING PROTOCOL
+      self_healing:
+        pre_task_check:
+          - "Review audit logs for previous task errors"
+          - "Verify previous task exit criteria met"
+          - "Check test alignment with implementation"
+        during_execution:
+          - "Log ALL operations with correlation_id"
+          - "Follow TDD if tdd_required=true"
+          - "Keep incremental commits <500 lines"
+        post_task_validation:
+          - "Verify exit criteria before marking COMPLETED"
+          - "Update tracker AND CONTINUATION-PROMPT.md"
+          - "Git checkpoint every 5 tasks"
+        phase_review:
+          - "Analyze audit trace for FEAT02-P2-* correlation IDs"
+          - "Check for ERROR/CRITICAL entries"
+          - "Validate test coverage >80%"
+          - "Immediate remediation if gaps found"
+      
       audit_requirements:
         log_category: "STATE_MANAGEMENT"
         component: "todo_manager"
@@ -758,6 +864,27 @@ feat02_todo_orchestrator:
       estimated_hours: 16
       dependencies: ["phase-2"]
       
+      # SELF-HEALING PROTOCOL (Applied to ALL phases)
+      self_healing:
+        pre_task_check:
+          - "Review audit logs: grep FEAT02-P3 cortex-brain/audit-logs/*.jsonl"
+          - "Verify previous task completion criteria"
+          - "Check test results match expectations"
+        during_execution:
+          - "Log with: AuditLevel.INFO, category, component, operation, correlation_id"
+          - "TDD enforcement: RED (failing test) → GREEN (pass) → REFACTOR"
+          - "Incremental: max 500 lines per commit"
+        post_task_validation:
+          - "Run tests: pytest tests/unit/test_*.py -v"
+          - "Update tracker status to COMPLETED"
+          - "Update CONTINUATION-PROMPT.md with current position"
+          - "Checkpoint: git commit every 5 tasks"
+        phase_review:
+          - "Audit trace: python3 scripts/analyze_audit.py --phase FEAT02-P3"
+          - "Error check: grep ERROR cortex-brain/audit-logs/FEAT02-P3*.jsonl"
+          - "Coverage: pytest --cov --cov-report=term-missing"
+          - "Gaps found: IMMEDIATE remediation (document if deferred)"
+      
       audit_requirements:
         log_category: "STATE_MANAGEMENT"
         component: "checkpoint_recovery"
@@ -831,6 +958,30 @@ feat02_todo_orchestrator:
       estimated_hours: 12
       dependencies: ["phase-3"]
       is_handoff_phase: true  # CRITICAL
+      
+      # SELF-HEALING + HANDOFF VALIDATION
+      self_healing:
+        pre_task_check:
+          - "Review audit logs: grep FEAT02-P4 cortex-brain/audit-logs/*.jsonl"
+          - "Verify Phase 3 completion: ALL tasks COMPLETED"
+          - "Check checkpoint/recovery functionality working"
+        during_execution:
+          - "Log ALL handoff-critical operations"
+          - "Extra validation for handoff readiness"
+          - "Document handoff procedure in detail"
+        post_task_validation:
+          - "Run integration tests: pytest tests/integration/test_cortex_self_management.py -v"
+          - "Verify CORTEX can create TODOs from YAML"
+          - "Verify CORTEX can execute TODOs in DAG order"
+          - "Update tracker AND continuation prompt"
+        phase_review_and_handoff:
+          - "Complete audit trace review for ALL FEAT02 phases"
+          - "Validate zero ERROR entries"
+          - "Run full test suite: pytest tests/ -v"
+          - "Coverage check: Must be >85% for handoff"
+          - "HANDOFF: Update current_executor to 'CORTEX TODO Manager'"
+          - "Log handoff completion to audit"
+          - "GitHub Copilot transitions to advisory role"
       
       audit_requirements:
         log_category: "EXECUTION"

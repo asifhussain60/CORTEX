@@ -11,9 +11,11 @@ All files are designed for GitHub Copilot autonomous execution with gradual hand
 
 | Purpose | File | Description |
 |---------|------|-------------|
-| **New Session** | `CONTINUATION-PROMPT.md` | Copy to start new Copilot session |
+| **New Session** | `CONTINUATION-PROMPT.md` | Copy to start new Copilot session (auto-updated) |
 | **Execution Guide** | `EXECUTION-GUIDE.yaml` | Detailed execution instructions |
 | **Track Progress** | `todo/00-TODO-CONTINUITY-TRACKER.yaml` | Current work state |
+| **Self-Healing** | `SELF-HEALING-SYSTEM.md` | Autonomous quality assurance |
+| **Auto-Update** | `update_continuation_prompt.py` | Sync continuation prompt |
 
 ---
 
