@@ -958,6 +958,47 @@ code_quality:
       dry_run_default: true
     
     reason: "Phase 0.3 - Remove redundant comments, improve code clarity"
+  
+  # --------------------------------------------------------------------------
+  # Category: Plan Root Folder Violations (SKULL RULE ENFORCEMENT)
+  # --------------------------------------------------------------------------
+  plan_root_violations:
+    enabled: true
+    priority: high
+    risk_level: low
+    
+    paths:
+      - "cortex-brain/documents/planning/active/*/00-*.md"
+      - "cortex-brain/documents/planning/active/*/README.md"
+      - "cortex-brain/documents/planning/active/*/*.png"
+      - "cortex-brain/documents/planning/active/*/*.jpg"
+      - "cortex-brain/documents/planning/active/*/*.gif"
+    
+    action: move_to_subfolder
+    move_rules:
+      "00-*.md": "reports/"
+      "README.md": "reports/"
+      "*.png": "images/"
+      "*.jpg": "images/"
+      "*.gif": "images/"
+    
+    exceptions:
+      allowed_root_files:
+        - "plan-viewer.html"
+        - "CONTINUATION-PROMPT.md"
+        - "intermittent-thoughts.txt"
+    
+    reason: "SKULL rule PLAN_FILE_ORGANIZATION: Only plan-viewer.html, CONTINUATION-PROMPT.md, intermittent-thoughts.txt allowed on root"
+    
+    scan_rules:
+      pattern_type: glob
+      include_hidden: false
+      recursive: false  # Only check root level
+    
+    safety:
+      require_confirmation: false  # Safe to auto-move
+      create_manifest: true
+      allow_rollback: true
 
 # ============================================================================
 # NOTES

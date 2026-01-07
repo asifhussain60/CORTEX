@@ -1,8 +1,8 @@
 {
   "snapshot_metadata": {
     "plan_id": "cortex5-epic-v3",
-    "snapshot_date": "2026-01-07T07:00:00Z",
-    "snapshot_reason": "Phase 0 completion",
+    "snapshot_date": "2026-01-07T07:30:00Z",
+    "snapshot_reason": "CORTEX Planner verification: vacuum automation + plan-viewer.html state",
     "plan_mode": "EPIC",
     "planner_version": "1.0.0"
   },
@@ -18,9 +18,20 @@
     "progress_tracker_exists": true,
     "progress_tracker_valid": true,
     "plan_viewer_exists": true,
-    "root_files": ["plan-viewer.html", "CONTINUATION-PROMPT.md", "plan-viewer-backup-20260107-041200.html"],
+    "plan_viewer_state": "OUTDATED",
+    "plan_viewer_issues": [
+      "Epic ID mismatch: shows cortex5-enhancement-epic-v2 instead of cortex5-epic-v3",
+      "Status outdated: shows BLOCKED instead of ACTIVE_PHASE_0_COMPLETE",
+      "Progress outdated: shows 0% instead of 7%",
+      "Phase 0 status: shows NOT STARTED instead of COMPLETE"
+    ],
+    "root_files": ["00-cortex5-epic-v3.md", "00-cortex5-epic.md", "CONTINUATION-PROMPT.md", "intermittent-thoughts.txt", "plan-viewer.html", "README.md"],
     "orphaned_files": [],
-    "duplicate_plans": false
+    "duplicate_plans": false,
+    "continuation_prompt_duplicate": false,
+    "vacuum_automation": "NOT_IMPLEMENTED",
+    "vacuum_blocker": "vacuum_v2 instantiation bug (missing log_execution() method)",
+    "post_phase_hooks": "NOT_CONFIGURED"
   },
   "folder_structure": {
     "analysis": ["gap-analysis.md", "enhancement-epic-gap-analysis.md"],
@@ -77,6 +88,13 @@
     "completion_percentage": 7,
     "status": "ACTIVE_PHASE_0_COMPLETE",
     "on_schedule": true,
+    "verification_completed": true,
+    "verification_results": {
+      "vacuum_automation": "FAIL - Not implemented (blocked by Phase 1 instantiation bugs)",
+      "plan_viewer_state": "FAIL - Outdated (needs regeneration after Phase 1)",
+      "skull_compliance": "PARTIAL - 4/6 rules passing",
+      "verification_report": "analysis/planner-verification-report.md"
+    },
     "next_phase": {
       "number": 1,
       "name": "Critical Blocker Resolution",
@@ -86,10 +104,11 @@
     }
   },
   "plan_organization": {
-    "root_files_count": 3,
-    "root_files_allowed": ["plan-viewer.html", "CONTINUATION-PROMPT.md"],
-    "root_files_violations": ["plan-viewer-backup-20260107-041200.html"],
+    "root_files_count": 6,
+    "root_files_allowed": ["plan-viewer.html", "CONTINUATION-PROMPT.md", "00-cortex5-epic-v3.md", "00-cortex5-epic.md", "intermittent-thoughts.txt", "README.md"],
+    "root_files_violations": [],
     "subfolders_organized": true,
-    "vacuum_needed": false
+    "vacuum_needed": false,
+    "cleanup_complete": true
   }
 }
