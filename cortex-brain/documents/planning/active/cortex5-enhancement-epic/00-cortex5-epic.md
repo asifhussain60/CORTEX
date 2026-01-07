@@ -1,17 +1,357 @@
 # CORTEX5 Enhancement Epic - Complete Architecture Overhaul
 
 **Plan ID:** `cortex5-enhancement-epic-v2`  
-**Version:** 2.0.0  
-**Status:** 🟢 ACTIVE - REQUIRES PHASE 0 MIGRATION FIRST  
+**Version:** 2.1.0  
+**Status:** 🟢 ACTIVE - REQUIRES PHASE 0 + P00B FIRST  
 **Created:** 2026-01-06  
-**Timeline:** Phase 0 (Migration) + 9 weeks (11 phases, 3 parallel tracks)  
+**Updated:** 2026-01-07 (Added Phase P00B: Critical Blocker Resolution)  
+**Timeline:** Phase 0 (Migration, 15 min) + Phase P00B (Critical Fixes, 1 day) + 9 weeks (11 phases, 3 parallel tracks)  
 **Complexity:** Tier 5 (Architectural Transformation)
+
+---
+
+## ⚠️ MANDATORY SETUP: Phase 0 + Phase P00B
+
+**🚨 EPIC REQUIRES TWO SETUP PHASES BEFORE PHASE 1 🚨**
+
+### Setup Timeline
+1. **Phase 0:** Clean Branch Migration (15 minutes)
+2. **Phase P00B:** Critical Blocker Resolution (1 day) ← **NEW - Added 2026-01-07**
+
+---
+
+## 🔴 Phase P00B: Critical Blocker Resolution (P0 PRIORITY)
+
+**Duration:** 1 day  
+**Priority:** P0_CRITICAL  
+**Blocks:** All Phases 1-11  
+**Reason:** CORTEX review (2026-01-07) identified 3 critical blockers that prevent safe implementation
+
+### Critical Blockers Identified
+
+**Blocker Analysis Source:** `cortex-brain/documents/planning/active/cortex5-enhancement-epic/reports/cortex-review/20260107_initial_review.yaml`
+
+#### 1. Missing Rollback Script (DEPLOY-001)
+- **Risk:** CRITICAL
+- **Impact:** Phase 0 migration unsafe without rollback capability
+- **Evidence:** Migration script exists but no recovery mechanism
+
+#### 2. Orchestrator Instantiation Failures (INT-001)
+- **Risk:** CRITICAL  
+- **Impact:** 6 orchestrators cannot load, blocks Phases 1-8
+- **Failures:**
+  - `planning_v5`: SyntaxError (f-string backslash, line 718)
+  - `tdd_orchestrator`: Unexpected kwarg `config_path`
+  - `ado_orchestrator_v2`: Missing positional arg `state_db`
+  - `sanitization`: Unexpected kwarg `config_path`
+  - `cleanup_v2`: Missing positional arg `state_db`
+  - `vacuum_v2`: StateManager.log_execution() missing
+
+#### 3. StateManager Race Condition (ARCH-001)
+- **Risk:** CRITICAL
+- **Impact:** Concurrent write corruption in multi-orchestrator usage
+- **Evidence:** Uses JSON file persistence without locking mechanism
+
+---
+
+### Phase P00B Deliverables
+
+#### Task 1: Create Rollback Script (2 hours)
+
+**File:** `scripts/rollback-cortex-5.5-migration.ps1`
+
+**Features:**
+```powershell
+# Rollback capabilities:
+# 1. Git branch reset to pre-migration state
+# 2. File system restoration from backup
+# 3. Database state rollback (if applicable)
+# 4. Validation that rollback successful
+# 5. Report generation (what was rolled back, why)
+```
+
+**Success Criteria:**
+- [ ] Script creates backup before Phase 0 migration
+- [ ] Script can restore from backup on failure
+- [ ] Validation confirms clean rollback state
+- [ ] Test: Simulate failed migration → successful rollback
+
+---
+
+#### Task 2: Fix Orchestrator Instantiation (4 hours)
+
+**Fix 1: planning_v5 Syntax Error**
+```python
+# File: src/orchestrators/planning/planning_orchestrator_v5.py
+# Line: 718
+# Issue: f-string contains backslash (invalid)
+# Fix: Remove backslash or escape properly
+```
+
+**Fix 2-3: Add state_db Parameter**
+```python
+# Files: 
+#   - src/orchestrators/ado/ado_orchestrator_v2.py
+#   - src/orchestrators/cleanup/cleanup_orchestrator_v2.py
+
+# Add to __init__:
+def __init__(self, config_path: str, state_db: PlanningStateDB, ...):
+    self.state_db = state_db
+```
+
+**Fix 4-5: Update __init__ Signatures**
+```python
+# Files:
+#   - src/orchestrators/tdd/tdd_orchestrator.py
+#   - src/orchestrators/sanitization/sanitization_orchestrator.py
+
+# Accept config_path parameter:
+def __init__(self, config_path: str, ...):
+    self.config_path = Path(config_path)
+```
+
+**Fix 6: Implement Missing Method**
+```python
+# File: src/orchestrators/state_manager.py
+# Add method:
+def log_execution(self, orchestrator_id: str, execution_data: Dict[str, Any]):
+    """Log orchestrator execution to audit trail."""
+    self.audit.info(
+        AuditCategory.EXECUTION,
+        orchestrator_id,
+        "execute",
+        f"Orchestrator executed",
+        context=execution_data
+    )
+```
+
+**Test Suite:**
+```python
+# File: tests/integration/test_all_orchestrators_instantiate.py
+# Test all 6 orchestrators can instantiate successfully
+
+def test_all_orchestrators_instantiate():
+    orchestrators = [
+        'planning_v5',
+        'tdd_orchestrator', 
+        'ado_orchestrator_v2',
+        'sanitization',
+        'cleanup_v2',
+        'vacuum_v2'
+    ]
+    
+    for orch_id in orchestrators:
+        # Load from registry
+        # Instantiate with proper args
+        # Assert no exceptions
+        assert orchestrator is not None
+```
+
+**Success Criteria:**
+- [ ] All 6 orchestrators instantiate without errors
+- [ ] Test suite passes (6/6 orchestrators)
+- [ ] No syntax errors in Python compilation
+- [ ] Import paths verified and working
+
+---
+
+#### Task 3: Fix StateManager Race Condition (4 hours)
+
+**Current Implementation:**
+```python
+# File: src/orchestrators/state_manager.py
+# Issue: Uses JSON file I/O without locking
+# Risk: Concurrent writes corrupt state file
+```
+
+**Solution: Migrate to SQLite with WAL Mode**
+
+```python
+# New implementation:
+import sqlite3
+from contextlib import contextmanager
+
+class StateManager:
+    def __init__(self, db_path: str):
+        self.db_path = db_path
+        self._init_database()
+    
+    def _init_database(self):
+        """Initialize SQLite database with WAL mode."""
+        with self._get_connection() as conn:
+            # Enable Write-Ahead Logging for concurrent access
+            conn.execute("PRAGMA journal_mode=WAL")
+            conn.execute("PRAGMA synchronous=NORMAL")
+            
+            # Create states table
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS states (
+                    state_id TEXT PRIMARY KEY,
+                    state_type TEXT NOT NULL,
+                    data TEXT NOT NULL,
+                    created_at TEXT NOT NULL,
+                    updated_at TEXT NOT NULL
+                )
+            """)
+    
+    @contextmanager
+    def _get_connection(self):
+        """Context manager for database connections with retry logic."""
+        max_retries = 3
+        for attempt in range(max_retries):
+            try:
+                conn = sqlite3.connect(self.db_path, timeout=10.0)
+                conn.row_factory = sqlite3.Row
+                yield conn
+                conn.commit()
+                conn.close()
+                return
+            except sqlite3.OperationalError as e:
+                if attempt == max_retries - 1:
+                    raise
+                time.sleep(0.1 * (2 ** attempt))  # Exponential backoff
+    
+    def create_state(self, state_id: str, state_type: str, data: Dict):
+        """Create state with atomic transaction."""
+        with self._get_connection() as conn:
+            conn.execute(
+                "INSERT INTO states VALUES (?, ?, ?, ?, ?)",
+                (state_id, state_type, json.dumps(data), 
+                 datetime.now().isoformat(), datetime.now().isoformat())
+            )
+```
+
+**Test Suite:**
+```python
+# File: tests/integration/test_concurrent_state_writes.py
+# Test concurrent writes don't corrupt database
+
+import threading
+import pytest
+
+def test_concurrent_state_writes():
+    """Test 10 threads writing simultaneously."""
+    state_manager = StateManager("test_concurrent.db")
+    threads = []
+    
+    def write_state(thread_id):
+        state_manager.create_state(
+            f"state_{thread_id}",
+            "test",
+            {"thread": thread_id, "data": "concurrent"}
+        )
+    
+    # Launch 10 concurrent writes
+    for i in range(10):
+        t = threading.Thread(target=write_state, args=(i,))
+        threads.append(t)
+        t.start()
+    
+    # Wait for all threads
+    for t in threads:
+        t.join()
+    
+    # Verify all 10 states written successfully
+    states = state_manager.list_states()
+    assert len(states) == 10
+    
+    # Verify database integrity
+    with state_manager._get_connection() as conn:
+        result = conn.execute("PRAGMA integrity_check").fetchone()
+        assert result[0] == "ok"
+```
+
+**Success Criteria:**
+- [ ] SQLite database with WAL mode enabled
+- [ ] Transaction-based writes with retry logic
+- [ ] Concurrent write test passes (10+ threads)
+- [ ] PRAGMA integrity_check passes
+- [ ] Performance: <100ms per write operation
+
+---
+
+### Phase P00B Success Criteria
+
+**All Must Pass:**
+- [ ] ✅ Rollback script created and tested
+- [ ] ✅ All 6 orchestrators instantiate successfully
+- [ ] ✅ StateManager handles concurrent writes without corruption
+- [ ] ✅ Integration test suite passes (100%)
+- [ ] ✅ No Python syntax errors
+- [ ] ✅ Git commit with all fixes
+
+**Test Command:**
+```bash
+# Run all P00B validation tests
+pytest tests/integration/test_all_orchestrators_instantiate.py
+pytest tests/integration/test_concurrent_state_writes.py
+python -m py_compile src/**/*.py  # Verify no syntax errors
+```
+
+---
+
+### Phase P00B Git Commit
+
+```bash
+git add .
+git commit -m "fix(p00b): Critical blocker resolution before Phase 1
+
+Phase P00B: Critical Blocker Resolution (1 day)
+
+Fixes:
+1. Created rollback-cortex-5.5-migration.ps1 (DEPLOY-001)
+   - Backup and restore capability for Phase 0 migration
+   - Validation and reporting
+   - Tested with simulated failure scenarios
+
+2. Fixed 6 orchestrator instantiation failures (INT-001)
+   - planning_v5: Fixed f-string syntax error (line 718)
+   - tdd_orchestrator: Added config_path parameter support
+   - ado_orchestrator_v2: Added state_db parameter
+   - sanitization: Added config_path parameter support
+   - cleanup_v2: Added state_db parameter
+   - vacuum_v2: Implemented StateManager.log_execution()
+   - Test suite: 6/6 orchestrators instantiate successfully
+
+3. Fixed StateManager race condition (ARCH-001)
+   - Migrated JSON file → SQLite database
+   - Enabled WAL mode for concurrent access
+   - Added transaction-based writes with retry logic
+   - Concurrent write test: 10 threads pass without corruption
+
+Tests:
+- tests/integration/test_all_orchestrators_instantiate.py (PASS)
+- tests/integration/test_concurrent_state_writes.py (PASS)
+- Python syntax validation (PASS)
+
+Review: cortex-brain/documents/planning/active/cortex5-enhancement-epic/reports/cortex-review/20260107_initial_review.yaml
+Epic: cortex5-enhancement-epic-v2
+Phase: P00B (Critical Blocker Resolution)
+Blocks: Phases 1-11
+"
+```
+
+---
+
+### Phase P00B → Phase 1 Handoff
+
+**After P00B Complete:**
+1. ✅ Rollback script operational
+2. ✅ All orchestrators can instantiate
+3. ✅ StateManager production-ready (no race conditions)
+4. ✅ **Phase 1 can begin safely**
+
+**Updated Timeline:**
+- Phase 0: 15 minutes (migration)
+- Phase P00B: 1 day (blocker fixes)
+- Phases 1-11: 9 weeks (original timeline)
+- **Total:** ~9 weeks + 1 day
 
 ---
 
 ## ⚠️ MANDATORY FIRST STEP: Phase 0 - Clean Branch Migration
 
-**🚨 THIS EPIC CANNOT START WITHOUT COMPLETING PHASE 0 MIGRATION 🚨**
+**🚨 MUST COMPLETE PHASE 0 BEFORE PHASE P00B 🚨**
 
 ### Why Phase 0 is Required
 

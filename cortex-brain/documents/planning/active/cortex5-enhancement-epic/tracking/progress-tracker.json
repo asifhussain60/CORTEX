@@ -1,24 +1,24 @@
 {
   "epic_metadata": {
     "epic_id": "cortex5-enhancement-epic-v2",
-    "version": "2.2.0",
-    "status": "BLOCKED_ON_PHASE_0",
+    "version": "2.3.0",
+    "status": "BLOCKED_ON_PHASE_0_AND_P00B",
     "created_date": "2026-01-06",
-    "last_updated": "2026-01-06",
-    "total_phases": 13,
-    "timeline_weeks": "15 minutes (Phase 0) + 9 weeks (Phases 1-12)",
+    "last_updated": "2026-01-07",
+    "total_phases": 14,
+    "timeline_weeks": "15 minutes (Phase 0) + 1 day (Phase P00B) + 9 weeks (Phases 1-12)",
     "complexity_tier": 5,
-    "last_changes": "Added Phase 9: Generic Vacuum Orchestrator v3"
+    "last_changes": "Added Phase P00B: Critical Blocker Resolution (2026-01-07 review findings)"
   },
   "overall_progress": {
     "phases_completed": 0,
     "phases_in_progress": 0,
-    "phases_not_started": 13,
-    "phases_blocked": 12,
+    "phases_not_started": 14,
+    "phases_blocked": 13,
     "completion_percentage": 0,
     "current_phase": 0,
     "on_schedule": false,
-    "blocking_reason": "Phase 0 (Clean Branch Migration) must be completed first"
+    "blocking_reason": "Phase 0 (Clean Branch Migration) + Phase P00B (Critical Blocker Resolution) must be completed first"
   },
   "phases": [
     {
@@ -31,7 +31,7 @@
       "start_week": 0,
       "end_week": 0,
       "dependencies": [],
-      "blocks_phases": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      "blocks_phases": ["P00B"],
       "deliverables": [
         {"name": "CORTEX-5.5 branch created from main", "status": "NOT_STARTED"},
         {"name": "~150 essential files copied from CORTEX-5.0", "status": "NOT_STARTED"},
@@ -65,16 +65,91 @@
       }
     },
     {
+      "phase_number": "P00B",
+      "name": "Critical Blocker Resolution",
+      "track": 0,
+      "status": "NOT_STARTED",
+      "priority": "P0_CRITICAL",
+      "progress_percentage": 0,
+      "duration": "1 day",
+      "start_week": 0,
+      "end_week": 0,
+      "dependencies": ["Phase 0"],
+      "blocks_phases": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      "reason": "CORTEX review (2026-01-07) identified 3 critical blockers",
+      "review_reference": "cortex-brain/documents/planning/active/cortex5-enhancement-epic/reports/cortex-review/20260107_initial_review.yaml",
+      "deliverables": [
+        {
+          "name": "Rollback script (rollback-cortex-5.5-migration.ps1)",
+          "status": "NOT_STARTED",
+          "blocker_id": "DEPLOY-001",
+          "risk": "CRITICAL",
+          "estimated_hours": 2
+        },
+        {
+          "name": "Fix 6 orchestrator instantiation failures",
+          "status": "NOT_STARTED",
+          "blocker_id": "INT-001",
+          "risk": "CRITICAL",
+          "estimated_hours": 4,
+          "failures": [
+            "planning_v5: f-string syntax error (line 718)",
+            "tdd_orchestrator: config_path kwarg mismatch",
+            "ado_orchestrator_v2: missing state_db parameter",
+            "sanitization: config_path kwarg mismatch",
+            "cleanup_v2: missing state_db parameter",
+            "vacuum_v2: missing log_execution() method"
+          ]
+        },
+        {
+          "name": "Fix StateManager race condition (JSON → SQLite WAL)",
+          "status": "NOT_STARTED",
+          "blocker_id": "ARCH-001",
+          "risk": "CRITICAL",
+          "estimated_hours": 4
+        },
+        {
+          "name": "Integration test suite (orchestrator instantiation)",
+          "status": "NOT_STARTED",
+          "test_file": "tests/integration/test_all_orchestrators_instantiate.py"
+        },
+        {
+          "name": "Integration test suite (concurrent state writes)",
+          "status": "NOT_STARTED",
+          "test_file": "tests/integration/test_concurrent_state_writes.py"
+        }
+      ],
+      "success_criteria": [
+        "Rollback script created and tested (simulated failure recovery)",
+        "All 6 orchestrators instantiate successfully (6/6 pass)",
+        "StateManager handles concurrent writes without corruption",
+        "Integration test suite passes (100%)",
+        "No Python syntax errors (py_compile validation)",
+        "Git commit with all fixes and test evidence"
+      ],
+      "test_commands": [
+        "pytest tests/integration/test_all_orchestrators_instantiate.py",
+        "pytest tests/integration/test_concurrent_state_writes.py",
+        "python -m py_compile src/**/*.py"
+      ],
+      "go_no_go": {
+        "status": "PENDING",
+        "go_criteria_met": 0,
+        "go_criteria_total": 6,
+        "no_go_triggered": false
+      }
+    },
+    {
       "phase_number": 1,
       "name": "Knowledge Extension Layer",
       "track": 1,
       "status": "BLOCKED",
-      "blocked_by": "Phase 0",
+      "blocked_by": "Phase P00B",
       "progress_percentage": 0,
       "duration_weeks": 2,
       "start_week": 1,
       "end_week": 2,
-      "dependencies": ["Phase 0"],
+      "dependencies": ["Phase 0", "Phase P00B"],
       "deliverables": [
         {"name": "Company knowledge folder structure", "status": "NOT_STARTED"},
         {"name": "CompanyKnowledgeProvider implementation", "status": "NOT_STARTED"},
