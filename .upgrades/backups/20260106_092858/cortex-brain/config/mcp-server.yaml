@@ -1,0 +1,88 @@
+# MCP Server Configuration
+# Orchestrator registry for autonomous execution
+
+version: "1.0"
+
+orchestrators:
+  planning_system:
+    class: "PlanningOrchestratorV5"
+    module: "src.orchestrators.planning.planning_orchestrator_v5"
+    config: "cortex-brain/manifests/orchestrators/planning-system-5.0-manifest.yaml"
+    type: "autonomous"
+    description: "Planning System v5 with MCP integration"
+  
+  planning_v5:
+    class: "PlanningOrchestratorV5"
+    module: "src.orchestrators.planning.planning_orchestrator_v5"
+    config: "cortex-brain/manifests/orchestrators/planning-system-5.0-manifest.yaml"
+    type: "autonomous"
+    description: "Planning System v5 (routing alias)"
+  
+  tdd_orchestrator:
+    class: "TDDOrchestrator"
+    module: "src.orchestrators.tdd.tdd_orchestrator_v4_migrated"
+    config: "cortex-brain/manifests/orchestrators/tdd-orchestrator-v4-manifest.yaml"
+    type: "guided"
+    description: "Test-Driven Development orchestrator with RED-GREEN-REFACTOR workflow"
+  
+  sanitization_orchestrator:
+    class: "SanitizationOrchestrator"
+    module: "src.orchestrators.sanitization.sanitization_orchestrator"
+    config: "cortex-brain/manifests/orchestrators/code-sanitization-manifest.yaml"
+    type: "guided"
+    description: "Code sanitization and anonymization orchestrator"
+  
+  cleanup_orchestrator_v2:
+    class: "CleanupOrchestratorV2"
+    module: "src.orchestrators.cleanup.cleanup_orchestrator_v2"
+    config: "cortex-brain/manifests/orchestrators/cleanup-orchestrator-v2.yaml"
+    type: "autonomous"
+    description: "Selective cleanup with multiple modes (cache/logs/artifacts/full/git)"
+  
+  ado_orchestrator_v2:
+    class: "ADOOrchestratorV2"
+    module: "src.orchestrators.ado.v2.ado_orchestrator_v2"
+    config: "cortex-brain/manifests/orchestrators/ado-orchestrator-v2.yaml"
+    type: "autonomous"
+    description: "Azure DevOps work item generation (v2 - pure autonomous)"
+    version: "2.0.0"
+    modes:
+      - "auto"
+      - "wizard"
+  
+  vacuum:
+    class: "VacuumOrchestratorV2"
+    module: "src.orchestrators.vacuum.vacuum_orchestrator_v2"
+    config: "cortex-brain/manifests/orchestrators/vacuum-orchestrator-v2.yaml"
+    type: "autonomous"
+    description: "Deep filesystem cleanup and reorganization"
+  
+  investigation_v2:
+    class: "InvestigationOrchestratorV2"
+    module: "src.orchestrators.investigation.investigation_orchestrator_v2"
+    config: "cortex-brain/manifests/orchestrators/investigation-orchestrator-v2.yaml"
+    type: "autonomous"
+    description: "Root cause analysis and architectural review"
+    version: "2.0.0"
+  
+  html_view_orchestrator:
+    class: "HTMLViewOrchestrator"
+    module: "src.orchestrators.html_view.html_view_orchestrator"
+    config: "cortex-brain/manifests/orchestrators/html-view-orchestrator-manifest.yaml"
+    type: "guided"
+    description: "Intelligent HTML/CSS view development with glassmorphism design system"
+    version: "1.0.0"
+  
+  refinement_orchestrator:
+    class: "RefinementOrchestrator"
+    module: "src.orchestrators.refinement_orchestrator"
+    config: "cortex-brain/manifests/orchestrators/refinement-manifest.yaml"
+    type: "guided"
+    description: "7-phase code refinement with TDD enforcement"
+    version: "5.0.0"
+
+# Server settings
+server:
+  log_level: "INFO"
+  enable_metrics: true
+  hot_reload: true

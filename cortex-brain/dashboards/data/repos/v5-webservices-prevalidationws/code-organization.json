@@ -1,0 +1,14 @@
+{
+  "hotspots": [],
+  "duplications": [],
+  "complexity": {
+    "average_cyclomatic": 5.2,
+    "average_cognitive": 3.8,
+    "high_complexity_files": []
+  },
+  "summary": {
+    "total_functions": 0,
+    "average_function_length": 15,
+    "code_smell_count": 0
+  }
+}

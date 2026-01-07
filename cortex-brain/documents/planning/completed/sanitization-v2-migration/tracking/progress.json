@@ -1,0 +1,353 @@
+{
+  "plan_id": "sanitization-v2-migration",
+  "parent_plan_id": "cortex-v5-holistic-refactor",
+  "parent_phase": "6.4",
+  "feature_name": "Sanitization Orchestrator v2 - Pure Autonomous Migration",
+  "created_at": "2026-01-03T00:00:00Z",
+  "updated_at": "2026-01-03T12:00:00Z",
+  "status": "in_progress",
+  "progress": {
+    "overall_percent": 20,
+    "current_phase": 1,
+    "total_phases": 8,
+    "holistic_reviews_completed": 1,
+    "holistic_reviews_total": 5,
+    "phases": [
+      {
+        "phase_number": 0,
+        "name": "Foundation & Analysis",
+        "status": "completed",
+        "estimated_hours": 2,
+        "actual_hours": 2,
+        "progress_percent": 100,
+        "completed_at": "2026-01-03T02:00:00Z",
+        "deliverables": [
+          "Migration plan structure created",
+          "Existing v1 sanitization analyzed",
+          "Reusable components identified (5 utility files)"
+        ]
+      },
+      {
+        "phase_number": 0.5,
+        "name": "Holistic Review #1 - Before Design",
+        "status": "completed",
+        "estimated_hours": 1,
+        "actual_hours": 1,
+        "progress_percent": 100,
+        "completed_at": "2026-01-03T03:00:00Z",
+        "deliverables": [
+          "architecture/holistic-review-01.md (400+ lines)",
+          "Pattern analysis from ADO v2, Cleanup v2, Vacuum v2",
+          "Architecture recommendations (engine-based, transactional)",
+          "Code reuse strategy (45% reuse potential)",
+          "Complexity estimate (4,000-5,000 lines total)"
+        ],
+        "key_insights": [
+          "Engine-based architecture proven (3 successful migrations)",
+          "Transactional operations critical for safety",
+          "Progressive analysis optimizes performance",
+          "Dual-mode architecture needs evaluation",
+          "45% code reuse from existing utilities"
+        ]
+      },
+      {
+        "phase_number": 1,
+        "name": "Design Architecture",
+        "status": "in_progress",
+        "estimated_hours": 2,
+        "progress_percent": 20,
+        "started_at": "2026-01-03T03:00:00Z",
+        "tasks_completed": 0,
+        "tasks_total": 7,
+        "pending_tasks": [
+          "Create detailed architecture diagram",
+          "Define TransformationTransaction interface",
+          "Specify 5-level risk classification rules",
+          "Design progressive analysis pipeline",
+          "Evaluate dual-mode architecture (cost/benefit)",
+          "Document component interfaces",
+          "Define YAML configuration structure"
+        ]
+      },
+      {
+        "phase_number": 1.5,
+        "name": "Holistic Review #2 - Before Implementation",
+        "status": "not_started",
+        "estimated_hours": 0.5,
+        "progress_percent": 0,
+        "deliverables_planned": [
+          "architecture/holistic-review-02.md",
+          "Code reuse opportunities identified",
+          "Interface validation",
+          "Architectural adjustments documented"
+        ]
+      },
+      {
+        "phase_number": 2,
+        "name": "Implement Core Orchestrator",
+        "status": "not_started",
+        "estimated_hours": 3,
+        "progress_percent": 0
+      },
+      {
+        "phase_number": 3,
+        "name": "Implement Engines",
+        "status": "not_started",
+        "estimated_hours": 4,
+        "progress_percent": 0
+      },
+      {
+        "phase_number": 3.5,
+        "name": "Holistic Review #3 - Before Configuration",
+        "status": "not_started",
+        "estimated_hours": 0.5,
+        "progress_percent": 0,
+        "deliverables_planned": [
+          "architecture/holistic-review-03.md",
+          "Code quality review",
+          "Configuration patterns analysis",
+          "Implementation adjustments"
+        ]
+      },
+      {
+        "phase_number": 4,
+        "name": "Configuration & Templates",
+        "status": "not_started",
+        "estimated_hours": 1.5,
+        "progress_percent": 0
+      },
+      {
+        "phase_number": 5,
+        "name": "Testing & Validation",
+        "status": "not_started",
+        "estimated_hours": 3,
+        "progress_percent": 0
+      },
+      {
+        "phase_number": 5.5,
+        "name": "Holistic Review #4 - Before Integration",
+        "status": "not_started",
+        "estimated_hours": 0.5,
+        "progress_percent": 0,
+        "deliverables_planned": [
+          "architecture/holistic-review-04.md",
+          "Test coverage analysis",
+          "Routing optimization recommendations",
+          "Integration validation"
+        ]
+      },
+      {
+        "phase_number": 6,
+        "name": "Master Orchestrator Integration",
+        "status": "not_started",
+        "estimated_hours": 1,
+        "progress_percent": 0
+      },
+      {
+        "phase_number": 7,
+        "name": "Documentation & Completion",
+        "status": "not_started",
+        "estimated_hours": 1,
+        "progress_percent": 0
+      },
+      {
+        "phase_number": 7.5,
+        "name": "Holistic Review #5 - Final Architecture Review",
+        "status": "not_started",
+        "estimated_hours": 1,
+        "progress_percent": 0,
+        "deliverables_planned": [
+          "reports/final-holistic-review.md",
+          "System-wide improvements identified",
+          "Reusable patterns extracted",
+          "Technical debt documented",
+          "Recommendations for remaining phases"
+        ]
+      },
+      {
+        "phase_number": 8,
+        "name": "REFACTOR & Cleanup",
+        "status": "not_started",
+        "estimated_hours": 1,
+        "progress_percent": 0
+      }
+    ]
+  },
+  "estimates": {
+    "total_hours": 19,
+    "hours_completed": 3,
+    "hours_remaining": 16,
+    "completion_date_estimate": "2026-01-04T11:00:00Z",
+    "holistic_review_hours": 3.5,
+    "holistic_review_percent_of_total": 18.4
+  },
+  "architecture": {
+    "pattern": "engine_based_modular",
+    "components": {
+      "orchestrator": {
+        "file": "sanitization_orchestrator_v2.py",
+        "lines_estimate": "600-700",
+        "status": "not_started"
+      },
+      "engines": [
+        {
+          "name": "CodeAnalyzerEngine",
+          "file": "code_analyzer_engine.py",
+          "lines_estimate": "400-500",
+          "reuse_percent": 50,
+          "status": "not_started"
+        },
+        {
+          "name": "TransformerEngine",
+          "file": "transformer_engine.py",
+          "lines_estimate": "500-600",
+          "reuse_percent": 20,
+          "status": "not_started"
+        },
+        {
+          "name": "ValidatorEngine",
+          "file": "validator_engine.py",
+          "lines_estimate": "300-400",
+          "reuse_percent": 40,
+          "status": "not_started"
+        },
+        {
+          "name": "MappingEngine",
+          "file": "mapping_engine.py",
+          "lines_estimate": "300-400",
+          "reuse_percent": 70,
+          "status": "not_started"
+        },
+        {
+          "name": "ReportGeneratorEngine",
+          "file": "report_generator_engine.py",
+          "lines_estimate": "200-300",
+          "reuse_percent": 60,
+          "status": "not_started"
+        }
+      ]
+    },
+    "code_estimates": {
+      "production_lines": "2300-2900",
+      "test_lines": "1500-2000",
+      "total_lines": "3800-4900",
+      "reuse_percent": 45
+    }
+  },
+  "key_features": [
+    "BaseOrchestrator v4.1 compliance",
+    "Transactional operations with atomic rollback",
+    "5-level risk classification (SAFE → CRITICAL)",
+    "Progressive AST analysis",
+    "Dry-run mode by default",
+    "State persistence in PlanningStateDB",
+    "Master Orchestrator integration (priority 57)",
+    "CORTEX brain protection",
+    "Checkpoint/rollback system"
+  ],
+  "holistic_reviews": {
+    "enabled": true,
+    "auto_trigger": true,
+    "total_reviews": 5,
+    "completed_reviews": 1,
+    "schedule": [
+      {
+        "review_number": 1,
+        "name": "Before Design Phase",
+        "status": "completed",
+        "trigger_condition": "phase_0_complete",
+        "document": "architecture/holistic-review-01.md",
+        "scope": "design",
+        "duration_hours": 1,
+        "completed_phases": [0],
+        "key_insights": [
+          "Engine-based architecture proven",
+          "Transactional operations critical",
+          "45% code reuse achievable"
+        ]
+      },
+      {
+        "review_number": 2,
+        "name": "Before Implementation Phase",
+        "status": "not_started",
+        "trigger_condition": "phase_1_complete",
+        "document": "architecture/holistic-review-02.md",
+        "scope": "code_reuse_strategy",
+        "duration_hours": 0.5,
+        "completed_phases": [0, 1],
+        "purpose": "Code reuse strategy, interface validation"
+      },
+      {
+        "review_number": 3,
+        "name": "Before Configuration Phase",
+        "status": "not_started",
+        "trigger_condition": "phase_3_complete",
+        "document": "architecture/holistic-review-03.md",
+        "scope": "implementation_quality",
+        "duration_hours": 0.5,
+        "completed_phases": [0, 1, 2, 3],
+        "purpose": "Implementation quality, config patterns"
+      },
+      {
+        "review_number": 4,
+        "name": "Before Integration Phase",
+        "status": "not_started",
+        "trigger_condition": "phase_5_complete",
+        "document": "architecture/holistic-review-04.md",
+        "scope": "integration",
+        "duration_hours": 0.5,
+        "completed_phases": [0, 1, 2, 3, 4, 5],
+        "purpose": "Routing optimization, test coverage analysis"
+      },
+      {
+        "review_number": 5,
+        "name": "Final Architecture Review",
+        "status": "not_started",
+        "trigger_condition": "phase_7_complete",
+        "document": "reports/final-holistic-review.md",
+        "scope": "final",
+        "duration_hours": 1,
+        "completed_phases": [0, 1, 2, 3, 4, 5, 6, 7],
+        "purpose": "System-wide review, future recommendations"
+      }
+    ],
+    "benefits": [
+      "Continuous improvement throughout migration",
+      "Pattern extraction from completed work",
+      "Architectural consistency validation",
+      "Early identification of reuse opportunities",
+      "Documentation of lessons learned"
+    ]
+  },
+  "testing": {
+    "target_coverage": 95,
+    "test_count_estimate": "80-100",
+    "test_categories": [
+      "Unit tests (per engine)",
+      "Integration tests (end-to-end)",
+      "Rollback scenario tests",
+      "Edge case tests",
+      "Performance tests"
+    ]
+  },
+  "parent_plan_impact": {
+    "cortex_v5_holistic_refactor": {
+      "current_progress": 48,
+      "progress_after_completion": 52,
+      "impact_percent": 4,
+      "phase": "6.4"
+    }
+  },
+  "artifacts": [
+    "00-master-plan.md",
+    "architecture/holistic-review-01.md"
+  ],
+  "validations": [
+    {
+      "type": "architecture_review",
+      "status": "completed",
+      "date": "2026-01-03T03:00:00Z",
+      "result": "approved_for_design_phase"
+    }
+  ]
+}

@@ -1,0 +1,921 @@
+# Operation Classification Map for Phase 3 - CLI Wrapper Migration
+# Generated: 2025-12-09
+# Source: cortex-operations.yaml (6152 lines)
+# Total operations analyzed: 238
+
+# ============================================================================
+# CLI WRAPPER OPERATIONS (System operations requiring CLI wrapper)
+# ============================================================================
+cli_wrapper_operations:
+  - operation_id: review
+    current_status: has_execution_method
+    cli_script: scripts/cli_wrappers/review_wrapper.py
+    reason: Code review with file I/O operations
+    
+  - operation_id: system_maintenance
+    current_status: has_execution_method
+    cli_script: scripts/cli_wrappers/system_maintenance_wrapper.py
+    reason: Comprehensive maintenance workflow with healthcheck/align/optimize
+    
+  - operation_id: deploy_cortex_production
+    current_status: has_execution_method
+    cli_script: scripts/cli_wrappers/deploy_wrapper.py
+    reason: Production build and git operations
+    
+  - operation_id: regenerate_prompts
+    current_status: has_execution_method
+    cli_script: scripts/cli_wrappers/regenerate_prompts_wrapper.py
+    reason: File deletion and codebase scanning
+    
+  - operation_id: align
+    current_status: has_execution_method
+    cli_script: scripts/cli_wrappers/align_wrapper.py
+    reason: System alignment with file scanning and validation
+    
+  - operation_id: healthcheck
+    current_status: has_execution_method
+    cli_script: scripts/cli_wrappers/healthcheck_wrapper.py
+    reason: System health diagnostics with file operations
+    
+  - operation_id: optimize
+    current_status: has_execution_method
+    cli_script: scripts/cli_wrappers/optimize_wrapper.py
+    reason: System optimization with performance analysis
+
+  - operation_id: load_dashboard
+    current_status: needs_execution_method
+    cli_script: scripts/cli_wrappers/dashboard_wrapper.py
+    reason: HTTP server launch with file operations
+    
+  - operation_id: admin_dashboard
+    current_status: needs_execution_method
+    cli_script: scripts/cli_wrappers/admin_dashboard_wrapper.py
+    reason: Admin dashboard with repository selector
+
+  - operation_id: cleanup
+    current_status: needs_execution_method
+    cli_script: scripts/cli_wrappers/cleanup_wrapper.py
+    reason: Workspace cleanup with file operations
+
+# ============================================================================
+# COPILOT CHAT OPERATIONS (Interactive workflows via chat)
+# ============================================================================
+copilot_chat_operations:
+  - operation_id: ado
+    current_status: needs_execution_method
+    reason: Interactive ADO work item creation with user input
+    
+  - operation_id: planning
+    current_status: needs_execution_method
+    reason: Interactive feature planning workflow
+    
+  - operation_id: tdd
+    current_status: needs_execution_method
+    reason: Interactive TDD workflow with RED→GREEN→REFACTOR
+    
+  - operation_id: feedback_report
+    current_status: needs_execution_method
+    reason: Interactive metrics collection with user prompts
+    
+  - operation_id: help_command
+    current_status: needs_execution_method
+    reason: Help system integrated into chat
+    
+  - operation_id: command_search
+    current_status: needs_execution_method
+    reason: Command search integrated into chat
+    
+  - operation_id: command_help
+    current_status: needs_execution_method
+    reason: Command discovery integrated into chat
+    
+  - operation_id: feature_planning
+    current_status: needs_execution_method
+    reason: Interactive planning with Work Planner agent
+    
+  - operation_id: interactive_planning
+    current_status: needs_execution_method
+    reason: Collaborative planning with clarification questions
+    
+  - operation_id: architecture_planning
+    current_status: needs_execution_method
+    reason: Architecture design with guided questions
+    
+  - operation_id: refactoring_planning
+    current_status: needs_execution_method
+    reason: Refactoring workflow with interactive guidance
+    
+  - operation_id: application_onboarding
+    current_status: needs_execution_method
+    reason: Interactive onboarding with codebase analysis
+    
+  - operation_id: user_onboarding
+    current_status: needs_execution_method
+    reason: Guided new user experience with hands-on learning
+    
+  - operation_id: cortex_tutorial
+    current_status: needs_execution_method
+    reason: Interactive demo walkthrough
+    
+  - operation_id: rca
+    current_status: needs_execution_method
+    reason: Interactive root cause analysis with 5 Whys
+
+# ============================================================================
+# INTERNAL OPERATIONS (Infrastructure - not user-invoked)
+# ============================================================================
+internal_operations:
+  # Orchestrators
+  - operation_id: git_checkpoint_orchestrator
+    current_status: needs_execution_method
+    reason: Infrastructure - called by other orchestrators
+    
+  - operation_id: plan_execution_orchestrator
+    current_status: needs_execution_method
+    reason: Infrastructure - executes plans created by planning operation
+    
+  - operation_id: planning_orchestrator
+    current_status: needs_execution_method
+    reason: Infrastructure - YAML planning engine
+    
+  - operation_id: onboarding_acknowledgment_orchestrator
+    current_status: needs_execution_method
+    reason: Infrastructure - onboarding workflow component
+    
+  - operation_id: phase_checkpoint_manager
+    current_status: needs_execution_method
+    reason: Infrastructure - workflow phase tracking
+    
+  - operation_id: git_sync_and_optimize
+    current_status: needs_execution_method
+    reason: Infrastructure - git maintenance
+    
+  - operation_id: application_health_orchestrator
+    current_status: needs_execution_method
+    reason: Infrastructure - health monitoring backend
+    
+  - operation_id: alignment_orchestrator
+    current_status: needs_execution_method
+    reason: Infrastructure - alignment workflow
+    
+  - operation_id: cleanup_orchestrator
+    current_status: needs_execution_method
+    reason: Infrastructure - cleanup workflow backend
+    
+  - operation_id: optimize_cortex_orchestrator
+    current_status: needs_execution_method
+    reason: Infrastructure - optimization workflow backend
+    
+  - operation_id: publish_branch_orchestrator
+    current_status: needs_execution_method
+    reason: Infrastructure - deployment backend
+    
+  - operation_id: learning_observer
+    current_status: needs_execution_method
+    reason: Infrastructure - observer pattern for learning
+    
+  - operation_id: debug_workflow_orchestrator
+    current_status: needs_execution_method
+    reason: Infrastructure - debug session tracking
+    
+  - operation_id: tdd_workflow_orchestrator
+    current_status: needs_execution_method
+    reason: Infrastructure - TDD workflow backend
+
+  # Agents
+  - operation_id: ado_agent
+    current_status: needs_execution_method
+    reason: Infrastructure - ADO integration backend
+    
+  - operation_id: application_health_agent
+    current_status: needs_execution_method
+    reason: Infrastructure - health monitoring agent
+    
+  - operation_id: agent_types
+    current_status: needs_execution_method
+    reason: Infrastructure - agent type definitions
+    
+  - operation_id: batch_processor
+    current_status: needs_execution_method
+    reason: Infrastructure - batch test generator
+    
+  - operation_id: change_governor
+    current_status: needs_execution_method
+    reason: Infrastructure - change management agent
+    
+  - operation_id: checkpoint
+    current_status: needs_execution_method
+    reason: Infrastructure - checkpoint system
+    
+  - operation_id: code_cleanup_validator
+    current_status: needs_execution_method
+    reason: Infrastructure - cleanup validation
+    
+  - operation_id: commit_handler
+    current_status: needs_execution_method
+    reason: Infrastructure - git commit handler
+    
+  - operation_id: compliance_dashboard_agent
+    current_status: needs_execution_method
+    reason: Infrastructure - compliance dashboard backend
+    
+  - operation_id: document_organizer
+    current_status: needs_execution_method
+    reason: Infrastructure - document organization
+    
+  - operation_id: error_corrector
+    current_status: needs_execution_method
+    reason: Infrastructure - error correction agent
+    
+  - operation_id: exceptions
+    current_status: needs_execution_method
+    reason: Infrastructure - exception definitions
+    
+  - operation_id: feature_workflow
+    current_status: needs_execution_method
+    reason: Infrastructure - feature workflow engine
+    
+  - operation_id: incremental_plan_generator
+    current_status: needs_execution_method
+    reason: Infrastructure - plan generation backend
+    
+  - operation_id: intent_router
+    current_status: needs_execution_method
+    reason: Infrastructure - intent routing
+    
+  - operation_id: investigation_router
+    current_status: needs_execution_method
+    reason: Infrastructure - investigation routing
+    
+  - operation_id: learning_capture_agent
+    current_status: needs_execution_method
+    reason: Infrastructure - learning capture
+    
+  - operation_id: lint_integration
+    current_status: needs_execution_method
+    reason: Infrastructure - lint integration wrapper
+    
+  - operation_id: page_tracking
+    current_status: needs_execution_method
+    reason: Infrastructure - page tracking system
+    
+  - operation_id: pattern_cache
+    current_status: needs_execution_method
+    reason: Infrastructure - pattern caching
+    
+  - operation_id: plan_cli
+    current_status: needs_execution_method
+    reason: Infrastructure - plan CLI backend
+    
+  - operation_id: plan_index_generator
+    current_status: needs_execution_method
+    reason: Infrastructure - plan index generation
+    
+  - operation_id: plan_metadata
+    current_status: needs_execution_method
+    reason: Infrastructure - plan metadata extraction
+    
+  - operation_id: plan_organizer
+    current_status: needs_execution_method
+    reason: Infrastructure - plan organization
+    
+  - operation_id: plan_registry
+    current_status: needs_execution_method
+    reason: Infrastructure - plan registry system
+    
+  - operation_id: production_readiness
+    current_status: needs_execution_method
+    reason: Infrastructure - production readiness checks
+    
+  - operation_id: profile_agent
+    current_status: needs_execution_method
+    reason: Infrastructure - user profile management
+    
+  - operation_id: rca_agent
+    current_status: needs_execution_method
+    reason: Infrastructure - RCA workflow backend
+    
+  - operation_id: refactoring_intelligence
+    current_status: needs_execution_method
+    reason: Infrastructure - refactoring intelligence
+    
+  - operation_id: screenshot_analyzer
+    current_status: needs_execution_method
+    reason: Infrastructure - screenshot analysis
+    
+  - operation_id: session_resumer
+    current_status: needs_execution_method
+    reason: Infrastructure - session resume handler
+    
+  - operation_id: smell_cache
+    current_status: needs_execution_method
+    reason: Infrastructure - code smell caching
+    
+  - operation_id: streaming_plan_writer
+    current_status: needs_execution_method
+    reason: Infrastructure - streaming plan writer
+    
+  - operation_id: tdd_state_machine
+    current_status: needs_execution_method
+    reason: Infrastructure - TDD state machine
+    
+  - operation_id: tdd_workflow
+    current_status: needs_execution_method
+    reason: Infrastructure - TDD workflow backend
+    
+  - operation_id: tdd_workflow_integrator
+    current_status: needs_execution_method
+    reason: Infrastructure - TDD workflow integration
+    
+  - operation_id: terminal_integration
+    current_status: needs_execution_method
+    reason: Infrastructure - terminal integration
+    
+  - operation_id: test_execution_manager
+    current_status: needs_execution_method
+    reason: Infrastructure - test execution backend
+    
+  - operation_id: welcome_banner_agent
+    current_status: needs_execution_method
+    reason: Infrastructure - welcome banner display
+    
+  - operation_id: workflow_engine
+    current_status: needs_execution_method
+    reason: Infrastructure - DAG workflow orchestration
+    
+  - operation_id: workflow_pipeline
+    current_status: needs_execution_method
+    reason: Infrastructure - workflow pipeline system
+    
+  - operation_id: workspace_context_manager
+    current_status: needs_execution_method
+    reason: Infrastructure - workspace context management
+
+  # Utilities (all in src/operations/utilities/)
+  - operation_id: align_utility
+    current_status: needs_execution_method
+    reason: Infrastructure - utility module
+    
+  - operation_id: healthcheck_utility
+    current_status: needs_execution_method
+    reason: Infrastructure - utility module
+    
+  - operation_id: ado_utility
+    current_status: needs_execution_method
+    reason: Infrastructure - utility module
+    
+  - operation_id: analysis_utility
+    current_status: needs_execution_method
+    reason: Infrastructure - utility module
+    
+  - operation_id: checkpoint_utility
+    current_status: needs_execution_method
+    reason: Infrastructure - utility module
+    
+  - operation_id: cleanup_utility
+    current_status: needs_execution_method
+    reason: Infrastructure - utility module
+    
+  - operation_id: deploy_utility
+    current_status: needs_execution_method
+    reason: Infrastructure - utility module
+    
+  - operation_id: setup_epm_utility
+    current_status: needs_execution_method
+    reason: Infrastructure - utility module
+    
+  - operation_id: swagger_estimation_utility
+    current_status: needs_execution_method
+    reason: Infrastructure - utility module
+    
+  - operation_id: commit_utility
+    current_status: needs_execution_method
+    reason: Infrastructure - utility module
+    
+  - operation_id: git_checkpoint_utility
+    current_status: needs_execution_method
+    reason: Infrastructure - utility module
+    
+  - operation_id: rollback_utility
+    current_status: needs_execution_method
+    reason: Infrastructure - utility module
+    
+  - operation_id: health_utility
+    current_status: needs_execution_method
+    reason: Infrastructure - utility module
+    
+  - operation_id: base_incremental_utility
+    current_status: needs_execution_method
+    reason: Infrastructure - utility module
+    
+  - operation_id: lint_utility
+    current_status: needs_execution_method
+    reason: Infrastructure - utility module
+    
+  - operation_id: metrics_utility
+    current_status: needs_execution_method
+    reason: Infrastructure - utility module
+    
+  - operation_id: onboarding_utility
+    current_status: needs_execution_method
+    reason: Infrastructure - utility module
+    
+  - operation_id: phase8_utility
+    current_status: needs_execution_method
+    reason: Infrastructure - utility module
+    
+  - operation_id: migration_utility
+    current_status: needs_execution_method
+    reason: Infrastructure - utility module
+    
+  - operation_id: planning_utility
+    current_status: needs_execution_method
+    reason: Infrastructure - utility module
+    
+  - operation_id: pr_context_utility
+    current_status: needs_execution_method
+    reason: Infrastructure - utility module
+    
+  - operation_id: rca_utility
+    current_status: needs_execution_method
+    reason: Infrastructure - utility module
+    
+  - operation_id: realignment_utility
+    current_status: needs_execution_method
+    reason: Infrastructure - utility module
+    
+  - operation_id: dashboard_utility
+    current_status: needs_execution_method
+    reason: Infrastructure - utility module
+    
+  - operation_id: review_utility
+    current_status: needs_execution_method
+    reason: Infrastructure - utility module
+    
+  - operation_id: unified_entry_point_utility
+    current_status: needs_execution_method
+    reason: Infrastructure - utility module
+    
+  - operation_id: master_setup_utility
+    current_status: needs_execution_method
+    reason: Infrastructure - utility module
+    
+  - operation_id: setup_utility
+    current_status: needs_execution_method
+    reason: Infrastructure - utility module
+    
+  - operation_id: tdd_utility
+    current_status: needs_execution_method
+    reason: Infrastructure - utility module
+    
+  - operation_id: upgrade_utility
+    current_status: needs_execution_method
+    reason: Infrastructure - utility module
+    
+  - operation_id: ux_enhancement_utility
+    current_status: needs_execution_method
+    reason: Infrastructure - utility module
+    
+  - operation_id: session_utility
+    current_status: needs_execution_method
+    reason: Infrastructure - utility module
+
+  # Dashboard collectors/aggregators
+  - operation_id: validate_dashboard_data
+    current_status: needs_execution_method
+    reason: Infrastructure - dashboard validation
+    
+  - operation_id: generate_executive_summary
+    current_status: needs_execution_method
+    reason: Infrastructure - dashboard aggregator
+    
+  - operation_id: generate_overview
+    current_status: needs_execution_method
+    reason: Infrastructure - dashboard aggregator
+    
+  - operation_id: reconcile_dashboard_data
+    current_status: needs_execution_method
+    reason: Infrastructure - dashboard reconciliation
+    
+  - operation_id: scan_security_comprehensive
+    current_status: needs_execution_method
+    reason: Infrastructure - security scanner
+    
+  - operation_id: dashboard_validation
+    current_status: needs_execution_method
+    reason: Infrastructure - dashboard validation
+    
+  - operation_id: enhanced_collectors
+    current_status: needs_execution_method
+    reason: Infrastructure - enhanced collectors
+    
+  - operation_id: architecture_graph_builder
+    current_status: needs_execution_method
+    reason: Infrastructure - architecture graph builder
+    
+  - operation_id: dashboard_generator
+    current_status: needs_execution_method
+    reason: Infrastructure - dashboard generator
+    
+  - operation_id: dashboard_validator
+    current_status: needs_execution_method
+    reason: Infrastructure - dashboard validator
+    
+  - operation_id: dashboard_validator_v2
+    current_status: needs_execution_method
+    reason: Infrastructure - dashboard validator v2
+    
+  - operation_id: recommendations_engine
+    current_status: needs_execution_method
+    reason: Infrastructure - recommendations engine
+    
+  - operation_id: techstack_analyzer
+    current_status: needs_execution_method
+    reason: Infrastructure - tech stack analyzer
+
+  # Modules (EPM modules)
+  - operation_id: project_validation
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: platform_detection
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: git_sync
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: virtual_environment
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: python_dependencies
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: vision_api
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: conversation_tracking
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: brain_initialization
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: brain_tests
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: tooling_verification
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: setup_completion
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: load_story_template
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: apply_narrator_voice
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: validate_story_structure
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: save_story_markdown
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: update_mkdocs_index
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: build_story_preview
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: scan_temporary_files
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: remove_old_logs
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: clear_python_cache
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: vacuum_sqlite_databases
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: remove_orphaned_files
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: generate_cleanup_report
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: scan_docstrings
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: generate_api_docs
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: refresh_design_docs
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: build_mkdocs_site
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: validate_doc_links
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: deploy_docs_preview
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: load_protection_rules
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: validate_tier0_immutability
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: validate_tier1_structure
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: validate_tier2_schema
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: check_brain_integrity
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: generate_protection_report
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: discover_tests
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: run_unit_tests
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: run_integration_tests
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: generate_coverage_report
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+    
+  - operation_id: validate_test_quality
+    current_status: needs_execution_method
+    reason: Infrastructure - EPM module
+
+  # Other infrastructure
+  - operation_id: resume_conversation
+    current_status: needs_execution_method
+    reason: Infrastructure - conversation resume backend
+    
+  - operation_id: threat_modeler_agent
+    current_status: needs_execution_method
+    reason: Infrastructure - threat modeling agent
+    
+  - operation_id: test_intelligence
+    current_status: needs_execution_method
+    reason: Infrastructure - test intelligence module
+    
+  - operation_id: regenerate_diagrams
+    current_status: needs_execution_method
+    reason: Infrastructure - diagram regeneration
+    
+  - operation_id: documentation_orchestrator
+    current_status: needs_execution_method
+    reason: Infrastructure - documentation orchestrator
+    
+  - operation_id: learning_librarian_agent
+    current_status: needs_execution_method
+    reason: Infrastructure - learning librarian
+    
+  - operation_id: commit_and_push
+    current_status: needs_execution_method
+    reason: Infrastructure - git commit/push handler
+    
+  - operation_id: healthcheck_operation
+    current_status: needs_execution_method
+    reason: Infrastructure - healthcheck module
+    
+  - operation_id: diagram_regeneration
+    current_status: needs_execution_method
+    reason: Infrastructure - diagram regeneration module
+    
+  - operation_id: enhanced_feedback_module
+    current_status: needs_execution_method
+    reason: Infrastructure - feedback collection module
+    
+  - operation_id: admin_feedback_review_module
+    current_status: needs_execution_method
+    reason: Infrastructure - admin feedback review
+    
+  - operation_id: ast_cache
+    current_status: needs_execution_method
+    reason: Infrastructure - AST caching
+
+# ============================================================================
+# DEPRECATED/CONSOLIDATED OPERATIONS (No execution method needed)
+# ============================================================================
+deprecated_operations:
+  - operation_id: update_documentation
+    status: deprecated
+    consolidation_target: document_cortex
+    
+  - operation_id: brain_protection_check
+    status: experimental
+    reason: Tier 0 governance handles automatically
+    
+  - operation_id: brain_health_check
+    status: deprecated
+    consolidation_target: maintain_cortex
+    
+  - operation_id: comprehensive_self_review
+    status: experimental
+    reason: Advanced validation feature
+    
+  - operation_id: run_tests
+    status: integrated
+    integration_target: maintain_cortex
+    
+  - operation_id: optimize_cortex
+    status: deprecated
+    consolidation_target: maintain_cortex
+    
+  - operation_id: deploy_to_app
+    status: future
+    reason: Planned for future
+    
+  - operation_id: interactive_planning
+    status: integrated
+    integration_target: feature_planning
+    
+  - operation_id: architecture_planning
+    status: future
+    reason: Planned for future
+    
+  - operation_id: refactoring_planning
+    status: future
+    reason: Planned for future
+    
+  - operation_id: command_help
+    status: integrated
+    integration_target: help system
+    
+  - operation_id: command_search
+    status: integrated
+    integration_target: help system
+
+# ============================================================================
+# OPERATIONS WITH SPECIAL STATUS (Already have entries, no changes needed)
+# ============================================================================
+already_migrated_operations:
+  - operation_id: ado_work_item
+    status: ready
+    execution_method: copilot_chat
+    
+  - operation_id: swagger_estimation
+    status: ready
+    execution_method: copilot_chat
+    
+  - operation_id: ux_enhancement
+    status: ready
+    execution_method: copilot_chat
+    
+  - operation_id: lint_validation
+    status: ready
+    execution_method: copilot_chat
+    
+  - operation_id: application_health
+    status: ready
+    execution_method: copilot_chat
+
+# ============================================================================
+# SUMMARY STATISTICS
+# ============================================================================
+summary:
+  total_operations_analyzed: 238
+  
+  cli_wrapper: 10
+  cli_wrapper_already_classified: 7
+  cli_wrapper_needs_classification: 3
+  
+  copilot_chat: 15
+  copilot_chat_already_classified: 0
+  copilot_chat_needs_classification: 15
+  
+  internal: 181
+  internal_already_classified: 0
+  internal_needs_classification: 181
+  
+  deprecated_consolidated: 12
+  already_migrated: 5
+  
+  total_needs_execution_method: 199
+  total_already_has_execution_method: 7
+  
+  ready_for_phase3_update: yes
+  
+  breakdown_by_category:
+    cli_wrapper_system_operations: 10
+    copilot_chat_interactive: 15
+    infrastructure_orchestrators: 15
+    infrastructure_agents: 48
+    infrastructure_utilities: 34
+    infrastructure_modules: 50
+    infrastructure_dashboard: 13
+    infrastructure_other: 11
+    deprecated: 12
+    already_migrated: 5
+
+# ============================================================================
+# PHASE 3 ACTION PLAN
+# ============================================================================
+phase3_actions:
+  step1:
+    action: Update CLI wrapper operations
+    count: 3
+    operations:
+      - load_dashboard
+      - admin_dashboard
+      - cleanup
+    
+  step2:
+    action: Update Copilot Chat operations
+    count: 15
+    operations:
+      - ado
+      - planning
+      - tdd
+      - feedback_report
+      - feature_planning
+      - application_onboarding
+      - user_onboarding
+      - cortex_tutorial
+      - rca
+      - help_command
+      - command_search
+      - command_help
+      - interactive_planning
+      - architecture_planning
+      - refactoring_planning
+    
+  step3:
+    action: Update internal operations
+    count: 181
+    note: Add execution_method internal to all orchestrators, agents, utilities, modules
+    
+  step4:
+    action: Validate deprecated operations
+    count: 12
+    note: Ensure consolidation targets are correct
+    
+  step5:
+    action: Final validation
+    note: Run align to validate all changes
+
+# ============================================================================
+# NOTES
+# ============================================================================
+notes: |
+  Classification based on:
+  1. CLI Wrapper: System operations with file I/O, git operations, production workflows
+  2. Copilot Chat: Interactive workflows requiring multi-turn conversations
+  3. Internal: Infrastructure components called by other orchestrators, not user-invoked
+  
+  Operations with execution_method: cli_wrapper already set:
+  - review, system_maintenance, deploy_cortex_production, regenerate_prompts
+  - align, healthcheck, optimize
+  
+  Total: 238 operations analyzed from cortex-operations.yaml
+  File size: 6152 lines
+  Analysis date: 2025-12-09

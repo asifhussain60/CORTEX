@@ -1,0 +1,25 @@
+# GitHub Gist Registry for Feedback Reports
+
+# This registry tracks user-uploaded feedback reports via GitHub Gists.
+# Users upload their feedback to personal Gists and share the URL with CORTEX admins.
+
+schema_version: '1.0'
+last_updated: '2025-11-24'
+
+applications: []
+# Example entry (populated when users share Gist URLs):
+#  - app_name: MyApp
+#    gist_url: https://gist.github.com/username/abc123def456
+#    gist_id: abc123def456
+#    owner: username
+#    added_date: '2025-11-24T10:30:00'
+#    last_synced: '2025-11-24T14:45:00'
+#    report_count: 3
+#    description: "MyApp feedback reports"
+
+# Usage Instructions:
+# 1. User runs: /CORTEX feedback (in their repo)
+# 2. User uploads report to personal GitHub Gist
+# 3. User shares Gist URL with CORTEX admin
+# 4. Admin adds entry to this registry
+# 5. Admin runs: /CORTEX review feedback (auto-syncs from all registered Gists)

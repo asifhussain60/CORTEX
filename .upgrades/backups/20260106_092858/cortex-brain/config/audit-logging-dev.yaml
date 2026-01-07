@@ -1,0 +1,141 @@
+# CORTEX Audit Logger Configuration - Development Environment
+# Version: 1.0.0
+# Environment: Development
+# Purpose: Verbose logging for debugging and development
+
+audit_logging:
+  # Core Settings
+  enabled: true
+  environment: "development"
+  log_level: "DEBUG"
+  
+  # Output Configuration
+  output:
+    console: true
+    file: true
+    database: true
+    
+  # File Settings
+  file:
+    base_path: "logs/audit"
+    format: "jsonl"
+    rotation:
+      enabled: true
+      max_size_mb: 100
+      max_files: 50
+      max_age_days: 30
+    compression:
+      enabled: false  # Disabled for easier debugging
+      algorithm: "gzip"
+      level: 6
+      
+  # Buffer Settings
+  buffer:
+    enabled: true
+    size: 1000
+    flush_interval_seconds: 5
+    flush_on_exit: true
+    overflow_strategy: "drop_oldest"
+    
+  # Performance Settings
+  performance:
+    async_writes: true
+    batch_size: 50
+    max_latency_ms: 50
+    monitor_overhead: true
+    
+  # Security Settings (Relaxed for Development)
+  security:
+    encryption_enabled: false
+    sanitize_pii: true
+    access_control_enabled: false
+    integrity_checks: false
+    
+  # Self-Healing Settings
+  self_healing:
+    enabled: true
+    pattern_detection: true
+    anomaly_detection: true
+    error_clustering: true
+    auto_recovery: true
+    max_retry_attempts: 3
+    retry_backoff_seconds: [1, 5, 15]
+    
+  # Orchestrator Coverage
+  orchestrators:
+    planning_v5:
+      enabled: true
+      log_level: "DEBUG"
+      capture_context: true
+    ado_v2:
+      enabled: true
+      log_level: "DEBUG"
+      capture_context: true
+    vacuum_v2:
+      enabled: true
+      log_level: "DEBUG"
+      capture_context: true
+    cleanup_v2:
+      enabled: true
+      log_level: "DEBUG"
+      capture_context: true
+    investigation_v2:
+      enabled: true
+      log_level: "DEBUG"
+      capture_context: true
+    tdd_v4:
+      enabled: true
+      log_level: "DEBUG"
+      capture_context: true
+    debug_v2:
+      enabled: true
+      log_level: "DEBUG"
+      capture_context: true
+    refinement_v2:
+      enabled: true
+      log_level: "DEBUG"
+      capture_context: true
+    maintenance_v2:
+      enabled: true
+      log_level: "DEBUG"
+      capture_context: true
+    sanitization_v2:
+      enabled: true
+      log_level: "DEBUG"
+      capture_context: true
+    master_orchestrator:
+      enabled: true
+      log_level: "DEBUG"
+      capture_context: true
+      
+  # Feature Flags
+  features:
+    detailed_context: true
+    stack_traces: true
+    request_body_logging: true
+    response_body_logging: true
+    llm_call_logging: true
+    database_query_logging: true
+    state_transition_logging: true
+    
+  # Monitoring & Alerting
+  monitoring:
+    enabled: true
+    metrics_collection: true
+    alert_on_errors: false  # Don't alert in dev
+    dashboard_export: true
+    
+  # Cleanup & Retention
+  cleanup:
+    enabled: true
+    retention_days: 30
+    archive_before_delete: true
+    archive_path: "logs/audit/archives"
+    run_schedule: "0 2 * * *"  # 2 AM daily
+    
+  # Compliance
+  compliance:
+    gdpr_mode: false
+    soc2_mode: false
+    hipaa_mode: false
+    audit_trail_integrity: false

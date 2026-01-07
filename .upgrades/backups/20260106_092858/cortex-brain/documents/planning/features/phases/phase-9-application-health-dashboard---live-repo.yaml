@@ -1,0 +1,227 @@
+# Phase 9: Application Health Dashboard - Live Repository Testing
+# Part of CONSOLIDATED-IMPLEMENTATION-PLAN v1.0.0
+# Created: 2025-12-01
+
+phase_id: phase_9
+name: Application Health Dashboard - Live Repository Testing
+priority: 10
+status: not-started
+description: Test Application Health Dashboard with live development repositories
+  to validate multi-language analysis, architecture graph generation, and report accuracy
+rationale: December 1, 2025 wiring fix completed dashboard integration into intent
+  routing. Need production validation with real-world codebases before declaring feature
+  complete.
+context:
+  wiring_status: ✅ COMPLETE (December 1, 2025)
+  changes_made:
+  - 'agent_types.py: Added IntentType.APPLICATION_HEALTH, IntentType.ONBOARD_APPLICATION,
+    AgentType.APPLICATION_HEALTH (+9 lines)'
+  - 'intent_router.py: Added dashboard keywords and rule context (+25 lines)'
+  - 'application_health_agent.py: NEW agent wrapper with lazy initialization (+159
+    lines)'
+  - 'agent_executor.py: Added ApplicationHealthAgent instantiation (+10 lines)'
+  integration_flow: User request → IntentRouter → AgentExecutor → ApplicationHealthAgent
+    → ApplicationHealthOrchestrator → Response
+  supported_commands:
+  - show health dashboard
+  - health dashboard
+  - application health
+  - analyze application
+  - onboard application
+  - scan project
+objectives:
+- Validate dashboard works with real-world multi-project codebases
+- Test progressive crawling (overview/standard/deep) on large repositories
+- Verify multi-language analysis (Python, C#, JavaScript/TypeScript, ColdFusion)
+- Confirm architecture graph generation accuracy
+- Validate report generation and caching performance
+- Test CLI wrappers and natural language triggers
+test_repositories:
+- name: KSESSIONS
+  path: D:\PROJECTS\KSESSIONS
+  expected_characteristics:
+    primary_language: Python
+    estimated_size: Medium (5K-20K LOC)
+    architecture: Session management system
+    test_focus:
+    - Python AST-based analysis accuracy
+    - Function/class detection
+    - Dependency graph generation
+    - Cache hit rate optimization
+- name: NOOR CANVAS
+  path: D:\PROJECTS\NOOR CANVAS
+  expected_characteristics:
+    primary_language: Mixed (JavaScript/TypeScript, possibly React/Vue)
+    estimated_size: Large (20K-100K LOC)
+    architecture: Canvas/drawing application
+    test_focus:
+    - Multi-language analysis (JS/TS)
+    - Framework detection (React/Angular/Vue)
+    - Large repository crawling performance
+    - Progressive scan level effectiveness
+    - Memory efficiency with 50K+ files
+deliverables:
+- id: '9.1'
+  name: Live Repository Test Suite
+  description: Automated test suite that runs dashboard analysis on KSESSIONS and
+    NOOR CANVAS
+  files_affected:
+  - tests/integration/test_live_repositories.py (new)
+  - tests/integration/live_repo_fixtures.py (new)
+  - cortex.config.json (add test_repositories section)
+  acceptance_criteria:
+  - Test suite runs dashboard analysis on both repositories
+  - Validates report structure (total_files, languages, LOC counts)
+  - Checks architecture graph nodes/edges exist
+  - Verifies scan completes without errors
+  - Measures performance (overview <30s, standard <2min, deep <5min)
+  - Tests can run in CI/CD if repositories available
+  estimated_effort: 8 hours
+- id: '9.2'
+  name: Multi-Language Analysis Validation
+  description: Verify language-specific analyzers work correctly on real code
+  files_affected:
+  - tests/integration/test_language_analyzers.py (new)
+  - src/orchestrators/application_health_orchestrator.py (validation updates)
+  acceptance_criteria:
+  - 'Python analyzer: Detects functions, classes, imports in KSESSIONS'
+  - 'JavaScript/TypeScript analyzer: Detects React components, hooks in NOOR CANVAS'
+  - 'Generic analyzer: Handles unknown file types gracefully'
+  - Language detection accuracy >95%
+  - LOC counts match manual verification (±5% tolerance)
+  estimated_effort: 6 hours
+- id: '9.3'
+  name: Architecture Graph Validation
+  description: Validate architecture graph generation produces accurate dependency
+    maps
+  files_affected:
+  - tests/integration/test_architecture_graph.py (new)
+  - src/orchestrators/application_health_orchestrator.py
+  acceptance_criteria:
+  - Graph contains expected nodes (files/modules/components)
+  - Edges represent actual import/dependency relationships
+  - No circular dependencies falsely reported
+  - Graph serialization (JSON) is valid and complete
+  - Graph can be rendered in dashboard (future enhancement)
+  estimated_effort: 5 hours
+- id: '9.4'
+  name: Progressive Crawling Performance Testing
+  description: Validate overview/standard/deep scan levels meet performance targets
+  files_affected:
+  - tests/performance/test_progressive_crawling.py (new)
+  - cortex-brain/documents/reports/dashboard-performance-benchmarks.md (new)
+  acceptance_criteria:
+  - 'Overview scan (KSESSIONS): <30 seconds'
+  - 'Standard scan (KSESSIONS): <2 minutes'
+  - 'Deep scan (KSESSIONS): <5 minutes'
+  - 'Overview scan (NOOR CANVAS): <45 seconds (larger repo)'
+  - 'Standard scan (NOOR CANVAS): <3 minutes'
+  - 'Deep scan (NOOR CANVAS): <7 minutes'
+  - Memory usage stays <2GB for largest scan
+  - Performance report documents actual times vs targets
+  estimated_effort: 6 hours
+- id: '9.5'
+  name: Caching & Incremental Analysis Validation
+  description: Test hash-based caching and incremental updates on file changes
+  files_affected:
+  - tests/integration/test_dashboard_caching.py (new)
+  - src/orchestrators/application_health_orchestrator.py
+  acceptance_criteria:
+  - 'First scan: Full analysis (cache miss)'
+  - 'Second scan (no changes): <100ms (cache hit, 97%+ faster)'
+  - 'File modified: Only re-analyze changed file + dependents'
+  - Cache invalidation works correctly
+  - Cache hit rate >90% for typical development workflow
+  estimated_effort: 5 hours
+- id: '9.6'
+  name: CLI Integration & Natural Language Testing
+  description: Validate all natural language triggers and CLI wrappers work correctly
+  files_affected:
+  - tests/integration/test_dashboard_cli.py (new)
+  - src/cortex_agents/application_health_agent.py (validation)
+  acceptance_criteria:
+  - All 9 keywords trigger dashboard analysis correctly
+  - '''show health dashboard'' → ApplicationHealthAgent.execute()'
+  - '''analyze application D:\PROJECTS\KSESSIONS'' → Scans specified path'
+  - '''onboard application'' → Interactive path selection'
+  - 'Error handling: Invalid path, permission denied, empty directory'
+  - Response template renders correctly with report data
+  estimated_effort: 4 hours
+- id: '9.7'
+  name: Align & Deploy Gate Integration
+  description: Wire dashboard into System Alignment validation and deployment gates
+  challenge_raised: true
+  challenge_details: 'CHALLENGE: User requested "proper wiring in align, deploy gates,
+    cli wrappers".
+
+    CLI wrappers complete (December 1, 2025 wiring fix). Need to add:
+
+    1. System Alignment integration - validate dashboard health during ''align''
+
+    2. Deployment gate integration - add Gate 19: Application Health Check
+
+    SOLUTION: Add dashboard validation as alignment check and deployment gate
+
+    '
+  files_affected:
+  - src/orchestrators/align_orchestrator.py
+  - scripts/deploy_cortex.py (add Gate 19)
+  - cortex-brain/documents/planning/GATE-19-APPLICATION-HEALTH-SPEC.md (new)
+  acceptance_criteria:
+  - 'System Alignment: ''align'' command runs dashboard health check'
+  - Alignment fails if dashboard orchestrator not wired (regression prevention)
+  - 'Deployment Gate 19: Application Health Check'
+  - 'Gate 19 validates: Dashboard triggers work, analysis completes, report generated'
+  - 'Gate 19 checks: Intent routing, agent instantiation, orchestrator execution'
+  - Gate failure blocks deployment with detailed error report
+  - Gate 19 runs during 'python scripts/deploy_cortex.py'
+  estimated_effort: 8 hours
+- id: '9.8'
+  name: Production Readiness Report
+  description: Generate comprehensive validation report documenting dashboard production
+    readiness
+  files_affected:
+  - cortex-brain/documents/reports/APPLICATION-HEALTH-DASHBOARD-PRODUCTION-READY.md
+    (new)
+  - cortex-brain/documents/reports/live-repository-test-results.json (new)
+  acceptance_criteria:
+  - Report documents all test results from deliverables 9.1-9.7
+  - Performance benchmarks table (overview/standard/deep for both repos)
+  - Language analysis accuracy metrics (Python, JS/TS)
+  - Architecture graph validation results
+  - Cache hit rate statistics
+  - CLI integration test results (all 9 keywords)
+  - Align & deploy gate validation status
+  - Known limitations and future enhancements documented
+  - 'Production deployment recommendation: GO/NO-GO with justification'
+  estimated_effort: 6 hours
+dependencies:
+- phase_0 (Foundation needed for clean testing environment)
+- Wiring fix complete (December 1, 2025 - ALREADY DONE)
+testing_requirements:
+- All tests pass on both KSESSIONS and NOOR CANVAS repositories
+- Performance targets met for all scan levels
+- Cache hit rate >90% on repeated scans
+- Multi-language analysis accuracy >95%
+- Architecture graph contains expected structure
+- CLI triggers work for all 9 keywords
+- Align integration detects dashboard health
+- Deploy Gate 19 validates dashboard functionality
+- No regressions in existing 656 CORTEX tests
+risks:
+- risk: NOOR CANVAS may be too large for deep scan performance target
+  mitigation: Add adaptive timeout, skip analysis for files >100KB in deep mode
+  severity: Medium
+- risk: Repository paths may not exist on all dev machines
+  mitigation: Make test suite configurable via cortex.config.json, skip if path missing
+  severity: Low
+- risk: Multi-threaded crawling may cause file handle exhaustion
+  mitigation: Limit worker threads to 100, add file handle monitoring
+  severity: Medium
+total_estimated_effort: 48 hours
+notes:
+- Dashboard wiring already complete per December 1, 2025 report
+- This phase focuses on production validation, not implementation
+- Align/deploy gate integration is NEW work requested by user
+- Test repositories represent real-world usage scenarios
+- 'Success criteria: Production-ready status with comprehensive validation report'

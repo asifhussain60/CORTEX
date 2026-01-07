@@ -1,0 +1,183 @@
+{
+  "project_name": "Luum Fresh",
+  "tagline": "Enterprise-grade C# SOAP service",
+  "what_it_does": {
+    "summary": "An enterprise legacy service built with C#, serving critical business operations. The system follows a n-tier architecture pattern with 240,255 lines of code, providing SOAP-based web services for external integration. This mature application handles core business logic and data processing with database persistence.",
+    "key_points": [
+      "Found 4 Web.config files",
+      "Found 47 API controllers",
+      "Found 443 Razor views",
+      "Found 22 data access files",
+      "Luum.Console.csproj: Executable"
+    ],
+    "source": "hybrid"
+  },
+  "recent_activity": [
+    {
+      "commit_hash": "555e1d13",
+      "author": "Jacob Patton",
+      "author_email": "jpatton@company.com",
+      "date": "2025-11-26 15:26:47 +0000",
+      "message": "Merged PR 6142: Correction on Terms and Conditions"
+    },
+    {
+      "commit_hash": "9b8eea60",
+      "author": "Jacob Patton",
+      "author_email": "jpatton@company.com",
+      "date": "2025-11-25 14:38:56 -0600",
+      "message": "update swedish terms parking conditions."
+    },
+    {
+      "commit_hash": "8dc71785",
+      "author": "Jacob Patton",
+      "author_email": "jpatton@company.com",
+      "date": "2025-11-25 19:16:52 +0000",
+      "message": "Merged PR 6140: Swedish Parking T&C Update"
+    },
+    {
+      "commit_hash": "c6f75542",
+      "author": "Jacob Patton",
+      "author_email": "jpatton@company.com",
+      "date": "2025-11-25 12:40:11 -0600",
+      "message": "updated migration"
+    },
+    {
+      "commit_hash": "30ea6acb",
+      "author": "Jacob Patton",
+      "author_email": "jpatton@company.com",
+      "date": "2025-11-25 11:56:03 -0600",
+      "message": "added migration for swedish T&C update"
+    },
+    {
+      "commit_hash": "acd2f7ad",
+      "author": "Carlos Maximo Romero",
+      "author_email": "cmromero@company.com",
+      "date": "2025-11-25 14:26:10 +0000",
+      "message": "Merged PR 6138: Engagement fix"
+    },
+    {
+      "commit_hash": "f3c1ac4f",
+      "author": "Yoga Surathi",
+      "author_email": "ysurathi@company.com",
+      "date": "2025-11-22 02:36:17 +0000",
+      "message": "Merged PR 6137: Add a check to the DWconnectring initilization if the connection string exists."
+    },
+    {
+      "commit_hash": "a493522e",
+      "author": "Carlos Maximo Romero",
+      "author_email": "cmromero@company.com",
+      "date": "2025-11-22 01:46:40 +0000",
+      "message": "Merged PR 6129: Completing engagement charts, fit & finish dashboard pages."
+    },
+    {
+      "commit_hash": "560d6854",
+      "author": "Yoga Vignesh Surathi",
+      "author_email": "ysurathi@company.com",
+      "date": "2025-11-21 16:03:25 -0600",
+      "message": "Add a check to the DWconnectring initilization if the connection string exists."
+    },
+    {
+      "commit_hash": "384cef91",
+      "author": "Ariel Fernandez Cabanas",
+      "author_email": "afernandezcabanas@company.com",
+      "date": "2025-11-21 21:10:12 +0000",
+      "message": "Merged PR 6126: Store Procedure to extract Engaged data"
+    }
+  ],
+  "composition": {
+    "architecture_style": "N-Tier Architecture",
+    "components": [
+      {
+        "name": "Service Layer",
+        "technology": "ASP.NET MVC, JSON.NET",
+        "purpose": "",
+        "files_count": 292
+      },
+      {
+        "name": "Tests",
+        "technology": "ASP.NET MVC, JSON.NET, SQL Server",
+        "purpose": "",
+        "files_count": 379
+      },
+      {
+        "name": "Infrastructure",
+        "technology": "ASP.NET MVC, JSON.NET",
+        "purpose": "",
+        "files_count": 55
+      },
+      {
+        "name": "Data Access",
+        "technology": "",
+        "purpose": "",
+        "files_count": 493
+      },
+      {
+        "name": "Models/Entities",
+        "technology": "",
+        "purpose": "",
+        "files_count": 52
+      },
+      {
+        "name": "Business Logic",
+        "technology": "ASP.NET MVC, SQL Server",
+        "purpose": "",
+        "files_count": 14
+      }
+    ],
+    "relationships": [
+      "Separated layers (Presentation, Business, Data)"
+    ]
+  },
+  "tech_stack_summary": {
+    "total_technologies": 5,
+    "primary_technologies": [
+      {
+        "name": "JavaScript",
+        "version": "unknown",
+        "category": "language"
+      },
+      {
+        "name": "TypeScript",
+        "version": "unknown",
+        "category": "language"
+      },
+      {
+        "name": "Python",
+        "version": "unknown",
+        "category": "language"
+      },
+      {
+        "name": "C#",
+        "version": "unknown",
+        "category": "language"
+      },
+      {
+        "name": ".NET",
+        "version": "8.0",
+        "category": "framework"
+      }
+    ],
+    "outdated_count": 0,
+    "critical_updates_needed": 0
+  },
+  "health_indicators": [
+    {
+      "name": "Code Quality",
+      "value": "85.0%",
+      "status": "healthy",
+      "trend": "stable"
+    },
+    {
+      "name": "Security",
+      "value": "0%",
+      "status": "warning",
+      "trend": "stable"
+    },
+    {
+      "name": "Technical Debt",
+      "value": "3754.2h",
+      "status": "warning",
+      "trend": "stable"
+    }
+  ]
+}

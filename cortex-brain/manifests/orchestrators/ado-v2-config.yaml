@@ -1,0 +1,538 @@
+# ======================================================================
+# CORTEX ADO Orchestrator v2 Configuration
+# ======================================================================
+# Schema: Master Orchestrator v4.1 + ADO-specific extensions
+# Author: Asif Hussain
+# Copyright: © 2026 Asif Hussain. All rights reserved.
+# ======================================================================
+
+# ----------------------------------------------------------------------
+# Core Configuration (REQUIRED)
+# ----------------------------------------------------------------------
+schema_version: "4.1.0"
+name: "ado_orchestrator_v2"
+display_name: "ADO Work Item Generator v2"
+version: "2.0.0"
+type: "autonomous"  # Pure autonomous - no manual steps
+
+# ----------------------------------------------------------------------
+# Orchestrator Metadata
+# ----------------------------------------------------------------------
+orchestrator:
+  name: "ado_v2"
+  version: "2.0.0"
+  type: "autonomous"
+  id: "ado_v2"
+  class_name: "ADOOrchestratorV2"
+  module_path: "src.orchestrators.ado.v2.ado_orchestrator_v2"
+  description: "Pure autonomous ADO work item generator with database state tracking"
+  category: "work_item_management"
+  tags:
+    - "ado"
+    - "azure-devops"
+    - "autonomous"
+    - "work-items"
+
+# ----------------------------------------------------------------------
+# Brain Integration
+# ----------------------------------------------------------------------
+brain_tiers:
+  tier0: "cortex-brain/tier0"  # Governance layer
+  tier1: "cortex-brain/tier1"  # Working memory
+  tier2: "cortex-brain/tier2"  # Knowledge graph
+  tier3: "cortex-brain/tier3"  # Dev context
+
+# ----------------------------------------------------------------------
+# Lifecycle Hooks
+# ----------------------------------------------------------------------
+hooks:
+  pre_execute:
+    - validate_parameters
+    - check_ado_connection
+    - load_project_context
+  
+  post_execute:
+    - persist_results
+    - update_knowledge_graph
+    - generate_completion_report
+  
+  on_error:
+    - log_error_details
+    - rollback_partial_changes
+    - notify_user
+
+# ----------------------------------------------------------------------
+# Pattern Matching (Master Orchestrator Integration)
+# ----------------------------------------------------------------------
+patterns:
+  triggers:
+    - pattern: "^ado\\s+(story|feature|epic)\\b"
+      confidence: 0.95
+      mode: "auto"
+    
+    - pattern: "^create\\s+(story|feature|epic)\\s+for\\b"
+      confidence: 0.90
+      mode: "auto"
+    
+    - pattern: "^generate\\s+ado\\s+work\\s+items?\\b"
+      confidence: 0.85
+      mode: "auto"
+    
+    - pattern: "^ado\\s+wizard\\b"
+      confidence: 1.0
+      mode: "wizard"
+  
+  keywords:
+    high_priority:
+      - "ado"
+      - "azure devops"
+      - "work item"
+      - "user story"
+      - "feature"
+      - "epic"
+    
+    medium_priority:
+      - "generate"
+      - "create"
+      - "backlog"
+      - "sprint"
+
+# ----------------------------------------------------------------------
+# ADO-Specific Configuration
+# ----------------------------------------------------------------------
+ado_specific:
+  api_version: "7.0"
+  organization: "default-org"  # Override via env: ADO_ORGANIZATION
+  project: "default-project"    # Override via env: ADO_PROJECT
+  
+  authentication:
+    method: "PAT"  # Personal Access Token
+    token_env_var: "ADO_PAT"
+  
+  rate_limiting:
+    max_requests_per_minute: 60
+    retry_attempts: 3
+    retry_delay_seconds: 2
+  
+  batch_operations:
+    enabled: true
+    max_batch_size: 100
+    parallel_execution: false  # Sequential for predictability
+
+# ----------------------------------------------------------------------
+# Work Item Type Definitions
+# ----------------------------------------------------------------------
+work_item_types:
+  story:
+    type_name: "User Story"
+    default_state: "New"
+    required_fields:
+      - "Title"
+      - "Description"
+      - "Acceptance Criteria"
+    
+    optional_fields:
+      - "Story Points"
+      - "Priority"
+      - "Tags"
+      - "Assigned To"
+    
+    story_points_mapping:
+      very_small: 1
+      small: 2
+      medium: 3
+      large: 5
+      very_large: 8
+      extra_large: 13
+  
+  task:
+    type_name: "Task"
+    default_state: "To Do"
+    required_fields:
+      - "Title"
+      - "Description"
+    
+    optional_fields:
+      - "Remaining Work"
+      - "Original Estimate"
+      - "Assigned To"
+  
+  feature:
+    type_name: "Feature"
+    default_state: "New"
+    required_fields:
+      - "Title"
+      - "Description"
+      - "Business Value"
+    
+    optional_fields:
+      - "Target Date"
+      - "Tags"
+  
+  epic:
+    type_name: "Epic"
+    default_state: "New"
+    required_fields:
+      - "Title"
+      - "Description"
+      - "Strategic Theme"
+    
+    optional_fields:
+      - "Start Date"
+      - "Target Date"
+
+# ----------------------------------------------------------------------
+# Complexity Classification
+# ----------------------------------------------------------------------
+complexity:
+  # Keyword-based detection
+  high_keywords:
+    - "authentication"
+    - "authorization"
+    - "security"
+    - "encryption"
+    - "api"
+    - "integration"
+    - "migration"
+    - "scalability"
+    - "performance"
+    - "distributed"
+    - "microservices"
+  
+  medium_keywords:
+    - "ui"
+    - "form"
+    - "validation"
+    - "crud"
+    - "search"
+    - "filter"
+    - "pagination"
+    - "notification"
+    - "email"
+    - "reporting"
+  
+  # Size thresholds (character count)
+  high_threshold: 150       # > 150 chars = HIGH
+  medium_min: 50            # 50-150 chars = MEDIUM
+                            # < 50 chars = LOW
+  
+  # Complexity adjustments based on additional factors
+  adjustments:
+    has_vision_context: +1    # Vision API analysis present
+    has_acceptance_criteria: 0
+    has_assumptions: +1       # Assumptions indicate uncertainty
+    has_constraints: +1       # Constraints add complexity
+    has_dependencies: +1      # Dependencies increase risk
+
+# ----------------------------------------------------------------------
+# Definition of Ready (DoR) Validation
+# ----------------------------------------------------------------------
+dor:
+  # Required elements for DoR completeness
+  required_elements:
+    - acceptance_criteria
+    - assumptions
+    - constraints
+  
+  # Minimum counts for each element
+  minimum_counts:
+    acceptance_criteria: 1
+    assumptions: 0  # Optional but recommended
+    constraints: 0  # Optional but recommended
+  
+  # Completeness thresholds
+  thresholds:
+    excellent: 90  # 90%+ = Excellent
+    good: 70       # 70-89% = Good
+    acceptable: 50 # 50-69% = Acceptable
+    poor: 0        # < 50% = Poor (flag for user)
+  
+  # DoR refinement suggestions
+  refinement_prompts:
+    missing_acceptance_criteria: "What specific behaviors or outcomes should be testable?"
+    missing_assumptions: "What are we assuming about the environment, users, or system?"
+    missing_constraints: "Are there technical, regulatory, or business constraints?"
+    low_completeness: "Consider adding more detail to improve clarity and reduce risk."
+
+# ----------------------------------------------------------------------
+# Work Item Hierarchy Generation
+# ----------------------------------------------------------------------
+hierarchy:
+  # Story breakdown rules
+  story_breakdown:
+    enabled: true
+    max_tasks_per_story: 8
+    
+    task_templates:
+      - name: "Design"
+        condition: "complexity >= MEDIUM"
+        estimate_hours: 4
+      
+      - name: "Implementation"
+        condition: "always"
+        estimate_hours: 8
+      
+      - name: "Unit Tests"
+        condition: "always"
+        estimate_hours: 3
+      
+      - name: "Integration Tests"
+        condition: "complexity >= MEDIUM"
+        estimate_hours: 4
+      
+      - name: "Documentation"
+        condition: "always"
+        estimate_hours: 2
+      
+      - name: "Code Review"
+        condition: "always"
+        estimate_hours: 2
+      
+      - name: "Performance Testing"
+        condition: "complexity == HIGH"
+        estimate_hours: 4
+      
+      - name: "Security Review"
+        condition: "has_security_keywords"
+        estimate_hours: 3
+  
+  # Feature breakdown rules
+  feature_breakdown:
+    enabled: true
+    max_stories_per_feature: 12
+    
+    story_generation:
+      method: "semantic"  # Use AI to decompose feature into stories
+      min_stories: 2
+      max_stories: 8
+
+# ----------------------------------------------------------------------
+# TDD Requirement Injection
+# ----------------------------------------------------------------------
+tdd:
+  enabled: true
+  
+  # Test requirement templates
+  test_requirements:
+    unit_tests:
+      enabled: true
+      template: |
+        **Unit Test Requirements:**
+        - Test happy path with valid inputs
+        - Test edge cases and boundary conditions
+        - Test error handling and validation
+        - Achieve minimum 80% code coverage
+    
+    integration_tests:
+      enabled: true
+      condition: "complexity >= MEDIUM"
+      template: |
+        **Integration Test Requirements:**
+        - Test component interactions
+        - Test database transactions
+        - Test API endpoints (if applicable)
+        - Test error propagation across boundaries
+    
+    acceptance_tests:
+      enabled: true
+      template: |
+        **Acceptance Test Requirements:**
+        - Validate all acceptance criteria are testable
+        - Define test scenarios for each AC
+        - Include both positive and negative test cases
+        - Consider accessibility and usability testing
+  
+  # Test-first enforcement
+  enforcement:
+    red_green_refactor: true
+    fail_without_tests: false  # Warning only (for now)
+    coverage_threshold: 80
+
+# ----------------------------------------------------------------------
+# Approval Workflow
+# ----------------------------------------------------------------------
+approval:
+  # Preview generation
+  preview:
+    enabled: true
+    template: "ado-v2-approval-preview.jinja2"
+    
+    sections:
+      - work_item_hierarchy
+      - story_points_summary
+      - effort_estimates
+      - test_requirements
+      - risks_and_assumptions
+  
+  # Approval modes
+  modes:
+    auto:
+      enabled: true
+      bypass_preview: false  # Still show preview, but don't wait
+    
+    interactive:
+      enabled: true
+      require_explicit_approval: true
+      allow_modifications: true
+  
+  # Timeout settings
+  timeout:
+    default_seconds: 300  # 5 minutes
+    max_seconds: 900      # 15 minutes
+
+# ----------------------------------------------------------------------
+# Execution Settings
+# ----------------------------------------------------------------------
+execution:
+  # Dry-run mode (test without creating work items)
+  dry_run:
+    enabled: true
+    default: true  # Safer default
+  
+  # Rollback capability
+  rollback:
+    enabled: true
+    track_created_items: true
+    auto_rollback_on_error: true
+  
+  # Progress reporting
+  progress:
+    show_progress_bar: true
+    update_frequency_seconds: 1
+    log_level: "INFO"
+
+# ----------------------------------------------------------------------
+# Template Paths
+# ----------------------------------------------------------------------
+templates:
+  jinja2_templates:
+    - "templates/ado/v2/work-item-preview.jinja2"
+    - "templates/ado/v2/approval-screen.jinja2"
+    - "templates/ado/v2/completion-message.jinja2"
+    - "templates/ado/v2/email-notification.jinja2"
+    - "templates/ado/v2/dor-refinement-prompt.jinja2"
+    - "templates/ado/v2/story-breakdown.jinja2"
+    - "templates/ado/v2/task-generation.jinja2"
+    - "templates/ado/v2/test-requirements.jinja2"
+    - "templates/ado/v2/error-report.jinja2"
+    - "templates/ado/v2/rollback-confirmation.jinja2"
+  
+  markdown_templates:
+    - "templates/ado/v2/feature-specification.md"
+    - "templates/ado/v2/user-story-template.md"
+
+# ----------------------------------------------------------------------
+# Logging and Telemetry
+# ----------------------------------------------------------------------
+logging:
+  level: "INFO"  # DEBUG | INFO | WARNING | ERROR
+  
+  log_destinations:
+    - type: "file"
+      path: "logs/ado-orchestrator-v2.log"
+      rotation: "daily"
+      retention_days: 30
+    
+    - type: "database"
+      table: "orchestrator_logs"
+      connection: "planning_state_db"
+  
+  sensitive_fields:
+    - "ado_pat"
+    - "api_token"
+    - "user_email"
+
+telemetry:
+  enabled: true
+  
+  metrics:
+    - "execution_duration"
+    - "work_items_created"
+    - "approval_rate"
+    - "complexity_distribution"
+    - "dor_completeness_average"
+    - "test_coverage_achieved"
+  
+  export:
+    - type: "prometheus"
+      port: 9090
+    
+    - type: "json"
+      path: "cortex-brain/metrics/ado-v2-metrics.json"
+
+# ----------------------------------------------------------------------
+# Error Handling
+# ----------------------------------------------------------------------
+error_handling:
+  # Retry logic
+  retry:
+    enabled: true
+    max_attempts: 3
+    backoff_strategy: "exponential"  # linear | exponential
+    initial_delay_seconds: 1
+    max_delay_seconds: 30
+  
+  # Graceful degradation
+  fallbacks:
+    review_orchestrator_failure:
+      action: "warn"
+      message: "Review orchestrator unavailable - skipping duplicate detection"
+    
+    duplicate_detection_failure:
+      action: "warn"
+      message: "Duplicate detection failed - proceeding with caution"
+    
+    template_rendering_failure:
+      action: "error"
+      message: "Template rendering failed - cannot generate preview"
+    
+    ado_api_failure:
+      action: "error"
+      message: "ADO API connection failed - cannot create work items"
+  
+  # User notifications
+  notifications:
+    on_warning: true
+    on_error: true
+    include_stack_trace: false  # Only in DEBUG mode
+
+# ----------------------------------------------------------------------
+# Feature Flags
+# ----------------------------------------------------------------------
+features:
+  vision_api_integration: true
+  semantic_story_breakdown: true
+  ai_complexity_classification: true
+  auto_duplicate_detection: true
+  real_time_progress: true
+  multi_project_support: false  # Future enhancement
+  custom_work_item_types: false  # Future enhancement
+
+# ----------------------------------------------------------------------
+# Compatibility
+# ----------------------------------------------------------------------
+compatibility:
+  min_cortex_version: "5.0.0"
+  min_python_version: "3.9"
+  
+  required_dependencies:
+    - "requests>=2.28.0"
+    - "jinja2>=3.1.0"
+    - "pyyaml>=6.0"
+    - "sqlite3"  # Built-in
+  
+  optional_dependencies:
+    - "prometheus-client>=0.15.0"  # For telemetry
+
+# ----------------------------------------------------------------------
+# Documentation References
+# ----------------------------------------------------------------------
+documentation:
+  manifest: "cortex-brain/documents/planning/active/ado-v2-migration/context/migration-strategy.md"
+  architecture: "cortex-brain/documents/planning/active/ado-v2-migration/context/ado-v1-architecture.md"
+  wizard_design: "cortex-brain/documents/planning/active/ado-v2-migration/context/conversational-wizard-design.md"
+  baseline_tests: "cortex-brain/documents/planning/active/ado-v2-migration/context/baseline-test-results.md"
+
+# ======================================================================
+# END OF CONFIGURATION
+# ======================================================================

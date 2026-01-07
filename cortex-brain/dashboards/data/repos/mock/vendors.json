@@ -1,0 +1,130 @@
+{
+  "vendors": [
+    {
+      "name": "Stripe",
+      "category": "payment",
+      "status": "active",
+      "cost_tier": "$$$",
+      "detection_method": "sdk_import",
+      "files_using": [
+        "src/payments/stripe_client.py",
+        "src/api/checkout.py"
+      ],
+      "env_vars": [
+        "STRIPE_API_KEY",
+        "STRIPE_WEBHOOK_SECRET"
+      ],
+      "compliance": [
+        "PCI_DSS",
+        "GDPR"
+      ],
+      "security_notes": "API keys properly stored in env vars"
+    },
+    {
+      "name": "Auth0",
+      "category": "authentication",
+      "status": "active",
+      "cost_tier": "$$",
+      "detection_method": "sdk_import",
+      "files_using": [
+        "src/auth/auth0_client.py",
+        "src/middleware/auth.py"
+      ],
+      "env_vars": [
+        "AUTH0_DOMAIN",
+        "AUTH0_CLIENT_ID",
+        "AUTH0_CLIENT_SECRET"
+      ],
+      "compliance": [
+        "SOC2",
+        "GDPR"
+      ],
+      "security_notes": "OAuth flow properly implemented"
+    },
+    {
+      "name": "AWS S3",
+      "category": "storage",
+      "status": "active",
+      "cost_tier": "$$",
+      "detection_method": "sdk_import",
+      "files_using": [
+        "src/storage/s3_client.py",
+        "src/services/file_upload.py"
+      ],
+      "env_vars": [
+        "AWS_ACCESS_KEY_ID",
+        "AWS_SECRET_ACCESS_KEY",
+        "AWS_BUCKET_NAME"
+      ],
+      "compliance": [
+        "SOC2",
+        "HIPAA"
+      ],
+      "security_notes": "IAM roles recommended over access keys"
+    },
+    {
+      "name": "SendGrid",
+      "category": "email",
+      "status": "configured",
+      "cost_tier": "$",
+      "detection_method": "env_var",
+      "files_using": [
+        "src/services/email_service.py"
+      ],
+      "env_vars": [
+        "SENDGRID_API_KEY"
+      ],
+      "compliance": [
+        "GDPR"
+      ],
+      "security_notes": "API key found, service configured"
+    },
+    {
+      "name": "Sentry",
+      "category": "monitoring",
+      "status": "active",
+      "cost_tier": "$",
+      "detection_method": "sdk_import",
+      "files_using": [
+        "src/main.py",
+        "src/middleware/error_handler.py"
+      ],
+      "env_vars": [
+        "SENTRY_DSN"
+      ],
+      "compliance": [
+        "SOC2"
+      ],
+      "security_notes": "Error tracking properly configured"
+    }
+  ],
+  "by_category": {
+    "payment": 1,
+    "authentication": 1,
+    "storage": 1,
+    "email": 1,
+    "monitoring": 1,
+    "analytics": 0,
+    "messaging": 0,
+    "cdn": 0
+  },
+  "by_status": {
+    "active": 4,
+    "configured": 1,
+    "inactive": 0,
+    "expired": 0
+  },
+  "summary": {
+    "total_vendors": 5,
+    "active_vendors": 4,
+    "cost_estimate": "$$$",
+    "compliance_flags": [
+      "PCI_DSS",
+      "GDPR",
+      "SOC2",
+      "HIPAA"
+    ],
+    "security_warnings": 1,
+    "last_scan": "2025-12-04T17:05:03.493428"
+  }
+}

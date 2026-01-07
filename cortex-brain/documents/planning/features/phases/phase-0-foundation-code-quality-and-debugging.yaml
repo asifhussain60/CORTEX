@@ -1,0 +1,71 @@
+# Phase 0: Foundation: Code Quality & Debugging
+# Part of CONSOLIDATED-IMPLEMENTATION-PLAN v1.0.0
+# Created: 2025-12-01
+
+phase_id: phase_0
+name: 'Foundation: Code Quality & Debugging'
+priority: 1
+status: not-started
+description: Establish baseline code quality, debugging infrastructure, and eliminate
+  technical debt
+rationale: Must establish clean foundation before adding features
+objectives:
+- Implement debugging marker system for development tracking
+- Add pipeline verification to detect mock objects in production code
+- Remove unnecessary comments and deprecated code
+- Establish code quality baseline for future work
+deliverables:
+- id: '0.1'
+  name: Debugging Marker System
+  description: Add marker-based debugging for developer workflow visibility
+  files_affected:
+  - src/utils/debug_markers.py
+  - cortex-brain/brain-protection-rules.yaml
+  acceptance_criteria:
+  - Markers can be inserted at any code location
+  - Markers auto-log execution flow without performance impact
+  - Markers removed automatically before commit (git hook)
+  estimated_effort: 4 hours
+- id: '0.2'
+  name: Mock Detection Pipeline Step
+  description: Add CI/CD verification that no mock objects exist in production code
+  files_affected:
+  - scripts/verify_no_mocks.py
+  - .github/workflows/cortex-ci.yml
+  - src/cortex_agents/test_validator.py
+  acceptance_criteria:
+  - Pipeline fails if unittest.mock imports found in src/
+  - Exception list for test utilities maintained
+  - Clear error messages indicate which files contain mocks
+  estimated_effort: 3 hours
+- id: '0.3'
+  name: Unnecessary Commenting Cleanup
+  description: Remove redundant comments, update docstrings to Google style
+  files_affected:
+  - src/**/*.py (all Python files)
+  - cortex-brain/cleanup-rules.yaml
+  acceptance_criteria:
+  - Commented-out code removed (except git-tracked history)
+  - Obvious comments removed (e.g., '# Create variable' above variable creation)
+  - Docstrings follow Google Python Style Guide
+  - Complex logic retains explanatory comments
+  estimated_effort: 6 hours
+- id: '0.4'
+  name: Deprecated Code Removal
+  description: Remove all deprecated functions, classes, and modules
+  files_affected:
+  - src/**/*.py
+  - tests/**/*.py
+  - cortex-brain/obsolete-tests-manifest.json
+  acceptance_criteria:
+  - All @deprecated decorated code removed
+  - No TODO comments referencing deprecated code
+  - Obsolete test manifest updated
+  - Breaking changes documented in CHANGELOG.md
+  estimated_effort: 5 hours
+dependencies: []
+testing_requirements:
+- All existing tests pass after cleanup
+- Code coverage remains ≥85%
+- No new linting errors introduced
+total_estimated_effort: 18 hours

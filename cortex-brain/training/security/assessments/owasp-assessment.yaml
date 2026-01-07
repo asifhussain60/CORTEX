@@ -1,0 +1,489 @@
+# Security Training Assessment: OWASP Top 10
+
+assessment:
+  id: owasp-assessment-v1
+  title: "OWASP Top 10 2021 Assessment"
+  version: "1.0.0"
+  description: "Comprehensive assessment covering all OWASP Top 10 categories"
+  pass_score: 80
+  time_limit_minutes: 45
+  total_questions: 25
+  question_types:
+    - multiple_choice
+    - code_review
+    - scenario_based
+
+questions:
+  # Section 1: Multiple Choice (10 questions)
+  - id: mc-01
+    type: multiple_choice
+    category: A01:2021
+    difficulty: easy
+    question: "Which OWASP category covers insufficient access control?"
+    options:
+      - A: "A03 - Injection"
+      - B: "A01 - Broken Access Control"
+      - C: "A07 - Identification and Authentication Failures"
+      - D: "A05 - Security Misconfiguration"
+    correct: B
+    explanation: "A01:2021 Broken Access Control is about failures in enforcing user permissions."
+
+  - id: mc-02
+    type: multiple_choice
+    category: A02:2021
+    difficulty: medium
+    question: "Which hash algorithm is considered INSECURE for password storage?"
+    options:
+      - A: "bcrypt"
+      - B: "Argon2"
+      - C: "MD5"
+      - D: "scrypt"
+    correct: C
+    explanation: "MD5 is cryptographically broken and unsuitable for security purposes."
+
+  - id: mc-03
+    type: multiple_choice
+    category: A03:2021
+    difficulty: easy
+    question: "What is the PRIMARY defense against SQL injection?"
+    options:
+      - A: "Input validation"
+      - B: "Output encoding"
+      - C: "Parameterized queries"
+      - D: "Web Application Firewall"
+    correct: C
+    explanation: "Parameterized queries (prepared statements) are the primary defense against SQL injection."
+
+  - id: mc-04
+    type: multiple_choice
+    category: A04:2021
+    difficulty: medium
+    question: "Which of these is a secure design principle?"
+    options:
+      - A: "Security through obscurity"
+      - B: "Implicit trust"
+      - C: "Defense in depth"
+      - D: "Fail open"
+    correct: C
+    explanation: "Defense in depth uses multiple layers of security controls."
+
+  - id: mc-05
+    type: multiple_choice
+    category: A05:2021
+    difficulty: easy
+    question: "Which is a security misconfiguration?"
+    options:
+      - A: "Using parameterized queries"
+      - B: "Enabling detailed error messages in production"
+      - C: "Implementing rate limiting"
+      - D: "Using HTTPS"
+    correct: B
+    explanation: "Detailed error messages can leak sensitive information."
+
+  - id: mc-06
+    type: multiple_choice
+    category: A06:2021
+    difficulty: medium
+    question: "How should vulnerable components be managed?"
+    options:
+      - A: "Ignore if application works"
+      - B: "Update only during major releases"
+      - C: "Continuous monitoring and prompt patching"
+      - D: "Remove all third-party dependencies"
+    correct: C
+    explanation: "Components should be continuously monitored and patched promptly."
+
+  - id: mc-07
+    type: multiple_choice
+    category: A07:2021
+    difficulty: hard
+    question: "Which is NOT a recommended practice for session management?"
+    options:
+      - A: "Regenerate session ID after login"
+      - B: "Set secure and HttpOnly flags on cookies"
+      - C: "Store session ID in URL parameters"
+      - D: "Implement absolute session timeout"
+    correct: C
+    explanation: "Session IDs in URLs can be leaked via referrer headers and browser history."
+
+  - id: mc-08
+    type: multiple_choice
+    category: A08:2021
+    difficulty: medium
+    question: "What protects software update integrity?"
+    options:
+      - A: "HTTP downloads"
+      - B: "Digital signatures and secure channels"
+      - C: "Version numbers"
+      - D: "File size verification"
+    correct: B
+    explanation: "Digital signatures verify authenticity; secure channels prevent tampering."
+
+  - id: mc-09
+    type: multiple_choice
+    category: A09:2021
+    difficulty: easy
+    question: "What should be logged for security monitoring?"
+    options:
+      - A: "User passwords"
+      - B: "Credit card numbers"
+      - C: "Login failures and access control failures"
+      - D: "Personal health information"
+    correct: C
+    explanation: "Security events like failures should be logged; sensitive data should NOT be logged."
+
+  - id: mc-10
+    type: multiple_choice
+    category: A10:2021
+    difficulty: hard
+    question: "Which mitigation helps prevent SSRF attacks?"
+    options:
+      - A: "Allow all internal network access"
+      - B: "Allowlist permitted domains and IPs"
+      - C: "Disable HTTPS validation"
+      - D: "Trust all user-provided URLs"
+    correct: B
+    explanation: "Allowlisting restricts which destinations can be accessed."
+
+  # Section 2: Code Review (10 questions)
+  - id: cr-01
+    type: code_review
+    category: A03:2021
+    difficulty: easy
+    language: python
+    question: "Identify the vulnerability in this code:"
+    code: |
+      def get_user(username):
+          query = f"SELECT * FROM users WHERE name = '{username}'"
+          return db.execute(query)
+    vulnerability: "SQL Injection"
+    cwe: "CWE-89"
+    explanation: "User input is directly interpolated into SQL query."
+    fix_hint: "Use parameterized queries: db.execute('SELECT * FROM users WHERE name = ?', [username])"
+
+  - id: cr-02
+    type: code_review
+    category: A01:2021
+    difficulty: medium
+    language: javascript
+    question: "What access control flaw exists here?"
+    code: |
+      app.get('/api/users/:id', async (req, res) => {
+          const user = await User.findById(req.params.id);
+          res.json(user);
+      });
+    vulnerability: "Insecure Direct Object Reference (IDOR)"
+    cwe: "CWE-639"
+    explanation: "No verification that requesting user owns or can access the resource."
+    fix_hint: "Check if req.user.id matches req.params.id or has admin role."
+
+  - id: cr-03
+    type: code_review
+    category: A02:2021
+    difficulty: medium
+    language: python
+    question: "What cryptographic issue is present?"
+    code: |
+      import hashlib
+      
+      def hash_password(password):
+          return hashlib.md5(password.encode()).hexdigest()
+    vulnerability: "Use of weak cryptographic algorithm"
+    cwe: "CWE-327"
+    explanation: "MD5 is cryptographically broken; should use bcrypt, Argon2, or scrypt."
+    fix_hint: "Use bcrypt: bcrypt.hashpw(password.encode(), bcrypt.gensalt())"
+
+  - id: cr-04
+    type: code_review
+    category: A05:2021
+    difficulty: easy
+    language: yaml
+    question: "What misconfiguration exists in this config?"
+    code: |
+      server:
+        debug: true
+        cors:
+          allow_origins: "*"
+        error_pages:
+          show_stack_trace: true
+    vulnerability: "Multiple security misconfigurations"
+    cwe: "CWE-16"
+    explanation: "Debug mode, permissive CORS, and stack traces in production."
+    fix_hint: "Set debug=false, restrict CORS origins, hide stack traces."
+
+  - id: cr-05
+    type: code_review
+    category: A07:2021
+    difficulty: hard
+    language: javascript
+    question: "What authentication weakness exists?"
+    code: |
+      app.post('/login', async (req, res) => {
+          const { username, password } = req.body;
+          const user = await User.findOne({ username });
+          
+          if (!user) {
+              return res.status(401).json({ error: 'User not found' });
+          }
+          
+          if (user.password !== password) {
+              return res.status(401).json({ error: 'Invalid password' });
+          }
+          
+          req.session.user = user;
+          res.json({ success: true });
+      });
+    vulnerability: "Multiple: User enumeration, plaintext password comparison, missing session regeneration"
+    cwe: "CWE-287"
+    explanation: "Different errors reveal user existence; passwords stored/compared in plaintext."
+    fix_hint: "Use generic error message, hash passwords, regenerate session after login."
+
+  - id: cr-06
+    type: code_review
+    category: A08:2021
+    difficulty: medium
+    language: python
+    question: "What integrity issue is present?"
+    code: |
+      import pickle
+      import base64
+      
+      def load_user_prefs(cookie_value):
+          data = base64.b64decode(cookie_value)
+          return pickle.loads(data)
+    vulnerability: "Insecure deserialization"
+    cwe: "CWE-502"
+    explanation: "Pickle deserialization of untrusted data can lead to code execution."
+    fix_hint: "Use JSON for data serialization, or validate/sign serialized data."
+
+  - id: cr-07
+    type: code_review
+    category: A03:2021
+    difficulty: medium
+    language: python
+    question: "What injection vulnerability exists?"
+    code: |
+      import os
+      
+      def convert_image(filename):
+          os.system(f"convert {filename} output.png")
+    vulnerability: "Command injection"
+    cwe: "CWE-78"
+    explanation: "User-controlled filename passed directly to shell command."
+    fix_hint: "Use subprocess.run with list arguments: ['convert', filename, 'output.png']"
+
+  - id: cr-08
+    type: code_review
+    category: A10:2021
+    difficulty: hard
+    language: python
+    question: "What SSRF vulnerability exists?"
+    code: |
+      @app.route('/fetch')
+      def fetch_url():
+          url = request.args.get('url')
+          response = requests.get(url)
+          return response.text
+    vulnerability: "Server-Side Request Forgery (SSRF)"
+    cwe: "CWE-918"
+    explanation: "Unrestricted URL fetch allows internal network access."
+    fix_hint: "Validate URL against allowlist, block internal IPs (10.x, 192.168.x, 127.x)."
+
+  - id: cr-09
+    type: code_review
+    category: A09:2021
+    difficulty: easy
+    language: python
+    question: "What logging issue exists?"
+    code: |
+      def process_payment(card_number, amount):
+          logger.info(f"Processing payment: card={card_number}, amount={amount}")
+          # ... payment logic
+    vulnerability: "Sensitive data logging"
+    cwe: "CWE-532"
+    explanation: "Credit card numbers should never be logged."
+    fix_hint: "Log masked card number: card=****{card_number[-4:]}"
+
+  - id: cr-10
+    type: code_review
+    category: A06:2021
+    difficulty: medium
+    language: json
+    question: "What risk does this package.json show?"
+    code: |
+      {
+        "dependencies": {
+          "lodash": "4.17.11",
+          "express": "4.16.2",
+          "mongoose": "5.0.0"
+        }
+      }
+    vulnerability: "Outdated dependencies with known vulnerabilities"
+    cwe: "CWE-1395"
+    explanation: "lodash 4.17.11 has prototype pollution CVE; all versions are outdated."
+    fix_hint: "Run npm audit and update to latest versions."
+
+  # Section 3: Scenario-Based (5 questions)
+  - id: sb-01
+    type: scenario_based
+    category: A01:2021
+    difficulty: hard
+    question: |
+      You're reviewing an e-commerce application. A customer reports they can view
+      other customers' orders by changing the order ID in the URL from:
+      /orders/12345 to /orders/12346
+      
+      What is the PRIMARY issue and how would you fix it?
+    expected_answer: |
+      PRIMARY ISSUE: Broken Access Control (IDOR - Insecure Direct Object Reference)
+      
+      FIX:
+      1. Verify the requesting user owns the order:
+         if order.user_id != current_user.id:
+             return 403 Forbidden
+      2. Use indirect references (UUID instead of sequential ID)
+      3. Implement proper authorization checks at all access points
+    points: 5
+
+  - id: sb-02
+    type: scenario_based
+    category: A03:2021
+    difficulty: medium
+    question: |
+      A penetration tester provides this payload that returns all users:
+      GET /api/users?sort=name; DROP TABLE users;--
+      
+      What type of attack is this and what defense should be implemented?
+    expected_answer: |
+      ATTACK TYPE: SQL Injection via ORDER BY clause
+      
+      DEFENSE:
+      1. Whitelist allowed sort columns: ['name', 'email', 'created_at']
+      2. Never interpolate user input into SQL
+      3. Use ORM with proper escaping
+      4. Example: if sort_column not in ALLOWED_SORTS: raise ValidationError
+    points: 5
+
+  - id: sb-03
+    type: scenario_based
+    category: A05:2021
+    difficulty: medium
+    question: |
+      During a security review, you discover the production server has:
+      - Default admin credentials
+      - Directory listing enabled
+      - Detailed error messages with stack traces
+      - Unused features and ports enabled
+      
+      Prioritize these issues and explain remediation.
+    expected_answer: |
+      PRIORITY ORDER (highest to lowest):
+      1. Default admin credentials - CRITICAL: Immediate account lockout and credential reset
+      2. Detailed error messages - HIGH: Disable stack traces, implement generic error pages
+      3. Directory listing - MEDIUM: Disable in web server config (Options -Indexes)
+      4. Unused features/ports - MEDIUM: Disable unnecessary services, close unused ports
+      
+      All are security misconfigurations (A05:2021) requiring configuration hardening.
+    points: 5
+
+  - id: sb-04
+    type: scenario_based
+    category: A07:2021
+    difficulty: hard
+    question: |
+      Your application's login form is being targeted with credential stuffing attacks
+      using leaked credentials from other breaches. Current protections are minimal.
+      
+      Design a defense strategy addressing this threat.
+    expected_answer: |
+      DEFENSE STRATEGY:
+      
+      1. Rate Limiting:
+         - Progressive delays after failed attempts
+         - Account lockout after N failures
+         - IP-based rate limiting
+      
+      2. Additional Verification:
+         - CAPTCHA after failed attempts
+         - MFA for all users
+         - Device fingerprinting
+      
+      3. Credential Protection:
+         - Check passwords against breach databases (HIBP)
+         - Require password complexity
+         - Block common passwords
+      
+      4. Monitoring:
+         - Alert on unusual login patterns
+         - Geographic anomaly detection
+         - Failed login trend monitoring
+    points: 5
+
+  - id: sb-05
+    type: scenario_based
+    category: A10:2021
+    difficulty: hard
+    question: |
+      Your application has a feature that fetches and displays content from URLs
+      provided by users. A security researcher demonstrates they can:
+      1. Access internal services (http://localhost:8080/admin)
+      2. Read cloud metadata (http://169.254.169.254/)
+      3. Scan internal network ports
+      
+      What vulnerability is this and how would you mitigate it?
+    expected_answer: |
+      VULNERABILITY: Server-Side Request Forgery (SSRF) - A10:2021
+      
+      MITIGATION:
+      
+      1. Input Validation:
+         - Allowlist of permitted domains
+         - Block private IP ranges (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16)
+         - Block localhost (127.0.0.0/8)
+         - Block cloud metadata IPs (169.254.169.254)
+      
+      2. Network Controls:
+         - Firewall rules blocking internal access from web tier
+         - Network segmentation
+         - Dedicated egress proxy
+      
+      3. Application Controls:
+         - Disable redirects or limit redirect chains
+         - Validate response content type
+         - Set timeouts
+         - Use DNS resolution validation
+    points: 5
+
+grading:
+  multiple_choice:
+    points_per_question: 2
+    max_points: 20
+  code_review:
+    points_per_question: 3
+    max_points: 30
+    partial_credit: true
+  scenario_based:
+    points_per_question: 5
+    max_points: 25
+    rubric:
+      - identifies_vulnerability: 1
+      - explains_impact: 1
+      - provides_mitigation: 2
+      - comprehensive_answer: 1
+
+passing_criteria:
+  minimum_score: 60  # out of 75 total (80%)
+  required_sections:
+    - multiple_choice_min: 14  # 70%
+    - code_review_min: 21  # 70%
+    - scenario_min: 15  # 60%
+
+certification:
+  on_pass:
+    badge: "OWASP Top 10 Specialist"
+    certificate_template: "owasp-specialist-cert.html"
+    valid_for_months: 24
+  on_fail:
+    recommended_modules:
+      - Modules for each failed category
+    retry_after_days: 7

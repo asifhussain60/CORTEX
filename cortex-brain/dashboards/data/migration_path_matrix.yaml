@@ -1,0 +1,686 @@
+# Migration Path Matrix for .NET Technologies
+# Purpose: Comprehensive documentation of common migration paths with effort estimates,
+#          step-by-step guides, blocker analysis, and risk assessments
+# Version: 1.0.0
+# Last Updated: December 6, 2025
+# Author: CORTEX Dashboard System
+
+metadata:
+  version: "1.0.0"
+  last_updated: "2025-12-06"
+  total_migrations: 5
+  complexity_levels:
+    LOW: "< 8 hours per project, minimal breaking changes"
+    MEDIUM: "8-15 hours per project, moderate refactoring required"
+    HIGH: "> 15 hours per project, significant architecture changes"
+
+migrations:
+  - id: "dotnet-framework-to-dotnet8"
+    name: ".NET Framework 4.8 → .NET 8"
+    from:
+      technology: ".NET Framework"
+      version: "4.8"
+      release_date: "2019-04-18"
+      eol_date: "TBD (Windows lifetime)"
+    to:
+      technology: ".NET"
+      version: "8.0"
+      release_date: "2023-11-14"
+      eol_date: "2026-11-10"
+      lts: true
+    
+    effort_estimate:
+      hours_per_project: 40
+      complexity: "HIGH"
+      team_size: "2-3 developers"
+      timeline: "4-6 weeks per project"
+    
+    benefits:
+      - "Cross-platform support (Windows, Linux, macOS)"
+      - "50-80% performance improvement in runtime"
+      - "Modern C# language features (C# 12)"
+      - "Reduced memory footprint (30-40%)"
+      - "Active LTS support until 2026"
+      - "Container-friendly deployment"
+      - "Improved API surface area"
+    
+    blockers:
+      - id: "wcf-remoting"
+        description: "WCF and .NET Remoting not supported in .NET Core/.NET"
+        severity: "CRITICAL"
+        workaround: "Migrate to gRPC, REST APIs, or CoreWCF (limited support)"
+        effort_hours: 20
+        
+      - id: "binary-serialization"
+        description: "BinaryFormatter removed for security reasons"
+        severity: "HIGH"
+        workaround: "Migrate to JSON (System.Text.Json), Protobuf, or MessagePack"
+        effort_hours: 8
+        
+      - id: "appdomain"
+        description: "AppDomain APIs removed"
+        severity: "MEDIUM"
+        workaround: "Use AssemblyLoadContext for plugin isolation"
+        effort_hours: 12
+        
+      - id: "webforms"
+        description: "ASP.NET WebForms not supported"
+        severity: "CRITICAL"
+        workaround: "Migrate to Blazor, Razor Pages, or MVC"
+        effort_hours: 40
+        
+      - id: "configuration"
+        description: "app.config/web.config replaced with appsettings.json"
+        severity: "LOW"
+        workaround: "Migrate to Microsoft.Extensions.Configuration"
+        effort_hours: 4
+    
+    migration_steps:
+      - phase: "Assessment"
+        duration: "2-4 hours"
+        steps:
+          - "Run .NET Portability Analyzer on codebase"
+          - "Identify unsupported APIs (WCF, Remoting, BinaryFormatter)"
+          - "Analyze NuGet package compatibility with .NET 8"
+          - "Assess ASP.NET technology (WebForms vs MVC)"
+          - "Document third-party dependencies requiring alternatives"
+          
+      - phase: "Preparation"
+        duration: "4-8 hours"
+        steps:
+          - "Update Visual Studio to 2022 (17.8+)"
+          - "Install .NET 8 SDK"
+          - "Create feature branch: feature/dotnet8-migration"
+          - "Set up CI/CD pipeline for .NET 8 builds"
+          - "Identify WCF services requiring gRPC migration"
+          
+      - phase: "Project File Migration"
+        duration: "2-4 hours"
+        steps:
+          - "Convert .csproj to SDK-style format"
+          - "Update TargetFramework to net8.0"
+          - "Remove obsolete package references (System.ServiceModel)"
+          - "Add Microsoft.Extensions.* packages for DI/Configuration"
+          - "Update NuGet packages to .NET 8 compatible versions"
+          
+      - phase: "Code Refactoring"
+        duration: "20-30 hours"
+        steps:
+          - "Replace WCF services with gRPC/REST endpoints"
+          - "Migrate BinaryFormatter to System.Text.Json"
+          - "Replace app.config with appsettings.json + IConfiguration"
+          - "Update logging to Microsoft.Extensions.Logging"
+          - "Refactor AppDomain usage to AssemblyLoadContext"
+          - "Update deprecated APIs (use .NET Upgrade Assistant)"
+          - "Enable nullable reference types (optional but recommended)"
+          
+      - phase: "Testing"
+        duration: "8-12 hours"
+        steps:
+          - "Run full regression test suite"
+          - "Test serialization/deserialization with new formats"
+          - "Verify configuration loading in all environments"
+          - "Performance benchmark comparison (Framework vs .NET 8)"
+          - "Load testing for API endpoints"
+          - "Cross-platform validation (if applicable)"
+          
+      - phase: "Deployment"
+        duration: "4-6 hours"
+        steps:
+          - "Update deployment scripts for .NET 8 runtime"
+          - "Configure IIS/.NET hosting bundle (Windows)"
+          - "Set up systemd services (Linux)"
+          - "Update Docker base images to mcr.microsoft.com/dotnet/aspnet:8.0"
+          - "Deploy to staging environment"
+          - "Monitor performance metrics post-deployment"
+    
+    testing_strategy:
+      unit_tests:
+        - "Verify all existing unit tests pass with .NET 8"
+        - "Add tests for new configuration loading (IConfiguration)"
+        - "Test JSON serialization edge cases (dates, nulls, polymorphism)"
+        - "Validate DI container behavior with Microsoft.Extensions.DependencyInjection"
+        
+      integration_tests:
+        - "Test gRPC service communication (if migrated from WCF)"
+        - "Verify database connectivity with updated drivers"
+        - "Test external API integrations"
+        - "Validate authentication/authorization flows"
+        
+      performance_tests:
+        - "Benchmark startup time (expect 30-50% improvement)"
+        - "Load test API endpoints (expect 50-80% throughput increase)"
+        - "Memory profiling (expect 30-40% reduction)"
+        - "CPU utilization under load"
+    
+    rollback_procedure:
+      triggers:
+        - "Critical production bugs not reproducible in .NET Framework"
+        - "Performance degradation > 20% vs baseline"
+        - "Data corruption in serialization layer"
+        - "Blocking issues in third-party dependencies"
+      
+      steps:
+        - "Switch deployment back to .NET Framework binaries"
+        - "Revert IIS application pool to .NET Framework"
+        - "Restore previous configuration files (app.config/web.config)"
+        - "Monitor error rates and performance metrics"
+        - "Document root cause for post-mortem analysis"
+      
+      rollback_time: "15-30 minutes (automated), 1-2 hours (manual)"
+    
+    risk_assessment:
+      technical_risk: "HIGH"
+      business_risk: "MEDIUM"
+      mitigations:
+        - "Phased rollout: Start with low-traffic services"
+        - "Blue-green deployment with instant rollback capability"
+        - "Feature flags for gradual API migration"
+        - "Comprehensive smoke tests in staging"
+        - "24/7 monitoring for first 2 weeks post-migration"
+    
+    success_criteria:
+      - "All unit tests passing (100%)"
+      - "Zero regression bugs in production (first 2 weeks)"
+      - "Performance improvement > 30% (startup time, throughput)"
+      - "Memory reduction > 20%"
+      - "Successful deployment across all environments"
+      - "Developer satisfaction score > 8/10"
+
+  - id: "csharp73-to-csharp12"
+    name: "C# 7.3 → C# 12"
+    from:
+      technology: "C#"
+      version: "7.3"
+      release_date: "2018-05-30"
+      platform: ".NET Framework 4.7.2+"
+    to:
+      technology: "C#"
+      version: "12"
+      release_date: "2023-11-14"
+      platform: ".NET 8"
+    
+    effort_estimate:
+      hours_per_project: 4
+      complexity: "LOW"
+      team_size: "1 developer"
+      timeline: "1-2 days per project"
+    
+    benefits:
+      - "File-scoped namespaces (reduce indentation)"
+      - "Global using directives (DRY principle)"
+      - "Required members (enforce initialization)"
+      - "Raw string literals (cleaner multiline strings)"
+      - "List patterns (improved pattern matching)"
+      - "Primary constructors (classes, not just records)"
+      - "Collection expressions (simplified initialization)"
+      - "Improved nullable reference types"
+    
+    blockers:
+      - id: "framework-dependency"
+        description: "C# 12 requires .NET 8 SDK"
+        severity: "LOW"
+        workaround: "Update project to .NET 8 or use C# 11 (.NET 7)"
+        effort_hours: 1
+    
+    migration_steps:
+      - phase: "Preparation"
+        duration: "30 minutes"
+        steps:
+          - "Update Visual Studio to 2022 (17.8+)"
+          - "Update .csproj: <LangVersion>12</LangVersion>"
+          - "Enable nullable reference types: <Nullable>enable</Nullable>"
+          
+      - phase: "Adopt Modern Features"
+        duration: "2-3 hours"
+        steps:
+          - "Convert namespaces to file-scoped format"
+          - "Add GlobalUsings.cs with common using directives"
+          - "Apply required keyword to mandatory properties"
+          - "Replace string concatenation with raw string literals"
+          - "Use collection expressions for array/list initialization"
+          - "Apply primary constructors where appropriate"
+          
+      - phase: "Testing"
+        duration: "30-60 minutes"
+        steps:
+          - "Run full test suite"
+          - "Verify no behavioral changes"
+          - "Check code coverage (should remain same)"
+    
+    testing_strategy:
+      unit_tests:
+        - "Verify file-scoped namespaces compile correctly"
+        - "Test required members throw on missing initialization"
+        - "Validate raw string literal edge cases (quotes, newlines)"
+        
+      code_quality:
+        - "Run static analysis (SonarQube, Roslyn analyzers)"
+        - "Verify no new warnings introduced"
+        - "Check cyclomatic complexity (should improve)"
+    
+    rollback_procedure:
+      triggers:
+        - "Compilation errors in CI/CD pipeline"
+        - "IDE tooling issues with new syntax"
+      
+      steps:
+        - "Revert .csproj: <LangVersion>7.3</LangVersion>"
+        - "Git revert syntax modernization commits"
+      
+      rollback_time: "5-10 minutes"
+    
+    risk_assessment:
+      technical_risk: "LOW"
+      business_risk: "LOW"
+      mitigations:
+        - "Incremental adoption (one feature at a time)"
+        - "Code review for unfamiliar syntax"
+        - "Team training session on new features"
+    
+    success_criteria:
+      - "All code compiles with C# 12"
+      - "No regression in test pass rate"
+      - "Reduced code verbosity (lines of code)"
+      - "Improved readability (team consensus)"
+
+  - id: "log4net-to-serilog"
+    name: "log4net → Serilog"
+    from:
+      technology: "log4net"
+      version: "2.0.15"
+      last_release: "2022-07-04"
+      maintenance_status: "Maintenance mode"
+    to:
+      technology: "Serilog"
+      version: "3.1.1"
+      release_date: "2023-11-15"
+      maintenance_status: "Active development"
+    
+    effort_estimate:
+      hours_per_project: 8
+      complexity: "MEDIUM"
+      team_size: "1-2 developers"
+      timeline: "2-3 days per project"
+    
+    benefits:
+      - "Structured logging with message templates"
+      - "50+ sinks (Elasticsearch, Seq, Application Insights)"
+      - "Better performance (async logging, batching)"
+      - "Strongly-typed log context"
+      - "Easier filtering and querying in centralized logs"
+      - "Modern .NET Core/.NET support"
+      - "Richer ecosystem and community"
+    
+    blockers:
+      - id: "custom-appenders"
+        description: "Custom log4net appenders need replacement"
+        severity: "MEDIUM"
+        workaround: "Implement custom Serilog sinks or use existing alternatives"
+        effort_hours: 4
+        
+      - id: "config-format"
+        description: "XML config vs code-based configuration"
+        severity: "LOW"
+        workaround: "Migrate to appsettings.json or fluent API"
+        effort_hours: 2
+    
+    migration_steps:
+      - phase: "Preparation"
+        duration: "1 hour"
+        steps:
+          - "Install Serilog NuGet packages:"
+          - "  - Serilog (core)"
+          - "  - Serilog.Sinks.Console"
+          - "  - Serilog.Sinks.File"
+          - "  - Serilog.Settings.Configuration (for appsettings.json)"
+          - "  - Serilog.Enrichers.Thread, Serilog.Enrichers.Environment"
+          - "Document existing log4net configuration (appenders, levels)"
+          
+      - phase: "Configuration Migration"
+        duration: "2-3 hours"
+        steps:
+          - "Create Serilog configuration in appsettings.json or Program.cs"
+          - "Map log4net appenders to Serilog sinks:"
+          - "  - RollingFileAppender → Serilog.Sinks.File (rolling)"
+          - "  - ConsoleAppender → Serilog.Sinks.Console"
+          - "  - AdoNetAppender → Serilog.Sinks.MSSqlServer"
+          - "Configure log levels (Verbose, Debug, Info, Warning, Error, Fatal)"
+          - "Set up enrichers (machine name, thread ID, process ID)"
+          
+      - phase: "Code Refactoring"
+        duration: "3-4 hours"
+        steps:
+          - "Replace log4net.ILog with Serilog.ILogger"
+          - "Update logging calls:"
+          - "  - log.Info(\"User logged in\") → logger.Information(\"User logged in\")"
+          - "  - log.Error(\"Error\", ex) → logger.Error(ex, \"Error\")"
+          - "Convert string concatenation to message templates:"
+          - "  - log.Info(\"User \" + userId + \" action\") → logger.Information(\"User {UserId} action\", userId)"
+          - "Add structured properties for better querying"
+          - "Update DI registration to inject Serilog.ILogger"
+          
+      - phase: "Testing"
+        duration: "1-2 hours"
+        steps:
+          - "Verify logs appear in configured sinks"
+          - "Test log levels filtering (Debug vs Info vs Error)"
+          - "Validate structured data in log entries"
+          - "Check log file rotation behavior"
+          - "Test exception logging with stack traces"
+    
+    testing_strategy:
+      unit_tests:
+        - "Mock Serilog.ILogger in tests"
+        - "Verify log method calls with message templates"
+        - "Test log enrichers add expected properties"
+        
+      integration_tests:
+        - "End-to-end logging to file sink"
+        - "Verify log entries in centralized logging (if using Seq/Elasticsearch)"
+        - "Test log retention policies"
+        
+      manual_testing:
+        - "Trigger errors and verify detailed logs"
+        - "Check log readability in production monitoring tools"
+    
+    rollback_procedure:
+      triggers:
+        - "Critical logs not appearing in production"
+        - "Performance degradation due to logging overhead"
+        - "Incompatibility with monitoring tools"
+      
+      steps:
+        - "Restore log4net configuration files"
+        - "Revert code to use log4net.ILog"
+        - "Redeploy with log4net dependencies"
+      
+      rollback_time: "30-60 minutes"
+    
+    risk_assessment:
+      technical_risk: "MEDIUM"
+      business_risk: "LOW"
+      mitigations:
+        - "Parallel logging (both log4net and Serilog) during transition"
+        - "Test in staging with production-like load"
+        - "Monitor log volume and performance metrics"
+    
+    success_criteria:
+      - "All logs appear in configured sinks"
+      - "Structured logging enabled for key events"
+      - "Log query performance improved (if using centralized logging)"
+      - "No log-related errors in production (first week)"
+      - "Reduced logging configuration complexity"
+
+  - id: "unity-to-autofac"
+    name: "Unity → Autofac"
+    from:
+      technology: "Unity Container"
+      version: "5.11.10"
+      last_release: "2021-05-20"
+      maintenance_status: "Low activity"
+    to:
+      technology: "Autofac"
+      version: "8.0.0"
+      release_date: "2024-01-15"
+      maintenance_status: "Active development"
+    
+    effort_estimate:
+      hours_per_project: 6
+      complexity: "MEDIUM"
+      team_size: "1 developer"
+      timeline: "1-2 days per project"
+    
+    benefits:
+      - "Better performance (30-50% faster resolution)"
+      - "Stronger lifetime scope management"
+      - "Module-based registration (cleaner organization)"
+      - "Integration with ASP.NET Core (built-in middleware)"
+      - "Better documentation and community support"
+      - "Lambda-based registration (more flexible)"
+      - "Decorator pattern support"
+    
+    blockers:
+      - id: "registration-syntax"
+        description: "Different registration API"
+        severity: "LOW"
+        workaround: "Map Unity RegisterType to Autofac RegisterType"
+        effort_hours: 2
+        
+      - id: "lifetime-management"
+        description: "Unity lifetime managers vs Autofac scopes"
+        severity: "MEDIUM"
+        workaround: "Map ContainerControlledLifetimeManager to SingleInstance, etc."
+        effort_hours: 3
+    
+    migration_steps:
+      - phase: "Preparation"
+        duration: "30 minutes"
+        steps:
+          - "Install Autofac NuGet packages:"
+          - "  - Autofac (core)"
+          - "  - Autofac.Extensions.DependencyInjection (ASP.NET Core)"
+          - "Document Unity registrations (types, lifetimes, names)"
+          
+      - phase: "Registration Migration"
+        duration: "2-3 hours"
+        steps:
+          - "Create Autofac ContainerBuilder"
+          - "Map Unity registrations to Autofac:"
+          - "  - RegisterType<IService, Service>() → builder.RegisterType<Service>().As<IService>()"
+          - "  - ContainerControlledLifetimeManager → .SingleInstance()"
+          - "  - HierarchicalLifetimeManager → .InstancePerLifetimeScope()"
+          - "  - TransientLifetimeManager → .InstancePerDependency()"
+          - "Organize registrations into Autofac modules"
+          - "Update named registrations: .Named<IService>(\"name\")"
+          
+      - phase: "Code Refactoring"
+        duration: "2-3 hours"
+        steps:
+          - "Replace IUnityContainer with IContainer or ILifetimeScope"
+          - "Update resolution calls:"
+          - "  - container.Resolve<IService>() → scope.Resolve<IService>()"
+          - "  - container.Resolve<IService>(\"name\") → scope.ResolveNamed<IService>(\"name\")"
+          - "Migrate child containers to lifetime scopes"
+          - "Update ASP.NET Core integration (UseServiceProviderFactory)"
+          
+      - phase: "Testing"
+        duration: "1 hour"
+        steps:
+          - "Verify all dependencies resolve correctly"
+          - "Test singleton lifetime (same instance across scopes)"
+          - "Test scoped lifetime (new instance per scope)"
+          - "Validate circular dependency detection"
+          - "Check disposal behavior (IDisposable objects)"
+    
+    testing_strategy:
+      unit_tests:
+        - "Test registration configurations"
+        - "Verify lifetime behaviors (singleton, scoped, transient)"
+        - "Test named registrations"
+        - "Validate module imports"
+        
+      integration_tests:
+        - "End-to-end DI resolution in ASP.NET Core pipeline"
+        - "Test scoped services in web requests"
+        - "Verify disposal of scoped services"
+    
+    rollback_procedure:
+      triggers:
+        - "Resolution failures in production"
+        - "Unexpected lifetime behaviors"
+        - "Performance issues"
+      
+      steps:
+        - "Revert to Unity container configuration"
+        - "Restore Unity package references"
+        - "Redeploy with Unity dependencies"
+      
+      rollback_time: "30-45 minutes"
+    
+    risk_assessment:
+      technical_risk: "MEDIUM"
+      business_risk: "LOW"
+      mitigations:
+        - "Test all DI resolutions in staging"
+        - "Monitor for resolution exceptions in logs"
+        - "Validate lifetime behaviors match Unity"
+    
+    success_criteria:
+      - "All dependencies resolve without errors"
+      - "Lifetime behaviors match previous Unity configuration"
+      - "Performance improvement in DI resolution (30-50%)"
+      - "Code organization improved with modules"
+      - "No DI-related issues in production (first week)"
+
+  - id: "newtonsoftjson-to-systemtextjson"
+    name: "Newtonsoft.Json → System.Text.Json"
+    from:
+      technology: "Newtonsoft.Json (Json.NET)"
+      version: "13.0.3"
+      release_date: "2023-03-08"
+      maintenance_status: "Maintenance mode"
+    to:
+      technology: "System.Text.Json"
+      version: "8.0.0"
+      release_date: "2023-11-14"
+      maintenance_status: "Active (built into .NET)"
+    
+    effort_estimate:
+      hours_per_project: 10
+      complexity: "MEDIUM"
+      team_size: "1-2 developers"
+      timeline: "2-3 days per project"
+    
+    benefits:
+      - "2-5x faster serialization/deserialization"
+      - "50% lower memory allocation"
+      - "Built into .NET (no NuGet dependency)"
+      - "Better async/await support (Utf8JsonReader/Writer)"
+      - "Source generators (compile-time performance)"
+      - "Native JSON DOM (JsonDocument, JsonNode)"
+      - "Security improvements (depth limits, string handling)"
+    
+    blockers:
+      - id: "missing-features"
+        description: "Some Json.NET features not in System.Text.Json"
+        severity: "MEDIUM"
+        workaround: "Custom converters or keep Json.NET for specific cases"
+        effort_hours: 6
+        examples:
+          - "Preserving object references (ReferenceLoopHandling)"
+          - "Type name handling ($type properties)"
+          - "Complex serialization callbacks"
+          - "Non-public members serialization"
+        
+      - id: "default-behavior"
+        description: "Different defaults (camelCase vs PascalCase)"
+        severity: "LOW"
+        workaround: "Configure JsonSerializerOptions for compatibility"
+        effort_hours: 2
+    
+    migration_steps:
+      - phase: "Assessment"
+        duration: "1-2 hours"
+        steps:
+          - "Search codebase for JsonConvert, JObject, JToken, JArray"
+          - "Identify custom JsonConverters"
+          - "Document APIs/contracts expecting specific JSON format"
+          - "Check for ReferenceLoopHandling usage"
+          - "List date/time format requirements"
+          
+      - phase: "Configuration"
+        duration: "1-2 hours"
+        steps:
+          - "Create JsonSerializerOptions with compatibility settings:"
+          - "  - PropertyNameCaseInsensitive = true"
+          - "  - PropertyNamingPolicy = JsonNamingPolicy.CamelCase (if needed)"
+          - "  - DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull"
+          - "  - WriteIndented = true (for readability)"
+          - "Configure date/time formats (ISO 8601 default)"
+          - "Set up converter factory for custom types"
+          
+      - phase: "Code Migration"
+        duration: "4-6 hours"
+        steps:
+          - "Replace namespaces: Newtonsoft.Json → System.Text.Json"
+          - "Update serialization calls:"
+          - "  - JsonConvert.SerializeObject(obj) → JsonSerializer.Serialize(obj, options)"
+          - "  - JsonConvert.DeserializeObject<T>(json) → JsonSerializer.Deserialize<T>(json, options)"
+          - "Migrate JObject/JToken/JArray:"
+          - "  - JObject → JsonDocument or JsonNode"
+          - "  - JToken → JsonElement"
+          - "  - JArray → JsonArray"
+          - "Convert custom JsonConverter implementations"
+          - "Update attributes: [JsonProperty] → [JsonPropertyName]"
+          
+      - phase: "Testing"
+        duration: "2-3 hours"
+        steps:
+          - "Test serialization/deserialization for all DTOs"
+          - "Verify JSON format matches API contracts"
+          - "Test null handling (ignore vs include)"
+          - "Validate date/time serialization formats"
+          - "Check polymorphic deserialization (if used)"
+          - "Performance benchmark (expect 2-5x improvement)"
+    
+    testing_strategy:
+      unit_tests:
+        - "Serialize/deserialize all data models"
+        - "Test custom converters"
+        - "Verify null handling"
+        - "Test edge cases (empty strings, large numbers)"
+        
+      integration_tests:
+        - "API contract tests (request/response JSON format)"
+        - "Database JSON column serialization"
+        - "Message queue payloads (if using JSON)"
+        
+      compatibility_tests:
+        - "Ensure backward compatibility with existing JSON files/APIs"
+        - "Test interop with external systems"
+    
+    rollback_procedure:
+      triggers:
+        - "API contract breaking changes"
+        - "Deserialization failures in production"
+        - "Performance issues (unexpected)"
+      
+      steps:
+        - "Revert to Newtonsoft.Json package reference"
+        - "Restore JsonConvert calls"
+        - "Redeploy with Json.NET dependencies"
+      
+      rollback_time: "30-60 minutes"
+    
+    risk_assessment:
+      technical_risk: "MEDIUM"
+      business_risk: "MEDIUM"
+      mitigations:
+        - "Test API contracts thoroughly"
+        - "Use compatibility shims for transitional period"
+        - "Monitor serialization errors in logs"
+        - "Keep Newtonsoft.Json as fallback for edge cases"
+    
+    success_criteria:
+      - "All serialization tests passing"
+      - "API contracts unchanged (or versioned)"
+      - "Performance improvement 2-5x (serialization benchmarks)"
+      - "Memory allocation reduced 30-50%"
+      - "No serialization errors in production (first 2 weeks)"
+      - "Newtonsoft.Json dependency removed (or minimal usage)"
+
+# Usage Instructions:
+# 1. Select migration path from 'migrations' array
+# 2. Review 'blockers' to identify potential issues
+# 3. Follow 'migration_steps' sequentially
+# 4. Execute 'testing_strategy' at each phase
+# 5. Keep 'rollback_procedure' ready for production deployment
+# 6. Validate 'success_criteria' post-migration
+
+# Notes:
+# - Effort estimates assume experienced developers familiar with both technologies
+# - Timeline can extend 30-50% for teams new to target technology
+# - Always test in staging environment before production deployment
+# - Consider phased rollout for high-risk migrations (dotnet8, systemtextjson)
+# - Document learnings for future migrations

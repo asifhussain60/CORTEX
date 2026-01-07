@@ -1,0 +1,12 @@
+version: '1.0'
+last_updated: '2025-12-17T12:24:06.919591'
+plans:
+- plan_id: prod-test-complex-oa
+  title: Unknown Feature
+  status: active
+  complexity_tier: 3
+  created_date: '2025-12-17T12:24:06.919320'
+  approved_date: '2025-12-17T12:24:06.919327'
+  folder: D:\PROJECTS\CORTEX\cortex-brain\documents\planning\active\prod-test-complex-oa
+  phases: []
+  estimated_days: 0

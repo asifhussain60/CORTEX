@@ -1,0 +1,10 @@
+standard_header:
+  description: Standard CORTEX response header
+  template: '## 🧠 CORTEX {title}
+
+    **Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
+
+
+    ---
+
+    '

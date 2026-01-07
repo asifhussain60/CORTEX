@@ -1,0 +1,111 @@
+{
+  "plan_id": "COMPOSABLE-TEMPLATES-001",
+  "plan_name": "Orchestrator Composable Template System",
+  "created": "2025-12-31T00:00:00Z",
+  "last_updated": "2025-12-31T08:19:20.871525",
+  "overall_progress": 100,
+  "status": "complete",
+  "estimated_effort": "8-10 hours",
+  "enhancements_added": [
+    "sync_plan_tracker.py toolkit tool",
+    "bidirectional_linking in manifests",
+    "progress_tracker_sync enforcement"
+  ],
+  "phases": [
+    {
+      "num": 1,
+      "name": "⏳ **Shield Icon Governance**",
+      "progress": 100,
+      "status": "complete"
+    },
+    {
+      "num": 2,
+      "name": "✅ **Discovery & Analysis**",
+      "progress": 100,
+      "status": "pending"
+    },
+    {
+      "num": 3,
+      "name": "✅ **Template Migration Review**",
+      "progress": 100,
+      "status": "pending"
+    },
+    {
+      "num": 4,
+      "name": "✅ **Intelligent Template Algorithm**",
+      "progress": 100,
+      "status": "pending"
+    },
+    {
+      "num": 5,
+      "name": "✅ **Orchestrator Template Generation**",
+      "progress": 100,
+      "status": "pending"
+    },
+    {
+      "num": 6,
+      "name": "✅ **Composable Blocks Schema**",
+      "progress": 100,
+      "status": "pending"
+    },
+    {
+      "num": 7,
+      "name": "✅ **Manifest Updates (All 8)**",
+      "progress": 100,
+      "status": "pending"
+    },
+    {
+      "num": 8,
+      "name": "✅ **Progress Bar Standardization**",
+      "progress": 100,
+      "status": "pending"
+    },
+    {
+      "num": 9,
+      "name": "✅ **Validation & REFACTOR**",
+      "progress": 100,
+      "status": "pending"
+    },
+    {
+      "num": 10,
+      "name": "✅ **Toolkit Tools Creation**",
+      "progress": 100,
+      "status": "pending"
+    },
+    {
+      "num": 11,
+      "name": "✅ **Tracker Sync Enhancement**",
+      "progress": 100,
+      "status": "pending"
+    }
+  ],
+  "success_criteria": {
+    "template_selection_algorithm_exists": true,
+    "composable_blocks_exists": true,
+    "manifest_count_with_templates": 8,
+    "manifest_count_target": 8,
+    "orchestrator_specific_templates_generated": true,
+    "yaml_valid": true,
+    "standardized_progress_bars": true,
+    "no_breaking_changes": true,
+    "tracker_sync_tool_created": true,
+    "bidirectional_linking_implemented": true
+  },
+  "files_to_modify": [
+    "cortex-brain/response-templates-v4.yaml",
+    "cortex-brain/manifests/orchestrators/planning-system-4.0-manifest.yaml",
+    "cortex-brain/manifests/orchestrators/tdd-orchestrator-v4-manifest.yaml",
+    "cortex-brain/manifests/orchestrators/debug-orchestrator-manifest.yaml",
+    "cortex-brain/manifests/orchestrators/cortex-lens-v3-manifest.yaml",
+    "cortex-brain/manifests/orchestrators/refinement-orchestrator-manifest.yaml",
+    "cortex-brain/manifests/orchestrators/code-sanitization-manifest.yaml",
+    "cortex-brain/manifests/orchestrators/technical-documentation-orchestrator-manifest.yaml",
+    "cortex-brain/manifests/orchestrators/ado-planning-manifest.yaml"
+  ],
+  "files_to_create": [
+    "context/template-migration-mapping.md",
+    "artifacts/orchestrator-templates.yaml",
+    "reports/validation-report.md"
+  ],
+  "last_synced_from_master": "2025-12-31T08:19:20.871206"
+}

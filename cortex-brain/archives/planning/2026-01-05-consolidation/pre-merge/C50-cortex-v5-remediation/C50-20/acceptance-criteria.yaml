@@ -1,0 +1,334 @@
+# C50-20: Governance Middleware Implementation - Acceptance Criteria
+
+epic_id: C50
+feature_id: C50-20
+feature_name: "Governance Middleware Implementation"
+priority: P0
+complexity: TIER_4_COMPREHENSIVE
+estimated_hours: 6-8
+
+# Definition of Ready (DoR)
+definition_of_ready:
+  dependencies_met:
+    - criterion: "Brittleness analysis completed"
+      status: complete
+      evidence: "cortex-brain/documents/analysis/C50-brittleness-analysis-2026-01-04.md"
+    
+    - criterion: "SKULL rules defined (v5.0)"
+      status: complete
+      evidence: "cortex-brain/brain-protection-rules.yaml (61 rules)"
+    
+    - criterion: "C50-19 completed (Brain Data Cutover)"
+      status: pending
+      blocker: true
+      reason: "Must complete C50-19 first for clean data sources"
+    
+    - criterion: "Master orchestrator lifecycle structure understood"
+      status: complete
+      evidence: "src/orchestrators/master_orchestrator.py exists"
+  
+  resources_available:
+    - criterion: "Test framework available"
+      status: complete
+      evidence: "tests/fixtures/skull_framework.py"
+    
+    - criterion: "Audit log directory structure"
+      status: complete
+      evidence: "tracking/ directory exists"
+  
+  false_positive_check:
+    - criterion: "SKULL rules YAML valid"
+      status: complete
+      validation: "yaml.safe_load succeeds"
+
+# Definition of Done (DoD)
+definition_of_done:
+  deliverables_created:
+    - criterion: "GovernanceCheckpoint middleware implemented"
+      acceptance_test: "Class exists with pre/post execution hooks"
+      file: "src/orchestrators/middleware/governance_checkpoint.py"
+      validation_command: "test -f src/orchestrators/middleware/governance_checkpoint.py"
+    
+    - criterion: "SetupVerifier middleware implemented"
+      acceptance_test: "Class exists with dependency verification"
+      file: "src/orchestrators/middleware/setup_verification.py"
+      validation_command: "test -f src/orchestrators/middleware/setup_verification.py"
+    
+    - criterion: "TeardownRefactor middleware implemented"
+      acceptance_test: "Class exists with refactor + git commit"
+      file: "src/orchestrators/middleware/teardown_refactor.py"
+      validation_command: "test -f src/orchestrators/middleware/teardown_refactor.py"
+    
+    - criterion: "Middleware directory structure"
+      acceptance_test: "__init__.py exists for package"
+      validation_command: "test -f src/orchestrators/middleware/__init__.py"
+  
+  tests_passing:
+    - criterion: "GovernanceCheckpoint tests pass"
+      acceptance_test: "All unit tests pass (100% coverage)"
+      test_file: "tests/orchestrators/middleware/test_governance_checkpoint.py"
+      minimum_coverage: 100
+      validation_command: "pytest tests/orchestrators/middleware/test_governance_checkpoint.py -v --cov=src.orchestrators.middleware.governance_checkpoint --cov-report=term --cov-fail-under=100"
+    
+    - criterion: "SetupVerifier tests pass"
+      acceptance_test: "All unit tests pass (100% coverage)"
+      test_file: "tests/orchestrators/middleware/test_setup_verifier.py"
+      minimum_coverage: 100
+      validation_command: "pytest tests/orchestrators/middleware/test_setup_verifier.py -v --cov=src.orchestrators.middleware.setup_verification --cov-report=term --cov-fail-under=100"
+    
+    - criterion: "TeardownRefactor tests pass"
+      acceptance_test: "All unit tests pass (100% coverage)"
+      test_file: "tests/orchestrators/middleware/test_teardown_refactor.py"
+      minimum_coverage: 100
+      validation_command: "pytest tests/orchestrators/middleware/test_teardown_refactor.py -v --cov=src.orchestrators.middleware.teardown_refactor --cov-report=term --cov-fail-under=100"
+    
+    - criterion: "Master orchestrator lifecycle tests pass"
+      acceptance_test: "Middleware integration verified"
+      test_file: "tests/orchestrators/test_master_orchestrator_lifecycle.py"
+      validation_command: "pytest tests/orchestrators/test_master_orchestrator_lifecycle.py -v"
+    
+    - criterion: "Integration tests pass"
+      acceptance_test: "Real orchestrator execution with middleware"
+      test_file: "tests/orchestrators/test_middleware_integration.py"
+      validation_command: "pytest tests/orchestrators/test_middleware_integration.py -v"
+  
+  refactor_complete:
+    - criterion: "All middleware files follow CORTEX standards"
+      validation:
+        - "Docstrings for all classes and methods"
+        - "Type hints for all parameters"
+        - "Error handling for all external calls"
+        - "Logging for all critical operations"
+    
+    - criterion: "Master orchestrator wired cleanly"
+      validation:
+        - "Lifecycle hooks registered in priority order"
+        - "Hook error handling wrapper implemented"
+        - "No breaking changes to existing orchestrators"
+  
+  documentation_updated:
+    - criterion: "Middleware API documented"
+      files:
+        - "src/orchestrators/middleware/README.md"
+      content:
+        - "Class diagrams for all 3 middleware"
+        - "Usage examples"
+        - "Hook registration process"
+    
+    - criterion: "Architecture docs updated"
+      files:
+        - "cortex-brain/documents/cortex-architecture-quick-ref.md"
+      content:
+        - "v5.0 Universal Pattern explained"
+        - "Middleware lifecycle diagram"
+        - "Audit log structure"
+
+# Quality Gates
+quality_gates:
+  test_coverage:
+    minimum: 100
+    target: 100
+    critical_paths:
+      - "GovernanceCheckpoint.pre_execution_hook"
+      - "GovernanceCheckpoint.post_execution_hook"
+      - "SetupVerifier.verify_dependencies"
+      - "TeardownRefactor.refactor_whole_file"
+      - "MasterOrchestrator lifecycle hooks"
+  
+  performance:
+    - criterion: "Audit log writes non-blocking"
+      baseline: "<10ms per write"
+      threshold: "<50ms max"
+    
+    - criterion: "No orchestrator execution slowdown"
+      baseline: "Current execution times"
+      threshold: "+5% max"
+  
+  security:
+    - criterion: "Audit log permissions correct"
+      validation: "0600 (owner read/write only)"
+    
+    - criterion: "No sensitive data in audit logs"
+      validation: "Manual review + automated PII detection"
+
+# Phase Acceptance Criteria
+phases:
+  phase_1:
+    name: "GovernanceCheckpoint Middleware"
+    duration_hours: 2
+    dor:
+      - "SKULL rules YAML loaded successfully"
+      - "Audit log directory exists"
+    dod:
+      - "GovernanceCheckpoint class implemented"
+      - "pre_execution_hook validates DoR"
+      - "post_execution_hook validates DoD"
+      - "Audit log writes working"
+      - "test_governance_checkpoint.py passes (100% coverage)"
+    exit_criteria:
+      - "Can enforce PHASE_ACCEPTANCE_CRITERIA rule"
+      - "Violations logged to tracking/governance-audit.jsonl"
+  
+  phase_2:
+    name: "SetupVerifier Middleware"
+    duration_hours: 1.5
+    dor:
+      - "Phase 1 complete"
+      - "Pytest execution understood"
+    dod:
+      - "SetupVerifier class implemented"
+      - "verify_dependencies runs actual tests"
+      - "detect_false_positives works"
+      - "test_setup_verifier.py passes (100% coverage)"
+    exit_criteria:
+      - "Can detect broken dependencies (file exists but import fails)"
+      - "Phase -2 verification operational"
+  
+  phase_3:
+    name: "TeardownRefactor Middleware"
+    duration_hours: 1.5
+    dor:
+      - "Phase 2 complete"
+      - "autoflake and black installed"
+    dod:
+      - "TeardownRefactor class implemented"
+      - "refactor_whole_file removes unused imports"
+      - "git_commit_with_pattern follows /cortex-git-commit"
+      - "test_teardown_refactor.py passes (100% coverage)"
+    exit_criteria:
+      - "Can clean up whole files (unused imports, formatting)"
+      - "Git commits have Co-authored-by: CORTEX"
+  
+  phase_4:
+    name: "Master Orchestrator Wiring"
+    duration_hours: 1
+    dor:
+      - "Phase 3 complete"
+      - "All 3 middleware classes tested"
+    dod:
+      - "Master orchestrator imports all middleware"
+      - "Lifecycle hooks registered in priority order"
+      - "Hook error handling wrapper implemented"
+      - "test_master_orchestrator_lifecycle.py passes"
+    exit_criteria:
+      - "Orchestrator execution calls all hooks"
+      - "Hook failures block execution when enforcement=BLOCKING"
+  
+  phase_5:
+    name: "Integration Testing"
+    duration_hours: 2
+    dor:
+      - "Phase 4 complete"
+      - "Test orchestrators available"
+    dod:
+      - "Planning v5 orchestrator runs with middleware"
+      - "Audit log populated with real violations"
+      - "Git commits follow pattern"
+      - "test_middleware_integration.py passes"
+      - "Completion report generated"
+    exit_criteria:
+      - "Real orchestrator execution validates all 3 middleware"
+      - "No regressions in existing orchestrators"
+
+# Validation Commands
+validation:
+  pre_execution:
+    - command: "python -c 'import yaml; yaml.safe_load(open(\"cortex-brain/brain-protection-rules.yaml\"))'"
+      expected: "No errors (YAML valid)"
+    
+    - command: "test -d tracking"
+      expected: "Directory exists"
+  
+  post_execution:
+    - command: "test -f src/orchestrators/middleware/governance_checkpoint.py"
+      expected: "File exists"
+    
+    - command: "test -f src/orchestrators/middleware/setup_verification.py"
+      expected: "File exists"
+    
+    - command: "test -f src/orchestrators/middleware/teardown_refactor.py"
+      expected: "File exists"
+    
+    - command: "pytest tests/orchestrators/middleware/ -v --cov=src.orchestrators.middleware --cov-report=term --cov-fail-under=100"
+      expected: "100% coverage, all tests pass"
+    
+    - command: "pytest tests/orchestrators/test_middleware_integration.py -v"
+      expected: "Integration tests pass"
+    
+    - command: "test -f tracking/governance-audit.jsonl"
+      expected: "Audit log created"
+    
+    - command: "wc -l tracking/governance-audit.jsonl"
+      expected: ">0 lines (violations logged)"
+
+# Rollback Plan
+rollback:
+  trigger: "Any phase DoD not met OR integration tests fail"
+  steps:
+    - "Remove middleware files"
+    - "Revert master orchestrator changes"
+    - "Delete audit log (testing artifacts)"
+    - "Verify orchestrators work without middleware"
+    - "Document rollback reason"
+  validation:
+    - "pytest tests/orchestrators/planning/ -v (should pass)"
+
+# Success Metrics
+success_metrics:
+  - metric: "Middleware classes implemented"
+    target: 3
+    validation: "ls src/orchestrators/middleware/*.py | wc -l"
+  
+  - metric: "Test coverage"
+    target: 100%
+    validation: "pytest --cov report"
+  
+  - metric: "Audit log writes"
+    target: ">0 entries"
+    validation: "wc -l tracking/governance-audit.jsonl"
+  
+  - metric: "Integration tests passing"
+    target: 100%
+    validation: "pytest exit code 0"
+  
+  - metric: "Git commit pattern compliance"
+    target: 100%
+    validation: "git log --grep='Co-authored-by: CORTEX'"
+
+# SKULL Rules Enforced
+skull_rules_implemented:
+  - rule_id: "SETUP_VERIFICATION"
+    middleware: "SetupVerifier"
+    enforcement: "Phase -2 pre-execution"
+    priority: 1
+  
+  - rule_id: "RUNTIME_GOVERNANCE"
+    middleware: "GovernanceCheckpoint"
+    enforcement: "Phase start/end checkpoints"
+    priority: 20
+  
+  - rule_id: "TEARDOWN_REFACTOR"
+    middleware: "TeardownRefactor"
+    enforcement: "Phase N+1 post-execution"
+    priority: 30
+  
+  - rule_id: "PHASE_ACCEPTANCE_CRITERIA"
+    middleware: "GovernanceCheckpoint"
+    enforcement: "DoR/DoD validation"
+    priority: 15
+
+# Sign-off
+sign_off:
+  technical_lead: "Asif Hussain"
+  qa_approval_required: true  # Integration testing critical
+  production_readiness: true
+  blocking_issues:
+    - "C50-19 must complete first"
+  
+  dependencies:
+    - "autoflake installed (pip install autoflake)"
+    - "black installed (pip install black)"
+    - "pytest-cov installed (pip install pytest-cov)"
+
+---
+# Copyright © 2026 Asif Hussain. All rights reserved.

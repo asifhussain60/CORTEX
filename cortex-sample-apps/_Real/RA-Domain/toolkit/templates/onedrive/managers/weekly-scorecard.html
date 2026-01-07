@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Weekly Scorecard | RA Domain Analysis</title>
+    <link rel="stylesheet" href="../assets/onedrive-glass.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="page-header">
+        <div class="header-logo">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="cortex-logo">
+            <div>
+                <h1 class="header-title">Manager Weekly Scorecard</h1>
+                <p style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.25rem;">
+                    Team health metrics | Sprint goals | Technical debt tracking
+                </p>
+            </div>
+        </div>
+        <div>
+            <p class="last-updated">Week of: December 9-13, 2025</p>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">
+                <a href="../index.html" style="color: var(--accent-primary);">← Back to Dashboard</a>
+            </p>
+        </div>
+    </header>
+
+    <!-- Team Health KPIs -->
+    <section class="glass-card-flat mb-xl">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+            📊 Weekly Team Health - Key Performance Indicators (KPIs)
+        </h2>
+        <div class="kpi-grid">
+        <div class="kpi critical">
+            <h3>Test Coverage</h3>
+            <div class="value">8.6%</div>
+            <div class="target">Sprint Goal: +5%</div>
+            <div class="trend down">↓ Need 20 tests</div>
+            <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                Weekly velocity: 4 tests/sprint
+            </p>
+        </div>
+
+        <div class="kpi warning">
+            <h3>Technical Debt</h3>
+            <div class="value">$127k</div>
+            <div class="target">Budget: $100k</div>
+            <div class="trend down">↓ Over Budget</div>
+            <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                Rollover refactoring: $45k
+            </p>
+        </div>
+
+        <div class="kpi success">
+            <h3>Sprint Velocity</h3>
+            <div class="value">32 pts</div>
+            <div class="target">Target: 30 pts</div>
+            <div class="trend up">↑ 7% Above Plan</div>
+            <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                Avg: 28 pts/sprint (Q4)
+            </p>
+        </div>
+
+        <div class="kpi warning">
+            <h3>Bus Factor Risk</h3>
+            <div class="value">3 areas</div>
+            <div class="target">Target: 0</div>
+            <div class="trend down">↓ Knowledge silos</div>
+            <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                Rollover, Requests, Rollover
+            </p>
+        </div>
+        </div>
+    </section>
+
+    <!-- Sprint Goals -->
+    <section class="glass-card-flat mb-xl">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+            🎯 Sprint Goals (Week 50)
+        </h2>
+        <table class="scorecard-table">
+            <thead>
+                <tr>
+                    <th>Goal</th>
+                    <th>Owner</th>
+                    <th>Progress</th>
+                    <th>Status</th>
+                    <th>Blocker</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="success">
+                    <td><strong>Add 5% Test Coverage</strong></td>
+                    <td>Dev Team A</td>
+                    <td>4.2% (+4 tests)</td>
+                    <td><span class="badge badge-success">ON TRACK</span></td>
+                    <td>None</td>
+                </tr>
+                <tr class="critical">
+                    <td><strong>Refactor CarryoverDollars (Phase 1)</strong></td>
+                    <td>Senior Dev B</td>
+                    <td>20% (Design done)</td>
+                    <td><span class="badge badge-critical">BLOCKED</span></td>
+                    <td>Waiting on bus factor doc</td>
+                </tr>
+                <tr class="success">
+                    <td><strong>Document Onboarding Steps 1-3</strong></td>
+                    <td>Tech Lead C</td>
+                    <td>100% (Merged)</td>
+                    <td><span class="badge badge-success">COMPLETE</span></td>
+                    <td>None</td>
+                </tr>
+                <tr class="warning">
+                    <td><strong>P0 Compliance: RegulatoryAgency Forms</strong></td>
+                    <td>Compliance Team</td>
+                    <td>60% (3/5 forms)</td>
+                    <td><span class="badge badge-warning">AT RISK</span></td>
+                    <td>External API delay</td>
+                </tr>
+                <tr class="success">
+                    <td><strong>NuGet Package Audit</strong></td>
+                    <td>DevOps D</td>
+                    <td>80% (36/45)</td>
+                    <td><span class="badge badge-success">ON TRACK</span></td>
+                    <td>None</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Team Capacity -->
+    <section class="glass-card-flat mb-xl">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+            👥 Team Capacity (Week 50)
+        </h2>
+        <table class="scorecard-table">
+            <thead>
+                <tr>
+                    <th>Team Customer</th>
+                    <th>Allocation</th>
+                    <th>Focus Area</th>
+                    <th>Risk</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="success">
+                    <td><strong>Senior Dev A</strong></td>
+                    <td>100% (40 hrs)</td>
+                    <td>Test coverage sprint</td>
+                    <td><span class="badge badge-success">GREEN</span></td>
+                </tr>
+                <tr class="critical">
+                    <td><strong>Senior Dev B</strong></td>
+                    <td>60% (24 hrs) - <em>On PTO Fri</em></td>
+                    <td>Rollover refactoring</td>
+                    <td><span class="badge badge-critical">BUS FACTOR</span></td>
+                </tr>
+                <tr class="success">
+                    <td><strong>Mid Dev C</strong></td>
+                    <td>100% (40 hrs)</td>
+                    <td>Documentation + tests</td>
+                    <td><span class="badge badge-success">GREEN</span></td>
+                </tr>
+                <tr class="warning">
+                    <td><strong>Mid Dev D</strong></td>
+                    <td>75% (30 hrs) - <em>Training 10 hrs</em></td>
+                    <td>P0 compliance (RegulatoryAgency forms)</td>
+                    <td><span class="badge badge-warning">LEARNING CURVE</span></td>
+                </tr>
+                <tr class="success">
+                    <td><strong>Junior Dev E</strong></td>
+                    <td>100% (40 hrs)</td>
+                    <td>NuGet audit + unit tests</td>
+                    <td><span class="badge badge-success">GREEN</span></td>
+                </tr>
+            </tbody>
+        </table>
+        <p style="margin-top: 1rem; font-size: 0.875rem; color: var(--text-secondary);">
+            <strong>Total Capacity:</strong> 174 hrs (effective) | <strong>Sprint Points:</strong> 32 pts | <strong>Utilization:</strong> 87%
+        </p>
+    </section>
+
+    <!-- Technical Debt Register -->
+    <section class="glass-card-flat mb-xl">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+            ⚠️ Technical Debt Register (Top 5)
+        </h2>
+        <table class="scorecard-table">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Cost</th>
+                    <th>Impact</th>
+                    <th>Sprint</th>
+                    <th>Owner</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="critical">
+                    <td><strong>ExampleDomainService Refactor</strong></td>
+                    <td>$45,000</td>
+                    <td>717 LOC | 20 methods | Bus factor = 1</td>
+                    <td>Sprints 51-53</td>
+                    <td>Senior Dev B</td>
+                </tr>
+                <tr class="critical">
+                    <td><strong>Test Coverage Gap (220 files)</strong></td>
+                    <td>$38,000</td>
+                    <td>$500k regulatory risk | RegulatoryAgency audit exposure</td>
+                    <td>Q1 2025 (ongoing)</td>
+                    <td>Dev Team A</td>
+                </tr>
+                <tr class="warning">
+                    <td><strong>No README Documentation</strong></td>
+                    <td>$18,000</td>
+                    <td>13-hour onboarding vs 4-hour target</td>
+                    <td>Sprint 51</td>
+                    <td>Tech Lead C</td>
+                </tr>
+                <tr class="warning">
+                    <td><strong>10 Large Files (&gt;500 LOC)</strong></td>
+                    <td>$16,000</td>
+                    <td>Maintenance burden | Merge conflicts</td>
+                    <td>Q2 2025</td>
+                    <td>Arch Review Board</td>
+                </tr>
+                <tr class="warning">
+                    <td><strong>XML Comments Deficiency</strong></td>
+                    <td>$10,000</td>
+                    <td>11 comments (need 200+) | IntelliSense gaps</td>
+                    <td>Sprint 52-54</td>
+                    <td>Mid Dev C</td>
+                </tr>
+            </tbody>
+        </table>
+        <p style="margin-top: 1rem; font-size: 0.875rem; color: var(--text-secondary);">
+            <strong>Total Debt:</strong> $127,000 | <strong>Budget:</strong> $100,000 | <strong>Over Budget:</strong> $27,000 (21%)
+        </p>
+        <p style="margin-top: 0.5rem; font-size: 0.875rem; color: var(--warning);">
+            ⚠️ <strong>Recommendation:</strong> Prioritize CarryoverDollars refactor + test coverage sprint (mitigates $83k debt)
+        </p>
+    </section>
+
+    <!-- Action Items -->
+    <section class="glass-card-flat mb-xl">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+            ✅ Action Items (This Week)
+        </h2>
+        <div style="display: grid; gap: 1rem;">
+            <div class="glass-card">
+                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--danger);">
+                    🔴 CRITICAL: Unblock Rollover Refactoring
+                </h3>
+                <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                    <strong>Owner:</strong> Manager + Senior Dev B
+                </p>
+                <p style="font-size: 0.875rem; color: var(--text-primary);">
+                    Schedule bus factor knowledge transfer session (2 hrs). Target: Complete by EOD Thursday.
+                </p>
+            </div>
+
+            <div class="glass-card">
+                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--warning);">
+                    🟡 HIGH: P0 Compliance External API
+                </h3>
+                <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                    <strong>Owner:</strong> Manager + Compliance Team
+                </p>
+                <p style="font-size: 0.875rem; color: var(--text-primary);">
+                    Escalate to vendor. Request SLA commitment. Parallel track: Manual workaround design.
+                </p>
+            </div>
+
+            <div class="glass-card">
+                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--success);">
+                    🟢 NORMAL: Celebrate Onboarding Docs Completion
+                </h3>
+                <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                    <strong>Owner:</strong> Manager
+                </p>
+                <p style="font-size: 0.875rem; color: var(--text-primary);">
+                    Team shoutout in Friday standup. Recognition for Tech Lead C's ownership.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="text-align: center; margin-top: 3rem; padding: 2rem; border-top: 1px solid var(--glass-border);">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX" style="height: 24px;">
+            <p style="font-size: 0.875rem; color: var(--text-secondary); margin: 0;">
+                Powered by <strong style="color: var(--accent-primary);">CORTEX</strong> AI Framework
+            </p>
+        </div>
+        <p style="font-size: 0.75rem; color: var(--text-muted); margin: 0;">
+            <a href="../index.html" style="color: var(--accent-primary);">Dashboard</a> | 
+            <a href="test-coverage-roadmap.html" style="color: var(--accent-primary);">Test Coverage Roadmap</a> | 
+            <a href="technical-debt-register.html" style="color: var(--accent-primary);">Debt Register</a>
+        </p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,238 @@
+# Base Orchestrator Manifest (Tier 1)
+# Universal foundation for ALL CORTEX orchestrators
+#
+# Purpose: Eliminate metadata redundancy by providing standard fields
+# Usage: All orchestrator manifests inherit from this base
+# Inheritance: Use `inherits_from: "shared/base-orchestrator-manifest.yaml"`
+#
+# Version: 1.0.0
+# Author: Asif Hussain
+# Created: 2025-12-22 (Week 15 Day 2)
+# Status: ACTIVE
+
+schema_version: "1.0"
+
+# ========================================
+# Standard Metadata
+# ALL orchestrators MUST have these fields
+# ========================================
+
+metadata:
+  orchestrator_name: null  # REQUIRED: Unique identifier (e.g., "planning_orchestrator")
+  version: "1.0.0"         # REQUIRED: Semantic version (x.y.z)
+  description: null        # REQUIRED: One-line purpose statement (min 50 chars)
+  
+  # Classification
+  category: null           # REQUIRED: planning|execution|analysis|deployment|maintenance
+  deployment_tier: "user"  # OPTIONAL: cortex|user|admin|dual_context (default: user)
+  status: "active"         # OPTIONAL: draft|active|deprecated (default: active)
+  
+  # Tracking
+  created_date: null       # OPTIONAL: ISO 8601 date (YYYY-MM-DD)
+  last_updated: null       # REQUIRED: ISO 8601 date (YYYY-MM-DD)
+  maintainer: "CORTEX Development Team"  # REQUIRED: Team/person responsible
+  
+  # Documentation
+  documentation_path: null  # OPTIONAL: Relative path to detailed guide
+  source_file: null         # OPTIONAL: Path to orchestrator implementation
+  changelog_path: "CHANGELOG.md"  # OPTIONAL: Version history location
+  
+  # Relationships
+  related_orchestrators: []  # OPTIONAL: List of dependent/related orchestrators
+  parent_orchestrator: null  # OPTIONAL: Parent in orchestrator hierarchy
+
+# ========================================
+# Common Validation Patterns
+# Reusable across orchestrators
+# ========================================
+
+validation_patterns:
+  git_clean:
+    description: "Ensure git working directory is clean"
+    checks:
+      - "No uncommitted changes"
+      - "No untracked files (or acceptable)"
+      - "On a valid branch"
+  
+  test_framework_available:
+    description: "Ensure test framework is installed and accessible"
+    checks:
+      - "Test runner executable found"
+      - "Test framework version compatible"
+      - "Test directory writable"
+  
+  environment_ready:
+    description: "Ensure runtime environment is properly configured"
+    checks:
+      - "Required language runtime installed"
+      - "Dependencies installed"
+      - "Configuration files present"
+
+# ========================================
+# Common Error Handling
+# ========================================
+
+error_handling:
+  default_strategy: "fail_fast"  # fail_fast|continue_on_error|retry
+  
+  retry_policy:
+    enabled: false
+    max_retries: 3
+    backoff_strategy: "exponential"  # linear|exponential|fixed
+    retry_delay_seconds: 5
+  
+  rollback:
+    enabled: true
+    automatic: false  # Require user confirmation
+    preserve_logs: true
+    checkpoint_frequency: "per_phase"  # per_phase|per_task|manual
+
+# ========================================
+# Logging & Observability
+# ========================================
+
+logging:
+  level: "INFO"  # DEBUG|INFO|WARNING|ERROR|CRITICAL
+  format: "structured"  # structured|plain
+  
+  destinations:
+    - type: "console"
+      enabled: true
+    - type: "file"
+      enabled: true
+      path: "logs/orchestrator.log"
+    - type: "database"
+      enabled: true
+      table: "tier1.orchestrator_execution_log"
+  
+  metrics:
+    enabled: true
+    track_duration: true
+    track_token_usage: true
+    track_error_rate: true
+
+# ========================================
+# Performance Thresholds
+# ========================================
+
+performance:
+  timeout_default_minutes: 30
+  max_memory_mb: 2048
+  max_concurrent_operations: 4
+  
+  thresholds:
+    warning_duration_minutes: 20
+    critical_duration_minutes: 25
+
+# ========================================
+# Integration Points
+# ========================================
+
+integrations:
+  brain_connector:
+    enabled: true
+    tiers: ["tier1", "tier2"]  # tier1|tier2|tier3
+  
+  mcp_gateway:
+    enabled: false  # Set true if orchestrator uses MCP tools
+  
+  git_orchestrator:
+    enabled: false  # Set true if git operations required
+  
+  test_executor:
+    enabled: false  # Set true if test execution required
+
+# ========================================
+# Extensibility
+# ========================================
+
+extensibility:
+  custom_fields_allowed: true
+  custom_field_prefix: "custom_"
+  
+  inheritance:
+    merge_strategy: "child_overrides_parent"
+    merge_lists: "append"  # append|replace|merge
+    merge_dicts: "deep_merge"  # deep_merge|replace
+
+# ========================================
+# Compliance & Governance
+# ========================================
+
+compliance:
+  skull_rules:
+    enforce: true
+    rules_file: "cortex-brain/brain-protection-rules.yaml"
+  
+  approval_gates:
+    enabled: false  # Enable in child manifests if needed
+    default_approver: "user"
+
+# ========================================
+# Versioning & Compatibility
+# ========================================
+
+compatibility:
+  min_cortex_version: "3.0.0"
+  breaking_changes_policy: "major_version_increment"
+  deprecation_notice_days: 90
+
+# ========================================
+# Documentation
+# ========================================
+
+documentation:
+  examples_path: "examples/"
+  api_docs_path: "docs/api/"
+  troubleshooting_guide: "docs/troubleshooting/"
+
+# ========================================
+# Usage Instructions
+# ========================================
+
+usage:
+  inheritance_example: |
+    # In your orchestrator manifest (e.g., my-orchestrator-manifest.yaml):
+    
+    inherits_from: "shared/base-orchestrator-manifest.yaml"
+    
+    metadata:
+      orchestrator_name: "my_orchestrator"
+      description: "My custom orchestrator description"
+      category: "execution"
+      last_updated: "2025-12-22"
+      # All other base fields inherited automatically
+    
+    # Add your custom sections
+    phases:
+      - id: "phase_1"
+        name: "Custom Phase"
+        # ...
+  
+  override_example: |
+    # Override base settings in child manifest:
+    
+    inherits_from: "shared/base-orchestrator-manifest.yaml"
+    
+    metadata:
+      orchestrator_name: "special_orchestrator"
+      deployment_tier: "admin"  # Override default "user"
+    
+    logging:
+      level: "DEBUG"  # Override default "INFO"
+    
+    performance:
+      timeout_default_minutes: 60  # Override default 30
+
+# ========================================
+# Changelog
+# ========================================
+
+changelog:
+  - version: "1.0.0"
+    date: "2025-12-22"
+    changes:
+      - "Initial base manifest creation"
+      - "Standard metadata fields defined"
+      - "Common validation patterns added"
+      - "Inheritance mechanism documented"

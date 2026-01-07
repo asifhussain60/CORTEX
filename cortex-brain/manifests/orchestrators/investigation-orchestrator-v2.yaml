@@ -1,0 +1,348 @@
+# Investigation Orchestrator v2 Manifest - Pure Autonomous Root Cause Analysis
+# Author: Asif Hussain
+# Copyright © 2025-2026 Asif Hussain. All rights reserved.
+
+schema_version: "5.0"
+
+orchestrator:
+  name: "investigation_orchestrator"
+  version: "2.0"
+  type: "autonomous"
+  description: "Pure autonomous root cause analysis and architectural review"
+  implementation: "src/orchestrators/investigation/investigation_orchestrator_v2.py"
+  base_class: "BaseOrchestratorV4_1"
+  
+  # Workflow phases (7 total)
+  phases:
+    - id: 1
+      name: "DISCOVERY"
+      description: "Locate target artifacts (plans, acceptance criteria, brittleness reports)"
+    - id: 2
+      name: "PARSING"
+      description: "Extract structured data from artifacts"
+    - id: 3
+      name: "VALIDATION"
+      description: "Compare planned vs actual state against acceptance criteria"
+    - id: 4
+      name: "CORRELATION"
+      description: "Cross-reference brittleness reports with plan claims"
+    - id: 5
+      name: "ANALYSIS"
+      description: "Root cause identification and impact assessment"
+    - id: 6
+      name: "REMEDIATION"
+      description: "Generate fix recommendations and implementation roadmap"
+    - id: 7
+      name: "REPORTING"
+      description: "Create comprehensive investigation report"
+
+# Execution instructions for GitHub Copilot (when interpreting this manifest)
+execution_instructions:
+  progress_reporting:
+    mode: "concise"
+    policy:
+      - "Display progress ONLY at phase boundaries"
+      - "DO NOT narrate task completions"
+      - "Update progress bar silently"
+  accessibility:
+    wcag_alignment: "AA"
+    display_frequency:
+      phase_start: "Show phase name + progress (3 lines)"
+      task_completion: "SILENT"
+      phase_completion: "Show completed + next (5 lines)"
+      overall_completion: "Summary (≤40 lines)"
+
+# Investigation scope types
+investigation_scopes:
+  
+  acceptance_criteria:
+    description: "Validate implementation against acceptance criteria"
+    artifacts_required:
+      - "acceptance criteria document"
+      - "completion certificate"
+      - "phase reports"
+    validation_methods:
+      - "criterion-by-criterion comparison"
+      - "artifact existence checking"
+      - "pass/fail/partial classification"
+  
+  brittleness:
+    description: "Cross-reference brittleness reports with plan claims"
+    artifacts_required:
+      - "brittleness reports"
+      - "completion certificate"
+      - "plan documents"
+    correlation_methods:
+      - "claim vs issue contradiction detection"
+      - "severity classification"
+      - "impact assessment"
+  
+  implementation:
+    description: "Verify implementation completeness"
+    artifacts_required:
+      - "source code"
+      - "test files"
+      - "documentation"
+    verification_methods:
+      - "orchestrator instantiation testing"
+      - "interface contract validation"
+      - "test coverage analysis"
+  
+  deployment:
+    description: "Check deployment validation"
+    artifacts_required:
+      - "deployment reports"
+      - "staging validation"
+      - "production monitoring"
+    validation_methods:
+      - "deployment artifact existence"
+      - "monitoring data analysis"
+      - "uptime verification"
+  
+  root_cause:
+    description: "Perform root cause analysis"
+    analysis_methods:
+      - "validation failure analysis"
+      - "contradiction analysis"
+      - "pattern identification"
+      - "hypothesis generation"
+
+# Artifact discovery patterns
+artifact_patterns:
+  
+  plans:
+    paths:
+      - "cortex-brain/documents/planning/**/*.md"
+    exclusions:
+      - "**/backups/**"
+      - "**/archive/**"
+  
+  acceptance_criteria:
+    paths:
+      - "cortex-brain/documents/planning/**/*acceptance*.md"
+      - "cortex-brain/documents/planning/**/*criteria*.md"
+  
+  brittleness_reports:
+    paths:
+      - "cortex-brain/documents/reports/*brittleness*.md"
+      - "cortex-brain/documents/analysis/*brittleness*.md"
+  
+  completion_certificates:
+    paths:
+      - "cortex-brain/documents/planning/**/*completion*.md"
+      - "cortex-brain/documents/planning/**/*certificate*.md"
+  
+  phase_reports:
+    paths:
+      - "cortex-brain/documents/planning/**/phase-*.md"
+      - "cortex-brain/documents/planning/**/reports/*.md"
+
+# Report generation templates
+report_templates:
+  
+  executive_summary:
+    filename: "00-executive-summary.md"
+    sections:
+      - "Quick Answer (why autonomous stopped)"
+      - "Investigation Overview"
+      - "Critical Findings"
+      - "Acceptance Criteria Validation"
+      - "Brittleness Cross-Reference"
+      - "Root Cause Analysis"
+      - "Remediation Roadmap"
+      - "Lessons Learned"
+      - "Final Verdict"
+  
+  acceptance_criteria_comparison:
+    filename: "acceptance-criteria-comparison.md"
+    sections:
+      - "Criteria Summary"
+      - "Detailed Comparison Matrix"
+      - "Pass/Fail/Partial Breakdown"
+      - "Gap Analysis"
+  
+  brittleness_cross_reference:
+    filename: "brittleness-cross-reference.md"
+    sections:
+      - "Brittleness Reports Summary"
+      - "Plan Claims vs Brittleness Issues"
+      - "Contradiction Analysis"
+      - "Impact Assessment"
+  
+  implementation_completeness_matrix:
+    filename: "implementation-completeness-matrix.md"
+    sections:
+      - "Phase-by-Phase Status"
+      - "Artifact Verification"
+      - "Code-Documentation Alignment"
+      - "Test Coverage"
+  
+  gap_analysis_summary:
+    filename: "gap-analysis-summary.md"
+    sections:
+      - "Identified Gaps"
+      - "Priority Classification"
+      - "Remediation Recommendations"
+      - "Estimated Effort"
+  
+  root_cause_analysis:
+    filename: "root-cause-analysis.md"
+    sections:
+      - "Root Causes Identified"
+      - "Causal Chain Analysis"
+      - "Prevention Strategies"
+      - "Process Improvements"
+
+# Validation rules
+validation_rules:
+  
+  criterion_pass:
+    conditions:
+      - "All required artifacts exist"
+      - "Implementation verified"
+      - "Tests passing"
+      - "Documentation complete"
+  
+  criterion_partial:
+    conditions:
+      - "Some artifacts exist"
+      - "Implementation partial"
+      - "Tests incomplete"
+      - "Documentation draft"
+  
+  criterion_fail:
+    conditions:
+      - "No artifacts exist"
+      - "Implementation missing"
+      - "Tests failing or missing"
+      - "Documentation missing"
+
+# Correlation rules
+correlation_rules:
+  
+  claim_contradicts_issue:
+    positive_keywords:
+      - "100%"
+      - "complete"
+      - "success"
+      - "all"
+      - "zero"
+      - "none"
+    negative_keywords:
+      - "fail"
+      - "error"
+      - "missing"
+      - "broken"
+      - "critical"
+      - "blocker"
+    severity: "critical"
+  
+  claim_conflicts_issue:
+    severity: "high"
+  
+  claim_inconsistent_issue:
+    severity: "medium"
+
+# Root cause categories
+root_cause_categories:
+  
+  scope_confusion:
+    description: "Plan scope expanded without validation update"
+    typical_causes:
+      - "Requirements added mid-execution"
+      - "Success criteria not updated"
+      - "Validation scope mismatch"
+  
+  false_positive:
+    description: "Partial work interpreted as complete"
+    typical_causes:
+      - "Artifact existence misinterpreted"
+      - "Phase markers without verification"
+      - "Completion before testing"
+  
+  validation_bypass:
+    description: "Validation steps skipped or incomplete"
+    typical_causes:
+      - "Missing deployment validation"
+      - "No integration testing"
+      - "Acceptance criteria not checked"
+  
+  documentation_code_disconnect:
+    description: "Documentation doesn't match implementation"
+    typical_causes:
+      - "Documentation before implementation"
+      - "No instantiation testing"
+      - "Interface contract violations"
+  
+  timing_issue:
+    description: "Race condition or sequencing problem"
+    typical_causes:
+      - "Completion before test results"
+      - "Parallel execution without coordination"
+      - "Missing dependency checks"
+
+# Remediation priorities
+remediation_priorities:
+  
+  critical:
+    response_time: "0-24 hours"
+    characteristics:
+      - "Production blockers"
+      - "Security vulnerabilities"
+      - "Data corruption risks"
+      - "Orchestrator instantiation failures"
+  
+  high:
+    response_time: "1-7 days"
+    characteristics:
+      - "Feature gaps"
+      - "Documentation misalignment"
+      - "Test failures"
+      - "Performance degradation"
+  
+  medium:
+    response_time: "1-4 weeks"
+    characteristics:
+      - "Diagram creation"
+      - "Process improvements"
+      - "Automation opportunities"
+      - "Technical debt"
+  
+  low:
+    response_time: "1-3 months"
+    characteristics:
+      - "Cosmetic improvements"
+      - "Nice-to-have features"
+      - "Documentation polish"
+      - "Optimization opportunities"
+
+# Output structure
+output_structure:
+  root: "cortex-brain/documents/investigations/{investigation_id}"
+  files:
+    - "00-executive-summary.md"
+    - "acceptance-criteria-comparison.md"
+    - "brittleness-cross-reference.md"
+    - "implementation-completeness-matrix.md"
+    - "gap-analysis-summary.md"
+    - "root-cause-analysis.md"
+  metadata:
+    - "investigation-metadata.json"
+    - "artifacts-inventory.json"
+    - "validation-results.json"
+
+# SKULL compliance
+skull_compliance:
+  - rule: "HOLISTIC_DISCOVERY"
+    enforcement: "Discover all artifacts before analysis"
+  - rule: "GIT_ISOLATION"
+    enforcement: "Investigation reports in cortex-brain/documents/investigations/"
+  - rule: "PLANNING_ISOLATION"
+    enforcement: "Investigation recommends, never implements"
+  - rule: "TDD_ENFORCEMENT"
+    enforcement: "N/A - investigation is read-only analysis"
+
+# Response template
+response_template: "autonomous_execution_progress"
+response_mode: "CONCISE"
+accessibility_optimized: true

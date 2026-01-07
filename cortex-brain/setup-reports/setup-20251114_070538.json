@@ -1,0 +1,25 @@
+{
+  "success": false,
+  "profile": "minimal",
+  "steps_completed": [
+    "project_validation",
+    "platform_detection",
+    "virtual_environment",
+    "python_dependencies",
+    "brain_initialization"
+  ],
+  "steps_failed": [],
+  "steps_skipped": [],
+  "warnings": [
+    "Virtual environment exists but not active - activate manually"
+  ],
+  "duration_seconds": 0.0,
+  "timestamp": "2025-11-14T07:05:36.679062",
+  "platform_info": {
+    "os": "mac",
+    "system": "Darwin",
+    "machine": "arm64",
+    "python_version": "3.9.6",
+    "python_executable": "/Library/Developer/CommandLineTools/usr/bin/python3"
+  }
+}

@@ -1,0 +1,255 @@
+# Refinement Orchestrator Manifest v1.0
+# System-wide quality enhancement and continuous improvement
+# Author: Asif Hussain | Copyright © 2025 Asif Hussain. All rights reserved.
+
+orchestrator:
+  name: "RefinementOrchestrator"
+  version: "1.0.0"
+  status: "production"
+  execution_method: "copilot_chat"
+  description: "Holistic system refinement with automated discovery and enhancement"
+  
+metadata:
+  author: "Asif Hussain"
+  created: "2025-12-16"
+  last_updated: "2025-12-16"
+  copyright: "Copyright © 2025 Asif Hussain. All rights reserved."
+  
+phases:
+  - id: "phase_1_discovery"
+    name: "Discovery & Analysis"
+    description: "Comprehensive system analysis"
+    blocking: true
+    timeout_minutes: 10
+    activities:
+      - "Code complexity analysis (cyclomatic, cognitive)"
+      - "Dead code detection (unreachable, unused imports)"
+      - "Test coverage gap analysis"
+      - "Documentation drift detection"
+      - "Dependency analysis (unused, outdated)"
+      - "Response template consistency check"
+    outputs:
+      - "cortex-brain/documents/reports/refinement-discovery-{timestamp}.md"
+    
+  - id: "phase_2_skull_review"
+    name: "SKULL Test Review"
+    description: "Governance test optimization"
+    blocking: true
+    requires_confirmation: true
+    git_checkpoint: true
+    timeout_minutes: 15
+    activities:
+      - "Identify redundant SKULL tests"
+      - "Find mergeable SKULL tests"
+      - "Detect unclear test purposes"
+      - "Suggest assertion improvements"
+      - "Validate alignment with brain-protection-rules.yaml"
+    safeguards:
+      - "Never remove core governance tests"
+      - "Preserve test coverage percentage"
+      - "Require explicit approval for deletions"
+    outputs:
+      - "cortex-brain/documents/analysis/skull-test-review-{timestamp}.md"
+      - "scripts/rollback_skull_changes.py"
+    
+  - id: "phase_3_documentation"
+    name: "Documentation Refinement"
+    description: "Optimize prompt files and docs"
+    blocking: true
+    git_checkpoint: true
+    timeout_minutes: 10
+    targets:
+      - ".github/prompts/CORTEX.prompt.md"
+      - ".github/copilot-instructions.md"
+      - "cortex-brain/response-templates-v4.yaml"
+      - "cortex-brain/brain-protection-rules.yaml"
+    activities:
+      - "Remove bloat from CORTEX.prompt.md (<600 lines)"
+      - "Fix broken file references"
+      - "Update outdated sections"
+      - "Sync copilot-instructions.md with operations"
+      - "Validate manifest references"
+      - "Check token efficiency"
+    validation:
+      - "All file paths must exist"
+      - "No broken cross-references"
+      - "Manifest inheritance chains valid"
+    outputs:
+      - "cortex-brain/documents/reports/documentation-refinement-{timestamp}.md"
+    
+  - id: "phase_4_code_quality"
+    name: "Code Quality Enhancement"
+    description: "Improve code maintainability"
+    blocking: true
+    git_checkpoint: true
+    timeout_minutes: 20
+    activities:
+      - "Simplify complex functions (>15 cyclomatic)"
+      - "Remove duplicate code blocks"
+      - "Standardize naming conventions"
+      - "Fix inconsistent error handling"
+      - "Optimize imports (remove unused, consolidate)"
+      - "Apply black/isort formatting"
+    quality_gates:
+      - "All tests must pass after changes"
+      - "No new linting errors introduced"
+      - "Complexity scores must improve"
+    outputs:
+      - "cortex-brain/documents/analysis/code-quality-improvements-{timestamp}.md"
+    
+  - id: "phase_5_architecture"
+    name: "Architecture Review"
+    description: "Validate system design"
+    blocking: false
+    timeout_minutes: 15
+    activities:
+      - "Check for circular dependencies"
+      - "Identify missing abstractions"
+      - "Find consolidation opportunities"
+      - "Review orchestrator manifest consistency"
+      - "Validate execution_method classifications"
+      - "Check tier separation violations"
+    outputs:
+      - "cortex-brain/documents/analysis/architecture-review-{timestamp}.md"
+    
+  - id: "phase_6_performance"
+    name: "Performance Optimization"
+    description: "Identify and fix bottlenecks"
+    blocking: false
+    timeout_minutes: 10
+    activities:
+      - "Identify slow operations (>1s response)"
+      - "Find memory leaks (growing collections)"
+      - "Optimize file I/O patterns"
+      - "Suggest caching opportunities"
+      - "Profile tier1 memory operations"
+    outputs:
+      - "cortex-brain/documents/analysis/performance-optimization-{timestamp}.md"
+    
+  - id: "phase_7_validation"
+    name: "Validation & Rollback Safety"
+    description: "Comprehensive validation suite"
+    blocking: true
+    timeout_minutes: 15
+    activities:
+      - "Run full test suite (pytest)"
+      - "Validate all SKULL rules pass"
+      - "Check documentation builds"
+      - "Verify no broken imports"
+      - "Test sample operations"
+      - "Generate rollback script"
+    success_criteria:
+      - "100% test pass rate"
+      - "Zero SKULL violations"
+      - "No import errors"
+      - "Documentation valid"
+    outputs:
+      - "cortex-brain/documents/reports/refinement-validation-{timestamp}.md"
+      - "scripts/rollback_refinement_{timestamp}.py"
+
+commands:
+  primary: "refine"
+  aliases:
+    - "refinement"
+    - "system refine"
+    - "improve cortex"
+  natural_language:
+    - "refine the system"
+    - "improve cortex"
+    - "optimize cortex holistically"
+
+configuration:
+  dry_run_default: true
+  auto_approve_safe_changes: false
+  max_complexity_threshold: 15
+  min_test_coverage: 80
+  token_limit_prompt_md: 600
+  
+  change_categories:
+    safe:
+      - "import optimization"
+      - "formatting fixes"
+      - "comment updates"
+    moderate:
+      - "function simplification"
+      - "duplicate removal"
+      - "documentation updates"
+    dangerous:
+      - "SKULL test removal"
+      - "governance rule changes"
+      - "architecture refactoring"
+
+integration:
+  pre_execution:
+    - "Run healthcheck to establish baseline"
+    - "Create full git backup branch"
+  
+  post_execution:
+    - "Run healthcheck to validate changes"
+    - "Update tier2 knowledge graph with improvements"
+  
+  rollback_triggers:
+    - "Test failure rate >5%"
+    - "SKULL violations detected"
+    - "Import errors found"
+    - "User abort requested"
+
+reporting:
+  format: "markdown"
+  include_metrics: true
+  include_diffs: true
+  include_rollback_instructions: true
+  
+metrics_tracked:
+  - "Lines of code removed"
+  - "Complexity score delta"
+  - "Test coverage delta"
+  - "Token count reduction"
+  - "Dead code removed"
+  - "Duplicate code eliminated"
+  - "Performance improvements"
+
+completion_criteria:
+  all_phases_complete: true
+  zero_test_failures: true
+  zero_skull_violations: true
+  validation_passed: true
+  rollback_script_generated: true
+
+# ========================================
+# Response Templates (Composable System)
+# ========================================
+
+response_templates:
+  use_algorithm: true
+  algorithm_version: "1.0"
+  algorithm_source: "cortex-brain/response-templates-v4.yaml::template_selection_algorithm"
+  
+  operations:
+    analysis:
+      description: "Code analysis phase"
+      context_signals:
+        operation_type: "refinement"
+        response_phase: "start"
+        complexity_tier: "STRUCTURED"
+        orchestrator_type: "refinement"
+        orchestrator_engaged: false
+      blocks:
+        mandatory: ["cortex_header", "improvement_areas", "next_action"]
+        conditional: ["understanding", "approach"]
+        orchestrator_specific: ["improvement_areas"]
+      rendering_order: ["cortex_header", "understanding", "improvement_areas", "approach", "next_action"]
+    
+    improvement_complete:
+      description: "Refinement complete with metrics"
+      context_signals:
+        operation_type: "refinement"
+        response_phase: "complete"
+        complexity_tier: "COMPREHENSIVE"
+        orchestrator_type: "refinement"
+        orchestrator_engaged: false
+      blocks:
+        mandatory: ["cortex_header", "code_quality_delta", "changes", "next_action"]
+        conditional: ["improvement_areas", "test_results_summary", "achievements"]
+        orchestrator_specific: ["code_quality_delta"]
+      rendering_order: ["cortex_header", "improvement_areas", "code_quality_delta", "changes", "test_results_summary", "achievements", "next_action"]

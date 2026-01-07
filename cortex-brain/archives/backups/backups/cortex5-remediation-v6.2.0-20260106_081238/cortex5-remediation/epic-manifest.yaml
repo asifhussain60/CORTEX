@@ -1,0 +1,1593 @@
+# CORTEX v5.0 Remediation Epic - Python-Based Autonomous Orchestrator Manifest
+# Version: 6.1.0 | Created: January 5, 2026 | Updated: January 6, 2026 | Author: Asif Hussain
+# Architecture: 100% Python autonomous execution via terminal invocation
+# Changelog: v6.1.0 - Added P14-P17 (verification gates, audit logging, plugins, risk mitigation)
+
+epic_metadata:
+  epic_id: cortex5-remediation
+  epic_name: "CORTEX 5.0 Architecture Enhancement & Remediation"
+  version: "6.2.0"
+  created: "2026-01-05"
+  updated: "2026-01-06"
+  author: "Asif Hussain"
+  status: planning
+  execution_mode: autonomous_python
+  
+  # Version History
+  version_history:
+    - version: "6.2.0"
+      date: "2026-01-06"
+      changes:
+        - "Added Phase P18: Governance Rules Collaborative Finalization (1-2 days, P0_CRITICAL)"
+        - "Updated dependencies: P05-P13 now depend on P18 completion (governance finalization checkpoint)"
+        - "Added human-in-the-loop checkpoint after infrastructure complete (P14-P17) before orchestrator upgrades"
+        - "Total phase count: 18 → 19 phases"
+        - "Total duration: 10-11 weeks → 10-11 weeks (no change, collaborative session replaces speculation time)"
+      rationale: "Governance rules should be finalized when architecture is stable (post P14-P17) but before orchestrator upgrades (P05-P13). This checkpoint prevents expensive rework and ensures rules are data-driven (based on P00-P17 violations) not speculative."
+    
+    - version: "6.1.0"
+      date: "2026-01-06"
+      changes:
+        - "Added Phase P14: Sequential Verification Gate System (2 days, P0_CRITICAL)"
+        - "Added Phase P15: Enterprise Audit Logger Integration (3 days, P0_CRITICAL)"
+        - "Added Phase P16: Plugin-Based Governance Architecture (5 days, P1_HIGH)"
+        - "Added Phase P17: Risk Mitigation Implementation (2 days, P0_CRITICAL)"
+        - "Updated dependencies: P05-P13 now depend on P17 completion"
+        - "Total phase count: 14 → 18 phases"
+        - "Total duration: 8-9 weeks → 10-11 weeks"
+      rationale: "Holistic Design Review identified 4 critical gaps preventing maximum autonomous execution efficiency"
+    
+    - version: "6.0.0"
+      date: "2026-01-05"
+      changes:
+        - "Initial epic structure with 14 phases"
+        - "Database schema consolidation (P00)"
+        - "Master orchestrator integration (P01-P04)"
+        - "Orchestrator upgrades (P05-P13)"
+  
+  # Epic Objectives
+  objectives:
+    primary: "Complete CORTEX 5.0 transition to Python-based autonomous orchestrators with maximum efficiency"
+    secondary:
+      - "Eliminate all markdown-based workflow execution"
+      - "Implement Master Orchestrator task tracking system"
+      - "Create auto-refreshing HTML plan viewers"
+      - "Establish terminal-based Python invocation as standard"
+      - "Fix 6 orchestrator instantiation failures (P0 blocker)"
+      - "Verify ResponseRenderer renders to user (continuation prompt issue)"
+      - "Verify SKULL middleware invokes during execution (setup/teardown hooks)"
+      - "🆕 Implement sequential verification gates (P14)"
+      - "🆕 Integrate enterprise audit logging (P15)"
+      - "🆕 Enable plugin-based governance extensibility (P16)"
+      - "🆕 Mitigate 13 critical risks (P17)"
+      - "🆕 Finalize governance rules via human-AI collaboration (P18)"
+  
+  # Success Criteria (Enhanced with Investigation Findings + New Phases)
+  success_criteria:
+    functional:
+      - "All orchestrators execute via python3 -m src.main invocation"
+      - "All 6 broken orchestrators instantiate successfully (planning_v5, tdd, ado_v2, sanitization, cleanup_v2, vacuum_v2)"
+      - "Master Orchestrator manages todo/task lists via manage_todo_list integration"
+      - "ResponseRenderer confirmed rendering to user (continuation prompts display)"
+      - "SKULL middleware invoked on all executions (SetupVerifier, GovernanceCheckpoint, TeardownRefactor)"
+      - "Zero markdown files used for workflow execution"
+      - "🆕 Verification gates enforce dependency validation before phase start (P14)"
+      - "🆕 All orchestrators log audit events with decision capture (P15)"
+      - "🆕 Governance rules add via plugins without code changes (P16)"
+      - "🆕 4 critical risks mitigated (atomic migrations, thread-safe tasks, lazy loading, renderer retry) (P17)"
+      - "🆕 3-5 governance rules finalized via human-AI collaboration (P18)"
+    
+    architectural:
+      - "Database schemas consolidated (zero schema mismatch errors)"
+      - "Knowledge graph queries work (tier2_patterns vs patterns resolved)"
+      - "User profile operations work (response_detail column exists)"
+      - "Duplicate databases eliminated (knowledge-graph.db vs knowledge_graph.db)"
+      - "🆕 Plugin architecture supports dynamic governance rule injection"
+      - "🆕 Extensibility framework prevents architecture churn from late realizations"
+      - "🆕 Governance rules based on real violations (not speculative)"
+    
+    integration:
+      - "Plan viewers auto-refresh with progress updates"
+      - "All phases tracked in JSON with real-time updates"
+      - "manage_todo_list used consistently across all orchestrators"
+      - "Governance rules from brain-protection-rules.yaml enforced at runtime"
+      - "🆕 Audit logs integrated with verification gates for phase validation"
+      - "🆕 Vision API enforcement plugin demonstrates governance extensibility"
+      - "🆕 Governance checkpoint gates orchestrator upgrades (P18 blocks P05-P13)"
+    
+    efficiency:
+      - "🆕 Phase-to-phase transitions require explicit verification and approval"
+      - "🆕 Audit logs provide 'why did this happen' traceability"
+      - "🆕 Governance rule addition time reduced from 3-5 days to 2-4 hours (90% reduction)"
+      - "🆕 Risk mitigation prevents production failures and expensive rework"
+      - "🆕 Human-AI collaboration prevents speculative governance (data-driven rules)"
+
+# Python Orchestrator Architecture
+orchestrator_architecture:
+  entry_point: "src/main.py"
+  invocation_pattern: "python3 -m src.main \"{request}\" --format markdown"
+  execution_mode: terminal_based
+  routing: master_orchestrator
+  
+  # Task Management System
+  task_tracking:
+    enabled: true
+    storage: "tracking/task-registry.json"
+    todo_manager: "src/orchestrators/master/todo_manager.py"
+    features:
+      - "Create, update, complete tasks"
+      - "Priority-based sorting"
+      - "Dependency tracking"
+      - "Progress percentage calculation"
+      - "Real-time JSON updates"
+  
+  # Progress Tracking
+  progress_tracking:
+    storage: "tracking/progress-tracker.json"
+    update_frequency: "per_phase_completion"
+    fields:
+      - "epic_id"
+      - "overall_progress"
+      - "phases_complete"
+      - "total_phases"
+      - "current_phase"
+      - "status"
+      - "last_updated"
+  
+  # Plan Viewer Configuration
+  plan_viewer:
+    file: "plan-viewer.html"
+    template: "templates/plan-viewer/plan-viewer-template.html"
+    css_theme: "templates/plan-viewer/glassmorphism-theme.css"
+    generator: "templates/plan-viewer/generate-plan-viewer.py"
+    auto_refresh: true
+    refresh_interval: 5  # seconds
+    features:
+      - "Real-time progress tracking"
+      - "Phase status visualization"
+      - "Task list display"
+      - "Dependency graph"
+      - "Glassmorphism design standard v4.2.9"
+    regeneration:
+      command: "python3 -m templates.plan-viewer.generate-plan-viewer --plan-dir {plan_dir}"
+      trigger: "After CSS theme updates or metadata changes"
+      applies_to: "All active plans when using --regenerate-all"
+
+# Epic Phases (Python Orchestrator-Based)
+phases:
+  - phase_id: "P00"
+    name: "Database Schema Consolidation & Migration"
+    type: autonomous_python
+    script: "scripts/phase_00_database_consolidation.py"
+    duration: "2 days"
+    priority: P0_CRITICAL
+    status: completed
+    completion_date: "2026-01-05"
+    description: "Fix database schema inconsistencies blocking autonomous execution"
+    
+    # Sub-phases for granular tracking
+    sub_phases:
+      - "P00.1: Schema Audit & Analysis (✅ COMPLETED - 623-line report)"
+      - "P00.2: Design Unified Schema Strategy (✅ COMPLETED - compatibility views)"
+      - "P00.3: Implement Database Views for Compatibility (✅ COMPLETED - tier2_patterns view)"
+      - "P00.4: Fix user_profile Schema (✅ COMPLETED - response_detail column verified)"
+      - "P00.5: Consolidate Duplicate Databases (⏭️ DEFERRED - using views for compatibility)"
+      - "P00.6: Implement Schema Migration System (✅ COMPLETED - migration framework exists)"
+      - "P00.7: Fix Code References (✅ COMPLETED - import paths fixed, backup.py created, config.root_path added)"
+      - "P00.8: Testing & Validation (✅ COMPLETED - Planning Orchestrator initializes successfully)"
+    
+    deliverables:
+      - "cortex-brain/documents/analysis/database-schema-audit-report-2026-01-05.md (✅ COMPLETED)"
+      - "src/database/migrations/001_add_compatibility_views.sql (CREATE VIEW tier2_patterns AS SELECT ... FROM patterns)"
+      - "src/database/migrations/002_fix_user_profile_schema.sql (ALTER TABLE user_profile ADD COLUMN response_detail)"
+      - "src/database/migrations/003_consolidate_knowledge_graphs.sql (data migration + DROP old DB)"
+      - "src/database/migrations/000_migration_framework.py (version tracking + rollback)"
+      - "src/database/schema_validator.py (runtime schema verification)"
+      - "cortex-brain/documents/database/SCHEMA-DOCUMENTATION.md (ERD + table descriptions)"
+      - "cortex-brain/documents/database/MIGRATION-GUIDE.md (step-by-step migration instructions)"
+      - "cortex-brain/database/erd-diagram.png (visual schema relationships)"
+    
+    acceptance_criteria:
+      functional:
+        - "✅ All orchestrators execute without database errors"
+        - "✅ Schema consistency verified (single source of truth)"
+        - "✅ Backward compatibility maintained via views"
+        - "✅ Migration system operational with version tracking"
+      
+      performance:
+        - "✅ Query performance not degraded (within 10% of baseline)"
+        - "✅ Indexes properly maintained"
+        - "✅ No table scans on large tables"
+      
+      data_integrity:
+        - "✅ Zero data loss during migration"
+        - "✅ Referential integrity enforced"
+        - "✅ No orphaned records"
+        - "✅ All foreign key constraints valid"
+        - "✅ No NULL values in NOT NULL columns"
+        - "✅ All FTS indexes synchronized"
+      
+      documentation:
+        - "✅ Complete ERD generated showing all relationships"
+        - "✅ Every table documented with purpose"
+        - "✅ Migration history tracked"
+        - "✅ Naming conventions documented"
+      
+      testing:
+        - "✅ Automated tests pass (>95% coverage for DB operations)"
+        - "✅ Integration tests for cross-database queries"
+        - "✅ Performance benchmarks within acceptable range"
+        - "✅ Schema validation tests pass"
+        - "✅ Manual smoke tests complete (all orchestrators)"
+    
+    issues_resolved:
+      p0_critical:
+        - "Schema mismatch: tier2_patterns vs patterns (name→title, description→content)"
+        - "Missing response_detail column in user_profile table"
+        - "Duplicate knowledge graph databases (knowledge-graph.db vs knowledge_graph.db)"
+        - "Code queries failing with 'no such table' and 'no such column' errors"
+      
+      p1_high:
+        - "Duplicate tier2_patterns in cortex-brain.db and tier2/knowledge_graph.db"
+        - "Orphaned tables in unified database"
+        - "Missing schema version tracking"
+      
+      p2_moderate:
+        - "Inconsistent naming conventions (hyphen vs underscore)"
+        - "Missing foreign key constraints"
+        - "No database documentation or ERD"
+    
+    metrics:
+      schema_consistency_score:
+        current: "45%"
+        target: "100%"
+        measurement: "Automated schema validator"
+      
+      database_errors:
+        current: "100% (blocking)"
+        target: "0%"
+        measurement: "Log analysis during orchestrator execution"
+      
+      duplicate_tables:
+        current: 6
+        target: 0
+        measurement: "Schema audit"
+      
+      missing_columns:
+        current: 4
+        target: 0
+        measurement: "Schema comparison tool"
+      
+      test_coverage:
+        current: "~60%"
+        target: ">95%"
+        measurement: "pytest --cov src/database/"
+    
+    dependencies: []
+    blocks: ["P00B", "P01", "P02", "P03", "P04", "P05", "P06", "P07", "P08", "P09", "P10", "P11", "P12", "P13", "P14"]
+    
+  - phase_id: "P00B"
+    name: "Critical Orchestrator Instantiation Fixes"
+    type: autonomous_python
+    script: "scripts/phase_00b_orchestrator_fixes.py"
+    duration: "1 day"
+    priority: P0_CRITICAL
+    status: planning
+    description: "Fix 6 orchestrator instantiation failures blocking autonomous execution"
+    
+    issues_to_fix:
+      - orchestrator: "planning_v5"
+        error: "SyntaxError: f-string expression part cannot include a backslash"
+        file: "src/orchestrators/planning/planning_orchestrator_v5.py"
+        line: 718
+        fix: "Extract backslash logic outside f-string or use .format() method"
+      
+      - orchestrator: "tdd_orchestrator"
+        error: "__init__() got an unexpected keyword argument 'config_path'"
+        file: "src/orchestrators/tdd/tdd_orchestrator.py"
+        fix: "Remove config_path from __init__, use self.config_path = Path() directly"
+      
+      - orchestrator: "ado_orchestrator_v2"
+        error: "__init__() missing 1 required positional argument: 'state_db'"
+        file: "src/orchestrators/ado/ado_orchestrator_v2.py"
+        fix: "Add state_db parameter to __init__ or make optional with default"
+      
+      - orchestrator: "sanitization"
+        error: "__init__() got an unexpected keyword argument 'config_path'"
+        file: "src/orchestrators/sanitization/sanitization_orchestrator.py"
+        fix: "Remove config_path kwarg, use BaseOrchestrator pattern"
+      
+      - orchestrator: "cleanup_v2"
+        error: "__init__() missing 1 required positional argument: 'state_db'"
+        file: "src/orchestrators/cleanup/cleanup_orchestrator_v2.py"
+        fix: "Add state_db parameter or create default StateManager instance"
+      
+      - orchestrator: "vacuum_v2"
+        error: "StateManager has no attribute 'log_execution'"
+        file: "src/orchestrators/vacuum/vacuum_orchestrator_v2.py"
+        fix: "Implement StateManager.log_execution() or use state_db.log_execution()"
+    
+    deliverables:
+      - "Fixed: planning_v5 f-string syntax (src/orchestrators/planning/planning_orchestrator_v5.py)"
+      - "Fixed: tdd_orchestrator config_path kwargs (src/orchestrators/tdd/tdd_orchestrator.py)"
+      - "Fixed: ado_orchestrator_v2 state_db args (src/orchestrators/ado/ado_orchestrator_v2.py)"
+      - "Fixed: sanitization config_path kwargs (src/orchestrators/sanitization/sanitization_orchestrator.py)"
+      - "Fixed: cleanup_v2 state_db args (src/orchestrators/cleanup/cleanup_orchestrator_v2.py)"
+      - "Fixed: vacuum_v2 StateManager.log_execution (src/orchestrators/vacuum/vacuum_orchestrator_v2.py)"
+      - "tests/integration/test_orchestrator_instantiation.py (verify all 6 orchestrators instantiate)"
+    
+    acceptance_criteria:
+      functional:
+        - "✅ All 6 orchestrators instantiate without errors"
+        - "✅ Each orchestrator can be imported: from src.orchestrators.X import Y"
+        - "✅ Integration test passes: test_all_orchestrators_instantiate()"
+      
+      testing:
+        - "✅ Unit tests added for each fix (6 tests minimum)"
+        - "✅ Integration test covers all 6 orchestrators together"
+        - "✅ Test coverage >90% for modified files"
+    
+    metrics:
+      orchestrators_broken:
+        baseline: 6
+        target: 0
+        measurement: "pytest tests/integration/test_orchestrator_instantiation.py"
+      
+      instantiation_success_rate:
+        baseline: "50% (6/12 broken)"
+        target: "100% (12/12 working)"
+        measurement: "Orchestrator registry scan"
+    
+    dependencies: ["P00"]
+    blocks: ["P01", "P02", "P03", "P04", "P05", "P06", "P07", "P08"]
+    
+  - phase_id: "P01"
+    name: "Intent Routing Architecture - Planning vs Task Breakdown"
+    type: autonomous_python
+    script: "scripts/phase_01_fix_intent_routing.py"
+    duration: "3 days"
+    priority: P0_CRITICAL
+    status: in_progress
+    started: "2026-01-05"
+    description: "Fix architectural issue where 'plan' intents incorrectly route through WorkPlanner agent instead of directly to Planning Orchestrator"
+    
+    # Root Cause Analysis
+    root_cause:
+      issue: "WorkPlanner agent calls PlanningOrchestrator.generate_incremental_plan() which expects user interaction and hangs"
+      impact: "All 'plan X' requests fail with 'BUG' error or hang indefinitely"
+      architecture_violation: "Planning Orchestrator designed for autonomous terminal invocation, not nested agent calls"
+      current_flow: "User: 'plan X' → IntentRouter → WorkPlanner agent → PlanningOrchestrator → HANGS"
+      expected_flow: "User: 'plan X' → IntentRouter → Planning Orchestrator (autonomous) → Plan created"
+    
+    # Sub-phases for systematic fix
+    sub_phases:
+      - "P01.1: Define intent classification rules (planning vs task breakdown) (4h)"
+      - "P01.2: Implement MasterOrchestrator routing for planning intents (6h)"
+      - "P01.3: Update IntentRouter to distinguish planning vs task breakdown (4h)"
+      - "P01.4: Disable WorkPlanner's nested orchestrator calls (2h)"
+      - "P01.5: Create direct Planning Orchestrator invocation path (6h)"
+      - "P01.6: Integration testing & validation (2h)"
+    
+    # Deliverables
+    deliverables:
+      # Intent Classification (P01.1)
+      - "cortex-brain/config/intent-classification-rules.yaml (planning vs task_breakdown criteria)"
+      - "Documentation: When to use Planning Orchestrator vs WorkPlanner agent"
+      - "Keywords for planning: 'plan feature', 'create plan', 'plan for', 'architecture', 'threat model'"
+      - "Keywords for task breakdown: 'estimate', 'breakdown', 'how long', 'time estimate'"
+      
+      # MasterOrchestrator Routing (P01.2)
+      - "src/orchestrators/master/master_orchestrator.py (routing decision logic)"
+      - "orchestrator_registry.py updated with PLANNING type (distinct from AGENT)"
+      - "Direct invocation path: src.main → MasterOrchestrator → PlanningOrchestrator"
+      - "Bypass agent layer entirely for planning intents"
+      
+      # IntentRouter Updates (P01.3)
+      - "src/cortex_agents/intent_router.py (updated intent classification)"
+      - "New intent types: PLANNING (orchestrator) vs TASK_BREAKDOWN (agent)"
+      - "Routing decision returns orchestrator_type when intent=PLANNING"
+      - "Agent routing only for non-orchestrator intents"
+      
+      # WorkPlanner Fixes (P01.4)
+      - "src/cortex_agents/work_planner/agent.py (disable nested orchestrator)"
+      - "Remove PlanningOrchestrator initialization from WorkPlanner.__init__"
+      - "Set self._planning_orchestrator = None permanently"
+      - "Force _should_use_orchestrator() to always return False"
+      - "WorkPlanner handles ONLY simple task breakdowns (original purpose)"
+      
+      # Direct Orchestrator Path (P01.5)
+      - "src/entry_point/cortex_entry.py (orchestrator execution path)"
+      - "New method: _execute_orchestrator_directly(orchestrator_type, request)"
+      - "Bypasses agent_executor entirely for orchestrator intents"
+      - "Returns formatted orchestrator output directly to user"
+      
+      # Testing & Validation (P01.6)
+      - "tests/integration/test_planning_intent_routing.py (routing correctness)"
+      - "tests/integration/test_orchestrator_direct_invocation.py (bypass agents)"
+      - "tests/unit/test_intent_classification_rules.py (classification accuracy)"
+    
+    acceptance_criteria:
+      routing:
+        - "✅ 'plan feature X' routes directly to Planning Orchestrator"
+        - "✅ 'estimate time for X' routes to WorkPlanner agent"
+        - "✅ 'breakdown task X' routes to WorkPlanner agent"
+        - "✅ IntentRouter correctly classifies 100% of test cases"
+      
+      execution:
+        - "✅ Planning Orchestrator executes autonomously (no agent nesting)"
+        - "✅ Plan generation completes without hanging"
+        - "✅ Plan folders created in cortex-brain/documents/planning/active/"
+        - "✅ WorkPlanner provides simple task breakdowns (no orchestrator calls)"
+      
+      architectural:
+        - "✅ Clear separation: Orchestrators for complex workflows, Agents for simple tasks"
+        - "✅ No nested orchestrator calls from agents"
+        - "✅ src.main → MasterOrchestrator → Orchestrator (direct path)"
+        - "✅ Agent layer only for non-orchestrator operations"
+      
+      testing:
+        - "✅ Integration tests pass for both planning and task breakdown flows"
+        - "✅ Regression tests verify no impact on other orchestrators"
+        - "✅ Test coverage >90% for modified routing logic"
+    
+    metrics:
+      planning_success_rate:
+        baseline: "0% (all 'plan X' requests hang or fail)"
+        target: "100% (all planning requests succeed)"
+        measurement: "pytest tests/integration/test_planning_intent_routing.py"
+      
+      routing_accuracy:
+        baseline: "50% (planning routed to agent incorrectly)"
+        target: "100% (correct routing for all intent types)"
+        measurement: "Intent classification confusion matrix"
+      
+      orchestrator_nesting:
+        baseline: "1 occurrence (WorkPlanner → PlanningOrchestrator)"
+        target: "0 occurrences (no nested calls)"
+        measurement: "Code analysis + integration tests"
+    
+    dependencies: ["P00"]
+    blocks: ["P02", "P03"]
+  
+  - phase_id: "P02"
+    name: "Master Orchestrator Integration & Verification"
+    type: autonomous_python
+    script: "scripts/phase_01_master_orchestrator_integration.py"
+    duration: "4 days"
+    priority: P0_CRITICAL
+    status: planning
+    description: "Integrate manage_todo_list, verify ResponseRenderer rendering, verify SKULL middleware invocation"
+    
+    sub_phases:
+      - "P01.1: Implement todo_manager.py with manage_todo_list integration (1 day)"
+      - "P01.2: Verify ResponseRenderer renders to user (continuation prompt fix) (1 day)"
+      - "P01.3: Verify SKULL middleware invocation (SetupVerifier, GovernanceCheckpoint, TeardownRefactor) (1 day)"
+      - "P01.4: Integration testing & validation (1 day)"
+    
+    deliverables:
+      # Task Management (P01.1)
+      - "src/orchestrators/master/todo_manager.py (manage_todo_list API integration)"
+      - "tracking/task-registry.json schema definition"
+      - "Task CRUD operations: create, update, complete, list, filter"
+      - "Priority-based task sorting and dependency tracking"
+      
+      # ResponseRenderer Verification (P01.2)
+      - "tests/integration/test_response_renderer_to_user.py (verify rendering reaches GitHub Copilot)"
+      - "Fixed: master_orchestrator.py handle_request() returns rendered markdown (not dict)"
+      - "Verified: continuation prompts display to user (fix from investigation report)"
+      - "cortex-brain/documents/investigations/response-renderer-verification-report.md"
+      
+      # SKULL Middleware Verification (P01.3)
+      - "tests/integration/test_skull_middleware_invocation.py (verify hooks called)"
+      - "Verified: SetupVerifier runs before orchestrator execution (Phase -2)"
+      - "Verified: GovernanceCheckpoint validates during execution (runtime)"
+      - "Verified: TeardownRefactor runs after execution (Phase N+1)"
+      - "Fixed: middleware hooks integrated into execution_engine.py if missing"
+      - "cortex-brain/documents/investigations/skull-middleware-verification-report.md"
+    
+    acceptance_criteria:
+      task_management:
+        - "✅ manage_todo_list integration complete (todo_manager.py exists)"
+        - "✅ Master Orchestrator can create/update/complete tasks"
+        - "✅ task-registry.json updates in real-time during execution"
+        - "✅ All orchestrators use consistent task tracking pattern"
+      
+      response_rendering:
+        - "✅ ResponseRenderer confirmed rendering to GitHub Copilot Chat"
+        - "✅ Continuation prompts display (no longer missing)"
+        - "✅ Token warnings display to user (from check_token_usage())"
+        - "✅ Success messages with metadata display properly"
+        - "✅ Integration test verifies end-to-end rendering pipeline"
+      
+      skull_middleware:
+        - "✅ SetupVerifier executes before every orchestrator (Phase -2 logged)"
+        - "✅ GovernanceCheckpoint validates during execution (checkpoints logged)"
+        - "✅ TeardownRefactor executes after every orchestrator (Phase N+1 logged)"
+        - "✅ brain-protection-rules.yaml rules enforced at runtime"
+        - "✅ tracking/governance-audit.jsonl shows middleware invocations"
+      
+      integration:
+        - "✅ All 3 subsystems work together (tasks + rendering + middleware)"
+        - "✅ Zero regression in existing orchestrator functionality"
+        - "✅ Test coverage >85% for new code"
+    
+    investigation_findings_addressed:
+      continuation_prompt_not_displaying:
+        root_cause: "Master Orchestrator missing ResponseRenderer integration"
+        status: "ADDRESSED in P01.2"
+        verification: "tests/integration/test_response_renderer_to_user.py"
+      
+      progress_bar_brittleness:
+        root_cause: "CORTEX master prompt lacks explicit post-orchestrator rendering instructions"
+        status: "ADDRESSED - ResponseRenderer verified + CORTEX.prompt.md already updated"
+        verification: "Manual testing with autonomous orchestrators"
+      
+      c150_plan_review:
+        root_cause: "SKULL middleware exists but invocation unclear"
+        status: "ADDRESSED in P01.3"
+        verification: "tests/integration/test_skull_middleware_invocation.py + governance audit logs"
+    
+    metrics:
+      task_tracking_adoption:
+        baseline: "0% (manual tracking only)"
+        target: "100% (all orchestrators use manage_todo_list)"
+        measurement: "Code review + integration tests"
+      
+      continuation_prompt_display_rate:
+        baseline: "0% (never displays)"
+        target: "100% (always displays when needed)"
+        measurement: "Integration test + manual validation"
+      
+      skull_middleware_invocation_rate:
+        baseline: "Unknown (middleware exists, invocation unverified)"
+        target: "100% (every orchestrator execution)"
+        measurement: "tracking/governance-audit.jsonl analysis"
+    
+    dependencies: ["P00", "P00B"]
+    blocks: ["P02", "P03", "P04", "P05", "P06", "P07", "P08"]
+    
+  - phase_id: "P02"
+    name: "Planning Orchestrator v6 - Pure Python"
+    type: autonomous_python
+    script: "scripts/phase_02_planning_orchestrator_v6.py"
+    duration: "4 days"
+    priority: P0_CRITICAL
+    status: planning
+    description: "Convert Planning Orchestrator to 100% Python autonomous execution"
+    deliverables:
+      - "src/orchestrators/planning/planning_orchestrator_v6.py"
+      - "Remove all MD-based plan templates"
+      - "Python-based plan structure generation"
+      - "Task-aware plan creation"
+    dependencies: ["P01"]
+    
+  - phase_id: "P03"
+    name: "ADO Orchestrator v3 - Python Autonomous"
+    type: autonomous_python
+    script: "scripts/phase_03_ado_orchestrator_v3.py"
+    duration: "3 days"
+    priority: P1
+    status: planning
+    description: "Upgrade ADO Orchestrator to Python autonomous execution"
+    deliverables:
+      - "src/orchestrators/ado/ado_orchestrator_v3.py"
+      - "Python-based work item generation"
+      - "Task integration"
+    dependencies: ["P00", "P01"]
+    
+  - phase_id: "P04"
+    name: "Cleanup Orchestrator v3 - Python Autonomous"
+    type: autonomous_python
+    script: "scripts/phase_04_cleanup_orchestrator_v3.py"
+    duration: "2 days"
+    priority: P1
+    status: planning
+    description: "Convert Cleanup Orchestrator to Python autonomous"
+    deliverables:
+      - "src/orchestrators/cleanup/cleanup_orchestrator_v3.py"
+      - "Python-based cleanup execution"
+      - "Task-tracked operations"
+    dependencies: ["P00", "P01"]
+    
+  # ============================================================================
+  # NEW PHASES: P14-P17 - Critical Infrastructure Enhancements
+  # Added: 2026-01-06 per Holistic Design Review
+  # Total Duration: 12 days
+  # ============================================================================
+  
+  - phase_id: "P14"
+    name: "Sequential Verification Gate System"
+    type: autonomous_python
+    script: "scripts/phase_14_verification_gates.py"
+    duration: "2 days"
+    priority: P0_CRITICAL
+    status: planning
+    description: "Implement phase-to-phase verification gates with dependency validation and acceptance criteria checks"
+    
+    # Why Critical
+    justification: "Prevents blind phase execution that could cascade failures. Without verification gates, phases P05-P13 could execute even if dependencies fail validation, creating technical debt and requiring expensive rework."
+    
+    # Sub-phases
+    sub_phases:
+      - "P14.1: PhaseExecutor with Pre/Post Verification (8h)"
+      - "P14.2: Dependency Acceptance Criteria Validator (6h)"
+      - "P14.3: Auto-Approval vs Manual-Approval Logic (4h)"
+      - "P14.4: Integration Testing & Documentation (2h)"
+    
+    # Deliverables
+    deliverables:
+      - "src/orchestrators/epic/phase_executor.py (PhaseExecutor class)"
+      - "src/orchestrators/epic/verification_gate.py (VerificationGate class)"
+      - "src/orchestrators/epic/acceptance_validator.py (AcceptanceCriteriaValidator)"
+      - "cortex-brain/config/verification-gate-rules.yaml (auto-approve thresholds)"
+      - "tests/integration/test_verification_gates.py (gate enforcement tests)"
+      - "cortex-brain/documents/architecture/VERIFICATION-GATE-SPECIFICATION.md"
+    
+    # Implementation Details
+    features:
+      pre_flight_checks:
+        - "Verify all dependency phases marked complete"
+        - "Validate acceptance criteria met for each dependency"
+        - "Check audit logs exist and verified"
+        - "Ensure deliverables present and valid"
+      
+      verification_gate:
+        - "Load dependency acceptance criteria from manifest"
+        - "Check functional criteria (e.g., 'All orchestrators execute without errors')"
+        - "Check performance criteria (e.g., 'Query time <50ms')"
+        - "Check data integrity criteria (e.g., 'Zero data loss')"
+        - "Generate verification report with pass/fail for each criterion"
+      
+      post_flight_checks:
+        - "Validate all deliverables created"
+        - "Run automated tests for phase"
+        - "Check metrics against targets"
+        - "Generate completion report"
+      
+      approval_logic:
+        - "Auto-approve if: All criteria met + No manual_approval flag"
+        - "Manual-approve if: P0_CRITICAL phase OR manual_approval=true"
+        - "Block if: Any critical criterion failed"
+    
+    acceptance_criteria:
+      functional:
+        - "✅ PhaseExecutor enforces dependency verification before phase start"
+        - "✅ Acceptance criteria validator checks all criteria types (functional, performance, data integrity)"
+        - "✅ Verification gate blocks phase start if dependencies incomplete"
+        - "✅ Auto-approval works for P1-P2 phases with criteria met"
+        - "✅ Manual approval prompts for P0_CRITICAL phases"
+      
+      architectural:
+        - "✅ Clear separation: Verification logic in VerificationGate class"
+        - "✅ Configurable: Rules in YAML, not hardcoded"
+        - "✅ Extensible: New criteria types easy to add"
+      
+      testing:
+        - "✅ Integration tests verify gate enforcement (phase blocked when dependency fails)"
+        - "✅ Unit tests for AcceptanceCriteriaValidator (100% coverage)"
+        - "✅ End-to-end test: P14 → P15 with verification gate in between"
+    
+    metrics:
+      phase_blocking_success_rate:
+        baseline: "0% (no enforcement)"
+        target: "100% (all incomplete dependencies block)"
+        measurement: "Integration test: attempt phase start with failed dependency"
+      
+      false_negative_rate:
+        baseline: "N/A (no gates)"
+        target: "<1% (gates rarely block valid phases)"
+        measurement: "Manual review of 100 phase transitions"
+    
+    dependencies: ["P01", "P02", "P03", "P04"]
+    blocks: ["P15", "P16", "P17", "P05", "P06", "P07", "P08", "P09", "P10", "P11", "P12", "P13"]
+  
+  - phase_id: "P15"
+    name: "Enterprise Audit Logger Integration"
+    type: autonomous_python
+    script: "scripts/phase_15_audit_logger.py"
+    duration: "3 days"
+    priority: P0_CRITICAL
+    status: planning
+    description: "Implement comprehensive audit logging with decision capture, reasoning, and verification trail"
+    
+    # Why Critical
+    justification: "Epic requires audit logging but ZERO orchestrators currently implement it. Without audit logs, verification gates (P14) cannot validate 'why did this decision happen?' and phase completion cannot be verified."
+    
+    # Sub-phases
+    sub_phases:
+      - "P15.1: AuditLogger Class with Decision Capture (10h)"
+      - "P15.2: Integration into 4 Completed Orchestrators (8h)"
+      - "P15.3: Verification Gate Audit Log Checks (4h)"
+      - "P15.4: Audit Viewer Dashboard (6h)"
+    
+    # Deliverables
+    deliverables:
+      - "src/orchestrators/audit/audit_logger.py (AuditLogger class)"
+      - "src/orchestrators/audit/audit_viewer.py (Dashboard for audit log exploration)"
+      - "cortex-brain/audit-logs/schema.sql (SQLite schema for audit storage)"
+      - "src/orchestrators/planning/planning_orchestrator_v5.py (AuditLogger integration)"
+      - "src/orchestrators/ado/ado_orchestrator_v2.py (AuditLogger integration)"
+      - "src/orchestrators/tdd/tdd_orchestrator.py (AuditLogger integration)"
+      - "src/orchestrators/refinement/refinement_orchestrator.py (AuditLogger integration)"
+      - "tests/integration/test_audit_logging.py (audit capture verification)"
+      - "cortex-brain/documents/architecture/AUDIT-LOGGING-SPECIFICATION.md"
+    
+    # Implementation Details
+    features:
+      audit_events:
+        - "Orchestrator entry (timestamp, request, context)"
+        - "Decision points (action, reasoning, alternatives, confidence)"
+        - "Resource usage (time, memory, disk I/O)"
+        - "Error conditions (exception type, stack trace, recovery action)"
+        - "User interactions (prompts, responses)"
+        - "Phase transitions (start, complete, blocked)"
+      
+      audit_storage:
+        - "SQLite database: cortex-brain/audit-logs/audit.db"
+        - "Schema: audit_events (id, timestamp, orchestrator, phase, event_type, payload)"
+        - "Indexed on: timestamp, orchestrator, phase, event_type"
+        - "Retention: 90 days (configurable)"
+      
+      audit_viewer:
+        - "Web-based dashboard at http://localhost:8200/audit-viewer"
+        - "Filter by: orchestrator, phase, date range, event type"
+        - "Visualize: Decision tree, resource usage graphs, timeline"
+        - "Export: CSV, JSON for external analysis"
+      
+      verification_integration:
+        - "VerificationGate checks audit log exists for dependency phases"
+        - "Validates audit log has 'phase_completion' event"
+        - "Checks audit log verified flag (manual or auto-verified)"
+    
+    acceptance_criteria:
+      functional:
+        - "✅ AuditLogger captures all event types (entry, decision, error, completion)"
+        - "✅ All 4 orchestrators (planning, ado, tdd, refinement) log audit events"
+        - "✅ Audit logs stored in SQLite with indexed queries"
+        - "✅ Audit viewer displays logs with filtering and search"
+        - "✅ VerificationGate validates audit logs exist and verified"
+      
+      performance:
+        - "✅ Audit logging adds <5ms overhead per orchestrator execution"
+        - "✅ Audit viewer loads <1s for 10k events"
+        - "✅ Database size <100MB for 90 days retention"
+      
+      security:
+        - "✅ Audit logs immutable (append-only)"
+        - "✅ No PII/secrets logged (sanitized before storage)"
+        - "✅ Access control: Only admins can view audit logs"
+      
+      testing:
+        - "✅ Integration tests verify audit events captured for each orchestrator"
+        - "✅ Performance benchmarks confirm <5ms overhead"
+        - "✅ Security tests verify no PII leakage"
+    
+    metrics:
+      audit_coverage:
+        baseline: "0% (no audit logging)"
+        target: "100% (all orchestrators log events)"
+        measurement: "Code analysis + integration tests"
+      
+      audit_log_completeness:
+        baseline: "N/A"
+        target: "100% (all decision points logged)"
+        measurement: "Manual review of 50 orchestrator executions"
+    
+    dependencies: ["P14"]
+    blocks: ["P16", "P17", "P05", "P06", "P07", "P08", "P09", "P10", "P11", "P12", "P13"]
+  
+  - phase_id: "P16"
+    name: "Plugin-Based Governance Architecture"
+    type: autonomous_python
+    script: "scripts/phase_16_governance_plugins.py"
+    duration: "5 days"
+    priority: P1_HIGH
+    status: planning
+    description: "Implement dynamic governance rule injection via plugins to handle late-stage realizations without architecture changes"
+    
+    # Why High Priority
+    justification: "Late-stage realizations (e.g., 'Vision API should be governance-enforced') currently require 3-5 days of architecture refactoring. Plugin architecture reduces this to 2-4 hours (90% time reduction), preventing architecture churn and technical debt."
+    
+    # Sub-phases
+    sub_phases:
+      - "P16.1: GovernancePluginLoader with Discovery (10h)"
+      - "P16.2: BaseGovernancePlugin Contract (6h)"
+      - "P16.3: Vision API Enforcement Plugin (Example) (8h)"
+      - "P16.4: Hot-Reload Capability (4h)"
+      - "P16.5: Documentation + 3 Sample Plugins (8h)"
+    
+    # Deliverables
+    deliverables:
+      - "src/governance/plugin_loader.py (GovernancePluginLoader class)"
+      - "src/governance/base_plugin.py (BaseGovernancePlugin abstract class)"
+      - "src/governance/plugin_metadata.py (PluginMetadata dataclass)"
+      - "cortex-brain/governance/plugins/vision_api_enforcement.py (example plugin)"
+      - "cortex-brain/governance/plugins/tdd_enforcement.py (migrated from hardcoded)"
+      - "cortex-brain/governance/plugins/planning_isolation.py (migrated from hardcoded)"
+      - "src/orchestrators/middleware/governance_checkpoint.py (plugin injection)"
+      - "tests/integration/test_governance_plugins.py (plugin loading + enforcement)"
+      - "cortex-brain/documents/architecture/GOVERNANCE-PLUGIN-GUIDE.md"
+      - "cortex-brain/documents/architecture/PLUGIN-DEVELOPMENT-TUTORIAL.md"
+    
+    # Implementation Details
+    features:
+      plugin_discovery:
+        - "Scan cortex-brain/governance/plugins/ directory"
+        - "Load all .py files matching *_plugin.py or *_enforcement.py"
+        - "Validate plugin implements BaseGovernancePlugin contract"
+        - "Register valid plugins in GovernanceCheckpoint middleware"
+      
+      plugin_contract:
+        - "metadata: PluginMetadata (rule_id, name, version, triggers, severity)"
+        - "validate(context): Check if rule satisfied, return ValidationResult"
+        - "remediate(context): Auto-fix violations if possible"
+        - "get_documentation(): Return user-facing rule explanation"
+      
+      hot_reload:
+        - "File watcher on cortex-brain/governance/plugins/"
+        - "Reload plugins on file change (dev mode only)"
+        - "Validate plugins before hot-reload (fail-safe)"
+        - "Log plugin reload events to audit log"
+      
+      governance_integration:
+        - "GovernanceCheckpoint calls plugin_loader.discover_plugins() on init"
+        - "Each plugin registered as middleware rule"
+        - "Plugins execute in priority order (severity: blocked > warning > info)"
+        - "Plugin failures logged to audit log"
+    
+    # Example: Vision API Enforcement Plugin
+    example_plugin:
+      rule_id: "VISION_API_ENFORCEMENT"
+      trigger: "image_attachment_detected"
+      action: "block_if_no_vision_analysis"
+      implementation: |
+        class VisionAPIEnforcementPlugin(BaseGovernancePlugin):
+            metadata = PluginMetadata(
+                rule_id="VISION_API_ENFORCEMENT",
+                name="Vision API Mandatory Analysis",
+                triggers=["image_attachment"],
+                severity="blocked"
+            )
+            
+            def validate(self, context):
+                has_images = 'image_attachments' in context
+                has_analysis = 'vision_analysis' in context
+                
+                if has_images and not has_analysis:
+                    return ValidationResult.fail(
+                        "Images detected but no Vision API analysis",
+                        remediation="Inject VisionContextMiddleware"
+                    )
+                return ValidationResult.pass_()
+    
+    acceptance_criteria:
+      functional:
+        - "✅ GovernancePluginLoader discovers all plugins in plugins/ directory"
+        - "✅ Plugins validate and inject into GovernanceCheckpoint"
+        - "✅ Vision API enforcement plugin blocks executions with unanalyzed images"
+        - "✅ Hot-reload works in dev mode (plugins reload without restart)"
+        - "✅ Plugin failures logged to audit log"
+      
+      architectural:
+        - "✅ New governance rules add via plugin (no orchestrator code changes)"
+        - "✅ Plugin contract enforces validation + remediation methods"
+        - "✅ Plugins execute in priority order (severity-based)"
+      
+      extensibility:
+        - "✅ 3 sample plugins provided (Vision API, TDD, Planning Isolation)"
+        - "✅ Plugin development tutorial with step-by-step guide"
+        - "✅ BaseGovernancePlugin contract documented"
+      
+      testing:
+        - "✅ Integration tests verify plugin loading + enforcement"
+        - "✅ Unit tests for each sample plugin (100% coverage)"
+        - "✅ Hot-reload tested (plugin change → immediate effect)"
+    
+    metrics:
+      governance_rule_addition_time:
+        baseline: "3-5 days (architecture refactoring)"
+        target: "2-4 hours (write plugin)"
+        measurement: "Time to add new rule (manual measurement)"
+      
+      plugin_load_success_rate:
+        baseline: "N/A"
+        target: "100% (all valid plugins load)"
+        measurement: "pytest tests/integration/test_governance_plugins.py"
+    
+    dependencies: ["P15"]
+    blocks: ["P17", "P05", "P06", "P07", "P08", "P09", "P10", "P11", "P12", "P13"]
+  
+  - phase_id: "P17"
+    name: "Risk Mitigation Implementation"
+    type: autonomous_python
+    script: "scripts/phase_17_risk_mitigation.py"
+    duration: "2 days"
+    priority: P0_CRITICAL
+    status: planning
+    description: "Implement mitigations for 4 critical risks identified in HOLISTIC-RISK-ANALYSIS.md"
+    
+    # Why Critical
+    justification: "13 critical risks identified but ZERO mitigations in current plan. Unaddressed risks will cause production failures: database corruption (RISK-001), race conditions (RISK-002), circular imports (RISK-003), renderer failures (RISK-004)."
+    
+    # Sub-phases
+    sub_phases:
+      - "P17.1: Atomic Database Migrations (RISK-001) (6h)"
+      - "P17.2: Thread-Safe Task Registry (RISK-002) (6h)"
+      - "P17.3: Circular Import Resolution (RISK-003) (8h)"
+      - "P17.4: ResponseRenderer Retry Logic (RISK-004) (4h)"
+    
+    # Deliverables
+    deliverables:
+      - "src/database/atomic_migrator.py (AtomicMigrator with transaction + rollback)"
+      - "src/database/migrations/migration_base.py (base class with savepoint support)"
+      - "src/orchestrators/master/thread_safe_task_registry.py (SQLite-based task storage)"
+      - "src/orchestrators/master/migrate_tasks_json_to_db.py (migration script)"
+      - "src/orchestrators/lazy_loader.py (lazy orchestrator loading via DI)"
+      - "src/orchestrators/orchestrator_factory.py (factory pattern for orchestrators)"
+      - "src/orchestrators/response_renderer.py (retry logic + fallback template)"
+      - "tests/integration/test_atomic_migrations.py (rollback verification)"
+      - "tests/integration/test_concurrent_task_updates.py (race condition tests)"
+      - "tests/unit/test_lazy_loading.py (circular import prevention)"
+      - "tests/unit/test_response_renderer_retry.py (retry logic verification)"
+      - "cortex-brain/documents/architecture/RISK-MITIGATION-REPORT.md"
+    
+    # Risk Mitigations
+    risk_mitigations:
+      RISK_001_atomic_migrations:
+        problem: "Database migrations lack rollback, risk data corruption"
+        solution: "Implement AtomicMigrator with savepoints + automatic rollback"
+        implementation: |
+          class AtomicMigrator:
+              def migrate(self, migration):
+                  with self.db.transaction():
+                      self.db.savepoint('pre_migration')
+                      try:
+                          for step in migration.steps:
+                              step.execute()
+                              self.db.savepoint(f'after_{step.id}')
+                          self.db.commit()
+                      except Exception as e:
+                          self.db.rollback_to('pre_migration')
+                          raise MigrationFailedError(e)
+      
+      RISK_002_task_race_condition:
+        problem: "JSON-based task registry not thread-safe, write-write conflicts"
+        solution: "Migrate to SQLite-based storage with automatic locking"
+        implementation: |
+          class ThreadSafeTaskRegistry:
+              def __init__(self):
+                  self.db = sqlite3.connect('tracking/tasks.db')
+                  self.db.execute("CREATE TABLE IF NOT EXISTS tasks (...)")
+              
+              def add_task(self, task):
+                  with self.db:  # Automatic transaction + row locking
+                      self.db.execute("INSERT INTO tasks VALUES (?)", task)
+      
+      RISK_003_circular_imports:
+        problem: "6 orchestrators have circular import dependencies"
+        solution: "Lazy loading via factory pattern + dependency injection"
+        implementation: |
+          # Replace direct imports
+          from src.orchestrators.planning import PlanningOrchestrator
+          
+          # With lazy loading
+          def get_orchestrator(name):
+              if name == 'planning':
+                  from src.orchestrators.planning import PlanningOrchestrator
+                  return PlanningOrchestrator()
+      
+      RISK_004_renderer_failure:
+        problem: "ResponseRenderer has no retry logic, silent failures possible"
+        solution: "Add exponential backoff retry + fallback template"
+        implementation: |
+          class ResilientResponseRenderer:
+              def render(self, template, context, retries=3):
+                  for attempt in range(retries):
+                      try:
+                          return self._render(template, context)
+                      except TemplateError as e:
+                          if attempt == retries - 1:
+                              return self._fallback_template(context)
+                          time.sleep(0.1 * (2 ** attempt))
+    
+    acceptance_criteria:
+      functional:
+        - "✅ AtomicMigrator rolls back on migration failure (tested with intentional error)"
+        - "✅ ThreadSafeTaskRegistry handles 10 concurrent writers without conflicts"
+        - "✅ Lazy loader resolves all 6 circular import issues"
+        - "✅ ResponseRenderer retries 3 times + uses fallback on persistent failure"
+      
+      testing:
+        - "✅ Integration test: Force migration failure, verify rollback"
+        - "✅ Concurrency test: 10 threads update tasks, verify no data loss"
+        - "✅ Unit test: Import orchestrators in different orders, no circular errors"
+        - "✅ Unit test: Mock template error, verify retry + fallback"
+      
+      data_integrity:
+        - "✅ Migration rollback leaves database in pre-migration state"
+        - "✅ Concurrent task updates result in all tasks saved (no lost writes)"
+        - "✅ No data corruption during migration"
+      
+      performance:
+        - "✅ SQLite task registry <10ms per operation"
+        - "✅ Lazy loading adds <50ms to first orchestrator instantiation"
+        - "✅ ResponseRenderer retry adds <100ms on failure (negligible on success)"
+    
+    metrics:
+      migration_rollback_success_rate:
+        baseline: "0% (no rollback logic)"
+        target: "100% (all failed migrations rollback)"
+        measurement: "Integration test with intentional migration errors"
+      
+      task_write_conflict_rate:
+        baseline: "~10% (observed with 5+ concurrent writers)"
+        target: "0% (SQLite ACID guarantees)"
+        measurement: "Concurrency test: 10 threads, 100 writes each"
+      
+      circular_import_errors:
+        baseline: "6 occurrences"
+        target: "0 occurrences"
+        measurement: "pytest --import-mode=importlib (all import orders)"
+      
+      renderer_failure_rate:
+        baseline: "~1% (silent failures observed)"
+        target: "<0.01% (retry + fallback)"
+        measurement: "Load test: 10k renders with 1% error injection"
+    
+    dependencies: ["P16"]
+    blocks: ["P18"]
+  
+  - phase_id: "P18"
+    name: "Governance Rules Collaborative Finalization"
+    type: collaborative_human_in_loop
+    script: "N/A (requires human collaboration)"
+    duration: "1-2 days (collaborative session)"
+    priority: P0_CRITICAL
+    status: planning
+    description: "Human-AI collaborative session to finalize governance rules based on architecture stability and real-world pain points before proceeding with orchestrator upgrades"
+    
+    # Why Critical
+    justification: |
+      Architecture is now stable (P14-P17 complete). This is the optimal time to finalize 
+      governance rules before upgrading 8 orchestrators (P05-P13). Adding rules AFTER 
+      orchestrator upgrades risks expensive rework. This checkpoint ensures governance 
+      aligns with proven architecture patterns.
+    
+    # Checkpoint Criteria
+    checkpoint_criteria:
+      architecture_stability:
+        - "✅ Verification gates operational (P14)"
+        - "✅ Audit logging integrated (P15)"
+        - "✅ Plugin architecture validated (P16)"
+        - "✅ Critical risks mitigated (P17)"
+        - "✅ No major refactors for 1+ weeks"
+      
+      data_collection:
+        - "Review governance-audit.jsonl for pattern violations"
+        - "Analyze orchestrator execution logs for architectural issues"
+        - "Extract pain points from completed phases P00-P17"
+      
+      readiness_indicators:
+        - "Current 4 rules (PATH_PORTABILITY, SETUP_VERIFICATION, TEARDOWN_REFACTOR, TDD_ENFORCEMENT) enforced consistently"
+        - "3 placeholder categories (Architecture Integrity, Quality Gates, Security/Privacy) ready for population"
+        - "Plugin system enables fast rule addition (2-4 hours per rule)"
+    
+    # Collaborative Session Structure
+    session_structure:
+      phase_0_git_intelligence:
+        duration: "30 minutes (automated)"
+        type: "pre_session_automation"
+        description: "Automated git commit analysis to extract governance intelligence from P00-P17 implementation history"
+        activities:
+          - "Run git commit analyzer: python3 scripts/analyze_git_commits.py --since P00-start --until P17-complete"
+          - "Extract violation patterns from commit messages (fix, bug, broken, revert)"
+          - "Identify refactoring clusters (files touched 5+ times in P00-P17)"
+          - "Detect rollback events (reverted commits indicate failed approaches)"
+          - "Find integration failures (merge conflict resolution commits)"
+          - "Discover security patches (commits with security, credential, PII keywords)"
+          - "Generate governance intelligence report with rule candidates"
+        
+        git_analysis_queries:
+          violation_patterns:
+            query: "git log --grep='fix\\|bug\\|broken\\|error' --since='2026-01-05' --until='2026-01-06' --oneline"
+            purpose: "Identify recurring architectural issues requiring governance"
+          
+          refactoring_clusters:
+            query: "git log --since='2026-01-05' --until='2026-01-06' --name-only --pretty=format: | sort | uniq -c | sort -rn | head -20"
+            purpose: "Find brittle files touched repeatedly (architecture integrity issues)"
+          
+          rollback_events:
+            query: "git log --grep='Revert\\|rollback\\|undo' --since='2026-01-05' --until='2026-01-06' --oneline"
+            purpose: "Discover failed approaches needing guardrails"
+          
+          security_indicators:
+            query: "git log --grep='security\\|credential\\|PII\\|token\\|secret' --since='2026-01-05' --until='2026-01-06' --oneline"
+            purpose: "Identify security gaps requiring governance rules"
+          
+          architecture_changes:
+            query: "git log --grep='refactor\\|redesign\\|migrate\\|consolidate' --since='2026-01-05' --until='2026-01-06' --oneline"
+            purpose: "Extract architectural evolution patterns"
+        
+        deliverables:
+          - "cortex-brain/documents/planning/active/cortex5-remediation/analysis/GIT-COMMIT-INTELLIGENCE-P00-P17.md"
+          - "cortex-brain/documents/planning/active/cortex5-remediation/analysis/GOVERNANCE-RULE-CANDIDATES-FROM-GIT.json"
+          - "cortex-brain/documents/planning/active/cortex5-remediation/analysis/VIOLATION-HEATMAP.json"
+        
+        automated_insights:
+          - "Top 10 most-modified files (brittleness indicators)"
+          - "Commit message sentiment analysis (frustration vs confidence keywords)"
+          - "Author collaboration patterns (who fixes whose code = coupling issues)"
+          - "Time-to-fix analysis (how long between bug intro and fix)"
+          - "Governance rule candidates ranked by violation frequency"
+      
+      phase_1_review:
+        duration: "2-3 hours"
+        type: "human_ai_collaborative"
+        dependencies: ["phase_0_git_intelligence"]
+        activities:
+          - "Review git commit intelligence report (automated from Phase 0)"
+          - "Review existing 4 governance rules effectiveness"
+          - "Analyze violations from tracking/governance-audit.jsonl"
+          - "Cross-reference git patterns with audit log violations"
+          - "Extract architectural patterns from P00-P17 execution"
+          - "Identify repeated mistakes/pain points (data-driven from git + audit logs)"
+      
+      phase_2_design:
+        duration: "3-4 hours"
+        activities:
+          - "Prioritize governance gaps (Architecture Integrity, Quality Gates, Security)"
+          - "Draft 3-5 new rules based on real violations"
+          - "Define enforcement triggers and validation criteria"
+          - "Design rule interaction patterns (no conflicts)"
+      
+      phase_3_validation:
+        duration: "2 hours"
+        activities:
+          - "Test new rules against P00-P17 execution history"
+          - "Verify rules don't conflict with existing 4"
+          - "Confirm plugin-based implementation feasible"
+          - "Create acceptance criteria for each rule"
+      
+      phase_4_implementation_prep:
+        duration: "1 hour"
+        activities:
+          - "Document finalized rules in brain-protection-rules.yaml"
+          - "Create plugin stubs for new rules"
+          - "Update governance documentation"
+          - "Define P19 implementation tasks"
+    
+    # Deliverables
+    deliverables:
+      - "cortex-brain/documents/planning/active/cortex5-remediation/analysis/GIT-COMMIT-INTELLIGENCE-P00-P17.md (Phase 0 automated)"
+      - "cortex-brain/documents/planning/active/cortex5-remediation/analysis/GOVERNANCE-RULE-CANDIDATES-FROM-GIT.json (Phase 0 automated)"
+      - "cortex-brain/documents/planning/active/cortex5-remediation/analysis/VIOLATION-HEATMAP.json (Phase 0 automated)"
+      - "cortex-brain/brain-protection-rules.yaml (updated with 3-5 new rules)"
+      - "cortex-brain/documents/governance/GOVERNANCE-RULES-V2-SPECIFICATION.md (design doc)"
+      - "cortex-brain/documents/governance/RULES-RATIONALE.md (why each rule exists)"
+      - "src/orchestrators/middleware/governance/plugins/ (rule plugin stubs)"
+      - "cortex-brain/documents/planning/active/cortex5-remediation/phases/P19-GOVERNANCE-RULES-IMPLEMENTATION.md"
+      - "cortex-brain/documents/analysis/GOVERNANCE-GAP-ANALYSIS.md (violations from P00-P17)"
+    
+    # Candidate Rules (To Be Validated in Session)
+    candidate_rules:
+      architecture_integrity:
+        - "ORCHESTRATOR_BASE_COMPLIANCE: All orchestrators must inherit from BaseOrchestrator"
+        - "DEPENDENCY_INJECTION: No hardcoded dependencies, use DI pattern"
+        - "ASYNC_SAFETY: All async operations must use asyncio.Lock for shared state"
+        - "STATE_IMMUTABILITY: State modifications logged in audit trail"
+      
+      quality_gates:
+        - "CODE_COVERAGE_THRESHOLD: New code must maintain >80% test coverage"
+        - "COMPLEXITY_LIMIT: Cyclomatic complexity <15 per function"
+        - "TYPE_SAFETY: All public APIs must have type hints"
+        - "DOCUMENTATION_REQUIRED: All orchestrators must have docstrings"
+      
+      security_privacy:
+        - "GIT_ISOLATION: CORTEX code never commits to user repos (from SKULL)"
+        - "PII_DETECTION: Automated PII scanning before file writes"
+        - "CREDENTIAL_SCANNING: Pre-commit hooks block credential exposure"
+        - "ACCESS_CONTROL: User data accessible only to authorized orchestrators"
+    
+    # Success Criteria
+    acceptance_criteria:
+      collaborative_alignment:
+        - "Human and AI agree on 3-5 high-value governance rules"
+        - "All rules have clear enforcement triggers"
+        - "No conflicts with existing 4 rules"
+        - "Rules address real pain points (not speculative)"
+      
+      implementation_ready:
+        - "brain-protection-rules.yaml updated with v6.0 schema"
+        - "Plugin stubs created for all new rules"
+        - "P19 implementation plan detailed"
+        - "Acceptance tests defined for each rule"
+      
+      documentation_complete:
+        - "Each rule has rationale (why it exists)"
+        - "Enforcement strategy documented"
+        - "Validation criteria specified"
+        - "Examples (pass/fail) provided"
+    
+    # Metrics
+    metrics:
+      governance_coverage:
+        baseline: "4 rules across 2/6 categories (33% populated)"
+        target: "8-10 rules across 5/6 categories (83% populated)"
+        measurement: "brain-protection-rules.yaml category coverage"
+      
+      violation_prevention:
+        baseline: "N/A (new rules not yet enforced)"
+        target: ">90% (violations prevented by plugins)"
+        measurement: "Audit log analysis after P19 implementation"
+      
+      rule_addition_time:
+        baseline: "3-5 days per rule (speculative design)"
+        target: "2-4 hours per rule (plugin-based, data-driven)"
+        measurement: "Time from rule design to enforcement"
+    
+    # Dependencies & Blocking
+    dependencies: ["P17"]  # Must complete risk mitigation before governance finalization
+    blocks: ["P05", "P06", "P07", "P08", "P09", "P10", "P11", "P12", "P13"]  # Block orchestrator upgrades until governance finalized
+    
+    # Human-AI Collaboration Protocol
+    collaboration_protocol:
+      cortex_role:
+        - "🆕 Phase 0: Run automated git commit intelligence analysis (30 min)"
+        - "🆕 Phase 0: Extract violation patterns, refactoring clusters, rollbacks from git history"
+        - "🆕 Phase 0: Generate governance rule candidates ranked by violation frequency"
+        - "Phase 1: Analyze governance-audit.jsonl for patterns"
+        - "Phase 1: Cross-reference git commit patterns with audit log violations"
+        - "Phase 1: Extract architectural pain points from P00-P17"
+        - "Phase 2: Propose rule candidates based on violations (git + audit data)"
+        - "Phase 2: Draft enforcement logic and validation tests"
+      
+      human_role:
+        - "Prioritize governance gaps (business context)"
+        - "Validate rule candidates (strategic alignment)"
+        - "Approve final rule set (3-5 rules)"
+        - "Define acceptance criteria (domain expertise)"
+      
+      stopping_conditions:
+        - "✅ 3-5 high-value rules identified and approved"
+        - "✅ All rules have enforcement plugins designed"
+        - "✅ P19 implementation plan accepted"
+        - "⛔ Maximum 2-day duration reached (time-box)"
+        - "⛔ No clear violations found (defer to post-P13 review)"
+  
+  # ============================================================================
+  # ORIGINAL PHASES: P05-P13 (Now depend on P18 completion)
+  # ============================================================================
+  
+  - phase_id: "P05"
+    name: "Vacuum Orchestrator v3 - Python Autonomous"
+    type: autonomous_python
+    script: "scripts/phase_05_vacuum_orchestrator_v3.py"
+    duration: "2 days"
+    priority: P1
+    status: planning
+    description: "Convert Vacuum Orchestrator to Python autonomous"
+    deliverables:
+      - "src/orchestrators/vacuum/vacuum_orchestrator_v3.py"
+      - "Python-based deep cleanup"
+      - "Task integration"
+    dependencies: ["P18"]  # Updated: Must wait for governance finalization before orchestrator upgrades
+    
+  - phase_id: "P06"
+    name: "Investigation Orchestrator v3 - Python Autonomous"
+    type: autonomous_python
+    script: "scripts/phase_06_investigation_orchestrator_v3.py"
+    duration: "3 days"
+    priority: P1
+    status: planning
+    description: "Convert Investigation Orchestrator to Python autonomous"
+    deliverables:
+      - "src/orchestrators/investigation/investigation_orchestrator_v3.py"
+      - "Python-based root cause analysis"
+      - "Task-tracked investigations"
+    dependencies: ["P18"]  # Updated: Must wait for governance finalization before orchestrator upgrades
+    
+  - phase_id: "P07"
+    name: "Sanitization Orchestrator v3 - Python Autonomous"
+    type: autonomous_python
+    script: "scripts/phase_07_sanitization_orchestrator_v3.py"
+    duration: "2 days"
+    priority: P1
+    status: planning
+    description: "Convert Sanitization Orchestrator to Python autonomous"
+    deliverables:
+      - "src/orchestrators/sanitization/sanitization_orchestrator_v3.py"
+      - "Python-based PII/secret removal"
+      - "Task integration"
+    dependencies: ["P18"]  # Updated: Must wait for governance finalization before orchestrator upgrades
+    
+  - phase_id: "P08"
+    name: "TDD Orchestrator v3 - Python Autonomous"
+    type: autonomous_python
+    script: "scripts/phase_08_tdd_orchestrator_v3.py"
+    duration: "3 days"
+    priority: P1
+    status: planning
+    description: "Convert TDD Orchestrator to Python autonomous"
+    deliverables:
+      - "src/orchestrators/tdd/tdd_orchestrator_v3.py"
+      - "Python-based RED→GREEN→REFACTOR"
+      - "Task-tracked TDD cycles"
+    dependencies: ["P18"]  # Updated: Must wait for governance finalization before orchestrator upgrades
+    
+  - phase_id: "P09"
+    name: "Refinement Orchestrator v3 - Python Autonomous"
+    type: autonomous_python
+    script: "scripts/phase_09_refinement_orchestrator_v3.py"
+    duration: "3 days"
+    priority: P2
+    status: planning
+    description: "Convert Refinement Orchestrator to Python autonomous"
+    deliverables:
+      - "src/orchestrators/refinement/refinement_orchestrator_v3.py"
+      - "Python-based code improvement"
+      - "Task integration"
+    dependencies: ["P18"]  # Updated: Must wait for governance finalization before orchestrator upgrades
+    
+  - phase_id: "P10"
+    name: "Debug Orchestrator v3 - Python Autonomous"
+    type: autonomous_python
+    script: "scripts/phase_10_debug_orchestrator_v3.py"
+    duration: "3 days"
+    priority: P2
+    status: planning
+    description: "Convert Debug Orchestrator to Python autonomous"
+    deliverables:
+      - "src/orchestrators/debug/debug_orchestrator_v3.py"
+      - "Python-based debugging"
+      - "Task-tracked debug sessions"
+    dependencies: ["P18"]  # Updated: Must wait for governance finalization before orchestrator upgrades
+    
+  - phase_id: "P11"
+    name: "Maintenance Orchestrator v3 - Python Autonomous"
+    type: autonomous_python
+    script: "scripts/phase_11_maintenance_orchestrator_v3.py"
+    duration: "4 days"
+    priority: P2
+    status: planning
+    description: "Convert Maintenance Orchestrator to Python autonomous"
+    deliverables:
+      - "src/orchestrators/maintenance/maintenance_orchestrator_v3.py"
+      - "Python-based 12-phase maintenance"
+      - "Task integration"
+    dependencies: ["P18"]  # Updated: Must wait for governance finalization before orchestrator upgrades
+    
+  - phase_id: "P12"
+    name: "Plan Viewer v3 - Task Tracking UI"
+    type: autonomous_python
+    script: "scripts/phase_12_plan_viewer_v3.py"
+    duration: "3 days"
+    priority: P1
+    status: planning
+    description: "Create modern HTML plan viewer with task tracking"
+    deliverables:
+      - "templates/plan-viewer-v3.html"
+      - "Auto-refresh every 5 seconds"
+      - "Task list visualization"
+      - "Progress bars and metrics"
+      - "Real-time JSON updates"
+    dependencies: ["P18"]  # Updated: Must wait for governance finalization before orchestrator upgrades
+    
+  - phase_id: "P13"
+    name: "Master Orchestrator Request Transformer"
+    type: autonomous_python
+    script: "scripts/phase_13_request_transformer.py"
+    duration: "2 days"
+    priority: P0_CRITICAL
+    status: planning
+    description: "Enhance request transformation with context enrichment"
+    deliverables:
+      - "src/orchestrators/master/request_transformer.py"
+      - "Context injection system"
+      - "Domain-aware transformations"
+    dependencies: ["P18"]  # Updated: Must wait for governance finalization before orchestrator upgrades
+    
+  - phase_id: "P05"
+    name: "Scripts/Utilities Toolkit Consolidation"
+    type: autonomous_python
+    script: "scripts/phase_05_toolkit_consolidation.py"
+    duration: "2 days (16 hours)"
+    priority: P2_MEDIUM
+    status: planning
+    description: "Consolidate scripts/utilities/ into managed CORTEX Toolkit Orchestrator with audit logging, usage intelligence, and continuous cleanup automation"
+    
+    sub_phases:
+      - "P05.1: Audit Infrastructure Setup (2 hours)"
+      - "P05.2: Tool Discovery & Classification (3 hours)"
+      - "P05.3: Organization & Migration (2 hours)"
+      - "P05.4: Intelligence System (4 hours)"
+      - "P05.5: Cleanup Automation (2 hours)"
+      - "P05.6: Integration & Testing (3 hours)"
+    
+    deliverables:
+      # Audit Infrastructure (P05.1)
+      - "src/orchestrators/toolkit/scripts_utilities_manager.py (main orchestrator)"
+      - "cortex-toolkit/core/audit_logger.py extensions (scripts-utilities category support)"
+      - "tracking/toolkit-usage-statistics.json (usage patterns)"
+      - "tracking/toolkit-performance-metrics.json (execution profiling)"
+      
+      # Discovery & Classification (P05.2)
+      - "src/orchestrators/toolkit/tool_discovery.py (AST-based scanner)"
+      - "src/orchestrators/toolkit/category_classifier.py (ML-based classification)"
+      - "src/orchestrators/toolkit/manifest_generator.py (auto-manifest creation)"
+      - "cortex-toolkit/scripts-utilities/manifest.yaml (master manifest)"
+      - "Category-specific manifests (analysis/, database/, migration/, cleanup/, validation/, dashboards/)"
+      
+      # Organization & Migration (P05.3)
+      - "cortex-toolkit/scripts-utilities/ folder structure (6 categories)"
+      - "All 23 utilities migrated to categorized folders"
+      - "CLI wrappers auto-generated for all utilities"
+      - "Updated ToolkitRegistry with scripts-utilities category"
+      
+      # Intelligence System (P05.4)
+      - "src/orchestrators/toolkit/usage_intelligence.py (pattern analyzer)"
+      - "src/orchestrators/toolkit/recommendation_engine.py (tool suggestions)"
+      - "src/orchestrators/toolkit/overlap_detector.py (CapabilityMatrix integration)"
+      - "cortex-brain/documents/reports/toolkit-usage-intelligence-report.md"
+      - "cortex-brain/documents/reports/toolkit-overlap-analysis.md"
+      
+      # Cleanup Automation (P05.5)
+      - "src/orchestrators/toolkit/cleanup_orchestrator.py (continuous cleanup)"
+      - "cortex-brain/config/toolkit-archival-policy.yaml (90-day unused → archive)"
+      - "cortex-brain/documents/reports/toolkit-cleanup-recommendations.md"
+      - "cortex-brain/archives/utilities/ (archived stale tools)"
+      
+      # Integration & Testing (P05.6)
+      - "src/main.py registration (toolkit pattern: ^(toolkit|manage tools))"
+      - "tests/integration/test_toolkit_orchestrator.py (full workflow test)"
+      - "cortex-brain/documents/planning/active/cortex5-remediation/reports/P05-completion-report.md"
+      - "cortex-brain/documents/guides/toolkit-management-guide.md (user documentation)"
+    
+    acceptance_criteria:
+      functional:
+        - "✅ All 23 utilities discovered and categorized (100% coverage)"
+        - "✅ All utilities have auto-generated manifests with capabilities"
+        - "✅ All utilities have CLI wrappers for easy invocation"
+        - "✅ All utility executions logged with audit events (100% audit coverage)"
+        - "✅ Usage intelligence system provides accurate recommendations (>90% accuracy)"
+        - "✅ Cleanup automation archives unused tools (>90 days stale)"
+        - "✅ Zero stale tools in scripts-utilities folder post-cleanup"
+      
+      architectural:
+        - "✅ Integration with existing cortex-toolkit/ infrastructure (ToolkitManager, AuditLogger, ToolkitRegistry)"
+        - "✅ CapabilityMatrix detects overlapping functionality"
+        - "✅ Master Orchestrator routes toolkit commands properly"
+        - "✅ CLI commands work: list, invoke, analyze, cleanup"
+      
+      testing:
+        - "✅ Test coverage >85% for new components"
+        - "✅ Integration test covers end-to-end workflow"
+        - "✅ Performance overhead <500ms per utility execution"
+    
+    metrics:
+      tool_discovery_rate:
+        baseline: "0% (manual discovery only)"
+        target: "100% (all 23 utilities auto-discovered)"
+        measurement: "ToolDiscovery.scan() output"
+      
+      audit_coverage:
+        baseline: "0% (no audit logging for utilities)"
+        target: "100% (all executions logged)"
+        measurement: "tracking/toolkit-audit-log.jsonl analysis"
+      
+      cleanup_effectiveness:
+        baseline: "23 utilities (some stale)"
+        target: "Active utilities only (stale archived)"
+        measurement: "ls -la cortex-toolkit/scripts-utilities/ | wc -l"
+      
+      recommendation_accuracy:
+        baseline: "N/A (no intelligence system)"
+        target: ">90% (user validation surveys)"
+        measurement: "Manual testing with 10 task descriptions"
+    
+    dependencies: ["P00", "P00B", "P01", "P02"]
+    blocks: []
+    
+    related_documentation:
+      - "phases/P05-SCRIPTS-UTILITIES-TOOLKIT-CONSOLIDATION.md (detailed plan)"
+      - "cortex-toolkit/README.md (toolkit overview)"
+      - "cortex-brain/documents/orchestrators-quick-ref.md (orchestrator docs)"
+  
+  - phase_id: "P14"
+    name: "Epic Final Validation & Testing"
+    type: autonomous_python
+    script: "scripts/phase_14_final_validation.py"
+    duration: "2 days"
+    priority: P0_CRITICAL
+    status: planning
+    description: "End-to-end testing of Python autonomous architecture"
+    deliverables:
+      - "Integration tests"
+      - "Task management validation"
+      - "Plan viewer testing"
+      - "Epic completion report"
+    dependencies: ["P00", "P01", "P02", "P03", "P04", "P05", "P06", "P07", "P08", "P09", "P10", "P11", "P12", "P13"]
+
+# Task Registry Schema
+task_registry_schema:
+  task:
+    id: "string (UUID)"
+    title: "string"
+    description: "string"
+    phase_id: "string (references phases.phase_id)"
+    status: "enum [not_started, in_progress, completed, blocked]"
+    priority: "enum [P0_CRITICAL, P1, P2, P3]"
+    created: "ISO 8601 datetime"
+    updated: "ISO 8601 datetime"
+    completed: "ISO 8601 datetime (nullable)"
+    dependencies: "array of task IDs"
+    assignee: "string (default: CORTEX)"
+    estimated_hours: "number"
+    actual_hours: "number (nullable)"
+    progress_percentage: "number (0-100)"
+
+# Progress Tracker Schema
+progress_tracker_schema:
+  epic_id: "string"
+  epic_name: "string"
+  version: "string"
+  status: "enum [planning, in_progress, completed, blocked]"
+  overall_progress: "number (0-100)"
+  phases:
+    total: "number"
+    completed: "number"
+    in_progress: "number"
+    pending: "number"
+  tasks:
+    total: "number"
+    completed: "number"
+    in_progress: "number"
+    pending: "number"
+    blocked: "number"
+  current_phase: "string (phase_id)"
+  started: "ISO 8601 datetime (nullable)"
+  completed: "ISO 8601 datetime (nullable)"
+  last_updated: "ISO 8601 datetime"
+  
+# SKULL Rules Enforcement
+skull_rules:
+  - rule: "PLANNING_ISOLATION"
+    enforcement: "Planning creates structure only, never implements"
+  - rule: "HAND_OFF_PROTOCOL"
+    enforcement: "All orchestrators invoke via terminal (python3 -m src.main)"
+  - rule: "AUTONOMOUS_ONLY"
+    enforcement: "NO markdown workflows, Python scripts only"
+  - rule: "TDD_ENFORCEMENT"
+    enforcement: "All code changes require RED→GREEN→REFACTOR"
+  - rule: "HOLISTIC_DISCOVERY"
+    enforcement: "Search before create (prevent duplicates)"
+  - rule: "TRANSFORMATION_REQUIRED"
+    enforcement: "Raw requests enriched before routing"
+
+# Execution Strategy
+execution_strategy:
+  approach: "Sequential with dependency validation"
+  start_phase: "P01"
+  checkpoint_frequency: "per_phase"
+  rollback_strategy: "Git-based with timestamped backups"
+  validation_gates:
+    - "Phase completion requires all tasks completed"
+    - "Dependencies must be satisfied before phase start"
+    - "Tests must pass before marking phase complete"
+  
+# Metrics & KPIs
+metrics:
+  brittleness_target: "< 30/100"
+  test_coverage_target: "> 80%"
+  orchestrator_readiness: "12/12 production-ready"
+  task_completion_rate: "measured per phase"
+  avg_task_duration: "tracked for estimation improvement"
+
+# References
+references:
+  architecture: "cortex-brain/documents/cortex-architecture-quick-ref.md"
+  skull_rules: "cortex-brain/brain-protection-rules.yaml"
+  master_orchestrator: "cortex-brain/config/master-orchestrator.yaml"
+  response_templates: "cortex-brain/response-templates-v4.yaml"
+  
+# Copyright
+copyright: "© 2025-2026 Asif Hussain. All rights reserved."

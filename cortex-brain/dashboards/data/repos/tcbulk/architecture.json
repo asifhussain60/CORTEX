@@ -1,0 +1,12 @@
+{
+  "style": "n-tier",
+  "tiers": [],
+  "components": [],
+  "dependencies": [],
+  "patterns": [],
+  "summary": {
+    "architecture_score": 80,
+    "modularity_score": 75,
+    "coupling": "moderate"
+  }
+}

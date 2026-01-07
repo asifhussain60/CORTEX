@@ -1,0 +1,60 @@
+{
+  "company_specific": {
+    "Hqy": "App",
+    "COMPANY": "GenericCorp",
+    "Product.ReimbursementAccounts": "Product.Example"
+  },
+  "domain_specific": {
+    "ReimbursementAccountBalanceService": "ExampleBalanceService",
+    "ReimbursementAccount": "PaymentAccount",
+    "ReimbursementPlan": "PaymentPlan",
+    "ReimbursementAccounts": "PaymentAccounts",
+    "Reimbursement": "Payment",
+    "reimbursement": "payment",
+    "Carryover": "Rollover",
+    "CarryoverTransferTracking": "RolloverTransferTracking",
+    "CarryOver": "Rollover",
+    "carryover": "rollover",
+    "carry over": "rollover",
+    "Carry Over": "Rollover"
+  },
+  "plan_types": {
+    "FSA": "FlexAccount",
+    "HSA": "HealthSavings",
+    "HRA": "HealthReimbursement",
+    "Dependent Care": "DependentCare"
+  },
+  "business_terms": {
+    "Member": "Customer",
+    "member": "customer",
+    "Members": "Customers",
+    "Employer": "Organization",
+    "employer": "organization",
+    "Employers": "Organizations",
+    "EOFY": "EOY",
+    "End-of-fiscal-year": "End-of-year",
+    "end-of-fiscal-year": "end-of-year"
+  },
+  "compliance_terms": {
+    "IRS": "RegulatoryAgency",
+    "HIPAA": "PrivacyRegulation",
+    "PCI-DSS": "PaymentSecurity",
+    "ERISA": "BenefitsRegulation"
+  },
+  "workflow_terms": {
+    "Claims Processing": "Request Processing",
+    "Claim": "Request",
+    "claim": "request",
+    "Claims": "Requests",
+    "Forfeiture": "Expiration",
+    "forfeiture": "expiration",
+    "Enrollment": "Registration",
+    "enrollment": "registration"
+  },
+  "folder_names": {
+    "RA-Domain": "Payment-Domain"
+  },
+  "file_names": {
+    "EVERYTHING-ROADMAP.md": "COMPLETE-ROADMAP.md"
+  }
+}

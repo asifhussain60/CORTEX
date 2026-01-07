@@ -1,0 +1,19 @@
+{
+  "overallScore": 50.0,
+  "totalIssues": 0,
+  "issuesBySeverity": {
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0
+  },
+  "technicalDebt": {
+    "estimatedHours": 0.0,
+    "estimatedCost": 0.0
+  },
+  "issues": [],
+  "trends": {
+    "direction": "stable",
+    "changePercent": 0
+  }
+}

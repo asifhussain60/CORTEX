@@ -1,0 +1,420 @@
+{
+  "total_dialogues": 1092,
+  "speaker_distribution": {
+    "Unattributed": 606,
+    "Miss G": 198,
+    "Asif": 273,
+    "Copilot": 13,
+    "client": 2
+  },
+  "confidence_distribution": {
+    "high": 360,
+    "medium": 119,
+    "low": 7,
+    "none": 606
+  },
+  "attribution_rate": "44.5%",
+  "unattributed_count": 613,
+  "unattributed_dialogues": [
+    {
+      "text": "Prologue: The Basement Laboratory",
+      "chapter": "Prologue",
+      "line": 3,
+      "context_before": "--- layout: default title:",
+      "context_after": "---  <link rel=\"stylesheet\" href=\"../story-styles.",
+      "confidence": "none"
+    },
+    {
+      "text": "Asif Codenstein.",
+      "chapter": "Prologue",
+      "line": 25,
+      "context_before": "ion three years ago—had just discovered my secret.",
+      "context_after": "She used my full name. Never a good sign. \"What ha",
+      "confidence": "none"
+    },
+    {
+      "text": "What have you done to that basement?",
+      "chapter": "Prologue",
+      "line": 25,
+      "context_before": "nstein.\" She used my full name. Never a good sign.",
+      "context_after": "<img src=\"../illustrations/images/essentials/corte",
+      "confidence": "none"
+    },
+    {
+      "text": "Technically, I've *improved* it.",
+      "chapter": "Prologue",
+      "line": 29,
+      "context_before": "rgin: 0 0 1em 1em; max-width: 45%; height: auto;\">",
+      "context_after": "\"The Christmas decorations. Where are the Christma",
+      "confidence": "none"
+    },
+    {
+      "text": "The Christmas decorations. Where are the Christmas...",
+      "chapter": "Prologue",
+      "line": 31,
+      "context_before": "eight: auto;\">  \"Technically, I've *improved* it.\"",
+      "context_after": "\"Garage.\"  \"The storage boxes?\"  \"Load-bearing str",
+      "confidence": "none"
+    },
+    {
+      "text": "Garage.",
+      "chapter": "Prologue",
+      "line": 33,
+      "context_before": "decorations. Where are the Christmas decorations?\"",
+      "context_after": "\"The storage boxes?\"  \"Load-bearing structures now",
+      "confidence": "none"
+    },
+    {
+      "text": "The storage boxes?",
+      "chapter": "Prologue",
+      "line": 35,
+      "context_before": ". Where are the Christmas decorations?\"  \"Garage.\"",
+      "context_after": "\"Load-bearing structures now. Very important. Crit",
+      "confidence": "none"
+    },
+    {
+      "text": "Load-bearing structures now. Very important. Criti...",
+      "chapter": "Prologue",
+      "line": 37,
+      "context_before": "mas decorations?\"  \"Garage.\"  \"The storage boxes?\"",
+      "context_after": "\"Asif, those boxes are labeled 'Kitchen Stuff We M",
+      "confidence": "none"
+    },
+    {
+      "text": "Asif, those boxes are labeled 'Kitchen Stuff We Mi...",
+      "chapter": "Prologue",
+      "line": 39,
+      "context_before": "res now. Very important. Critical infrastructure.\"",
+      "context_after": "\"And someday, we'll need the networking switch the",
+      "confidence": "none"
+    },
+    {
+      "text": "And someday, we'll need the networking switch they...",
+      "chapter": "Prologue",
+      "line": 41,
+      "context_before": "re labeled 'Kitchen Stuff We Might Need Someday.'\"",
+      "context_after": "Miss G pinched the bridge of her nose—a gesture I'",
+      "confidence": "none"
+    },
+    {
+      "text": "Tell me this isn't another smart mirror situation.",
+      "chapter": "Prologue",
+      "line": 43,
+      "context_before": " 847 times since our imaginary relationship began.",
+      "context_after": "\"It's not another smart mirror situation.\"  \"Becau",
+      "confidence": "none"
+    },
+    {
+      "text": "It's not another smart mirror situation.",
+      "chapter": "Prologue",
+      "line": 45,
+      "context_before": "ell me this isn't another smart mirror situation.\"",
+      "context_after": "\"Because that mirror—\"  \"Became sentient enough to",
+      "confidence": "none"
+    },
+    {
+      "text": "Because that mirror—",
+      "chapter": "Prologue",
+      "line": 47,
+      "context_before": "tion.\"  \"It's not another smart mirror situation.\"",
+      "context_after": "\"Became sentient enough to mock my hair, yes, I re",
+      "confidence": "none"
+    },
+    {
+      "text": "Became sentient enough to mock my hair, yes, I rem...",
+      "chapter": "Prologue",
+      "line": 49,
+      "context_before": "r smart mirror situation.\"  \"Because that mirror—\"",
+      "context_after": "I spun my chair to face her properly. \"This is dif",
+      "confidence": "none"
+    },
+    {
+      "text": "Yesterday, I spent two hours with Copilot figuring...",
+      "chapter": "Prologue",
+      "line": 67,
+      "context_before": "ok a deep breath. This was the part that mattered.",
+      "context_after": "\"And?\"  <img src=\"../illustrations/images/essentia",
+      "confidence": "none"
+    },
+    {
+      "text": "And?",
+      "chapter": "Prologue",
+      "line": 69,
+      "context_before": "iss G. A genuine developer-AI bonding experience.\"",
+      "context_after": "<img src=\"../illustrations/images/essentials/corte",
+      "confidence": "none"
+    },
+    {
+      "text": "And this morning, I asked it to add a logout butto...",
+      "chapter": "Prologue",
+      "line": 73,
+      "context_before": "rgin: 0 1em 1em 0; max-width: 45%; height: auto;\">",
+      "context_after": "I let the implications hang in the air.  \"It didn'",
+      "confidence": "none"
+    },
+    {
+      "text": "It was like meeting a stranger who'd stolen my ex'...",
+      "chapter": "Prologue",
+      "line": 77,
+      "context_before": "uldn't use session tokens.\" I slumped in my chair.",
+      "context_after": "\"So it's like talking to you before coffee.\"  \"Wor",
+      "confidence": "none"
+    },
+    {
+      "text": "So it's like talking to you before coffee.",
+      "chapter": "Prologue",
+      "line": 79,
+      "context_before": "ike meeting a stranger who'd stolen my ex's code.\"",
+      "context_after": "\"Worse! It's like talking to me before coffee *eve",
+      "confidence": "none"
+    },
+    {
+      "text": "Worse! It's like talking to me before coffee *ever...",
+      "chapter": "Prologue",
+      "line": 81,
+      "context_before": "de.\"  \"So it's like talking to you before coffee.\"",
+      "context_after": "I ran my hand through my already-chaotic hair. \"I ",
+      "confidence": "none"
+    },
+    {
+      "text": "I spend more time re-explaining yesterday than bui...",
+      "chapter": "Prologue",
+      "line": 81,
+      "context_before": "*.\" I ran my hand through my already-chaotic hair.",
+      "context_after": "Miss G was quiet for a moment. Then: \"How many cof",
+      "confidence": "none"
+    },
+    {
+      "text": "How many coffee mugs are in that room right now?",
+      "chapter": "Prologue",
+      "line": 83,
+      "context_before": "g tomorrow.\"  Miss G was quiet for a moment. Then:",
+      "context_after": "I looked around. Counted. Stopped counting. \"Seven",
+      "confidence": "none"
+    },
+    {
+      "text": "I could while away the hours, conferring with the ...",
+      "chapter": "Prologue",
+      "line": 101,
+      "context_before": "ow the one.  And the Scarecrow started singing.  *",
+      "context_after": "*  I sat up so fast I nearly achieved orbit.  \"Mis",
+      "confidence": "none"
+    },
+    {
+      "text": "Miss G!",
+      "chapter": "Prologue",
+      "line": 105,
+      "context_before": "rain!\"*  I sat up so fast I nearly achieved orbit.",
+      "context_after": "I shouted into the empty basement. \"THE SCARECROW!",
+      "confidence": "none"
+    },
+    {
+      "text": "THE SCARECROW!",
+      "chapter": "Prologue",
+      "line": 105,
+      "context_before": "bit.  \"Miss G!\" I shouted into the empty basement.",
+      "context_after": "\"It's 2 AM,\" her voice materialized groggily in my",
+      "confidence": "none"
+    },
+    {
+      "text": "It's 2 AM,",
+      "chapter": "Prologue",
+      "line": 107,
+      "context_before": " shouted into the empty basement. \"THE SCARECROW!\"",
+      "context_after": "her voice materialized groggily in my consciousnes",
+      "confidence": "none"
+    },
+    {
+      "text": "The Scarecrow can wait.",
+      "chapter": "Prologue",
+      "line": 107,
+      "context_before": "r voice materialized groggily in my consciousness.",
+      "context_after": "\"No, listen! The Scarecrow is *brilliant*. He solv",
+      "confidence": "none"
+    },
+    {
+      "text": "No, listen! The Scarecrow is *brilliant*. He solve...",
+      "chapter": "Prologue",
+      "line": 109,
+      "context_before": "ily in my consciousness. \"The Scarecrow can wait.\"",
+      "context_after": "\"Asif...\"  \"Copilot is the Scarecrow!\" I was pacin",
+      "confidence": "none"
+    },
+    {
+      "text": "Asif...",
+      "chapter": "Prologue",
+      "line": 111,
+      "context_before": "nks he's useless because he doesn't have a brain!\"",
+      "context_after": "\"Copilot is the Scarecrow!\" I was pacing now, lapt",
+      "confidence": "none"
+    },
+    {
+      "text": "Copilot is the Scarecrow!",
+      "chapter": "Prologue",
+      "line": 113,
+      "context_before": "eless because he doesn't have a brain!\"  \"Asif...\"",
+      "context_after": "I was pacing now, laptop abandoned, arms gesticula",
+      "confidence": "none"
+    },
+    {
+      "text": "It's genuinely intelligent—writes code I couldn't ...",
+      "chapter": "Prologue",
+      "line": 113,
+      "context_before": "gesticulating wildly at concepts only I could see.",
+      "context_after": "\"You want to give your robot a brain... because of",
+      "confidence": "none"
+    },
+    {
+      "text": "You want to give your robot a brain... because of ...",
+      "chapter": "Prologue",
+      "line": 115,
+      "context_before": "Every conversation, it forgets it was ever smart!\"",
+      "context_after": "\"The Wizard gave the Scarecrow a diploma and sudde",
+      "confidence": "none"
+    },
+    {
+      "text": "The Wizard gave the Scarecrow a diploma and sudden...",
+      "chapter": "Prologue",
+      "line": 117,
+      "context_before": " your robot a brain... because of a 1939 musical.\"",
+      "context_after": "\"You've said that exact sentence about three previ",
+      "confidence": "none"
+    },
+    {
+      "text": "You've said that exact sentence about three previo...",
+      "chapter": "Prologue",
+      "line": 119,
+      "context_before": "ive architecture. Not a fake diploma—REAL MEMORY!\"",
+      "context_after": "\"Name one.\"  \"The automated home garden.\"  \"...oka",
+      "confidence": "none"
+    },
+    {
+      "text": "Name one.",
+      "chapter": "Prologue",
+      "line": 121,
+      "context_before": "hat exact sentence about three previous projects.\"",
+      "context_after": "\"The automated home garden.\"  \"...okay, but that f",
+      "confidence": "none"
+    },
+    {
+      "text": "The automated home garden.",
+      "chapter": "Prologue",
+      "line": 123,
+      "context_before": "tence about three previous projects.\"  \"Name one.\"",
+      "context_after": "\"...okay, but that flooding was partially the soil",
+      "confidence": "none"
+    },
+    {
+      "text": "...okay, but that flooding was partially the soil'...",
+      "chapter": "Prologue",
+      "line": 125,
+      "context_before": "jects.\"  \"Name one.\"  \"The automated home garden.\"",
+      "context_after": "## The Architecture of Madness  Miss G surveyed my",
+      "confidence": "none"
+    },
+    {
+      "text": "Explain the coffee mugs.",
+      "chapter": "Prologue",
+      "line": 131,
+      "context_before": " whiteboard kingdom through my memory of the room.",
+      "context_after": "\"They're visual metaphors for the tier system.\"  \"",
+      "confidence": "none"
+    },
+    {
+      "text": "They're visual metaphors for the tier system.",
+      "chapter": "Prologue",
+      "line": 133,
+      "context_before": "my memory of the room.  \"Explain the coffee mugs.\"",
+      "context_after": "\"Of course they are.\"  \"See? The fresh ones near m",
+      "confidence": "none"
+    },
+    {
+      "text": "Of course they are.",
+      "chapter": "Prologue",
+      "line": 135,
+      "context_before": "\"  \"They're visual metaphors for the tier system.\"",
+      "context_after": "\"See? The fresh ones near my keyboard—that's Tier ",
+      "confidence": "none"
+    },
+    {
+      "text": "See? The fresh ones near my keyboard—that's Tier 1...",
+      "chapter": "Prologue",
+      "line": 137,
+      "context_before": "phors for the tier system.\"  \"Of course they are.\"",
+      "context_after": "I pointed to the middle distance. \"The ones gettin",
+      "confidence": "none"
+    },
+    {
+      "text": "Tier 3. Long-term storage. Persistent knowledge. A...",
+      "chapter": "Prologue",
+      "line": 141,
+      "context_before": " the ones by the wall with the... is that *mold*?\"",
+      "context_after": "\"A health hazard. That represents a health hazard.",
+      "confidence": "none"
+    },
+    {
+      "text": "A health hazard. That represents a health hazard.",
+      "chapter": "Prologue",
+      "line": 143,
+      "context_before": "s evolved a small ecosystem, but that represents—\"",
+      "context_after": "\"I was going to say 'data decay,' but yours is mor",
+      "confidence": "none"
+    },
+    {
+      "text": "I was going to say 'data decay,' but yours is more...",
+      "chapter": "Prologue",
+      "line": 145,
+      "context_before": "A health hazard. That represents a health hazard.\"",
+      "context_after": "Miss G studied the whiteboard behind me. Tier 0. T",
+      "confidence": "none"
+    },
+    {
+      "text": "What's Tier 0?",
+      "chapter": "Prologue",
+      "line": 149,
+      "context_before": "nd boxes and neural networks made of sticky notes.",
+      "context_after": "\"Brain protection.\" I couldn't keep the pride out ",
+      "confidence": "none"
+    },
+    {
+      "text": "Brain protection.",
+      "chapter": "Prologue",
+      "line": 151,
+      "context_before": "l networks made of sticky notes.  \"What's Tier 0?\"",
+      "context_after": "I couldn't keep the pride out of my voice. \"Six la",
+      "confidence": "none"
+    },
+    {
+      "text": "Six layers of rules that prevent the system from d...",
+      "chapter": "Prologue",
+      "line": 151,
+      "context_before": "ction.\" I couldn't keep the pride out of my voice.",
+      "context_after": "\"You're calling your safety system... SKULL.\"  \"Se",
+      "confidence": "none"
+    },
+    {
+      "text": "You're calling your safety system... SKULL.",
+      "chapter": "Prologue",
+      "line": 153,
+      "context_before": "ation logic. Sanity checks. I'm calling it SKULL.\"",
+      "context_after": "\"Security, Knowledge, Understanding, Logic, and...",
+      "confidence": "none"
+    },
+    {
+      "text": "Security, Knowledge, Understanding, Logic, and... ...",
+      "chapter": "Prologue",
+      "line": 155,
+      "context_before": "L.\"  \"You're calling your safety system... SKULL.\"",
+      "context_after": "\"That spells SKULL?\"  \"...I'm still workshopping t",
+      "confidence": "none"
+    },
+    {
+      "text": "Exactly!",
+      "chapter": "Prologue",
+      "line": 173,
+      "context_before": "\"  \"Correct.\"  \"—that gives it persistent memory—\"",
+      "context_after": "\"—specialized agents—\"  \"Multiple! For different t",
+      "confidence": "none"
+    }
+  ]
+}

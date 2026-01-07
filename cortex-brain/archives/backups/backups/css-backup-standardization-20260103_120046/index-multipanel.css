@@ -1,0 +1,805 @@
+/**
+ * CORTEX Home Page - Multi-Panel System Styles
+ * Extracted from inline styles for Glassmorphism v4.0.1 compliance
+ * 
+ * Author: Asif Hussain
+ * Date: January 2, 2026
+ * Copyright © 2026 Asif Hussain. All rights reserved.
+ */
+
+/* ============================================
+   CSS VARIABLES - Extended for Multi-Panel
+   ============================================ */
+:root {
+    /* Extended Color Palette */
+    --color-purple: rgb(123, 97, 255);
+    --color-purple-alpha-15: rgba(123, 97, 255, 0.15);
+    --color-purple-alpha-40: rgba(123, 97, 255, 0.4);
+    --color-purple-orchid: rgb(186, 85, 211);
+    --color-purple-orchid-alpha-15: rgba(186, 85, 211, 0.15);
+    --color-purple-orchid-alpha-95: rgba(186, 85, 211, 0.95);
+    
+    --color-cyan: rgb(0, 212, 255);
+    --color-cyan-alpha-10: rgba(0, 212, 255, 0.10);
+    --color-cyan-alpha-15: rgba(0, 212, 255, 0.15);
+    --color-cyan-alpha-20: rgba(0, 212, 255, 0.2);
+    --color-cyan-alpha-30: rgba(0, 212, 255, 0.3);
+    --color-cyan-alpha-35: rgba(0, 212, 255, 0.35);
+    --color-cyan-alpha-40: rgba(0, 212, 255, 0.4);
+    --color-cyan-alpha-50: rgba(0, 212, 255, 0.5);
+    --color-cyan-alpha-95: rgba(0, 212, 255, 0.95);
+    
+    --color-emerald: rgb(16, 185, 129);
+    --color-emerald-alpha-15: rgba(16, 185, 129, 0.15);
+    --color-emerald-alpha-35: rgba(16, 185, 129, 0.35);
+    --color-emerald-light: rgb(52, 211, 153);
+    --color-emerald-light-alpha-15: rgba(52, 211, 153, 0.15);
+    --color-emerald-light-alpha-95: rgba(52, 211, 153, 0.95);
+    
+    --color-indigo: rgb(79, 70, 229);
+    --color-indigo-alpha-15: rgba(79, 70, 229, 0.15);
+    --color-indigo-alpha-35: rgba(79, 70, 229, 0.35);
+    --color-indigo-light: rgb(99, 102, 241);
+    --color-indigo-light-alpha-15: rgba(99, 102, 241, 0.15);
+    --color-indigo-lighter: rgb(129, 140, 248);
+    --color-indigo-lighter-alpha-95: rgba(129, 140, 248, 0.95);
+    
+    --color-pink: rgb(236, 72, 153);
+    --color-pink-alpha-15: rgba(236, 72, 153, 0.15);
+    --color-pink-alpha-35: rgba(236, 72, 153, 0.35);
+    --color-pink-light: rgb(244, 114, 182);
+    --color-pink-light-alpha-15: rgba(244, 114, 182, 0.15);
+    --color-pink-light-alpha-95: rgba(244, 114, 182, 0.95);
+    
+    --color-amber: rgb(245, 158, 11);
+    --color-amber-alpha-15: rgba(245, 158, 11, 0.15);
+    --color-amber-alpha-35: rgba(245, 158, 11, 0.35);
+    --color-amber-light: rgb(251, 191, 36);
+    --color-amber-light-alpha-15: rgba(251, 191, 36, 0.15);
+    --color-amber-light-alpha-95: rgba(251, 191, 36, 0.95);
+    
+    --color-teal: rgb(20, 184, 166);
+    --color-teal-alpha-15: rgba(20, 184, 166, 0.15);
+    --color-teal-alpha-35: rgba(20, 184, 166, 0.35);
+    --color-teal-alpha-95: rgba(20, 184, 166, 0.95);
+    
+    --color-green: rgb(0, 255, 136);
+    --color-green-alpha-08: rgba(0, 255, 136, 0.08);
+    
+    /* Glass Backgrounds */
+    --glass-dark-primary: rgba(10, 14, 39, 0.8);
+    --glass-dark-secondary: rgba(26, 31, 58, 0.8);
+    --glass-dark-tertiary: rgba(10, 14, 39, 0.7);
+    --glass-dark-quaternary: rgba(10, 14, 39, 0.6);
+    --glass-dark-quinary: rgba(10, 14, 39, 0.4);
+    
+    /* White/Transparent variants */
+    --white-alpha-02: rgba(255, 255, 255, 0.02);
+    --white-alpha-05: rgba(255, 255, 255, 0.05);
+    --white-alpha-08: rgba(255, 255, 255, 0.08);
+    --white-alpha-10: rgba(255, 255, 255, 0.1);
+    --white-alpha-20: rgba(255, 255, 255, 0.2);
+    --white-alpha-60: rgba(255, 255, 255, 0.6);
+    --white-alpha-85: rgba(255, 255, 255, 0.85);
+    --white-alpha-95: rgba(255, 255, 255, 0.95);
+    
+    /* Shadows */
+    --shadow-panel: 0 4px 24px rgba(0, 0, 0, 0.2);
+    --shadow-panel-hover: 0 8px 32px var(--color-cyan-alpha-20);
+    --shadow-tag-hover: 0 6px 20px var(--color-cyan-alpha-40);
+    --shadow-glow-cyan: 0 0 30px var(--color-cyan-alpha-40);
+    
+    /* Spacing (extended) */
+    --space-3xl: 3rem;
+    --space-2xl: 2.5rem;
+    
+    /* Transitions */
+    --transition-panel: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   MULTI-PANEL SYSTEM (Pattern 15)
+   ============================================ */
+
+/* Key Features Section */
+.key-features-section {
+    max-width: 1400px;
+    margin: 0 auto var(--space-3xl) auto;
+    padding: 0 var(--spacing-md);
+}
+
+/* Main Panel Wrapper */
+.main-panel-wrapper {
+    background: linear-gradient(135deg, var(--color-purple-alpha-15), var(--color-cyan-alpha-10));
+    border: 1px solid var(--color-purple-alpha-40);
+    border-radius: var(--radius-lg);
+    padding: var(--space-2xl);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-panel);
+}
+
+.panel-header-centered {
+    text-align: center;
+    margin-bottom: var(--space-2xl);
+}
+
+.panel-title-main {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+}
+
+.panel-title-main > span:first-child {
+    font-size: 2.5rem;
+}
+
+.panel-subtitle-main {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    margin-top: 0;
+}
+
+/* Category Sub-Panels Grid (Intelligent Layout) */
+.category-panels-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xl);
+    margin-bottom: 0;
+}
+
+@media (min-width: 768px) {
+    .category-panels-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .category-panels-grid.grid-3x2 {
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+    }
+    
+    .category-panels-grid.grid-2x3 {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: auto;
+    }
+}
+
+@media (min-width: 1024px) {
+    .category-panels-grid {
+        gap: var(--space-2xl);
+    }
+}
+
+@media (min-width: 1440px) {
+    .category-panels-grid {
+        gap: var(--space-3xl);
+    }
+}
+
+/* Category Sub-Panels */
+.category-subpanel {
+    background: linear-gradient(135deg, var(--glass-dark-primary), var(--glass-dark-secondary));
+    border: 1px solid var(--white-alpha-10);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl) var(--spacing-lg);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: var(--transition-panel);
+    min-height: 380px;
+}
+
+.category-subpanel.single-tag {
+    min-height: 280px;
+    padding: var(--spacing-lg) 1.25rem;
+}
+
+.category-subpanel.single-tag .category-icon-wrapper {
+    width: clamp(45px, 12cqi, 65px);
+    height: clamp(45px, 12cqi, 65px);
+    font-size: clamp(1.4rem, 4cqi + 0.4rem, 2.2rem);
+    margin-bottom: clamp(0.5rem, 1.5cqi, 0.875rem);
+}
+
+.category-subpanel.single-tag .category-title {
+    font-size: clamp(0.95rem, 3cqi + 0.3rem, 1.3rem);
+    margin-bottom: clamp(0.4rem, 1cqi, 0.625rem);
+}
+
+.category-subpanel.single-tag .category-description {
+    font-size: clamp(0.75rem, 2cqi + 0.2rem, 0.95rem);
+    margin-bottom: clamp(0.5rem, 1.5cqi, 0.875rem);
+}
+
+.category-subpanel.single-tag .category-tags {
+    gap: 0;
+}
+
+.category-subpanel.single-tag .category-tag {
+    padding: clamp(0.5rem, 1.5cqi, 0.875rem) clamp(0.5rem, 2cqi, 1rem);
+    font-size: clamp(0.75rem, 2cqi + 0.2rem, 1rem);
+}
+
+.category-subpanel:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-cyan-alpha-40);
+    box-shadow: var(--shadow-panel-hover);
+}
+
+.category-icon-wrapper {
+    font-size: clamp(1.5rem, 5cqi + 0.5rem, 2.5rem);
+    background: linear-gradient(135deg, var(--color-cyan-alpha-20), var(--color-purple-alpha-15));
+    width: clamp(50px, 15cqi, 80px);
+    height: clamp(50px, 15cqi, 80px);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-slow) ease;
+    flex-shrink: 0;
+    margin-bottom: clamp(0.75rem, 2cqi, 1.25rem);
+}
+
+.category-subpanel:hover .category-icon-wrapper {
+    transform: scale(1.1);
+    background: linear-gradient(135deg, var(--color-cyan-alpha-30), var(--color-purple-alpha-15));
+    box-shadow: var(--shadow-glow-cyan);
+}
+
+.category-icon {
+    font-size: clamp(1.5rem, 5cqi + 0.5rem, 2.5rem);
+    filter: drop-shadow(0 0 15px var(--color-cyan-alpha-50));
+}
+
+.category-title {
+    font-size: clamp(1rem, 3.5cqi + 0.3rem, 1.5rem);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: clamp(0.5rem, 1.5cqi, 0.875rem);
+}
+
+.category-description {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    font-size: clamp(0.8rem, 2.5cqi + 0.2rem, 1rem);
+    flex-grow: 1;
+    margin-bottom: clamp(0.75rem, 2cqi, 1.25rem);
+}
+
+/* Category Tags (Tetris/Masonry Grid) */
+.category-tags {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: clamp(50px, 12cqi, 70px);
+    grid-auto-flow: dense; /* Tetris-style packing */
+    gap: clamp(0.375rem, 1cqi, 0.75rem); /* Reduced by 50% for tighter spacing */
+    width: 100%;
+    align-content: start;
+    min-height: clamp(150px, 36cqi, 210px); /* Ensure minimum height for sparse panels */
+}
+
+.category-tag {
+    background: var(--glass-bg, rgba(26, 31, 58, 0.7));
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+    border-radius: var(--radius-lg, 16px);
+    box-shadow: var(--shadow, 0 8px 32px rgba(0, 0, 0, 0.37));
+    color: var(--text-primary, rgba(255, 255, 255, 0.95));
+    padding: clamp(0.5rem, 2cqi, 1rem) clamp(0.5rem, 1.5cqi, 0.875rem);
+    font-size: clamp(0.75rem, 2.5cqi + 0.2rem, 1.1rem);
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    line-height: 1.2;
+}
+
+/* Icon-only mode for smaller screens */
+@media (max-width: 1200px) {
+    .category-tag span {
+        font-size: 0;
+    }
+    
+    .category-tag::after {
+        content: attr(data-icon);
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        display: block;
+    }
+    
+    .category-tag:hover span {
+        font-size: clamp(0.75rem, 0.9vw + 0.3rem, 0.85rem);
+        margin-top: 0.25rem;
+    }
+    
+    .category-tag:hover::after {
+        font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+    }
+}
+
+@media (min-width: 1201px) {
+    .category-tag::after {
+        display: none;
+    }
+}
+
+.category-tag::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.05) 50%,
+        transparent 70%
+    );
+    animation: glassReflection 8s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes glassReflection {
+    0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
+    50% { transform: translate(-30%, -30%) rotate(180deg); }
+}
+
+.category-tag:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg, 0 20px 48px rgba(0, 0, 0, 0.5));
+    border-color: rgba(0, 212, 255, 0.3);
+}
+
+/* Color Variations for Security Panel - Enhanced Glass Effect */
+#security-panel .category-subpanel:nth-of-type(1) .category-tag:nth-child(2) {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(192, 132, 252, 0.05));
+    border-color: rgba(168, 85, 247, 0.3);
+}
+
+#security-panel .category-subpanel:nth-of-type(1) .category-tag:nth-child(2):hover {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(192, 132, 252, 0.1));
+    border-color: rgba(168, 85, 247, 0.5);
+}
+
+#security-panel .category-subpanel:nth-of-type(1) .category-tag:nth-child(3) {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(52, 211, 153, 0.05));
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+#security-panel .category-subpanel:nth-of-type(1) .category-tag:nth-child(3):hover {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(52, 211, 153, 0.1));
+    border-color: rgba(16, 185, 129, 0.5);
+}
+
+#security-panel .category-subpanel:nth-of-type(2) .category-tag:nth-child(1) {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(129, 140, 248, 0.05));
+    border-color: rgba(99, 102, 241, 0.3);
+}
+
+#security-panel .category-subpanel:nth-of-type(2) .category-tag:nth-child(1):hover {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(129, 140, 248, 0.1));
+    border-color: rgba(99, 102, 241, 0.5);
+}
+
+#security-panel .category-subpanel:nth-of-type(2) .category-tag:nth-child(2) {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(244, 114, 182, 0.05));
+    border-color: rgba(236, 72, 153, 0.3);
+}
+
+#security-panel .category-subpanel:nth-of-type(2) .category-tag:nth-child(2):hover {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(244, 114, 182, 0.1));
+    border-color: rgba(236, 72, 153, 0.5);
+}
+
+#security-panel .category-subpanel:nth-of-type(2) .category-tag:nth-child(3) {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.05));
+    border-color: rgba(245, 158, 11, 0.3);
+}
+
+#security-panel .category-subpanel:nth-of-type(2) .category-tag:nth-child(3):hover {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(251, 191, 36, 0.1));
+    border-color: rgba(245, 158, 11, 0.5);
+}
+
+#security-panel .category-subpanel:nth-of-type(3) .category-tag:nth-child(1) {
+    background: linear-gradient(135deg, rgba(20, 184, 166, 0.1), rgba(45, 212, 191, 0.05));
+    border-color: rgba(20, 184, 166, 0.3);
+}
+
+#security-panel .category-subpanel:nth-of-type(3) .category-tag:nth-child(1):hover {
+    background: linear-gradient(135deg, rgba(20, 184, 166, 0.15), rgba(45, 212, 191, 0.1));
+    border-color: rgba(20, 184, 166, 0.5);
+}
+
+#security-panel .category-subpanel:nth-of-type(3) .category-tag:nth-child(2) {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(52, 211, 153, 0.05));
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+#security-panel .category-subpanel:nth-of-type(3) .category-tag:nth-child(2):hover {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(52, 211, 153, 0.1));
+    border-color: rgba(16, 185, 129, 0.5);
+}
+
+#security-panel .category-subpanel:nth-of-type(3) .category-tag:nth-child(3) {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(192, 132, 252, 0.05));
+    border-color: rgba(168, 85, 247, 0.3);
+}
+
+#security-panel .category-subpanel:nth-of-type(3) .category-tag:nth-child(3):hover {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(192, 132, 252, 0.1));
+    border-color: rgba(168, 85, 247, 0.5);
+}
+
+#security-panel .category-subpanel:nth-of-type(4) .category-tag:nth-child(1) {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.05));
+    border-color: rgba(245, 158, 11, 0.3);
+}
+
+#security-panel .category-subpanel:nth-of-type(4) .category-tag:nth-child(1):hover {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(251, 191, 36, 0.1));
+    border-color: rgba(245, 158, 11, 0.5);
+}
+
+#security-panel .category-subpanel:nth-of-type(4) .category-tag:nth-child(2) {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(244, 114, 182, 0.05));
+    border-color: rgba(236, 72, 153, 0.3);
+}
+
+#security-panel .category-subpanel:nth-of-type(4) .category-tag:nth-child(2):hover {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(244, 114, 182, 0.1));
+    border-color: rgba(236, 72, 153, 0.5);
+}
+
+#security-panel .category-subpanel:nth-of-type(4) .category-tag:nth-child(3) {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(129, 140, 248, 0.05));
+    border-color: rgba(99, 102, 241, 0.3);
+}
+
+#security-panel .category-subpanel:nth-of-type(4) .category-tag:nth-child(3):hover {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(129, 140, 248, 0.1));
+    border-color: rgba(99, 102, 241, 0.5);
+}
+
+/* Orchestrators & STS Panel Colors - Enhanced Glass Effect */
+#orchestrators-panel .category-tag:nth-child(2),
+#sts-panel .category-tag:nth-child(2) {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(192, 132, 252, 0.05));
+    border-color: rgba(168, 85, 247, 0.3);
+}
+
+#orchestrators-panel .category-tag:nth-child(2):hover,
+#sts-panel .category-tag:nth-child(2):hover {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(192, 132, 252, 0.1));
+    border-color: rgba(168, 85, 247, 0.5);
+}
+
+#orchestrators-panel .category-tag:nth-child(3),
+#sts-panel .category-tag:nth-child(3) {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(52, 211, 153, 0.05));
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+#orchestrators-panel .category-tag:nth-child(3):hover,
+#sts-panel .category-tag:nth-child(3):hover {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(52, 211, 153, 0.1));
+    border-color: rgba(16, 185, 129, 0.5);
+}
+
+#orchestrators-panel .category-tag:nth-child(4),
+#sts-panel .category-tag:nth-child(4) {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(129, 140, 248, 0.05));
+    border-color: rgba(99, 102, 241, 0.3);
+}
+
+#orchestrators-panel .category-tag:nth-child(4):hover,
+#sts-panel .category-tag:nth-child(4):hover {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(129, 140, 248, 0.1));
+    border-color: rgba(99, 102, 241, 0.5);
+}
+
+/* Remove old hover state override */
+
+/* Tetris/Masonry Layouts for Security Panel */
+
+/* Protection Panel (3 cards) - Vertical emphasis */
+#security-panel .category-subpanel:nth-of-type(1) .category-tag:nth-child(1) {
+    grid-column: span 1;
+    grid-row: span 3;
+    font-size: 1.2rem;
+}
+
+#security-panel .category-subpanel:nth-of-type(1) .category-tag:nth-child(2) {
+    grid-column: span 2;
+    grid-row: span 2;
+    font-size: 1.1rem;
+}
+
+#security-panel .category-subpanel:nth-of-type(1) .category-tag:nth-child(3) {
+    grid-column: span 2;
+    grid-row: span 1;
+    font-size: 1rem;
+}
+
+/* Assessment Panel (4 cards) - Balanced grid */
+#security-panel .category-subpanel:nth-of-type(2) .category-tag:nth-child(1) {
+    grid-column: span 2;
+    grid-row: span 2;
+    font-size: 1.1rem;
+}
+
+#security-panel .category-subpanel:nth-of-type(2) .category-tag:nth-child(2) {
+    grid-column: span 1;
+    grid-row: span 2;
+    font-size: 1rem;
+}
+
+#security-panel .category-subpanel:nth-of-type(2) .category-tag:nth-child(3) {
+    grid-column: span 2;
+    grid-row: span 1;
+    font-size: 1rem;
+}
+
+#security-panel .category-subpanel:nth-of-type(2) .category-tag:nth-child(4) {
+    grid-column: span 1;
+    grid-row: span 1;
+    font-size: 1rem;
+}
+
+/* Compliance Panel (3 cards) - Horizontal emphasis */
+#security-panel .category-subpanel:nth-of-type(3) .category-tag:nth-child(1) {
+    grid-column: span 3;
+    grid-row: span 1;
+    font-size: 1.1rem;
+}
+
+#security-panel .category-subpanel:nth-of-type(3) .category-tag:nth-child(2) {
+    grid-column: span 2;
+    grid-row: span 2;
+    font-size: 1.1rem;
+}
+
+#security-panel .category-subpanel:nth-of-type(3) .category-tag:nth-child(3) {
+    grid-column: span 1;
+    grid-row: span 2;
+    font-size: 1rem;
+}
+
+/* Response Panel (3 cards) - Vertical emphasis fills space */
+#security-panel .category-subpanel:nth-of-type(4) .category-tag:nth-child(1) {
+    grid-column: span 2;
+    grid-row: span 3;
+    font-size: 1.2rem;
+}
+
+#security-panel .category-subpanel:nth-of-type(4) .category-tag:nth-child(2) {
+    grid-column: span 1;
+    grid-row: span 2;
+    font-size: 1.1rem;
+}
+
+#security-panel .category-subpanel:nth-of-type(4) .category-tag:nth-child(3) {
+    grid-column: span 1;
+    grid-row: span 1;
+    font-size: 1rem;
+}
+
+/* Tetris-style dynamic card spanning for Orchestrators Panel */
+
+/* Planning Panel (4 cards) - Grid layout */
+#orchestrators-panel .category-subpanel:nth-of-type(1) .category-tag:nth-child(1) {
+    grid-column: span 2;
+    grid-row: span 2;
+    font-size: 1.1rem;
+}
+
+#orchestrators-panel .category-subpanel:nth-of-type(1) .category-tag:nth-child(2) {
+    grid-column: span 1;
+    grid-row: span 1;
+    font-size: 1rem;
+}
+
+#orchestrators-panel .category-subpanel:nth-of-type(1) .category-tag:nth-child(3) {
+    grid-column: span 1;
+    grid-row: span 1;
+    font-size: 1rem;
+}
+
+#orchestrators-panel .category-subpanel:nth-of-type(1) .category-tag:nth-child(4) {
+    grid-column: span 2;
+    grid-row: span 1;
+    font-size: 1rem;
+}
+
+/* Execution Panel (3 cards) - Large TDD emphasis */
+#orchestrators-panel .category-subpanel:nth-of-type(2) .category-tag:nth-child(1) {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+#orchestrators-panel .category-subpanel:nth-of-type(2) .category-tag:nth-child(2) {
+    grid-column: span 1;
+    grid-row: span 2;
+}
+
+#orchestrators-panel .category-subpanel:nth-of-type(2) .category-tag:nth-child(3) {
+    grid-column: span 3;
+    grid-row: span 1;
+}
+
+/* System Panel (3 cards) - Balanced vertical */
+#orchestrators-panel .category-subpanel:nth-of-type(3) .category-tag:nth-child(1) {
+    grid-column: span 1;
+    grid-row: span 2;
+    font-size: 1.1rem;
+}
+
+#orchestrators-panel .category-subpanel:nth-of-type(3) .category-tag:nth-child(2) {
+    grid-column: span 2;
+    grid-row: span 2;
+    font-size: 1.1rem;
+}
+
+#orchestrators-panel .category-subpanel:nth-of-type(3) .category-tag:nth-child(3) {
+    grid-column: span 3;
+    grid-row: span 1;
+    font-size: 1rem;
+}
+
+/* Analysis Panel (3 cards) - T-shape */
+#orchestrators-panel .category-subpanel:nth-of-type(4) .category-tag:nth-child(1) {
+    grid-column: span 3;
+    grid-row: span 1;
+    font-size: 1.1rem;
+}
+
+#orchestrators-panel .category-subpanel:nth-of-type(4) .category-tag:nth-child(2) {
+    grid-column: span 2;
+    grid-row: span 2;
+    font-size: 1.1rem;
+}
+
+#orchestrators-panel .category-subpanel:nth-of-type(4) .category-tag:nth-child(3) {
+    grid-column: span 1;
+    grid-row: span 2;
+    font-size: 1rem;
+}
+
+/* Debug Panel (2 cards) - Large split */
+#orchestrators-panel .category-subpanel:nth-of-type(5) .category-tag:nth-child(1) {
+    grid-column: span 2;
+    grid-row: span 3;
+    font-size: 1.2rem;
+}
+
+#orchestrators-panel .category-subpanel:nth-of-type(5) .category-tag:nth-child(2) {
+    grid-column: span 1;
+    grid-row: span 3;
+    font-size: 1.2rem;
+}
+
+/* Responsive: Simplify masonry on mobile */
+@media (max-width: 768px) {
+    .category-tags {
+        grid-template-columns: repeat(2, 1fr);
+        min-height: auto;
+    }
+    
+    .category-tag:nth-child(1),
+    .category-tag:nth-child(2),
+    .category-tag:nth-child(3),
+    .category-tag:nth-child(4) {
+        grid-column: span 1 !important;
+        grid-row: span 1 !important;
+    }
+    
+    .main-panel-wrapper {
+        padding: var(--spacing-lg);
+    }
+    
+    .category-subpanel {
+        padding: 1.25rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .key-features-section {
+        padding: 0 var(--spacing-sm);
+    }
+}
+
+/* ============================================
+   CAPABILITIES GRID (Orchestrators Page)
+   ============================================ */
+
+.capabilities-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+    margin-top: var(--space-xl);
+}
+
+@media (min-width: 768px) {
+    .capabilities-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .capabilities-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.capability-item {
+    text-align: center;
+    padding: var(--space-lg);
+}
+
+.capability-icon {
+    font-size: 2.5rem;
+    color: var(--accent-primary);
+    margin-bottom: var(--space-md);
+    display: block;
+}
+
+.capability-item h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-sm);
+}
+
+.capability-item p {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.stats-row {
+    display: flex;
+    justify-content: space-around;
+    gap: var(--space-lg);
+    margin-top: var(--space-xl);
+    flex-wrap: wrap;
+}
+
+.stat-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--space-lg);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    min-width: 120px;
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-top: var(--space-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}

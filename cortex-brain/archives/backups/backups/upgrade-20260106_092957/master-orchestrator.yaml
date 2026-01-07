@@ -1,0 +1,486 @@
+# Master Orchestrator Configuration v5.0
+# Centralized routing layer for deterministic orchestrator coordination
+
+schema_version: "5.0"
+
+# Pattern-Based Routing Rules (Primary)
+# 90%+ of requests handled via exact/regex matching
+routing_rules:
+  # Epic Executor - NEW (Universal YAML-Based Execution)
+  # Executes multi-phase epics with dependency validation
+  - pattern: "^(execute epic|run epic|proceed with epic|epic execution|continue epic).*$"
+    orchestrator: "epic_executor"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 8
+    metadata:
+      description: "Epic executor with sequential phase execution"
+      autonomous: true
+      version: "5.0"
+      features:
+        - "Dependency validation (DAG)"
+        - "Sequential phase execution"
+        - "Python script-based phases"
+        - "4-level audit logging"
+        - "Real-time progress tracking"
+        - "Git checkpoints"
+        - "Snowball effect measurement"
+  
+  # CORTEX Upgrade System - Enhanced v2.0
+  # Pulls latest enhancements, validates plans, regenerates docs
+  - pattern: "^(upgrade cortex|cortex upgrade|pull enhancements|sync enhancements).*$"
+    orchestrator: "upgrade_orchestrator"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 15
+    metadata:
+      description: "Upgrade system with plan validation and Level 1 uniqueness"
+      autonomous: true
+      version: "2.0"
+      phases:
+        - "Pre-Flight Validation"
+        - "Remote Analysis"
+        - "Backup & Rollback Preparation"
+        - "Git Pull & Merge"
+        - "Dependency Synchronization"
+        - "Orchestrator Wiring Analysis"
+        - "Prompt Rebuilding"
+        - "Plan Structure Validation & Upgrade"
+        - "Documentation Site Regeneration"
+        - "Master/Child Orchestrator Setup"
+        - "Audit Logger Integration"
+        - "Integration Testing"
+        - "Feature Summary & User Guidance"
+  
+  # Planning System (Alias for planning_v5)
+  # Both planning_system and planning_v5 exist in registry
+  - pattern: "^(planning system).*$"
+    orchestrator: "planning_system"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 9
+    metadata:
+      description: "Planning system (explicit name routing)"
+      autonomous: true
+  
+  # Planning System
+  - pattern: "^(plan|create a plan|make a plan)\\s*.*$"
+    orchestrator: "planning_v5"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 10
+    metadata:
+      description: "Planning system for structured planning"
+      autonomous: true
+  
+  # TDD Orchestrator
+  - pattern: "^(tdd|start tdd|run tests|test driven).*$"
+    orchestrator: "tdd_orchestrator"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 20
+    metadata:
+      description: "Test-Driven Development orchestrator"
+      autonomous: false
+  
+  # Documentation Standardization Orchestrator v2.0
+  # State-aware HTML glassmorphism standardization with audit logging
+  - pattern: "^(standardize|apply glassmorphism|glassmorphism standardization|docs standardization).*$"
+    orchestrator: "documentation_orchestrator"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 25
+    metadata:
+      description: "Documentation standardization with state-aware validation"
+      autonomous: true
+      version: "2.0"
+      features:
+        - "Pre-flight validation (git checkpoints, inline style detection)"
+        - "Approved pattern library integration"
+        - "CSS class registry enforcement"
+        - "State persistence (prevents duplicate applications)"
+        - "Atomic operations with rollback"
+        - "Audit logging integration"
+        - "Python-only generation (no Copilot HTML edits)"
+      phases:
+        - "Pre-Flight Validation"
+        - "State Query & Pattern Matching"
+        - "Inline Style Removal (Atomic)"
+        - "CSS Class Application (Atomic)"
+        - "State Persistence & Approval"
+        - "Validation & Reporting"
+  
+  # ADO Operations v2 - Wizard Mode (Interactive)
+  - pattern: "^(ado wizard|ado interactive).*$"
+    orchestrator: "ado_orchestrator_v2"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 29
+    metadata:
+      description: "ADO v2 wizard mode (multi-turn conversational)"
+      autonomous: true
+      mode: "wizard"
+      version: "2.0"
+  
+  # ADO Operations v2 - Auto Mode (Quick Generation)
+  - pattern: "^(ado|ado story|ado feature|azure devops).*$"
+    orchestrator: "ado_orchestrator_v2"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 30
+    metadata:
+      description: "ADO v2 auto mode (quick generation)"
+      autonomous: true
+      mode: "auto"
+      version: "2.0"
+  
+  # Sanitization Orchestrator - AUTONOMOUS
+  # Updated: January 5, 2026 - Fixed naming mismatch (was sanitization_v2)
+  - pattern: "^(sanitize|remove sensitive data|clean sensitive info|anonymize|redact|sanitization).*$"
+    orchestrator: "sanitization_orchestrator"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 40
+    metadata:
+      description: "Sanitization orchestrator - autonomous sensitive data removal"
+      autonomous: true
+      version: "1.0"
+  
+  # Maintenance - DISABLED: orchestrator not yet registered
+  # - pattern: "^(maintenance|health check|system health).*$"
+  #   orchestrator: "maintenance_orchestrator"
+  #   confidence: 1.0
+  #   match_type: "regex"
+  #   priority: 50
+  #   metadata:
+  #     description: "System maintenance and health checks"
+  #     autonomous: false
+  
+  # Cleanup v2 (Selective Modes)
+  - pattern: "^(cleanup|cleanup cache|cleanup logs|cleanup artifacts|cleanup full|cleanup git).*$"
+    orchestrator: "cleanup_orchestrator_v2"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 55
+    mode_extraction:
+      pattern: "^cleanup\\s+(cache|logs|artifacts|full|git).*$"
+      default: "full"
+    metadata:
+      description: "Cleanup v2 with selective modes (cache/logs/artifacts/full/git)"
+      autonomous: true
+      version: "2.0"
+      modes:
+        - name: "cache"
+          duration_seconds: 10
+          expected_space_freed: "1GB"
+          priority: "HIGH"
+        - name: "logs"
+          duration_seconds: 10
+          expected_space_freed: "250MB"
+          priority: "MEDIUM"
+        - name: "artifacts"
+          duration_seconds: 60
+          expected_space_freed: "2.5GB"
+          priority: "MEDIUM"
+        - name: "full"
+          duration_seconds: 100
+          expected_space_freed: "7.5GB"
+          priority: "HIGH"
+        - name: "git"
+          duration_seconds: 180
+          expected_space_freed: "100MB"
+          priority: "LOW"
+  
+  # Investigation v2 (Root Cause Analysis & Architectural Review)
+  - pattern: "^(investigate|find root cause|review|why is|debug architecture|fix brittleness|analyze).*$"
+    orchestrator: "investigation_v2"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 60
+    metadata:
+      description: "Investigation v2 autonomous root cause analysis"
+      autonomous: true
+      version: "2.0"
+      features:
+        - "Multi-source artifact discovery"
+        - "Acceptance criteria validation"
+        - "Brittleness cross-reference"
+        - "Root cause analysis"
+        - "Gap identification"
+        - "Remediation planning"
+        - "Comprehensive reporting"
+  
+  # Vacuum v2 (Deep Filesystem Cleanup)
+  - pattern: "^(vacuum|deep clean|organize files).*$"
+    orchestrator: "vacuum"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 56
+    path_extraction:
+      pattern: "^(vacuum|deep clean|organize files)\\s+([^\\s]+).*$"
+      group: 2
+      default: "."
+    metadata:
+      description: "Vacuum v2 autonomous filesystem cleanup"
+      autonomous: true
+      version: "2.0"
+      features:
+        - "10 cleanup categories"
+        - "Duplicate detection"
+        - "Orphan test detection"
+        - "Transactional operations"
+        - "Checkpoint rollback"
+        - "CORTEX brain protection"
+  
+  # Panel Styling - DISABLED (orchestrator not yet registered)
+  # Natural language glassmorphism styling commands
+  # TODO: Add panel_styler to mcp-server.yaml registry before enabling
+  # - pattern: "^(style|make .+ look like|use .+ panel|apply .+ to).*$"
+  #   orchestrator: "panel_styler"
+  #   confidence: 1.0
+  #   match_type: "regex"
+  #   priority: 57
+  #   metadata:
+  #     description: "Natural language glassmorphism panel styling"
+  #     autonomous: false
+  #     version: "1.0"
+  #     features:
+  #       - "11 named panel styles"
+  #       - "'style X like Y' parsing"
+  #       - "HTML/CSS preview generation"
+  #       - "BEM class name resolution"
+  
+  # HTML View Orchestrator (NEW - Phase 14.5)
+  # Intelligent HTML/CSS view development with glassmorphism
+  - pattern: "^(build html view|fix visual issues|standardize .+ to glassmorphism|add diagram to|make .+ responsive|html view).*$"
+    orchestrator: "html_view_orchestrator"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 58
+    metadata:
+      description: "HTML view development with glassmorphism design system"
+      autonomous: false
+      version: "1.0"
+      features:
+        - "Vision API integration"
+        - "Tier 2 learning system (html-view-requirements.yaml)"
+        - "WCAG AA compliance validation"
+        - "Mermaid diagram generation"
+        - "Preview-first workflow"
+        - "Component pattern library"
+  
+  # Refinement Orchestrator (C50-01 - ACTIVE)
+  # 7-phase guided code improvement with TDD enforcement
+  - pattern: "^(refine|improve|optimize|code quality|refactor).*$"
+    orchestrator: "refinement_orchestrator"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 60
+    metadata:
+      description: "7-phase code refinement with TDD enforcement"
+      autonomous: false
+      version: "5.0"
+      phases:
+        - "Code Analysis"
+        - "Issue Identification"
+        - "Impact Assessment"
+        - "Refactoring Plan"
+        - "Implementation"
+        - "Validation"
+        - "Documentation"
+      features:
+        - "Complexity analysis (cyclomatic, cognitive)"
+        - "Anti-pattern detection"
+        - "Test coverage analysis"
+        - "TDD enforcement (RED→GREEN→REFACTOR)"
+        - "Rollback checkpoints"
+        - "Before/after metrics"
+  
+  # Debug Orchestrator - DISABLED (orchestrator not yet registered)
+  # 7-phase systematic debugging with root cause analysis
+  # TODO: Add debug_orchestrator to mcp-server.yaml registry before enabling
+  # - pattern: "^(debug|fix bug|troubleshoot|investigate bug|root cause).*$"
+  #   orchestrator: "debug_orchestrator"
+  #   confidence: 1.0
+  #   match_type: "regex"
+  #   priority: 61
+  #   metadata:
+  #     description: "7-phase systematic debugging workflow"
+  #     autonomous: false
+  #     version: "5.0"
+  #     phases:
+  #       - "Bug Report Parsing"
+  #       - "Error Analysis"
+  #       - "Root Cause Detection"
+  #       - "Fix Generation"
+  #       - "Debug Marker Injection"
+  #       - "Validation"
+  #       - "Pattern Learning"
+  #     features:
+  #       - "Stack trace analysis"
+  #       - "Hypothesis generation"
+  #       - "Evidence collection"
+  #       - "Multi-strategy fix proposals"
+  #       - "Debug marker injection/cleanup"
+  #       - "Git checkpoint management"
+  #       - "DoR/DoD validation"
+
+# LLM Fallback Configuration (Secondary)
+# Handles ambiguous inputs that don't match patterns
+fallback:
+  enabled: true
+  classifier: "llm_intent_classifier"
+  confidence_threshold: 0.7
+  log_unmatched: true
+  
+  # Fallback behavior
+  on_low_confidence:
+    action: "ask_user"  # or "use_default", "fail"
+    default_orchestrator: null
+  
+  # LLM configuration
+  llm_config:
+    model: "claude-sonnet-4.5"
+    temperature: 0.1
+    max_tokens: 500
+
+# Orchestrator Lifecycle Hooks (CORTEX v5 Universal Pattern)
+# Phase -2: Setup Verification | Phase 0-N: Work | Phase N+1: Teardown + REFACTOR
+lifecycle_hooks:
+  # Phase -2: Setup Verification (Pre-execution - ALL orchestrators)
+  pre_execution:
+    - name: "setup_verification"
+      enabled: true
+      priority: 1
+      middleware: "src.orchestrators.middleware.setup_verification.SetupVerifier"
+      description: "Verify dependencies, detect false positives, check cache state"
+      checks:
+        - "validate_dependencies_implementation"  # Not just file checks
+        - "detect_false_positives"
+        - "check_vscode_cache_state"
+        - "validate_governance_compliance"
+    
+    - name: "validate_dependencies"
+      enabled: true
+      priority: 10
+    
+    - name: "check_state_conflicts"
+      enabled: true
+      priority: 20
+  
+  # Phase N+1: Teardown + REFACTOR + Commit (Post-execution - ALL orchestrators)
+  post_execution:
+    - name: "save_artifacts"
+      enabled: true
+      priority: 10
+    
+    - name: "update_metrics"
+      enabled: true
+      priority: 20
+    
+    - name: "teardown_refactor"
+      enabled: true
+      priority: 30
+      middleware: "src.orchestrators.middleware.teardown_refactor.TeardownRefactor"
+      description: "Whole-file cleanup, remove orphaned code, git commit"
+      phases:
+        - name: "REFACTOR"
+          cleanup_rules:
+            - "Remove unused imports"
+            - "Remove orphaned code"
+            - "Remove duplicate functions"
+            - "Consolidate redundant logic"
+            - "Update docstrings"
+            - "Format code (black/prettier)"
+        
+        - name: "Git Commit"
+          commit_strategy: "atomic"  # One commit per orchestrator execution
+          commit_pattern: "/cortex-git-commit"
+          commit_message_template: |
+            {orchestrator_name}: {phase_summary}
+            
+            {change_summary}
+            
+            Files modified: {file_count}
+            Tests added: {test_count}
+            Coverage: {coverage_change}
+            
+            Co-authored-by: CORTEX v5 <cortex@asifhussain.dev>
+  
+  # Error hooks (run on execution failure)
+  on_error:
+    - name: "log_failure"
+      enabled: true
+      priority: 10
+    
+    - name: "notify_user"
+      enabled: true
+      priority: 20
+    
+    - name: "create_rollback_point"
+      enabled: false
+      priority: 30
+
+# State Coordination Settings
+state_coordination:
+  enabled: true
+  
+  # Cross-orchestrator state sharing
+  state_sharing:
+    enabled: true
+    max_state_age_hours: 24
+    auto_cleanup: true
+  
+  # Execution tracking
+  execution_tracking:
+    enabled: true
+    log_to_database: true
+    log_level: "INFO"
+
+# Monitoring and Metrics
+monitoring:
+  enabled: true
+  
+  # Metrics collection
+  metrics:
+    collect_routing_stats: true
+    collect_execution_stats: true
+    collect_performance_stats: true
+  
+  # Performance thresholds
+  thresholds:
+    routing_latency_ms: 100
+    execution_timeout_seconds: 3600
+    max_active_orchestrators: 10
+
+# Orchestrator Registry Integration
+registry:
+  config_path: "cortex-brain/config/mcp-server.yaml"
+  auto_discovery: true
+  cache_orchestrators: true
+  
+  # Dependency resolution
+  dependencies:
+    enabled: true
+    validate_on_start: true
+    allow_cycles: false
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  
+  # Log routing decisions
+  log_routing: true
+  log_execution: true
+  log_state_changes: true
+  
+  # Output
+  console: true
+  file: "logs/master-orchestrator.log"
+
+# Development Settings
+development:
+  hot_reload: true
+  debug_mode: false
+  validate_patterns_on_start: true

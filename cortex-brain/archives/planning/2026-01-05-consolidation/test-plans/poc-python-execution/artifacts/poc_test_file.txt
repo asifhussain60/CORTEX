@@ -1,0 +1,4 @@
+POC Test File
+Created: 2026-01-05T05:55:07.094316
+Purpose: Prove Python execution works
+Architecture: Copilot → Terminal → Python → Results

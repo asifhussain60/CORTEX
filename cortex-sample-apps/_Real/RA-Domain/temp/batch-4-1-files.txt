@@ -1,0 +1,9 @@
+C:\PROJECTS\Product.Example\SDKs\App.PaymentAccounts.Contracts\DTOs\ActualCoverageDto.cs
+C:\PROJECTS\Product.Example\SDKs\App.PaymentAccounts.Contracts\DTOs\BalanceChangeInfoDto.cs
+C:\PROJECTS\Product.Example\SDKs\App.PaymentAccounts.Contracts\DTOs\BalanceDetailsDto.cs
+C:\PROJECTS\Product.Example\SDKs\App.PaymentAccounts.Contracts\DTOs\CarryOverJobResponse.cs
+C:\PROJECTS\Product.Example\SDKs\App.PaymentAccounts.Contracts\DTOs\CarryoverTransferTrackingDto.cs
+C:\PROJECTS\Product.Example\SDKs\App.PaymentAccounts.Contracts\DTOs\CaryOverResponse.cs
+C:\PROJECTS\Product.Example\SDKs\App.PaymentAccounts.Contracts\DTOs\DependentDto.cs
+C:\PROJECTS\Product.Example\SDKs\App.PaymentAccounts.Contracts\DTOs\DependentSpanDto.cs
+C:\PROJECTS\Product.Example\SDKs\App.PaymentAccounts.Contracts\DTOs\EmployerDetailsDto.cs

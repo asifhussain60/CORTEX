@@ -1,0 +1,74 @@
+metadata:
+  generated_at: '2026-01-05'
+  total_level1_pages: 12
+  description: Level 1 Hub Pages - Main category entry points
+pages:
+- file: architecture/index.html
+  title: Architecture | CORTEX 4.0
+  description: CORTEX Architecture - 4-Tier Brain System with Tier 0 Governance, Agent
+    Intelligence, and Orchestrator Ecosystem
+  category: architecture
+  outbound_links: 4
+- file: features/index.html
+  title: Features | CORTEX 4.0
+  description: CORTEX Features - Intelligent planning, TDD orchestration, ADO integration,
+    and autonomous development workflows
+  category: features
+  outbound_links: 12
+- file: getting-started/index.html
+  title: Getting Started | CORTEX 4.0
+  description: Getting Started with CORTEX - 5-Minute Setup Guide for Installation
+    and First Steps
+  category: getting-started
+  outbound_links: 4
+- file: knowledge/index.html
+  title: Best Practices | CORTEX 4.0
+  description: CORTEX Best Practices - 35 Guidelines for Implementation across Frontend,
+    Backend, Data, Cloud, and Software Craft
+  category: knowledge
+  outbound_links: 55
+- file: learning-paths/index.html
+  title: Learning Paths | CORTEX 4.0
+  description: CORTEX Learning Paths - Interactive programming journeys from Beginner
+    to Expert with quizzes, code playgrounds, and progressive challenges
+  category: learning-paths
+  outbound_links: 13
+- file: lens/index.html
+  title: CORTEX Lens | CORTEX 4.0
+  description: CORTEX Lens - AST Analysis, Reverse Engineering, and Intelligence Extraction
+    Dashboard
+  category: lens
+  outbound_links: 4
+- file: orchestrators/index.html
+  title: Orchestrators Hub - CORTEX
+  description: CORTEX Orchestrators - 10 autonomous workflow coordinators across Planning,
+    Execution, System Ops, Analysis, and Debug categories
+  category: orchestrators
+  outbound_links: 11
+- file: security/index.html
+  title: Index - Security - CORTEX
+  description: ''
+  category: security
+  outbound_links: 1
+- file: story/index.html
+  title: Index - The Awakening - CORTEX
+  description: ''
+  category: story
+  outbound_links: 1
+- file: sts/index.html
+  title: Sharpen The Saw Hub - CORTEX
+  description: CORTEX Sharpen The Saw - 6 continuous improvement practices
+  category: sts
+  outbound_links: 7
+- file: token-optimization/index.html
+  title: Token Optimization | CORTEX 4.0
+  description: CORTEX Token Optimization - 97% Input Reduction, $8.6K Annual Savings
+    through 4-Tier Brain Architecture
+  category: token-optimization
+  outbound_links: 4
+- file: toolkit-manager/index.html
+  title: Toolkit Manager | CORTEX 4.0
+  description: CORTEX Toolkit Manager - Master Orchestrator Routing Layer with Pattern-Based
+    + LLM Hybrid Intelligence
+  category: toolkit-manager
+  outbound_links: 4

@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX 4-Tier Brain Architecture - Preview with Enhanced Examples">
+    <title>Four-Tier Brain Architecture Preview | CORTEX</title>
+    <link rel="icon" type="image/png" href="assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="assets/css/variables.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/intentional-classes.css">
+    <link rel="stylesheet" href="assets/css/purpose-driven-themes.css">
+    <link rel="stylesheet" href="assets/css/four-tier-brain-custom.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                darkMode: true,
+                background: '#0a0e27',
+                primaryColor: '#7c7cff',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#fff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#00d4ff',
+                tertiaryColor: '#ffd700'
+            }
+        });
+    </script>
+    <style>
+        /* PREVIEW STYLES - Enhanced Examples Tab */
+        
+        /* Typography - WCAG AA Compliant */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            font-size: clamp(17px, 2.2vw, 20px);
+            line-height: 1.7;
+            font-weight: 400;
+            letter-spacing: -0.011em;
+        }
+        
+        h1 {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            line-height: 1.1;
+            font-weight: 700;
+            letter-spacing: -0.022em;
+        }
+        
+        h2 {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+            line-height: 1.2;
+            font-weight: 600;
+            letter-spacing: -0.019em;
+        }
+        
+        h3 {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            font-size: clamp(1.35rem, 2.8vw, 2rem);
+            line-height: 1.3;
+            font-weight: 600;
+            letter-spacing: -0.014em;
+        }
+        
+        h4 {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+            line-height: 1.4;
+            font-weight: 600;
+            letter-spacing: -0.011em;
+        }
+        
+        /* Tab Navigation */
+        .tab-nav {
+            display: flex;
+            gap: 0.5rem;
+            margin: 2rem 0;
+            padding: 0.5rem;
+            background: rgba(26, 31, 58, 0.5);
+            backdrop-filter: blur(20px);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow-x: auto;
+        }
+        
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            font-size: clamp(14px, 1.5vw, 16px);
+            min-width: 44px;
+            min-height: 44px;
+        }
+        
+        .tab-button:hover {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: rgba(0, 212, 255, 0.3);
+            color: #00d4ff;
+        }
+        
+        .tab-button.active {
+            background: rgba(0, 212, 255, 0.2);
+            border-color: #00d4ff;
+            color: #00d4ff;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* ENHANCED EXAMPLE TILES - NEW DESIGN */
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .example-tile {
+            background: rgba(26, 31, 58, 0.5);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .example-tile:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 48px rgba(0, 212, 255, 0.25);
+            border-color: rgba(0, 212, 255, 0.4);
+        }
+        
+        .example-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(0, 212, 255, 0.2);
+        }
+        
+        .example-icon {
+            font-size: 2.5rem;
+            color: #00d4ff;
+            filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.5));
+        }
+        
+        .example-header h4 {
+            margin: 0;
+            color: #00d4ff;
+            font-size: clamp(1.15rem, 2.5vw, 1.5rem);
+        }
+        
+        .example-user-input {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border-left: 3px solid #7c7cff;
+            font-family: 'Courier New', monospace;
+            font-size: clamp(14px, 1.6vw, 16px);
+            color: #00d4ff;
+        }
+        
+        /* Tier Flow Visualization */
+        .tier-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            position: relative;
+        }
+        
+        .tier-flow::before {
+            content: '';
+            position: absolute;
+            left: 1.5rem;
+            top: 2rem;
+            bottom: 2rem;
+            width: 2px;
+            background: linear-gradient(to bottom, 
+                #ff6b6b 0%, 
+                #ff6b6b 25%, 
+                #ffd700 25%, 
+                #ffd700 50%, 
+                #00d4ff 50%, 
+                #00d4ff 75%, 
+                #00ff88 75%, 
+                #00ff88 100%
+            );
+            opacity: 0.3;
+        }
+        
+        .tier-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 10px;
+            border-left: 4px solid var(--tier-color, #00d4ff);
+            font-size: clamp(14px, 1.6vw, 16px);
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tier-step-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 45px;
+            height: 28px;
+            padding: 0 0.75rem;
+            background: var(--tier-color, #00d4ff);
+            color: var(--tier-text-color, #fff);
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: clamp(12px, 1.4vw, 14px);
+            letter-spacing: 0.05em;
+            flex-shrink: 0;
+        }
+        
+        /* Tier Color Variants */
+        .tier-step[data-tier="0"] {
+            --tier-color: #ff6b6b;
+            --tier-text-color: #fff;
+        }
+        
+        .tier-step[data-tier="1"] {
+            --tier-color: #ffd700;
+            --tier-text-color: #000;
+        }
+        
+        .tier-step[data-tier="2"] {
+            --tier-color: #00d4ff;
+            --tier-text-color: #fff;
+        }
+        
+        .tier-step[data-tier="3"] {
+            --tier-color: #00ff88;
+            --tier-text-color: #000;
+        }
+        
+        /* Output Box */
+        .example-output {
+            margin-top: 0.5rem;
+            padding: 1.25rem;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(124, 124, 255, 0.15));
+            border-radius: 12px;
+            border: 2px solid rgba(0, 212, 255, 0.4);
+            font-size: clamp(14px, 1.6vw, 16px);
+            line-height: 1.6;
+        }
+        
+        .example-output strong {
+            color: #00d4ff;
+            font-weight: 600;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .example-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .example-tile {
+                padding: 1.5rem;
+            }
+            
+            .tier-flow::before {
+                left: 1rem;
+            }
+        }
+        
+        /* Section Spacing */
+        section, .glass-card-display {
+            margin-bottom: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Glass Header Navigation -->
+    <header class="glass-header">
+        <div class="header-content">
+            <a href="index.html" class="logo-link" title="CORTEX Home">
+                <img src="assets/images/CORTEX-logo.png" 
+                     alt="CORTEX - AI Development Orchestrator" 
+                     class="cortex-logo">
+            </a>
+            
+            <nav>
+                <a href="architecture/index.html" class="nav-link">
+                    <i class="fas fa-sitemap"></i>
+                    <span>Architecture Hub</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container level2-reference" id="main-content">
+        <!-- Page Title Card -->
+        <div class="glass-card-display animation-t1">
+            <div class="page-title-section">
+                <h1 class="page-title">
+                    <i class="fas fa-layer-group pulse-glow-glass--fast"></i>
+                    CORTEX 4-Tier Brain Architecture
+                </h1>
+                <p class="page-subtitle">
+                    Hierarchical memory system powering intelligent, context-aware development orchestration
+                </p>
+            </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <nav class="tab-nav" role="tablist" aria-label="Content sections">
+            <button class="tab-button active" role="tab" aria-selected="true" aria-controls="tab-overview" id="btn-overview" data-tab="overview">
+                <i class="fas fa-info-circle"></i> Overview
+            </button>
+            <button class="tab-button" role="tab" aria-selected="false" aria-controls="tab-tiers" id="btn-tiers" data-tab="tiers">
+                <i class="fas fa-layer-group"></i> Tier Details
+            </button>
+            <button class="tab-button" role="tab" aria-selected="false" aria-controls="tab-examples" id="btn-examples" data-tab="examples">
+                <i class="fas fa-lightbulb"></i> Examples
+            </button>
+            <button class="tab-button" role="tab" aria-selected="false" aria-controls="tab-related" id="btn-related" data-tab="related">
+                <i class="fas fa-link"></i> Related
+            </button>
+        </nav>
+
+        <!-- Tab Content: Overview -->
+        <div class="tab-content active" role="tabpanel" id="tab-overview" aria-labelledby="btn-overview">
+            <div class="glass-card-display animation-t1">
+                <h2 class="section-title"><i class="fas fa-brain pulse-glow-glass--fast"></i> Overview</h2>
+                <p>Content from production file...</p>
+            </div>
+        </div>
+
+        <!-- Tab Content: Tier Details -->
+        <div class="tab-content" role="tabpanel" id="tab-tiers" aria-labelledby="btn-tiers">
+            <div class="glass-card-display animation-t1">
+                <h2 class="section-title"><i class="fas fa-layer-group pulse-glow-glass--fast"></i> Tier Details</h2>
+                <p>Content from production file...</p>
+            </div>
+        </div>
+
+        <!-- Tab Content: Examples (ENHANCED) -->
+        <div class="tab-content" role="tabpanel" id="tab-examples" aria-labelledby="btn-examples">
+            <div class="glass-card-display animation-t1">
+                <h2 class="section-title">
+                    <i class="fas fa-lightbulb pulse-glow-glass--fast"></i>
+                    Real-World Examples
+                </h2>
+                
+                <div class="example-grid">
+                    <!-- Example 1: Creating a Plan -->
+                    <div class="example-tile">
+                        <div class="example-header">
+                            <i class="fas fa-clipboard-list example-icon"></i>
+                            <h4>Creating a Plan</h4>
+                        </div>
+                        
+                        <div class="example-user-input">
+                            <strong>User:</strong> <code>/CORTEX plan user authentication</code>
+                        </div>
+                        
+                        <div class="tier-flow">
+                            <div class="tier-step" data-tier="0">
+                                <span class="tier-step-badge">T0</span>
+                                <span><strong>Governance:</strong> Enforce PLANNING_ISOLATION rule (plan only, don't implement)</span>
+                            </div>
+                            
+                            <div class="tier-step" data-tier="1">
+                                <span class="tier-step-badge">T1</span>
+                                <span><strong>Working Memory:</strong> Create new plan entry, set status = "active", phase = 0</span>
+                            </div>
+                            
+                            <div class="tier-step" data-tier="2">
+                                <span class="tier-step-badge">T2</span>
+                                <span><strong>Knowledge Graph:</strong> Query for authentication patterns, best practices, security considerations</span>
+                            </div>
+                            
+                            <div class="tier-step" data-tier="3">
+                                <span class="tier-step-badge">T3</span>
+                                <span><strong>Dev Context:</strong> Scan project for existing auth code, identify integration points</span>
+                            </div>
+                        </div>
+                        
+                        <div class="example-output">
+                            <strong>Output:</strong> 17-phase plan document with knowledge-enriched steps, Phase -1 security patterns, and DoR/DoD checklists
+                        </div>
+                    </div>
+                    
+                    <!-- Example 2: TDD Session -->
+                    <div class="example-tile">
+                        <div class="example-header">
+                            <i class="fas fa-vial example-icon"></i>
+                            <h4>TDD Session</h4>
+                        </div>
+                        
+                        <div class="example-user-input">
+                            <strong>User:</strong> <code>tdd login function</code>
+                        </div>
+                        
+                        <div class="tier-flow">
+                            <div class="tier-step" data-tier="0">
+                                <span class="tier-step-badge">T0</span>
+                                <span><strong>Governance:</strong> Enforce TDD_ENFORCEMENT (RED→GREEN→REFACTOR mandatory)</span>
+                            </div>
+                            
+                            <div class="tier-step" data-tier="1">
+                                <span class="tier-step-badge">T1</span>
+                                <span><strong>Working Memory:</strong> Check for active TDD session, resume if exists</span>
+                            </div>
+                            
+                            <div class="tier-step" data-tier="2">
+                                <span class="tier-step-badge">T2</span>
+                                <span><strong>Knowledge Graph:</strong> Load testing patterns for login functions from Phase -1 library</span>
+                            </div>
+                            
+                            <div class="tier-step" data-tier="3">
+                                <span class="tier-step-badge">T3</span>
+                                <span><strong>Dev Context:</strong> Identify test framework (pytest/jest), locate test files, check coverage</span>
+                            </div>
+                        </div>
+                        
+                        <div class="example-output">
+                            <strong>Output:</strong> Failing test first (RED), then minimal implementation (GREEN), then refactor (REFACTOR)
+                        </div>
+                    </div>
+                    
+                    <!-- Example 3: Resuming Work -->
+                    <div class="example-tile">
+                        <div class="example-header">
+                            <i class="fas fa-sync example-icon"></i>
+                            <h4>Resuming Work</h4>
+                        </div>
+                        
+                        <div class="example-user-input">
+                            <strong>User:</strong> <code>continue</code>
+                        </div>
+                        
+                        <div class="tier-flow">
+                            <div class="tier-step" data-tier="1">
+                                <span class="tier-step-badge">T1</span>
+                                <span><strong>Working Memory:</strong> Query last 3 sessions from conversation-context.jsonl, find most recent orchestrator</span>
+                            </div>
+                            
+                            <div class="tier-step" data-tier="1">
+                                <span class="tier-step-badge">T1</span>
+                                <span><strong>PlanningStateDB:</strong> Load plan state (current phase, completed tasks, progress percentage)</span>
+                            </div>
+                            
+                            <div class="tier-step" data-tier="2">
+                                <span class="tier-step-badge">T2</span>
+                                <span><strong>Knowledge Graph:</strong> Recall context from previous session, relevant patterns</span>
+                            </div>
+                            
+                            <div class="tier-step" data-tier="3">
+                                <span class="tier-step-badge">T3</span>
+                                <span><strong>Dev Context:</strong> Re-scan workspace for changes since last session (git diff, file modifications)</span>
+                            </div>
+                        </div>
+                        
+                        <div class="example-output">
+                            <strong>Output:</strong> "Resuming Phase 5: Implementation (3/8 tasks complete, 37% progress)"
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Content: Related -->
+        <div class="tab-content" role="tabpanel" id="tab-related" aria-labelledby="btn-related">
+            <div class="glass-card-display animation-t1">
+                <h2 class="section-title"><i class="fas fa-link pulse-glow-glass--fast"></i> Related Topics</h2>
+                <p>Content from production file...</p>
+            </div>
+        </div>
+    </main>
+
+    
+<!-- Modern Glass Footer -->
+
+<!-- Modern Glass Footer -->
+
+<!-- Modern Glass Footer -->
+<footer class="glass-footer-modern">
+    <div class="footer-modern-content">
+        <img src="../assets/images/CORTEX-logo.png" alt="CORTEX" class="cortex-logo-footer" width="100" height="100" />
+        <p class="footer-copyright-modern">
+            Copyright © 2025-2026 <span class="copyright-author">Asif Hussain</span>. All rights reserved.
+        </p>
+    </div>
+</footer>
+
+    <!-- Tab Switching JavaScript -->
+    <script>
+        function initTabs() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabId = button.getAttribute('data-tab');
+                    
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('active');
+                        btn.setAttribute('aria-selected', 'false');
+                    });
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    button.classList.add('active');
+                    button.setAttribute('aria-selected', 'true');
+                    document.getElementById(`tab-${tabId}`).classList.add('active');
+                    
+                    window.location.hash = tabId;
+                    sessionStorage.setItem('activeTab', tabId);
+                });
+            });
+            
+            const hash = window.location.hash.replace('#', '');
+            const storedTab = sessionStorage.getItem('activeTab');
+            const initialTab = hash || storedTab || 'overview';
+            
+            const initialButton = document.querySelector(`[data-tab="${initialTab}"]`);
+            if (initialButton) {
+                initialButton.click();
+            }
+        }
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initTabs);
+        } else {
+            initTabs();
+        }
+        
+        document.addEventListener('keydown', (e) => {
+            const activeTab = document.querySelector('.tab-button.active');
+            if (!activeTab) return;
+            
+            const tabs = Array.from(document.querySelectorAll('.tab-button'));
+            const currentIndex = tabs.indexOf(activeTab);
+            
+            let nextIndex;
+            if (e.key === 'ArrowRight') {
+                nextIndex = (currentIndex + 1) % tabs.length;
+                tabs[nextIndex].click();
+                tabs[nextIndex].focus();
+            } else if (e.key === 'ArrowLeft') {
+                nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+                tabs[nextIndex].click();
+                tabs[nextIndex].focus();
+            }
+        });
+    </script>
+</body>
+</html>

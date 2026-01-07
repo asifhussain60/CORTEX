@@ -1,0 +1,20 @@
+# CORTEX Prompt File Preservation Marker
+# 
+# This marker file indicates that copilot-instructions.md and CORTEX.prompt.md
+# contain manually crafted enhancements that should NOT be auto-regenerated.
+#
+# Created: December 8, 2025
+# Reason: ADO orchestrator-level integration with Planning System 2.0 parity
+#
+# Manual Enhancements Protected:
+# - ADO Operations workflow documentation
+# - Planning System 2.0 manifest references
+# - DoR/DoD compliance instructions
+# - Manifest file paths and inheritance structure
+# - Quick command reference table with ADO commands
+#
+# To regenerate anyway (will lose manual enhancements):
+#   python scripts/regenerate_cortex_prompts.py --force
+#
+# To remove this protection:
+#   Delete this file (.github/.prompt-preserve)

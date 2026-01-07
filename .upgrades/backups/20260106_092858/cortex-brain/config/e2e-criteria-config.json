@@ -1,0 +1,182 @@
+{
+  "criteria": [
+    {
+      "id": "complexity",
+      "name": "Code Complexity",
+      "weight": 30,
+      "description": "Cyclomatic complexity, branching paths, control flow",
+      "source": "static_analysis.complexity_scores",
+      "thresholds": {
+        "critical": 20,
+        "high": 15,
+        "medium": 10,
+        "low": 5
+      }
+    },
+    {
+      "id": "risk_score",
+      "name": "Risk Score",
+      "weight": 25,
+      "description": "Calculated as complexity × change_frequency",
+      "source": "calculated",
+      "calculation": "complexity * change_frequency",
+      "thresholds": {
+        "critical": 400,
+        "high": 200,
+        "medium": 100,
+        "low": 50
+      }
+    },
+    {
+      "id": "business_value",
+      "name": "Business Value",
+      "weight": 20,
+      "description": "Payment, order, checkout, invoice, transaction, billing keywords",
+      "source": "semantic_analysis",
+      "keywords": [
+        "payment",
+        "order",
+        "checkout",
+        "invoice",
+        "transaction",
+        "billing",
+        "purchase",
+        "cart",
+        "credit",
+        "money",
+        "financial"
+      ]
+    },
+    {
+      "id": "user_impact",
+      "name": "User Impact",
+      "weight": 15,
+      "description": "Based on endpoint call volume and user traffic",
+      "source": "runtime_metrics.endpoint_calls",
+      "thresholds": {
+        "critical": 1000,
+        "high": 500,
+        "medium": 100,
+        "low": 10
+      }
+    },
+    {
+      "id": "regulatory",
+      "name": "Regulatory Compliance",
+      "weight": 30,
+      "description": "PCI-DSS, GDPR, HIPAA, SOX compliance requirements",
+      "source": "semantic_analysis",
+      "auto_promote": true,
+      "auto_promote_priority": "P0",
+      "regulations": {
+        "PCI-DSS": {
+          "pattern": "\\b(credit\\s*card|card\\s*number|cvv|cvc|pan|pci|payment\\s*card|cardholder)\\b",
+          "description": "Payment Card Industry Data Security Standard"
+        },
+        "GDPR": {
+          "pattern": "\\b(gdpr|personal\\s*data|data\\s*subject|right\\s*to\\s*erasure|consent|dpo)\\b",
+          "description": "General Data Protection Regulation"
+        },
+        "HIPAA": {
+          "pattern": "\\b(hipaa|phi|protected\\s*health|medical\\s*record|patient\\s*data|ehr)\\b",
+          "description": "Health Insurance Portability and Accountability Act"
+        },
+        "SOX": {
+          "pattern": "\\b(sox|sarbanes|financial\\s*report|audit\\s*trail|internal\\s*control)\\b",
+          "description": "Sarbanes-Oxley Act"
+        }
+      }
+    },
+    {
+      "id": "data_integrity",
+      "name": "Data Integrity",
+      "weight": 20,
+      "description": "Transaction, financial, money, balance, audit keywords",
+      "source": "semantic_analysis",
+      "keywords": [
+        "transaction",
+        "financial",
+        "money",
+        "balance",
+        "audit",
+        "ledger",
+        "reconciliation",
+        "accounting",
+        "revenue"
+      ]
+    },
+    {
+      "id": "dependency_risk",
+      "name": "External Dependency Risk",
+      "weight": 10,
+      "description": "Risk from external services (payment gateways, APIs, third-party)",
+      "source": "architecture_analysis.external_services",
+      "thresholds": {
+        "critical": 3,
+        "high": 2,
+        "medium": 1,
+        "low": 0
+      }
+    },
+    {
+      "id": "change_frequency",
+      "name": "Change Frequency",
+      "weight": 15,
+      "description": "Regression risk from frequent code changes",
+      "source": "git_analysis.change_frequency",
+      "thresholds": {
+        "critical": 20,
+        "high": 10,
+        "medium": 5,
+        "low": 2
+      }
+    }
+  ],
+  "priority_thresholds": {
+    "p0": {
+      "threshold": 80,
+      "label": "Critical",
+      "description": "Must be tested before every release",
+      "color": "#dc3545"
+    },
+    "p1": {
+      "threshold": 60,
+      "label": "High",
+      "description": "Test on major releases or significant changes",
+      "color": "#fd7e14"
+    },
+    "p2": {
+      "threshold": 40,
+      "label": "Medium",
+      "description": "Test periodically or when related areas change",
+      "color": "#ffc107"
+    },
+    "p3": {
+      "threshold": 0,
+      "label": "Low",
+      "description": "Test as time permits or during major refactoring",
+      "color": "#28a745"
+    }
+  },
+  "scoring_algorithm": {
+    "method": "weighted_sum",
+    "normalization": "0-100",
+    "description": "Each criterion score (0-100) is multiplied by its weight and summed. Total is normalized to 0-100 scale.",
+    "formula": "Σ(criterion_score × criterion_weight) / Σ(all_weights) × 100"
+  },
+  "auto_promotion_rules": [
+    {
+      "criterion": "regulatory",
+      "condition": "any_detected",
+      "target_priority": "P0",
+      "rationale": "Regulatory violations can result in fines, legal action, and loss of business licenses"
+    }
+  ],
+  "metadata": {
+    "version": "1.0.0",
+    "author": "Asif Hussain",
+    "created": "2025-01-06",
+    "phase": "7.5.2",
+    "component": "Dashboard v3 - Recommendations Tab"
+  }
+}

@@ -1,0 +1,302 @@
+# Test Gap Matrix - Phase 8 Task 8.1
+# Generated: December 23, 2025
+# Coverage Audit: coverage-audit-20251223-153936.log
+
+metadata:
+  audit_date: "2025-12-23T15:40:00-08:00"
+  total_files_analyzed: 883
+  total_statements: 111315
+  total_covered: 97658
+  total_missing: 34136
+  total_branches: 620
+  overall_coverage: 10.91%
+  test_results:
+    total_tests: 1844
+    passed: 1797
+    failed: 47
+    skipped: 12
+    duration: "90.65s"
+
+coverage_summary:
+  baseline: "10.91%"
+  target: "90%+"
+  gap: "79.09%"
+  priority: "CRITICAL - Major coverage expansion required"
+
+## CRITICAL PRIORITY (0% Coverage - Core Infrastructure)
+critical_files:
+  - path: src/llm/adapters/anthropic_adapter.py
+    statements: 12
+    missing: 12
+    coverage: 0%
+    criticality: CRITICAL
+    category: llm_integration
+    priority_score: 100
+    reason: "LLM adapter - core functionality for Anthropic Claude integration"
+    
+  - path: src/llm/adapters/openai_adapter.py
+    statements: 13
+    missing: 13
+    coverage: 0%
+    criticality: CRITICAL
+    category: llm_integration
+    priority_score: 100
+    reason: "LLM adapter - core functionality for OpenAI integration"
+    
+  - path: src/llm/adapters/base.py
+    statements: 8
+    missing: 8
+    coverage: 0%
+    criticality: CRITICAL
+    category: llm_integration
+    priority_score: 100
+    reason: "Base LLM adapter - foundation for all LLM integrations"
+    
+  - path: src/llm/types.py
+    statements: 48
+    missing: 48
+    coverage: 0%
+    criticality: HIGH
+    category: llm_integration
+    priority_score: 95
+    reason: "LLM type definitions - shared across all adapters"
+
+  - path: src/orchestration_4_0/base/agent_interface.py
+    statements: 30
+    missing: 2
+    coverage: 0%
+    criticality: CRITICAL
+    category: orchestration
+    priority_score: 98
+    reason: "Agent interface - foundation for all orchestrator-agent communication"
+    
+  - path: src/orchestration_4_0/execution/execution_mode.py
+    statements: 20
+    missing: 1
+    coverage: 0%
+    criticality: CRITICAL
+    category: orchestration
+    priority_score: 98
+    reason: "Execution mode manager - controls autonomous/supervised/manual modes"
+    
+  - path: src/orchestration_4_0/orchestrators/execution/schemas.py
+    statements: 81
+    missing: 2
+    coverage: 0%
+    criticality: HIGH
+    category: orchestration
+    priority_score: 95
+    reason: "Execution orchestrator schemas - validation for execution workflows"
+
+  - path: src/operations/utilities/deployment_orchestrator.py
+    statements: 21
+    missing: 5
+    coverage: 0%
+    criticality: HIGH
+    category: deployment
+    priority_score: 90
+    reason: "Deployment orchestrator - production deployment workflows"
+    
+  - path: src/operations/utilities/integration_testing_orchestrator.py
+    statements: 22
+    missing: 6
+    coverage: 0%
+    criticality: HIGH
+    category: testing
+    priority_score: 90
+    reason: "Integration testing orchestrator - end-to-end test workflows"
+
+  - path: src/cortex_agents/agent_types.py
+    statements: 112
+    missing: 1
+    coverage: 0%
+    criticality: HIGH
+    category: agents
+    priority_score: 92
+    reason: "Agent type definitions - foundation for agent system"
+    
+  - path: src/cortex_agents/exceptions.py
+    statements: 8
+    missing: 8
+    coverage: 0%
+    criticality: MEDIUM
+    category: error_handling
+    priority_score: 70
+    reason: "Agent exception types - error handling infrastructure"
+
+## HIGH PRIORITY (0% Coverage - Operations/Discovery)
+high_priority_files:
+  - path: src/operations/modules/discovery/models.py
+    statements: 99
+    missing: 99
+    coverage: 0%
+    criticality: HIGH
+    category: discovery
+    priority_score: 85
+    reason: "Discovery models - code analysis data structures"
+    
+  - path: src/operations/modules/discovery/snippet_extractor.py
+    statements: 47
+    missing: 47
+    coverage: 0%
+    criticality: HIGH
+    category: discovery
+    priority_score: 80
+    reason: "Code snippet extraction - used in documentation/analysis"
+    
+  - path: src/operations/modules/design_sync/design_sync_models.py
+    statements: 42
+    missing: 42
+    coverage: 0%
+    criticality: MEDIUM
+    category: design_sync
+    priority_score: 75
+    reason: "Design sync models - architecture synchronization"
+    
+  - path: src/operations/modules/system/optimization_models.py
+    statements: 42
+    missing: 42
+    coverage: 0%
+    criticality: MEDIUM
+    category: optimization
+    priority_score: 75
+    reason: "System optimization models - performance tuning data"
+    
+  - path: src/operations/modules/cleanup/cleanup_verifier.py
+    statements: 66
+    missing: 66
+    coverage: 0%
+    criticality: MEDIUM
+    category: cleanup
+    priority_score: 70
+    reason: "Cleanup verification - ensures cleanup operations succeeded"
+
+## MEDIUM PRIORITY (0% Coverage - Supporting Infrastructure)
+medium_priority_files:
+  - path: src/cortex_lens/analyzers/base.py
+    statements: 9
+    missing: 9
+    coverage: 0%
+    criticality: MEDIUM
+    category: cortex_lens
+    priority_score: 65
+    reason: "Base analyzer for CORTEX Lens visualization"
+    
+  - path: src/cortex_lens/collectors/base.py
+    statements: 11
+    missing: 11
+    coverage: 0%
+    criticality: MEDIUM
+    category: cortex_lens
+    priority_score: 65
+    reason: "Base collector for CORTEX Lens data gathering"
+    
+  - path: src/cortex_lens/generators/base.py
+    statements: 9
+    missing: 9
+    coverage: 0%
+    criticality: MEDIUM
+    category: cortex_lens
+    priority_score: 65
+    reason: "Base generator for CORTEX Lens output"
+    
+  - path: src/operations/dashboard_generator.py
+    statements: 25
+    missing: 25
+    coverage: 0%
+    criticality: MEDIUM
+    category: dashboard
+    priority_score: 60
+    reason: "Dashboard generation - visualization output"
+    
+  - path: src/orchestrators/git_checkpoint_orchestrator.py
+    statements: 8
+    missing: 8
+    coverage: 0%
+    criticality: MEDIUM
+    category: git
+    priority_score: 60
+    reason: "Git checkpoint management - version control integration"
+
+## Testing Gaps Analysis
+testing_gaps:
+  stub_tests_requiring_implementation:
+    count: 47
+    files:
+      - tests/test_missing_path_feature.py (6 tests)
+      - tests/test_multiagent_test.py (6 tests)
+      - tests/test_phase_5_test.py (6 tests)
+      - tests/test_user_registration.py (7 tests)
+    status: "All contain 'assert False' placeholders"
+    priority: HIGH
+    action: "Implement actual test logic or remove stub files"
+
+  parallel_analysis_failures:
+    count: "Multiple warnings"
+    error: "There is no current event loop in thread 'MainThread'"
+    affected: "Parallel analysis operations in various modules"
+    priority: MEDIUM
+    action: "Fix asyncio event loop initialization in parallel operations"
+
+## Recommendations
+
+top_20_priority_order:
+  week_1_sprint:
+    - src/llm/adapters/base.py (foundation)
+    - src/llm/adapters/anthropic_adapter.py (critical)
+    - src/llm/adapters/openai_adapter.py (critical)
+    - src/llm/types.py (shared types)
+    - src/orchestration_4_0/base/agent_interface.py (critical orchestration)
+    
+  week_2_sprint:
+    - src/orchestration_4_0/execution/execution_mode.py (execution control)
+    - src/orchestration_4_0/orchestrators/execution/schemas.py (validation)
+    - src/operations/utilities/deployment_orchestrator.py (deployment)
+    - src/operations/utilities/integration_testing_orchestrator.py (testing)
+    - src/cortex_agents/agent_types.py (agent foundation)
+    
+  week_3_sprint:
+    - src/operations/modules/discovery/models.py (discovery)
+    - src/operations/modules/discovery/snippet_extractor.py (code analysis)
+    - src/operations/modules/design_sync/design_sync_models.py (sync)
+    - src/operations/modules/system/optimization_models.py (optimization)
+    - src/operations/modules/cleanup/cleanup_verifier.py (cleanup validation)
+    
+  week_4_sprint:
+    - src/cortex_lens/analyzers/base.py (visualization)
+    - src/cortex_lens/collectors/base.py (data gathering)
+    - src/cortex_lens/generators/base.py (output generation)
+    - src/operations/dashboard_generator.py (dashboard)
+    - src/orchestrators/git_checkpoint_orchestrator.py (version control)
+
+actionable_steps:
+  immediate:
+    - "Fix 47 stub tests (remove or implement)"
+    - "Address asyncio event loop warnings in parallel operations"
+    - "Create test files for top 5 critical priority modules"
+    
+  short_term:
+    - "Achieve 50% coverage on LLM adapters (Week 1)"
+    - "Achieve 60% coverage on orchestration foundation (Week 2)"
+    - "Achieve 70% coverage on operations/discovery (Week 3)"
+    
+  medium_term:
+    - "Achieve 80% coverage on supporting infrastructure (Week 4)"
+    - "Implement integration tests for orchestrator interactions"
+    - "Add performance benchmarks for critical paths"
+
+quality_gates:
+  minimum_coverage_per_category:
+    llm_integration: 85%
+    orchestration: 90%
+    agents: 85%
+    operations: 80%
+    discovery: 75%
+    supporting: 70%
+
+complexity_hotspots:
+  high_complexity_low_coverage:
+    - "Dashboard collectors with >15 cyclomatic complexity"
+    - "Code organization modules with nested conditional logic"
+    - "Narrative consolidation with complex validation"
+    note: "These require tests BEFORE refactoring to prevent regressions"

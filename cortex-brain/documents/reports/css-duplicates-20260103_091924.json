@@ -1,0 +1,5312 @@
+{
+  "files_scanned": 12,
+  "recommendations": [
+    "Delete 22 exact duplicate rules (110 lines)",
+    "Merge 31 partial duplicates (93 lines consolidated)",
+    "Extract 509 scattered patterns to utility classes (6507 lines → 509 lines)"
+  ],
+  "scan_timestamp": "2026-01-03T09:19:35.6645214-05:00",
+  "total_redundancy": {
+    "savings_potential": "~6710 lines, 201KB reduction",
+    "percentage": 34.6,
+    "lines": 6710.0
+  },
+  "total_css_lines": 19393,
+  "duplicate_analysis": {
+    "exact_duplicates": {
+      "instances": [
+        {
+          "Line1": 505,
+          "Line2": 461,
+          "File1": "index-multipanel.css",
+          "Selector": "#security-panel .category-subpanel",
+          "Action": "DELETE index-multipanel.css:461 instance (duplicate)",
+          "Properties": [
+            "grid-column",
+            "grid-row",
+            "font-size"
+          ],
+          "File2": "index-multipanel.css"
+        },
+        {
+          "Line1": 545,
+          "Line2": 551,
+          "File1": "index-multipanel.css",
+          "Selector": "#orchestrators-panel .category-subpanel",
+          "Action": "DELETE index-multipanel.css:551 instance (duplicate)",
+          "Properties": [
+            "grid-column",
+            "grid-row",
+            "font-size"
+          ],
+          "File2": "index-multipanel.css"
+        },
+        {
+          "Line1": 873,
+          "Line2": 838,
+          "File1": "glass-patterns.css",
+          "Selector": ".level0-category-subpanel",
+          "Action": "DELETE glass-patterns.css:838 instance (duplicate)",
+          "Properties": [
+            "background",
+            "color",
+            "border-color"
+          ],
+          "File2": "glass-patterns.css"
+        },
+        {
+          "Line1": 8959,
+          "Line2": 1629,
+          "File1": "main.css",
+          "Selector": ".quick-links-grid",
+          "Action": "DELETE future.css:1629 instance (duplicate)",
+          "Properties": [
+            "grid-template-columns"
+          ],
+          "File2": "future.css"
+        },
+        {
+          "Line1": 539,
+          "Line2": 9023,
+          "File1": "learning-hub.css",
+          "Selector": ".tab-content.active",
+          "Action": "DELETE main.css:9023 instance (duplicate)",
+          "Properties": [
+            "display"
+          ],
+          "File2": "main.css"
+        },
+        {
+          "Line1": 843,
+          "Line2": 815,
+          "File1": "glass-patterns.css",
+          "Selector": ".level0-category-subpanel",
+          "Action": "DELETE glass-patterns.css:815 instance (duplicate)",
+          "Properties": [
+            "background",
+            "color",
+            "border-color"
+          ],
+          "File2": "glass-patterns.css"
+        },
+        {
+          "Line1": 810,
+          "Line2": 901,
+          "File1": "glass-patterns.css",
+          "Selector": ".level0-category-subpanel",
+          "Action": "DELETE glass-patterns.css:901 instance (duplicate)",
+          "Properties": [
+            "background",
+            "color",
+            "border-color"
+          ],
+          "File2": "glass-patterns.css"
+        },
+        {
+          "Line1": 810,
+          "Line2": 883,
+          "File1": "glass-patterns.css",
+          "Selector": ".level0-category-subpanel",
+          "Action": "DELETE glass-patterns.css:883 instance (duplicate)",
+          "Properties": [
+            "background",
+            "color",
+            "border-color"
+          ],
+          "File2": "glass-patterns.css"
+        },
+        {
+          "Line1": 888,
+          "Line2": 793,
+          "File1": "glass-patterns.css",
+          "Selector": ".level0-category-subpanel",
+          "Action": "DELETE glass-patterns.css:793 instance (duplicate)",
+          "Properties": [
+            "background",
+            "color",
+            "border-color"
+          ],
+          "File2": "glass-patterns.css"
+        },
+        {
+          "Line1": 888,
+          "Line2": 861,
+          "File1": "glass-patterns.css",
+          "Selector": ".level0-category-subpanel",
+          "Action": "DELETE glass-patterns.css:861 instance (duplicate)",
+          "Properties": [
+            "background",
+            "color",
+            "border-color"
+          ],
+          "File2": "glass-patterns.css"
+        },
+        {
+          "Line1": 535,
+          "Line2": 9019,
+          "File1": "learning-hub.css",
+          "Selector": ".tab-content",
+          "Action": "DELETE main.css:9019 instance (duplicate)",
+          "Properties": [
+            "display"
+          ],
+          "File2": "main.css"
+        },
+        {
+          "Line1": 1491,
+          "Line2": 10453,
+          "File1": "future.css",
+          "Selector": ".feature-list",
+          "Action": "DELETE main.css:10453 instance (duplicate)",
+          "Properties": [
+            "margin",
+            "padding",
+            "list-style"
+          ],
+          "File2": "main.css"
+        },
+        {
+          "Line1": 492,
+          "Line2": 530,
+          "File1": "index-multipanel.css",
+          "Selector": "#security-panel .category-subpanel",
+          "Action": "DELETE index-multipanel.css:530 instance (duplicate)",
+          "Properties": [
+            "grid-column",
+            "grid-row",
+            "font-size"
+          ],
+          "File2": "index-multipanel.css"
+        },
+        {
+          "Line1": 793,
+          "Line2": 861,
+          "File1": "glass-patterns.css",
+          "Selector": ".level0-category-subpanel",
+          "Action": "DELETE glass-patterns.css:861 instance (duplicate)",
+          "Properties": [
+            "background",
+            "color",
+            "border-color"
+          ],
+          "File2": "glass-patterns.css"
+        },
+        {
+          "Line1": 586,
+          "Line2": 605,
+          "File1": "index-multipanel.css",
+          "Selector": "#orchestrators-panel .category-subpanel",
+          "Action": "DELETE index-multipanel.css:605 instance (duplicate)",
+          "Properties": [
+            "grid-column",
+            "grid-row",
+            "font-size"
+          ],
+          "File2": "index-multipanel.css"
+        },
+        {
+          "Line1": 486,
+          "Line2": 467,
+          "File1": "index-multipanel.css",
+          "Selector": "#security-panel .category-subpanel",
+          "Action": "DELETE index-multipanel.css:467 instance (duplicate)",
+          "Properties": [
+            "grid-column",
+            "grid-row",
+            "font-size"
+          ],
+          "File2": "index-multipanel.css"
+        },
+        {
+          "Line1": 856,
+          "Line2": 821,
+          "File1": "glass-patterns.css",
+          "Selector": "/* Cyan default */\n.level0-category-subpanel",
+          "Action": "DELETE glass-patterns.css:821 instance (duplicate)",
+          "Properties": [
+            "background",
+            "color",
+            "border-color"
+          ],
+          "File2": "glass-patterns.css"
+        },
+        {
+          "Line1": 856,
+          "Line2": 896,
+          "File1": "glass-patterns.css",
+          "Selector": "/* Cyan default */\n.level0-category-subpanel",
+          "Action": "DELETE glass-patterns.css:896 instance (duplicate)",
+          "Properties": [
+            "background",
+            "color",
+            "border-color"
+          ],
+          "File2": "glass-patterns.css"
+        },
+        {
+          "Line1": 878,
+          "Line2": 833,
+          "File1": "glass-patterns.css",
+          "Selector": ".level0-category-subpanel",
+          "Action": "DELETE glass-patterns.css:833 instance (duplicate)",
+          "Properties": [
+            "background",
+            "color",
+            "border-color"
+          ],
+          "File2": "glass-patterns.css"
+        },
+        {
+          "Line1": 511,
+          "Line2": 480,
+          "File1": "index-multipanel.css",
+          "Selector": "#security-panel .category-subpanel",
+          "Action": "DELETE index-multipanel.css:480 instance (duplicate)",
+          "Properties": [
+            "grid-column",
+            "grid-row",
+            "font-size"
+          ],
+          "File2": "index-multipanel.css"
+        },
+        {
+          "Line1": 901,
+          "Line2": 883,
+          "File1": "glass-patterns.css",
+          "Selector": ".level0-category-subpanel",
+          "Action": "DELETE glass-patterns.css:883 instance (duplicate)",
+          "Properties": [
+            "background",
+            "color",
+            "border-color"
+          ],
+          "File2": "glass-patterns.css"
+        },
+        {
+          "Line1": 821,
+          "Line2": 896,
+          "File1": "glass-patterns.css",
+          "Selector": "/* Cyan default */\n.level0-category-subpanel",
+          "Action": "DELETE glass-patterns.css:896 instance (duplicate)",
+          "Properties": [
+            "background",
+            "color",
+            "border-color"
+          ],
+          "File2": "glass-patterns.css"
+        }
+      ],
+      "lines_wasted": 110,
+      "count": 22,
+      "percentage": 0.57
+    },
+    "partial_duplicates": {
+      "instances": [
+        {
+          "OverlapPercentage": 66.67,
+          "UniqueInSecond": null,
+          "Action": "MERGE into index-multipanel.css, delete index-multipanel.css",
+          "File1": "index-multipanel.css",
+          "Line2": 524,
+          "Selector": "#security-panel .category-subpanel",
+          "Line1": 505,
+          "Overlap": [
+            "font-size",
+            "grid-row"
+          ],
+          "File2": "index-multipanel.css"
+        },
+        {
+          "OverlapPercentage": 66.67,
+          "UniqueInSecond": null,
+          "Action": "MERGE into index-multipanel.css, delete index-multipanel.css",
+          "File1": "index-multipanel.css",
+          "Line2": 557,
+          "Selector": "#orchestrators-panel .category-subpanel",
+          "Line1": 545,
+          "Overlap": [
+            "font-size",
+            "grid-row"
+          ],
+          "File2": "index-multipanel.css"
+        },
+        {
+          "OverlapPercentage": 66.67,
+          "UniqueInSecond": null,
+          "Action": "MERGE into index-multipanel.css, delete index-multipanel.css",
+          "File1": "index-multipanel.css",
+          "Line2": 592,
+          "Selector": "#orchestrators-panel .category-subpanel",
+          "Line1": 545,
+          "Overlap": [
+            "font-size",
+            "grid-row"
+          ],
+          "File2": "index-multipanel.css"
+        },
+        {
+          "OverlapPercentage": 66.67,
+          "UniqueInSecond": null,
+          "Action": "MERGE into index-multipanel.css, delete index-multipanel.css",
+          "File1": "index-multipanel.css",
+          "Line2": 611,
+          "Selector": "#orchestrators-panel .category-subpanel",
+          "Line1": 545,
+          "Overlap": [
+            "font-size",
+            "grid-column"
+          ],
+          "File2": "index-multipanel.css"
+        },
+        {
+          "OverlapPercentage": 66.67,
+          "UniqueInSecond": "font-size",
+          "Action": "MERGE into index-multipanel.css, delete index-multipanel.css",
+          "File1": "index-multipanel.css",
+          "Line2": 592,
+          "Selector": "#orchestrators-panel .category-subpanel",
+          "Line1": 574,
+          "Overlap": [
+            "grid-column",
+            "grid-row"
+          ],
+          "File2": "index-multipanel.css"
+        },
+        {
+          "OverlapPercentage": 50.0,
+          "UniqueInSecond": null,
+          "Action": "MERGE into main.css, delete knowledge.css",
+          "File1": "main.css",
+          "Line2": 360,
+          "Selector": ".code-comparison",
+          "Line1": 4319,
+          "Overlap": "grid-template-columns",
+          "File2": "knowledge.css"
+        },
+        {
+          "OverlapPercentage": 66.67,
+          "UniqueInSecond": null,
+          "Action": "MERGE into index-multipanel.css, delete index-multipanel.css",
+          "File1": "index-multipanel.css",
+          "Line2": 486,
+          "Selector": "#security-panel .category-subpanel",
+          "Line1": 492,
+          "Overlap": [
+            "font-size",
+            "grid-row"
+          ],
+          "File2": "index-multipanel.css"
+        },
+        {
+          "OverlapPercentage": 66.67,
+          "UniqueInSecond": null,
+          "Action": "MERGE into index-multipanel.css, delete index-multipanel.css",
+          "File1": "index-multipanel.css",
+          "Line2": 511,
+          "Selector": "#security-panel .category-subpanel",
+          "Line1": 492,
+          "Overlap": [
+            "font-size",
+            "grid-column"
+          ],
+          "File2": "index-multipanel.css"
+        },
+        {
+          "OverlapPercentage": 66.67,
+          "UniqueInSecond": null,
+          "Action": "MERGE into index-multipanel.css, delete index-multipanel.css",
+          "File1": "index-multipanel.css",
+          "Line2": 467,
+          "Selector": "#security-panel .category-subpanel",
+          "Line1": 492,
+          "Overlap": [
+            "font-size",
+            "grid-row"
+          ],
+          "File2": "index-multipanel.css"
+        },
+        {
+          "OverlapPercentage": 66.67,
+          "UniqueInSecond": null,
+          "Action": "MERGE into index-multipanel.css, delete index-multipanel.css",
+          "File1": "index-multipanel.css",
+          "Line2": 480,
+          "Selector": "#security-panel .category-subpanel",
+          "Line1": 492,
+          "Overlap": [
+            "font-size",
+            "grid-column"
+          ],
+          "File2": "index-multipanel.css"
+        },
+        {
+          "OverlapPercentage": 66.67,
+          "UniqueInSecond": null,
+          "Action": "MERGE into index-multipanel.css, delete index-multipanel.css",
+          "File1": "index-multipanel.css",
+          "Line2": 557,
+          "Selector": "#orchestrators-panel .category-subpanel",
+          "Line1": 551,
+          "Overlap": [
+            "font-size",
+            "grid-row"
+          ],
+          "File2": "index-multipanel.css"
+        },
+        {
+          "OverlapPercentage": 66.67,
+          "UniqueInSecond": null,
+          "Action": "MERGE into index-multipanel.css, delete index-multipanel.css",
+          "File1": "index-multipanel.css",
+          "Line2": 592,
+          "Selector": "#orchestrators-panel .category-subpanel",
+          "Line1": 551,
+          "Overlap": [
+            "font-size",
+            "grid-row"
+          ],
+          "File2": "index-multipanel.css"
+        },
+        {
+          "OverlapPercentage": 66.67,
+          "UniqueInSecond": null,
+          "Action": "MERGE into index-multipanel.css, delete index-multipanel.css",
+          "File1": "index-multipanel.css",
+          "Line2": 611,
+          "Selector": "#orchestrators-panel .category-subpanel",
+          "Line1": 551,
+          "Overlap": [
+            "font-size",
+            "grid-column"
+          ],
+          "File2": "index-multipanel.css"
+        },
+        {
+          "OverlapPercentage": 50.0,
+          "UniqueInSecond": null,
+          "Action": "MERGE into future.css, delete future.css",
+          "File1": "future.css",
+          "Line2": 188,
+          "Selector": ".timeline-item",
+          "Line1": 193,
+          "Overlap": "justify-content",
+          "File2": "future.css"
+        },
+        {
+          "OverlapPercentage": 50.0,
+          "UniqueInSecond": "z-index",
+          "Action": "MERGE into main.css, delete story.css",
+          "File1": "main.css",
+          "Line2": 33,
+          "Selector": ".hero-content",
+          "Line1": 8497,
+          "Overlap": "max-width",
+          "File2": "story.css"
+        },
+        {
+          "OverlapPercentage": 66.67,
+          "UniqueInSecond": null,
+          "Action": "MERGE into index-multipanel.css, delete index-multipanel.css",
+          "File1": "index-multipanel.css",
+          "Line2": 530,
+          "Selector": "#security-panel .category-subpanel",
+          "Line1": 486,
+          "Overlap": [
+            "font-size",
+            "grid-row"
+          ],
+          "File2": "index-multipanel.css"
+        },
+        {
+          "OverlapPercentage": 50.0,
+          "UniqueInSecond": null,
+          "Action": "MERGE into sts.css, delete sts.css",
+          "File1": "sts.css",
+          "Line2": 684,
+          "Selector": ".panel pre",
+          "Line1": 689,
+          "Overlap": "border-radius",
+          "File2": "sts.css"
+        },
+        {
+          "OverlapPercentage": 66.67,
+          "UniqueInSecond": null,
+          "Action": "MERGE into index-multipanel.css, delete index-multipanel.css",
+          "File1": "index-multipanel.css",
+          "Line2": 511,
+          "Selector": "#security-panel .category-subpanel",
+          "Line1": 530,
+          "Overlap": [
+            "font-size",
+            "grid-column"
+          ],
+          "File2": "index-multipanel.css"
+        },
+        {
+          "OverlapPercentage": 66.67,
+          "UniqueInSecond": null,
+          "Action": "MERGE into index-multipanel.css, delete index-multipanel.css",
+          "File1": "index-multipanel.css",
+          "Line2": 467,
+          "Selector": "#security-panel .category-subpanel",
+          "Line1": 530,
+          "Overlap": [
+            "font-size",
+            "grid-row"
+          ],
+          "File2": "index-multipanel.css"
+        },
+        {
+          "OverlapPercentage": 66.67,
+          "UniqueInSecond": null,
+          "Action": "MERGE into index-multipanel.css, delete index-multipanel.css",
+          "File1": "index-multipanel.css",
+          "Line2": 480,
+          "Selector": "#security-panel .category-subpanel",
+          "Line1": 530,
+          "Overlap": [
+            "font-size",
+            "grid-column"
+          ],
+          "File2": "index-multipanel.css"
+        },
+        {
+          "OverlapPercentage": 66.67,
+          "UniqueInSecond": null,
+          "Action": "MERGE into index-multipanel.css, delete index-multipanel.css",
+          "File1": "index-multipanel.css",
+          "Line2": 511,
+          "Selector": "#security-panel .category-subpanel",
+          "Line1": 524,
+          "Overlap": [
+            "grid-column",
+            "grid-row"
+          ],
+          "File2": "index-multipanel.css"
+        },
+        {
+          "OverlapPercentage": 66.67,
+          "UniqueInSecond": null,
+          "Action": "MERGE into index-multipanel.css, delete index-multipanel.css",
+          "File1": "index-multipanel.css",
+          "Line2": 461,
+          "Selector": "#security-panel .category-subpanel",
+          "Line1": 524,
+          "Overlap": [
+            "font-size",
+            "grid-row"
+          ],
+          "File2": "index-multipanel.css"
+        },
+        {
+          "OverlapPercentage": 66.67,
+          "UniqueInSecond": null,
+          "Action": "MERGE into index-multipanel.css, delete index-multipanel.css",
+          "File1": "index-multipanel.css",
+          "Line2": 480,
+          "Selector": "#security-panel .category-subpanel",
+          "Line1": 524,
+          "Overlap": [
+            "grid-column",
+            "grid-row"
+          ],
+          "File2": "index-multipanel.css"
+        },
+        {
+          "OverlapPercentage": 50.0,
+          "UniqueInSecond": "gap",
+          "Action": "MERGE into index-multipanel.css, delete main.css",
+          "File1": "index-multipanel.css",
+          "Line2": 5867,
+          "Selector": ".category-panels-grid.grid-3x2",
+          "Line1": 158,
+          "Overlap": "grid-template-columns",
+          "File2": "main.css"
+        },
+        {
+          "OverlapPercentage": 50.0,
+          "UniqueInSecond": null,
+          "Action": "MERGE into main.css, delete glass-patterns.css",
+          "File1": "main.css",
+          "Line2": 339,
+          "Selector": "0%",
+          "Line1": 6369,
+          "Overlap": "transform",
+          "File2": "glass-patterns.css"
+        },
+        {
+          "OverlapPercentage": 50.0,
+          "UniqueInSecond": null,
+          "Action": "MERGE into main.css, delete sts.css",
+          "File1": "main.css",
+          "Line2": 905,
+          "Selector": ".sts-category-card",
+          "Line1": 4162,
+          "Overlap": "box-shadow",
+          "File2": "sts.css"
+        },
+        {
+          "OverlapPercentage": 50.0,
+          "UniqueInSecond": "font-weight",
+          "Action": "MERGE into main.css, delete knowledge.css",
+          "File1": "main.css",
+          "Line2": 421,
+          "Selector": ".tab-button.active",
+          "Line1": 9013,
+          "Overlap": [
+            "border-color",
+            "color"
+          ],
+          "File2": "knowledge.css"
+        },
+        {
+          "OverlapPercentage": 50.0,
+          "UniqueInSecond": null,
+          "Action": "MERGE into story.css, delete story-print.css",
+          "File1": "story.css",
+          "Line2": 108,
+          "Selector": ".story-text em",
+          "Line1": 369,
+          "Overlap": "font-style",
+          "File2": "story-print.css"
+        },
+        {
+          "OverlapPercentage": 50.0,
+          "UniqueInSecond": "box-shadow",
+          "Action": "MERGE into glass-patterns.css, delete glass-patterns.css",
+          "File1": "glass-patterns.css",
+          "Line2": 132,
+          "Selector": ".glass-card--no-hover",
+          "Line1": 128,
+          "Overlap": "transform",
+          "File2": "glass-patterns.css"
+        },
+        {
+          "OverlapPercentage": 66.67,
+          "UniqueInSecond": null,
+          "Action": "MERGE into index-multipanel.css, delete index-multipanel.css",
+          "File1": "index-multipanel.css",
+          "Line2": 592,
+          "Selector": "#orchestrators-panel .category-subpanel",
+          "Line1": 557,
+          "Overlap": [
+            "font-size",
+            "grid-row"
+          ],
+          "File2": "index-multipanel.css"
+        },
+        {
+          "OverlapPercentage": 66.67,
+          "UniqueInSecond": "font-size",
+          "Action": "MERGE into index-multipanel.css, delete index-multipanel.css",
+          "File1": "index-multipanel.css",
+          "Line2": 611,
+          "Selector": "#orchestrators-panel .category-subpanel",
+          "Line1": 569,
+          "Overlap": [
+            "grid-column",
+            "grid-row"
+          ],
+          "File2": "index-multipanel.css"
+        }
+      ],
+      "count": 31,
+      "percentage": 0.48,
+      "overlapping_lines": 93
+    },
+    "scattered_duplicates": {
+      "patterns": [
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : linear-gradient(135deg, #f59e0b, #fbbf24)",
+          "Files": "main.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-size : 0.75rem",
+          "Files": [
+            "main.css",
+            "learning-hub.css",
+            "sts.css",
+            "story.css",
+            "knowledge.css"
+          ],
+          "Occurrences": 23
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "flex-direction : row",
+          "Files": [
+            "story.css",
+            "main.css",
+            "future.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border : 1px solid rgba(255, 255, 255, 0.1)",
+          "Files": [
+            "future.css",
+            "knowledge.css",
+            "main.css",
+            "index-multipanel.css",
+            "glass-patterns.css"
+          ],
+          "Occurrences": 23
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : rgba(239, 68, 68, 0.1)",
+          "Files": [
+            "main.css",
+            "learning-hub.css",
+            "sts.css"
+          ],
+          "Occurrences": 6
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background-clip : text",
+          "Files": [
+            "main.css",
+            "future.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "line-height : 1.6",
+          "Files": [
+            "main.css",
+            "future.css",
+            "story-print.css",
+            "knowledge.css",
+            "sts.css",
+            "story.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 42
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-left : 4px solid #10b981",
+          "Files": "main.css",
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-size : 3rem",
+          "Files": [
+            "main.css",
+            "future.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 17
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-size : 0.875rem",
+          "Files": [
+            "learning-hub.css",
+            "main.css",
+            "knowledge.css",
+            "sts.css",
+            "story.css",
+            "index-multipanel.css"
+          ],
+          "Occurrences": 62
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "content : ''",
+          "Files": [
+            "main.css",
+            "future.css",
+            "micro-interactions.css",
+            "glass-patterns.css",
+            "story.css",
+            "index-multipanel.css"
+          ],
+          "Occurrences": 25
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "backdrop-filter : blur(12px)",
+          "Files": [
+            "glass-patterns.css",
+            "faq.css",
+            "story.css"
+          ],
+          "Occurrences": 9
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin : var(--spacing-2xl) 0",
+          "Files": [
+            "main.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 6
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "gap : 1rem",
+          "Files": [
+            "sts.css",
+            "main.css",
+            "knowledge.css",
+            "story.css"
+          ],
+          "Occurrences": 28
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border : 1px solid #ccc",
+          "Files": [
+            "story.css",
+            "main.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin : 40px auto",
+          "Files": "future.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-left : 3px solid var(--accent-primary)",
+          "Files": "main.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : linear-gradient(135deg, rgba(79, 70, 229, 0.15), rgba(99, 102, 241, 0.15))",
+          "Files": "glass-patterns.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : 0.75rem",
+          "Files": [
+            "main.css",
+            "knowledge.css",
+            "story.css"
+          ],
+          "Occurrences": 10
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "transition : color var(--transition-base)",
+          "Files": "main.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "content : \"•\"",
+          "Files": [
+            "main.css",
+            "future.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : #0d1117",
+          "Files": "main.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : var(--accent-primary)",
+          "Files": [
+            "index-multipanel.css",
+            "main.css",
+            "story.css",
+            "faq.css"
+          ],
+          "Occurrences": 126
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "height : auto",
+          "Files": [
+            "story.css",
+            "sts.css",
+            "main.css",
+            "story-print.css"
+          ],
+          "Occurrences": 7
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-bottom : 1.25rem",
+          "Files": "main.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-size : 14pt",
+          "Files": "story-print.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-bottom : 0.25cm",
+          "Files": "story-print.css",
+          "Occurrences": 6
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : rgba(255, 255, 255, 0.7)",
+          "Files": [
+            "future.css",
+            "main.css",
+            "sts.css"
+          ],
+          "Occurrences": 12
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "page-break-inside : avoid",
+          "Files": [
+            "story-print.css",
+            "faq.css",
+            "story.css",
+            "main.css"
+          ],
+          "Occurrences": 9
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "width : 40px",
+          "Files": [
+            "future.css",
+            "main.css",
+            "glass-patterns.css",
+            "story.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-radius : var(--radius-lg, 16px)",
+          "Files": [
+            "glass-patterns.css",
+            "micro-interactions.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : 1.25rem",
+          "Files": [
+            "sts.css",
+            "index-multipanel.css",
+            "main.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding-bottom : 15px",
+          "Files": "future.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin : var(--spacing-lg) 0",
+          "Files": "main.css",
+          "Occurrences": 11
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-size : 18px",
+          "Files": "future.css",
+          "Occurrences": 13
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin : var(--spacing-xl) 0",
+          "Files": "main.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border : 1px solid var(--module-border)",
+          "Files": "learning-hub.css",
+          "Occurrences": 11
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "line-height : 1.4",
+          "Files": "main.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : #f5f5f5",
+          "Files": "story.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : #000 !important",
+          "Files": "story-print.css",
+          "Occurrences": 7
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-color : rgba(20, 184, 166, 0.35)",
+          "Files": "glass-patterns.css",
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-size : 1rem",
+          "Files": [
+            "index-multipanel.css",
+            "sts.css",
+            "main.css",
+            "knowledge.css",
+            "story.css",
+            "learning-hub.css",
+            "future.css",
+            "faq.css"
+          ],
+          "Occurrences": 72
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "grid-column : span 12",
+          "Files": "main.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-size : 12px",
+          "Files": "future.css",
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : 30px",
+          "Files": "future.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "max-width : 1400px",
+          "Files": [
+            "main.css",
+            "future.css",
+            "sts.css",
+            "index-multipanel.css"
+          ],
+          "Occurrences": 15
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "-webkit-backdrop-filter : blur(10px)",
+          "Files": [
+            "index-multipanel.css",
+            "main.css"
+          ],
+          "Occurrences": 7
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-color : rgba(0, 212, 255, 0.3)",
+          "Files": [
+            "sts.css",
+            "knowledge.css",
+            "main.css"
+          ],
+          "Occurrences": 13
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : var(--spacing-xs) var(--spacing-sm)",
+          "Files": [
+            "main.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "transform : translateY(-10px)",
+          "Files": [
+            "future.css",
+            "story.css",
+            "glass-patterns.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "flex-direction : column",
+          "Files": [
+            "main.css",
+            "learning-hub.css",
+            "knowledge.css",
+            "future.css",
+            "story.css",
+            "index-multipanel.css",
+            "sts.css"
+          ],
+          "Occurrences": 61
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "top : 0",
+          "Files": [
+            "main.css",
+            "future.css",
+            "micro-interactions.css",
+            "story.css",
+            "glass-patterns.css",
+            "index-multipanel.css"
+          ],
+          "Occurrences": 22
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : linear-gradient(135deg, #e91e63, #f06292)",
+          "Files": "main.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : #F44336",
+          "Files": "main.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : #fff",
+          "Files": [
+            "sts.css",
+            "learning-hub.css",
+            "knowledge.css",
+            "main.css",
+            "story.css"
+          ],
+          "Occurrences": 15
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-color : rgba(0, 212, 255, 0.4)",
+          "Files": [
+            "main.css",
+            "sts.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-top : var(--spacing-2xl)",
+          "Files": [
+            "learning-hub.css",
+            "main.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : #fff",
+          "Files": [
+            "story.css",
+            "story-print.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-size : 1.5rem",
+          "Files": [
+            "main.css",
+            "story.css",
+            "sts.css",
+            "faq.css",
+            "learning-hub.css",
+            "glass-patterns.css",
+            "future.css",
+            "knowledge.css"
+          ],
+          "Occurrences": 47
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "transition : opacity 0.3s ease",
+          "Files": [
+            "main.css",
+            "future.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "transform : translateY(-2px)",
+          "Files": [
+            "story.css",
+            "main.css",
+            "knowledge.css",
+            "sts.css",
+            "learning-hub.css",
+            "faq.css"
+          ],
+          "Occurrences": 36
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : #9C27B0",
+          "Files": "main.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin : 0 0 15px 0",
+          "Files": "future.css",
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-right : auto",
+          "Files": [
+            "main.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "right : 0",
+          "Files": [
+            "future.css",
+            "main.css",
+            "micro-interactions.css",
+            "glass-patterns.css",
+            "story.css"
+          ],
+          "Occurrences": 10
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : #FF9800",
+          "Files": "main.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "height : 200%",
+          "Files": [
+            "main.css",
+            "glass-patterns.css"
+          ],
+          "Occurrences": 6
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "box-shadow : var(--shadow)",
+          "Files": "main.css",
+          "Occurrences": 7
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-radius : 2px",
+          "Files": [
+            "story.css",
+            "main.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-left : 4px solid #ef4444",
+          "Files": "main.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin : 1.5rem 0",
+          "Files": [
+            "main.css",
+            "knowledge.css",
+            "story.css",
+            "sts.css",
+            "faq.css"
+          ],
+          "Occurrences": 11
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-left : auto",
+          "Files": [
+            "main.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "min-width : 200px",
+          "Files": [
+            "sts.css",
+            "main.css",
+            "glass-patterns.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "max-width : 400px",
+          "Files": [
+            "main.css",
+            "glass-patterns.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-bottom : var(--spacing-2xl)",
+          "Files": [
+            "main.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 12
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : rgba(0, 212, 255, 0.05)",
+          "Files": [
+            "story.css",
+            "main.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "pointer-events : none",
+          "Files": [
+            "main.css",
+            "future.css",
+            "glass-patterns.css",
+            "micro-interactions.css",
+            "story.css"
+          ],
+          "Occurrences": 16
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : var(--text-secondary)",
+          "Files": [
+            "main.css",
+            "learning-hub.css",
+            "future.css",
+            "faq.css",
+            "story.css",
+            "index-multipanel.css"
+          ],
+          "Occurrences": 146
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : #7b61ff",
+          "Files": "main.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : linear-gradient(135deg, rgba(123, 97, 255, 0.15), rgba(186, 85, 211, 0.15))",
+          "Files": "glass-patterns.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "box-shadow : var(--shadow-lg), var(--glow)",
+          "Files": "main.css",
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : 15px",
+          "Files": [
+            "future.css",
+            "main.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : rgba(245, 158, 11, 0.2)",
+          "Files": "main.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : var(--spacing-sm) 0",
+          "Files": [
+            "learning-hub.css",
+            "main.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background-size : 200% 100%",
+          "Files": "micro-interactions.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "max-width : 900px",
+          "Files": [
+            "main.css",
+            "faq.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 6
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : #f59e0b",
+          "Files": "main.css",
+          "Occurrences": 11
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : 20px",
+          "Files": "future.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : rgba(59, 130, 246, 0.1)",
+          "Files": "main.css",
+          "Occurrences": 6
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : rgba(255, 255, 255, 0.8)",
+          "Files": [
+            "future.css",
+            "main.css",
+            "sts.css"
+          ],
+          "Occurrences": 15
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "height : 4px",
+          "Files": [
+            "future.css",
+            "main.css",
+            "story.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "box-shadow : var(--shadow-lg)",
+          "Files": [
+            "main.css",
+            "story.css"
+          ],
+          "Occurrences": 10
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : var(--accent-primary, #00d4ff)",
+          "Files": [
+            "main.css",
+            "glass-patterns.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border : 1px solid rgba(34, 197, 94, 0.3)",
+          "Files": [
+            "knowledge.css",
+            "sts.css",
+            "main.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "width : 0%",
+          "Files": [
+            "main.css",
+            "story.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "letter-spacing : 0.05em",
+          "Files": [
+            "learning-hub.css",
+            "sts.css",
+            "story.css",
+            "main.css",
+            "knowledge.css"
+          ],
+          "Occurrences": 17
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin : 0",
+          "Files": [
+            "knowledge.css",
+            "main.css",
+            "future.css",
+            "learning-hub.css",
+            "sts.css",
+            "story-print.css"
+          ],
+          "Occurrences": 65
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "align-items : center",
+          "Files": [
+            "index-multipanel.css",
+            "faq.css",
+            "main.css",
+            "sts.css",
+            "learning-hub.css",
+            "story.css",
+            "knowledge.css",
+            "future.css",
+            "glass-patterns.css"
+          ],
+          "Occurrences": 158
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "gap : var(--spacing-lg)",
+          "Files": [
+            "main.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 31
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "opacity : 0",
+          "Files": [
+            "main.css",
+            "glass-patterns.css",
+            "micro-interactions.css",
+            "story.css"
+          ],
+          "Occurrences": 16
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "width : 8px",
+          "Files": [
+            "sts.css",
+            "main.css",
+            "story.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "grid-template-columns : repeat(auto-fit, minmax(250px, 1fr))",
+          "Files": [
+            "learning-hub.css",
+            "main.css"
+          ],
+          "Occurrences": 8
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-bottom : var(--spacing-lg)",
+          "Files": [
+            "learning-hub.css",
+            "main.css"
+          ],
+          "Occurrences": 23
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : 0.5rem 1rem",
+          "Files": [
+            "story.css",
+            "main.css"
+          ],
+          "Occurrences": 6
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-top : auto",
+          "Files": [
+            "main.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-size : 48px",
+          "Files": "future.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : var(--sts-glass-bg)",
+          "Files": "sts.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "transform : scale(1.05)",
+          "Files": [
+            "future.css",
+            "story.css",
+            "main.css",
+            "glass-patterns.css",
+            "micro-interactions.css"
+          ],
+          "Occurrences": 6
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "width : 200%",
+          "Files": [
+            "main.css",
+            "glass-patterns.css"
+          ],
+          "Occurrences": 6
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : var(--sts-accent)",
+          "Files": "sts.css",
+          "Occurrences": 11
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-color : rgba(16, 185, 129, 0.35)",
+          "Files": "glass-patterns.css",
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-size : 10pt",
+          "Files": "story-print.css",
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "left : 0",
+          "Files": [
+            "main.css",
+            "future.css",
+            "sts.css",
+            "micro-interactions.css",
+            "knowledge.css",
+            "story.css",
+            "glass-patterns.css"
+          ],
+          "Occurrences": 25
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin : 0.5cm 0",
+          "Files": "story-print.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "content : '✓'",
+          "Files": [
+            "main.css",
+            "sts.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "position : absolute",
+          "Files": [
+            "main.css",
+            "future.css",
+            "faq.css",
+            "story.css",
+            "sts.css",
+            "glass-patterns.css",
+            "micro-interactions.css",
+            "knowledge.css",
+            "index-multipanel.css"
+          ],
+          "Occurrences": 58
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : rgba(20, 184, 166, 0.95)",
+          "Files": "glass-patterns.css",
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-bottom : 20px",
+          "Files": [
+            "main.css",
+            "future.css"
+          ],
+          "Occurrences": 13
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-size : 1.25rem",
+          "Files": [
+            "sts.css",
+            "main.css",
+            "knowledge.css",
+            "story.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 40
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "flex-grow : 1",
+          "Files": [
+            "future.css",
+            "index-multipanel.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "grid-template-columns : repeat(auto-fit, minmax(280px, 1fr))",
+          "Files": [
+            "main.css",
+            "learning-hub.css",
+            "sts.css"
+          ],
+          "Occurrences": 6
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "box-shadow : var(--sts-glow)",
+          "Files": "sts.css",
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "width : 200px",
+          "Files": [
+            "story.css",
+            "main.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin : 0 0 var(--spacing-lg) 0",
+          "Files": "learning-hub.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "height : 60px",
+          "Files": [
+            "main.css",
+            "future.css"
+          ],
+          "Occurrences": 32
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "grid-column : span 1",
+          "Files": "index-multipanel.css",
+          "Occurrences": 12
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "left : 20px",
+          "Files": [
+            "future.css",
+            "story.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "grid-row : span 3",
+          "Files": "index-multipanel.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : linear-gradient(90deg, var(--accent-primary), var(--accent-secondary))",
+          "Files": [
+            "main.css",
+            "story.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : var(--difficulty-expert)",
+          "Files": "learning-hub.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : rgba(255, 255, 255, 0.6)",
+          "Files": [
+            "future.css",
+            "sts.css",
+            "main.css",
+            "knowledge.css",
+            "story.css"
+          ],
+          "Occurrences": 16
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-bottom : 1px solid rgba(255, 255, 255, 0.1)",
+          "Files": [
+            "knowledge.css",
+            "main.css",
+            "future.css"
+          ],
+          "Occurrences": 7
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-right : 0.5rem",
+          "Files": [
+            "sts.css",
+            "main.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "visibility : hidden",
+          "Files": [
+            "main.css",
+            "story.css",
+            "glass-patterns.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : var(--future-success)",
+          "Files": "future.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "transform : none",
+          "Files": [
+            "micro-interactions.css",
+            "learning-hub.css",
+            "main.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border : 1px solid rgba(255, 255, 255, 0.05)",
+          "Files": "main.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-bottom : 0.5rem",
+          "Files": [
+            "sts.css",
+            "main.css",
+            "story.css",
+            "micro-interactions.css"
+          ],
+          "Occurrences": 29
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "grid-template-columns : repeat(4, 1fr)",
+          "Files": [
+            "main.css",
+            "index-multipanel.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-radius : 50px",
+          "Files": [
+            "faq.css",
+            "sts.css",
+            "glass-patterns.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "line-height : 1.3",
+          "Files": "main.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : 1.5rem 1rem",
+          "Files": [
+            "faq.css",
+            "knowledge.css",
+            "main.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "inset : 0",
+          "Files": [
+            "main.css",
+            "glass-patterns.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-radius : 8px 8px 0 0",
+          "Files": [
+            "learning-hub.css",
+            "main.css",
+            "future.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(52, 211, 153, 0.15))",
+          "Files": "glass-patterns.css",
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-radius : var(--radius-full)",
+          "Files": "main.css",
+          "Occurrences": 12
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "align-items : flex-start",
+          "Files": [
+            "main.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 8
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : var(--future-warning)",
+          "Files": "future.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "opacity : 0.9",
+          "Files": [
+            "main.css",
+            "future.css",
+            "story.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "position : fixed",
+          "Files": [
+            "main.css",
+            "future.css",
+            "glass-patterns.css",
+            "story.css"
+          ],
+          "Occurrences": 12
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "right : 1rem",
+          "Files": [
+            "story.css",
+            "glass-patterns.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-radius : var(--radius-md)",
+          "Files": [
+            "main.css",
+            "index-multipanel.css"
+          ],
+          "Occurrences": 64
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "bottom : 2rem",
+          "Files": [
+            "main.css",
+            "story.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-bottom : 0",
+          "Files": [
+            "main.css",
+            "future.css",
+            "story.css",
+            "faq.css",
+            "index-multipanel.css"
+          ],
+          "Occurrences": 13
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "gap : 15px",
+          "Files": "future.css",
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding-left : 1.5rem",
+          "Files": [
+            "story.css",
+            "main.css",
+            "knowledge.css",
+            "faq.css"
+          ],
+          "Occurrences": 8
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : rgba(0, 212, 255, 0.08)",
+          "Files": [
+            "sts.css",
+            "main.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : rgba(26, 31, 58, 0.6)",
+          "Files": [
+            "knowledge.css",
+            "main.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : 0 var(--spacing-md)",
+          "Files": [
+            "main.css",
+            "index-multipanel.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : transparent",
+          "Files": [
+            "faq.css",
+            "story.css",
+            "main.css",
+            "future.css"
+          ],
+          "Occurrences": 7
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "gap : var(--spacing-md)",
+          "Files": [
+            "index-multipanel.css",
+            "main.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 29
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "transform : translateX(-50%)",
+          "Files": [
+            "main.css",
+            "glass-patterns.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-size : 1.75rem",
+          "Files": [
+            "learning-hub.css",
+            "main.css",
+            "knowledge.css",
+            "story.css"
+          ],
+          "Occurrences": 40
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border : none",
+          "Files": [
+            "faq.css",
+            "main.css",
+            "story.css",
+            "learning-hub.css",
+            "future.css"
+          ],
+          "Occurrences": 15
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "transition : all var(--transition-base)",
+          "Files": "main.css",
+          "Occurrences": 30
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-radius : 16px",
+          "Files": [
+            "main.css",
+            "sts.css",
+            "knowledge.css",
+            "story.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 15
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "transition : all 0.3s ease",
+          "Files": [
+            "faq.css",
+            "main.css",
+            "knowledge.css",
+            "learning-hub.css",
+            "future.css",
+            "glass-patterns.css",
+            "sts.css",
+            "story.css"
+          ],
+          "Occurrences": 32
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "transform : rotate(180deg)",
+          "Files": [
+            "main.css",
+            "micro-interactions.css",
+            "knowledge.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "grid-column : span 2",
+          "Files": "index-multipanel.css",
+          "Occurrences": 12
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-radius : var(--radius-sm)",
+          "Files": [
+            "main.css",
+            "index-multipanel.css"
+          ],
+          "Occurrences": 13
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-radius : var(--radius-sm, 8px)",
+          "Files": [
+            "micro-interactions.css",
+            "glass-patterns.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "visibility : visible",
+          "Files": [
+            "story.css",
+            "glass-patterns.css",
+            "main.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : 12px 15px",
+          "Files": "future.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding-left : 1.25rem",
+          "Files": [
+            "main.css",
+            "sts.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-color : var(--hub-primary)",
+          "Files": "learning-hub.css",
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin : 0.5rem 0",
+          "Files": "main.css",
+          "Occurrences": 12
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-family : 'Courier New', monospace",
+          "Files": [
+            "learning-hub.css",
+            "faq.css",
+            "main.css",
+            "story-print.css"
+          ],
+          "Occurrences": 6
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "min-height : 44px",
+          "Files": "main.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : rgba(245, 158, 11, 0.1)",
+          "Files": "main.css",
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "transform : translateY(-50%)",
+          "Files": [
+            "faq.css",
+            "main.css",
+            "story.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "grid-column : span 3",
+          "Files": "index-multipanel.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-top : var(--spacing-xl)",
+          "Files": [
+            "learning-hub.css",
+            "main.css"
+          ],
+          "Occurrences": 12
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "height : 20px",
+          "Files": [
+            "future.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "height : 8px",
+          "Files": [
+            "sts.css",
+            "main.css",
+            "story.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : var(--spacing-sm)",
+          "Files": [
+            "main.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "white-space : nowrap",
+          "Files": [
+            "glass-patterns.css",
+            "sts.css",
+            "main.css",
+            "knowledge.css"
+          ],
+          "Occurrences": 7
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-weight : 600",
+          "Files": [
+            "learning-hub.css",
+            "main.css",
+            "story.css",
+            "future.css",
+            "sts.css",
+            "knowledge.css",
+            "faq.css",
+            "index-multipanel.css"
+          ],
+          "Occurrences": 120
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin : 0 auto var(--spacing-md)",
+          "Files": "main.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border : 1px solid rgba(255, 255, 255, 0.2)",
+          "Files": [
+            "future.css",
+            "glass-patterns.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : rgba(244, 114, 182, 0.95)",
+          "Files": "glass-patterns.css",
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(244, 114, 182, 0.15))",
+          "Files": "glass-patterns.css",
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "overflow : hidden",
+          "Files": [
+            "story.css",
+            "main.css",
+            "knowledge.css",
+            "faq.css",
+            "micro-interactions.css",
+            "future.css",
+            "glass-patterns.css",
+            "index-multipanel.css",
+            "sts.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 43
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : #3fb950",
+          "Files": "main.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "backdrop-filter : blur(10px)",
+          "Files": [
+            "future.css",
+            "main.css",
+            "index-multipanel.css",
+            "sts.css",
+            "story.css"
+          ],
+          "Occurrences": 52
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-size : 0.8125rem",
+          "Files": [
+            "main.css",
+            "sts.css"
+          ],
+          "Occurrences": 8
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : rgba(0, 0, 0, 0.3)",
+          "Files": [
+            "main.css",
+            "sts.css",
+            "story.css"
+          ],
+          "Occurrences": 29
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-bottom : 1rem",
+          "Files": [
+            "main.css",
+            "story.css",
+            "faq.css",
+            "sts.css"
+          ],
+          "Occurrences": 46
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "width : 100%",
+          "Files": [
+            "story.css",
+            "faq.css",
+            "main.css",
+            "glass-patterns.css",
+            "sts.css",
+            "index-multipanel.css",
+            "future.css",
+            "micro-interactions.css",
+            "story-print.css"
+          ],
+          "Occurrences": 42
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-bottom : 0.5cm",
+          "Files": "story-print.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-bottom : 1.5rem",
+          "Files": [
+            "sts.css",
+            "main.css",
+            "story.css"
+          ],
+          "Occurrences": 22
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : 0.5rem 0",
+          "Files": "main.css",
+          "Occurrences": 6
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "z-index : 1",
+          "Files": [
+            "glass-patterns.css",
+            "micro-interactions.css",
+            "main.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : var(--text-muted)",
+          "Files": [
+            "learning-hub.css",
+            "main.css",
+            "story.css"
+          ],
+          "Occurrences": 28
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-size : 13px",
+          "Files": [
+            "future.css",
+            "main.css"
+          ],
+          "Occurrences": 6
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border : 1px solid rgba(0, 212, 255, 0.4)",
+          "Files": [
+            "knowledge.css",
+            "sts.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "transform : none !important",
+          "Files": "glass-patterns.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : var(--warning)",
+          "Files": "main.css",
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "text-decoration : underline",
+          "Files": [
+            "story-print.css",
+            "main.css",
+            "story.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "opacity : 0.5",
+          "Files": [
+            "main.css",
+            "story.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "left : -50%",
+          "Files": [
+            "main.css",
+            "glass-patterns.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2))",
+          "Files": [
+            "story.css",
+            "main.css",
+            "knowledge.css",
+            "sts.css"
+          ],
+          "Occurrences": 11
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : linear-gradient(135deg, rgba(10, 14, 39, 0.8), rgba(26, 31, 58, 0.8))",
+          "Files": "main.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-color : rgba(0, 212, 255, 0.2)",
+          "Files": [
+            "sts.css",
+            "main.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : 0.5rem 0.75rem",
+          "Files": [
+            "main.css",
+            "story.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "top : 50%",
+          "Files": [
+            "faq.css",
+            "main.css",
+            "story.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-top : var(--spacing-md)",
+          "Files": [
+            "main.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 9
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "max-height : 0",
+          "Files": [
+            "faq.css",
+            "main.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-top : 2rem",
+          "Files": [
+            "main.css",
+            "sts.css",
+            "story.css",
+            "knowledge.css"
+          ],
+          "Occurrences": 12
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : rgba(251, 191, 36, 0.95)",
+          "Files": "glass-patterns.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "line-height : 1.7",
+          "Files": [
+            "future.css",
+            "faq.css",
+            "main.css",
+            "index-multipanel.css",
+            "story.css"
+          ],
+          "Occurrences": 13
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : #333 !important",
+          "Files": "story-print.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "transition : max-height var(--transition-slow), padding var(--transition-slow)",
+          "Files": "main.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : var(--glass-bg)",
+          "Files": [
+            "main.css",
+            "story.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 37
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : var(--future-success)",
+          "Files": "future.css",
+          "Occurrences": 6
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-weight : 700",
+          "Files": [
+            "index-multipanel.css",
+            "learning-hub.css",
+            "main.css",
+            "story.css",
+            "future.css",
+            "sts.css",
+            "knowledge.css"
+          ],
+          "Occurrences": 50
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : var(--spacing-md)",
+          "Files": [
+            "main.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 15
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "opacity : 1",
+          "Files": [
+            "story.css",
+            "glass-patterns.css",
+            "main.css",
+            "micro-interactions.css"
+          ],
+          "Occurrences": 13
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : var(--text-primary, #fff)",
+          "Files": "glass-patterns.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin : 2rem auto",
+          "Files": [
+            "main.css",
+            "story.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-family : 'Source Code Pro', monospace",
+          "Files": "story.css",
+          "Occurrences": 6
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : rgba(0, 212, 255, 0.2)",
+          "Files": [
+            "story.css",
+            "knowledge.css",
+            "main.css",
+            "glass-patterns.css"
+          ],
+          "Occurrences": 8
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "gap : 0.75rem",
+          "Files": [
+            "main.css",
+            "sts.css",
+            "story.css"
+          ],
+          "Occurrences": 22
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "min-height : auto",
+          "Files": [
+            "index-multipanel.css",
+            "main.css",
+            "story-print.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : linear-gradient(135deg, #10b981, #34d399)",
+          "Files": "main.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : #3b82f6",
+          "Files": "main.css",
+          "Occurrences": 10
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "letter-spacing : 0.5px",
+          "Files": [
+            "story.css",
+            "future.css",
+            "main.css",
+            "index-multipanel.css"
+          ],
+          "Occurrences": 8
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : 1rem 2rem",
+          "Files": "main.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : #ef4444",
+          "Files": "main.css",
+          "Occurrences": 6
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : rgba(52, 211, 153, 0.95)",
+          "Files": "glass-patterns.css",
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-size : 16px",
+          "Files": "future.css",
+          "Occurrences": 6
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "display : inline-block",
+          "Files": [
+            "main.css",
+            "future.css",
+            "story.css",
+            "sts.css",
+            "knowledge.css"
+          ],
+          "Occurrences": 29
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border : 1px solid rgba(255, 255, 255, 0.08)",
+          "Files": [
+            "main.css",
+            "glass-patterns.css",
+            "story.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : rgba(0, 0, 0, 0.2)",
+          "Files": [
+            "main.css",
+            "knowledge.css",
+            "sts.css"
+          ],
+          "Occurrences": 10
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : var(--hub-secondary)",
+          "Files": "learning-hub.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin : var(--spacing-md) 0",
+          "Files": [
+            "main.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "gap : 10px",
+          "Files": [
+            "main.css",
+            "future.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-radius : 6px",
+          "Files": [
+            "main.css",
+            "sts.css",
+            "future.css",
+            "learning-hub.css",
+            "story.css"
+          ],
+          "Occurrences": 22
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : 1rem 1.5rem",
+          "Files": [
+            "main.css",
+            "faq.css",
+            "sts.css",
+            "glass-patterns.css"
+          ],
+          "Occurrences": 10
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "-webkit-backdrop-filter : blur(20px)",
+          "Files": [
+            "main.css",
+            "glass-patterns.css"
+          ],
+          "Occurrences": 14
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : rgba(255, 255, 255, 0.1)",
+          "Files": [
+            "main.css",
+            "future.css",
+            "learning-hub.css",
+            "glass-patterns.css",
+            "story.css"
+          ],
+          "Occurrences": 13
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "transform : scale(1.02)",
+          "Files": [
+            "micro-interactions.css",
+            "main.css",
+            "story.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "overflow-x : auto",
+          "Files": [
+            "knowledge.css",
+            "main.css",
+            "sts.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 16
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-size : 11px",
+          "Files": [
+            "main.css",
+            "future.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : #7b61ff",
+          "Files": "main.css",
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-color : rgba(245, 158, 11, 0.35)",
+          "Files": "glass-patterns.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "display : inline-flex",
+          "Files": [
+            "index-multipanel.css",
+            "sts.css",
+            "story.css",
+            "main.css",
+            "learning-hub.css",
+            "knowledge.css"
+          ],
+          "Occurrences": 11
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-bottom : var(--spacing-xs)",
+          "Files": [
+            "learning-hub.css",
+            "main.css"
+          ],
+          "Occurrences": 6
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin : 0 0 var(--spacing-xs) 0",
+          "Files": [
+            "main.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : rgba(0, 0, 0, 0.5)",
+          "Files": "main.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin : 1rem 0",
+          "Files": [
+            "story.css",
+            "main.css",
+            "faq.css",
+            "knowledge.css"
+          ],
+          "Occurrences": 11
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : 0.25rem 0.75rem",
+          "Files": [
+            "main.css",
+            "story.css"
+          ],
+          "Occurrences": 10
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : var(--future-primary)",
+          "Files": "future.css",
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : var(--spacing-xl)",
+          "Files": [
+            "learning-hub.css",
+            "main.css"
+          ],
+          "Occurrences": 25
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : rgba(123, 97, 255, 0.1)",
+          "Files": [
+            "main.css",
+            "learning-hub.css",
+            "sts.css"
+          ],
+          "Occurrences": 11
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-radius : 4px",
+          "Files": [
+            "story.css",
+            "main.css",
+            "future.css",
+            "sts.css",
+            "learning-hub.css",
+            "faq.css",
+            "knowledge.css"
+          ],
+          "Occurrences": 29
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border : 1px solid var(--sts-glass-border)",
+          "Files": "sts.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-size : 1.1rem",
+          "Files": [
+            "faq.css",
+            "index-multipanel.css",
+            "future.css",
+            "main.css",
+            "learning-hub.css",
+            "story.css"
+          ],
+          "Occurrences": 33
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : #666 !important",
+          "Files": "story-print.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : 2rem",
+          "Files": [
+            "main.css",
+            "sts.css",
+            "story.css"
+          ],
+          "Occurrences": 31
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : #000",
+          "Files": [
+            "learning-hub.css",
+            "main.css",
+            "story-print.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(251, 191, 36, 0.15))",
+          "Files": "glass-patterns.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : 1rem",
+          "Files": [
+            "knowledge.css",
+            "main.css",
+            "story.css",
+            "sts.css",
+            "faq.css"
+          ],
+          "Occurrences": 26
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "z-index : 1000",
+          "Files": [
+            "main.css",
+            "story.css"
+          ],
+          "Occurrences": 8
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "gap : 1.5rem",
+          "Files": [
+            "main.css",
+            "knowledge.css",
+            "sts.css"
+          ],
+          "Occurrences": 21
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : var(--text-primary)",
+          "Files": [
+            "main.css",
+            "faq.css",
+            "learning-hub.css",
+            "story.css",
+            "index-multipanel.css",
+            "future.css"
+          ],
+          "Occurrences": 87
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "height : 100%",
+          "Files": [
+            "index-multipanel.css",
+            "main.css",
+            "story.css",
+            "future.css"
+          ],
+          "Occurrences": 12
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "overflow-y : auto",
+          "Files": [
+            "glass-patterns.css",
+            "sts.css",
+            "main.css",
+            "story.css"
+          ],
+          "Occurrences": 7
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "transform : translateY(0)",
+          "Files": [
+            "glass-patterns.css",
+            "story.css",
+            "main.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-style : italic",
+          "Files": [
+            "main.css",
+            "story.css",
+            "story-print.css",
+            "sts.css"
+          ],
+          "Occurrences": 24
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-top : 1px solid rgba(255, 255, 255, 0.1)",
+          "Files": [
+            "faq.css",
+            "future.css",
+            "main.css"
+          ],
+          "Occurrences": 7
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : rgba(0, 255, 136, 0.1)",
+          "Files": [
+            "main.css",
+            "story.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "transform : translateX(10px)",
+          "Files": [
+            "future.css",
+            "micro-interactions.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : linear-gradient(135deg, var(--accent-primary), var(--accent-secondary))",
+          "Files": "main.css",
+          "Occurrences": 6
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : var(--hub-success)",
+          "Files": "learning-hub.css",
+          "Occurrences": 7
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : var(--danger)",
+          "Files": "main.css",
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-size : 0.95rem",
+          "Files": [
+            "learning-hub.css",
+            "main.css",
+            "story.css",
+            "future.css"
+          ],
+          "Occurrences": 22
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-top : var(--spacing-sm)",
+          "Files": [
+            "learning-hub.css",
+            "main.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-color : rgba(236, 72, 153, 0.35)",
+          "Files": "glass-patterns.css",
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : var(--hub-primary)",
+          "Files": "learning-hub.css",
+          "Occurrences": 11
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(123, 97, 255, 0.15))",
+          "Files": [
+            "sts.css",
+            "main.css",
+            "glass-patterns.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : #1e1e2e",
+          "Files": "future.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-bottom : 25px",
+          "Files": "future.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : 0.375rem 0.75rem",
+          "Files": [
+            "main.css",
+            "sts.css",
+            "knowledge.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "justify-content : flex-start",
+          "Files": [
+            "sts.css",
+            "future.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(0, 212, 255, 0.2))",
+          "Files": "main.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : #86efac",
+          "Files": [
+            "sts.css",
+            "knowledge.css"
+          ],
+          "Occurrences": 6
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : 0",
+          "Files": [
+            "main.css",
+            "learning-hub.css",
+            "story-print.css",
+            "future.css",
+            "sts.css",
+            "knowledge.css"
+          ],
+          "Occurrences": 37
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "gap : 30px",
+          "Files": "future.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding-top : 2rem",
+          "Files": [
+            "main.css",
+            "faq.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "display : grid",
+          "Files": [
+            "sts.css",
+            "learning-hub.css",
+            "main.css",
+            "future.css",
+            "knowledge.css",
+            "index-multipanel.css"
+          ],
+          "Occurrences": 67
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "height : 200px",
+          "Files": [
+            "main.css",
+            "micro-interactions.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-top : 1.5rem",
+          "Files": [
+            "main.css",
+            "faq.css",
+            "story.css"
+          ],
+          "Occurrences": 11
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "flex-wrap : wrap",
+          "Files": [
+            "main.css",
+            "learning-hub.css",
+            "future.css",
+            "sts.css",
+            "index-multipanel.css"
+          ],
+          "Occurrences": 28
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "right : 2rem",
+          "Files": [
+            "main.css",
+            "story.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : 0.75rem 1rem",
+          "Files": [
+            "sts.css",
+            "glass-patterns.css",
+            "knowledge.css"
+          ],
+          "Occurrences": 6
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "width : 60px",
+          "Files": [
+            "main.css",
+            "future.css"
+          ],
+          "Occurrences": 32
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-size : 1.125rem",
+          "Files": [
+            "main.css",
+            "story.css",
+            "knowledge.css",
+            "sts.css",
+            "index-multipanel.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 17
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-bottom : var(--spacing-sm)",
+          "Files": [
+            "index-multipanel.css",
+            "main.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 14
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-weight : 500",
+          "Files": [
+            "future.css",
+            "faq.css",
+            "main.css",
+            "story.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 26
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "max-width : 1600px",
+          "Files": [
+            "future.css",
+            "main.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "height : 2px",
+          "Files": "main.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-top : 0.5rem",
+          "Files": "main.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "align-items : stretch",
+          "Files": [
+            "sts.css",
+            "main.css",
+            "future.css"
+          ],
+          "Occurrences": 8
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "grid-template-columns : repeat(auto-fit, minmax(200px, 1fr))",
+          "Files": [
+            "future.css",
+            "main.css",
+            "sts.css"
+          ],
+          "Occurrences": 9
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : rgba(186, 85, 211, 0.95)",
+          "Files": "glass-patterns.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : #f5f5f5 !important",
+          "Files": "story-print.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin : 0 0 1rem 0",
+          "Files": [
+            "knowledge.css",
+            "main.css"
+          ],
+          "Occurrences": 6
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-size : 0.9rem",
+          "Files": [
+            "main.css",
+            "story.css",
+            "faq.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 47
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : var(--space-xl, 3rem)",
+          "Files": "glass-patterns.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-radius : 8px",
+          "Files": [
+            "story.css",
+            "main.css",
+            "future.css",
+            "learning-hub.css",
+            "knowledge.css",
+            "faq.css",
+            "sts.css"
+          ],
+          "Occurrences": 68
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-size : 1.2rem",
+          "Files": [
+            "main.css",
+            "index-multipanel.css",
+            "story.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 12
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "animation : fadeInUp 0.8s ease-out 0.4s both",
+          "Files": "main.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-bottom : 15px",
+          "Files": "future.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-bottom : none",
+          "Files": [
+            "main.css",
+            "story.css",
+            "glass-patterns.css",
+            "faq.css"
+          ],
+          "Occurrences": 8
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin : 0 auto 2rem",
+          "Files": [
+            "main.css",
+            "sts.css",
+            "faq.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-color : rgba(123, 97, 255, 0.5)",
+          "Files": [
+            "main.css",
+            "sts.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : rgba(129, 140, 248, 0.95)",
+          "Files": "glass-patterns.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-color : rgba(123, 97, 255, 0.35)",
+          "Files": "glass-patterns.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-top : var(--spacing-lg)",
+          "Files": [
+            "main.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 20
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "height : 40px",
+          "Files": [
+            "main.css",
+            "glass-patterns.css",
+            "story.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border : 1px solid rgba(0, 212, 255, 0.3)",
+          "Files": [
+            "main.css",
+            "glass-patterns.css",
+            "story.css"
+          ],
+          "Occurrences": 10
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "outline : none",
+          "Files": [
+            "main.css",
+            "future.css",
+            "faq.css",
+            "micro-interactions.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "bottom : 0",
+          "Files": [
+            "main.css",
+            "micro-interactions.css",
+            "story.css"
+          ],
+          "Occurrences": 6
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "text-align : left",
+          "Files": [
+            "faq.css",
+            "main.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 13
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(0, 212, 255, 0.2))",
+          "Files": "main.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-bottom : var(--spacing-md)",
+          "Files": [
+            "main.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 65
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "position : sticky",
+          "Files": [
+            "main.css",
+            "future.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-size : 2.5rem",
+          "Files": [
+            "main.css",
+            "index-multipanel.css",
+            "sts.css",
+            "future.css",
+            "story.css"
+          ],
+          "Occurrences": 29
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-radius : 20px",
+          "Files": [
+            "story.css",
+            "future.css",
+            "sts.css",
+            "main.css",
+            "knowledge.css"
+          ],
+          "Occurrences": 10
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-bottom : var(--spacing-xl)",
+          "Files": [
+            "learning-hub.css",
+            "main.css"
+          ],
+          "Occurrences": 8
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : var(--space-lg, 2rem)",
+          "Files": "glass-patterns.css",
+          "Occurrences": 6
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-size : 24px",
+          "Files": "future.css",
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : linear-gradient(135deg, var(--future-primary), var(--future-secondary))",
+          "Files": "future.css",
+          "Occurrences": 7
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "text-transform : uppercase",
+          "Files": [
+            "learning-hub.css",
+            "main.css",
+            "sts.css",
+            "story.css",
+            "future.css",
+            "index-multipanel.css",
+            "knowledge.css"
+          ],
+          "Occurrences": 35
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : 0.75rem 1.5rem",
+          "Files": [
+            "main.css",
+            "knowledge.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-bottom : 0.75rem",
+          "Files": [
+            "story.css",
+            "main.css",
+            "faq.css",
+            "sts.css"
+          ],
+          "Occurrences": 21
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border : 1px solid rgba(247, 223, 30, 0.4)",
+          "Files": [
+            "sts.css",
+            "main.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-top : 1rem",
+          "Files": [
+            "main.css",
+            "knowledge.css"
+          ],
+          "Occurrences": 12
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "-webkit-background-clip : text",
+          "Files": [
+            "main.css",
+            "future.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : 25px",
+          "Files": "future.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "list-style : none",
+          "Files": [
+            "main.css",
+            "learning-hub.css",
+            "story-print.css",
+            "future.css",
+            "sts.css",
+            "story.css",
+            "knowledge.css"
+          ],
+          "Occurrences": 31
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border : 1px solid var(--glass-border)",
+          "Files": [
+            "main.css",
+            "story.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 44
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "grid-template-columns : 1fr",
+          "Files": [
+            "main.css",
+            "story.css",
+            "sts.css",
+            "future.css",
+            "knowledge.css",
+            "learning-hub.css",
+            "index-multipanel.css"
+          ],
+          "Occurrences": 42
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "z-index : 100",
+          "Files": [
+            "main.css",
+            "story.css",
+            "future.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : var(--spacing-2xl)",
+          "Files": [
+            "learning-hub.css",
+            "main.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-bottom : 3rem",
+          "Files": [
+            "main.css",
+            "sts.css",
+            "faq.css"
+          ],
+          "Occurrences": 9
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin : 2rem 0",
+          "Files": [
+            "story.css",
+            "main.css"
+          ],
+          "Occurrences": 10
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : 0 1.5rem",
+          "Files": "main.css",
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : #00ff88",
+          "Files": [
+            "main.css",
+            "story.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "line-height : 1.5",
+          "Files": [
+            "knowledge.css",
+            "main.css",
+            "learning-hub.css",
+            "future.css",
+            "sts.css",
+            "index-multipanel.css",
+            "story.css"
+          ],
+          "Occurrences": 17
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-radius : 12px",
+          "Files": [
+            "future.css",
+            "knowledge.css",
+            "learning-hub.css",
+            "main.css",
+            "story.css",
+            "sts.css",
+            "faq.css"
+          ],
+          "Occurrences": 54
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "display : block",
+          "Files": [
+            "learning-hub.css",
+            "main.css",
+            "future.css",
+            "sts.css",
+            "index-multipanel.css",
+            "story.css"
+          ],
+          "Occurrences": 34
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-bottom : 1px solid rgba(255, 255, 255, 0.05)",
+          "Files": [
+            "main.css",
+            "glass-patterns.css",
+            "faq.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-size : 0.8rem",
+          "Files": [
+            "main.css",
+            "story.css"
+          ],
+          "Occurrences": 7
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : 1.5rem",
+          "Files": [
+            "main.css",
+            "story.css",
+            "sts.css",
+            "knowledge.css"
+          ],
+          "Occurrences": 46
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : var(--spacing-md) var(--spacing-xl)",
+          "Files": "learning-hub.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "transition : all 0.2s ease",
+          "Files": [
+            "glass-patterns.css",
+            "main.css",
+            "story.css"
+          ],
+          "Occurrences": 12
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "gap : 0.5rem",
+          "Files": [
+            "main.css",
+            "sts.css",
+            "story.css",
+            "knowledge.css"
+          ],
+          "Occurrences": 30
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : #d4a574",
+          "Files": "story.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "transform : scale(1.1)",
+          "Files": [
+            "micro-interactions.css",
+            "story.css",
+            "knowledge.css",
+            "index-multipanel.css"
+          ],
+          "Occurrences": 6
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "grid-template-columns : repeat(auto-fit, minmax(300px, 1fr))",
+          "Files": [
+            "main.css",
+            "future.css",
+            "sts.css"
+          ],
+          "Occurrences": 6
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : #f85149",
+          "Files": "main.css",
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "width : 50px",
+          "Files": [
+            "main.css",
+            "story.css",
+            "future.css"
+          ],
+          "Occurrences": 6
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "height : 300px",
+          "Files": "main.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : rgba(59, 130, 246, 0.2)",
+          "Files": "main.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "max-width : 100%",
+          "Files": [
+            "main.css",
+            "glass-patterns.css",
+            "story.css",
+            "story-print.css"
+          ],
+          "Occurrences": 15
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border : 1px solid rgba(59, 130, 246, 0.3)",
+          "Files": "main.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "max-width : 700px",
+          "Files": [
+            "story.css",
+            "main.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : rgba(16, 185, 129, 0.1)",
+          "Files": [
+            "main.css",
+            "sts.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 11
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : rgba(0, 212, 255, 0.15)",
+          "Files": [
+            "knowledge.css",
+            "main.css",
+            "glass-patterns.css",
+            "sts.css",
+            "story.css"
+          ],
+          "Occurrences": 9
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : linear-gradient(90deg, transparent, var(--accent-primary), transparent)",
+          "Files": "main.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "-webkit-text-fill-color : transparent",
+          "Files": [
+            "main.css",
+            "future.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-weight : 800",
+          "Files": [
+            "sts.css",
+            "main.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "opacity : 0.7",
+          "Files": [
+            "main.css",
+            "story.css",
+            "glass-patterns.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "transform : translateY(-5px)",
+          "Files": [
+            "future.css",
+            "glass-patterns.css",
+            "story.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : linear-gradient(135deg, rgba(255, 165, 0, 0.2), rgba(255, 68, 68, 0.2))",
+          "Files": "main.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-bottom : 0.25rem",
+          "Files": [
+            "main.css",
+            "sts.css",
+            "story.css"
+          ],
+          "Occurrences": 7
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : rgba(247, 223, 30, 0.2)",
+          "Files": [
+            "sts.css",
+            "main.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "min-height : 280px",
+          "Files": [
+            "main.css",
+            "index-multipanel.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-size : 14px",
+          "Files": [
+            "future.css",
+            "main.css"
+          ],
+          "Occurrences": 21
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-radius : 50%",
+          "Files": [
+            "main.css",
+            "knowledge.css",
+            "micro-interactions.css",
+            "story.css",
+            "glass-patterns.css",
+            "future.css"
+          ],
+          "Occurrences": 16
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding-top : 1.5rem",
+          "Files": [
+            "story.css",
+            "main.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "text-decoration : none",
+          "Files": [
+            "main.css",
+            "learning-hub.css",
+            "future.css",
+            "knowledge.css",
+            "story.css",
+            "index-multipanel.css",
+            "sts.css",
+            "faq.css"
+          ],
+          "Occurrences": 39
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "letter-spacing : 0.1em",
+          "Files": [
+            "sts.css",
+            "main.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : rgba(255, 255, 255, 0.05)",
+          "Files": [
+            "future.css",
+            "story.css",
+            "faq.css",
+            "main.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 25
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-left : 4px solid #7b61ff",
+          "Files": "main.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-color : var(--accent-primary)",
+          "Files": [
+            "main.css",
+            "story.css",
+            "faq.css"
+          ],
+          "Occurrences": 25
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "opacity : 0.8",
+          "Files": [
+            "faq.css",
+            "main.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin : 0 auto 1rem auto",
+          "Files": "main.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : rgba(0, 0, 0, 0.4)",
+          "Files": [
+            "main.css",
+            "sts.css",
+            "knowledge.css"
+          ],
+          "Occurrences": 11
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : linear-gradient(135deg, var(--accent-secondary), var(--accent-primary))",
+          "Files": "main.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "transition : transform 0.3s ease",
+          "Files": [
+            "future.css",
+            "knowledge.css",
+            "micro-interactions.css",
+            "main.css",
+            "story.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "flex : 1",
+          "Files": [
+            "main.css",
+            "sts.css",
+            "knowledge.css",
+            "faq.css",
+            "future.css"
+          ],
+          "Occurrences": 15
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : 0.5cm",
+          "Files": "story-print.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "transition : all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+          "Files": [
+            "main.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : #4CAF50",
+          "Files": "main.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-weight : bold",
+          "Files": [
+            "main.css",
+            "learning-hub.css",
+            "story-print.css",
+            "sts.css",
+            "knowledge.css"
+          ],
+          "Occurrences": 11
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "display : flex",
+          "Files": [
+            "main.css",
+            "faq.css",
+            "sts.css",
+            "learning-hub.css",
+            "knowledge.css",
+            "story.css",
+            "index-multipanel.css",
+            "future.css",
+            "glass-patterns.css"
+          ],
+          "Occurrences": 212
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : rgba(123, 97, 255, 0.2)",
+          "Files": [
+            "learning-hub.css",
+            "main.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-color : rgba(79, 70, 229, 0.35)",
+          "Files": "glass-patterns.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "width : 0",
+          "Files": [
+            "main.css",
+            "glass-patterns.css",
+            "micro-interactions.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin : 80px auto",
+          "Files": "future.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : #00d4ff",
+          "Files": [
+            "story.css",
+            "knowledge.css",
+            "sts.css",
+            "main.css"
+          ],
+          "Occurrences": 12
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : var(--module-bg)",
+          "Files": "learning-hub.css",
+          "Occurrences": 8
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-top : 1px solid var(--glass-border)",
+          "Files": [
+            "main.css",
+            "story.css"
+          ],
+          "Occurrences": 10
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "position : relative",
+          "Files": [
+            "glass-patterns.css",
+            "main.css",
+            "story.css",
+            "learning-hub.css",
+            "knowledge.css",
+            "future.css",
+            "micro-interactions.css",
+            "index-multipanel.css",
+            "faq.css",
+            "sts.css"
+          ],
+          "Occurrences": 55
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-size : 0.7rem",
+          "Files": "main.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "left : -100%",
+          "Files": [
+            "main.css",
+            "index-multipanel.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border : 2px solid var(--glass-border)",
+          "Files": "main.css",
+          "Occurrences": 10
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding-left : 0",
+          "Files": [
+            "main.css",
+            "story.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-left : 4px solid var(--accent-primary)",
+          "Files": [
+            "main.css",
+            "story.css"
+          ],
+          "Occurrences": 6
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "transform : translateY(-3px)",
+          "Files": [
+            "index-multipanel.css",
+            "future.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "line-height : 1",
+          "Files": [
+            "main.css",
+            "index-multipanel.css"
+          ],
+          "Occurrences": 7
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "content : \"✓\"",
+          "Files": [
+            "learning-hub.css",
+            "future.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "text-align : center",
+          "Files": [
+            "main.css",
+            "faq.css",
+            "story.css",
+            "future.css",
+            "index-multipanel.css",
+            "story-print.css",
+            "learning-hub.css",
+            "sts.css"
+          ],
+          "Occurrences": 117
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-top : 0.75rem",
+          "Files": [
+            "sts.css",
+            "main.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "gap : var(--spacing-sm)",
+          "Files": [
+            "main.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 20
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : rgba(0, 212, 255, 0.1)",
+          "Files": [
+            "main.css",
+            "story.css",
+            "knowledge.css",
+            "sts.css"
+          ],
+          "Occurrences": 23
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : #8b5cf6",
+          "Files": [
+            "sts.css",
+            "main.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : #10b981",
+          "Files": [
+            "main.css",
+            "sts.css"
+          ],
+          "Occurrences": 15
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "max-width : 600px",
+          "Files": [
+            "main.css",
+            "sts.css",
+            "learning-hub.css",
+            "story.css",
+            "faq.css"
+          ],
+          "Occurrences": 8
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : var(--accent-secondary)",
+          "Files": [
+            "main.css",
+            "story.css"
+          ],
+          "Occurrences": 21
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : rgba(255, 255, 255, 0.03)",
+          "Files": [
+            "faq.css",
+            "main.css",
+            "story.css",
+            "index-multipanel.css"
+          ],
+          "Occurrences": 7
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-color : var(--future-primary)",
+          "Files": "future.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-size : 12pt",
+          "Files": "story-print.css",
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "gap : var(--spacing-xs)",
+          "Files": [
+            "learning-hub.css",
+            "main.css"
+          ],
+          "Occurrences": 9
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-top : 0",
+          "Files": [
+            "main.css",
+            "story-print.css",
+            "index-multipanel.css"
+          ],
+          "Occurrences": 15
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "gap : 2rem",
+          "Files": "main.css",
+          "Occurrences": 11
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "max-width : 1200px",
+          "Files": [
+            "main.css",
+            "future.css"
+          ],
+          "Occurrences": 8
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : var(--future-accent)",
+          "Files": "future.css",
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "box-shadow : 0 8px 32px rgba(0, 212, 255, 0.2)",
+          "Files": "main.css",
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "display : none",
+          "Files": [
+            "story.css",
+            "main.css",
+            "learning-hub.css",
+            "micro-interactions.css",
+            "faq.css",
+            "glass-patterns.css",
+            "index-multipanel.css"
+          ],
+          "Occurrences": 22
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-size : 2rem",
+          "Files": [
+            "index-multipanel.css",
+            "main.css",
+            "learning-hub.css",
+            "story.css",
+            "faq.css",
+            "sts.css"
+          ],
+          "Occurrences": 34
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "grid-row : span 2",
+          "Files": "index-multipanel.css",
+          "Occurrences": 13
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : linear-gradient(135deg, rgba(20, 184, 166, 0.15), rgba(0, 212, 255, 0.15))",
+          "Files": "glass-patterns.css",
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "cursor : pointer",
+          "Files": [
+            "faq.css",
+            "main.css",
+            "learning-hub.css",
+            "glass-patterns.css",
+            "knowledge.css",
+            "micro-interactions.css",
+            "story.css",
+            "future.css",
+            "index-multipanel.css"
+          ],
+          "Occurrences": 39
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-radius : var(--radius-md, 12px)",
+          "Files": "glass-patterns.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(123, 97, 255, 0.1))",
+          "Files": [
+            "story.css",
+            "main.css",
+            "sts.css"
+          ],
+          "Occurrences": 6
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "justify-content : center",
+          "Files": [
+            "main.css",
+            "knowledge.css",
+            "learning-hub.css",
+            "story.css",
+            "sts.css",
+            "future.css",
+            "glass-patterns.css",
+            "index-multipanel.css"
+          ],
+          "Occurrences": 80
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-style : normal",
+          "Files": [
+            "story.css",
+            "main.css",
+            "sts.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "gap : 2.5rem",
+          "Files": "main.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : var(--accent-primary)",
+          "Files": [
+            "main.css",
+            "story.css"
+          ],
+          "Occurrences": 10
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-family : var(--font-mono)",
+          "Files": "main.css",
+          "Occurrences": 9
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin : 0 auto",
+          "Files": [
+            "main.css",
+            "future.css",
+            "sts.css",
+            "faq.css",
+            "story.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 23
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "transform : scale(1)",
+          "Files": [
+            "glass-patterns.css",
+            "micro-interactions.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin : 3rem 0",
+          "Files": [
+            "main.css",
+            "sts.css",
+            "story.css"
+          ],
+          "Occurrences": 8
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : var(--spacing-md) var(--spacing-lg)",
+          "Files": [
+            "main.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "transform : translateX(4px)",
+          "Files": [
+            "main.css",
+            "knowledge.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-size : 0.9375rem",
+          "Files": [
+            "sts.css",
+            "main.css"
+          ],
+          "Occurrences": 10
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border : 1px solid rgba(123, 97, 255, 0.3)",
+          "Files": [
+            "main.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "font-size : 0.85rem",
+          "Files": [
+            "main.css",
+            "future.css"
+          ],
+          "Occurrences": 14
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "line-height : 1.8",
+          "Files": [
+            "story.css",
+            "main.css"
+          ],
+          "Occurrences": 13
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "transform : translateY(-4px)",
+          "Files": [
+            "main.css",
+            "index-multipanel.css",
+            "learning-hub.css",
+            "sts.css"
+          ],
+          "Occurrences": 24
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "flex-shrink : 0",
+          "Files": [
+            "main.css",
+            "knowledge.css",
+            "future.css",
+            "index-multipanel.css"
+          ],
+          "Occurrences": 13
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-radius : var(--radius-lg)",
+          "Files": [
+            "main.css",
+            "index-multipanel.css"
+          ],
+          "Occurrences": 24
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : rgba(255, 255, 255, 0.85)",
+          "Files": [
+            "knowledge.css",
+            "sts.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : var(--success)",
+          "Files": "main.css",
+          "Occurrences": 13
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "/* GPU acceleration */\n    transform : translateZ(0)",
+          "Files": "glass-patterns.css",
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "transform : translateX(0)",
+          "Files": "glass-patterns.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "grid-template-columns : 1fr 1fr",
+          "Files": [
+            "knowledge.css",
+            "main.css",
+            "sts.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : #fca5a5",
+          "Files": [
+            "knowledge.css",
+            "sts.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border : 1px solid var(--accent-primary)",
+          "Files": [
+            "story.css",
+            "main.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : var(--spacing-lg)",
+          "Files": [
+            "main.css",
+            "learning-hub.css",
+            "index-multipanel.css"
+          ],
+          "Occurrences": 36
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-top : 0.25rem",
+          "Files": [
+            "main.css",
+            "index-multipanel.css",
+            "sts.css",
+            "story.css"
+          ],
+          "Occurrences": 11
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : #2196F3",
+          "Files": "main.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "justify-content : space-between",
+          "Files": [
+            "faq.css",
+            "main.css",
+            "learning-hub.css",
+            "future.css",
+            "story.css",
+            "sts.css"
+          ],
+          "Occurrences": 30
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-color : rgba(0, 212, 255, 0.5)",
+          "Files": [
+            "main.css",
+            "sts.css",
+            "knowledge.css"
+          ],
+          "Occurrences": 9
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "top : -50%",
+          "Files": [
+            "main.css",
+            "glass-patterns.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "transform : translateY(-8px)",
+          "Files": [
+            "micro-interactions.css",
+            "main.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : 0 20px",
+          "Files": "future.css",
+          "Occurrences": 9
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "grid-template-columns : repeat(3, 1fr)",
+          "Files": [
+            "main.css",
+            "future.css",
+            "index-multipanel.css"
+          ],
+          "Occurrences": 17
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "width : 80%",
+          "Files": [
+            "main.css",
+            "micro-interactions.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "left : 50%",
+          "Files": [
+            "main.css",
+            "glass-patterns.css"
+          ],
+          "Occurrences": 6
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "grid-row : span 1",
+          "Files": "index-multipanel.css",
+          "Occurrences": 11
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "gap : var(--spacing-xl)",
+          "Files": [
+            "learning-hub.css",
+            "main.css",
+            "index-multipanel.css"
+          ],
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "left : 100%",
+          "Files": [
+            "index-multipanel.css",
+            "main.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "right : 20px",
+          "Files": [
+            "future.css",
+            "glass-patterns.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : #fde047",
+          "Files": "sts.css",
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "gap : 20px",
+          "Files": "future.css",
+          "Occurrences": 6
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-bottom : clamp(0.5rem, 1.5cqi, 0.875rem)",
+          "Files": "index-multipanel.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "min-width : 0",
+          "Files": [
+            "main.css",
+            "knowledge.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : white",
+          "Files": [
+            "main.css",
+            "future.css"
+          ],
+          "Occurrences": 77
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "max-width : 800px",
+          "Files": [
+            "main.css",
+            "future.css",
+            "story.css"
+          ],
+          "Occurrences": 9
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-bottom : 1px solid var(--glass-border)",
+          "Files": [
+            "main.css",
+            "story.css"
+          ],
+          "Occurrences": 11
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "height : 50px",
+          "Files": [
+            "main.css",
+            "story.css",
+            "future.css"
+          ],
+          "Occurrences": 6
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : rgba(0, 0, 0, 0.9)",
+          "Files": [
+            "main.css",
+            "sts.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "min-height : 400px",
+          "Files": [
+            "learning-hub.css",
+            "main.css"
+          ],
+          "Occurrences": 6
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "border-bottom : 2px solid var(--glass-border)",
+          "Files": [
+            "story.css",
+            "main.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "transition : transform 0.2s ease, box-shadow 0.2s ease",
+          "Files": [
+            "story.css",
+            "main.css"
+          ],
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "backdrop-filter : blur(20px)",
+          "Files": [
+            "main.css",
+            "glass-patterns.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 15
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "grid-template-columns : repeat(2, 1fr)",
+          "Files": [
+            "main.css",
+            "index-multipanel.css"
+          ],
+          "Occurrences": 16
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-bottom : 8px",
+          "Files": "future.css",
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : #a78bfa",
+          "Files": [
+            "learning-hub.css",
+            "main.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-bottom : 2rem",
+          "Files": [
+            "main.css",
+            "sts.css",
+            "story.css"
+          ],
+          "Occurrences": 24
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : var(--spacing-sm) var(--spacing-md)",
+          "Files": [
+            "main.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 4
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "margin-bottom : 10px",
+          "Files": "future.css",
+          "Occurrences": 5
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "background : rgba(10, 14, 39, 0.6)",
+          "Files": "main.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "padding : 2.5rem",
+          "Files": "main.css",
+          "Occurrences": 3
+        },
+        {
+          "Action": "EXTRACT to utility class",
+          "Property": "color : inherit",
+          "Files": [
+            "main.css",
+            "learning-hub.css"
+          ],
+          "Occurrences": 4
+        }
+      ],
+      "consolidation_potential": 6507.0,
+      "count": 509,
+      "percentage": 33.55
+    }
+  }
+}
