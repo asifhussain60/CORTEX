@@ -42,6 +42,7 @@
 | Pattern (Regex) | Orchestrator | Priority | Mode |
 |-----------------|--------------|----------|------|
 | `^(plan\|create a plan\|make a plan)` | **Planning v5** | 10 (highest) | autonomous |
+| `^(cortex-planner\|manage plan\|planner\|continue plan)` | **Planner v1** | 8 | autonomous |
 | `^(ado wizard\|ado interactive)` | **ADO v2** | 29 | wizard |
 | `^(ado\|ado story\|ado feature\|azure devops)` | **ADO v2** | 30 | auto |
 | `^(sanitize\|anonymize\|redact\|remove sensitive)` | **Sanitization v2** | 40 | autonomous |
