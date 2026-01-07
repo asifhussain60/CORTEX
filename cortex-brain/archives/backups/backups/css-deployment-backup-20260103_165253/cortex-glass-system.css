@@ -1,0 +1,69 @@
+/**
+ * CORTEX Glassmorphism Design System - Master Import
+ * Version: 4.0.0
+ * 
+ * Unified glassmorphism design system with named panel taxonomy.
+ * Consolidates 24+ CSS files into modular architecture.
+ * 
+ * Architecture:
+ * - Design Tokens (CSS variables)
+ * - Named Panels (10 semantic panel styles)
+ * - Base Patterns (5 core glassmorphism patterns)
+ * - UI Components (modals, toasts, dropdowns)
+ * - Animations (hover, focus, morphing effects)
+ * - Utilities (helper classes for quick styling)
+ * 
+ * Author: Asif Hussain
+ * Copyright: © 2025-2026 Asif Hussain. All rights reserved.
+ * License: Source-Available (Use Allowed, No Contributions)
+ */
+
+/* ============================================
+   TIER 1: DESIGN TOKENS (Foundation Layer)
+   ============================================ */
+@import url('./glass-design-tokens.css');
+
+/* ============================================
+   TIER 2: NAMED PANELS (Semantic Panel System)
+   ============================================ */
+@import url('./glass-named-panels.css');
+
+/* ============================================
+   TIER 3: BASE PATTERNS (Core Glassmorphism)
+   ============================================ */
+@import url('./glass-base-patterns.css');
+
+/* ============================================
+   TIER 4: UI COMPONENTS (Interactive Elements)
+   ============================================ */
+@import url('./glass-ui-components.css');
+
+/* ============================================
+   TIER 5: ANIMATIONS (Motion & Transitions)
+   ============================================ */
+@import url('./glass-animations.css');
+
+/* ============================================
+   TIER 6: UTILITIES (Helper Classes)
+   ============================================ */
+@import url('./glass-utilities.css');
+
+/**
+ * Usage Examples:
+ * 
+ * Named Panels:
+ * <div class="panel-tetris">...</div>
+ * <div class="panel-intro">...</div>
+ * <div class="panel-compact-cards">...</div>
+ * 
+ * Base Patterns:
+ * <div class="glass-card">...</div>
+ * <div class="neuglass-card">...</div>
+ * 
+ * UI Components:
+ * <div class="glass-modal">...</div>
+ * <div class="glass-toast glass-toast--success">...</div>
+ * 
+ * Utilities:
+ * <div class="blur-lg shadow-deep radius-xl">...</div>
+ */

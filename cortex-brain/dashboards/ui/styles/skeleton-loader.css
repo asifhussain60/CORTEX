@@ -1,0 +1,386 @@
+/**
+ * Modern Skeleton Loaders with Shimmer Effects
+ * 
+ * Replaces boring spinners with engaging skeleton screens
+ * 
+ * Author: Asif Hussain
+ * Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+ */
+
+/* Shimmer Animation */
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Base Skeleton */
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.05) 0%,
+        rgba(255, 255, 255, 0.15) 50%,
+        rgba(255, 255, 255, 0.05) 100%
+    );
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite linear;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.skeleton::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.1),
+        transparent
+    );
+    animation: shimmer 2s infinite;
+}
+
+/* Loading Container */
+.loading-container {
+    padding: 20px;
+    width: 100%;
+}
+
+/* Health Score Skeleton (Circular) */
+.skeleton-health-score {
+    width: 200px;
+    height: 200px;
+    margin: 40px auto;
+    border-radius: 50%;
+    background: linear-gradient(
+        135deg,
+        rgba(76, 175, 80, 0.1) 0%,
+        rgba(76, 175, 80, 0.3) 50%,
+        rgba(76, 175, 80, 0.1) 100%
+    );
+    background-size: 400% 400%;
+    animation: pulse 2s ease-in-out infinite;
+    position: relative;
+}
+
+.skeleton-health-score::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    border-radius: 50%;
+    background: rgba(30, 33, 48, 0.8);
+}
+
+.skeleton-health-score::after {
+    content: 'Calculating...';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 1;
+}
+
+/* Metric Card Skeleton */
+.skeleton-metric-card {
+    width: 100%;
+    height: 120px;
+    margin-bottom: 16px;
+    border-radius: 12px;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.03) 0%,
+        rgba(255, 255, 255, 0.08) 50%,
+        rgba(255, 255, 255, 0.03) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.skeleton-metric-card-title {
+    width: 60%;
+    height: 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.skeleton-metric-card-value {
+    width: 40%;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    margin-top: 12px;
+}
+
+/* Grid of Metric Cards */
+.skeleton-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+    margin: 20px 0;
+}
+
+/* Chart Skeleton */
+.skeleton-chart {
+    width: 100%;
+    height: 300px;
+    border-radius: 12px;
+    background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.02) 0%,
+        rgba(255, 255, 255, 0.06) 50%,
+        rgba(255, 255, 255, 0.02) 100%
+    );
+    background-size: 100% 200%;
+    animation: shimmer 2s infinite;
+    position: relative;
+    overflow: hidden;
+}
+
+.skeleton-chart::before {
+    content: '';
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    height: 60%;
+    background: repeating-linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.05),
+        rgba(255, 255, 255, 0.05) 40px,
+        transparent 40px,
+        transparent 80px
+    );
+    animation: pulse 1.5s infinite;
+}
+
+/* Table Skeleton */
+.skeleton-table {
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.skeleton-table-row {
+    display: flex;
+    gap: 16px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.02);
+    margin-bottom: 2px;
+}
+
+.skeleton-table-cell {
+    flex: 1;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    animation: pulse 1.5s infinite;
+}
+
+.skeleton-table-cell:nth-child(even) {
+    animation-delay: 0.2s;
+}
+
+/* Text Line Skeleton */
+.skeleton-text {
+    height: 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    margin-bottom: 8px;
+    animation: pulse 1.5s infinite;
+}
+
+.skeleton-text-short {
+    width: 60%;
+}
+
+.skeleton-text-medium {
+    width: 80%;
+}
+
+.skeleton-text-long {
+    width: 95%;
+}
+
+/* Progress Bar Skeleton (for actual loading progress) */
+.skeleton-progress {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+    margin: 20px 0;
+}
+
+.skeleton-progress-bar {
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        rgba(76, 175, 80, 0.5),
+        rgba(76, 175, 80, 0.8),
+        rgba(76, 175, 80, 0.5)
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1s infinite;
+    transition: width 0.3s ease-out;
+}
+
+/* Fade In Animation for Loaded Content */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.content-loaded {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Loading State Overlay */
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(30, 33, 48, 0.95);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.loading-message {
+    margin-top: 20px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+}
+
+.loading-submessage {
+    margin-top: 8px;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 12px;
+}
+
+/* Specific Tab Skeletons */
+.skeleton-executive-summary {
+    padding: 20px;
+}
+
+.skeleton-tech-stack {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    padding: 20px;
+}
+
+.skeleton-tech-item {
+    height: 80px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    animation: pulse 1.5s infinite;
+}
+
+.skeleton-tech-item:nth-child(3n) {
+    animation-delay: 0.2s;
+}
+
+.skeleton-tech-item:nth-child(3n+1) {
+    animation-delay: 0.4s;
+}
+
+/* Security Skeleton */
+.skeleton-security-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 20px;
+}
+
+.skeleton-vulnerability-card {
+    height: 150px;
+    border-radius: 12px;
+    background: rgba(244, 67, 54, 0.1);
+    animation: pulse 1.5s infinite;
+}
+
+/* Architecture Skeleton */
+.skeleton-architecture {
+    padding: 20px;
+}
+
+.skeleton-architecture-diagram {
+    width: 100%;
+    height: 400px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    position: relative;
+    overflow: hidden;
+}
+
+.skeleton-architecture-diagram::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle,
+        rgba(33, 150, 243, 0.2) 0%,
+        transparent 70%
+    );
+    animation: pulse 2s infinite;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .skeleton-metrics-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .skeleton-security-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .skeleton-tech-stack {
+        grid-template-columns: 1fr;
+    }
+}

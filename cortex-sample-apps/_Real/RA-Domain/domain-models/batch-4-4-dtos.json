@@ -1,0 +1,164 @@
+{
+  "batch_info": {
+    "name": "Batch 3.1 - First 10 Entities",
+    "total_files": 9,
+    "total_classes": 9,
+    "total_properties": 0,
+    "total_navigation_properties": 0
+  },
+  "entities": [
+    {
+      "file": "C:\\PROJECTS\\Product.PaymentAccounts\\SDKs\\App.PaymentAccounts.Contracts\\DTOs\\PercentPlanLedgerResponse.cs",
+      "filename": "PercentPlanLedgerResponse.cs",
+      "namespace": "App.PaymentAccounts.Contracts.DTOs",
+      "classes": [
+        {
+          "name": "PercentPlanLedgerResponse",
+          "line": 3,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.PaymentAccounts\\SDKs\\App.PaymentAccounts.Contracts\\DTOs\\ProcessCarryOverRequest.cs",
+      "filename": "ProcessCarryOverRequest.cs",
+      "namespace": "App.PaymentAccounts.Contracts.DTOs",
+      "classes": [
+        {
+          "name": "ProcessCarryOverRequest",
+          "line": 22,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.PaymentAccounts\\SDKs\\App.PaymentAccounts.Contracts\\DTOs\\ProcessCarryOverRequestForEmployer.cs",
+      "filename": "ProcessCarryOverRequestForEmployer.cs",
+      "namespace": "App.PaymentAccounts.Contracts.DTOs",
+      "classes": [
+        {
+          "name": "ProcessCarryOverRequestForEmployer",
+          "line": 22,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.PaymentAccounts\\SDKs\\App.PaymentAccounts.Contracts\\DTOs\\ProcessFlexSpansRequest.cs",
+      "filename": "ProcessFlexSpansRequest.cs",
+      "namespace": "App.PaymentAccounts.Contracts.DTOs",
+      "classes": [
+        {
+          "name": "ProcessFlexSpansRequest",
+          "line": 22,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.PaymentAccounts\\SDKs\\App.PaymentAccounts.Contracts\\DTOs\\ProcessFlexSpansRequestForEmployer.cs",
+      "filename": "ProcessFlexSpansRequestForEmployer.cs",
+      "namespace": "App.PaymentAccounts.Contracts.DTOs",
+      "classes": [
+        {
+          "name": "ProcessFlexSpansRequestForEmployer",
+          "line": 22,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.PaymentAccounts\\SDKs\\App.PaymentAccounts.Contracts\\DTOs\\ProcessFlexSpansRequestForMember.cs",
+      "filename": "ProcessFlexSpansRequestForMember.cs",
+      "namespace": "App.PaymentAccounts.Contracts.DTOs",
+      "classes": [
+        {
+          "name": "ProcessFlexSpansRequestForMember",
+          "line": 22,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.PaymentAccounts\\SDKs\\App.PaymentAccounts.Contracts\\DTOs\\ProcessPercentPlanLedgerRequest.cs",
+      "filename": "ProcessPercentPlanLedgerRequest.cs",
+      "namespace": "App.PaymentAccounts.Contracts.DTOs",
+      "classes": [
+        {
+          "name": "ProcessPercentPlanLedgerRequest",
+          "line": 6,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.PaymentAccounts\\SDKs\\App.PaymentAccounts.Contracts\\DTOs\\RecentActivityDto.cs",
+      "filename": "RecentActivityDto.cs",
+      "namespace": "App.PaymentAccounts.Contracts.DTOs",
+      "classes": [
+        {
+          "name": "RecentActivityDto",
+          "line": 22,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.PaymentAccounts\\SDKs\\App.PaymentAccounts.Contracts\\DTOs\\ReimbursementAccountBalanceDetailsResponse.cs",
+      "filename": "ReimbursementAccountBalanceDetailsResponse.cs",
+      "namespace": "App.PaymentAccounts.Contracts.DTOs",
+      "classes": [
+        {
+          "name": "ReimbursementAccountBalanceDetailsResponse",
+          "line": 21,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    }
+  ]
+}

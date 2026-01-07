@@ -1,0 +1,7 @@
+{
+  "app_name": "CleanSolidApp",
+  "app_type": "onboarded",
+  "onboarding_timestamp": "2025-12-09T09:17:46.201146",
+  "scan_duration_seconds": 1.05,
+  "data_source": "onboarding_orchestrator"
+}

@@ -1,0 +1,47 @@
+#!/usr/bin/env python3
+"""
+Pre-commit hook to verify no mock objects in production code.
+Install: Copy to .git/hooks/pre-commit and make executable
+Or use: git config core.hooksPath .githooks
+"""
+
+import subprocess
+import sys
+from pathlib import Path
+
+
+def main():
+    """Run mock detection before commit"""
+    
+    # Get the repository root
+    repo_root = Path(__file__).parent.parent
+    
+    # Check if verify_no_mocks.py exists
+    script_path = repo_root / "scripts" / "verify_no_mocks.py"
+    if not script_path.exists():
+        print("⚠️  Warning: verify_no_mocks.py not found, skipping mock detection")
+        return 0
+    
+    print("🔍 Checking for mock objects in production code...")
+    
+    # Run the verification script
+    result = subprocess.run(
+        [sys.executable, str(script_path), "--directory", str(repo_root)],
+        capture_output=True,
+        text=True
+    )
+    
+    if result.returncode != 0:
+        print(result.stdout)
+        print()
+        print("❌ Pre-commit hook failed: Mock objects detected")
+        print("   Remove unittest.mock imports from production code (src/)")
+        print("   Or add files to exception list in scripts/verify_no_mocks.py")
+        return 1
+    
+    print("✅ No mock objects detected")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

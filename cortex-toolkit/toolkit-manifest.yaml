@@ -1,0 +1,379 @@
+version: 1.0.0
+last_updated: 2025-12-16T00:00:00Z
+toolkit_root: D:\PROJECTS\CORTEX\cortex-toolkit
+
+categories:
+  brain_operations:
+    description: CORTEX brain tier operations
+    tools:
+      - name: align
+        command: cortex-align
+        script: core/brain/align.py
+        wrapper: cli/wrappers/align_wrapper.py
+        description: System alignment and consistency checks
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli_wrapper
+        
+      - name: healthcheck
+        command: cortex-health
+        script: core/brain/healthcheck.py
+        wrapper: cli/wrappers/healthcheck_wrapper.py
+        description: Comprehensive system health diagnostics
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli_wrapper
+        
+      - name: optimize
+        command: cortex-optimize
+        script: core/brain/optimize.py
+        wrapper: cli/wrappers/optimize_wrapper.py
+        description: System optimization and performance tuning
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli_wrapper
+        
+      - name: cleanup
+        command: cortex-cleanup
+        script: core/brain/cleanup.py
+        wrapper: cli/wrappers/cleanup_wrapper.py
+        description: System cleanup and maintenance
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli_wrapper
+
+  operations:
+    description: System operations and orchestration
+    tools:
+      - name: review
+        command: cortex-review
+        script: core/operations/review.py
+        wrapper: cli/wrappers/review_wrapper.py
+        description: Code review orchestration
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli_wrapper
+        
+      - name: deploy
+        command: cortex-deploy
+        script: core/operations/deploy.py
+        wrapper: cli/wrappers/deploy_wrapper.py
+        description: Deployment to publish directory
+        platforms: [windows, linux, macos]
+        requires_admin: true
+        execution_method: cli_wrapper
+        
+      - name: sanitize
+        command: cortex-sanitize
+        script: core/operations/sanitize.py
+        wrapper: cli/wrappers/sanitize_wrapper.py
+        description: Code sanitization for sharing
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli_wrapper
+
+  planning:
+    description: Planning and ADO management
+    tools:
+      - name: plan
+        command: cortex-plan
+        script: core/planning/plan_generator.py
+        description: Generate feature implementation plans
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: copilot_chat
+        
+      - name: ado
+        command: cortex-ado
+        script: core/planning/ado_manager.py
+        description: Azure DevOps work item management
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: copilot_chat
+        
+      - name: planning-file-manager
+        command: cortex-pfm
+        script: core/planning/planning_file_manager.py
+        description: Manage planning documentation files
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+
+  analytics:
+    description: Analysis and reporting
+    tools:
+      - name: profile
+        command: cortex-profile
+        script: analytics/profiling/profile_performance.py
+        description: Performance profiling and analysis
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+        
+      - name: metrics
+        command: cortex-metrics
+        script: analytics/metrics/collect_dashboard_data.py
+        description: Collect and display system metrics
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+        
+      - name: visualize
+        command: cortex-visualize
+        script: analytics/visualization/visualize_brain_health.py
+        description: Visualize brain health and metrics
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+        
+      - name: uml
+        command: cortex-uml
+        script: analytics/visualization/generate_uml_standalone.py
+        description: Generate UML diagrams
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+
+  documentation:
+    description: Documentation generation
+    tools:
+      - name: docs-generate
+        command: cortex-docs-gen
+        script: documentation/generate_docs_from_code.py
+        description: Generate documentation from source code
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+        
+      - name: prompts-regenerate
+        command: cortex-prompts-regen
+        script: documentation/regenerate_prompts.py
+        wrapper: cli/wrappers/regenerate_prompts_wrapper.py
+        description: Regenerate AI prompt files
+        platforms: [windows, linux, macos]
+        requires_admin: true
+        execution_method: cli_wrapper
+        
+      - name: quick-reference
+        command: cortex-qr
+        script: documentation/generate_quick_reference.py
+        description: Generate quick reference documentation
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+        
+      - name: html-generator
+        command: cortex-html-gen
+        script: documentation/html-tools/generator.py
+        description: Pure Python HTML generation (zero dependencies)
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+        user_friendly_name: "HTML Generator"
+        functionality: "Type-safe HTML element creation with automatic attribute escaping"
+        
+      - name: html-validator
+        command: cortex-html-validate
+        script: documentation/html-tools/validator.py
+        description: Validate HTML syntax and structure
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+        user_friendly_name: "HTML Validator"
+        functionality: "Checks HTML files for syntax errors, unclosed tags, malformed attributes, and structural issues"
+        
+      - name: docgen-discovery
+        command: cortex-docgen-discover
+        script: documentation/docgen_discovery.py
+        description: Discover all documentable code elements (modules, classes, functions)
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+        user_friendly_name: "DocGen Discovery"
+        functionality: "Scans src/, manifests/, and docs/ to build comprehensive documentation manifest"
+        
+      - name: diagram-staleness
+        command: cortex-diagram-check
+        script: documentation/diagram_staleness.py
+        description: Check D3.js and Mermaid diagrams for staleness
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+        user_friendly_name: "Diagram Staleness Checker"
+        functionality: "Detects outdated diagrams based on related source code changes"
+        
+      - name: site-manifest
+        command: cortex-site-manifest
+        script: documentation/site_manifest.py
+        description: Generate site manifest with missing doc detection
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+        user_friendly_name: "Site Manifest Generator"
+        functionality: "Creates site map, detects missing documentation, checks broken links"
+
+  testing:
+    description: Testing utilities
+    tools:
+      - name: validate
+        command: cortex-validate
+        script: testing/validate_deployment.py
+        description: Validate deployment integrity
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+        
+      - name: test-performance
+        command: cortex-test-perf
+        script: testing/generate_performance_tests.py
+        description: Generate and run performance tests
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+        
+      - name: verify-no-mocks
+        command: cortex-verify-mocks
+        script: testing/verify_no_mocks.py
+        description: Verify no mock objects in tests
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+
+  migration:
+    description: Database and schema migration
+    tools:
+      - name: schema-migrate
+        command: cortex-schema-migrate
+        script: migration/schema_migrator.py
+        description: Migrate database schemas
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+        
+      - name: version-detect
+        command: cortex-version-detect
+        script: migration/version_detector.py
+        description: Detect CORTEX version
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+
+  maintenance:
+    description: Maintenance tools
+    tools:
+      - name: cleanup-temp
+        command: cortex-cleanup-temp
+        script: maintenance/cleanup_temp_files.py
+        description: Clean up temporary files
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+        
+      - name: detect-duplicates
+        command: cortex-duplicates
+        script: maintenance/detect_duplicates.py
+        description: Detect duplicate code
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+        
+      - name: full-cleanup
+        command: cortex-full-cleanup
+        script: maintenance/full_cleanup.py
+        description: Comprehensive 5-phase cleanup orchestrator
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+        
+      - name: rename-planning-system-version
+        command: cortex-rename-planning-version
+        script: rename_planning_system_version.py
+        description: Rename Planning System version references across CORTEX
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+
+  generators:
+    description: Code and specification generators
+    tools:
+      - name: extract-schemas
+        command: cortex-extract-schemas
+        script: core/generators/schema_extractor.py
+        wrapper: cli/wrappers/extract_schemas_wrapper.py
+        description: Extract OpenAPI schemas from C# entity classes
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli_wrapper
+        
+      - name: generate-ra-specs-v4
+        command: cortex-gen-ra-specs-v4
+        script: core/generators/openapi_generator_v4.py
+        wrapper: cli/wrappers/generate_ra_specs_v4_wrapper.py
+        description: Generate production-ready RA API specifications (v4)
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli_wrapper
+        
+      - name: generate-legacy-specs
+        command: cortex-gen-legacy-specs
+        script: ../src/operations/modules/generators/legacy_spec_generator.py
+        wrapper: cli/wrappers/generate_legacy_specs_wrapper.py
+        description: Generate business specs and OpenAPI from legacy C# code (v3 with narrative validation)
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli_wrapper
+        
+      - name: schema-registry
+        command: cortex-schema-registry
+        script: core/generators/schema_registry.py
+        description: Manage OpenAPI schema registry with deduplication
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+        
+      - name: narrative-validator
+        command: cortex-validate-narrative
+        script: core/generators/narrative_validator.py
+        description: Validate and correct narrative quality in generated specs
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+
+  utilities:
+    description: General utility tools
+    tools:
+      - name: token-calculator
+        command: cortex-tokens
+        script: core/utilities/measure_prompt_tokens.py
+        description: Calculate prompt token usage
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+        
+      - name: version-manager
+        command: cortex-version
+        script: core/utilities/version_manager.py
+        description: Manage CORTEX versions
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+        
+      - name: plan-scaffold
+        command: cortex-plan-scaffold
+        script: core/utilities/plan_scaffold_generator.py
+        description: Generate standard 4-folder planning structure
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+        user_friendly_name: "Plan Scaffold Generator"
+        functionality: "Automatically creates Planning System 4.0 folder structure (context/, reports/, artifacts/, tracking/) with progress tracker JSON"
+        
+      - name: orchestrator-scaffold
+        command: cortex-orch-scaffold
+        script: core/utilities/orchestrator_scaffold_generator.py
+        description: Generate orchestrator-specific folder structures
+        platforms: [windows, linux, macos]
+        requires_admin: false
+        execution_method: cli
+        user_friendly_name: "Orchestrator Scaffold Generator"
+        functionality: "Creates standard folder structures for multiple orchestrator types (planning, sanitization, tdd, ado, maintenance)"

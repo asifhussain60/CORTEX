@@ -1,0 +1,19 @@
+<h1>CleanSolidApp Tasks</h1>
+
+<div>
+  <input [(ngModel)]="newTitle" placeholder="New task title" />
+  <button (click)="create()">Create</button>
+</div>
+
+<div>
+  <input [(ngModel)]="filter" placeholder="Filter by title" />
+  <button (click)="load()">Apply Filter</button>
+</div>
+
+<ul>
+  <li *ngFor="let t of tasks">
+    <input type="checkbox" [checked]="t.isCompleted" (change)="toggle(t)" />
+    {{t.title}} (id: {{t.id}})
+    <button (click)="delete(t)">Delete</button>
+  </li>
+</ul>

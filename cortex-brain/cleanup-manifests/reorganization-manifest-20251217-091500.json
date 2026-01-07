@@ -1,0 +1,111 @@
+{
+  "metadata": {
+    "created": "2025-12-17T09:15:00.829090",
+    "operation_type": "reorganization",
+    "dry_run": false,
+    "project_root": "D:\\PROJECTS\\CORTEX",
+    "total_moves": 16
+  },
+  "moves": [
+    {
+      "old_path": "CORTEX.code-workspace",
+      "new_path": "scripts\\temp\\CORTEX.code-workspace",
+      "git_commit": "d20add1ffb1ffb66e691ab3835df14fb85c01df8",
+      "reverse_command": "git mv \"scripts\\temp\\CORTEX.code-workspace\" \"CORTEX.code-workspace\""
+    },
+    {
+      "old_path": "CORTEX.sln",
+      "new_path": "scripts\\temp\\CORTEX.sln",
+      "git_commit": "e5252c421de09fe515f31b204ccbd93515d181d1",
+      "reverse_command": "git mv \"scripts\\temp\\CORTEX.sln\" \"CORTEX.sln\""
+    },
+    {
+      "old_path": "deployment-manifest.yaml",
+      "new_path": "scripts\\temp\\deployment-manifest.yaml",
+      "git_commit": "b5324327d234bc8a4fa378ebd01c38ab1c767dee",
+      "reverse_command": "git mv \"scripts\\temp\\deployment-manifest.yaml\" \"deployment-manifest.yaml\""
+    },
+    {
+      "old_path": "install-cortex-unix-fast.sh",
+      "new_path": "scripts\\temp\\install-cortex-unix-fast.sh",
+      "git_commit": "486f7533a05832af2bfa0192a7a4a514ee0ff608",
+      "reverse_command": "git mv \"scripts\\temp\\install-cortex-unix-fast.sh\" \"install-cortex-unix-fast.sh\""
+    },
+    {
+      "old_path": "install-cortex-windows-fast.ps1",
+      "new_path": "scripts\\temp\\install-cortex-windows-fast.ps1",
+      "git_commit": "486f7533a05832af2bfa0192a7a4a514ee0ff608",
+      "reverse_command": "git mv \"scripts\\temp\\install-cortex-windows-fast.ps1\" \"install-cortex-windows-fast.ps1\""
+    },
+    {
+      "old_path": "launch_dashboard_server.ps1",
+      "new_path": "scripts\\temp\\launch_dashboard_server.ps1",
+      "git_commit": "ed4d875a0cdeab9c2208c81625204cb7d58f2ef8",
+      "reverse_command": "git mv \"scripts\\temp\\launch_dashboard_server.ps1\" \"launch_dashboard_server.ps1\""
+    },
+    {
+      "old_path": "MANIFEST.in",
+      "new_path": "scripts\\temp\\MANIFEST.in",
+      "git_commit": "cd2bff880480bd6bd9cef78ab63f58f8e978357c",
+      "reverse_command": "git mv \"scripts\\temp\\MANIFEST.in\" \"MANIFEST.in\""
+    },
+    {
+      "old_path": "pytest.smoke.ini",
+      "new_path": "scripts\\temp\\pytest.smoke.ini",
+      "git_commit": "8b7e8974170300648196ce0b23c27f2c1731be7e",
+      "reverse_command": "git mv \"scripts\\temp\\pytest.smoke.ini\" \"pytest.smoke.ini\""
+    },
+    {
+      "old_path": "requirements-core.txt",
+      "new_path": "scripts\\temp\\requirements-core.txt",
+      "git_commit": "b5324327d234bc8a4fa378ebd01c38ab1c767dee",
+      "reverse_command": "git mv \"scripts\\temp\\requirements-core.txt\" \"requirements-core.txt\""
+    },
+    {
+      "old_path": "requirements-dev.txt",
+      "new_path": "scripts\\temp\\requirements-dev.txt",
+      "git_commit": "486f7533a05832af2bfa0192a7a4a514ee0ff608",
+      "reverse_command": "git mv \"scripts\\temp\\requirements-dev.txt\" \"requirements-dev.txt\""
+    },
+    {
+      "old_path": "requirements-optional.txt",
+      "new_path": "scripts\\temp\\requirements-optional.txt",
+      "git_commit": "d16159e11378b11c40304e6c1fa13d3f8cdfe02b",
+      "reverse_command": "git mv \"scripts\\temp\\requirements-optional.txt\" \"requirements-optional.txt\""
+    },
+    {
+      "old_path": "requirements-production.txt",
+      "new_path": "scripts\\temp\\requirements-production.txt",
+      "git_commit": "b5324327d234bc8a4fa378ebd01c38ab1c767dee",
+      "reverse_command": "git mv \"scripts\\temp\\requirements-production.txt\" \"requirements-production.txt\""
+    },
+    {
+      "old_path": "setup.py",
+      "new_path": "scripts\\temp\\setup.py",
+      "git_commit": "cd2bff880480bd6bd9cef78ab63f58f8e978357c",
+      "reverse_command": "git mv \"scripts\\temp\\setup.py\" \"setup.py\""
+    },
+    {
+      "old_path": "temp-requirements.txt",
+      "new_path": "scripts\\temp\\temp-requirements.txt",
+      "git_commit": "b5324327d234bc8a4fa378ebd01c38ab1c767dee",
+      "reverse_command": "git mv \"scripts\\temp\\temp-requirements.txt\" \"temp-requirements.txt\""
+    },
+    {
+      "old_path": "temp_cleanup.py",
+      "new_path": "scripts\\temp\\temp_cleanup.py",
+      "git_commit": null,
+      "reverse_command": "git mv \"scripts\\temp\\temp_cleanup.py\" \"temp_cleanup.py\""
+    },
+    {
+      "old_path": "test_dependency_discovery.py",
+      "new_path": "scripts\\temp\\test_dependency_discovery.py",
+      "git_commit": "b5324327d234bc8a4fa378ebd01c38ab1c767dee",
+      "reverse_command": "git mv \"scripts\\temp\\test_dependency_discovery.py\" \"test_dependency_discovery.py\""
+    }
+  ],
+  "recovery": {
+    "instructions": "To reverse moves, use the 'reverse_command' for each file or run the bulk_reverse_command",
+    "bulk_reverse_command": "git mv \"scripts\\temp\\CORTEX.code-workspace\" \"CORTEX.code-workspace\" && git mv \"scripts\\temp\\CORTEX.sln\" \"CORTEX.sln\" && git mv \"scripts\\temp\\deployment-manifest.yaml\" \"deployment-manifest.yaml\" && git mv \"scripts\\temp\\install-cortex-unix-fast.sh\" \"install-cortex-unix-fast.sh\" && git mv \"scripts\\temp\\install-cortex-windows-fast.ps1\" \"install-cortex-windows-fast.ps1\" && git mv \"scripts\\temp\\launch_dashboard_server.ps1\" \"launch_dashboard_server.ps1\" && git mv \"scripts\\temp\\MANIFEST.in\" \"MANIFEST.in\" && git mv \"scripts\\temp\\pytest.smoke.ini\" \"pytest.smoke.ini\" && git mv \"scripts\\temp\\requirements-core.txt\" \"requirements-core.txt\" && git mv \"scripts\\temp\\requirements-dev.txt\" \"requirements-dev.txt\" && git mv \"scripts\\temp\\requirements-optional.txt\" \"requirements-optional.txt\" && git mv \"scripts\\temp\\requirements-production.txt\" \"requirements-production.txt\" && git mv \"scripts\\temp\\setup.py\" \"setup.py\" && git mv \"scripts\\temp\\temp-requirements.txt\" \"temp-requirements.txt\" && git mv \"scripts\\temp\\temp_cleanup.py\" \"temp_cleanup.py\" && git mv \"scripts\\temp\\test_dependency_discovery.py\" \"test_dependency_discovery.py\""
+  }
+}

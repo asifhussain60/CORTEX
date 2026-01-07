@@ -1,0 +1,18 @@
+{
+  "timestamp": "2025-12-31T12:25:48.828716",
+  "unwired_count": 20,
+  "duplicate_count": 0,
+  "bloated_prompts": 2,
+  "knowledge_status": {
+    "status": "found",
+    "yaml_files": 5,
+    "md_files": 18,
+    "total": 23
+  },
+  "action_items": [
+    "Wire unwired components (Phase 5)",
+    "Archive/delete duplicate reports (Phase 8)",
+    "Optimize bloated prompts (Phase 10)",
+    "Sync knowledge library (Phase 7)"
+  ]
+}

@@ -1,0 +1,178 @@
+# CORTEX Audit Logger Configuration - Production Environment
+# Version: 1.0.0
+# Environment: Production
+# Purpose: Optimized logging with full security and compliance
+
+audit_logging:
+  # Core Settings
+  enabled: true
+  environment: "production"
+  log_level: "WARNING"
+  
+  # Output Configuration
+  output:
+    console: false
+    file: true
+    database: true
+    remote: false  # Configure remote logging if needed
+    
+  # File Settings
+  file:
+    base_path: "/var/log/cortex/audit"
+    format: "jsonl"
+    rotation:
+      enabled: true
+      max_size_mb: 500
+      max_files: 200
+      max_age_days: 90
+    compression:
+      enabled: true
+      algorithm: "gzip"
+      level: 9
+      compress_on_rotation: true
+      
+  # Buffer Settings
+  buffer:
+    enabled: true
+    size: 10000
+    flush_interval_seconds: 1
+    flush_on_exit: true
+    overflow_strategy: "block_writes"  # Never drop logs in prod
+    
+  # Performance Settings
+  performance:
+    async_writes: true
+    batch_size: 200
+    max_latency_ms: 5
+    monitor_overhead: true
+    adaptive_batching: true
+    
+  # Security Settings (FULL)
+  security:
+    encryption_enabled: true
+    encryption_algorithm: "AES-256-GCM"
+    key_rotation_days: 90
+    sanitize_pii: true
+    pii_detection_accuracy: 0.98
+    access_control_enabled: true
+    role_based_access: true
+    integrity_checks: true
+    checksum_algorithm: "SHA-256"
+    signature_verification: true
+    
+  # Self-Healing Settings
+  self_healing:
+    enabled: true
+    pattern_detection: true
+    anomaly_detection: true
+    error_clustering: true
+    auto_recovery: true
+    max_retry_attempts: 5
+    retry_backoff_seconds: [1, 5, 15, 45, 120]
+    recovery_timeout_seconds: 600
+    fallback_to_stderr: true
+    
+  # Orchestrator Coverage (CRITICAL ONLY by default)
+  orchestrators:
+    planning_v5:
+      enabled: true
+      log_level: "WARNING"
+      capture_context: false
+    ado_v2:
+      enabled: true
+      log_level: "WARNING"
+      capture_context: false
+    vacuum_v2:
+      enabled: true
+      log_level: "WARNING"
+      capture_context: false
+    cleanup_v2:
+      enabled: true
+      log_level: "WARNING"
+      capture_context: false
+    investigation_v2:
+      enabled: true
+      log_level: "WARNING"
+      capture_context: false
+    tdd_v4:
+      enabled: true
+      log_level: "WARNING"
+      capture_context: false
+    debug_v2:
+      enabled: true
+      log_level: "WARNING"
+      capture_context: false
+    refinement_v2:
+      enabled: true
+      log_level: "WARNING"
+      capture_context: false
+    maintenance_v2:
+      enabled: true
+      log_level: "WARNING"
+      capture_context: false
+    sanitization_v2:
+      enabled: true
+      log_level: "WARNING"
+      capture_context: false
+    master_orchestrator:
+      enabled: true
+      log_level: "INFO"  # Slightly more verbose for master
+      capture_context: false
+      
+  # Feature Flags (Minimal)
+  features:
+    detailed_context: false
+    stack_traces: false  # Security risk in prod
+    request_body_logging: false
+    response_body_logging: false
+    llm_call_logging: false
+    database_query_logging: false
+    state_transition_logging: true
+    
+  # Monitoring & Alerting (FULL)
+  monitoring:
+    enabled: true
+    metrics_collection: true
+    alert_on_errors: true
+    alert_threshold_errors_per_minute: 5
+    dashboard_export: true
+    prometheus_export: true
+    grafana_integration: true
+    pagerduty_integration: false  # Configure if needed
+    slack_webhook: ""  # Configure if needed
+    
+  # Cleanup & Retention
+  cleanup:
+    enabled: true
+    retention_days: 90
+    archive_before_delete: true
+    archive_path: "/var/log/cortex/audit/archives"
+    archive_to_s3: false  # Configure if cloud storage needed
+    run_schedule: "0 1 * * *"  # 1 AM daily
+    
+  # Compliance (FULL)
+  compliance:
+    gdpr_mode: true
+    soc2_mode: true
+    hipaa_mode: false  # Enable if handling PHI
+    audit_trail_integrity: true
+    retention_policy_enforcement: true
+    right_to_erasure_support: true
+    data_locality_enforcement: false
+    
+  # Degradation & Resilience
+  degradation:
+    enabled: true
+    fallback_to_memory: true
+    fallback_to_stderr: true
+    reduced_logging_threshold_errors_per_sec: 100
+    circuit_breaker_enabled: true
+    circuit_breaker_threshold: 50
+    circuit_breaker_timeout_seconds: 60
+    
+  # Health Check
+  health_check:
+    enabled: true
+    endpoint: "/health/audit-logger"
+    interval_seconds: 30
+    timeout_seconds: 5

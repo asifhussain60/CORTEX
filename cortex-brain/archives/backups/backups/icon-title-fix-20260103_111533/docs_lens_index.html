@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Lens - AST Analysis, Reverse Engineering, and Intelligence Extraction Dashboard">
+    <meta name="keywords" content="CORTEX, AST, analysis, reverse engineering, intelligence extraction">
+    <meta name="author" content="Asif Hussain">
+    <title>CORTEX Lens | CORTEX 4.0</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/main.css?v=2026-01-02-v4">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <!-- Glass Header Navigation -->
+    <header class="glass-header">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
+        <div class="header-content">
+            <nav class="header-nav" mobile-nav-optimized>
+                <a href="../index.html" class="nav-link" mobile-nav-optimized>
+                    <i class="fas fa-home pulse-glow-glass--fast"></i>
+                    <span>Home</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="container" id="main-content">
+        <!-- Page Title Card -->
+        <div class="glass-card-display animation-t1">
+            <div class="page-title-section">
+                <h1 class="page-title"><i class="fas fa-microscope pulse-glow-glass--fast"></i> CORTEX Lens</h1>
+                <p class="page-subtitle">AST Analysis · Reverse Engineering · Intelligence Extraction Dashboard</p>
+            </div>
+            
+            <div class="metadata-grid">
+                <div class="metadata-item">
+                    <i class="fas fa-code-branch pulse-glow-glass--fast"></i>
+                    <span>AST Analysis</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-search pulse-glow-glass--fast"></i>
+                    <span>Pattern Detection</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-brain pulse-glow-glass--fast"></i>
+                    <span>Intelligence Extraction</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-network-wired pulse-glow-glass--fast"></i>
+                    <span>Dependency Mapping</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-chart-bar pulse-glow-glass--fast"></i>
+                    <span>Score: 30</span>
+                </div>
+                <div class="metadata-item">
+                    <i class="fas fa-calendar-alt pulse-glow-glass--fast"></i>
+                    <span>Updated: Jan 2026</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Executive Summary -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-book-open pulse-glow-glass--fast"></i>
+                What Is CORTEX Lens?
+            </h2>
+            
+            <p class="intro-text">CORTEX Lens is an <strong>intelligent code analysis dashboard</strong> that performs deep AST (Abstract Syntax Tree) analysis, reverse engineering, and knowledge extraction from codebases. It transforms raw code into <strong>actionable intelligence</strong> stored in Tier 2 Knowledge Graph.</p>
+            
+            <div class="highlight-box">
+                <div class="highlight-icon">
+                    <i class="fas fa-lightbulb pulse-glow-glass--fast"></i>
+                </div>
+                <div class="highlight-content">
+                    <h3>Key Capabilities</h3>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><i class="fas fa-check-circle pulse-glow-glass--fast"></i><strong>AST Analysis:</strong> Parse and understand code structure at token level</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="fas fa-check-circle pulse-glow-glass--fast"></i><strong>Pattern Detection:</strong> Identify design patterns, anti-patterns, code smells</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="fas fa-check-circle pulse-glow-glass--fast"></i><strong>Dependency Mapping:</strong> Build complete dependency graphs automatically</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="fas fa-check-circle pulse-glow-glass--fast"></i><strong>Intelligence Extraction:</strong> Extract architectural decisions, relationships, contracts</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><i class="fas fa-check-circle pulse-glow-glass--fast"></i><strong>Reverse Engineering:</strong> Reconstruct architecture from code artifacts</div>
+    </div>
+</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Analysis Pipeline -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title"><i class="fas fa-stream pulse-glow-glass--fast"></i> Intelligence Extraction Pipeline</h2>
+            
+            <p class="intro-text">CORTEX Lens uses a 5-stage pipeline to transform code into actionable knowledge.</p>
+            
+            <div class="diagram-container">
+                <div class="mermaid">
+graph LR
+    Code["📄 Source Code<br/><small>Raw codebase</small>"]
+    Parse["🔍 AST Parser<br/><small>Python, JS, TS, C#</small>"]
+    Analyze["🧠 Semantic Analysis<br/><small>Patterns & Relationships</small>"]
+    Extract["💎 Intelligence Extraction<br/><small>Architecture & Design</small>"]
+    Store["🗄️ Knowledge Graph<br/><small>Tier 2 Storage</small>"]
+    Viz["📊 Dashboard<br/><small>Interactive Visualization</small>"]
+    
+    Code --> Parse
+    Parse --> Analyze
+    Analyze --> Extract
+    Extract --> Store
+    Store --> Viz
+    
+    style Code fill:#6366f1,stroke:#818cf8,stroke-width:2px,color:#fff
+    style Parse fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff
+    style Analyze fill:#f59e0b,stroke:#fbbf24,stroke-width:2px,color:#fff
+    style Extract fill:#ec4899,stroke:#f472b6,stroke-width:2px,color:#fff
+    style Store fill:#8b5cf6,stroke:#a78bfa,stroke-width:2px,color:#fff
+    style Viz fill:#ef4444,stroke:#f87171,stroke-width:2px,color:#fff
+                </div>
+            </div>
+        </section>
+
+        <!-- Analysis Capabilities -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title"><i class="fas fa-cogs pulse-glow-glass--fast"></i> Analysis Capabilities</h2>
+            
+            <p class="intro-text">CORTEX Lens provides 8 specialized analysis capabilities across code, architecture, and quality domains.</p>
+            
+            <div class="masonry-grid">
+                <!-- AST Analysis -->
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon ast-icon">
+                        <i class="fas fa-code-branch pulse-glow-glass--fast"></i>
+                    </div>
+                    <h4 class="card-title">AST Analysis</h4>
+                    <p class="card-description">Parse code into Abstract Syntax Trees. Extract functions, classes, imports, decorators, type annotations.</p>
+                    <div class="card-stats">
+                        <span class="stat-item"><i class="fas fa-language pulse-glow-glass--fast"></i> Multi-Language</span>
+                        <span class="stat-item"><i class="fas fa-layer-group pulse-glow-glass--fast"></i> Token-Level</span>
+                    </div>
+                </div>
+                
+                <!-- Pattern Detection -->
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon pattern-icon">
+                        <i class="fas fa-search pulse-glow-glass--fast"></i>
+                    </div>
+                    <h4 class="card-title">Pattern Detection</h4>
+                    <p class="card-description">Identify 23 design patterns (Singleton, Factory, Observer, etc.) and 15 anti-patterns automatically.</p>
+                    <div class="card-stats">
+                        <span class="stat-item"><i class="fas fa-check pulse-glow-glass--fast"></i> 23 Patterns</span>
+                        <span class="stat-item"><i class="fas fa-exclamation-triangle pulse-glow-glass--fast"></i> 15 Anti-Patterns</span>
+                    </div>
+                </div>
+                
+                <!-- Dependency Mapping -->
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon dependency-icon">
+                        <i class="fas fa-network-wired pulse-glow-glass--fast"></i>
+                    </div>
+                    <h4 class="card-title">Dependency Mapping</h4>
+                    <p class="card-description">Build complete dependency graphs. Detect circular dependencies, unused imports, coupling metrics.</p>
+                    <div class="card-stats">
+                        <span class="stat-item"><i class="fas fa-project-diagram pulse-glow-glass--fast"></i> Graph-Based</span>
+                        <span class="stat-item"><i class="fas fa-chart-line pulse-glow-glass--fast"></i> Metrics</span>
+                    </div>
+                </div>
+                
+                <!-- Architecture Extraction -->
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon arch-icon">
+                        <i class="fas fa-sitemap pulse-glow-glass--fast"></i>
+                    </div>
+                    <h4 class="card-title">Architecture Extraction</h4>
+                    <p class="card-description">Reconstruct system architecture from code. Identify layers, modules, service boundaries.</p>
+                    <div class="card-stats">
+                        <span class="stat-item"><i class="fas fa-cube pulse-glow-glass--fast"></i> Module Detection</span>
+                        <span class="stat-item"><i class="fas fa-layer-group pulse-glow-glass--fast"></i> Layer Mapping</span>
+                    </div>
+                </div>
+                
+                <!-- Code Smells -->
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon smell-icon">
+                        <i class="fas fa-bug pulse-glow-glass--fast"></i>
+                    </div>
+                    <h4 class="card-title">Code Smell Detection</h4>
+                    <p class="card-description">Identify 30+ code smells: long methods, large classes, god objects, feature envy, data clumps.</p>
+                    <div class="card-stats">
+                        <span class="stat-item"><i class="fas fa-exclamation-circle pulse-glow-glass--fast"></i> 30+ Smells</span>
+                        <span class="stat-item"><i class="fas fa-chart-bar pulse-glow-glass--fast"></i> Severity Scoring</span>
+                    </div>
+                </div>
+                
+                <!-- Complexity Metrics -->
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon complexity-icon">
+                        <i class="fas fa-chart-line pulse-glow-glass--fast"></i>
+                    </div>
+                    <h4 class="card-title">Complexity Metrics</h4>
+                    <p class="card-description">Calculate cyclomatic complexity, cognitive complexity, maintainability index, technical debt.</p>
+                    <div class="card-stats">
+                        <span class="stat-item"><i class="fas fa-calculator pulse-glow-glass--fast"></i> 8 Metrics</span>
+                        <span class="stat-item"><i class="fas fa-tachometer-alt pulse-glow-glass--fast"></i> Real-Time</span>
+                    </div>
+                </div>
+                
+                <!-- Test Coverage -->
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon test-icon">
+                        <i class="fas fa-vial pulse-glow-glass--fast"></i>
+                    </div>
+                    <h4 class="card-title">Test Coverage Analysis</h4>
+                    <p class="card-description">Map test coverage to code paths. Identify untested branches, missing edge cases, coverage gaps.</p>
+                    <div class="card-stats">
+                        <span class="stat-item"><i class="fas fa-percentage pulse-glow-glass--fast"></i> Coverage %</span>
+                        <span class="stat-item"><i class="fas fa-route pulse-glow-glass--fast"></i> Branch Analysis</span>
+                    </div>
+                </div>
+                
+                <!-- Security Scan -->
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon security-icon">
+                        <i class="fas fa-shield-alt pulse-glow-glass--fast"></i>
+                    </div>
+                    <h4 class="card-title">Security Scanning</h4>
+                    <p class="card-description">Detect security vulnerabilities: SQL injection, XSS, hardcoded secrets, insecure dependencies.</p>
+                    <div class="card-stats">
+                        <span class="stat-item"><i class="fas fa-lock pulse-glow-glass--fast"></i> 12 Checks</span>
+                        <span class="stat-item"><i class="fas fa-exclamation-triangle pulse-glow-glass--fast"></i> CVE Database</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Intelligence Extraction Flow -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title"><i class="fas fa-brain pulse-glow-glass--fast"></i> Intelligence Extraction Workflow</h2>
+            
+            <p class="intro-text">Step-by-step process of how CORTEX Lens extracts architectural intelligence from code.</p>
+            
+            <div class="diagram-container">
+                <div class="mermaid">
+sequenceDiagram
+    participant Code as Source Code
+    participant Lens as CORTEX Lens
+    participant Parser as AST Parser
+    participant Analyzer as Semantic Analyzer
+    participant KG as Knowledge Graph
+    participant Dash as Dashboard
+    
+    Code->>Lens: Scan codebase
+    Lens->>Parser: Parse files to AST
+    Parser-->>Lens: AST nodes (functions, classes, imports)
+    Lens->>Analyzer: Semantic analysis
+    Analyzer-->>Lens: Patterns, dependencies, architecture
+    Lens->>KG: Store intelligence (Tier 2)
+    KG-->>Lens: Confirm storage
+    Lens->>Dash: Render visualization
+    Dash-->>Lens: Interactive dashboard ready
+                </div>
+            </div>
+            
+            <div class="two-column-grid">
+                <div class="info-box">
+                    <h3>Input Sources</h3>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Python, JavaScript, TypeScript, C#</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">SQL scripts, YAML configs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Documentation files</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Test suites</div>
+    </div>
+</div>
+                </div>
+                
+                <div class="info-box">
+                    <h3>Output Intelligence</h3>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body">Architecture diagrams</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Dependency graphs</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Quality metrics</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Pattern catalog</div>
+    </div>
+</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Features -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title"><i class="fas fa-chart-pie pulse-glow-glass--fast"></i> Interactive Dashboard</h2>
+            
+            <p class="intro-text">CORTEX Lens provides an interactive dashboard with 6 visualization panels for real-time code intelligence.</p>
+            
+            <div class="dashboard-grid">
+                <div class="dashboard-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-project-diagram pulse-glow-glass--fast"></i>
+                        <span>Dependency Graph</span>
+                    </div>
+                    <p class="panel-description">Interactive D3.js force-directed graph showing module dependencies, circular references, coupling metrics.</p>
+                </div>
+                
+                <div class="dashboard-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-sitemap pulse-glow-glass--fast"></i>
+                        <span>Architecture Map</span>
+                    </div>
+                    <p class="panel-description">Reconstructed system architecture with layers, boundaries, and service communication patterns.</p>
+                </div>
+                
+                <div class="dashboard-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-chart-bar pulse-glow-glass--fast"></i>
+                        <span>Complexity Metrics</span>
+                    </div>
+                    <p class="panel-description">Real-time complexity scores: cyclomatic, cognitive, maintainability index, technical debt ratio.</p>
+                </div>
+                
+                <div class="dashboard-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-bug pulse-glow-glass--fast"></i>
+                        <span>Code Smells</span>
+                    </div>
+                    <p class="panel-description">Ranked list of detected code smells with severity, location, and refactoring suggestions.</p>
+                </div>
+                
+                <div class="dashboard-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-vial pulse-glow-glass--fast"></i>
+                        <span>Test Coverage</span>
+                    </div>
+                    <p class="panel-description">Heat map of test coverage across files, functions, and branches. Identifies untested code paths.</p>
+                </div>
+                
+                <div class="dashboard-panel">
+                    <div class="panel-header">
+                        <i class="fas fa-shield-alt pulse-glow-glass--fast"></i>
+                        <span>Security Report</span>
+                    </div>
+                    <p class="panel-description">Vulnerability scanner results with CVE references, OWASP Top 10 mapping, remediation guidance.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Use Cases -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title"><i class="fas fa-lightbulb pulse-glow-glass--fast"></i> Common Use Cases</h2>
+            
+            <div class="use-case-grid">
+                <div class="use-case-card">
+                    <div class="use-case-icon">
+                        <i class="fas fa-search pulse-glow-glass--fast"></i>
+                    </div>
+                    <h4 class="use-case-title">Onboarding</h4>
+                    <p class="use-case-description">New developers quickly understand codebase architecture, patterns, and dependencies through visual dashboards.</p>
+                </div>
+                
+                <div class="use-case-card">
+                    <div class="use-case-icon">
+                        <i class="fas fa-recycle pulse-glow-glass--fast"></i>
+                    </div>
+                    <h4 class="use-case-title">Refactoring</h4>
+                    <p class="use-case-description">Identify high-priority refactoring targets based on complexity metrics, code smells, and technical debt.</p>
+                </div>
+                
+                <div class="use-case-card">
+                    <div class="use-case-icon">
+                        <i class="fas fa-shield-alt pulse-glow-glass--fast"></i>
+                    </div>
+                    <h4 class="use-case-title">Security Audits</h4>
+                    <p class="use-case-description">Automated security scanning detects vulnerabilities, insecure patterns, and compliance violations.</p>
+                </div>
+                
+                <div class="use-case-card">
+                    <div class="use-case-icon">
+                        <i class="fas fa-book pulse-glow-glass--fast"></i>
+                    </div>
+                    <h4 class="use-case-title">Documentation</h4>
+                    <p class="use-case-description">Auto-generate architecture diagrams, API documentation, and dependency maps for knowledge bases.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Performance Metrics -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title"><i class="fas fa-tachometer-alt pulse-glow-glass--fast"></i> Performance Metrics</h2>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-file-code pulse-glow-glass--fast"></i>
+                    </div>
+                    <div class="metric-value">500K</div>
+                    <div class="metric-label">Lines/Minute</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-code-branch pulse-glow-glass--fast"></i>
+                    </div>
+                    <div class="metric-value">10K</div>
+                    <div class="metric-label">AST Nodes/Sec</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-search pulse-glow-glass--fast"></i>
+                    </div>
+                    <div class="metric-value">38</div>
+                    <div class="metric-label">Pattern Types</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-language pulse-glow-glass--fast"></i>
+                    </div>
+                    <div class="metric-value">4</div>
+                    <div class="metric-label">Languages</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-network-wired pulse-glow-glass--fast"></i>
+                    </div>
+                    <div class="metric-value">Real-Time</div>
+                    <div class="metric-label">Dependency Graph</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-chart-bar pulse-glow-glass--fast"></i>
+                    </div>
+                    <div class="metric-value">15</div>
+                    <div class="metric-label">Metrics Tracked</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Related Resources -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title"><i class="fas fa-link pulse-glow-glass--fast"></i> Related Resources</h2>
+            
+            <div class="reference-grid">
+                <div class="reference-section">
+                    <h3>Implementation</h3>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><code>src/operations/lens/</code></div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>src/operations/lens/ast_analyzer.py</code></div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>src/operations/lens/pattern_detector.py</code></div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body"><code>src/operations/lens/dependency_mapper.py</code></div>
+    </div>
+</div>
+                </div>
+                
+                <div class="reference-section">
+                    <h3>Dashboard</h3>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><code>docs/lens/dashboard.html</code></div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Interactive D3.js visualizations</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Real-time metric updates</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Export to PNG/PDF</div>
+    </div>
+</div>
+                </div>
+                
+                <div class="reference-section">
+                    <h3>Related Documentation</h3>
+                    <ul class="reference-list">
+                        <li><a href="../architecture/index.html">Architecture Overview</a></li>
+                        <li><a href="../token-optimization/index.html">Token Optimization</a></li>
+                        <li><a href="../knowledge/index.html">Best Practices</a></li>
+                    </ul>
+                </div>
+                
+                <div class="reference-section">
+                    <h3>Analysis Output</h3>
+                    <div class="capability-tiles">
+    <div class="glass-card">
+        <div class="card-body"><code>cortex-lens-output/</code></div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Architecture diagrams (PNG/SVG)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Dependency graphs (JSON)</div>
+    </div>
+    <div class="glass-card">
+        <div class="card-body">Metric reports (HTML/JSON)</div>
+    </div>
+</div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Initialize Mermaid -->
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#7b61ff',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#9f87ff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#10b981',
+                tertiaryColor: '#f59e0b'
+            }
+        });
+    </script>
+</body>
+</html>

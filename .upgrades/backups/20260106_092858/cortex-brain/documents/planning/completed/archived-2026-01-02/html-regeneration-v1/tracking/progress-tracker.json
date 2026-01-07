@@ -1,0 +1,54 @@
+{
+  "plan_id": "html-regeneration-v1",
+  "title": "HTML Regeneration Plan",
+  "complexity_tier": 3,
+  "created_at": "2025-12-27T00:00:00",
+  "status": "active",
+  "phases": [
+    {
+      "phase_id": 1,
+      "name": "Backup & Source Discovery",
+      "status": "not-started",
+      "duration": "15 minutes"
+    },
+    {
+      "phase_id": 2,
+      "name": "Validation & Categorization",
+      "status": "not-started",
+      "duration": "20 minutes"
+    },
+    {
+      "phase_id": 3,
+      "name": "Batch Deletion",
+      "status": "not-started",
+      "duration": "5 minutes"
+    },
+    {
+      "phase_id": 4,
+      "name": "Regeneration (Priority Groups)",
+      "status": "complete",
+      "duration": "120 minutes",
+      "note": "All 31 files validated"
+    },
+    {
+      "phase_id": 5,
+      "name": "Style Centralization",
+      "status": "not-started",
+      "duration": "20 minutes"
+    },
+    {
+      "phase_id": 6,
+      "name": "Final Validation",
+      "status": "not-started",
+      "duration": "15 minutes"
+    }
+  ],
+  "metadata": {
+    "plan_type": "documentation",
+    "author": "Asif Hussain",
+    "created": "2025-12-27",
+    "total_phases": 6,
+    "total_files": 32,
+    "valid_files": 31
+  }
+}

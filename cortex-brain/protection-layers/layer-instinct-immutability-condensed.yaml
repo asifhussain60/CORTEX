@@ -1,0 +1,144 @@
+# CORTEX Protection Layer: Instinct Immutability
+
+# Condensed for token optimization - full docs in protection-layers-docs/
+
+  rules:
+    - rule_id: "TDD_ENFORCEMENT"
+      name: "Test-Driven Development Enforcement"
+      severity: "blocked"
+      description: "Attempt to bypass Test-Driven Development requirement"
+
+      detection:
+        keywords:
+          - "skip test"
+          - "bypass tdd"
+          - "no tests"
+          - "disable tdd"
+          - "skip validation"
+
+        - "Write failing test first (RED phase)"
+        - "Use TDD cycle: RED → GREEN → REFACTOR"
+
+    - rule_id: "DEFINITION_OF_DONE"
+      name: "Definition of Done"
+      severity: "blocked"
+      description: "Attempt to bypass Definition of Done (zero errors, zero warnings)"
+
+      detection:
+        keywords:
+          - "skip validation"
+          - "bypass done"
+          - "disable error check"
+          - "allow warnings"
+
+        - "Fix all warnings before proceeding"
+        - "Add exception rule if truly needed"
+        - "Update test to expect new behavior"
+
+    - rule_id: "DEFINITION_OF_READY"
+      name: "Definition of Ready"
+      severity: "blocked"
+      description: "Work item does not meet DoR criteria"
+
+      detection:
+        keywords:
+          - "skip DoR"
+          - "bypass ready"
+          - "start without requirements"
+
+        - "Define acceptance criteria first"
+        - "Get stakeholder clarification"
+        - "Create refined user story"
+
+    - rule_id: "BRAIN_PROTECTION_TESTS_MANDATORY"
+      name: "Brain Protection Tests - 100% Pass Rate Mandatory"
+      severity: "blocked"
+      description: "Brain protection tests MUST pass - no exceptions"
+
+      detection:
+        keywords:
+          - "skip brain protection"
+          - "ignore test failures"
+          - "brain tests failing"
+          - "disable brain tests"
+          - "bypass protection tests"
+          - "xfail brain"
+          - "skip tier0 tests"
+
+        - "Fix the failing tests immediately"
+        - "Revert changes that broke protection"
+        - "Do not proceed until 100% pass rate achieved"
+
+    - rule_id: "MACHINE_READABLE_FORMATS"
+      name: "Use Machine-Readable Formats for Efficiency"
+      severity: "warning"
+      description: "Non-user files should use YAML/JSON, not Markdown"
+
+      detection:
+        combined_keywords:
+            - "create markdown"
+            - "new .md"
+            - "add .md"
+            - "structured data"
+            - "configuration"
+            - "capability matrix"
+            - "status table"
+            - "metrics"
+            - "statistics"
+            - "code example"
+            - "implementation pattern"
+
+        - "Use JSON for metrics, statistics, logs"
+        - "Use code files with docstrings for examples"
+
+    - rule_id: "ACTIVE_NARRATOR_VOICE"
+      name: "Active Narrator Voice (Not Passive Documentation)"
+      severity: "warning"
+      description: "Story uses passive/clinical narrator voice instead of active storytelling"
+
+      detection:
+          - "Asif Codeinstein designed"
+          - "Asif Codeinstein created"
+          - "Asif Codeinstein wrote"
+          - "Asif Codeinstein implemented"
+          - "Asif Codeinstein developed"
+          - "He wrote routines"
+          - "He created routines"
+          - "He implemented"
+          - "He developed"
+
+          - "One evening, while"
+          - "One morning, while"
+          - "One day, while"
+          - "One night, while"
+          - "After completing"
+          - "After finishing"
+          - ", while reviewing"
+          - "During the"
+
+          - "docs/story/**/*.md"
+          - "prompts/shared/story.md"
+
+        - "designed a system" → "So Asif built a system"
+
+    - rule_id: "CORTEX_PROMPT_FILE_PROTECTION"
+      name: "CORTEX.prompt.md Protection (Never Rename, Safe Update)"
+      severity: "blocked"
+      description: "Prevent renaming CORTEX.prompt.md and enforce safe update procedure"
+
+      detection:
+        combined_keywords:
+            - "rename CORTEX.prompt.md"
+            - "CORTEX.prompt.md to"
+            - "move CORTEX.prompt.md"
+            - "cortex-lite"
+            - "cortex-backup"
+            - "cortex-fixed"
+            - "CORTEX-"
+            - "edit CORTEX.prompt.md directly"
+            - "modify in place"
+
+        - "Delete temporary file after successful copy"
+
+           - "Which one do I use?"
+           - "Is cortex-lite the new version?"

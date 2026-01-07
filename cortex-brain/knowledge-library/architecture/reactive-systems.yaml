@@ -1,0 +1,181 @@
+# Reactive Systems - Knowledge Library
+# Copyright (c) 2025 Asif Hussain. All rights reserved.
+# Source: Pluralsight Course - Microservices: Developing Reactive Systems
+
+metadata:
+  version: '1.0.0'
+  domain: architecture
+  subdomain: microservices
+  author: 'Asif Hussain'
+  created: '2025-12-29'
+  source: 'Pluralsight Reactive Systems Course'
+  keywords:
+    - reactive-systems
+    - event-driven
+    - kafka
+    - microservices
+    - spring-boot
+    - webhooks
+
+resiliency_principles:
+  description: "Five core principles for reactive system resilience"
+  principles:
+    - name: "Isolation"
+      description: "Ensure one failing component doesn't crash the whole system"
+    - name: "Supervision and Recovery"
+      description: "Services can restart automatically if something goes wrong"
+    - name: "Circuit Breakers and Back Pressure"
+      description: "Handle overloads gracefully"
+    - name: "Replication and Redundancy"
+      description: "Ensure reliability even if a node fails"
+    - name: "Asynchronous Messaging"
+      description: "Decouple services and improve throughput"
+
+architectural_patterns:
+  event_driven_architecture:
+    description: "Connect services through message topics for asynchronous communication"
+    benefits:
+      - "Decouples producers from consumers"
+      - "Enables scalability"
+      - "Provides fault tolerance"
+    
+  microservices_separation:
+    description: "Each service focuses on single responsibility"
+    examples:
+      - "Request handling service"
+      - "Payout initiation service"
+      - "Webhook handling service"
+    
+  webhook_integration:
+    description: "Enable real-time synchronization with third-party providers"
+    flow:
+      - "Provider processes event"
+      - "Provider sends HTTP callback"
+      - "Service receives and validates"
+      - "Publishes to internal topic"
+      - "Consumer updates database"
+    
+  reactive_programming:
+    description: "Non-blocking, lightweight, highly performant under load"
+    key_concepts:
+      - "WebFlux for reactive APIs"
+      - "Mono and Flux types"
+      - "Non-blocking I/O"
+
+kafka_integration:
+  producer_setup:
+    configuration:
+      - "Bootstrap servers"
+      - "Key/Value serializers"
+      - "Topic name"
+    components:
+      - "KafkaTemplate bean"
+      - "ProducerConfig class"
+    
+  consumer_setup:
+    configuration:
+      - "Consumer group ID"
+      - "Bootstrap servers"
+    annotations:
+      - "@KafkaListener for topic subscription"
+      - "@Component for auto-detection"
+    
+  best_practices:
+    - "Use unique topic names per domain"
+    - "Configure idempotent producers for exactly-once delivery"
+    - "Handle message deserialization errors gracefully"
+
+payout_flow_architecture:
+  initiation_flow:
+    steps:
+      - "Client sends payout request to initiate service"
+      - "Service validates input and creates database record"
+      - "Service publishes event to Kafka topic"
+      - "Returns immediately with request ID"
+    benefits:
+      - "Non-blocking"
+      - "Scalable"
+      - "Separation of concerns"
+      
+  processing_flow:
+    steps:
+      - "Consumer picks up event from Kafka"
+      - "Parses message and logs for tracking"
+      - "Calls external API using reactive WebClient"
+      - "Updates database with transaction details"
+      
+  webhook_flow:
+    description: "Complete feedback loop for transaction status"
+    steps:
+      - "External provider sends webhook callback"
+      - "Service validates and publishes to internal topic"
+      - "Consumer updates database status"
+    ensures: "Eventual consistency across systems"
+
+database_integration:
+  shared_database_via_abstraction:
+    description: "Pattern for database access layer using views and stored procedures"
+    benefits:
+      - "Helps decompose monolithic database later"
+      - "Forces understanding of data ownership"
+      - "Simplifies extraction into micro databases"
+    
+  jpa_setup:
+    components:
+      - "Entity classes with @Entity annotation"
+      - "Repository interfaces extending JpaRepository"
+      - "Schema.sql for table creation"
+      
+  status_tracking:
+    fields:
+      - "Internal reference ID"
+      - "External transaction ID"
+      - "Status (INITIATED, PENDING, COMPLETED)"
+      - "FX rate and currency information"
+      - "Timestamps"
+
+idempotency_patterns:
+  description: "Ensuring operations produce same result regardless of repetition"
+  strategies:
+    - name: "Idempotency Keys"
+      description: "Use unique request IDs to prevent duplicate processing"
+    - name: "Database Constraints"
+      description: "Unique constraints prevent duplicate records"
+    - name: "Status Checks"
+      description: "Check current state before processing"
+
+webclient_integration:
+  configuration:
+    - "Base URL from properties"
+    - "Authorization headers"
+    - "Content type settings"
+  
+  reactive_patterns:
+    - "Use bodyToMono for single responses"
+    - "doOnSuccess for logging"
+    - "doOnError for error handling"
+    - "onErrorReturn for fallback responses"
+
+dto_best_practices:
+  request_dto:
+    - "Use @NotBlank for required string fields"
+    - "Use @Positive for numeric validation"
+    - "Nest related objects (BeneficiaryDetails, etc.)"
+    
+  response_dto:
+    - "Include status and message fields"
+    - "Nested data objects for complex responses"
+    - "Map to internal models for storage"
+
+spring_boot_setup:
+  dependencies:
+    - "Spring Reactive Web (WebFlux)"
+    - "Spring for Apache Kafka"
+    - "PostgreSQL Driver"
+    - "Spring Data JPA"
+    
+  configuration_properties:
+    - "spring.kafka.bootstrap-servers"
+    - "spring.kafka.consumer.group-id"
+    - "spring.datasource.url"
+    - "server.port"

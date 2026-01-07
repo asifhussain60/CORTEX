@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX - Repository Analysis</title>
+    <link rel="stylesheet" href="assets/cortex-unified.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <!-- Top Header Row -->
+    <header class="dashboard-header glass-card">
+        <div class="header-content">
+            <!-- Left: CORTEX Logo (aligned with sidebar) -->
+            <div class="header-brand">
+                <img src="assets/CORTEX-logo.png" alt="CORTEX" class="cortex-logo" />
+            </div>
+            
+            <!-- Center-Left: Repository Identity -->
+            <div class="repo-identity">
+                <h1 class="repo-name">Repository Analysis</h1>
+            </div>
+            
+            <!-- Right: Controls -->
+            <div class="header-controls">
+                <div class="scan-date">
+                    <span class="date-icon">📅</span>
+                    <span class="date-text">December 14, 2025</span>
+                </div>
+                <button id="themeToggle" class="btn-theme-toggle" onclick="toggleTheme()">
+                    <span class="theme-icon">🌙</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Content Container -->
+    <div class="content-wrapper">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar glass-card">
+            <ul class="tab-list">
+                <li>
+                    <a href="#executive" class="tab-link active" data-tab="executive">
+                        <span class="tab-icon">📋</span>
+                        <span class="tab-text">Executive Summary</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#overview" class="tab-link" data-tab="overview">
+                        <span class="tab-icon">📊</span>
+                        <span class="tab-text">Overview</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#architecture" class="tab-link" data-tab="architecture">
+                        <span class="tab-icon">🏗️</span>
+                        <span class="tab-text">Architecture & Technical</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#quality" class="tab-link" data-tab="quality">
+                        <span class="tab-icon">✨</span>
+                        <span class="tab-text">Quality & Testing</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#security" class="tab-link" data-tab="security">
+                        <span class="tab-icon">🔒</span>
+                        <span class="tab-text">Security</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#dependencies" class="tab-link" data-tab="dependencies">
+                        <span class="tab-icon">📦</span>
+                        <span class="tab-text">Dependencies & Workflows</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- EXECUTIVE SUMMARY TAB -->
+            <section id="executive" class="tab-content active">
+                <!-- Value Proposition (Visual Cards at Top) -->
+                <div class="glass-card executive-section">
+                    <h3 class="executive-heading">💎 Value Delivered</h3>
+                    <div class="value-grid">
+                        <div class="value-card">
+                            <div class="value-icon">⚡</div>
+                            <h4 class="value-title">Speed to Insight</h4>
+                            <p class="value-description">Comprehensive analysis in minutes vs. weeks of manual review</p>
+                        </div>
+                        <div class="value-card">
+                            <div class="value-icon">🎯</div>
+                            <h4 class="value-title">Data-Driven Decisions</h4>
+                            <p class="value-description">Objective metrics replace subjective opinions in technical discussions</p>
+                        </div>
+                        <div class="value-card">
+                            <div class="value-icon">🛡️</div>
+                            <h4 class="value-title">Risk Mitigation</h4>
+                            <p class="value-description">Proactively identify vulnerabilities before they impact production</p>
+                        </div>
+                        <div class="value-card">
+                            <div class="value-icon">💰</div>
+                            <h4 class="value-title">Cost Optimization</h4>
+                            <p class="value-description">Focus resources on high-impact improvements with measurable ROI</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Introduction -->
+                <div class="glass-card executive-section">
+                    <h3 class="executive-heading">🎯 What Is This Application?</h3>
+                    <p class="executive-text">
+                        This repository represents a <strong>software application</strong> that has been analyzed by CORTEX Lens - 
+                        an AI-powered code intelligence platform. The analysis provides comprehensive insights into the application's 
+                        architecture, quality, dependencies, and overall health to help stakeholders make informed decisions.
+                    </p>
+                </div>
+
+                <!-- Problem Domain -->
+                <div class="glass-card executive-section">
+                    <h3 class="executive-heading">💼 Business Context</h3>
+                    <p class="executive-text">
+                        <strong>Problem Domain:</strong> Modern software applications face challenges in maintaining code quality, 
+                        managing technical debt, and ensuring scalability as they grow. Without proper visibility into code structure 
+                        and dependencies, teams struggle to make strategic decisions about refactoring, modernization, and risk mitigation.
+                    </p>
+                    <p class="executive-text">
+                        <strong>Solution Approach:</strong> CORTEX Lens analyzes the codebase using AI-powered pattern recognition 
+                        to identify architectural patterns, code quality metrics, security vulnerabilities, and dependency risks. 
+                        This enables data-driven decision-making for technical leadership and product owners.
+                    </p>
+                </div>
+
+                <!-- Key Use Cases -->
+                <div class="glass-card executive-section">
+                    <h3 class="executive-heading">🎬 Key Use Cases</h3>
+                    <p class="executive-text" style="margin-bottom: 29px;">
+                        Explore how CORTEX Lens delivers value to different roles in your organization. Click any tile to expand details.
+                    </p>
+                    
+                    <div class="use-case-tiles">
+                        <!-- Business & Product Tile -->
+                        <div class="use-case-tile" data-category="business">
+                            <div class="tile-header">
+                                <div class="tile-icon">💼</div>
+                                <div class="tile-info">
+                                    <h4 class="tile-title">Business & Product</h4>
+                                    <p class="tile-subtitle">Product Owners, Business Leaders, Stakeholders</p>
+                                </div>
+                                <div class="tile-toggle">
+                                    <span class="toggle-icon">▼</span>
+                                </div>
+                            </div>
+                            <div class="tile-content">
+                                <ul class="tile-list">
+                                    <li><strong>Investment Prioritization:</strong> Understand where technical debt exists and prioritize modernization efforts based on business impact</li>
+                                    <li><strong>Risk Assessment:</strong> Identify security vulnerabilities, outdated dependencies, and architectural risks before they become critical issues</li>
+                                    <li><strong>Roadmap Planning:</strong> Make informed decisions about feature development vs. technical improvement initiatives</li>
+                                    <li><strong>Due Diligence:</strong> Evaluate code quality and technical health during acquisitions or vendor assessments</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Managers Tile -->
+                        <div class="use-case-tile" data-category="managers">
+                            <div class="tile-header">
+                                <div class="tile-icon">👔</div>
+                                <div class="tile-info">
+                                    <h4 class="tile-title">Managers</h4>
+                                    <p class="tile-subtitle">Engineering Managers, Tech Leads, Directors</p>
+                                </div>
+                                <div class="tile-toggle">
+                                    <span class="toggle-icon">▼</span>
+                                </div>
+                            </div>
+                            <div class="tile-content">
+                                <ul class="tile-list">
+                                    <li><strong>Architecture Review:</strong> Visualize system architecture, identify anti-patterns, and plan refactoring strategies</li>
+                                    <li><strong>Code Quality Monitoring:</strong> Track test coverage, maintainability scores, and code complexity trends over time</li>
+                                    <li><strong>Dependency Management:</strong> Identify outdated packages, license risks, and supply chain vulnerabilities</li>
+                                    <li><strong>Team Onboarding:</strong> Provide new developers with instant understanding of codebase structure and conventions</li>
+                                    <li><strong>Resource Planning:</strong> Allocate engineering time effectively based on objective technical metrics</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Engineers Tile -->
+                        <div class="use-case-tile" data-category="engineers">
+                            <div class="tile-header">
+                                <div class="tile-icon">⚙️</div>
+                                <div class="tile-info">
+                                    <h4 class="tile-title">Engineers</h4>
+                                    <p class="tile-subtitle">Developers, QA Engineers, DevOps Teams</p>
+                                </div>
+                                <div class="tile-toggle">
+                                    <span class="toggle-icon">▼</span>
+                                </div>
+                            </div>
+                            <div class="tile-content">
+                                <ul class="tile-list">
+                                    <li><strong>Refactoring Guidance:</strong> Identify high-complexity areas that would benefit most from refactoring</li>
+                                    <li><strong>Testing Gaps:</strong> Discover untested code paths and areas with insufficient coverage</li>
+                                    <li><strong>Dependency Upgrades:</strong> Plan upgrade paths for outdated dependencies with clear impact analysis</li>
+                                    <li><strong>Pattern Recognition:</strong> Learn from existing architectural patterns to maintain consistency</li>
+                                    <li><strong>Code Navigation:</strong> Quickly understand relationships between modules and components</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- OVERVIEW TAB (Landing Page) -->
+            <section id="overview" class="tab-content">
+                <h2 class="tab-title">📊 Repository Overview</h2>
+                
+                <!-- PRIMARY HEALTH INDICATOR (Hero Card) -->
+                <div class="hero-kpi glass-card kpi-excellent">
+                    <div class="hero-kpi-content">
+                        <div class="hero-kpi-icon">💚</div>
+                        <div class="hero-kpi-details">
+                            <div class="hero-kpi-value">85</div>
+                            <div class="hero-kpi-label">Overall Health Score</div>
+                            <div class="hero-kpi-trend">
+                                <span class="trend-icon">↑</span>
+                                <span class="trend-text">Excellent</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION: Quality Metrics -->
+                <div class="section-header">
+                    <h3 class="section-title">🎯 Quality Metrics</h3>
+                    <p class="section-description">Code quality, testing, and security indicators</p>
+                </div>
+                <div class="kpi-grid quality-metrics">
+                    <!-- Test Coverage -->
+                    <div class="kpi-card glass-card kpi-good" data-kpi="test-coverage">
+                        <div class="kpi-icon">🧪</div>
+                        <div class="kpi-value">69%</div>
+                        <div class="kpi-label">Test Coverage</div>
+                        <div class="kpi-trend">→</div>
+                    </div>
+
+                    <!-- Security Score -->
+                    <div class="kpi-card glass-card kpi-excellent" data-kpi="security-score">
+                        <div class="kpi-icon">🔒</div>
+                        <div class="kpi-value">90</div>
+                        <div class="kpi-label">Security Score</div>
+                    </div>
+
+                    <!-- Code Quality (Placeholder for future) -->
+                    <div class="kpi-card glass-card kpi-excellent" data-kpi="code-quality">
+                        <div class="kpi-icon">✨</div>
+                        <div class="kpi-value">100</div>
+                        <div class="kpi-label">Code Quality</div>
+                    </div>
+                </div>
+
+                <!-- SECTION: Repository Size -->
+                <div class="section-header">
+                    <h3 class="section-title">📂 Repository Size</h3>
+                    <p class="section-description">Codebase scale and composition</p>
+                </div>
+                <div class="kpi-grid repo-size-metrics">
+                    <!-- Total Files -->
+                    <div class="kpi-card glass-card" data-kpi="total-files">
+                        <div class="kpi-icon">📁</div>
+                        <div class="kpi-value">1,247</div>
+                        <div class="kpi-label">Total Files</div>
+                    </div>
+
+                    <!-- Lines of Code -->
+                    <div class="kpi-card glass-card" data-kpi="total-loc">
+                        <div class="kpi-icon">📝</div>
+                        <div class="kpi-value">45,823</div>
+                        <div class="kpi-label">Lines of Code</div>
+                    </div>
+                </div>
+
+                <!-- SECTION: Dependencies -->
+                <div class="section-header">
+                    <h3 class="section-title">📦 Dependencies</h3>
+                    <p class="section-description">External packages and libraries</p>
+                </div>
+                <div class="kpi-grid dependencies-metrics">
+                    <!-- Dependencies -->
+                    <div class="kpi-card glass-card" data-kpi="dependencies">
+                        <div class="kpi-icon">📦</div>
+                        <div class="kpi-value">47</div>
+                        <div class="kpi-label">Total Dependencies</div>
+                        <div class="kpi-sublabel">3 outdated</div>
+                    </div>
+
+                    <!-- Placeholder for future dependency metrics -->
+                    <div class="kpi-card glass-card kpi-good" data-kpi="dependency-health">
+                        <div class="kpi-icon">💊</div>
+                        <div class="kpi-value">94%</div>
+                        <div class="kpi-label">Dependencies Up-to-Date</div>
+                    </div>
+                </div>
+
+                <!-- Health Radar Chart -->
+                <div class="chart-container glass-card">
+                    <h3>🎯 Health Metrics</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="healthRadarChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Quick Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-item glass-card">
+                        <div class="stat-icon">🐍</div>
+                        <div class="stat-label">Primary Language</div>
+                        <div class="stat-value">Python (65.2%)</div>
+                    </div>
+                    <div class="stat-item glass-card">
+                        <div class="stat-icon">🚀</div>
+                        <div class="stat-label">Entry Points</div>
+                        <div class="stat-value">2</div>
+                    </div>
+                    <div class="stat-item glass-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-label">Tests Passing</div>
+                        <div class="stat-value">304/327</div>
+                    </div>
+                    <div class="stat-item glass-card">
+                        <div class="stat-icon">🏗️</div>
+                        <div class="stat-label">Architecture Layers</div>
+                        <div class="stat-value">4</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ARCHITECTURE & TECHNICAL TAB -->
+            <section id="architecture" class="tab-content">
+                <h2 class="tab-title">🏗️ Architecture & Technical</h2>
+                
+                <!-- System Architecture -->
+                <div class="glass-card" style="margin-top: 29px;">
+                    <h3 style="color: var(--accent-primary); margin-bottom: 21px;">📐 System Architecture</h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 21px; margin-bottom: 29px;">
+                        <div class="metric-card">
+                            <div class="metric-label">Detected Pattern</div>
+                            <div class="metric-value" style="font-size: 18px; color: var(--accent-primary);">Clean Architecture</div>
+                            <div class="metric-subtitle">4-tier layered system</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Total Layers</div>
+                            <div class="metric-value">7</div>
+                            <div class="metric-subtitle">Including test & infrastructure</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Coupling Score</div>
+                            <div class="metric-value" style="color: #10b981;">28.5%</div>
+                            <div class="metric-subtitle">Low coupling (good)</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Modularity Grade</div>
+                            <div class="metric-value" style="color: #10b981;">A</div>
+                            <div class="metric-subtitle">High modularity</div>
+                        </div>
+                    </div>
+                    
+                    <h4 style="color: var(--text-secondary); margin: 21px 0 14px 0; font-size: 15px; font-weight: 600;">Architectural Layers</h4>
+                    <div style="display: flex; flex-direction: column; gap: 14px;">
+                        <div class="layer-item">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px;">
+                                <span style="font-weight: 600; color: var(--text-primary);">🔷 Tier 0 - Brain Protection</span>
+                                <span style="color: var(--text-tertiary); font-size: 13px;">12 files • 3.2k LOC</span>
+                            </div>
+                            <div style="background: rgba(0, 212, 255, 0.1); height: 6px; border-radius: 3px; overflow: hidden;">
+                                <div style="background: linear-gradient(90deg, #00d4ff, #0066ff); width: 8%; height: 100%;"></div>
+                            </div>
+                        </div>
+                        <div class="layer-item">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px;">
+                                <span style="font-weight: 600; color: var(--text-primary);">🔶 Tier 1 - Working Memory</span>
+                                <span style="color: var(--text-tertiary); font-size: 13px;">18 files • 5.8k LOC</span>
+                            </div>
+                            <div style="background: rgba(0, 212, 255, 0.1); height: 6px; border-radius: 3px; overflow: hidden;">
+                                <div style="background: linear-gradient(90deg, #00d4ff, #0066ff); width: 14%; height: 100%;"></div>
+                            </div>
+                        </div>
+                        <div class="layer-item">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px;">
+                                <span style="font-weight: 600; color: var(--text-primary);">🔷 Tier 2 - Knowledge Graph</span>
+                                <span style="color: var(--text-tertiary); font-size: 13px;">24 files • 8.4k LOC</span>
+                            </div>
+                            <div style="background: rgba(0, 212, 255, 0.1); height: 6px; border-radius: 3px; overflow: hidden;">
+                                <div style="background: linear-gradient(90deg, #00d4ff, #0066ff); width: 20%; height: 100%;"></div>
+                            </div>
+                        </div>
+                        <div class="layer-item">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px;">
+                                <span style="font-weight: 600; color: var(--text-primary);">🔶 Tier 3 - Dev Context</span>
+                                <span style="color: var(--text-tertiary); font-size: 13px;">32 files • 12.1k LOC</span>
+                            </div>
+                            <div style="background: rgba(0, 212, 255, 0.1); height: 6px; border-radius: 3px; overflow: hidden;">
+                                <div style="background: linear-gradient(90deg, #00d4ff, #0066ff); width: 28%; height: 100%;"></div>
+                            </div>
+                        </div>
+                        <div class="layer-item">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px;">
+                                <span style="font-weight: 600; color: var(--text-primary);">🧩 Orchestrators</span>
+                                <span style="color: var(--text-tertiary); font-size: 13px;">42 files • 18.6k LOC</span>
+                            </div>
+                            <div style="background: rgba(0, 212, 255, 0.1); height: 6px; border-radius: 3px; overflow: hidden;">
+                                <div style="background: linear-gradient(90deg, #00d4ff, #0066ff); width: 45%; height: 100%;"></div>
+                            </div>
+                        </div>
+                        <div class="layer-item">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px;">
+                                <span style="font-weight: 600; color: var(--text-primary);">⚡ Operations</span>
+                                <span style="color: var(--text-tertiary); font-size: 13px;">68 files • 28.3k LOC</span>
+                            </div>
+                            <div style="background: rgba(0, 212, 255, 0.1); height: 6px; border-radius: 3px; overflow: hidden;">
+                                <div style="background: linear-gradient(90deg, #00d4ff, #0066ff); width: 68%; height: 100%;"></div>
+                            </div>
+                        </div>
+                        <div class="layer-item">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px;">
+                                <span style="font-weight: 600; color: var(--text-primary);">🧪 Tests</span>
+                                <span style="color: var(--text-tertiary); font-size: 13px;">156 files • 42.5k LOC</span>
+                            </div>
+                            <div style="background: rgba(0, 212, 255, 0.1); height: 6px; border-radius: 3px; overflow: hidden;">
+                                <div style="background: linear-gradient(90deg, #00d4ff, #0066ff); width: 100%; height: 100%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h4 style="color: var(--text-secondary); margin: 29px 0 14px 0; font-size: 15px; font-weight: 600;">Entry Points</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px;">
+                        <div style="background: rgba(0, 212, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.2); border-radius: 8px; padding: 14px;">
+                            <div style="font-size: 13px; color: var(--text-tertiary); margin-bottom: 4px;">🐍 Python</div>
+                            <div style="font-family: 'Courier New', monospace; font-size: 13px; color: var(--text-primary);">src/main.py</div>
+                        </div>
+                        <div style="background: rgba(0, 212, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.2); border-radius: 8px; padding: 14px;">
+                            <div style="font-size: 13px; color: var(--text-tertiary); margin-bottom: 4px;">🔧 CLI</div>
+                            <div style="font-family: 'Courier New', monospace; font-size: 13px; color: var(--text-primary);">src/cli.py</div>
+                        </div>
+                        <div style="background: rgba(0, 212, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.2); border-radius: 8px; padding: 14px;">
+                            <div style="font-size: 13px; color: var(--text-tertiary); margin-bottom: 4px;">📊 Dashboard</div>
+                            <div style="font-family: 'Courier New', monospace; font-size: 13px; color: var(--text-primary);">src/dashboard/app.py</div>
+                        </div>
+                        <div style="background: rgba(0, 212, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.2); border-radius: 8px; padding: 14px;">
+                            <div style="font-size: 13px; color: var(--text-tertiary); margin-bottom: 4px;">🔍 Lens</div>
+                            <div style="font-family: 'Courier New', monospace; font-size: 13px; color: var(--text-primary);">src/cortex_lens/cli.py</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Technical Stack -->
+                <div class="glass-card" style="margin-top: 29px;">
+                    <h3 style="color: var(--accent-primary); margin-bottom: 21px;">⚙️ Technical Stack</h3>
+                    
+                    <h4 style="color: var(--text-secondary); margin: 0 0 14px 0; font-size: 15px; font-weight: 600;">Languages</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 29px;">
+                        <div style="background: rgba(0, 212, 255, 0.05); border-radius: 8px; padding: 14px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 7px;">
+                                <span style="font-weight: 600; color: var(--text-primary);">🐍 Python</span>
+                                <span style="color: var(--accent-primary); font-weight: 600;">82.4%</span>
+                            </div>
+                            <div style="background: rgba(0, 212, 255, 0.1); height: 4px; border-radius: 2px; overflow: hidden;">
+                                <div style="background: linear-gradient(90deg, #00d4ff, #0066ff); width: 82.4%; height: 100%;"></div>
+                            </div>
+                            <div style="font-size: 12px; color: var(--text-tertiary); margin-top: 4px;">824 files • 128.6k LOC</div>
+                        </div>
+                        <div style="background: rgba(0, 212, 255, 0.05); border-radius: 8px; padding: 14px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 7px;">
+                                <span style="font-weight: 600; color: var(--text-primary);">🟨 JavaScript</span>
+                                <span style="color: var(--accent-primary); font-weight: 600;">8.2%</span>
+                            </div>
+                            <div style="background: rgba(0, 212, 255, 0.1); height: 4px; border-radius: 2px; overflow: hidden;">
+                                <div style="background: linear-gradient(90deg, #f7df1e, #f0db4f); width: 8.2%; height: 100%;"></div>
+                            </div>
+                            <div style="font-size: 12px; color: var(--text-tertiary); margin-top: 4px;">89 files • 12.8k LOC</div>
+                        </div>
+                        <div style="background: rgba(0, 212, 255, 0.05); border-radius: 8px; padding: 14px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 7px;">
+                                <span style="font-weight: 600; color: var(--text-primary);">🔷 TypeScript</span>
+                                <span style="color: var(--accent-primary); font-weight: 600;">4.1%</span>
+                            </div>
+                            <div style="background: rgba(0, 212, 255, 0.1); height: 4px; border-radius: 2px; overflow: hidden;">
+                                <div style="background: linear-gradient(90deg, #3178c6, #235a97); width: 4.1%; height: 100%;"></div>
+                            </div>
+                            <div style="font-size: 12px; color: var(--text-tertiary); margin-top: 4px;">34 files • 6.4k LOC</div>
+                        </div>
+                        <div style="background: rgba(0, 212, 255, 0.05); border-radius: 8px; padding: 14px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 7px;">
+                                <span style="font-weight: 600; color: var(--text-primary);">💚 C#</span>
+                                <span style="color: var(--accent-primary); font-weight: 600;">3.8%</span>
+                            </div>
+                            <div style="background: rgba(0, 212, 255, 0.1); height: 4px; border-radius: 2px; overflow: hidden;">
+                                <div style="background: linear-gradient(90deg, #239120, #68217a); width: 3.8%; height: 100%;"></div>
+                            </div>
+                            <div style="font-size: 12px; color: var(--text-tertiary); margin-top: 4px;">28 files • 5.9k LOC</div>
+                        </div>
+                        <div style="background: rgba(0, 212, 255, 0.05); border-radius: 8px; padding: 14px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 7px;">
+                                <span style="font-weight: 600; color: var(--text-primary);">📄 YAML</span>
+                                <span style="color: var(--accent-primary); font-weight: 600;">1.5%</span>
+                            </div>
+                            <div style="background: rgba(0, 212, 255, 0.1); height: 4px; border-radius: 2px; overflow: hidden;">
+                                <div style="background: linear-gradient(90deg, #cb171e, #a61319); width: 1.5%; height: 100%;"></div>
+                            </div>
+                            <div style="font-size: 12px; color: var(--text-tertiary); margin-top: 4px;">147 files • 2.3k LOC</div>
+                        </div>
+                    </div>
+                    
+                    <h4 style="color: var(--text-secondary); margin: 0 0 14px 0; font-size: 15px; font-weight: 600;">Core Frameworks & Libraries</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 29px;">
+                        <div style="background: rgba(0, 212, 255, 0.05); border-radius: 6px; padding: 10px; text-align: center;">
+                            <div style="font-size: 13px; font-weight: 600; color: var(--text-primary);">FastAPI</div>
+                            <div style="font-size: 11px; color: var(--text-tertiary); margin-top: 3px;">Web Framework</div>
+                        </div>
+                        <div style="background: rgba(0, 212, 255, 0.05); border-radius: 6px; padding: 10px; text-align: center;">
+                            <div style="font-size: 13px; font-weight: 600; color: var(--text-primary);">SQLAlchemy</div>
+                            <div style="font-size: 11px; color: var(--text-tertiary); margin-top: 3px;">ORM</div>
+                        </div>
+                        <div style="background: rgba(0, 212, 255, 0.05); border-radius: 6px; padding: 10px; text-align: center;">
+                            <div style="font-size: 13px; font-weight: 600; color: var(--text-primary);">pytest</div>
+                            <div style="font-size: 11px; color: var(--text-tertiary); margin-top: 3px;">Testing</div>
+                        </div>
+                        <div style="background: rgba(0, 212, 255, 0.05); border-radius: 6px; padding: 10px; text-align: center;">
+                            <div style="font-size: 13px; font-weight: 600; color: var(--text-primary);">Pydantic</div>
+                            <div style="font-size: 11px; color: var(--text-tertiary); margin-top: 3px;">Validation</div>
+                        </div>
+                        <div style="background: rgba(0, 212, 255, 0.05); border-radius: 6px; padding: 10px; text-align: center;">
+                            <div style="font-size: 13px; font-weight: 600; color: var(--text-primary);">D3.js</div>
+                            <div style="font-size: 11px; color: var(--text-tertiary); margin-top: 3px;">Visualization</div>
+                        </div>
+                        <div style="background: rgba(0, 212, 255, 0.05); border-radius: 6px; padding: 10px; text-align: center;">
+                            <div style="font-size: 13px; font-weight: 600; color: var(--text-primary);">Chart.js</div>
+                            <div style="font-size: 11px; color: var(--text-tertiary); margin-top: 3px;">Charts</div>
+                        </div>
+                    </div>
+                    
+                    <h4 style="color: var(--text-secondary); margin: 0 0 14px 0; font-size: 15px; font-weight: 600;">Development Tools</h4>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                        <span style="background: rgba(0, 212, 255, 0.1); border: 1px solid rgba(0, 212, 255, 0.3); border-radius: 16px; padding: 6px 14px; font-size: 12px; color: var(--text-primary);">🐳 Docker</span>
+                        <span style="background: rgba(0, 212, 255, 0.1); border: 1px solid rgba(0, 212, 255, 0.3); border-radius: 16px; padding: 6px 14px; font-size: 12px; color: var(--text-primary);">🔄 GitHub Actions</span>
+                        <span style="background: rgba(0, 212, 255, 0.1); border: 1px solid rgba(0, 212, 255, 0.3); border-radius: 16px; padding: 6px 14px; font-size: 12px; color: var(--text-primary);">📦 Poetry</span>
+                        <span style="background: rgba(0, 212, 255, 0.1); border: 1px solid rgba(0, 212, 255, 0.3); border-radius: 16px; padding: 6px 14px; font-size: 12px; color: var(--text-primary);">🎨 MkDocs</span>
+                        <span style="background: rgba(0, 212, 255, 0.1); border: 1px solid rgba(0, 212, 255, 0.3); border-radius: 16px; padding: 6px 14px; font-size: 12px; color: var(--text-primary);">🔍 Pylint</span>
+                        <span style="background: rgba(0, 212, 255, 0.1); border: 1px solid rgba(0, 212, 255, 0.3); border-radius: 16px; padding: 6px 14px; font-size: 12px; color: var(--text-primary);">⚡ Black</span>
+                        <span style="background: rgba(0, 212, 255, 0.1); border: 1px solid rgba(0, 212, 255, 0.3); border-radius: 16px; padding: 6px 14px; font-size: 12px; color: var(--text-primary);">📝 Mypy</span>
+                        <span style="background: rgba(0, 212, 255, 0.1); border: 1px solid rgba(0, 212, 255, 0.3); border-radius: 16px; padding: 6px 14px; font-size: 12px; color: var(--text-primary);">🚀 PowerShell</span>
+                    </div>
+                </div>
+                
+                <!-- Complexity Analysis -->
+                <div class="glass-card" style="margin-top: 29px;">
+                    <h3 style="color: var(--accent-primary); margin-bottom: 21px;">📊 Complexity Analysis</h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 21px; margin-bottom: 29px;">
+                        <div class="metric-card">
+                            <div class="metric-label">Avg Cyclomatic</div>
+                            <div class="metric-value" style="color: #10b981;">6.8</div>
+                            <div class="metric-subtitle">Low complexity</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Avg Cognitive</div>
+                            <div class="metric-value" style="color: #10b981;">9.2</div>
+                            <div class="metric-subtitle">Readable code</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Maintainability</div>
+                            <div class="metric-value" style="color: #10b981;">71.3</div>
+                            <div class="metric-subtitle">High maintainability</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Hotspots</div>
+                            <div class="metric-value" style="color: #f59e0b;">18</div>
+                            <div class="metric-subtitle">Need refactoring</div>
+                        </div>
+                    </div>
+                    
+                    <h4 style="color: var(--text-secondary); margin: 0 0 14px 0; font-size: 15px; font-weight: 600;">Complexity Distribution</h4>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 29px;">
+                        <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 14px; text-align: center;">
+                            <div style="font-size: 24px; font-weight: 700; color: #10b981;">68%</div>
+                            <div style="font-size: 12px; color: var(--text-tertiary); margin-top: 4px;">Low (< 10)</div>
+                            <div style="font-size: 11px; color: var(--text-tertiary); margin-top: 2px;">562 functions</div>
+                        </div>
+                        <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 8px; padding: 14px; text-align: center;">
+                            <div style="font-size: 24px; font-weight: 700; color: #f59e0b;">24%</div>
+                            <div style="font-size: 12px; color: var(--text-tertiary); margin-top: 4px;">Medium (10-20)</div>
+                            <div style="font-size: 11px; color: var(--text-tertiary); margin-top: 2px;">198 functions</div>
+                        </div>
+                        <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 14px; text-align: center;">
+                            <div style="font-size: 24px; font-weight: 700; color: #ef4444;">6%</div>
+                            <div style="font-size: 12px; color: var(--text-tertiary); margin-top: 4px;">High (20-50)</div>
+                            <div style="font-size: 11px; color: var(--text-tertiary); margin-top: 2px;">49 functions</div>
+                        </div>
+                        <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); border-radius: 8px; padding: 14px; text-align: center;">
+                            <div style="font-size: 24px; font-weight: 700; color: #dc2626;">2%</div>
+                            <div style="font-size: 12px; color: var(--text-tertiary); margin-top: 4px;">Very High (> 50)</div>
+                            <div style="font-size: 11px; color: var(--text-tertiary); margin-top: 2px;">18 functions</div>
+                        </div>
+                    </div>
+                    
+                    <h4 style="color: var(--text-secondary); margin: 0 0 14px 0; font-size: 15px; font-weight: 600;">Top Complexity Hotspots</h4>
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: separate; border-spacing: 0 7px;">
+                            <thead>
+                                <tr style="background: rgba(0, 212, 255, 0.05);">
+                                    <th style="padding: 10px 14px; text-align: left; font-size: 12px; color: var(--text-tertiary); font-weight: 600; border-top-left-radius: 6px; border-bottom-left-radius: 6px;">Function</th>
+                                    <th style="padding: 10px 14px; text-align: left; font-size: 12px; color: var(--text-tertiary); font-weight: 600;">File</th>
+                                    <th style="padding: 10px 14px; text-align: center; font-size: 12px; color: var(--text-tertiary); font-weight: 600;">Cyclomatic</th>
+                                    <th style="padding: 10px 14px; text-align: center; font-size: 12px; color: var(--text-tertiary); font-weight: 600;">Cognitive</th>
+                                    <th style="padding: 10px 14px; text-align: center; font-size: 12px; color: var(--text-tertiary); font-weight: 600; border-top-right-radius: 6px; border-bottom-right-radius: 6px;">Lines</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="background: rgba(0, 212, 255, 0.03);">
+                                    <td style="padding: 10px 14px; font-size: 13px; font-family: 'Courier New', monospace; color: var(--text-primary); border-top-left-radius: 6px; border-bottom-left-radius: 6px;">process_conversation</td>
+                                    <td style="padding: 10px 14px; font-size: 12px; color: var(--text-secondary);">tier1/conversation_processor.py</td>
+                                    <td style="padding: 10px 14px; text-align: center; font-weight: 600; color: #dc2626;">58</td>
+                                    <td style="padding: 10px 14px; text-align: center; font-weight: 600; color: #dc2626;">72</td>
+                                    <td style="padding: 10px 14px; text-align: center; color: var(--text-tertiary); border-top-right-radius: 6px; border-bottom-right-radius: 6px;">284</td>
+                                </tr>
+                                <tr style="background: rgba(0, 212, 255, 0.03);">
+                                    <td style="padding: 10px 14px; font-size: 13px; font-family: 'Courier New', monospace; color: var(--text-primary); border-top-left-radius: 6px; border-bottom-left-radius: 6px;">analyze_repository</td>
+                                    <td style="padding: 10px 14px; font-size: 12px; color: var(--text-secondary);">cortex_lens/orchestrator.py</td>
+                                    <td style="padding: 10px 14px; text-align: center; font-weight: 600; color: #dc2626;">52</td>
+                                    <td style="padding: 10px 14px; text-align: center; font-weight: 600; color: #dc2626;">68</td>
+                                    <td style="padding: 10px 14px; text-align: center; color: var(--text-tertiary); border-top-right-radius: 6px; border-bottom-right-radius: 6px;">312</td>
+                                </tr>
+                                <tr style="background: rgba(0, 212, 255, 0.03);">
+                                    <td style="padding: 10px 14px; font-size: 13px; font-family: 'Courier New', monospace; color: var(--text-primary); border-top-left-radius: 6px; border-bottom-left-radius: 6px;">execute_maintenance</td>
+                                    <td style="padding: 10px 14px; font-size: 12px; color: var(--text-secondary);">orchestrators/maintenance_v3.py</td>
+                                    <td style="padding: 10px 14px; text-align: center; font-weight: 600; color: #ef4444;">42</td>
+                                    <td style="padding: 10px 14px; text-align: center; font-weight: 600; color: #ef4444;">54</td>
+                                    <td style="padding: 10px 14px; text-align: center; color: var(--text-tertiary); border-top-right-radius: 6px; border-bottom-right-radius: 6px;">256</td>
+                                </tr>
+                                <tr style="background: rgba(0, 212, 255, 0.03);">
+                                    <td style="padding: 10px 14px; font-size: 13px; font-family: 'Courier New', monospace; color: var(--text-primary); border-top-left-radius: 6px; border-bottom-left-radius: 6px;">generate_dashboard</td>
+                                    <td style="padding: 10px 14px; font-size: 12px; color: var(--text-secondary);">dashboard/builder.py</td>
+                                    <td style="padding: 10px 14px; text-align: center; font-weight: 600; color: #ef4444;">38</td>
+                                    <td style="padding: 10px 14px; text-align: center; font-weight: 600; color: #ef4444;">46</td>
+                                    <td style="padding: 10px 14px; text-align: center; color: var(--text-tertiary); border-top-right-radius: 6px; border-bottom-right-radius: 6px;">198</td>
+                                </tr>
+                                <tr style="background: rgba(0, 212, 255, 0.03);">
+                                    <td style="padding: 10px 14px; font-size: 13px; font-family: 'Courier New', monospace; color: var(--text-primary); border-top-left-radius: 6px; border-bottom-left-radius: 6px;">collect_metrics</td>
+                                    <td style="padding: 10px 14px; font-size: 12px; color: var(--text-secondary);">collectors/manager.py</td>
+                                    <td style="padding: 10px 14px; text-align: center; font-weight: 600; color: #f59e0b;">28</td>
+                                    <td style="padding: 10px 14px; text-align: center; font-weight: 600; color: #f59e0b;">35</td>
+                                    <td style="padding: 10px 14px; text-align: center; color: var(--text-tertiary); border-top-right-radius: 6px; border-bottom-right-radius: 6px;">145</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- QUALITY & TESTING TAB -->
+            <section id="quality" class="tab-content">
+                <h2 class="tab-title">✨ Quality & Testing</h2>
+                <div class="glass-card" style="margin-top: 29px;">
+                    <h3 style="color: var(--accent-primary); margin-bottom: 21px;">📈 Code Quality Metrics</h3>
+                    <p class="tab-placeholder">Maintainability index, cyclomatic complexity, documentation coverage, code duplication</p>
+                </div>
+                <div class="glass-card" style="margin-top: 29px;">
+                    <h3 style="color: var(--accent-primary); margin-bottom: 21px;">🧪 Test Coverage</h3>
+                    <p class="tab-placeholder">Unit test coverage, integration tests, test quality metrics, passing/failing tests</p>
+                </div>
+                <div class="glass-card" style="margin-top: 29px;">
+                    <h3 style="color: var(--accent-primary); margin-bottom: 21px;">⚠️ Testing Gaps</h3>
+                    <p class="tab-placeholder">Untested code paths, missing edge cases, critical components without tests</p>
+                </div>
+            </section>
+
+            <!-- SECURITY TAB -->
+            <section id="security" class="tab-content">
+                <h2 class="tab-title">🔒 Security & Compliance</h2>
+                <div class="glass-card" style="margin-top: 29px;">
+                    <h3 style="color: var(--accent-primary); margin-bottom: 21px;">🛡️ Security Vulnerabilities</h3>
+                    <p class="tab-placeholder">OWASP Top 10, security hotspots, threat analysis, vulnerability tracking</p>
+                </div>
+                <div class="glass-card" style="margin-top: 29px;">
+                    <h3 style="color: var(--accent-primary); margin-bottom: 21px;">📋 Compliance</h3>
+                    <p class="tab-placeholder">GDPR, HIPAA, SOC2, industry standards compliance, regulatory requirements</p>
+                </div>
+            </section>
+
+            <!-- DEPENDENCIES & WORKFLOWS TAB -->
+            <section id="dependencies" class="tab-content">
+                <h2 class="tab-title">📦 Dependencies & Workflows</h2>
+                <div class="glass-card" style="margin-top: 29px;">
+                    <h3 style="color: var(--accent-primary); margin-bottom: 21px;">📦 Package Dependencies</h3>
+                    <p class="tab-placeholder">Direct dependencies, transitive dependencies, dependency graphs, version management</p>
+                </div>
+                <div class="glass-card" style="margin-top: 29px;">
+                    <h3 style="color: var(--accent-primary); margin-bottom: 21px;">🔄 Outdated Packages</h3>
+                    <p class="tab-placeholder">Security patches needed, major version upgrades available, deprecation warnings</p>
+                </div>
+                <div class="glass-card" style="margin-top: 29px;">
+                    <h3 style="color: var(--accent-primary); margin-bottom: 21px;">⚡ CI/CD & Workflows</h3>
+                    <p class="tab-placeholder">Build pipelines, deployment workflows, automation status, operational sequences</p>
+                </div>
+            </section>
+        </main>
+
+    <!-- JavaScript -->
+    <script src="assets/cortex-unified.js"></script>
+    <script>
+        // Mock analysis data
+        const analysisData = {
+            metadata: {
+                repo_name: "CORTEX",
+                scan_timestamp: "2025-12-14T08:30:00Z",
+                total_files: 1247,
+                total_loc: 45823,
+                languages: {"Python": 65.2, "JavaScript": 25.3, "SQL": 9.5}
+            },
+            health: {
+                overall_score: 85,
+                code_quality_score: 78,
+                test_coverage_score: 71,
+                documentation_score: 82,
+                security_score: 90,
+                architecture_score: 88
+            },
+            architecture: {
+                entry_points: ["src/main.py", "scripts/cli.py"],
+                layers: ["tier0", "tier1", "tier2", "tier3"],
+                commands: 12
+            },
+            dependencies: {
+                total_count: 47,
+                outdated_count: 3
+            },
+            testing: {
+                total_tests: 327,
+                passing_tests: 304,
+                coverage_percentage: 69
+            }
+        };
+
+        // Initialize Health Radar Chart
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('healthRadarChart');
+            if (ctx) {
+                const healthRadarChart = new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: ['Code Quality', 'Test Coverage', 'Documentation', 'Security', 'Architecture'],
+                        datasets: [{
+                            label: 'Health Scores',
+                            data: [
+                                analysisData.health.code_quality_score,
+                                analysisData.health.test_coverage_score,
+                                analysisData.health.documentation_score,
+                                analysisData.health.security_score,
+                                analysisData.health.architecture_score
+                            ],
+                            backgroundColor: 'rgba(0, 212, 255, 0.2)',
+                            borderColor: 'rgba(0, 212, 255, 1)',
+                            borderWidth: 2,
+                            pointBackgroundColor: 'rgba(0, 212, 255, 1)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgba(0, 212, 255, 1)',
+                            pointRadius: 6,
+                            pointHoverRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        scales: {
+                            r: {
+                                min: 0,
+                                max: 100,
+                                ticks: {
+                                    stepSize: 20,
+                                    color: '#888',
+                                    backdropColor: 'transparent',
+                                    font: {
+                                        size: 14
+                                    }
+                                },
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)',
+                                    lineWidth: 1
+                                },
+                                angleLines: {
+                                    color: 'rgba(255, 255, 255, 0.1)',
+                                    lineWidth: 1
+                                },
+                                pointLabels: {
+                                    color: '#fff',
+                                    font: {
+                                        size: 16,
+                                        weight: '600'
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                titleColor: '#00d4ff',
+                                bodyColor: '#fff',
+                                borderColor: 'rgba(0, 212, 255, 0.5)',
+                                borderWidth: 1,
+                                padding: 12,
+                                displayColors: false,
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.label + ': ' + context.parsed.r + '/100';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            console.log('✅ Landing page loaded successfully');
+            console.log('📊 Analysis data:', analysisData);
+        });
+    </script>
+    </div>
+</body>
+</html>

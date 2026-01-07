@@ -1,0 +1,903 @@
+{
+  "version": "1.0",
+  "generated": "2025-12-31T11:52:22.474210",
+  "generator": "diagram_staleness.py",
+  "settings": {
+    "max_age_days": 30,
+    "source_paths_monitored": [
+      "src/orchestrators/",
+      "src/cortex_agents/",
+      "cortex-brain/manifests/",
+      "cortex-brain/tier0/",
+      "cortex-brain/tier1/",
+      "cortex-brain/tier2/",
+      "cortex-brain/tier3/"
+    ]
+  },
+  "summary": {
+    "total_diagrams": 60,
+    "stale_diagrams": 0,
+    "d3_diagrams": 42,
+    "mermaid_diagrams": 46,
+    "healthy_diagrams": 60
+  },
+  "stale_diagrams": [],
+  "all_diagrams": [
+    {
+      "path": "docs/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/index.html",
+      "has_d3": true,
+      "has_mermaid": false,
+      "diagram_types": [
+        "unknown"
+      ],
+      "modified": "2025-12-31T09:01:34.580448",
+      "age_days": 0,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/sitemap.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/sitemap.html",
+      "has_d3": true,
+      "has_mermaid": false,
+      "diagram_types": [
+        "unknown"
+      ],
+      "modified": "2025-12-31T07:21:29.321480",
+      "age_days": 0,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/cortex-lens-output/test-repo/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/cortex-lens-output/test-repo/index.html",
+      "has_d3": true,
+      "has_mermaid": false,
+      "diagram_types": [
+        "unknown"
+      ],
+      "modified": "2025-12-29T16:13:28.054032",
+      "age_days": 1,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/cortex-lens-output/CORTEX/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/cortex-lens-output/CORTEX/index.html",
+      "has_d3": true,
+      "has_mermaid": false,
+      "diagram_types": [
+        "unknown"
+      ],
+      "modified": "2025-12-29T16:42:46.943077",
+      "age_days": 1,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/cortex-lens-output/mock-landing/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/cortex-lens-output/mock-landing/index.html",
+      "has_d3": true,
+      "has_mermaid": false,
+      "diagram_types": [
+        "unknown"
+      ],
+      "modified": "2025-12-29T16:13:28.058079",
+      "age_days": 1,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/security/penetration-testing.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/security/penetration-testing.html",
+      "has_d3": true,
+      "has_mermaid": true,
+      "diagram_types": [
+        "mermaid-flowchart"
+      ],
+      "modified": "2025-12-30T19:08:59.113533",
+      "age_days": 0,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/security/threat-intelligence.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/security/threat-intelligence.html",
+      "has_d3": true,
+      "has_mermaid": true,
+      "diagram_types": [
+        "mermaid-flowchart"
+      ],
+      "modified": "2025-12-30T19:08:59.123943",
+      "age_days": 0,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/security/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/security/index.html",
+      "has_d3": true,
+      "has_mermaid": false,
+      "diagram_types": [
+        "unknown"
+      ],
+      "modified": "2025-12-30T18:44:32.707085",
+      "age_days": 0,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/security/compliance.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/security/compliance.html",
+      "has_d3": true,
+      "has_mermaid": true,
+      "diagram_types": [
+        "mermaid-flowchart"
+      ],
+      "modified": "2025-12-30T17:57:03.749603",
+      "age_days": 0,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/security/access-control.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/security/access-control.html",
+      "has_d3": true,
+      "has_mermaid": true,
+      "diagram_types": [
+        "d3-tree",
+        "mermaid-flowchart",
+        "mermaid-sequence"
+      ],
+      "modified": "2025-12-30T19:08:59.123708",
+      "age_days": 0,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/security/dashboard.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/security/dashboard.html",
+      "has_d3": true,
+      "has_mermaid": true,
+      "diagram_types": [
+        "d3-force",
+        "mermaid-flowchart"
+      ],
+      "modified": "2025-12-30T17:57:03.510666",
+      "age_days": 0,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/security/owasp.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/security/owasp.html",
+      "has_d3": true,
+      "has_mermaid": true,
+      "diagram_types": [
+        "mermaid-sequence"
+      ],
+      "modified": "2025-12-30T17:57:03.558619",
+      "age_days": 0,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/security/security-training.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/security/security-training.html",
+      "has_d3": true,
+      "has_mermaid": true,
+      "diagram_types": [
+        "mermaid-flowchart"
+      ],
+      "modified": "2025-12-30T19:08:59.123802",
+      "age_days": 0,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/security/vulnerability-assessment.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/security/vulnerability-assessment.html",
+      "has_d3": true,
+      "has_mermaid": true,
+      "diagram_types": [
+        "d3-pie",
+        "mermaid-flowchart",
+        "mermaid-state"
+      ],
+      "modified": "2025-12-30T19:08:59.113385",
+      "age_days": 0,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/security/data-protection.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/security/data-protection.html",
+      "has_d3": true,
+      "has_mermaid": true,
+      "diagram_types": [
+        "mermaid-flowchart"
+      ],
+      "modified": "2025-12-30T19:08:59.123441",
+      "age_days": 0,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/security/threat-modeling.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/security/threat-modeling.html",
+      "has_d3": true,
+      "has_mermaid": true,
+      "diagram_types": [
+        "mermaid-flowchart",
+        "mermaid-sequence"
+      ],
+      "modified": "2025-12-30T18:34:23.023077",
+      "age_days": 0,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/security/incident-response.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/security/incident-response.html",
+      "has_d3": true,
+      "has_mermaid": true,
+      "diagram_types": [
+        "mermaid-flowchart"
+      ],
+      "modified": "2025-12-30T19:08:59.113629",
+      "age_days": 0,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/security/audit-logging.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/security/audit-logging.html",
+      "has_d3": true,
+      "has_mermaid": true,
+      "diagram_types": [
+        "mermaid-flowchart",
+        "mermaid-sequence"
+      ],
+      "modified": "2025-12-30T19:08:59.123541",
+      "age_days": 0,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/security/risk-assessment.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/security/risk-assessment.html",
+      "has_d3": true,
+      "has_mermaid": true,
+      "diagram_types": [
+        "mermaid-flowchart"
+      ],
+      "modified": "2025-12-30T19:08:59.123412",
+      "age_days": 0,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/features/dashboard-system.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/features/dashboard-system.html",
+      "has_d3": true,
+      "has_mermaid": false,
+      "diagram_types": [
+        "unknown"
+      ],
+      "modified": "2025-12-28T17:48:49.596843",
+      "age_days": 2,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/features/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/features/index.html",
+      "has_d3": true,
+      "has_mermaid": false,
+      "diagram_types": [
+        "unknown"
+      ],
+      "modified": "2025-12-29T12:27:40.163520",
+      "age_days": 1,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/token-optimization/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/token-optimization/index.html",
+      "has_d3": false,
+      "has_mermaid": true,
+      "diagram_types": [
+        "mermaid-flowchart"
+      ],
+      "modified": "2025-12-29T12:27:40.167128",
+      "age_days": 1,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/orchestrators/architectural-review.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/orchestrators/architectural-review.html",
+      "has_d3": true,
+      "has_mermaid": true,
+      "diagram_types": [
+        "d3-pie",
+        "mermaid-flowchart",
+        "mermaid-class"
+      ],
+      "modified": "2025-12-28T17:48:49.604385",
+      "age_days": 2,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/orchestrators/cortex-lens.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/orchestrators/cortex-lens.html",
+      "has_d3": true,
+      "has_mermaid": true,
+      "diagram_types": [
+        "d3-force",
+        "mermaid-flowchart",
+        "mermaid-sequence"
+      ],
+      "modified": "2025-12-28T17:48:49.604639",
+      "age_days": 2,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/orchestrators/git-checkpoint.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/orchestrators/git-checkpoint.html",
+      "has_d3": true,
+      "has_mermaid": true,
+      "diagram_types": [
+        "mermaid-flowchart",
+        "mermaid-state"
+      ],
+      "modified": "2025-12-28T17:48:49.605014",
+      "age_days": 2,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/orchestrators/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/orchestrators/index.html",
+      "has_d3": true,
+      "has_mermaid": false,
+      "diagram_types": [
+        "d3-force",
+        "d3-data-join"
+      ],
+      "modified": "2025-12-29T07:02:35.631115",
+      "age_days": 2,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/orchestrators/pre-flight.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/orchestrators/pre-flight.html",
+      "has_d3": true,
+      "has_mermaid": true,
+      "diagram_types": [
+        "mermaid-flowchart"
+      ],
+      "modified": "2025-12-28T17:48:49.605493",
+      "age_days": 2,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/orchestrators/intelligent-dashboard.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/orchestrators/intelligent-dashboard.html",
+      "has_d3": true,
+      "has_mermaid": true,
+      "diagram_types": [
+        "mermaid-flowchart"
+      ],
+      "modified": "2025-12-28T17:48:49.605208",
+      "age_days": 2,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/orchestrators/rollback-orchestrator.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/orchestrators/rollback-orchestrator.html",
+      "has_d3": true,
+      "has_mermaid": true,
+      "diagram_types": [
+        "mermaid-flowchart",
+        "mermaid-sequence",
+        "mermaid-class"
+      ],
+      "modified": "2025-12-28T17:48:49.605664",
+      "age_days": 2,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/orchestrators/system-integrity.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/orchestrators/system-integrity.html",
+      "has_d3": true,
+      "has_mermaid": true,
+      "diagram_types": [
+        "mermaid-flowchart",
+        "mermaid-sequence",
+        "mermaid-class"
+      ],
+      "modified": "2025-12-28T17:48:49.605868",
+      "age_days": 2,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/orchestrators/refinement-orchestrator.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/orchestrators/refinement-orchestrator.html",
+      "has_d3": true,
+      "has_mermaid": true,
+      "diagram_types": [
+        "d3-tree",
+        "mermaid-flowchart",
+        "mermaid-state"
+      ],
+      "modified": "2025-12-28T17:48:49.605557",
+      "age_days": 2,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/orchestrators/debug-orchestrator.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/orchestrators/debug-orchestrator.html",
+      "has_d3": true,
+      "has_mermaid": true,
+      "diagram_types": [
+        "d3-force",
+        "d3-tree",
+        "mermaid-flowchart",
+        "mermaid-sequence",
+        "mermaid-state"
+      ],
+      "modified": "2025-12-28T17:48:49.604758",
+      "age_days": 2,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/orchestrators/cleanup-orchestrator.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/orchestrators/cleanup-orchestrator.html",
+      "has_d3": true,
+      "has_mermaid": true,
+      "diagram_types": [
+        "d3-tree",
+        "mermaid-flowchart",
+        "mermaid-class"
+      ],
+      "modified": "2025-12-28T17:48:49.604521",
+      "age_days": 2,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/lens/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/lens/index.html",
+      "has_d3": true,
+      "has_mermaid": true,
+      "diagram_types": [
+        "d3-force",
+        "mermaid-flowchart"
+      ],
+      "modified": "2025-12-29T16:29:04.609203",
+      "age_days": 1,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/architecture/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/architecture/index.html",
+      "has_d3": true,
+      "has_mermaid": true,
+      "diagram_types": [
+        "mermaid-flowchart"
+      ],
+      "modified": "2025-12-29T08:33:28.694967",
+      "age_days": 2,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/getting-started/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/getting-started/index.html",
+      "has_d3": false,
+      "has_mermaid": true,
+      "diagram_types": [
+        "mermaid-flowchart"
+      ],
+      "modified": "2025-12-29T12:47:39.879488",
+      "age_days": 1,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/knowledge/ui-ux.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/ui-ux.html",
+      "has_d3": false,
+      "has_mermaid": true,
+      "diagram_types": [
+        "mermaid-flowchart"
+      ],
+      "modified": "2025-12-29T07:02:35.630961",
+      "age_days": 2,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/knowledge/design-patterns.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/design-patterns.html",
+      "has_d3": true,
+      "has_mermaid": false,
+      "diagram_types": [
+        "unknown"
+      ],
+      "modified": "2025-12-29T13:15:35.277662",
+      "age_days": 1,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/knowledge/api-design.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/api-design.html",
+      "has_d3": false,
+      "has_mermaid": true,
+      "diagram_types": [
+        "mermaid-flowchart"
+      ],
+      "modified": "2025-12-29T08:33:28.695819",
+      "age_days": 2,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/knowledge/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/index.html",
+      "has_d3": true,
+      "has_mermaid": false,
+      "diagram_types": [
+        "unknown"
+      ],
+      "modified": "2025-12-29T14:21:58.397448",
+      "age_days": 1,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/knowledge/microservices.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/microservices.html",
+      "has_d3": true,
+      "has_mermaid": false,
+      "diagram_types": [
+        "unknown"
+      ],
+      "modified": "2025-12-29T13:52:22.609605",
+      "age_days": 1,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/knowledge/database.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/database.html",
+      "has_d3": false,
+      "has_mermaid": true,
+      "diagram_types": [
+        "mermaid-flowchart",
+        "mermaid-sequence"
+      ],
+      "modified": "2025-12-29T07:02:35.628947",
+      "age_days": 2,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/knowledge/performance.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/performance.html",
+      "has_d3": false,
+      "has_mermaid": true,
+      "diagram_types": [
+        "mermaid-flowchart",
+        "mermaid-sequence"
+      ],
+      "modified": "2025-12-29T07:02:35.630353",
+      "age_days": 2,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/knowledge/containers.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/containers.html",
+      "has_d3": false,
+      "has_mermaid": true,
+      "diagram_types": [
+        "mermaid-flowchart",
+        "mermaid-sequence"
+      ],
+      "modified": "2025-12-29T07:02:35.628761",
+      "age_days": 2,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/knowledge/mobile.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/mobile.html",
+      "has_d3": false,
+      "has_mermaid": true,
+      "diagram_types": [
+        "mermaid-flowchart"
+      ],
+      "modified": "2025-12-29T07:02:35.630201",
+      "age_days": 2,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/knowledge/engineering.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/engineering.html",
+      "has_d3": false,
+      "has_mermaid": true,
+      "diagram_types": [
+        "unknown"
+      ],
+      "modified": "2025-12-29T07:02:35.629395",
+      "age_days": 2,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/knowledge/security.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/security.html",
+      "has_d3": false,
+      "has_mermaid": true,
+      "diagram_types": [
+        "mermaid-sequence"
+      ],
+      "modified": "2025-12-29T07:02:35.630636",
+      "age_days": 2,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/knowledge/cloud.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/cloud.html",
+      "has_d3": false,
+      "has_mermaid": true,
+      "diagram_types": [
+        "mermaid-flowchart",
+        "mermaid-sequence"
+      ],
+      "modified": "2025-12-29T07:02:35.628588",
+      "age_days": 2,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/knowledge/frontend.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/frontend.html",
+      "has_d3": false,
+      "has_mermaid": true,
+      "diagram_types": [
+        "mermaid-flowchart"
+      ],
+      "modified": "2025-12-29T07:02:35.629566",
+      "age_days": 2,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/knowledge/ddd.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/ddd.html",
+      "has_d3": false,
+      "has_mermaid": true,
+      "diagram_types": [
+        "mermaid-flowchart",
+        "mermaid-sequence"
+      ],
+      "modified": "2025-12-29T07:02:35.629095",
+      "age_days": 2,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/knowledge/devops.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/devops.html",
+      "has_d3": false,
+      "has_mermaid": true,
+      "diagram_types": [
+        "mermaid-flowchart"
+      ],
+      "modified": "2025-12-29T07:02:35.629240",
+      "age_days": 2,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/knowledge/testing.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/testing.html",
+      "has_d3": false,
+      "has_mermaid": true,
+      "diagram_types": [
+        "mermaid-flowchart",
+        "mermaid-state"
+      ],
+      "modified": "2025-12-29T07:02:35.630795",
+      "age_days": 2,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/knowledge/messaging.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/messaging.html",
+      "has_d3": false,
+      "has_mermaid": true,
+      "diagram_types": [
+        "mermaid-flowchart",
+        "mermaid-sequence"
+      ],
+      "modified": "2025-12-29T07:02:35.629880",
+      "age_days": 2,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/knowledge/rag-domains.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/knowledge/rag-domains.html",
+      "has_d3": false,
+      "has_mermaid": true,
+      "diagram_types": [
+        "mermaid-flowchart",
+        "mermaid-sequence"
+      ],
+      "modified": "2025-12-29T07:02:35.630507",
+      "age_days": 2,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/technical/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/technical/index.html",
+      "has_d3": true,
+      "has_mermaid": false,
+      "diagram_types": [
+        "unknown"
+      ],
+      "modified": "2025-12-28T17:48:49.628281",
+      "age_days": 2,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/technical/security/dashboard.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/technical/security/dashboard.html",
+      "has_d3": true,
+      "has_mermaid": true,
+      "diagram_types": [
+        "d3-force",
+        "mermaid-flowchart"
+      ],
+      "modified": "2025-12-30T18:34:22.989279",
+      "age_days": 0,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/technical/orchestrators/architectural-review.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/technical/orchestrators/architectural-review.html",
+      "has_d3": true,
+      "has_mermaid": true,
+      "diagram_types": [
+        "mermaid-flowchart",
+        "mermaid-sequence"
+      ],
+      "modified": "2025-12-28T17:48:49.628512",
+      "age_days": 2,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/technical/orchestrators/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/technical/orchestrators/index.html",
+      "has_d3": true,
+      "has_mermaid": false,
+      "diagram_types": [
+        "d3-force"
+      ],
+      "modified": "2025-12-28T17:48:49.628610",
+      "age_days": 2,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/technical/orchestrators/ado-planning.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/technical/orchestrators/ado-planning.html",
+      "has_d3": true,
+      "has_mermaid": true,
+      "diagram_types": [
+        "unknown"
+      ],
+      "modified": "2025-12-28T17:48:49.628439",
+      "age_days": 2,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    },
+    {
+      "path": "docs/validation/index.html",
+      "abs_path": "/Users/asifhussain/PROJECTS/CORTEX/docs/validation/index.html",
+      "has_d3": false,
+      "has_mermaid": true,
+      "diagram_types": [
+        "mermaid-sequence"
+      ],
+      "modified": "2025-12-28T17:48:49.628947",
+      "age_days": 2,
+      "is_stale": false,
+      "staleness_reason": null,
+      "related_changes": 0
+    }
+  ]
+}

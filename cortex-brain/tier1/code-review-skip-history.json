@@ -1,0 +1,20 @@
+{
+  "skipped_reviews": [
+    {
+      "phase": "phase-4",
+      "event": null,
+      "name": "Unknown",
+      "reason": "skip review",
+      "timestamp": "2025-12-13T01:37:42.863405",
+      "status": "complete"
+    },
+    {
+      "phase": "phase-4",
+      "event": null,
+      "name": "Unknown",
+      "reason": "skip review",
+      "timestamp": "2025-12-13T01:40:37.247189",
+      "status": "complete"
+    }
+  ]
+}

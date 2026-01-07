@@ -1,0 +1,16 @@
+# YAML Backlog Index
+# Maintained by cortex-backlog.prompt.md workflow
+
+version: "1.0"
+last_updated: null
+total_items: 0
+
+items: []
+
+# Items will be added in format:
+# - id: "BL-{priority}-{yymmdd}-{seq}"
+#   file: "{date}-{name}.yaml"
+#   title: ""
+#   priority: 0
+#   status: "archived"
+#   converted: ""

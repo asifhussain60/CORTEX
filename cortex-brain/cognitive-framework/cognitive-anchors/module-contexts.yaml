@@ -1,0 +1,275 @@
+# Module Context Anchors (Rule #25: Cognitive Anchoring)
+# 
+# Purpose: Define context anchors for all CORTEX components
+# Each anchor provides:
+# - module: File path
+# - purpose: What this component does
+# - role: Which hemisphere/tier it belongs to
+# - tier: CORTEX tier classification
+#
+# These anchors are used to provide context at the start of every task,
+# preventing "context loss" and ensuring Copilot always knows where it is.
+
+---
+
+# RIGHT HEMISPHERE - Strategic Planning Agents
+
+intent_router:
+  module: "CORTEX/src/agents/strategic/intent_router.py"
+  purpose: "Route user requests to appropriate specialist agents"
+  role: "RIGHT BRAIN strategic planner"
+  tier: "Phase 4 - Core Intelligence Layer"
+  responsibilities:
+    - "Parse natural language user requests"
+    - "Classify intent (PLAN, EXECUTE, TEST, VALIDATE, etc.)"
+    - "Route to appropriate specialist agent"
+    - "Query Tier 2 for intent patterns"
+    - "Fallback to Work Planner when ambiguous"
+
+work_planner:
+  module: "CORTEX/src/agents/strategic/work_planner.py"
+  purpose: "Create multi-phase strategic plans for features"
+  role: "RIGHT BRAIN strategic planner"
+  tier: "Phase 4 - Core Intelligence Layer"
+  responsibilities:
+    - "Break features into logical phases"
+    - "Query Tier 2 for similar feature patterns"
+    - "Query Tier 3 for project context and velocity"
+    - "Estimate effort based on historical data"
+    - "Generate step-by-step execution plans"
+
+change_governor:
+  module: "CORTEX/src/agents/strategic/change_governor.py"
+  purpose: "Protect CORTEX integrity from risky changes"
+  role: "RIGHT BRAIN strategic guardian"
+  tier: "Phase 4 - Core Intelligence Layer"
+  responsibilities:
+    - "Review proposed changes to CORTEX codebase"
+    - "Challenge risky modifications"
+    - "Enforce Tier 0 governance rules"
+    - "Suggest safe alternatives"
+    - "Log all governance challenges"
+
+brain_protector:
+  module: "CORTEX/src/agents/strategic/brain_protector.py"
+  purpose: "Guard brain's integrity and quality standards"
+  role: "RIGHT BRAIN strategic guardian (Rule #22)"
+  tier: "Phase 4 - Core Intelligence Layer"
+  responsibilities:
+    - "Detect attempts to bypass TDD, DoR, DoD"
+    - "Protect Tier boundaries"
+    - "Enforce SOLID principles"
+    - "Validate hemisphere specialization"
+    - "Monitor knowledge quality"
+
+screenshot_analyzer:
+  module: "CORTEX/src/agents/strategic/screenshot_analyzer.py"
+  purpose: "Extract requirements from UI mockups and images"
+  role: "RIGHT BRAIN strategic interpreter"
+  tier: "Phase 4 - Core Intelligence Layer"
+  responsibilities:
+    - "Analyze screenshot images"
+    - "Extract UI component requirements"
+    - "Identify layout patterns"
+    - "Generate implementation plan"
+    - "Store visual patterns in Tier 2"
+
+# LEFT HEMISPHERE - Tactical Execution Agents
+
+code_executor:
+  module: "CORTEX/src/agents/tactical/code_executor.py"
+  purpose: "Implement code with surgical precision"
+  role: "LEFT BRAIN tactical executor"
+  tier: "Phase 4 - Core Intelligence Layer"
+  responsibilities:
+    - "Execute code changes with exact file edits"
+    - "Follow TDD workflow (RED → GREEN → REFACTOR)"
+    - "Search for existing patterns before creating new code"
+    - "Validate syntax and build status"
+    - "Work in small incremental steps (Rule #23)"
+
+test_generator:
+  module: "CORTEX/src/agents/tactical/test_generator.py"
+  purpose: "Create and run tests following TDD principles"
+  role: "LEFT BRAIN tactical validator"
+  tier: "Phase 4 - Core Intelligence Layer"
+  responsibilities:
+    - "Write failing tests first (RED phase)"
+    - "Validate test success (GREEN phase)"
+    - "Enable refactoring (REFACTOR phase)"
+    - "Track test coverage and pass rates"
+    - "Identify flaky tests"
+
+health_validator:
+  module: "CORTEX/src/agents/tactical/health_validator.py"
+  purpose: "Validate system health obsessively"
+  role: "LEFT BRAIN tactical inspector"
+  tier: "Phase 4 - Core Intelligence Layer"
+  responsibilities:
+    - "Check build status (zero errors, zero warnings)"
+    - "Validate all tests passing"
+    - "Verify Definition of DONE compliance"
+    - "Monitor brain health metrics"
+    - "Generate health reports"
+
+error_corrector:
+  module: "CORTEX/src/agents/tactical/error_corrector.py"
+  purpose: "Catch and fix Copilot mistakes instantly"
+  role: "LEFT BRAIN tactical debugger"
+  tier: "Phase 4 - Core Intelligence Layer"
+  responsibilities:
+    - "Detect wrong-file mistakes"
+    - "Catch syntax errors before commit"
+    - "Identify logic bugs"
+    - "Suggest corrections"
+    - "Learn from correction patterns"
+
+commit_handler:
+  module: "CORTEX/src/agents/tactical/commit_handler.py"
+  purpose: "Create semantic git commits with intelligence"
+  role: "LEFT BRAIN tactical archivist"
+  tier: "Phase 4 - Core Intelligence Layer"
+  responsibilities:
+    - "Generate semantic commit messages"
+    - "Categorize changes (feat/fix/test/docs)"
+    - "Associate commits with conversations"
+    - "Validate commit integrity"
+    - "Trigger brain updates post-commit"
+
+# CORPUS CALLOSUM - Hemisphere Coordination
+
+message_queue:
+  module: "CORTEX/src/corpus_callosum/message_queue.py"
+  purpose: "Coordinate messages between hemispheres"
+  role: "Bridge between RIGHT and LEFT BRAIN"
+  tier: "Phase 4 - Core Intelligence Layer"
+  responsibilities:
+    - "Queue strategic plans from RIGHT → LEFT"
+    - "Queue execution results from LEFT → RIGHT"
+    - "Ensure asynchronous coordination"
+    - "Validate message integrity"
+    - "Log all inter-hemisphere communication"
+
+# TIER ENGINES - Data Storage and Retrieval
+
+working_memory_engine:
+  module: "CORTEX/src/tier1/working_memory_engine.py"
+  purpose: "Manage short-term conversation memory (FIFO queue)"
+  role: "Tier 1 - Short-term Memory"
+  tier: "GROUP 3 - Data Storage Layer"
+  responsibilities:
+    - "Store last 20 conversations"
+    - "Implement FIFO queue (conversation-level)"
+    - "Provide <100ms read performance"
+    - "Support cross-conversation context"
+    - "Enable 'Make it purple' references"
+
+knowledge_graph_engine:
+  module: "CORTEX/src/tier2/knowledge_graph_engine.py"
+  purpose: "Store and query long-term knowledge patterns"
+  role: "Tier 2 - Long-term Memory"
+  tier: "GROUP 3 - Data Storage Layer"
+  responsibilities:
+    - "Store intent patterns and workflows"
+    - "Track file relationships and co-modifications"
+    - "Manage pattern confidence scores"
+    - "Provide semantic search via FTS5"
+    - "Extract patterns from deleted conversations"
+
+dev_context_engine:
+  module: "CORTEX/src/tier3/dev_context_engine.py"
+  purpose: "Analyze holistic project metrics and velocity"
+  role: "Tier 3 - Development Context"
+  tier: "GROUP 3 - Data Storage Layer"
+  responsibilities:
+    - "Track git activity (commits, velocity, hotspots)"
+    - "Monitor code health (lines, churn, stability)"
+    - "Analyze CORTEX usage patterns"
+    - "Measure testing activity and coverage"
+    - "Generate proactive warnings"
+
+# COGNITIVE FRAMEWORK - Best Practices Enforcement
+
+cognitive_anchor_provider:
+  module: "CORTEX/src/cognitive_framework/anchor_provider.py"
+  purpose: "Provide context anchors for all components (Rule #25)"
+  role: "Cognitive framework enforcer"
+  tier: "Cognitive Best Practices Layer"
+  responsibilities:
+    - "Load module context from module-contexts.yaml"
+    - "Generate context anchor text for any component"
+    - "Validate context anchor completeness"
+    - "Log context anchor usage"
+
+intent_confirmer:
+  module: "CORTEX/src/cognitive_framework/intent_confirmer.py"
+  purpose: "Confirm understanding before implementation (Rule #26)"
+  role: "Cognitive framework enforcer"
+  tier: "Cognitive Best Practices Layer"
+  responsibilities:
+    - "Generate intent confirmation messages"
+    - "Wait for user confirmation"
+    - "Parse clarifications"
+    - "Block execution until confirmed"
+    - "Log all confirmations"
+
+pattern_search_enforcer:
+  module: "CORTEX/src/cognitive_framework/pattern_search_enforcer.py"
+  purpose: "Enforce pattern-first development (Rule #27)"
+  role: "Cognitive framework enforcer"
+  tier: "Cognitive Best Practices Layer"
+  responsibilities:
+    - "Search Tier 2 before creating new code"
+    - "Apply 70% similarity threshold"
+    - "Suggest pattern reuse when appropriate"
+    - "Log all pattern searches"
+    - "Track pattern reuse statistics"
+
+context_snapshot_generator:
+  module: "CORTEX/src/cognitive_framework/snapshot_generator.py"
+  purpose: "Generate context snapshots at phase boundaries"
+  role: "Cognitive framework enforcer"
+  tier: "Cognitive Best Practices Layer"
+  responsibilities:
+    - "Create summaries at context switches"
+    - "Document what was just completed"
+    - "Preview what's coming next"
+    - "List dependencies and blockers"
+    - "Prevent context loss"
+
+# ROUTER AND SESSION MANAGEMENT
+
+universal_router:
+  module: "CORTEX/src/router.py"
+  purpose: "Universal entry point from cortex.md"
+  role: "Central orchestrator"
+  tier: "GROUP 2 - Core Infrastructure"
+  responsibilities:
+    - "Process requests from cortex.md"
+    - "Coordinate intent detection"
+    - "Inject context from Tiers 1-3"
+    - "Route to workflows"
+    - "Track performance (<300ms total)"
+
+session_manager:
+  module: "CORTEX/src/session_manager.py"
+  purpose: "Manage conversation sessions and state"
+  role: "Session coordinator"
+  tier: "GROUP 2 - Core Infrastructure"
+  responsibilities:
+    - "Create and track conversation sessions"
+    - "Manage active session state"
+    - "Coordinate with Tier 1 for persistence"
+    - "Handle session resumption"
+
+context_injector:
+  module: "CORTEX/src/context_injector.py"
+  purpose: "Inject context from all brain tiers"
+  role: "Context aggregator"
+  tier: "GROUP 2 - Core Infrastructure"
+  responsibilities:
+    - "Query Tier 1 for recent conversations"
+    - "Query Tier 2 for relevant patterns"
+    - "Query Tier 3 for project metrics"
+    - "Aggregate context efficiently (<200ms)"
+    - "Format context for agent consumption"

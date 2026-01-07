@@ -1,0 +1,3067 @@
+{
+  "architecture": {
+    "html_path": "docs\\architecture\\index.html",
+    "snapshot_path": "cortex-brain\\test-snapshots\\architecture-after-20260105-150655.html",
+    "fingerprint": {
+      "inline_styles": [],
+      "css_classes": [
+        {
+          "tag": "main",
+          "class": "level1-main-a5853dbc",
+          "id": "main-content"
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-panel-amber",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-panel-amber",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-panel-amber",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-panel-emerald",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-panel-purple",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        }
+      ],
+      "elements_with_styles": 0
+    },
+    "timestamp": "2026-01-05T15:06:55.907947"
+  },
+  "features": {
+    "html_path": "docs\\features\\index.html",
+    "snapshot_path": "cortex-brain\\test-snapshots\\features-after-20260105-150655.html",
+    "fingerprint": {
+      "inline_styles": [],
+      "css_classes": [
+        {
+          "tag": "div",
+          "class": "level1-hero-header",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-hero-content",
+          "id": null
+        },
+        {
+          "tag": "h1",
+          "class": "level1-hero-title",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "level1-hero-subtitle",
+          "id": null
+        },
+        {
+          "tag": "main",
+          "class": "level1-features",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "h2",
+          "class": "level1-section-header",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-section-header-icon",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "level1-intro-text",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "level1-intro-text",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "level1-intro-text--no-margin",
+          "id": null
+        },
+        {
+          "tag": "strong",
+          "class": "level1-highlight",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "level1-feature-card-link",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-feature-icon-container",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-feature-icon-container--primary",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-feature-icon-lg",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-feature-icon--primary",
+          "id": null
+        },
+        {
+          "tag": "h3",
+          "class": "level1-feature-title",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "level1-feature-subtitle",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "level1-feature-description",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-check-icon",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-check-icon",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-check-icon",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-check-icon",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "level1-feature-card-link",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-feature-icon-container",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-feature-icon-container--success",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-feature-icon-lg",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-feature-icon--success",
+          "id": null
+        },
+        {
+          "tag": "h3",
+          "class": "level1-feature-title",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "level1-feature-subtitle",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "level1-feature-description",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-check-icon",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-check-icon",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-check-icon",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-check-icon",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "level1-feature-card-link",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-feature-icon-container",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-feature-icon-container--purple",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-feature-icon-lg",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-feature-icon--purple",
+          "id": null
+        },
+        {
+          "tag": "h3",
+          "class": "level1-feature-title",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "level1-feature-subtitle",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "level1-feature-description",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-check-icon",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-check-icon",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-check-icon",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-check-icon",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "level1-feature-card-link",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-feature-icon-container",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-feature-icon-container--info",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-feature-icon-lg",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-feature-icon--info",
+          "id": null
+        },
+        {
+          "tag": "h3",
+          "class": "level1-feature-title",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "level1-feature-subtitle",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "level1-feature-description",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-check-icon",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-check-icon",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-check-icon",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-check-icon",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "level1-feature-card-link",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-feature-icon-container",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-feature-icon-container--mixed",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-feature-icon-lg",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-feature-icon--primary",
+          "id": null
+        },
+        {
+          "tag": "h3",
+          "class": "level1-feature-title",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "level1-feature-subtitle",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "level1-feature-description",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-check-icon",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-check-icon",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-check-icon",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-check-icon",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "level1-feature-card-link",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-feature-icon-container",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-feature-icon-container--warning",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-feature-icon-lg",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-feature-icon--warning",
+          "id": null
+        },
+        {
+          "tag": "h3",
+          "class": "level1-feature-title",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "level1-feature-subtitle",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "level1-feature-description",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-check-icon",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-check-icon",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-check-icon",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-check-icon",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "level1-feature-card-link",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-feature-icon-container",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-feature-icon-container--success",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-feature-icon-lg",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-feature-icon--success",
+          "id": null
+        },
+        {
+          "tag": "h3",
+          "class": "level1-feature-title",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "level1-feature-subtitle",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "level1-feature-description",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "level1-feature-card-link",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-feature-icon-container",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-feature-icon-container--primary",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-feature-icon-lg",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-feature-icon--primary",
+          "id": null
+        },
+        {
+          "tag": "h3",
+          "class": "level1-feature-title",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "level1-feature-subtitle--no-center",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "level1-feature-description",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "h2",
+          "class": "level1-integration-header",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-integration-icon-container",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-integration-icon-container--primary",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-integration-icon",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-feature-icon--primary",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-metric-value",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-metric-label",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-metric-detail",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-metric-value",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-metric-label",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-metric-detail",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-metric-value",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-metric-label",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-metric-detail",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-metric-value",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-metric-label",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-metric-detail",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "h2",
+          "class": "level1-integration-header",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-integration-icon-container",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-integration-icon-container--warning",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-integration-icon",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-feature-icon--warning",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-benefit-content",
+          "id": null
+        },
+        {
+          "tag": "h3",
+          "class": "level1-benefit-title",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "strong",
+          "class": "level1-benefit-arrow",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "strong",
+          "class": "level1-benefit-arrow",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "strong",
+          "class": "level1-benefit-arrow",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "strong",
+          "class": "level1-benefit-arrow",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-benefit-content",
+          "id": null
+        },
+        {
+          "tag": "h3",
+          "class": "level1-benefit-title",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "strong",
+          "class": "level1-benefit-arrow",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "strong",
+          "class": "level1-benefit-arrow",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "strong",
+          "class": "level1-benefit-arrow",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "strong",
+          "class": "level1-benefit-arrow",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-cta-card",
+          "id": null
+        },
+        {
+          "tag": "h2",
+          "class": "level1-cta-title",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "level1-cta-description",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-cta-buttons",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "level1-btn-hero",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "level1-btn-hero--primary",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-btn-icon",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "level1-btn-hero",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "level1-btn-hero--secondary",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-btn-icon",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "level1-btn-hero",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "level1-btn-hero--secondary",
+          "id": null
+        },
+        {
+          "tag": "i",
+          "class": "level1-btn-icon",
+          "id": null
+        }
+      ],
+      "elements_with_styles": 0
+    },
+    "timestamp": "2026-01-05T15:06:55.924480"
+  },
+  "getting-started": {
+    "html_path": "docs\\getting-started\\index.html",
+    "snapshot_path": "cortex-brain\\test-snapshots\\getting-started-after-20260105-150655.html",
+    "fingerprint": {
+      "inline_styles": [],
+      "css_classes": [
+        {
+          "tag": "header",
+          "class": "glass-header",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-panel-amber",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-panel-emerald",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-panel-amber",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        }
+      ],
+      "elements_with_styles": 0
+    },
+    "timestamp": "2026-01-05T15:06:55.940475"
+  },
+  "knowledge": {
+    "html_path": "docs\\knowledge\\index.html",
+    "snapshot_path": "cortex-brain\\test-snapshots\\knowledge-after-20260105-150655.html",
+    "fingerprint": {
+      "inline_styles": [],
+      "css_classes": [
+        {
+          "tag": "header",
+          "class": "glass-header",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-panel-amber",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-panel-emerald",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-panel-emerald",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-panel-purple",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-panel-purple",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-display",
+          "id": null
+        }
+      ],
+      "elements_with_styles": 0
+    },
+    "timestamp": "2026-01-05T15:06:55.979144"
+  },
+  "learning-paths": {
+    "html_path": "docs\\learning-paths\\index.html",
+    "snapshot_path": "cortex-brain\\test-snapshots\\learning-paths-after-20260105-150655.html",
+    "fingerprint": {
+      "inline_styles": [],
+      "css_classes": [
+        {
+          "tag": "header",
+          "class": "glass-header",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-panel-amber",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-panel-purple",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-cbff0d81",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "level1-a-8ff716ed",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-d469cdb0",
+          "id": null
+        },
+        {
+          "tag": "h3",
+          "class": "level1-h3-5fa13ef5",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "level1-p-bb0a7636",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-cf1c4e5b",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-1141ff03",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-26b6825e",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-fb99fb61",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-eac6397e",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-f5e8e854",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-04dc1e00",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-eac6397e",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-3ec75c94",
+          "id": null
+        },
+        {
+          "tag": "span",
+          "class": "level1-span-b79d9949",
+          "id": null
+        },
+        {
+          "tag": "span",
+          "class": "level1-span-b79d9949",
+          "id": null
+        },
+        {
+          "tag": "span",
+          "class": "level1-span-b79d9949",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-88d065ce",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-222414b7",
+          "id": null
+        },
+        {
+          "tag": "ul",
+          "class": "level1-ul-e8396a62",
+          "id": null
+        },
+        {
+          "tag": "li",
+          "class": "level1-li-6694a98d",
+          "id": null
+        },
+        {
+          "tag": "li",
+          "class": "level1-li-6694a98d",
+          "id": null
+        },
+        {
+          "tag": "li",
+          "class": "level1-li-6694a98d",
+          "id": null
+        },
+        {
+          "tag": "li",
+          "class": "level1-li-6694a98d",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "level1-a-44ddc605",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-e18fd6f7",
+          "id": null
+        },
+        {
+          "tag": "h3",
+          "class": "level1-h3-5fa13ef5",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "level1-p-bb0a7636",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-cf1c4e5b",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-1141ff03",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-26b6825e",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-fb99fb61",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-eac6397e",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-da0a90a4",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-4868d13e",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-eac6397e",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-3ec75c94",
+          "id": null
+        },
+        {
+          "tag": "span",
+          "class": "level1-span-b79d9949",
+          "id": null
+        },
+        {
+          "tag": "span",
+          "class": "level1-span-b79d9949",
+          "id": null
+        },
+        {
+          "tag": "span",
+          "class": "level1-span-b79d9949",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-40083259",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-222414b7",
+          "id": null
+        },
+        {
+          "tag": "ul",
+          "class": "level1-ul-e8396a62",
+          "id": null
+        },
+        {
+          "tag": "li",
+          "class": "level1-li-6694a98d",
+          "id": null
+        },
+        {
+          "tag": "li",
+          "class": "level1-li-6694a98d",
+          "id": null
+        },
+        {
+          "tag": "li",
+          "class": "level1-li-6694a98d",
+          "id": null
+        },
+        {
+          "tag": "li",
+          "class": "level1-li-6694a98d",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "level1-a-2332f38a",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-7306ca7a",
+          "id": null
+        },
+        {
+          "tag": "h3",
+          "class": "level1-h3-5fa13ef5",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "level1-p-bb0a7636",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-cf1c4e5b",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-1141ff03",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-8615a2b6",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-47acd778",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-eac6397e",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-a5ae6714",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-dff1c476",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-eac6397e",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-3ec75c94",
+          "id": null
+        },
+        {
+          "tag": "span",
+          "class": "level1-span-b79d9949",
+          "id": null
+        },
+        {
+          "tag": "span",
+          "class": "level1-span-b79d9949",
+          "id": null
+        },
+        {
+          "tag": "span",
+          "class": "level1-span-b79d9949",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-82d37893",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-222414b7",
+          "id": null
+        },
+        {
+          "tag": "ul",
+          "class": "level1-ul-e8396a62",
+          "id": null
+        },
+        {
+          "tag": "li",
+          "class": "level1-li-6694a98d",
+          "id": null
+        },
+        {
+          "tag": "li",
+          "class": "level1-li-6694a98d",
+          "id": null
+        },
+        {
+          "tag": "li",
+          "class": "level1-li-6694a98d",
+          "id": null
+        },
+        {
+          "tag": "li",
+          "class": "level1-li-6694a98d",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "level1-a-155d9fd0",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-940504c3",
+          "id": null
+        },
+        {
+          "tag": "h3",
+          "class": "level1-h3-5fa13ef5",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "level1-p-bb0a7636",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-cf1c4e5b",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-1141ff03",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-86970cd3",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-3983eb37",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-eac6397e",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-95c7d4dd",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-5465964f",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-eac6397e",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-3ec75c94",
+          "id": null
+        },
+        {
+          "tag": "span",
+          "class": "level1-span-b79d9949",
+          "id": null
+        },
+        {
+          "tag": "span",
+          "class": "level1-span-b79d9949",
+          "id": null
+        },
+        {
+          "tag": "span",
+          "class": "level1-span-b79d9949",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-9c571875",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-222414b7",
+          "id": null
+        },
+        {
+          "tag": "ul",
+          "class": "level1-ul-e8396a62",
+          "id": null
+        },
+        {
+          "tag": "li",
+          "class": "level1-li-6694a98d",
+          "id": null
+        },
+        {
+          "tag": "li",
+          "class": "level1-li-6694a98d",
+          "id": null
+        },
+        {
+          "tag": "li",
+          "class": "level1-li-6694a98d",
+          "id": null
+        },
+        {
+          "tag": "li",
+          "class": "level1-li-6694a98d",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-7459dbdb",
+          "id": null
+        },
+        {
+          "tag": "h3",
+          "class": "level1-h3-7023da70",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-6255b864",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-7459dbdb",
+          "id": null
+        },
+        {
+          "tag": "h3",
+          "class": "level1-h3-7023da70",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-6d4549ba",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-7459dbdb",
+          "id": null
+        },
+        {
+          "tag": "h3",
+          "class": "level1-h3-7023da70",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-13a65a07",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-7459dbdb",
+          "id": null
+        },
+        {
+          "tag": "h3",
+          "class": "level1-h3-7023da70",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-f30b7777",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-7459dbdb",
+          "id": null
+        },
+        {
+          "tag": "h3",
+          "class": "level1-h3-7023da70",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-f4eacc45",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-7459dbdb",
+          "id": null
+        },
+        {
+          "tag": "h3",
+          "class": "level1-h3-7023da70",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-2e5abae4",
+          "id": null
+        },
+        {
+          "tag": "span",
+          "class": "level1-span-7864e5ad",
+          "id": null
+        },
+        {
+          "tag": "span",
+          "class": "level1-span-589ac059",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "level1-p-51aa0000",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-7fb799b0",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-2e5abae4",
+          "id": null
+        },
+        {
+          "tag": "span",
+          "class": "level1-span-85c166cb",
+          "id": null
+        },
+        {
+          "tag": "span",
+          "class": "level1-span-589ac059",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "level1-p-51aa0000",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-7a5c1afe",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-2e5abae4",
+          "id": null
+        },
+        {
+          "tag": "span",
+          "class": "level1-span-99f58288",
+          "id": null
+        },
+        {
+          "tag": "span",
+          "class": "level1-span-589ac059",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "level1-p-51aa0000",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-cfdff18b",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-2e5abae4",
+          "id": null
+        },
+        {
+          "tag": "span",
+          "class": "level1-span-1711a82b",
+          "id": null
+        },
+        {
+          "tag": "span",
+          "class": "level1-span-589ac059",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "level1-p-51aa0000",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-96884bd3",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-7459dbdb",
+          "id": null
+        },
+        {
+          "tag": "h3",
+          "class": "level1-h3-7023da70",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "level1-h3-7023da70",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-55128206",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-96884bd3",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-7459dbdb",
+          "id": null
+        },
+        {
+          "tag": "h3",
+          "class": "level1-h3-7023da70",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "level1-h3-7023da70",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-55128206",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-96884bd3",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-7459dbdb",
+          "id": null
+        },
+        {
+          "tag": "h3",
+          "class": "level1-h3-7023da70",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "level1-h3-7023da70",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-55128206",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-96884bd3",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-7459dbdb",
+          "id": null
+        },
+        {
+          "tag": "h3",
+          "class": "level1-h3-7023da70",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "level1-h3-7023da70",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "level1-div-55128206",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        }
+      ],
+      "elements_with_styles": 0
+    },
+    "timestamp": "2026-01-05T15:06:55.996476"
+  },
+  "lens": {
+    "html_path": "docs\\lens\\index.html",
+    "snapshot_path": "cortex-brain\\test-snapshots\\lens-after-20260105-150655.html",
+    "fingerprint": {
+      "inline_styles": [],
+      "css_classes": [
+        {
+          "tag": "header",
+          "class": "glass-header",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-panel-purple",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-panel-amber",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-panel-emerald",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-panel-purple",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        }
+      ],
+      "elements_with_styles": 0
+    },
+    "timestamp": "2026-01-05T15:06:56.013230"
+  },
+  "orchestrators": {
+    "html_path": "docs\\orchestrators\\index.html",
+    "snapshot_path": "cortex-brain\\test-snapshots\\orchestrators-after-20260105-150656.html",
+    "fingerprint": {
+      "inline_styles": [],
+      "css_classes": [
+        {
+          "tag": "header",
+          "class": "glass-header",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-panel-purple",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "a",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-panel-emerald",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-panel-amber",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-display",
+          "id": null
+        }
+      ],
+      "elements_with_styles": 0
+    },
+    "timestamp": "2026-01-05T15:06:56.025065"
+  },
+  "security": {
+    "html_path": "docs\\security\\index.html",
+    "snapshot_path": "cortex-brain\\test-snapshots\\security-after-20260105-150656.html",
+    "fingerprint": {
+      "inline_styles": [],
+      "css_classes": [],
+      "elements_with_styles": 0
+    },
+    "timestamp": "2026-01-05T15:06:56.028352"
+  },
+  "story": {
+    "html_path": "docs\\story\\index.html",
+    "snapshot_path": "cortex-brain\\test-snapshots\\story-after-20260105-150656.html",
+    "fingerprint": {
+      "inline_styles": [],
+      "css_classes": [],
+      "elements_with_styles": 0
+    },
+    "timestamp": "2026-01-05T15:06:56.030993"
+  },
+  "sts": {
+    "html_path": "docs\\sts\\index.html",
+    "snapshot_path": "cortex-brain\\test-snapshots\\sts-after-20260105-150656.html",
+    "fingerprint": {
+      "inline_styles": [],
+      "css_classes": [
+        {
+          "tag": "body",
+          "class": "level1-integration-icon-container",
+          "id": null
+        },
+        {
+          "tag": "header",
+          "class": "level1-integration-icon-container",
+          "id": null
+        },
+        {
+          "tag": "h1",
+          "class": "level1-integration-icon-container",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "level1-integration-icon-container",
+          "id": null
+        },
+        {
+          "tag": "main",
+          "class": "level1-integration-icon-container",
+          "id": "main-content"
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "p",
+          "class": "glass-card--no-hover",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card",
+          "id": null
+        }
+      ],
+      "elements_with_styles": 0
+    },
+    "timestamp": "2026-01-05T15:06:56.041744"
+  },
+  "token-optimization": {
+    "html_path": "docs\\token-optimization\\index.html",
+    "snapshot_path": "cortex-brain\\test-snapshots\\token-optimization-after-20260105-150656.html",
+    "fingerprint": {
+      "inline_styles": [],
+      "css_classes": [
+        {
+          "tag": "header",
+          "class": "glass-header",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-panel-purple",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-panel-amber",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": "roi-calculator-section"
+        },
+        {
+          "tag": "section",
+          "class": "glass-panel-amber",
+          "id": "roi-calculator-section"
+        },
+        {
+          "tag": "input",
+          "class": "level1-input-0cc234ad",
+          "id": "hourlyRate"
+        },
+        {
+          "tag": "input",
+          "class": "level1-input-b397ed09",
+          "id": "sprintsPerYear"
+        },
+        {
+          "tag": "div",
+          "class": "level1-h3-7023da70",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-panel-emerald",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-panel-purple",
+          "id": null
+        }
+      ],
+      "elements_with_styles": 0
+    },
+    "timestamp": "2026-01-05T15:06:56.064795"
+  },
+  "toolkit-manager": {
+    "html_path": "docs\\toolkit-manager\\index.html",
+    "snapshot_path": "cortex-brain\\test-snapshots\\toolkit-manager-after-20260105-150656.html",
+    "fingerprint": {
+      "inline_styles": [],
+      "css_classes": [
+        {
+          "tag": "header",
+          "class": "glass-header",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-panel-emerald",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-panel-purple",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-panel-emerald",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "div",
+          "class": "glass-card-clickable",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-panel-purple",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-panel-amber",
+          "id": null
+        },
+        {
+          "tag": "section",
+          "class": "glass-card-display",
+          "id": null
+        }
+      ],
+      "elements_with_styles": 0
+    },
+    "timestamp": "2026-01-05T15:06:56.080981"
+  }
+}

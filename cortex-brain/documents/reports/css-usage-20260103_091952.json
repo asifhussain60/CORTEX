@@ -1,0 +1,811 @@
+{
+  "recommendations": [
+    "Delete 871 unused CSS classes (estimated 6968 lines)",
+    "Fix 734 missing CSS classes (broken styling)"
+  ],
+  "missing_css_classes": {
+    "instances": [
+      {
+        "action": "ADD CSS definition",
+        "used_in": "code-review.html",
+        "usage_count": 1,
+        "class": "process-steps"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": "design-patterns.html",
+        "usage_count": 1,
+        "class": "pattern-type-badge"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": [
+          "react-best-practices.html",
+          "react-best-practices.html",
+          "react-best-practices.html",
+          "react-best-practices.html",
+          "react-best-practices.html"
+        ],
+        "usage_count": 10,
+        "class": "language-jsx"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": [
+          "incident-response.html",
+          "penetration-testing.html",
+          "threat-modeling.html"
+        ],
+        "usage_count": 3,
+        "class": "fa-bell"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": "index.html",
+        "usage_count": 1,
+        "class": "controls"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": [
+          "graphql.html",
+          "rest-api.html",
+          "aws-best-practices.html",
+          "kubernetes-patterns.html",
+          "aggregates-entities.html"
+        ],
+        "usage_count": 20,
+        "class": "sticky-nav"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": "viewer.html",
+        "usage_count": 1,
+        "class": "sidebar-overlay"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": [
+          "clean-code.html",
+          "clean-code.html",
+          "design-patterns.html",
+          "design-patterns.html",
+          "refactoring.html"
+        ],
+        "usage_count": 8,
+        "class": "usage-title"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": [
+          "api-design.html",
+          "database.html",
+          "mobile.html",
+          "ui-ux.html",
+          "ui-ux.html"
+        ],
+        "usage_count": 12,
+        "class": "info-box-info"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": [
+          "sitemap.html",
+          "sitemap.html",
+          "sitemap.html",
+          "sitemap.html",
+          "sitemap.html"
+        ],
+        "usage_count": 54,
+        "class": "sitemap-page-icon"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": [
+          "aggregates-entities.html",
+          "aggregates-entities.html",
+          "aggregates-entities.html",
+          "aggregates-entities.html",
+          "aggregates-entities.html"
+        ],
+        "usage_count": 56,
+        "class": "language-csharp"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": [
+          "graphql.html",
+          "rest-api.html",
+          "aws-best-practices.html",
+          "kubernetes-patterns.html",
+          "aggregates-entities.html"
+        ],
+        "usage_count": 21,
+        "class": "toc-sidebar"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": "rollback-orchestrator.html",
+        "usage_count": 1,
+        "class": "section-flow"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": [
+          "index.html",
+          "index.html",
+          "index.html",
+          "index.html",
+          "index.html"
+        ],
+        "usage_count": 1419,
+        "class": "fas"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": [
+          "sitemap.html",
+          "index.html",
+          "index.html",
+          "index.html",
+          "index.html"
+        ],
+        "usage_count": 14,
+        "class": "fab"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": [
+          "index.html",
+          "index.html",
+          "index.html",
+          "index.html",
+          "index.html"
+        ],
+        "usage_count": 6,
+        "class": "control-btn"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": "anti-patterns.html",
+        "usage_count": 1,
+        "class": "architecture-list"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": [
+          "design-patterns.html",
+          "design-patterns.html",
+          "design-patterns.html",
+          "design-patterns.html",
+          "design-patterns.html"
+        ],
+        "usage_count": 11,
+        "class": "pattern-intent"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": [
+          "graphql-best-practices.html",
+          "graphql-best-practices.html",
+          "graphql-best-practices.html",
+          "graphql-best-practices.html",
+          "rest-api-design.html"
+        ],
+        "usage_count": 9,
+        "class": "rule-title"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": [
+          "design-patterns.html",
+          "design-patterns.html",
+          "design-patterns.html",
+          "design-patterns.html",
+          "design-patterns.html"
+        ],
+        "usage_count": 5,
+        "class": "pattern-tab"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": [
+          "design-patterns.html",
+          "design-patterns.html"
+        ],
+        "usage_count": 2,
+        "class": "fa-building"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": [
+          "domain-rag-integration.html",
+          "anti-patterns.html",
+          "anti-patterns.html",
+          "clean-code.html",
+          "clean-code.html"
+        ],
+        "usage_count": 8,
+        "class": "badge-critical"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": "rest-api-design.html",
+        "usage_count": 1,
+        "class": "http-methods-grid"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": [
+          "anti-patterns.html",
+          "anti-patterns.html",
+          "anti-patterns.html",
+          "anti-patterns.html"
+        ],
+        "usage_count": 4,
+        "class": "severity-card"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": [
+          "agent-system.html",
+          "four-tier-brain.html",
+          "multi-repo.html",
+          "orchestrator-ecosystem.html",
+          "working-memory.html"
+        ],
+        "usage_count": 167,
+        "class": "stub-back-link"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": "index.html",
+        "usage_count": 1,
+        "class": "system"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": [
+          "graphql-best-practices.html",
+          "graphql-best-practices.html",
+          "graphql-best-practices.html",
+          "graphql-best-practices.html"
+        ],
+        "usage_count": 4,
+        "class": "nullability-pattern"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": [
+          "index.html",
+          "index.html",
+          "index.html",
+          "index.html",
+          "index.html"
+        ],
+        "usage_count": 7,
+        "class": "fa-question-circle"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": [
+          "index.html",
+          "index.html",
+          "microservices.html",
+          "microservices.html",
+          "index.html"
+        ],
+        "usage_count": 11,
+        "class": "fa-book"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": "risk-assessment.html",
+        "usage_count": 1,
+        "class": "fa-gauge-high"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": [
+          "sitemap.html",
+          "index.html",
+          "microservices.html",
+          "microservices.html",
+          "index.html"
+        ],
+        "usage_count": 12,
+        "class": "fa-network-wired"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": [
+          "architectural-review.html",
+          "architectural-review.html",
+          "architectural-review.html",
+          "architectural-review.html",
+          "architectural-review.html"
+        ],
+        "usage_count": 6,
+        "class": "scoring-card"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": "cortex-lens.html",
+        "usage_count": 1,
+        "class": "section-force"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": "authentication-authorization.html",
+        "usage_count": 1,
+        "class": "solution-vulnerabilities"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": [
+          "sitemap.html",
+          "sitemap.html",
+          "sitemap.html",
+          "sitemap.html",
+          "sitemap.html"
+        ],
+        "usage_count": 54,
+        "class": "sitemap-page-link"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": [
+          "knowledge-graph.html",
+          "skull-protection.html"
+        ],
+        "usage_count": 2,
+        "class": "nav-footer"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": "index.html",
+        "usage_count": 1,
+        "class": "subsection-title"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": [
+          "clean-code.html",
+          "design-patterns.html",
+          "refactoring.html",
+          "solid-principles.html"
+        ],
+        "usage_count": 4,
+        "class": "usage-when"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": [
+          "index.html",
+          "index.html",
+          "index.html"
+        ],
+        "usage_count": 3,
+        "class": "fa-search-plus"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": [
+          "ado-v2.html",
+          "ado-v2.html"
+        ],
+        "usage_count": 2,
+        "class": "mode-header"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": [
+          "clean-code.html",
+          "design-patterns.html",
+          "refactoring.html",
+          "solid-principles.html"
+        ],
+        "usage_count": 4,
+        "class": "usage-avoid"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": "data-protection.html",
+        "usage_count": 1,
+        "class": "fa-user-slash"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": [
+          "graphql.html",
+          "rest-api.html",
+          "aws-best-practices.html",
+          "kubernetes-patterns.html",
+          "component-architecture.html"
+        ],
+        "usage_count": 9,
+        "class": "related-files-grid"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": "orchestrators.html",
+        "usage_count": 1,
+        "class": "redirect-box"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": "solid-principles.html",
+        "usage_count": 1,
+        "class": "contract-list"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": "vulnerability-assessment.html",
+        "usage_count": 1,
+        "class": "main-container"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": [
+          "index.html",
+          "index.html"
+        ],
+        "usage_count": 2,
+        "class": "fa-stethoscope"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": [
+          "microservices.html",
+          "microservices.html",
+          "microservices.html",
+          "microservices.html",
+          "microservices.html"
+        ],
+        "usage_count": 5,
+        "class": "legend-dot"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": [
+          "index.html",
+          "index.html",
+          "index.html",
+          "index.html",
+          "index.html"
+        ],
+        "usage_count": 10,
+        "class": "fa-bug"
+      },
+      {
+        "action": "ADD CSS definition",
+        "used_in": [
+          "architectural-review.html",
+          "cleanup-orchestrator.html",
+          "rollback-orchestrator.html",
+          "system-integrity.html"
+        ],
+        "usage_count": 4,
+        "class": "section-datamodel"
+      }
+    ],
+    "count": 734,
+    "severity": "HIGH"
+  },
+  "scan_timestamp": "2026-01-03T09:19:53.0631952-05:00",
+  "html_analysis": {
+    "total_class_usages": 21205.0,
+    "total_html_files": 318,
+    "unique_classes_used": 1361
+  },
+  "unused_css_classes": {
+    "instances": [
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "main.css",
+        "class": "evolution-banner"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "micro-interactions.css",
+        "class": "tilt-glass--intense"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "main.css",
+        "class": "gap-4"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "main.css",
+        "class": "justify-between"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "story-print.css",
+        "class": "callout-link"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "future.css",
+        "class": "architecture-title-future"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "future.css",
+        "class": "control-select"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "main.css",
+        "class": "level1-code-terminal"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "main.css",
+        "class": "severity"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "glass-patterns.css",
+        "class": "glass-card--no-hover"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "story-print.css",
+        "class": "story-image-comic"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "main.css",
+        "class": "level1-panel-blue-center-border"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "micro-interactions.css",
+        "class": "skeleton-glass--text-sm"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "main.css",
+        "class": "level1-big-number-purple"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "main.css",
+        "class": "level1-text-prose-lg"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "future.css",
+        "class": "timeline-item"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "main.css",
+        "class": "level1-feature-panel"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "main.css",
+        "class": "text-accent"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "main.css",
+        "class": "level1-text-primary"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "glass-patterns.css",
+        "class": "neuglass-card"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "learning-hub.css",
+        "class": "text-hub-success"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "main.css",
+        "class": "level1-flex-between-sm"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "main.css",
+        "class": "text-warning"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "main.css",
+        "class": "improvement-explanation"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "main.css",
+        "class": "level1-stat-icon-container--primary"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "future.css",
+        "class": "timeline-arrow"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "main.css",
+        "class": "level2-flex-between"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "micro-interactions.css",
+        "class": "skeleton-glass--avatar"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "main.css",
+        "class": "sts-testing"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "future.css",
+        "class": "grid-background"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "main.css",
+        "class": "level1-comparison-box-error"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "sts.css",
+        "class": "transform-panels"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "main.css",
+        "class": "level1-domain-icon--frontend"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "main.css",
+        "class": "demo-video-title"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "story.css",
+        "class": "prev"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "main.css",
+        "class": "level1-hero-title-mb-sm"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "future.css",
+        "class": "vision-title"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "future.css",
+        "class": "grid-header"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "future.css",
+        "class": "status-indicator"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "main.css",
+        "class": "search-results-list"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "main.css",
+        "class": "level1-dark-panel"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "main.css",
+        "class": "text-muted"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "story-print.css",
+        "class": "story-callout"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "micro-interactions.css",
+        "class": "spin-glass"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "sts.css",
+        "class": "hljs"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "future.css",
+        "class": "status-badge"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "glass-patterns.css",
+        "class": "expanded"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "main.css",
+        "class": "level1-testing-card"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "sts.css",
+        "class": "practice-icon"
+      },
+      {
+        "action": "DELETE (dead code)",
+        "confidence": "HIGH",
+        "file": "main.css",
+        "class": "metric-before"
+      }
+    ],
+    "count": 871,
+    "percentage": 58.14
+  },
+  "css_analysis": {
+    "total_classes_defined": 1498,
+    "total_files_scanned": 12
+  }
+}

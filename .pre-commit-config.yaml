@@ -1,0 +1,55 @@
+# Pre-commit Configuration for CORTEX
+# See https://pre-commit.com for more information
+
+repos:
+  - repo: local
+    hooks:
+      - id: validate-orchestrator-config
+        name: Validate Orchestrator Configuration
+        entry: python3 scripts/validate_orchestrator_config.py
+        language: system
+        pass_filenames: false
+        always_run: false
+        files: ^cortex-brain/config/(mcp-server|master-orchestrator)\.yaml$
+        description: Validates orchestrator configuration files against JSON schemas
+        
+      - id: validate-orchestrator-config-on-change
+        name: Validate Orchestrator Config (on config change)
+        entry: python3 scripts/validate_orchestrator_config.py
+        language: system
+        pass_filenames: false
+        files: |
+          (?x)^(
+            cortex-brain/config/mcp-server\.yaml|
+            cortex-brain/config/master-orchestrator\.yaml|
+            src/orchestrators/.*\.py|
+            cortex-brain/manifests/orchestrators/.*\.yaml
+          )$
+        description: Run validation when orchestrator files change
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: check-yaml
+        files: ^cortex-brain/config/.*\.yaml$
+        description: Check YAML syntax
+      
+      - id: check-json
+        files: ^cortex-brain/config/schemas/.*\.json$
+        description: Check JSON schema syntax
+      
+      - id: trailing-whitespace
+        files: \.(py|yaml|json|md)$
+      
+      - id: end-of-file-fixer
+        files: \.(py|yaml|json|md)$
+
+# Installation:
+#   pip install pre-commit
+#   pre-commit install
+#
+# Manual run:
+#   pre-commit run --all-files
+#
+# Update hooks:
+#   pre-commit autoupdate

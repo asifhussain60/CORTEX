@@ -1,0 +1,26 @@
+# CORTEX v4.0 Adaptive Base Template
+# This template provides the base structure that other templates inherit from
+# The format is adaptive tier-based (scales with complexity)
+
+adaptive_base:
+  base_structure: '## 🧠 CORTEX {operation}
+    Author: Asif Hussain | github.com/asifhussain60/CORTEX
+
+
+    {understanding_scope_content}
+
+
+    ---
+
+
+    {response_content}
+
+
+    ---
+
+
+    **🔍 Next Steps:**
+
+    {next_steps_content}
+
+    '

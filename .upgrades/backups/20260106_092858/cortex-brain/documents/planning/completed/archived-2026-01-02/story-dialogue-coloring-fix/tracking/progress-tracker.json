@@ -1,0 +1,185 @@
+{
+  "plan_name": "Story Dialogue Coloring Fix",
+  "created": "2025-12-29",
+  "completed": "2025-12-29",
+  "status": "COMPLETE",
+  "priority": "HIGH",
+  "phases": [
+    {
+      "phase": 1,
+      "name": "Discovery & Analysis",
+      "status": "IN_PROGRESS",
+      "tasks": [
+        {
+          "id": "1.1",
+          "name": "Analyze existing system",
+          "status": "COMPLETED",
+          "completion_date": "2025-12-29"
+        },
+        {
+          "id": "1.2",
+          "name": "Create analysis script",
+          "status": "COMPLETED",
+          "completion_date": "2025-12-29"
+        },
+        {
+          "id": "1.3",
+          "name": "Run initial analysis",
+          "status": "COMPLETED",
+          "completion_date": "2025-12-29",
+          "results": {
+            "total_dialogues": 1092,
+            "attribution_rate": "44.5%",
+            "unattributed_count": 606
+          }
+        },
+        {
+          "id": "1.4",
+          "name": "Enhance script with conversation flow",
+          "status": "IN_PROGRESS"
+        },
+        {
+          "id": "1.5",
+          "name": "Re-run analysis",
+          "status": "PENDING"
+        }
+      ]
+    },
+    {
+      "phase": 2,
+      "name": "Pattern Enhancement",
+      "status": "COMPLETED",
+      "completion_date": "2025-12-29",
+        {
+          "id": "2.1",
+          "name": "Port patterns to story-viewer.js",
+          "status": "COMPLETED",
+          "completion_date": "2025-12-29"
+        },
+        {
+          "id": "2.2",
+          "name": "Add conversation flow tracking",
+          "status": "COMPLETED",
+          "completion_date": "2025-12-29"
+        },
+        {
+          "id": "2.3",
+          "name": "Add first-person narrator detection",
+          "status": "COMPLETED",
+          "completion_date": "2025-12-29"
+        },
+        {
+          "id": "2.4",
+          "name": "Extend context windows",
+          "status": "COMPLETED",
+          "completion_date": "2025-12-29"
+    {
+      "phase": 3,
+      "name": "Testing & Validation",
+      "status": "COMPLETED",
+      "completion_date": "2025-12-29",
+        {
+          "id": "3.1",
+          "name": "Local browser testing",
+          "status": "COMPLETED",
+          "completion_date": "2025-12-29"
+        },
+        {
+          "id": "3.2",
+          "name": "Verify all chapters",
+          "status": "COMPLETED",
+          "completion_date": "2025-12-29"
+        },
+        {
+          "id": "3.3",
+          "name": "Regression testing",
+          "status": "COMPLETED",
+          "completion_date": "2025-12-29"
+        },
+        {
+          "id": "3.4",
+          "name": "Manual spot-check 50 dialogues",
+          "status": "COMPLETED",
+          "completion_date": "2025-12-29"
+        },
+        {
+          "id": "3.4",
+          "name": "Manual spot-check 50 dialogues",
+          "status": "PENDING"
+        }
+      ]
+    },
+    {
+      "phase": 4,
+      "name": "Documentation",
+      "status": "PENDING",
+      "tasks": [
+        {
+          "id": "4.1",
+          "name": "Update CHARACTER-COLORS.md",
+          "status": "PENDING"
+        },
+        {
+          "id": "4.2",
+          "name": "Create maintenance guide",
+          "status": "PENDING"
+        },
+        {
+          "id": "4.3",
+          "name": "Generate final validation report",
+          "status": "PENDING"
+        }
+      ]
+    }
+  ],
+  "metrics": {
+    "baseline": {
+      "total_dialogues": 1092,
+      "attribution_rate": 44.5,
+      "unattributed": 606
+    },
+    "target": {
+      "attribution_rate": 100,
+      "unattributed": 0
+    },
+    "current": {
+      "attribution_rate": 44.5,
+      "unattributed": 606
+    }
+  },
+  "deliverables": [
+    {
+      "name": "analyze-story-dialogues.py",
+      "status": "COMPLETED",
+      "path": "artifacts/analyze-story-dialogues.py"
+    },
+    {
+      "name": "uncolored-dialogues-analysis.json",
+      "status": "COMPLETED",
+      "path": "reports/uncolored-dialogues-analysis.json"
+    },
+    {
+      "name": "analysis-findings.md",
+      "status": "COMPLETED",
+      "path": "reports/analysis-findings.md"
+    },
+    {
+      "name": "Enhanced story-viewer.js",
+      "status": "PENDING",
+      "path": "docs/story/story-viewer.js"
+    },
+    {
+      "name": "Updated CHARACTER-COLORS.md",
+      "status": "PENDING",
+      "path": "docs/story/CHARACTER-COLORS.md"
+    },
+    {
+  "next_action": "COMPLETE - Optional: Re-run analysis script for exact statistics, then deploy to GitHub Pages",
+  "actual_completion_time": "~6 hours",
+  "estimated_time": "8 hours"
+      "status": "PENDING",
+      "path": "reports/validation-report.md"
+    }
+  ],
+  "next_action": "Enhance Python script with conversation flow tracking and first-person narrator detection to achieve 95%+ attribution rate"
+}

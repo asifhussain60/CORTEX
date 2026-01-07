@@ -1,0 +1,21 @@
+/**
+ * CORTEX Glassmorphism Design System - Master Import
+ * Version: 4.0.0
+ * 
+ * Unified glassmorphism design system with named panel taxonomy.
+ * Consolidates 24+ CSS files into modular architecture.
+ * 
+ * Architecture:
+ * - Design Tokens (CSS variables)
+ * - Named Panels (10 semantic panel styles)
+ * - Base Patterns (5 core glassmorphism patterns)
+ * - UI Components (modals, toasts, dropdowns)
+ * - Animations (hover, focus, morphing effects)
+ * - Utilities (helper classes for quick styling)
+ * 
+ * Author: Asif Hussain
+ * Copyright: © 2025-2026 Asif Hussain. All rights reserved.
+ * License: Source-Available (Use Allowed, No Contributions)
+ */
+
+@import url('./glass-design-tokens.css');@import url('./glass-named-panels.css');@import url('./glass-base-patterns.css');@import url('./glass-ui-components.css');@import url('./glass-animations.css');@import url('./glass-utilities.css');

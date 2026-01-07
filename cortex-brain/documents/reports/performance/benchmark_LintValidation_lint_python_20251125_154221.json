@@ -1,0 +1,17 @@
+{
+  "label": "LintValidation.lint_python",
+  "metrics": {
+    "response_time_ms": 0.001500011421740055,
+    "memory_peak_mb": 0.00098419189453125,
+    "memory_current_mb": 0.000640869140625,
+    "cpu_percent": 0.0,
+    "timestamp": "2025-11-25T15:42:21.227760",
+    "passed": true,
+    "violations": []
+  },
+  "thresholds": {
+    "response_time_ms": 500.0,
+    "memory_mb": 100.0,
+    "cpu_percent": 50.0
+  }
+}

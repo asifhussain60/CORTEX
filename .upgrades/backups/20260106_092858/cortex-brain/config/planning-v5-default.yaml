@@ -1,0 +1,59 @@
+# Planning Orchestrator v5 - Default Configuration
+schema_version: "5.0"
+
+orchestrator:
+  name: "Planning System v5"
+  version: "5.0.0"
+  type: "autonomous"
+  description: "Universal planning system with FEATURE/REMEDIATION modes"
+
+# Planning modes
+modes:
+  feature:
+    enabled: true
+    default_phases: [-2, 0, "N", 999]
+    phase_minus_one: true  # Enable knowledge library lookup
+  
+  remediation:
+    enabled: true
+    default_phases: [-2, 0, "N", 999]
+    phase_minus_one: true
+
+# Phase configuration
+phases:
+  phase_minus_2:
+    name: "Setup Verification"
+    enabled: true
+    auto_discovery: true
+  
+  phase_0:
+    name: "Context Discovery"
+    enabled: true
+    holistic_search: true
+  
+  phase_999:
+    name: "Teardown + REFACTOR"
+    enabled: true
+    whole_file_cleanup: true
+    git_commit: true
+
+# Database configuration
+database:
+  path: "cortex-brain/database/planning_state.db"
+  auto_create: true
+
+# Template configuration
+templates:
+  directory: "cortex-brain/templates/planning"
+  fallback_to_defaults: true
+
+# Governance integration
+governance:
+  enabled: true
+  skull_validation: true
+  acceptance_criteria: true
+
+# Logging configuration
+logging:
+  level: "INFO"
+  format: "structured"

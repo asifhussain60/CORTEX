@@ -1,0 +1,12 @@
+{
+  "overall_health": 85,
+  "metrics": [
+    {
+      "label": "Security Issues",
+      "value": 6,
+      "trend": "warning"
+    }
+  ],
+  "trends": [],
+  "generated_at": "2025-12-20T17:17:02.988943"
+}

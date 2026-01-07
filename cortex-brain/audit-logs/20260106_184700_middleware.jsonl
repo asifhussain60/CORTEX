@@ -1,1 +1,0 @@
-{"timestamp": "2026-01-06T18:47:00.374791", "level": "info", "category": "middleware", "component": "SetupVerificationMiddleware", "operation": "initialize", "message": "Initialized with workspace_root=/Users/asifhussain/PROJECTS/CORTEX", "context": {}, "metadata": {}, "correlation_id": null, "duration_ms": null}

@@ -1,0 +1,13 @@
+{
+  "custom": {
+    "editor": {
+      "integration_mode": "extension",
+      "solution_aware": true,
+      "msbuild_integration": true
+    },
+    "ui": {
+      "progress_location": "status_bar",
+      "output_pane": "CORTEX"
+    }
+  }
+}

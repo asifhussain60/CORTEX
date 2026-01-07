@@ -1,0 +1,204 @@
+# Code Executor Patterns & Rules
+# Version: 6.0
+# Purpose: Execution patterns, validation rules, and task flow definitions
+
+execution_patterns:
+  
+  task_execution_flow:
+    steps:
+      - "Load active plan from Tier 1"
+      - "Identify next task (lowest incomplete task_id)"
+      - "Validate prerequisites"
+      - "Execute task implementation"
+      - "Run tests (must pass)"
+      - "Update task status to complete"
+      - "Save progress to Tier 1"
+    
+    error_handling:
+      - "If tests fail: Report failure, don't mark complete"
+      - "If file not found: Ask user for clarification"
+      - "If prerequisites missing: Block execution, notify user"
+  
+  file_modification_pattern:
+    sequence:
+      - "Read current file content"
+      - "Apply changes (preserve existing code)"
+      - "Validate syntax"
+      - "Run affected tests"
+      - "Commit if tests pass"
+    
+    safety_rules:
+      - "Never delete existing functionality without explicit user request"
+      - "Preserve whitespace and formatting"
+      - "Add comments for complex logic"
+      - "Follow project conventions"
+  
+  test_validation_pattern:
+    pre_implementation:
+      - "Tests should fail (TDD)"
+      - "Failure validates test correctness"
+    
+    post_implementation:
+      - "Tests must pass"
+      - "No new test failures introduced"
+      - "Coverage maintained or improved"
+
+execution_rules:
+  
+  rule_8_test_first:
+    mandate: "Tests before implementation (TDD)"
+    workflow:
+      - "Write test that defines expected behavior"
+      - "Run test (expect failure)"
+      - "Implement minimum code to pass test"
+      - "Refactor if needed"
+      - "Run all tests (expect all pass)"
+  
+  rule_15_hybrid_identifiers:
+    mandate: "Use data-testid AND aria-label for UI elements"
+    format:
+      data_testid: "kebab-case (export-pdf-button)"
+      aria_label: "Natural language (Export to PDF)"
+    
+    example:
+      html: '<button data-testid="export-pdf-button" aria-label="Export to PDF">Export</button>'
+  
+  rule_18_no_external_deps:
+    mandate: "No npm/NuGet packages without approval"
+    exceptions:
+      - "Standard framework libraries"
+      - "Pre-approved utility packages"
+    
+    workflow:
+      - "Check if package already in project"
+      - "If new: Ask user for approval"
+      - "Document reason for dependency"
+  
+  rule_correlation_tracking:
+    mandate: "Track all changes with correlation ID"
+    format: "session-YYYY-MM-DD-NNN"
+    
+    tracking:
+      - "Add correlation ID to commits"
+      - "Link tests to correlation ID"
+      - "Update plan with correlation ID"
+
+task_types:
+  
+  ui_implementation:
+    files:
+      - "Component file (.razor, .tsx, .vue)"
+      - "Stylesheet (.css, .scss)"
+      - "Test file (.spec.ts, .test.tsx)"
+    
+    validation:
+      - "Visual regression test (Playwright + Percy)"
+      - "Accessibility checks"
+      - "Responsive design validation"
+  
+  api_implementation:
+    files:
+      - "Controller/Route handler"
+      - "Service layer"
+      - "Unit test"
+      - "Integration test"
+    
+    validation:
+      - "Unit tests pass"
+      - "Integration tests pass"
+      - "API documentation updated"
+  
+  business_logic:
+    files:
+      - "Service class"
+      - "Unit tests"
+      - "Integration tests (if needed)"
+    
+    validation:
+      - "Unit test coverage ≥80%"
+      - "Edge cases tested"
+      - "Error handling validated"
+
+progress_tracking:
+  
+  tier_1_updates:
+    after_each_task:
+      - "Update task status in plan"
+      - "Increment completed_tasks counter"
+      - "Update next_task pointer"
+      - "Save modified files list"
+  
+  status_values:
+    not_started: "Task not yet begun"
+    in_progress: "Task currently executing"
+    complete: "Task finished, tests passing"
+    blocked: "Task cannot proceed (missing prerequisites)"
+  
+  completion_summary:
+    format:
+      tasks_completed: "integer"
+      tasks_remaining: "integer"
+      files_modified: "array"
+      tests_passing: "boolean"
+      next_task: "string (task_id)"
+
+validation_checks:
+  
+  before_execution:
+    - "Active plan exists in Tier 1"
+    - "Next task identified"
+    - "Required files accessible"
+    - "Tests exist or will be created"
+  
+  during_execution:
+    - "Code syntax valid"
+    - "No breaking changes to existing functionality"
+    - "Follows project conventions"
+  
+  after_execution:
+    - "Tests pass"
+    - "No new test failures"
+    - "Task status updated"
+    - "Progress saved to Tier 1"
+
+error_recovery:
+  
+  test_failures:
+    action: "Don't mark task complete"
+    report:
+      - "Which tests failed"
+      - "Failure reason"
+      - "Suggested fix"
+  
+  syntax_errors:
+    action: "Revert changes, fix syntax"
+    report:
+      - "Error location"
+      - "Error message"
+      - "Corrected code"
+  
+  missing_prerequisites:
+    action: "Block task, notify user"
+    report:
+      - "Missing prerequisite"
+      - "Why it's needed"
+      - "Suggested resolution"
+
+execution_output:
+  
+  task_completion:
+    format:
+      task_id: "string"
+      status: "complete"
+      files_modified: "array"
+      tests_run: "array"
+      tests_passing: "boolean"
+      duration: "string (e.g., '2 minutes')"
+  
+  phase_completion:
+    format:
+      phase_number: "integer"
+      tasks_completed: "integer"
+      files_modified: "array"
+      all_tests_passing: "boolean"
+      ready_for_next_phase: "boolean"

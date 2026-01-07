@@ -1,0 +1,338 @@
+{
+  "version": "3.2",
+  "last_alignment": "2025-12-15T11:10:03.350164",
+  "last_full_scan": "2025-12-15T11:10:03.350164",
+  "scan_mode": "full",
+  "context_type": "admin",
+  "file_checksums": {
+    "D:\\PROJECTS\\CORTEX\\src\\operations\\modules\\hands_on_tutorial_orchestrator.py": {
+      "sha256": "3f4463911880c095530d90fc20292b6c9e9db9db62c9faa1f1529a400ff9a5f8",
+      "last_modified": "2025-12-01T12:25:31.745785",
+      "last_checked": "2025-12-15T11:10:03.389941",
+      "size_bytes": 28728
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\operations\\modules\\architectural\\review_orchestrator.py": {
+      "sha256": "7d6d1b128d9e44874d9447f4170b6a96496b91432859cfd80cde3255a00e1906",
+      "last_modified": "2025-12-09T05:13:15.356022",
+      "last_checked": "2025-12-15T11:10:03.396796",
+      "size_bytes": 33804
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\operations\\modules\\brain\\brain_tuning_orchestrator.py": {
+      "sha256": "1dcc78cad41e1f640968fe998dc4d848a8a8353f43fd1e817d0426dac9826638",
+      "last_modified": "2025-12-08T06:24:00.469473",
+      "last_checked": "2025-12-15T11:10:03.403039",
+      "size_bytes": 27356
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\operations\\modules\\cleanup\\cleanup_orchestrator.py": {
+      "sha256": "74d8f0e0472f8a4d05ff1fc78e6f2662245c4b18fc294ec6c81586d19a6d4ac2",
+      "last_modified": "2025-12-07T15:46:02.269559",
+      "last_checked": "2025-12-15T11:10:03.411221",
+      "size_bytes": 65282
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\operations\\modules\\cleanup\\holistic_cleanup_orchestrator.py": {
+      "sha256": "90c0d94fd7f42a8fafea13f1f9f94fec1c08c503f11ebdeca78195f06c5b32ea",
+      "last_modified": "2025-12-01T12:25:32.104082",
+      "last_checked": "2025-12-15T11:10:03.418201",
+      "size_bytes": 55808
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\operations\\modules\\cleanup\\user_cleanup_orchestrator.py": {
+      "sha256": "93d60f59f30acdd3a11f1cfb51b59002609eac017e501d141defe5f8891ee0ac",
+      "last_modified": "2025-12-01T12:25:32.131065",
+      "last_checked": "2025-12-15T11:10:03.422690",
+      "size_bytes": 16692
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\operations\\modules\\demo\\demo_orchestrator.py": {
+      "sha256": "cb36f4453e4a2a0fbfce43e823719ea5d6aa4ae605f9d6abcc4b34525211de1b",
+      "last_modified": "2025-12-13T14:33:38.983731",
+      "last_checked": "2025-12-15T11:10:03.428416",
+      "size_bytes": 15845
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\operations\\modules\\design_sync\\design_sync_orchestrator.py": {
+      "sha256": "709a18cc890545bae15fb66eb6f24cae2b099c2fd158494bf5ea3a24c39f86aa",
+      "last_modified": "2025-12-09T09:56:19.101746",
+      "last_checked": "2025-12-15T11:10:03.435253",
+      "size_bytes": 52290
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\operations\\modules\\diagrams\\diagram_regeneration_orchestrator.py": {
+      "sha256": "a69e87b8417e3cb2c9449a2468e713532556cf0e037345054ea5f8050027b9db",
+      "last_modified": "2025-12-09T09:56:19.102746",
+      "last_checked": "2025-12-15T11:10:03.439831",
+      "size_bytes": 21049
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\operations\\modules\\epm\\auto_registration_orchestrator.py": {
+      "sha256": "b0cd2e1cb02304f5ae68b6f946362db36e1a69234dee50c8076a238aa66f80a1",
+      "last_modified": "2025-12-08T07:20:16.827504",
+      "last_checked": "2025-12-15T11:10:03.445567",
+      "size_bytes": 13712
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\operations\\modules\\optimization\\optimize_cortex_orchestrator.py": {
+      "sha256": "96fed34ecdb72bc6f8f4b2c1d0290cce7a3c069bc241409dd159198dfe5581be",
+      "last_modified": "2025-12-08T06:24:00.496457",
+      "last_checked": "2025-12-15T11:10:03.452280",
+      "size_bytes": 60682
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\operations\\modules\\orchestration\\ado_planning_orchestrator.py": {
+      "sha256": "dc89c661522f0a0300824d8e2d77ab2fc4e6b2ad0411f5aae63d2abbf1cf1eef",
+      "last_modified": "2025-12-15T10:59:29.461045",
+      "last_checked": "2025-12-15T11:10:03.457723",
+      "size_bytes": 31169
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\operations\\modules\\orchestration\\cleanup_orchestrator.py": {
+      "sha256": "d2defd7bda59436e848d54dbdedf5949fd94158ce1ba2e94c5dace4087812661",
+      "last_modified": "2025-12-15T11:05:52.005979",
+      "last_checked": "2025-12-15T11:10:03.464783",
+      "size_bytes": 41744
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\operations\\modules\\orchestration\\document_hygiene_orchestrator.py": {
+      "sha256": "893e9cc6865fc5b3a413e532eff351d8e34a4f3726162ff55ea94e1898349419",
+      "last_modified": "2025-12-14T09:20:34.671121",
+      "last_checked": "2025-12-15T11:10:03.469871",
+      "size_bytes": 10402
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\operations\\modules\\orchestration\\planning_orchestrator.py": {
+      "sha256": "67711e914d7c330f27ea797f89d8e581acb7ccc07cc79de89351fc8095e4e3a1",
+      "last_modified": "2025-12-15T10:56:58.530999",
+      "last_checked": "2025-12-15T11:10:03.478059",
+      "size_bytes": 91926
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\operations\\modules\\orchestration\\refactor_cycle_orchestrator.py": {
+      "sha256": "3f9be3b34c3009e9ca584ff9e856cec3f36723ac53b979735390ab59ce983b68",
+      "last_modified": "2025-12-14T09:20:34.671121",
+      "last_checked": "2025-12-15T11:10:03.483792",
+      "size_bytes": 9900
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\operations\\modules\\orchestration\\tdd_orchestrator.py": {
+      "sha256": "693105b5b853d99377f2382e12ee54aa25e535f3117e8cf54f6316d400b9f83d",
+      "last_modified": "2025-12-15T10:56:58.532053",
+      "last_checked": "2025-12-15T11:10:03.488692",
+      "size_bytes": 37580
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\operations\\modules\\orchestration\\vacuum_orchestrator.py": {
+      "sha256": "70f7cef92e0b904e7bfd36f2e0507bb21b02f732b6e45af1bf7ffd4a9a62cba3",
+      "last_modified": "2025-12-14T09:20:34.670122",
+      "last_checked": "2025-12-15T11:10:03.493865",
+      "size_bytes": 12218
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\operations\\modules\\publish\\publish_branch_orchestrator.py": {
+      "sha256": "aa3c06a17ea74dcd5fbf4bf75b96ab33887598380a9ac06587d1e9e6a65c6549",
+      "last_modified": "2025-12-03T12:49:25.884752",
+      "last_checked": "2025-12-15T11:10:03.499998",
+      "size_bytes": 15452
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\operations\\modules\\system\\optimize_system_orchestrator.py": {
+      "sha256": "f4e01211cdbfbfc9c2644a7ffdf564ce2e54e9d720f0ace57b8599beb5924ed1",
+      "last_modified": "2025-12-08T06:24:00.470472",
+      "last_checked": "2025-12-15T11:10:03.507624",
+      "size_bytes": 59868
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\orchestrators\\application_health_orchestrator.py": {
+      "sha256": "f912ce792c0908127fb2c0f21afcb2bfd79554ce55084f4eb4da827f260bf036",
+      "last_modified": "2025-12-11T12:40:56.347352",
+      "last_checked": "2025-12-15T11:10:03.514086",
+      "size_bytes": 10394
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\orchestrators\\ast_narrative_orchestrator.py": {
+      "sha256": "f6660a74056b1548ed3f844c34a1b758d916fd96598de434876eb631845d9006",
+      "last_modified": "2025-12-12T03:53:44.757902",
+      "last_checked": "2025-12-15T11:10:03.520113",
+      "size_bytes": 20210
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\orchestrators\\cross_machine_context_orchestrator.py": {
+      "sha256": "1c2d30a3dbaf020bd14d9582e2d611ec7241dab98065aa1630c7138ba0177da8",
+      "last_modified": "2025-12-13T04:49:30.708483",
+      "last_checked": "2025-12-15T11:10:03.526459",
+      "size_bytes": 10228
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\orchestrators\\debug_workflow_orchestrator.py": {
+      "sha256": "236fdf0ed18f42f7710c8af944cf0bf7fe5130f224462ae41a5375dfb7025714",
+      "last_modified": "2025-12-11T07:37:26.204625",
+      "last_checked": "2025-12-15T11:10:03.532522",
+      "size_bytes": 8136
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\orchestrators\\documentation_orchestrator.py": {
+      "sha256": "2d0086e654391a9ebb54352ffcce545aa2ec828955e972a7624e1349643d5ee5",
+      "last_modified": "2025-12-13T10:18:35.679921",
+      "last_checked": "2025-12-15T11:10:03.538261",
+      "size_bytes": 15744
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\orchestrators\\environment_diagnostics_orchestrator.py": {
+      "sha256": "037aab0cfd18874927a593981ff4aa36b3712a6910b5d0b4cde7d22c2aaa735e",
+      "last_modified": "2025-12-13T04:49:30.709482",
+      "last_checked": "2025-12-15T11:10:03.545232",
+      "size_bytes": 18877
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\orchestrators\\git_checkpoint_orchestrator.py": {
+      "sha256": "84c6fcefe5c82e99fbf8f87e53aab56cebf1a54549f8fa4ce12db9238b0d6e9a",
+      "last_modified": "2025-12-13T10:18:35.679921",
+      "last_checked": "2025-12-15T11:10:03.551233",
+      "size_bytes": 11481
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\orchestrators\\manager_report_orchestrator.py": {
+      "sha256": "57650fcc6d030e0f245447429a2db2f67e948c311d76b69d1d08b637391d1cdf",
+      "last_modified": "2025-12-05T09:39:32.730437",
+      "last_checked": "2025-12-15T11:10:03.557297",
+      "size_bytes": 13635
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\orchestrators\\onboarding_acknowledgment_orchestrator.py": {
+      "sha256": "c12b2763ec3c83c3125e401b2476fd48bfcfb82aaf5d6e22cab23e1f6360a97f",
+      "last_modified": "2025-12-04T03:54:13.218714",
+      "last_checked": "2025-12-15T11:10:03.563883",
+      "size_bytes": 11075
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\orchestrators\\planning_orchestrator.py": {
+      "sha256": "b7ee685963e34d0e3eb06e1357bb16359c61357b39ac0342470be21e9123ef3e",
+      "last_modified": "2025-12-14T11:04:28.667588",
+      "last_checked": "2025-12-15T11:10:03.578107",
+      "size_bytes": 240195
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\orchestrators\\plan_execution_orchestrator.py": {
+      "sha256": "a49e398fbc2547b87912a5e7a498dc76a4d25b753958e3c24d3bbabb878d6087",
+      "last_modified": "2025-12-13T10:18:35.680921",
+      "last_checked": "2025-12-15T11:10:03.588406",
+      "size_bytes": 59999
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\orchestrators\\tdd_implementation_orchestrator.py": {
+      "sha256": "d05ebc3df7af86f080cec5e2863b1cd2a2d3f0073eafcb52fb8290fd3a87c736",
+      "last_modified": "2025-12-13T10:18:35.684918",
+      "last_checked": "2025-12-15T11:10:03.598001",
+      "size_bytes": 101802
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\orchestrators\\planning\\pre_flight_orchestrator.py": {
+      "sha256": "19a8b43230e11355ee3498cf0e93d8ad1e832efc6f2da1a52231c3e90ee1a18c",
+      "last_modified": "2025-12-13T15:51:19.012615",
+      "last_checked": "2025-12-15T11:10:03.605126",
+      "size_bytes": 25721
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\orchestrators\\story_enhancement\\story_enhancement_orchestrator.py": {
+      "sha256": "e68292e38211941dcb084bf453fb0aa8f5ce5184f459425805951600b52c545c",
+      "last_modified": "2025-12-11T07:37:34.650413",
+      "last_checked": "2025-12-15T11:10:03.611431",
+      "size_bytes": 10275
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\cortex_agents\\ado_agent.py": {
+      "sha256": "5ebe6995f054defd9e6675ba6a3805f67dc6661e0acd23999e29faa157120a74",
+      "last_modified": "2025-12-01T12:25:28.269708",
+      "last_checked": "2025-12-15T11:10:03.617673",
+      "size_bytes": 12810
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\cortex_agents\\application_health_agent.py": {
+      "sha256": "5c6a16c5176f400c4ff734a26164faca0aeede897c74b874d38883b8bc9337fc",
+      "last_modified": "2025-12-01T12:25:28.272706",
+      "last_checked": "2025-12-15T11:10:03.622794",
+      "size_bytes": 5875
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\cortex_agents\\base_agent.py": {
+      "sha256": "28f0742c63dd5ab9ec9457ffdefafe6f3175853feeabeb253c81933f2b33741f",
+      "last_modified": "2025-12-01T12:25:28.275705",
+      "last_checked": "2025-12-15T11:10:03.628430",
+      "size_bytes": 10644
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\cortex_agents\\compliance_dashboard_agent.py": {
+      "sha256": "1d37305ef1d31a2de065fe3120083318d4ce76fde374ee5a9a30ec12a6900bc7",
+      "last_modified": "2025-12-01T12:25:28.294693",
+      "last_checked": "2025-12-15T11:10:03.635897",
+      "size_bytes": 15813
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\cortex_agents\\learning_capture_agent.py": {
+      "sha256": "d1a6b5c156ef6a81431d0bdb67d7c4cb44db2f63e0047d48cb4f1ee548870f0a",
+      "last_modified": "2025-12-01T12:25:28.357105",
+      "last_checked": "2025-12-15T11:10:03.644292",
+      "size_bytes": 21521
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\cortex_agents\\learning_librarian_agent.py": {
+      "sha256": "79b2c53da499f155c515c018accdf2040e2ec503780a2bb90817bc5069a4441c",
+      "last_modified": "2025-12-07T13:20:54.136345",
+      "last_checked": "2025-12-15T11:10:03.650782",
+      "size_bytes": 9218
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\cortex_agents\\profile_agent.py": {
+      "sha256": "d415c6ff9dc8f61f7df42d622f777c1da38a6d660b604532b343dfe1448a5081",
+      "last_modified": "2025-12-01T12:25:28.366100",
+      "last_checked": "2025-12-15T11:10:03.656673",
+      "size_bytes": 15583
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\cortex_agents\\rca_agent.py": {
+      "sha256": "32a1c59ff03fc247c5b87d6e19f7b7117b1733d657afabcd794510e618be0f8d",
+      "last_modified": "2025-12-01T12:25:28.375095",
+      "last_checked": "2025-12-15T11:10:03.663200",
+      "size_bytes": 15926
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\cortex_agents\\welcome_banner_agent.py": {
+      "sha256": "9f3b02db0a52e693d9048ddb7116e177e313627a4eaa29cdc609a7b817fa5e40",
+      "last_modified": "2025-12-01T12:25:28.395083",
+      "last_checked": "2025-12-15T11:10:03.669292",
+      "size_bytes": 15289
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\cortex_agents\\operational\\router_agent.py": {
+      "sha256": "a4f108dd52d072d26f3ecf12fc9bee3868d33592f6cf6b2b83f918b4a43eae92",
+      "last_modified": "2025-12-07T14:47:25.169621",
+      "last_checked": "2025-12-15T11:10:03.674356",
+      "size_bytes": 5630
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\cortex_agents\\strategic\\architecture_intelligence_agent.py": {
+      "sha256": "99ea61a3ae95f9fe479856a2bb577a217ef79cc28aaf170d1be428766c625fb9",
+      "last_modified": "2025-12-01T12:25:33.250391",
+      "last_checked": "2025-12-15T11:10:03.680648",
+      "size_bytes": 19806
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\agents\\base_agent.py": {
+      "sha256": "90b9e4a34930cedf2af1a407ee60c3cc4016e76f8db9e8a0cb31af8da19c9ede",
+      "last_modified": "2025-12-01T12:25:27.892847",
+      "last_checked": "2025-12-15T11:10:03.686053",
+      "size_bytes": 7234
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\agents\\brain_ingestion_adapter_agent.py": {
+      "sha256": "5b3c863bfc0f74fd851cf4af94f3e72ec398fcb7b3537bb7fb2bb54f0e447030",
+      "last_modified": "2025-11-29T08:57:55.769419",
+      "last_checked": "2025-12-15T11:10:03.690798",
+      "size_bytes": 1691
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\agents\\brain_ingestion_agent.py": {
+      "sha256": "c2202d501fc733c12ebfbe857a4f60b82fc0bfd86d6a1dd1c2e58c2e93977b53",
+      "last_modified": "2025-12-01T12:25:27.901843",
+      "last_checked": "2025-12-15T11:10:03.697251",
+      "size_bytes": 17832
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\agents\\feedback_agent.py": {
+      "sha256": "449d7b665c19fb8b083cc5087952269c1a9e23c23c457709b644496b806d2085",
+      "last_modified": "2025-12-01T12:25:27.940821",
+      "last_checked": "2025-12-15T11:10:03.702805",
+      "size_bytes": 10102
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\agents\\view_discovery_agent.py": {
+      "sha256": "83fa474fb1d711bb549813bbf509b0545d70400d21194f0dc33a44b8fc2300c6",
+      "last_modified": "2025-12-01T12:25:27.980796",
+      "last_checked": "2025-12-15T11:10:03.708030",
+      "size_bytes": 17854
+    },
+    "D:\\PROJECTS\\CORTEX\\src\\agents\\security\\threat_modeler_agent.py": {
+      "sha256": "4cf9c9dc1c426006e99c98397195789de80ba4ce862517f8efa914a395c6c1d9",
+      "last_modified": "2025-12-02T14:17:52.750144",
+      "last_checked": "2025-12-15T11:10:03.718906",
+      "size_bytes": 55790
+    }
+  },
+  "feature_scores": {},
+  "changes_detected": {
+    "files_added": [],
+    "files_modified": [],
+    "files_deleted": [],
+    "features_impacted": []
+  },
+  "performance_metrics": {
+    "last_run_duration_seconds": 0.053520700079388916,
+    "features_checked": 0,
+    "features_skipped": 0,
+    "cache_hit_rate": 0.0
+  },
+  "overall_health": 77,
+  "alignment_history": [
+    {
+      "timestamp": "2025-12-15T11:10:03.718957",
+      "overall_health": 77,
+      "total_features": 0,
+      "critical_issues": 2,
+      "warnings": 1
+    }
+  ]
+}

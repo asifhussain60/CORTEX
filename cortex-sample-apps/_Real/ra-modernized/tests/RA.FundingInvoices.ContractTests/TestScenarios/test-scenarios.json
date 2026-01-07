@@ -1,0 +1,585 @@
+{
+  "version": "1.0",
+  "description": "Comprehensive test scenarios for WCF to REST contract verification",
+  "totalScenarios": 105,
+  "categories": {
+    "XAddFundingInvoice": {
+      "happyPath": [
+        {
+          "id": "ADD-HP-001",
+          "description": "Create invoice with employer and employee funding",
+          "request": {
+            "employerId": "EMP-001",
+            "subaccountId": "SA-001",
+            "reimbursementPlanId": "RP-001",
+            "employerFundingDefault": 500.00,
+            "employeeFundingDefault": 250.00,
+            "effectiveDate": "2025-12-15T00:00:00Z",
+            "invoiceDescription": "December payroll funding",
+            "isLSA": false,
+            "updateTemplate": true,
+            "createdBy": "system"
+          },
+          "expectedResponse": {
+            "status": 201,
+            "totalAmount": 750.00,
+            "invoiceStatus": "Pending"
+          }
+        },
+        {
+          "id": "ADD-HP-002",
+          "description": "Create invoice with only employer funding",
+          "request": {
+            "employerId": "EMP-002",
+            "subaccountId": "SA-002",
+            "reimbursementPlanId": "RP-001",
+            "employerFundingDefault": 1000.00,
+            "employeeFundingDefault": 0.00,
+            "effectiveDate": "2025-12-20T00:00:00Z",
+            "invoiceDescription": "Employer-only contribution",
+            "isLSA": false,
+            "updateTemplate": false,
+            "createdBy": "admin"
+          },
+          "expectedResponse": {
+            "status": 201,
+            "totalAmount": 1000.00
+          }
+        },
+        {
+          "id": "ADD-HP-003",
+          "description": "Create LSA invoice",
+          "request": {
+            "employerId": "EMP-003",
+            "subaccountId": "SA-LSA-001",
+            "reimbursementPlanId": "RP-LSA-001",
+            "employerFundingDefault": 2000.00,
+            "employeeFundingDefault": 0.00,
+            "effectiveDate": "2025-12-25T00:00:00Z",
+            "invoiceDescription": "LSA funding",
+            "isLSA": true,
+            "updateTemplate": true,
+            "createdBy": "system"
+          },
+          "expectedResponse": {
+            "status": 201,
+            "totalAmount": 2000.00
+          }
+        }
+      ],
+      "errorCases": [
+        {
+          "id": "ADD-ERR-001",
+          "description": "Validation error - empty employer ID",
+          "request": {
+            "employerId": "",
+            "subaccountId": "SA-001",
+            "employerFundingDefault": 500.00,
+            "employeeFundingDefault": 250.00
+          },
+          "expectedResponse": {
+            "status": 400,
+            "errorType": "ValidationException",
+            "errorField": "employerId"
+          }
+        },
+        {
+          "id": "ADD-ERR-002",
+          "description": "Validation error - both amounts zero",
+          "request": {
+            "employerId": "EMP-001",
+            "subaccountId": "SA-001",
+            "employerFundingDefault": 0.00,
+            "employeeFundingDefault": 0.00
+          },
+          "expectedResponse": {
+            "status": 400,
+            "errorType": "ValidationException"
+          }
+        },
+        {
+          "id": "ADD-ERR-003",
+          "description": "Not found - subaccount doesn't exist",
+          "request": {
+            "employerId": "EMP-001",
+            "subaccountId": "SA-NOTFOUND",
+            "employerFundingDefault": 500.00,
+            "employeeFundingDefault": 250.00
+          },
+          "expectedResponse": {
+            "status": 404,
+            "errorType": "NotFoundException"
+          }
+        },
+        {
+          "id": "ADD-ERR-004",
+          "description": "Validation error - negative amount",
+          "request": {
+            "employerId": "EMP-001",
+            "subaccountId": "SA-001",
+            "employerFundingDefault": -100.00,
+            "employeeFundingDefault": 250.00
+          },
+          "expectedResponse": {
+            "status": 400,
+            "errorType": "ValidationException"
+          }
+        },
+        {
+          "id": "ADD-ERR-005",
+          "description": "Validation error - past effective date",
+          "request": {
+            "employerId": "EMP-001",
+            "subaccountId": "SA-001",
+            "employerFundingDefault": 500.00,
+            "employeeFundingDefault": 250.00,
+            "effectiveDate": "2020-01-01T00:00:00Z"
+          },
+          "expectedResponse": {
+            "status": 400,
+            "errorType": "ValidationException",
+            "errorField": "effectiveDate"
+          }
+        }
+      ],
+      "edgeCases": [
+        {
+          "id": "ADD-EDGE-001",
+          "description": "Maximum decimal precision",
+          "request": {
+            "employerId": "EMP-001",
+            "subaccountId": "SA-001",
+            "employerFundingDefault": 999999.99,
+            "employeeFundingDefault": 0.01
+          },
+          "expectedResponse": {
+            "status": 201,
+            "totalAmount": 1000000.00
+          }
+        },
+        {
+          "id": "ADD-EDGE-002",
+          "description": "Very long description (500 chars)",
+          "request": {
+            "employerId": "EMP-001",
+            "subaccountId": "SA-001",
+            "employerFundingDefault": 500.00,
+            "employeeFundingDefault": 250.00,
+            "invoiceDescription": "A".repeat(500)
+          },
+          "expectedResponse": {
+            "status": 201
+          }
+        }
+      ]
+    },
+    "XGenerateFundingInvoice": {
+      "happyPath": [
+        {
+          "id": "GEN-HP-001",
+          "description": "Generate invoice - balance below peg",
+          "setup": {
+            "subaccountBalance": 100.00
+          },
+          "request": {
+            "subaccountId": "SA-001",
+            "invoiceAmount": 500.00,
+            "invoiceDate": "2025-12-15T00:00:00Z",
+            "createdBy": "system"
+          },
+          "expectedResponse": {
+            "status": 200,
+            "result": "invoice created",
+            "pegAmount": 400.00
+          }
+        },
+        {
+          "id": "GEN-HP-002",
+          "description": "Invoice not needed - balance meets peg",
+          "setup": {
+            "subaccountBalance": 600.00
+          },
+          "request": {
+            "subaccountId": "SA-001",
+            "invoiceAmount": 500.00,
+            "invoiceDate": "2025-12-15T00:00:00Z",
+            "createdBy": "system"
+          },
+          "expectedResponse": {
+            "status": 200,
+            "result": "invoice not needed",
+            "invoice": null
+          }
+        },
+        {
+          "id": "GEN-HP-003",
+          "description": "Generate with auto-debit enabled",
+          "setup": {
+            "subaccountBalance": 50.00,
+            "autoDebitEnabled": true
+          },
+          "request": {
+            "subaccountId": "SA-001",
+            "invoiceAmount": 500.00,
+            "invoiceDate": "2025-12-15T00:00:00Z",
+            "createdBy": "system"
+          },
+          "expectedResponse": {
+            "status": 200,
+            "result": "invoice created",
+            "paymentId": "PAY-*"
+          }
+        }
+      ],
+      "errorCases": [
+        {
+          "id": "GEN-ERR-001",
+          "description": "Validation error - zero amount",
+          "request": {
+            "subaccountId": "SA-001",
+            "invoiceAmount": 0.00,
+            "invoiceDate": "2025-12-15T00:00:00Z"
+          },
+          "expectedResponse": {
+            "status": 400,
+            "errorType": "ValidationException"
+          }
+        },
+        {
+          "id": "GEN-ERR-002",
+          "description": "Validation error - negative amount",
+          "request": {
+            "subaccountId": "SA-001",
+            "invoiceAmount": -100.00,
+            "invoiceDate": "2025-12-15T00:00:00Z"
+          },
+          "expectedResponse": {
+            "status": 400,
+            "errorType": "ValidationException"
+          }
+        },
+        {
+          "id": "GEN-ERR-003",
+          "description": "Not found - invalid subaccount",
+          "request": {
+            "subaccountId": "SA-INVALID",
+            "invoiceAmount": 500.00,
+            "invoiceDate": "2025-12-15T00:00:00Z"
+          },
+          "expectedResponse": {
+            "status": 404,
+            "errorType": "NotFoundException"
+          }
+        }
+      ],
+      "boundaryConditions": [
+        {
+          "id": "GEN-BC-001",
+          "description": "Balance exactly equals invoice amount",
+          "setup": {
+            "subaccountBalance": 500.00
+          },
+          "request": {
+            "subaccountId": "SA-001",
+            "invoiceAmount": 500.00
+          },
+          "expectedResponse": {
+            "result": "invoice not needed"
+          }
+        },
+        {
+          "id": "GEN-BC-002",
+          "description": "Balance one cent below invoice",
+          "setup": {
+            "subaccountBalance": 499.99
+          },
+          "request": {
+            "subaccountId": "SA-001",
+            "invoiceAmount": 500.00
+          },
+          "expectedResponse": {
+            "result": "invoice created",
+            "pegAmount": 0.01
+          }
+        }
+      ]
+    },
+    "Updater_CreateRAFundingInvoices": {
+      "happyPath": [
+        {
+          "id": "BATCH-HP-001",
+          "description": "Process 10 subaccounts successfully",
+          "setup": {
+            "employerCount": 2,
+            "subaccountsPerEmployer": 5
+          },
+          "request": {
+            "employerIds": ["EMP-001", "EMP-002"],
+            "createdBy": "system"
+          },
+          "expectedResponse": {
+            "status": 200,
+            "totalProcessed": 10,
+            "successCount": 10,
+            "failureCount": 0,
+            "skippedCount": 0
+          }
+        },
+        {
+          "id": "BATCH-HP-002",
+          "description": "Skip existing invoices",
+          "setup": {
+            "existingInvoices": 3
+          },
+          "request": {
+            "employerIds": ["EMP-001"],
+            "createdBy": "system"
+          },
+          "expectedResponse": {
+            "status": 200,
+            "skippedCount": 3
+          }
+        },
+        {
+          "id": "BATCH-HP-003",
+          "description": "Partial success with failures",
+          "setup": {
+            "employerCount": 1,
+            "subaccountsPerEmployer": 5,
+            "failedSubaccounts": 2
+          },
+          "request": {
+            "employerIds": ["EMP-001"],
+            "createdBy": "system"
+          },
+          "expectedResponse": {
+            "status": 200,
+            "totalProcessed": 5,
+            "successCount": 3,
+            "failureCount": 2
+          }
+        }
+      ],
+      "errorCases": [
+        {
+          "id": "BATCH-ERR-001",
+          "description": "Empty employer list",
+          "request": {
+            "employerIds": [],
+            "createdBy": "system"
+          },
+          "expectedResponse": {
+            "status": 400,
+            "errorType": "ValidationException"
+          }
+        }
+      ]
+    },
+    "XCloseFundingBatch": {
+      "happyPath": [
+        {
+          "id": "CLOSE-HP-001",
+          "description": "Close batch with positive total",
+          "setup": {
+            "batchStatus": "Open",
+            "invoiceCount": 5,
+            "totalAmount": 5000.00
+          },
+          "request": {
+            "batchId": "BATCH-001",
+            "description": "December batch closed",
+            "excludedInvoiceIds": [],
+            "closedBy": "system"
+          },
+          "expectedResponse": {
+            "status": 200,
+            "result": "batch closed",
+            "batchStatus": "Pending"
+          }
+        },
+        {
+          "id": "CLOSE-HP-002",
+          "description": "Close with excluded invoices",
+          "setup": {
+            "batchStatus": "Open",
+            "invoiceCount": 5,
+            "totalAmount": 5000.00,
+            "excludedInvoiceTotal": 500.00
+          },
+          "request": {
+            "batchId": "BATCH-001",
+            "excludedInvoiceIds": ["INV-999"],
+            "closedBy": "system"
+          },
+          "expectedResponse": {
+            "status": 200,
+            "batchTotalAmount": 4500.00
+          }
+        },
+        {
+          "id": "CLOSE-HP-003",
+          "description": "Close with auto-debit",
+          "setup": {
+            "batchStatus": "Open",
+            "totalAmount": 5000.00,
+            "autoDebitEnabled": true
+          },
+          "request": {
+            "batchId": "BATCH-001",
+            "closedBy": "system"
+          },
+          "expectedResponse": {
+            "status": 200,
+            "paymentId": "PAY-*",
+            "paymentEffectiveDate": "2025-12-16T00:00:00Z"
+          }
+        }
+      ],
+      "errorCases": [
+        {
+          "id": "CLOSE-ERR-001",
+          "description": "Conflict - zero total after exclusions",
+          "setup": {
+            "batchStatus": "Open",
+            "totalAmount": 500.00
+          },
+          "request": {
+            "batchId": "BATCH-001",
+            "excludedInvoiceIds": ["INV-001"]
+          },
+          "expectedResponse": {
+            "status": 409,
+            "errorType": "InvalidOperationException"
+          }
+        },
+        {
+          "id": "CLOSE-ERR-002",
+          "description": "Not found - batch doesn't exist",
+          "request": {
+            "batchId": "BATCH-NOTFOUND",
+            "closedBy": "system"
+          },
+          "expectedResponse": {
+            "status": 404,
+            "errorType": "NotFoundException"
+          }
+        },
+        {
+          "id": "CLOSE-ERR-003",
+          "description": "Conflict - batch already closed",
+          "setup": {
+            "batchStatus": "Closed"
+          },
+          "request": {
+            "batchId": "BATCH-001",
+            "closedBy": "system"
+          },
+          "expectedResponse": {
+            "status": 409,
+            "errorType": "InvalidOperationException"
+          }
+        }
+      ],
+      "stateTransitions": [
+        {
+          "id": "CLOSE-ST-001",
+          "description": "Verify Open → Pending → Closed sequence",
+          "setup": {
+            "batchStatus": "Open"
+          },
+          "expectedSequence": ["Open", "Pending", "Closed"]
+        },
+        {
+          "id": "CLOSE-ST-002",
+          "description": "Reopen on payment failure",
+          "setup": {
+            "batchStatus": "Pending",
+            "paymentFails": true
+          },
+          "expectedFinalStatus": "Reopened"
+        }
+      ]
+    },
+    "XUpdateFundingBatch": {
+      "happyPath": [
+        {
+          "id": "UPDATE-HP-001",
+          "description": "Update batch description",
+          "request": {
+            "batchId": "BATCH-001",
+            "description": "Updated description",
+            "updatedBy": "admin"
+          },
+          "expectedResponse": {
+            "status": 200,
+            "description": "Updated description"
+          }
+        },
+        {
+          "id": "UPDATE-HP-002",
+          "description": "Update employer ID",
+          "request": {
+            "batchId": "BATCH-001",
+            "description": "Batch 1",
+            "employerId": "EMP-999",
+            "updatedBy": "admin"
+          },
+          "expectedResponse": {
+            "status": 200,
+            "employerId": "EMP-999"
+          }
+        }
+      ],
+      "errorCases": [
+        {
+          "id": "UPDATE-ERR-001",
+          "description": "Validation error - description too long",
+          "request": {
+            "batchId": "BATCH-001",
+            "description": "A".repeat(501),
+            "updatedBy": "admin"
+          },
+          "expectedResponse": {
+            "status": 400,
+            "errorType": "ValidationException"
+          }
+        },
+        {
+          "id": "UPDATE-ERR-002",
+          "description": "Not found - batch doesn't exist",
+          "request": {
+            "batchId": "BATCH-NOTFOUND",
+            "description": "Test",
+            "updatedBy": "admin"
+          },
+          "expectedResponse": {
+            "status": 404,
+            "errorType": "NotFoundException"
+          }
+        }
+      ]
+    }
+  },
+  "performanceScenarios": [
+    {
+      "id": "PERF-001",
+      "description": "Single invoice creation under load",
+      "operation": "XAddFundingInvoice",
+      "concurrentRequests": 10,
+      "targetP95": "< 500ms"
+    },
+    {
+      "id": "PERF-002",
+      "description": "Batch processing 100 subaccounts",
+      "operation": "Updater_CreateRAFundingInvoices",
+      "dataSize": 100,
+      "targetP95": "< 5000ms"
+    },
+    {
+      "id": "PERF-003",
+      "description": "Batch closure with auto-debit",
+      "operation": "XCloseFundingBatch",
+      "targetP95": "< 1000ms"
+    }
+  ]
+}

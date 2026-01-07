@@ -1,0 +1,84 @@
+category_name: database
+utility_count: 6
+utilities:
+- name: validate_db_schema
+  file_path: /Users/asifhussain/PROJECTS/CORTEX/scripts/utilities/validate_db_schema.py
+  category: database
+  description: Quick validation test for database schema fixes
+  capabilities:
+  - test_database_schema
+  dependencies:
+  - sys
+  - sqlite3
+  usage_stats:
+    execution_count: 0
+    last_used: null
+    avg_duration_ms: 0.0
+    success_rate: 100.0
+- name: migrate_conversations_table
+  file_path: /Users/asifhussain/PROJECTS/CORTEX/scripts/utilities/migrate_conversations_table.py
+  category: database
+  description: No description available
+  capabilities: []
+  dependencies:
+  - os
+  - sqlite3
+  usage_stats:
+    execution_count: 0
+    last_used: null
+    avg_duration_ms: 0.0
+    success_rate: 100.0
+- name: migrate_messages_table
+  file_path: /Users/asifhussain/PROJECTS/CORTEX/scripts/utilities/migrate_messages_table.py
+  category: database
+  description: No description available
+  capabilities: []
+  dependencies:
+  - os
+  - traceback
+  - sqlite3
+  usage_stats:
+    execution_count: 0
+    last_used: null
+    avg_duration_ms: 0.0
+    success_rate: 100.0
+- name: check_schema
+  file_path: /Users/asifhussain/PROJECTS/CORTEX/scripts/utilities/check_schema.py
+  category: database
+  description: No description available
+  capabilities: []
+  dependencies:
+  - os
+  - sqlite3
+  usage_stats:
+    execution_count: 0
+    last_used: null
+    avg_duration_ms: 0.0
+    success_rate: 100.0
+- name: migrate_entities_table
+  file_path: /Users/asifhussain/PROJECTS/CORTEX/scripts/utilities/migrate_entities_table.py
+  category: database
+  description: No description available
+  capabilities: []
+  dependencies:
+  - os
+  - traceback
+  - sqlite3
+  usage_stats:
+    execution_count: 0
+    last_used: null
+    avg_duration_ms: 0.0
+    success_rate: 100.0
+- name: migrate_conversations_full
+  file_path: /Users/asifhussain/PROJECTS/CORTEX/scripts/utilities/migrate_conversations_full.py
+  category: database
+  description: No description available
+  capabilities: []
+  dependencies:
+  - os
+  - sqlite3
+  usage_stats:
+    execution_count: 0
+    last_used: null
+    avg_duration_ms: 0.0
+    success_rate: 100.0

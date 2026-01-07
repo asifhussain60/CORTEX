@@ -1,0 +1,27 @@
+{
+  "vendors": [],
+  "by_category": {
+    "payment": 0,
+    "authentication": 0,
+    "storage": 0,
+    "email": 0,
+    "monitoring": 0,
+    "analytics": 0,
+    "messaging": 0,
+    "cdn": 0
+  },
+  "by_status": {
+    "active": 0,
+    "configured": 0,
+    "inactive": 0,
+    "expired": 0
+  },
+  "summary": {
+    "total_vendors": 0,
+    "active_vendors": 0,
+    "cost_estimate": "$",
+    "compliance_flags": [],
+    "security_warnings": 0,
+    "last_scan": null
+  }
+}

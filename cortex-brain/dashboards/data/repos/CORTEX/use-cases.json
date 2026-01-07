@@ -1,0 +1,165 @@
+{
+  "use_cases": [
+    {
+      "id": "uc001",
+      "title": "Dashboard Data Collection & Analytics",
+      "description": "Collect repository metrics, analyze tech stack, and generate insights for strategic planning",
+      "target_role": "Admin",
+      "domain": "Reporting",
+      "complexity": "high",
+      "confidence": 0.95,
+      "business_value": "high",
+      "evidence": {
+        "files": ["src/dashboard/orchestrator.py", "src/dashboard/data/*.py"],
+        "patterns": ["analytics", "dashboard", "report", "collector"],
+        "entities": ["dashboard", "metrics", "analytics"]
+      }
+    },
+    {
+      "id": "uc002",
+      "title": "System Health Monitoring",
+      "description": "Monitor CORTEX system health, track conversation context, and validate brain integrity",
+      "target_role": "Admin",
+      "domain": "Security",
+      "complexity": "medium",
+      "confidence": 0.90,
+      "business_value": "critical",
+      "evidence": {
+        "files": ["scripts/healthcheck.py", "cortex-brain/brain-protection-rules.yaml"],
+        "patterns": ["health", "monitor", "validate", "check"],
+        "entities": ["health", "status", "validation"]
+      }
+    },
+    {
+      "id": "uc003",
+      "title": "Multi-Repository Code Analysis",
+      "description": "Analyze multiple repositories, detect tech stacks, and generate comparative insights",
+      "target_role": "Manager",
+      "domain": "Reporting",
+      "complexity": "high",
+      "confidence": 0.88,
+      "business_value": "high",
+      "evidence": {
+        "files": ["src/tier3/*.py", "analyze_all_repos_task1.3.py"],
+        "patterns": ["analyze", "scan", "detect", "tech_stack"],
+        "entities": ["repository", "tech_stack", "analysis"]
+      }
+    },
+    {
+      "id": "uc004",
+      "title": "Automated Testing & TDD Enforcement",
+      "description": "Run tests, enforce TDD methodology with RED-GREEN-REFACTOR cycle validation",
+      "target_role": "End User",
+      "domain": "Security",
+      "complexity": "medium",
+      "confidence": 0.92,
+      "business_value": "high",
+      "evidence": {
+        "files": ["tests/**/*.py", "cortex-brain/brain-protection-rules.yaml"],
+        "patterns": ["test", "tdd", "red_phase", "pytest"],
+        "entities": ["test", "validation", "coverage"]
+      }
+    },
+    {
+      "id": "uc005",
+      "title": "Context-Aware AI Responses",
+      "description": "Generate structured AI responses using templates, maintain conversation context across sessions",
+      "target_role": "End User",
+      "domain": "User Management",
+      "complexity": "high",
+      "confidence": 0.93,
+      "business_value": "critical",
+      "evidence": {
+        "files": ["src/response_templates/*.py", "cortex-brain/response-templates.yaml"],
+        "patterns": ["template", "response", "context", "conversation"],
+        "entities": ["response", "template", "context"]
+      }
+    },
+    {
+      "id": "uc006",
+      "title": "Planning System with DoR/DoD",
+      "description": "Create incremental/conditional/skeleton plans with Definition of Ready and Done compliance",
+      "target_role": "Manager",
+      "domain": "Reporting",
+      "complexity": "high",
+      "confidence": 0.91,
+      "business_value": "high",
+      "evidence": {
+        "files": [".github/prompts/planning-system-manifest.yaml"],
+        "patterns": ["plan", "dor", "dod", "incremental", "conditional"],
+        "entities": ["plan", "task", "milestone"]
+      }
+    },
+    {
+      "id": "uc007",
+      "title": "Git Operations & Version Control",
+      "description": "Automated git checkpointing, branch management, and commit generation with semantic messages",
+      "target_role": "End User",
+      "domain": "Security",
+      "complexity": "medium",
+      "confidence": 0.87,
+      "business_value": "medium",
+      "evidence": {
+        "files": ["cortex-brain/git-checkpoint-rules.yaml", "scripts/git_*.py"],
+        "patterns": ["git", "commit", "branch", "checkpoint"],
+        "entities": ["commit", "branch", "repository"]
+      }
+    },
+    {
+      "id": "uc008",
+      "title": "API Consumer Integration",
+      "description": "Provide API endpoints for external tools to access CORTEX insights and analytics",
+      "target_role": "API Consumer",
+      "domain": "E-Commerce",
+      "complexity": "medium",
+      "confidence": 0.85,
+      "business_value": "medium",
+      "evidence": {
+        "files": ["src/cortex_agents/*.py"],
+        "patterns": ["api", "endpoint", "rest", "integration"],
+        "entities": ["api", "endpoint", "integration"]
+      }
+    }
+  ],
+  "metadata": {
+    "total_use_cases": 8,
+    "confidence_distribution": {
+      "high": 6,
+      "medium": 2,
+      "low": 0
+    },
+    "complexity_distribution": {
+      "high": 4,
+      "medium": 4,
+      "low": 0
+    },
+    "business_value_distribution": {
+      "critical": 2,
+      "high": 4,
+      "medium": 2,
+      "low": 0
+    }
+  },
+  "roles": ["Admin", "API Consumer", "End User", "Manager"],
+  "domains": ["E-Commerce", "Reporting", "Security", "User Management"],
+  "counts": {
+    "total": 8,
+    "by_role": {
+      "Admin": 2,
+      "API Consumer": 1,
+      "End User": 3,
+      "Manager": 2
+    },
+    "by_domain": {
+      "E-Commerce": 1,
+      "Reporting": 3,
+      "Security": 3,
+      "User Management": 1
+    },
+    "by_complexity": {
+      "high": 4,
+      "medium": 4,
+      "low": 0
+    }
+  }
+}

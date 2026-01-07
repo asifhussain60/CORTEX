@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orchestrator Ecosystem - Architecture - CORTEX</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo-64.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/variables.css">
+    <link rel="stylesheet" href="../assets/css/cortex-glass-system.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        .mermaid { 
+            background: transparent; 
+            margin: 1.5rem 0; 
+        }
+    </style>
+<style>
+        /* REFERENCE Theme - Level 2 */
+        .level2-reference {
+            --theme-primary: #00bfff;
+            --theme-accent: #7c7cff;
+            --theme-success: #00ff88;
+            --theme-warning: #ffd700;
+            --theme-glow: rgba(0, 191, 255, 0.25);
+            
+            /* Apply to glass effects */
+            --glass-border-color: #00bfff33;
+            --pulse-glow-color: rgba(0, 191, 255, 0.25);
+        }
+        
+        /* Themed glass cards */
+        .level2-reference .glass-card-clickable:hover {
+            border-color: #00bfff66;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37),
+                        0 0 30px rgba(0, 191, 255, 0.25);
+        }
+        
+        /* Themed icons */
+        .level2-reference .pulse-glow-glass--fast {
+            filter: drop-shadow(0 0 10px rgba(0, 191, 255, 0.25));
+        }
+        
+        /* Themed metric tiles */
+        .level2-reference .token-metric-tile {
+            border-color: #00bfff33;
+        }
+        
+        .level2-reference .token-metric-tile:hover {
+            border-color: #00bfff66;
+            background: #00bfff11;
+        }
+</style>
+</head>
+<body>
+    <header>
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="../index.html" class="breadcrumb-separator">
+                <i class="fas fa-home pulse-glow-glass--fast"></i> Home
+            </a>
+            <span class="breadcrumb-separator">→</span>
+            <a href="index.html">Architecture</a>
+            <span class="breadcrumb-separator">→</span>
+            <span class="breadcrumb-current">Orchestrator Ecosystem</span>
+        </nav>
+    </header>
+    
+    <main id="main-content">
+        <!-- Title Section -->
+        <section class="glass-card-display">
+            <div class="page-title-section">
+                <h1 class="page-title"><i class="fas fa-project-diagram pulse-glow-glass--fast"></i> Orchestrator Ecosystem</h1>
+                <p class="page-subtitle">10 Core Orchestrators · 5 Categories · Master Hub Coordination</p>
+            </div>
+        </section>
+
+        <!-- Overview -->
+        <section class="glass-card-display">
+            <h2 class="section-title"><i class="fas fa-info-circle pulse-glow-glass--fast"></i> Ecosystem Overview</h2>
+            <p>
+                The CORTEX Orchestrator Ecosystem consists of 10 specialized orchestrators coordinated through 
+                the Master Orchestrator Hub. Each orchestrator is an autonomous workflow coordinator that 
+                transforms natural language commands into multi-phase operations, handling everything from 
+                strategic planning to code refinement and debugging.
+            </p>
+        </section>
+
+        <!-- 10 Orchestrators Network Diagram -->
+        <section class="glass-card-display">
+            <h2 class="section-title"><i class="fas fa-network-wired pulse-glow-glass--fast"></i> 10-Orchestrator Network</h2>
+            <div class="mermaid">
+graph TB
+    subgraph MasterHub["🧠 Master Orchestrator Hub"]
+        MO[Master Orchestrator<br/>Intent Router]
+    end
+    
+    subgraph Planning["📋 Planning & Strategy"]
+        PV5[Planning v5<br/>🚀 13-Phase Planning]
+        ADO[ADO Operations<br/>📝 Work Item Generator]
+    end
+    
+    subgraph Execution["▶️ Execution & Quality"]
+        TDD[TDD Mastery<br/>🧪 RED-GREEN-REFACTOR]
+        EXEC[Execution Engine<br/>⚙️ Multi-Step Automation]
+    end
+    
+    subgraph SystemOps["🔧 System Maintenance"]
+        CLEAN[Cleanup v2<br/>🧹 Cache & Artifact Management]
+        VAC[Vacuum v2<br/>🗑️ Deep Cleanup]
+        MAINT[Maintenance<br/>🔄 12-Phase Health Pipeline]
+    end
+    
+    subgraph Analysis["📊 Analysis & Refinement"]
+        REF[Refinement Engine<br/>💎 7-Phase Quality Improvement]
+        LENS[CORTEX Lens<br/>🔍 Repository Analysis]
+    end
+    
+    subgraph Debug["🐛 Debug & Troubleshooting"]
+        DBG[Debug Orchestrator<br/>🩺 Root Cause Analysis]
+    end
+    
+    MO -.->|plan| PV5
+    MO -.->|ado story| ADO
+    MO -.->|tdd| TDD
+    MO -.->|execute| EXEC
+    MO -.->|cleanup| CLEAN
+    MO -.->|vacuum| VAC
+    MO -.->|maintenance| MAINT
+    MO -.->|refine| REF
+    MO -.->|lens| LENS
+    MO -.->|debug| DBG
+    
+    PV5 -.->|generates| ADO
+    TDD -.->|analyzes| LENS
+    REF -.->|uses| LENS
+    DBG -.->|uses| LENS
+    CLEAN -.->|extends| VAC
+    
+    style MO fill:#00d4ff,color:#1a1a2e,stroke:#00d4ff,stroke-width:3px
+    style PV5 fill:#8b5cf6,color:#fff
+    style ADO fill:#8b5cf6,color:#fff
+    style TDD fill:#10b981,color:#fff
+    style EXEC fill:#10b981,color:#fff
+    style CLEAN fill:#f59e0b,color:#fff
+    style VAC fill:#f59e0b,color:#fff
+    style MAINT fill:#f59e0b,color:#fff
+    style REF fill:#06b6d4,color:#fff
+    style LENS fill:#06b6d4,color:#fff
+    style DBG fill:#ef4444,color:#fff
+            </div>
+        </section>
+
+        <!-- Category Breakdown -->
+        <section class="glass-card-display">
+            <h2 class="section-title"><i class="fas fa-layer-group pulse-glow-glass--fast"></i> Category Breakdown</h2>
+            <div class="principle-card-grid columns-3">
+                <div class="glass-card-clickable">
+                    <h3><i class="fas fa-chess-knight pulse-glow-glass--fast"></i> Planning & Strategy</h3>
+                    <p><strong>2 Orchestrators</strong></p>
+                    <ul>
+                        <li><strong>Planning v5:</strong> 13-phase autonomous planning with Phase -1 Knowledge Library</li>
+                        <li><strong>ADO Operations:</strong> Epic/Feature work item generation for Azure DevOps</li>
+                    </ul>
+                </div>
+                
+                <div class="glass-card-clickable">
+                    <h3><i class="fas fa-play-circle pulse-glow-glass--fast"></i> Execution & Quality</h3>
+                    <p><strong>2 Orchestrators</strong></p>
+                    <ul>
+                        <li><strong>TDD Mastery:</strong> Test-first development workflow with RED→GREEN→REFACTOR</li>
+                        <li><strong>Execution Engine:</strong> Multi-step command orchestration and automation</li>
+                    </ul>
+                </div>
+                
+                <div class="glass-card-clickable">
+                    <h3><i class="fas fa-wrench pulse-glow-glass--fast"></i> System Maintenance</h3>
+                    <p><strong>3 Orchestrators</strong></p>
+                    <ul>
+                        <li><strong>Cleanup v2:</strong> Intelligent cache and artifact management</li>
+                        <li><strong>Vacuum v2:</strong> Deep filesystem cleanup with safety checks</li>
+                        <li><strong>Maintenance:</strong> 12-phase system health pipeline</li>
+                    </ul>
+                </div>
+                
+                <div class="glass-card-clickable">
+                    <h3><i class="fas fa-chart-line pulse-glow-glass--fast"></i> Analysis & Refinement</h3>
+                    <p><strong>2 Orchestrators</strong></p>
+                    <ul>
+                        <li><strong>Refinement Engine:</strong> 7-phase code quality and architecture improvement</li>
+                        <li><strong>CORTEX Lens:</strong> AST-based repository analysis and visualization</li>
+                    </ul>
+                </div>
+                
+                <div class="glass-card-clickable">
+                    <h3><i class="fas fa-bug pulse-glow-glass--fast"></i> Debug & Troubleshooting</h3>
+                    <p><strong>1 Orchestrator</strong></p>
+                    <ul>
+                        <li><strong>Debug Orchestrator:</strong> Intelligent error detection with root cause analysis</li>
+                    </ul>
+                </div>
+                
+                <div class="glass-card-clickable">
+                    <h3><i class="fas fa-brain pulse-glow-glass--fast"></i> Master Hub</h3>
+                    <p><strong>1 Orchestrator</strong></p>
+                    <ul>
+                        <li><strong>Master Orchestrator:</strong> Central command router with intent classification</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- CORTEX-5.0 Migration Status -->
+        <section class="glass-card-display">
+            <h2 class="section-title"><i class="fas fa-rocket pulse-glow-glass--fast"></i> CORTEX-5.0 Migration Status</h2>
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background: rgba(0, 212, 255, 0.1); border-bottom: 2px solid rgba(0, 212, 255, 0.3);">
+                        <th style="padding: 0.75rem; text-align: left;">Orchestrator</th>
+                        <th style="padding: 0.75rem; text-align: center;">Status</th>
+                        <th style="padding: 0.75rem; text-align: center;">Implementation</th>
+                        <th style="padding: 0.75rem; text-align: center;">Sub-Plan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                        <td style="padding: 0.75rem;"><strong>Planning v5</strong></td>
+                        <td style="padding: 0.75rem; text-align: center;">✅ Deployed</td>
+                        <td style="padding: 0.75rem; text-align: center;">100%</td>
+                        <td style="padding: 0.75rem; text-align: center;">—</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                        <td style="padding: 0.75rem;"><strong>ADO Operations</strong></td>
+                        <td style="padding: 0.75rem; text-align: center;">✅ Deployed</td>
+                        <td style="padding: 0.75rem; text-align: center;">100%</td>
+                        <td style="padding: 0.75rem; text-align: center;">—</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                        <td style="padding: 0.75rem;"><strong>TDD Mastery</strong></td>
+                        <td style="padding: 0.75rem; text-align: center;">✅ Deployed</td>
+                        <td style="padding: 0.75rem; text-align: center;">100%</td>
+                        <td style="padding: 0.75rem; text-align: center;">—</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                        <td style="padding: 0.75rem;"><strong>Execution Engine</strong></td>
+                        <td style="padding: 0.75rem; text-align: center;">✅ Deployed</td>
+                        <td style="padding: 0.75rem; text-align: center;">100%</td>
+                        <td style="padding: 0.75rem; text-align: center;">—</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                        <td style="padding: 0.75rem;"><strong>Cleanup v2</strong></td>
+                        <td style="padding: 0.75rem; text-align: center;">🔄 Migrating</td>
+                        <td style="padding: 0.75rem; text-align: center;">60%</td>
+                        <td style="padding: 0.75rem; text-align: center;">Sub-Plan 08</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                        <td style="padding: 0.75rem;"><strong>Vacuum v2</strong></td>
+                        <td style="padding: 0.75rem; text-align: center;">🔄 Migrating</td>
+                        <td style="padding: 0.75rem; text-align: center;">60%</td>
+                        <td style="padding: 0.75rem; text-align: center;">Sub-Plan 08</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                        <td style="padding: 0.75rem;"><strong>Maintenance</strong></td>
+                        <td style="padding: 0.75rem; text-align: center;">✅ Deployed</td>
+                        <td style="padding: 0.75rem; text-align: center;">100%</td>
+                        <td style="padding: 0.75rem; text-align: center;">—</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                        <td style="padding: 0.75rem;"><strong>Refinement Engine</strong></td>
+                        <td style="padding: 0.75rem; text-align: center;">⏸️ Blocked</td>
+                        <td style="padding: 0.75rem; text-align: center;">0%</td>
+                        <td style="padding: 0.75rem; text-align: center;">Sub-Plan 01</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                        <td style="padding: 0.75rem;"><strong>CORTEX Lens</strong></td>
+                        <td style="padding: 0.75rem; text-align: center;">✅ Deployed</td>
+                        <td style="padding: 0.75rem; text-align: center;">100%</td>
+                        <td style="padding: 0.75rem; text-align: center;">—</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.75rem;"><strong>Debug Orchestrator</strong></td>
+                        <td style="padding: 0.75rem; text-align: center;">⏸️ Blocked</td>
+                        <td style="padding: 0.75rem; text-align: center;">0%</td>
+                        <td style="padding: 0.75rem; text-align: center;">Sub-Plan 02</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="margin-top: 1rem; font-size: 0.875rem; color: rgba(255, 255, 255, 0.7);">
+                <strong>Gate 1 Blocker:</strong> Refinement and Debug orchestrators require ≥50% test coverage before implementation can begin.
+            </p>
+        </section>
+
+        <!-- Key Capabilities -->
+        <section class="glass-card-display">
+            <h2 class="section-title"><i class="fas fa-star pulse-glow-glass--fast"></i> Ecosystem Capabilities</h2>
+            <div class="principle-card-grid columns-2">
+                <div class="glass-card-clickable">
+                    <h3><i class="fas fa-brain pulse-glow-glass--fast"></i> Autonomous Execution</h3>
+                    <p>Self-managing workflows with minimal human intervention. Each orchestrator coordinates multi-phase operations independently.</p>
+                </div>
+                
+                <div class="glass-card-clickable">
+                    <h3><i class="fas fa-shield-check pulse-glow-glass--fast"></i> SKULL Protection</h3>
+                    <p>Built-in brain protection rules ensure safe operations: TDD enforcement, holistic discovery, git isolation, and planning isolation.</p>
+                </div>
+                
+                <div class="glass-card-clickable">
+                    <h3><i class="fas fa-sync pulse-glow-glass--fast"></i> Rollback Support</h3>
+                    <p>Automatic git checkpoints and recovery mechanisms at every critical phase. All destructive operations are reversible.</p>
+                </div>
+                
+                <div class="glass-card-clickable">
+                    <h3><i class="fas fa-network-wired pulse-glow-glass--fast"></i> Inter-Orchestrator Communication</h3>
+                    <p>Orchestrators share context via the Master Hub. Planning generates ADO work items, TDD uses Lens analysis, Debug leverages Lens insights.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    
+<!-- Modern Glass Footer -->
+
+<!-- Modern Glass Footer -->
+<footer class="glass-footer-modern">
+    <div class="footer-modern-content">
+        <img src="../assets/images/CORTEX-logo.png" alt="CORTEX" class="cortex-logo-footer" width="100" height="100" />
+        <p class="footer-copyright-modern">
+            Copyright © 2025-2026 <span class="copyright-author">Asif Hussain</span>. All rights reserved.
+        </p>
+    </div>
+</footer>
+    
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                darkMode: true,
+                background: 'transparent',
+                primaryColor: '#00d4ff',
+                primaryTextColor: '#ffffff',
+                primaryBorderColor: '#00d4ff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#8b5cf6',
+                tertiaryColor: '#10b981'
+            }
+        });
+    </script>
+</body>
+</html>

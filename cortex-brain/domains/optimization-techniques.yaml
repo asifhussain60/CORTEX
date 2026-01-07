@@ -1,0 +1,591 @@
+# Week 26: Performance Optimization Techniques
+# Part of Phase 10.2 - Specialization Domains
+# Focus: Algorithmic optimization, memory management, I/O optimization, concurrency patterns
+
+metadata:
+  week: 26
+  phase: "10.2"
+  domain: "Performance Optimization"
+  difficulty: "Advanced"
+  prerequisites:
+    - "Profiling and diagnostics fundamentals"
+    - "Algorithm analysis"
+    - "System architecture"
+    - "Concurrency models"
+
+optimization_techniques:
+  algorithmic_optimization:
+    description: "Improving algorithm efficiency and reducing computational complexity"
+    
+    complexity_analysis:
+      time_complexity:
+        - technique: "Big-O analysis"
+          focus: "Analyze worst-case, average-case, and best-case scenarios"
+          examples:
+            - "O(1) - Constant time: hash table lookups"
+            - "O(log n) - Logarithmic: binary search"
+            - "O(n) - Linear: single pass array traversal"
+            - "O(n log n) - Linearithmic: efficient sorting"
+            - "O(n²) - Quadratic: nested loops"
+        
+        - technique: "Amortized analysis"
+          focus: "Average time over sequence of operations"
+          use_cases:
+            - "Dynamic array resizing"
+            - "Hash table operations"
+            - "Union-find data structures"
+      
+      space_complexity:
+        - technique: "Memory usage analysis"
+          considerations:
+            - "Auxiliary space requirements"
+            - "In-place vs out-of-place algorithms"
+            - "Stack space for recursion"
+            - "Cache locality impact"
+    
+    data_structure_selection:
+      principles:
+        - "Choose structures matching access patterns"
+        - "Balance read vs write performance"
+        - "Consider memory vs speed tradeoffs"
+      
+      common_optimizations:
+        - pattern: "Array to hash table"
+          benefit: "O(n²) to O(n) for lookups"
+          tradeoff: "Increased memory usage"
+        
+        - pattern: "List to balanced tree"
+          benefit: "O(n) to O(log n) for sorted operations"
+          tradeoff: "More complex implementation"
+        
+        - pattern: "Tree to hash table"
+          benefit: "O(log n) to O(1) for exact matches"
+          tradeoff: "No ordered traversal"
+    
+    algorithm_patterns:
+      divide_and_conquer:
+        description: "Break problem into smaller subproblems"
+        examples:
+          - "Merge sort, quick sort"
+          - "Binary search"
+          - "Fast Fourier Transform"
+        complexity_improvement: "Often O(n²) to O(n log n)"
+      
+      dynamic_programming:
+        description: "Cache subproblem solutions"
+        approaches:
+          - name: "Top-down (memoization)"
+            technique: "Recursive with caching"
+          - name: "Bottom-up (tabulation)"
+            technique: "Iterative with table"
+        use_cases:
+          - "Fibonacci sequence"
+          - "Longest common subsequence"
+          - "Knapsack problem"
+      
+      greedy_algorithms:
+        description: "Make locally optimal choices"
+        characteristics:
+          - "Fast execution"
+          - "Not always globally optimal"
+          - "Requires proof of correctness"
+        examples:
+          - "Dijkstra's algorithm"
+          - "Huffman coding"
+          - "Activity selection"
+      
+      two_pointer_technique:
+        description: "Use two indices to traverse data"
+        benefits:
+          - "Reduces O(n²) to O(n)"
+          - "Constant space usage"
+        applications:
+          - "Array pair sums"
+          - "Palindrome checking"
+          - "Container with most water"
+
+  memory_optimization:
+    description: "Efficient memory usage and management"
+    
+    memory_allocation:
+      object_pooling:
+        purpose: "Reuse objects instead of creating new ones"
+        benefits:
+          - "Reduced GC pressure"
+          - "Faster allocation"
+          - "Predictable memory usage"
+        use_cases:
+          - "Network buffers"
+          - "Database connections"
+          - "Game entities"
+        implementation:
+          initialization: "Pre-allocate pool of objects"
+          acquisition: "Get object from pool, reset state"
+          release: "Return object to pool instead of destroying"
+      
+      memory_arenas:
+        purpose: "Bulk allocation and deallocation"
+        benefits:
+          - "Fast allocation within arena"
+          - "Single deallocation for all"
+          - "Reduced fragmentation"
+        pattern: |
+          # Create arena for temporary allocations
+          arena = MemoryArena(size=1MB)
+          # Allocate many small objects
+          for i in range(1000):
+              obj = arena.allocate(ObjectType)
+          # Free all at once
+          arena.clear()
+      
+      stack_vs_heap:
+        stack_allocation:
+          characteristics:
+            - "Automatic lifetime management"
+            - "Fast allocation/deallocation"
+            - "Limited size"
+          use_for: "Small, short-lived objects"
+        
+        heap_allocation:
+          characteristics:
+            - "Manual or GC management"
+            - "Slower allocation"
+            - "Large available space"
+          use_for: "Large, long-lived objects"
+    
+    data_structure_optimization:
+      compact_representations:
+        - technique: "Bit packing"
+          description: "Store multiple values in single integer"
+          example: "RGB color as 0xRRGGBB"
+          savings: "75% for boolean flags"
+        
+        - technique: "Structure padding elimination"
+          description: "Reorder fields to minimize padding"
+          example: |
+            # Before (24 bytes with padding)
+            struct { char a; long b; char c; }
+            # After (16 bytes)
+            struct { long b; char a; char c; }
+        
+        - technique: "Interning/flyweight"
+          description: "Share immutable objects"
+          use_cases:
+            - "String constants"
+            - "Small integers"
+            - "Repeated configurations"
+      
+      memory_efficient_collections:
+        - collection: "Sparse arrays"
+          when: "Few non-default values"
+          technique: "Store only non-default entries"
+        
+        - collection: "Bloom filters"
+          when: "Membership testing with false positives ok"
+          technique: "Probabilistic set with minimal space"
+        
+        - collection: "Tries for strings"
+          when: "Many strings with common prefixes"
+          technique: "Share common prefixes"
+    
+    garbage_collection_optimization:
+      generational_gc:
+        principle: "Most objects die young"
+        strategy:
+          - "Frequent young generation collection"
+          - "Infrequent old generation collection"
+        optimization: "Minimize old generation promotions"
+      
+      gc_pressure_reduction:
+        techniques:
+          - "Object pooling for frequent allocations"
+          - "Struct/value types for small objects"
+          - "Array reuse instead of reallocation"
+          - "Span<T> for zero-copy slicing"
+      
+      finalization:
+        guideline: "Avoid finalizers when possible"
+        reason: "Delays object collection, adds overhead"
+        alternative: "Implement IDisposable for deterministic cleanup"
+
+  io_optimization:
+    description: "Efficient input/output operations"
+    
+    buffering_strategies:
+      read_buffering:
+        purpose: "Reduce system call overhead"
+        techniques:
+          - "Read-ahead buffering"
+          - "Adaptive buffer sizing"
+          - "Memory-mapped files for large files"
+        buffer_size_guidelines:
+          small_files: "4KB - 8KB"
+          medium_files: "64KB - 128KB"
+          large_files: "1MB - 4MB or memory mapping"
+      
+      write_buffering:
+        purpose: "Batch writes for efficiency"
+        techniques:
+          - "Write-behind buffering"
+          - "Group commit for transactions"
+          - "Write combining for sequential writes"
+        flush_strategies:
+          time_based: "Flush every N milliseconds"
+          size_based: "Flush when buffer reaches N bytes"
+          hybrid: "Whichever comes first"
+      
+      zero_copy:
+        techniques:
+          - name: "sendfile/splice"
+            description: "Transfer data without user-space copy"
+            use_case: "File to network socket"
+          
+          - name: "Memory mapping"
+            description: "Direct file access via pointers"
+            use_case: "Large file processing"
+          
+          - name: "Scatter-gather I/O"
+            description: "Read/write multiple buffers in single call"
+            use_case: "Structured data with headers"
+    
+    async_io:
+      benefits:
+        - "Don't block waiting for I/O"
+        - "Better thread utilization"
+        - "Higher concurrency"
+      
+      patterns:
+        async_await:
+          language_support:
+            - "C# async/await"
+            - "Python asyncio"
+            - "JavaScript promises"
+          principle: "Non-blocking with readable synchronous-style code"
+        
+        io_completion_ports:
+          platform: "Windows"
+          description: "Efficient async I/O notification"
+          benefit: "Scales to thousands of concurrent operations"
+        
+        epoll_kqueue:
+          platform: "Linux/BSD"
+          description: "Efficient event notification"
+          benefit: "O(1) event monitoring"
+    
+    file_system_optimization:
+      sequential_access:
+        guideline: "Design for sequential reads when possible"
+        benefit: "Leverages OS read-ahead and disk locality"
+        techniques:
+          - "Sort data by access pattern"
+          - "Append-only logs"
+          - "Sequential scan over index when reading most data"
+      
+      batch_operations:
+        principle: "Minimize file open/close overhead"
+        techniques:
+          - "Keep files open for multiple operations"
+          - "Batch metadata operations (stat, rename)"
+          - "Use transactions for multiple writes"
+      
+      alignment:
+        sector_alignment: "Align I/O to sector boundaries (512B or 4KB)"
+        benefit: "Avoid read-modify-write cycles"
+        page_alignment: "Align buffers to page boundaries for zero-copy"
+
+  concurrency_optimization:
+    description: "Efficient parallel and concurrent execution"
+    
+    parallelization_strategies:
+      task_parallelism:
+        description: "Different tasks run in parallel"
+        use_cases:
+          - "Independent operations"
+          - "Pipeline stages"
+          - "Background processing"
+        implementation:
+          - "Thread pools"
+          - "Task queues"
+          - "Fork-join framework"
+      
+      data_parallelism:
+        description: "Same operation on different data"
+        use_cases:
+          - "Array transformations"
+          - "Image processing"
+          - "MapReduce operations"
+        implementation:
+          - "SIMD instructions"
+          - "Parallel loops"
+          - "GPU compute"
+      
+      work_stealing:
+        description: "Balance load across threads dynamically"
+        algorithm:
+          - "Each thread has work queue"
+          - "Idle threads steal from busy threads"
+          - "Reduces contention vs shared queue"
+        benefits:
+          - "Automatic load balancing"
+          - "Reduced synchronization overhead"
+    
+    lock_optimization:
+      lock_free_structures:
+        technique: "Use atomic operations instead of locks"
+        examples:
+          - "Lock-free queues"
+          - "Lock-free stacks"
+          - "Compare-and-swap based updates"
+        benefits:
+          - "No blocking"
+          - "Better scalability"
+          - "No deadlock risk"
+        tradeoffs:
+          - "Complex implementation"
+          - "May retry operations"
+      
+      lock_granularity:
+        coarse_grained:
+          description: "One lock for large data structure"
+          pros: "Simple, no deadlock"
+          cons: "High contention"
+        
+        fine_grained:
+          description: "Many locks for subsets"
+          pros: "Lower contention"
+          cons: "Complex, potential deadlock"
+        
+        optimistic:
+          description: "No locks, detect conflicts"
+          pros: "Best for read-heavy"
+          cons: "May need retry"
+      
+      read_write_locks:
+        purpose: "Allow concurrent reads, exclusive writes"
+        use_when: "Reads greatly outnumber writes"
+        variants:
+          - "Prefer readers (may starve writers)"
+          - "Prefer writers (may starve readers)"
+          - "Fair (queue-based)"
+    
+    thread_pool_sizing:
+      cpu_bound_tasks:
+        formula: "threads = number_of_cores"
+        reason: "More threads don't help, just add overhead"
+        caveat: "May use cores+1 to handle page faults"
+      
+      io_bound_tasks:
+        formula: "threads = cores * (1 + wait_time/compute_time)"
+        example: "90% wait → 10 threads per core"
+        limit: "OS thread limits, context switch overhead"
+      
+      adaptive_pools:
+        approach: "Adjust size based on metrics"
+        metrics:
+          - "Queue depth"
+          - "Thread utilization"
+          - "Task completion rate"
+    
+    false_sharing_prevention:
+      problem: "Cache line ping-ponging between cores"
+      cache_line_size: "Typically 64 bytes"
+      solutions:
+        - technique: "Padding"
+          description: "Add padding to separate hot variables"
+          example: "struct { long counter; char pad[56]; }"
+        
+        - technique: "Thread-local accumulation"
+          description: "Each thread updates local copy"
+          example: "Accumulate locally, then sum at end"
+        
+        - technique: "Array partitioning"
+          description: "Assign non-adjacent elements to threads"
+
+  network_optimization:
+    description: "Efficient network communication"
+    
+    connection_management:
+      connection_pooling:
+        purpose: "Reuse TCP connections"
+        benefits:
+          - "Avoid handshake overhead"
+          - "Reduce TIME_WAIT sockets"
+        configuration:
+          min_size: "Baseline for quick startup"
+          max_size: "Limit resource usage"
+          idle_timeout: "Close unused connections"
+      
+      keep_alive:
+        purpose: "Detect dead connections"
+        settings:
+          - "TCP keepalive interval"
+          - "Application-level heartbeat"
+        benefit: "Free resources from failed clients"
+      
+      connection_coalescing:
+        technique: "Multiplex requests over single connection"
+        examples:
+          - "HTTP/2 multiplexing"
+          - "gRPC streaming"
+          - "WebSocket channels"
+    
+    protocol_optimization:
+      message_batching:
+        purpose: "Reduce per-message overhead"
+        technique: "Combine multiple messages before sending"
+        tradeoffs:
+          - "Lower latency vs higher throughput"
+          - "Configure max batch size and timeout"
+      
+      compression:
+        use_when: "Network slower than CPU"
+        algorithms:
+          fast: "LZ4, Snappy (streaming data)"
+          balanced: "Zstd (good ratio and speed)"
+          max_ratio: "LZMA, brotli (static content)"
+        consider:
+          - "Compress high entropy data"
+          - "Skip already compressed (images, video)"
+      
+      serialization:
+        text_formats:
+          examples: "JSON, XML"
+          pros: "Human readable, flexible"
+          cons: "Large size, slow parsing"
+        
+        binary_formats:
+          examples: "Protocol Buffers, MessagePack, CBOR"
+          pros: "Compact, fast parsing"
+          cons: "Not human readable"
+        
+        zero_copy:
+          examples: "FlatBuffers, Cap'n Proto"
+          pros: "No parsing needed"
+          cons: "Less flexible"
+
+best_practices:
+  measurement:
+    - "Always profile before optimizing"
+    - "Measure after changes to verify improvement"
+    - "Use realistic workloads for benchmarks"
+    - "Consider percentiles, not just averages"
+  
+  optimization_workflow:
+    - step: "Identify bottleneck"
+      tools: "Profilers, metrics, logs"
+    
+    - step: "Understand root cause"
+      tools: "Code review, algorithm analysis"
+    
+    - step: "Apply optimization"
+      approach: "Start with highest impact"
+    
+    - step: "Validate improvement"
+      check: "Performance metrics and correctness"
+    
+    - step: "Document changes"
+      include: "Rationale and tradeoffs"
+  
+  common_pitfalls:
+    - "Premature optimization"
+    - "Optimizing non-bottlenecks"
+    - "Sacrificing correctness for speed"
+    - "Ignoring maintainability"
+    - "Not considering worst-case scenarios"
+
+integration:
+  with_profiling:
+    - "Use profiling to identify optimization targets"
+    - "Validate optimizations with profiling data"
+    - "Monitor for regressions"
+  
+  with_caching:
+    - "Cache expensive computation results"
+    - "Use caching to reduce I/O"
+    - "Balance cache memory vs compute time"
+  
+  with_architecture:
+    - "Design for performance from start"
+    - "Choose appropriate patterns"
+    - "Plan for scalability"
+
+examples:
+  algorithmic:
+    problem: "Find two numbers that sum to target"
+    naive:
+      approach: "Nested loops checking all pairs"
+      complexity: "O(n²)"
+    optimized:
+      approach: "Hash table for O(1) lookups"
+      complexity: "O(n)"
+      improvement: "100x faster for n=10,000"
+  
+  memory:
+    problem: "Store 1 million boolean flags"
+    naive:
+      approach: "Array of booleans"
+      memory: "1 MB (1 byte per boolean)"
+    optimized:
+      approach: "Bit array"
+      memory: "125 KB (1 bit per boolean)"
+      improvement: "8x reduction"
+  
+  io:
+    problem: "Process 10 GB log file"
+    naive:
+      approach: "Read line by line"
+      time: "200 seconds"
+    optimized:
+      approach: "Memory-mapped file with parallel processing"
+      time: "25 seconds"
+      improvement: "8x faster"
+  
+  concurrency:
+    problem: "Count word frequencies in documents"
+    sequential:
+      approach: "Process each document serially"
+      time: "100 seconds on 4-core system"
+    parallel:
+      approach: "MapReduce with worker threads"
+      time: "28 seconds (3.6x speedup)"
+      note: "Not 4x due to coordination overhead"
+
+metrics:
+  performance_indicators:
+    throughput: "Operations per second"
+    latency: "Time per operation"
+    resource_usage: "CPU, memory, I/O utilization"
+    scalability: "Performance vs load/data size"
+  
+  optimization_success:
+    - "Target metric improved"
+    - "No regression in other metrics"
+    - "Acceptable resource usage"
+    - "Maintainable implementation"
+
+learning_path:
+  beginner:
+    - "Understand basic complexity analysis"
+    - "Learn common data structures"
+    - "Practice simple optimizations"
+  
+  intermediate:
+    - "Apply algorithm patterns"
+    - "Optimize memory usage"
+    - "Implement concurrent solutions"
+  
+  advanced:
+    - "Design lock-free algorithms"
+    - "Optimize at system level"
+    - "Balance multiple constraints"
+
+references:
+  books:
+    - "The Art of Computer Programming - Donald Knuth"
+    - "Programming Pearls - Jon Bentley"
+    - "The Garbage Collection Handbook"
+  
+  online:
+    - "Big-O Cheat Sheet: bigocheatsheet.com"
+    - "Memory allocator benchmarks"
+    - "Platform-specific optimization guides"

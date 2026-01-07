@@ -1,0 +1,175 @@
+version: '1.0'
+
+approved_libraries:
+  frontend:
+    - name: "react"
+      version: "^18.0.0"
+      purpose: "UI framework"
+      alternatives_forbidden: ["vue", "angular", "svelte"]
+      documentation: "https://react.dev"
+    
+    - name: "typescript"
+      version: "^5.0.0"
+      purpose: "Type safety"
+      required: true
+      strict_mode: true
+    
+    - name: "axios"
+      version: "^1.0.0"
+      purpose: "HTTP client"
+      alternatives_forbidden: ["fetch", "superagent", "request"]
+    
+    - name: "react-router-dom"
+      version: "^6.0.0"
+      purpose: "Routing"
+      alternatives_forbidden: ["react-router", "reach-router"]
+    
+    - name: "zustand"
+      version: "^4.0.0"
+      purpose: "State management"
+      alternatives_forbidden: ["redux", "mobx", "recoil"]
+  
+  backend:
+    - name: "express"
+      version: "^4.18.0"
+      purpose: "Web framework"
+      alternatives_forbidden: ["koa", "fastify", "hapi"]
+    
+    - name: "prisma"
+      version: "^5.0.0"
+      purpose: "ORM"
+      alternatives_forbidden: ["typeorm", "sequelize", "mongoose"]
+    
+    - name: "zod"
+      version: "^3.0.0"
+      purpose: "Schema validation"
+      alternatives_forbidden: ["yup", "joi", "ajv"]
+  
+  testing:
+    - name: "vitest"
+      version: "^1.0.0"
+      purpose: "Unit testing"
+      alternatives_forbidden: ["jest", "mocha", "jasmine"]
+    
+    - name: "playwright"
+      version: "^1.40.0"
+      purpose: "E2E testing"
+      alternatives_forbidden: ["cypress", "selenium", "puppeteer"]
+
+forbidden_libraries:
+  - name: "lodash"
+    reason: "Use native ES6+ methods instead"
+    replacement: "Native Array/Object methods"
+    since: "2024-01-01"
+  
+  - name: "moment"
+    reason: "Deprecated and unmaintained"
+    replacement: "date-fns"
+    since: "2023-01-01"
+  
+  - name: "jquery"
+    reason: "Not needed with modern frameworks"
+    replacement: "Native DOM APIs or React"
+    since: "2020-01-01"
+  
+  - name: "underscore"
+    reason: "Use lodash-es or native methods"
+    replacement: "lodash-es or native"
+    since: "2023-01-01"
+
+language_features:
+  typescript:
+    min_version: "5.0.0"
+    strict_mode: true
+    no_any: true
+    no_explicit_any: true
+    no_implicit_any: true
+    strict_null_checks: true
+    strict_function_types: true
+    no_unused_locals: true
+    no_unused_parameters: true
+  
+  ecmascript:
+    target: "ES2022"
+    module: "ESNext"
+    features_required:
+      - "async/await"
+      - "arrow_functions"
+      - "destructuring"
+      - "template_literals"
+      - "spread_operator"
+    features_forbidden:
+      - "with"
+      - "eval"
+      - "arguments.caller"
+      - "arguments.callee"
+
+frameworks:
+  - name: "React"
+    version: "^18.0.0"
+    features_required:
+      - "hooks"
+      - "functional_components"
+      - "jsx"
+    features_forbidden:
+      - "class_components"
+      - "legacy_context"
+      - "string_refs"
+  
+  - name: "Node.js"
+    min_version: "18.0.0"
+    lts_required: true
+
+package_managers:
+  approved:
+    - name: "pnpm"
+      version: "^8.0.0"
+      reason: "Efficient disk usage, fast installs"
+  
+  forbidden:
+    - name: "npm"
+      reason: "Use pnpm instead"
+    - name: "yarn"
+      reason: "Use pnpm instead"
+
+dependency_rules:
+  max_dependencies: 50
+  max_dev_dependencies: 100
+  require_exact_versions: false
+  allow_pre_release: false
+  security_audit_required: true
+  license_check_required: true
+  allowed_licenses:
+    - "MIT"
+    - "Apache-2.0"
+    - "BSD-3-Clause"
+    - "ISC"
+  forbidden_licenses:
+    - "GPL"
+    - "AGPL"
+    - "LGPL"
+
+build_tools:
+  - name: "vite"
+    version: "^5.0.0"
+    purpose: "Build tool"
+    config_file: "vite.config.ts"
+  
+  - name: "esbuild"
+    version: "^0.19.0"
+    purpose: "Fast bundling"
+    used_by: "vite"
+
+linters:
+  - name: "eslint"
+    version: "^8.0.0"
+    config: ".eslintrc.json"
+    plugins_required:
+      - "@typescript-eslint/eslint-plugin"
+      - "eslint-plugin-react"
+      - "eslint-plugin-react-hooks"
+  
+  - name: "prettier"
+    version: "^3.0.0"
+    config: ".prettierrc"
+    integration: "eslint"

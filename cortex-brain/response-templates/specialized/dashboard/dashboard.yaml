@@ -1,0 +1,134 @@
+category: specialized/dashboard
+templates:
+  compliance_dashboard_agent:
+    inherits_from: core/base-templates/adaptive-base.yaml
+    name: Compliance Dashboard Agent
+    triggers:
+    - compliance
+    - compliance dashboard
+    - show compliance
+    - security compliance
+    response_type: operational
+    expected_orchestrator: compliance_dashboard_agent
+    operation_name: ComplianceDashboard
+    sections:
+      understanding_scope_content: You want to view compliance and security dashboard
+      approach_considerations_content: No significant challenges - Real-time compliance monitoring
+      response_content: '## 🛡️ Compliance Dashboard Agent
+
+
+        **Security and compliance monitoring** with OWASP integration
+
+
+        **Compliance Categories:**
+
+
+        **1. OWASP Top 10 Compliance**
+
+        - Injection vulnerabilities
+
+        - Broken authentication
+
+        - Sensitive data exposure
+
+        - XML external entities
+
+        - Broken access control
+
+        - Security misconfiguration
+
+        - XSS (Cross-Site Scripting)
+
+        - Insecure deserialization
+
+        - Known vulnerabilities
+
+        - Insufficient logging
+
+
+        **2. Code Quality Compliance**
+
+        - SOLID principles adherence
+
+        - Design patterns usage
+
+        - Code complexity metrics
+
+        - Technical debt tracking
+
+
+        **3. Testing Compliance**
+
+        - Test coverage (>80% target)
+
+        - Test quality metrics
+
+        - TDD workflow adherence
+
+        - Integration test coverage
+
+
+        **4. Documentation Compliance**
+
+        - API documentation completeness
+
+        - Code comment coverage
+
+        - Architecture diagram accuracy
+
+        - README completeness
+
+
+        **Dashboard Metrics:**
+
+        ```
+
+        🛡️ OWASP Compliance: 95% (9.5/10 categories clean)
+
+        ✅ Code Quality: A (92/100)
+
+        ✅ Test Coverage: 87%
+
+        ⚠️  Documentation: 78% (needs improvement)
+
+
+        Overall Compliance Score: 88/100 (B+)
+
+        ```
+
+
+        **Real-Time Monitoring:**
+
+        - Continuous security scanning
+
+        - Automatic compliance reports
+
+        - Trend analysis
+
+        - Risk prioritization
+
+
+        **Alert System:**
+
+        - Critical: Security vulnerabilities
+
+        - High: Compliance violations
+
+        - Medium: Quality degradation
+
+        - Low: Documentation gaps
+
+        '
+      impact_changes_content: View compliance and security dashboard
+      next_steps_content: '**Compliance Commands:**
+
+
+        1. Say "compliance dashboard" to view full compliance status
+
+        2. Say "compliance scan" to run immediate security scan
+
+        3. Say "compliance report" to generate detailed report
+
+        4. Say "compliance history" to see compliance trends
+
+        '

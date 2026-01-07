@@ -1,0 +1,419 @@
+{
+  "timestamp": "2026-01-04T10:09:57.225326",
+  "plan_root": "/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/documents/planning/active/CORTEX-5.0",
+  "auto_fix_enabled": false,
+  "total_issues": 58,
+  "critical": 0,
+  "warnings": 58,
+  "info": 0,
+  "fixes_applied": 0,
+  "results": [
+    {
+      "test": "Broken Links",
+      "severity": "TestSeverity.WARNING",
+      "message": "Broken link in 00-MASTER-REMEDIATION-PLAN.md: ../../reports/cortex-v5-acceptance-gap-analysis.md",
+      "fix": "Update link or restore missing file",
+      "timestamp": "2026-01-04T10:09:57.219837"
+    },
+    {
+      "test": "Broken Links",
+      "severity": "TestSeverity.WARNING",
+      "message": "Broken link in 00-MASTER-REMEDIATION-PLAN.md: ../FINAL-ACCEPTANCE-CRITERIA.md",
+      "fix": "Update link or restore missing file",
+      "timestamp": "2026-01-04T10:09:57.219870"
+    },
+    {
+      "test": "Broken Links",
+      "severity": "TestSeverity.WARNING",
+      "message": "Broken link in 00-MASTER-REMEDIATION-PLAN.md: ../backups/cortex-v5-holistic-refactor/",
+      "fix": "Update link or restore missing file",
+      "timestamp": "2026-01-04T10:09:57.219898"
+    },
+    {
+      "test": "Broken Links",
+      "severity": "TestSeverity.WARNING",
+      "message": "Broken link in 00-MASTER-REMEDIATION-PLAN.md: ../guided-orchestrators-assessment/",
+      "fix": "Update link or restore missing file",
+      "timestamp": "2026-01-04T10:09:57.219953"
+    },
+    {
+      "test": "Broken Links",
+      "severity": "TestSeverity.WARNING",
+      "message": "Broken link in 00-MASTER-REMEDIATION-PLAN.md: ../ado-v2-migration/",
+      "fix": "Update link or restore missing file",
+      "timestamp": "2026-01-04T10:09:57.219983"
+    },
+    {
+      "test": "Broken Links",
+      "severity": "TestSeverity.WARNING",
+      "message": "Broken link in 00-MASTER-REMEDIATION-PLAN.md: ../vacuum-v2-migration/",
+      "fix": "Update link or restore missing file",
+      "timestamp": "2026-01-04T10:09:57.220006"
+    },
+    {
+      "test": "Broken Links",
+      "severity": "TestSeverity.WARNING",
+      "message": "Broken link in 00-MASTER-REMEDIATION-PLAN.md: ../cleanup-v2-migration/",
+      "fix": "Update link or restore missing file",
+      "timestamp": "2026-01-04T10:09:57.220029"
+    },
+    {
+      "test": "Broken Links",
+      "severity": "TestSeverity.WARNING",
+      "message": "Broken link in sub-plans-13-15-readme.md: 13-onboarding-system/13-onboarding-system.md",
+      "fix": "Update link or restore missing file",
+      "timestamp": "2026-01-04T10:09:57.220271"
+    },
+    {
+      "test": "Broken Links",
+      "severity": "TestSeverity.WARNING",
+      "message": "Broken link in sub-plans-13-15-readme.md: 14-demo-tutorials/14-demo-tutorials.md",
+      "fix": "Update link or restore missing file",
+      "timestamp": "2026-01-04T10:09:57.220297"
+    },
+    {
+      "test": "Broken Links",
+      "severity": "TestSeverity.WARNING",
+      "message": "Broken link in sub-plans-13-15-readme.md: 15-user-response-templates/15-user-response-templates.md",
+      "fix": "Update link or restore missing file",
+      "timestamp": "2026-01-04T10:09:57.220324"
+    },
+    {
+      "test": "Broken Links",
+      "severity": "TestSeverity.WARNING",
+      "message": "Broken link in sub-plans-13-15-readme.md: ONBOARDING-PLANNING-COMPLETE.md",
+      "fix": "Update link or restore missing file",
+      "timestamp": "2026-01-04T10:09:57.220410"
+    },
+    {
+      "test": "Broken Links",
+      "severity": "TestSeverity.WARNING",
+      "message": "Broken link in sub-plans-13-15-readme.md: VISUAL-SUMMARY.md",
+      "fix": "Update link or restore missing file",
+      "timestamp": "2026-01-04T10:09:57.220434"
+    },
+    {
+      "test": "Broken Links",
+      "severity": "TestSeverity.WARNING",
+      "message": "Broken link in sub-plans-13-15-readme.md: 15-user-response-templates/persona_detector.py",
+      "fix": "Update link or restore missing file",
+      "timestamp": "2026-01-04T10:09:57.220470"
+    },
+    {
+      "test": "Broken Links",
+      "severity": "TestSeverity.WARNING",
+      "message": "Broken link in sub-plans-13-15-readme.md: VISUAL-SUMMARY.md",
+      "fix": "Update link or restore missing file",
+      "timestamp": "2026-01-04T10:09:57.220494"
+    },
+    {
+      "test": "Broken Links",
+      "severity": "TestSeverity.WARNING",
+      "message": "Broken link in sub-plans-13-15-readme.md: ONBOARDING-PLANNING-COMPLETE.md",
+      "fix": "Update link or restore missing file",
+      "timestamp": "2026-01-04T10:09:57.220548"
+    },
+    {
+      "test": "Broken Links",
+      "severity": "TestSeverity.WARNING",
+      "message": "Broken link in sub-plans-13-15-readme.md: 15-user-response-templates/15-user-response-templates.md",
+      "fix": "Update link or restore missing file",
+      "timestamp": "2026-01-04T10:09:57.220598"
+    },
+    {
+      "test": "Broken Links",
+      "severity": "TestSeverity.WARNING",
+      "message": "Broken link in sub-plans-13-15-readme.md: 15-user-response-templates/persona_detector.py",
+      "fix": "Update link or restore missing file",
+      "timestamp": "2026-01-04T10:09:57.220623"
+    },
+    {
+      "test": "Broken Links",
+      "severity": "TestSeverity.WARNING",
+      "message": "Broken link in plan-readme.md: ./00-MASTER-REMEDIATION-PLAN.md",
+      "fix": "Update link or restore missing file",
+      "timestamp": "2026-01-04T10:09:57.220767"
+    },
+    {
+      "test": "Broken Links",
+      "severity": "TestSeverity.WARNING",
+      "message": "Broken link in plan-readme.md: ./tracking/epic-progress-tracker.json",
+      "fix": "Update link or restore missing file",
+      "timestamp": "2026-01-04T10:09:57.220793"
+    },
+    {
+      "test": "Broken Links",
+      "severity": "TestSeverity.WARNING",
+      "message": "Broken link in plan-readme.md: ./tracking/dependency-graph.json",
+      "fix": "Update link or restore missing file",
+      "timestamp": "2026-01-04T10:09:57.220818"
+    },
+    {
+      "test": "Broken Links",
+      "severity": "TestSeverity.WARNING",
+      "message": "Broken link in 12-production-validation-pipeline.md: ../00-cortex-v5-gap-remediation/00-MASTER-REMEDIATION-PLAN.md",
+      "fix": "Update link or restore missing file",
+      "timestamp": "2026-01-04T10:09:57.221018"
+    },
+    {
+      "test": "Broken Links",
+      "severity": "TestSeverity.WARNING",
+      "message": "Broken link in 12-production-validation-pipeline.md: ../../../../brain-protection-rules.yaml",
+      "fix": "Update link or restore missing file",
+      "timestamp": "2026-01-04T10:09:57.221043"
+    },
+    {
+      "test": "Broken Links",
+      "severity": "TestSeverity.WARNING",
+      "message": "Broken link in 12-production-validation-pipeline.md: ./templates/production-readiness-report.md",
+      "fix": "Update link or restore missing file",
+      "timestamp": "2026-01-04T10:09:57.221071"
+    },
+    {
+      "test": "Broken Links",
+      "severity": "TestSeverity.WARNING",
+      "message": "Broken link in 12-production-validation-pipeline.md: ./templates/risk-assessment.md",
+      "fix": "Update link or restore missing file",
+      "timestamp": "2026-01-04T10:09:57.221096"
+    },
+    {
+      "test": "Broken Links",
+      "severity": "TestSeverity.WARNING",
+      "message": "Broken link in 12-production-validation-pipeline.md: ./templates/deployment-checklist.md",
+      "fix": "Update link or restore missing file",
+      "timestamp": "2026-01-04T10:09:57.221121"
+    },
+    {
+      "test": "Tracking Integrity",
+      "severity": "TestSeverity.WARNING",
+      "message": "Sub-plan 17 exists but not in tracker",
+      "fix": "Update epic-progress-tracker.json",
+      "timestamp": "2026-01-04T10:09:57.222520"
+    },
+    {
+      "test": "Tracking Integrity",
+      "severity": "TestSeverity.WARNING",
+      "message": "Sub-plan 18 exists but not in tracker",
+      "fix": "Update epic-progress-tracker.json",
+      "timestamp": "2026-01-04T10:09:57.222522"
+    },
+    {
+      "test": "Tracking Integrity",
+      "severity": "TestSeverity.WARNING",
+      "message": "Sub-plan 16 exists but not in tracker",
+      "fix": "Update epic-progress-tracker.json",
+      "timestamp": "2026-01-04T10:09:57.222523"
+    },
+    {
+      "test": "File Naming",
+      "severity": "TestSeverity.WARNING",
+      "message": "Filename too long: 10-acceptance-validation-system.md (31 chars)",
+      "fix": "Rename to \u226420 characters",
+      "timestamp": "2026-01-04T10:09:57.223059"
+    },
+    {
+      "test": "File Naming",
+      "severity": "TestSeverity.WARNING",
+      "message": "Filename too long: 08-orchestrator-migrations.md (26 chars)",
+      "fix": "Rename to \u226420 characters",
+      "timestamp": "2026-01-04T10:09:57.223169"
+    },
+    {
+      "test": "File Naming",
+      "severity": "TestSeverity.WARNING",
+      "message": "Filename too long: onboarding-ux-overview.md (22 chars)",
+      "fix": "Rename to \u226420 characters",
+      "timestamp": "2026-01-04T10:09:57.223261"
+    },
+    {
+      "test": "File Naming",
+      "severity": "TestSeverity.WARNING",
+      "message": "Filename too long: sub-plans-13-15-readme.md (22 chars)",
+      "fix": "Rename to \u226420 characters",
+      "timestamp": "2026-01-04T10:09:57.223271"
+    },
+    {
+      "test": "File Naming",
+      "severity": "TestSeverity.WARNING",
+      "message": "Filename too long: orchestrator-quick-ref.md (22 chars)",
+      "fix": "Rename to \u226420 characters",
+      "timestamp": "2026-01-04T10:09:57.223278"
+    },
+    {
+      "test": "File Naming",
+      "severity": "TestSeverity.WARNING",
+      "message": "Filename too long: epic-feature-planner-vision.md (27 chars)",
+      "fix": "Rename to \u226420 characters",
+      "timestamp": "2026-01-04T10:09:57.223284"
+    },
+    {
+      "test": "File Naming",
+      "severity": "TestSeverity.WARNING",
+      "message": "Filename too long: phase-1-completion-report-2026-01-03.md (36 chars)",
+      "fix": "Rename to \u226420 characters",
+      "timestamp": "2026-01-04T10:09:57.223383"
+    },
+    {
+      "test": "File Naming",
+      "severity": "TestSeverity.WARNING",
+      "message": "Filename too long: PHASE-1-8-COMPLETION-REPORT.md (27 chars)",
+      "fix": "Rename to \u226420 characters",
+      "timestamp": "2026-01-04T10:09:57.223389"
+    },
+    {
+      "test": "File Naming",
+      "severity": "TestSeverity.WARNING",
+      "message": "Filename too long: 07-refactor-enforcement.md (23 chars)",
+      "fix": "Rename to \u226420 characters",
+      "timestamp": "2026-01-04T10:09:57.223416"
+    },
+    {
+      "test": "File Naming",
+      "severity": "TestSeverity.WARNING",
+      "message": "Filename too long: 12-production-validation-pipeline.md (33 chars)",
+      "fix": "Rename to \u226420 characters",
+      "timestamp": "2026-01-04T10:09:57.223697"
+    },
+    {
+      "test": "File Naming",
+      "severity": "TestSeverity.WARNING",
+      "message": "Filename too long: pre-execution-analysis-20260104.md (31 chars)",
+      "fix": "Rename to \u226420 characters",
+      "timestamp": "2026-01-04T10:09:57.224000"
+    },
+    {
+      "test": "File Naming",
+      "severity": "TestSeverity.WARNING",
+      "message": "Filename too long: QUICK-START-INTEGRATION.md (23 chars)",
+      "fix": "Rename to \u226420 characters",
+      "timestamp": "2026-01-04T10:09:57.224059"
+    },
+    {
+      "test": "File Naming",
+      "severity": "TestSeverity.WARNING",
+      "message": "Filename too long: pre-execution-analysis-20260104.md (31 chars)",
+      "fix": "Rename to \u226420 characters",
+      "timestamp": "2026-01-04T10:09:57.224120"
+    },
+    {
+      "test": "File Naming",
+      "severity": "TestSeverity.WARNING",
+      "message": "Filename too long: REFINEMENT-SUMMARY-20260104.md (27 chars)",
+      "fix": "Rename to \u226420 characters",
+      "timestamp": "2026-01-04T10:09:57.224159"
+    },
+    {
+      "test": "File Naming",
+      "severity": "TestSeverity.WARNING",
+      "message": "Filename too long: 01-refinement-orchestrator.md (26 chars)",
+      "fix": "Rename to \u226420 characters",
+      "timestamp": "2026-01-04T10:09:57.224267"
+    },
+    {
+      "test": "File Naming",
+      "severity": "TestSeverity.WARNING",
+      "message": "Filename too long: 04-ast-scanning-planning.md (24 chars)",
+      "fix": "Rename to \u226420 characters",
+      "timestamp": "2026-01-04T10:09:57.224482"
+    },
+    {
+      "test": "File Naming",
+      "severity": "TestSeverity.WARNING",
+      "message": "Filename too long: pre-execution-analysis-20260104.md (31 chars)",
+      "fix": "Rename to \u226420 characters",
+      "timestamp": "2026-01-04T10:09:57.224538"
+    },
+    {
+      "test": "File Naming",
+      "severity": "TestSeverity.WARNING",
+      "message": "Filename too long: phase-00-architecture-spec.md (26 chars)",
+      "fix": "Rename to \u226420 characters",
+      "timestamp": "2026-01-04T10:09:57.224621"
+    },
+    {
+      "test": "File Naming",
+      "severity": "TestSeverity.WARNING",
+      "message": "Filename too long: pre-execution-analysis-20260104.md (31 chars)",
+      "fix": "Rename to \u226420 characters",
+      "timestamp": "2026-01-04T10:09:57.224663"
+    },
+    {
+      "test": "File Naming",
+      "severity": "TestSeverity.WARNING",
+      "message": "Filename too long: phase-00-completion-report.md (26 chars)",
+      "fix": "Rename to \u226420 characters",
+      "timestamp": "2026-01-04T10:09:57.224706"
+    },
+    {
+      "test": "File Naming",
+      "severity": "TestSeverity.WARNING",
+      "message": "Filename too long: 02-debug-orchestrator.md (21 chars)",
+      "fix": "Rename to \u226420 characters",
+      "timestamp": "2026-01-04T10:09:57.224731"
+    },
+    {
+      "test": "File Naming",
+      "severity": "TestSeverity.WARNING",
+      "message": "Filename too long: 03-knowledge-library-phase.md (26 chars)",
+      "fix": "Rename to \u226420 characters",
+      "timestamp": "2026-01-04T10:09:57.224820"
+    },
+    {
+      "test": "File Naming",
+      "severity": "TestSeverity.WARNING",
+      "message": "Filename too long: pre-execution-analysis-20260104.md (31 chars)",
+      "fix": "Rename to \u226420 characters",
+      "timestamp": "2026-01-04T10:09:57.224878"
+    },
+    {
+      "test": "File Naming",
+      "severity": "TestSeverity.WARNING",
+      "message": "Filename too long: 05-context-middleware.md (21 chars)",
+      "fix": "Rename to \u226420 characters",
+      "timestamp": "2026-01-04T10:09:57.224934"
+    },
+    {
+      "test": "File Naming",
+      "severity": "TestSeverity.WARNING",
+      "message": "Filename too long: pre-execution-analysis-20260104.md (31 chars)",
+      "fix": "Rename to \u226420 characters",
+      "timestamp": "2026-01-04T10:09:57.224992"
+    },
+    {
+      "test": "File Naming",
+      "severity": "TestSeverity.WARNING",
+      "message": "Filename too long: 15-user-response-templates.md (26 chars)",
+      "fix": "Rename to \u226420 characters",
+      "timestamp": "2026-01-04T10:09:57.225048"
+    },
+    {
+      "test": "File Naming",
+      "severity": "TestSeverity.WARNING",
+      "message": "Filename too long: epic-transformation-complete.md (28 chars)",
+      "fix": "Rename to \u226420 characters",
+      "timestamp": "2026-01-04T10:09:57.225266"
+    },
+    {
+      "test": "File Naming",
+      "severity": "TestSeverity.WARNING",
+      "message": "Filename too long: shared-infra-complete.md (21 chars)",
+      "fix": "Rename to \u226420 characters",
+      "timestamp": "2026-01-04T10:09:57.225274"
+    },
+    {
+      "test": "File Naming",
+      "severity": "TestSeverity.WARNING",
+      "message": "Filename too long: onboarding-planning-complete.md (28 chars)",
+      "fix": "Rename to \u226420 characters",
+      "timestamp": "2026-01-04T10:09:57.225280"
+    },
+    {
+      "test": "File Naming",
+      "severity": "TestSeverity.WARNING",
+      "message": "Filename too long: holistic-refinement-analysis.md (28 chars)",
+      "fix": "Rename to \u226420 characters",
+      "timestamp": "2026-01-04T10:09:57.225286"
+    }
+  ],
+  "fixes": []
+}

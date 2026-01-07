@@ -1,0 +1,176 @@
+# AI Architecture Patterns - Knowledge Library
+# Copyright (c) 2025 Asif Hussain. All rights reserved.
+# Source: Pluralsight Course - AI Architecture in Production
+
+metadata:
+  version: '1.0.0'
+  domain: architecture
+  subdomain: ai-systems
+  author: 'Asif Hussain'
+  created: '2025-12-29'
+  source: 'Pluralsight AI Architecture Course'
+  keywords:
+    - ai
+    - machine-learning
+    - production-systems
+    - model-deployment
+    - llm-integration
+
+three_key_decisions:
+  description: "Critical architectural decisions for AI systems"
+  decisions:
+    - name: "Build vs Buy vs Rent"
+      description: "Whether to build custom models, buy vendor solutions, or rent API access"
+      considerations:
+        - "Custom build: $500K+ minimum, 6-18 months, need unique data/advantage"
+        - "Fine-tuning: Few months, requires ML expertise and clean training data"
+        - "APIs: $50-100/day, immediate results, vendor dependency"
+        - "Vendor products: $10K+/month, compliance/support included"
+      
+    - name: "Production Architecture"
+      description: "How to architect for actual production loads"
+      key_patterns:
+        - "Move slow AI calls off request path"
+        - "Use circuit breakers for unhealthy dependencies"
+        - "Cache common questions"
+        - "Implement retries with backoff"
+      
+    - name: "Failure Handling"
+      description: "How to handle AI-specific failures"
+      ai_specific_failures:
+        - "Confident but wrong answers (hallucinations)"
+        - "Variable latency (2s to 30s)"
+        - "Context window limits (silent drops)"
+        - "No exceptions for quality issues"
+
+production_patterns:
+  processing_evolution:
+    sequential:
+      description: "One request in, one request out"
+      when_to_use: "Each request finishes before next starts"
+      upgrade_signals:
+        - "Requests start to overlap"
+        - "Queue depth grows"
+        - "Response time climbing"
+    
+    parallel:
+      description: "Handle multiple requests simultaneously"
+      requirements:
+        - "Make repeated writes safe (idempotent)"
+        - "Use transactions or single writer per key"
+        - "Monitor CPU vs throughput ratio"
+    
+    distributed:
+      description: "Spread work across machines"
+      approach: "Split by customer, document type, or region"
+      key_concept: "Partitioning - keep related work together"
+    
+    batch_vs_realtime:
+      principle: "Who's waiting?"
+      realtime: "Person watching screen - keep it short"
+      batch: "Nobody watching - run on schedule"
+
+architecture_selection:
+  language_tasks:
+    approach:
+      - "Run real prompts for a few days, log misses"
+      - "Group misses: unknown terms, private facts, prompt issues"
+      - "Add retrieval first for context"
+      - "Consider training only for repeated gaps with examples"
+    
+  structured_decisions:
+    approach:
+      - "Begin with explainable rules"
+      - "Implement 'why trail' for each decision"
+      - "Log rule misses or misclassifications"
+      - "Add small model only for leftover cases"
+    
+  rag_and_search:
+    progression:
+      - "Start with keyword search, measure failures"
+      - "Add semantic search for wording variations"
+      - "Re-rank with user clicks or lightweight model"
+      - "Schedule index refresh for new content"
+
+context_management:
+  principle: "Treat context as budget - every token costs money"
+  best_practices:
+    - "Keep system prompt short"
+    - "Remove duplicates, compress long quotes"
+    - "Keep chunks small with overlap"
+    - "Order: task first, recent conversation, relevant facts, everything else"
+    - "Always cite sources for verification"
+
+failure_patterns:
+  format_drift:
+    problem: "Same input, different output format"
+    solutions:
+      - "Validate every response"
+      - "Use provider's JSON mode when available"
+      - "Pin model versions when possible"
+      - "Run daily test prompts to detect changes"
+  
+  timeout_mismatches:
+    problem: "Web expects 1s, model needs 20s"
+    solutions:
+      - "Move slow calls to worker behind queue"
+      - "Return immediately with progress indicator"
+      - "Use streaming for time-to-first-token"
+      - "Short timeouts on web, longer on workers"
+  
+  shared_rate_limits:
+    problem: "Batch job burns quota, blocks interactive users"
+    solutions:
+      - "Split API keys by use case"
+      - "Single limiter enforcing priorities"
+      - "Retries with backoff and randomness"
+
+monitoring_essentials:
+  metrics_to_track:
+    - name: "P95 Latency"
+      why: "What users actually feel"
+    - name: "User-visible errors"
+      why: "Not internal retries, just failures users see"
+    - name: "Cost per request"
+      why: "Prevent budget surprises"
+    - name: "Quality signal"
+      why: "Catch silent degradation"
+    - name: "Queue depth/backlog"
+      why: "Pipeline falling behind warning"
+
+graceful_degradation:
+  levels:
+    - name: "Full service"
+      condition: "Everything healthy"
+    - name: "Reduced service"
+      condition: "Under pressure - slower but functional"
+    - name: "Minimum viable"
+      condition: "Basic features only"
+  
+  strategies:
+    - "Serve cached answers"
+    - "Fall back to simpler model"
+    - "Route to basic path during recovery"
+
+cost_reality:
+  custom_build:
+    initial: "$500K+"
+    year_one: "$1M-5M"
+    ongoing: "$30K+/month infrastructure"
+    team: "2+ senior ML engineers ($250-300K each)"
+  
+  api_usage:
+    example: "2000 tokens/query at $2/million = $400/month for 100K queries"
+    with_overhead: "~$850/month with monitoring, fallbacks, upgrades"
+  
+  vendor_products:
+    typical: "$10K+/month"
+    evaluate: "What beyond API access? Compliance? Support? SLAs?"
+
+design_principles:
+  - "Choose boring technology where possible"
+  - "Accept models are slow, expensive, unpredictable - design around it"
+  - "Plan for exit - document what triggers redesign"
+  - "Set latency target and cost limit before designing"
+  - "Precompute and cache everything possible"
+  - "Run models as shared infrastructure, not per-service"

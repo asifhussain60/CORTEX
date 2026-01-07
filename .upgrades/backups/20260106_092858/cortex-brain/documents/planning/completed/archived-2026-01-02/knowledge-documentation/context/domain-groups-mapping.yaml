@@ -1,0 +1,379 @@
+# Domain Groups Mapping - Knowledge Library
+# Maps 17 categories into 5 logical domain groups
+# Created: December 28, 2025
+# Author: Asif Hussain
+
+metadata:
+  version: "1.0"
+  total_domains: 5
+  total_categories: 17
+  total_files: 65
+  purpose: "Information architecture for progressive disclosure UI"
+
+domain_groups:
+  frontend_ui:
+    name: "Frontend & UI"
+    emoji: "🎨"
+    description: "User interface development, frontend frameworks, and user experience"
+    color: "#00d4ff"
+    categories:
+      - id: "frontend"
+        name: "Frontend Development"
+        description: "React, Angular, Vue, TypeScript patterns"
+        file_count: 6
+        files:
+          - "frontend/react-best-practices.yaml"
+          - "frontend/angular-patterns.yaml"
+          - "frontend/vue-patterns.yaml"
+          - "frontend/typescript-frontend.yaml"
+          - "frontend/state-management.yaml"
+          - "frontend/component-architecture.yaml"
+        learning_resources:
+          - title: "React Documentation"
+            url: "https://react.dev"
+          - title: "TypeScript Handbook"
+            url: "https://www.typescriptlang.org/docs/"
+          - title: "Vue.js Guide"
+            url: "https://vuejs.org/guide/"
+      
+      - id: "ui-ux"
+        name: "UI/UX Design"
+        description: "Design systems, accessibility, responsive design"
+        file_count: 4
+        files:
+          - "ui-ux/ui-ux-best-practices.yaml"
+          - "ui-ux/accessibility-wcag.yaml"
+          - "ui-ux/responsive-design.yaml"
+          - "ui-ux/design-systems.yaml"
+        learning_resources:
+          - title: "WCAG Guidelines"
+            url: "https://www.w3.org/WAI/WCAG21/quickref/"
+          - title: "Material Design"
+            url: "https://material.io/design"
+          - title: "A11y Project"
+            url: "https://www.a11yproject.com/"
+      
+      - id: "mobile"
+        name: "Mobile Development"
+        description: "iOS, Android, React Native, Flutter"
+        file_count: 4
+        files:
+          - "mobile/ios-swift-patterns.yaml"
+          - "mobile/android-kotlin-patterns.yaml"
+          - "mobile/react-native-best-practices.yaml"
+          - "mobile/flutter-patterns.yaml"
+        learning_resources:
+          - title: "Swift Documentation"
+            url: "https://swift.org/documentation/"
+          - title: "Kotlin for Android"
+            url: "https://developer.android.com/kotlin"
+          - title: "React Native Docs"
+            url: "https://reactnative.dev/"
+
+  backend_apis:
+    name: "Backend & APIs"
+    emoji: "🔌"
+    description: "API design, microservices architecture, and messaging patterns"
+    color: "#7b61ff"
+    categories:
+      - id: "api-design"
+        name: "API Development"
+        description: "REST, GraphQL, gRPC, WebSocket patterns"
+        file_count: 5
+        files:
+          - "engineering/api-design/rest-api-design.yaml"
+          - "engineering/api-design/graphql-best-practices.yaml"
+          - "engineering/api-design/api-versioning.yaml"
+          - "engineering/api-design/grpc-patterns.yaml"
+          - "engineering/api-design/websocket-patterns.yaml"
+        learning_resources:
+          - title: "REST API Tutorial"
+            url: "https://restfulapi.net/"
+          - title: "GraphQL Learn"
+            url: "https://graphql.org/learn/"
+          - title: "gRPC Documentation"
+            url: "https://grpc.io/docs/"
+      
+      - id: "microservices"
+        name: "Microservices"
+        description: "Service design, API gateways, resilience patterns"
+        file_count: 4
+        files:
+          - "microservices/service-design.yaml"
+          - "microservices/api-gateway-patterns.yaml"
+          - "microservices/service-mesh.yaml"
+          - "microservices/resilience-patterns.yaml"
+        learning_resources:
+          - title: "Microservices.io"
+            url: "https://microservices.io/"
+          - title: "Martin Fowler - Microservices"
+            url: "https://martinfowler.com/microservices/"
+          - title: "Istio Documentation"
+            url: "https://istio.io/latest/docs/"
+      
+      - id: "messaging"
+        name: "Messaging & Events"
+        description: "Event-driven architecture, message brokers"
+        file_count: 3
+        files:
+          - "messaging/event-driven-architecture.yaml"
+          - "messaging/message-brokers.yaml"
+          - "messaging/async-patterns.yaml"
+        learning_resources:
+          - title: "Apache Kafka Documentation"
+            url: "https://kafka.apache.org/documentation/"
+          - title: "RabbitMQ Tutorials"
+            url: "https://www.rabbitmq.com/getstarted.html"
+          - title: "Event-Driven Architecture"
+            url: "https://martinfowler.com/articles/201701-event-driven.html"
+
+  data_storage:
+    name: "Data & Storage"
+    emoji: "🗄️"
+    description: "Database patterns, performance optimization, and caching"
+    color: "#00ff88"
+    categories:
+      - id: "database"
+        name: "Databases"
+        description: "SQL, NoSQL, database design patterns"
+        file_count: 6
+        files:
+          - "database/oracle-best-practices.yaml"
+          - "database/sql-server-best-practices.yaml"
+          - "database/postgresql-patterns.yaml"
+          - "database/mongodb-patterns.yaml"
+          - "database/redis-patterns.yaml"
+          - "database/database-migrations.yaml"
+        learning_resources:
+          - title: "PostgreSQL Documentation"
+            url: "https://www.postgresql.org/docs/"
+          - title: "MongoDB University"
+            url: "https://university.mongodb.com/"
+          - title: "SQL Server Central"
+            url: "https://www.sqlservercentral.com/"
+      
+      - id: "performance"
+        name: "Performance & Optimization"
+        description: "Caching, profiling, optimization techniques"
+        file_count: 3
+        files:
+          - "performance/caching-strategies.yaml"
+          - "performance/profiling-analysis.yaml"
+          - "performance/optimization-techniques.yaml"
+        learning_resources:
+          - title: "Web Performance Working Group"
+            url: "https://www.w3.org/webperf/"
+          - title: "Google PageSpeed Insights"
+            url: "https://developers.google.com/speed"
+          - title: "High Performance Browser Networking"
+            url: "https://hpbn.co/"
+
+  infrastructure_cloud:
+    name: "Infrastructure & Cloud"
+    emoji: "☁️"
+    description: "Cloud platforms, containers, and DevOps practices"
+    color: "#ffa500"
+    categories:
+      - id: "cloud"
+        name: "Cloud Platforms"
+        description: "AWS, Azure, GCP, serverless patterns"
+        file_count: 4
+        files:
+          - "cloud/aws-best-practices.yaml"
+          - "cloud/azure-best-practices.yaml"
+          - "cloud/gcp-best-practices.yaml"
+          - "cloud/serverless-patterns.yaml"
+        learning_resources:
+          - title: "AWS Well-Architected Framework"
+            url: "https://aws.amazon.com/architecture/well-architected/"
+          - title: "Azure Architecture Center"
+            url: "https://docs.microsoft.com/en-us/azure/architecture/"
+          - title: "Google Cloud Architecture Framework"
+            url: "https://cloud.google.com/architecture/framework"
+      
+      - id: "containers"
+        name: "Containers & Orchestration"
+        description: "Docker, Kubernetes, Helm"
+        file_count: 3
+        files:
+          - "containers/docker-best-practices.yaml"
+          - "containers/kubernetes-patterns.yaml"
+          - "containers/helm-charts.yaml"
+        learning_resources:
+          - title: "Docker Documentation"
+            url: "https://docs.docker.com/"
+          - title: "Kubernetes Documentation"
+            url: "https://kubernetes.io/docs/"
+          - title: "Helm Documentation"
+            url: "https://helm.sh/docs/"
+      
+      - id: "devops"
+        name: "DevOps"
+        description: "CI/CD, IaC, monitoring"
+        file_count: 3
+        files:
+          - "devops/cicd-pipelines.yaml"
+          - "devops/infrastructure-as-code.yaml"
+          - "devops/monitoring-observability.yaml"
+        learning_resources:
+          - title: "DevOps Roadmap"
+            url: "https://roadmap.sh/devops"
+          - title: "GitLab CI/CD"
+            url: "https://docs.gitlab.com/ee/ci/"
+          - title: "Terraform Documentation"
+            url: "https://www.terraform.io/docs"
+
+  software_craft:
+    name: "Software Craft"
+    emoji: "🏗️"
+    description: "Engineering practices, design patterns, testing, and security"
+    color: "#ff1744"
+    categories:
+      - id: "engineering"
+        name: "Engineering Practices"
+        description: "Clean code, SOLID, design patterns, refactoring"
+        file_count: 6
+        files:
+          - "engineering/clean-code.yaml"
+          - "engineering/anti-patterns.yaml"
+          - "engineering/solid-principles.yaml"
+          - "engineering/refactoring.yaml"
+          - "engineering/design-patterns.yaml"
+          - "engineering/code-review.yaml"
+        learning_resources:
+          - title: "Clean Code (Book)"
+            url: "https://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882"
+          - title: "Refactoring Guru"
+            url: "https://refactoring.guru/"
+          - title: "Martin Fowler's Blog"
+            url: "https://martinfowler.com/"
+      
+      - id: "ddd"
+        name: "Domain-Driven Design"
+        description: "Aggregates, bounded contexts, domain events"
+        file_count: 3
+        files:
+          - "ddd/aggregates-entities.yaml"
+          - "ddd/bounded-contexts.yaml"
+          - "ddd/domain-events.yaml"
+        learning_resources:
+          - title: "Domain-Driven Design (Book)"
+            url: "https://www.amazon.com/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215"
+          - title: "DDD Community"
+            url: "https://www.domainlanguage.com/"
+          - title: "Implementing DDD"
+            url: "https://vaughnvernon.com/"
+      
+      - id: "security"
+        name: "Security"
+        description: "Secure coding, OWASP, API security"
+        file_count: 3
+        files:
+          - "security/secure-coding-practices.yaml"
+          - "security/owasp-top-10.yaml"
+          - "security/api-security-checklist.yaml"
+        learning_resources:
+          - title: "OWASP Top 10"
+            url: "https://owasp.org/www-project-top-ten/"
+          - title: "CWE Top 25"
+            url: "https://cwe.mitre.org/top25/"
+          - title: "API Security Best Practices"
+            url: "https://owasp.org/www-project-api-security/"
+      
+      - id: "testing"
+        name: "Testing"
+        description: "TDD, test pyramid, test doubles"
+        file_count: 4
+        files:
+          - "testing/testing-pyramid.yaml"
+          - "testing/test-doubles.yaml"
+          - "testing/tdd-best-practices.yaml"
+          - "testing/selenium-to-playwright-migration.yaml"
+        learning_resources:
+          - title: "Test-Driven Development (Book)"
+            url: "https://www.amazon.com/Test-Driven-Development-Kent-Beck/dp/0321146530"
+          - title: "Playwright Documentation"
+            url: "https://playwright.dev/"
+          - title: "Testing Best Practices"
+            url: "https://testingjavascript.com/"
+      
+      - id: "rag-domains"
+        name: "RAG & Knowledge"
+        description: "RAG integration, embeddings, vector databases"
+        file_count: 4
+        files:
+          - "domains/domain-rag-integration.yaml"
+          - "domains/embeddings-strategy.yaml"
+          - "domains/retrieval-pipeline.yaml"
+          - "domains/vector-database-guide.yaml"
+        learning_resources:
+          - title: "LangChain Documentation"
+            url: "https://python.langchain.com/"
+          - title: "Pinecone Learning Center"
+            url: "https://www.pinecone.io/learn/"
+          - title: "OpenAI Embeddings Guide"
+            url: "https://platform.openai.com/docs/guides/embeddings"
+
+# Navigation structure for docs
+navigation:
+  home:
+    title: "Knowledge Library"
+    url: "docs/knowledge/index.html"
+  
+  domain_pages:
+    - id: "frontend_ui"
+      url: "docs/knowledge/frontend-ui.html"
+    - id: "backend_apis"
+      url: "docs/knowledge/backend-apis.html"
+    - id: "data_storage"
+      url: "docs/knowledge/data-storage.html"
+    - id: "infrastructure_cloud"
+      url: "docs/knowledge/infrastructure-cloud.html"
+    - id: "software_craft"
+      url: "docs/knowledge/software-craft.html"
+  
+  category_pages:
+    - id: "frontend"
+      url: "docs/knowledge/frontend.html"
+    - id: "ui-ux"
+      url: "docs/knowledge/ui-ux.html"
+    - id: "mobile"
+      url: "docs/knowledge/mobile.html"
+    - id: "api-design"
+      url: "docs/knowledge/api-design.html"
+    - id: "microservices"
+      url: "docs/knowledge/microservices.html"
+    - id: "messaging"
+      url: "docs/knowledge/messaging.html"
+    - id: "database"
+      url: "docs/knowledge/database.html"
+    - id: "performance"
+      url: "docs/knowledge/performance.html"
+    - id: "cloud"
+      url: "docs/knowledge/cloud.html"
+    - id: "containers"
+      url: "docs/knowledge/containers.html"
+    - id: "devops"
+      url: "docs/knowledge/devops.html"
+    - id: "engineering"
+      url: "docs/knowledge/engineering.html"
+    - id: "ddd"
+      url: "docs/knowledge/ddd.html"
+    - id: "security"
+      url: "docs/knowledge/security.html"
+    - id: "testing"
+      url: "docs/knowledge/testing.html"
+    - id: "rag-domains"
+      url: "docs/knowledge/rag-domains.html"
+
+# Search index configuration
+search:
+  indexed_fields:
+    - domain_name
+    - category_name
+    - file_path
+    - description
+  boost:
+    domain_name: 3
+    category_name: 2
+    description: 1

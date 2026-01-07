@@ -1,0 +1,97 @@
+# CORTEX.prompt.md - Updated with MCP Tool Integration
+
+⚠️ PREVIEW FILE - NOT YET IMPLEMENTED
+Phase: 1 (MCP Tool Infrastructure)
+Status: 📋 ARCHITECTURAL PREVIEW
+
+# This file shows the CHANGES that will be made to .github/prompts/CORTEX.prompt.md
+
+## NEW SECTION: MCP Tool Integration
+
+### 🛠️ MCP Tool: invoke_orchestrator
+
+**When to Use:**
+- User says: "plan", "create a plan", "make a plan" → invoke_orchestrator(name="planning")
+- User says: "ado story", "ado feature" → invoke_orchestrator(name="ado")
+- User says: "vacuum", "deep clean" → invoke_orchestrator(name="vacuum")
+- User says: "cleanup", "remove bloat" → invoke_orchestrator(name="cleanup")
+
+**Tool Schema:**
+```json
+{
+  "name": "invoke_orchestrator",
+  "description": "Invoke a CORTEX autonomous orchestrator",
+  "parameters": {
+    "name": {
+      "type": "string",
+      "enum": ["planning", "ado", "vacuum", "cleanup"],
+      "description": "Orchestrator to invoke"
+    },
+    "feature": {
+      "type": "string",
+      "description": "Feature/task description"
+    },
+    "complexity": {
+      "type": "string",
+      "enum": ["tier-1", "tier-2", "tier-3", "tier-4"],
+      "optional": true
+    }
+  }
+}
+```
+
+**Example Usage:**
+```
+User: "plan user authentication with JWT"
+
+CORTEX Response:
+1. Classify intent: Planning
+2. Invoke MCP tool:
+   invoke_orchestrator(
+     name="planning",
+     feature="user authentication with JWT",
+     complexity="tier-3"
+   )
+3. Tool executes planning_orchestrator_v5.py
+4. Return result to user:
+   "✅ Plan created at cortex-brain/documents/planning/active/user-auth-jwt/
+    📋 Master Plan: 00-MASTER-PLAN.md
+    🎯 Phase Count: 8
+    ✅ Compliance Score: 10.0/10.0
+    
+    Next Steps:
+    - Review master plan
+    - Begin Phase 0 (Discovery)"
+```
+
+## UPDATED SECTION: Hand-Off Protocol
+
+**OLD (v4.0 - BROKEN):**
+```
+When planning intent detected:
+1. Load manifest reference
+2. Use autonomous_execution_progress template
+3. STOP immediately after hand-off header ❌ (nothing executes)
+```
+
+**NEW (v5.0 - FIXED):**
+```
+When planning intent detected:
+1. Classify intent (planning/ado/vacuum/cleanup)
+2. Invoke MCP tool: invoke_orchestrator(name="{orchestrator}")
+3. Tool executes Python orchestrator ✅ (guaranteed execution)
+4. Return structured result to user
+5. STOP (orchestrator already executed)
+```
+
+**Visual Confirmation:**
+- 🛡️ OLD: "CORTEX will hand off to orchestrator" → ❌ (no execution)
+- ✅ NEW: "Invoking {orchestrator} via MCP tool..." → ✅ (executes)
+
+## Implementation Timeline
+- Phase 1: Tasks 1.29-1.37 (update CORTEX.prompt.md)
+- Phase 3: Tasks 3.30-3.35 (test end-to-end)
+
+## References
+- Full Changes: phases/phase-01-mcp-infrastructure.md (Tasks 1.29-1.37)
+- Testing: phases/phase-03-planning-core.md (Tasks 3.30-3.35)

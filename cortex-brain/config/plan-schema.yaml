@@ -1,0 +1,577 @@
+# YAML Schema for CORTEX Feature Planning
+# Version: 1.0.0
+# Purpose: Structured planning format for interactive feature planning
+# Replaces: Markdown-based planning documents
+# Benefits: Parseable, validatable, auto-generates readable views
+
+schema:
+  version: "1.0.0"
+  required_fields:
+    - metadata
+    - phases
+    - definition_of_ready
+    - definition_of_done
+  
+  metadata:
+    description: "Project-level information and context"
+    required_fields:
+      - plan_id
+      - title
+      - created_date
+      - created_by
+      - status
+      - priority
+      - estimated_hours
+    optional_fields:
+      - last_updated
+      - completed_date
+      - tags
+      - related_plans
+      - related_issues
+      - notes
+      - threat_analysis_enabled
+    
+    field_definitions:
+      plan_id:
+        type: string
+        pattern: "^[A-Z0-9-]+$"
+        description: "Unique identifier (e.g., CORTEX-GAP-001)"
+        example: "CORTEX-GAP-REMEDIATION"
+      
+      title:
+        type: string
+        max_length: 200
+        description: "Concise plan title"
+        example: "Comprehensive Gap Remediation Plan"
+      
+      created_date:
+        type: string
+        format: iso8601
+        description: "Plan creation timestamp"
+        example: "2024-01-15T10:30:00Z"
+      
+      created_by:
+        type: string
+        description: "Creator name or identifier"
+        example: "GitHub Copilot"
+      
+      status:
+        type: enum
+        values:
+          - proposed
+          - approved
+          - in-progress
+          - blocked
+          - completed
+          - cancelled
+        description: "Current plan status"
+      
+      priority:
+        type: enum
+        values:
+          - critical
+          - high
+          - medium
+          - low
+        description: "Implementation priority"
+      
+      estimated_hours:
+        type: number
+        min: 0
+        description: "Total estimated effort in hours"
+        example: 18
+      
+      tags:
+        type: list
+        item_type: string
+        description: "Categorization tags"
+        example: ["tdd", "automation", "workflow"]
+      
+      related_plans:
+        type: list
+        item_type: string
+        description: "References to other plan IDs"
+        example: ["CORTEX-FEATURE-001", "CORTEX-BUGFIX-042"]
+      
+      related_issues:
+        type: list
+        item_type: string
+        description: "GitHub issue URLs or numbers"
+        example: ["#67", "#80", "#108"]
+      
+      threat_analysis_enabled:
+        type: boolean
+        description: "Enable threat modeling analysis (auto-detects security-sensitive features)"
+        default: true
+        example: true
+      
+      notes:
+        type: string
+        description: "User annotations and implementation notes"
+        example: "Discussed with architect on 2024-01-15, agreed on JWT approach"
+  
+  threat_modeling:
+    description: "Control settings for threat modeling during plan creation"
+    required_fields: []
+    optional_fields:
+      - enabled
+      - stride_categories
+      - owasp_mapping
+      - auto_mitigations
+      - security_context
+    
+    field_definitions:
+      enabled:
+        type: boolean
+        description: "Enable threat modeling analysis for this plan"
+        default: true
+        example: true
+      
+      stride_categories:
+        type: list
+        item_type: enum
+        values: ['Spoofing', 'Tampering', 'Repudiation', 'Information Disclosure', 'Denial of Service', 'Elevation of Privilege']
+        description: "STRIDE categories to analyze (defaults to all)"
+        default: ['Spoofing', 'Tampering', 'Repudiation', 'Information Disclosure', 'Denial of Service', 'Elevation of Privilege']
+        example: ['Spoofing', 'Tampering', 'Elevation of Privilege']
+      
+      owasp_mapping:
+        type: list
+        item_type: string
+        description: "OWASP Top 10 categories to map threats against"
+        default: ['A01:2021-Broken Access Control', 'A02:2021-Cryptographic Failures', 'A03:2021-Injection', 'A04:2021-Insecure Design', 'A05:2021-Security Misconfiguration', 'A06:2021-Vulnerable and Outdated Components', 'A07:2021-Identification and Authentication Failures', 'A08:2021-Software and Data Integrity Failures', 'A09:2021-Security Logging and Monitoring Failures', 'A10:2021-Server-Side Request Forgery']
+        example: ['A01:2021-Broken Access Control', 'A07:2021-Identification and Authentication Failures']
+      
+      auto_mitigations:
+        type: boolean
+        description: "Automatically generate mitigation strategies for identified threats"
+        default: true
+        example: true
+      
+      security_context:
+        type: object
+        description: "Additional security context for threat modeling"
+        optional: true
+        field_definitions:
+          data_sensitivity:
+            type: enum
+            values: ['public', 'internal', 'confidential', 'restricted']
+            default: 'internal'
+          authentication_required:
+            type: boolean
+            default: true
+          authorization_model:
+            type: enum
+            values: ['none', 'role-based', 'attribute-based', 'custom']
+            default: 'role-based'
+          external_interfaces:
+            type: list
+            item_type: string
+            description: "External systems/APIs the feature interacts with"
+  
+  copilot_instructions:
+    description: "Embedded instructions for GitHub Copilot to follow during plan execution"
+    required_fields: []
+    optional_fields:
+      - response_template
+      - progress_updates
+      - custom_format
+      - tdd_enforcement
+      - checkpoint_frequency
+    
+    field_definitions:
+      response_template:
+        type: string
+        description: "Name of response template to use for progress updates"
+        default: "autonomous_execution_progress"
+        example: "autonomous_execution_progress"
+        allowed_values:
+          - "autonomous_execution_progress"
+          - "interactive_planning_progress"
+          - "custom"
+      
+      progress_updates:
+        type: boolean
+        description: "Enable progress visualization at phase boundaries"
+        default: true
+        example: true
+      
+      custom_format:
+        type: string
+        description: "Custom response format instructions (used when response_template is 'custom')"
+        example: |
+          Use adaptive tier-based response format with visual progress bars.
+          Update progress after each task completion.
+          Include TDD phase indicators (RED/GREEN/REFACTOR).
+      
+      tdd_enforcement:
+        type: boolean
+        description: "Enforce TDD workflow (RED→GREEN→REFACTOR) with validation"
+        default: true
+        example: true
+      
+      checkpoint_frequency:
+        type: enum
+        values:
+          - per_task
+          - per_phase
+          - manual
+          - disabled
+        description: "Git checkpoint creation frequency"
+        default: "per_phase"
+        example: "per_phase"
+
+  phases:
+    description: "Sequential implementation phases"
+    type: list
+    min_items: 1
+    item_schema:
+      required_fields:
+        - phase_number
+        - phase_name
+        - estimated_hours
+        - tasks
+      optional_fields:
+        - description
+        - dependencies
+        - acceptance_criteria
+        - risks
+        - notes
+      
+      field_definitions:
+        phase_number:
+          type: integer
+          min: 1
+          description: "Sequential phase identifier"
+          example: 1
+        
+        phase_name:
+          type: string
+          max_length: 100
+          description: "Phase title"
+          example: "TDD Mastery Enhancements"
+        
+        estimated_hours:
+          type: string
+          pattern: "^\\d+(-\\d+)?$"
+          description: "Hour estimate or range"
+          example: "10-12"
+        
+        description:
+          type: string
+          description: "Phase overview"
+          example: "Implement automated git checkpoints and metrics tracking"
+        
+        dependencies:
+          type: list
+          item_type: string
+          description: "Prerequisites (phase numbers or external)"
+          example: ["Phase 1", "Database migration"]
+        
+        tasks:
+          type: list
+          min_items: 1
+          item_schema:
+            required_fields:
+              - task_id
+              - task_name
+              - estimated_hours
+            optional_fields:
+              - description
+              - acceptance_criteria
+              - implementation_notes
+              - files_affected
+              - tests_required
+            
+            field_definitions:
+              task_id:
+                type: string
+                pattern: "^\\d+\\.\\d+$"
+                description: "Task identifier (phase.task)"
+                example: "1.1"
+              
+              task_name:
+                type: string
+                max_length: 150
+                description: "Task title"
+                example: "Create GitCheckpointOrchestrator"
+              
+              estimated_hours:
+                type: number
+                min: 0.25
+                step: 0.25
+                description: "Task effort estimate"
+                example: 2.5
+              
+              acceptance_criteria:
+                type: list
+                item_type: string
+                description: "Completion conditions"
+                example:
+                  - "Creates git checkpoint before implementation"
+                  - "Tracks checkpoint in .cortex/checkpoints.json"
+                  - "Supports rollback to checkpoint"
+              
+              files_affected:
+                type: list
+                item_type: string
+                description: "Files to create/modify"
+                example:
+                  - "src/orchestrators/git_checkpoint_orchestrator.py"
+                  - "tests/orchestrators/test_git_checkpoint_orchestrator.py"
+
+  definition_of_ready:
+    description: "Criteria required before implementation starts"
+    type: list
+    item_type: string
+    min_items: 1
+    example:
+      - "TDD Mastery workflow MUST be followed (RED→GREEN→REFACTOR)"
+      - "Tests MUST fail before implementation (RED phase validation)"
+      - "All CORTEX brain protection rules apply (SKULL enforcement)"
+      - "Reference: cortex-brain/brain-protection-rules.yaml for complete ruleset"
+      - "All dependencies identified and documented"
+      - "User stories/requirements clearly defined"
+      - "Technical approach agreed upon"
+      - "No critical blockers present"
+
+  definition_of_done:
+    description: "Criteria required for plan completion"
+    type: list
+    item_type: string
+    min_items: 1
+    example:
+      - "All code follows TDD workflow with git checkpoints at phase boundaries"
+      - "No SKULL rule violations detected (brain protection compliance verified)"
+      - "Test coverage meets CORTEX standards (RED→GREEN→REFACTOR documented)"
+      - "Git history shows test-first commits (RED phase before GREEN phase)"
+      - "All tasks implemented and tested"
+      - "Documentation updated"
+      - "Code review completed"
+      - "Acceptance criteria met"
+      - "No regressions introduced"
+  
+  threat_analysis:
+    description: "Threat modeling analysis results (auto-generated if enabled)"
+    type: object
+    optional: true
+    field_definitions:
+      feature_name:
+        type: string
+        description: "Feature being analyzed"
+      
+      threats:
+        type: list
+        description: "Identified security threats"
+        item_schema:
+          required_fields:
+            - category
+            - name
+            - description
+            - risk_rating
+          field_definitions:
+            category:
+              type: enum
+              values: ['Spoofing', 'Tampering', 'Repudiation', 'Information Disclosure', 'Denial of Service', 'Elevation of Privilege']
+            name:
+              type: string
+            description:
+              type: string
+            attack_scenario:
+              type: string
+            risk_rating:
+              type: enum
+              values: ['CRITICAL', 'HIGH', 'MEDIUM', 'LOW']
+            risk_score:
+              type: integer
+              min: 0
+              max: 10
+            owasp_categories:
+              type: list
+              item_type: string
+            mitigation_strategies:
+              type: list
+              item_schema:
+                required_fields:
+                  - name
+                  - effort_hours
+                  - effectiveness_percent
+      
+      stride_summary:
+        type: object
+        description: "Count of threats by STRIDE category"
+      
+      owasp_coverage:
+        type: object
+        description: "OWASP Top 10 categories mapped"
+      
+      risk_level:
+        type: enum
+        values: ['CRITICAL', 'HIGH', 'MEDIUM', 'LOW']
+      
+      recommendations:
+        type: list
+        item_type: string
+
+  risks:
+    description: "Potential issues and mitigation strategies"
+    type: list
+    optional: true
+    item_schema:
+      required_fields:
+        - risk_id
+        - description
+        - likelihood
+        - impact
+        - mitigation
+      
+      field_definitions:
+        risk_id:
+          type: string
+          pattern: "^R\\d+$"
+          example: "R1"
+        
+        description:
+          type: string
+          example: "Git operations may fail on detached HEAD"
+        
+        likelihood:
+          type: enum
+          values: [low, medium, high]
+        
+        impact:
+          type: enum
+          values: [low, medium, high, critical]
+        
+        mitigation:
+          type: string
+          example: "Detect detached HEAD state and warn user before operations"
+
+  acceptance_criteria:
+    description: "High-level acceptance criteria for entire plan"
+    type: list
+    item_type: string
+    optional: true
+    example:
+      - "All 10 gaps remediated with automated workflows"
+      - "Metrics tracking integrated into TDD workflow"
+      - "Feedback system automated with Gist uploads"
+      - "Deployment modernized with git-based publishing"
+
+validation_rules:
+  - name: "Unique task IDs"
+    description: "All task_id values must be unique within a plan"
+    
+  - name: "Sequential phases"
+    description: "Phase numbers must be sequential starting from 1"
+    
+  - name: "Valid dependencies"
+    description: "Phase dependencies must reference existing phases"
+    
+  - name: "Total hours consistency"
+    description: "Sum of phase hours should match metadata.estimated_hours (±20% tolerance)"
+    
+  - name: "Status transitions"
+    description: "Status must follow: proposed → approved → in-progress → completed"
+    
+  - name: "ISO 8601 dates"
+    description: "All date fields must use ISO 8601 format (YYYY-MM-DDTHH:MM:SSZ)"
+
+markdown_view_template:
+  description: "Auto-generated Markdown structure from YAML"
+  sections:
+    - type: header
+      level: 1
+      content: "{{ metadata.title }}"
+    
+    - type: metadata_table
+      content: |
+        | Field | Value |
+        |-------|-------|
+        | Plan ID | {{ metadata.plan_id }} |
+        | Status | {{ metadata.status }} |
+        | Priority | {{ metadata.priority }} |
+        | Created | {{ metadata.created_date }} by {{ metadata.created_by }} |
+        | Estimated Hours | {{ metadata.estimated_hours }} |
+    
+    - type: header
+      level: 2
+      content: "Definition of Ready"
+    
+    - type: checklist
+      items: "{{ definition_of_ready }}"
+    
+    - type: header
+      level: 2
+      content: "Implementation Phases"
+    
+    - type: phases
+      for_each: "{{ phases }}"
+      content: |
+        ### Phase {{ phase.phase_number }}: {{ phase.phase_name }}
+        **Estimated Hours:** {{ phase.estimated_hours }}
+        
+        {{ phase.description }}
+        
+        #### Tasks
+        {% for task in phase.tasks %}
+        - **{{ task.task_id }}** - {{ task.task_name }} ({{ task.estimated_hours }}h)
+          {% if task.acceptance_criteria %}
+          - Acceptance Criteria:
+            {% for criterion in task.acceptance_criteria %}
+            - {{ criterion }}
+            {% endfor %}
+          {% endif %}
+        {% endfor %}
+    
+    - type: header
+      level: 2
+      content: "Definition of Done"
+    
+    - type: checklist
+      items: "{{ definition_of_done }}"
+    
+    - type: header
+      level: 2
+      content: "Risks & Mitigation"
+      conditional: "{{ risks is defined }}"
+    
+    - type: risk_table
+      conditional: "{{ risks is defined }}"
+      content: |
+        | ID | Risk | Likelihood | Impact | Mitigation |
+        |----|------|------------|--------|------------|
+        {% for risk in risks %}
+        | {{ risk.risk_id }} | {{ risk.description }} | {{ risk.likelihood }} | {{ risk.impact }} | {{ risk.mitigation }} |
+        {% endfor %}
+
+examples:
+  - name: "Simple Bug Fix Plan"
+    path: "examples/simple-bugfix-plan.yaml"
+    description: "Single-phase plan for straightforward bug fix"
+  
+  - name: "Multi-Phase Feature Plan"
+    path: "examples/multi-phase-feature-plan.yaml"
+    description: "Complex feature with dependencies and risks"
+  
+  - name: "Gap Remediation Plan"
+    path: "examples/gap-remediation-plan.yaml"
+    description: "Current CORTEX gap remediation (reference implementation)"
+
+migration_notes:
+  from_markdown:
+    - "Extract metadata from header tables"
+    - "Parse phase sections (## Phase N: ...)"
+    - "Extract task lists under each phase"
+    - "Convert checkbox lists to DoR/DoD arrays"
+    - "Preserve notes/risks sections"
+    - "Generate plan_id from filename or title"
+    - "Set created_date to file creation time"
+    - "Default status to 'in-progress' if not specified"
+  
+  validation:
+    - "Verify all required fields present"
+    - "Check task ID uniqueness"
+    - "Validate phase sequence"
+    - "Ensure total hours match"
+    - "Verify ISO 8601 date formats"

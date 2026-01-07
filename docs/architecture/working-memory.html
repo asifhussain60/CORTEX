@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Tier 1 Working Memory - SQLite-backed state management for active plans, conversation context, and agent coordination">
+    <meta name="keywords" content="CORTEX, Tier 1, working memory, PlanningStateDB, conversation context, state management">
+    <meta name="author" content="Asif Hussain">
+    <title>Working Memory (Tier 1) | CORTEX Architecture</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/variables.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
+    <link rel="stylesheet" href="../assets/css/purpose-driven-themes.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                darkMode: true,
+                background: '#0a0e27',
+                primaryColor: '#ffd700',
+                primaryTextColor: '#000',
+                primaryBorderColor: '#fff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#00d4ff',
+                tertiaryColor: '#00ff88'
+            }
+        });
+    </script>
+</head>
+<body>
+    <!-- Glass Header Navigation -->
+    <header class="glass-header">
+        <div class="header-content">
+            <a href="../index.html" class="logo-link" title="CORTEX Home">
+                <img src="../assets/images/CORTEX-logo.png" 
+                     alt="CORTEX - AI Development Orchestrator" 
+                     class="cortex-logo">
+            </a>
+            <nav>
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-sitemap"></i>
+                    <span>Architecture Hub</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container level2-reference" id="main-content">
+        <!-- Breadcrumb Navigation -->
+        <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+            <a href="../index.html" class="breadcrumb-link"><i class="fas fa-home"></i> Home</a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="index.html" class="breadcrumb-link">Architecture</a>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-current">Working Memory</span>
+        </nav>
+
+        <!-- Page Title -->
+        <div class="glass-card-display animation-t1">
+            <div class="page-title-section">
+                <h1 class="page-title"><i class="fas fa-memory pulse-glow-glass--fast"></i> Working Memory (Tier 1)</h1>
+                <p class="page-subtitle">Short-term, high-velocity state management for active orchestration</p>
+            </div>
+        </div>
+
+        <!-- Overview -->
+        <div class="glass-card-display animation-t1">
+            <h2 class="section-title"><i class="fas fa-info-circle pulse-glow-glass--fast"></i> Overview</h2>
+            <p>
+                <strong>Tier 1: Working Memory</strong> is CORTEX's consciousness—what it's actively thinking about right now. 
+                This tier stores <em>ephemeral state</em> that changes rapidly during orchestration: active plans, current phase 
+                progress, conversation context, and agent handoff coordination.
+            </p>
+            <p>
+                Unlike Tier 0 (immutable rules) and Tier 2 (long-term knowledge), Tier 1 is <strong>read-write intensive</strong> 
+                with a 30-day rolling retention window. It's implemented using <strong>SQLite databases</strong> for ACID transactions 
+                and <strong>JSONL logs</strong> for append-only event streams. This enables stateful orchestration where users can 
+                say "continue" and CORTEX resumes exactly where it left off.
+            </p>
+        </div>
+
+        <!-- Data Flow Diagram -->
+        <div class="glass-card-display animation-t1">
+            <h2 class="section-title"><i class="fas fa-project-diagram pulse-glow-glass--fast"></i> Tier 1 Data Flow</h2>
+            <div class="mermaid-container">
+                <div class="mermaid">
+sequenceDiagram
+    participant User
+    participant MO as Master Orchestrator
+    participant T1 as Tier 1 Working Memory
+    participant PA as Planning Agent
+    participant EA as Execution Agent
+    
+    User->>MO: /CORTEX plan feature X
+    MO->>T1: Create conversation session
+    T1-->>MO: session_id: abc123
+    
+    MO->>PA: Generate plan for feature X
+    PA->>T1: Query recent sessions (context)
+    T1-->>PA: Last 3 sessions metadata
+    
+    PA->>T1: Write plan (17 phases)
+    T1-->>PA: plan_id: xyz789
+    
+    PA->>MO: Plan created (xyz789)
+    MO-->>User: Phase 0 complete
+    
+    User->>MO: continue
+    MO->>T1: Query active plans
+    T1-->>MO: plan xyz789, phase 0
+    
+    MO->>EA: Execute plan xyz789
+    EA->>T1: Read phase 1 tasks
+    T1-->>EA: 5 tasks loaded
+    
+    EA->>T1: Update progress (task 1/5 complete)
+    EA->>T1: Update progress (task 2/5 complete)
+    EA->>T1: Mark phase 1 complete
+    
+    EA->>MO: Phase 1 done
+    MO-->>User: Phase 1 complete (2/17)
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Components -->
+        <div class="glass-card-display animation-t1">
+            <h2 class="section-title"><i class="fas fa-database pulse-glow-glass--fast"></i> Storage Components</h2>
+            <div class="principle-card-grid columns-2">
+                <div class="glass-card-display animation-t1">
+                    <h3><i class="fas fa-clipboard-list" style="color: #ffd700;"></i> PlanningStateDB</h3>
+                    <p>
+                        <strong>Type:</strong> SQLite database<br>
+                        <strong>Location:</strong> <code>cortex-brain/tier1/working_memory.db</code><br>
+                        <strong>Schema:</strong> plans, phases, tasks, acceptance_criteria, checkpoints<br>
+                        <strong>Purpose:</strong> Track plan execution state, current phase, progress bars<br>
+                        <strong>Retention:</strong> 30 days
+                    </p>
+                </div>
+                <div class="glass-card-display animation-t1">
+                    <h3><i class="fas fa-comments" style="color: #00d4ff;"></i> ConversationDB</h3>
+                    <p>
+                        <strong>Type:</strong> SQLite database<br>
+                        <strong>Location:</strong> <code>cortex-brain/tier1/conversations.db</code><br>
+                        <strong>Schema:</strong> sessions, messages, user_preferences, intent_history<br>
+                        <strong>Purpose:</strong> Enable "continue" command, track conversation context<br>
+                        <strong>Retention:</strong> 30 days
+                    </p>
+                </div>
+                <div class="glass-card-display animation-t1">
+                    <h3><i class="fas fa-file-alt" style="color: #00ff88;"></i> Event Log (JSONL)</h3>
+                    <p>
+                        <strong>Type:</strong> Append-only JSONL<br>
+                        <strong>Location:</strong> <code>cortex-brain/tier1/event_log.jsonl</code><br>
+                        <strong>Schema:</strong> timestamp, event_type, orchestrator, metadata<br>
+                        <strong>Purpose:</strong> Audit trail, debugging, performance analysis<br>
+                        <strong>Retention:</strong> 90 days
+                    </p>
+                </div>
+                <div class="glass-card-display animation-t1">
+                    <h3><i class="fas fa-tachometer-alt" style="color: #ff6b6b;"></i> Performance Cache</h3>
+                    <p>
+                        <strong>Type:</strong> In-memory dict + pickle backup<br>
+                        <strong>Location:</strong> <code>cortex-brain/tier1/cache.pkl</code><br>
+                        <strong>Data:</strong> Token usage, hot paths, frequently queried knowledge<br>
+                        <strong>Purpose:</strong> Speed up repeated queries, reduce Tier 2 reads<br>
+                        <strong>Retention:</strong> Session-based
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Schema Details -->
+        <div class="glass-card-display animation-t1">
+            <h2 class="section-title"><i class="fas fa-table pulse-glow-glass--fast"></i> PlanningStateDB Schema</h2>
+            <p>The core database for stateful plan orchestration:</p>
+            
+            <h3><i class="fas fa-folder"></i> plans Table</h3>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <i class="fas fa-key"></i>
+                    <div>
+                        <strong>plan_id</strong> (TEXT PRIMARY KEY)<br>
+                        <small>Unique identifier (UUID)</small>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-tag"></i>
+                    <div>
+                        <strong>title</strong> (TEXT)<br>
+                        <small>User-facing plan name</small>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-circle"></i>
+                    <div>
+                        <strong>status</strong> (TEXT)<br>
+                        <small>active | paused | completed | failed</small>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-layer-group"></i>
+                    <div>
+                        <strong>current_phase</strong> (INTEGER)<br>
+                        <small>0-17 (Phase -1 to Phase 15)</small>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-clock"></i>
+                    <div>
+                        <strong>created_at</strong> (TIMESTAMP)<br>
+                        <small>Plan creation time</small>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-file"></i>
+                    <div>
+                        <strong>plan_document_path</strong> (TEXT)<br>
+                        <small>Link to markdown plan file</small>
+                    </div>
+                </div>
+            </div>
+            
+            <h3 style="margin-top: 2rem;"><i class="fas fa-list"></i> phases Table</h3>
+            <p>
+                Links to <code>plans.plan_id</code> (foreign key). Stores per-phase state:<br>
+                <code>phase_id, plan_id, phase_number, phase_name, status, tasks_total, tasks_completed, started_at, completed_at</code>
+            </p>
+            
+            <h3 style="margin-top: 2rem;"><i class="fas fa-check"></i> tasks Table</h3>
+            <p>
+                Links to <code>phases.phase_id</code> (foreign key). Granular task tracking:<br>
+                <code>task_id, phase_id, task_description, status, assigned_agent, completed_at</code>
+            </p>
+        </div>
+
+        <!-- Agent Coordination -->
+        <div class="glass-card-display animation-t1">
+            <h2 class="section-title"><i class="fas fa-exchange-alt pulse-glow-glass--fast"></i> Agent Coordination via Tier 1</h2>
+            <p>
+                Tier 1 acts as the <strong>message bus</strong> for agent handoffs. When Planning Agent finishes creating a plan, 
+                it writes the plan to Tier 1 with <code>status='active'</code>. Execution Agent polls Tier 1 for active plans, 
+                reads the current phase, and begins implementation. Progress updates flow back to Tier 1 in real-time.
+            </p>
+            
+            <h3><i class="fas fa-sync"></i> Handoff Protocol</h3>
+            <ol>
+                <li><strong>Planning Agent:</strong> Write plan to PlanningStateDB with <code>status='active'</code>, <code>current_phase=0</code></li>
+                <li><strong>Master Orchestrator:</strong> Detect plan creation event, invoke Execution Agent</li>
+                <li><strong>Execution Agent:</strong> Query <code>SELECT * FROM plans WHERE status='active' ORDER BY created_at DESC LIMIT 1</code></li>
+                <li><strong>Execution Agent:</strong> Read phase 1 tasks from <code>phases</code> table</li>
+                <li><strong>Execution Agent:</strong> Implement task 1, update <code>UPDATE tasks SET status='completed' WHERE task_id=?</code></li>
+                <li><strong>Execution Agent:</strong> Repeat for remaining tasks, update phase status when all complete</li>
+                <li><strong>Learning Agent:</strong> Query completed phases, extract patterns, write to Tier 2</li>
+            </ol>
+        </div>
+
+        <!-- Continue Command -->
+        <div class="glass-card-display animation-t1">
+            <h2 class="section-title"><i class="fas fa-play-circle pulse-glow-glass--fast"></i> The "Continue" Command</h2>
+            <p>
+                One of CORTEX's most powerful features is <strong>stateful resumption</strong>. Users can close VS Code, 
+                come back hours later, type <code>continue</code>, and CORTEX picks up exactly where it left off.
+            </p>
+            
+            <h3><i class="fas fa-terminal"></i> Implementation</h3>
+            <p><strong>User Input:</strong> <code>continue</code> or <code>resume</code></p>
+            <p><strong>Master Orchestrator Logic:</strong></p>
+            <ol>
+                <li>Query ConversationDB: <code>SELECT * FROM sessions ORDER BY last_activity DESC LIMIT 1</code></li>
+                <li>Extract <code>last_orchestrator</code> from session metadata (e.g., "Planning", "TDD", "Execution")</li>
+                <li>Query PlanningStateDB: <code>SELECT * FROM plans WHERE status='active' LIMIT 1</code></li>
+                <li>Load plan metadata: <code>current_phase</code>, <code>tasks_completed</code>, <code>tasks_total</code></li>
+                <li>Display to user: "Resuming [orchestrator] - Phase [X]: [Y/Z tasks complete]"</li>
+                <li>Invoke appropriate agent with loaded state</li>
+            </ol>
+            
+            <h3 style="margin-top: 2rem;"><i class="fas fa-lightbulb"></i> Example Interaction</h3>
+            <p>
+                <strong>Session 1 (Friday 3pm):</strong><br>
+                <code>User: /CORTEX plan user authentication</code><br>
+                <code>CORTEX: Phase 0 complete, 17 phases planned. Phase 1 starting...</code><br>
+                <em>(User closes VS Code)</em>
+            </p>
+            <p>
+                <strong>Session 2 (Monday 9am):</strong><br>
+                <code>User: continue</code><br>
+                <code>CORTEX: Resuming Planning v5 - Phase 1: Implementation (2/8 tasks complete). Starting task 3: Add JWT token validation...</code>
+            </p>
+        </div>
+
+        <!-- Performance Characteristics -->
+        <div class="glass-card-display animation-t1">
+            <h2 class="section-title"><i class="fas fa-tachometer-alt pulse-glow-glass--fast"></i> Performance Characteristics</h2>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <i class="fas fa-clock"></i>
+                    <div>
+                        <strong>Write Latency</strong><br>
+                        <small>&lt;5ms for plan updates (SQLite ACID transactions)</small>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-search"></i>
+                    <div>
+                        <strong>Query Speed</strong><br>
+                        <small>&lt;2ms for active plan lookup (indexed by status + created_at)</small>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-database"></i>
+                    <div>
+                        <strong>Database Size</strong><br>
+                        <small>~10MB per 100 plans (with 30-day auto-cleanup)</small>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-sync"></i>
+                    <div>
+                        <strong>Concurrent Access</strong><br>
+                        <small>SQLite WAL mode enables concurrent readers + single writer</small>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-trash"></i>
+                    <div>
+                        <strong>Auto-Cleanup</strong><br>
+                        <small>Daily cron job removes plans &gt;30 days old, logs &gt;90 days</small>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-save"></i>
+                    <div>
+                        <strong>Backup Strategy</strong><br>
+                        <small>Daily SQLite backup to cortex-brain/backups/ (7-day retention)</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Related Pages -->
+        <div class="glass-card-display animation-t1">
+            <h2 class="section-title"><i class="fas fa-link pulse-glow-glass--fast"></i> Related Topics</h2>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <i class="fas fa-layer-group"></i>
+                    <div>
+                        <a href="four-tier-brain.html" class="level2-link">
+                            <strong>4-Tier Brain Architecture</strong><br>
+                            <small>How Tier 1 fits into the larger memory hierarchy</small>
+                        </a>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-users"></i>
+                    <div>
+                        <a href="agent-system.html" class="level2-link">
+                            <strong>Agent System</strong><br>
+                            <small>How agents coordinate via Tier 1 state</small>
+                        </a>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-clipboard-list"></i>
+                    <div>
+                        <a href="../features/planning-system.html" class="level2-link">
+                            <strong>Planning System</strong><br>
+                            <small>How Planning Agent writes plans to Tier 1</small>
+                        </a>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-network-wired"></i>
+                    <div>
+                        <a href="knowledge-graph.html" class="level2-link">
+                            <strong>Knowledge Graph (Tier 2)</strong><br>
+                            <small>Long-term knowledge storage vs. short-term state</small>
+                        </a>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-code"></i>
+                    <div>
+                        <a href="../features/execution-orchestrator.html" class="level2-link">
+                            <strong>Execution Orchestrator</strong><br>
+                            <small>How Execution Agent reads/writes Tier 1 state</small>
+                        </a>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-shield-halved"></i>
+                    <div>
+                        <a href="skull-protection.html" class="level2-link">
+                            <strong>SKULL Protection (Tier 0)</strong><br>
+                            <small>Governance rules that guard Tier 1 operations</small>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    
+<!-- Modern Glass Footer -->
+
+<!-- Modern Glass Footer -->
+
+<!-- Modern Glass Footer -->
+<footer class="glass-footer-modern">
+    <div class="footer-modern-content">
+        <img src="../assets/images/CORTEX-logo.png" alt="CORTEX" class="cortex-logo-footer" width="100" height="100" />
+        <p class="footer-copyright-modern">
+            Copyright © 2025-2026 <span class="copyright-author">Asif Hussain</span>. All rights reserved.
+        </p>
+    </div>
+</footer>
+</body>
+</html>

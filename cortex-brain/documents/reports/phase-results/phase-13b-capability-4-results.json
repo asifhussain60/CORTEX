@@ -1,0 +1,12 @@
+{
+  "capability": "System Maintenance",
+  "start_time": "2025-12-26T05:23:34.946759",
+  "phases": {},
+  "overall_success": false,
+  "errors": [
+    "Unknown error"
+  ],
+  "execution_time_seconds": 0.100824,
+  "end_time": "2025-12-26T05:23:35.047792",
+  "validation_status": "FAIL"
+}
