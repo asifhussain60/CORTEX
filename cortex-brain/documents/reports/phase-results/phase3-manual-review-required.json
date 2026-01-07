@@ -1,0 +1,359 @@
+{
+  "phase": 3,
+  "timestamp": "2025-12-07T19:32:10.874675",
+  "safety_status": "MANUAL_REVIEW_REQUIRED",
+  "critical_findings": {
+    "package_markers_excluded": 3,
+    "reason": "__init__.py files are Python package markers, not duplicates",
+    "impact": "Auto-consolidation would have broken all imports"
+  },
+  "analysis": {
+    "total_candidates": 247,
+    "high_confidence": 0,
+    "medium_confidence": 44,
+    "low_confidence": 203,
+    "excluded_package_markers": 3
+  },
+  "recommendations": {
+    "high_confidence_candidates": [],
+    "action_required": "Manual code review of each candidate before consolidation"
+  },
+  "import_redirects": {
+    "src\\operations\\base_operation_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\base_operation_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.base_operation_module",
+      "secondary_module": "src.operations.base_operation_module",
+      "confidence": 30
+    },
+    "src\\operations\\header_formatter.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\header_formatter.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.header_formatter",
+      "secondary_module": "src.operations.header_formatter",
+      "confidence": 30
+    },
+    "src\\operations\\header_utils.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\header_utils.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.header_utils",
+      "secondary_module": "src.operations.header_utils",
+      "confidence": 30
+    },
+    "src\\operations\\help_command.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\help_command.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.help_command",
+      "secondary_module": "src.operations.help_command",
+      "confidence": 30
+    },
+    "src\\operations\\operations_orchestrator.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\operations_orchestrator.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.operations_orchestrator",
+      "secondary_module": "src.operations.operations_orchestrator",
+      "confidence": 30
+    },
+    "src\\operations\\operation_factory.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\operation_factory.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.operation_factory",
+      "secondary_module": "src.operations.operation_factory",
+      "confidence": 30
+    },
+    "src\\operations\\crawlers\\brain_inspector.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\crawlers\\brain_inspector.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.crawlers.brain_inspector",
+      "secondary_module": "src.operations.crawlers.brain_inspector",
+      "confidence": 30
+    },
+    "src\\operations\\crawlers\\doc_mapper.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\crawlers\\doc_mapper.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.crawlers.doc_mapper",
+      "secondary_module": "src.operations.crawlers.doc_mapper",
+      "confidence": 30
+    },
+    "src\\operations\\crawlers\\file_scanner.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\crawlers\\file_scanner.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.crawlers.file_scanner",
+      "secondary_module": "src.operations.crawlers.file_scanner",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\cleanup\\file_scanner.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\crawlers\\file_scanner.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.crawlers.file_scanner",
+      "secondary_module": "src.operations.modules.cleanup.file_scanner",
+      "confidence": 30
+    },
+    "src\\operations\\crawlers\\git_analyzer.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\crawlers\\git_analyzer.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.crawlers.git_analyzer",
+      "secondary_module": "src.operations.crawlers.git_analyzer",
+      "confidence": 30
+    },
+    "src\\operations\\crawlers\\health_assessor.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\crawlers\\health_assessor.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.crawlers.health_assessor",
+      "secondary_module": "src.operations.crawlers.health_assessor",
+      "confidence": 30
+    },
+    "src\\operations\\crawlers\\plugin_registry.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\crawlers\\plugin_registry.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.crawlers.plugin_registry",
+      "secondary_module": "src.operations.crawlers.plugin_registry",
+      "confidence": 30
+    },
+    "src\\plugins\\plugin_registry.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\crawlers\\plugin_registry.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.crawlers.plugin_registry",
+      "secondary_module": "src.plugins.plugin_registry",
+      "confidence": 30
+    },
+    "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-user-v1.0.0\\src\\operations\\crawlers\\test_parser.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\crawlers\\test_parser.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.crawlers.test_parser",
+      "secondary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-user-v1.0.0.src.operations.crawlers.test_parser",
+      "confidence": 30
+    },
+    "src\\operations\\crawlers\\test_parser.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\crawlers\\test_parser.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.crawlers.test_parser",
+      "secondary_module": "src.operations.crawlers.test_parser",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\apply_narrator_voice_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\apply_narrator_voice_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.apply_narrator_voice_module",
+      "secondary_module": "src.operations.modules.apply_narrator_voice_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\brain_initialization_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\brain_initialization_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.brain_initialization_module",
+      "secondary_module": "src.operations.modules.brain_initialization_module",
+      "confidence": 30
+    },
+    "src\\setup\\modules\\brain_initialization_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\brain_initialization_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.brain_initialization_module",
+      "secondary_module": "src.setup.modules.brain_initialization_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\clear_python_cache_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\clear_python_cache_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.clear_python_cache_module",
+      "secondary_module": "src.operations.modules.clear_python_cache_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\conversation_tracking_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\conversation_tracking_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.conversation_tracking_module",
+      "secondary_module": "src.operations.modules.conversation_tracking_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\deploy_docs_preview_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\deploy_docs_preview_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.deploy_docs_preview_module",
+      "secondary_module": "src.operations.modules.deploy_docs_preview_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\evaluate_cortex_architecture_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\evaluate_cortex_architecture_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.evaluate_cortex_architecture_module",
+      "secondary_module": "src.operations.modules.evaluate_cortex_architecture_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\generate_cleanup_report_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\generate_cleanup_report_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.generate_cleanup_report_module",
+      "secondary_module": "src.operations.modules.generate_cleanup_report_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\generate_image_prompts_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\generate_image_prompts_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.generate_image_prompts_module",
+      "secondary_module": "src.operations.modules.generate_image_prompts_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\git_sync_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\git_sync_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.git_sync_module",
+      "secondary_module": "src.operations.modules.git_sync_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\load_protection_rules_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\load_protection_rules_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.load_protection_rules_module",
+      "secondary_module": "src.operations.modules.load_protection_rules_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\platform_detection_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\platform_detection_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.platform_detection_module",
+      "secondary_module": "src.operations.modules.platform_detection_module",
+      "confidence": 30
+    },
+    "src\\setup\\modules\\platform_detection_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\platform_detection_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.platform_detection_module",
+      "secondary_module": "src.setup.modules.platform_detection_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\project_validation_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\project_validation_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.project_validation_module",
+      "secondary_module": "src.operations.modules.project_validation_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\python_dependencies_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\python_dependencies_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modulesthon_dependencies_module",
+      "secondary_module": "src.operations.modulesthon_dependencies_module",
+      "confidence": 30
+    },
+    "src\\setup\\modules\\python_dependencies_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\python_dependencies_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modulesthon_dependencies_module",
+      "secondary_module": "src.setup.modulesthon_dependencies_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\refresh_design_docs_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\refresh_design_docs_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.refresh_design_docs_module",
+      "secondary_module": "src.operations.modules.refresh_design_docs_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\remove_orphaned_files_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\remove_orphaned_files_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.remove_orphaned_files_module",
+      "secondary_module": "src.operations.modules.remove_orphaned_files_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\scan_docstrings_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\scan_docstrings_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.scan_docstrings_module",
+      "secondary_module": "src.operations.modules.scan_docstrings_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\scan_temporary_files_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\scan_temporary_files_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.scan_temporary_files_module",
+      "secondary_module": "src.operations.modules.scan_temporary_files_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\setup_completion_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\setup_completion_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.setup_completion_module",
+      "secondary_module": "src.operations.modules.setup_completion_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\tooling_detection_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\tooling_detection_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.tooling_detection_module",
+      "secondary_module": "src.operations.modules.tooling_detection_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\tooling_installer_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\tooling_installer_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.tooling_installer_module",
+      "secondary_module": "src.operations.modules.tooling_installer_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\tooling_verification_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\tooling_verification_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.tooling_verification_module",
+      "secondary_module": "src.operations.modules.tooling_verification_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\vacuum_sqlite_databases_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\vacuum_sqlite_databases_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.vacuum_sqlite_databases_module",
+      "secondary_module": "src.operations.modules.vacuum_sqlite_databases_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\virtual_environment_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\virtual_environment_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.virtual_environment_module",
+      "secondary_module": "src.operations.modules.virtual_environment_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\vision_api_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\vision_api_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.vision_api_module",
+      "secondary_module": "src.operations.modules.vision_api_module",
+      "confidence": 30
+    },
+    "src\\setup\\modules\\vision_api_module.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\vision_api_module.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.vision_api_module",
+      "secondary_module": "src.setup.modules.vision_api_module",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\cleanup\\cleanup_orchestrator.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\cleanup\\cleanup_orchestrator.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.cleanup.cleanup_orchestrator",
+      "secondary_module": "src.operations.modules.cleanup.cleanup_orchestrator",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\orchestration\\cleanup_orchestrator.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\cleanup\\cleanup_orchestrator.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.cleanup.cleanup_orchestrator",
+      "secondary_module": "src.operations.modules.orchestration.cleanup_orchestrator",
+      "confidence": 30
+    },
+    "src\\plugins\\cleanup_orchestrator.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\cleanup\\cleanup_orchestrator.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.cleanup.cleanup_orchestrator",
+      "secondary_module": "src.plugins.cleanup_orchestrator",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\design_sync\\design_sync_orchestrator.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\design_sync\\design_sync_orchestrator.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.design_sync.design_sync_orchestrator",
+      "secondary_module": "src.operations.modules.design_sync.design_sync_orchestrator",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\design_sync\\track_config.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\design_sync\\track_config.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.design_sync.track_config",
+      "secondary_module": "src.operations.modules.design_sync.track_config",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\design_sync\\track_templates.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\design_sync\\track_templates.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.design_sync.track_templates",
+      "secondary_module": "src.operations.modules.design_sync.track_templates",
+      "confidence": 30
+    },
+    "src\\operations\\modules\\optimization\\optimize_cortex_orchestrator.py": {
+      "redirect_to": "cortex-brain\\archives\\obsolete-content-20251116_092210\\dist\\cortex-test\\src\\operations\\modules\\optimization\\optimize_cortex_orchestrator.py",
+      "primary_module": "cortex-brain.archives.obsolete-content-20251116_092210.dist.cortex-test.src.operations.modules.optimization.optimize_cortex_orchestrator",
+      "secondary_module": "src.operations.modules.optimization.optimize_cortex_orchestrator",
+      "confidence": 30
+    },
+    "cortex-brain\\backups\\obsolete-code\\cleanup_20251204_063039\\src\\orchestrators\\git_checkpoint_orchestrator.py": {
+      "redirect_to": "cortex-brain\\backups\\obsolete-code\\cleanup_20251203_172219\\src\\orchestrators\\git_checkpoint_orchestrator.py",
+      "primary_module": "cortex-brain.backups.obsolete-code.cleanup_20251203_172219.src.orchestrators.git_checkpoint_orchestrator",
+      "secondary_module": "cortex-brain.backups.obsolete-code.cleanup_20251204_063039.src.orchestrators.git_checkpoint_orchestrator",
+      "confidence": 30
+    },
+    "cortex-brain\\backups\\obsolete-code\\cleanup_20251204_104559\\src\\orchestrators\\git_checkpoint_orchestrator.py": {
+      "redirect_to": "cortex-brain\\backups\\obsolete-code\\cleanup_20251203_172219\\src\\orchestrators\\git_checkpoint_orchestrator.py",
+      "primary_module": "cortex-brain.backups.obsolete-code.cleanup_20251203_172219.src.orchestrators.git_checkpoint_orchestrator",
+      "secondary_module": "cortex-brain.backups.obsolete-code.cleanup_20251204_104559.src.orchestrators.git_checkpoint_orchestrator",
+      "confidence": 30
+    },
+    "src\\orchestrators\\git_checkpoint_orchestrator.py": {
+      "redirect_to": "cortex-brain\\backups\\obsolete-code\\cleanup_20251203_172219\\src\\orchestrators\\git_checkpoint_orchestrator.py",
+      "primary_module": "cortex-brain.backups.obsolete-code.cleanup_20251203_172219.src.orchestrators.git_checkpoint_orchestrator",
+      "secondary_module": "src.orchestrators.git_checkpoint_orchestrator",
+      "confidence": 30
+    },
+    "cortex-brain\\backups\\obsolete-code\\cleanup_20251204_104559\\src\\orchestrators\\planning_orchestrator.py": {
+      "redirect_to": "cortex-brain\\backups\\obsolete-code\\cleanup_20251204_063039\\src\\orchestrators\\planning_orchestrator.py",
+      "primary_module": "cortex-brain.backups.obsolete-code.cleanup_20251204_063039.src.orchestrators.planning_orchestrator",
+      "secondary_module": "cortex-brain.backups.obsolete-code.cleanup_20251204_104559.src.orchestrators.planning_orchestrator",
+      "confidence": 30
+    },
+    "src\\orchestrators\\planning_orchestrator.py": {
+      "redirect_to": "cortex-brain\\backups\\obsolete-code\\cleanup_20251204_063039\\src\\orchestrators\\planning_orchestrator.py",
+      "primary_module": "cortex-brain.backups.obsolete-code.cleanup_20251204_063039.src.orchestrators.planning_orchestrator",
+      "secondary_module": "src.orchestrators.planning_orchestrator",
+      "confidence": 30
+    }
+  }
+}

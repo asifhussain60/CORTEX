@@ -1,0 +1,174 @@
+# CORTEX Dashboard Configuration
+# Version: 1.0
+# Purpose: Centralized configuration for admin dashboard system
+
+version: "1.0"
+last_updated: "2025-12-06"
+
+# Path Configuration (all paths relative to cortex-brain/)
+paths:
+  # Data directories
+  data_root: "dashboards/data"
+  repos: "dashboards/data/repos"
+  mock: "dashboards/data/mock"
+  schema: "dashboards/data/schema"
+  templates: "dashboards/data/templates"
+  cache: "dashboards/data/cache"
+  
+  # UI directories
+  ui: "dashboards/ui"
+  ui_components: "dashboards/ui/components"
+  ui_services: "dashboards/ui/services"
+  ui_styles: "dashboards/ui/styles"
+  
+  # Configuration
+  config: "dashboards/config"
+  
+  # Registry and metadata
+  repository_registry: "dashboards/data/repository-registry.json"
+  
+# Data Collection Configuration
+collectors:
+  # Analysis depth
+  deep_analysis: true
+  quick_scan_fallback: false
+  
+  # Performance settings
+  timeout: 300  # seconds
+  parallel_workers: 4
+  
+  # Progress feedback
+  show_progress: true
+  progress_interval: 5  # seconds
+  
+  # Data file configuration
+  required_files:
+    - "health-data.json"
+    - "tech-stack.json"
+    - "security.json"
+    - "architecture.json"
+    - "code-organization.json"
+    - "team-metrics.json"
+    - "vendors.json"
+    - "metadata.json"
+  
+  # File size benchmarks (bytes) - validates collection success
+  benchmarks:
+    health-data:
+      min_size: 5120       # 5KB minimum
+      target_size: 10240   # 10KB target
+      max_variance: 0.3    # ±30% acceptable
+    
+    tech-stack:
+      min_size: 3072       # 3KB minimum
+      target_size: 5120    # 5KB target
+      max_variance: 0.25   # ±25% acceptable
+    
+    security:
+      min_size: 10240      # 10KB minimum
+      target_size: 20480   # 20KB target
+      max_variance: 0.4    # ±40% acceptable
+    
+    architecture:
+      min_size: 15360      # 15KB minimum
+      target_size: 25600   # 25KB target
+      max_variance: 0.35   # ±35% acceptable
+    
+    code-organization:
+      min_size: 20480      # 20KB minimum
+      target_size: 30720   # 30KB target
+      max_variance: 0.3    # ±30% acceptable
+    
+    team-metrics:
+      min_size: 2048       # 2KB minimum
+      target_size: 4096    # 4KB target
+      max_variance: 0.25   # ±25% acceptable
+    
+    vendors:
+      min_size: 1024       # 1KB minimum
+      target_size: 2048    # 2KB target
+      max_variance: 0.2    # ±20% acceptable
+
+# Repository Discovery Configuration
+discovery:
+  # Auto-scan on launch
+  auto_scan: true
+  scan_on_startup: true
+  
+  # Scan behavior
+  scan_interval: 30  # seconds (for dynamic monitoring)
+  validate_data_files: true
+  remove_missing: true
+  
+  # Repository validation
+  min_data_files: 3  # Minimum files to consider valid
+  require_metadata: true
+
+# UI Configuration
+ui:
+  # Branding
+  logo_path: "static/images/cortex-logo.png"
+  logo_width: 180
+  logo_height: 60
+  logo_alt: "CORTEX"
+  
+  # Update behavior
+  refresh_interval: 5000  # milliseconds
+  enable_polling: true
+  enable_websocket: false  # Future enhancement
+  
+  # Theme
+  theme: "dark"
+  accent_color: "#00d4ff"
+  
+  # Features
+  show_repository_count: true
+  show_last_updated: true
+  enable_notifications: true
+
+# Server Configuration
+server:
+  port_range: [8080, 8089]
+  auto_open_browser: true
+  cors_enabled: true
+  
+# Cache Configuration
+cache:
+  enabled: true
+  ttl: 300  # seconds
+  max_size: 100  # MB
+  
+# Logging Configuration
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  log_file: "logs/dashboard.log"
+  max_log_size: 10  # MB
+  backup_count: 5
+
+# Security Configuration
+security:
+  validate_paths: true
+  prevent_path_traversal: true
+  sanitize_input: true
+  max_file_size: 100  # MB for data files
+
+# Performance Configuration
+performance:
+  lazy_load_tabs: true
+  cache_visualizations: true
+  debounce_search: 300  # milliseconds
+  
+# Feature Flags
+features:
+  auto_discovery: true
+  dynamic_updates: true
+  deep_collectors: true
+  logo_branding: true
+  repository_comparison: false  # Phase 2 future
+  historical_trending: false  # Phase 2 future
+
+# Validation Rules
+validation:
+  enforce_schema: true
+  schema_version: "1.0"
+  fail_on_invalid: false  # Continue with warnings

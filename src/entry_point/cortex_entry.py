@@ -131,4 +131,18 @@ class CortexEntry:
             capabilities=["planning", "context_discovery", "state_tracking"]
         )
         
+        # Vacuum v2
+        self.registry.register(
+            id="vacuum",
+            name="Vacuum Orchestrator v2",
+            version="2.0.0",
+            type=OrchestratorType.AUTONOMOUS,
+            category=OrchestratorCategory.MAINTENANCE,
+            class_name="VacuumOrchestrator",
+            module_path="src.orchestrators.vacuum.vacuum_orchestrator",
+            manifest_path="cortex-brain/manifests/orchestrators/vacuum-orchestrator-v2.yaml",
+            patterns=[r"^(vacuum|deep clean|organize files).*$"],
+            capabilities=["cleanup", "duplicate_detection", "file_organization"]
+        )
+        
         self.logger.info("Registered core orchestrators")

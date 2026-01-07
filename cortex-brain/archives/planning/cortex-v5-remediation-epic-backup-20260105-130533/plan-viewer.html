@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C50: CORTEX v5 Gap Remediation - Plan Viewer</title>
+    <style>
+        /* CORTEX Plan Viewer - Self-Contained Glassmorphism Theme
+         * Based on: docs/technical/assets/styles/glassmorphism.css
+         * Author: Asif Hussain
+         * Version: 5.1.0
+         * Copyright © 2025-2026 Asif Hussain. All rights reserved.
+         */
+
+        :root {
+            /* CORTEX Brand Colors - Darker */
+            --primary: #6D28D9;
+            --primary-light: #7C3AED;
+            --primary-dark: #5B21B6;
+            --accent: #059669;
+            --accent-light: #10B981;
+            --warning: #D97706;
+            --error: #DC2626;
+            --info: #0891B2;
+            
+            /* Glassmorphism Backgrounds - Darker/More Opaque */
+            --bg-primary: rgba(30, 27, 75, 0.5);
+            --bg-secondary: rgba(20, 18, 50, 0.6);
+            --bg-hover: rgba(40, 35, 90, 0.55);
+            
+            /* Glass Effects - Darker */
+            --glass-blur: blur(12px);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+            --glass-shadow-hover: 0 12px 40px 0 rgba(0, 0, 0, 0.6);
+            
+            /* Text Colors - Slightly Darker */
+            --text-primary: #D1D5DB;
+            --text-secondary: #6B7280;
+            --text-muted: #4B5563;
+            
+            /* Border Radius */
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            
+            /* Font */
+            --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 100px; /* Account for sticky nav */
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: linear-gradient(135deg, #0f0e1f 0%, #1a1640 50%, #0f1f3f 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Glassmorphism Base Class */
+        .glass {
+            background: var(--bg-primary);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            border-radius: var(--radius-lg);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass:hover {
+            background: var(--bg-hover);
+            box-shadow: var(--glass-shadow-hover);
+            transform: translateY(-2px);
+        }
+
+        .header {
+            padding: 40px 30px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(109, 40, 217, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%);
+            z-index: -1;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            justify-content: flex-start;
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header-logo {
+            height: 180px;
+            width: 180px;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 12px rgba(109, 40, 217, 0.4));
+            flex-shrink: 0;
+        }
+
+        .header-title-group {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            flex: 1;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.8em;
+            margin: 0 0 8px 0;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: -0.5px;
+        }
+
+        .header .subtitle {
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 1.2em;
+            margin: 0;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        .meta-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            color: white;
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 18px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .meta-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .meta-label {
+            font-size: 0.85em;
+            opacity: 0.7;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+
+        .meta-value {
+            font-size: 1.5em;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        /* Overall Progress */
+        .overall-progress {
+            padding: 30px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .overall-progress::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.08) 0%, rgba(109, 40, 217, 0.08) 100%);
+            z-index: -1;
+        }
+
+        .progress-header {
+            color: white;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 45px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 25px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--accent-light) 50%, var(--primary-light) 100%);
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1em;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+            border-radius: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.1) 50%, 
+                transparent 100%);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            color: white;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: scale(1.02);
+        }
+
+        .stat-item span:last-child {
+            font-weight: 700;
+            font-size: 1.2em;
+        }
+
+        /* Status Badges - CORTEX Colors */
+        .status-badge {
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 0.95em;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .status-badge:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .status-active { 
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .status-complete { 
+            background: linear-gradient(135deg, #059669 0%, #10B981 100%);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .status-blocked { 
+            background: linear-gradient(135deg, #DC2626 0%, #EF4444 100%);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .status-in-progress { 
+            background: linear-gradient(135deg, #D97706 0%, #F59E0B 100%);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .status-pending { 
+            background: linear-gradient(135deg, #DC2626 0%, #EF4444 100%);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .status-deferred { 
+            background: rgba(75, 85, 99, 0.8);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .header h1 {
+                font-size: 2.2em;
+            }
+            
+            .header .subtitle {
+                font-size: 1em;
+            }
+            
+            .header-logo {
+                height: 140px;
+                width: 140px;
+            }
+            
+            .meta-info {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .header {
+                padding: 25px 20px;
+            }
+            
+            .header-brand {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+            
+            .header-title-group {
+                align-items: center;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .header .subtitle {
+                font-size: 0.9em;
+            }
+            
+            .header-logo {
+                height: 120px;
+                width: 120px;
+            }
+            
+            .meta-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .child-plans-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Waves Section */
+        .waves-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .wave {
+            padding: 25px;
+        }
+
+        .wave-header {
+            color: white;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .wave-header:hover {
+            opacity: 0.8;
+        }
+
+        .collapse-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .collapse-icon.collapsed {
+            transform: rotate(-90deg);
+        }
+
+        .wave-content {
+            max-height: 5000px;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .wave-content.collapsed {
+            max-height: 0;
+        }
+
+        /* Child Plans Grid */
+        .child-plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .child-plan {
+            padding: 20px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+        }
+
+        /* Card background colors based on status */
+        .child-plan.card-complete {
+            background: rgba(5, 150, 105, 0.15);
+            border: 1px solid rgba(5, 150, 105, 0.3);
+        }
+
+        .child-plan.card-in-progress {
+            background: rgba(217, 119, 6, 0.15);
+            border: 1px solid rgba(217, 119, 6, 0.3);
+        }
+
+        .child-plan.card-blocked,
+        .child-plan.card-pending {
+            background: rgba(220, 38, 38, 0.15);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+        }
+
+        .child-plan.card-deferred {
+            background: rgba(75, 85, 99, 0.15);
+            border: 1px solid rgba(75, 85, 99, 0.3);
+        }
+
+        /* Priority indicator for active work (visual cue) */
+        .child-plan[data-priority="high"]::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, var(--accent) 0%, var(--accent-light) 100%);
+            border-radius: 12px 0 0 12px;
+        }
+
+        .child-plan[data-priority="medium"]::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, var(--warning) 0%, #F59E0B 100%);
+            border-radius: 12px 0 0 12px;
+        }
+
+        .child-plan:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.5);
+        }
+
+        .child-plan-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .child-plan-id {
+            color: white;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .child-plan-name {
+            color: white;
+            font-size: 1em;
+            margin-bottom: 10px;
+        }
+
+        .child-plan-meta {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+            font-size: 0.85em;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .child-plan-progress {
+            width: 100%;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .child-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+
+        .child-plan-dependencies {
+            font-size: 0.8em;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Auto-refresh indicator */
+        .auto-refresh {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .refresh-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        /* Quick Navigation */
+        .quick-nav {
+            position: sticky;
+            top: 20px;
+            z-index: 999;
+            margin-bottom: 20px;
+            padding: 15px 20px;
+        }
+
+        .nav-header {
+            color: white;
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .nav-link {
+            background: rgba(109, 40, 217, 0.3);
+            border: 1px solid rgba(109, 40, 217, 0.5);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.9em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-link:hover {
+            background: rgba(109, 40, 217, 0.5);
+            border-color: rgba(109, 40, 217, 0.8);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(109, 40, 217, 0.4);
+        }
+
+        .nav-link.back-to-top {
+            background: rgba(5, 150, 105, 0.3);
+            border-color: rgba(5, 150, 105, 0.5);
+        }
+
+        .nav-link.back-to-top:hover {
+            background: rgba(5, 150, 105, 0.5);
+            border-color: rgba(5, 150, 105, 0.8);
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4);
+        }
+
+        /* Status-based navigation link colors */
+        .nav-link.nav-complete {
+            background: rgba(5, 150, 105, 0.3);
+            border-color: rgba(5, 150, 105, 0.5);
+        }
+
+        .nav-link.nav-complete:hover {
+            background: rgba(5, 150, 105, 0.5);
+            border-color: rgba(5, 150, 105, 0.8);
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4);
+        }
+
+        .nav-link.nav-in-progress {
+            background: rgba(217, 119, 6, 0.3);
+            border-color: rgba(217, 119, 6, 0.5);
+        }
+
+        .nav-link.nav-in-progress:hover {
+            background: rgba(217, 119, 6, 0.5);
+            border-color: rgba(217, 119, 6, 0.8);
+            box-shadow: 0 4px 12px rgba(217, 119, 6, 0.4);
+        }
+
+        .nav-link.nav-blocked,
+        .nav-link.nav-pending {
+            background: rgba(220, 38, 38, 0.3);
+            border-color: rgba(220, 38, 38, 0.5);
+        }
+
+        .nav-link.nav-blocked:hover,
+        .nav-link.nav-pending:hover {
+            background: rgba(220, 38, 38, 0.5);
+            border-color: rgba(220, 38, 38, 0.8);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .header-logo {
+                height: 150px;
+                width: 150px;
+            }
+
+            .header-brand {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .header-title-group {
+                align-items: center;
+            }
+
+            .meta-info {
+                gap: 15px;
+            }
+
+            .child-plans-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            color: white;
+            font-size: 1.2em;
+            padding: 50px;
+        }
+
+        .error {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid rgba(244, 67, 54, 0.5);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="top"></div>
+    <div class="container">
+        <div class="header glass">
+            <div class="header-brand">
+                <img src="../../../../../docs/assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="header-logo">
+                <div class="header-title-group">
+                    <h1>C50: CORTEX v5 Gap Remediation</h1>
+                    <div class="subtitle">Epic Planning Dashboard</div>
+                </div>
+            </div>
+            <div class="meta-info">
+                <div class="meta-item">
+                    <span class="meta-label">Epic ID</span>
+                    <span class="meta-value" id="epic-id">C50</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Status</span>
+                    <span class="meta-value"><span id="epic-status" class="status-badge status-active">🔄 ACTIVE</span></span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Duration</span>
+                    <span class="meta-value" id="epic-duration">10-11 weeks</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Child Plans</span>
+                    <span class="meta-value" id="child-count">22</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="quick-nav glass" id="quick-nav">
+            <div class="nav-header">
+                🧭 Quick Navigation
+            </div>
+            <div class="nav-links">
+                <a href="#top" class="nav-link back-to-top">⬆️ Top</a>
+                <a href="#overall-progress" class="nav-link">📊 Progress</a>
+                <a href="#wave-1" class="nav-link">1️⃣ Wave 1</a>
+                <a href="#wave-2" class="nav-link">2️⃣ Wave 2</a>
+                <a href="#wave-3" class="nav-link">3️⃣ Wave 3</a>
+                <a href="#deferred" class="nav-link">⏸️ Deferred</a>
+            </div>
+        </div>
+
+        <div class="overall-progress glass" id="overall-progress">
+            <div class="progress-header">
+                <span>📊 Overall Epic Progress</span>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="overall-progress-bar" style="width: 0%;">
+                    <span id="overall-percentage">0%</span>
+                </div>
+            </div>
+            <div class="progress-stats">
+                <div class="stat-item">
+                    <span>✅ Complete:</span>
+                    <span id="complete-count">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>🔄 In Progress:</span>
+                    <span id="inprogress-count">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>🔒 Blocked:</span>
+                    <span id="blocked-count">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>⏳ Pending:</span>
+                    <span id="pending-count">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>⏸️ Deferred:</span>
+                    <span id="deferred-count">0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="waves-container" id="waves-container">
+            <div class="loading">Loading plan data...</div>
+        </div>
+    </div>
+
+    <div class="auto-refresh">
+        <div class="refresh-dot"></div>
+        <span>Auto-refresh: <span id="refresh-interval">10s</span> | Last: <span id="last-update">--:--:--</span></span>
+    </div>
+
+    <script>
+        // ========================================
+        // CORTEX C50 Epic Dashboard
+        // Sequential Progress View: Show Work in Natural Order
+        // ========================================
+        // Display Strategy:
+        //   - Show plans in sequential order (00A, 00B, 00C, 01, 02, etc.)
+        //   - Progress visible as cards update status/percentage
+        //   - Completed work stays in position (visual progress indicator)
+        //   4. Active (general active state)
+        //   5. Deferred (postponed)
+        //   6. Complete (done, pushed to bottom)
+        // ========================================
+        
+        // Configuration
+        const TRACKING_FILE = 'tracking/epic-progress-tracker.json';
+        const REFRESH_INTERVAL = 10000; // 10 seconds
+        const CHILD_PLAN_REGISTRY = 'tracking/child-plan-registry.json';
+
+        // State
+        let epicData = null;
+        let childPlans = [];
+        let autoRefreshTimer = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadEpicData();
+            startAutoRefresh();
+        });
+
+        // Load epic data from JSON
+        async function loadEpicData() {
+            try {
+                const response = await fetch(TRACKING_FILE);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                epicData = await response.json();
+                
+                // Load child plan registry
+                const childResponse = await fetch(CHILD_PLAN_REGISTRY);
+                if (childResponse.ok) {
+                    childPlans = await childResponse.json();
+                }
+
+                renderEpicView();
+                updateTimestamp();
+            } catch (error) {
+                showError(error);
+            }
+        }
+
+        // Render epic dashboard
+        function renderEpicView() {
+            if (!epicData) return;
+
+            // Update overall progress
+            const overallProgress = epicData.overall_progress || 0;
+            document.getElementById('overall-progress-bar').style.width = `${overallProgress}%`;
+            document.getElementById('overall-percentage').textContent = `${overallProgress}%`;
+
+            // Update statistics
+            const stats = calculateStats();
+            document.getElementById('complete-count').textContent = stats.complete;
+            document.getElementById('inprogress-count').textContent = stats.inProgress;
+            document.getElementById('blocked-count').textContent = stats.blocked;
+            document.getElementById('pending-count').textContent = stats.pending;
+            document.getElementById('deferred-count').textContent = stats.deferred;
+
+            // Render waves
+            renderWaves();
+            
+            // Update navigation link colors based on wave status
+            updateNavigationColors();
+        }
+
+        // Update navigation link colors based on wave completion status
+        function updateNavigationColors() {
+            if (!epicData || !epicData.child_plans) return;
+
+            const waves = {
+                'wave-1': ['00A', '00B', '00C', '00D'],
+                'wave-2': ['01', '02', '03', '04', '05', '06', '07', '08', '10', '11'],
+                'wave-3': ['09', '12', '13', '14', '15'],
+                'deferred': ['16', '17', '18']
+            };
+
+            Object.entries(waves).forEach(([waveId, childIds]) => {
+                // Get all plans in this wave
+                const wavePlans = epicData.child_plans.filter(plan => 
+                    childIds.some(id => plan.id.includes(id) || plan.order === id)
+                );
+
+                if (wavePlans.length === 0) return;
+
+                // Calculate wave status based on all plans
+                const allComplete = wavePlans.every(plan => plan.status.toLowerCase().includes('complete'));
+                const anyInProgress = wavePlans.some(plan => plan.status.toLowerCase().includes('progress'));
+                const anyBlocked = wavePlans.some(plan => plan.status.toLowerCase().includes('blocked'));
+
+                // Find the nav link and update its class
+                const navLink = document.querySelector(`a[href="#${waveId}"]`);
+                if (navLink) {
+                    // Remove existing status classes
+                    navLink.classList.remove('nav-complete', 'nav-in-progress', 'nav-blocked', 'nav-pending');
+                    
+                    // Add appropriate status class
+                    if (allComplete) {
+                        navLink.classList.add('nav-complete');
+                    } else if (anyBlocked) {
+                        navLink.classList.add('nav-blocked');
+                    } else if (anyInProgress) {
+                        navLink.classList.add('nav-in-progress');
+                    } else {
+                        navLink.classList.add('nav-pending');
+                    }
+                }
+            });
+        }
+
+        // Calculate statistics from child plans
+        function calculateStats() {
+            const stats = {
+                complete: 0,
+                inProgress: 0,
+                blocked: 0,
+                pending: 0,
+                deferred: 0
+            };
+
+            if (epicData.child_plans) {
+                epicData.child_plans.forEach(plan => {
+                    const status = plan.status.toLowerCase();
+                    if (status.includes('complete')) stats.complete++;
+                    else if (status.includes('progress')) stats.inProgress++;
+                    else if (status.includes('blocked')) stats.blocked++;
+                    else if (status.includes('deferred')) stats.deferred++;
+                    else stats.pending++;
+                });
+            }
+
+            return stats;
+        }
+
+        // Sort child plans by natural order (preserve sequential progression)
+        function sortChildPlansByPriority(plans) {
+            // Simply sort by order/id to show progress as it happens
+            return plans.sort((a, b) => {
+                return (a.order || a.id).localeCompare(b.order || b.id);
+            });
+        }
+
+        // Render waves with child plans
+        function renderWaves() {
+            const wavesContainer = document.getElementById('waves-container');
+            wavesContainer.innerHTML = '';
+
+            const waves = {
+                'Wave 1: Foundation (Weeks 1-3)': { id: 'wave-1', children: ['00A', '00B', '00C', '00D'] },
+                'Wave 2: Core Features (Weeks 4-9)': { id: 'wave-2', children: ['01', '02', '03', '04', '05', '06', '07', '08', '10', '11'] },
+                'Wave 3: Finalization (Weeks 10-11)': { id: 'wave-3', children: ['09', '12', '13', '14', '15'] },
+                'Deferred': { id: 'deferred', children: ['16', '17', '18'] }
+            };
+
+            Object.entries(waves).forEach(([waveName, waveConfig]) => {
+                const waveDiv = document.createElement('div');
+                waveDiv.className = 'wave glass';
+                waveDiv.id = waveConfig.id; // Add ID for anchor links
+
+                const waveHeader = document.createElement('div');
+                waveHeader.className = 'wave-header';
+                waveHeader.innerHTML = `
+                    <span class="collapse-icon">▼</span>
+                    <span>${waveName}</span>
+                `;
+                waveHeader.onclick = () => toggleWave(waveDiv);
+
+                const waveContent = document.createElement('div');
+                waveContent.className = 'wave-content';
+
+                const childPlansGrid = document.createElement('div');
+                childPlansGrid.className = 'child-plans-grid';
+
+                // Filter child plans for this wave
+                const childIds = waveConfig.children;
+                let wavePlans = epicData.child_plans.filter(plan => 
+                    childIds.some(id => plan.id.includes(id) || plan.order === id)
+                );
+
+                // Keep plans in natural sequential order (show progress as it happens)
+                wavePlans = sortChildPlansByPriority(wavePlans);
+
+                wavePlans.forEach(plan => {
+                    childPlansGrid.appendChild(createChildPlanCard(plan));
+                });
+
+                waveContent.appendChild(childPlansGrid);
+                waveDiv.appendChild(waveHeader);
+                waveDiv.appendChild(waveContent);
+                wavesContainer.appendChild(waveDiv);
+            });
+        }
+
+        // Create child plan card
+        function createChildPlanCard(plan) {
+            const card = document.createElement('div');
+            card.className = 'child-plan glass';
+            card.onclick = () => openChildPlan(plan);
+
+            const statusClass = getStatusClass(plan.status);
+            const progress = plan.progress || 0;
+            
+            // Add card status class for background color
+            const status = plan.status.toLowerCase();
+            if (status.includes('complete')) {
+                card.classList.add('card-complete');
+            } else if (status.includes('progress')) {
+                card.classList.add('card-in-progress');
+            } else if (status.includes('blocked')) {
+                card.classList.add('card-blocked');
+            } else if (status.includes('deferred')) {
+                card.classList.add('card-deferred');
+            } else {
+                card.classList.add('card-pending');
+            }
+            
+            // Add priority attribute for visual indicator
+            if (status.includes('progress') || status.includes('blocked')) {
+                card.setAttribute('data-priority', 'high');
+            } else if (status.includes('pending')) {
+                card.setAttribute('data-priority', 'medium');
+            }
+
+            card.innerHTML = `
+                <div class="child-plan-header">
+                    <span class="child-plan-id">C50-${plan.order}</span>
+                    <span class="status-badge ${statusClass}">${plan.status}</span>
+                </div>
+                <div class="child-plan-name">${plan.name}</div>
+                <div class="child-plan-meta">
+                    <span>⏱️ ${plan.estimated_hours || 0}h</span>
+                    <span>🔧 ${plan.complexity || 'N/A'}</span>
+                    <span>🎯 ${plan.priority || 'N/A'}</span>
+                </div>
+                <div class="child-plan-progress">
+                    <div class="child-progress-bar" style="width: ${progress}%;"></div>
+                </div>
+                ${plan.dependencies && plan.dependencies.length > 0 ? `
+                    <div class="child-plan-dependencies">
+                        📌 Depends on: ${plan.dependencies.join(', ')}
+                    </div>
+                ` : ''}
+            `;
+
+            return card;
+        }
+
+        // Get status CSS class
+        function getStatusClass(status) {
+            const s = status.toLowerCase();
+            if (s.includes('complete')) return 'status-complete';
+            if (s.includes('progress')) return 'status-in-progress';
+            if (s.includes('blocked')) return 'status-blocked';
+            if (s.includes('deferred')) return 'status-deferred';
+            return 'status-pending';
+        }
+
+        // Toggle wave collapse
+        function toggleWave(waveDiv) {
+            const content = waveDiv.querySelector('.wave-content');
+            const icon = waveDiv.querySelector('.collapse-icon');
+            
+            content.classList.toggle('collapsed');
+            icon.classList.toggle('collapsed');
+        }
+
+        // Open child plan
+        function openChildPlan(plan) {
+            const planPath = `C50-${plan.order}/`;
+            console.log('Opening child plan:', planPath);
+            // In a real implementation, this would navigate to the child plan viewer
+            alert(`Opening ${plan.name} (C50-${plan.order})\n\nPath: ${planPath}`);
+        }
+
+        // Auto-refresh functionality
+        function startAutoRefresh() {
+            autoRefreshTimer = setInterval(() => {
+                loadEpicData();
+            }, REFRESH_INTERVAL);
+        }
+
+        // Update timestamp
+        function updateTimestamp() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            document.getElementById('last-update').textContent = timeString;
+        }
+
+        // Show error
+        function showError(error) {
+            const wavesContainer = document.getElementById('waves-container');
+            wavesContainer.innerHTML = `
+                <div class="error glass">
+                    <h3>⚠️ Error Loading Plan Data</h3>
+                    <p>${error.message}</p>
+                    <p><strong>Expected file:</strong> ${TRACKING_FILE}</p>
+                    <p>Please ensure the tracking file exists and contains valid JSON.</p>
+                </div>
+            `;
+        }
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (autoRefreshTimer) {
+                clearInterval(autoRefreshTimer);
+            }
+        });
+    </script>
+</body>
+</html>

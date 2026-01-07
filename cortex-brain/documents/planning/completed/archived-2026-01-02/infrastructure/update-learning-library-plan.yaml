@@ -1,0 +1,1360 @@
+# Update Learning Library - Implementation Plan
+# Feature: Git-based learning capture with interactive refinement
+# Version: 1.0.0
+# Created: 2025-12-07
+# Author: Asif Hussain
+
+metadata:
+  feature_name: "Update Learning Library"
+  feature_id: "update-learning-library-001"
+  version: "1.0.0"
+  target_release: "CORTEX 3.9"
+  status: "approved"
+  priority: "high"
+  estimated_effort_hours: 24
+  created_date: "2025-12-07"
+  approved_date: "2025-12-07"
+
+overview:
+  description: |
+    Create "Update Learning Library" orchestrator that scans git history for a timeframe,
+    identifies learning-worthy commits using heuristics, guides user through interactive
+    lesson capture, checks for duplicates, and appends to lessons-learned.yaml.
+    
+    Docsify dashboard auto-reflects changes (no generation needed - it's a viewer).
+  
+  business_value:
+    - "Systematic capture of debugging insights and solutions"
+    - "Prevent repeated mistakes through documented prevention rules"
+    - "Build institutional knowledge from daily development work"
+    - "Reduce time spent re-solving known problems"
+  
+  technical_approach:
+    - "Hybrid: Git automation + human insight"
+    - "Reuse existing GitMetricsCollector (Tier 3)"
+    - "Leverage KnowledgeGraph FTS5 for duplication detection"
+    - "Interactive prompts ensure quality over automation"
+    - "YAML validation prevents schema corruption"
+  
+  key_components:
+    - component: "LearningLibrarianAgent"
+      path: "src/cortex_agents/learning_librarian_agent.py"
+      purpose: "Specialist agent for learning operations"
+    
+    - component: "UpdateLearningLibraryModule"
+      path: "src/operations/modules/learning/update_learning_library_module.py"
+      purpose: "Core orchestrator - git scan, filter, capture, validate, write"
+    
+    - component: "Intent Registration"
+      path: "cortex-operations.yaml"
+      purpose: "Entry point with natural language triggers"
+    
+    - component: "Response Template"
+      path: "cortex-brain/response-templates-v4.yaml"
+      purpose: "Formatted responses for learning operations"
+
+definition_of_ready:
+  requirements:
+    - requirement: "Git history scanning capability exists (GitMetricsCollector)"
+      status: "✅ READY"
+      evidence: "src/tier3/metrics/git_metrics.py"
+    
+    - requirement: "YAML file structure documented (lessons-learned.yaml schema)"
+      status: "✅ READY"
+      evidence: "cortex-brain/learning/lessons-learned.yaml (1188 lines, 20 lessons)"
+    
+    - requirement: "FTS5 search available for duplication detection"
+      status: "✅ READY"
+      evidence: "src/tier2/knowledge_graph.py has FTS5 virtual table"
+    
+    - requirement: "Docsify dashboard exists and serves YAML-based content"
+      status: "✅ READY"
+      evidence: "cortex-brain/dashboards/learning/ + learning_dashboard_launcher.py"
+    
+    - requirement: "Agent framework supports new specialist agents"
+      status: "✅ READY"
+      evidence: "src/cortex_agents/base_agent.py + agent registration pattern"
+    
+    - requirement: "TDD infrastructure ready (pytest, coverage, test isolation)"
+      status: "✅ READY"
+      evidence: "pytest.ini enforces CORTEX-only test discovery"
+
+definition_of_done:
+  acceptance_criteria:
+    - criterion: "User can trigger 'update learning library' from natural language"
+      validation: "cortex-operations.yaml has triggers + intent routing works"
+    
+    - criterion: "System scans git history for configurable timeframe (default 24h)"
+      validation: "Subprocess calls git log with --since parameter"
+    
+    - criterion: "Heuristics identify learning-worthy commits (>100 lines, test changes, errors)"
+      validation: "Filter returns candidates with confidence scores"
+    
+    - criterion: "Interactive prompts guide user through structured capture"
+      validation: "5 prompts: problem, root_cause, solution, prevention_rules, time_cost"
+    
+    - criterion: "FTS5 search detects potential duplicates with >70% keyword overlap"
+      validation: "Shows existing lessons before appending new ones"
+    
+    - criterion: "YAML writer validates schema before appending"
+      validation: "PyYAML loads, validates structure, appends, writes safely"
+    
+    - criterion: "Docsify dashboard reflects changes without manual action"
+      validation: "Refresh browser shows new lessons (file-based, no generation)"
+    
+    - criterion: "All phases follow RED→GREEN→REFACTOR with tests first"
+      validation: "Git history shows test commits before implementation commits"
+    
+    - criterion: "Integration tests validate end-to-end flow"
+      validation: "tests/integration/test_learning_library_update_e2e.py passes"
+    
+    - criterion: "Brain Protector validates against SKULL rules"
+      validation: "No TDD violations, no root-level docs, proper test isolation"
+
+phases:
+  # Phases added incrementally following INCREMENTAL_PLAN_GENERATION instinct
+  
+  phase_1:
+    name: "Git History Scanner"
+    description: "Scan git history for specified timeframe and extract commit metadata"
+    estimated_hours: 3
+    dependencies: []
+    
+    user_stories:
+      - story: "As a user, I want to scan last 24 hours of git commits so I can review recent work"
+        acceptance: "System extracts commits with timestamps, messages, files changed, line counts"
+      
+      - story: "As a user, I want to configure timeframe so I can scan different periods"
+        acceptance: "Accepts hours/days parameter, defaults to 24h"
+    
+    tdd_requirements:
+      red_phase:
+        - test: "test_scan_git_history_default_24h"
+          description: "Verify default 24h scan returns commits from last day"
+          file: "tests/operations/learning/test_git_history_scanner.py"
+        
+        - test: "test_scan_git_history_custom_timeframe"
+          description: "Verify custom timeframe (48h, 7d) works correctly"
+          file: "tests/operations/learning/test_git_history_scanner.py"
+        
+        - test: "test_extract_commit_metadata"
+          description: "Verify extracted metadata includes: sha, message, author, timestamp, files, lines"
+          file: "tests/operations/learning/test_git_history_scanner.py"
+        
+        - test: "test_handle_non_git_directory"
+          description: "Verify graceful failure when not in git repo"
+          file: "tests/operations/learning/test_git_history_scanner.py"
+      
+      green_phase:
+        implementation_file: "src/operations/modules/learning/git_history_scanner.py"
+        key_functions:
+          - "scan_commits(repo_path, since_hours=24)"
+          - "extract_commit_metadata(commit_sha)"
+          - "parse_git_log_output(log_text)"
+        
+        integration_points:
+          - "Reuse subprocess.run() pattern from GitMetricsCollector"
+          - "Parse git log --numstat output for line counts"
+          - "Handle git errors (not a repo, no commits)"
+      
+      refactor_phase:
+        - "Extract timeframe parsing to utility function"
+        - "Cache git log output to avoid repeated subprocess calls"
+        - "Add logging for debugging (commits found, timeframe, errors)"
+    
+    definition_of_done:
+      - "All 4 RED tests written and failing"
+      - "Implementation passes all tests"
+      - "Code coverage >90% for git_history_scanner.py"
+      - "Refactored with no duplication"
+      - "Git checkpoint created: 'CORTEX-TDD: phase-RED' → 'phase-GREEN' → 'phase-REFACTOR'"
+    
+    skull_compliance:
+      - rule: "TDD_ENFORCEMENT"
+        validation: "Git history shows test commits before implementation"
+      
+      - rule: "TEST_LOCATION_SEPARATION"
+        validation: "Tests in tests/operations/learning/ (CORTEX tests in CORTEX repo)"
+      
+      - rule: "GIT_CHECKPOINT_ENFORCEMENT"
+        validation: "3 commits for RED/GREEN/REFACTOR phases"
+  
+  phase_2:
+    name: "Heuristic Commit Filter"
+    description: "Identify learning-worthy commits using heuristics (line count, test changes, error patterns)"
+    estimated_hours: 4
+    dependencies: ["phase_1"]
+    
+    user_stories:
+      - story: "As a user, I want system to identify significant commits so I don't review trivial changes"
+        acceptance: "Filter returns commits with >100 lines changed OR test file modifications OR error-related keywords"
+      
+      - story: "As a user, I want confidence scores so I can prioritize which commits to review"
+        acceptance: "Each candidate has score 0.0-1.0 based on heuristic strength"
+    
+    heuristics:
+      line_count:
+        threshold: 100
+        weight: 0.3
+        description: "Large commits likely involve significant work"
+      
+      test_changes:
+        patterns: ["test_*.py", "*_test.py", "tests/"]
+        weight: 0.4
+        description: "Test changes indicate problem-solving"
+      
+      error_keywords:
+        patterns: ["fix", "bug", "error", "crash", "fail", "debug", "issue"]
+        weight: 0.5
+        description: "Error-related commits capture lessons learned"
+      
+      refactor_keywords:
+        patterns: ["refactor", "cleanup", "optimize", "improve"]
+        weight: 0.3
+        description: "Refactorings document better approaches"
+    
+    tdd_requirements:
+      red_phase:
+        - test: "test_filter_by_line_count"
+          description: "Verify commits >100 lines marked as candidates"
+          file: "tests/operations/learning/test_commit_filter.py"
+        
+        - test: "test_filter_by_test_changes"
+          description: "Verify commits touching test files marked as candidates"
+          file: "tests/operations/learning/test_commit_filter.py"
+        
+        - test: "test_filter_by_error_keywords"
+          description: "Verify commits with 'fix', 'bug', etc. marked as candidates"
+          file: "tests/operations/learning/test_commit_filter.py"
+        
+        - test: "test_calculate_confidence_score"
+          description: "Verify weighted scoring: test_changes=0.4, error=0.5, lines=0.3"
+          file: "tests/operations/learning/test_commit_filter.py"
+        
+        - test: "test_rank_candidates_by_score"
+          description: "Verify candidates sorted by confidence descending"
+          file: "tests/operations/learning/test_commit_filter.py"
+      
+      green_phase:
+        implementation_file: "src/operations/modules/learning/commit_filter.py"
+        key_functions:
+          - "filter_learning_candidates(commits: List[CommitMetadata]) -> List[Candidate]"
+          - "calculate_confidence_score(commit: CommitMetadata) -> float"
+          - "match_heuristics(commit: CommitMetadata) -> Dict[str, bool]"
+        
+        integration_points:
+          - "Receives commits from GitHistoryScanner"
+          - "Returns ranked candidates with scores"
+          - "Configurable heuristics via YAML config"
+      
+      refactor_phase:
+        - "Extract heuristic definitions to config file"
+        - "Make weights configurable per-user"
+        - "Add explanation field: why this commit is a candidate"
+    
+    definition_of_done:
+      - "All 5 RED tests written and failing"
+      - "Implementation passes all tests"
+      - "Code coverage >90% for commit_filter.py"
+      - "Heuristics extracted to config YAML"
+      - "Git checkpoint created for RED/GREEN/REFACTOR"
+    
+    skull_compliance:
+      - rule: "TDD_ENFORCEMENT"
+        validation: "Tests written before filter implementation"
+      
+      - rule: "MACHINE_READABLE_FORMATS"
+        validation: "Heuristics stored in YAML, not hardcoded"
+  
+  phase_3:
+    name: "Interactive Lesson Capture"
+    description: "Guide user through structured prompts to capture high-quality lessons"
+    estimated_hours: 5
+    dependencies: ["phase_2"]
+    
+    user_stories:
+      - story: "As a user, I want guided prompts so I capture complete lessons"
+        acceptance: "System prompts for: problem, root_cause, solution, prevention_rules, time_cost"
+      
+      - story: "As a user, I want to see commit context so I remember what happened"
+        acceptance: "Shows commit message, files changed, line counts before prompting"
+      
+      - story: "As a user, I want to skip candidates so I don't document everything"
+        acceptance: "Can type 'skip' to move to next candidate"
+    
+    prompt_flow:
+      - step: 1
+        prompt: "Show commit context (message, files, lines)"
+        purpose: "Refresh user's memory"
+      
+      - step: 2
+        prompt: "What problem were you solving?"
+        field: "problem"
+        validation: "min_length: 20 chars"
+      
+      - step: 3
+        prompt: "What was the root cause?"
+        field: "root_cause"
+        validation: "min_length: 20 chars"
+      
+      - step: 4
+        prompt: "How did you solve it?"
+        field: "solution"
+        validation: "min_length: 20 chars"
+      
+      - step: 5
+        prompt: "What prevention rules apply? (comma-separated)"
+        field: "prevention_rules"
+        validation: "min_items: 1"
+      
+      - step: 6
+        prompt: "How long did debugging/implementation take? (minutes)"
+        field: "time_cost.total_cost_minutes"
+        validation: "numeric, min: 1"
+      
+      - step: 7
+        prompt: "Add tags for categorization? (comma-separated)"
+        field: "tags"
+        validation: "optional"
+    
+    tdd_requirements:
+      red_phase:
+        - test: "test_prompt_for_problem_description"
+          description: "Verify problem prompt shown and input captured"
+          file: "tests/operations/learning/test_lesson_capture.py"
+        
+        - test: "test_prompt_for_root_cause"
+          description: "Verify root_cause prompt and validation (min 20 chars)"
+          file: "tests/operations/learning/test_lesson_capture.py"
+        
+        - test: "test_prompt_for_solution"
+          description: "Verify solution prompt captures implementation details"
+          file: "tests/operations/learning/test_lesson_capture.py"
+        
+        - test: "test_prompt_for_prevention_rules"
+          description: "Verify prevention_rules accepts comma-separated list"
+          file: "tests/operations/learning/test_lesson_capture.py"
+        
+        - test: "test_prompt_for_time_cost"
+          description: "Verify time_cost validation (numeric, positive)"
+          file: "tests/operations/learning/test_lesson_capture.py"
+        
+        - test: "test_skip_candidate"
+          description: "Verify 'skip' command moves to next candidate"
+          file: "tests/operations/learning/test_lesson_capture.py"
+        
+        - test: "test_show_commit_context"
+          description: "Verify commit message, files, lines displayed before prompts"
+          file: "tests/operations/learning/test_lesson_capture.py"
+      
+      green_phase:
+        implementation_file: "src/operations/modules/learning/lesson_capture.py"
+        key_functions:
+          - "capture_lesson(candidate: Candidate) -> Optional[LessonData]"
+          - "prompt_user(question: str, validation: Dict) -> str"
+          - "show_commit_context(candidate: Candidate)"
+          - "validate_input(value: str, rules: Dict) -> bool"
+        
+        integration_points:
+          - "Receives candidates from CommitFilter"
+          - "Returns structured lesson data"
+          - "Uses response templates for formatted prompts"
+      
+      refactor_phase:
+        - "Extract prompt definitions to YAML template"
+        - "Add retry logic for validation failures"
+        - "Support multi-line input for long descriptions"
+        - "Add preview: show captured lesson before confirming"
+    
+    definition_of_done:
+      - "All 7 RED tests written and failing"
+      - "Implementation passes all tests"
+      - "Code coverage >90% for lesson_capture.py"
+      - "Prompts extracted to response template"
+      - "User can skip, retry, or confirm lessons"
+      - "Git checkpoint created for RED/GREEN/REFACTOR"
+    
+    skull_compliance:
+      - rule: "TDD_ENFORCEMENT"
+        validation: "Prompt tests before implementation"
+      
+      - rule: "MACHINE_READABLE_FORMATS"
+        validation: "Prompt templates in YAML, not hardcoded strings"
+  
+  phase_4:
+    name: "Duplication Detection (FTS5)"
+    description: "Search existing lessons-learned.yaml for duplicates using FTS5 full-text search"
+    estimated_hours: 4
+    dependencies: ["phase_3"]
+    
+    user_stories:
+      - story: "As a user, I want duplicate detection so I don't add redundant lessons"
+        acceptance: "System searches existing lessons for similar content"
+      
+      - story: "As a user, I want to see potential duplicates so I can decide whether to add lesson"
+        acceptance: "Shows matching lessons with similarity scores"
+      
+      - story: "As a user, I want to merge with existing lesson so I can enhance rather than duplicate"
+        acceptance: "Option to append to existing lesson instead of creating new one"
+    
+    duplication_algorithm:
+      method: "FTS5 keyword search with TF-IDF scoring"
+      
+      steps:
+        - step: 1
+          action: "Extract keywords from new lesson (problem + solution + tags)"
+          implementation: "Use stopword removal, stemming"
+        
+        - step: 2
+          action: "Query Tier 2 KnowledgeGraph FTS5 patterns table"
+          implementation: "Search against existing lesson titles + problems"
+        
+        - step: 3
+          action: "Calculate similarity score (0.0-1.0)"
+          implementation: "Keyword overlap / total unique keywords"
+        
+        - step: 4
+          action: "Show matches with score >0.7 (70% similarity)"
+          implementation: "Present to user with merge/skip/continue options"
+      
+      thresholds:
+        high_similarity: 0.85  # Very likely duplicate
+        medium_similarity: 0.70  # Possible duplicate
+        low_similarity: 0.50  # Loosely related
+    
+    tdd_requirements:
+      red_phase:
+        - test: "test_extract_keywords_from_lesson"
+          description: "Verify keyword extraction removes stopwords, stems words"
+          file: "tests/operations/learning/test_duplication_detector.py"
+        
+        - test: "test_search_existing_lessons_fts5"
+          description: "Verify FTS5 query returns matching lessons"
+          file: "tests/operations/learning/test_duplication_detector.py"
+        
+        - test: "test_calculate_similarity_score"
+          description: "Verify score = overlapping_keywords / total_unique_keywords"
+          file: "tests/operations/learning/test_duplication_detector.py"
+        
+        - test: "test_filter_by_similarity_threshold"
+          description: "Verify only matches >0.7 returned"
+          file: "tests/operations/learning/test_duplication_detector.py"
+        
+        - test: "test_no_duplicates_found"
+          description: "Verify returns empty list when no matches"
+          file: "tests/operations/learning/test_duplication_detector.py"
+        
+        - test: "test_rank_duplicates_by_score"
+          description: "Verify results sorted by similarity descending"
+          file: "tests/operations/learning/test_duplication_detector.py"
+      
+      green_phase:
+        implementation_file: "src/operations/modules/learning/duplication_detector.py"
+        key_functions:
+          - "detect_duplicates(lesson: LessonData) -> List[DuplicateMatch]"
+          - "extract_keywords(text: str) -> List[str]"
+          - "search_fts5(keywords: List[str]) -> List[ExistingLesson]"
+          - "calculate_similarity(new_keywords: Set, existing_keywords: Set) -> float"
+        
+        integration_points:
+          - "Receives lesson from LessonCapture"
+          - "Queries Tier 2 KnowledgeGraph"
+          - "Returns ranked duplicate candidates"
+          - "Supports merge/skip/continue decision"
+      
+      refactor_phase:
+        - "Extract keyword extraction to shared utility"
+        - "Cache FTS5 queries to avoid repeated searches"
+        - "Add explanation: which keywords caused the match"
+        - "Support configurable similarity thresholds"
+    
+    definition_of_done:
+      - "All 6 RED tests written and failing"
+      - "Implementation passes all tests"
+      - "Code coverage >90% for duplication_detector.py"
+      - "Integration with Tier 2 KnowledgeGraph verified"
+      - "User workflow supports merge/skip/continue"
+      - "Git checkpoint created for RED/GREEN/REFACTOR"
+    
+    skull_compliance:
+      - rule: "TDD_ENFORCEMENT"
+        validation: "Duplication tests before implementation"
+      
+      - rule: "DISTRIBUTED_DATABASE_ARCHITECTURE"
+        validation: "Uses Tier 2 KnowledgeGraph, not monolithic DB"
+  
+  phase_5:
+    name: "YAML Writer & Validator"
+    description: "Safely append new lessons to lessons-learned.yaml with schema validation"
+    estimated_hours: 4
+    dependencies: ["phase_4"]
+    
+    user_stories:
+      - story: "As a user, I want lessons appended safely so existing data isn't corrupted"
+        acceptance: "Backup created, YAML validated before write, atomic operation"
+      
+      - story: "As a user, I want schema validation so malformed lessons are rejected"
+        acceptance: "Validates required fields, data types, structure before append"
+      
+      - story: "As a user, I want automatic ID generation so lessons have unique identifiers"
+        acceptance: "Generates IDs like 'git-learning-001', 'git-learning-002'"
+    
+    yaml_schema:
+      required_fields:
+        - "id"  # Format: {category}-{sequence}
+        - "title"
+        - "category"
+        - "severity"
+        - "date"
+        - "problem"
+        - "root_cause"
+        - "solution"
+        - "prevention_rules"
+        - "time_cost"
+      
+      optional_fields:
+        - "subcategory"
+        - "symptoms"
+        - "code_example"
+        - "related_files"
+        - "related_operations"
+        - "tags"
+        - "pattern_id"
+        - "confidence"
+        - "reusability"
+      
+      validation_rules:
+        id:
+          pattern: "^[a-z0-9-]+$"
+          unique: true
+        
+        severity:
+          allowed: ["critical", "high", "medium", "low", "info"]
+        
+        date:
+          format: "YYYY-MM-DD"
+        
+        time_cost:
+          type: "object"
+          required: ["total_cost_minutes"]
+    
+    safety_protocol:
+      - step: 1
+        action: "Create backup: lessons-learned.yaml.backup"
+        rollback: "Restore from backup on failure"
+      
+      - step: 2
+        action: "Load existing YAML, validate structure"
+        rollback: "Abort if existing YAML corrupted"
+      
+      - step: 3
+        action: "Generate unique ID (check for collisions)"
+        rollback: "Increment sequence until unique"
+      
+      - step: 4
+        action: "Validate new lesson against schema"
+        rollback: "Reject if validation fails, show errors"
+      
+      - step: 5
+        action: "Append to lessons array"
+        rollback: "Don't modify original on validation failure"
+      
+      - step: 6
+        action: "Update metadata (total_lessons, last_updated)"
+        rollback: "Increment count, set timestamp"
+      
+      - step: 7
+        action: "Write atomically (temp file + rename)"
+        rollback: "Restore backup if write fails"
+    
+    tdd_requirements:
+      red_phase:
+        - test: "test_validate_lesson_schema_valid"
+          description: "Verify valid lesson passes schema validation"
+          file: "tests/operations/learning/test_yaml_writer.py"
+        
+        - test: "test_validate_lesson_schema_missing_required"
+          description: "Verify missing required field rejected"
+          file: "tests/operations/learning/test_yaml_writer.py"
+        
+        - test: "test_validate_lesson_schema_invalid_severity"
+          description: "Verify invalid severity value rejected"
+          file: "tests/operations/learning/test_yaml_writer.py"
+        
+        - test: "test_generate_unique_id"
+          description: "Verify ID generation: git-learning-001, git-learning-002"
+          file: "tests/operations/learning/test_yaml_writer.py"
+        
+        - test: "test_create_backup_before_write"
+          description: "Verify .backup file created before modification"
+          file: "tests/operations/learning/test_yaml_writer.py"
+        
+        - test: "test_append_lesson_to_yaml"
+          description: "Verify lesson appended to lessons array"
+          file: "tests/operations/learning/test_yaml_writer.py"
+        
+        - test: "test_update_metadata_counts"
+          description: "Verify total_lessons incremented, last_updated set"
+          file: "tests/operations/learning/test_yaml_writer.py"
+        
+        - test: "test_atomic_write_with_temp_file"
+          description: "Verify writes to .tmp then renames (atomic operation)"
+          file: "tests/operations/learning/test_yaml_writer.py"
+        
+        - test: "test_rollback_on_validation_failure"
+          description: "Verify backup restored if validation fails"
+          file: "tests/operations/learning/test_yaml_writer.py"
+      
+      green_phase:
+        implementation_file: "src/operations/modules/learning/yaml_writer.py"
+        key_functions:
+          - "append_lesson(lesson: LessonData, yaml_path: Path) -> bool"
+          - "validate_lesson_schema(lesson: Dict) -> Tuple[bool, List[str]]"
+          - "generate_unique_id(category: str, existing_ids: Set[str]) -> str"
+          - "create_backup(yaml_path: Path) -> Path"
+          - "atomic_write(yaml_path: Path, data: Dict)"
+        
+        integration_points:
+          - "Receives validated lesson from DuplicationDetector"
+          - "Writes to cortex-brain/learning/lessons-learned.yaml"
+          - "Returns success/failure with error messages"
+      
+      refactor_phase:
+        - "Extract schema definition to separate YAML file"
+        - "Add schema versioning support"
+        - "Improve error messages (which field failed, why)"
+        - "Add dry-run mode for testing without writing"
+    
+    definition_of_done:
+      - "All 9 RED tests written and failing"
+      - "Implementation passes all tests"
+      - "Code coverage >95% for yaml_writer.py (critical code)"
+      - "Backup/rollback protocol verified with error injection"
+      - "Atomic write prevents partial corruption"
+      - "Schema validation catches all malformed data"
+      - "Git checkpoint created for RED/GREEN/REFACTOR"
+    
+    skull_compliance:
+      - rule: "TDD_ENFORCEMENT"
+        validation: "YAML writer tests before implementation"
+      
+      - rule: "BRAIN_ARCHITECTURE_INTEGRITY"
+        validation: "Protects lessons-learned.yaml from corruption"
+      
+      - rule: "MACHINE_READABLE_FORMATS"
+        validation: "Schema defined in YAML, validated programmatically"
+  
+  phase_6:
+    name: "Agent Integration & Entry Point"
+    description: "Create LearningLibrarianAgent, register in IntentRouter, add cortex-operations.yaml entry"
+    estimated_hours: 3
+    dependencies: ["phase_5"]
+    
+    user_stories:
+      - story: "As a user, I want to say 'update learning library' and have system understand"
+        acceptance: "IntentRouter recognizes learning library commands"
+      
+      - story: "As a user, I want natural language triggers so I don't memorize commands"
+        acceptance: "Supports: 'update learning library', 'capture lessons', 'document learnings'"
+    
+    components:
+      learning_librarian_agent:
+        file: "src/cortex_agents/learning_librarian_agent.py"
+        extends: "BaseAgent"
+        
+        responsibilities:
+          - "Route learning library requests"
+          - "Orchestrate git scan → filter → capture → dedupe → write"
+          - "Handle errors and provide feedback"
+          - "Track learning capture events in Tier 1"
+        
+        key_methods:
+          - "can_handle(request: AgentRequest) -> bool"
+          - "execute(request: AgentRequest) -> AgentResponse"
+      
+      cortex_operations_entry:
+        file: "cortex-operations.yaml"
+        operation_name: "update_learning_library"
+        
+        natural_language_triggers:
+          - "update learning library"
+          - "capture lessons"
+          - "document learnings"
+          - "capture what I learned"
+          - "add to learning library"
+          - "update lessons learned"
+        
+        parameters:
+          timeframe_hours:
+            type: "integer"
+            default: 24
+            description: "Hours of git history to scan"
+          
+          auto_approve:
+            type: "boolean"
+            default: false
+            description: "Skip confirmation prompts (dangerous)"
+      
+      intent_router_integration:
+        file: "src/cortex_agents/intent_router.py"
+        changes:
+          - "Add LEARNING_LIBRARY intent type"
+          - "Map intent to LearningLibrarianAgent"
+          - "Add keyword detection for learning-related requests"
+    
+    tdd_requirements:
+      red_phase:
+        - test: "test_learning_librarian_can_handle_learning_requests"
+          description: "Verify can_handle returns True for learning intents"
+          file: "tests/cortex_agents/test_learning_librarian_agent.py"
+        
+        - test: "test_learning_librarian_execute_orchestrates_flow"
+          description: "Verify execute calls: scan → filter → capture → dedupe → write"
+          file: "tests/cortex_agents/test_learning_librarian_agent.py"
+        
+        - test: "test_intent_router_recognizes_learning_triggers"
+          description: "Verify 'update learning library' routes to LearningLibrarianAgent"
+          file: "tests/cortex_agents/test_intent_router_learning.py"
+        
+        - test: "test_cortex_operations_yaml_has_entry"
+          description: "Verify update_learning_library in cortex-operations.yaml"
+          file: "tests/operations/test_operations_registry.py"
+        
+        - test: "test_end_to_end_trigger_to_yaml_append"
+          description: "Integration: user command → lesson appended (mocked prompts)"
+          file: "tests/integration/test_learning_library_trigger.py"
+      
+      green_phase:
+        implementation_order:
+          - step: 1
+            action: "Create LearningLibrarianAgent skeleton"
+            file: "src/cortex_agents/learning_librarian_agent.py"
+          
+          - step: 2
+            action: "Add cortex-operations.yaml entry"
+            file: "cortex-operations.yaml"
+          
+          - step: 3
+            action: "Update IntentRouter with learning keywords"
+            file: "src/cortex_agents/intent_router.py"
+          
+          - step: 4
+            action: "Implement LearningLibrarianAgent.execute() orchestration"
+            file: "src/cortex_agents/learning_librarian_agent.py"
+          
+          - step: 5
+            action: "Wire up all Phase 1-5 components"
+            file: "src/operations/modules/learning/update_learning_library_module.py"
+      
+      refactor_phase:
+        - "Extract orchestration logic to separate UpdateLearningLibraryModule"
+        - "Add comprehensive logging for debugging"
+        - "Add progress monitoring for long operations"
+        - "Improve error messages with actionable guidance"
+    
+    definition_of_done:
+      - "All 5 RED tests written and failing"
+      - "Implementation passes all tests"
+      - "Natural language triggers work end-to-end"
+      - "Agent registered in intent router"
+      - "cortex-operations.yaml entry complete"
+      - "Documentation added to OPERATIONS-REFERENCE.md"
+      - "Git checkpoint created for RED/GREEN/REFACTOR"
+    
+    skull_compliance:
+      - rule: "TDD_ENFORCEMENT"
+        validation: "Agent integration tests before implementation"
+      
+      - rule: "MACHINE_READABLE_FORMATS"
+        validation: "Operation defined in cortex-operations.yaml"
+  
+  phase_7:
+    name: "Integration Tests & End-to-End Validation"
+    description: "Comprehensive integration tests validating entire flow with real git repos"
+    estimated_hours: 4
+    dependencies: ["phase_6"]
+    
+    user_stories:
+      - story: "As a developer, I want integration tests so I know the full pipeline works"
+        acceptance: "Tests cover: trigger → git scan → filter → capture → dedupe → write → docsify"
+      
+      - story: "As a developer, I want edge case coverage so production issues are minimized"
+        acceptance: "Tests handle: no commits, no candidates, all skipped, duplicates, write errors"
+    
+    test_scenarios:
+      scenario_1_happy_path:
+        name: "Complete flow with valid commit"
+        setup:
+          - "Create temp git repo"
+          - "Make commit with >100 lines (triggers heuristic)"
+          - "Mock user prompts with valid responses"
+        
+        execution:
+          - "Trigger 'update learning library'"
+          - "System scans git, finds 1 candidate"
+          - "User provides lesson details via prompts"
+          - "No duplicates found"
+          - "Lesson appended to YAML"
+        
+        assertions:
+          - "lessons-learned.yaml contains new lesson"
+          - "total_lessons incremented"
+          - "last_updated timestamp updated"
+          - "Backup file created"
+          - "Docsify dashboard shows new lesson (HTTP check)"
+      
+      scenario_2_no_commits:
+        name: "No commits in timeframe"
+        setup:
+          - "Create temp git repo"
+          - "No commits in last 24h"
+        
+        execution:
+          - "Trigger 'update learning library'"
+        
+        assertions:
+          - "Returns friendly message: 'No commits found in last 24h'"
+          - "No YAML modifications"
+      
+      scenario_3_no_candidates:
+        name: "Commits exist but none match heuristics"
+        setup:
+          - "Create commit with 5 lines (below threshold)"
+        
+        execution:
+          - "Trigger 'update learning library'"
+        
+        assertions:
+          - "Returns: 'No learning-worthy commits found'"
+          - "Explains heuristics: line count, test changes, keywords"
+      
+      scenario_4_all_skipped:
+        name: "User skips all candidates"
+        setup:
+          - "Create 3 commits matching heuristics"
+          - "Mock user input: 'skip' for all"
+        
+        execution:
+          - "System presents 3 candidates"
+          - "User skips all"
+        
+        assertions:
+          - "Returns: 'All candidates skipped'"
+          - "No YAML modifications"
+      
+      scenario_5_duplicate_found:
+        name: "New lesson matches existing (>70% similarity)"
+        setup:
+          - "Existing lesson: 'File validation bug'"
+          - "New commit: 'Fix validation issue in FileProcessor'"
+          - "Mock user chooses 'merge'"
+        
+        execution:
+          - "Duplication detector finds match (score 0.82)"
+          - "Shows existing lesson"
+          - "User chooses merge"
+        
+        assertions:
+          - "Existing lesson updated, not duplicated"
+          - "total_lessons unchanged"
+      
+      scenario_6_yaml_write_failure:
+        name: "Rollback on write error"
+        setup:
+          - "Make lessons-learned.yaml read-only"
+          - "Valid lesson captured"
+        
+        execution:
+          - "Attempt to write"
+          - "Permission denied error"
+        
+        assertions:
+          - "Error message shown to user"
+          - "Backup restored (if created)"
+          - "No partial corruption"
+      
+      scenario_7_invalid_timeframe:
+        name: "Handle invalid timeframe parameter"
+        setup:
+          - "User: 'update learning library last -5 hours'"
+        
+        execution:
+          - "Parse timeframe"
+        
+        assertions:
+          - "Returns error: 'Invalid timeframe: must be positive'"
+      
+      scenario_8_docsify_reflection:
+        name: "Verify Docsify dashboard reflects changes"
+        setup:
+          - "Launch learning dashboard"
+          - "Append new lesson"
+        
+        execution:
+          - "Refresh browser"
+          - "Search for new lesson title"
+        
+        assertions:
+          - "HTTP GET returns 200"
+          - "HTML contains new lesson title"
+          - "Sidebar shows updated count"
+    
+    tdd_requirements:
+      integration_tests:
+        - test: "test_e2e_happy_path_complete_flow"
+          description: "End-to-end: trigger → append → docsify verification"
+          file: "tests/integration/test_learning_library_update_e2e.py"
+        
+        - test: "test_e2e_no_commits_found"
+          description: "Graceful handling when git history empty"
+          file: "tests/integration/test_learning_library_update_e2e.py"
+        
+        - test: "test_e2e_no_candidates_match_heuristics"
+          description: "No commits meet learning-worthy criteria"
+          file: "tests/integration/test_learning_library_update_e2e.py"
+        
+        - test: "test_e2e_all_candidates_skipped"
+          description: "User skips all presented candidates"
+          file: "tests/integration/test_learning_library_update_e2e.py"
+        
+        - test: "test_e2e_duplicate_detected_and_merged"
+          description: "Duplication detector finds match, user merges"
+          file: "tests/integration/test_learning_library_update_e2e.py"
+        
+        - test: "test_e2e_yaml_write_failure_rollback"
+          description: "Rollback when write fails (permission, disk full)"
+          file: "tests/integration/test_learning_library_update_e2e.py"
+        
+        - test: "test_e2e_invalid_timeframe_parameter"
+          description: "Handle negative/zero/invalid timeframe"
+          file: "tests/integration/test_learning_library_update_e2e.py"
+        
+        - test: "test_e2e_docsify_dashboard_reflection"
+          description: "Verify dashboard HTTP endpoint serves new lesson"
+          file: "tests/integration/test_learning_library_update_e2e.py"
+      
+      test_infrastructure:
+        - "Temp git repo fixture with commit helpers"
+        - "YAML file fixture with backup/restore"
+        - "Mock prompt fixture (avoids blocking on input)"
+        - "HTTP client for Docsify verification"
+        - "Cleanup: remove temp files, reset state"
+    
+    definition_of_done:
+      - "All 8 integration tests written and passing"
+      - "Code coverage >85% across all learning modules"
+      - "Edge cases handled gracefully"
+      - "Error messages actionable and user-friendly"
+      - "Performance acceptable (<5 seconds for 100 commits)"
+      - "Docsify integration verified (HTTP check)"
+      - "Git checkpoint created"
+    
+    skull_compliance:
+      - rule: "TDD_ENFORCEMENT"
+        validation: "Integration tests cover real-world scenarios"
+      
+      - rule: "BRAIN_ARCHITECTURE_INTEGRITY"
+        validation: "No corruption of lessons-learned.yaml under error conditions"
+  
+  phase_8:
+    name: "Refactor & Performance Optimization"
+    description: "Code cleanup, performance tuning, documentation polish"
+    estimated_hours: 3
+    dependencies: ["phase_7"]
+    
+    user_stories:
+      - story: "As a developer, I want clean code so future maintenance is easy"
+        acceptance: "No duplication, clear names, comprehensive docstrings"
+      
+      - story: "As a user, I want fast operation so I don't wait for large histories"
+        acceptance: "Processes 100 commits in <5 seconds"
+    
+    refactoring_targets:
+      code_quality:
+        - target: "Eliminate duplication across modules"
+          action: "Extract common patterns to shared utilities"
+          files:
+            - "git_history_scanner.py"
+            - "commit_filter.py"
+            - "duplication_detector.py"
+        
+        - target: "Improve error messages"
+          action: "Add context, suggestions, recovery options"
+          examples:
+            - "Before: 'Validation failed'"
+            - "After: 'Validation failed: problem field requires min 20 chars. You entered 8 chars.'"
+        
+        - target: "Add comprehensive docstrings"
+          action: "Module, class, function, parameter documentation"
+          standard: "Google docstring format"
+        
+        - target: "Type hints everywhere"
+          action: "Full type annotations for mypy validation"
+          coverage: "100% of public APIs"
+      
+      performance_optimizations:
+        - optimization: "Git log caching"
+          problem: "Repeated subprocess calls expensive"
+          solution: "Cache parsed commits for session"
+          expected_gain: "50% faster on re-runs"
+        
+        - optimization: "FTS5 query batching"
+          problem: "N queries for N lessons (N+1 problem)"
+          solution: "Batch keyword searches"
+          expected_gain: "3x faster duplication detection"
+        
+        - optimization: "YAML parsing once"
+          problem: "Reload YAML for each validation"
+          solution: "Load once, validate in-memory"
+          expected_gain: "40% faster validation"
+        
+        - optimization: "Lazy prompt rendering"
+          problem: "Render all prompts upfront"
+          solution: "Render on-demand"
+          expected_gain: "Faster startup"
+      
+      documentation_polish:
+        - doc: "Module-level README"
+          file: "src/operations/modules/learning/README.md"
+          content:
+            - "Architecture diagram"
+            - "Component responsibilities"
+            - "Integration points"
+            - "Usage examples"
+        
+        - doc: "User guide"
+          file: "cortex-brain/documents/implementation-guides/learning-library-capture-guide.md"
+          content:
+            - "Quick start"
+            - "Timeframe configuration"
+            - "Heuristic tuning"
+            - "Troubleshooting"
+        
+        - doc: "API documentation"
+          file: "docs/api/learning-library.md"
+          content:
+            - "Public functions"
+            - "Parameters"
+            - "Return types"
+            - "Error conditions"
+    
+    tdd_requirements:
+      refactor_validation:
+        - test: "test_no_code_duplication"
+          description: "Radon check: no duplicate code blocks >5 lines"
+          file: "tests/quality/test_code_quality_learning.py"
+        
+        - test: "test_all_functions_have_docstrings"
+          description: "Verify 100% docstring coverage"
+          file: "tests/quality/test_code_quality_learning.py"
+        
+        - test: "test_all_functions_have_type_hints"
+          description: "Mypy validation passes with strict mode"
+          file: "tests/quality/test_code_quality_learning.py"
+        
+        - test: "test_performance_100_commits_under_5_seconds"
+          description: "Benchmark: process 100 commits in <5s"
+          file: "tests/performance/test_learning_library_performance.py"
+        
+        - test: "test_git_log_cache_hit_rate"
+          description: "Verify cache used on repeated scans (>80% hit rate)"
+          file: "tests/performance/test_learning_library_performance.py"
+      
+      green_phase:
+        implementation_order:
+          - step: 1
+            action: "Extract common utilities"
+            file: "src/operations/modules/learning/utils.py"
+          
+          - step: 2
+            action: "Add caching layer"
+            file: "src/operations/modules/learning/cache.py"
+          
+          - step: 3
+            action: "Improve error messages"
+            pattern: "Replace all generic errors with context"
+          
+          - step: 4
+            action: "Add type hints"
+            tool: "mypy --strict"
+          
+          - step: 5
+            action: "Write documentation"
+            files: ["README.md", "user-guide.md", "api-docs.md"]
+      
+      refactor_phase:
+        - "Run black formatter"
+        - "Run pylint (target score >9.0)"
+        - "Run vulture (remove dead code)"
+        - "Verify no TODO/FIXME/HACK comments"
+    
+    definition_of_done:
+      - "All quality tests passing (no duplication, full docstrings, type hints)"
+      - "All performance benchmarks met (<5s for 100 commits)"
+      - "Code coverage maintained at >90%"
+      - "Documentation complete (README, guide, API)"
+      - "Pylint score >9.0"
+      - "No dead code (vulture clean)"
+      - "Git checkpoint created"
+    
+    skull_compliance:
+      - rule: "CODE_STYLE_CONSISTENCY"
+        validation: "Black formatting, consistent naming, clear structure"
+      
+      - rule: "API_DOCUMENTATION_REQUIRED"
+        validation: "All public functions documented with examples"
+  
+  phase_9:
+    name: "System Realignment & SKULL Validation"
+    description: "Final alignment check, SKULL compliance validation, production readiness"
+    estimated_hours: 2
+    dependencies: ["phase_8"]
+    
+    user_stories:
+      - story: "As a developer, I want SKULL validation so feature doesn't violate governance"
+        acceptance: "Brain Protector validates against all 44 Tier 0 instincts"
+      
+      - story: "As a developer, I want system realignment so all components are synchronized"
+        acceptance: "Align orchestrator runs successfully with no warnings"
+    
+    validation_checklist:
+      tdd_compliance:
+        - check: "All phases followed RED→GREEN→REFACTOR"
+          validation: "Git history shows test commits before implementation"
+          evidence: "Git log filtered by 'CORTEX-TDD: phase-RED'"
+        
+        - check: "Tests in correct location (tests/operations/learning/)"
+          validation: "No tests in src/, all in tests/"
+          evidence: "File search: no test_*.py in src/"
+        
+        - check: "Test isolation enforced (CORTEX tests only)"
+          validation: "pytest.ini enforces CORTEX-only discovery"
+          evidence: "pytest runs only CORTEX tests, not app tests"
+      
+      document_organization:
+        - check: "No root-level documents created"
+          validation: "All docs in cortex-brain/documents/"
+          evidence: "File search: no planning-*.md in root"
+        
+        - check: "Implementation guide created in correct location"
+          validation: "cortex-brain/documents/implementation-guides/learning-library-capture-guide.md exists"
+          evidence: "File exists check"
+      
+      git_isolation:
+        - check: "No CORTEX code in user repos"
+          validation: "All learning library code in CORTEX repo"
+          evidence: "Grep search: no learning_librarian_agent.py in sample apps"
+        
+        - check: "No brain state files committed"
+          validation: ".gitignore blocks conversation-history.jsonl, alignment-state.json"
+          evidence: "Git status shows untracked for brain state"
+      
+      brain_architecture:
+        - check: "Tier separation maintained"
+          validation: "Git scanner uses Tier 3, deduplication uses Tier 2, prompts use Tier 1"
+          evidence: "Import statements show proper tier usage"
+        
+        - check: "No monolithic database created"
+          validation: "Uses existing Tier 2/3 databases, not new central DB"
+          evidence: "No new database files created"
+      
+      operational_readiness:
+        - check: "Entry point registered in cortex-operations.yaml"
+          validation: "update_learning_library operation exists with triggers"
+          evidence: "YAML parse succeeds, operation found"
+        
+        - check: "Intent routing works end-to-end"
+          validation: "'update learning library' triggers LearningLibrarianAgent"
+          evidence: "Integration test passes"
+        
+        - check: "Response template added"
+          validation: "cortex-brain/response-templates-v4.yaml has learning_library entry"
+          evidence: "YAML parse finds learning_library template"
+        
+        - check: "Help system updated"
+          validation: "docs/OPERATIONS-REFERENCE.md documents update_learning_library"
+          evidence: "Grep search finds operation in reference doc"
+    
+    alignment_protocol:
+      - step: 1
+        action: "Run align orchestrator"
+        command: "User says: 'align'"
+        expected: "All checks pass, no errors"
+      
+      - step: 2
+        action: "Validate SKULL rules"
+        method: "Brain Protector challenges feature against 44 instincts"
+        expected: "All instincts satisfied"
+      
+      - step: 3
+        action: "Run full test suite"
+        command: "pytest tests/ --cov=src"
+        expected: "100% tests pass, coverage >90%"
+      
+      - step: 4
+        action: "Verify Docsify integration"
+        method: "Launch dashboard, check new lessons visible"
+        expected: "HTTP 200, lessons rendered"
+      
+      - step: 5
+        action: "Performance validation"
+        method: "Benchmark with 100-commit history"
+        expected: "<5 seconds total runtime"
+    
+    tdd_requirements:
+      validation_tests:
+        - test: "test_skull_tdd_enforcement_compliance"
+          description: "Verify RED→GREEN→REFACTOR in git history"
+          file: "tests/validation/test_skull_compliance_learning.py"
+        
+        - test: "test_skull_test_location_separation"
+          description: "Verify no tests in src/, all in tests/"
+          file: "tests/validation/test_skull_compliance_learning.py"
+        
+        - test: "test_skull_document_organization"
+          description: "Verify no root-level docs, all in cortex-brain/documents/"
+          file: "tests/validation/test_skull_compliance_learning.py"
+        
+        - test: "test_skull_git_isolation"
+          description: "Verify no CORTEX code in user repos"
+          file: "tests/validation/test_skull_compliance_learning.py"
+        
+        - test: "test_skull_brain_architecture_integrity"
+          description: "Verify tier separation maintained"
+          file: "tests/validation/test_skull_compliance_learning.py"
+        
+        - test: "test_operational_readiness_complete"
+          description: "Verify entry point, routing, templates all wired"
+          file: "tests/validation/test_operational_readiness_learning.py"
+      
+      green_phase:
+        implementation:
+          - "Fix any alignment violations found"
+          - "Update documentation gaps"
+          - "Add missing response templates"
+          - "Ensure all SKULL rules satisfied"
+      
+      refactor_phase:
+        - "Remove any debug markers (console.log, print, TODO)"
+        - "Clean up temporary test files"
+        - "Verify VERSION file updated"
+        - "Update CHANGELOG.md with feature entry"
+    
+    definition_of_done:
+      - "Align orchestrator runs successfully (no errors)"
+      - "All 11 SKULL validation tests passing"
+      - "Full test suite passes (100% success)"
+      - "Code coverage >90% maintained"
+      - "Performance benchmarks met (<5s)"
+      - "Docsify integration verified (HTTP check)"
+      - "Documentation complete and accurate"
+      - "VERSION bumped to 3.9.0"
+      - "CHANGELOG.md updated"
+      - "Feature ready for user testing"
+    
+    skull_compliance:
+      - rule: "OPERATIONAL_READINESS_ENFORCEMENT"
+        validation: "All integration points wired, tested, documented"
+      
+      - rule: "DEBUG_MARKER_REMOVAL_ENFORCEMENT"
+        validation: "No console.log, print statements, or TODO comments"
+      
+      - rule: "DEPLOYMENT_VERSION_TRACKING"
+        validation: "VERSION file updated, CHANGELOG entry added"
+
+risk_mitigation:
+  risks:
+    - risk: "Git history doesn't capture enough context for quality lessons"
+      likelihood: "medium"
+      impact: "medium"
+      mitigation: "Interactive prompts ensure user provides context. Git is just trigger."
+    
+    - risk: "Duplication detection misses similar lessons (FTS5 limitations)"
+      likelihood: "medium"
+      impact: "low"
+      mitigation: "Manual review step, user confirms duplicates. Defer semantic engine to 4.0."
+    
+    - risk: "YAML corruption from concurrent writes"
+      likelihood: "low"
+      impact: "high"
+      mitigation: "Atomic write (temp + rename), backup before modify, file locking"
+    
+    - risk: "Large git histories (1000+ commits) cause timeout"
+      likelihood: "low"
+      impact: "medium"
+      mitigation: "Default 24h timeframe, progress monitoring, configurable timeout"
+    
+    - risk: "User skips all prompts (no lessons captured)"
+      likelihood: "medium"
+      impact: "low"
+      mitigation: "Friendly message, suggest better timeframe or heuristic tuning"
+
+success_metrics:
+  quantitative:
+    - metric: "Lessons captured per week"
+      target: ">5 lessons/week"
+      measurement: "Count lessons with date in last 7 days"
+    
+    - metric: "Time to capture lesson"
+      target: "<3 minutes"
+      measurement: "Timestamp start to YAML append"
+    
+    - metric: "Duplication prevention rate"
+      target: ">90% duplicates caught"
+      measurement: "FTS5 true positives / total duplicates"
+    
+    - metric: "User satisfaction"
+      target: ">4.0/5.0"
+      measurement: "Feedback system ratings"
+  
+  qualitative:
+    - metric: "Lesson quality improvement"
+      target: "Richer context vs manual entry"
+      measurement: "Compare problem/solution depth"
+    
+    - metric: "Adoption rate"
+      target: "Used weekly by CORTEX developers"
+      measurement: "Git commit frequency with feature"
+
+deployment_plan:
+  pre_deployment:
+    - "All 9 phases complete"
+    - "SKULL validation passes"
+    - "Integration tests pass"
+    - "Documentation complete"
+    - "User guide reviewed"
+  
+  deployment_steps:
+    - step: 1
+      action: "Merge to CORTEX-3.0 branch"
+      validation: "CI/CD tests pass"
+    
+    - step: 2
+      action: "Update VERSION to 3.9.0"
+      validation: "File committed"
+    
+    - step: 3
+      action: "Deploy to development environment"
+      validation: "End-to-end smoke test"
+    
+    - step: 4
+      action: "Internal dogfooding (1 week)"
+      validation: "No critical bugs"
+    
+    - step: 5
+      action: "Merge to main branch"
+      validation: "Production deployment"
+  
+  rollback_plan:
+    - "Revert VERSION to 3.8.3"
+    - "Remove cortex-operations.yaml entry"
+    - "Restore lessons-learned.yaml from backup"
+    - "Notify users via feedback system"
+
+notes:
+  - "This feature bridges automation and human insight - git finds candidates, humans provide wisdom"
+  - "Docsify is passive viewer - no generation needed, just append to YAML"
+  - "FTS5 duplication detection is 'good enough' for 3.9, semantic embeddings deferred to 4.0"
+  - "Incremental capture better than perfect capture - ship and iterate"
+  - "TDD mandatory for all phases - tests are specification, not afterthought"
+

@@ -1,0 +1,763 @@
+# Documentation Standardization Orchestrator v2.0
+# State-aware HTML glassmorphism orchestration with audit logging
+
+orchestrator_id: "documentation_orchestrator"
+name: "Documentation Standardization Orchestrator"
+version: "2.0.0"
+status: "production"
+type: "autonomous"
+
+metadata:
+  author: "Asif Hussain"
+  created_at: "2026-01-06"
+  last_updated: "2026-01-06"
+  description: |
+    State-aware orchestration system for HTML glassmorphism standardization
+    that prevents duplicate content, preserves color schemes, and enforces
+    CSS-only architecture through mandatory pre-flight validation and state tracking.
+  
+  copyright: "© 2025-2026 Asif Hussain. All rights reserved."
+  
+  tags:
+    - documentation
+    - html
+    - css
+    - glassmorphism
+    - standardization
+    - level1
+    - level2
+    - audit-logging
+
+# ═══════════════════════════════════════════════════════════════
+# ROUTING CONFIGURATION
+# ═══════════════════════════════════════════════════════════════
+
+routing:
+  patterns:
+    - pattern: "^(standardize|apply glassmorphism|glassmorphism standardization).*$"
+      priority: 25
+      confidence: 1.0
+      match_type: "regex"
+      examples:
+        - "standardize architecture/index.html"
+        - "apply glassmorphism to orchestrators page"
+        - "glassmorphism standardization for all Level 1 pages"
+  
+  fallback_to_llm: false
+  requires_confirmation: true
+
+# ═══════════════════════════════════════════════════════════════
+# AUDIT LOGGING CONFIGURATION
+# ═══════════════════════════════════════════════════════════════
+
+audit_logging:
+  enabled: true
+  log_directory: "logs/cortex-audit/documentation/"
+  
+  event_types:
+    - orchestrator_start
+    - orchestrator_complete
+    - phase_start
+    - phase_complete
+    - validation_check
+    - git_checkpoint
+    - inline_style_removal
+    - css_class_application
+    - state_persistence
+    - error
+  
+  tracked_metrics:
+    - inline_styles_removed
+    - css_classes_applied
+    - git_checkpoints_created
+    - pages_standardized
+    - validation_failures
+    - pattern_matches
+    - complexity_score
+    - execution_time_ms
+  
+  redaction:
+    enabled: true
+    sensitive_fields:
+      - "api_key"
+      - "password"
+      - "token"
+      - "secret"
+
+# ═══════════════════════════════════════════════════════════════
+# BRAIN PROTECTION (SKULL) INTEGRATION
+# ═══════════════════════════════════════════════════════════════
+
+brain_protection:
+  enabled: true
+  rules_file: "cortex-brain/brain-protection-rules.yaml"
+  
+  enforced_rules:
+    - PYTHON_ONLY_GENERATION:
+        severity: "CRITICAL"
+        description: "Copilot must NOT directly edit HTML files"
+        enforcement: "block_copilot_edits"
+        violation_action: "reject_request"
+    
+    - CSS_REGISTRY_ENFORCEMENT:
+        severity: "CRITICAL"
+        description: "All CSS classes must exist in registry before application"
+        enforcement: "pre_flight_validation"
+        violation_action: "error_with_remediation"
+    
+    - INLINE_STYLE_PROHIBITION:
+        severity: "CRITICAL"
+        description: "Zero tolerance for inline style attributes"
+        enforcement: "atomic_removal"
+        violation_action: "auto_remove_before_proceed"
+    
+    - GIT_CHECKPOINT_REQUIRED:
+        severity: "HIGH"
+        description: "Mandatory checkpoints before destructive operations"
+        enforcement: "pre_operation_snapshot"
+        violation_action: "auto_create_checkpoint"
+    
+    - STATE_PERSISTENCE:
+        severity: "HIGH"
+        description: "State tracking prevents duplicate applications"
+        enforcement: "state_file_update"
+        violation_action: "warn_user_approved_page"
+
+# ═══════════════════════════════════════════════════════════════
+# KNOWLEDGE BASE INHERITANCE
+# ═══════════════════════════════════════════════════════════════
+
+knowledge_inheritance:
+  tier0_governance:
+    - file: "cortex-brain/brain-protection-rules.yaml"
+      rules:
+        - "PYTHON_ONLY_GENERATION"
+        - "CSS_ONLY_ARCHITECTURE"
+        - "STATE_FIRST_VALIDATION"
+  
+  tier2_knowledge_graph:
+    patterns:
+      - source: "cortex-brain/documents/planning/active/html-glassmorphism-alignment/standards/approved-panels.yaml"
+        type: "approved_html_patterns"
+        version: "2.0"
+      
+      - source: "docs/assets/css/variables.css"
+        type: "css_class_registry"
+        version: "dynamic"
+      
+      - source: "cortex-brain/cache/html-standardization-state.json"
+        type: "persistent_state"
+        version: "dynamic"
+  
+  tier3_dev_context:
+    reference_implementations:
+      - file: "docs/orchestrators/index.html"
+        description: "Reference Level 1 page with approved glassmorphism"
+        git_tag: "v5.0-glassmorphism-approved"
+      
+      - file: "docs/panel-viewer.html"
+        description: "Panel library showcase (approved patterns)"
+        git_tag: "v5.0-glassmorphism-approved"
+
+# ═══════════════════════════════════════════════════════════════
+# EXECUTION PHASES
+# ═══════════════════════════════════════════════════════════════
+
+phases:
+  - id: 1
+    name: "Pre-Flight Validation"
+    duration_estimate: "30 seconds"
+    mandatory: true
+    
+    description: |
+      State-aware validation BEFORE any changes:
+      - Git checkpoint creation
+      - Approved panel library query
+      - Current HTML structure parsing
+      - CSS class registry validation
+      - Inline style detection (CRITICAL)
+      - Duplicate section detection
+      - Complexity scoring
+    
+    tasks:
+      - name: "Create Git Checkpoint"
+        script: "scripts/create-git-checkpoint.py"
+        args: ["--target", "{page_path}", "--reason", "{change_type}"]
+        output: "checkpoint_tag"
+      
+      - name: "Load Approved Panel Library"
+        script: "scripts/load-approved-panels.py"
+        args: ["--library", "cortex-brain/documents/planning/active/html-glassmorphism-alignment/standards/approved-panels.yaml"]
+        output: "approved_patterns"
+      
+      - name: "Parse HTML Structure"
+        script: "scripts/parse-html-structure.py"
+        args: ["--file", "{page_path}"]
+        output: "html_structure"
+      
+      - name: "Query CSS Registry"
+        script: "scripts/query-css-registry.py"
+        args: ["--css-file", "docs/assets/css/variables.css"]
+        output: "css_registry"
+      
+      - name: "Detect Inline Styles"
+        script: "scripts/detect-inline-styles.py"
+        args: ["--file", "{page_path}"]
+        output: "inline_styles_count"
+        critical: true
+      
+      - name: "Calculate Complexity"
+        script: "scripts/calculate-complexity.py"
+        args: ["--html-structure", "{html_structure}"]
+        output: "complexity_score"
+    
+    success_criteria:
+      - git_checkpoint_created: true
+      - library_loaded: true
+      - html_parsed: true
+      - registry_validated: true
+    
+    failure_handling:
+      - condition: "inline_styles_count > 0"
+        action: "block"
+        message: "ERROR: {inline_styles_count} inline styles detected. Run remove-inline-styles.py FIRST."
+      
+      - condition: "complexity_score > 50"
+        action: "warn"
+        message: "Complexity > 50 - Fresh regeneration recommended"
+        suggestion: "strategy = DELETE_AND_REGENERATE"
+    
+    audit_events:
+      - "phase_start"
+      - "validation_check"
+      - "git_checkpoint"
+      - "phase_complete"
+
+  - id: 2
+    name: "State Query & Pattern Matching"
+    duration_estimate: "15 seconds"
+    mandatory: true
+    
+    description: |
+      Load previous state and match against approved patterns:
+      - Load html-standardization-state.json
+      - Check if page previously approved
+      - Match request against pattern library
+      - Determine execution strategy
+    
+    tasks:
+      - name: "Load Page State"
+        script: "scripts/load-page-state.py"
+        args: ["--page", "{page_path}", "--state-file", "cortex-brain/cache/html-standardization-state.json"]
+        output: "page_state"
+      
+      - name: "Check Approved Status"
+        condition: "page_state.status == 'approved'"
+        action: "prompt_user"
+        message: |
+          ⚠️ WARNING: Page previously approved on {page_state.approved_date}
+          Git tag: {page_state.git_tag}
+          Applied patterns: {page_state.applied_patterns}
+          
+          Overwrite approved state? [Y/n]
+      
+      - name: "Match Pattern"
+        script: "scripts/match-pattern.py"
+        args: ["--request", "{user_request}", "--library", "{approved_patterns}"]
+        output: "matched_pattern"
+    
+    success_criteria:
+      - state_loaded: true
+      - pattern_matched: true
+    
+    audit_events:
+      - "phase_start"
+      - "state_persistence"
+      - "pattern_matches"
+      - "phase_complete"
+
+  - id: 3
+    name: "Atomic Operation: Inline Style Removal"
+    duration_estimate: "20 seconds"
+    mandatory: true
+    condition: "inline_styles_count > 0"
+    
+    description: |
+      Remove ALL inline style attributes atomically.
+      This MUST complete before CSS class application.
+    
+    tasks:
+      - name: "Remove Inline Styles"
+        script: "scripts/remove-inline-styles.py"
+        args: ["--file", "{page_path}", "--backup"]
+        output: "removed_count"
+      
+      - name: "Validate Removal"
+        script: "scripts/validate-no-inline-styles.py"
+        args: ["--file", "{page_path}"]
+        assertion: "inline_count == 0"
+        critical: true
+    
+    success_criteria:
+      - inline_styles_removed: true
+      - validation_passed: true
+    
+    rollback_on_failure: true
+    
+    audit_events:
+      - "phase_start"
+      - "inline_style_removal"
+      - "validation_check"
+      - "phase_complete"
+
+  - id: 4
+    name: "Atomic Operation: CSS Class Application"
+    duration_estimate: "30 seconds"
+    mandatory: true
+    
+    description: |
+      Apply CSS classes from approved pattern library.
+      Pre-condition: Zero inline styles.
+    
+    tasks:
+      - name: "Apply Pattern HTML"
+        script: "scripts/standardize_level1_view.py"
+        args: ["--file", "{page_path}", "--pattern", "{matched_pattern}", "--css-registry", "{css_registry}"]
+        output: "applied_classes"
+      
+      - name: "Validate CSS Classes"
+        script: "scripts/validate-css-classes.py"
+        args: ["--file", "{page_path}", "--registry", "{css_registry}"]
+        output: "unregistered_classes"
+      
+      - name: "Assert No Unregistered Classes"
+        condition: "len(unregistered_classes) == 0"
+        assertion: true
+        critical: true
+    
+    success_criteria:
+      - css_classes_applied: true
+      - no_unregistered_classes: true
+    
+    rollback_on_failure: true
+    
+    audit_events:
+      - "phase_start"
+      - "css_class_application"
+      - "validation_check"
+      - "phase_complete"
+
+  - id: 5
+    name: "State Persistence & Approval"
+    duration_estimate: "10 seconds"
+    mandatory: true
+    
+    description: |
+      Save standardization state for future invocations.
+      Update approved panel library if new pattern created.
+    
+    tasks:
+      - name: "Update State File"
+        script: "scripts/save-page-state.py"
+        args:
+          - "--page": "{page_path}"
+          - "--state-file": "cortex-brain/cache/html-standardization-state.json"
+          - "--applied-patterns": "{applied_classes}"
+          - "--git-checkpoint": "{checkpoint_tag}"
+          - "--status": "approved"
+      
+      - name: "Update Approved Library"
+        condition: "new_pattern_created == true"
+        script: "scripts/add-to-approved-library.py"
+        args: ["--pattern", "{new_pattern}", "--library", "cortex-brain/documents/planning/active/html-glassmorphism-alignment/standards/approved-panels.yaml"]
+    
+    success_criteria:
+      - state_persisted: true
+      - library_updated: true
+    
+    audit_events:
+      - "phase_start"
+      - "state_persistence"
+      - "phase_complete"
+
+  - id: 6
+    name: "Validation & Reporting"
+    duration_estimate: "15 seconds"
+    mandatory: true
+    
+    description: |
+      Final validation and user-facing report generation.
+    
+    tasks:
+      - name: "Run Full Validation"
+        script: "scripts/validate-standardization.py"
+        args: ["--file", "{page_path}"]
+        checks:
+          - zero_inline_styles
+          - all_classes_registered
+          - glassmorphism_applied
+          - git_checkpoint_exists
+          - state_tracked
+      
+      - name: "Generate Report"
+        script: "scripts/generate-standardization-report.py"
+        args: ["--page", "{page_path}", "--output", "reports/standardization-{timestamp}.md"]
+    
+    success_criteria:
+      - validation_passed: true
+      - report_generated: true
+    
+    audit_events:
+      - "phase_start"
+      - "validation_check"
+      - "phase_complete"
+      - "orchestrator_complete"
+
+# ═══════════════════════════════════════════════════════════════
+# VALIDATORS REGISTRY
+# ═══════════════════════════════════════════════════════════════
+
+validators:
+  enabled: true
+  registry_path: "cortex-toolkit/validators/"
+  
+  registered_validators:
+    - id: "template_compliance"
+      class: "TemplateComplianceValidator"
+      priority: "critical"
+      auto_run: true
+      reference_template: "docs/orchestrators/index.html"
+      description: "Validates Level 1 pages against approved template standards"
+      checks:
+        - margins_match: "Left/right body margins match orchestrators/index.html"
+        - logo_placement: "CORTEX logo atop introduction panel"
+        - hero_image: "Hero-robot-head image present"
+        - panel_structure: "Glassmorphism panel structure valid"
+      failure_action: "warn"
+      
+    - id: "margins"
+      class: "MarginsValidator"
+      priority: "high"
+      auto_run: true
+      approved_margins:
+        body_left: "2rem"
+        body_right: "2rem"
+        content_max_width: "1400px"
+      description: "Validates body left/right margins are exactly 2rem"
+      checks:
+        - body_left_margin: "2rem"
+        - body_right_margin: "2rem"
+        - content_max_width: "1400px"
+      failure_action: "warn"
+    
+    - id: "logo_placement"
+      class: "LogoPlacementValidator"
+      priority: "high"
+      auto_run: true
+      expected_position: "atop_introduction_panel"
+      description: "Verifies CORTEX logo placed atop introduction panel"
+      checks:
+        - logo_exists: "CORTEX logo image found"
+        - logo_position: "Logo before introduction panel in DOM"
+        - visual_position: "Logo visually above introduction panel"
+      failure_action: "warn"
+    
+    - id: "inline_styles"
+      class: "InlineStyleValidator"
+      priority: "critical"
+      auto_run: true
+      tolerance: 0
+      description: "Zero tolerance for inline styles (CRITICAL brain protection rule)"
+      checks:
+        - inline_style_count: "Zero inline style attributes"
+        - style_attribute_forbidden: "No 'style=' attributes in HTML"
+      failure_action: "block"
+      auto_remediation:
+        enabled: true
+        script: "cortex-toolkit/orchestrators/documentation/remove_inline_styles.py"
+        message: "Auto-removing inline styles before proceeding..."
+    
+    - id: "uniqueness"
+      class: "UniquenessValidator"
+      priority: "medium"
+      auto_run: false  # Manual trigger only
+      threshold: 0.30  # <30% overlap
+      description: "Validates Level 1 page content uniqueness (overlap <30%)"
+      compare_pages:
+        - ["docs/architecture/index.html", "docs/orchestrators/index.html"]
+        - ["docs/architecture/index.html", "docs/features/index.html"]
+      metrics:
+        - heading_similarity: "Section heading overlap percentage"
+        - text_similarity: "Paragraph text similarity via TF-IDF"
+        - diagram_overlap: "Diagram type overlap percentage"
+        - visual_overlap: "Visual component overlap percentage"
+      weighting:
+        headings: 0.3
+        text: 0.4
+        diagrams: 0.2
+        visual: 0.1
+      failure_action: "warn"
+      auto_remediation:
+        enabled: true
+        script: "cortex-toolkit/orchestrators/documentation/standardize_level1_views.py"
+        args: ["--enforce-uniqueness"]
+        message: "Auto-enforcing uniqueness (removing duplicate content)..."
+  
+  validation_pipeline:
+    pre_flight:
+      - inline_styles     # CRITICAL: Blocks if fails
+      - template_compliance
+      - margins
+      - logo_placement
+    
+    post_execution:
+      - inline_styles     # Verify removal worked
+      - uniqueness        # Check content differentiation (if enabled)
+  
+  failure_handling:
+    critical_failures:
+      - validator: "inline_styles"
+        condition: "inline_count > 0"
+        action: "block"
+        message: "CRITICAL: {inline_count} inline styles detected. Auto-remediating..."
+        auto_remediation: true
+      
+    high_failures:
+      - validator: "template_compliance"
+        condition: "failures > 2"
+        action: "warn"
+        message: "Multiple template violations detected. Consider regeneration."
+        recommendation: "Run: python -m cortex_toolkit.cli docs regenerate {page_path}"
+      
+      - validator: "margins"
+        condition: "any_margin_mismatch"
+        action: "warn"
+        message: "Margin mismatch detected. Expected: {expected}, Got: {actual}"
+        recommendation: "Update CSS variables in docs/assets/css/variables.css"
+    
+    medium_failures:
+      - validator: "uniqueness"
+        condition: "overlap_score > 0.30"
+        action: "warn"
+        message: "Content overlap {overlap_score:.1%} exceeds 30% threshold"
+        recommendation: "Run: python -m cortex_toolkit.cli docs standardize-level1-views --enforce-uniqueness"
+
+# ═══════════════════════════════════════════════════════════════
+# EXECUTION STRATEGY (Decision Tree)
+# ═══════════════════════════════════════════════════════════════
+
+execution_strategy:
+  decision_tree:
+    - condition: "inline_styles_count > 0"
+      action: "AUTO_REMEDIATE"
+      message: "Inline styles detected. Auto-removing before proceeding..."
+      script: "cortex-toolkit/orchestrators/documentation/remove_inline_styles.py"
+    
+    - condition: "page_state.status == 'approved' AND user_confirmed == false"
+      action: "PROMPT"
+      message: "Page previously approved. Overwrite?"
+    
+    - condition: "matched_pattern == null"
+      action: "WARN"
+      message: "Pattern not in library. Creating new pattern for approval."
+      strategy: "CREATE_NEW_PATTERN"
+    
+    - condition: "complexity_score > 50"
+      action: "RECOMMEND"
+      message: "High complexity detected. Consider DELETE_AND_REGENERATE strategy."
+      strategy: "DELETE_AND_REGENERATE"
+    
+    - condition: "template_compliance_failures > 2"
+      action: "RECOMMEND_REGENERATION"
+      message: "Multiple template violations. Regeneration recommended."
+      command: "python -m cortex_toolkit.cli docs regenerate {page_path}"
+    
+    - condition: "uniqueness_score > 0.30"
+      action: "ENFORCE_UNIQUENESS"
+      message: "Content overlap exceeds threshold. Enforcing uniqueness..."
+      script: "cortex-toolkit/orchestrators/documentation/standardize_level1_views.py"
+      args: ["--enforce-uniqueness"]
+    
+    - condition: "complexity_score <= 50 AND inline_styles_count == 0 AND template_compliance_passed"
+      action: "PROCEED"
+      strategy: "SCRIPT_DRIVEN"
+
+# ═══════════════════════════════════════════════════════════════
+# ATOMIC OPERATIONS (Rollback-Safe Tools)
+# ═══════════════════════════════════════════════════════════════
+
+atomic_operations:
+  - name: "remove_inline_styles"
+    script: "scripts/remove-inline-styles.py"
+    atomic: true
+    rollback: true
+    pre_conditions:
+      - html_file_exists
+    post_conditions:
+      - zero_inline_styles
+    
+  - name: "apply_css_classes"
+    script: "scripts/standardize_level1_view.py"
+    atomic: true
+    rollback: true
+    pre_conditions:
+      - zero_inline_styles
+      - css_registry_loaded
+    post_conditions:
+      - all_classes_registered
+      - no_duplicate_sections
+    
+  - name: "create_git_checkpoint"
+    script: "scripts/create-git-checkpoint.py"
+    atomic: true
+    rollback: false
+    pre_conditions:
+      - git_repo_exists
+    post_conditions:
+      - git_tag_created
+    
+  - name: "validate_standardization"
+    script: "scripts/validate-standardization.py"
+    atomic: true
+    rollback: false
+    pre_conditions:
+      - html_file_exists
+    post_conditions:
+      - validation_report_generated
+
+# ═══════════════════════════════════════════════════════════════
+# SUCCESS CRITERIA
+# ═══════════════════════════════════════════════════════════════
+
+success_criteria:
+  functional:
+    - zero_inline_styles: "No inline style attributes in HTML"
+    - all_classes_registered: "All CSS classes exist in registry"
+    - glassmorphism_applied: "7-color glassmorphism pattern applied"
+    - git_checkpoint_created: "Rollback checkpoint exists"
+    - state_persisted: "Page state saved for future invocations"
+    - no_duplicates: "No duplicate content or sections created"
+    - validation_passed: "All validation checks pass"
+  
+  quality:
+    - color_scheme_preserved: "Applied patterns match approved library"
+    - css_only_architecture: "Zero inline styles (100% CSS classes)"
+    - approved_library_updated: "New patterns added to library after approval"
+    - complexity_reduced: "Complexity score within acceptable range"
+  
+  user_experience:
+    - clear_error_messages: "Actionable error messages with remediation steps"
+    - state_awareness: "User informed of previous approvals"
+    - rollback_capability: "Git checkpoints enable safe rollback"
+
+# ═══════════════════════════════════════════════════════════════
+# ERROR HANDLING & ROLLBACK
+# ═══════════════════════════════════════════════════════════════
+
+error_handling:
+  rollback_strategy:
+    - trigger: "validation_failure"
+      action: "rollback_to_checkpoint"
+      checkpoint: "{checkpoint_tag}"
+    
+    - trigger: "unregistered_css_class"
+      action: "error_with_remediation"
+      message: |
+        CRITICAL: Unregistered CSS classes detected: {unregistered_classes}
+        
+        Remediation:
+        1. Add classes to docs/assets/css/variables.css
+        2. Or remove classes from HTML
+        3. Re-run standardization
+    
+    - trigger: "inline_styles_detected"
+      action: "auto_remediate"
+      script: "scripts/remove-inline-styles.py"
+      message: "Auto-removing inline styles before proceeding..."
+  
+  assertion_failures:
+    - assertion: "inline_count == 0"
+      action: "block"
+      message: "CRITICAL: Inline styles still present after removal"
+    
+    - assertion: "len(unregistered_classes) == 0"
+      action: "block"
+      message: "CRITICAL: Unregistered CSS classes detected"
+    
+    - assertion: "git_checkpoint_exists"
+      action: "auto_create"
+      message: "Creating missing git checkpoint..."
+
+# ═══════════════════════════════════════════════════════════════
+# METRICS & OBSERVABILITY
+# ═══════════════════════════════════════════════════════════════
+
+metrics:
+  tracked:
+    - pages_standardized_count
+    - inline_styles_removed_total
+    - css_classes_applied_total
+    - git_checkpoints_created_count
+    - validation_failures_count
+    - rollbacks_triggered_count
+    - pattern_matches_success_rate
+    - complexity_score_average
+    - execution_time_ms_p50
+    - execution_time_ms_p95
+  
+  alerts:
+    - condition: "validation_failures_count > 5"
+      severity: "warning"
+      message: "High validation failure rate detected"
+    
+    - condition: "rollbacks_triggered_count > 3"
+      severity: "critical"
+      message: "Frequent rollbacks - review execution strategy"
+
+# ═══════════════════════════════════════════════════════════════
+# DOCUMENTATION REFERENCES
+# ═══════════════════════════════════════════════════════════════
+
+documentation:
+  prompt_file: ".github/prompts/cortex-docs.prompt.md"
+  version: "2.0.0"
+  
+  related_files:
+    - "cortex-brain/documents/planning/active/html-glassmorphism-alignment/standards/approved-panels.yaml"
+    - "docs/assets/css/variables.css"
+    - "cortex-brain/cache/html-standardization-state.json"
+    - "docs/design-system/migration-guide.md"
+  
+  scripts:
+    - "scripts/remove-inline-styles.py"
+    - "scripts/standardize_level1_view.py"
+    - "scripts/validate-standardization.py"
+    - "scripts/create-git-checkpoint.py"
+    - "scripts/load-page-state.py"
+    - "scripts/save-page-state.py"
+
+# ═══════════════════════════════════════════════════════════════
+# VERSION HISTORY
+# ═══════════════════════════════════════════════════════════════
+
+changelog:
+  - version: "2.0.0"
+    date: "2026-01-06"
+    changes:
+      - "State-aware pre-flight validation system"
+      - "Audit logging integration"
+      - "Brain protection (SKULL) rules enforcement"
+      - "Knowledge base inheritance (Tier 0, 2, 3)"
+      - "Atomic operation framework with rollback"
+      - "CSS class registry validation"
+      - "Inline style prohibition enforcement"
+      - "Approved pattern library integration"
+      - "Git checkpoint automation"
+      - "Python-only generation mandate"
+  
+  - version: "1.4.0"
+    date: "2026-01-05"
+    changes:
+      - "Initial cortex-docs prompt created"
+      - "Basic glassmorphism standardization"
+      - "7-color palette support"

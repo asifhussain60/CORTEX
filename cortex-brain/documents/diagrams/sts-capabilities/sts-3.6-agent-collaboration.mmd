@@ -1,0 +1,132 @@
+---
+title: Agent Collaboration Capability - STS Validation
+description: Handoff mechanism validation between specialist agents
+category: STS Capability
+priority: MEDIUM
+version: 4.0.0
+validation_date: 2025-12-26
+---
+
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+      'actorTextColor': '#fff',
+      'actorBkg': '#9B59B6',
+      'actorBorder': '#7D3C98'
+    }
+  }
+}%%
+
+sequenceDiagram
+    participant STS as 🧪 STS Validator
+    participant Router as 🔀 Intent Router
+    participant Corpus as 🧠 Corpus Callosum
+    participant SPE as 📚 Strategic Planning<br/>Expert Agent
+    participant IE as 🔍 Investigation<br/>Expert Agent
+    participant Brain as 💾 4-Tier Brain
+    
+    %% Handoff Test 1: Planning to Investigation
+    rect rgb(123, 104, 238)
+        Note over STS,Brain: HANDOFF TEST 1: Planning → Investigation
+        STS->>Router: Request: "Plan feature X then investigate bug Y"
+        activate Router
+        
+        Router->>Router: Parse intent:<br/>• Primary: feature_planning<br/>• Secondary: bug_investigation
+        Router-->>Corpus: Route to Strategic Planning Expert
+        deactivate Router
+        
+        activate Corpus
+        Corpus->>SPE: Activate agent (task: plan feature X)
+        deactivate Corpus
+        
+        activate SPE
+        SPE->>SPE: Analyze feature complexity
+        SPE->>SPE: Generate implementation plan:<br/>• 5 phases<br/>• 12 tasks<br/>• TDD integration
+        
+        SPE->>Brain: Store plan in Tier 2<br/>(knowledge graph)
+        Brain-->>SPE: ✅ Plan stored
+        
+        SPE->>SPE: ⏱️ Start handoff timer
+        SPE->>Corpus: Handoff required:<br/>task: bug_investigation<br/>context: feature_plan_id
+        deactivate SPE
+        
+        activate Corpus
+        Corpus->>Corpus: Validate handoff:<br/>• Context packaged<br/>• Agent available<br/>• No data loss
+        
+        Corpus->>IE: Activate agent (task: investigate bug Y)
+        Corpus->>IE: Transfer context:<br/>• Feature plan context<br/>• Related codebase info<br/>• Previous conversation
+        deactivate Corpus
+        
+        activate IE
+        IE->>IE: Receive context ✓
+        IE->>IE: ⏱️ Measure handoff latency: 28ms
+        
+        IE->>Brain: Query related issues from Tier 2
+        Brain-->>IE: Historical patterns retrieved
+        
+        IE->>IE: Investigate bug:<br/>• Root cause: async race condition<br/>• Impact: high<br/>• Fix: add mutex lock
+        
+        IE->>Brain: Store investigation results
+        Brain-->>IE: ✅ Results stored
+        
+        IE-->>STS: ✅ Handoff 1 complete<br/>Latency: 28ms
+        deactivate IE
+    end
+    
+    %% Handoff Test 2: Investigation to Planning
+    rect rgb(231, 76, 60)
+        Note over STS,Brain: HANDOFF TEST 2: Investigation → Planning
+        STS->>Router: Request: "Investigate crash then plan refactor"
+        activate Router
+        
+        Router->>Router: Parse intent:<br/>• Primary: crash_investigation<br/>• Secondary: refactor_planning
+        Router-->>Corpus: Route to Investigation Expert
+        deactivate Router
+        
+        activate Corpus
+        Corpus->>IE: Activate agent (task: investigate crash)
+        deactivate Corpus
+        
+        activate IE
+        IE->>IE: Analyze crash logs
+        IE->>IE: Identify root cause:<br/>• Memory leak in module X<br/>• Affects 3 components<br/>• Requires refactoring
+        
+        IE->>Brain: Store investigation findings
+        Brain-->>IE: ✅ Findings stored
+        
+        IE->>IE: ⏱️ Start handoff timer
+        IE->>Corpus: Handoff required:<br/>task: refactor_planning<br/>context: investigation_id
+        deactivate IE
+        
+        activate Corpus
+        Corpus->>Corpus: Validate handoff:<br/>• Investigation complete<br/>• Context ready<br/>• Agent transition valid
+        
+        Corpus->>SPE: Activate agent (task: plan refactor)
+        Corpus->>SPE: Transfer context:<br/>• Investigation findings<br/>• Affected components<br/>• Severity assessment
+        deactivate Corpus
+        
+        activate SPE
+        SPE->>SPE: Receive context ✓
+        SPE->>SPE: ⏱️ Measure handoff latency: 42ms
+        
+        SPE->>Brain: Query refactoring patterns from Tier 2
+        Brain-->>SPE: Best practices retrieved
+        
+        SPE->>SPE: Generate refactoring plan:<br/>• Phase 1: Extract module X<br/>• Phase 2: Implement cleanup<br/>• Phase 3: Integration tests<br/>• Estimated: 8 hours
+        
+        SPE->>Brain: Store refactoring plan
+        Brain-->>SPE: ✅ Plan stored
+        
+        SPE-->>STS: ✅ Handoff 2 complete<br/>Latency: 42ms
+        deactivate SPE
+    end
+    
+    %% Metrics Validation
+    STS->>STS: Calculate metrics:<br/>• Handoffs tested: 2<br/>• Handoffs passed: 2<br/>• Avg latency: (28+42)/2 = 35ms<br/>• Max latency: 42ms<br/>• Context preserved: 100%
+    
+    STS->>STS: Validate thresholds:<br/>• Handoffs ≥ 2 ✓<br/>• Success rate = 100% ✓<br/>• Avg latency < 100ms ✓<br/>• Context loss = 0% ✓
+    
+    STS->>STS: Update sts-baseline.json:<br/>capability: agent_collaboration<br/>status: PASS<br/>metrics: {handoffs: 2, latency: 35ms}
+    
+    Note over STS,Brain: 🎉 Agent Collaboration Validated!<br/>Seamless handoffs confirmed

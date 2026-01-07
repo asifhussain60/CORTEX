@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cortex-SDD | Login</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+    <!-- Auth Form Container -->
+    <div id="auth-container"></div>
+
+    <!-- Application Script (ES6 Module) -->
+    <script type="module">
+        import { AuthFormComponent } from './js/presentation/components/auth-form.js';
+        import { Logger } from './js/utils/logger.js';
+
+        // Initialize auth form
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                Logger.info('Loading authentication page');
+                const authForm = new AuthFormComponent();
+                const container = document.getElementById('auth-container');
+                
+                if (container) {
+                    authForm.renderLogin(container);
+                } else {
+                    Logger.error('Auth container not found');
+                }
+            } catch (error) {
+                Logger.error('Failed to load authentication page:', error);
+            }
+        });
+    </script>
+</body>
+</html>

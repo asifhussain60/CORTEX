@@ -1,0 +1,462 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://cortex.dev/schemas/integration-manifest-v2.json",
+  "title": "CORTEX Integration Manifest Schema",
+  "description": "JSON Schema for validating CORTEX Integration Manifest (external systems)",
+  "version": "2.0.0",
+  "type": "object",
+  "required": ["schema_version", "manifest_type", "integrations"],
+  "additionalProperties": false,
+  
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+$",
+      "description": "Schema version (e.g., 2.0)"
+    },
+    
+    "manifest_type": {
+      "type": "string",
+      "const": "integration",
+      "description": "Must be 'integration' for IntegrationManifest"
+    },
+    
+    "last_updated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of last update"
+    },
+    
+    "metadata": {
+      "type": "object",
+      "description": "Manifest metadata and statistics"
+    },
+    
+    "changelog": {
+      "type": "array",
+      "description": "Manifest change history",
+      "items": {
+        "type": "object",
+        "properties": {
+          "version": {"type": "string"},
+          "date": {"type": "string"},
+          "author": {"type": "string"},
+          "changes": {
+            "type": "array",
+            "items": {"type": "string"}
+          }
+        }
+      }
+    },
+    
+    "security": {
+      "type": "object",
+      "description": "Global security settings"
+    },
+    
+    "monitoring": {
+      "type": "object",
+      "description": "Global monitoring configuration"
+    },
+    
+    "error_handling": {
+      "type": "object",
+      "description": "Global error handling configuration"
+    },
+    
+    "integrations": {
+      "type": "object",
+      "description": "Registry of external system integrations",
+      "minProperties": 1,
+      "patternProperties": {
+        "^[a-z_0-9]+$": {
+          "type": "object",
+          "required": ["id", "name", "adapter"],
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^integration://.*$",
+              "description": "Unique integration identifier with namespace",
+              "examples": ["integration://azure_devops", "integration://github"]
+            },
+            
+            "version": {
+              "type": "string",
+              "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+              "description": "Integration version (semantic versioning)"
+            },
+            
+            "status": {
+              "type": "string",
+              "enum": ["draft", "active", "deprecated", "archived"],
+              "description": "Current status of integration"
+            },
+            
+            "name": {
+              "type": "string",
+              "minLength": 3,
+              "description": "Human-readable name"
+            },
+            
+            "description": {
+              "type": "string",
+              "minLength": 20,
+              "description": "Integration purpose and capabilities"
+            },
+            
+            "adapter": {
+              "type": "object",
+              "description": "Adapter implementation details",
+              "required": ["class_name", "module_path", "version"],
+              "properties": {
+                "class_name": {
+                  "type": "string",
+                  "pattern": "^[A-Z][a-zA-Z0-9]+Adapter$",
+                  "description": "Adapter class name (PascalCase, ends with 'Adapter')"
+                },
+                "module_path": {
+                  "type": "string",
+                  "pattern": "^src\\..*",
+                  "description": "Python module path (dot-notation)"
+                },
+                "version": {
+                  "type": "string",
+                  "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+                  "description": "Adapter version (semantic versioning)"
+                }
+              }
+            },
+            
+            "authentication": {
+              "type": "object",
+              "description": "Authentication configuration",
+              "required": ["method"],
+              "properties": {
+                "method": {
+                  "type": "string",
+                  "enum": ["PAT", "OAuth2", "API_KEY", "none"],
+                  "description": "Authentication method"
+                },
+                "env_var": {
+                  "type": "string",
+                  "pattern": "^[A-Z_]+$",
+                  "description": "Environment variable name for credentials"
+                },
+                "required_scopes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "uniqueItems": true,
+                  "description": "Required OAuth scopes or permissions"
+                },
+                "validation": {
+                  "type": "object",
+                  "properties": {
+                    "test_endpoint": {
+                      "type": "string",
+                      "description": "Endpoint to test authentication"
+                    },
+                    "expected_status": {
+                      "type": "number",
+                      "minimum": 100,
+                      "maximum": 599,
+                      "description": "Expected HTTP status code"
+                    }
+                  }
+                }
+              }
+            },
+            
+            "api": {
+              "type": "object",
+              "description": "API configuration",
+              "properties": {
+                "base_url": {
+                  "type": "string",
+                  "format": "uri",
+                  "description": "Base URL for API"
+                },
+                "version": {
+                  "type": "string",
+                  "description": "API version"
+                },
+                "endpoints": {
+                  "type": "object",
+                  "description": "API endpoint definitions",
+                  "patternProperties": {
+                    "^[a-z_]+$": {
+                      "type": "object",
+                      "required": ["path", "methods"],
+                      "properties": {
+                        "path": {
+                          "type": "string",
+                          "description": "Endpoint path (may include {placeholders})"
+                        },
+                        "methods": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "enum": ["GET", "POST", "PUT", "PATCH", "DELETE"]
+                          },
+                          "minItems": 1,
+                          "uniqueItems": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            
+            "rate_limiting": {
+              "type": "object",
+              "description": "Rate limiting configuration",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "requests_per_second": {
+                  "type": "number",
+                  "minimum": 1,
+                  "description": "Maximum requests per second"
+                },
+                "burst": {
+                  "type": "number",
+                  "minimum": 1,
+                  "description": "Burst capacity"
+                },
+                "strategy": {
+                  "type": "string",
+                  "enum": ["token_bucket", "sliding_window", "fixed_window"],
+                  "description": "Rate limiting algorithm"
+                }
+              }
+            },
+            
+            "retry": {
+              "type": "object",
+              "description": "Retry policy configuration",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "max_retries": {
+                  "type": "number",
+                  "minimum": 0,
+                  "description": "Maximum retry attempts"
+                },
+                "backoff_strategy": {
+                  "type": "string",
+                  "enum": ["linear", "exponential", "fixed"],
+                  "description": "Backoff algorithm"
+                },
+                "initial_delay": {
+                  "type": "number",
+                  "minimum": 0,
+                  "description": "Initial delay in seconds"
+                },
+                "max_delay": {
+                  "type": "number",
+                  "minimum": 0,
+                  "description": "Maximum delay in seconds"
+                },
+                "retry_on_status": {
+                  "type": "array",
+                  "items": {
+                    "type": "number",
+                    "minimum": 100,
+                    "maximum": 599
+                  },
+                  "description": "HTTP status codes to retry on"
+                }
+              }
+            },
+            
+            "caching": {
+              "type": "object",
+              "description": "Caching configuration",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "ttl": {
+                  "type": "number",
+                  "minimum": 0,
+                  "description": "Cache time-to-live in seconds"
+                },
+                "cache_key_prefix": {
+                  "type": "string",
+                  "description": "Prefix for cache keys"
+                }
+              }
+            },
+            
+            "circuit_breaker": {
+              "type": "object",
+              "description": "Circuit breaker configuration"
+            },
+            
+            "operations": {
+              "type": "object",
+              "description": "Available operations and capabilities"
+            },
+            
+            "configuration": {
+              "type": "object",
+              "description": "Integration-specific configuration"
+            },
+            
+            "orchestrators": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z_0-9]+$"
+              },
+              "uniqueItems": true,
+              "description": "Orchestrators using this integration"
+            }
+          }
+        }
+      }
+    },
+    
+    "adapter_factory": {
+      "type": "object",
+      "description": "Adapter factory configuration",
+      "properties": {
+        "auto_detection": {
+          "type": "boolean",
+          "description": "Auto-detect adapters"
+        },
+        "fallback_adapter": {
+          "type": "string",
+          "description": "Default adapter when detection fails"
+        },
+        "cache_ttl": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Factory cache TTL in seconds"
+        },
+        "middleware": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "enabled", "priority"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Middleware name"
+              },
+              "enabled": {
+                "type": "boolean"
+              },
+              "priority": {
+                "type": "number",
+                "minimum": 1,
+                "description": "Execution priority (lower = earlier)"
+              },
+              "config": {
+                "type": "object",
+                "description": "Middleware-specific configuration"
+              }
+            }
+          }
+        }
+      }
+    },
+    
+    "connection_pooling": {
+      "type": "object",
+      "description": "Connection pooling configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "max_connections": {
+          "type": "number",
+          "minimum": 1
+        },
+        "min_connections": {
+          "type": "number",
+          "minimum": 0
+        },
+        "connection_timeout": {
+          "type": "number",
+          "minimum": 1
+        },
+        "idle_timeout": {
+          "type": "number",
+          "minimum": 1
+        }
+      }
+    },
+    
+    "health_checks": {
+      "type": "object",
+      "description": "Health check configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "interval": {
+          "type": "number",
+          "minimum": 1,
+          "description": "Check interval in seconds"
+        },
+        "timeout": {
+          "type": "number",
+          "minimum": 1,
+          "description": "Check timeout in seconds"
+        },
+        "checks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["integration"],
+            "properties": {
+              "integration": {
+                "type": "string",
+                "description": "Integration to check"
+              },
+              "endpoint": {
+                "type": "string",
+                "description": "Endpoint to probe"
+              },
+              "expected_status": {
+                "type": "number",
+                "minimum": 100,
+                "maximum": 599
+              },
+              "method": {
+                "type": "string",
+                "description": "Custom health check method"
+              }
+            }
+          }
+        }
+      }
+    },
+    
+    "validation": {
+      "type": "object",
+      "description": "Validation rules for the manifest",
+      "properties": {
+        "required_fields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "allowed_auth_methods": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["PAT", "OAuth2", "API_KEY", "username_password", "none"]
+          }
+        }
+      }
+    }
+  }
+}

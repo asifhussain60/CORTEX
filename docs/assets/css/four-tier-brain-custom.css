@@ -1,0 +1,92 @@
+/* Four-Tier Brain Custom Styles */
+/* Purpose-driven design additions for architecture page */
+
+/* Benefits Hero Section */
+.benefits-hero {
+    background: linear-gradient(135deg, rgba(26, 31, 58, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    padding: 3rem;
+}
+
+.benefits-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.benefits-icon-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #00d4ff 0%, #7c7cff 100%);
+    border-radius: 16px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 8px 32px rgba(0, 212, 255, 0.4);
+}
+
+.benefits-icon-badge i {
+    font-size: 2.5rem;
+    color: #fff;
+}
+
+.benefits-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    margin: 0;
+    color: #fff;
+    letter-spacing: -0.02em;
+}
+
+.benefits-subtitle {
+    font-size: clamp(16px, 2vw, 19px);
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 0.75rem;
+    font-style: italic;
+}
+
+/* Benefits cards within the grid */
+.benefits-hero .glass-card-display {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 2rem;
+    border-radius: 12px;
+    border-left: 4px solid #00d4ff;
+    transition: all 0.3s ease;
+}
+
+.benefits-hero .glass-card-display:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 212, 255, 0.3);
+}
+
+.benefit-icon {
+    font-size: 1.5rem;
+    color: #00ff88;
+    margin-top: 0.25rem;
+    margin-bottom: 0.75rem;
+    display: block;
+}
+
+.benefits-hero .glass-card-display h3 {
+    font-size: clamp(1.25rem, 2vw, 1.5rem);
+    font-weight: 600;
+    margin: 0 0 0.75rem 0;
+    color: #fff;
+}
+
+.benefits-hero .glass-card-display p {
+    font-size: clamp(15px, 1.8vw, 17px);
+    line-height: 1.6;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Override overview content styling */
+.overview-content p {
+    font-size: clamp(19px, 2.6vw, 23px);
+    margin-bottom: 2rem;
+}
+
+.overview-content p:last-child {
+    margin-bottom: 0;
+}

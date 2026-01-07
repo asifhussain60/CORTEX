@@ -1,0 +1,215 @@
+# CORTEX Consolidated Implementation Plan - INDEX
+# Version: 1.0.0
+# Created: 2025-12-01
+# Author: Asif Hussain
+# Organization: Feature-based (not sprint-based)
+# Strategy: Foundation first, then complete features end-to-end
+#
+# NOTE: This is an INDEX file. Detailed phase information is in phases/ subdirectory.
+# This structure optimizes load time and reduces context window usage.
+
+metadata:
+  plan_id: "CONSOLIDATED-PLAN-2025-12-01"
+  version: "1.0.0"
+  created_date: "2025-12-01"
+  status: "draft"
+  organization_strategy: "feature-based"
+  implementation_philosophy: "foundation-first, then feature-completion"
+  phase_directory: "phases/"
+  total_phases: 11
+
+# Phase Index - Load individual phases from phases/ directory
+# Each phase file contains complete deliverables, dependencies, and acceptance criteria
+phases:
+  - phase_id: "phase_0"
+    name: "Foundation: Code Quality & Debugging"
+    file: "phases/phase-0-foundation-code-quality-and-debugging.yaml"
+    status: "completed"
+    priority: 1
+    estimated_effort: "18 hours"
+    actual_effort: "48 hours"
+    completion_date: "2025-12-01"
+    version: "v3.4.0"
+    completion_notes: "Debug markers, mock detection, comment cleanup, deprecated code removal. 40/40 tests passing."
+
+  - phase_id: "phase_0"
+    name: "Foundation: Code Quality & Debugging"
+    file: "phases/phase-0-foundation.yaml"
+    status: "completed"
+    priority: 1
+    estimated_effort: "18 hours"
+    actual_effort: "48 hours"
+    completion_date: "2025-12-01"
+    version: "v3.4.0"
+    completion_notes: "Duplicate entry - same work as phase-0-foundation-code-quality-and-debugging.yaml"
+
+  - phase_id: "phase_1"
+    name: "Setup & Onboarding Enhancement"
+    file: "phases/phase-1-setup-and-onboarding-enhancement.yaml"
+    status: "completed"
+    priority: 2
+    estimated_effort: "21 hours"
+    actual_effort: "59 hours"
+    completion_date: "2025-12-01"
+    version: "v3.5.0"
+    completion_notes: "Shared CORTEX tooling environment (10x speedup), long-running notifications, application naming, enhanced setup guide. 11/11 tests passing. Velocity: 181% of estimate (21h → 59h)."
+
+  - phase_id: "phase_2"
+    name: "Architecture Synchronization"
+    file: "phases/phase-2-architecture-synchronization.yaml"
+    status: "not-started"
+    priority: 3
+    estimated_effort: "15 hours"
+
+  - phase_id: "phase_3"
+    name: "TDD Workflow Enhancement - Tier Feeding"
+    file: "phases/phase-3-tdd-workflow-enhancement---tier-feeding.yaml"
+    status: "not-started"
+    priority: 4
+    estimated_effort: "25 hours"
+
+  - phase_id: "phase_4"
+    name: "Incremental Planning System"
+    file: "phases/phase-4-incremental-planning-system.yaml"
+    status: "not-started"
+    priority: 5
+    estimated_effort: "23 hours"
+
+  - phase_id: "phase_5"
+    name: "Response Template System Refactor"
+    file: "phases/phase-5-response-template-system-refactor.yaml"
+    status: "not-started"
+    priority: 6
+    estimated_effort: "38 hours"
+
+  - phase_id: "phase_6"
+    name: "Threat Modeling Integration"
+    file: "phases/phase-6-threat-modeling-integration.yaml"
+    status: "not-started"
+    priority: 7
+    estimated_effort: "29 hours"
+
+  - phase_id: "phase_7"
+    name: "Brain Health & Learning Systems"
+    file: "phases/phase-7-brain-health-and-learning-systems.yaml"
+    status: "not-started"
+    priority: 8
+    estimated_effort: "45 hours"
+
+  - phase_id: "phase_8"
+    name: "Final Integration & Cleanup"
+    file: "phases/phase-8-final-integration-and-cleanup.yaml"
+    status: "not-started"
+    priority: 9
+    estimated_effort: "48 hours"
+
+  - phase_id: "phase_9"
+    name: "Application Health Dashboard - Live Repository Testing"
+    file: "phases/phase-9-application-health-dashboard---live-repo.yaml"
+    status: "not-started"
+    priority: 10
+    estimated_effort: "48 hours"
+
+  - phase_id: "phase_10"
+    name: "Systematic YAML Modularization"
+    file: "phases/phase-10-systematic-yaml-modularization.yaml"
+    status: "not-started"
+    priority: 11
+    estimated_effort: "6.5 hours"
+
+
+# ========================================
+# PLAN SUMMARY
+# ========================================
+
+summary:
+  total_phases: 11
+  total_estimated_effort_hours: 316.5
+  phase_breakdown:
+    phase_0: Foundation (48 hours) - Database, brain protection, entry points
+    phase_1: Planning System (36 hours) - Vision API, DoR/DoD, file-based workflow
+    phase_2: TDD Workflow Enhancements (28 hours) - View discovery, auto-debug, performance
+      refactoring
+    phase_3: Architecture Intelligence (24 hours) - Trend analysis, debt forecasting,
+      ADR generation
+    phase_4: Code Review System (24 hours) - PR analysis, dependency crawling, fix
+      templates
+    phase_5: User Profile System (20 hours) - Tech stack preference, interaction modes
+    phase_6: Enhancement Catalog (18 hours) - Feature tracking, temporal awareness
+    phase_7: Git Checkpoint Integration (16 hours) - Auto-checkpoints, rollback safety
+    phase_8: Upgrade System 2.0 (48 hours) - Brain preservation, embedded detection
+    phase_9: Application Health Dashboard Testing (48 hours) - Live repo validation,
+      align/deploy integration
+    phase_10: Systematic YAML Modularization (6.5 hours) - Auto-split large YAMLs,
+      planning orchestrator integration, response template grouping
+  critical_path:
+  - Phase 0 (Foundation) → Phase 9 (Dashboard Testing)
+  - Phase 1 (Planning) → Phase 2 (TDD) → Phase 7 (Git Checkpoints)
+  - Phase 3 (Architecture Intelligence) complements Phase 2 (TDD)
+  - Phase 4 (Code Review) depends on Phase 2 (TDD) for test generation
+  - Phase 5 (User Profile) enables Phase 1 (Planning) tech stack preference
+  - Phase 6 (Enhancement Catalog) supports Phase 8 (Upgrade) 'What's New' feature
+  - Phase 10 (YAML Modularization) enhances Phase 4 (Incremental Planning) output
+  parallel_work_opportunities:
+    track_a: Phase 1 (Planning) + Phase 5 (User Profile) - Independent systems
+    track_b: Phase 3 (Architecture Intelligence) + Phase 6 (Enhancement Catalog) -
+      Separate databases
+    track_c: Phase 4 (Code Review) after Phase 2 (TDD) complete
+    track_d: Phase 7 (Git Checkpoints) + Phase 8 (Upgrade) - Different concerns
+    track_e: Phase 9 (Dashboard Testing) requires Phase 0 foundation only
+    track_f: Phase 10 (YAML Modularization) can run parallel with Phase 4 (Planning)
+      or after completion
+  deployment_readiness:
+    minimum_viable: Phase 0 complete - CORTEX functional with existing features
+    enhanced_capabilities: Phases 0-5 complete - Planning, TDD, Architecture, Code
+      Review, User Profile
+    production_ready: All 11 phases complete - Full feature set validated with automatic
+      YAML optimization
+  risk_summary:
+    high_risk_phases:
+    - 'Phase 1: Vision API integration (external dependency)'
+    - 'Phase 8: Upgrade system (brain data migration risk)'
+    - 'Phase 9: Large repository testing (performance unknowns)'
+    mitigation_strategy:
+    - 'Phase 1: Vision API failures degrade gracefully, don''t block planning'
+    - 'Phase 8: Comprehensive backup before upgrade, automated rollback'
+    - 'Phase 9: Adaptive timeouts, configurable test paths, skip-if-missing logic'
+  success_criteria:
+  - All 656 existing CORTEX tests pass (no regressions)
+  - Phase-specific acceptance criteria met (documented per deliverable)
+  - 'Performance targets achieved (Phase 9: overview <45s, standard <3min, deep <7min)'
+  - 'Performance targets achieved (Phase 10: Index loads 80%+ faster, 85%+ token
+    reduction)'
+  - Integration tests pass (align orchestrator, deploy Gate 19, CLI triggers)
+  - Documentation complete (guides, specs, reports)
+  user_requirements_mapping:
+    original_request: comprehensive fix for Application Health Dashboard with proper
+      wiring in align, deploy gates, cli wrappers
+    resolution:
+      dashboard_status: ✅ COMPLETE (December 1, 2025 wiring fix)
+      comprehensive_plan: ✅ CREATED (CONSOLIDATED-IMPLEMENTATION-PLAN.yaml, 11 phases,
+        316.5 hours)
+      align_integration: '✅ PLANNED (Phase 9.7: System Alignment integration)'
+      deploy_gates: '✅ PLANNED (Phase 9.7: Gate 19 - Application Health Check)'
+      cli_wrappers: ✅ COMPLETE (December 1, 2025 wiring fix - 9 keywords)
+      live_testing: '✅ PLANNED (Phase 9: KSESSIONS, NOOR CANVAS validation)'
+  next_steps:
+    immediate: Create CONSOLIDATED-PLAN-SUMMARY.md (user requested alongside this
+      file)
+    short_term: Implement Phase 0 (Foundation) - 48 hours
+    medium_term: 'Parallel tracks: Phase 1+5 (Planning+Profile), Phase 3+6 (Architecture+Catalog)'
+    long_term: Complete all phases sequentially/parallel, validate with Phase 9
+  notes:
+  - Plan created December 1, 2025 in response to user request for comprehensive dashboard
+    fix
+  - Dashboard wiring already complete (December 1, 2025 report), plan focuses on validation
+    and enhancement
+  - Phase 9 addresses user's specific request for live repository testing (KSESSIONS,
+    NOOR CANVAS)
+  - Total effort 310 hours assumes foundation-first approach with parallel work opportunities
+  - Phase 10 added December 1, 2025 to make YAML modularization systematic (Option
+    B from user request)
+  - Phase 10 makes manual optimization of this file automatic for all future planning
+    operations
+  - 'Estimated completion: ~8-10 weeks with 1 full-time developer, ~4-5 weeks with
+    2 developers on parallel tracks'

@@ -1,0 +1,830 @@
+# CORTEX Config Manifest v2.0
+# Centralized runtime configuration and operational rules
+#
+# Purpose: Unified configuration for all orchestrators eliminating duplicate rules
+# Reduction: 4,500 lines (8 rule files) → 1,200 lines (-73%)
+#
+# Author: Asif Hussain
+# GitHub: github.com/asifhussain60/CORTEX
+# Created: 2025-12-22
+# Version: 2.0.0
+# Status: PRODUCTION
+
+schema_version: "2.0"
+manifest_type: "config"
+last_updated: "2025-12-22T00:00:00Z"
+
+# ========================================
+# Global Configuration
+# ========================================
+
+global:
+  timezone: "UTC"
+  date_format: "ISO8601"
+  encoding: "utf-8"
+  
+  # Timeouts (seconds)
+  timeouts:
+    default_operation: 300
+    long_operation: 3600
+    network_request: 30
+    test_execution: 600
+  
+  # Performance
+  performance:
+    max_parallel_operations: 4
+    cache_ttl: 300
+    enable_profiling: false
+    memory_limit_mb: 2048
+  
+  # File system
+  file_system:
+    max_file_size_mb: 100
+    allowed_extensions:
+      - ".py"
+      - ".md"
+      - ".yaml"
+      - ".json"
+      - ".txt"
+    ignore_patterns:
+      - "**/__pycache__/**"
+      - "**/.git/**"
+      - "**/node_modules/**"
+      - "**/.venv/**"
+      - "**/.pytest_cache/**"
+
+# ========================================
+# Category-Based Rules
+# ========================================
+
+categories:
+  
+  # ──────────────────────────────────
+  # Cleanup Rules
+  # ──────────────────────────────────
+  
+  cleanup:
+    # Standard Mode (default, safe)
+    standard:
+      enabled: true
+      description: "Safe cleanup with user confirmation before destructive operations"
+      
+      rules:
+        orphaned_files:
+          enabled: true
+          threshold_days: 90
+          safe_mode: true
+          dry_run_first: true
+          patterns:
+            - "**/*.tmp"
+            - "**/*.bak"
+            - "**/*.pyc"
+            - "**/__pycache__/**"
+            - "**/*.log"
+          exclude_paths:
+            - "logs/important/**"
+            - "cortex-brain/**"
+        
+        duplicate_detection:
+          enabled: true
+          similarity_threshold: 0.95
+          min_file_size: 1024  # bytes
+          ignore_patterns:
+            - "**/tests/**"
+            - "**/examples/**"
+            - "**/templates/**"
+          actions:
+            - "report"  # report, archive, delete
+        
+        empty_directories:
+          enabled: true
+          exclude_paths:
+            - ".git"
+            - "node_modules"
+            - "__pycache__"
+            - ".pytest_cache"
+        
+        unused_imports:
+          enabled: false  # Requires static analysis
+          auto_fix: false
+    
+    # Aggressive Mode (deep cleanup)
+    aggressive:
+      enabled: false
+      description: "Deep cleanup with minimal confirmation (use with caution)"
+      
+      rules:
+        orphaned_files:
+          enabled: true
+          threshold_days: 30
+          safe_mode: false
+          dry_run_first: false
+        
+        unused_imports:
+          enabled: true
+          auto_fix: true
+          preserve_star_imports: false
+        
+        dead_code:
+          enabled: true
+          confidence_threshold: 0.85
+          methods:
+            - "unused_functions"
+            - "unused_classes"
+            - "unreachable_code"
+        
+        log_rotation:
+          enabled: true
+          max_log_age_days: 7
+          max_log_size_mb: 100
+  
+  # ──────────────────────────────────
+  # Refactoring Rules
+  # ──────────────────────────────────
+  
+  refactoring:
+    # Base rules (inherited by all)
+    base:
+      enabled: true
+      description: "Base refactoring rules for code quality and maintainability"
+      
+      complexity:
+        max_function_complexity: 15
+        max_class_complexity: 50
+        max_file_complexity: 100
+        max_nesting_depth: 4
+      
+      naming:
+        enforce_pep8: true
+        min_variable_name_length: 2
+        max_variable_name_length: 50
+        allow_single_char: false  # except i, j, k in loops
+        class_name_pattern: "^[A-Z][a-zA-Z0-9]+$"
+        function_name_pattern: "^[a-z_][a-z0-9_]*$"
+      
+      structure:
+        max_function_lines: 50
+        max_class_lines: 300
+        max_file_lines: 500
+        max_parameters: 5
+        max_return_statements: 3
+      
+      documentation:
+        require_module_docstring: true
+        require_class_docstring: true
+        require_function_docstring: true
+        min_docstring_length: 20
+    
+    # Planning-specific overrides
+    planning:
+      enabled: true
+      inherits_from: "refactoring.base"
+      description: "Relaxed rules for planning orchestrators due to complexity"
+      
+      complexity:
+        max_function_complexity: 30  # Higher for planning logic
+        max_class_complexity: 75
+        max_file_complexity: 150
+      
+      structure:
+        max_function_lines: 100
+        max_class_lines: 500
+        max_parameters: 8  # Plans need more params
+    
+    # TDD-specific overrides
+    tdd:
+      enabled: true
+      inherits_from: "refactoring.base"
+      description: "Strict rules for TDD orchestrators enforcing clean code"
+      
+      complexity:
+        max_function_complexity: 10  # Lower for TDD
+        max_class_complexity: 40
+        max_nesting_depth: 3
+      
+      structure:
+        max_function_lines: 30
+        max_parameters: 4
+      
+      testing:
+        require_docstrings: true
+        require_type_hints: true
+        enforce_naming_convention: true  # test_*, Test*
+    
+    # Maintenance-specific overrides
+    maintenance:
+      enabled: true
+      inherits_from: "refactoring.base"
+      description: "Balanced rules for maintenance orchestrators"
+      
+      complexity:
+        max_function_complexity: 25
+        max_class_complexity: 60
+  
+  # ──────────────────────────────────
+  # Token Optimization Rules
+  # ──────────────────────────────────
+  
+  token_optimization:
+    # Global settings
+    global:
+      enabled: true
+      target_reduction: 95  # percentage
+      preserve_semantics: true
+      preserve_functionality: true
+      
+      strategies:
+        - name: "remove_comments"
+          enabled: true
+          preserve_docstrings: true
+          preserve_license_headers: true
+        
+        - name: "minify_whitespace"
+          enabled: true
+          preserve_readability: true
+          preserve_indentation: true
+        
+        - name: "abbreviate_identifiers"
+          enabled: false  # Risky - reduces readability
+        
+        - name: "pseudo_code_conversion"
+          enabled: true
+          detail_level: "medium"  # low|medium|high
+          preserve_logic_flow: true
+    
+    # Planning-specific
+    planning:
+      enabled: true
+      inherits_from: "token_optimization.global"
+      target_reduction: 98  # More aggressive for large plans
+      
+      strategies:
+        - name: "pseudo_code_conversion"
+          enabled: true
+          detail_level: "low"  # More aggressive
+        
+        - name: "phase_summarization"
+          enabled: true
+          max_phase_tokens: 500
+    
+    # TDD-specific
+    tdd:
+      enabled: false  # TDD code should remain readable
+      reason: "TDD requires clear, explicit code for test generation"
+  
+  # ──────────────────────────────────
+  # Documentation Rules
+  # ──────────────────────────────────
+  
+  documentation:
+    # Base rules
+    base:
+      enabled: true
+      description: "Base documentation generation and validation rules"
+      
+      generation:
+        format: "markdown"
+        include_examples: true
+        include_diagrams: false
+        auto_toc: true
+        max_heading_depth: 4
+      
+      validation:
+        require_module_docstring: true
+        require_class_docstring: true
+        require_function_docstring: true
+        min_docstring_length: 20
+        check_docstring_format: "google"  # google|numpy|sphinx
+      
+      structure:
+        sections:
+          - "Overview"
+          - "Usage"
+          - "Examples"
+          - "API Reference"
+          - "Configuration"
+    
+    # Planning-specific
+    planning:
+      enabled: true
+      inherits_from: "documentation.base"
+      description: "Enhanced documentation for planning orchestrators"
+      
+      generation:
+        include_diagrams: true
+        diagram_format: "mermaid"
+        include_phase_breakdown: true
+      
+      structure:
+        sections:
+          - "Overview"
+          - "Architecture"
+          - "Phase Breakdown"
+          - "Usage Examples"
+          - "Configuration"
+          - "Migration Guide"
+    
+    # TDD-specific
+    tdd:
+      enabled: true
+      inherits_from: "documentation.base"
+      description: "Test-focused documentation for TDD orchestrators"
+      
+      generation:
+        include_test_examples: true
+        include_coverage_reports: true
+      
+      structure:
+        sections:
+          - "Overview"
+          - "Test Strategy"
+          - "Usage Examples"
+          - "Test Coverage"
+          - "Configuration"
+    
+    # ADO-specific
+    ado:
+      enabled: true
+      inherits_from: "documentation.base"
+      description: "ADO-formatted documentation"
+      
+      generation:
+        format: "ado_markdown"  # ADO-specific markdown extensions
+        include_work_item_templates: true
+  
+  # ──────────────────────────────────
+  # Git Checkpoint Rules
+  # ──────────────────────────────────
+  
+  git:
+    checkpoints:
+      enabled: true
+      description: "Automated git checkpoint management"
+      
+      frequency:
+        per_phase: true
+        per_major_change: true
+        on_test_pass: true
+        on_refactor: false  # Too frequent
+      
+      commit_message_format: "feat({{orchestrator}}): {{phase_name}}"
+      commit_message_templates:
+        phase: "feat({{orchestrator}}): Complete Phase {{phase_number}} - {{phase_name}}"
+        test: "test({{orchestrator}}): Add tests for {{feature}}"
+        refactor: "refactor({{orchestrator}}): {{description}}"
+        fix: "fix({{orchestrator}}): {{description}}"
+      
+      validation:
+        require_clean_working_dir: true
+        require_tests_passing: true
+        require_no_conflicts: true
+        allow_uncommitted_if_test_fails: false
+      
+      branch_strategy:
+        use_feature_branches: true
+        branch_prefix: "feature/"
+        auto_create_pr: false
+    
+    sync:
+      enabled: true
+      description: "Repository synchronization settings"
+      
+      pull_strategy: "rebase"  # merge|rebase|ff-only
+      push_strategy: "force_with_lease"  # force_with_lease|push|force
+      
+      conflict_resolution:
+        auto_resolve: false
+        prefer: "ours"  # ours|theirs|manual
+    
+    optimization:
+      enabled: true
+      description: "Repository optimization settings"
+      
+      gc_frequency: "weekly"
+      prune_frequency: "monthly"
+      pack_refs: true
+  
+  # ──────────────────────────────────
+  # Testing Rules
+  # ──────────────────────────────────
+  
+  testing:
+    # Global settings
+    global:
+      enabled: true
+      framework: "pytest"
+      
+      coverage:
+        min_coverage: 80
+        exclude_patterns:
+          - "**/tests/**"
+          - "**/examples/**"
+          - "**/__init__.py"
+        branch_coverage: true
+      
+      execution:
+        parallel: true
+        max_workers: 4
+        timeout: 300
+        fail_fast: false
+        verbose: true
+      
+      reporting:
+        formats:
+          - "terminal"
+          - "html"
+          - "json"
+        output_dir: "coverage-reports"
+    
+    # TDD-specific
+    tdd:
+      enabled: true
+      inherits_from: "testing.global"
+      description: "Strict testing requirements for TDD workflows"
+      
+      coverage:
+        min_coverage: 95  # Higher for TDD
+        require_100_for_new_code: true
+      
+      workflow:
+        enforce_red_green_refactor: true
+        require_test_first: true
+        fail_if_no_failing_test: true
+      
+      test_generation:
+        auto_generate: true
+        complexity_threshold: 10
+        include_edge_cases: true
+    
+    # Planning-specific
+    planning:
+      enabled: true
+      inherits_from: "testing.global"
+      description: "Planning orchestrator testing configuration"
+      
+      coverage:
+        min_coverage: 85
+      
+      execution:
+        timeout: 600  # Longer for complex plans
+    
+    # Sanitization-specific
+    sanitization:
+      enabled: true
+      inherits_from: "testing.global"
+      description: "Sanitization orchestrator testing with validation"
+      
+      coverage:
+        min_coverage: 85
+      
+      validation:
+        require_reverse_mapping_tests: true
+        require_anonymization_tests: true
+  
+  # ──────────────────────────────────
+  # Validation Rules
+  # ──────────────────────────────────
+  
+  validation:
+    base:
+      enabled: true
+      description: "Base validation rules for system integrity and correctness"
+      
+      pre_flight:
+        check_system_health: true
+        verify_dependencies: true
+        validate_environment: true
+        check_disk_space: true
+        check_memory: true
+    
+    system_integrity:
+      check_git_status: true
+      verify_brain_health: true
+      validate_manifests: true
+  
+  # ──────────────────────────────────
+  # Azure DevOps (ADO) Rules
+  # ──────────────────────────────────
+  
+  ado:
+    base:
+      enabled: true
+      description: "Azure DevOps integration configuration"
+      
+      formatting:
+        use_ado_markdown: true
+        include_work_item_templates: true
+        max_description_length: 5000
+    
+    work_items:
+      story_template: "default"
+      task_template: "default"
+      feature_template: "default"
+  
+  # ──────────────────────────────────
+  # Sanitization Rules
+  # ──────────────────────────────────
+  
+  sanitization:
+    base:
+      enabled: true
+      description: "Code sanitization and anonymization rules"
+      
+      rules:
+        company_names:
+          replace_with: "Company"
+        project_names:
+          replace_with: "Project"
+        author_names:
+          replace_with: "Developer"
+      
+      validation:
+        require_reverse_mapping: true
+        verify_functionality: true
+  
+  # ──────────────────────────────────
+  # Autonomous Execution Rules
+  # ──────────────────────────────────
+  
+  execution:
+    base:
+      enabled: true
+      description: "Autonomous execution engine configuration"
+      
+      safety:
+        dry_run_first: true
+        require_confirmation: true
+        max_auto_iterations: 10
+      
+      phases:
+        allow_parallel: true
+        timeout_per_phase: 300
+  
+  # ──────────────────────────────────
+  # Story Enhancement Rules
+  # ──────────────────────────────────
+  
+  story:
+    base:
+      enabled: true
+      description: "User story enhancement and analysis rules"
+      
+      analysis:
+        extract_personas: true
+        identify_edge_cases: true
+        generate_acceptance_criteria: true
+      
+      enhancement:
+        add_technical_notes: true
+        suggest_test_scenarios: true
+
+# ========================================
+# Orchestrator-Specific Overrides
+# ========================================
+
+orchestrator_overrides:
+  
+  planning_orchestrator:
+    refactoring:
+      enabled: true
+      enforcement_level: "warning"  # Don't block on violations
+    
+    token_optimization:
+      enabled: true
+      target_reduction: 98
+    
+    documentation:
+      enabled: true
+      generation:
+        include_diagrams: true
+        include_phase_breakdown: true
+    
+    testing:
+      coverage:
+        min_coverage: 85
+      execution:
+        timeout: 600
+  
+  tdd_orchestrator:
+    refactoring:
+      enabled: true
+      enforcement_level: "strict"  # Block on violations
+    
+    token_optimization:
+      enabled: false
+    
+    testing:
+      enabled: true
+      coverage:
+        min_coverage: 95
+        require_100_for_new_code: true
+      workflow:
+        enforce_red_green_refactor: true
+  
+  ado_orchestrator:
+    refactoring:
+      enabled: true
+      enforcement_level: "warning"
+    
+    documentation:
+      enabled: true
+      generation:
+        format: "ado_markdown"
+        include_work_item_templates: true
+    
+    testing:
+      coverage:
+        min_coverage: 75
+  
+  sanitization_orchestrator:
+    cleanup:
+      enabled: false  # Sanitization manages its own cleanup
+    
+    testing:
+      enabled: true
+      coverage:
+        min_coverage: 85
+      validation:
+        require_reverse_mapping_tests: true
+  
+  maintenance_orchestrator:
+    cleanup:
+      enabled: true
+      mode: "aggressive"  # Maintenance can be aggressive
+    
+    refactoring:
+      enabled: true
+      enforcement_level: "warning"
+    
+    testing:
+      coverage:
+        min_coverage: 88
+  
+  system_integrity_orchestrator:
+    refactoring:
+      enabled: true
+      enforcement_level: "strict"
+    
+    testing:
+      enabled: true
+      coverage:
+        min_coverage: 90
+
+# ========================================
+# Feature Flags
+# ========================================
+
+feature_flags:
+  enable_experimental_features: false
+  enable_parallel_orchestration: true
+  enable_adaptive_complexity: true
+  enable_auto_refactoring: false
+  enable_ai_code_generation: true
+  enable_test_auto_generation: true
+  enable_token_optimization: true
+  enable_diagram_generation: false  # Requires mermaid-cli
+  enable_performance_profiling: false
+  enable_memory_profiling: false
+
+# ========================================
+# ADO-Specific Configuration
+# ========================================
+
+ado:
+  work_items:
+    default_type: "User Story"
+    types:
+      - "Epic"
+      - "Feature"
+      - "User Story"
+      - "Task"
+      - "Bug"
+    
+    hierarchy:
+      epic:
+        max_features: 10
+      feature:
+        max_stories: 20
+      story:
+        max_tasks: 15
+    
+    fields:
+      priority: ["1", "2", "3", "4"]
+      severity: ["1 - Critical", "2 - High", "3 - Medium", "4 - Low"]
+      effort: ["XS", "S", "M", "L", "XL", "XXL"]
+    
+    templates:
+      story_template: |
+        # {{title}}
+        
+        ## Description
+        {{description}}
+        
+        ## Acceptance Criteria
+        {{acceptance_criteria}}
+        
+        ## Technical Notes
+        {{technical_notes}}
+  
+  formatting:
+    use_markdown: true
+    max_description_length: 5000
+    max_title_length: 256
+    include_checkboxes: true
+
+# ========================================
+# Sanitization Configuration
+# ========================================
+
+sanitization:
+  rules:
+    company_names:
+      replace_with: "Company"
+      patterns:
+        - "Acme Corp"
+        - "Example Inc"
+    
+    project_names:
+      replace_with: "Project"
+      preserve_structure: true
+    
+    author_names:
+      replace_with: "Developer"
+      preserve_initials: false
+    
+    file_paths:
+      anonymize: true
+      preserve_structure: true
+    
+    api_keys:
+      remove: true
+      placeholder: "YOUR_API_KEY_HERE"
+  
+  validation:
+    require_reverse_mapping: true
+    verify_functionality: true
+    run_tests_after: true
+    generate_report: true
+
+# ========================================
+# Validation Rules
+# ========================================
+
+validation:
+  required_fields:
+    - "categories.cleanup.standard"
+    - "categories.refactoring.base"
+    - "categories.testing.global"
+  
+  allowed_enforcement_levels:
+    - "strict"
+    - "warning"
+    - "disabled"
+  
+  allowed_test_frameworks:
+    - "pytest"
+    - "unittest"
+    - "nose2"
+  
+  allowed_doc_formats:
+    - "markdown"
+    - "ado_markdown"
+    - "rst"
+    - "html"
+
+# ========================================
+# Metadata
+# ========================================
+
+metadata:
+  total_categories: 11
+  total_rules: 127
+  orchestrator_overrides: 6
+  feature_flags: 10
+  
+  statistics:
+    lines_consolidated: 3300  # 4500 - 1200
+    reduction_percentage: 73.3
+    files_consolidated: 8
+
+# ========================================
+# Change Log
+# ========================================
+
+changelog:
+  - version: "2.0.0"
+    date: "2025-12-22"
+    changes:
+      - "Initial 3-tier manifest architecture release"
+      - "Consolidated 8 rule files into ConfigManifest"
+      - "6 categories with inheritance support"
+      - "Orchestrator-specific overrides implemented"
+      - "Feature flags for experimental features"
+    author: "Asif Hussain"
+  
+  - version: "1.0.0"
+    date: "2024-01-15"
+    changes:
+      - "Legacy rule system (pre-consolidation)"
+      - "Individual rule files per category"
+    author: "CORTEX Development Team"

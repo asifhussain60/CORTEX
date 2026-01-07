@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Transformation Test</title>
+</head>
+<body>
+    <h1>Recommendation Transformation Test</h1>
+    <pre id="output"></pre>
+
+    <script>
+        // Load the actual data
+        fetch('/data/repos/cleansolidapp/recommendations.json')
+            .then(r => r.json())
+            .then(rawData => {
+                console.log('Raw data loaded:', rawData);
+                
+                // Transform function (from app.js)
+                function transformRecommendationsData(rawData) {
+                    console.log('[TRANSFORM] Raw recommendations data:', rawData);
+                    
+                    if (!rawData || !rawData.recommendations) {
+                        console.warn('[TRANSFORM] No recommendations data to transform');
+                        return { recommendations: [], top_recommendations: [], counts: {} };
+                    }
+
+                    const calculateROI = (impact, effort) => {
+                        const impactScore = { high: 3, medium: 2, low: 1 }[impact?.toLowerCase()] || 1;
+                        const effortScore = { low: 3, medium: 2, high: 1 }[effort?.toLowerCase()] || 1;
+                        return impactScore * effortScore;
+                    };
+
+                    const generateTitle = (description) => {
+                        if (!description) return 'Recommendation';
+                        const cleaned = description.replace(/^(Consider|Add|Remove|Update|Fix|Improve)\s+/i, '');
+                        return cleaned.length > 60 ? cleaned.substring(0, 57) + '...' : cleaned;
+                    };
+
+                    const flatRecommendations = [];
+                    for (const [category, recs] of Object.entries(rawData.recommendations)) {
+                        if (Array.isArray(recs)) {
+                            recs.forEach(rec => {
+                                flatRecommendations.push({
+                                    ...rec,
+                                    title: generateTitle(rec.description),
+                                    roi_score: calculateROI(rec.impact, rec.effort),
+                                    category: rec.category || category
+                                });
+                            });
+                        }
+                    }
+
+                    flatRecommendations.sort((a, b) => b.roi_score - a.roi_score);
+                    const topRecommendations = flatRecommendations.slice(0, 10);
+
+                    const counts = {
+                        total: rawData.summary?.total_recommendations || flatRecommendations.length,
+                        by_priority: rawData.summary?.by_priority || {},
+                        by_category: rawData.summary?.by_category || {}
+                    };
+
+                    console.log('[TRANSFORM] Transformed to:', {
+                        count: flatRecommendations.length,
+                        topCount: topRecommendations.length,
+                        counts
+                    });
+
+                    return {
+                        recommendations: flatRecommendations,
+                        top_recommendations: topRecommendations,
+                        counts: counts
+                    };
+                }
+                
+                const transformed = transformRecommendationsData(rawData);
+                
+                document.getElementById('output').textContent = JSON.stringify({
+                    success: true,
+                    originalStructure: Object.keys(rawData),
+                    transformedStructure: Object.keys(transformed),
+                    recommendationCount: transformed.recommendations.length,
+                    firstRecommendation: transformed.recommendations[0],
+                    hasTitle: transformed.recommendations[0]?.title !== undefined,
+                    hasRoiScore: transformed.recommendations[0]?.roi_score !== undefined
+                }, null, 2);
+                
+                console.log('✅ Transformation successful:', transformed);
+            })
+            .catch(err => {
+                console.error('❌ Error:', err);
+                document.getElementById('output').textContent = 'ERROR: ' + err.message;
+            });
+    </script>
+</body>
+</html>

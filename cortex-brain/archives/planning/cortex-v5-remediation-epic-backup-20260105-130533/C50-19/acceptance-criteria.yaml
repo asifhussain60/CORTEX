@@ -1,0 +1,238 @@
+# C50-19: Brain Data Source Cutover - Acceptance Criteria
+
+epic_id: C50
+feature_id: C50-19
+feature_name: "Brain Data Source Cutover"
+priority: P0
+complexity: TIER_2_FOCUSED
+estimated_hours: 2-3
+
+# Definition of Ready (DoR)
+definition_of_ready:
+  dependencies_met:
+    - criterion: "Brittleness analysis completed"
+      status: complete
+      evidence: "cortex-brain/documents/analysis/C50-brittleness-analysis-2026-01-04.md"
+    
+    - criterion: "SQLite databases exist and operational"
+      status: complete
+      evidence:
+        - "cortex-brain/tier1/working_memory.db (40KB)"
+        - "cortex-brain/tier2/knowledge_graph.db (1.2MB)"
+    
+    - criterion: "Migration scripts tested"
+      status: complete
+      evidence:
+        - "src/tier1/migrate_tier1.py"
+        - "src/tier2/migrate_tier2.py"
+        - "src/tier3/migrate_tier3.py"
+    
+    - criterion: "Dual-source code paths identified"
+      status: complete
+      evidence:
+        - "6 YAML references found in src/tier0/"
+        - "List documented in brittleness analysis"
+  
+  resources_available:
+    - criterion: "Archive directory structure defined"
+      status: complete
+    
+    - criterion: "Validation scripts prepared"
+      status: complete
+  
+  false_positive_check:
+    - criterion: "Database integrity verified"
+      status: complete
+      validation: "sqlite3 queries successful"
+
+# Definition of Done (DoD)
+definition_of_done:
+  deliverables_created:
+    - criterion: "YAML files archived"
+      acceptance_test: "All 3 YAML files in archives/yaml-deprecated-2026-01-04/"
+      validation_command: |
+        test -f cortex-brain/archives/yaml-deprecated-2026-01-04/conversation-context.jsonl &&
+        test -f cortex-brain/archives/yaml-deprecated-2026-01-04/knowledge-graph.yaml &&
+        test -f cortex-brain/archives/yaml-deprecated-2026-01-04/development-context.yaml
+    
+    - criterion: "Deprecation notice created"
+      acceptance_test: "README.md in archive directory with migration info"
+      validation_command: "test -f cortex-brain/archives/yaml-deprecated-2026-01-04/README.md"
+    
+    - criterion: "Archive script created"
+      acceptance_test: "scripts/archive_yaml_sources.sh exists and executable"
+      validation_command: "test -x scripts/archive_yaml_sources.sh"
+  
+  tests_passing:
+    - criterion: "No YAML files in cortex-brain root"
+      acceptance_test: "YAML files do not exist in root"
+      test_file: "tests/tier0/test_yaml_deprecated.py::test_yaml_files_archived"
+      validation_command: |
+        ! test -f cortex-brain/conversation-context.jsonl &&
+        ! test -f cortex-brain/knowledge-graph.yaml &&
+        ! test -f cortex-brain/development-context.yaml
+    
+    - criterion: "No YAML references in src/"
+      acceptance_test: "Zero grep matches for YAML filenames"
+      test_file: "tests/tier0/test_no_yaml_references.py::test_no_yaml_references_in_source"
+      validation_command: "! grep -r 'knowledge-graph\\.yaml' src/"
+    
+    - criterion: "Tier 1 DB operational"
+      acceptance_test: "Can query working_memory.db"
+      test_file: "tests/tier0/test_brain_data_cutover.py::test_tier1_db_operational"
+    
+    - criterion: "Tier 2 DB operational"
+      acceptance_test: "Can query knowledge_graph.db"
+      test_file: "tests/tier0/test_brain_data_cutover.py::test_tier2_db_operational"
+    
+    - criterion: "No YAML files loaded at runtime"
+      acceptance_test: "Module imports don't trigger YAML reads"
+      test_file: "tests/tier0/test_brain_data_cutover.py::test_yaml_files_not_loaded"
+  
+  refactor_complete:
+    - criterion: "Code cleaned (6 YAML references removed)"
+      files_modified:
+        - "src/tier0/integrity_checker.py"
+        - "src/tier0/tier_validator.py"
+        - "src/tier0/optimized_context_loader.py"
+      validation_command: "grep -c 'working_memory.db\\|knowledge_graph.db' src/tier0/*.py | grep -v ':0$' | wc -l"
+    
+    - criterion: "Documentation updated"
+      files_modified:
+        - "README.md"
+        - "cortex-brain/documents/cortex-architecture-quick-ref.md"
+      validation: "No YAML references in docs"
+  
+  documentation_updated:
+    - criterion: "Architecture docs reflect SQLite-only"
+      acceptance_test: "Docs mention databases, not YAML"
+      test_file: "tests/docs/test_no_yaml_in_docs.py::test_documentation_no_yaml_references"
+    
+    - criterion: "Migration notice added"
+      acceptance_test: "Architecture guide has migration section"
+      validation: "Section '🔄 YAML to SQLite Migration' exists"
+
+# Quality Gates
+quality_gates:
+  test_coverage:
+    minimum: 80
+    target: 100
+    critical_paths:
+      - "Database query paths"
+      - "Archive script execution"
+      - "Validation logic"
+  
+  performance:
+    - criterion: "No performance regression"
+      baseline: "Current DB query times"
+      threshold: "+10% max"
+  
+  security:
+    - criterion: "No sensitive data in YAML archives"
+      validation: "Manual review of archived files"
+
+# Phase Acceptance Criteria
+phases:
+  phase_1:
+    name: "Archive YAML Files"
+    duration_minutes: 15
+    dor:
+      - "Backup YAML files externally (safety)"
+      - "Archive directory created"
+    dod:
+      - "3 YAML files moved to archives/"
+      - "README.md created in archive"
+      - "test_yaml_files_archived passes"
+  
+  phase_2:
+    name: "Remove YAML Read Paths"
+    duration_minutes: 30
+    dor:
+      - "Phase 1 complete"
+      - "YAML references documented"
+    dod:
+      - "6 code locations updated to use DB"
+      - "test_no_yaml_references_in_source passes"
+      - "All tier tests still pass"
+  
+  phase_3:
+    name: "Update Documentation"
+    duration_minutes: 20
+    dor:
+      - "Phase 2 complete"
+      - "Docs inventory complete"
+    dod:
+      - "README.md updated"
+      - "Architecture docs updated"
+      - "test_documentation_no_yaml_references passes"
+  
+  phase_4:
+    name: "Validation & Testing"
+    duration_minutes: 45
+    dor:
+      - "Phase 3 complete"
+      - "All code changes committed"
+    dod:
+      - "All acceptance tests pass"
+      - "validate_brain_cutover.sh passes"
+      - "No YAML references in src/ (grep check)"
+      - "Completion report generated"
+
+# Validation Commands
+validation:
+  pre_execution:
+    - command: "ls -lh cortex-brain/{conversation-context.jsonl,knowledge-graph.yaml,development-context.yaml}"
+      expected: "All 3 files exist"
+    
+    - command: "sqlite3 cortex-brain/tier1/working_memory.db 'SELECT COUNT(*) FROM conversations;'"
+      expected: "Query succeeds (exit 0)"
+  
+  post_execution:
+    - command: "test -d cortex-brain/archives/yaml-deprecated-2026-01-04"
+      expected: "Archive directory exists"
+    
+    - command: "! test -f cortex-brain/knowledge-graph.yaml"
+      expected: "YAML file NOT in root"
+    
+    - command: "grep -r 'knowledge-graph\\.yaml' src/ || true"
+      expected: "No matches (empty output)"
+    
+    - command: "pytest tests/tier0/test_brain_data_cutover.py -v"
+      expected: "All tests pass"
+
+# Rollback Plan
+rollback:
+  trigger: "Any phase DoD not met"
+  steps:
+    - "Restore YAML files from archives/"
+    - "Revert code changes (git checkout)"
+    - "Verify original tests pass"
+    - "Document rollback reason"
+
+# Success Metrics
+success_metrics:
+  - metric: "YAML files archived"
+    target: 3
+    validation: "count files in archives/yaml-deprecated-2026-01-04/"
+  
+  - metric: "Code references removed"
+    target: 6
+    validation: "grep count before/after"
+  
+  - metric: "Tests passing"
+    target: 100%
+    validation: "pytest exit code 0"
+  
+  - metric: "Performance impact"
+    target: "<10% slower"
+    validation: "DB query benchmarks"
+
+# Sign-off
+sign_off:
+  technical_lead: "Asif Hussain"
+  qa_approval_required: false  # Automated testing sufficient
+  production_readiness: true
+  blocking_issues: []
+
+---
+# Copyright © 2026 Asif Hussain. All rights reserved.

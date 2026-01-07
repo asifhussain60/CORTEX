@@ -1,0 +1,211 @@
+# Sanitization Orchestrator v2 - Manifest
+# Pure Configuration - No Natural Language Instructions
+# Version: 2.0.0
+# Schema Version: v4.1
+# Type: AUTONOMOUS
+
+schema_version: "v4.1"
+
+metadata:
+  name: "Sanitization Orchestrator v2"
+  version: "2.0.0"
+  type: autonomous
+  description: "Deterministic sensitive data detection and sanitization with pattern-based matching"
+  author: "Asif Hussain"
+  created: "2026-01-03"
+  
+orchestrator:
+  name: "Sanitization Orchestrator v2"
+  version: "2.0.0"
+  type: autonomous
+  class_name: "SanitizationOrchestratorV2"
+  module_path: "src.orchestrators.sanitization_v2.sanitization_orchestrator_v2"
+  base_class: "BaseOrchestratorV4_1"
+  
+  phases:
+    - name: "discovery"
+      duration_estimate: "30s"
+      purpose: "Scan workspace for sensitive data patterns"
+      
+    - name: "analysis"
+      duration_estimate: "10s"
+      purpose: "Classify sensitivity levels and calculate risk score"
+      
+    - name: "transformation"
+      duration_estimate: "45s"
+      purpose: "Apply sanitization rules with backup"
+      
+    - name: "validation"
+      duration_estimate: "20s"
+      purpose: "Verify all high-confidence patterns removed"
+      
+    - name: "finalization"
+      duration_estimate: "5s"
+      purpose: "Generate report and cleanup"
+
+configuration:
+  # Default target file patterns
+  target_patterns:
+    - "**/*.py"
+    - "**/*.md"
+    - "**/*.yaml"
+    - "**/*.json"
+    - "**/*.txt"
+    - "**/*.sh"
+  
+  # Excluded paths (never scanned)
+  exclude_patterns:
+    - "**/venv/**"
+    - "**/.venv/**"
+    - "**/node_modules/**"
+    - "**/__pycache__/**"
+    - "**/cortex-brain/database/**"
+    - "**/backups/**"
+    - "**/.git/**"
+  
+  # Privacy levels (determines pattern strictness)
+  privacy_levels:
+    minimal:
+      description: "Remove only critical secrets (passwords, API keys, tokens)"
+      categories: ["critical_secrets"]
+      min_confidence: 0.95
+      
+    medium:
+      description: "Remove critical secrets + PII + credentials"
+      categories: ["critical_secrets", "pii", "phi", "pci"]
+      min_confidence: 0.85
+      
+    full:
+      description: "Remove all sensitive patterns including paths and company info"
+      categories: ["critical_secrets", "pii", "phi", "pci", "paths", "company"]
+      min_confidence: 0.70
+  
+  # Risk scoring weights
+  risk_weights:
+    critical_secrets: 50
+    pii: 10
+    phi: 20
+    pci: 30
+    paths: 1
+    company: 1
+  
+  # Validation thresholds
+  validation:
+    min_confidence: 0.8  # Patterns below this are not validation failures
+    max_high_confidence_remaining: 0  # Fail if any high-confidence matches remain
+  
+  # Backup settings
+  backup:
+    enabled: true
+    location: "backups/sanitization_{timestamp}"
+    retention_days: 30
+
+patterns:
+  # Pattern categories are defined in PatternRegistry
+  # This section documents what's available
+  categories:
+    - critical_secrets:  # Priority 100+
+        patterns: ["password", "api_key", "token", "secret", "private_key"]
+        confidence: 0.90-0.999
+        
+    - pii:  # Priority 80-99
+        patterns: ["email", "phone", "ssn", "ip_address", "passport"]
+        confidence: 0.75-0.99
+        
+    - phi:  # Priority 70-79
+        patterns: ["mrn", "icd10"]
+        confidence: 0.85-0.99
+        
+    - pci:  # Priority 60-69
+        patterns: ["credit_card", "cvv"]
+        confidence: 0.90-0.99
+        
+    - paths:  # Priority 50-59
+        patterns: ["unix_path", "windows_path"]
+        confidence: 0.80-0.85
+        
+    - company:  # Priority 40-49
+        patterns: ["domain", "internal_ip"]
+        confidence: 0.70-0.99
+
+routing:
+  # Master Orchestrator routing patterns
+  patterns:
+    - "sanitize"
+    - "remove sensitive data"
+    - "clean sensitive info"
+    - "anonymize"
+    - "redact"
+    - "sanitization"
+  
+  priority: 40  # Higher than maintenance (35), lower than planning (50)
+  
+  trigger_conditions:
+    - "User explicitly requests sanitization"
+    - "User wants to remove sensitive data"
+    - "User needs to anonymize content"
+
+output:
+  # Report generation
+  report:
+    format: "json"
+    location: "cortex-brain/documents/reports/"
+    filename: "sanitization-report-{timestamp}.json"
+    
+  # Report structure
+  sections:
+    - metadata
+    - discovery
+    - analysis
+    - transformation
+    - validation
+    - summary
+
+performance:
+  # Performance targets (v2.0)
+  targets:
+    discovery_ms: 30000  # 30s for 1000 files
+    analysis_ms: 10000   # 10s
+    transformation_ms: 45000  # 45s
+    validation_ms: 20000  # 20s
+    finalization_ms: 5000  # 5s
+    total_ms: 110000  # 110s (~2 minutes)
+  
+  # Token efficiency
+  token_efficiency: 0.996  # 99.6% (minimal LLM usage, report generation only)
+
+testing:
+  # Test coverage requirements
+  coverage:
+    unit: 0.95  # 95% minimum
+    integration: 0.90  # 90% minimum
+    
+  # Test scenarios
+  scenarios:
+    - "Empty workspace (0 matches)"
+    - "Single file with PII"
+    - "Multiple files with mixed patterns"
+    - "High-risk file (10+ matches)"
+    - "Binary file handling"
+    - "Backup/rollback"
+    - "Validation failure"
+
+migration:
+  # Migration from v1 to v2
+  v1_to_v2:
+    breaking_changes:
+      - "No natural language instructions"
+      - "Config-driven execution only"
+      - "New manifest schema (v4.1)"
+    
+    preserved_features:
+      - "Pattern consolidation (30+ patterns)"
+      - "Multi-category detection"
+      - "Backup/rollback support"
+    
+    new_features:
+      - "Priority-based matching"
+      - "Configurable replacement strategies"
+      - "Transaction support"
+      - "99.6% token efficiency"
+      - "<30ms phase transitions"

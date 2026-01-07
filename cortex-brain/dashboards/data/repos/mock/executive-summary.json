@@ -1,0 +1,247 @@
+{
+  "project_name": "Luum Fresh",
+  "tagline": "Modern time tracking and project management platform",
+  "what_it_does": {
+    "summary": "Luum Fresh is a comprehensive time tracking and project management application designed for modern teams. It provides real-time visibility into project progress, resource allocation, and time utilization across multiple projects and team members.\n\nThe application combines intuitive time entry interfaces with powerful analytics and reporting capabilities. Users can track time against specific projects and tasks, view burndown charts, manage team capacity, and generate detailed reports for billing and productivity analysis. The platform supports multiple workspaces, custom project hierarchies, and integrates with popular development tools.\n\nBuilt with a focus on user experience and performance, Luum Fresh offers both web and mobile interfaces, real-time synchronization across devices, and offline capabilities for time tracking on the go. The architecture emphasizes scalability, data consistency, and responsive user interactions.",
+    "key_points": [
+      "Real-time time tracking with offline support",
+      "Multi-project management with custom hierarchies",
+      "Advanced analytics and reporting dashboards",
+      "Team capacity planning and resource allocation",
+      "Integration with development tools and APIs"
+    ],
+    "source": "hybrid"
+  },
+  "composition": {
+    "architecture_style": "Modern 3-Tier Web Application",
+    "components": [
+      {
+        "name": "Frontend Application",
+        "technology": "React 18 + TypeScript",
+        "purpose": "User interface for time tracking, project management, and analytics visualization",
+        "files_count": 147
+      },
+      {
+        "name": "Backend API Server",
+        "technology": "Node.js + Express",
+        "purpose": "RESTful API handling business logic, authentication, and data operations",
+        "files_count": 89
+      },
+      {
+        "name": "Real-time Services",
+        "technology": "Socket.io + Redis",
+        "purpose": "WebSocket connections for live updates and real-time collaboration features",
+        "files_count": 23
+      },
+      {
+        "name": "Database Layer",
+        "technology": "PostgreSQL 15",
+        "purpose": "Relational data storage for projects, time entries, users, and analytics",
+        "files_count": 45
+      },
+      {
+        "name": "Authentication Service",
+        "technology": "JWT + OAuth 2.0",
+        "purpose": "User authentication, authorization, and session management",
+        "files_count": 18
+      },
+      {
+        "name": "Analytics Engine",
+        "technology": "Python + Pandas",
+        "purpose": "Data aggregation, report generation, and statistical analysis",
+        "files_count": 34
+      }
+    ],
+    "relationships": [
+      "Frontend communicates with Backend API via REST endpoints and WebSocket connections",
+      "Backend API validates requests and coordinates with Database Layer and Real-time Services",
+      "Real-time Services use Redis pub/sub for broadcasting updates to connected clients",
+      "Analytics Engine processes data from PostgreSQL and generates reports on demand",
+      "Authentication Service issues JWT tokens verified by all backend services"
+    ]
+  },
+  "capabilities": [
+    {
+      "name": "Time Tracking",
+      "description": "Start/stop timers, manual time entry, time editing, and bulk operations with offline support",
+      "confidence": 0.95
+    },
+    {
+      "name": "Project Management",
+      "description": "Create projects, define tasks, set budgets, manage milestones, and track progress",
+      "confidence": 0.95
+    },
+    {
+      "name": "Team Collaboration",
+      "description": "Real-time updates, shared workspaces, team calendars, and activity feeds",
+      "confidence": 0.90
+    },
+    {
+      "name": "Analytics & Reporting",
+      "description": "Customizable dashboards, time reports, project analytics, capacity planning, and export capabilities",
+      "confidence": 0.90
+    },
+    {
+      "name": "API Integration",
+      "description": "RESTful API, webhooks, OAuth integrations with third-party tools (Jira, GitHub, Slack)",
+      "confidence": 0.85
+    },
+    {
+      "name": "Mobile Support",
+      "description": "Responsive web interface and native mobile apps for iOS and Android",
+      "confidence": 0.80
+    },
+    {
+      "name": "Billing & Invoicing",
+      "description": "Generate invoices from tracked time, configurable billing rates, and client management",
+      "confidence": 0.85
+    },
+    {
+      "name": "Resource Planning",
+      "description": "Team capacity visualization, workload balancing, and availability tracking",
+      "confidence": 0.80
+    }
+  ],
+  "technical_foundation": {
+    "languages": {
+      "TypeScript": "42%",
+      "JavaScript": "28%",
+      "Python": "15%",
+      "SQL": "8%",
+      "CSS": "5%",
+      "Shell": "2%"
+    },
+    "frameworks": [
+      "React 18 (UI framework)",
+      "Express.js 4 (Backend API)",
+      "Socket.io 4 (Real-time communication)",
+      "Redux Toolkit (State management)",
+      "React Query (Data fetching)",
+      "Material-UI v5 (Component library)",
+      "Pandas 2.0 (Data analysis)",
+      "Passport.js (Authentication)",
+      "Prisma ORM (Database access)",
+      "Jest + React Testing Library (Testing)"
+    ],
+    "architecture_type": "3-Tier Microservices with Real-time Layer",
+    "dependencies": {
+      "production": 87,
+      "development": 54,
+      "total": 141
+    },
+    "key_technologies": {
+      "frontend": {
+        "framework": "React 18.2",
+        "language": "TypeScript 5.0",
+        "build_tool": "Vite 4.3",
+        "styling": "Material-UI v5 + CSS Modules",
+        "state_management": "Redux Toolkit + React Query"
+      },
+      "backend": {
+        "runtime": "Node.js 18 LTS",
+        "framework": "Express.js 4.18",
+        "language": "JavaScript (ES2022)",
+        "database_client": "Prisma ORM 4.14",
+        "authentication": "Passport.js + JWT"
+      },
+      "database": {
+        "primary": "PostgreSQL 15",
+        "cache": "Redis 7.0",
+        "migrations": "Prisma Migrate"
+      },
+      "infrastructure": {
+        "containerization": "Docker + Docker Compose",
+        "ci_cd": "GitHub Actions",
+        "monitoring": "Sentry + Custom Analytics",
+        "hosting": "AWS (EC2, RDS, S3, CloudFront)"
+      }
+    }
+  },
+  "health_snapshot": {
+    "overall_score": 82.5,
+    "status": "Healthy",
+    "security_issues": 3,
+    "code_quality_score": 8.2,
+    "test_coverage": 78.5,
+    "documentation_coverage": 65.0,
+    "technical_debt_hours": 127.5,
+    "last_updated": "2025-12-06T14:45:00Z"
+  },
+  "project_stats": {
+    "total_files": 356,
+    "total_lines": 45782,
+    "total_commits": 1247,
+    "contributors": 8,
+    "age_months": 14,
+    "active_branches": 6,
+    "open_issues": 23,
+    "last_commit": "2025-12-05T18:30:00Z"
+  },
+  "quick_insights": [
+    {
+      "category": "Architecture",
+      "insight": "Well-structured 3-tier architecture with clear separation of concerns",
+      "severity": "info"
+    },
+    {
+      "category": "Security",
+      "insight": "3 medium-severity vulnerabilities in dependencies - update recommended",
+      "severity": "warning"
+    },
+    {
+      "category": "Performance",
+      "insight": "Real-time layer using efficient Redis pub/sub pattern",
+      "severity": "info"
+    },
+    {
+      "category": "Testing",
+      "insight": "Test coverage at 78.5% - consider increasing to 85%+",
+      "severity": "warning"
+    },
+    {
+      "category": "Documentation",
+      "insight": "65% of public APIs documented - improve inline documentation",
+      "severity": "warning"
+    },
+    {
+      "category": "Code Quality",
+      "insight": "High code quality score (8.2/10) with consistent style",
+      "severity": "info"
+    }
+  ],
+  "recommended_next_steps": [
+    {
+      "priority": "high",
+      "action": "Update dependencies to resolve 3 security vulnerabilities",
+      "estimated_effort": "2-3 hours",
+      "category": "security"
+    },
+    {
+      "priority": "medium",
+      "action": "Increase test coverage from 78.5% to 85%+ for critical paths",
+      "estimated_effort": "1-2 days",
+      "category": "quality"
+    },
+    {
+      "priority": "medium",
+      "action": "Add comprehensive API documentation for all public endpoints",
+      "estimated_effort": "3-4 hours",
+      "category": "documentation"
+    },
+    {
+      "priority": "low",
+      "action": "Refactor analytics engine to reduce technical debt by ~40 hours",
+      "estimated_effort": "3-5 days",
+      "category": "maintenance"
+    }
+  ],
+  "metadata": {
+    "schema_version": "2.0",
+    "generated_at": "2025-12-06T14:45:00Z",
+    "generation_method": "mock",
+    "data_sources": [
+      "mock_data"
+    ],
+    "confidence_score": 1.0
+  }
+}

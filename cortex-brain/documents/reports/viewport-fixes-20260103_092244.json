@@ -1,0 +1,16 @@
+{
+  "Timestamp": "2026-01-03T09:22:44.7335912-05:00",
+  "TotalFiles": 318,
+  "MissingViewport": 5,
+  "Files": [
+    "skull-protection.html",
+    "git-operations.html",
+    "holistic-discovery.html",
+    "response-templates.html",
+    "viewer.html"
+  ],
+  "FilesFixed": 5,
+  "DryRun": {
+    "IsPresent": false
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "large_files": [
+    {
+      "file": "CarryoverDollarsDomainService.cs",
+      "loc": 717,
+      "methods": 22,
+      "complexity_score": 85,
+      "priority": "P0"
+    },
+    {
+      "file": "BalanceCalculationService.cs",
+      "loc": 542,
+      "methods": 18,
+      "complexity_score": 75,
+      "priority": "P0"
+    },
+    {
+      "file": "ClaimsProcessingService.cs",
+      "loc": 612,
+      "methods": 25,
+      "complexity_score": 80,
+      "priority": "P1"
+    },
+    {
+      "file": "PlanManagementService.cs",
+      "loc": 589,
+      "methods": 20,
+      "complexity_score": 70,
+      "priority": "P2"
+    },
+    {
+      "file": "CardTransactionService.cs",
+      "loc": 501,
+      "methods": 16,
+      "complexity_score": 65,
+      "priority": "P1"
+    },
+    {
+      "file": "ReportingService.cs",
+      "loc": 478,
+      "methods": 15,
+      "complexity_score": 60,
+      "priority": "P2"
+    },
+    {
+      "file": "ParticipantRepository.cs",
+      "loc": 445,
+      "methods": 12,
+      "complexity_score": 55,
+      "priority": "P2"
+    },
+    {
+      "file": "IrsComplianceValidator.cs",
+      "loc": 412,
+      "methods": 14,
+      "complexity_score": 62,
+      "priority": "P1"
+    },
+    {
+      "file": "ClaimValidationService.cs",
+      "loc": 398,
+      "methods": 13,
+      "complexity_score": 58,
+      "priority": "P1"
+    },
+    {
+      "file": "BalanceRepository.cs",
+      "loc": 367,
+      "methods": 11,
+      "complexity_score": 52,
+      "priority": "P1"
+    }
+  ],
+  "summary": {
+    "total_files_over_500_loc": 10,
+    "total_loc_in_large_files": 5061,
+    "average_complexity_score": 66.2,
+    "p0_hotspots": 2,
+    "p1_hotspots": 5,
+    "p2_hotspots": 3
+  }
+}

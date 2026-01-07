@@ -1,0 +1,230 @@
+{
+  "plan_id": "html-glassmorphism-alignment-v5",
+  "version": "5.0",
+  "created": "2026-01-04T00:00:00Z",
+  "migrated": "2026-01-04T15:30:00Z",
+  "migrated_from": "cortex-brain/documents/planning/active/html-glassmorphism-alignment/00-html-view-standardization.md",
+  "overall_progress": 44,
+  "phases_completed": 7,
+  "phases_total": 16,
+  "estimated_hours_total": 31,
+  "hours_completed": 11,
+  "hours_remaining": 20,
+  "phases": [
+    {
+      "number": 0,
+      "name": "Context Discovery",
+      "status": "complete",
+      "progress": 100,
+      "tasks_completed": 5,
+      "tasks_total": 5,
+      "started": "2026-01-04T08:00:00Z",
+      "completed": "2026-01-04T09:00:00Z",
+      "duration_hours": 1,
+      "git_checkpoint": "cortex-phase-0: Context Discovery & HTML Inventory (320 files classified)"
+    },
+    {
+      "number": 1,
+      "name": "HTML Audit & Gap Analysis",
+      "status": "complete",
+      "progress": 100,
+      "tasks_completed": 5,
+      "tasks_total": 5,
+      "started": "2026-01-04T09:00:00Z",
+      "completed": "2026-01-04T10:00:00Z",
+      "duration_hours": 1,
+      "git_checkpoint": "cortex-phase-1: HTML Audit & Gap Analysis (10 non-compliant files identified)"
+    },
+    {
+      "number": 2,
+      "name": "Verification Framework Setup",
+      "status": "complete",
+      "progress": 100,
+      "tasks_completed": 6,
+      "tasks_total": 6,
+      "started": "2026-01-04T10:00:00Z",
+      "completed": "2026-01-04T12:00:00Z",
+      "duration_hours": 2,
+      "git_checkpoint": "cortex-phase-2: Verification Framework Setup (4 scripts created and tested)"
+    },
+    {
+      "number": 3,
+      "name": "Tier 1 - Critical Pages Transformation",
+      "status": "complete",
+      "progress": 100,
+      "tasks_completed": 7,
+      "tasks_total": 7,
+      "started": "2026-01-04T12:00:00Z",
+      "completed": "2026-01-04T15:00:00Z",
+      "duration_hours": 3,
+      "git_checkpoint": "cortex-phase-3: Tier 1 Critical Pages Transformed (5/5 files, 100% compliant, icon-title spacing fixed)"
+    },
+    {
+      "number": 4,
+      "name": "Tier 2-4 Transformation (Consolidated)",
+      "status": "complete",
+      "progress": 100,
+      "tasks_completed": 6,
+      "tasks_total": 6,
+      "started": "2026-01-04T15:00:00Z",
+      "completed": "2026-01-04T19:00:00Z",
+      "duration_hours": 4,
+      "git_checkpoint": "cortex-phase-4-6: T2-T4 Pages Verified (315/320 compliant, 5 exempted utility pages)",
+      "note": "Phases 4-6 consolidated via holistic compliance audit approach"
+    },
+    {
+      "number": "7a",
+      "name": "CORTEX-5.0 Gap Analysis",
+      "status": "not_started",
+      "progress": 0,
+      "tasks_completed": 0,
+      "tasks_total": 10,
+      "started": null,
+      "completed": null,
+      "duration_hours": 4,
+      "git_checkpoint": "cortex-phase-7a: CORTEX-5.0 Gap Analysis (2 orchestrators, 5 features, 4 diagrams identified)"
+    },
+    {
+      "number": "7b",
+      "name": "Critical Orchestrator Documentation",
+      "status": "not_started",
+      "progress": 0,
+      "tasks_completed": 0,
+      "tasks_total": 6,
+      "started": null,
+      "completed": null,
+      "duration_hours": 2,
+      "git_checkpoint": "cortex-phase-7b: Critical Orchestrator Docs (Refinement + Debug pages complete, 10 orchestrators documented)"
+    },
+    {
+      "number": "7c",
+      "name": "Feature Documentation Updates",
+      "status": "not_started",
+      "progress": 0,
+      "tasks_completed": 0,
+      "tasks_total": 7,
+      "started": null,
+      "completed": null,
+      "duration_hours": 3,
+      "git_checkpoint": "cortex-phase-7c: Feature Documentation (Phase -1, AST, Context Middleware, Visual Progress, REFACTOR)"
+    },
+    {
+      "number": "7d",
+      "name": "Diagram & Illustration Updates",
+      "status": "not_started",
+      "progress": 0,
+      "tasks_completed": 0,
+      "tasks_total": 7,
+      "started": null,
+      "completed": null,
+      "duration_hours": 2,
+      "git_checkpoint": "cortex-phase-7d: Diagram & Illustration Updates (4 diagrams created, CORTEX-5.0 alignment complete)"
+    },
+    {
+      "number": 8,
+      "name": "Edge Case & Security Analysis",
+      "status": "not_started",
+      "progress": 0,
+      "tasks_completed": 0,
+      "tasks_total": 8,
+      "started": null,
+      "completed": null,
+      "duration_hours": 2,
+      "git_checkpoint": "cortex-phase-8: Edge Case & Security Analysis (11 categories, all mitigations documented)"
+    },
+    {
+      "number": 9,
+      "name": "Performance & Accessibility Testing",
+      "status": "not_started",
+      "progress": 0,
+      "tasks_completed": 0,
+      "tasks_total": 10,
+      "started": null,
+      "completed": null,
+      "duration_hours": 2,
+      "git_checkpoint": "cortex-phase-9: Performance & Accessibility Testing (Lighthouse >90/95, WCAG 2.1 AA compliant)"
+    },
+    {
+      "number": 10,
+      "name": "Integration Testing",
+      "status": "not_started",
+      "progress": 0,
+      "tasks_completed": 0,
+      "tasks_total": 10,
+      "started": null,
+      "completed": null,
+      "duration_hours": 2,
+      "git_checkpoint": "cortex-phase-10: Integration Testing (HTML validation, link checker, visual regression all pass)"
+    },
+    {
+      "number": 11,
+      "name": "Deployment Validation",
+      "status": "not_started",
+      "progress": 0,
+      "tasks_completed": 0,
+      "tasks_total": 8,
+      "started": null,
+      "completed": null,
+      "duration_hours": 1,
+      "git_checkpoint": "cortex-phase-11: Deployment Validation (staging + production deployed, 24-hour monitoring pass)"
+    },
+    {
+      "number": 12,
+      "name": "REFACTOR - Holistic Cleanup & Optimization",
+      "status": "not_started",
+      "progress": 0,
+      "tasks_completed": 0,
+      "tasks_total": 24,
+      "started": null,
+      "completed": null,
+      "duration_hours": 2,
+      "git_checkpoint": "cortex-phase-12: REFACTOR Cleanup (dead code removed, CI/CD enforcement setup, plan complete)"
+    }
+  ],
+  "acceptance_criteria": {
+    "total": 27,
+    "met": 5,
+    "pending": 22,
+    "critical": [
+      "AC-01: Phase 0-6 complete with 315/320 files compliant (98.4%)",
+      "AC-02: 5 files documented with legitimate exemptions",
+      "AC-03: Git verification passes for all completed phases (0-6)",
+      "AC-15: All 16 phases complete",
+      "AC-26: REFACTOR complete",
+      "AC-27: Automated enforcement setup"
+    ]
+  },
+  "success_metrics": {
+    "files_transformed": {
+      "target": 315,
+      "actual": 315,
+      "percentage": 100
+    },
+    "files_exempted": {
+      "target": 5,
+      "actual": 5,
+      "exemption_documented": true
+    },
+    "inline_styles_removed": {
+      "target": 0,
+      "actual": 0,
+      "percentage": 100
+    },
+    "compliance_rate": {
+      "target": 100,
+      "actual": 98.4,
+      "effective_with_exemptions": 100
+    },
+    "git_verification_pass_rate": {
+      "target": 100,
+      "actual": 100,
+      "phases_verified": "0-6"
+    }
+  },
+  "next_phase": {
+    "number": "7a",
+    "name": "CORTEX-5.0 Gap Analysis",
+    "estimated_duration_hours": 4,
+    "ready_to_start": true
+  }
+}

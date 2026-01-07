@@ -1,0 +1,179 @@
+{
+  "plan_id": "STS-REGEN",
+  "plan_name": "STS Regeneration - Before/After Showcase",
+  "version": "2.0",
+  "created": "2025-12-28T00:00:00Z",
+  "status": "IN_PROGRESS",
+  "complexity_tier": 3,
+  "estimated_duration": "15 hours",
+  "phases": [
+    {
+      "id": 1,
+      "name": "Homepage Tile Integration",
+      "status": "COMPLETED",
+      "progress": 100,
+      "tasks": 2,
+      "tasks_completed": 2,
+      "duration_estimate": "30m",
+      "description": "Add STS showcase tile to docs/index.html",
+      "started_at": "2025-12-28T08:00:00Z",
+      "completed_at": "2025-12-28T08:12:00Z"
+    },
+    {
+      "id": 2,
+      "name": "STS Showcase Main Page",
+      "status": "COMPLETED",
+      "progress": 100,
+      "tasks": 5,
+      "tasks_completed": 5,
+      "duration_estimate": "2h",
+      "description": "Build docs/sts/index.html with concept explanation and category navigation",
+      "started_at": "2025-12-28T08:15:00Z",
+      "completed_at": "2025-12-28T08:16:00Z"
+    },
+    {
+      "id": 3,
+      "name": "Security Showcase",
+      "status": "COMPLETED",
+      "progress": 100,
+      "tasks": 3,
+      "tasks_completed": 3,
+      "duration_estimate": "2h",
+      "description": "12 security flaws with before/after code comparisons",
+      "started_at": "2025-12-28T08:16:00Z",
+      "completed_at": "2025-12-28T08:18:00Z"
+    },
+    {
+      "id": 4,
+      "name": "SOLID Showcase",
+      "status": "COMPLETED",
+      "progress": 100,
+      "tasks": 3,
+      "tasks_completed": 3,
+      "duration_estimate": "2h",
+      "description": "15 SOLID violations with before/after code comparisons + educational explainers",
+      "started_at": "2025-12-28T08:18:00Z",
+      "completed_at": "2025-12-28T08:22:00Z"
+    },
+    {
+      "id": 5,
+      "name": "Code Quality Showcase",
+      "status": "COMPLETED",
+      "progress": 100,
+      "tasks": 3,
+      "tasks_completed": 3,
+      "duration_estimate": "2h",
+      "description": "20 code quality issues with before/after comparisons + DRY/KISS/YAGNI education",
+      "started_at": "2025-12-28T08:22:00Z",
+      "completed_at": "2025-12-28T08:24:00Z"
+    },
+    {
+      "id": 6,
+      "name": "Performance/Testing/Documentation",
+      "status": "COMPLETED",
+      "progress": 100,
+      "tasks": 3,
+      "tasks_completed": 3,
+      "duration_estimate": "1.5h",
+      "description": "Remaining 3 category pages with before/after comparisons + concept explainers",
+      "started_at": "2025-12-28T08:24:00Z",
+      "completed_at": "2025-12-28T08:26:00Z"
+    },
+    {
+      "id": 7,
+      "name": "CSS & Responsive Design",
+      "status": "COMPLETED",
+      "progress": 100,
+      "tasks": 3,
+      "tasks_completed": 3,
+      "duration_estimate": "1h",
+      "description": "STS-specific styles per documentation-styling-standards.md",
+      "started_at": "2025-12-28T08:18:00Z",
+      "completed_at": "2025-12-28T08:20:00Z"
+    },
+    {
+      "id": 8,
+      "name": "Create Fixed Source Files",
+      "status": "NOT_STARTED",
+      "progress": 0,
+      "tasks": 4,
+      "tasks_completed": 0,
+      "duration_estimate": "2h",
+      "description": "Create src-fixed/ directory with corrected code",
+      "started_at": null,
+      "completed_at": null
+    },
+    {
+      "id": 9,
+      "name": "Learning Library Integration",
+      "status": "NOT_STARTED",
+      "progress": 0,
+      "tasks": 2,
+      "tasks_completed": 0,
+      "duration_estimate": "1h",
+      "description": "Link all fixes to Knowledge Library entries",
+      "started_at": null,
+      "completed_at": null
+    },
+    {
+      "id": 10,
+      "name": "Final Validation & Polish",
+      "status": "NOT_STARTED",
+      "progress": 0,
+      "tasks": 3,
+      "tasks_completed": 0,
+      "duration_estimate": "1h",
+      "description": "HTML validation, link verification, visual QA",
+      "started_at": null,
+      "completed_at": null
+    }
+  ],
+  "overall_progress": 0,
+  "total_tasks": 31,
+  "completed_tasks": 0,
+  "vision": {
+    "purpose": "Demonstrate CORTEX 4.0 capabilities through before/after code transformation showcase",
+    "target_audience": "Developers evaluating CORTEX for their projects",
+    "key_message": "See exactly how CORTEX transforms problematic code into production-quality software"
+  },
+  "success_criteria": [
+    "STS tile appears on homepage and links correctly",
+    "Main STS page explains concept clearly",
+    "All 6 category pages show before/after comparisons",
+    "Glassmorphism styling per documentation-styling-standards.md",
+    "Mobile-responsive at all breakpoints",
+    "Learning library cross-references work",
+    "HTML validation passes",
+    "Fixed source code exists in src-fixed/"
+  ],
+  "deliverables": {
+    "pages": [
+      "docs/sts/index.html",
+      "docs/sts/security.html",
+      "docs/sts/solid.html",
+      "docs/sts/code-quality.html",
+      "docs/sts/performance.html",
+      "docs/sts/testing.html",
+      "docs/sts/documentation.html"
+    ],
+    "code": [
+      "cortex-sample-apps/sts-validation-app/src-fixed/",
+      "cortex-brain/knowledge/sts-learning-map.yaml"
+    ],
+    "styling": [
+      "docs/assets/css/main.css (STS additions)",
+      "docs/index.html (STS tile)"
+    ]
+  },
+  "flaw_categories": {
+    "security": { "count": 12, "status": "not_started" },
+    "solid": { "count": 15, "status": "not_started" },
+    "code_quality": { "count": 20, "status": "not_started" },
+    "performance": { "count": 8, "status": "not_started" },
+    "testing": { "count": 3, "status": "not_started" },
+    "documentation": { "count": 3, "status": "not_started" }
+  },
+  "risk_level": "MEDIUM",
+  "tdd_required": false,
+  "last_updated": "2025-12-28T00:00:00Z"
+}

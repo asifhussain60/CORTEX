@@ -1,0 +1,213 @@
+version: '1.0'
+
+authentication:
+  method: "OAuth2 + JWT"
+  provider: "Auth0"  # Options: Auth0, Okta, AWS Cognito, Azure AD
+  token_type: "JWT"
+  token_expiry_seconds: 3600
+  refresh_token_required: true
+  refresh_token_expiry_days: 30
+  mfa_required: true
+  mfa_methods: ["totp", "sms", "email"]
+  password_policy:
+    min_length: 12
+    require_uppercase: true
+    require_lowercase: true
+    require_numbers: true
+    require_symbols: true
+    expiry_days: 90
+    prevent_reuse_count: 5
+
+authorization:
+  model: "RBAC"  # Options: RBAC (Role-Based), ABAC (Attribute-Based), ACL (Access Control List)
+  default_deny: true
+  require_explicit_grants: true
+  roles:
+    - name: "admin"
+      permissions: ["*"]
+    - name: "user"
+      permissions: ["read:own", "write:own"]
+    - name: "guest"
+      permissions: ["read:public"]
+  session_timeout_minutes: 30
+  concurrent_sessions_allowed: 1
+
+data_protection:
+  encryption_at_rest: true
+  encryption_algorithm: "AES-256"
+  encryption_in_transit: true
+  tls_version: "1.2+"
+  
+  pii_fields:
+    - "email"
+    - "phone"
+    - "ssn"
+    - "credit_card"
+    - "bank_account"
+    - "address"
+    - "date_of_birth"
+  
+  pii_encryption: "AES-256"
+  pii_masking_in_logs: true
+  pii_retention_days: 365
+  pii_deletion_on_request: true
+  
+  sensitive_data_handling:
+    - field: "password"
+      storage: "hashed"
+      algorithm: "bcrypt"
+      rounds: 12
+    
+    - field: "credit_card"
+      storage: "tokenized"
+      provider: "Stripe"
+    
+    - field: "ssn"
+      storage: "encrypted"
+      algorithm: "AES-256"
+
+input_validation:
+  sanitize_all_inputs: true
+  max_request_size: "10MB"
+  max_json_depth: 10
+  max_array_length: 1000
+  
+  rate_limiting:
+    enabled: true
+    requests_per_minute: 60
+    burst_size: 10
+    by: "ip_address"
+  
+  sql_injection_prevention: "parameterized_queries"
+  xss_prevention: "content_security_policy"
+  csrf_protection: true
+  
+  content_security_policy:
+    default_src: ["'self'"]
+    script_src: ["'self'", "'unsafe-inline'"]
+    style_src: ["'self'", "'unsafe-inline'"]
+    img_src: ["'self'", "data:", "https:"]
+
+secrets_management:
+  use_vault: true
+  vault_provider: "AWS Secrets Manager"  # Options: AWS Secrets Manager, Azure Key Vault, HashiCorp Vault
+  no_hardcoded_secrets: true
+  rotate_secrets_days: 90
+  
+  secret_types:
+    - type: "api_keys"
+      rotation_required: true
+      rotation_days: 90
+    
+    - type: "database_credentials"
+      rotation_required: true
+      rotation_days: 30
+    
+    - type: "encryption_keys"
+      rotation_required: true
+      rotation_days: 365
+  
+  validation: "Check for credentials in code, config files, logs"
+
+secure_coding:
+  - rule: "No eval()"
+    severity: "CRITICAL"
+    description: "Never use eval() or similar dynamic code execution"
+  
+  - rule: "No innerHTML"
+    severity: "HIGH"
+    description: "Use textContent or sanitized methods"
+  
+  - rule: "No dangerouslySetInnerHTML"
+    severity: "HIGH"
+    description: "Sanitize HTML before rendering"
+  
+  - rule: "Validate all file uploads"
+    severity: "CRITICAL"
+    description: "Check file type, size, content"
+    max_file_size: "10MB"
+    allowed_extensions: [".jpg", ".png", ".pdf", ".docx"]
+  
+  - rule: "Use prepared statements"
+    severity: "CRITICAL"
+    description: "Never concatenate SQL queries"
+
+api_security:
+  authentication_required: true
+  cors_enabled: true
+  cors_allowed_origins: ["https://app.company.com"]
+  cors_allowed_methods: ["GET", "POST", "PUT", "DELETE"]
+  cors_allowed_headers: ["Content-Type", "Authorization"]
+  
+  api_versioning: true
+  deprecation_notice_days: 90
+  
+  request_validation:
+    schema_validation: true
+    content_type_validation: true
+    method_validation: true
+  
+  response_headers:
+    X-Content-Type-Options: "nosniff"
+    X-Frame-Options: "DENY"
+    X-XSS-Protection: "1; mode=block"
+    Strict-Transport-Security: "max-age=31536000; includeSubDomains"
+    Content-Security-Policy: "default-src 'self'"
+
+logging_monitoring:
+  log_all_access: true
+  log_all_errors: true
+  log_security_events: true
+  
+  security_events:
+    - "failed_login_attempts"
+    - "privilege_escalation"
+    - "unauthorized_access"
+    - "data_export"
+    - "admin_actions"
+  
+  log_retention_days: 90
+  pii_masking_in_logs: true
+  
+  alerting:
+    enabled: true
+    alert_on:
+      - "multiple_failed_logins"
+      - "unusual_access_patterns"
+      - "data_breach_indicators"
+      - "privilege_escalation_attempts"
+    
+    notification_channels:
+      - email: "security@company.com"
+      - slack: "#security-alerts"
+
+compliance_requirements:
+  - standard: "OWASP Top 10"
+    year: 2021
+    validation: "Automated security scans"
+  
+  - standard: "CWE Top 25"
+    year: 2023
+    validation: "Static analysis tools"
+  
+  - standard: "GDPR"
+    requirements: ["Data encryption", "User consent", "Right to deletion"]
+  
+  - standard: "SOX"
+    requirements: ["Audit trails", "Access controls", "Data retention"]
+
+security_testing:
+  static_analysis: true
+  static_analysis_tools: ["SonarQube", "ESLint Security Plugin"]
+  
+  dynamic_analysis: true
+  dynamic_analysis_tools: ["OWASP ZAP", "Burp Suite"]
+  
+  dependency_scanning: true
+  dependency_scanning_tools: ["npm audit", "Snyk"]
+  
+  penetration_testing: true
+  penetration_testing_frequency: "quarterly"
+  
+  security_code_review: true
+  security_code_review_required_for: ["authentication", "authorization", "payment", "pii"]

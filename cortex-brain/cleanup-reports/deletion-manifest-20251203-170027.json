@@ -1,0 +1,34 @@
+{
+  "timestamp": "2025-12-03T17:00:27.974568",
+  "summary": {
+    "total_analyzed": 71,
+    "total_candidates": 1,
+    "safe_to_delete": 1,
+    "space_to_free_bytes": 0,
+    "space_to_free_mb": 0.0
+  },
+  "risk_breakdown": {
+    "low": 1
+  },
+  "reason_breakdown": {
+    "empty": 1
+  },
+  "candidates": [
+    {
+      "path": "logs/doc_generation.log",
+      "category": "unknown",
+      "purpose": "unknown",
+      "size_bytes": 0,
+      "modified_time": "2025-12-03T15:24:57.791541",
+      "reason": "empty",
+      "risk": "low",
+      "confidence": 0.85,
+      "evidence": [
+        "Empty or near-empty file",
+        "Size: 0 bytes",
+        "Lines: 1"
+      ],
+      "related_files": []
+    }
+  ]
+}

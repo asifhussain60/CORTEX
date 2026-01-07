@@ -1,0 +1,325 @@
+# CORTEX Interactive Clarification Rules
+# Purpose: Configure ambiguity detection and multi-round clarification behavior
+# Version: 1.0
+# Author: Asif Hussain
+# Date: 2025-11-27
+
+# ============================================================================
+# CLARIFICATION SETTINGS
+# ============================================================================
+
+clarification_settings:
+  # Maximum number of clarification rounds
+  max_rounds: 4
+  
+  # Minimum rounds before allowing early completion
+  min_rounds: 1
+  
+  # Auto-trigger threshold (0-10 ambiguity score)
+  # If score >= threshold, automatically start clarification
+  auto_trigger_threshold: 6
+  
+  # Enable/disable clarification system
+  enabled: true
+  
+  # Save conversation state to YAML
+  save_conversation_state: true
+
+# ============================================================================
+# AMBIGUITY DETECTION
+# ============================================================================
+
+ambiguity_detection:
+  # Weight factors for scoring (0-10 scale)
+  vague_language_weight: 2.0
+  missing_fields_weight: 3.0
+  technical_ambiguity_weight: 2.5
+  security_concerns_weight: 3.0
+  
+  # Vague language patterns (regex)
+  vague_patterns:
+    - '\b(maybe|perhaps|possibly|might|could be|probably)\b'
+    - '\b(some|few|several|various|multiple)\b'
+    - '\b(approximately|around|about|roughly)\b'
+    - '\b(etc|and so on|among others)\b'
+    - '\b(something|somehow|somewhere)\b'
+    - '\b(kind of|sort of|type of)\b'
+  
+  # Required fields for completeness check
+  required_fields:
+    acceptance_criteria: "What are the success criteria?"
+    technical_approach: "What is the technical implementation approach?"
+    user_flow: "What is the expected user interaction flow?"
+    dependencies: "What are the external dependencies?"
+  
+  # Technical ambiguity indicators
+  technical_ambiguity_indicators:
+    - "no architecture specified"
+    - "unclear API contract"
+    - "unspecified database changes"
+    - "missing error handling strategy"
+    - "unknown integration points"
+    - "unclear data model"
+  
+  # Security concern indicators
+  security_concern_indicators:
+    - "authentication"
+    - "authorization"
+    - "sensitive data"
+    - "user credentials"
+    - "API keys"
+    - "payment information"
+    - "personal data"
+    - "GDPR"
+    - "PII"
+
+# ============================================================================
+# QUESTION CATEGORIES
+# ============================================================================
+
+question_categories:
+  # Round 1: Scope Questions
+  - id: scope
+    name: "Scope Clarification"
+    priority: 1
+    description: "Understand the high-level scope and type of work"
+    questions:
+      - id: scope_type
+        text: "What is the primary scope of this work item?"
+        choices:
+          - letter: "a"
+            text: "New feature (greenfield development)"
+            category: "scope"
+          - letter: "b"
+            text: "Enhancement to existing feature"
+            category: "scope"
+          - letter: "c"
+            text: "Bug fix with refactoring"
+            category: "scope"
+          - letter: "d"
+            text: "Technical debt reduction"
+            category: "scope"
+          - letter: "e"
+            text: "Documentation or tooling"
+            category: "scope"
+      
+      - id: scope_goal
+        text: "What is the primary goal of this work?"
+        choices:
+          - letter: "a"
+            text: "Improve user experience"
+            category: "scope"
+          - letter: "b"
+            text: "Increase performance"
+            category: "scope"
+          - letter: "c"
+            text: "Add new capability"
+            category: "scope"
+          - letter: "d"
+            text: "Fix defect or issue"
+            category: "scope"
+          - letter: "e"
+            text: "Improve code quality"
+            category: "scope"
+  
+  # Round 2: Technical Questions
+  - id: technical
+    name: "Technical Approach"
+    priority: 2
+    description: "Clarify technical implementation details"
+    questions:
+      - id: tech_components
+        text: "Which components will be affected?"
+        choices:
+          - letter: "a"
+            text: "Frontend UI components only"
+            category: "technical"
+          - letter: "b"
+            text: "Backend API endpoints only"
+            category: "technical"
+          - letter: "c"
+            text: "Database schema changes"
+            category: "technical"
+          - letter: "d"
+            text: "Multiple components (frontend + backend)"
+            category: "technical"
+          - letter: "e"
+            text: "Infrastructure or DevOps"
+            category: "technical"
+      
+      - id: tech_integration
+        text: "What integration points are involved?"
+        choices:
+          - letter: "a"
+            text: "No external integrations"
+            category: "technical"
+          - letter: "b"
+            text: "Third-party APIs"
+            category: "technical"
+          - letter: "c"
+            text: "Internal microservices"
+            category: "technical"
+          - letter: "d"
+            text: "Database connections"
+            category: "technical"
+          - letter: "e"
+            text: "Multiple integration points"
+            category: "technical"
+  
+  # Round 3: UI/UX Questions
+  - id: ui_ux
+    name: "User Experience"
+    priority: 3
+    description: "Understand user-facing aspects"
+    questions:
+      - id: user_impact
+        text: "What is the expected user impact?"
+        choices:
+          - letter: "a"
+            text: "High (core workflow change)"
+            category: "ui_ux"
+          - letter: "b"
+            text: "Medium (visible but not critical)"
+            category: "ui_ux"
+          - letter: "c"
+            text: "Low (background improvement)"
+            category: "ui_ux"
+          - letter: "d"
+            text: "None (internal change only)"
+            category: "ui_ux"
+      
+      - id: user_flow
+        text: "Is the user flow clearly defined?"
+        choices:
+          - letter: "a"
+            text: "Yes, documented with mockups"
+            category: "ui_ux"
+          - letter: "b"
+            text: "Yes, verbal description only"
+            category: "ui_ux"
+          - letter: "c"
+            text: "Partially defined"
+            category: "ui_ux"
+          - letter: "d"
+            text: "No, needs definition"
+            category: "ui_ux"
+  
+  # Round 4: Quality Questions
+  - id: quality
+    name: "Quality Requirements"
+    priority: 4
+    description: "Clarify testing and quality expectations"
+    questions:
+      - id: test_coverage
+        text: "What level of test coverage is required?"
+        choices:
+          - letter: "a"
+            text: "High (80%+ unit + integration tests)"
+            category: "quality"
+          - letter: "b"
+            text: "Medium (60%+ unit tests)"
+            category: "quality"
+          - letter: "c"
+            text: "Low (critical paths only)"
+            category: "quality"
+          - letter: "d"
+            text: "Manual testing sufficient"
+            category: "quality"
+      
+      - id: security_review
+        text: "Is security review required?"
+        choices:
+          - letter: "a"
+            text: "Yes, OWASP review mandatory"
+            category: "quality"
+          - letter: "b"
+            text: "Yes, standard security checklist"
+            category: "quality"
+          - letter: "c"
+            text: "No, low security risk"
+            category: "quality"
+          - letter: "d"
+            text: "Unknown, needs assessment"
+            category: "quality"
+      
+      - id: performance_req
+        text: "Are there specific performance requirements?"
+        choices:
+          - letter: "a"
+            text: "Yes, strict SLA (<1s response)"
+            category: "quality"
+          - letter: "b"
+            text: "Yes, moderate SLA (<5s response)"
+            category: "quality"
+          - letter: "c"
+            text: "No specific requirements"
+            category: "quality"
+          - letter: "d"
+            text: "Unknown, needs profiling"
+            category: "quality"
+
+# ============================================================================
+# CHOICE FORMAT
+# ============================================================================
+
+choice_format:
+  # Pattern: [round_number][letter]
+  # Examples: "1a", "2c", "3b"
+  pattern: "[round][letter]"
+  
+  # Multi-select separator
+  multi_select_separator: ","
+  
+  # Case sensitivity
+  case_sensitive: false
+  
+  # Allow "skip" to skip questions
+  allow_skip: true
+  
+  # Allow "done" to finish early
+  allow_early_completion: true
+
+# ============================================================================
+# CONTEXT INTEGRATION
+# ============================================================================
+
+context_integration:
+  # Automatically update work item description
+  auto_update_description: true
+  
+  # Store clarifications in YAML
+  store_in_yaml: true
+  
+  # Generate clarification report
+  generate_report: true
+  
+  # Report format
+  report_format: markdown
+  
+  # Include in work item template
+  include_in_template: true
+
+# ============================================================================
+# PERFORMANCE TARGETS
+# ============================================================================
+
+performance_targets:
+  ambiguity_detection_ms: 100
+  question_generation_ms: 200
+  response_validation_ms: 50
+  context_integration_ms: 100
+  total_round_time_ms: 500
+
+# ============================================================================
+# SUCCESS METRICS
+# ============================================================================
+
+success_metrics:
+  ambiguity_detection_accuracy: 0.95  # 95%+
+  question_relevance_score: 0.90      # 90%+
+  user_completion_rate: 0.85          # 85%+
+  average_rounds_per_item: 2.5        # 2-3 rounds typical
+
+# ============================================================================
+# END OF CONFIGURATION
+# ============================================================================

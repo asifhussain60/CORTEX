@@ -1,0 +1,292 @@
+{
+  "manifest_version": "1.0.0",
+  "application": {
+    "name": "STS E-Commerce Validation App",
+    "version": "0.1.0",
+    "purpose": "CORTEX 4.0 Capability Validation",
+    "baseline_score": 25,
+    "target_score": 90,
+    "created": "2025-12-25",
+    "author": "Asif Hussain - CORTEX Phase 13B"
+  },
+  "flaws": {
+    "total_count": 61,
+    "by_category": {
+      "security": 12,
+      "solid": 15,
+      "code_quality": 20,
+      "performance": 8,
+      "testing": 3,
+      "documentation": 8
+    }
+  },
+  "security_flaws": [
+    {
+      "id": "SEC-01",
+      "owasp": "A02:2021",
+      "cwe": "CWE-798",
+      "location": "src/api/auth.py:23",
+      "severity": "CRITICAL",
+      "description": "Hardcoded JWT secret key",
+      "detection_pattern": "JWT_SECRET = \"",
+      "capability_tested": "code_sanitization"
+    },
+    {
+      "id": "SEC-02",
+      "owasp": "A02:2021",
+      "cwe": "CWE-916",
+      "location": "src/api/auth.py:42",
+      "severity": "CRITICAL",
+      "description": "No password hashing (plaintext storage)",
+      "detection_pattern": "password.*==.*password",
+      "capability_tested": "tdd_mastery"
+    },
+    {
+      "id": "SEC-03",
+      "owasp": "A03:2021",
+      "cwe": "CWE-89",
+      "location": "src/data/database.py:75",
+      "severity": "CRITICAL",
+      "description": "SQL injection via f-strings",
+      "detection_pattern": "f\".*SELECT.*{",
+      "capability_tested": "system_refinement"
+    },
+    {
+      "id": "SEC-05",
+      "owasp": "A05:2021",
+      "cwe": "CWE-489",
+      "location": "src/app.py:13",
+      "severity": "HIGH",
+      "description": "Debug mode enabled in production",
+      "detection_pattern": "debug.*=.*True",
+      "capability_tested": "system_maintenance"
+    },
+    {
+      "id": "SEC-12",
+      "owasp": "A05:2021",
+      "cwe": "CWE-942",
+      "location": "src/app.py:24",
+      "severity": "MEDIUM",
+      "description": "Permissive CORS (allow all origins)",
+      "detection_pattern": "Access-Control-Allow-Origin.*\\*",
+      "capability_tested": "architectural_review"
+    }
+  ],
+  "solid_violations": [
+    {
+      "id": "SOL-01",
+      "principle": "SRP",
+      "location": "src/api/users.py",
+      "description": "God class (auth + CRUD + validation + email)",
+      "metrics": {
+        "methods": 32,
+        "loc": 654
+      },
+      "detection_heuristic": "methods > 20 AND loc > 500",
+      "capability_tested": "system_refinement"
+    },
+    {
+      "id": "SOL-02",
+      "principle": "SRP",
+      "location": "src/utils/helpers.py",
+      "description": "God object with 23 unrelated functions",
+      "metrics": {
+        "functions": 23,
+        "loc": 587
+      },
+      "detection_heuristic": "functions > 15 AND loc > 400",
+      "capability_tested": "holistic_discovery"
+    },
+    {
+      "id": "SOL-04",
+      "principle": "OCP",
+      "location": "src/business/payment.py:17",
+      "description": "Payment processor if/else chains",
+      "metrics": {
+        "branches": 8
+      },
+      "detection_heuristic": "if/elif count > 5",
+      "capability_tested": "planning_system"
+    },
+    {
+      "id": "SOL-09",
+      "principle": "DIP",
+      "location": "src/app.py:37",
+      "description": "Direct instantiation of concrete Database class",
+      "detection_pattern": "db = Database()",
+      "capability_tested": "architectural_review"
+    },
+    {
+      "id": "SOL-15",
+      "principle": "DIP",
+      "location": "src/app.py:37",
+      "description": "High-level app module depends on low-level data",
+      "detection_pattern": "from src.data.database import",
+      "capability_tested": "architectural_review"
+    }
+  ],
+  "code_quality_issues": [
+    {
+      "id": "CQ-03",
+      "anti_pattern": "Copy-Paste Programming",
+      "location": "src/business/payment.py",
+      "description": "3 payment methods with 80% duplicate code",
+      "metrics": {
+        "duplicate_percentage": 80
+      },
+      "detection": "duplicate > 5%",
+      "capability_tested": "holistic_discovery"
+    },
+    {
+      "id": "CQ-07",
+      "anti_pattern": "Monster Method",
+      "location": "src/utils/helpers.py:49",
+      "description": "process_data() function too long and complex",
+      "metrics": {
+        "complexity": 68,
+        "loc": 250
+      },
+      "detection": "complexity > 20 AND loc > 100",
+      "capability_tested": "system_refinement"
+    },
+    {
+      "id": "CQ-09",
+      "anti_pattern": "Dead Code",
+      "location": "src/utils/helpers.py:189",
+      "description": "Unused legacy_function() and old_helper()",
+      "detection": "call_graph_analysis",
+      "capability_tested": "system_maintenance"
+    },
+    {
+      "id": "CQ-11",
+      "anti_pattern": "Poor Naming",
+      "location": "src/utils/helpers.py:100",
+      "description": "do_stuff(x, y, z) - vague names",
+      "detection": "name_length < 4 OR single_letter_vars",
+      "capability_tested": "code_sanitization"
+    },
+    {
+      "id": "CQ-13",
+      "anti_pattern": "No Error Handling",
+      "location": "src/app.py:51",
+      "description": "health() endpoint missing try/except",
+      "detection": "no_exception_handling",
+      "capability_tested": "tdd_mastery"
+    }
+  ],
+  "performance_issues": [
+    {
+      "id": "PERF-01",
+      "issue": "N+1 Query Problem",
+      "location": "src/data/database.py:find_all",
+      "current": "O(n) queries",
+      "target": "O(1) query with JOIN",
+      "detection": "query_count_analysis",
+      "capability_tested": "system_refinement"
+    },
+    {
+      "id": "PERF-02",
+      "issue": "No Pagination",
+      "location": "src/api/products.py",
+      "description": "Loads all products at once",
+      "detection": "SELECT without LIMIT",
+      "capability_tested": "architectural_review"
+    },
+    {
+      "id": "PERF-04",
+      "issue": "No Connection Pooling",
+      "location": "src/data/database.py:18",
+      "description": "Creates new connection for each request",
+      "detection": "sqlite3.connect in __init__",
+      "capability_tested": "system_refinement"
+    }
+  ],
+  "testing_gaps": [
+    {
+      "id": "TEST-01",
+      "gap": "Placeholder Tests",
+      "location": "tests/test_api.py",
+      "current": "assert True instead of real assertions",
+      "target": "Proper test assertions",
+      "detection": "assert True pattern",
+      "capability_tested": "tdd_mastery"
+    },
+    {
+      "id": "TEST-02",
+      "gap": "Happy Path Only",
+      "location": "tests/test_api.py",
+      "current": "No edge case testing",
+      "target": "Comprehensive edge cases",
+      "detection": "test_pyramid_analysis",
+      "capability_tested": "tdd_mastery"
+    },
+    {
+      "id": "TEST-03",
+      "gap": "Missing Test Files",
+      "location": "tests/",
+      "current": "Only test_api.py exists",
+      "target": "test_business.py, test_data.py, test_utils.py",
+      "detection": "file_exists_check",
+      "capability_tested": "tdd_mastery"
+    }
+  ],
+  "capability_mapping": {
+    "code_sanitization": {
+      "flaws_to_detect": ["SEC-01", "CQ-11"],
+      "expected_actions": [
+        "Replace hardcoded secrets with environment variables",
+        "Generate sanitization mapping reference",
+        "Validate builds still pass after changes"
+      ],
+      "success_criteria": "5/5 secrets sanitized, tests pass, mapping generated"
+    },
+    "planning_system": {
+      "flaws_to_detect": ["SOL-04", "SEC-03"],
+      "expected_complexity": "HIGH",
+      "expected_routing": "incremental",
+      "success_criteria": "4-phase incremental plan with TDD, DoR/DoD compliance"
+    },
+    "tdd_mastery": {
+      "flaws_to_detect": ["TEST-01", "TEST-02", "TEST-03", "SEC-02", "CQ-13"],
+      "expected_workflow": "RED→GREEN→REFACTOR",
+      "current_coverage": "15%",
+      "target_coverage": "90%+",
+      "success_criteria": "Full TDD cycle, 90%+ coverage, complexity reduced"
+    },
+    "system_maintenance": {
+      "flaws_to_detect": ["CQ-09", "SEC-05"],
+      "expected_phases": 7,
+      "expected_fixes": ["dead_code_removal", "auto_formatting", "import_cleanup"],
+      "success_criteria": "0 critical issues after 7 phases"
+    },
+    "system_refinement": {
+      "flaws_to_detect": ["SOL-01", "SOL-02", "CQ-07", "PERF-01"],
+      "expected_violations": "35+",
+      "expected_refactorings": ["extract_method", "strategy_pattern", "repository_pattern"],
+      "success_criteria": "All SOLID violations resolved, 60%+ test coverage"
+    },
+    "architectural_review": {
+      "flaws_to_detect": ["SOL-09", "SOL-15", "SEC-12", "PERF-02"],
+      "current_score": 25,
+      "target_score": 90,
+      "expected_phases": 6,
+      "success_criteria": "Score 90+, 20+ actionable recommendations"
+    },
+    "ado_operations": {
+      "test_scenario": "Generate ADO story for authentication refactoring",
+      "expected_output": "Valid ADO work item with hierarchy",
+      "success_criteria": "Complete ADO format, story/task breakdown"
+    },
+    "holistic_discovery": {
+      "flaws_to_detect": ["CQ-03", "SOL-02", "CQ-09"],
+      "expected_findings": ["duplicate_code", "dead_code", "god_objects"],
+      "success_criteria": "100% accuracy, 0 false positives"
+    }
+  },
+  "validation_plan": {
+    "week_1_2": "Application creation with all 61 flaws",
+    "week_3": "Capabilities 1-4 validation",
+    "week_4": "Capabilities 5-8 validation",
+    "week_5": "Measurement and reporting"
+  }
+}

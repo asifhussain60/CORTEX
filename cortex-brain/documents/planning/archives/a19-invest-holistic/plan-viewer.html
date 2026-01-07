@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A19 - Investigate Holistic Review Of All Chat History - CORTEX Plan Viewer</title>
+    <style>
+        /* CORTEX 5.0 Glassmorphism Styles */
+        :root {
+            --glass-bg: rgba(15, 23, 42, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --progress-gradient: linear-gradient(90deg, #00d4ff 0%, #a855f7 100%);
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --accent-blue: #00d4ff;
+            --accent-purple: #a855f7;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: var(--text-primary);
+            padding: 2rem;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        .container { max-width: 1400px; margin: 0 auto; }
+        
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .glass-panel:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.15);
+        }
+        
+        .header { text-align: center; margin-bottom: 3rem; }
+        
+        .plan-id {
+            display: inline-block;
+            background: var(--progress-gradient);
+            color: #000;
+            font-weight: 700;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .plan-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #10b981;
+            font-size: 0.875rem;
+            margin-top: 1rem;
+        }
+        
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .overall-progress { margin: 2rem 0; }
+        
+        .progress-bar {
+            height: 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--progress-gradient);
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 1rem;
+            color: #000;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        
+        .phase-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .phase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .phase-title { font-size: 1.5rem; font-weight: 600; }
+        
+        .phase-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        
+        .status-not-started { background: rgba(148, 163, 184, 0.2); color: #94a3b8; }
+        .status-in-progress { background: rgba(0, 212, 255, 0.2); color: #00d4ff; }
+        .status-completed { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+        
+        .task-list { list-style: none; margin-top: 1rem; }
+        
+        .task-item {
+            padding: 0.75rem;
+            border-left: 3px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .task-item.completed {
+            border-left-color: #10b981;
+            opacity: 0.7;
+        }
+        
+        .task-item.in-progress {
+            border-left-color: #00d4ff;
+        }
+        
+        .meta-info {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header glass-panel">
+            <div class="plan-id" id="planId">A19</div>
+            <h1 class="plan-title" id="planTitle">Investigate Holistic Review Of All Chat History</h1>
+            <div class="live-indicator">
+                <div class="live-dot"></div>
+                <span>Live Updates</span>
+            </div>
+        </div>
+        
+        <div class="glass-panel overall-progress">
+            <h2>Overall Progress</h2>
+            <div class="progress-bar">
+                <div class="progress-fill" id="overallProgress" style="width: 0%">0%</div>
+            </div>
+            <div class="meta-info">
+                <span>⏱️ <span id="estimatedHours">0</span> hours estimated</span>
+                <span>📅 Created: <span id="createdDate">-</span></span>
+            </div>
+        </div>
+        
+        <div id="phasesContainer">
+            <!-- Phases loaded dynamically -->
+        </div>
+    </div>
+    
+    <script>
+        // Fetch plan data from server
+        async function fetchPlan() {
+            try {
+                const response = await fetch('/api/plan');
+                const data = await response.json();
+                return data.plan;
+            } catch (error) {
+                console.error('Failed to fetch plan:', error);
+                return null;
+            }
+        }
+        
+        // Fetch progress data
+        async function fetchProgress() {
+            try {
+                const response = await fetch('/api/progress');
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Failed to fetch progress:', error);
+                return null;
+            }
+        }
+        
+        // Render phases
+        function renderPhases(plan, progress) {
+            const container = document.getElementById('phasesContainer');
+            container.innerHTML = '';
+            
+            if (!plan || !plan.phases) return;
+            
+            plan.phases.forEach(phase => {
+                const statusClass = `status-${phase.status.replace('_', '-')}`;
+                
+                const tasksHtml = phase.tasks.map(task => `
+                    <li class="task-item ${task.status.replace('_', '-')}">
+                        <span>${task.name}</span>
+                        <span class="phase-status ${`status-${task.status.replace('_', '-')}`}">${task.status.replace('_', ' ')}</span>
+                    </li>
+                `).join('');
+                
+                const phaseHtml = `
+                    <div class="glass-panel phase-card">
+                        <div class="phase-header">
+                            <h3 class="phase-title">Phase ${phase.number}: ${phase.name}</h3>
+                            <span class="phase-status ${statusClass}">${phase.status.replace('_', ' ').toUpperCase()}</span>
+                        </div>
+                        <p class="meta-info">${phase.description || ''}</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%">0%</div>
+                        </div>
+                        <ul class="task-list">
+                            ${tasksHtml}
+                        </ul>
+                        <div class="meta-info">
+                            <span>⏱️ ${phase.estimated_hours} hours</span>
+                            <span>📋 ${phase.tasks.length} tasks</span>
+                        </div>
+                    </div>
+                `;
+                
+                container.innerHTML += phaseHtml;
+            });
+        }
+        
+        // Update progress
+        function updateProgress(progress) {
+            if (!progress || !progress.progress) return;
+            
+            const overallPercent = progress.progress.overall_percent || 0;
+            const overallEl = document.getElementById('overallProgress');
+            overallEl.style.width = overallPercent + '%';
+            overallEl.textContent = Math.round(overallPercent) + '%';
+        }
+        
+        // Initialize
+        async function init() {
+            const plan = await fetchPlan();
+            if (plan) {
+                document.getElementById('planId').textContent = plan.id;
+                document.getElementById('planTitle').textContent = plan.title;
+                document.getElementById('estimatedHours').textContent = plan.metadata?.estimated_hours || 0;
+                document.getElementById('createdDate').textContent = 
+                    new Date(plan.metadata?.created).toLocaleDateString() || '-';
+                renderPhases(plan, {});
+            }
+            
+            // Poll for updates every 2 seconds
+            setInterval(async () => {
+                const progress = await fetchProgress();
+                updateProgress(progress);
+            }, 2000);
+        }
+        
+        init();
+    </script>
+</body>
+</html>

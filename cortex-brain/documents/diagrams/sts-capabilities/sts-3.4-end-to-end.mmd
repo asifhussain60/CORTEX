@@ -1,0 +1,138 @@
+---
+title: End-to-End Capability - STS Validation
+description: Complete workflow testing with knowledge transfer
+category: STS Capability
+priority: MEDIUM
+version: 4.0.0
+validation_date: 2025-12-26
+---
+
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+      'actorTextColor': '#fff',
+      'actorBkg': '#1ABC9C',
+      'actorBorder': '#16A085'
+    }
+  }
+}%%
+
+sequenceDiagram
+    participant STS as 🧪 STS Validator
+    participant User as 👤 Simulated User
+    participant CORTEX as 🧠 CORTEX System
+    participant TDD as 🧪 TDD Orchestrator
+    participant Plan as 📋 Planning Orchestrator
+    participant Sanitize as 🧹 Sanitization Orchestrator
+    participant Brain as 💾 4-Tier Brain
+    
+    %% Workflow 1: TDD Feature Development
+    rect rgb(74, 144, 226)
+        Note over STS,Brain: WORKFLOW 1: TDD FEATURE DEVELOPMENT
+        STS->>User: Simulate: "Develop login feature with TDD"
+        User->>CORTEX: start tdd login_feature
+        
+        activate CORTEX
+        CORTEX->>TDD: Route to TDD Orchestrator
+        activate TDD
+        
+        TDD->>TDD: RED Phase: Generate tests<br/>• test_login_valid()<br/>• test_login_invalid()<br/>• test_login_edge_cases()
+        TDD->>TDD: Validate tests fail ❌
+        
+        TDD->>TDD: GREEN Phase: Implement<br/>def login(username, password)
+        TDD->>TDD: Run tests → All pass ✅
+        
+        TDD->>TDD: REFACTOR Phase: Clean code<br/>• Extract validation<br/>• Add docstrings<br/>• Quality score: 8/10
+        
+        TDD->>Brain: Store TDD session in Tier 1
+        Brain-->>TDD: ✅ Session captured
+        
+        TDD-->>CORTEX: ✅ TDD workflow complete
+        deactivate TDD
+        CORTEX-->>User: Feature ready with 100% test coverage
+        deactivate CORTEX
+        
+        User->>STS: ✅ Workflow 1 passed
+    end
+    
+    %% Workflow 2: Feature Planning with Knowledge Transfer
+    rect rgb(80, 200, 120)
+        Note over STS,Brain: WORKFLOW 2: PLANNING WITH KNOWLEDGE TRANSFER
+        STS->>User: Simulate: "Plan user authentication system"
+        User->>CORTEX: plan authentication_system
+        
+        activate CORTEX
+        CORTEX->>Plan: Route to Planning Orchestrator
+        activate Plan
+        
+        Plan->>Brain: Query Tier 2 for auth patterns
+        Brain-->>Plan: Retrieved: OAuth2 pattern,<br/>JWT best practices,<br/>Previous auth implementations
+        
+        Note over Plan: 🧠 KNOWLEDGE TRANSFER:<br/>Learned from previous sessions
+        
+        Plan->>Plan: Analyze complexity: HIGH<br/>Triggers: security, authentication<br/>Route: INCREMENTAL planning
+        
+        Plan->>Plan: Generate plan (5 phases):<br/>1. OAuth2 integration<br/>2. JWT token management<br/>3. Session handling<br/>4. Security hardening<br/>5. Testing & validation
+        
+        Plan->>Plan: Auto-include TDD:<br/>• Tests per phase<br/>• Security test suite<br/>• Integration tests
+        
+        Plan->>Brain: Store plan in Tier 2
+        Brain-->>Plan: ✅ Plan stored + patterns learned
+        
+        Plan-->>CORTEX: ✅ Planning complete<br/>Knowledge applied from Tier 2
+        deactivate Plan
+        CORTEX-->>User: Plan ready with learned best practices
+        deactivate CORTEX
+        
+        User->>STS: ✅ Workflow 2 passed<br/>Knowledge transfer verified
+    end
+    
+    %% Workflow 3: Code Sanitization
+    rect rgb(243, 156, 18)
+        Note over STS,Brain: WORKFLOW 3: CODE SANITIZATION
+        STS->>User: Simulate: "Sanitize codebase for open source"
+        User->>CORTEX: sanitize src/
+        
+        activate CORTEX
+        CORTEX->>Sanitize: Route to Sanitization Orchestrator
+        activate Sanitize
+        
+        Sanitize->>Sanitize: Phase 1: Analyze<br/>• Company names: 15 instances<br/>• Internal URLs: 8 instances<br/>• API keys: 3 instances
+        
+        Sanitize->>Sanitize: Phase 2: Create mapping<br/>• ACME Corp → Generic Corp<br/>• internal.api → public.api<br/>• api_key_xxx → [REDACTED]
+        
+        Sanitize->>Sanitize: Phase 3: Transform<br/>• Replace all instances<br/>• Update config files<br/>• Sanitize comments
+        
+        Sanitize->>Sanitize: Phase 4: Validate<br/>• Build succeeds ✅<br/>• Tests pass ✅<br/>• No sensitive data ✅
+        
+        Sanitize->>Sanitize: Phase 5: Generate report<br/>• Files changed: 47<br/>• Replacements: 26<br/>• Validation: PASS
+        
+        Sanitize->>Brain: Store sanitization session
+        Brain-->>Sanitize: ✅ Session captured
+        
+        Sanitize-->>CORTEX: ✅ Sanitization complete
+        deactivate Sanitize
+        CORTEX-->>User: Codebase ready for public release
+        deactivate CORTEX
+        
+        User->>STS: ✅ Workflow 3 passed
+    end
+    
+    %% Knowledge Transfer Verification
+    STS->>Brain: Verify knowledge transfer
+    activate Brain
+    
+    Brain->>Brain: Check Tier 2 patterns:<br/>• TDD session patterns: ✓<br/>• Auth patterns learned: ✓<br/>• Sanitization patterns: ✓
+    
+    Brain-->>STS: ✅ Knowledge transfer verified<br/>All patterns stored in Tier 2
+    deactivate Brain
+    
+    %% Metrics Compilation
+    STS->>STS: Compile results:<br/>• Workflows tested: 3<br/>• Workflows passed: 3<br/>• Success rate: 100%<br/>• Knowledge transfer: verified<br/>• Avg workflow time: 12.5s
+    
+    STS->>STS: Validate thresholds:<br/>• Workflows ≥ 3 ✓<br/>• Success rate = 100% ✓<br/>• Knowledge transfer ✓
+    
+    STS->>STS: Update sts-baseline.json:<br/>capability: end_to_end<br/>status: PASS
+    
+    Note over STS,Brain: 🎉 End-to-End Validated!<br/>Complete workflows with learning confirmed

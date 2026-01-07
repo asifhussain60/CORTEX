@@ -1,0 +1,412 @@
+# React Best Practices (Machine-Readable Guideline)
+# Source: React Official Documentation & Community Best Practices
+# Version: 1.0
+# Created: December 28, 2025
+# Schema: KnowledgeGuidelineSchema
+# Purpose: Authoritative React patterns for CORTEX AI-powered code generation
+
+metadata:
+  title: "React Best Practices"
+  author: "React Team & Community"
+  source: "React Official Documentation, Kent C. Dodds, Dan Abramov"
+  year: 2025
+  version: "1.0"
+  created: "2025-12-28"
+  updated: "2025-12-28"
+  schema: "KnowledgeGuidelineSchema"
+  tags:
+    - react
+    - frontend
+    - javascript
+    - hooks
+    - components
+  
+  generated_docs:
+    - path: "docs/knowledge/frontend/react-best-practices.html"
+      format: "html"
+      generator: "DocumentationOrchestrator"
+      template: "knowledge_file_detail"
+
+# 1. COMPONENT DESIGN
+component_patterns:
+  principle: "Components should be small, focused, and composable"
+  importance: "Critical - foundation of React architecture"
+  
+  rules:
+    - id: "react_comp_001"
+      name: "Single Responsibility Principle"
+      description: "Each component should do one thing well"
+      severity: "HIGH"
+      examples:
+        good:
+          - language: "jsx"
+            code: |
+              // Good: Separate concerns
+              function UserProfile({ user }) {
+                return (
+                  <div>
+                    <UserAvatar user={user} />
+                    <UserInfo user={user} />
+                    <UserStats user={user} />
+                  </div>
+                );
+              }
+              
+              function UserAvatar({ user }) {
+                return <img src={user.avatar} alt={user.name} />;
+              }
+            explanation: "Each component has one responsibility"
+        
+        bad:
+          - language: "jsx"
+            code: |
+              // Bad: Doing too much
+              function UserProfile({ user }) {
+                const [isEditing, setIsEditing] = useState(false);
+                const [notifications, setNotifications] = useState([]);
+                const [settings, setSettings] = useState({});
+                
+                useEffect(() => {
+                  fetchNotifications();
+                  fetchSettings();
+                  subscribeToUpdates();
+                }, []);
+                
+                return <div>/* 500 lines of JSX */</div>;
+              }
+            explanation: "God component doing everything"
+
+    - id: "react_comp_002"
+      name: "Prefer Function Components with Hooks"
+      description: "Use function components and hooks over class components"
+      severity: "HIGH"
+      examples:
+        good:
+          - language: "jsx"
+            code: |
+              function Counter() {
+                const [count, setCount] = useState(0);
+                
+                useEffect(() => {
+                  document.title = `Count: ${count}`;
+                }, [count]);
+                
+                return (
+                  <button onClick={() => setCount(count + 1)}>
+                    Count: {count}
+                  </button>
+                );
+              }
+            explanation: "Modern function component with hooks"
+        
+        bad:
+          - language: "jsx"
+            code: |
+              class Counter extends React.Component {
+                constructor(props) {
+                  super(props);
+                  this.state = { count: 0 };
+                }
+                
+                componentDidMount() {
+                  document.title = `Count: ${this.state.count}`;
+                }
+                
+                render() {
+                  return <button onClick={() => this.setState({ count: this.state.count + 1 })}>
+                    Count: {this.state.count}
+                  </button>;
+                }
+              }
+            explanation: "Legacy class component"
+
+# 2. HOOKS BEST PRACTICES
+hooks_patterns:
+  principle: "Hooks enable state and lifecycle in function components"
+  importance: "Critical - modern React development"
+  
+  rules:
+    - id: "react_hook_001"
+      name: "Rules of Hooks"
+      description: "Only call hooks at the top level, only in React functions"
+      severity: "CRITICAL"
+      examples:
+        good:
+          - language: "jsx"
+            code: |
+              function UserDashboard({ userId }) {
+                const [user, setUser] = useState(null);
+                const [isLoading, setIsLoading] = useState(true);
+                
+                useEffect(() => {
+                  fetchUser(userId).then(setUser);
+                }, [userId]);
+                
+                if (isLoading) return <Spinner />;
+                return <div>{user.name}</div>;
+              }
+            explanation: "Hooks called at top level unconditionally"
+        
+        bad:
+          - language: "jsx"
+            code: |
+              function UserDashboard({ userId }) {
+                if (userId) {
+                  const [user, setUser] = useState(null);  // ❌ Conditional hook
+                }
+                
+                for (let i = 0; i < 10; i++) {
+                  useEffect(() => {});  // ❌ Hook in loop
+                }
+              }
+            explanation: "Hooks in conditionals/loops violate rules"
+
+    - id: "react_hook_002"
+      name: "Custom Hooks for Reusable Logic"
+      description: "Extract reusable stateful logic into custom hooks"
+      severity: "MEDIUM"
+      examples:
+        good:
+          - language: "jsx"
+            code: |
+              // Custom hook
+              function useAuth() {
+                const [user, setUser] = useState(null);
+                const [isLoading, setIsLoading] = useState(true);
+                
+                useEffect(() => {
+                  const unsubscribe = auth.onAuthStateChanged(setUser);
+                  setIsLoading(false);
+                  return unsubscribe;
+                }, []);
+                
+                return { user, isLoading };
+              }
+              
+              // Usage
+              function Dashboard() {
+                const { user, isLoading } = useAuth();
+                if (isLoading) return <Spinner />;
+                return <div>Welcome {user?.name}</div>;
+              }
+            explanation: "Reusable auth logic in custom hook"
+
+# 3. STATE MANAGEMENT
+state_patterns:
+  principle: "Manage state at the right level, avoid prop drilling"
+  importance: "High - impacts app architecture"
+  
+  rules:
+    - id: "react_state_001"
+      name: "Lift State Up When Shared"
+      description: "Move state to common ancestor when multiple components need it"
+      severity: "HIGH"
+      examples:
+        good:
+          - language: "jsx"
+            code: |
+              function ShoppingCart() {
+                const [items, setItems] = useState([]);
+                
+                return (
+                  <div>
+                    <CartSummary items={items} />
+                    <CartItems items={items} onRemove={(id) => 
+                      setItems(items.filter(item => item.id !== id))
+                    } />
+                  </div>
+                );
+              }
+            explanation: "State in common parent"
+
+    - id: "react_state_002"
+      name: "Use Context for Deep Prop Drilling"
+      description: "Context API prevents passing props through many layers"
+      severity: "MEDIUM"
+      examples:
+        good:
+          - language: "jsx"
+            code: |
+              const ThemeContext = React.createContext('light');
+              
+              function App() {
+                const [theme, setTheme] = useState('light');
+                return (
+                  <ThemeContext.Provider value={theme}>
+                    <Layout />
+                  </ThemeContext.Provider>
+                );
+              }
+              
+              function DeepComponent() {
+                const theme = useContext(ThemeContext);
+                return <div className={theme}>Content</div>;
+              }
+            explanation: "Context avoids prop drilling"
+
+# 4. PERFORMANCE OPTIMIZATION
+performance_patterns:
+  principle: "Optimize re-renders and expensive computations"
+  importance: "Medium - optimize when needed"
+  
+  rules:
+    - id: "react_perf_001"
+      name: "Use React.memo for Pure Components"
+      description: "Prevent re-renders when props haven't changed"
+      severity: "MEDIUM"
+      examples:
+        good:
+          - language: "jsx"
+            code: |
+              const ExpensiveComponent = React.memo(function ExpensiveComponent({ data }) {
+                // Expensive rendering logic
+                return <div>{data.map(item => <Item key={item.id} {...item} />)}</div>;
+              });
+            explanation: "Memoized component only re-renders when props change"
+
+    - id: "react_perf_002"
+      name: "Use useMemo for Expensive Calculations"
+      description: "Cache expensive computation results"
+      severity: "MEDIUM"
+      examples:
+        good:
+          - language: "jsx"
+            code: |
+              function ProductList({ products, filter }) {
+                const filteredProducts = useMemo(() => {
+                  return products.filter(p => p.category === filter);
+                }, [products, filter]);
+                
+                return <div>{filteredProducts.map(p => <Product key={p.id} {...p} />)}</div>;
+              }
+            explanation: "Expensive filtering only runs when dependencies change"
+
+    - id: "react_perf_003"
+      name: "Use useCallback for Stable Function References"
+      description: "Prevent recreating callbacks on every render"
+      severity: "LOW"
+      examples:
+        good:
+          - language: "jsx"
+            code: |
+              function TodoList({ todos }) {
+                const handleToggle = useCallback((id) => {
+                  toggleTodo(id);
+                }, []);
+                
+                return todos.map(todo => 
+                  <Todo key={todo.id} todo={todo} onToggle={handleToggle} />
+                );
+              }
+            explanation: "Stable callback reference prevents child re-renders"
+
+# 5. SIDE EFFECTS
+effects_patterns:
+  principle: "Handle side effects properly with useEffect"
+  importance: "High - common source of bugs"
+  
+  rules:
+    - id: "react_effect_001"
+      name: "Always Specify Effect Dependencies"
+      description: "Include all values from component scope that change over time"
+      severity: "CRITICAL"
+      examples:
+        good:
+          - language: "jsx"
+            code: |
+              function UserProfile({ userId }) {
+                const [user, setUser] = useState(null);
+                
+                useEffect(() => {
+                  fetchUser(userId).then(setUser);
+                }, [userId]);  // ✅ Dependency specified
+                
+                return <div>{user?.name}</div>;
+              }
+            explanation: "Effect re-runs when userId changes"
+        
+        bad:
+          - language: "jsx"
+            code: |
+              function UserProfile({ userId }) {
+                const [user, setUser] = useState(null);
+                
+                useEffect(() => {
+                  fetchUser(userId).then(setUser);
+                }, []);  // ❌ Missing dependency
+                
+                return <div>{user?.name}</div>;
+              }
+            explanation: "Effect ignores userId changes"
+
+    - id: "react_effect_002"
+      name: "Clean Up Effects"
+      description: "Return cleanup function for subscriptions/timers"
+      severity: "HIGH"
+      examples:
+        good:
+          - language: "jsx"
+            code: |
+              useEffect(() => {
+                const interval = setInterval(() => {
+                  checkForUpdates();
+                }, 5000);
+                
+                return () => clearInterval(interval);  // ✅ Cleanup
+              }, []);
+            explanation: "Cleanup prevents memory leaks"
+
+# 6. ERROR HANDLING
+error_patterns:
+  principle: "Handle errors gracefully with error boundaries"
+  importance: "High - improves user experience"
+  
+  rules:
+    - id: "react_error_001"
+      name: "Use Error Boundaries"
+      description: "Catch JavaScript errors in component tree"
+      severity: "HIGH"
+      examples:
+        good:
+          - language: "jsx"
+            code: |
+              class ErrorBoundary extends React.Component {
+                constructor(props) {
+                  super(props);
+                  this.state = { hasError: false };
+                }
+                
+                static getDerivedStateFromError(error) {
+                  return { hasError: true };
+                }
+                
+                componentDidCatch(error, errorInfo) {
+                  logErrorToService(error, errorInfo);
+                }
+                
+                render() {
+                  if (this.state.hasError) {
+                    return <h1>Something went wrong.</h1>;
+                  }
+                  return this.props.children;
+                }
+              }
+              
+              // Usage
+              <ErrorBoundary>
+                <App />
+              </ErrorBoundary>
+            explanation: "Error boundary catches rendering errors"
+
+# CROSS-REFERENCES
+related_knowledge:
+  - file: "frontend/typescript-frontend.yaml"
+    relationship: "TypeScript enhances React development"
+  - file: "frontend/state-management.yaml"
+    relationship: "State management libraries (Redux, Zustand)"
+  - file: "frontend/component-architecture.yaml"
+    relationship: "Component design patterns"
+  - file: "testing/tdd-best-practices.yaml"
+    relationship: "Testing React components"
+  - file: "performance/optimization-techniques.yaml"
+    relationship: "General performance optimization"

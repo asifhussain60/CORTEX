@@ -1,0 +1,210 @@
+{
+  "total_css_lines": 23004,
+  "files_scanned": 14,
+  "recommendations": [
+    "Delete 29 exact duplicate rules (145 lines)",
+    "Merge 30 partial duplicates (90 lines consolidated)",
+    "Extract 566 scattered patterns to utility classes (8145 lines → 566 lines)"
+  ],
+  "scan_timestamp": "2026-01-03T12:08:41.1534172-05:00",
+  "duplicate_analysis": {
+    "partial_duplicates": {
+      "count": 30,
+      "overlapping_lines": 90,
+      "percentage": 0.39,
+      "instances": [
+        {
+          "Line2": 684,
+          "UniqueInSecond": null,
+          "Action": "MERGE into sts.css, delete sts.css",
+          "Overlap": "border-radius",
+          "Selector": ".panel pre",
+          "OverlapPercentage": 50.0,
+          "File1": "sts.css",
+          "File2": "sts.css",
+          "Line1": 689
+        },
+        {
+          "Line2": 610,
+          "UniqueInSecond": null,
+          "Action": "MERGE into index-multipanel.css, delete index-multipanel.css",
+          "Overlap": [
+            "font-size",
+            "grid-column"
+          ],
+          "Selector": "#orchestrators-panel .category-subpanel",
+          "OverlapPercentage": 66.67,
+          "File1": "index-multipanel.css",
+          "File2": "index-multipanel.css",
+          "Line1": 676
+        },
+        {
+          "Line2": 634,
+          "UniqueInSecond": null,
+          "Action": "MERGE into index-multipanel.css, delete index-multipanel.css",
+          "Overlap": [
+            "grid-column",
+            "grid-row"
+          ],
+          "Selector": "#orchestrators-panel .category-subpanel",
+          "OverlapPercentage": 66.67,
+          "File1": "index-multipanel.css",
+          "File2": "index-multipanel.css",
+          "Line1": 676
+        },
+        {
+          "Line2": 616,
+          "UniqueInSecond": null,
+          "Action": "MERGE into index-multipanel.css, delete index-multipanel.css",
+          "Overlap": [
+            "font-size",
+            "grid-column"
+          ],
+          "Selector": "#orchestrators-panel .category-subpanel",
+          "OverlapPercentage": 66.67,
+          "File1": "index-multipanel.css",
+          "File2": "index-multipanel.css",
+          "Line1": 676
+        },
+        {
+          "Line2": 4116,
+          "UniqueInSecond": null,
+          "Action": "MERGE into sts.css, delete main.css",
+          "Overlap": "box-shadow",
+          "Selector": ".sts-category-card",
+          "OverlapPercentage": 50.0,
+          "File1": "sts.css",
+          "File2": "main.css",
+          "Line1": 905
+        }
+      ]
+    },
+    "scattered_duplicates": {
+      "count": 566,
+      "patterns": [
+        {
+          "Occurrences": 13,
+          "Property": "margin-top : var(--spacing-sm)",
+          "Files": [
+            "generated-classes.css",
+            "main.css",
+            "learning-hub.css"
+          ],
+          "Action": "EXTRACT to utility class"
+        },
+        {
+          "Occurrences": 3,
+          "Property": "background : rgba(0,0,0,0.3)",
+          "Files": "generated-classes.css",
+          "Action": "EXTRACT to utility class"
+        },
+        {
+          "Occurrences": 10,
+          "Property": "padding : 0.75rem",
+          "Files": [
+            "main.css",
+            "knowledge.css",
+            "story.css"
+          ],
+          "Action": "EXTRACT to utility class"
+        },
+        {
+          "Occurrences": 14,
+          "Property": "grid-row : span 2",
+          "Files": [
+            "index-multipanel.css",
+            "intentional-classes.css"
+          ],
+          "Action": "EXTRACT to utility class"
+        },
+        {
+          "Occurrences": 11,
+          "Property": "background : linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2))",
+          "Files": [
+            "main.css",
+            "knowledge.css",
+            "sts.css",
+            "story.css"
+          ],
+          "Action": "EXTRACT to utility class"
+        }
+      ],
+      "percentage": 35.41,
+      "consolidation_potential": 8145.0
+    },
+    "exact_duplicates": {
+      "count": 29,
+      "lines_wasted": 145,
+      "percentage": 0.63,
+      "instances": [
+        {
+          "Properties": [
+            "border-color",
+            "background"
+          ],
+          "File2": "index-multipanel.css",
+          "Line2": 393,
+          "Selector": "#security-panel .category-subpanel",
+          "Line1": 473,
+          "File1": "index-multipanel.css",
+          "Action": "DELETE index-multipanel.css:393 instance (duplicate)"
+        },
+        {
+          "Properties": [
+            "border-color",
+            "background",
+            "color"
+          ],
+          "File2": "glass-patterns.css",
+          "Line2": 878,
+          "Selector": ".level0-category-subpanel",
+          "Line1": 833,
+          "File1": "glass-patterns.css",
+          "Action": "DELETE glass-patterns.css:878 instance (duplicate)"
+        },
+        {
+          "Properties": [
+            "padding",
+            "margin",
+            "list-style"
+          ],
+          "File2": "future.css",
+          "Line2": 1465,
+          "Selector": ".feature-list",
+          "Line1": 10295,
+          "File1": "main.css",
+          "Action": "DELETE future.css:1465 instance (duplicate)"
+        },
+        {
+          "Properties": [
+            "border-color",
+            "background",
+            "color"
+          ],
+          "File2": "glass-patterns.css",
+          "Line2": 873,
+          "Selector": ".level0-category-subpanel",
+          "Line1": 838,
+          "File1": "glass-patterns.css",
+          "Action": "DELETE glass-patterns.css:873 instance (duplicate)"
+        },
+        {
+          "Properties": [
+            "grid-template-columns"
+          ],
+          "File2": "future.css",
+          "Line2": 1591,
+          "Selector": ".quick-links-grid",
+          "Line1": 8801,
+          "File1": "main.css",
+          "Action": "DELETE future.css:1591 instance (duplicate)"
+        }
+      ]
+    }
+  },
+  "total_redundancy": {
+    "lines": 8380.0,
+    "percentage": 36.43,
+    "savings_potential": "~8380 lines, 251KB reduction"
+  }
+}

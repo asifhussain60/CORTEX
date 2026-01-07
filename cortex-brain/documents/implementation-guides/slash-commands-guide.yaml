@@ -1,0 +1,532 @@
+# ============================================================================
+# CORTEX Slash Commands Guide
+# ============================================================================
+#
+# Comprehensive guide to slash commands vs natural language.
+# Addresses Issue #5 from CORTEX-2.0-ARCHITECTURE-GAP-ANALYSIS.md
+# Implements recommendations from TIER-IMPORT-FIX.md
+#
+# Philosophy: Slash commands are OPTIONAL shortcuts.
+#             Natural language is the primary interface.
+#
+# Version: 1.0
+# Author: Asif Hussain
+# Date: 2025-11-10
+# ============================================================================
+
+slash_commands:
+  
+  # --------------------------------------------------------------------------
+  # PHILOSOPHY
+  # --------------------------------------------------------------------------
+  philosophy:
+    primary_interface: "natural_language"
+    slash_commands_role: "optional_shortcuts"
+    design_principle: "zero_memorization_required"
+    
+    core_beliefs:
+      - "Natural language is more flexible and intuitive"
+      - "Slash commands are faster for power users"
+      - "Both interfaces work equally well"
+      - "No need to memorize - just ask CORTEX"
+      - "Mix and match based on preference"
+  
+  # --------------------------------------------------------------------------
+  # WHEN TO USE WHAT
+  # --------------------------------------------------------------------------
+  when_to_use:
+    
+    natural_language:
+      recommended_for:
+        - "First-time users (more intuitive)"
+        - "Complex multi-part requests"
+        - "When unsure of exact command"
+        - "Exploratory work sessions"
+        - "Requests with context or conditions"
+        
+      examples:
+        - "setup environment with full profile"
+        - "refresh the story but skip validation"
+        - "help me find commands related to cleanup"
+        - "continue where I left off yesterday"
+        - "setup for macOS development"
+        
+      advantages:
+        - "More flexible (can add qualifiers)"
+        - "Context-aware understanding"
+        - "No syntax to remember"
+        - "Natural conversation flow"
+        - "Handles ambiguity gracefully"
+    
+    slash_commands:
+      recommended_for:
+        - "Frequent repeated operations"
+        - "Power users (faster typing)"
+        - "Scripting/automation"
+        - "Clear single-intent actions"
+        - "Muscle memory shortcuts"
+        
+      examples:
+        - "/setup"
+        - "/resume"
+        - "/help"
+        - "/status"
+        - "/CORTEX, refresh cortex story"
+        
+      advantages:
+        - "Faster to type (fewer characters)"
+        - "Predictable behavior"
+        - "Easy to document"
+        - "Scriptable"
+        - "Clear intent signal"
+  
+  # --------------------------------------------------------------------------
+  # ALL AVAILABLE COMMANDS
+  # --------------------------------------------------------------------------
+  commands:
+    
+    # Environment & Platform
+    setup:
+      slash: "/setup"
+      aliases: ["/env", "/environment", "/configure"]
+      natural_language:
+        - "setup environment"
+        - "configure cortex"
+        - "initialize environment"
+        - "get started"
+        - "setup for [platform]"
+      
+      when_to_use: "First-time setup or platform reconfiguration"
+      
+      examples:
+        slash: "/setup full"
+        natural: "setup environment with full profile"
+        
+      profiles:
+        - minimal: "Core functionality only"
+        - standard: "Recommended for most users"
+        - full: "Everything enabled"
+      
+      estimated_duration: "5-15 minutes"
+      auto_detect_platform: true
+    
+    # Session Management
+    resume:
+      slash: "/resume"
+      natural_language:
+        - "continue work"
+        - "resume where I left off"
+        - "continue previous session"
+        - "what was I working on"
+      
+      when_to_use: "Continuing previous work session"
+      
+      examples:
+        slash: "/resume"
+        natural: "continue where I left off"
+      
+      requires_conversation_tracking: true
+      loads_last_20_messages: true
+    
+    status:
+      slash: "/status"
+      natural_language:
+        - "show progress"
+        - "what's the status"
+        - "where are we"
+        - "show current work"
+      
+      when_to_use: "Checking current work status and progress"
+      
+      examples:
+        slash: "/status"
+        natural: "show me the current progress"
+      
+      shows:
+        - "Current phase"
+        - "Completion percentage"
+        - "Active tasks"
+        - "Next steps"
+    
+    help:
+      slash: "/help"
+      natural_language:
+        - "help"
+        - "show commands"
+        - "what can you do"
+        - "available commands"
+        - "how do I [task]"
+      
+      when_to_use: "Discovering available commands"
+      
+      examples:
+        slash: "/help"
+        slash_search: "/help search cleanup"
+        natural: "help me find commands for cleaning up"
+      
+      formats:
+        quick: "5-7 most relevant commands"
+        standard: "All commands with categories"
+        detailed: "Full documentation per command"
+      
+      cortex_version: "2.1"
+      implementation_status: "pending"
+    
+    # Story Management
+    refresh_story:
+      slash: "/CORTEX, refresh cortex story"
+      natural_language:
+        - "refresh story"
+        - "refresh cortex story"
+        - "update story"
+        - "regenerate story"
+        - "update cortex story"
+      
+      when_to_use: "Updating CORTEX story documentation"
+      
+      examples:
+        slash: "/CORTEX, refresh cortex story"
+        natural: "refresh the story with narrator voice"
+      
+      profiles:
+        quick: "Narrator voice only (2 min)"
+        standard: "Voice + validation (3 min)"
+        full: "Everything + preview (5 min)"
+    
+    # Maintenance
+    cleanup:
+      slash: "/CORTEX, cleanup"
+      natural_language:
+        - "cleanup"
+        - "clean workspace"
+        - "clean up"
+        - "tidy up"
+        - "remove temporary files"
+      
+      when_to_use: "Cleaning temporary files and optimizing databases"
+      
+      examples:
+        slash: "/CORTEX, cleanup safe"
+        natural: "cleanup temporary files safely"
+      
+      implementation_status: "pending"
+      estimated_duration: "1-3 minutes"
+    
+    # Documentation
+    generate_docs:
+      slash: "/CORTEX, generate documentation"
+      natural_language:
+        - "update docs"
+        - "update documentation"
+        - "refresh docs"
+        - "build docs"
+        - "generate documentation"
+      
+      when_to_use: "Refreshing and building documentation site"
+      
+      examples:
+        slash: "/CORTEX, generate documentation"
+        natural: "update the documentation with latest changes"
+      
+      implementation_status: "pending"
+      estimated_duration: "5-10 minutes"
+    
+    # Validation
+    check_brain:
+      slash: "/CORTEX, run brain protection"
+      natural_language:
+        - "check brain"
+        - "validate brain"
+        - "brain protection"
+        - "verify brain integrity"
+      
+      when_to_use: "Validating CORTEX brain protection and integrity"
+      
+      examples:
+        slash: "/CORTEX, run brain protection"
+        natural: "check brain protection rules"
+      
+      implementation_status: "pending"
+      estimated_duration: "2-5 minutes"
+    
+    # Testing
+    run_tests:
+      slash: "/CORTEX, run tests"
+      natural_language:
+        - "run tests"
+        - "test this"
+        - "execute tests"
+        - "run test suite"
+      
+      when_to_use: "Running CORTEX test suite with coverage"
+      
+      examples:
+        slash: "/CORTEX, run tests full"
+        natural: "run all tests with coverage report"
+      
+      implementation_status: "pending"
+      estimated_duration: "3-15 minutes"
+  
+  # --------------------------------------------------------------------------
+  # CORTEX 2.1 COMMANDS (Planned)
+  # --------------------------------------------------------------------------
+  cortex_2_1_commands:
+    
+    plan_feature:
+      slash: "/CORTEX, let's plan a feature"
+      natural_language:
+        - "let's plan a feature"
+        - "plan feature"
+        - "I want to plan"
+        - "help me plan"
+      
+      when_to_use: "Interactive feature planning with clarifying questions"
+      
+      examples:
+        slash: "/CORTEX, let's plan a feature"
+        natural: "let's plan a new authentication system"
+      
+      features:
+        - "Asks clarifying questions (max 5)"
+        - "Extracts implied context"
+        - "Filters redundant questions"
+        - "Generates implementation plan"
+      
+      target_release: "Week 19-20"
+    
+    architect_solution:
+      slash: "/CORTEX, architect a solution"
+      natural_language:
+        - "architect a solution"
+        - "design architecture"
+        - "plan architecture"
+        - "system design"
+      
+      when_to_use: "Collaborative architecture design"
+      
+      examples:
+        slash: "/CORTEX, architect a solution"
+        natural: "architect a microservices solution"
+      
+      target_release: "Week 19-20"
+    
+    refactor_module:
+      slash: "/CORTEX, refactor this module"
+      natural_language:
+        - "refactor this module"
+        - "refactor code"
+        - "improve code quality"
+        - "clean up this"
+      
+      when_to_use: "Interactive refactoring with SOLID principles"
+      
+      examples:
+        slash: "/CORTEX, refactor this module"
+        natural: "refactor this module following SOLID principles"
+      
+      target_release: "Week 19-20"
+  
+  # --------------------------------------------------------------------------
+  # BEST PRACTICES
+  # --------------------------------------------------------------------------
+  best_practices:
+    
+    - name: "Start with natural language"
+      reason: "More flexible, better for exploration"
+      when: "Learning CORTEX or unsure of command"
+      example: "setup environment for windows"
+    
+    - name: "Learn slash commands gradually"
+      reason: "Pick up shortcuts for frequent tasks"
+      when: "After using natural language a few times"
+      example: "Use /setup after learning what it does"
+    
+    - name: "Both work equally well"
+      reason: "No technical difference, just preference"
+      when: "Always - choose what feels natural"
+      example: "'/setup' and 'setup environment' are identical"
+    
+    - name: "Mix and match freely"
+      reason: "Use what feels natural in the moment"
+      when: "Any time - no need to be consistent"
+      example: "Use /setup today, 'setup environment' tomorrow"
+    
+    - name: "Add context to natural language"
+      reason: "Natural language handles qualifiers better"
+      when: "Need specific profiles or conditions"
+      example: "'setup environment with full profile for mac'"
+    
+    - name: "Use slash for automation"
+      reason: "Slash commands are more scriptable"
+      when: "Writing scripts or CI/CD pipelines"
+      example: "Script: execute_operation('/setup')"
+  
+  # --------------------------------------------------------------------------
+  # COMMON PATTERNS
+  # --------------------------------------------------------------------------
+  common_patterns:
+    
+    first_time_user:
+      typical_flow:
+        - "How do I get started?"
+        - "setup environment"
+        - "what can you do?"
+        - "help me add authentication"
+      
+      recommendations:
+        - "Use natural language exclusively"
+        - "Ask questions freely"
+        - "Don't worry about syntax"
+        - "CORTEX will guide you"
+    
+    daily_developer:
+      typical_flow:
+        - "/resume"
+        - "add login button"
+        - "test this"
+        - "/status"
+      
+      recommendations:
+        - "Use /resume for quick start"
+        - "Natural language for coding tasks"
+        - "Mix slash and natural freely"
+        - "Slash for frequent operations"
+    
+    power_user:
+      typical_flow:
+        - "/resume"
+        - "/setup minimal"
+        - "execute complex workflow"
+        - "/CORTEX, run tests quick"
+      
+      recommendations:
+        - "Slash commands for speed"
+        - "Natural language for complex requests"
+        - "Learn all slash aliases"
+        - "Customize profiles"
+  
+  # --------------------------------------------------------------------------
+  # TROUBLESHOOTING
+  # --------------------------------------------------------------------------
+  troubleshooting:
+    
+    command_not_recognized:
+      problem: "Slash command or natural language not understood"
+      solutions:
+        - "Check spelling of slash command"
+        - "Try natural language equivalent"
+        - "Use /help to see available commands"
+        - "Describe what you want to do"
+      examples:
+        wrong: "/setu"
+        right_slash: "/setup"
+        right_natural: "setup environment"
+    
+    ambiguous_request:
+      problem: "Request unclear or has multiple interpretations"
+      solutions:
+        - "Add more context to natural language"
+        - "Specify profile if using slash command"
+        - "CORTEX will ask clarifying questions (2.1)"
+        - "Break into smaller requests"
+      examples:
+        ambiguous: "setup"
+        clear: "setup environment with full profile"
+        clear_slash: "/setup full"
+    
+    operation_not_available:
+      problem: "Command recognized but not yet implemented"
+      solutions:
+        - "Check STATUS.md for implementation status"
+        - "Look for '⏸️ PENDING' marker"
+        - "Use alternative commands if available"
+        - "Wait for future release"
+      examples:
+        pending: "/CORTEX, cleanup"
+        status: "0/6 modules implemented"
+        alternative: "Manually clean __pycache__ folders"
+  
+  # --------------------------------------------------------------------------
+  # EXAMPLES BY SCENARIO
+  # --------------------------------------------------------------------------
+  examples_by_scenario:
+    
+    first_time_setup:
+      goal: "Get CORTEX running for first time"
+      natural: "setup environment for windows development"
+      slash: "/setup full"
+      outcome: "Full environment configuration"
+    
+    resume_work:
+      goal: "Continue from yesterday's session"
+      natural: "continue where I left off"
+      slash: "/resume"
+      outcome: "Loads last 20 messages from conversation history"
+    
+    add_feature:
+      goal: "Implement new feature"
+      natural: "add authentication with JWT tokens"
+      slash: "N/A - use natural language"
+      outcome: "Plans and implements authentication"
+    
+    update_docs:
+      goal: "Refresh story documentation"
+      natural: "refresh the cortex story"
+      slash: "/CORTEX, refresh cortex story"
+      outcome: "Regenerates story with narrator voice"
+    
+    check_progress:
+      goal: "See current work status"
+      natural: "show me the current progress"
+      slash: "/status"
+      outcome: "Displays phase, percentage, next steps"
+    
+    discover_commands:
+      goal: "Learn what CORTEX can do"
+      natural: "what commands are available"
+      slash: "/help"
+      outcome: "Shows all available commands"
+    
+    find_specific_command:
+      goal: "Find cleanup-related commands"
+      natural: "help me find commands for cleaning up"
+      slash: "/help search cleanup"
+      outcome: "Shows cleanup-related commands"
+
+# ============================================================================
+# METADATA
+# ============================================================================
+
+metadata:
+  version: "1.0"
+  schema_version: "1.0"
+  author: "Asif Hussain"
+  last_updated: "2025-11-10"
+  description: "Slash commands vs natural language guide for CORTEX"
+  
+  addresses_issues:
+    - "CORTEX-2.0-ARCHITECTURE-GAP-ANALYSIS.md Issue #5"
+    - "TIER-IMPORT-FIX.md slash command recommendations"
+  
+  changelog:
+    - version: "1.0"
+      date: "2025-11-10"
+      changes:
+        - "Initial YAML guide created"
+        - "Documented philosophy and best practices"
+        - "Added all current slash commands"
+        - "Added CORTEX 2.1 planned commands"
+        - "Provided examples by scenario"
+        - "Added troubleshooting section"
+  
+  statistics:
+    total_commands_documented: 11
+    cortex_2_0_commands: 8
+    cortex_2_1_commands: 3
+    example_scenarios: 7
+    best_practices: 6
+    
+  token_reduction:
+    before_tokens: 1800  # Estimated MD guide
+    after_tokens: 1200   # Current YAML
+    reduction_percent: 33.3

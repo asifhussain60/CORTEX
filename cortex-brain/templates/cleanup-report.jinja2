@@ -1,0 +1,122 @@
+# 🧹 Cleanup Report - {{ mode|title }} Mode
+
+**Orchestrator:** Cleanup v2  
+**Mode:** `{{ mode }}`  
+**Timestamp:** {{ result.timestamp }}  
+**Duration:** {{ result.duration_seconds|default(0)|round(2) }}s  
+**Workspace:** {{ result.workspace_root|default('N/A') }}
+
+---
+
+## 📊 Statistics
+
+| Metric | Count |
+|--------|-------|
+| Files Scanned | {{ result.statistics.files_scanned|default(0)|format_number }} |
+| Files Deleted | {{ result.statistics.files_deleted|default(0)|format_number }} |
+| Files Archived | {{ result.statistics.files_archived|default(0)|format_number }} |
+| Folders Deleted | {{ result.statistics.folders_deleted|default(0)|format_number }} |
+| **Space Freed** | **{{ result.statistics.space_freed_mb|default(0)|round(2) }} MB** |
+
+---
+
+## 📂 Categories Processed
+
+{% if result.categories %}
+{% for category, data in result.categories.items() %}
+### {{ category }}
+- **Items:** {{ data.count }}
+- **Size:** {{ data.size_mb|default(0)|round(2) }} MB
+
+{% endfor %}
+{% else %}
+_No categories processed_
+{% endif %}
+
+---
+
+{% if result.log_rotation %}
+## 📋 Log Rotation
+
+**Rotated:** {{ result.log_rotation.rotated_count }} logs
+
+{% if result.log_rotation.rotated_logs %}
+{% for log in result.log_rotation.rotated_logs[:10] %}
+- `{{ log.path }}` ({{ log.size_mb|round(2) }} MB → archived to `{{ log.archived_to }}`)
+{% endfor %}
+{% if result.log_rotation.rotated_logs|length > 10 %}
+_... and {{ result.log_rotation.rotated_logs|length - 10 }} more_
+{% endif %}
+{% endif %}
+
+---
+
+{% endif %}
+
+{% if result.operations %}
+## 🔧 Git Operations
+
+{% for op in result.operations %}
+### {{ op.operation }}
+- **Success:** {{ '✅' if op.success else '❌' }}
+{% if op.output %}
+- **Output:** {{ op.output[:200] }}{% if op.output|length > 200 %}...{% endif %}
+{% endif %}
+{% if op.error %}
+- **Error:** {{ op.error }}
+{% endif %}
+
+{% endfor %}
+
+{% if result.size_before_mb is defined %}
+**Git Directory Size:**
+- Before: {{ result.size_before_mb|round(2) }} MB
+- After: {{ result.size_after_mb|round(2) }} MB
+- Freed: {{ (result.size_before_mb - result.size_after_mb)|round(2) }} MB
+{% endif %}
+
+---
+
+{% endif %}
+
+## ⚠️ Errors & Warnings
+
+{% if result.errors %}
+**Errors:**
+{% for error in result.errors %}
+- {{ error }}
+{% endfor %}
+{% else %}
+✅ No errors
+{% endif %}
+
+{% if result.warnings %}
+**Warnings:**
+{% for warning in result.warnings %}
+- ⚠️ {{ warning }}
+{% endfor %}
+{% endif %}
+
+---
+
+## 🎯 Summary
+
+{% if mode == 'cache' %}
+Cache cleanup removed {{ result.statistics.files_deleted }} cache files, freeing {{ result.statistics.space_freed_mb|round(2) }} MB of disk space. All cache directories are regenerable.
+{% elif mode == 'logs' %}
+Log management processed {{ result.statistics.files_deleted }} log files, freeing {{ result.statistics.space_freed_mb|round(2) }} MB. Large logs were rotated and archived.
+{% elif mode == 'artifacts' %}
+Artifact removal cleaned {{ result.statistics.files_deleted }} generated files and backups, freeing {{ result.statistics.space_freed_mb|round(2) }} MB. Recent backups were retained per retention policy.
+{% elif mode == 'full' %}
+Full cleanup processed {{ result.statistics.categories_processed }} categories, removing {{ result.statistics.files_deleted }} files and freeing {{ result.statistics.space_freed_mb|round(2) }} MB of disk space.
+{% elif mode == 'git' %}
+Git optimization completed {{ result.operations|length }} operations, freeing {{ result.statistics.space_freed_mb|round(2) }} MB in .git directory.
+{% endif %}
+
+---
+
+✅ **Cleanup complete!**
+
+{% if result.session_id %}
+_Session ID: {{ result.session_id }}_
+{% endif %}

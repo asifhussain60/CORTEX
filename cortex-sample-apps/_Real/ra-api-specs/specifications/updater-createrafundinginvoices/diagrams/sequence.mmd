@@ -1,0 +1,8 @@
+sequenceDiagram
+    participant Client
+    participant Updater_CreateRAFundingInvoices
+
+    Client->>+Updater_CreateRAFundingInvoices: Execute
+    Updater_CreateRAFundingInvoices->>Updater_CreateRAFundingInvoices: stringIsNullOrEmptycashInOutId
+    Updater_CreateRAFundingInvoices->>Updater_CreateRAFundingInvoices: HasParameters
+    Updater_CreateRAFundingInvoices-->>-Client: Success

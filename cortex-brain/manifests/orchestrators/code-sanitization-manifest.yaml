@@ -1,0 +1,379 @@
+# Code Sanitization Orchestrator Manifest
+# Version: 1.0.0
+# Purpose: Transform domain-specific codebases into generic, shareable versions
+# Author: Asif Hussain | Copyright © 2025 Asif Hussain. All rights reserved.
+# Status: Active
+
+metadata:
+  name: code_sanitization
+  version: 1.0.0
+  description: "On-demand sanitization of company-specific data for safe sharing"
+  author: "Asif Hussain"
+  created: "2025-12-16"
+  status: active
+  execution_method: copilot_chat
+  category: developer_tools
+
+orchestrator:
+  class_name: SanitizationOrchestrator
+  module_path: src.operations.modules.orchestration.sanitization_orchestrator
+  entry_point: execute_sanitization
+
+phases:
+  - id: 1_analyze
+    name: "Discovery & Analysis"
+    description: "Scan codebase and identify domain-specific terminology"
+    actions:
+      - scan_file_structure
+      - extract_namespaces_classes
+      - identify_domain_terms
+      - detect_sensitive_data
+      - generate_dependency_graph
+    outputs:
+      - domain_terminology_report
+      - file_inventory
+      - sensitive_data_locations
+    validation:
+      required_inputs: ["source_directory"]
+      success_criteria:
+        - "All files scanned successfully"
+        - "Domain terms extracted with confidence scores"
+
+  - id: 2_mapping
+    name: "Generate Transformation Mapping"
+    description: "Create domain→generic mappings with user approval"
+    actions:
+      - propose_generic_names
+      - generate_namespace_mappings
+      - create_terminology_dictionary
+      - detect_naming_conflicts
+      - present_preview_report
+    outputs:
+      - transformation_mapping_yaml
+      - conflict_resolution_report
+      - preview_diff_summary
+    validation:
+      required_inputs: ["domain_terminology_report"]
+      success_criteria:
+        - "All domain terms mapped to generic equivalents"
+        - "No naming conflicts detected"
+        - "User approval obtained"
+    user_interaction:
+      approval_required: true
+      preview_format: "side_by_side_diff"
+
+  - id: 3_transform
+    name: "Execute Transformation"
+    description: "Apply mappings across all files with backup"
+    actions:
+      - create_backup
+      - apply_namespace_transformations
+      - update_file_contents
+      - rename_files_directories
+      - update_configuration_files
+      - transform_documentation
+    outputs:
+      - sanitized_codebase
+      - transformation_log
+      - backup_location
+    validation:
+      required_inputs: ["transformation_mapping_yaml", "user_approval"]
+      success_criteria:
+        - "All files transformed without corruption"
+        - "Backup created successfully"
+        - "No broken references detected"
+    rollback:
+      enabled: true
+      backup_retention_days: 30
+
+  - id: 4_validate
+    name: "Build & Test Validation"
+    description: "Ensure sanitized code builds and tests pass"
+    actions:
+      - detect_build_system
+      - execute_build
+      - run_test_suite
+      - compare_test_results
+      - verify_functionality_parity
+    outputs:
+      - build_validation_report
+      - test_comparison_report
+      - functionality_verification
+    validation:
+      required_inputs: ["sanitized_codebase"]
+      success_criteria:
+        - "Build completes successfully"
+        - "Test pass rate >= original codebase"
+        - "No runtime errors introduced"
+      failure_handling:
+        auto_rollback: true
+        generate_failure_report: true
+
+  - id: 5_report
+    name: "Generate Audit Report"
+    description: "Document transformation with full traceability"
+    actions:
+      - generate_transformation_summary
+      - create_mapping_reference
+      - document_validation_results
+      - archive_artifacts
+    outputs:
+      - sanitization_audit_report_md
+      - mapping_reference_json
+      - validation_metrics
+    validation:
+      success_criteria:
+        - "Audit report generated"
+        - "All artifacts archived"
+
+workflow:
+  execution_order: sequential
+  allow_phase_skip: false
+  require_user_approval:
+    - phase: 2_mapping
+      trigger: before_transformation
+    - phase: 3_transform
+      trigger: before_execution
+
+  error_handling:
+    on_failure:
+      - rollback_to_backup
+      - generate_failure_report
+      - notify_user
+    retry_policy:
+      max_retries: 0
+      auto_retry: false
+
+mapping_rules:
+  namespace_patterns:
+    - pattern: "{{CompanyDomain}}.{{Module}}.{{Layer}}"
+      replacement: "{{GenericDomain}}.{{Module}}.{{Layer}}"
+      example: "RA.FundingInvoices.Core → PaymentProcessor.Core"
+
+  terminology_categories:
+    domain_specific:
+      - reimbursement
+      - funding
+      - subaccount
+      - member
+      - participant
+      - HSA
+      - FSA
+      - HRA
+      - claim
+    
+    compliance_specific:
+      - HIPAA
+      - PHI
+      - Protected Health Information
+      - SOC2
+      - healthcare
+    
+    infrastructure_specific:
+      - company_name
+      - internal_urls
+      - proprietary_systems
+      - department_names
+
+  generic_replacements:
+    domain:
+      reimbursement: payment
+      funding: payment
+      subaccount: account_category
+      member: customer
+      participant: customer
+      HSA: account_type_a
+      FSA: account_type_b
+      HRA: account_type_c
+      claim: request
+    
+    compliance:
+      HIPAA: GDPR
+      PHI: PII
+      "Protected Health Information": "Personal Identifiable Information"
+      SOC2: "ISO 27001"
+      healthcare: "data protection"
+    
+    infrastructure:
+      # User-provided at runtime
+      company_name: "GenericCorp"
+      internal_urls: "example.com"
+
+file_processing:
+  supported_languages:
+    - csharp:
+        extensions: [".cs"]
+        ast_parser: "roslyn"
+        namespace_transformation: true
+        using_statement_update: true
+    
+    - python:
+        extensions: [".py"]
+        ast_parser: "ast"
+        import_transformation: true
+    
+    - typescript:
+        extensions: [".ts", ".tsx"]
+        ast_parser: "typescript"
+        import_transformation: true
+    
+    - documentation:
+        extensions: [".md", ".txt", ".rst"]
+        strategy: "regex_replacement"
+        preserve_code_blocks: true
+    
+    - configuration:
+        extensions: [".json", ".yaml", ".yml", ".xml", ".config"]
+        strategy: "structure_aware_replacement"
+        validate_json_yaml: true
+    
+    - api_specs:
+        extensions: [".openapi.yaml", ".openapi.json"]
+        strategy: "openapi_aware_transformation"
+        update_schemas: true
+
+  exclusions:
+    - pattern: "**/bin/**"
+    - pattern: "**/obj/**"
+    - pattern: "**/node_modules/**"
+    - pattern: "**/.git/**"
+    - pattern: "**/packages/**"
+    - pattern: "**/*.dll"
+    - pattern: "**/*.exe"
+
+validation_rules:
+  build_systems:
+    dotnet:
+      build_command: "dotnet build"
+      test_command: "dotnet test"
+      success_exit_code: 0
+    
+    python:
+      build_command: "pip install -e ."
+      test_command: "pytest"
+      success_exit_code: 0
+    
+    node:
+      build_command: "npm install && npm run build"
+      test_command: "npm test"
+      success_exit_code: 0
+
+  quality_gates:
+    - name: "Build Success"
+      required: true
+      description: "Sanitized code must build without errors"
+    
+    - name: "Test Parity"
+      required: true
+      description: "Test pass rate must be >= original"
+    
+    - name: "No Broken References"
+      required: true
+      description: "All namespace/import references must resolve"
+    
+    - name: "Documentation Updated"
+      required: false
+      description: "All documentation reflects generic terminology"
+
+output_configuration:
+  directory_structure:
+    pattern: "{{source_dir}}-sanitized"
+    preserve_original: true
+    create_backup: true
+  
+  reports:
+    format: markdown
+    include_diff: true
+    include_metrics: true
+    
+  artifacts:
+    - transformation_mapping.yaml
+    - sanitization_audit_report.md
+    - before_after_comparison.md
+    - validation_results.json
+
+compliance:
+  data_protection:
+    - "Never sanitize test data containing real PII/PHI"
+    - "Verify no sensitive data in comments/strings"
+    - "Mask connection strings and credentials"
+  
+  auditability:
+    - "Maintain complete transformation log"
+    - "Generate reversible mapping file"
+    - "Document all automated decisions"
+
+integration:
+  depends_on:
+    - align  # Pre-sanitization system alignment
+    - healthcheck  # Verify CORTEX health before operation
+  
+  triggers:
+    - command: "sanitize"
+    - command: "sanitize codebase"
+    - command: "anonymize project"
+    - command: "make generic"
+  
+  related_operations:
+    - onboard_application  # Post-sanitization onboarding
+    - generate_documentation  # Update docs after sanitization
+
+user_interaction:
+  prompts:
+    - phase: 2_mapping
+      message: "Review proposed mappings. Approve to proceed with transformation?"
+      options: ["approve", "modify", "cancel"]
+    
+    - phase: 3_transform
+      message: "Backup created at {{backup_location}}. Proceed with transformation?"
+      options: ["proceed", "cancel"]
+  
+  progress_indicators:
+    - phase: 1_analyze
+      message: "Scanning {{file_count}} files..."
+    
+    - phase: 3_transform
+      message: "Transforming {{file_count}} files ({{percent_complete}}% complete)..."
+    
+    - phase: 4_validate
+      message: "Running test suite ({{tests_run}}/{{total_tests}})..."
+
+success_template: sanitization_complete
+
+# ========================================
+# Response Templates (Composable System)
+# ========================================
+
+response_templates:
+  use_algorithm: true
+  algorithm_version: "1.0"
+  algorithm_source: "cortex-brain/response-templates-v4.yaml::template_selection_algorithm"
+  
+  operations:
+    scan:
+      description: "Sanitization scan results"
+      context_signals:
+        operation_type: "sanitization"
+        response_phase: "in_progress"
+        complexity_tier: "STRUCTURED"
+        orchestrator_type: "sanitization"
+        orchestrator_engaged: false
+      blocks:
+        mandatory: ["cortex_header", "sanitization_findings", "next_action"]
+        conditional: ["cautions"]
+        orchestrator_specific: ["sanitization_findings"]
+      rendering_order: ["cortex_header", "sanitization_findings", "cautions", "next_action"]
+    
+    complete:
+      description: "Sanitization complete"
+      context_signals:
+        operation_type: "sanitization"
+        response_phase: "complete"
+        complexity_tier: "STRUCTURED"
+        orchestrator_type: "sanitization"
+        orchestrator_engaged: false
+      blocks:
+        mandatory: ["cortex_header", "sanitization_findings", "changes", "next_action"]
+        conditional: ["achievements"]
+        orchestrator_specific: ["sanitization_findings"]
+      rendering_order: ["cortex_header", "sanitization_findings", "changes", "achievements", "next_action"]

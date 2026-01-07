@@ -1,0 +1,168 @@
+%% State Machine Diagram Template
+%% Template Version: 1.0.0
+%% Author: CORTEX Development Team
+%% Usage: Use for workflow states, lifecycle management, and status transitions
+%%
+%% Variables to replace:
+%%   {{STATE_N}} - State names
+%%   {{TRANSITION_N}} - Transition labels/events
+%%   {{GUARD_N}} - Guard conditions
+
+---
+%% Basic State Machine
+stateDiagram-v2
+    [*] --> Created : Initialize
+    
+    Created --> Pending : Submit
+    Pending --> Processing : StartProcessing
+    Processing --> Completed : Success
+    Processing --> Failed : Error
+    Failed --> Pending : Retry
+    Completed --> [*]
+    Failed --> [*] : Abandon
+
+---
+%% Order Lifecycle State Machine
+stateDiagram-v2
+    [*] --> Draft
+    
+    state "Order States" as OrderStates {
+        Draft --> Submitted : Customer Submit
+        Submitted --> PaymentPending : Validate Order
+        
+        state PaymentPending {
+            [*] --> AwaitingPayment
+            AwaitingPayment --> PaymentReceived : Payment Success
+            AwaitingPayment --> PaymentFailed : Payment Error
+            PaymentFailed --> AwaitingPayment : Retry
+        }
+        
+        PaymentPending --> Confirmed : Payment Complete
+        PaymentPending --> Cancelled : Payment Timeout
+        
+        Confirmed --> Processing : Begin Fulfillment
+        Processing --> Shipped : Ship Order
+        Shipped --> Delivered : Confirm Delivery
+        Delivered --> [*]
+        
+        Confirmed --> Cancelled : Customer Cancel
+        Processing --> Cancelled : Admin Cancel
+    }
+    
+    note right of Draft : Initial state\nwhen cart created
+    note right of Delivered : Final successful state
+    note right of Cancelled : Can occur at multiple stages
+
+---
+%% User Authentication State Machine
+stateDiagram-v2
+    [*] --> Anonymous
+    
+    Anonymous --> Authenticating : Login Request
+    Authenticating --> Authenticated : Valid Credentials
+    Authenticating --> Anonymous : Invalid Credentials
+    
+    state Authenticated {
+        [*] --> Active
+        Active --> Idle : Timeout (5min)
+        Idle --> Active : User Activity
+        Idle --> SessionExpired : Timeout (30min)
+    }
+    
+    Authenticated --> Anonymous : Logout
+    SessionExpired --> Anonymous : Auto Logout
+    
+    state MFA <<choice>>
+    Authenticating --> MFA : MFA Required
+    MFA --> Authenticated : MFA Valid
+    MFA --> Anonymous : MFA Invalid
+
+---
+%% Document Review Workflow
+stateDiagram-v2
+    direction LR
+    
+    [*] --> Draft
+    
+    Draft --> UnderReview : Submit for Review
+    UnderReview --> Draft : Request Changes
+    UnderReview --> Approved : Approve
+    UnderReview --> Rejected : Reject
+    
+    Approved --> Published : Publish
+    Published --> Archived : Archive
+    Rejected --> Draft : Revise
+    Rejected --> Archived : Abandon
+    
+    note left of Draft
+        Author can edit
+        document freely
+    end note
+    
+    note right of UnderReview
+        Reviewer evaluates
+        document quality
+    end note
+    
+    note right of Published
+        Document is live
+        and visible
+    end note
+
+---
+%% Issue/Ticket State Machine
+stateDiagram-v2
+    [*] --> Open : Create Ticket
+    
+    Open --> InProgress : Assign
+    Open --> Closed : Close (Duplicate/Invalid)
+    
+    InProgress --> OnHold : Block
+    OnHold --> InProgress : Unblock
+    
+    InProgress --> InReview : Submit Fix
+    InReview --> InProgress : Request Changes
+    InReview --> Resolved : Approve Fix
+    
+    Resolved --> Closed : Verify Fix
+    Resolved --> InProgress : Reopen (Not Fixed)
+    
+    Closed --> Open : Reopen
+    Closed --> [*]
+    
+    state InProgress {
+        [*] --> Analyzing
+        Analyzing --> Developing
+        Developing --> Testing
+        Testing --> [*]
+    }
+
+---
+%% Deployment Pipeline State Machine
+stateDiagram-v2
+    [*] --> Queued : Trigger Build
+    
+    Queued --> Building : Start Build
+    Building --> BuildFailed : Build Error
+    BuildFailed --> [*]
+    
+    Building --> Testing : Build Success
+    Testing --> TestFailed : Test Error
+    TestFailed --> [*]
+    
+    Testing --> Deploying : Tests Pass
+    Deploying --> DeployFailed : Deploy Error
+    DeployFailed --> [*]
+    
+    Deploying --> Verifying : Deploy Success
+    Verifying --> Deployed : Verification Pass
+    Verifying --> RollingBack : Verification Fail
+    
+    RollingBack --> Deployed : Rollback Complete
+    Deployed --> [*]
+    
+    note right of Testing
+        Unit tests
+        Integration tests
+        Security scans
+    end note

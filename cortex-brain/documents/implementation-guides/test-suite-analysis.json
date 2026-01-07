@@ -1,0 +1,3822 @@
+{
+  "summary": {
+    "total_tests": 2111,
+    "total_files": 130,
+    "total_lines": 43200,
+    "redundancy_count": 272
+  },
+  "complexity_distribution": {
+    "trivial": 363,
+    "simple": 1243,
+    "moderate": 441,
+    "complex": 57,
+    "very_complex": 7
+  },
+  "redundancies": [
+    {
+      "type": "exact_duplicate",
+      "severity": "high",
+      "description": "Found 2 tests with identical implementation",
+      "recommendation": "Remove duplicate tests or consolidate into parameterized test",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestPlatformDetection.test_platform_display_names",
+        "TestPlatformDetection.test_platform_display_names"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestPathTraversalProtection.test_blocks_parent_directory_traversal",
+        "TestPathTraversalProtection.test_blocks_absolute_path_outside_workspace"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestCommandInjectionPrevention.test_git_hook_script_uses_absolute_paths",
+        "TestGitMonitor.test_hook_script_uses_absolute_paths"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestMaliciousPatternDetection.test_sanitizes_tokens_in_commands",
+        "TestTerminalMonitor.test_sanitizes_github_tokens"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 3 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 3,
+      "tests": [
+        "TestInputValidation.test_validates_json_structure",
+        "TestHelperMethods.test_extract_files_empty",
+        "TestFileTracking.test_get_files_empty"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 3 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 3,
+      "tests": [
+        "TestSecureErrorHandling.test_does_not_expose_paths_in_errors",
+        "TestTerminalHistoryMonitoring.test_validates_history_path_is_file",
+        "TestTerminalHistoryMonitoring.test_validates_history_file_size"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestSecureErrorHandling.test_git_hook_failures_are_silent",
+        "TestAmbientCaptureDaemon.test_daemon_handles_missing_tier1_database"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestIntelligentHandling.test_handles_generic_request",
+        "TestConvenienceFunctions.test_cortex_help_function"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 6 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 6,
+      "tests": [
+        "TestVisualDebugging.test_generate_css_snippet",
+        "TestExceptionLearningCapture.test_returns_none_for_unrecognized_exception",
+        "TestEmptyInputs.test_empty_string_operation",
+        "TestEmptyInputs.test_none_operation",
+        "TestMalformedData.test_invalid_json_config",
+        "TestMalformedData.test_invalid_yaml_syntax"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 6 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 6,
+      "tests": [
+        "TestCSSStyles.test_sidebar_gradient_background",
+        "TestCSSStyles.test_navigation_link_color",
+        "TestCSSStyles.test_active_link_purple_gradient",
+        "TestCSSStyles.test_brain_emoji_in_title",
+        "TestCSSStyles.test_hover_effect_purple",
+        "TestCSSStyles.test_navigation_title_style"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestColorConsistency.test_cortex_primary_color_defined",
+        "TestColorConsistency.test_cortex_accent_color_defined"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestBrainProtectorImmutability.test_tier0_read_only_enforcement",
+        "TestViolationLogging.test_limits_violation_results"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestBrainProtectorBoundaries.test_tier_write_boundaries",
+        "TestViolationLogging.test_logs_violations"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestWorkflowDAGValidation.test_valid_dag_topology",
+        "TestConcurrentTierAccess.test_concurrent_tier_access"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 3 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 3,
+      "tests": [
+        "TestYAMLConversion.test_operations_config_load_performance",
+        "TestYAMLConversion.test_slash_commands_load_performance",
+        "TestYAMLConversion.test_cortex_operations_load_performance"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestAgentRequest.test_create_request_with_priority",
+        "TestPriorityExtraction.test_critical_priority"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestChangeGovernorBasics.test_governor_can_handle_check_governance",
+        "TestChangeGovernorBasics.test_governor_can_handle_assess_risk"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestRiskAssessment.test_high_risk_deletion",
+        "TestRiskAssessment.test_high_risk_protected_file"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestCommitHandlerBasics.test_handler_can_handle_commit_intent",
+        "TestCommitHandlerBasics.test_handler_can_handle_git_commit_intent"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 3 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 3,
+      "tests": [
+        "TestEdgeCases.test_router_without_tier_apis",
+        "TestEdgeCases.test_very_long_user_message",
+        "TestEdgeCases.test_tier2_search_failure"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestOperationLearningCapture.test_returns_none_for_successful_operation",
+        "TestGitCommitLearningCapture.test_ignores_non_fix_commits"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestConvenienceFunctions.test_capture_operation_learning_quick_function",
+        "TestConvenienceFunctions.test_capture_exception_learning_quick_function"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestScreenshotAnalyzerBasics.test_analyzer_can_handle_screenshot_intent",
+        "TestScreenshotAnalyzerBasics.test_analyzer_can_handle_find_test_ids_intent"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestErrorHandling.test_invalid_image_format",
+        "TestErrorHandling.test_unsupported_image_type"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestSessionResumerBasics.test_resumer_can_handle_resume_intent",
+        "TestSessionResumerBasics.test_resumer_can_handle_restore_intent"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestFileSystemWatcher.test_ignores_pycache_files",
+        "TestFileSystemWatcher.test_ignores_git_directory"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 4 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 4,
+      "tests": [
+        "TestVSCodeMonitor.test_get_open_files_returns_empty_if_no_workspace",
+        "TestVSCodeMonitor.test_get_open_files_handles_invalid_json",
+        "TestVSCodeMonitor.test_rejects_oversized_workspace_file",
+        "TestVSCodeStateValidation.test_validates_json_structure"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 17 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 17,
+      "tests": [
+        "test_empty_string_request_handling",
+        "test_very_large_request_handling",
+        "test_malformed_unicode_handling",
+        "test_sql_injection_prevention",
+        "test_code_injection_prevention",
+        "test_circular_reference_handling",
+        "test_invalid_conversation_id_handling",
+        "test_mixed_encoding_request",
+        "test_multiple_conflicting_intents",
+        "test_zero_confidence_intent_routing",
+        "test_intent_confidence_boundary_cases",
+        "test_multi_intent_request",
+        "test_agent_context_passing",
+        "test_parallel_agent_execution",
+        "test_agent_conflict_resolution",
+        "test_agent_retry_on_failure",
+        "test_session_metadata_persistence"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 6 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 6,
+      "tests": [
+        "test_intent_routing_loop_detection",
+        "test_session_timeout_exactly_30_minutes",
+        "test_session_resume_after_system_restart",
+        "test_tier2_knowledge_graph_unavailable",
+        "test_tier3_context_intelligence_error",
+        "test_multiple_tier_failures_simultaneously"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 3 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 3,
+      "tests": [
+        "test_malformed_intent_data_handling",
+        "test_corrupted_session_data_recovery",
+        "test_tier1_database_lock_failure"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 3 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 3,
+      "tests": [
+        "test_session_with_missing_metadata",
+        "test_session_with_invalid_timestamps",
+        "test_tier_recovery_after_failure"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestCortexEntryInitialization.test_entry_point_with_logging",
+        "TestCortexEntryInitialization.test_entry_point_without_logging"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestIntentExtraction.test_plan_intent",
+        "TestEdgeCases.test_mixed_case_intent_keywords"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestIntentExtraction.test_fix_intent",
+        "TestEdgeCases.test_message_with_special_characters"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestPriorityExtraction.test_medium_priority",
+        "TestPriorityExtraction.test_normal_priority"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 3 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 3,
+      "tests": [
+        "TestRequestValidation.test_validate_valid_request",
+        "TestSyntaxValidator.test_validate_valid_python",
+        "TestSyntaxValidator.test_validate_python_with_imports"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestTextFormatting.test_format_with_recommendations",
+        "TestRecommendations.test_extract_next_steps_from_metadata"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestEdgeCases.test_format_empty_response",
+        "TestEdgeCases.test_format_response_no_message"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestCrossTierReadFlow.test_cross_tier_read_with_missing_tier2_data",
+        "TestErrorCorrectorIntegration.test_handle_unparseable_error"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 3 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 3,
+      "tests": [
+        "TestFailureHandling.test_module_failure_doesnt_crash_operation",
+        "TestOperationChainFailures.test_required_module_failure_stops_chain",
+        "TestOperationChainFailures.test_optional_module_failure_continues_chain"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "test_session_resume_preserves_conversation_id",
+        "test_concurrent_session_handling"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestBloatDetection.test_entry_point_bloat_detection",
+        "TestBloatDetection.test_orchestrator_bloat_detection"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestFullWorkflow.test_quick_profile",
+        "TestFullWorkflow.test_comprehensive_profile"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestDocumentationWorkflow.test_scan_missing_src_dir",
+        "TestDocumentationWorkflow.test_publish_missing_api_docs"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 7 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 7,
+      "tests": [
+        "TestExecutionModeDetection.test_detect_dry_run_spaced",
+        "TestExecutionModeDetection.test_detect_dry_run_simulate",
+        "TestExecutionModeDetection.test_detect_dry_run_test",
+        "TestExecutionModeDetection.test_detect_dry_run_what_would",
+        "TestExecutionModeDetection.test_detect_dry_run_show_me",
+        "TestExecutionModeArgs.test_parse_dry_run_true",
+        "TestExecutionModeArgs.test_parse_with_other_args"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 5 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 5,
+      "tests": [
+        "TestExecutionModeDetection.test_detect_live_run_apply",
+        "TestExecutionModeDetection.test_detect_live_run_actually",
+        "TestExecutionModeDetection.test_detect_live_run_for_real",
+        "TestExecutionModeArgs.test_parse_dry_run_false",
+        "TestExecutionModeArgs.test_parse_dry_run_missing"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestHelpCommandEdgeCases.test_empty_factory",
+        "TestHelpCommandEdgeCases.test_invalid_format"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "test_tier1_get_recent_conversations_performance",
+        "test_tier1_get_conversation_by_id_performance"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestTempFileCleanup.test_cleanup_old_temp_files",
+        "TestBackupFileCleanup.test_cleanup_old_backups"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestCacheCleanup.test_cleanup_pycache",
+        "TestEmptyDirectoryCleanup.test_cleanup_empty_dirs"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 5 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 5,
+      "tests": [
+        "TestStructureEnforcement.test_enforce_structure",
+        "TestErrorHandling.test_handle_permission_errors",
+        "TestEdgeCases.test_cleanup_with_special_characters",
+        "TestGitHubArchival.test_manifest_creation",
+        "TestGitHubArchival.test_backup_archive_cleanup"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestPlatformCommandExpansion.test_windows_command_expansion",
+        "TestCommandExpansion.test_expand_alias"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestCommandExpansionPerformance.test_expansion_is_fast",
+        "TestCommandExpansionPerformance.test_is_command_is_fast"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 3 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 3,
+      "tests": [
+        "TestConfigurationWizardPlugin.test_non_interactive_mode",
+        "TestDocSyncValidation.test_doc_sync_check_up_to_date",
+        "TestBudgetEnforcement.test_accept_image_within_budget"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestDocRefreshFileCreationProhibition.test_prohibits_quick_read_creation",
+        "TestDocRefreshFileCreationProhibition.test_prohibits_summary_variant_creation"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 5 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 5,
+      "tests": [
+        "TestDocRefreshPluginInitialization.test_plugin_initialization_success",
+        "TestDocRefreshPluginInitialization.test_plugin_initialization_creates_story_dir",
+        "TestPluginIntegration.test_plugin_cleanup",
+        "TestExtensionScaffoldInitialization.test_plugin_initialization_success",
+        "TestPluginCleanup.test_plugin_cleans_up_successfully"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 3 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 3,
+      "tests": [
+        "TestDocRefreshExecution.test_execute_unknown_hook",
+        "TestErrorHandling.test_execute_handles_io_error",
+        "TestGitOperations.test_git_pull_failure"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 3 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 3,
+      "tests": [
+        "TestAncientRulesRefresh.test_ancient_rules_file_not_exists_error",
+        "TestFeaturesDocRefresh.test_features_doc_file_not_exists_error",
+        "TestBackupAndSafety.test_no_file_creation_enforcement"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestPlatformDetection.test_detect_current_platform",
+        "TestPlatformDetection.test_detects_current_platform"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestEnvironmentConfiguration.test_creates_venv_if_missing",
+        "TestSchemaInitialization.test_creates_fts5_virtual_table"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestTemplateRenderer.test_render_with_none_context",
+        "TestTemplateRenderer.test_render_with_empty_context"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestTemplateRenderer.test_conditional_with_false_condition",
+        "TestTemplateRenderer.test_conditional_with_false_value"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestTemplateRenderer.test_loop_with_empty_list",
+        "TestTemplateRenderer.test_loop_with_missing_list"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 7 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 7,
+      "tests": [
+        "TestPassiveVoiceDetection.test_detects_passive_designed",
+        "TestPassiveVoiceDetection.test_detects_passive_created",
+        "TestPassiveVoiceDetection.test_detects_passive_wrote",
+        "TestPassiveVoiceDetection.test_detects_passive_implemented",
+        "TestPassiveVoiceDetection.test_detects_documentary_one_evening_while",
+        "TestPassiveVoiceDetection.test_detects_documentary_after_completing",
+        "TestPassiveVoiceDetection.test_detects_documentary_while_reviewing"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 7 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 7,
+      "tests": [
+        "TestMachineReadableFormatEnforcement.test_detects_structured_table_in_markdown",
+        "TestMachineReadableFormatEnforcement.test_detects_structured_list_in_markdown",
+        "TestModularFileStructureLimits.test_warns_file_exceeds_soft_limit",
+        "TestHemisphereSeparationStrict.test_detects_strategic_logic_in_left_brain",
+        "TestHemisphereSeparationStrict.test_detects_tactical_logic_in_right_brain",
+        "TestPluginArchitectureEnforcement.test_detects_feature_added_to_core",
+        "TestStoryTechnicalRatioValidation.test_warns_too_much_technical_content"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 7 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 7,
+      "tests": [
+        "TestMachineReadableFormatEnforcement.test_allows_narrative_markdown",
+        "TestDefinitionOfReadyValidation.test_allows_bug_fix_without_dor",
+        "TestModularFileStructureLimits.test_allows_small_files",
+        "TestPluginArchitectureEnforcement.test_allows_plugin_implementation",
+        "TestPluginArchitectureEnforcement.test_allows_core_bug_fixes",
+        "TestStoryTechnicalRatioValidation.test_allows_proper_story_ratio",
+        "TestStoryTechnicalRatioValidation.test_ignores_ratio_for_technical_docs"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestDefinitionOfReadyValidation.test_detects_implementation_without_dor",
+        "TestModularFileStructureLimits.test_blocks_file_exceeds_hard_limit"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestDefinitionOfReadyValidation.test_allows_implementation_with_dor",
+        "TestHemisphereSeparationStrict.test_allows_corpus_callosum_coordination"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestGitIsolationEnforcer.test_fails_if_not_git_repo",
+        "TestCheckpointManager.test_delete_nonexistent_checkpoint"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 3 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 3,
+      "tests": [
+        "TestStagedFileChecking.test_allows_clean_commit",
+        "TestStagedFileChecking.test_allows_team_knowledge_yaml",
+        "TestPublicAPI.test_check_git_isolation_function"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestTDDEnforcement.test_allows_test_first_development",
+        "TestTierBoundaryProtection.test_allows_correct_tier_data"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestSKULLBannerImages.test_help_table_has_banner_image",
+        "TestSKULLBannerImages.test_help_detailed_has_banner_image"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 14 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 14,
+      "tests": [
+        "TestSkull001TestBeforeClaim.test_passes_with_test_validation",
+        "TestSkull002IntegrationVerification.test_passes_with_e2e_test",
+        "TestSkull002IntegrationVerification.test_detects_integration_test_patterns",
+        "TestSkull003VisualRegression.test_passes_css_change_with_visual_test",
+        "TestSkull003VisualRegression.test_detects_visual_test_patterns",
+        "TestSkull004RetryWithoutLearning.test_passes_retry_with_diagnosis",
+        "TestSkull005TransformationVerification.test_passes_transformation_with_changes",
+        "TestSkull005TransformationVerification.test_allows_validation_only_operations",
+        "TestSkullProtector.test_skull_001_passes_fix_with_tests",
+        "TestSkullProtector.test_skull_002_passes_integration_with_e2e_test",
+        "TestSkullProtector.test_skull_002_detects_integration_keyword",
+        "TestSkullProtector.test_skull_003_passes_css_change_with_visual_test",
+        "TestSkullProtector.test_skull_003_detects_visual_keywords",
+        "TestSkullProtector.test_skull_004_passes_retry_with_diagnosis"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 3 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 3,
+      "tests": [
+        "TestSkull001TestBeforeClaim.test_detects_all_success_claims",
+        "TestSkull004RetryWithoutLearning.test_requires_changed_approach",
+        "TestSkull005TransformationVerification.test_detects_pass_through_operations"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestRealWorldIncidentPrevention.test_prevents_november_9th_css_incident",
+        "TestSkullProtector.test_prevents_css_incident_november_9th"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestRealWorldIncidentPrevention.test_prevents_november_9th_vision_api_incident",
+        "TestSkullProtector.test_prevents_vision_api_incident_november_9th"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestMultipleViolations.test_css_retry_without_tests_or_diagnosis",
+        "TestMultipleViolations.test_integration_transformation_without_verification"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestEnforcementBehavior.test_warning_returns_validation",
+        "TestSkullProtector.test_warning_rules_allow_execution"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestTier0Validation.test_detects_application_data_in_tier0",
+        "TestTier2Validation.test_detects_raw_conversation_in_tier2"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 3 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 3,
+      "tests": [
+        "TestTier1Validation.test_detects_missing_tier1_file",
+        "TestTier2Validation.test_detects_missing_tier2_file",
+        "TestTier3Validation.test_detects_missing_tier3_file"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 3 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 3,
+      "tests": [
+        "TestTier1Validation.test_validates_correct_jsonl_format",
+        "TestTier2Validation.test_validates_correct_knowledge_graph",
+        "TestTier3Validation.test_validates_correct_dev_context"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 3 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 3,
+      "tests": [
+        "TestDatabaseInitialization.test_creates_database_file",
+        "TestDatabaseInitialization.test_schema_is_idempotent",
+        "TestDatabaseInitialization.test_database_created"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 3 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 3,
+      "tests": [
+        "TestConversationCRUD.test_get_nonexistent_conversation",
+        "TestGetConversation.test_get_nonexistent_conversation",
+        "TestDeleteConversation.test_delete_removes_conversation"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestMessageManagement.test_get_messages_empty_conversation",
+        "TestGetMessages.test_get_messages_empty_conversation"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestEntityTracking.test_get_entities_empty",
+        "TestGetConversationEntities.test_get_entities_empty_conversation"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 5 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 5,
+      "tests": [
+        "TestInteractivePlanning.test_load_nonexistent_session",
+        "TestSessionRetrieval.test_get_session_nonexistent",
+        "TestSessionRetrieval.test_get_active_session_none",
+        "TestSessionSearch.test_find_by_conversation_not_found",
+        "TestSessionSearch.test_find_by_work_session_not_found"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestErrorHandling.test_database_path_creation",
+        "TestDatabaseConnection.test_creates_parent_directories"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 9 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 9,
+      "tests": [
+        "TestDatabaseInitialization.test_session_tokens_table_exists",
+        "TestDatabaseInitialization.test_work_sessions_table_exists",
+        "TestDatabaseInitialization.test_work_progress_table_exists",
+        "TestDatabaseInitialization.test_creates_git_metrics_table",
+        "TestDatabaseInitialization.test_creates_file_hotspots_table",
+        "TestSchemaInitialization.test_creates_pattern_relationships_table",
+        "TestSchemaInitialization.test_creates_pattern_tags_table",
+        "TestSchemaInitialization.test_creates_confidence_decay_log_table",
+        "TestDatabaseMigrations.test_schema_version_is_tracked"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestSessionCreation.test_create_session_with_conversation",
+        "TestSessionAssociations.test_associate_conversation"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestSessionCreation.test_create_session_with_work_session",
+        "TestSessionAssociations.test_associate_work_session"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 3 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 3,
+      "tests": [
+        "TestSessionRetrieval.test_get_active_session",
+        "TestSessionSearch.test_find_by_conversation",
+        "TestSessionSearch.test_find_by_work_session"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestSessionRetrieval.test_get_active_session_most_recent",
+        "TestSessionSearch.test_find_by_conversation_most_recent"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestSessionAssociations.test_association_updates_activity",
+        "TestSessionLifecycle.test_update_activity"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestSessionLifecycle.test_resume_session",
+        "TestEdgeCases.test_multiple_pauses_and_resumes"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestStaleSessionCleanup.test_cleanup_no_stale_sessions",
+        "TestGetMessageCount.test_count_empty_conversation"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestImageValidation.test_validate_valid_png",
+        "TestImageValidation.test_validate_valid_jpeg"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 4 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 4,
+      "tests": [
+        "TestVisionAPIAutoEngagement.test_intent_router_detects_image_base64",
+        "TestVisionAPIAutoEngagement.test_intent_router_detects_image_path",
+        "TestVisionAPIAutoEngagement.test_intent_router_detects_image_data",
+        "TestVisionAPIAutoEngagement.test_intent_router_detects_screenshot_keyword"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestEntityExtraction.test_links_entities_to_conversations",
+        "TestGetConversationEntities.test_get_entities_after_extraction"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestPerformanceTargets.test_optimization_overhead_multiple_conversations",
+        "TestDatabasePerformance.test_schema_creation_is_fast"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestStateRetrieval.test_get_current_state_no_active_work",
+        "TestStateRetrieval.test_get_state_nonexistent"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 3 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 3,
+      "tests": [
+        "TestGetPatternsByNamespace.test_get_nonexistent_namespace",
+        "TestEmptyResults.test_namespace_with_no_patterns",
+        "TestEmptyResults.test_empty_database_generic_patterns"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestChangePatternDetector.test_detect_documentation_pattern",
+        "TestChangePatternDetector.test_detect_rst_documentation"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 3 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 3,
+      "tests": [
+        "TestChangePatternDetector.test_detect_config_json",
+        "TestChangePatternDetector.test_detect_config_yaml",
+        "TestChangePatternDetector.test_detect_config_env"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestChangePatternDetector.test_detect_feature_created",
+        "TestChangePatternDetector.test_detect_feature_many_additions"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestChangePatternDetector.test_detect_refactor_deleted",
+        "TestChangePatternDetector.test_detect_refactor_balanced_changes"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 4 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 4,
+      "tests": [
+        "TestChangePatternDetector.test_detect_unknown_no_diff",
+        "TestChangePatternDetector.test_handle_git_not_available",
+        "TestChangePatternDetector.test_handle_git_timeout",
+        "TestChangePatternDetector.test_handle_malformed_event"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 3 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 3,
+      "tests": [
+        "TestActivityScorer.test_score_python_file",
+        "TestActivityScorer.test_score_typescript_file",
+        "TestActivityScorer.test_score_created_file"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestActivityScorer.test_score_deleted_file",
+        "TestActivityScorer.test_score_test_files"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestActivityScorer.test_score_unknown_pattern",
+        "TestActivityScorer.test_score_unknown_file_type"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 3 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 3,
+      "tests": [
+        "TestSmartFileFilter.test_filter_pycache",
+        "TestSmartFileFilter.test_filter_pyc_files",
+        "TestSmartFileFilter.test_filter_node_modules"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 3 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 3,
+      "tests": [
+        "TestSmartFileFilter.test_filter_generated_marker",
+        "TestSmartFileFilter.test_filter_autogenerated_marker",
+        "TestSmartFileFilter.test_filter_generated_directory"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 3 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 3,
+      "tests": [
+        "TestBugFixWorkflow.test_bug_fix_happy_path",
+        "TestRefactoringWorkflow.test_refactoring_happy_path",
+        "TestSecurityEnhancementWorkflow.test_security_happy_path"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 3 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 3,
+      "tests": [
+        "TestBugFixWorkflow.test_bug_fix_checkpoint_resume",
+        "TestRefactoringWorkflow.test_refactoring_checkpoint_resume",
+        "TestSecurityEnhancementWorkflow.test_security_checkpoint_resume"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 4 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 4,
+      "tests": [
+        "TestInsightGenerator.test_generate_velocity_insights_no_data",
+        "TestInsightGenerator.test_generate_hotspot_insights_no_data",
+        "TestInsightGenerator.test_generate_all_insights",
+        "TestInsightGenerator.test_empty_insights_handling"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestGitMetricsCollector.test_collect_metrics_empty_period",
+        "TestGitMetricsCollector.test_empty_repository_handling"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestContextStore.test_get_connection",
+        "TestDatabaseConnection.test_get_connection_returns_connection"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestPatternUpdates.test_update_pattern_returns_false_if_not_found",
+        "TestPatternUpdates.test_update_pattern_returns_false_if_no_updates"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestSearchByKeyword.test_search_case_insensitive",
+        "TestSearchByDateRange.test_search_within_date_range"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestSearchByKeyword.test_search_no_matches",
+        "TestSearchByDateRange.test_search_outside_date_range"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestGetMessageCount.test_count_after_adding_messages",
+        "TestGetMessageCount.test_count_after_multiple_adds"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestBackupManager.test_backup_without_dir",
+        "TestBackupManager.test_multiple_backups"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 5 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 5,
+      "tests": [
+        "TestCodeExecutorIntegration.test_can_handle_code_intent",
+        "TestCodeExecutorIntegration.test_can_handle_create_file_intent",
+        "TestErrorCorrectorIntegration.test_can_handle_fix_intent",
+        "TestHealthValidatorIntegration.test_can_handle_health_check",
+        "TestHealthValidatorIntegration.test_can_handle_validate"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 3 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 3,
+      "tests": [
+        "TestCodeExecutorIntegration.test_cannot_handle_other_intent",
+        "TestErrorCorrectorIntegration.test_reject_non_fix_intent",
+        "TestHealthValidatorIntegration.test_cannot_handle_other_intent"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestEditOperation.test_edit_nonexistent_file",
+        "TestDeleteOperation.test_delete_nonexistent_file"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestEditOperation.test_edit_with_backup",
+        "TestDeleteOperation.test_delete_with_backup"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 3 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 3,
+      "tests": [
+        "TestSyntaxValidator.test_validate_empty_python",
+        "TestSyntaxValidator.test_validate_javascript_basic",
+        "TestSyntaxValidator.test_validate_typescript_basic"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 5 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 5,
+      "tests": [
+        "TestPytestErrorParser.test_can_parse_pytest_error",
+        "TestSyntaxErrorParser.test_can_parse_syntax_error",
+        "TestImportErrorParser.test_can_parse_import_error",
+        "TestRuntimeErrorParser.test_can_parse_runtime_error",
+        "TestLinterErrorParser.test_can_parse_linter_error"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 4 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 4,
+      "tests": [
+        "TestIndentationFixStrategy.test_can_fix_indentation_error",
+        "TestImportFixStrategy.test_can_fix_import_error",
+        "TestSyntaxFixStrategy.test_can_fix_syntax_error",
+        "TestPackageFixStrategy.test_can_fix_package_error"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 2 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 2,
+      "tests": [
+        "TestFixValidator.test_validate_successful_fix",
+        "TestFixValidator.test_validate_fix_with_changes_only"
+      ]
+    },
+    {
+      "type": "semantic_duplicate",
+      "severity": "medium",
+      "description": "Found 3 tests with nearly identical assertion patterns",
+      "recommendation": "Review tests for consolidation or parameterization",
+      "similarity_score": 1.0,
+      "test_count": 3,
+      "tests": [
+        "TestFixValidator.test_validate_failed_fix",
+        "TestFixValidator.test_validate_fix_missing_changes",
+        "TestFixValidator.test_validate_invalid_fixed_content_type"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestPathTraversalProtection.test_blocks_parent_directory_traversal",
+        "TestPathTraversalProtection.test_blocks_absolute_path_outside_workspace",
+        "TestPathTraversalProtection.test_allows_valid_workspace_paths",
+        "TestPathTraversalProtection.test_resolves_symlinks_and_validates"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 5 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 5,
+      "tests": [
+        "TestInputValidation.test_rejects_oversized_files",
+        "TestInputValidation.test_rejects_long_commands",
+        "TestInputValidation.test_validates_file_extensions",
+        "TestInputValidation.test_limits_vscode_file_list",
+        "TestInputValidation.test_validates_json_structure"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 6 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 6,
+      "tests": [
+        "TestStatusFileConsolidation.test_consolidate_preserves_progress_bars",
+        "TestStatusFileConsolidation.test_consolidate_preserves_file_size",
+        "TestStatusFileConsolidation.test_consolidate_handles_multiple_asterisks",
+        "TestStatusFileConsolidation.test_consolidate_updates_metrics_correctly",
+        "TestStatusFileConsolidation.test_consolidate_first_time_adds_timestamp",
+        "TestStatusFileConsolidation.test_consolidate_multiple_runs_idempotent"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 7 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 7,
+      "tests": [
+        "TestMaliciousPatternDetection.test_blocks_rm_rf_commands",
+        "TestMaliciousPatternDetection.test_blocks_eval_commands",
+        "TestMaliciousPatternDetection.test_blocks_curl_pipe_sh",
+        "TestMaliciousPatternDetection.test_blocks_fork_bombs",
+        "TestMaliciousPatternDetection.test_sanitizes_passwords_in_commands",
+        "TestMaliciousPatternDetection.test_sanitizes_tokens_in_commands",
+        "TestMaliciousPatternDetection.test_allows_safe_commands"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 9 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 9,
+      "tests": [
+        "TestCSSStyles.test_sidebar_gradient_background",
+        "TestCSSStyles.test_navigation_link_color",
+        "TestCSSStyles.test_active_link_purple_gradient",
+        "TestCSSStyles.test_main_title_gradient",
+        "TestCSSStyles.test_brain_emoji_in_title",
+        "TestCSSStyles.test_code_block_dark_grey",
+        "TestCSSStyles.test_hover_effect_purple",
+        "TestCSSStyles.test_navigation_title_style",
+        "TestCSSStyles.test_no_pure_black_in_navigation"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestBrainProtectorImmutability.test_tier0_rules_immutable",
+        "TestBrainProtectorImmutability.test_tier0_read_only_enforcement",
+        "TestBrainProtectorImmutability.test_challenge_generation_for_risky_change",
+        "TestBrainProtectorImmutability.test_rollback_mechanism_on_violation"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 18 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 18,
+      "tests": [
+        "TestYAMLLoading.test_brain_protection_rules_loads",
+        "TestYAMLLoading.test_brain_protection_rules_structure",
+        "TestYAMLLoading.test_brain_protection_rules_content",
+        "TestYAMLLoading.test_operations_config_loads",
+        "TestYAMLLoading.test_operations_config_structure",
+        "TestYAMLLoading.test_operations_config_content",
+        "TestYAMLLoading.test_operations_config_profiles",
+        "TestYAMLLoading.test_module_definitions_loads",
+        "TestYAMLLoading.test_module_definitions_structure",
+        "TestYAMLLoading.test_module_definitions_content",
+        "TestYAMLLoading.test_module_definitions_statistics",
+        "TestYAMLLoading.test_design_metadata_loads",
+        "TestYAMLLoading.test_design_metadata_structure",
+        "TestYAMLLoading.test_design_metadata_phases",
+        "TestYAMLLoading.test_yaml_handles_missing_file",
+        "TestYAMLLoading.test_yaml_loading_performance",
+        "TestYAMLLoading.test_all_yaml_files_consistent",
+        "TestYAMLLoading.test_module_dependencies_valid"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestChangeGovernorBasics.test_governor_initialization",
+        "TestChangeGovernorBasics.test_governor_can_handle_check_governance",
+        "TestChangeGovernorBasics.test_governor_can_handle_assess_risk",
+        "TestChangeGovernorBasics.test_governor_rejects_invalid_intent"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestRuleCompliance.test_rule_3_archive_forbidden",
+        "TestRuleCompliance.test_rule_20_tdd_required",
+        "TestRuleCompliance.test_rule_22_protected_file_deletion",
+        "TestRuleCompliance.test_rule_23_incremental_creation"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 5 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 5,
+      "tests": [
+        "TestRiskAssessment.test_low_risk_simple_modification",
+        "TestRiskAssessment.test_medium_risk_multiple_files",
+        "TestRiskAssessment.test_high_risk_deletion",
+        "TestRiskAssessment.test_high_risk_protected_file",
+        "TestRiskAssessment.test_critical_risk_governance_violations"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestMultiRuleValidation.test_multiple_violations",
+        "TestMultiRuleValidation.test_tdd_with_tests_provided",
+        "TestMultiRuleValidation.test_allowed_with_warnings",
+        "TestMultiRuleValidation.test_clean_change_approval"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestCommitHandlerBasics.test_handler_initialization",
+        "TestCommitHandlerBasics.test_handler_can_handle_commit_intent",
+        "TestCommitHandlerBasics.test_handler_can_handle_git_commit_intent",
+        "TestCommitHandlerBasics.test_handler_rejects_invalid_intent"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 6 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 6,
+      "tests": [
+        "TestIntentClassification.test_classify_planning_intent",
+        "TestIntentClassification.test_classify_code_intent",
+        "TestIntentClassification.test_classify_test_intent",
+        "TestIntentClassification.test_classify_fix_intent",
+        "TestIntentClassification.test_classify_unknown_intent",
+        "TestIntentClassification.test_preserve_valid_intent"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestRoutingDecisions.test_route_plan_to_planner",
+        "TestRoutingDecisions.test_route_code_to_executor",
+        "TestRoutingDecisions.test_route_with_multiple_agents",
+        "TestRoutingDecisions.test_confidence_scoring"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestScreenshotAnalyzerBasics.test_analyzer_initialization",
+        "TestScreenshotAnalyzerBasics.test_analyzer_can_handle_screenshot_intent",
+        "TestScreenshotAnalyzerBasics.test_analyzer_can_handle_find_test_ids_intent",
+        "TestScreenshotAnalyzerBasics.test_analyzer_rejects_invalid_intent"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestSessionResumerBasics.test_resumer_initialization",
+        "TestSessionResumerBasics.test_resumer_can_handle_resume_intent",
+        "TestSessionResumerBasics.test_resumer_can_handle_restore_intent",
+        "TestSessionResumerBasics.test_resumer_rejects_invalid_intent"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestCommitMessageGeneration.test_generate_feat_commit",
+        "TestCommitMessageGeneration.test_generate_fix_commit",
+        "TestCommitMessageGeneration.test_generate_docs_commit",
+        "TestCommitMessageGeneration.test_infer_commit_type_from_files"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestLessonSaving.test_saves_lesson_to_yaml",
+        "TestLessonSaving.test_generates_unique_ids",
+        "TestLessonSaving.test_prevents_duplicate_lessons",
+        "TestLessonSaving.test_updates_last_updated_timestamp"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 10 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 10,
+      "tests": [
+        "TestFileSystemWatcher.test_watcher_initialization",
+        "TestFileSystemWatcher.test_rejects_file_as_workspace",
+        "TestFileSystemWatcher.test_detects_file_creation",
+        "TestFileSystemWatcher.test_detects_file_modification",
+        "TestFileSystemWatcher.test_ignores_pycache_files",
+        "TestFileSystemWatcher.test_ignores_git_directory",
+        "TestFileSystemWatcher.test_only_watches_allowed_extensions",
+        "TestFileSystemWatcher.test_relative_paths_in_events",
+        "TestFileSystemWatcher.test_safe_path_validation",
+        "TestFileSystemWatcher.test_event_contains_timestamp"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 14 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 14,
+      "tests": [
+        "TestTerminalMonitor.test_monitor_initialization",
+        "TestTerminalMonitor.test_identifies_test_commands",
+        "TestTerminalMonitor.test_identifies_build_commands",
+        "TestTerminalMonitor.test_identifies_git_commands",
+        "TestTerminalMonitor.test_sanitizes_passwords",
+        "TestTerminalMonitor.test_sanitizes_github_tokens",
+        "TestTerminalMonitor.test_sanitizes_api_keys",
+        "TestTerminalMonitor.test_blocks_malicious_rm_commands",
+        "TestTerminalMonitor.test_blocks_eval_commands",
+        "TestTerminalMonitor.test_blocks_fork_bombs",
+        "TestTerminalMonitor.test_blocks_pipe_to_shell",
+        "TestTerminalMonitor.test_allows_safe_commands",
+        "TestTerminalMonitor.test_rejects_oversized_commands",
+        "TestTerminalMonitor.test_filters_meaningful_commands"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 6 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 6,
+      "tests": [
+        "TestGitMonitor.test_monitor_initialization_with_git_repo",
+        "TestGitMonitor.test_hook_types_whitelist",
+        "TestGitMonitor.test_installs_git_hooks",
+        "TestGitMonitor.test_hook_script_uses_absolute_paths",
+        "TestGitMonitor.test_backs_up_existing_hooks",
+        "TestGitMonitor.test_skips_hook_install_if_capture_script_missing"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestAmbientCaptureDaemon.test_daemon_initialization",
+        "TestAmbientCaptureDaemon.test_git_hooks_installed_on_start",
+        "TestAmbientCaptureDaemon.test_daemon_graceful_shutdown",
+        "TestAmbientCaptureDaemon.test_daemon_handles_missing_tier1_database"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 9 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 9,
+      "tests": [
+        "TestVSCodeMonitor.test_monitor_initialization",
+        "TestVSCodeMonitor.test_get_open_files_with_valid_workspace",
+        "TestVSCodeMonitor.test_get_open_files_returns_empty_if_no_workspace",
+        "TestVSCodeMonitor.test_get_open_files_handles_invalid_json",
+        "TestVSCodeMonitor.test_get_open_files_limits_file_count",
+        "TestVSCodeMonitor.test_rejects_oversized_workspace_file",
+        "TestVSCodeMonitor.test_sanitize_path_validates_workspace_boundary",
+        "TestVSCodeMonitor.test_sanitize_path_handles_invalid_paths",
+        "TestVSCodeMonitor.test_get_active_file_returns_none"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 10 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 10,
+      "tests": [
+        "test_null_request_handling",
+        "test_empty_string_request_handling",
+        "test_very_large_request_handling",
+        "test_malformed_unicode_handling",
+        "test_sql_injection_prevention",
+        "test_code_injection_prevention",
+        "test_circular_reference_handling",
+        "test_concurrent_same_request_deduplication",
+        "test_invalid_conversation_id_handling",
+        "test_mixed_encoding_request"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 5 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 5,
+      "tests": [
+        "test_multiple_conflicting_intents",
+        "test_zero_confidence_intent_routing",
+        "test_intent_routing_loop_detection",
+        "test_malformed_intent_data_handling",
+        "test_intent_confidence_boundary_cases"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 6 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 6,
+      "tests": [
+        "test_agent_handoff_failure_recovery",
+        "test_missing_agent_context_handling",
+        "test_agent_circular_dependency_detection",
+        "test_agent_timeout_during_processing",
+        "test_agent_response_conflict_resolution",
+        "test_agent_state_corruption_recovery"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 8 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 8,
+      "tests": [
+        "test_rapid_session_creation",
+        "test_session_overflow_protection",
+        "test_corrupted_session_data_recovery",
+        "test_session_timeout_exactly_30_minutes",
+        "test_session_with_missing_metadata",
+        "test_session_resume_after_system_restart",
+        "test_session_with_invalid_timestamps",
+        "test_concurrent_session_modifications"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 5 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 5,
+      "tests": [
+        "test_tier1_database_lock_failure",
+        "test_tier2_knowledge_graph_unavailable",
+        "test_tier3_context_intelligence_error",
+        "test_multiple_tier_failures_simultaneously",
+        "test_tier_recovery_after_failure"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "test_agent_context_passing",
+        "test_parallel_agent_execution",
+        "test_agent_conflict_resolution",
+        "test_agent_retry_on_failure"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "test_30_minute_timeout_enforcement",
+        "test_session_resume_preserves_conversation_id",
+        "test_concurrent_session_handling",
+        "test_session_metadata_persistence"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 10 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 10,
+      "tests": [
+        "test_ambiguous_intent_resolution",
+        "test_refactor_code_quality_workflow",
+        "test_document_feature_workflow",
+        "test_deploy_feature_workflow",
+        "test_parallel_request_isolation",
+        "test_concurrent_sessions",
+        "test_session_timeout_with_resume",
+        "test_session_state_persistence",
+        "test_conflicting_intents",
+        "test_chained_dependent_intents"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 8 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 8,
+      "tests": [
+        "test_add_authentication_full_workflow",
+        "test_continue_work_session_resume",
+        "test_fix_bug_debug_workflow",
+        "test_plan_to_execute_handoff",
+        "test_execute_to_test_handoff",
+        "test_new_session_vs_resumed_session",
+        "test_session_message_accumulation",
+        "test_different_intents_processed_correctly"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 7 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 7,
+      "tests": [
+        "TestSingleRequestProcessing.test_process_simple_request",
+        "TestSingleRequestProcessing.test_process_with_new_session",
+        "TestSingleRequestProcessing.test_process_with_existing_session",
+        "TestSingleRequestProcessing.test_process_logs_to_tier1",
+        "TestSingleRequestProcessing.test_process_with_markdown_format",
+        "TestSingleRequestProcessing.test_process_with_json_format",
+        "TestSingleRequestProcessing.test_process_with_metadata"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestSessionManagement.test_get_session_info_active",
+        "TestSessionManagement.test_get_session_info_no_active",
+        "TestSessionManagement.test_end_session",
+        "TestSessionManagement.test_end_session_no_active"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 8 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 8,
+      "tests": [
+        "TestIntentExtraction.test_plan_intent",
+        "TestIntentExtraction.test_code_intent",
+        "TestIntentExtraction.test_test_intent",
+        "TestIntentExtraction.test_fix_intent",
+        "TestIntentExtraction.test_commit_intent",
+        "TestIntentExtraction.test_resume_intent",
+        "TestIntentExtraction.test_health_check_intent",
+        "TestIntentExtraction.test_unknown_intent"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 8 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 8,
+      "tests": [
+        "TestContextExtraction.test_file_path_extraction",
+        "TestContextExtraction.test_code_block_extraction",
+        "TestContextExtraction.test_inline_file_extraction",
+        "TestContextExtraction.test_bug_context_type",
+        "TestContextExtraction.test_feature_context_type",
+        "TestContextExtraction.test_operation_detection_create",
+        "TestContextExtraction.test_operation_detection_modify",
+        "TestContextExtraction.test_operation_detection_delete"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestPriorityExtraction.test_critical_priority",
+        "TestPriorityExtraction.test_high_priority",
+        "TestPriorityExtraction.test_medium_priority",
+        "TestPriorityExtraction.test_normal_priority"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 6 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 6,
+      "tests": [
+        "TestHelperMethods.test_extract_files_from_context",
+        "TestHelperMethods.test_extract_files_single_string",
+        "TestHelperMethods.test_extract_files_empty",
+        "TestHelperMethods.test_infer_agent_type_planner",
+        "TestHelperMethods.test_infer_agent_type_code_executor",
+        "TestHelperMethods.test_infer_agent_type_unknown"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestRequestValidation.test_validate_valid_request",
+        "TestRequestValidation.test_validate_empty_message",
+        "TestRequestValidation.test_validate_no_intent",
+        "TestRequestValidation.test_validate_unknown_intent_warning"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 5 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 5,
+      "tests": [
+        "TestEdgeCases.test_empty_message",
+        "TestEdgeCases.test_very_long_message",
+        "TestEdgeCases.test_message_with_special_characters",
+        "TestEdgeCases.test_mixed_case_intent_keywords",
+        "TestEdgeCases.test_multiple_intents"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestProgressFormatting.test_format_progress_partial",
+        "TestProgressFormatting.test_format_progress_complete",
+        "TestProgressFormatting.test_format_progress_with_message",
+        "TestProgressFormatting.test_format_progress_zero_total"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestRecommendations.test_extract_recommendations_from_next_actions",
+        "TestRecommendations.test_extract_next_steps_from_metadata",
+        "TestRecommendations.test_default_recommendations_success",
+        "TestRecommendations.test_default_recommendations_failure"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestEdgeCases.test_format_empty_response",
+        "TestEdgeCases.test_format_response_no_message",
+        "TestEdgeCases.test_format_response_with_special_characters",
+        "TestEdgeCases.test_format_very_long_message"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 5 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 5,
+      "tests": [
+        "TestTextFormatting.test_format_success_response",
+        "TestTextFormatting.test_format_with_metadata",
+        "TestTextFormatting.test_format_without_metadata",
+        "TestTextFormatting.test_format_with_recommendations",
+        "TestTextFormatting.test_format_without_recommendations"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 5 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 5,
+      "tests": [
+        "TestSKULLProtectionLayer.test_skull_001_blocks_untested_changes",
+        "TestSKULLProtectionLayer.test_skull_001_allows_tested_changes",
+        "TestSKULLProtectionLayer.test_skull_002_blocks_untested_integrations",
+        "TestSKULLProtectionLayer.test_skull_003_warns_on_css_changes",
+        "TestSKULLProtectionLayer.test_skull_004_warns_on_immediate_retry"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestBrainTierProtection.test_tier0_immutability_enforced",
+        "TestBrainTierProtection.test_tier1_schema_validation",
+        "TestBrainTierProtection.test_tier2_yaml_validation",
+        "TestBrainTierProtection.test_tier3_read_only_enforcement"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestConversationPersistence.test_save_and_load_conversation",
+        "TestConversationPersistence.test_save_multiple_conversations",
+        "TestConversationPersistence.test_conversation_retention_limit",
+        "TestConversationPersistence.test_conversation_with_context"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 9 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 9,
+      "tests": [
+        "TestDocumentationWorkflow.test_scan_module",
+        "TestDocumentationWorkflow.test_build_module",
+        "TestDocumentationWorkflow.test_publish_module",
+        "TestDocumentationWorkflow.test_complete_workflow",
+        "TestDocumentationWorkflow.test_scan_missing_src_dir",
+        "TestDocumentationWorkflow.test_build_missing_docstring_index",
+        "TestDocumentationWorkflow.test_publish_missing_api_docs",
+        "TestDocumentationWorkflow.test_docstring_extraction_quality",
+        "TestDocumentationWorkflow.test_markdown_formatting"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestAutomaticPlatformChange.test_first_time_setup_no_state_file",
+        "TestAutomaticPlatformChange.test_save_and_load_platform_state",
+        "TestAutomaticPlatformChange.test_platform_change_detected",
+        "TestAutomaticPlatformChange.test_no_change_same_platform"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 6 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 6,
+      "tests": [
+        "test_minimalist_header_with_purpose",
+        "test_minimalist_header_without_purpose",
+        "test_completion_footer_with_accomplishments",
+        "test_completion_footer_without_accomplishments",
+        "test_completion_footer_failure",
+        "test_dry_run_mode_header"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestConfigurationWizardPlugin.test_plugin_initialization",
+        "TestConfigurationWizardPlugin.test_discover_from_environment",
+        "TestConfigurationWizardPlugin.test_discover_apis_from_environment",
+        "TestConfigurationWizardPlugin.test_extract_namespace_from_dsn"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 5 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 5,
+      "tests": [
+        "TestDocRefreshFileCreationProhibition.test_fails_when_file_does_not_exist",
+        "TestDocRefreshFileCreationProhibition.test_refresh_all_docs_fails_on_missing_file",
+        "TestDocRefreshFileCreationProhibition.test_prohibits_quick_read_creation",
+        "TestDocRefreshFileCreationProhibition.test_prohibits_summary_variant_creation",
+        "TestDocRefreshFileCreationProhibition.test_only_updates_existing_files"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 6 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 6,
+      "tests": [
+        "TestReadTimeEnforcement.test_validate_read_time_calculates_correctly",
+        "TestReadTimeEnforcement.test_validate_read_time_detects_too_long",
+        "TestReadTimeEnforcement.test_validate_read_time_detects_too_short",
+        "TestReadTimeEnforcement.test_validate_read_time_acceptable_range",
+        "TestReadTimeEnforcement.test_transformation_plan_includes_read_time_enforcement",
+        "TestReadTimeEnforcement.test_story_refresh_includes_read_time_validation"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 5 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 5,
+      "tests": [
+        "TestImplicitPartDetection.test_detects_explicit_parts_only",
+        "TestImplicitPartDetection.test_detects_implicit_part_1",
+        "TestImplicitPartDetection.test_detects_implicit_part_with_interludes",
+        "TestImplicitPartDetection.test_no_implicit_part_when_starts_with_explicit",
+        "TestImplicitPartDetection.test_only_one_explicit_part_with_chapters_before"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestStructureClassification.test_three_act_structure",
+        "TestStructureClassification.test_multi_part_structure",
+        "TestStructureClassification.test_single_narrative_no_parts",
+        "TestStructureClassification.test_implicit_part_affects_structure_classification"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestEdgeCases.test_empty_story",
+        "TestEdgeCases.test_only_intro_no_chapters_or_parts",
+        "TestEdgeCases.test_case_insensitive_part_detection",
+        "TestEdgeCases.test_part_in_middle_of_line"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 6 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 6,
+      "tests": [
+        "TestConfigurationWizardPlugin.test_discover_mode",
+        "TestConfigurationWizardPlugin.test_discover_oracle_from_code",
+        "TestConfigurationWizardPlugin.test_discover_apis_from_code",
+        "TestConfigurationWizardPlugin.test_save_to_config",
+        "TestConfigurationWizardPlugin.test_non_interactive_mode",
+        "TestConfigurationWizardPlugin.test_discover_all_integration"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestTypeScriptGeneration.test_extension_ts_generation",
+        "TestTypeScriptGeneration.test_extension_ts_includes_features",
+        "TestTypeScriptGeneration.test_chat_participant_ts_generation",
+        "TestTypeScriptGeneration.test_brain_bridge_ts_generation"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 8 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 8,
+      "tests": [
+        "TestTemplateSystemIntegration.test_loader_renderer_pipeline",
+        "TestTemplateSystemIntegration.test_loader_registry_integration",
+        "TestTemplateSystemIntegration.test_trigger_to_rendered_output",
+        "TestTemplateSystemIntegration.test_response_formatter_template_integration",
+        "TestTemplateSystemIntegration.test_response_formatter_trigger_lookup",
+        "TestTemplateSystemIntegration.test_plugin_template_registration",
+        "TestTemplateSystemIntegration.test_list_available_templates",
+        "TestTemplateSystemIntegration.test_list_templates_by_category"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestPerformance.test_template_load_performance",
+        "TestPerformance.test_template_render_performance",
+        "TestPerformance.test_trigger_lookup_performance",
+        "TestPerformance.test_end_to_end_performance"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 7 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 7,
+      "tests": [
+        "TestTemplateRenderer.test_render_simple_template",
+        "TestTemplateRenderer.test_render_missing_placeholder",
+        "TestTemplateRenderer.test_render_with_none_context",
+        "TestTemplateRenderer.test_render_with_empty_context",
+        "TestTemplateRenderer.test_render_with_kwargs",
+        "TestTemplateRenderer.test_placeholder_substitution_with_nested_dict",
+        "TestTemplateRenderer.test_render_strips_whitespace"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 5 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 5,
+      "tests": [
+        "TestYAMLConfiguration.test_loads_yaml_configuration",
+        "TestYAMLConfiguration.test_has_all_protection_layers",
+        "TestYAMLConfiguration.test_critical_paths_loaded",
+        "TestYAMLConfiguration.test_application_paths_loaded",
+        "TestYAMLConfiguration.test_brain_state_files_loaded"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 12 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 12,
+      "tests": [
+        "TestEntryPointBloat.test_token_count_hard_limit",
+        "TestEntryPointBloat.test_token_count_warning",
+        "TestEntryPointBloat.test_token_count_target",
+        "TestEntryPointBloat.test_line_count_limit",
+        "TestEntryPointBloat.test_no_excessive_inline_docs",
+        "TestEntryPointBloat.test_modular_architecture_present",
+        "TestEntryPointBloat.test_response_templates_externalized",
+        "TestEntryPointBloat.test_no_python_execution_for_help",
+        "TestEntryPointBloat.test_version_documented",
+        "TestEntryPointBloat.test_status_documented",
+        "TestEntryPointBloat.test_copyright_present",
+        "TestEntryPointBloat.test_performance_metrics"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 6 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 6,
+      "tests": [
+        "TestEntryPointArchitecture.test_quick_start_section",
+        "TestEntryPointArchitecture.test_help_command_documented",
+        "TestEntryPointArchitecture.test_slash_commands_documented",
+        "TestEntryPointArchitecture.test_plugin_system_referenced",
+        "TestEntryPointArchitecture.test_tracking_system_referenced",
+        "TestEntryPointArchitecture.test_brain_architecture_referenced"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 8 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 8,
+      "tests": [
+        "TestProtectedPathDetection.test_detects_tier0_path",
+        "TestProtectedPathDetection.test_detects_tier1_path",
+        "TestProtectedPathDetection.test_detects_tier2_path",
+        "TestProtectedPathDetection.test_detects_cortex_agents_path",
+        "TestProtectedPathDetection.test_detects_cortex_brain_path",
+        "TestProtectedPathDetection.test_detects_prompts_path",
+        "TestProtectedPathDetection.test_allows_application_code",
+        "TestProtectedPathDetection.test_allows_team_knowledge_directory"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestTDDEnforcement.test_blocks_implementation_without_test",
+        "TestTDDEnforcement.test_challenges_test_written_after_code",
+        "TestTDDEnforcement.test_allows_test_first_development",
+        "TestTDDEnforcement.test_logs_tdd_violations"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestTierBoundaryProtection.test_detects_conversation_data_in_tier_0",
+        "TestTierBoundaryProtection.test_detects_governance_in_tier_1",
+        "TestTierBoundaryProtection.test_allows_correct_tier_data",
+        "TestTierBoundaryProtection.test_detects_patterns_in_tier_1"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestRuleRetrieval.test_gets_rule_by_id",
+        "TestRuleRetrieval.test_returns_none_for_unknown_rule",
+        "TestRuleRetrieval.test_gets_all_rules",
+        "TestRuleRetrieval.test_filters_rules_by_severity"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestViolationLogging.test_logs_violations",
+        "TestViolationLogging.test_filters_violations_by_severity",
+        "TestViolationLogging.test_limits_violation_results",
+        "TestViolationLogging.test_clears_violations"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 8 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 8,
+      "tests": [
+        "TestSKULLBannerImages.test_help_table_has_banner_image",
+        "TestSKULLBannerImages.test_help_detailed_has_banner_image",
+        "TestSKULLBannerImages.test_operation_started_has_ascii_banner",
+        "TestSKULLBannerImages.test_orchestrator_header_has_full_banner",
+        "TestSKULLBannerImages.test_banner_image_properly_formatted",
+        "TestSKULLBannerImages.test_copyright_in_all_headers",
+        "TestSKULLBannerImages.test_ascii_banner_visual_consistency",
+        "TestSKULLBannerImages.test_structured_response_format"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestSkull005TransformationVerification.test_blocks_transformation_claim_without_changes",
+        "TestSkull005TransformationVerification.test_passes_transformation_with_changes",
+        "TestSkull005TransformationVerification.test_allows_validation_only_operations",
+        "TestSkull005TransformationVerification.test_detects_pass_through_operations"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 13 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 13,
+      "tests": [
+        "TestSkullProtector.test_skull_001_blocks_fix_without_tests",
+        "TestSkullProtector.test_skull_001_passes_fix_with_tests",
+        "TestSkullProtector.test_skull_002_blocks_integration_without_e2e_test",
+        "TestSkullProtector.test_skull_002_passes_integration_with_e2e_test",
+        "TestSkullProtector.test_skull_002_detects_integration_keyword",
+        "TestSkullProtector.test_skull_003_warns_css_change_without_visual_test",
+        "TestSkullProtector.test_skull_003_passes_css_change_with_visual_test",
+        "TestSkullProtector.test_skull_003_detects_visual_keywords",
+        "TestSkullProtector.test_skull_004_warns_retry_without_diagnosis",
+        "TestSkullProtector.test_skull_004_passes_retry_with_diagnosis",
+        "TestSkullProtector.test_skull_004_skips_non_retry_requests",
+        "TestSkullProtector.test_prevents_css_incident_november_9th",
+        "TestSkullProtector.test_prevents_vision_api_incident_november_9th"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestFileAnalysis.test_analyze_simple_file",
+        "TestFileAnalysis.test_extract_test_cases",
+        "TestFileAnalysis.test_extract_fixtures",
+        "TestFileAnalysis.test_fixture_usage_tracking"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 5 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 5,
+      "tests": [
+        "TestRedundancyDetection.test_detect_exact_duplicates",
+        "TestRedundancyDetection.test_no_duplicates_in_simple_file",
+        "TestRedundancyDetection.test_detect_semantic_duplicates",
+        "TestRedundancyDetection.test_detect_overlapping_coverage",
+        "TestRedundancyDetection.test_detect_fixture_redundancy"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 6 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 6,
+      "tests": [
+        "TestPatternManagement.test_adds_pattern",
+        "TestPatternManagement.test_gets_pattern_by_id",
+        "TestPatternManagement.test_updates_pattern",
+        "TestPatternManagement.test_deletes_pattern",
+        "TestPatternManagement.test_lists_patterns_by_type",
+        "TestPatternManagement.test_updates_access_timestamp"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 5 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 5,
+      "tests": [
+        "TestFTS5Search.test_simple_keyword_search",
+        "TestFTS5Search.test_phrase_search",
+        "TestFTS5Search.test_boolean_search",
+        "TestFTS5Search.test_prefix_search",
+        "TestFTS5Search.test_search_ranking_by_relevance"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestPatternRelationships.test_links_two_patterns",
+        "TestPatternRelationships.test_gets_related_patterns",
+        "TestPatternRelationships.test_traverses_graph_multi_level",
+        "TestPatternRelationships.test_detects_circular_relationships"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestConfidenceDecay.test_applies_decay_based_on_age",
+        "TestConfidenceDecay.test_deletes_low_confidence_patterns",
+        "TestConfidenceDecay.test_protects_pinned_patterns",
+        "TestConfidenceDecay.test_tracks_decay_history"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 5 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 5,
+      "tests": [
+        "TestConversationManagement.test_adds_conversation",
+        "TestConversationManagement.test_gets_conversation_by_id",
+        "TestConversationManagement.test_gets_recent_conversations",
+        "TestConversationManagement.test_marks_conversation_as_active",
+        "TestConversationManagement.test_updates_conversation"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestFIFOQueue.test_stores_20_conversations_without_eviction",
+        "TestFIFOQueue.test_evicts_oldest_when_21st_added",
+        "TestFIFOQueue.test_never_evicts_active_conversation",
+        "TestFIFOQueue.test_logs_eviction_events"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestEntityExtraction.test_extracts_file_entities",
+        "TestEntityExtraction.test_extracts_class_entities",
+        "TestEntityExtraction.test_extracts_method_entities",
+        "TestEntityExtraction.test_links_entities_to_conversations"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestSearchAndQuery.test_searches_conversations_by_keyword",
+        "TestSearchAndQuery.test_finds_conversations_by_entity",
+        "TestSearchAndQuery.test_gets_conversations_by_date_range",
+        "TestSearchAndQuery.test_gets_entity_usage_statistics"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestConversationCRUD.test_get_nonexistent_conversation",
+        "TestConversationCRUD.test_get_active_conversation",
+        "TestConversationCRUD.test_get_active_conversation_no_active",
+        "TestConversationCRUD.test_conversation_with_context"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 5 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 5,
+      "tests": [
+        "TestMessageManagement.test_add_message",
+        "TestMessageManagement.test_get_messages",
+        "TestMessageManagement.test_message_order",
+        "TestMessageManagement.test_message_count_update",
+        "TestMessageManagement.test_get_messages_empty_conversation"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 5 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 5,
+      "tests": [
+        "TestEntityTracking.test_add_entity",
+        "TestEntityTracking.test_add_multiple_entities",
+        "TestEntityTracking.test_get_entities_by_type",
+        "TestEntityTracking.test_get_entities_empty",
+        "TestEntityTracking.test_entity_timestamps"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 5 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 5,
+      "tests": [
+        "TestFileTracking.test_add_file",
+        "TestFileTracking.test_add_multiple_files",
+        "TestFileTracking.test_file_operation_types",
+        "TestFileTracking.test_get_files_empty",
+        "TestFileTracking.test_file_timestamps"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestFIFOQueue.test_max_conversations_limit",
+        "TestFIFOQueue.test_fifo_enforcement",
+        "TestFIFOQueue.test_fifo_preserves_active_conversations",
+        "TestFIFOQueue.test_fifo_deletes_oldest_first"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 5 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 5,
+      "tests": [
+        "TestStatisticsAndQueries.test_get_statistics",
+        "TestStatisticsAndQueries.test_get_recent_conversations",
+        "TestStatisticsAndQueries.test_get_conversation_count",
+        "TestStatisticsAndQueries.test_get_message_count_all",
+        "TestStatisticsAndQueries.test_get_message_count_specific"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestSearchAndFilter.test_search_by_agent_id",
+        "TestSearchAndFilter.test_search_by_date_range",
+        "TestSearchAndFilter.test_search_by_has_goal",
+        "TestSearchAndFilter.test_search_multiple_criteria"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 5 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 5,
+      "tests": [
+        "TestInteractivePlanning.test_load_nonexistent_session",
+        "TestInteractivePlanning.test_list_planning_sessions",
+        "TestInteractivePlanning.test_planning_session_with_final_plan",
+        "TestInteractivePlanning.test_planning_questions_order",
+        "TestInteractivePlanning.test_planning_answers_chronology"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 8 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 8,
+      "tests": [
+        "TestMLContextOptimizer.test_optimizer_initialization",
+        "TestMLContextOptimizer.test_optimize_with_few_conversations",
+        "TestMLContextOptimizer.test_optimize_with_empty_conversations",
+        "TestMLContextOptimizer.test_optimize_pattern_context_basic",
+        "TestMLContextOptimizer.test_optimize_patterns_below_limit",
+        "TestMLContextOptimizer.test_optimize_patterns_without_query",
+        "TestMLContextOptimizer.test_pattern_relevance_scoring",
+        "TestMLContextOptimizer.test_none_conversation_content"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 8 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 8,
+      "tests": [
+        "TestMLContextOptimizer.test_optimize_conversation_context_basic",
+        "TestMLContextOptimizer.test_optimize_with_empty_intent",
+        "TestMLContextOptimizer.test_relevance_scoring",
+        "TestMLContextOptimizer.test_recency_boost",
+        "TestMLContextOptimizer.test_token_counting",
+        "TestMLContextOptimizer.test_quality_score_calculation",
+        "TestMLContextOptimizer.test_optimization_time",
+        "TestMLContextOptimizer.test_statistics_tracking"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 5 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 5,
+      "tests": [
+        "TestSessionCreation.test_create_session_basic",
+        "TestSessionCreation.test_create_session_with_conversation",
+        "TestSessionCreation.test_create_session_with_work_session",
+        "TestSessionCreation.test_create_session_with_metadata",
+        "TestSessionCreation.test_token_uniqueness"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 5 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 5,
+      "tests": [
+        "TestSessionRetrieval.test_get_session_by_token",
+        "TestSessionRetrieval.test_get_session_nonexistent",
+        "TestSessionRetrieval.test_get_active_session",
+        "TestSessionRetrieval.test_get_active_session_none",
+        "TestSessionRetrieval.test_get_active_session_most_recent"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 5 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 5,
+      "tests": [
+        "TestSessionLifecycle.test_update_activity",
+        "TestSessionLifecycle.test_pause_session",
+        "TestSessionLifecycle.test_resume_session",
+        "TestSessionLifecycle.test_complete_session",
+        "TestSessionLifecycle.test_expire_session"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 5 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 5,
+      "tests": [
+        "TestSessionSearch.test_find_by_conversation",
+        "TestSessionSearch.test_find_by_conversation_not_found",
+        "TestSessionSearch.test_find_by_work_session",
+        "TestSessionSearch.test_find_by_work_session_not_found",
+        "TestSessionSearch.test_find_by_conversation_most_recent"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 8 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 8,
+      "tests": [
+        "TestTaskLifecycle.test_start_task_basic",
+        "TestTaskLifecycle.test_start_task_with_files",
+        "TestTaskLifecycle.test_start_task_with_metadata",
+        "TestTaskLifecycle.test_update_progress",
+        "TestTaskLifecycle.test_update_progress_multiple_times",
+        "TestTaskLifecycle.test_complete_task",
+        "TestTaskLifecycle.test_pause_task",
+        "TestTaskLifecycle.test_abandon_task"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 8 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 8,
+      "tests": [
+        "TestStateRetrieval.test_get_current_state_with_active_work",
+        "TestStateRetrieval.test_get_current_state_no_active_work",
+        "TestStateRetrieval.test_get_state_by_id",
+        "TestStateRetrieval.test_get_state_nonexistent",
+        "TestStateRetrieval.test_has_incomplete_work_true",
+        "TestStateRetrieval.test_has_incomplete_work_false",
+        "TestStateRetrieval.test_get_incomplete_sessions",
+        "TestStateRetrieval.test_get_recent_completed"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestWorkStateClass.test_work_state_to_dict",
+        "TestWorkStateClass.test_work_state_from_dict",
+        "TestWorkStateClass.test_is_stale_false",
+        "TestWorkStateClass.test_duration_minutes"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 18 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 18,
+      "tests": [
+        "TestTokenMetricsCollector.test_collector_initialization",
+        "TestTokenMetricsCollector.test_record_request_basic",
+        "TestTokenMetricsCollector.test_record_multiple_requests",
+        "TestTokenMetricsCollector.test_record_request_invalidates_cache",
+        "TestTokenMetricsCollector.test_get_current_metrics_structure",
+        "TestTokenMetricsCollector.test_optimization_percentage_calculation",
+        "TestTokenMetricsCollector.test_cost_calculation",
+        "TestTokenMetricsCollector.test_average_tokens_per_request",
+        "TestTokenMetricsCollector.test_zero_requests_metrics",
+        "TestTokenMetricsCollector.test_metrics_caching",
+        "TestTokenMetricsCollector.test_force_refresh_bypasses_cache",
+        "TestTokenMetricsCollector.test_get_session_summary",
+        "TestTokenMetricsCollector.test_session_summary_best_worst_reduction",
+        "TestTokenMetricsCollector.test_session_summary_average_quality",
+        "TestTokenMetricsCollector.test_get_request_history_all",
+        "TestTokenMetricsCollector.test_get_request_history_limited",
+        "TestTokenMetricsCollector.test_export_default_path",
+        "TestTokenMetricsCollector.test_reset_session"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 5 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 5,
+      "tests": [
+        "TestContextOptimization.test_get_optimized_context_with_active_conversation",
+        "TestContextOptimization.test_get_optimized_context_with_specific_conversation",
+        "TestContextOptimization.test_get_optimized_context_with_pattern_context",
+        "TestContextOptimization.test_get_optimized_context_with_custom_target_reduction",
+        "TestContextOptimization.test_get_optimized_context_when_disabled"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 5 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 5,
+      "tests": [
+        "TestNamespaceDeletion.test_delete_by_namespace",
+        "TestNamespaceDeletion.test_block_cortex_core_deletion",
+        "TestNamespaceDeletion.test_never_delete_generic_patterns",
+        "TestNamespaceDeletion.test_multi_namespace_safety",
+        "TestNamespaceDeletion.test_dry_run_namespace_deletion"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 6 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 6,
+      "tests": [
+        "TestNamespaceAwareSearch.test_search_with_current_namespace_boost",
+        "TestNamespaceAwareSearch.test_generic_patterns_always_included",
+        "TestNamespaceAwareSearch.test_generic_patterns_excluded_when_disabled",
+        "TestNamespaceAwareSearch.test_cross_namespace_isolation",
+        "TestNamespaceAwareSearch.test_multi_namespace_patterns_boosted_for_all",
+        "TestNamespaceAwareSearch.test_search_without_namespace_context"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestGetPatternsByNamespace.test_get_ksessions_patterns",
+        "TestGetPatternsByNamespace.test_get_noor_patterns",
+        "TestGetPatternsByNamespace.test_get_cortex_core_patterns",
+        "TestGetPatternsByNamespace.test_get_nonexistent_namespace"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestSchemaExtraction.test_extracts_tables_for_current_user",
+        "TestSchemaExtraction.test_extracts_columns_with_metadata",
+        "TestSchemaExtraction.test_extracts_indexes_with_columns",
+        "TestSchemaExtraction.test_extracts_foreign_key_constraints"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 8 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 8,
+      "tests": [
+        "TestContextIntelligenceIntegration.test_full_system_initialization",
+        "TestContextIntelligenceIntegration.test_end_to_end_git_metrics_workflow",
+        "TestContextIntelligenceIntegration.test_end_to_end_file_hotspots_workflow",
+        "TestContextIntelligenceIntegration.test_end_to_end_insights_workflow",
+        "TestContextIntelligenceIntegration.test_refresh_all_functionality",
+        "TestContextIntelligenceIntegration.test_get_summary_functionality",
+        "TestContextIntelligenceIntegration.test_database_operations",
+        "TestContextIntelligenceIntegration.test_multi_day_analysis_consistency"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 6 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 6,
+      "tests": [
+        "TestCheckpointManager.test_load_nonexistent_checkpoint",
+        "TestCheckpointManager.test_delete_nonexistent_checkpoint",
+        "TestCheckpointManager.test_list_checkpoints",
+        "TestCheckpointManager.test_list_empty_checkpoints",
+        "TestCheckpointManager.test_get_resumable_checkpoints",
+        "TestCheckpointManager.test_cleanup_old_checkpoints"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestFeatureDevelopmentWorkflow.test_feature_development_happy_path",
+        "TestFeatureDevelopmentWorkflow.test_feature_development_checkpoint_resume",
+        "TestFeatureDevelopmentWorkflow.test_feature_development_error_recovery",
+        "TestFeatureDevelopmentWorkflow.test_feature_development_required_stage_failure"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestBugFixWorkflow.test_bug_fix_happy_path",
+        "TestBugFixWorkflow.test_bug_fix_checkpoint_resume",
+        "TestBugFixWorkflow.test_bug_fix_error_recovery",
+        "TestBugFixWorkflow.test_bug_fix_required_stage_failure"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestRefactoringWorkflow.test_refactoring_happy_path",
+        "TestRefactoringWorkflow.test_refactoring_checkpoint_resume",
+        "TestRefactoringWorkflow.test_refactoring_error_recovery",
+        "TestRefactoringWorkflow.test_refactoring_required_stage_failure"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestSecurityEnhancementWorkflow.test_security_happy_path",
+        "TestSecurityEnhancementWorkflow.test_security_checkpoint_resume",
+        "TestSecurityEnhancementWorkflow.test_security_error_recovery",
+        "TestSecurityEnhancementWorkflow.test_security_required_stage_failure"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 6 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 6,
+      "tests": [
+        "TestInsightGenerator.test_generate_velocity_insights_with_data",
+        "TestInsightGenerator.test_generate_hotspot_insights_with_data",
+        "TestInsightGenerator.test_insight_severity_assignment",
+        "TestInsightGenerator.test_insight_recommendations",
+        "TestInsightGenerator.test_insight_data_structure",
+        "TestInsightGenerator.test_multiple_insight_types"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 7 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 7,
+      "tests": [
+        "TestFileMetricsAnalyzer.test_analyze_hotspots_basic",
+        "TestFileMetricsAnalyzer.test_save_and_retrieve_hotspots",
+        "TestFileMetricsAnalyzer.test_get_unstable_files",
+        "TestFileMetricsAnalyzer.test_churn_rate_filtering",
+        "TestFileMetricsAnalyzer.test_stability_classification",
+        "TestFileMetricsAnalyzer.test_force_analysis_flag",
+        "TestFileMetricsAnalyzer.test_date_range_filtering"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 7 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 7,
+      "tests": [
+        "TestGitMetricsCollector.test_collect_metrics_empty_period",
+        "TestGitMetricsCollector.test_save_and_retrieve_metrics",
+        "TestGitMetricsCollector.test_get_metrics_date_filtering",
+        "TestGitMetricsCollector.test_duplicate_metric_handling",
+        "TestGitMetricsCollector.test_force_collection_flag",
+        "TestGitMetricsCollector.test_aggregation_across_contributors",
+        "TestGitMetricsCollector.test_get_metrics_with_specific_contributor"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 13 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 13,
+      "tests": [
+        "TestContextStore.test_database_tables_created",
+        "TestContextStore.test_git_metrics_schema",
+        "TestContextStore.test_file_hotspots_schema",
+        "TestContextStore.test_indexes_created",
+        "TestContextStore.test_get_connection",
+        "TestContextStore.test_vacuum",
+        "TestContextStore.test_analyze",
+        "TestContextStore.test_get_database_size",
+        "TestContextStore.test_get_table_counts",
+        "TestContextStore.test_unique_constraints",
+        "TestContextStore.test_check_constraints",
+        "TestContextStore.test_default_values",
+        "TestContextStore.test_timestamp_columns"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestDatabaseConnection.test_get_connection_returns_connection",
+        "TestDatabaseConnection.test_connection_has_row_factory",
+        "TestDatabaseConnection.test_connection_is_cached",
+        "TestDatabaseConnection.test_close_closes_connection"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 6 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 6,
+      "tests": [
+        "TestSchemaInitialization.test_creates_patterns_table",
+        "TestSchemaInitialization.test_creates_pattern_relationships_table",
+        "TestSchemaInitialization.test_creates_pattern_tags_table",
+        "TestSchemaInitialization.test_creates_confidence_decay_log_table",
+        "TestSchemaInitialization.test_creates_fts5_virtual_table",
+        "TestSchemaInitialization.test_creates_indexes"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 5 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 5,
+      "tests": [
+        "test_store_and_get_pattern",
+        "test_duplicate_pattern_id_raises",
+        "test_update_pattern_confidence",
+        "test_list_patterns_with_filters",
+        "test_delete_pattern"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 6 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 6,
+      "tests": [
+        "TestPatternStorage.test_store_pattern_with_minimal_data",
+        "TestPatternStorage.test_store_pattern_with_all_fields",
+        "TestPatternStorage.test_store_pattern_validates_confidence_range",
+        "TestPatternStorage.test_store_pattern_validates_scope",
+        "TestPatternStorage.test_store_pattern_sets_timestamps",
+        "TestPatternStorage.test_store_pattern_initializes_access_count"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestPatternRetrieval.test_get_pattern_returns_stored_pattern",
+        "TestPatternRetrieval.test_get_pattern_returns_none_if_not_found",
+        "TestPatternRetrieval.test_get_pattern_updates_access_timestamp",
+        "TestPatternRetrieval.test_get_pattern_increments_access_count"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 6 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 6,
+      "tests": [
+        "TestPatternUpdates.test_update_pattern_changes_title",
+        "TestPatternUpdates.test_update_pattern_changes_confidence",
+        "TestPatternUpdates.test_update_pattern_changes_metadata",
+        "TestPatternUpdates.test_update_pattern_protects_pattern_id",
+        "TestPatternUpdates.test_update_pattern_returns_false_if_not_found",
+        "TestPatternUpdates.test_update_pattern_returns_false_if_no_updates"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 6 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 6,
+      "tests": [
+        "TestPatternListing.test_list_patterns_returns_all_patterns",
+        "TestPatternListing.test_list_patterns_filters_by_type",
+        "TestPatternListing.test_list_patterns_filters_by_scope",
+        "TestPatternListing.test_list_patterns_filters_by_confidence",
+        "TestPatternListing.test_list_patterns_respects_limit",
+        "TestPatternListing.test_list_patterns_orders_by_confidence_and_access"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 4 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 4,
+      "tests": [
+        "TestUpdateConversation.test_update_title",
+        "TestUpdateConversation.test_update_summary",
+        "TestUpdateConversation.test_update_tags",
+        "TestUpdateConversation.test_update_message_count"
+      ]
+    },
+    {
+      "type": "overlapping_coverage",
+      "severity": "low",
+      "description": "Found 5 tests using same fixtures in same location",
+      "recommendation": "Review if tests can be consolidated or if coverage is truly distinct",
+      "similarity_score": 0.5,
+      "test_count": 5,
+      "tests": [
+        "TestExtractEntities.test_extract_file_entities",
+        "TestExtractEntities.test_extract_class_entities",
+        "TestExtractEntities.test_extract_method_entities",
+        "TestExtractEntities.test_extract_multiple_entity_types",
+        "TestExtractEntities.test_extract_with_no_entities"
+      ]
+    },
+    {
+      "type": "fixture_redundancy",
+      "severity": "low",
+      "description": "Fixture 'temp_brain' defined in 3 files",
+      "recommendation": "Consider moving to conftest.py: ['tests\\\\test_risk_mitigation.py', 'tests\\\\agents\\\\test_learning_capture_agent.py', 'tests\\\\tier0\\\\test_brain_protector_conversation_tracking.py']",
+      "similarity_score": 1.0,
+      "test_count": 0,
+      "tests": []
+    },
+    {
+      "type": "fixture_redundancy",
+      "severity": "low",
+      "description": "Fixture 'temp_db' defined in 19 files",
+      "recommendation": "Consider moving to conftest.py: ['tests\\\\test_risk_mitigation.py', 'tests\\\\tier1\\\\test_conversation_manager.py', 'tests\\\\tier1\\\\test_session_token.py', 'tests\\\\tier1\\\\test_working_memory.py', 'tests\\\\tier1\\\\test_work_state_manager.py', 'tests\\\\tier2\\\\test_amnesia.py', 'tests\\\\tier2\\\\test_knowledge_graph.py', 'tests\\\\tier2\\\\test_namespace_boundaries.py', 'tests\\\\tier2\\\\test_namespace_search.py', 'tests\\\\tier3\\\\test_context_intelligence.py', 'tests\\\\tier3\\\\test_context_intelligence_integration.py', 'tests\\\\tier3\\\\analysis\\\\test_insight_generator.py', 'tests\\\\tier3\\\\analysis\\\\test_velocity_analyzer.py', 'tests\\\\tier3\\\\metrics\\\\test_file_metrics.py', 'tests\\\\tier3\\\\metrics\\\\test_git_metrics.py', 'tests\\\\tier3\\\\storage\\\\test_context_store.py', 'tests\\\\tier2\\\\knowledge_graph\\\\test_pattern_store.py', 'tests\\\\tier1\\\\conversations\\\\test_conversation_search.py', 'tests\\\\tier1\\\\fifo\\\\test_queue_manager.py']",
+      "similarity_score": 1.0,
+      "test_count": 0,
+      "tests": []
+    },
+    {
+      "type": "fixture_redundancy",
+      "severity": "low",
+      "description": "Fixture 'cortex_entry_with_brain' defined in 9 files",
+      "recommendation": "Consider moving to conftest.py: ['tests\\\\edge_cases\\\\test_input_validation.py', 'tests\\\\edge_cases\\\\test_intent_routing.py', 'tests\\\\edge_cases\\\\test_multi_agent_coordination_edge.py', 'tests\\\\edge_cases\\\\test_session_lifecycle.py', 'tests\\\\edge_cases\\\\test_tier_failures.py', 'tests\\\\integration\\\\test_complex_intent_routing.py', 'tests\\\\integration\\\\test_end_to_end_workflows.py', 'tests\\\\integration\\\\test_multi_agent_coordination.py', 'tests\\\\integration\\\\test_session_boundaries.py']",
+      "similarity_score": 1.0,
+      "test_count": 0,
+      "tests": []
+    },
+    {
+      "type": "fixture_redundancy",
+      "severity": "low",
+      "description": "Fixture 'brain_path' defined in 2 files",
+      "recommendation": "Consider moving to conftest.py: ['tests\\\\integration\\\\test_cross_tier_workflows.py', 'tests\\\\tier0\\\\test_brain_protector.py']",
+      "similarity_score": 1.0,
+      "test_count": 0,
+      "tests": []
+    },
+    {
+      "type": "fixture_redundancy",
+      "severity": "low",
+      "description": "Fixture 'cortex_entry' defined in 4 files",
+      "recommendation": "Consider moving to conftest.py: ['tests\\\\integration\\\\test_cross_tier_workflows.py', 'tests\\\\integration\\\\test_phase_5_1_high_priority.py', 'tests\\\\integration\\\\test_phase_5_1_medium_priority.py', 'tests\\\\tier0\\\\test_brain_protector_conversation_tracking.py']",
+      "similarity_score": 1.0,
+      "test_count": 0,
+      "tests": []
+    },
+    {
+      "type": "fixture_redundancy",
+      "severity": "low",
+      "description": "Fixture 'temp_brain_path' defined in 2 files",
+      "recommendation": "Consider moving to conftest.py: ['tests\\\\integration\\\\test_phase_5_1_high_priority.py', 'tests\\\\integration\\\\test_phase_5_1_medium_priority.py']",
+      "similarity_score": 1.0,
+      "test_count": 0,
+      "tests": []
+    },
+    {
+      "type": "fixture_redundancy",
+      "severity": "low",
+      "description": "Fixture 'mock_intent_router' defined in 2 files",
+      "recommendation": "Consider moving to conftest.py: ['tests\\\\integration\\\\test_phase_5_1_high_priority.py', 'tests\\\\integration\\\\test_phase_5_1_medium_priority.py']",
+      "similarity_score": 1.0,
+      "test_count": 0,
+      "tests": []
+    },
+    {
+      "type": "fixture_redundancy",
+      "severity": "low",
+      "description": "Fixture 'temp_project' defined in 2 files",
+      "recommendation": "Consider moving to conftest.py: ['tests\\\\operations\\\\test_cleanup_orchestrator.py', 'tests\\\\operations\\\\test_documentation_workflow.py']",
+      "similarity_score": 1.0,
+      "test_count": 0,
+      "tests": []
+    },
+    {
+      "type": "fixture_redundancy",
+      "severity": "low",
+      "description": "Fixture 'project_root' defined in 2 files",
+      "recommendation": "Consider moving to conftest.py: ['tests\\\\operations\\\\test_optimize_cortex_orchestrator.py', 'tests\\\\tier0\\\\test_brain_protector.py']",
+      "similarity_score": 1.0,
+      "test_count": 0,
+      "tests": []
+    },
+    {
+      "type": "fixture_redundancy",
+      "severity": "low",
+      "description": "Fixture 'conversation_manager' defined in 2 files",
+      "recommendation": "Consider moving to conftest.py: ['tests\\\\tier1\\\\test_conversation_manager.py', 'tests\\\\tier1\\\\fifo\\\\test_queue_manager.py']",
+      "similarity_score": 1.0,
+      "test_count": 0,
+      "tests": []
+    },
+    {
+      "type": "fixture_redundancy",
+      "severity": "low",
+      "description": "Fixture 'working_memory' defined in 2 files",
+      "recommendation": "Consider moving to conftest.py: ['tests\\\\tier1\\\\test_working_memory.py', 'tests\\\\tier1\\\\test_working_memory_optimization.py']",
+      "similarity_score": 1.0,
+      "test_count": 0,
+      "tests": []
+    },
+    {
+      "type": "fixture_redundancy",
+      "severity": "low",
+      "description": "Fixture 'kg' defined in 3 files",
+      "recommendation": "Consider moving to conftest.py: ['tests\\\\tier2\\\\test_amnesia.py', 'tests\\\\tier2\\\\test_namespace_boundaries.py', 'tests\\\\tier2\\\\test_namespace_search.py']",
+      "similarity_score": 1.0,
+      "test_count": 0,
+      "tests": []
+    },
+    {
+      "type": "fixture_redundancy",
+      "severity": "low",
+      "description": "Fixture 'temp_repo' defined in 3 files",
+      "recommendation": "Consider moving to conftest.py: ['tests\\\\tier3\\\\test_context_intelligence_integration.py', 'tests\\\\tier3\\\\metrics\\\\test_file_metrics.py', 'tests\\\\tier3\\\\metrics\\\\test_git_metrics.py']",
+      "similarity_score": 1.0,
+      "test_count": 0,
+      "tests": []
+    },
+    {
+      "type": "fixture_redundancy",
+      "severity": "low",
+      "description": "Fixture 'context_store' defined in 5 files",
+      "recommendation": "Consider moving to conftest.py: ['tests\\\\tier3\\\\analysis\\\\test_insight_generator.py', 'tests\\\\tier3\\\\analysis\\\\test_velocity_analyzer.py', 'tests\\\\tier3\\\\metrics\\\\test_file_metrics.py', 'tests\\\\tier3\\\\metrics\\\\test_git_metrics.py', 'tests\\\\tier3\\\\storage\\\\test_context_store.py']",
+      "similarity_score": 1.0,
+      "test_count": 0,
+      "tests": []
+    },
+    {
+      "type": "fixture_redundancy",
+      "severity": "low",
+      "description": "Fixture 'velocity_analyzer' defined in 2 files",
+      "recommendation": "Consider moving to conftest.py: ['tests\\\\tier3\\\\analysis\\\\test_insight_generator.py', 'tests\\\\tier3\\\\analysis\\\\test_velocity_analyzer.py']",
+      "similarity_score": 1.0,
+      "test_count": 0,
+      "tests": []
+    },
+    {
+      "type": "fixture_redundancy",
+      "severity": "low",
+      "description": "Fixture 'file_analyzer' defined in 2 files",
+      "recommendation": "Consider moving to conftest.py: ['tests\\\\tier3\\\\analysis\\\\test_insight_generator.py', 'tests\\\\tier3\\\\metrics\\\\test_file_metrics.py']",
+      "similarity_score": 1.0,
+      "test_count": 0,
+      "tests": []
+    },
+    {
+      "type": "fixture_redundancy",
+      "severity": "low",
+      "description": "Fixture 'store' defined in 2 files",
+      "recommendation": "Consider moving to conftest.py: ['tests\\\\tier2\\\\knowledge_graph\\\\test_pattern_store.py', 'tests\\\\tier1\\\\messages\\\\test_message_store.py']",
+      "similarity_score": 1.0,
+      "test_count": 0,
+      "tests": []
+    },
+    {
+      "type": "fixture_redundancy",
+      "severity": "low",
+      "description": "Fixture 'manager' defined in 2 files",
+      "recommendation": "Consider moving to conftest.py: ['tests\\\\tier1\\\\conversations\\\\test_conversation_manager.py', 'tests\\\\tier1\\\\conversations\\\\test_conversation_search.py']",
+      "similarity_score": 1.0,
+      "test_count": 0,
+      "tests": []
+    }
+  ],
+  "recommendations": [
+    "\ud83d\udd34 HIGH PRIORITY: Found 1 exact duplicate tests. Remove duplicates immediately to reduce maintenance burden.",
+    "\ud83d\udfe1 MEDIUM PRIORITY: Found 129 semantically similar tests. Consider consolidating using @pytest.mark.parametrize.",
+    "\ud83d\udfe1 Found 7 very complex tests (>50 lines). Consider refactoring into smaller, focused tests."
+  ]
+}
