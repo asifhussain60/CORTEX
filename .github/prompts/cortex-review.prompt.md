@@ -206,33 +206,246 @@ This prompt performs holistic verification of CORTEX epic plans and implementati
 
 ### Phase 7: Best Practices Enforcement
 
-**Target Areas:**
+**Target Files:**
+- `cortex-brain/knowledge-library/standards/python-style-guide.md`
+- `cortex-brain/knowledge-library/architecture/python-architecture-patterns.md`
+- All Python source files in `src/`
+- Test files in `tests/`
 
-**Code Organization:**
-- [ ] Scripts organized by category (planning/, orchestration/, utilities/)
-- [ ] Clear module boundaries
-- [ ] Single Responsibility Principle
-- [ ] Dependency injection over hardcoded dependencies
+**Verification Points:**
 
-**Testing:**
-- [ ] Unit tests for all new orchestrators
-- [ ] Integration tests for master orchestrator routing
-- [ ] Edge case coverage ≥80%
-- [ ] Performance regression tests
+**A. Python Style Guide Compliance (PEP 8)**
+- [ ] **Indentation:** 4 spaces (no tabs)
+- [ ] **Line Length:** ≤100 characters
+- [ ] **Naming Conventions:**
+  - Classes: PascalCase (`OrchestratorRegistry`)
+  - Functions/methods: snake_case (`match_pattern`)
+  - Constants: SCREAMING_SNAKE_CASE (`DEFAULT_TIMEOUT`)
+  - Private attributes: _leading_underscore (`_cache`)
+- [ ] **Import Organization:** stdlib → third-party → local (with blank line separation)
+- [ ] **Whitespace:** Consistent spacing around operators, commas
 
-**Documentation:**
-- [ ] Inline docstrings (classes, functions)
-- [ ] Architecture diagrams up-to-date
-- [ ] README.md updated with new capabilities
-- [ ] Examples for custom orchestrator creation
+**B. Type Hints (PEP 484 - MANDATORY)**
+- [ ] **Function signatures:** Return type + parameter types for ALL public functions
+- [ ] **Class attributes:** Type annotations for instance and class variables
+- [ ] **Complex types:** Proper use of `Dict`, `List`, `Optional`, `Union`, `TypedDict`
+- [ ] **Generic types:** `Type[T]`, `Callable[[Args], Return]` where applicable
+- [ ] **No `Any`:** Avoid `Any` except for truly dynamic types (justify in comments)
 
-**Python Standards:**
-- [ ] Type hints on public APIs
-- [ ] Error handling with specific exceptions
-- [ ] Logging at appropriate levels
-- [ ] No hardcoded paths/credentials
+**C. Docstrings (PEP 257 + Google Style - MANDATORY)**
+- [ ] **Module docstrings:** Purpose, classes, author, version
+- [ ] **Class docstrings:** Description, attributes, thread safety, example usage
+- [ ] **Function/method docstrings:** Description, Args, Returns, Raises, Example
+  - Include performance characteristics (e.g., "O(n) complexity")
+  - Document side effects (e.g., "Modifies database")
+  - Specify thread safety (e.g., "NOT thread-safe")
 
-**Output:** Best practices compliance score (0-100)
+**D. SOLID Principles**
+- [ ] **Single Responsibility:** Each class has ONE reason to change
+  - ✅ GOOD: `OrchestratorRegistry` (registration only), `OrchestratorExecutor` (execution only)
+  - ❌ BAD: `OrchestratorManager` (registration + execution + logging)
+- [ ] **Open/Closed:** Extend via inheritance, don't modify existing classes
+  - ✅ GOOD: `BaseOrchestrator` ABC with child orchestrators
+  - ❌ BAD: Adding `if orchestrator_type == "new_type"` to existing code
+- [ ] **Liskov Substitution:** Subclass can replace parent without breaking behavior
+  - ✅ GOOD: All orchestrators return `Dict[str, Any]` with 'status' key
+  - ❌ BAD: One orchestrator returns `str`, breaking caller expectations
+- [ ] **Interface Segregation:** Small, focused interfaces
+  - ✅ GOOD: `Executable`, `Cancellable`, `Monitorable` as separate protocols
+  - ❌ BAD: `OrchestratorInterface` with 10+ methods (not all needed)
+- [ ] **Dependency Inversion:** Depend on abstractions, not concretions
+  - ✅ GOOD: `def __init__(self, state_store: StateStore)` (protocol)
+  - ❌ BAD: `def __init__(self, db_path: str)` then hardcode `sqlite3.connect()`
+
+**E. Code Quality Standards**
+- [ ] **DRY (Don't Repeat Yourself):** No code duplication >5 lines
+  - Extract to helper functions or base classes
+- [ ] **KISS (Keep It Simple):** Prefer simple solutions over clever ones
+  - ✅ GOOD: `orchestrator_id.isidentifier()`
+  - ❌ BAD: Complex regex when simple method exists
+- [ ] **YAGNI (You Aren't Gonna Need It):** No premature optimization/features
+  - Don't add caching, metrics, backups until actually needed
+- [ ] **Cyclomatic Complexity:** ≤10 per function
+  - If >10, extract helper functions
+- [ ] **Nesting Depth:** ≤4 levels
+  - Use early returns, guard clauses
+
+**F. Architecture Patterns (CORTEX-Specific)**
+- [ ] **Master-Child Orchestrator:** Single entry point (MasterOrchestrator) routes to children
+- [ ] **Plugin Architecture:** Dynamic orchestrator loading via registry
+- [ ] **Strategy Pattern:** Execution modes (autonomous, guided, interactive)
+- [ ] **Repository Pattern:** Abstract state persistence (SQLite, PostgreSQL swappable)
+- [ ] **Chain of Responsibility:** Middleware for logging, validation, caching
+- [ ] **LLM → Python Handoff:** Copilot transforms request → invokes Python via terminal
+- [ ] **Snowball Optimization:** Dependency graph analysis for parallel execution
+
+**G. Testing Best Practices**
+- [ ] **Test Structure:** AAA pattern (Arrange-Act-Assert)
+- [ ] **Test Naming:** Descriptive (e.g., `test_router_matches_planning_request`)
+- [ ] **Test Coverage:**
+  - Unit tests: 80%+ for all modules
+  - Integration tests: 60%+ for orchestrator coordination
+  - All error paths tested
+  - Race condition tests for state management
+- [ ] **Test Isolation:** Tests don't depend on each other
+- [ ] **Test Performance:** Unit tests <100ms, integration tests <5s
+
+**H. Error Handling**
+- [ ] **Custom Exceptions:** Specific exception hierarchy (e.g., `OrchestratorNotFoundError`)
+- [ ] **Context Managers:** Use `with` for resources (files, DB connections)
+- [ ] **Retry Logic:** Exponential backoff for transient failures
+- [ ] **Graceful Degradation:** Fallback behavior when non-critical components fail
+
+**I. Security & Safety**
+- [ ] **No Secrets in Code:** Environment variables or secure vaults only
+- [ ] **Path Validation:** Prevent path traversal attacks
+- [ ] **Input Sanitization:** Validate all external inputs
+- [ ] **SQL Injection Prevention:** Parameterized queries only
+- [ ] **Resource Limits:** Timeout, memory limits for orchestrators
+
+**J. Performance & Scalability**
+- [ ] **Complexity Limits:**
+  - Lines per function: ≤50
+  - Lines per class: ≤300
+  - Parameters per function: ≤5
+  - Module lines: ≤500
+- [ ] **Lazy Loading:** Load orchestrators on-demand, not upfront
+- [ ] **Database Optimization:**
+  - WAL mode for SQLite concurrency
+  - Connection pooling
+  - Index on frequently queried columns
+- [ ] **Caching:** Cache expensive operations (knowledge queries, pattern matching)
+
+**K. Static Analysis Tools**
+- [ ] **mypy:** Type checking with `--strict` flag
+- [ ] **pylint:** Code quality score ≥8.0
+- [ ] **black:** Consistent formatting (line length 100)
+- [ ] **isort:** Import sorting with `--profile=black`
+- [ ] **pytest:** Test suite passes 100%
+- [ ] **coverage.py:** Coverage reports generated
+
+**L. Documentation Completeness**
+- [ ] **Architecture diagrams:** Up-to-date with implementation
+- [ ] **README.md:** New capabilities documented
+- [ ] **CHANGELOG.md:** All changes logged
+- [ ] **API documentation:** Generated from docstrings (Sphinx)
+- [ ] **Examples:** Custom orchestrator creation guide
+
+**Output:** Best practices compliance score (0-100) with detailed breakdown per category
+
+---
+
+### Phase 8: Python AI Application Best Practices (NEW)
+
+**Purpose:** Verify CORTEX-specific best practices for Python-based AI applications.
+
+**Target Files:**
+- `src/orchestrators/master_orchestrator.py`
+- `src/orchestrators/pattern_router.py`
+- `src/orchestrators/execution_engine.py`
+- All child orchestrator implementations
+
+**Verification Points:**
+
+**A. LLM Integration Patterns**
+- [ ] **LLM → Python Handoff:**
+  - GitHub Copilot transforms requests (pattern matching + transformation)
+  - Python executes via terminal invocation
+  - NO inline LLM code generation during execution
+- [ ] **Intent Classification:**
+  - Pattern matching handles 90%+ of requests
+  - LLM fallback ONLY for ambiguous cases
+  - Classification confidence threshold ≥0.7
+- [ ] **Context Window Management:**
+  - Summarize long conversations (keep <8K tokens)
+  - Use knowledge library references instead of full text
+  - Prune irrelevant context before LLM calls
+
+**B. Autonomous Orchestration**
+- [ ] **Script-Based Execution:**
+  - All autonomous orchestrators execute Python scripts (not LLM prompts)
+  - Scripts cataloged and versioned
+  - No duplicate script creation (SKULL enforcement)
+- [ ] **State Machine Pattern:**
+  - Clear state transitions (PENDING → RUNNING → COMPLETED → FAILED)
+  - State persistence across executions
+  - Rollback capability for failed states
+- [ ] **Orchestrator Interface Contract:**
+  - All orchestrators implement `OrchestratorInterface` protocol
+  - Mandatory methods: `execute()`, `validate()`, `get_status()`
+  - Consistent `__init__` signature (prevents INT-001 type issues)
+
+**C. Knowledge Management**
+- [ ] **Three-Layer Knowledge System:**
+  - CORTEX knowledge (tier 0 - immutable best practices)
+  - Company knowledge (tier 2 - overrides CORTEX intelligently)
+  - Domain knowledge (tier 3 - project-specific)
+- [ ] **Knowledge Merge Logic:**
+  - Company knowledge overrides CORTEX only where relevant
+  - Core best practices preserved
+  - Merge conflicts logged for review
+- [ ] **Knowledge Query Performance:**
+  - <50ms for knowledge queries
+  - Caching for frequently accessed knowledge
+  - Lazy loading of domain-specific knowledge
+
+**D. Registry & Plugin System**
+- [ ] **Orchestrator Registry:**
+  - JSON-based registry with validation schema
+  - Lazy orchestrator instantiation (performance)
+  - Dependency injection via registry metadata
+- [ ] **Pattern Collision Detection:**
+  - NO overlapping regex patterns
+  - Priority-based routing when patterns similar
+  - Test suite verifies pattern uniqueness
+- [ ] **Orchestrator Validation:**
+  - Validation before registration
+  - Health checks before execution
+  - Graceful degradation if orchestrator unavailable
+
+**E. Concurrency & State Management**
+- [ ] **Thread Safety:**
+  - StateManager handles concurrent writes (SQLite WAL mode)
+  - No JSON file-based state (prevents INT-001)
+  - Transaction-based updates with retry logic
+- [ ] **Race Condition Prevention:**
+  - Database-level locking for critical sections
+  - Optimistic concurrency control (version numbers)
+  - Integration tests for concurrent orchestrator execution
+- [ ] **State Isolation:**
+  - Each orchestrator has isolated state namespace
+  - No shared mutable state between orchestrators
+  - State cleanup on orchestrator completion
+
+**F. Observability & Debugging**
+- [ ] **Audit Logging:**
+  - All orchestrator executions logged
+  - State transitions logged
+  - Pattern matching decisions logged
+- [ ] **Metrics Collection:**
+  - Execution time per orchestrator
+  - Pattern matching accuracy
+  - State persistence latency
+- [ ] **Debugging Tools:**
+  - Execution trace for failed orchestrators
+  - State snapshots at key transitions
+  - Dry-run mode for testing
+
+**G. Resilience & Reliability**
+- [ ] **Retry Strategies:**
+  - Exponential backoff for transient failures
+  - Circuit breaker for persistent failures
+  - Dead letter queue for unrecoverable errors
+- [ ] **Rollback Mechanisms:**
+  - Rollback scripts for migrations
+  - State rollback on orchestrator failure
+  - Validation that rollback successful
+- [ ] **Health Checks:**
+  - Orchestrator health endpoint
+  - Dependency health checks (database, filesystem)
+  - Automated recovery on health check failure
+
+**Output:** Python AI application compliance score (0-100)
 
 ---
 
