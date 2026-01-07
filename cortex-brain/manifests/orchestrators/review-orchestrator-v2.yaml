@@ -6,7 +6,7 @@ version: "2.0.0"
 name: "CORTEX Review Orchestrator"
 type: "validation"
 priority: 3
-category: "quality_assurance"
+category: "validation"
 
 description: |
   Comprehensive epic plan and implementation review orchestrator that validates:
