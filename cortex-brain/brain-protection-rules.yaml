@@ -239,6 +239,309 @@ rules:
     4. Better test coverage
     5. Reduced codebase size
 
+- rule_id: PYTHON_TYPE_HINTS_MANDATORY
+  category: quality_gates
+  severity: blocked
+  name: Type Hints Required for All Functions/Methods
+  description: 'ALL Python functions and methods MUST have complete type hints for parameters and return values.
+
+    Type safety is CRITICAL for CORTEX because it generates and executes Python code autonomously.
+
+    Missing type hints lead to runtime errors that could have been caught at static analysis time.
+
+    '
+  enforcement:
+    trigger: code_change
+    action: block_if_missing_type_hints
+  validation:
+  - All function parameters must have type hints (except self, cls)
+  - All functions must have return type hints (use None if no return)
+  - Complex types must use typing module (List, Dict, Optional, Union, etc.)
+  - Class attributes must have type hints
+  - No use of Any type without justification comment
+  implementation:
+    middleware: src.orchestrators.middleware.python_best_practices_validator.PythonBestPracticesValidator
+    checker: mypy --strict
+    hook: pre_file_save
+    priority: 10
+  knowledge_base:
+    reference: cortex-brain/knowledge-library/standards/python-style-guide.md
+    section: "Type Hints (PEP 484, 585, 604)"
+  examples:
+    pass:
+    - "def execute(self, request: str, context: Dict[str, Any]) -> ExecutionResult:"
+    - "def get_orchestrators(self) -> List[BaseOrchestrator]:"
+    - "name: str  # Class attribute with type hint"
+    fail:
+    - "def execute(self, request, context):  # Missing type hints"
+    - "def get_orchestrators():  # Missing return type"
+    - "def process(data: Any) -> Any:  # Overuse of Any without justification"
+  rationale: |
+    Type hints prevent:
+    1. Runtime type errors (wrong type passed to function)
+    2. API misuse (calling function with wrong arguments)
+    3. Refactoring errors (type changes not propagated)
+    4. Integration failures (incompatible type expectations)
+    5. Documentation gaps (types self-document the API)
+
+- rule_id: PYTHON_DOCSTRINGS_MANDATORY
+  category: quality_gates
+  severity: blocked
+  name: Docstrings Required for All Public APIs
+  description: 'ALL public Python modules, classes, functions, and methods MUST have docstrings following Google style.
+
+    Docstrings explain WHY code exists and HOW to use it, not WHAT it does (code explains that).
+
+    '
+  enforcement:
+    trigger: code_change
+    action: block_if_missing_docstrings
+  validation:
+  - All public modules must have module docstrings
+  - All public classes must have class docstrings
+  - All public functions/methods must have docstrings with Args/Returns/Raises
+  - Private functions (starting with _) are exempt but encouraged
+  - Docstrings must follow Google style format
+  implementation:
+    middleware: src.orchestrators.middleware.python_best_practices_validator.PythonBestPracticesValidator
+    checker: pydocstyle --convention=google
+    hook: pre_file_save
+    priority: 11
+  knowledge_base:
+    reference: cortex-brain/knowledge-library/standards/python-style-guide.md
+    section: "Docstrings (PEP 257 + Google Style)"
+  examples:
+    pass:
+    - |
+      def execute(self, request: str) -> ExecutionResult:
+          """Execute orchestrator with given request.
+          
+          Args:
+              request: User request to process
+          
+          Returns:
+              ExecutionResult with status and artifacts
+          
+          Raises:
+              OrchestratorValidationError: If validation fails
+          """
+    fail:
+    - "def execute(self, request: str) -> ExecutionResult:  # No docstring"
+    - |
+      def execute(self, request: str) -> ExecutionResult:
+          """Execute orchestrator"""  # Incomplete docstring (no Args/Returns)
+  rationale: |
+    Docstrings enable:
+    1. Auto-generated API documentation
+    2. IDE tooltips and autocomplete
+    3. LLM-assisted code understanding
+    4. Faster onboarding for new developers
+    5. Contract-based development
+
+- rule_id: PYTHON_ERROR_HANDLING_REQUIRED
+  category: quality_gates
+  severity: blocked
+  name: Explicit Error Handling with Custom Exceptions
+  description: 'ALL error conditions MUST be handled explicitly with custom exception classes.
+
+    Bare except blocks and generic Exception catching are PROHIBITED.
+
+    CORTEX must fail fast with clear error messages, not hide failures.
+
+    '
+  enforcement:
+    trigger: code_change
+    action: block_if_bare_except_or_generic_catch
+  validation:
+  - No bare except clauses (must specify exception type)
+  - No catching generic Exception without re-raising
+  - Custom exception classes for domain-specific errors
+  - All exceptions must have descriptive messages
+  - Error context must be preserved (use "from" for chaining)
+  implementation:
+    middleware: src.orchestrators.middleware.python_best_practices_validator.PythonBestPracticesValidator
+    checker: pylint --disable=all --enable=bare-except,broad-except
+    hook: pre_file_save
+    priority: 12
+  knowledge_base:
+    reference: cortex-brain/knowledge-library/standards/python-style-guide.md
+    section: "Error Handling"
+  examples:
+    pass:
+    - |
+      try:
+          orchestrator = self.registry.get(orchestrator_id)
+      except OrchestratorNotFoundError as e:
+          raise ExecutionError(f"Cannot execute: {e}") from e
+    - |
+      class OrchestratorValidationError(CortexError):
+          """Raised when orchestrator validation fails."""
+    fail:
+    - |
+      try:
+          orchestrator = self.registry.get(orchestrator_id)
+      except:  # Bare except - blocks all errors including KeyboardInterrupt
+          pass
+    - |
+      try:
+          orchestrator = self.registry.get(orchestrator_id)
+      except Exception:  # Too broad, hides specific errors
+          return None
+  rationale: |
+    Explicit error handling:
+    1. Fails fast (errors don't propagate silently)
+    2. Provides clear error messages (debugging easier)
+    3. Preserves error context (full stack trace)
+    4. Enables error recovery (catch specific errors only)
+    5. Prevents hiding critical errors (KeyboardInterrupt, SystemExit)
+
+- rule_id: PYTHON_SOLID_PRINCIPLES_REQUIRED
+  category: architecture_integrity
+  severity: blocked
+  name: SOLID Principles Enforcement
+  description: 'ALL Python classes and modules MUST follow SOLID principles.
+
+    Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion.
+
+    This is CRITICAL for maintainability and extensibility of CORTEX orchestrators.
+
+    '
+  enforcement:
+    trigger: code_change
+    action: block_if_solid_violation
+  validation:
+  - Single Responsibility - Class has one reason to change
+  - Open/Closed - Extend behavior via inheritance/composition, not modification
+  - Liskov Substitution - Subclasses must be substitutable for base classes
+  - Interface Segregation - Many specific interfaces > one general interface
+  - Dependency Inversion - Depend on abstractions (protocols), not concrete classes
+  implementation:
+    middleware: src.orchestrators.middleware.python_best_practices_validator.PythonBestPracticesValidator
+    analyzer: src.orchestrators.middleware.solid_analyzer.SOLIDAnalyzer
+    hook: pre_file_save
+    priority: 13
+  knowledge_base:
+    reference: cortex-brain/knowledge-library/design-patterns/solid-principles.md
+    sections:
+      - "Single Responsibility Principle (SRP)"
+      - "Open/Closed Principle (OCP)"
+      - "Liskov Substitution Principle (LSP)"
+      - "Interface Segregation Principle (ISP)"
+      - "Dependency Inversion Principle (DIP)"
+  examples:
+    pass:
+    - "class OrchestratorRegistry:  # Single responsibility - registry only"
+    - "class OrchestratorExecutor:  # Single responsibility - execution only"
+    - |
+      class BaseOrchestrator(Protocol):  # Dependency inversion - depend on protocol
+          def execute(self, request: str) -> ExecutionResult: ...
+    fail:
+    - |
+      class OrchestratorManager:  # Multiple responsibilities
+          def register(self, orch): ...
+          def execute(self, orch_id): ...
+          def log_metrics(self, orch_id): ...
+          def save_to_db(self, orch_id): ...
+    - |
+      def execute(self, executor: ConcreteExecutor):  # Depends on concrete class
+          executor.run()
+  rationale: |
+    SOLID principles enable:
+    1. Single Responsibility - Easy to understand and maintain
+    2. Open/Closed - Extend without modifying existing code
+    3. Liskov Substitution - Polymorphism works correctly
+    4. Interface Segregation - Clients don't depend on unused methods
+    5. Dependency Inversion - Loosely coupled, testable architecture
+
+- rule_id: PYTHON_IMPORT_ORGANIZATION_REQUIRED
+  category: quality_gates
+  severity: warning
+  name: Import Organization (PEP 8)
+  description: 'ALL Python imports MUST be organized in 3 groups: stdlib, third-party, local.
+
+    Each group separated by blank line, sorted alphabetically.
+
+    This improves readability and prevents import conflicts.
+
+    '
+  enforcement:
+    trigger: code_change
+    action: auto_fix_with_isort
+  validation:
+  - Imports grouped in 3 sections (stdlib, third-party, local)
+  - Each section sorted alphabetically
+  - Blank line between sections
+  - No wildcard imports (from x import *)
+  - Absolute imports preferred over relative
+  implementation:
+    middleware: src.orchestrators.middleware.python_best_practices_validator.PythonBestPracticesValidator
+    formatter: isort --profile=black
+    hook: pre_file_save
+    priority: 14
+  knowledge_base:
+    reference: cortex-brain/knowledge-library/standards/python-style-guide.md
+    section: "Import Organization"
+  examples:
+    pass:
+    - |
+      import json
+      from pathlib import Path
+      
+      import yaml
+      
+      from src.orchestrators.base import BaseOrchestrator
+    fail:
+    - |
+      from src.orchestrators.base import BaseOrchestrator
+      import json
+      import yaml
+      from pathlib import Path
+  rationale: |
+    Import organization:
+    1. Easy to find imports (predictable location)
+    2. Prevents circular imports (clear dependency hierarchy)
+    3. Identifies external dependencies (third-party group)
+    4. Improves git diffs (sorted imports = less conflicts)
+    5. Standard across all Python projects
+
+- rule_id: PYTHON_CODE_FORMATTING_REQUIRED
+  category: quality_gates
+  severity: warning
+  name: Black Code Formatting
+  description: 'ALL Python code MUST be formatted with Black (line length 100).
+
+    Consistent formatting reduces cognitive load and eliminates style debates.
+
+    '
+  enforcement:
+    trigger: code_change
+    action: auto_format_with_black
+  validation:
+  - Black formatting with --line-length=100
+  - No manual line length violations
+  - Consistent string quote style (double quotes)
+  - Consistent trailing commas in multi-line structures
+  implementation:
+    middleware: src.orchestrators.middleware.python_best_practices_validator.PythonBestPracticesValidator
+    formatter: black --line-length=100
+    hook: pre_file_save
+    priority: 15
+  knowledge_base:
+    reference: cortex-brain/knowledge-library/standards/python-style-guide.md
+    section: "PEP 8 Compliance"
+  examples:
+    pass:
+    - "result = some_function(arg1, arg2, arg3)  # Black formatted"
+    fail:
+    - "result=some_function(arg1,arg2,arg3)  # Inconsistent spacing"
+  rationale: |
+    Black formatting:
+    1. Zero configuration (opinionated formatter)
+    2. Consistent style across entire codebase
+    3. Eliminates style debates in code reviews
+    4. Automatic formatting (no manual work)
+    5. Integrates with pre-commit hooks
+
 governance:
   enforcement_level: strict
   override_allowed: false
