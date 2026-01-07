@@ -7,6 +7,18 @@
 
 ---
 
+## ⚠️ IMPORTANT: Planning System v6 Migration Complete
+
+**📌 Structure Update:** This epic has been migrated to **Planning System v6**
+- ❌ **OLD:** Physical phase folders (phase-0/, phase-1/, etc.) - 260 folders, 187 empty
+- ✅ **NEW:** Logical phase definitions in feature.yaml - 78 folders, 0 empty
+- 📄 **Documentation:** See `tracking/PLAN-MIGRATION-ORCHESTRATOR-DOCS.md`
+- 📄 **Architecture:** See `reports/PLANNING-SYSTEM-V6-OVERVIEW.md`
+
+**All references to "phase folders" below are now deprecated. Phases are defined in feature.yaml files.**
+
+---
+
 ## 📋 Executive Summary
 
 **Total Pending Items:** 47  
