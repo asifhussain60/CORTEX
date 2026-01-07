@@ -1,0 +1,65 @@
+# Architecture Refactor Orchestrator - Child of Refactor Orchestrator
+# Author: Asif Hussain
+# Copyright © 2025-2026 Asif Hussain. All rights reserved.
+
+schema_version: "5.0"
+
+orchestrator:
+  name: "refactor_architecture"
+  version: "1.0.0"
+  type: "autonomous"
+  parent_orchestrator_id: "refactor_orchestrator"
+  description: "Architectural refactoring: SOLID principles, design patterns, modularity"
+  implementation: "src/orchestrators/refactor/architecture_refactor.py"
+  base_class: "BaseOrchestratorV4_1"
+  
+  phases:
+    - id: 1
+      name: "ANALYSIS"
+      description: "Analyze architectural quality"
+      activities:
+        - "Check SOLID principles violations"
+        - "Identify God classes (>300 lines)"
+        - "Find tight coupling (high fan-in/fan-out)"
+        - "Detect missing abstractions"
+        - "Analyze dependency injection usage"
+    
+    - id: 2
+      name: "REFACTORING"
+      description: "Apply architectural improvements"
+      activities:
+        - "Split God classes (Single Responsibility)"
+        - "Extract interfaces (Dependency Inversion)"
+        - "Apply design patterns (Strategy, Factory, Observer)"
+        - "Introduce dependency injection"
+        - "Decouple tightly coupled modules"
+    
+    - id: 3
+      name: "VALIDATION"
+      description: "Verify architectural improvements"
+      activities:
+        - "Run pytest (100% pass required)"
+        - "Validate SOLID compliance"
+        - "Check coupling metrics"
+        - "Verify no circular dependencies"
+
+capabilities:
+  - "solid_principles_enforcement"
+  - "design_pattern_application"
+  - "dependency_injection"
+  - "module_restructuring"
+  - "coupling_reduction"
+
+metrics:
+  - name: "solid_violations_before"
+    type: "int"
+  - name: "solid_violations_after"
+    type: "int"
+  - name: "coupling_before"
+    type: "float"
+  - name: "coupling_after"
+    type: "float"
+
+governance:
+  rules_enforced:
+    - "PYTHON_SOLID_PRINCIPLES_REQUIRED"

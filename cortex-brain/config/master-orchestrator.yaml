@@ -83,6 +83,52 @@ routing_rules:
       description: "Test-Driven Development orchestrator"
       autonomous: false
   
+  # Refactor Orchestrator v2 - NEW (Parent-Child Architecture)
+  # Coordinates specialized refactoring children (code quality, architecture, docs, tests)
+  - pattern: "^(refactor|improve code|optimize code|clean up code|code quality|architecture refactor|improve docs|improve tests).*$"
+    orchestrator: "refactor_orchestrator"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 35
+    metadata:
+      description: "Refactor orchestrator with intelligent child routing"
+      autonomous: true
+      version: "2.0"
+      orchestration_model: "parent_child"
+      child_orchestrators:
+        - "refactor_code_quality"
+        - "refactor_architecture"
+        - "refactor_documentation"
+        - "refactor_tests"
+      features:
+        - "LLM-based request classification"
+        - "Sequential/parallel/conditional child execution"
+        - "In-memory todo list tracking"
+        - "Static analysis integration (mypy, pylint, pydocstyle, black, isort)"
+        - "Consolidated YAML reporting"
+  
+  # Housekeeping Orchestrator - NEW (Autonomous CORTEX Maintenance)
+  # Scheduled maintenance: audit logs, knowledge absorption, redundancy elimination, optimization
+  - pattern: "^(housekeeping|system health|cortex maintenance|analyze bugs|optimize orchestrators).*$"
+    orchestrator: "housekeeping_orchestrator"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 45
+    metadata:
+      description: "Autonomous CORTEX maintenance orchestrator"
+      autonomous: true
+      version: "1.0"
+      execution_schedule:
+        - "daily: audit_log_analysis, knowledge_absorption, cache_cleanup"
+        - "weekly: redundancy_elimination, orchestrator_optimization, conflict_resolution"
+        - "monthly: deep_validation"
+      features:
+        - "Bug detection from audit logs (repeated failures, timeouts)"
+        - "Knowledge tier promotion (tier1 → tier2)"
+        - "Duplicate/conflict detection and resolution"
+        - "Orchestrator usage analysis and optimization"
+        - "SKULL test validation"
+  
   # Documentation Standardization Orchestrator v2.0 - DISABLED
   # REASON: Python implementation missing (not migrated from CORTEX-5.0)
   # TODO: BACKLOG-001 - Migrate documentation orchestrator implementation
