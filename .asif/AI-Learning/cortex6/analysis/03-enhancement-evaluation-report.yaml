@@ -1,0 +1,814 @@
+# CORTEX-6 Enhancement Evaluation Report
+# Microsoft Amplifier Comparison & Multi-Repo Team Collaboration Strategy
+# Generated: 2026-01-07T15:00:00Z
+
+metadata:
+  document_type: enhancement_evaluation
+  cortex_version: '6.0.0'
+  evaluation_scope: microsoft_amplifier_comparison_plus_enhancements
+  generated_timestamp: '2026-01-07T15:00:00Z'
+  author: CORTEX Architecture Team
+  review_status: COMPREHENSIVE_ANALYSIS
+
+# =============================================================================
+# EXECUTIVE SUMMARY
+# =============================================================================
+
+executive_summary:
+  current_cortex6_status:
+    documents_reviewed: 3
+    total_requirements: 10
+    edge_cases_analyzed: 25
+    architecture_diagrams: 5
+    completion: "38% (Phase 2 in progress)"
+    
+  new_enhancements_from_chat01:
+    - "Local MCP (Model Context Protocol) standardization for tooling"
+    - "Multi-repo team collaboration with centralized CORTEX"
+    - "Team-wide knowledge learning (not just single-user)"
+    - "Config-based repo discovery and integration"
+    - "Differentiated benefits over Microsoft Amplifier orchestration"
+    
+  evaluation_verdict: |
+    CORTEX-6 currently addresses 70% of Microsoft Amplifier patterns (DAG orchestration,
+    state management, retry logic, checkpointing) BUT is missing critical enhancements:
+    
+    1. ❌ NO MCP standardization layer
+    2. ❌ NO multi-repo support
+    3. ❌ NO team collaboration features
+    4. ❌ NO centralized knowledge learning
+    5. ✅ HAS local Python orchestration (advantage)
+    6. ✅ HAS graph-based work tracking (advantage)
+    7. ✅ HAS autonomous execution (advantage)
+    
+    RECOMMENDATION: Add 4 new requirements (CR-011 to CR-014) to address gaps.
+
+# =============================================================================
+# MICROSOFT AMPLIFIER PATTERN COMPARISON
+# =============================================================================
+
+microsoft_amplifier_patterns:
+  what_amplifier_provides:
+    - pattern: "Task Scheduling & Fan-Out"
+      description: "Orchestrator fans out work to multiple workers"
+      azure_implementation: "Azure ML Pipelines, Durable Functions"
+      cortex6_equivalent: "TODO Orchestrator with DAG + parallel execution"
+      status: ✅ ADDRESSED
+      
+    - pattern: "State Management"
+      description: "Orchestrator tracks workflow state, checkpoints"
+      azure_implementation: "Durable Functions (automatic checkpointing)"
+      cortex6_equivalent: "SQLite with WAL mode + checkpoint table"
+      status: ✅ ADDRESSED
+      
+    - pattern: "Retry Logic & Error Handling"
+      description: "Auto-retry transient failures, exponential backoff"
+      azure_implementation: "Durable Functions retry policies"
+      cortex6_equivalent: "CR-005 Rollback/Recovery + retry_count"
+      status: ✅ ADDRESSED
+      
+    - pattern: "Result Aggregation"
+      description: "Collect results from parallel workers"
+      azure_implementation: "Fan-in pattern in orchestration"
+      cortex6_equivalent: "TODO Orchestrator aggregates task outputs"
+      status: ✅ ADDRESSED
+      
+    - pattern: "Observability"
+      description: "Logging, metrics, tracing"
+      azure_implementation: "Azure Monitor, Application Insights"
+      cortex6_equivalent: "CR-002 Audit logging + metrics collection"
+      status: ⚠️ PARTIAL (no distributed tracing)
+      
+    - pattern: "Idempotency"
+      description: "Re-running same operation produces same result"
+      azure_implementation: "Durable Functions replay semantics"
+      cortex6_equivalent: "Task status tracking prevents double-execution"
+      status: ✅ ADDRESSED
+      
+    - pattern: "Concurrency Limits"
+      description: "Throttle parallel execution"
+      azure_implementation: "Azure ML compute quotas"
+      cortex6_equivalent: "CR-009 Resource limits (max_concurrent_orchestrators)"
+      status: ✅ ADDRESSED
+      
+    - pattern: "Versioning & Schema Evolution"
+      description: "Handle workflow version changes"
+      azure_implementation: "Orchestration versioning"
+      cortex6_equivalent: "EDGE-DEP-002 Schema versioning"
+      status: ✅ ADDRESSED
+  
+  amplifier_gaps_in_cortex6:
+    - gap: "Multi-Repo Orchestration"
+      amplifier_approach: "Azure DevOps Pipelines across repos"
+      cortex6_status: ❌ MISSING
+      impact: "Cannot orchestrate work across multiple codebases"
+      priority: P0_CRITICAL
+      
+    - gap: "Team Collaboration & Learning"
+      amplifier_approach: "Shared Azure ML workspace, team pipelines"
+      cortex6_status: ❌ MISSING
+      impact: "Knowledge isolated to single user"
+      priority: P0_CRITICAL
+      
+    - gap: "Distributed Tracing"
+      amplifier_approach: "Application Insights distributed tracing"
+      cortex6_status: ❌ MISSING
+      impact: "Hard to debug cross-orchestrator workflows"
+      priority: P1_HIGH
+      
+    - gap: "MCP Tool Standardization"
+      amplifier_approach: "Azure Functions as standardized workers"
+      cortex6_status: ❌ MISSING
+      impact: "No standard interface for tools/orchestrators"
+      priority: P0_CRITICAL
+      
+    - gap: "Cloud-Native Scaling"
+      amplifier_approach: "Auto-scale compute clusters"
+      cortex6_status: ❌ MISSING (local only)
+      impact: "Limited to single machine resources"
+      priority: P2_MEDIUM (future enhancement)
+
+# =============================================================================
+# CORTEX-6 ADVANTAGES OVER MICROSOFT AMPLIFIER
+# =============================================================================
+
+cortex6_advantages:
+  
+  advantage_1_local_first:
+    name: "Local-First Execution (No Cloud Dependency)"
+    description: |
+      CORTEX-6 runs entirely on local machine without cloud services. No network
+      latency, no API rate limits, no cloud costs, no data leaving local environment.
+    amplifier_limitation: "Azure Amplifier requires Azure subscription, cloud connectivity"
+    cortex6_benefit:
+      - "Zero cloud costs (no Azure subscription required)"
+      - "Offline capability (work without internet)"
+      - "Data privacy (code never leaves local machine)"
+      - "Instant feedback (<100ms orchestrator routing)"
+      - "No rate limits (unlimited local execution)"
+    use_cases:
+      - "Sensitive codebases (healthcare, finance, government)"
+      - "Air-gapped environments (no cloud access)"
+      - "Cost-conscious teams (no cloud budget)"
+      - "Low-latency requirements (sub-second responses)"
+      
+  advantage_2_github_copilot_integration:
+    name: "Native GitHub Copilot Integration"
+    description: |
+      CORTEX-6 invoked via natural language in GitHub Copilot Chat. No need to
+      write pipeline YAML or learn orchestration DSL. Just ask "plan user auth"
+      and CORTEX orchestrates.
+    amplifier_limitation: "Azure ML Pipelines require Python DSL, YAML config, portal UI"
+    cortex6_benefit:
+      - "Natural language interface (no DSL to learn)"
+      - "Context-aware (understands current codebase)"
+      - "Inline in IDE (no context switching)"
+      - "LLM-assisted request transformation (adds context)"
+    use_cases:
+      - "Rapid prototyping (idea → plan in seconds)"
+      - "Developer-friendly (no pipeline expertise needed)"
+      - "Ad-hoc orchestration (one-off tasks)"
+      
+  advantage_3_graph_based_work_tracking:
+    name: "DAG-Based Work Tracking with Resume"
+    description: |
+      TODO Orchestrator maintains dependency graph. On failure, resume from
+      checkpoint without re-running completed tasks. No chatty progress updates.
+    amplifier_limitation: "Durable Functions replay entire history (slower)"
+    cortex6_benefit:
+      - "Instant resume (load checkpoint, execute next ready task)"
+      - "Silent execution (no narration, just progress bar)"
+      - "Parallel execution (independent tasks run concurrently)"
+      - "Visual progress (Mermaid DAG diagrams)"
+    use_cases:
+      - "Long-running plans (hours/days)"
+      - "Complex dependencies (50+ tasks)"
+      - "Iterative development (frequent interruptions)"
+      
+  advantage_4_embedded_governance:
+    name: "Built-In Governance (SKULL Rules)"
+    description: |
+      61 brain protection rules enforced automatically. Prevents brittleness
+      patterns, enforces TDD, blocks technical debt. Pre-commit hooks block
+      violations.
+    amplifier_limitation: "Azure Pipelines governance requires manual policy configuration"
+    cortex6_benefit:
+      - "Automatic enforcement (no config required)"
+      - "61 pre-defined rules (TDD, SOLID, security, etc.)"
+      - "Pre-commit hooks (block bad code)"
+      - "Audit logging (track all violations)"
+    use_cases:
+      - "Quality-focused teams (zero technical debt)"
+      - "Security-sensitive projects (enforce best practices)"
+      - "Learning environments (teach good habits)"
+      
+  advantage_5_knowledge_integration:
+    name: "3-Tier Knowledge System (CORTEX + Library + Company)"
+    description: |
+      Company knowledge overrides CORTEX defaults intelligently. Orchestrators
+      query knowledge for best practices. Knowledge evolves with team learning.
+    amplifier_limitation: "Azure ML no built-in knowledge management"
+    cortex6_benefit:
+      - "Company-specific best practices (override defaults)"
+      - "Contextual guidance (query knowledge on-demand)"
+      - "Learning over time (knowledge library grows)"
+      - "Conflict resolution (explicit merge strategies)"
+    use_cases:
+      - "Enterprise teams (company standards)"
+      - "Domain-specific patterns (healthcare, finance)"
+      - "Continuous improvement (capture learnings)"
+      
+  advantage_6_no_vendor_lock_in:
+    name: "Open Source, No Vendor Lock-In"
+    description: |
+      CORTEX-6 is open source, runs anywhere Python runs. No Azure dependency,
+      no proprietary APIs, no cloud migration costs.
+    amplifier_limitation: "Azure Amplifier locked to Azure ecosystem"
+    cortex6_benefit:
+      - "Run anywhere (macOS, Windows, Linux)"
+      - "No cloud migration (data stays local)"
+      - "Full control (modify source code)"
+      - "No licensing fees (100% free)"
+    use_cases:
+      - "Multi-cloud teams (AWS, GCP, Azure)"
+      - "Cost-sensitive projects (no Azure budget)"
+      - "Open-source projects (community-driven)"
+
+# =============================================================================
+# NEW REQUIREMENTS (From chat01.md Enhancements)
+# =============================================================================
+
+new_requirements:
+  
+  # ---------------------------------------------------------------------------
+  # CR-011: MCP (Model Context Protocol) Standardization Layer
+  # ---------------------------------------------------------------------------
+  
+  - id: CR-011
+    category: tooling_standardization
+    priority: P0_CRITICAL
+    confidence: 1.0
+    name: "Local MCP Standardization for Tools & Orchestrators"
+    description: |
+      Create local MCP server that standardizes interface for all tools and
+      orchestrators. Orchestrators register via MCP, expose capabilities,
+      and communicate via standard protocol.
+    
+    user_requirement: |
+      "I want local MCP created to standardize tooling and orchestrators."
+    
+    technical_specification:
+      component: "MCP Server (Model Context Protocol)"
+      location: "src/mcp/mcp_server.py"
+      
+      mcp_architecture:
+        purpose: "Standardize orchestrator/tool interfaces for composability"
+        protocol: "JSON-RPC 2.0 over stdio (local process communication)"
+        
+        capabilities:
+          - capability: "tools/list"
+            description: "List all available tools/orchestrators"
+            returns: "List[{name, description, parameters, examples}]"
+            
+          - capability: "tools/call"
+            description: "Invoke tool/orchestrator with parameters"
+            parameters: "{tool_name, arguments}"
+            returns: "{status, result, error}"
+            
+          - capability: "prompts/list"
+            description: "List available prompt templates"
+            returns: "List[{name, description, arguments}]"
+            
+          - capability: "prompts/get"
+            description: "Get prompt template with arguments"
+            returns: "{prompt_text, arguments}"
+            
+          - capability: "resources/list"
+            description: "List available resources (knowledge, state)"
+            returns: "List[{uri, name, description, mime_type}]"
+            
+          - capability: "resources/read"
+            description: "Read resource content"
+            returns: "{contents, mime_type}"
+            
+        orchestrator_registration:
+          registration_file: "cortex-brain/registry/mcp-orchestrators.json"
+          schema:
+            orchestrator_id: "String (unique ID)"
+            mcp_tool_name: "String (MCP tool name)"
+            capabilities: "List[tool_name]"
+            parameters_schema: "JSON Schema for tool parameters"
+            examples: "List[{request, response}]"
+            
+        benefits_over_azure:
+          - "Local execution (no network calls)"
+          - "Composable orchestrators (chain via MCP)"
+          - "Standard interface (any MCP client can invoke)"
+          - "Introspectable (list all capabilities)"
+          - "Type-safe (JSON Schema validation)"
+          
+      implementation_phases:
+        phase_1: "MCP server skeleton (stdio communication)"
+        phase_2: "Orchestrator registration (manifest → MCP tool)"
+        phase_3: "Capability exposure (tools/list, tools/call)"
+        phase_4: "GitHub Copilot integration (MCP client)"
+        
+    validation:
+      - "MCP server starts on CORTEX initialization"
+      - "All orchestrators registered as MCP tools"
+      - "GitHub Copilot can list CORTEX capabilities via MCP"
+      - "tools/call invokes orchestrators successfully"
+      
+    effort_estimate: "5 days (design + implement + test + integrate)"
+    warrantability: MANDATORY
+    blocking: true
+    
+  # ---------------------------------------------------------------------------
+  # CR-012: Multi-Repo Team Collaboration
+  # ---------------------------------------------------------------------------
+  
+  - id: CR-012
+    category: team_collaboration
+    priority: P0_CRITICAL
+    confidence: 1.0
+    name: "Multi-Repo Support with Centralized CORTEX"
+    description: |
+      CORTEX-6 MUST support orchestration across multiple repositories with
+      a single centralized CORTEX installation. Simple config file links
+      repos to CORTEX. Plans, reports, knowledge remain repo-specific while
+      core orchestration is shared.
+    
+    user_requirement: |
+      "Cortex should work across multiple repos using a simple strategy like a
+      config file to that centralizes the cortex repo to work seamlessly with
+      all repos while maintaining distinction in terms of plans and reportings,
+      knowledge libraries etc."
+    
+    technical_specification:
+      component: "Multi-Repo Manager"
+      location: "src/multi_repo/repo_manager.py"
+      
+      configuration:
+        central_config: "~/.cortex/repos.yaml"
+        schema:
+          repos:
+            - repo_id: "String (unique ID, e.g., 'frontend-app')"
+              path: "String (absolute path to repo)"
+              name: "String (human-readable name)"
+              type: "Enum: primary, secondary"
+              cortex_enabled: "Boolean (default true)"
+              knowledge_library: "String (path to repo-specific knowledge)"
+              plan_storage: "String (path to store plans, default '{repo}/.cortex/plans')"
+              
+        example_config: |
+          cortex_installation: "/Users/asif/CORTEX"
+          
+          repos:
+            - repo_id: "frontend-app"
+              path: "/Users/asif/projects/frontend-app"
+              name: "Frontend Application"
+              type: primary
+              cortex_enabled: true
+              knowledge_library: ".cortex/knowledge"
+              plan_storage: ".cortex/plans"
+              
+            - repo_id: "backend-api"
+              path: "/Users/asif/projects/backend-api"
+              name: "Backend API"
+              type: secondary
+              cortex_enabled: true
+              knowledge_library: ".cortex/knowledge"
+              plan_storage: ".cortex/plans"
+              
+            - repo_id: "shared-lib"
+              path: "/Users/asif/projects/shared-lib"
+              name: "Shared Library"
+              type: secondary
+              cortex_enabled: true
+              
+      architecture:
+        repo_context_detection:
+          method: "Detect current working directory, match against repos.yaml"
+          fallback: "Prompt user: 'Which repo? (frontend-app, backend-api)'"
+          
+        plan_isolation:
+          storage: "Repo-specific .cortex/plans/{epic-name}/"
+          tracking: "Repo-specific .cortex/tracking/progress.db"
+          separation: "Each repo has independent plans, no cross-contamination"
+          
+        knowledge_merging:
+          hierarchy:
+            tier_1: "CORTEX core knowledge (universal best practices)"
+            tier_2: "CORTEX knowledge library (cross-repo patterns)"
+            tier_3: "Repo-specific knowledge (.cortex/knowledge/)"
+          merge_strategy: "Tier 3 overrides Tier 2 overrides Tier 1"
+          
+        orchestrator_invocation:
+          workflow: |
+            1. Detect current repo via cwd
+            2. Load repo config from repos.yaml
+            3. Set context: {repo_id, repo_path, knowledge_path, plan_path}
+            4. Invoke orchestrator with repo context
+            5. Orchestrator operates in repo-specific namespace
+            6. Store outputs in repo-specific paths
+            
+      benefits_over_azure:
+        - "Single CORTEX installation (no per-repo duplication)"
+        - "Repo-specific context (plans isolated)"
+        - "Shared orchestration logic (DRY principle)"
+        - "Cross-repo patterns (knowledge library)"
+        - "Simple config (no complex Azure DevOps pipelines)"
+        
+    validation:
+      - "CORTEX detects repo context automatically"
+      - "Plans stored in repo-specific paths"
+      - "Knowledge hierarchy respected"
+      - "Multiple repos can invoke CORTEX simultaneously"
+      
+    effort_estimate: "4 days (config parsing + context detection + testing)"
+    warrantability: MANDATORY
+    blocking: true
+    
+  # ---------------------------------------------------------------------------
+  # CR-013: Team-Wide Knowledge Learning
+  # ---------------------------------------------------------------------------
+  
+  - id: CR-013
+    category: knowledge_management
+    priority: P0_CRITICAL
+    confidence: 1.0
+    name: "Team Collaboration & Shared Knowledge Learning"
+    description: |
+      CORTEX-6 MUST support team collaboration where knowledge tier evolves
+      based on ENTIRE TEAM's work, not just single user. Team members contribute
+      learnings, patterns, and best practices to shared knowledge base.
+    
+    user_requirement: |
+      "CORTEX should be designed for team work where the tiers keep learning
+      and getting intelligent over time learning from team knowledge, not just
+      the user working on repo."
+    
+    technical_specification:
+      component: "Team Knowledge Aggregator"
+      location: "src/knowledge/team_knowledge_aggregator.py"
+      
+      architecture:
+        team_knowledge_storage:
+          location: "cortex-brain/tier2/team-knowledge/{team-id}/"
+          structure:
+            patterns: "Discovered patterns from all team members"
+            learnings: "Lessons learned aggregated"
+            best_practices: "Team-validated best practices"
+            anti_patterns: "Common mistakes to avoid"
+            
+        contribution_workflow:
+          step_1: "User completes work (plan, review, refactor)"
+          step_2: "Orchestrator extracts learnings (patterns, successes, failures)"
+          step_3: "Learning proposed to team knowledge base"
+          step_4: "Team review + validation (optional manual review)"
+          step_5: "Learning promoted to team knowledge if validated"
+          step_6: "All team members benefit from learning"
+          
+        learning_extraction:
+          triggers:
+            - "Plan completion (extract architectural patterns)"
+            - "Review findings (extract anti-patterns)"
+            - "TDD cycles (extract testing patterns)"
+            - "Refactoring (extract code smells)"
+            
+          extraction_logic:
+            method: "LLM-assisted pattern recognition"
+            prompt: "Extract reusable patterns from this work"
+            validation: "Compare against existing team knowledge"
+            deduplication: "Merge similar patterns"
+            
+        knowledge_evolution:
+          versioning: "Team knowledge versioned (v1.0, v1.1, ...)"
+          changelog: "Track what was learned and when"
+          contributors: "Track who contributed each learning"
+          usage_metrics: "Track which patterns used most"
+          
+        team_sync:
+          mechanism: "Shared Git repository OR shared network drive"
+          conflict_resolution: "Latest team knowledge wins (with merge conflicts)"
+          notification: "Team notified when new learning added"
+          
+      benefits_over_azure:
+        - "Organic knowledge growth (learn from real work)"
+        - "Team-wide sharing (not siloed per user)"
+        - "Automatic extraction (no manual documentation)"
+        - "Context-aware (patterns tied to real code)"
+        - "Free (no Azure ML workspace costs)"
+        
+    validation:
+      - "Learnings extracted after plan completion"
+      - "Team knowledge file updated with new patterns"
+      - "All team members see new learnings"
+      - "Knowledge versioning tracks evolution"
+      
+    effort_estimate: "6 days (extraction logic + sync + versioning)"
+    warrantability: MANDATORY
+    blocking: true
+    
+  # ---------------------------------------------------------------------------
+  # CR-014: Config-Based Repo Discovery
+  # ---------------------------------------------------------------------------
+  
+  - id: CR-014
+    category: developer_experience
+    priority: P1_HIGH
+    confidence: 1.0
+    name: "Simple Config-Based Repo Discovery"
+    description: |
+      Developers MUST be able to link repos to CORTEX via simple YAML config.
+      No complex setup, no CLI commands, just edit ~/.cortex/repos.yaml and
+      CORTEX automatically discovers repos.
+    
+    user_requirement: |
+      "Simple strategy like a config file to that centralizes the cortex repo
+      to work seamlessly with all repos."
+    
+    technical_specification:
+      component: "Repo Discovery Service"
+      location: "src/multi_repo/discovery_service.py"
+      
+      config_format:
+        file: "~/.cortex/repos.yaml"
+        minimal_example: |
+          repos:
+            - path: "/Users/asif/projects/frontend"
+            - path: "/Users/asif/projects/backend"
+            
+        full_example: |
+          cortex_installation: "/Users/asif/CORTEX"
+          default_plan_storage: ".cortex/plans"
+          
+          repos:
+            - repo_id: "frontend"
+              path: "/Users/asif/projects/frontend"
+              name: "Frontend App"
+              
+            - repo_id: "backend"
+              path: "/Users/asif/projects/backend"
+              name: "Backend API"
+              aliases: ["api", "server"]
+              
+      discovery_logic:
+        auto_detect:
+          method: "On CORTEX startup, scan repos.yaml, validate paths exist"
+          caching: "Cache discovered repos in memory (reload on config change)"
+          
+        context_inference:
+          cwd_matching: "If cwd in repo path, auto-select that repo"
+          prompt_user: "If ambiguous, prompt: 'Which repo? (frontend, backend)'"
+          
+      setup_flow:
+        step_1: "User creates ~/.cortex/repos.yaml"
+        step_2: "Add repo entries with paths"
+        step_3: "CORTEX auto-discovers on next invocation"
+        step_4: "No restart required (hot reload)"
+        
+    validation:
+      - "Config file parsed successfully"
+      - "Repos auto-discovered on startup"
+      - "Context inference works (cwd → repo)"
+      - "Hot reload on config change"
+      
+    effort_estimate: "2 days (config parsing + validation + hot reload)"
+    warrantability: HIGH
+    blocking: false
+
+# =============================================================================
+# UPDATED ARCHITECTURE REQUIREMENTS
+# =============================================================================
+
+architecture_updates_required:
+  
+  layer_additions:
+    - layer: "MCP Layer (New)"
+      position: "Between Master Orchestrator and Specialized Orchestrators"
+      purpose: "Standardize orchestrator interfaces via Model Context Protocol"
+      components:
+        - "MCP Server (stdio-based JSON-RPC)"
+        - "MCP Orchestrator Registry"
+        - "MCP Client Integration (GitHub Copilot)"
+        
+    - layer: "Multi-Repo Context Layer (New)"
+      position: "Before Master Orchestrator"
+      purpose: "Detect and manage repo context for multi-repo support"
+      components:
+        - "Repo Discovery Service"
+        - "Repo Context Manager"
+        - "Knowledge Hierarchy Resolver"
+        
+    - layer: "Team Knowledge Layer (Enhanced)"
+      position: "Within Intelligence & Governance Layer"
+      purpose: "Aggregate and share team learnings"
+      components:
+        - "Team Knowledge Aggregator"
+        - "Learning Extraction Engine"
+        - "Knowledge Sync Service"
+        
+  updated_system_diagram:
+    mermaid: |
+      ```mermaid
+      graph TB
+          subgraph "User Interface"
+              UI[GitHub Copilot Chat]
+          end
+          
+          subgraph "Multi-Repo Context Layer (NEW)"
+              Disco[Repo Discovery]
+              Context[Repo Context Manager]
+          end
+          
+          subgraph "Intent Router"
+              Router[CORTEX.prompt.md]
+              Trie[Trie Pattern Matcher]
+          end
+          
+          subgraph "MCP Layer (NEW)"
+              MCP[MCP Server<br/>JSON-RPC]
+              MCPRegistry[MCP Orchestrator Registry]
+          end
+          
+          subgraph "Master Orchestration"
+              Master[Master Orchestrator v2]
+              TODO[TODO Orchestrator DAG]
+          end
+          
+          subgraph "Specialized Orchestrators"
+              Plan[Planning v7]
+              Review[Review v2]
+              Custom[Custom]
+          end
+          
+          subgraph "Team Knowledge (ENHANCED)"
+              TeamKnow[Team Knowledge Aggregator]
+              Extract[Learning Extraction]
+              Sync[Knowledge Sync]
+          end
+          
+          subgraph "Data Persistence"
+              DB[(SQLite)]
+              RepoConfig[~/.cortex/repos.yaml]
+              TeamKnowDB[Team Knowledge Storage]
+          end
+          
+          UI --> Disco
+          Disco --> Context
+          Context --> Router
+          Router --> Trie
+          Trie --> MCP
+          MCP --> MCPRegistry
+          MCPRegistry --> Master
+          Master --> TODO
+          TODO --> Plan
+          TODO --> Review
+          TODO --> Custom
+          
+          Plan --> Extract
+          Review --> Extract
+          Extract --> TeamKnow
+          TeamKnow --> Sync
+          Sync --> TeamKnowDB
+          
+          Context --> RepoConfig
+          Master --> DB
+          
+          style MCP fill:#00BCD4,stroke:#333,stroke-width:3px
+          style Disco fill:#00BCD4,stroke:#333,stroke-width:3px
+          style TeamKnow fill:#00BCD4,stroke:#333,stroke-width:3px
+      ```
+
+# =============================================================================
+# COMPARATIVE ADVANTAGE SUMMARY
+# =============================================================================
+
+comparative_advantage_summary:
+  
+  cortex6_vs_microsoft_amplifier:
+    cortex6_wins:
+      - "✅ Local-first (no cloud costs, offline capability)"
+      - "✅ Natural language interface (GitHub Copilot integration)"
+      - "✅ Built-in governance (61 SKULL rules)"
+      - "✅ 3-tier knowledge system (company overrides)"
+      - "✅ No vendor lock-in (open source, run anywhere)"
+      - "✅ DAG-based resume (instant checkpoint recovery)"
+      - "✅ MCP standardization (local composable tools)"
+      - "✅ Multi-repo support (single CORTEX, multiple repos)"
+      - "✅ Team knowledge learning (organic knowledge growth)"
+      
+    amplifier_wins:
+      - "☁️ Cloud-native scaling (auto-scale compute)"
+      - "☁️ Enterprise auth (Azure AD integration)"
+      - "☁️ Managed service (no maintenance burden)"
+      - "☁️ Distributed tracing (Application Insights)"
+      
+    cortex6_target_audience:
+      - "Individual developers (free, no cloud costs)"
+      - "Small teams (2-10 developers)"
+      - "Sensitive codebases (healthcare, finance, government)"
+      - "Cost-conscious teams (no cloud budget)"
+      - "Open-source projects (community-driven)"
+      - "Learning environments (teach orchestration)"
+      
+    amplifier_target_audience:
+      - "Enterprise teams (100+ developers)"
+      - "Cloud-native projects (already on Azure)"
+      - "Large-scale ML workloads (distributed training)"
+      - "Compliance-heavy orgs (Azure certifications)"
+
+# =============================================================================
+# IMPLEMENTATION ROADMAP UPDATE
+# =============================================================================
+
+implementation_roadmap_update:
+  
+  phase_0_immediate:
+    title: "MCP + Multi-Repo + Team Knowledge (Foundational)"
+    requirements:
+      - CR-011  # MCP standardization
+      - CR-012  # Multi-repo support
+      - CR-013  # Team knowledge learning
+      - CR-014  # Config-based discovery
+    effort: "17 days (5 + 4 + 6 + 2)"
+    priority: P0_CRITICAL
+    blocking: true
+    rationale: "These enable all other CORTEX-6 features"
+    
+  phase_1_core_improvements:
+    title: "DAG Orchestration + Audit Logging + Silent Execution"
+    requirements:
+      - CR-001  # TODO Orchestrator
+      - CR-002  # Audit logging
+      - CR-003  # Silent execution
+      - CR-004  # Race conditions
+      - CR-010  # Markdown blocking
+    effort: "14 days (3 + 2 + 1 + 2 + 1 + existing 5)"
+    priority: P0_CRITICAL
+    blocking: true
+    
+  phase_2_resilience:
+    title: "Rollback + Performance + Validation"
+    requirements:
+      - CR-005  # Rollback/recovery
+      - CR-006  # Trie routing
+      - CR-007  # Circular dependency detection
+      - CR-009  # Resource limits
+    effort: "9 days (3 + 2 + 1 + 2 + existing 1)"
+    priority: P1_HIGH
+    blocking: false
+    
+  phase_3_polish:
+    title: "Knowledge Conflicts + Edge Cases"
+    requirements:
+      - CR-008  # Knowledge merge conflicts
+      - EDGE-* (25 edge cases)
+    effort: "25 days (2 + 23)"
+    priority: P2_MEDIUM
+    blocking: false
+    
+  total_effort:
+    phases: "Phase 0 + Phase 1 + Phase 2 + Phase 3"
+    effort: "65 days (~13 weeks)"
+    dual_epic_strategy:
+      epic_1_windows: "8 weeks (slower machine)"
+      epic_2_mac: "5 weeks (faster machine, parallel)"
+      integration: "2 weeks"
+      total: "10-11 weeks (with parallelization)"
+
+# =============================================================================
+# RECOMMENDATION
+# =============================================================================
+
+recommendation:
+  verdict: ✅ PROCEED WITH CORTEX-6 (with 4 new requirements)
+  
+  must_add:
+    - "CR-011: MCP standardization (5 days)"
+    - "CR-012: Multi-repo support (4 days)"
+    - "CR-013: Team knowledge learning (6 days)"
+    - "CR-014: Config-based discovery (2 days)"
+    
+  cortex6_killer_features:
+    - "Local MCP = composable orchestrators (vs Azure Functions)"
+    - "Multi-repo = single CORTEX for entire team (vs per-repo config)"
+    - "Team learning = organic knowledge growth (vs manual docs)"
+    - "Config-driven = zero-setup repo integration (vs complex pipelines)"
+    
+  competitive_positioning:
+    tagline: "CORTEX-6: Local-First AI Orchestration for Teams"
+    value_prop: |
+      Microsoft Amplifier requires cloud, costs money, and locks you to Azure.
+      CORTEX-6 runs locally, costs nothing, and works across all your repos
+      with a single config file. Team knowledge grows automatically. MCP
+      standardization means composable tools. Zero vendor lock-in.
+    
+  next_actions:
+    - "Update architecture documents with MCP + Multi-Repo layers"
+    - "Create CR-011 to CR-014 requirement documents"
+    - "Add MCP + Multi-Repo to dual-epic strategy"
+    - "Update system diagrams with new layers"
+    - "Create implementation guide for Phase 0"
+

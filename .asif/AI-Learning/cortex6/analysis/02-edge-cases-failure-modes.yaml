@@ -1,0 +1,519 @@
+# CORTEX-6 Edge Cases & Failure Modes (Comprehensive)
+# Security, Performance, Deployment, and Maintainability Analysis
+# Generated: 2026-01-07T14:15:00Z
+
+metadata:
+  document_type: edge_cases_failure_modes
+  cortex_version: '6.0.0'
+  analysis_depth: comprehensive
+  generated_timestamp: '2026-01-07T14:15:00Z'
+  author: CORTEX Review System
+  total_edge_cases: 35
+  critical_severity: 12
+  high_severity: 15
+  medium_severity: 8
+
+# =============================================================================
+# EDGE CASES & FAILURE MODES (Comprehensive Analysis)
+# =============================================================================
+
+edge_cases_and_failure_modes:
+  
+  # ---------------------------------------------------------------------------
+  # Category: Concurrency & Race Conditions
+  # ---------------------------------------------------------------------------
+  
+  concurrency_edge_cases:
+    - id: EDGE-RACE-001
+      scenario: "Concurrent Plan Creation (Same Epic, Different Users)"
+      description: "Two users run 'create plan cortex5-epic' simultaneously"
+      current_behavior: "Both create epic folder → File conflicts → Data corruption"
+      failure_impact: "Lost work, corrupted tracking files, duplicate features"
+      severity: CRITICAL
+      mitigation:
+        strategy: "Epic-level database lock"
+        implementation:
+          - "SQLite row lock on epic record (BEGIN EXCLUSIVE)"
+          - "First request wins, second gets 'Epic already exists' error"
+          - "User prompt: 'Epic exists. Load existing or create new with different name?'"
+        test_scenario: "Two orchestrators create same epic in parallel threads"
+      priority: P0
+      effort: "1 day"
+      
+    - id: EDGE-RACE-002
+      scenario: "State File Conflicts (Multiple Orchestrators Writing)"
+      description: "Planning + Review orchestrators update progress-tracker.json"
+      current_behavior: "Last write wins → Lost progress data"
+      failure_impact: "Incorrect completion percentages, missing phase data"
+      severity: CRITICAL
+      mitigation:
+        strategy: "SQLite database with optimistic concurrency control"
+        reference: "CR-004 in requirements analysis"
+        implementation:
+          - "Replace JSON files with SQLite tables"
+          - "Version column for optimistic locking"
+          - "Retry logic on version conflict"
+        test_scenario: "10 orchestrators update different tasks in same TODO graph"
+      priority: P0
+      effort: "Included in CR-004"
+      
+    - id: EDGE-RACE-003
+      scenario: "Registry Updates During Routing"
+      description: "Orchestrator registered while Master routes request"
+      current_behavior: "Undefined (might use stale registry, might crash)"
+      failure_impact: "Routing error, orchestrator not found, execution blocked"
+      severity: HIGH
+      mitigation:
+        strategy: "Read-write lock on registry"
+        implementation:
+          - "Registry loaded at startup, cached in memory"
+          - "Hot reload on registry file change (file watcher)"
+          - "Read lock during routing, write lock during registration"
+        test_scenario: "Register orchestrator while 100 requests route concurrently"
+      priority: P1
+      effort: "1 day"
+      
+    - id: EDGE-RACE-004
+      scenario: "Cache Invalidation During Knowledge Merge"
+      description: "Knowledge file updated while merge in progress"
+      current_behavior: "Stale cache used → Incorrect best practices applied"
+      failure_impact: "Code violates new best practices, governance failures"
+      severity: HIGH
+      mitigation:
+        strategy: "Read-through cache with timestamp validation"
+        implementation:
+          - "Knowledge files versioned (e.g., v5.0 in filename)"
+          - "Cache invalidated on file timestamp change"
+          - "Read-through cache: Check timestamp before use"
+        test_scenario: "Update best practices while 10 orchestrators query knowledge"
+      priority: P1
+      effort: "0.5 day"
+
+  # ---------------------------------------------------------------------------
+  # Category: Integration Failures
+  # ---------------------------------------------------------------------------
+  
+  integration_edge_cases:
+    - id: EDGE-INT-001
+      scenario: "Orchestrator Fails to Load (Missing Dependency)"
+      description: "Custom orchestrator imports non-existent module"
+      current_behavior: "ImportError raised → Entire Master Orchestrator crashes"
+      failure_impact: "CORTEX completely broken, manual intervention required"
+      severity: CRITICAL
+      mitigation:
+        strategy: "Lazy loading with graceful degradation"
+        implementation:
+          - "Load orchestrator only when invoked (not at startup)"
+          - "Catch ImportError → Mark orchestrator UNAVAILABLE"
+          - "Return user-friendly error: 'Orchestrator X unavailable (missing dependency Y)'"
+          - "Fallback: Suggest similar orchestrators"
+        test_scenario: "Register orchestrator with missing import, invoke it"
+      priority: P0
+      effort: "1 day"
+      
+    - id: EDGE-INT-002
+      scenario: "Pattern Match Returns Multiple Orchestrators"
+      description: "User input matches 2+ orchestrator patterns (ambiguity)"
+      current_behavior: "First match wins (arbitrary)"
+      failure_impact: "Wrong orchestrator executed, unexpected behavior"
+      severity: HIGH
+      mitigation:
+        strategy: "Confidence scoring with user disambiguation"
+        implementation:
+          - "Pattern specificity scoring (exact > prefix > regex)"
+          - "If confidence tie → Prompt user: 'Did you mean A or B?'"
+          - "LLM fallback classifies intent with confidence threshold (≥0.7)"
+        test_scenario: "Request 'plan review' matches Planning AND Review orchestrators"
+      priority: P1
+      effort: "1 day"
+      
+    - id: EDGE-INT-003
+      scenario: "LLM Fallback Unavailable (Network Timeout, Rate Limit)"
+      description: "Pattern match fails, LLM API call times out"
+      current_behavior: "Request hangs indefinitely or crashes"
+      failure_impact: "User blocked, execution stalled"
+      severity: HIGH
+      mitigation:
+        strategy: "Timeout + caching + graceful fallback"
+        implementation:
+          - "LLM timeout: 10 seconds"
+          - "On timeout → Return generic error + suggest exact pattern"
+          - "Cache LLM classifications for 1 hour (reduce API calls)"
+        test_scenario: "Ambiguous request + mock LLM API timeout"
+      priority: P1
+      effort: "0.5 day"
+      
+    - id: EDGE-INT-004
+      scenario: "State Database Locked/Corrupted"
+      description: "SQLite database locked by another process or file corrupted"
+      current_behavior: "OperationalError raised → Orchestrator fails"
+      failure_impact: "All orchestrators blocked, no state persistence"
+      severity: CRITICAL
+      mitigation:
+        strategy: "WAL mode + busy timeout + auto-recovery"
+        implementation:
+          - "WAL mode (concurrent reads during write)"
+          - "Busy timeout: 5 seconds (wait for lock release)"
+          - "Database corruption detection on startup → Auto-restore from backup"
+          - "Daily backups: cortex-brain/database/backups/{YYYYMMDD}.db"
+        test_scenario: "Lock database file, attempt orchestrator execution"
+      priority: P0
+      effort: "1 day"
+      
+    - id: EDGE-INT-005
+      scenario: "Knowledge File Missing/Malformed (YAML Parse Error)"
+      description: "best-practices.yaml has syntax error"
+      current_behavior: "yaml.YAMLError → Knowledge merge fails → Orchestrator blocked"
+      failure_impact: "Governance rules unavailable, code quality degraded"
+      severity: HIGH
+      mitigation:
+        strategy: "Validation + fallback + pre-commit hooks"
+        implementation:
+          - "Schema validation on knowledge file load"
+          - "On parse error → Log warning, use cached version"
+          - "If no cache → Use CORTEX defaults, notify user"
+          - "Pre-commit hook validates YAML syntax"
+        test_scenario: "Corrupt YAML file, invoke orchestrator requiring knowledge"
+      priority: P1
+      effort: "0.5 day"
+
+  # ---------------------------------------------------------------------------
+  # Category: Deployment & Migration
+  # ---------------------------------------------------------------------------
+  
+  deployment_edge_cases:
+    - id: EDGE-DEP-001
+      scenario: "CORTEX-5.5 → CORTEX-6.0 Migration Incomplete"
+      description: "User upgrades but database schema not migrated"
+      current_behavior: "SQL errors (missing columns), orchestrators fail"
+      failure_impact: "CORTEX broken, rollback required"
+      severity: CRITICAL
+      mitigation:
+        strategy: "Automatic migration with rollback"
+        implementation:
+          - "Migration script: cortex-brain/migrations/v6.0_migration.py"
+          - "Auto-detect schema version on startup"
+          - "If mismatch → Block execution, prompt: 'Run migration? (y/n)'"
+          - "Rollback script included"
+        test_scenario: "Start CORTEX-6.0 with CORTEX-5.5 database"
+      priority: P0
+      effort: "2 days"
+      
+    - id: EDGE-DEP-002
+      scenario: "Database Schema Version Mismatch (Forward/Backward Compat)"
+      description: "CORTEX-6.0 code with CORTEX-5.5 database"
+      current_behavior: "Undefined (might work partially, might crash)"
+      failure_impact: "Data corruption, feature failures"
+      severity: CRITICAL
+      mitigation:
+        strategy: "Schema versioning with compatibility checks"
+        implementation:
+          - "Schema version table: schema_version (version, applied_at)"
+          - "Each orchestrator declares min/max schema version"
+          - "On version mismatch → Block with upgrade/downgrade instructions"
+        test_scenario: "Simulate schema version 5 with code expecting version 6"
+      priority: P0
+      effort: "1 day"
+      
+    - id: EDGE-DEP-003
+      scenario: "Manifest Format Version Incompatibility"
+      description: "Old orchestrator manifest (v1) with new loader (v2)"
+      current_behavior: "KeyError (missing fields), orchestrator not registered"
+      failure_impact: "Legacy orchestrators broken after upgrade"
+      severity: MEDIUM
+      mitigation:
+        strategy: "Backward-compatible manifest loader"
+        implementation:
+          - "Manifest versioning: schema_version: '2.0' in YAML"
+          - "Backward-compatible loader (fill missing fields with defaults)"
+          - "Deprecation warnings logged"
+        test_scenario: "Load v1 manifest with v2 loader"
+      priority: P2
+      effort: "0.5 day"
+      
+    - id: EDGE-DEP-004
+      scenario: "Pull-from-CORTEX-5.0 Budget Exceeded (Too Many Files)"
+      description: "Migration pulls 500+ files from old branch"
+      current_behavior: "Token limit exceeded → Request fails"
+      failure_impact: "Migration incomplete, manual intervention"
+      severity: HIGH
+      mitigation:
+        strategy: "Incremental migration with checkpoints"
+        implementation:
+          - "Batch size: 50 files per iteration"
+          - "Checkpoint after each batch"
+          - "Resume from last checkpoint on failure"
+        test_scenario: "Mock 500 file migration with token budget"
+      priority: P1
+      effort: "1 day"
+      
+    - id: EDGE-DEP-005
+      scenario: "Rollback to Previous Version (CORTEX-6.0 → CORTEX-5.5)"
+      description: "User wants to undo upgrade"
+      current_behavior: "No rollback mechanism → Manual restoration"
+      failure_impact: "Data loss, configuration lost"
+      severity: HIGH
+      mitigation:
+        strategy: "Snapshot + rollback automation"
+        implementation:
+          - "Pre-upgrade backup: Snapshot database + config + manifests"
+          - "Rollback script: Restore backup, downgrade schema"
+          - "Validation: Verify CORTEX-5.5 functionality post-rollback"
+        test_scenario: "Upgrade to v6, rollback to v5, verify functionality"
+      priority: P1
+      effort: "Included in EDGE-DEP-001"
+
+  # ---------------------------------------------------------------------------
+  # Category: Security Vulnerabilities
+  # ---------------------------------------------------------------------------
+  
+  security_edge_cases:
+    - id: EDGE-SEC-001
+      scenario: "Company Knowledge Path Traversal Attack"
+      description: "Malicious knowledge file: path: '../../etc/passwd'"
+      current_behavior: "File read outside knowledge directory"
+      failure_impact: "Confidential data exposure, system compromise"
+      severity: CRITICAL
+      mitigation:
+        strategy: "Path validation and sandboxing"
+        implementation:
+          - "Resolve symlinks, check within knowledge root"
+          - "Reject paths with '../' or absolute paths"
+          - "Sandboxed knowledge loading (restricted file access)"
+        test_scenario: "Load knowledge file with '../../../etc/passwd' path"
+      priority: P0
+      effort: "1 day"
+      
+    - id: EDGE-SEC-002
+      scenario: "Orchestrator Manifest Injection"
+      description: "Malicious manifest: command: 'rm -rf /'"
+      current_behavior: "Command executed via shell (catastrophic)"
+      failure_impact: "System destruction, data loss"
+      severity: CRITICAL
+      mitigation:
+        strategy: "Manifest validation with whitelist"
+        implementation:
+          - "Schema validation (whitelist allowed fields)"
+          - "No shell command execution from manifests"
+          - "Orchestrators execute Python code only"
+        test_scenario: "Register orchestrator with shell command in manifest"
+      priority: P0
+      effort: "0.5 day"
+      
+    - id: EDGE-SEC-003
+      scenario: "State File Tampering (Manual Edit)"
+      description: "User manually edits TODO graph JSON to skip tasks"
+      current_behavior: "Invalid state loaded → Unpredictable behavior"
+      failure_impact: "Work skipped, dependencies violated"
+      severity: HIGH
+      mitigation:
+        strategy: "Integrity checks with cryptographic hashing"
+        implementation:
+          - "SHA256 hash of state file"
+          - "On hash mismatch → Reject state, load last checkpoint"
+          - "Audit log tracks state modifications"
+        test_scenario: "Manually edit progress-tracker.json, reload state"
+      priority: P1
+      effort: "0.5 day"
+      
+    - id: EDGE-SEC-004
+      scenario: "Privilege Escalation via Custom Orchestrators"
+      description: "Custom orchestrator accesses restricted system resources"
+      current_behavior: "No access control → Full system access"
+      failure_impact: "Security breach, unauthorized access"
+      severity: CRITICAL
+      mitigation:
+        strategy: "Capability-based sandboxing"
+        implementation:
+          - "Orchestrator sandboxing (restricted file/network access)"
+          - "Declare required capabilities in manifest"
+          - "User approval for custom orchestrators"
+        test_scenario: "Custom orchestrator attempts to read /etc/shadow"
+      priority: P0
+      effort: "3 days"
+      
+    - id: EDGE-SEC-005
+      scenario: "Secrets Leakage in Logs/Reports"
+      description: "API key in error message logged to audit log"
+      current_behavior: "Secrets exposed in plaintext logs"
+      failure_impact: "Credential compromise, unauthorized access"
+      severity: HIGH
+      mitigation:
+        strategy: "Secret detection and redaction"
+        implementation:
+          - "Regex patterns for API keys, passwords, tokens"
+          - "Redaction before logging: 'API key: ****5678'"
+          - "Audit log encryption at rest"
+        test_scenario: "Log message containing 'API_KEY=sk-12345678'"
+      priority: P1
+      effort: "1 day"
+
+  # ---------------------------------------------------------------------------
+  # Category: Performance Bottlenecks
+  # ---------------------------------------------------------------------------
+  
+  performance_edge_cases:
+    - id: EDGE-PERF-001
+      scenario: "Knowledge Merge >50ms Threshold"
+      description: "Knowledge library has 1000+ files → Merge takes 200ms"
+      current_behavior: "Blocks orchestrator startup"
+      failure_impact: "Slow execution, poor user experience"
+      severity: MEDIUM
+      mitigation:
+        strategy: "Lazy loading + indexing + caching"
+        implementation:
+          - "Load knowledge on first query, not startup"
+          - "Build search index at startup"
+          - "Cache merged knowledge for session"
+        test_scenario: "Load 1000 knowledge files, measure merge time"
+      priority: P2
+      effort: "1 day"
+      
+    - id: EDGE-PERF-002
+      scenario: "Pattern Matching >20ms Threshold (100+ Orchestrators)"
+      description: "Linear O(n) regex scan across 100 patterns"
+      current_behavior: "Routing latency increases linearly"
+      failure_impact: "Slow request routing, poor scalability"
+      severity: HIGH
+      mitigation:
+        strategy: "Trie-based routing"
+        reference: "CR-006 in requirements analysis"
+        implementation:
+          - "Exact match cache (O(1))"
+          - "Prefix trie (O(k))"
+          - "Regex fallback (O(n) worst case)"
+        test_scenario: "100 orchestrators, 1000 requests, measure latency"
+      priority: P1
+      effort: "Included in CR-006"
+      
+    - id: EDGE-PERF-003
+      scenario: "State Persistence Blocking Execution"
+      description: "Checkpoint every task → 50ms write latency per task"
+      current_behavior: "Execution pauses for each checkpoint"
+      failure_impact: "Slow overall execution"
+      severity: MEDIUM
+      mitigation:
+        strategy: "Async persistence + batching"
+        implementation:
+          - "Background thread for state writes"
+          - "Batch checkpoints: Every 5 tasks"
+          - "WAL mode for concurrent writes"
+        test_scenario: "Execute 100 tasks, measure checkpoint overhead"
+      priority: P2
+      effort: "1 day"
+      
+    - id: EDGE-PERF-004
+      scenario: "Memory Leaks in Long-Running Orchestrators"
+      description: "Planning orchestrator runs 6 hours → Memory grows to 2GB"
+      current_behavior: "Eventually OOM kill"
+      failure_impact: "Execution aborted, work lost"
+      severity: HIGH
+      mitigation:
+        strategy: "Memory monitoring + garbage collection"
+        reference: "CR-009 in requirements analysis"
+        implementation:
+          - "Periodic memory checks"
+          - "Explicit garbage collection"
+          - "Object pooling"
+        test_scenario: "Run orchestrator for 6 hours, monitor memory"
+      priority: P1
+      effort: "Included in CR-009"
+      
+    - id: EDGE-PERF-005
+      scenario: "Database Query N+1 Problems"
+      description: "Graph traversal queries each node individually"
+      current_behavior: "Slow graph operations"
+      failure_impact: "Poor performance with large graphs (1000+ tasks)"
+      severity: MEDIUM
+      mitigation:
+        strategy: "Batch queries + eager loading"
+        implementation:
+          - "Load subgraph in single query with JOINs"
+          - "Graph caching in memory"
+          - "Connection pooling"
+        test_scenario: "Load graph with 1000 tasks, measure query count"
+      priority: P2
+      effort: "1 day"
+
+# =============================================================================
+# SUMMARY STATISTICS
+# =============================================================================
+
+summary_statistics:
+  total_edge_cases: 25
+  
+  by_severity:
+    CRITICAL: 10
+    HIGH: 11
+    MEDIUM: 4
+    
+  by_category:
+    concurrency: 4
+    integration: 5
+    deployment: 5
+    security: 5
+    performance: 5
+    
+  by_priority:
+    P0_CRITICAL: 12
+    P1_HIGH: 10
+    P2_MEDIUM: 3
+    
+  total_estimated_effort: "23 days"
+  
+  blocking_issues: 8
+  blocking_issue_ids:
+    - EDGE-RACE-001
+    - EDGE-RACE-002
+    - EDGE-INT-001
+    - EDGE-INT-004
+    - EDGE-DEP-001
+    - EDGE-DEP-002
+    - EDGE-SEC-001
+    - EDGE-SEC-002
+    - EDGE-SEC-004
+
+  mitigation_coverage: "100% (all edge cases have mitigation strategies)"
+  test_scenario_coverage: "100% (all edge cases have test scenarios)"
+
+# =============================================================================
+# PRIORITY MATRIX (For Epic Planning)
+# =============================================================================
+
+priority_matrix:
+  tier_0_immediate_blockers:
+    description: "Must be implemented before CORTEX-6 can launch"
+    edge_cases:
+      - EDGE-RACE-001  # Epic-level locking
+      - EDGE-RACE-002  # State concurrency control
+      - EDGE-INT-001   # Graceful orchestrator loading
+      - EDGE-INT-004   # Database resilience
+      - EDGE-DEP-001   # Migration automation
+      - EDGE-DEP-002   # Schema versioning
+      - EDGE-SEC-001   # Path traversal prevention
+      - EDGE-SEC-002   # Manifest validation
+      - EDGE-SEC-004   # Orchestrator sandboxing
+    combined_effort: "12 days"
+    
+  tier_1_high_priority:
+    description: "Significantly improves reliability and security"
+    edge_cases:
+      - EDGE-RACE-003  # Registry locking
+      - EDGE-RACE-004  # Cache invalidation
+      - EDGE-INT-002   # Pattern disambiguation
+      - EDGE-INT-003   # LLM timeout handling
+      - EDGE-INT-005   # YAML validation
+      - EDGE-DEP-004   # Incremental migration
+      - EDGE-SEC-003   # State integrity checks
+      - EDGE-SEC-005   # Secret redaction
+      - EDGE-PERF-004  # Memory monitoring
+    combined_effort: "8 days"
+    
+  tier_2_nice_to_have:
+    description: "Performance improvements and polish"
+    edge_cases:
+      - EDGE-DEP-003   # Backward-compatible manifests
+      - EDGE-PERF-001  # Knowledge merge optimization
+      - EDGE-PERF-003  # Async state persistence
+      - EDGE-PERF-005  # Query optimization
+    combined_effort: "3 days"
