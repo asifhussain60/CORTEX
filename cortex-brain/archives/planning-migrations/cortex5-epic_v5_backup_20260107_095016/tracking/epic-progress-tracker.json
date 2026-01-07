@@ -1,0 +1,182 @@
+{
+  "epic_id": "cortex5-epic",
+  "epic_name": "CORTEX 5.0 Enhancement Epic: Business Domain Integration",
+  "version": "4.0.0",
+  "status": "ACTIVE",
+  "created_date": "2026-01-07",
+  "last_updated": "2026-01-07T12:00:00Z",
+  "overall_progress": 8,
+  "completion_status": {
+    "features_total": 10,
+    "features_completed": 0,
+    "features_in_progress": 1,
+    "features_not_started": 9,
+    "features_blocked": 9
+  },
+  "features": [
+    {
+      "feature_id": "planning-system-core",
+      "feature_name": "Planning System v5 Core",
+      "priority": "P0_FOUNDATION",
+      "progress": 15,
+      "status": "IN_PROGRESS",
+      "estimated_weeks": 2,
+      "dependencies": [],
+      "blocks_features": ["governance-rules", "testing-framework"],
+      "tracker_path": "features/planning-system-core/tracking/progress-tracker.json",
+      "snowball_tier": 1,
+      "description": "Foundational planning infrastructure with epic/feature hierarchy, folder organization, and machine-readable plans"
+    },
+    {
+      "feature_id": "governance-rules",
+      "feature_name": "Governance Rules v2",
+      "priority": "P0_FOUNDATION",
+      "progress": 0,
+      "status": "BLOCKED",
+      "estimated_weeks": 1.5,
+      "dependencies": ["planning-system-core"],
+      "blocks_features": ["goal-detection", "goal-inheritance"],
+      "tracker_path": "features/governance-rules/tracking/progress-tracker.json",
+      "snowball_tier": 1,
+      "description": "Enhanced brain protection rules with runtime enforcement and governance checkpoints"
+    },
+    {
+      "feature_id": "testing-framework",
+      "feature_name": "Testing Framework v2",
+      "priority": "P0_FOUNDATION",
+      "progress": 0,
+      "status": "BLOCKED",
+      "estimated_weeks": 1,
+      "dependencies": ["planning-system-core"],
+      "blocks_features": ["goal-detection"],
+      "tracker_path": "features/testing-framework/tracking/progress-tracker.json",
+      "snowball_tier": 1,
+      "description": "TDD harness with orchestrator testing, integration tests, and coverage tracking"
+    },
+    {
+      "feature_id": "goal-detection",
+      "feature_name": "Goal Detection System",
+      "priority": "P1_INTELLIGENCE",
+      "progress": 0,
+      "status": "BLOCKED",
+      "estimated_weeks": 2,
+      "dependencies": ["governance-rules", "testing-framework"],
+      "blocks_features": ["goal-inheritance"],
+      "tracker_path": "features/goal-detection/tracking/progress-tracker.json",
+      "snowball_tier": 2,
+      "description": "Intelligent goal extraction from user requests with NLP and pattern matching"
+    },
+    {
+      "feature_id": "goal-inheritance",
+      "feature_name": "Goal Inheritance System",
+      "priority": "P1_INTELLIGENCE",
+      "progress": 0,
+      "status": "BLOCKED",
+      "estimated_weeks": 1.5,
+      "dependencies": ["goal-detection", "governance-rules"],
+      "blocks_features": ["knowledge-integration"],
+      "tracker_path": "features/goal-inheritance/tracking/progress-tracker.json",
+      "snowball_tier": 2,
+      "description": "Hierarchical goal propagation (epic → feature → phase) with conflict resolution"
+    },
+    {
+      "feature_id": "knowledge-integration",
+      "feature_name": "Knowledge Graph Integration",
+      "priority": "P2_INTELLIGENCE",
+      "progress": 0,
+      "status": "BLOCKED",
+      "estimated_weeks": 1,
+      "dependencies": ["goal-inheritance"],
+      "blocks_features": [],
+      "tracker_path": "features/knowledge-integration/tracking/progress-tracker.json",
+      "snowball_tier": 2,
+      "description": "Tier 2 knowledge graph queries for lessons learned and cross-plan analytics"
+    },
+    {
+      "feature_id": "response-templates",
+      "feature_name": "Response Templates v5",
+      "priority": "P1_USER_EXPERIENCE",
+      "progress": 0,
+      "status": "BLOCKED",
+      "estimated_weeks": 1.5,
+      "dependencies": ["planning-system-core"],
+      "blocks_features": ["continuation-system"],
+      "tracker_path": "features/response-templates/tracking/progress-tracker.json",
+      "snowball_tier": 3,
+      "description": "Enhanced response templates with accessibility, cognitive load management, and concise mode"
+    },
+    {
+      "feature_id": "continuation-system",
+      "feature_name": "Continuation System v2",
+      "priority": "P1_USER_EXPERIENCE",
+      "progress": 0,
+      "status": "BLOCKED",
+      "estimated_weeks": 1,
+      "dependencies": ["response-templates"],
+      "blocks_features": ["plan-viewer-enhancements"],
+      "tracker_path": "features/continuation-system/tracking/progress-tracker.json",
+      "snowball_tier": 3,
+      "description": "Session management with token limit detection and continuation prompts"
+    },
+    {
+      "feature_id": "plan-viewer-enhancements",
+      "feature_name": "Plan Viewer Enhancements",
+      "priority": "P1_USER_EXPERIENCE",
+      "progress": 0,
+      "status": "BLOCKED",
+      "estimated_weeks": 1.5,
+      "dependencies": ["continuation-system"],
+      "blocks_features": ["toolkit-orchestration"],
+      "tracker_path": "features/plan-viewer-enhancements/tracking/progress-tracker.json",
+      "snowball_tier": 3,
+      "description": "Universal HTML viewer with epic/feature auto-detection and progress visualization"
+    },
+    {
+      "feature_id": "toolkit-orchestration",
+      "feature_name": "Toolkit Orchestration",
+      "priority": "P2_USER_EXPERIENCE",
+      "progress": 0,
+      "status": "BLOCKED",
+      "estimated_weeks": 1,
+      "dependencies": ["plan-viewer-enhancements"],
+      "blocks_features": [],
+      "tracker_path": "features/toolkit-orchestration/tracking/progress-tracker.json",
+      "snowball_tier": 3,
+      "description": "Script generation and execution orchestrator for plan automation"
+    }
+  ],
+  "snowball_execution_order": [
+    "Tier 1 (Foundation): planning-system-core → governance-rules, testing-framework (parallel)",
+    "Tier 2 (Intelligence): goal-detection → goal-inheritance → knowledge-integration",
+    "Tier 3 (User Experience): response-templates → continuation-system → plan-viewer-enhancements → toolkit-orchestration"
+  ],
+  "critical_path": [
+    "planning-system-core",
+    "governance-rules",
+    "goal-detection",
+    "goal-inheritance",
+    "response-templates",
+    "continuation-system",
+    "plan-viewer-enhancements"
+  ],
+  "epic_level_goals": {
+    "mandatory": [
+      "G001: Audit Trail Required",
+      "G002: Core Isolation Mandatory",
+      "G003: Atomic Operations",
+      "G004: Governance Validation"
+    ],
+    "recommended": [
+      "G005: Backward Compatibility",
+      "G006: Performance Budget (<50ms knowledge merge)",
+      "G007: Documentation Complete"
+    ]
+  },
+  "architecture": {
+    "type": "hierarchical",
+    "pattern": "Epic → Feature → Phase",
+    "execution_mode": "snowball_autonomous",
+    "knowledge_layers": 3,
+    "orchestrator_registry": "enabled"
+  }
+}

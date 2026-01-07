@@ -1,0 +1,153 @@
+{
+  "feature_id": "planning-system-core",
+  "feature_name": "Planning System v5 Core",
+  "parent_epic": "cortex5-epic",
+  "version": "1.0.0",
+  "status": "IN_PROGRESS",
+  "created_date": "2026-01-07",
+  "last_updated": "2026-01-07T12:00:00Z",
+  "overall_progress": 15,
+  "priority": "P0_FOUNDATION",
+  "snowball_tier": 1,
+  "estimated_weeks": 2,
+  "phases": [
+    {
+      "phase_number": 1,
+      "phase_name": "Epic/Feature Folder Structure",
+      "status": "IN_PROGRESS",
+      "progress": 60,
+      "estimated_hours": 8,
+      "dependencies": [],
+      "deliverables": [
+        {
+          "name": "Epic folder structure implementation",
+          "status": "IN_PROGRESS",
+          "description": "Create proper epic → feature → phase hierarchy"
+        },
+        {
+          "name": "Folder naming conventions",
+          "status": "NOT_STARTED",
+          "description": "Implement suffix naming with 25 char limit"
+        },
+        {
+          "name": "Root file organization rules",
+          "status": "NOT_STARTED",
+          "description": "Only plan-viewer.html + CONTINUATION-PROMPT.md on root"
+        }
+      ],
+      "success_criteria": [
+        "Epic has features/ subfolder with full feature plans",
+        "Features have phases/ subfolder with executable phases",
+        "All naming follows suffix pattern (cortex5-epic, not epic-cortex5)",
+        "Character limit 25 enforced",
+        "Root cleanup: only 2 files allowed"
+      ]
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Machine-Readable Plan Format",
+      "status": "NOT_STARTED",
+      "progress": 0,
+      "estimated_hours": 6,
+      "dependencies": [1],
+      "deliverables": [
+        {
+          "name": "JSON-based feature plans",
+          "status": "NOT_STARTED",
+          "description": "Replace .md feature files with executable JSON plans"
+        },
+        {
+          "name": "Progress tracker format v2",
+          "status": "NOT_STARTED",
+          "description": "Enhanced tracker with snowball execution order"
+        },
+        {
+          "name": "Phase execution manifests",
+          "status": "NOT_STARTED",
+          "description": "Machine-readable phase definitions for autonomous execution"
+        }
+      ],
+      "success_criteria": [
+        "Zero .md files in features/ folder (except in context/analysis subfolders)",
+        "All features have progress-tracker.json",
+        "All phases have execution manifests",
+        "Plan viewer can parse and display JSON plans"
+      ]
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Auto-Detection Logic",
+      "status": "NOT_STARTED",
+      "progress": 0,
+      "estimated_hours": 4,
+      "dependencies": [1, 2],
+      "deliverables": [
+        {
+          "name": "Epic vs Feature detection",
+          "status": "NOT_STARTED",
+          "description": "Auto-detect mode based on features/ subfolder + epic-progress-tracker.json"
+        },
+        {
+          "name": "Tracker file naming validation",
+          "status": "NOT_STARTED",
+          "description": "Epic: epic-progress-tracker.json, Feature: progress-tracker.json"
+        },
+        {
+          "name": "Plan viewer mode switcher",
+          "status": "NOT_STARTED",
+          "description": "Universal viewer that renders epic or feature based on detection"
+        }
+      ],
+      "success_criteria": [
+        "Plan viewer correctly detects epic vs feature 100% of time",
+        "Epic mode renders all features with progress bars",
+        "Feature mode renders all phases with progress bars",
+        "No manual configuration needed"
+      ]
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Snowball Execution Orchestrator",
+      "status": "NOT_STARTED",
+      "progress": 0,
+      "estimated_hours": 8,
+      "dependencies": [1, 2, 3],
+      "deliverables": [
+        {
+          "name": "Snowball prioritization algorithm",
+          "status": "NOT_STARTED",
+          "description": "Priority = (Impact × Urgency × Dependencies_Satisfied) / (Effort × Risk)"
+        },
+        {
+          "name": "Tier-based execution sequencing",
+          "status": "NOT_STARTED",
+          "description": "Foundation → Intelligence → User Experience tiers"
+        },
+        {
+          "name": "Parallel execution support",
+          "status": "NOT_STARTED",
+          "description": "Execute independent features/phases in parallel"
+        },
+        {
+          "name": "Autonomous continuation",
+          "status": "NOT_STARTED",
+          "description": "Auto-execute next phase after completion (no manual trigger)"
+        }
+      ],
+      "success_criteria": [
+        "Features execute in optimal snowball order",
+        "Parallel execution works without race conditions",
+        "Autonomous mode completes entire epic without user intervention",
+        "Progress tracking accurate across concurrent executions"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "blocks_features": ["governance-rules", "testing-framework"],
+  "epic_level_goals_inherited": [
+    "G001: Audit Trail Required",
+    "G002: Core Isolation Mandatory",
+    "G003: Atomic Operations",
+    "G004: Governance Validation"
+  ]
+}
