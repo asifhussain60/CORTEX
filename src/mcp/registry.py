@@ -174,6 +174,42 @@ class OrchestratorRegistry:
         """
         return self._orchestrators.get(id)
     
+    def instantiate(self, orchestrator_id: str, init_args: Optional[Dict[str, Any]] = None) -> Any:
+        """
+        Instantiate an orchestrator by ID.
+        
+        Args:
+            orchestrator_id: Orchestrator identifier
+            init_args: Optional initialization arguments
+        
+        Returns:
+            Orchestrator instance
+        
+        Raises:
+            KeyError: If orchestrator not found
+            ImportError: If module cannot be imported
+        """
+        # Check cache first
+        if orchestrator_id in self._loaded_instances and init_args is None:
+            self.logger.debug(f"Using cached instance: {orchestrator_id}")
+            return self._loaded_instances[orchestrator_id]
+        
+        # Get metadata
+        metadata = self.get(orchestrator_id)
+        if not metadata:
+            raise KeyError(f"Orchestrator '{orchestrator_id}' not found in registry")
+        
+        # Use loader to instantiate
+        from src.mcp.loader import OrchestratorLoader
+        loader = OrchestratorLoader(self)
+        instance = loader.load_instance(orchestrator_id, init_args=init_args)
+        
+        # Cache instance if no custom init_args
+        if init_args is None:
+            self._loaded_instances[orchestrator_id] = instance
+        
+        return instance
+    
     def list_all(
         self,
         enabled_only: bool = True,

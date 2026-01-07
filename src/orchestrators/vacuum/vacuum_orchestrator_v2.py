@@ -65,16 +65,24 @@ class VacuumOrchestratorV2(BaseOrchestratorV4_1):
             state_db: PlanningStateDB instance (creates new if None)
             plan_id: Optional existing plan ID to resume
         """
-        # Initialize database if not provided
+        # Store state_db and plan_id as instance variables
         if state_db is None:
             db_path = Path("cortex-brain/database/planning_state.db")
             state_db = PlanningStateDB(str(db_path))
         
-        super().__init__(
-            config_path=config_path,
-            state_db=state_db,
-            plan_id=plan_id
-        )
+        self.state_db = state_db
+        self.plan_id = plan_id
+        
+        # Call parent with only config_path (BaseOrchestratorV4_1 only accepts this)
+        super().__init__(config_path=config_path)
+        
+        # Load config manually since base doesn't do it
+        import yaml
+        if config_path and Path(config_path).exists():
+            with open(config_path, 'r') as f:
+                self.config = yaml.safe_load(f)
+        else:
+            self.config = {}
         
         # Load cleanup rules from config
         self.cleanup_rules = self.config.get('cleanup_categories', {})
@@ -92,6 +100,19 @@ class VacuumOrchestratorV2(BaseOrchestratorV4_1):
         self.cleanup_plan: Dict[str, Any] = {}
         self.validated_plan: Dict[str, Any] = {}
         self.execution_result: Dict[str, Any] = {}
+    
+    def check_token_usage(self) -> Dict[str, Any]:
+        """
+        Check token usage (stub for middleware compatibility).
+        
+        Returns:
+            Dict with percentage and optional user_message
+        """
+        # Stub implementation - return safe values
+        return {
+            'percentage': 0,
+            'user_message': None
+        }
     
     @property
     def filesystem_engine(self):
@@ -184,7 +205,7 @@ class VacuumOrchestratorV2(BaseOrchestratorV4_1):
         # Validate target path
         if not target_path.exists():
             return OrchestratorResult(
-                status=OrchestratorStatus.FAILED,
+                status=OrchestratorStatus.FAILURE,
                 message=f"Target path not found: {target_path}",
                 artifacts=[],
                 errors=[f"Path does not exist: {target_path}"]
@@ -213,9 +234,9 @@ class VacuumOrchestratorV2(BaseOrchestratorV4_1):
         try:
             # Phase 1: DISCOVERY
             discovery_result = self._phase_discovery(target_path)
-            artifacts.extend(discovery_result.artifacts)
+            artifacts.extend(discovery_result.data.get("artifacts", []))
             if discovery_result.status == PhaseStatus.FAILED:
-                errors.extend(discovery_result.errors)
+                errors.extend(discovery_result.data.get("errors", []))
                 raise RuntimeError("Discovery phase failed")
             
             # Check token usage after Phase 1
@@ -226,9 +247,9 @@ class VacuumOrchestratorV2(BaseOrchestratorV4_1):
             
             # Phase 2: ANALYSIS
             analysis_result = self._phase_analysis(aggressive)
-            artifacts.extend(analysis_result.artifacts)
+            artifacts.extend(analysis_result.data.get("artifacts", []))
             if analysis_result.status == PhaseStatus.FAILED:
-                errors.extend(analysis_result.errors)
+                errors.extend(analysis_result.data.get("errors", []))
                 raise RuntimeError("Analysis phase failed")
             
             # Check token usage after Phase 2
@@ -238,9 +259,9 @@ class VacuumOrchestratorV2(BaseOrchestratorV4_1):
             
             # Phase 3: PLANNING (safety validation)
             planning_result = self._phase_planning()
-            artifacts.extend(planning_result.artifacts)
+            artifacts.extend(planning_result.data.get("artifacts", []))
             if planning_result.status == PhaseStatus.FAILED:
-                errors.extend(planning_result.errors)
+                errors.extend(planning_result.data.get("errors", []))
                 raise RuntimeError("Planning phase failed")
             
             # Check token usage after Phase 3
@@ -252,7 +273,7 @@ class VacuumOrchestratorV2(BaseOrchestratorV4_1):
             if dry_run:
                 # Generate dry-run report
                 approval_result = self._phase_approval_dry_run()
-                artifacts.extend(approval_result.artifacts)
+                artifacts.extend(approval_result.data.get("artifacts", []))
                 
                 # Check token usage - middleware will handle user-facing warnings
                 token_check = self.check_token_usage()
@@ -271,26 +292,26 @@ class VacuumOrchestratorV2(BaseOrchestratorV4_1):
             else:
                 # User confirmation (if not auto-approved)
                 approval_result = self._phase_approval_confirm(auto_approve)
-                artifacts.extend(approval_result.artifacts)
+                artifacts.extend(approval_result.data.get("artifacts", []))
                 
                 if approval_result.status == PhaseStatus.FAILED:
                     return OrchestratorResult(
                         status=OrchestratorStatus.CANCELLED,
                         message="User cancelled vacuum operation",
                         artifacts=artifacts,
-                        errors=approval_result.errors
+                        errors=approval_result.data.get("errors", [])
                     )
             
             # Phase 5: EXECUTION
             execution_result = self._phase_execution(checkpoint)
-            artifacts.extend(execution_result.artifacts)
+            artifacts.extend(execution_result.data.get("artifacts", []))
             if execution_result.status == PhaseStatus.FAILED:
-                errors.extend(execution_result.errors)
+                errors.extend(execution_result.data.get("errors", []))
                 raise RuntimeError("Execution phase failed")
             
             # Phase 6: COMPLETION
             completion_result = self._phase_completion()
-            artifacts.extend(completion_result.artifacts)
+            artifacts.extend(completion_result.data.get("artifacts", []))
             
             # Calculate duration
             duration = (datetime.now() - started_at).total_seconds()
@@ -300,15 +321,16 @@ class VacuumOrchestratorV2(BaseOrchestratorV4_1):
             completion_message = f"Vacuum completed successfully in {duration:.1f}s"
             
             return OrchestratorResult(
+                success=True,
                 status=OrchestratorStatus.SUCCESS,
                 message=completion_message,
-                artifacts=artifacts,
-                errors=errors,
                 data={
-                    'token_usage_percentage': final_token_check.get('percentage', 0),  # For middleware
+                    'artifacts': artifacts,
+                    'errors': errors,
+                    'token_usage_percentage': final_token_check.get('percentage', 0),
                     'success_metadata': {
                         'duration_seconds': duration,
-                        'files_cleaned': len([a for a in artifacts if 'cleaned' in a.lower()]),
+                        'files_cleaned': len([a for a in artifacts if 'cleaned' in str(a).lower()]),
                         'phases_completed': 6
                     }
                 }
@@ -319,10 +341,13 @@ class VacuumOrchestratorV2(BaseOrchestratorV4_1):
             errors.append(str(e))
             
             return OrchestratorResult(
-                status=OrchestratorStatus.FAILED,
+                success=False,
+                status=OrchestratorStatus.FAILURE,
                 message=f"Vacuum failed: {e}",
-                artifacts=artifacts,
-                errors=errors
+                data={
+                    'artifacts': artifacts,
+                    'errors': errors
+                }
             )
     
     def _phase_discovery(self, target_path: Path) -> PhaseResult:
@@ -374,12 +399,12 @@ class VacuumOrchestratorV2(BaseOrchestratorV4_1):
                     cat: len(files) for cat, files in self.inventory.items()
                 }
             }
-            phase_result.status = PhaseStatus.COMPLETED
+            phase_result.status = PhaseStatus.COMPLETE
             
         except Exception as e:
             self.logger.error(f"Discovery phase failed: {e}", exc_info=True)
             phase_result.status = PhaseStatus.FAILED
-            phase_result.errors.append(str(e))
+            phase_result.message += f"\\nError: {str(e)}"
         
         return phase_result
     
@@ -449,12 +474,12 @@ class VacuumOrchestratorV2(BaseOrchestratorV4_1):
                 'orphaned_tests': len(orphaned_tests),
                 'space_recovery_mb': space_recovery / (1024 * 1024)
             }
-            phase_result.status = PhaseStatus.COMPLETED
+            phase_result.status = PhaseStatus.COMPLETE
             
         except Exception as e:
             self.logger.error(f"Analysis phase failed: {e}", exc_info=True)
             phase_result.status = PhaseStatus.FAILED
-            phase_result.errors.append(str(e))
+            phase_result.message += f"\\nError: {str(e)}"
         
         return phase_result
     
@@ -514,12 +539,12 @@ class VacuumOrchestratorV2(BaseOrchestratorV4_1):
                 'blocked_files': len(self.validated_plan['blocked']),
                 'confirm_required': len(self.validated_plan['confirm_required'])
             }
-            phase_result.status = PhaseStatus.COMPLETED
+            phase_result.status = PhaseStatus.COMPLETE
             
         except Exception as e:
             self.logger.error(f"Planning phase failed: {e}", exc_info=True)
             phase_result.status = PhaseStatus.FAILED
-            phase_result.errors.append(str(e))
+            phase_result.message += f"\\nError: {str(e)}"
         
         return phase_result
     
@@ -555,13 +580,13 @@ class VacuumOrchestratorV2(BaseOrchestratorV4_1):
             
             self.logger.info(f"Dry-run report saved: {report_path}")
             
-            phase_result.artifacts.append(str(report_path))
-            phase_result.status = PhaseStatus.COMPLETED
+            phase_result.data.get("artifacts", []).append(str(report_path))
+            phase_result.status = PhaseStatus.COMPLETE
             
         except Exception as e:
             self.logger.error(f"Dry-run report generation failed: {e}", exc_info=True)
             phase_result.status = PhaseStatus.FAILED
-            phase_result.errors.append(str(e))
+            phase_result.message += f"\\nError: {str(e)}"
         
         return phase_result
     
@@ -581,17 +606,17 @@ class VacuumOrchestratorV2(BaseOrchestratorV4_1):
         try:
             if auto_approve:
                 self.logger.info("Phase 4b: APPROVAL - Auto-approved")
-                phase_result.status = PhaseStatus.COMPLETED
+                phase_result.status = PhaseStatus.COMPLETE
             else:
                 # In real implementation, this would prompt user
                 # For now, auto-approve
                 self.logger.warning("Phase 4b: User confirmation not implemented - auto-approving")
-                phase_result.status = PhaseStatus.COMPLETED
+                phase_result.status = PhaseStatus.COMPLETE
         
         except Exception as e:
             self.logger.error(f"Approval phase failed: {e}", exc_info=True)
             phase_result.status = PhaseStatus.FAILED
-            phase_result.errors.append(str(e))
+            phase_result.message += f"\\nError: {str(e)}"
         
         return phase_result
     
@@ -636,12 +661,12 @@ class VacuumOrchestratorV2(BaseOrchestratorV4_1):
             )
             
             phase_result.metadata = self.execution_result
-            phase_result.status = PhaseStatus.COMPLETED
+            phase_result.status = PhaseStatus.COMPLETE
             
         except Exception as e:
             self.logger.error(f"Execution phase failed: {e}", exc_info=True)
             phase_result.status = PhaseStatus.FAILED
-            phase_result.errors.append(str(e))
+            phase_result.message += f"\\nError: {str(e)}"
         
         return phase_result
     
@@ -677,12 +702,12 @@ class VacuumOrchestratorV2(BaseOrchestratorV4_1):
             
             self.logger.info(f"Completion report saved: {report_path}")
             
-            phase_result.artifacts.append(str(report_path))
-            phase_result.status = PhaseStatus.COMPLETED
+            phase_result.data.get("artifacts", []).append(str(report_path))
+            phase_result.status = PhaseStatus.COMPLETE
             
         except Exception as e:
             self.logger.error(f"Completion phase failed: {e}", exc_info=True)
             phase_result.status = PhaseStatus.FAILED
-            phase_result.errors.append(str(e))
+            phase_result.message += f"\\nError: {str(e)}"
         
         return phase_result
