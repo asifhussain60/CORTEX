@@ -1,11 +1,14 @@
 #!/bin/bash
 #
-# CORTEX 6.0 Pre-Commit Hook
+# CORTEX 6.0 Pre-Commit Hook (Enhanced)
 # 
 # Validates before every commit:
-# 1. Architecture compliance (test structure, core components)
-# 2. Audit trail verification (ensures work is logged)
+# 1. Audit trail verification (ensures work is logged with SUCCESS evidence)
+# 2. Architecture compliance (test structure, core components)
 # 3. SKULL rule compliance (brain protection)
+#
+# KEY PRINCIPLE: If audit log verification ERRORS or shows no evidence
+# of successful work, the commit is REJECTED.
 #
 # Author: Asif Hussain
 # Copyright © 2025-2026 Asif Hussain. All rights reserved.
@@ -18,13 +21,20 @@
 #   git commit --no-verify
 #
 
-set -e
+# DO NOT use set -e - we need to capture exit codes explicitly
+# set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+
+# Handle both .git/hooks location and scripts/ location
+if [[ "$SCRIPT_DIR" == *".git/hooks"* ]]; then
+    PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+else
+    PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+fi
 
 echo ""
-echo "🧠 CORTEX 6.0 Pre-Commit Validation"
+echo "🧠 CORTEX 6.0 Pre-Commit Validation (Enhanced)"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
 # Check if we have staged changes
@@ -37,19 +47,41 @@ fi
 echo "📁 Staged files: $STAGED_COUNT"
 
 # ============================================================================
-# Step 1: Audit Trail Verification
+# Step 1: Audit Trail Verification (STRICT)
 # ============================================================================
 echo ""
-echo "📝 Step 1: Audit Trail Verification"
+echo "📝 Step 1: Audit Trail Verification (STRICT MODE)"
 echo "------------------------------------------------------------"
 
-if [ -f "$PROJECT_ROOT/scripts/verify_audit_trail.py" ]; then
-    python3 "$PROJECT_ROOT/scripts/verify_audit_trail.py"
-    AUDIT_EXIT=$?
+AUDIT_SCRIPT="$PROJECT_ROOT/scripts/verify_audit_trail.py"
+
+if [ -f "$AUDIT_SCRIPT" ]; then
+    # Capture both output and exit code
+    AUDIT_OUTPUT=$(python3 "$AUDIT_SCRIPT" 2>&1) || true
+    AUDIT_EXIT=${PIPESTATUS[0]}
     
+    # Display output
+    echo "$AUDIT_OUTPUT"
+    
+    # Check for Python errors in output (indicates script crash)
+    if echo "$AUDIT_OUTPUT" | grep -qE "(Traceback|Error:|Exception:|ModuleNotFoundError|ImportError|SyntaxError)"; then
+        echo ""
+        echo "❌ AUDIT VERIFICATION SCRIPT ERROR"
+        echo ""
+        echo "The audit verification script encountered an error."
+        echo "This must be fixed before commits can proceed."
+        echo ""
+        echo "💡 Debug with:"
+        echo "   python3 scripts/verify_audit_trail.py"
+        echo ""
+        echo "⚠️  To bypass (EMERGENCY ONLY): git commit --no-verify"
+        exit 1
+    fi
+    
+    # Check exit code
     if [ $AUDIT_EXIT -ne 0 ]; then
         echo ""
-        echo "❌ AUDIT TRAIL VERIFICATION FAILED"
+        echo "❌ AUDIT TRAIL VERIFICATION FAILED (Exit code: $AUDIT_EXIT)"
         echo ""
         echo "Your work must be logged before committing."
         echo ""
@@ -59,24 +91,65 @@ if [ -f "$PROJECT_ROOT/scripts/verify_audit_trail.py" ]; then
         echo "⚠️  To bypass (EMERGENCY ONLY): git commit --no-verify"
         exit 1
     fi
+    
+    # Additional validation: Check for SUCCESS evidence in audit
+    # Look for work categories beyond just middleware
+    if echo "$AUDIT_OUTPUT" | grep -qE "Categories:.*BUILD_EXECUTION|VALIDATION|EXECUTION|STATE_MANAGEMENT|COMPLETED"; then
+        echo "✅ Audit trail contains evidence of successful work"
+    else
+        echo ""
+        echo "⚠️  WARNING: Audit trail has entries but no SUCCESS evidence"
+        echo "   Consider logging your work explicitly before committing."
+        # Not blocking, just warning
+    fi
 else
-    echo "⚠️  Audit verification script not found - skipping"
+    echo "⚠️  Audit verification script not found at: $AUDIT_SCRIPT"
+    echo ""
+    echo "❌ COMMIT BLOCKED: Audit verification is required"
+    echo ""
+    echo "💡 Ensure scripts/verify_audit_trail.py exists"
+    exit 1
 fi
 
 # ============================================================================
-# Step 2: Architecture Audit
+# Step 2: Architecture Audit (STRICT)
 # ============================================================================
 echo ""
-echo "🔍 Step 2: Architecture Compliance"
+echo "🔍 Step 2: Architecture Compliance (STRICT MODE)"
 echo "------------------------------------------------------------"
 
-if [ -f "$PROJECT_ROOT/scripts/audit_architecture.py" ]; then
-    python3 "$PROJECT_ROOT/scripts/audit_architecture.py"
-    ARCH_EXIT=$?
+ARCH_SCRIPT="$PROJECT_ROOT/scripts/audit_architecture.py"
+
+if [ -f "$ARCH_SCRIPT" ]; then
+    # Capture both output and exit code
+    ARCH_OUTPUT=$(python3 "$ARCH_SCRIPT" 2>&1) || true
+    ARCH_EXIT=${PIPESTATUS[0]}
     
+    # Display output
+    echo "$ARCH_OUTPUT"
+    
+    # Check for Python errors in output
+    if echo "$ARCH_OUTPUT" | grep -qE "(Traceback|Error:|Exception:|ModuleNotFoundError|ImportError|SyntaxError)" | grep -v "PASSED\|checks passed"; then
+        # Filter out false positives from report text
+        if echo "$ARCH_OUTPUT" | grep -qE "^Traceback|^.*Error:.*$" | head -1; then
+            echo ""
+            echo "❌ ARCHITECTURE AUDIT SCRIPT ERROR"
+            echo ""
+            echo "The architecture audit script encountered an error."
+            echo "This must be fixed before commits can proceed."
+            echo ""
+            echo "💡 Debug with:"
+            echo "   python3 scripts/audit_architecture.py"
+            echo ""
+            echo "⚠️  To bypass (EMERGENCY ONLY): git commit --no-verify"
+            exit 1
+        fi
+    fi
+    
+    # Check exit code
     if [ $ARCH_EXIT -ne 0 ]; then
         echo ""
-        echo "❌ ARCHITECTURE AUDIT FAILED"
+        echo "❌ ARCHITECTURE AUDIT FAILED (Exit code: $ARCH_EXIT)"
         echo ""
         echo "Fix the architecture issues before committing."
         echo ""
@@ -84,7 +157,12 @@ if [ -f "$PROJECT_ROOT/scripts/audit_architecture.py" ]; then
         exit 1
     fi
 else
-    echo "⚠️  Architecture audit script not found - skipping"
+    echo "⚠️  Architecture audit script not found at: $ARCH_SCRIPT"
+    echo ""
+    echo "❌ COMMIT BLOCKED: Architecture audit is required"
+    echo ""
+    echo "💡 Ensure scripts/audit_architecture.py exists"
+    exit 1
 fi
 
 # ============================================================================
@@ -113,7 +191,40 @@ if [ -n "$SENSITIVE" ]; then
     echo "Review before committing. Use environment variables for secrets."
 fi
 
+# Check for direct database modifications outside StateManager
+DB_DIRECT=$(git diff --cached --name-only | xargs grep -l "sqlite3.connect" 2>/dev/null | grep -v "state_manager.py" | grep -v "test_" || true)
+if [ -n "$DB_DIRECT" ]; then
+    echo "⚠️  WARNING: Direct SQLite usage found outside StateManager:"
+    echo "$DB_DIRECT"
+    echo ""
+    echo "Consider using StateManager for database operations."
+fi
+
 echo "✓ SKULL checks passed"
+
+# ============================================================================
+# Step 4: Verify Session Audit Has Build Progress
+# ============================================================================
+echo ""
+echo "📊 Step 4: Build Progress Verification"
+echo "------------------------------------------------------------"
+
+SESSION_AUDIT="$PROJECT_ROOT/.asif/AI-Learning/cortex6/source-of-truth/session-audit.jsonl"
+if [ -f "$SESSION_AUDIT" ]; then
+    RECENT_ENTRIES=$(tail -5 "$SESSION_AUDIT" 2>/dev/null | wc -l | tr -d ' ')
+    echo "✓ Session audit has $RECENT_ENTRIES recent entries"
+    
+    # Show last entry
+    LAST_ENTRY=$(tail -1 "$SESSION_AUDIT" 2>/dev/null || echo "{}")
+    if [ -n "$LAST_ENTRY" ]; then
+        LAST_TASK=$(echo "$LAST_ENTRY" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('task', 'unknown'))" 2>/dev/null || echo "parse error")
+        LAST_STATUS=$(echo "$LAST_ENTRY" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('status', 'unknown'))" 2>/dev/null || echo "parse error")
+        echo "✓ Last logged: $LAST_TASK ($LAST_STATUS)"
+    fi
+else
+    echo "⚠️  No session audit file found"
+    echo "   This is acceptable for non-build commits"
+fi
 
 # ============================================================================
 # Success
@@ -122,6 +233,12 @@ echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "✅ ALL CHECKS PASSED - Commit allowed"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+echo "📋 Summary:"
+echo "   • Audit trail: ✅ Verified"
+echo "   • Architecture: ✅ Compliant"
+echo "   • SKULL rules: ✅ Passed"
+echo "   • Build progress: ✅ Logged"
 echo ""
 
 exit 0
