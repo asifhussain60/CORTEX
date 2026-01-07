@@ -232,6 +232,25 @@ routing_rules:
         - "Checkpoint rollback"
         - "CORTEX brain protection"
   
+  # Documentation Generator v1.0 (Glassmorphism Design System)
+  # Intelligent documentation with template selection and responsive layouts
+  - pattern: "^(document|doc|generate docs|architecture docs|create documentation).*$"
+    orchestrator: "documentation_orchestrator"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 65
+    metadata:
+      description: "Documentation generator with glassmorphism UI and intelligent template selection"
+      autonomous: true
+      version: "1.0"
+      features:
+        - "6 template categories (Executive/Architecture/Security/Performance/API/Features)"
+        - "7-color glassmorphism panel rotation"
+        - "Responsive layouts (mobile/tablet/desktop)"
+        - "D3.js + Mermaid visualization integration"
+        - "Touch-friendly interfaces (44px targets)"
+        - "Level 1 uniqueness enforcement"
+  
   # Panel Styling - DISABLED (orchestrator not yet registered)
   # Natural language glassmorphism styling commands
   # TODO: Add panel_styler to mcp-server.yaml registry before enabling
