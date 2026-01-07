@@ -1,0 +1,46 @@
+{
+  "planning_v5": {
+    "id": "planning_v5",
+    "name": "Planning System v5",
+    "version": "5.0.0",
+    "type": "autonomous",
+    "category": "planning",
+    "class_name": "PlanningOrchestratorV5",
+    "module_path": "src.orchestrators.planning.planning_orchestrator_v5",
+    "description": "",
+    "manifest_path": "cortex-brain/manifests/orchestrators/planning-system-5.0-manifest.yaml",
+    "patterns": [
+      "^(plan|create a plan|make a plan).*$"
+    ],
+    "dependencies": [],
+    "capabilities": [
+      "planning",
+      "context_discovery",
+      "state_tracking"
+    ],
+    "tags": {},
+    "enabled": true
+  },
+  "vacuum": {
+    "id": "vacuum",
+    "name": "Vacuum Orchestrator v2",
+    "version": "2.0.0",
+    "type": "autonomous",
+    "category": "maintenance",
+    "class_name": "VacuumOrchestratorV2",
+    "module_path": "src.orchestrators.vacuum.vacuum_orchestrator_v2",
+    "description": "Deep filesystem cleanup with duplicate detection and safe deletion",
+    "manifest_path": "cortex-brain/manifests/orchestrators/vacuum-orchestrator-v2.yaml",
+    "patterns": [
+      "^(vacuum|deep clean|organize files).*$"
+    ],
+    "dependencies": [],
+    "capabilities": [
+      "cleanup",
+      "duplicate_detection",
+      "file_organization"
+    ],
+    "tags": {},
+    "enabled": true
+  }
+}
