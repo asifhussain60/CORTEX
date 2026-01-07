@@ -258,6 +258,10 @@ class PlanMigrationOrchestrator:
                 changes['feature_yamls_created'].append(self.plan_name)
                 self._log(f"Created: feature.yaml")
         
+        # Clean up root folder - move scripts to scripts/
+        root_cleanup_changes = self._cleanup_root_folder()
+        changes['root_files_moved'] = root_cleanup_changes
+        
         # Update plan-viewer.html if exists
         plan_viewer = self.plan_path / "plan-viewer.html"
         if plan_viewer.exists():
@@ -465,6 +469,59 @@ class PlanMigrationOrchestrator:
             comment = "\n<!-- Planning System v6: Reads feature.yaml for phase definitions -->\n"
             content = content.replace("<head>", f"<head>{comment}", 1)
             plan_viewer.write_text(content)
+    
+    def _cleanup_root_folder(self) -> List[str]:
+        """
+        Clean up root folder - only CONTINUATION-PROMPT.md and plan-viewer.html allowed.
+        Move all other files to appropriate folders.
+        
+        Planning System v6 Rules:
+        - Root files allowed: CONTINUATION-PROMPT.md, plan-viewer.html
+        - Scripts (.py, .sh, .ps1) → scripts/
+        - Markdown (.md) → reports/
+        - Data (.json, .yaml, .yml) → tracking/
+        - Other → artifacts/
+        
+        Returns:
+            List of files moved
+        """
+        moved = []
+        allowed_root_files = {'CONTINUATION-PROMPT.md', 'plan-viewer.html'}
+        allowed_root_dirs = {'analysis', 'architecture', 'artifacts', 'context', 'features', 'reports', 'scripts', 'tracking'}
+        
+        for item in self.plan_path.iterdir():
+            # Skip directories and allowed files
+            if item.is_dir():
+                if item.name not in allowed_root_dirs:
+                    self._log(f"WARNING: Unexpected directory in root: {item.name}")
+                continue
+            
+            if item.name in allowed_root_files:
+                continue
+            
+            # Determine target folder based on file type
+            if item.suffix in ['.py', '.sh', '.ps1', '.bat']:
+                target_folder = self.plan_path / "scripts"
+            elif item.suffix == '.md':
+                target_folder = self.plan_path / "reports"
+            elif item.suffix in ['.json', '.yaml', '.yml']:
+                target_folder = self.plan_path / "tracking"
+            else:
+                target_folder = self.plan_path / "artifacts"
+            
+            # Create target folder if needed
+            target_folder.mkdir(parents=True, exist_ok=True)
+            
+            # Move file
+            target = target_folder / item.name
+            if not target.exists():
+                shutil.move(str(item), str(target))
+                moved.append(f"{item.name} → {target_folder.name}/")
+                self._log(f"Moved: {item.name} → {target_folder.name}/")
+            else:
+                self._log(f"WARNING: Target already exists, skipping: {target}")
+        
+        return moved
     
     def _verify_migration(self) -> Dict[str, Any]:
         """

@@ -1,0 +1,110 @@
+feature_id: feat09-response-templates
+feature_name: 'Feature: Response Templates & Accessibility'
+epic_id: cortex5-epic
+priority: P2_MEDIUM
+status: NOT_STARTED
+progress: 0
+metadata:
+  created_date: '2026-01-07'
+  last_updated: '2026-01-07T09:50:16.101814'
+  estimated_weeks: 2
+  actual_weeks: 0
+dependencies: {}
+phases:
+- phase: 1
+  name: Design & Architecture
+  status: NOT_STARTED
+  progress: 0
+  estimated_hours: 8
+  tasks:
+  - id: task-1.1
+    name: Design system architecture
+    status: NOT_STARTED
+  - id: task-1.2
+    name: Design data models
+    status: NOT_STARTED
+  - id: task-1.3
+    name: Design API interfaces
+    status: NOT_STARTED
+  outputs:
+  - path: analysis/design.yaml
+    type: design_document
+  - path: architecture/components.yaml
+    type: architecture
+- phase: 2
+  name: Implementation
+  status: NOT_STARTED
+  progress: 0
+  estimated_hours: 16
+  tasks:
+  - id: task-2.1
+    name: Implement core logic
+    status: NOT_STARTED
+    test_required: true
+  - id: task-2.2
+    name: Implement data layer
+    status: NOT_STARTED
+    test_required: true
+  - id: task-2.3
+    name: Implement API endpoints
+    status: NOT_STARTED
+    test_required: true
+  outputs:
+  - path: artifacts/feat09_response_templates.py
+    type: implementation
+- phase: 3
+  name: Testing
+  status: NOT_STARTED
+  progress: 0
+  estimated_hours: 8
+  tasks:
+  - id: task-3.1
+    name: Unit tests
+    status: NOT_STARTED
+  - id: task-3.2
+    name: Integration tests
+    status: NOT_STARTED
+  - id: task-3.3
+    name: System tests
+    status: NOT_STARTED
+  outputs:
+  - path: artifacts/test_feat09_response_templates.py
+    type: test_suite
+  - path: reports/test-results.yaml
+    type: test_report
+- phase: 4
+  name: Documentation & Deployment
+  status: NOT_STARTED
+  progress: 0
+  estimated_hours: 4
+  tasks:
+  - id: task-4.1
+    name: Write documentation
+    status: NOT_STARTED
+  - id: task-4.2
+    name: Create deployment guide
+    status: NOT_STARTED
+  - id: task-4.3
+    name: Deploy to production
+    status: NOT_STARTED
+  outputs:
+  - path: reports/feat09-response-templates-guide.md
+    type: documentation
+  - path: reports/deployment-report.yaml
+    type: deployment_log
+artifacts:
+  design: []
+  implementation: []
+  tests: []
+  documentation: []
+progress_summary:
+  phases_total: 4
+  phases_completed: 0
+  phases_in_progress: 0
+  phases_not_started: 4
+  tasks_total: 12
+  tasks_completed: 0
+  tasks_in_progress: 0
+  tasks_not_started: 12
+context_files:
+- context/response-templates.md
