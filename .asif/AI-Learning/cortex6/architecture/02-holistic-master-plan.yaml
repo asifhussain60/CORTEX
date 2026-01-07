@@ -1,0 +1,1592 @@
+# ==============================================================================
+# CORTEX-6 HOLISTIC ARCHITECTURE & AUTONOMOUS EXECUTION MASTER PLAN
+# ==============================================================================
+# Purpose: Finalized architecture with strict governance, knowledge-driven
+#          development, MCP unification, intelligent orchestration, and
+#          autonomous execution with TODO orchestrator tracking
+# Version: 1.0.0
+# Created: 2026-01-07
+# Author: Asif Hussain
+# Review: cortex-review.prompt.md compliance verified
+
+metadata:
+  document_type: holistic_master_plan
+  cortex_version: '6.0.0'
+  architecture_maturity: production_grade
+  governance_enforcement: mandatory
+  knowledge_consultation: continuous
+  mcp_standardization: enabled
+  autonomous_execution: true
+  audit_trail: comprehensive
+  snowball_strategy: optimized
+
+# ==============================================================================
+# EXECUTIVE SUMMARY
+# ==============================================================================
+
+executive_summary:
+  mission: |
+    CORTEX-6 represents a fundamental architectural evolution transforming CORTEX
+    from a prompt-based assistant into a production-grade autonomous orchestration
+    platform with:
+    
+    1. **Graph-Based Execution**: DAG TODO orchestrator tracks all work, enables
+       instant resume from breakage without chatty narration
+    
+    2. **Mandatory Governance**: 61+ SKULL rules enforced automatically via pre-
+       commit hooks, audit logging, and middleware validators
+    
+    3. **Knowledge-Driven Development**: All development, review, and refactoring
+       decisions consult knowledge YAMLs (3-tier hierarchy: CORTEX → Company → Project)
+    
+    4. **MCP Unification**: Local MCP server standardizes CORTEX tooling across
+       multiple repos with single config file
+    
+    5. **Intelligent Orchestration**: Master orchestrator v2 with O(1) trie routing,
+       optimistic locking, and automatic rollback/recovery
+    
+    6. **Autonomous Execution**: Python orchestrators execute independently after
+       LLM handoff, no manual intervention, silent progress updates
+    
+    7. **Continuous Audit & Learning**: Every phase generates audit logs, governance
+       reports, and lessons learned to enhance precision via snowball effect
+  
+  architectural_pillars:
+    - pillar: "Governance-First Design"
+      enforcement: "Pre-commit hooks + middleware + audit logging"
+      
+    - pillar: "Knowledge-Driven Decisions"
+      consultation: "Every operation queries knowledge library for best practices"
+      
+    - pillar: "MCP-Standardized Tooling"
+      unification: "Single interface across multiple repos, GitHub Copilot native"
+      
+    - pillar: "DAG-Based Work Tracking"
+      resumability: "Instant recovery from breakage, no lost work"
+      
+    - pillar: "Autonomous Python Execution"
+      handoff: "LLM classifies intent → Python orchestrators execute independently"
+      
+    - pillar: "Continuous Learning Loop"
+      improvement: "Audit logs → governance review → lessons learned → snowball precision"
+
+  key_differentiators:
+    vs_microsoft_amplifier:
+      - "Local-first (no cloud costs, offline capable)"
+      - "Natural language interface (no YAML/DSL)"
+      - "Embedded governance (61 rules vs manual policies)"
+      - "Graph-based resume (instant vs replay history)"
+      
+    vs_cortex5:
+      - "Graph-based work tracking (vs linear execution)"
+      - "Mandatory audit logging (vs bypass allowed)"
+      - "Silent autonomous execution (vs chatty updates)"
+      - "MCP standardization (vs monolithic design)"
+      - "Multi-repo support (vs single codebase)"
+      - "Team knowledge learning (vs user-specific)"
+
+# ==============================================================================
+# ARCHITECTURAL OVERVIEW
+# ==============================================================================
+
+architectural_overview:
+  
+  system_architecture_diagram: |
+    ```mermaid
+    graph TB
+        subgraph "User Interface Layer"
+            GHC[GitHub Copilot Chat<br/>Natural Language]
+            CLI[Terminal CLI<br/>Direct Invocation]
+        end
+        
+        subgraph "Intent Classification & Routing"
+            Intent[CORTEX.prompt.md<br/>Intent Router]
+            Trie[Trie Pattern Matcher<br/>O(1) routing]
+            LLM[LLM Intent Classifier<br/>Confidence ≥0.7]
+        end
+        
+        subgraph "Master Orchestrator v2"
+            Master[Master Orchestrator<br/>Single Entry Point]
+            TODO[TODO Orchestrator<br/>DAG Work Tracker]
+            State[State Manager<br/>SQLite WAL]
+            Exec[Execution Engine<br/>Event-Driven]
+        end
+        
+        subgraph "Governance & Intelligence"
+            Gov[Governance Validator<br/>SKULL Rules Enforcer]
+            Audit[Audit Logger<br/>Mandatory JSONL]
+            Know[Knowledge Merger<br/>3-Tier Hierarchy]
+            MCP[MCP Server<br/>JSON-RPC 2.0]
+        end
+        
+        subgraph "Specialized Orchestrators (Python)"
+            Plan[Planning v7]
+            TDD[TDD v2]
+            Review[Review v2]
+            Vacuum[Vacuum v2]
+            Custom[Custom Orchestrators]
+        end
+        
+        subgraph "Data Persistence"
+            DB[(SQLite WAL<br/>State + Audit + TODO)]
+            Registry[Orchestrator Registry<br/>JSON + Validation]
+            KnowLib[Knowledge Library<br/>YAML + Markdown]
+            Repos[Multi-Repo Config<br/>repos.yaml]
+        end
+        
+        GHC --> Intent
+        CLI --> Intent
+        Intent --> Trie
+        Trie -.Fallback.-> LLM
+        Trie --> Master
+        LLM --> Master
+        
+        Master --> Gov
+        Gov --> Know
+        Gov --> Audit
+        Master --> TODO
+        Master --> MCP
+        Master --> Exec
+        
+        TODO --> State
+        State --> DB
+        Audit --> DB
+        
+        Exec --> Plan
+        Exec --> TDD
+        Exec --> Review
+        Exec --> Vacuum
+        Exec --> Custom
+        
+        Plan --> Know
+        Plan --> Audit
+        TDD --> Know
+        Review --> Know
+        
+        MCP --> Registry
+        Know --> KnowLib
+        Master --> Repos
+        
+        style Master fill:#ff9900,stroke:#333,stroke-width:4px
+        style TODO fill:#ff6600,stroke:#333,stroke-width:3px
+        style Gov fill:#f44336,stroke:#333,stroke-width:3px
+        style Audit fill:#e91e63,stroke:#333,stroke-width:2px
+        style MCP fill:#2196f3,stroke:#333,stroke-width:3px
+        style DB fill:#4CAF50,stroke:#333,stroke-width:3px
+    ```
+  
+  layer_descriptions:
+    
+    layer_1_user_interface:
+      name: "User Interface Layer"
+      components:
+        - "GitHub Copilot Chat (primary interface)"
+        - "Terminal CLI (advanced users, scripting)"
+      capabilities:
+        - "Natural language requests"
+        - "Vision API integration (image analysis)"
+        - "File attachments and context"
+      
+    layer_2_intent_classification:
+      name: "Intent Classification & Routing"
+      components:
+        - "CORTEX.prompt.md (intent router)"
+        - "Trie Pattern Matcher (O(1) routing)"
+        - "LLM Intent Classifier (fallback)"
+      capabilities:
+        - "Exact match cache (O(1))"
+        - "Prefix trie traversal (O(k))"
+        - "Regex fallback (O(n) worst case)"
+        - "LLM classification (confidence ≥0.7)"
+      performance:
+        - "<5ms routing for 100 orchestrators"
+        - ">95% cache hit rate"
+      
+    layer_3_master_orchestrator:
+      name: "Master Orchestrator v2"
+      components:
+        - "Master Orchestrator (coordination)"
+        - "TODO Orchestrator (DAG tracking)"
+        - "State Manager (persistence)"
+        - "Execution Engine (event-driven)"
+      capabilities:
+        - "Graph-based work tracking"
+        - "Instant resume from breakage"
+        - "Parallel task execution"
+        - "Automatic checkpointing"
+        - "Rollback on failure"
+      performance:
+        - "Checkpoint every 5 tasks"
+        - "<100ms state persistence"
+      
+    layer_4_governance_intelligence:
+      name: "Governance & Intelligence Layer"
+      components:
+        - "Governance Validator (SKULL enforcement)"
+        - "Audit Logger (mandatory logging)"
+        - "Knowledge Merger (3-tier hierarchy)"
+        - "MCP Server (standardization)"
+      capabilities:
+        - "61+ governance rules enforced"
+        - "Pre-commit hook blocking"
+        - "Knowledge consultation on every decision"
+        - "Company knowledge overrides CORTEX intelligently"
+        - "MCP tool standardization across repos"
+      enforcement:
+        - "Pre-commit hooks (git)"
+        - "Middleware validators (runtime)"
+        - "Static analysis (mypy, pylint, pydocstyle)"
+      
+    layer_5_orchestrators:
+      name: "Specialized Orchestrators (Python)"
+      components:
+        - "Planning v7 (YAML plans, no .md)"
+        - "TDD v2 (RED→GREEN→REFACTOR)"
+        - "Review v2 (7-phase validation)"
+        - "Vacuum v2 (deep cleanup)"
+        - "Custom Orchestrators (sandboxed)"
+      execution_mode:
+        - "Autonomous Python execution"
+        - "No manual intervention"
+        - "Silent progress updates"
+        - "Event-driven completion"
+      
+    layer_6_data_persistence:
+      name: "Data Persistence Layer"
+      components:
+        - "SQLite WAL database (state, audit, TODO)"
+        - "Orchestrator Registry (JSON + validation)"
+        - "Knowledge Library (YAML + Markdown)"
+        - "Multi-Repo Config (repos.yaml)"
+      durability:
+        - "SQLite WAL mode (concurrent reads)"
+        - "Optimistic locking (concurrent writes)"
+        - "Automatic backup every 100 operations"
+
+# ==============================================================================
+# KEY NOTATION 1: GOVERNANCE RULE ENFORCEMENT
+# ==============================================================================
+
+governance_rule_enforcement:
+  
+  overview: |
+    ALL orchestrators MUST consult brain-protection-rules.yaml before ANY operation.
+    Governance rules are enforced at THREE layers:
+    
+    1. **Pre-Commit Hooks**: Block git commits if violations exist
+    2. **Runtime Middleware**: Validate operations before execution
+    3. **Static Analysis**: mypy, pylint, pydocstyle checks in CI/CD
+  
+  enforcement_architecture:
+    
+    pre_commit_hooks:
+      location: ".git/hooks/pre-commit"
+      triggers:
+        - "git commit"
+        - "git merge"
+      
+      checks:
+        - check: "Audit log exists"
+          script: "scripts/pre-commit/check-audit-log.sh"
+          blocker: true
+          
+        - check: "No active BLOCKED severity violations"
+          script: "scripts/pre-commit/check-governance-violations.py"
+          blocker: true
+          
+        - check: "All Python files have type hints"
+          script: "mypy src/ --strict"
+          blocker: true
+          
+        - check: "All public APIs have docstrings"
+          script: "pydocstyle src/ --convention=google"
+          blocker: true
+          
+        - check: "Code formatting compliant"
+          script: "black src/ --check --line-length=100"
+          blocker: true
+          
+        - check: "Import organization compliant"
+          script: "isort src/ --check-only --profile=black"
+          blocker: true
+      
+      bypass_protection:
+        allowed: false
+        enforcement: "Pre-commit script cannot be bypassed (--no-verify blocked)"
+        detection: "scripts/detect-bypass-attempt.py (runs on push)"
+    
+    runtime_middleware:
+      location: "src/orchestrators/middleware/"
+      
+      validators:
+        - validator: "GovernanceValidator"
+          file: "governance_validator.py"
+          hook: "pre_execution"
+          checks:
+            - "Load brain-protection-rules.yaml"
+            - "Validate orchestrator manifest compliance"
+            - "Check resource limits"
+            - "Verify dependencies available"
+          
+        - validator: "FileCreationGuard"
+          file: "file_creation_guard.py"
+          hook: "pre_file_creation"
+          checks:
+            - "Block *.md files (except knowledge library)"
+            - "Block *-summary.md, *-report.md patterns"
+            - "Allow cortex-brain/knowledge-library/**/*.md"
+          
+        - validator: "IncrementalExecutor"
+          file: "incremental_executor.py"
+          hook: "pre_execution"
+          checks:
+            - "Estimate token usage"
+            - "Split into <500 line increments if needed"
+            - "Enable autonomous mode (no user prompts)"
+          
+        - validator: "PythonBestPracticesValidator"
+          file: "python_best_practices_validator.py"
+          hook: "pre_file_save"
+          checks:
+            - "Type hints mandatory (PYTHON_TYPE_HINTS_MANDATORY)"
+            - "Docstrings mandatory (PYTHON_DOCSTRINGS_MANDATORY)"
+            - "Error handling required (PYTHON_ERROR_HANDLING_REQUIRED)"
+            - "SOLID principles (PYTHON_SOLID_PRINCIPLES_REQUIRED)"
+    
+    static_analysis:
+      tools:
+        - tool: "mypy"
+          command: "mypy src/ --strict --show-error-codes"
+          blocker: true
+          threshold: "0 errors"
+          
+        - tool: "pylint"
+          command: "pylint src/ --rcfile=.pylintrc"
+          blocker: false
+          threshold: "≥8.0 score"
+          
+        - tool: "pydocstyle"
+          command: "pydocstyle src/ --convention=google"
+          blocker: true
+          threshold: "0 errors (100% docstring coverage)"
+          
+        - tool: "black"
+          command: "black src/ --check --line-length=100"
+          blocker: true
+          threshold: "0 diffs"
+          
+        - tool: "isort"
+          command: "isort src/ --check-only --profile=black"
+          blocker: true
+          threshold: "0 diffs"
+  
+  rule_consultation_workflow:
+    
+    step_1_load_rules:
+      when: "Orchestrator initialization"
+      action: "Load cortex-brain/brain-protection-rules.yaml into memory"
+      caching: "Cache rules for 5 minutes (hot reload on config change)"
+      
+    step_2_validate_operation:
+      when: "Before ANY file operation, git operation, or orchestrator execution"
+      action: "Validate against applicable rules"
+      example_rules:
+        - "NO_MARKDOWN_GENERATION: Block *.md creation"
+        - "INCREMENTAL_AUTONOMOUS_EXECUTION: Split large operations"
+        - "VISUAL_PROGRESS_RESPONSE_FORMAT: Use progress bars"
+      
+    step_3_log_violation:
+      when: "Rule violation detected"
+      action: "Log to cortex-brain/audit-logs/governance-violations.jsonl"
+      schema:
+        timestamp: "ISO8601"
+        rule_id: "RULE_ID_FROM_YAML"
+        severity: "blocked | warning | info"
+        file: "File path (if applicable)"
+        message: "Human-readable violation description"
+        status: "active | fixed | ignored"
+      
+    step_4_enforce_or_warn:
+      when: "After logging"
+      action: "If severity=blocked → Raise exception, halt execution"
+      action_alt: "If severity=warning → Log and continue"
+      user_notification: "Display violation summary in chat (concise format)"
+  
+  audit_logging_enforcement:
+    
+    mandatory_logging:
+      rule: "CR-002: Audit Logging Enforcement (No More Bypass)"
+      enforcement: "Pre-commit hook checks audit log exists and complete"
+      
+    audit_log_schema:
+      file: "cortex-brain/audit-logs/{operation}/{YYYYMMDD}/{timestamp}.jsonl"
+      format: "JSONL (one JSON object per line)"
+      
+      fields:
+        timestamp: "ISO8601 timestamp"
+        operation_id: "UUID"
+        orchestrator_id: "String"
+        operation_type: "Enum: PLAN, REVIEW, REFACTOR, TDD, VACUUM, etc."
+        user_request: "String (original user input)"
+        execution_status: "Enum: STARTED, IN_PROGRESS, COMPLETED, FAILED"
+        tasks_completed: "Integer"
+        tasks_total: "Integer"
+        errors: "List[error_message]"
+        governance_violations: "List[{rule_id, severity, message}]"
+        knowledge_consultations: "List[{query, file, result}]"
+        files_modified: "List[file_path]"
+        git_commits: "List[commit_sha]"
+    
+    pre_commit_validation:
+      script: "scripts/pre-commit/check-audit-log.sh"
+      checks:
+        - "Audit log file exists for this operation"
+        - "Audit log contains STARTED entry"
+        - "Audit log contains COMPLETED or FAILED entry"
+        - "No active BLOCKED violations in audit log"
+      
+      on_failure:
+        action: "Block git commit"
+        message: |
+          ❌ AUDIT LOG VALIDATION FAILED
+          
+          Audit logging is mandatory. Ensure:
+          1. Audit log exists: cortex-brain/audit-logs/{operation}/{date}/{timestamp}.jsonl
+          2. Operation status logged: STARTED → COMPLETED/FAILED
+          3. No active BLOCKED severity violations
+          
+          Run: python scripts/validate-audit-log.py
+        
+      bypass_prevention:
+        git_commit_no_verify: "Blocked via custom hook wrapper"
+        git_push_force: "Blocked via remote pre-receive hook"
+
+# ==============================================================================
+# KEY NOTATION 2: KNOWLEDGE YAML CONSULTATIONS
+# ==============================================================================
+
+knowledge_yaml_consultations:
+  
+  overview: |
+    ALL development, review, and refactoring decisions MUST consult knowledge YAMLs
+    from the 3-tier knowledge hierarchy:
+    
+    1. **CORTEX Knowledge** (Tier 0 - Brain): Universal best practices
+    2. **Company Knowledge** (Tier 2): Company-specific overrides
+    3. **Project Knowledge** (Tier 3): Codebase-specific context
+    
+    Company knowledge INTELLIGENTLY overrides CORTEX (not blind replacement).
+  
+  three_tier_knowledge_hierarchy:
+    
+    tier_0_cortex_knowledge:
+      location: "cortex-brain/knowledge-library/"
+      scope: "Universal best practices"
+      mutability: "Immutable (updated only by CORTEX team)"
+      
+      structure:
+        - "standards/ (PEP 8, SOLID, WCAG)"
+        - "patterns/ (architecture patterns, design patterns)"
+        - "workflows/ (TDD, git flow, review process)"
+        - "security/ (authentication, authorization, secrets)"
+        - "performance/ (optimization techniques, profiling)"
+      
+      example_files:
+        - "standards/python-style-guide.yaml"
+        - "patterns/solid-principles.yaml"
+        - "workflows/tdd-workflow.yaml"
+        - "security/secret-management.yaml"
+    
+    tier_2_company_knowledge:
+      location: "cortex-brain/tier2/company-knowledge/"
+      scope: "Company-specific overrides"
+      mutability: "Editable by company admins"
+      
+      structure:
+        - "coding-standards/ (line length, naming conventions)"
+        - "architecture/ (approved patterns, anti-patterns)"
+        - "workflows/ (company-specific git flow, CI/CD)"
+        - "security/ (company policies, compliance requirements)"
+      
+      example_files:
+        - "coding-standards/python-style-overrides.yaml"
+        - "architecture/microservices-guidelines.yaml"
+        - "workflows/branching-strategy.yaml"
+        - "security/compliance-requirements.yaml"
+    
+    tier_3_project_knowledge:
+      location: "cortex-brain/tier3/{repo-name}/"
+      scope: "Project-specific context"
+      mutability: "Editable by project team"
+      
+      structure:
+        - "architecture/ (system architecture, component diagrams)"
+        - "domain-models/ (business logic, data models)"
+        - "api-contracts/ (REST endpoints, GraphQL schemas)"
+        - "deployment/ (infrastructure, configuration)"
+      
+      example_files:
+        - "architecture/system-architecture.yaml"
+        - "domain-models/user-management.yaml"
+        - "api-contracts/rest-api-v2.yaml"
+        - "deployment/kubernetes-manifests.yaml"
+  
+  intelligent_merge_strategy:
+    
+    merge_algorithm:
+      step_1: "Load CORTEX knowledge for topic (e.g., python.line_length)"
+      step_2: "Load company knowledge for same topic"
+      step_3: "Detect conflicts (same key, different values)"
+      step_4: "Apply resolution strategy based on knowledge type"
+      step_5: "Log merge decisions to audit log"
+      
+    resolution_strategies:
+      
+      strategy_1_company_wins:
+        name: "Company Wins (Project Preferences)"
+        when: "Project-specific preferences (line length, branch names, test framework)"
+        example:
+          cortex_value: "python.line_length = 79"
+          company_value: "python.line_length = 120"
+          final_value: "120"
+          rationale: "Company preference overrides PEP 8 default"
+      
+      strategy_2_cortex_wins:
+        name: "CORTEX Wins (Universal Best Practices)"
+        when: "Universal best practices (type hints mandatory, SOLID principles)"
+        example:
+          cortex_value: "python.type_hints = MANDATORY"
+          company_value: "python.type_hints = OPTIONAL"
+          final_value: "MANDATORY"
+          rationale: "Type hints are universally beneficial, not optional"
+      
+      strategy_3_merge_combine:
+        name: "Merge Combine (Non-Conflicting Additions)"
+        when: "Adding to lists (approved libraries, security scanners)"
+        example:
+          cortex_value: "python.approved_libraries = [requests, httpx]"
+          company_value: "python.approved_libraries = [internal-http-client]"
+          final_value: "[requests, httpx, internal-http-client]"
+          rationale: "Company adds to CORTEX list, no conflict"
+      
+      strategy_4_user_prompt:
+        name: "User Prompt (Critical Conflicts)"
+        when: "Conflicting architectural decisions (microservices vs monolith)"
+        example:
+          cortex_value: "architecture.pattern = microservices"
+          company_value: "architecture.pattern = monolith"
+          action: "Prompt user to resolve conflict"
+          message: "Conflicting architecture patterns detected. Choose: 1) Microservices, 2) Monolith"
+  
+  consultation_workflow:
+    
+    when_to_consult:
+      - trigger: "Development operation (code generation, refactoring)"
+        action: "Query knowledge for language best practices"
+        
+      - trigger: "Review operation (code review, architecture review)"
+        action: "Query knowledge for review criteria"
+        
+      - trigger: "Refactoring operation (cleanup, optimization)"
+        action: "Query knowledge for refactoring patterns"
+        
+      - trigger: "Planning operation (feature planning, epic creation)"
+        action: "Query knowledge for architecture patterns"
+    
+    consultation_api:
+      interface: "src/knowledge/knowledge_query_api.py"
+      
+      methods:
+        - method: "query(topic: str, scope: Enum[CORTEX, COMPANY, PROJECT, ALL])"
+          description: "Query knowledge for topic"
+          returns: "KnowledgeResult (value, source, confidence)"
+          
+        - method: "merge(topic: str)"
+          description: "Merge CORTEX + company knowledge for topic"
+          returns: "MergedKnowledge (final_value, resolution_strategy, conflicts)"
+          
+        - method: "validate(file_path: str, operation: str)"
+          description: "Validate operation against knowledge rules"
+          returns: "ValidationResult (passed, violations, recommendations)"
+    
+    caching_strategy:
+      cache_duration: "5 minutes (hot reload on file change)"
+      cache_key: "topic + scope + file_hash"
+      cache_invalidation: "File watcher on knowledge library directories"
+    
+    audit_logging:
+      log_all_consultations: true
+      log_schema:
+        timestamp: "ISO8601"
+        topic: "String (e.g., python.line_length)"
+        scope: "Enum (CORTEX, COMPANY, PROJECT, ALL)"
+        result: "Final merged value"
+        resolution_strategy: "Enum (COMPANY_WINS, CORTEX_WINS, MERGE, USER_PROMPT)"
+        conflicts_detected: "List[{cortex_value, company_value}]"
+
+# ==============================================================================
+# KEY NOTATION 3: CORTEX TOOLING BEHIND MCP
+# ==============================================================================
+
+mcp_tooling_unification:
+  
+  overview: |
+    CORTEX-6 standardizes ALL orchestrators as MCP tools, enabling:
+    
+    1. **Multi-Repo Support**: Single CORTEX instance manages multiple repos
+    2. **GitHub Copilot Native**: Orchestrators exposed as native tools
+    3. **Composable Workflows**: Chain orchestrators via MCP tool calls
+    4. **Standardized Interface**: JSON-RPC 2.0 protocol, predictable I/O
+  
+  mcp_server_architecture:
+    
+    protocol: "JSON-RPC 2.0"
+    transport: "stdio (standard input/output)"
+    message_format: "JSONL (one JSON object per line)"
+    
+    capabilities:
+      - capability: "tools/list"
+        description: "List all available CORTEX orchestrators"
+        returns: "List[{name, description, inputSchema}]"
+        
+      - capability: "tools/call"
+        description: "Invoke orchestrator with parameters"
+        params: "{name, arguments}"
+        returns: "{content: [{type, text}], isError: bool}"
+        
+      - capability: "prompts/list"
+        description: "List all CORTEX prompt templates"
+        returns: "List[{name, description, arguments}]"
+        
+      - capability: "prompts/get"
+        description: "Get prompt template by name"
+        params: "{name, arguments}"
+        returns: "{messages: [{role, content}]}"
+        
+      - capability: "resources/list"
+        description: "List knowledge library resources"
+        returns: "List[{uri, name, description, mimeType}]"
+        
+      - capability: "resources/read"
+        description: "Read knowledge library resource"
+        params: "{uri}"
+        returns: "{contents: [{uri, mimeType, text}]}"
+    
+    orchestrator_registration:
+      process: |
+        1. Load orchestrator manifest: cortex-brain/manifests/orchestrators/{name}.yaml
+        2. Extract MCP tool schema: name, description, inputSchema
+        3. Register tool with MCP server
+        4. Expose via tools/list endpoint
+      
+      manifest_to_tool_transformation:
+        manifest_fields:
+          orchestrator_id: "planning_orchestrator_v5"
+          name: "Planning Orchestrator v5"
+          description: "Create YAML-based plans with DAG structure"
+          patterns: ["plan *", "create plan *"]
+          parameters:
+            - name: "request"
+              type: "string"
+              description: "User request to plan"
+              required: true
+        
+        mcp_tool_schema:
+          name: "cortex_planning_v5"
+          description: "Create YAML-based plans with DAG structure"
+          inputSchema:
+            type: "object"
+            properties:
+              request:
+                type: "string"
+                description: "User request to plan"
+            required: ["request"]
+  
+  multi_repo_configuration:
+    
+    config_file: "~/.cortex/repos.yaml"
+    
+    schema:
+      repos:
+        - id: "main-backend"
+          path: "/Users/user/projects/backend"
+          enabled: true
+          orchestrators: "all"
+          knowledge_path: "cortex-brain/tier3/backend/"
+          
+        - id: "frontend-app"
+          path: "/Users/user/projects/frontend"
+          enabled: true
+          orchestrators: ["planning", "review", "tdd"]
+          knowledge_path: "cortex-brain/tier3/frontend/"
+          
+        - id: "cortex-dev"
+          path: "/Users/user/PROJECTS/CORTEX"
+          enabled: true
+          orchestrators: "all"
+          admin_mode: true
+    
+    context_detection:
+      trigger: "On user request"
+      algorithm: |
+        1. Detect current working directory (pwd)
+        2. Match pwd against repos[].path
+        3. Load repo-specific configuration
+        4. Load repo-specific knowledge (tier 3)
+        5. Enable repo-specific orchestrators
+      
+      fallback: "If no match, use CORTEX repo as default"
+    
+    isolation:
+      plans: "Each repo has isolated plan storage: {repo_path}/.cortex/plans/"
+      state: "Each repo has isolated state: {repo_path}/.cortex/state.db"
+      knowledge: "Repo-specific knowledge in cortex-brain/tier3/{repo_id}/"
+      
+      shared_resources:
+        - "CORTEX core orchestrators (src/orchestrators/)"
+        - "Knowledge library tier 0 (universal best practices)"
+        - "MCP server instance (single server, multiple repos)"
+  
+  github_copilot_integration:
+    
+    mcp_server_registration:
+      file: "~/.vscode/extensions/github.copilot/mcp-servers.json"
+      
+      config:
+        cortex:
+          command: "python3"
+          args: ["-m", "src.mcp.mcp_server"]
+          cwd: "/Users/user/PROJECTS/CORTEX"
+          env:
+            CORTEX_CONFIG: "~/.cortex/repos.yaml"
+      
+    tool_invocation:
+      user_request: "Create a plan for user authentication"
+      
+      github_copilot_behavior:
+        step_1: "GitHub Copilot detects 'plan' keyword"
+        step_2: "Calls MCP tools/list → Discovers cortex_planning_v5"
+        step_3: "Calls MCP tools/call → {name: 'cortex_planning_v5', arguments: {request: 'user authentication'}}"
+        step_4: "MCP server routes to Planning Orchestrator v5"
+        step_5: "Orchestrator executes (autonomous Python)"
+        step_6: "MCP server returns result to GitHub Copilot"
+        step_7: "GitHub Copilot displays result in chat"
+
+# ==============================================================================
+# KEY NOTATION 4: INTELLIGENT ORCHESTRATIONS
+# ==============================================================================
+
+intelligent_orchestrations:
+  
+  overview: |
+    Master Orchestrator v2 implements intelligent routing, execution, and recovery
+    with O(1) pattern matching, automatic rollback, and dependency-aware scheduling.
+  
+  intelligent_routing:
+    
+    trie_pattern_matcher:
+      algorithm: "Prefix trie with exact match cache"
+      complexity: "O(1) best case, O(k) average case (k = input length)"
+      
+      routing_flow:
+        step_1_normalize: "Lowercase, trim, remove punctuation"
+        step_2_cache_lookup: "Check exact match cache (HashMap)"
+        step_3_trie_traversal: "Traverse prefix trie if cache miss"
+        step_4_regex_fallback: "Fallback to regex scan if no trie match"
+        step_5_llm_classification: "LLM classification if no regex match (confidence ≥0.7)"
+        step_6_cache_result: "Cache successful match for future requests"
+      
+      performance_benchmarks:
+        cache_hit: "<1ms"
+        trie_match: "<5ms (100 orchestrators)"
+        regex_fallback: "<20ms (100 orchestrators)"
+        llm_classification: "<500ms (network latency)"
+    
+    llm_intent_classifier:
+      trigger: "No pattern match found (exact, trie, regex)"
+      
+      classification_prompt:
+        system: |
+          You are a CORTEX intent classifier. Given a user request, identify
+          the most appropriate orchestrator from the registered orchestrators list.
+          Return orchestrator_id and confidence score (0.0-1.0).
+        
+        user_template: |
+          User Request: "{user_request}"
+          
+          Available Orchestrators:
+          {orchestrators_list}
+          
+          Classify this request. Return JSON:
+          {
+            "orchestrator_id": "...",
+            "confidence": 0.0-1.0,
+            "reasoning": "..."
+          }
+      
+      confidence_threshold: 0.7
+      
+      on_low_confidence:
+        action: "Prompt user for clarification"
+        message: "I'm not sure which orchestrator to use. Did you mean: 1) Plan, 2) Review, 3) TDD?"
+  
+  intelligent_execution:
+    
+    dag_based_scheduling:
+      algorithm: "Topological sort with ready queue"
+      
+      scheduling_flow:
+        step_1: "Load TODO DAG from database"
+        step_2: "Compute ready tasks (dependencies met, status=READY)"
+        step_3: "Sort ready tasks by priority (critical path first)"
+        step_4: "Execute tasks in parallel (up to max_concurrent_orchestrators)"
+        step_5: "On task completion, update dependents to READY if unblocked"
+        step_6: "Repeat until all tasks COMPLETED or FAILED"
+      
+      parallelization:
+        max_concurrent_orchestrators: 5
+        strategy: "Independent tasks run concurrently"
+        example: |
+          Tasks: [T1, T2, T3, T4]
+          Dependencies: T1 → T3, T2 → T4
+          
+          Execution:
+          - Wave 1: T1, T2 (parallel)
+          - Wave 2: T3, T4 (parallel, after T1 and T2 complete)
+    
+    event_driven_coordination:
+      architecture: "Observer pattern with event emitter"
+      
+      events:
+        - event: "task_started"
+          payload: "{task_id, orchestrator_id, start_time}"
+          
+        - event: "task_completed"
+          payload: "{task_id, orchestrator_id, end_time, result}"
+          
+        - event: "task_failed"
+          payload: "{task_id, orchestrator_id, error_message, retry_count}"
+          
+        - event: "checkpoint_created"
+          payload: "{checkpoint_id, graph_snapshot, timestamp}"
+          
+        - event: "progress_updated"
+          payload: "{completed_tasks, total_tasks, percentage}"
+      
+      subscribers:
+        - "Audit Logger (logs all events)"
+        - "Progress Bar Renderer (updates visual progress)"
+        - "State Manager (persists events to database)"
+        - "Notification Service (user alerts on failure)"
+  
+  intelligent_recovery:
+    
+    automatic_rollback:
+      triggers:
+        - "Task status = FAILED and retry_count >= max_retries"
+        - "Unhandled exception in orchestrator"
+        - "Resource limit exceeded (memory, time, CPU)"
+        - "User abort (Ctrl+C)"
+      
+      rollback_procedure:
+        step_1: "Identify last successful checkpoint"
+        step_2: "Load checkpoint graph snapshot from database"
+        step_3: "Mark IN_PROGRESS tasks → PENDING (retry)"
+        step_4: "Mark FAILED tasks → BLOCKED (if max retries exceeded)"
+        step_5: "Restore orchestrator state from checkpoint"
+        step_6: "Log rollback event to audit log"
+        step_7: "Prompt user for action: RETRY, SKIP_FAILED, ABORT"
+    
+    retry_strategies:
+      - strategy: "Exponential Backoff"
+        when: "Transient failures (network timeout, rate limit)"
+        formula: "wait_time = base ** retry_count (base=2)"
+        example: "Retry 1: 2s, Retry 2: 4s, Retry 3: 8s"
+        
+      - strategy: "Immediate Retry"
+        when: "Idempotent operations (file read, database query)"
+        max_retries: 3
+        
+      - strategy: "Skip and Continue"
+        when: "Non-critical tasks (documentation generation)"
+        action: "Mark task SKIPPED, unblock dependents"
+        
+      - strategy: "Fail Fast"
+        when: "Critical failures (database corruption, auth failure)"
+        action: "Abort execution, rollback to last checkpoint, notify user"
+
+# ==============================================================================
+# KEY NOTATION 5: NO LOSS OF AUTONOMOUS PATHS (TODO ORCHESTRATOR)
+# ==============================================================================
+
+todo_orchestrator_autonomous_execution:
+  
+  overview: |
+    TODO Orchestrator maintains a directed acyclic graph (DAG) of ALL work.
+    On breakage, Master Orchestrator resumes from last checkpoint WITHOUT
+    chatty narration. Autonomous execution continues until user stops it.
+  
+  dag_work_tracking:
+    
+    graph_structure:
+      nodes: "Tasks (atomic units of work)"
+      edges: "Dependencies (task A must complete before task B)"
+      properties:
+        acyclic: true
+        directed: true
+        weighted: true  # weights = estimated effort
+      
+    task_node_schema:
+      task_id: "UUID (unique identifier)"
+      orchestrator_id: "String (which orchestrator executes)"
+      task_name: "String (human-readable)"
+      status: "Enum: PENDING, READY, IN_PROGRESS, COMPLETED, FAILED, BLOCKED, SKIPPED"
+      dependencies: "List[task_id]"
+      dependents: "List[task_id]"
+      estimated_effort_hours: "Integer"
+      actual_effort_hours: "Integer (nullable)"
+      start_time: "Timestamp (nullable)"
+      end_time: "Timestamp (nullable)"
+      error_message: "String (nullable)"
+      retry_count: "Integer (default 0)"
+      max_retries: "Integer (default 3)"
+      metadata_json: "JSON (orchestrator-specific data)"
+    
+    persistence:
+      database: "SQLite (cortex_brain_state.db)"
+      table: "todo_tasks"
+      indexes:
+        - "CREATE INDEX idx_status ON todo_tasks(status)"
+        - "CREATE INDEX idx_orchestrator ON todo_tasks(orchestrator_id)"
+      
+      checkpointing:
+        frequency: "Every 5 tasks completed"
+        storage: "todo_checkpoints table"
+        data: "Graph snapshot JSON + orchestrator state"
+  
+  autonomous_resume_behavior:
+    
+    on_breakage_detection:
+      triggers:
+        - "Master Orchestrator restarted"
+        - "Unhandled exception caught"
+        - "User returns after Ctrl+C"
+      
+      resume_procedure:
+        step_1: "Load last checkpoint from database"
+        step_2: "Identify IN_PROGRESS tasks (incomplete)"
+        step_3: "Mark IN_PROGRESS → PENDING (retry)"
+        step_4: "Get ready tasks (dependencies met, status=READY)"
+        step_5: "Execute next task WITHOUT narrating history"
+        step_6: "Continue autonomous execution until all tasks COMPLETED"
+      
+      no_chatty_updates:
+        rule: "ONLY report task completion, NOT task start or plans"
+        
+        examples_good:
+          - "✅ Task 5/20 complete (25%)"
+          - "✅ Phase 1 complete → Phase 2 starting"
+          - "[████░░░░░░] 40%"
+        
+        examples_bad:
+          - "Now I'll start task 5... After that I'll do task 6..."
+          - "Perfect! Task 5 is done. Next, I need to analyze..."
+          - "Excellent progress! Let me explain what I did in task 5..."
+    
+    progress_visualization:
+      format: "Visual progress bars + percentage"
+      
+      templates:
+        phase_progress: |
+          Phase {n}/{total}: [{bar}] {percentage}%
+        
+        overall_progress: |
+          Overall: [{bar}] {percentage}% ({completed}/{total} tasks)
+        
+        bar_rendering:
+          completed: "█"
+          remaining: "░"
+          width: 10
+      
+      update_frequency:
+        - "Phase start (once)"
+        - "Phase completion (once)"
+        - "Overall completion (once)"
+        - "NOT every task (too verbose)"
+  
+  dependency_management:
+    
+    circular_dependency_detection:
+      algorithm: "Depth-First Search (DFS) with cycle detection"
+      complexity: "O(V + E) where V=tasks, E=dependencies"
+      
+      validation_points:
+        - "On task add"
+        - "On orchestrator registration"
+        - "On graph load from checkpoint"
+      
+      on_cycle_detected:
+        action: "Raise CircularDependencyError"
+        message: "Circular dependency: Task A → B → C → A"
+        user_guidance: "Remove one dependency to resolve"
+    
+    dependency_types:
+      - type: "HARD"
+        description: "Task MUST complete before dependent can start"
+        blocking: true
+        
+      - type: "SOFT"
+        description: "Preferred order, but not strictly required"
+        blocking: false
+        
+      - type: "DATA"
+        description: "Dependent task consumes output of prerequisite"
+        blocking: true
+        data_flow: "Task A output → Task B input"
+  
+  parallel_execution:
+    
+    parallelization_strategy:
+      algorithm: "Level-based parallelization (topological levels)"
+      
+      level_computation:
+        level_0: "Tasks with no dependencies"
+        level_n: "Tasks with dependencies only on level 0 to n-1"
+      
+      execution:
+        - "All tasks in level_n execute in parallel"
+        - "Level n+1 starts only after level_n complete"
+      
+      concurrency_limit:
+        max_concurrent_orchestrators: 5
+        reason: "Prevent resource exhaustion (memory, CPU)"
+    
+    race_condition_prevention:
+      mechanism: "Optimistic locking with version numbers"
+      
+      locking_flow:
+        step_1: "Task reads state (version = v1)"
+        step_2: "Task executes (local changes)"
+        step_3: "Task writes state (if version still v1)"
+        step_4: "If version changed → Retry with new version"
+      
+      database_support:
+        sqlite_wal: true
+        description: "Write-Ahead Logging enables concurrent reads"
+
+# ==============================================================================
+# KEY NOTATION 6: CONTINUOUS AUDIT LOGGING & REVIEW
+# ==============================================================================
+
+continuous_audit_and_learning:
+  
+  overview: |
+    Every phase generates comprehensive audit logs and governance reports.
+    At phase completion, CORTEX reviews logs to extract lessons learned,
+    identify patterns, and update knowledge library. This creates a snowball
+    effect: each phase improves precision for subsequent phases.
+  
+  audit_logging_system:
+    
+    log_structure:
+      base_directory: "cortex-brain/audit-logs/"
+      
+      organization:
+        by_operation: "{operation}/"  # planning, review, tdd, vacuum
+        by_date: "{YYYYMMDD}/"
+        by_timestamp: "{HHmmss}.jsonl"
+      
+      example_path: "cortex-brain/audit-logs/planning/20260107/143022.jsonl"
+    
+    log_schema:
+      operation_metadata:
+        operation_id: "UUID"
+        operation_type: "Enum: PLAN, REVIEW, TDD, REFACTOR, VACUUM, etc."
+        orchestrator_id: "String"
+        orchestrator_version: "String"
+        start_time: "ISO8601"
+        end_time: "ISO8601"
+        duration_seconds: "Integer"
+        execution_status: "Enum: STARTED, IN_PROGRESS, COMPLETED, FAILED, ABORTED"
+      
+      user_context:
+        user_request: "String (original natural language request)"
+        repo_id: "String (from repos.yaml)"
+        working_directory: "String"
+        github_copilot_version: "String"
+      
+      execution_details:
+        tasks_total: "Integer"
+        tasks_completed: "Integer"
+        tasks_failed: "Integer"
+        tasks_skipped: "Integer"
+        parallel_tasks_max: "Integer"
+        checkpoints_created: "Integer"
+      
+      governance_compliance:
+        rules_checked: "List[rule_id]"
+        violations_detected: "List[{rule_id, severity, file, line, message}]"
+        violations_blocked: "Integer (severity=blocked)"
+        violations_warnings: "Integer (severity=warning)"
+      
+      knowledge_consultations:
+        queries: "List[{topic, scope, result, timestamp}]"
+        merge_conflicts: "List[{topic, cortex_value, company_value, resolution}]"
+      
+      resource_usage:
+        peak_memory_mb: "Integer"
+        peak_cpu_percent: "Integer"
+        files_read: "Integer"
+        files_written: "Integer"
+        files_modified: "Integer"
+        git_commits: "List[commit_sha]"
+      
+      errors_and_warnings:
+        errors: "List[{timestamp, message, stack_trace}]"
+        warnings: "List[{timestamp, message}]"
+      
+      performance_metrics:
+        pattern_matching_ms: "Integer"
+        knowledge_query_ms: "Integer"
+        state_persistence_ms: "Integer"
+        total_execution_ms: "Integer"
+  
+  phase_completion_review:
+    
+    trigger: "Phase status = COMPLETED in TODO DAG"
+    
+    review_workflow:
+      step_1_aggregate_logs:
+        action: "Collect all audit logs for phase"
+        files: "cortex-brain/audit-logs/{operation}/{date}/*.jsonl"
+        
+      step_2_analyze_governance:
+        action: "Count violations by rule_id and severity"
+        output: "Governance compliance report"
+        
+        metrics:
+          total_violations: "Integer"
+          blocked_violations: "Integer (critical)"
+          warning_violations: "Integer"
+          violations_by_rule: "Dict[rule_id, count]"
+          trend: "Enum: IMPROVING, STABLE, DEGRADING"
+      
+      step_3_analyze_knowledge:
+        action: "Extract knowledge consultation patterns"
+        output: "Knowledge usage report"
+        
+        metrics:
+          total_consultations: "Integer"
+          unique_topics: "Integer"
+          merge_conflicts: "Integer"
+          resolution_strategies: "Dict[strategy, count]"
+      
+      step_4_analyze_performance:
+        action: "Identify bottlenecks and optimization opportunities"
+        output: "Performance analysis report"
+        
+        metrics:
+          slowest_operation: "{operation, duration_ms}"
+          peak_memory_usage: "Integer (MB)"
+          most_expensive_queries: "List[{query, duration_ms}]"
+      
+      step_5_extract_lessons_learned:
+        action: "LLM-assisted pattern extraction"
+        
+        prompt_template: |
+          Analyze these audit logs from Phase {n}:
+          
+          {audit_logs_summary}
+          
+          Extract lessons learned:
+          1. What went well? (patterns to repeat)
+          2. What went poorly? (anti-patterns to avoid)
+          3. What can be optimized? (performance improvements)
+          4. What governance rules should be added/modified?
+          5. What knowledge should be added to library?
+        
+        output: "cortex-brain/learning/lessons-learned/{operation}-phase-{n}.yaml"
+      
+      step_6_update_knowledge_library:
+        action: "Update knowledge YAMLs with new learnings"
+        
+        examples:
+          - "Add new anti-pattern to standards/python-anti-patterns.yaml"
+          - "Update performance/optimization-techniques.yaml with bottleneck fix"
+          - "Add new security rule to security/secret-management.yaml"
+        
+        approval: "Automatic for low-impact changes, user approval for high-impact"
+      
+      step_7_generate_governance_report:
+        action: "Create phase governance report"
+        
+        file: "cortex-brain/documents/planning/active/{plan}/reports/phase-{n}-governance.yaml"
+        
+        content:
+          phase_summary: "Phase {n} summary"
+          governance_compliance: "Compliance metrics"
+          violations_resolved: "List[{rule_id, fix_commit}]"
+          violations_outstanding: "List[{rule_id, status}]"
+          recommendations: "List[{recommendation, priority}]"
+          pre_next_phase_checklist: "List[{item, checked}]"
+  
+  snowball_effect_optimization:
+    
+    concept: |
+      Each phase improves precision for subsequent phases by:
+      
+      1. **Learning from Mistakes**: Anti-patterns identified → Added to blocklist
+      2. **Performance Tuning**: Bottlenecks found → Optimizations applied
+      3. **Governance Refinement**: Violations tracked → Rules strengthened
+      4. **Knowledge Growth**: Patterns discovered → Library enriched
+    
+    feedback_loop:
+      phase_n_execution:
+        - "Execute with current knowledge and governance rules"
+        - "Log all operations to audit logs"
+      
+      phase_n_review:
+        - "Analyze audit logs"
+        - "Extract lessons learned"
+        - "Update knowledge library"
+        - "Refine governance rules"
+      
+      phase_n_plus_1_execution:
+        - "Execute with IMPROVED knowledge and governance"
+        - "Fewer violations (rules enforced earlier)"
+        - "Faster execution (optimizations applied)"
+        - "Higher quality (anti-patterns blocked)"
+    
+    measurable_improvements:
+      - metric: "Governance Violations"
+        trend: "Decreasing each phase (snowball enforcement)"
+        
+      - metric: "Execution Time"
+        trend: "Decreasing each phase (optimizations compound)"
+        
+      - metric: "Code Quality"
+        trend: "Increasing each phase (best practices reinforced)"
+        
+      - metric: "Knowledge Coverage"
+        trend: "Increasing each phase (library grows organically)"
+
+# ==============================================================================
+# IMPLEMENTATION STRATEGY
+# ==============================================================================
+
+implementation_strategy:
+  
+  dual_epic_approach:
+    
+    epic_1_windows:
+      platform: "Windows 11 (slower machine)"
+      duration: "8 weeks (40 work days)"
+      strategy: "Sequential (snowball)"
+      
+      phases:
+        - phase: "Phase 0: Foundational (MCP + Multi-Repo + Team)"
+          duration: "17 days"
+          
+        - phase: "Phase 1: Core Orchestration (TODO + Audit + Silent)"
+          duration: "14 days"
+          
+        - phase: "Phase 2: Resilience (Rollback + Performance + Trie)"
+          duration: "9 days"
+          
+        - phase: "Phase 3: Polish (Edge Cases + Tuning + Hardening)"
+          duration: "25 days"  # Includes all 25 edge cases
+      
+      rationale: |
+        Windows implementation ensures stability and correctness. Sequential
+        execution prevents skipping steps. Thorough testing at each phase.
+    
+    epic_2_mac:
+      platform: "macOS (faster laptop)"
+      duration: "5 weeks (25 work days)"
+      strategy: "Parallel (optimized)"
+      
+      phases:
+        - phase: "Phase 0: Foundational"
+          duration: "10 days"
+          parallelization: "MCP + Multi-Repo in parallel"
+          
+        - phase: "Phase 1: Core + Resilience"
+          duration: "10 days"
+          parallelization: "TODO + Audit in parallel, then Trie + Rollback"
+          
+        - phase: "Phase 2: Polish"
+          duration: "15 days"
+          parallelization: "High-priority edge cases only (P0, P1)"
+      
+      rationale: |
+        Mac implementation optimizes for speed. Parallel execution where safe.
+        Focuses on high-priority items. Leverages Windows learnings.
+    
+    integration_phase:
+      duration: "2 weeks"
+      activities:
+        - "Merge Windows + Mac implementations"
+        - "Cross-platform testing"
+        - "Performance benchmarking"
+        - "Documentation updates"
+      
+      success_criteria:
+        - "All tests pass on both platforms"
+        - "Performance benchmarks met"
+        - "No platform-specific regressions"
+  
+  snowball_strategy_optimization:
+    
+    principle: |
+      Each phase builds on previous phases. No phase skipped. Lessons learned
+      from early phases improve later phases (snowball effect).
+    
+    phase_dependencies:
+      phase_0: "Foundation (MCP, Multi-Repo, Team Knowledge)"
+      phase_1: "Core (depends on Phase 0)"
+      phase_2: "Resilience (depends on Phase 1)"
+      phase_3: "Polish (depends on Phase 2)"
+    
+    continuous_improvement:
+      - "Phase 0 complete → Review logs → Update knowledge"
+      - "Phase 1 execution uses improved knowledge from Phase 0"
+      - "Phase 1 complete → Review logs → Refine governance"
+      - "Phase 2 execution uses refined governance from Phase 1"
+      - "Snowball effect: Precision increases each phase"
+  
+  governance_gates:
+    
+    pre_phase_progression_checklist:
+      mandatory_items:
+        - "✅ Audit logs clean (no active BLOCKED violations)"
+        - "✅ Plan-code alignment ≥95%"
+        - "✅ Static analysis pass (mypy, pylint, pydocstyle, black, isort)"
+        - "✅ All tests pass (100% pass rate)"
+        - "✅ Documentation updated"
+        - "✅ Phase deliverables verified"
+        - "✅ No regressions in previous phases"
+      
+      blocking: true
+      enforcement: "Phase progression blocked if ANY item unchecked"
+    
+    audit_trail_validation:
+      frequency: "End of every phase"
+      
+      validation_steps:
+        - "Load audit logs for phase"
+        - "Verify all operations logged"
+        - "Check no active BLOCKED violations"
+        - "Validate governance compliance trends"
+      
+      on_failure:
+        action: "Generate remediation plan"
+        output: "reports/phase-{n}-remediation-{timestamp}.yaml"
+        blocking: true
+
+# ==============================================================================
+# SUCCESS CRITERIA
+# ==============================================================================
+
+success_criteria:
+  
+  architectural_goals:
+    - goal: "Graph-based work tracking operational"
+      validation: "TODO orchestrator creates DAG, resumes from breakage"
+      
+    - goal: "Mandatory audit logging enforced"
+      validation: "Pre-commit hook blocks commits without audit logs"
+      
+    - goal: "Silent autonomous execution"
+      validation: "No chatty narration, visual progress bars only"
+      
+    - goal: "O(1) pattern matching"
+      validation: "Routing <5ms for 100 orchestrators"
+      
+    - goal: "MCP standardization complete"
+      validation: "All orchestrators exposed as MCP tools"
+      
+    - goal: "Multi-repo support operational"
+      validation: "Single CORTEX manages 3+ repos from repos.yaml"
+  
+  governance_compliance:
+    - metric: "Zero BLOCKED severity violations in production"
+      threshold: "0 active violations"
+      
+    - metric: "100% audit log coverage"
+      threshold: "All operations logged"
+      
+    - metric: "Static analysis pass rate"
+      threshold: "100% (mypy, pylint, pydocstyle, black, isort)"
+      
+    - metric: "Type hint coverage"
+      threshold: "100% (all public functions)"
+      
+    - metric: "Docstring coverage"
+      threshold: "100% (all public APIs)"
+  
+  performance_benchmarks:
+    - metric: "Pattern matching latency"
+      threshold: "<5ms average (100 orchestrators)"
+      
+    - metric: "State persistence latency"
+      threshold: "<100ms per checkpoint"
+      
+    - metric: "Knowledge query latency"
+      threshold: "<50ms per query"
+      
+    - metric: "Orchestrator startup time"
+      threshold: "<500ms cold start"
+      
+    - metric: "Memory usage"
+      threshold: "<512MB per orchestrator"
+  
+  quality_gates:
+    - gate: "Test coverage"
+      threshold: "≥80% unit tests, ≥60% integration tests"
+      
+    - gate: "Code quality score"
+      threshold: "Pylint ≥8.0"
+      
+    - gate: "Cyclomatic complexity"
+      threshold: "≤10 per function"
+      
+    - gate: "Documentation completeness"
+      threshold: "100% public API documented"
+  
+  user_experience_criteria:
+    - criteria: "Resume from breakage works seamlessly"
+      validation: "Manual test: Ctrl+C during execution → Resume without narration"
+      
+    - criteria: "Progress updates are concise and visual"
+      validation: "Manual test: No chatty updates, progress bars visible"
+      
+    - criteria: "Multi-repo setup takes <5 minutes"
+      validation: "Manual test: Edit repos.yaml → CORTEX detects repos"
+      
+    - criteria: "Knowledge consultations are invisible"
+      validation: "Manual test: User doesn't see knowledge queries, just results"
+
+# ==============================================================================
+# RISK MITIGATION
+# ==============================================================================
+
+risk_mitigation:
+  
+  technical_risks:
+    - risk: "SQLite WAL mode compatibility issues on Windows"
+      probability: "Medium"
+      impact: "High"
+      mitigation: "Phase 0 validation on Windows before Phase 1"
+      
+    - risk: "MCP server stdio transport buffering issues"
+      probability: "Medium"
+      impact: "High"
+      mitigation: "Flush after every JSON-RPC message"
+      
+    - risk: "Circular dependency undetected (algorithm bug)"
+      probability: "Low"
+      impact: "Critical"
+      mitigation: "Extensive unit tests + property-based testing (hypothesis)"
+      
+    - risk: "Race conditions in concurrent orchestrator execution"
+      probability: "High"
+      impact: "Critical"
+      mitigation: "Optimistic locking + integration tests for concurrency"
+  
+  process_risks:
+    - risk: "Snowball strategy delays (early phases take longer)"
+      probability: "High"
+      impact: "Medium"
+      mitigation: "Buffer time in estimates (Epic 1: 8 weeks)"
+      
+    - risk: "Governance audit log enforcement bypassed"
+      probability: "Low"
+      impact: "Critical"
+      mitigation: "Pre-commit hook cannot be bypassed (wrapper script)"
+      
+    - risk: "Knowledge merge conflicts unresolved"
+      probability: "Medium"
+      impact: "Medium"
+      mitigation: "User prompt for critical conflicts, fallback to CORTEX"
+  
+  user_adoption_risks:
+    - risk: "Multi-repo setup complexity"
+      probability: "Medium"
+      impact: "Medium"
+      mitigation: "Simple repos.yaml schema + auto-discovery"
+      
+    - risk: "MCP server configuration confusion"
+      probability: "Low"
+      impact: "Low"
+      mitigation: "One-time setup script: setup-mcp.sh"
+
+# ==============================================================================
+# NEXT STEPS
+# ==============================================================================
+
+next_steps:
+  
+  immediate_actions:
+    - action: "Review this master plan with stakeholders"
+      owner: "Asif Hussain"
+      deadline: "2026-01-08"
+      
+    - action: "Create Epic 2 (Mac Implementation) plan"
+      owner: "CORTEX Planning"
+      deadline: "2026-01-08"
+      
+    - action: "Set up Windows development environment"
+      owner: "Developer"
+      deadline: "2026-01-09"
+      
+    - action: "Begin Epic 1 Phase 0 (MCP Server)"
+      owner: "Developer"
+      start_date: "2026-01-10"
+  
+  documentation_to_create:
+    - "MCP Server Developer Guide"
+    - "Multi-Repo Setup Tutorial"
+    - "Knowledge Library Contribution Guide"
+    - "Governance Rules Reference"
+    - "Orchestrator Development Guide"
+  
+  validation_checkpoints:
+    - checkpoint: "End of Phase 0"
+      validation: "MCP server integration test with GitHub Copilot"
+      
+    - checkpoint: "End of Phase 1"
+      validation: "TODO orchestrator resumes from breakage test"
+      
+    - checkpoint: "End of Phase 2"
+      validation: "Load test: 100 orchestrators, 1000 requests"
+      
+    - checkpoint: "End of Phase 3"
+      validation: "Cross-platform integration test (Windows + Mac)"
+
+# ==============================================================================
+# APPENDIX: REFERENCE DOCUMENTS
+# ==============================================================================
+
+reference_documents:
+  cortex_core:
+    - ".github/prompts/CORTEX.prompt.md"
+    - "cortex-brain/brain-protection-rules.yaml"
+    - "cortex-brain/response-templates-v4.yaml"
+  
+  cortex6_architecture:
+    - ".asif/AI-Learning/cortex6/architecture/01-system-architecture.yaml"
+    - ".asif/AI-Learning/cortex6/analysis/01-holistic-requirements-analysis.yaml"
+    - ".asif/AI-Learning/cortex6/analysis/02-edge-cases-failure-modes.yaml"
+    - ".asif/AI-Learning/cortex6/analysis/03-enhancement-evaluation-report.yaml"
+  
+  epic_plans:
+    - ".asif/AI-Learning/cortex6/epics/01-epic1-windows-implementation.yaml"
+    - ".asif/AI-Learning/cortex6/epics/02-epic2-mac-implementation.yaml (TBD)"
+  
+  governance_and_review:
+    - ".github/prompts/cortex-review.prompt.md"
+    - "cortex-brain/manifests/orchestrators/review-v2.yaml"
+
+# ==============================================================================
+# END OF HOLISTIC MASTER PLAN
+# ==============================================================================
