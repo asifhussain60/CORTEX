@@ -26,7 +26,7 @@
     "name": "CORTEX Review Orchestrator",
     "version": "2.0.0",
     "type": "autonomous",
-    "category": "quality_assurance",
+  "category": "validation",
     "class_name": "ReviewOrchestratorV2",
     "module_path": "src.orchestrators.review.review_orchestrator_v2",
     "description": "Comprehensive epic plan and implementation validation with 7-phase analysis pipeline",

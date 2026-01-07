@@ -1626,7 +1626,7 @@ named_templates:
     description: "Progress template for autonomous execution with CONCISE mode (default) for accessibility - ✅ IMPLEMENTED in v4.0.4"
     tier: "TIER 3"
     orchestrator_engaged: true
-    default_mode: "concise"  # ✅ Accessibility-first (WCAG AA - implemented 2026-01-04)
+    default_mode: "one_line"  # Ultra-concise single-line updates (requested by user)
     implementation_status:
       concise_mode: "✅ IMPLEMENTED (2026-01-04)"
       verbose_mode: "✅ IMPLEMENTED (2026-01-04)"
@@ -1634,6 +1634,16 @@ named_templates:
       orchestrator_params: "✅ IMPLEMENTED (2026-01-04)"
     
     modes:
+      one_line:
+        description: "Single-line updates: what was done and what's next"
+        use_when: "user requests ultra-concise updates"
+        display_policy:
+          phase_start: "ONE LINE"
+          task_completion: "SILENT"
+          phase_completion: "ONE LINE"
+          overall_completion: "ONE LINE"
+        format: |
+          {{#if phase_completed}}✅ {{completed_phase}} → Next: {{next_phase}}{{else}}🔄 {{phase_name}} {{overall_percentage}}% → Next: {{next_phase}}{{/if}}
       concise:
         description: "Minimal updates for accessibility (WCAG-aligned cognitive load management)"
         use_when: "default for all autonomous execution"
@@ -1734,6 +1744,13 @@ named_templates:
     description: "Enhanced ADO work item generation progress with story points and hierarchy tracking"
     tier: "TIER 3"
     orchestrator_engaged: true
+    default_mode: "one_line"
+    modes:
+      one_line:
+        description: "Single-line updates for ADO: what was done and what's next"
+        use_when: "user requests ultra-concise updates"
+        format: |
+          {{#if phase_completed}}✅ {{completed_phase}} → Next: {{next_phase}}{{else}}🔄 {{phase_name}} {{overall_percentage}}% → Next: {{next_phase}}{{/if}}
     display_moments:
       - "beginning": "Show complete phase table with work item summary"
       - "phase_completion": "Show overall progress and next phase"

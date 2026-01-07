@@ -304,14 +304,23 @@ class TodoOrchestrator:
     
     # Valid status transitions (state machine)
     VALID_TRANSITIONS = {
-        TodoStatus.NOT_STARTED: {TodoStatus.BLOCKED, TodoStatus.READY, TodoStatus.IN_PROGRESS},
-        TodoStatus.BLOCKED: {TodoStatus.READY, TodoStatus.IN_PROGRESS},
+        # READY is a computed state that maps to NodeStatus.NOT_STARTED
+        # Allow moving from NOT_STARTED to READY or IN_PROGRESS
+        TodoStatus.NOT_STARTED: {TodoStatus.BLOCKED, TodoStatus.READY, TodoStatus.IN_PROGRESS, TodoStatus.CANCELLED},
+        # From BLOCKED, allow becoming READY (maps to NOT_STARTED) or CANCELLED
+        # Do NOT allow direct BLOCKED -> IN_PROGRESS (DAG disallows)
+        TodoStatus.BLOCKED: {TodoStatus.READY, TodoStatus.CANCELLED},
+        # From READY, allow progression to IN_PROGRESS or becoming BLOCKED
         TodoStatus.READY: {TodoStatus.IN_PROGRESS, TodoStatus.BLOCKED},
-        TodoStatus.IN_PROGRESS: {TodoStatus.COMPLETED, TodoStatus.FAILED, TodoStatus.BLOCKED},
-        TodoStatus.FAILED: {TodoStatus.ROLLED_BACK, TodoStatus.READY, TodoStatus.IN_PROGRESS},
-        TodoStatus.COMPLETED: set(),  # Terminal state
-        TodoStatus.ROLLED_BACK: {TodoStatus.READY, TodoStatus.IN_PROGRESS},
-        TodoStatus.CANCELLED: set(),  # Terminal state
+        # From IN_PROGRESS, allow completion, failure, or cancellation (DAG allows)
+        TodoStatus.IN_PROGRESS: {TodoStatus.COMPLETED, TodoStatus.FAILED, TodoStatus.CANCELLED},
+        # From FAILED, only allow resetting to READY (maps to NOT_STARTED) for retry
+        TodoStatus.FAILED: {TodoStatus.READY},
+        # Terminal states
+        TodoStatus.COMPLETED: set(),
+        # ROLLED_BACK is represented as FAILED at the DAG level; allow moving to READY
+        TodoStatus.ROLLED_BACK: {TodoStatus.READY},
+        TodoStatus.CANCELLED: set(),
     }
     
     def __init__(
@@ -609,11 +618,11 @@ class TodoOrchestrator:
             results = []
             for todo in self.todos.values():
                 # Apply filters
-                if status and todo.status != status:
+                if status is not None and todo.status != status:
                     continue
-                if priority and todo.priority != priority:
+                if priority is not None and todo.priority != priority:
                     continue
-                if tags and not tags.issubset(todo.tags):
+                if tags is not None and not tags.issubset(todo.tags):
                     continue
                 results.append(todo)
             return results
@@ -771,6 +780,17 @@ class TodoOrchestrator:
                 for group in parallel_node_groups
             ]
             return parallel_todo_groups
+
+    def _calculate_critical_path(self) -> List[Todo]:
+        """
+        Calculate the critical path (longest dependency chain) of TODOs.
+        
+        Returns:
+            List of Todo objects in critical path order (roots → leaf)
+        """
+        with self._lock:
+            node_path = self.dag.get_critical_path()
+            return [self.todos[node_id] for node_id in node_path if node_id in self.todos]
     
     # ==========================================================================
     # CHECKPOINT & RECOVERY
