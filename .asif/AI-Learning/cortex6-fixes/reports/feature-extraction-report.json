@@ -1,0 +1,44 @@
+{
+  "timestamp": "2026-01-08T14:30:04.277206",
+  "source_file": ".asif/AI-Learning/cortex6/source-of-truth/features/feat03-to-feat08/features-summary.yaml",
+  "total_features": 6,
+  "total_requirements": 22,
+  "features": [
+    {
+      "feature_id": "feat03",
+      "feature_name": "4-Category Governance System",
+      "requirements_count": 4,
+      "output_file": ".asif/AI-Learning/cortex6/source-of-truth/features/feat03-4-category-governance-system/requirements.yaml"
+    },
+    {
+      "feature_id": "feat04",
+      "feature_name": "Core Orchestration Layer",
+      "requirements_count": 4,
+      "output_file": ".asif/AI-Learning/cortex6/source-of-truth/features/feat04-core-orchestration-layer/requirements.yaml"
+    },
+    {
+      "feature_id": "feat05",
+      "feature_name": "Resilience & Performance",
+      "requirements_count": 3,
+      "output_file": ".asif/AI-Learning/cortex6/source-of-truth/features/feat05-resilience-&-performance/requirements.yaml"
+    },
+    {
+      "feature_id": "feat06",
+      "feature_name": "MCP & Multi-Repo Support",
+      "requirements_count": 4,
+      "output_file": ".asif/AI-Learning/cortex6/source-of-truth/features/feat06-mcp-&-multi-repo-support/requirements.yaml"
+    },
+    {
+      "feature_id": "feat07",
+      "feature_name": "Integration & Polish",
+      "requirements_count": 4,
+      "output_file": ".asif/AI-Learning/cortex6/source-of-truth/features/feat07-integration-&-polish/requirements.yaml"
+    },
+    {
+      "feature_id": "feat08",
+      "feature_name": "Vacuum & Repository Cleanup",
+      "requirements_count": 3,
+      "output_file": ".asif/AI-Learning/cortex6/source-of-truth/features/feat08-vacuum-&-repository-cleanup/requirements.yaml"
+    }
+  ]
+}

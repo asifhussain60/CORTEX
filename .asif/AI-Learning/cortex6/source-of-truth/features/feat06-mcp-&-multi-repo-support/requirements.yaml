@@ -1,0 +1,60 @@
+feature_id: feat06
+feature_name: MCP & Multi-Repo Support
+description: 'Implements Model Context Protocol server and multi-repo operations:
+
+  - JSON-RPC 2.0 MCP server
+
+  - Multi-repo manager
+
+  - Company brain plugin system
+
+  '
+created_date: '2026-01-08T14:30:04.274053'
+requirements:
+- requirement_id: REQ-001
+  description: MCP Server Implementation
+  acceptance_criteria:
+  - Implement JSON-RPC 2.0 server
+  - Implement orchestrator capability exposure
+  - Implement request/response handling
+  priority: P0_CRITICAL
+  status: NOT_STARTED
+  category: TECHNICAL
+  feature_id: feat06
+  dependencies: []
+  estimated_hours: 24
+- requirement_id: REQ-002
+  description: Multi-Repo Manager
+  acceptance_criteria:
+  - Implement repo discovery
+  - Implement cross-repo operations
+  - Implement repo isolation
+  priority: P0_CRITICAL
+  status: NOT_STARTED
+  category: TECHNICAL
+  feature_id: feat06
+  dependencies: []
+  estimated_hours: 20
+- requirement_id: REQ-003
+  description: Company Brain Plugin System
+  acceptance_criteria:
+  - Implement company brain registry
+  - Implement domain plugin architecture
+  - Implement brain isolation
+  priority: P0_CRITICAL
+  status: NOT_STARTED
+  category: TECHNICAL
+  feature_id: feat06
+  dependencies: []
+  estimated_hours: 16
+- requirement_id: REQ-004
+  description: Integration Testing
+  acceptance_criteria:
+  - MCP protocol compliance tests
+  - Multi-repo integration tests
+  priority: P0_CRITICAL
+  status: NOT_STARTED
+  category: TECHNICAL
+  feature_id: feat06
+  dependencies: []
+  estimated_hours: 12
