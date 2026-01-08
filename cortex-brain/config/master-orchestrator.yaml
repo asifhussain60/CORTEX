@@ -6,6 +6,26 @@ schema_version: "5.0"
 # Pattern-Based Routing Rules (Primary)
 # 90%+ of requests handled via exact/regex matching
 routing_rules:
+  # Epic Review - NEW (Health Check & Progress Analysis)
+  # Autonomous health check and progress analysis for CORTEX 6.0 Build Epic
+  - pattern: "^(epic review|review epic|health check|progress report|cortex status|epic status).*$"
+    orchestrator: "epic_review"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 7
+    metadata:
+      description: "Epic health review with visual progress bars and gap detection"
+      autonomous: true
+      version: "1.0"
+      features:
+        - "Visual progress bars (ASCII)"
+        - "Health metrics (test, audit, governance)"
+        - "Component usage tracking"
+        - "Self-healing evaluation"
+        - "Gap detection with severity"
+        - "Automatic epic updates"
+        - "Executive summary generation"
+  
   # Epic Executor - NEW (Universal YAML-Based Execution)
   # Executes multi-phase epics with dependency validation
   - pattern: "^(execute epic|run epic|proceed with epic|epic execution|continue epic).*$"

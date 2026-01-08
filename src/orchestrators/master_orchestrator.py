@@ -279,7 +279,7 @@ class MasterOrchestrator:
                 )
         
         # STEP 4: Execute orchestrator (now with optional review insights)
-        result = self.execute_orchestrator(
+        exec_result = self.execute_orchestrator(
             orchestrator_id=match.orchestrator_id,
             params={
                 'user_request': user_input,
@@ -287,6 +287,15 @@ class MasterOrchestrator:
                 'routing_match': match
             }
         )
+        
+        # Convert ExecutionResult to expected format
+        result = type('Result', (), {
+            'success': exec_result.status.value == 'success',
+            'message': str(exec_result.output) if exec_result.output else "Execution completed",
+            'metadata': {'orchestrator_result': exec_result.output, 'orchestrator_id': match.orchestrator_id},
+            'artifacts': [],
+            'user_message': None
+        })()
         
         # STEP 5: Render user-facing response (NEW - Phase 6.4)
         if result.metadata.get('orchestrator_result'):
@@ -455,31 +464,70 @@ class MasterOrchestrator:
         if not orchestrator:
             raise ValueError(f"Orchestrator not found: {orchestrator_id}")
         
-        # Begin execution tracking
-        log_id = self.state_manager.begin_execution(
-            orchestrator_id,
-            params
-        )
+        # Begin execution tracking (if supported)
+        log_id = None
+        if hasattr(self.state_manager, 'begin_execution'):
+            log_id = self.state_manager.begin_execution(
+                orchestrator_id,
+                params
+            )
         
         try:
-            # Execute with engine
-            result = self.execution_engine.run(
-                orchestrator=orchestrator,
-                params=params,
-                hooks=self._get_lifecycle_hooks(orchestrator_id)
-            )
+            from src.orchestrators.execution_engine import ExecutionStatus
+            from datetime import datetime
+            import uuid
             
-            # Complete execution tracking
-            self.state_manager.complete_execution(
-                orchestrator_id,
-                result.to_dict()
-            )
+            # Check if orchestrator has execute method
+            if hasattr(orchestrator, 'execute'):
+                # Direct execution (for simple orchestrators)
+                started_at = datetime.now()
+                result_data = orchestrator.execute()
+                completed_at = datetime.now()
+                
+                # Wrap in ExecutionResult
+                result = ExecutionResult(
+                    execution_id=str(uuid.uuid4()),
+                    status=ExecutionStatus.SUCCESS,
+                    started_at=started_at,
+                    completed_at=completed_at,
+                    output=result_data,
+                    error=None
+                )
+            elif hasattr(self.execution_engine, 'run'):
+                # Execute with engine (for complex orchestrators)
+                result = self.execution_engine.run(
+                    orchestrator=orchestrator,
+                    params=params,
+                    hooks=self._get_lifecycle_hooks(orchestrator_id)
+                )
+            else:
+                # Fallback - try direct call
+                started_at = datetime.now()
+                result_data = orchestrator(**params) if params else orchestrator()
+                completed_at = datetime.now()
+                
+                result = ExecutionResult(
+                    execution_id=str(uuid.uuid4()),
+                    status=ExecutionStatus.SUCCESS,
+                    started_at=started_at,
+                    completed_at=completed_at,
+                    output=result_data,
+                    error=None
+                )
+            
+            # Complete execution tracking (if supported)
+            if hasattr(self.state_manager, 'complete_execution'):
+                self.state_manager.complete_execution(
+                    orchestrator_id,
+                    result.to_dict()
+                )
             
             return result
             
         except Exception as e:
-            # Fail execution tracking
-            self.state_manager.fail_execution(orchestrator_id, str(e))
+            # Fail execution tracking (if supported)
+            if hasattr(self.state_manager, 'fail_execution'):
+                self.state_manager.fail_execution(orchestrator_id, str(e))
             raise RuntimeError(
                 f"Orchestrator execution failed: {orchestrator_id} - {e}"
             ) from e
