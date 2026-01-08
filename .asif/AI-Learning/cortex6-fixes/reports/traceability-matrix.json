@@ -1,0 +1,3090 @@
+{
+  "metadata": {
+    "generated_at": "2026-01-08T14:34:22.543985",
+    "workspace_root": "/Users/asifhussain/PROJECTS/CORTEX",
+    "total_requirements": 59
+  },
+  "coverage_summary": {
+    "total_requirements": 59,
+    "with_implementation": 59,
+    "with_tests": 59,
+    "fully_traced": 59,
+    "percentages": {
+      "implementation_coverage": "100.0%",
+      "test_coverage": "100.0%",
+      "full_traceability": "100.0%"
+    }
+  },
+  "traceability": [
+    {
+      "requirement_id": "",
+      "feature_id": "feat01",
+      "feature_name": "Foundation Layer",
+      "description": "Create unified tests/ folder with subdirectories for unit, integration,\nperformance, and governance tests. All test files must be under tests/.\n",
+      "priority": "P0_CRITICAL",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "tests/__init__.py",
+          "tests/unit/__init__.py",
+          "tests/integration/__init__.py",
+          "tests/performance/__init__.py",
+          "tests/governance/__init__.py",
+          "tests/fixtures/"
+        ],
+        "count": 6,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/mcp/test_company_brain.py",
+          "tests/unit/test_checkpoint_manager.py",
+          "tests/unit/test_circuit_breaker.py",
+          "tests/unit/test_todo_orchestrator_persistence.py",
+          "tests/unit/test_phase_boundary_reporter.py",
+          "tests/governance/test_audit_validation_simple.py",
+          "tests/unit/test_rate_limiter.py",
+          "tests/unit/test_master_orchestrator_pipeline.py",
+          "tests/unit/test_enhanced_vacuum.py",
+          "tests/integration/test_feat04_end_to_end.py",
+          "tests/governance/test_governance_merger.py",
+          "tests/mcp/test_request_response_handling.py",
+          "tests/orchestrators/test_sanitization_orchestrator_v2.py",
+          "tests/mcp/test_multi_repo.py",
+          "tests/governance/test_governance_performance.py",
+          "tests/unit/test_resource_limiter.py",
+          "tests/integration/test_unified_pipeline.py",
+          "tests/orchestrators/test_ado_orchestrator_v2.py",
+          "tests/unit/test_smoke.py",
+          "tests/mcp/test_capability_exposure.py",
+          "tests/unit/test_yaml_first_enforcement.py",
+          "tests/integration/test_edge_case_mitigations.py",
+          "tests/governance/test_audit_validation.py",
+          "tests/unit/test_silent_execution.py",
+          "tests/unit/test_orchestrator_lifecycle.py",
+          "tests/integration/test_todo_lifecycle.py",
+          "tests/unit/test_master_orchestrator_governance.py",
+          "tests/unit/test_todo_status_transitions.py",
+          "tests/orchestrators/test_maintenance_orchestrator_v2.py",
+          "tests/performance/test_feat07_performance.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/tools/test_md_to_yaml_converter.py",
+          "tests/unit/test_dag.py",
+          "tests/unit/test_file_utils.py",
+          "tests/unit/test_progress_throttler.py",
+          "tests/unit/test_state_manager.py",
+          "tests/unit/test_rollback_manager.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/integration/test_governance_todo_integration.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_structure_validator.py",
+          "tests/unit/test_yaml_to_todos.py",
+          "tests/unit/test_master_orchestrator_todo.py",
+          "tests/unit/test_todo_parallel.py",
+          "tests/unit/test_intelligence_middleware.py",
+          "tests/orchestrators/test_investigation_orchestrator_v2.py",
+          "tests/unit/test_audit_logger.py",
+          "tests/unit/test_trie_router.py",
+          "tests/unit/test_todo_critical_path.py",
+          "tests/unit/test_mistake_prevention.py",
+          "tests/mcp/test_mcp_integration.py",
+          "tests/mcp/test_jsonrpc_server.py",
+          "tests/unit/test_execution_and_progress.py",
+          "tests/unit/test_todo_crud.py",
+          "tests/integration/test_feat07_integration_suite.py"
+        ],
+        "count": 55,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "",
+      "feature_id": "feat01",
+      "feature_name": "Foundation Layer",
+      "description": "Configure pytest with proper testpaths, markers, and options for\nCORTEX 6.0 test suite.\n",
+      "priority": "P0_CRITICAL",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "tests/pytest.ini"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/mcp/test_company_brain.py",
+          "tests/unit/test_checkpoint_manager.py",
+          "tests/unit/test_circuit_breaker.py",
+          "tests/unit/test_todo_orchestrator_persistence.py",
+          "tests/unit/test_phase_boundary_reporter.py",
+          "tests/governance/test_audit_validation_simple.py",
+          "tests/unit/test_rate_limiter.py",
+          "tests/unit/test_master_orchestrator_pipeline.py",
+          "tests/unit/test_enhanced_vacuum.py",
+          "tests/integration/test_feat04_end_to_end.py",
+          "tests/governance/test_governance_merger.py",
+          "tests/mcp/test_request_response_handling.py",
+          "tests/orchestrators/test_sanitization_orchestrator_v2.py",
+          "tests/mcp/test_multi_repo.py",
+          "tests/governance/test_governance_performance.py",
+          "tests/unit/test_resource_limiter.py",
+          "tests/integration/test_unified_pipeline.py",
+          "tests/orchestrators/test_ado_orchestrator_v2.py",
+          "tests/unit/test_smoke.py",
+          "tests/mcp/test_capability_exposure.py",
+          "tests/unit/test_yaml_first_enforcement.py",
+          "tests/integration/test_edge_case_mitigations.py",
+          "tests/governance/test_audit_validation.py",
+          "tests/unit/test_silent_execution.py",
+          "tests/unit/test_orchestrator_lifecycle.py",
+          "tests/integration/test_todo_lifecycle.py",
+          "tests/unit/test_master_orchestrator_governance.py",
+          "tests/unit/test_todo_status_transitions.py",
+          "tests/orchestrators/test_maintenance_orchestrator_v2.py",
+          "tests/performance/test_feat07_performance.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/tools/test_md_to_yaml_converter.py",
+          "tests/unit/test_dag.py",
+          "tests/unit/test_file_utils.py",
+          "tests/unit/test_progress_throttler.py",
+          "tests/unit/test_state_manager.py",
+          "tests/unit/test_rollback_manager.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/integration/test_governance_todo_integration.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_structure_validator.py",
+          "tests/unit/test_yaml_to_todos.py",
+          "tests/unit/test_master_orchestrator_todo.py",
+          "tests/unit/test_todo_parallel.py",
+          "tests/unit/test_intelligence_middleware.py",
+          "tests/orchestrators/test_investigation_orchestrator_v2.py",
+          "tests/unit/test_audit_logger.py",
+          "tests/unit/test_trie_router.py",
+          "tests/unit/test_todo_critical_path.py",
+          "tests/unit/test_mistake_prevention.py",
+          "tests/mcp/test_mcp_integration.py",
+          "tests/mcp/test_jsonrpc_server.py",
+          "tests/unit/test_execution_and_progress.py",
+          "tests/unit/test_todo_crud.py",
+          "tests/integration/test_feat07_integration_suite.py"
+        ],
+        "count": 55,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "",
+      "feature_id": "feat01",
+      "feature_name": "Foundation Layer",
+      "description": "Provide reusable pytest fixtures for audit_logger, temp_db, sample_dag,\nand mock governance rules across all test suites.\n",
+      "priority": "P0_CRITICAL",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "tests/conftest.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/mcp/test_company_brain.py",
+          "tests/unit/test_checkpoint_manager.py",
+          "tests/unit/test_circuit_breaker.py",
+          "tests/unit/test_todo_orchestrator_persistence.py",
+          "tests/unit/test_phase_boundary_reporter.py",
+          "tests/governance/test_audit_validation_simple.py",
+          "tests/unit/test_rate_limiter.py",
+          "tests/unit/test_master_orchestrator_pipeline.py",
+          "tests/unit/test_enhanced_vacuum.py",
+          "tests/integration/test_feat04_end_to_end.py",
+          "tests/governance/test_governance_merger.py",
+          "tests/mcp/test_request_response_handling.py",
+          "tests/orchestrators/test_sanitization_orchestrator_v2.py",
+          "tests/mcp/test_multi_repo.py",
+          "tests/governance/test_governance_performance.py",
+          "tests/unit/test_resource_limiter.py",
+          "tests/integration/test_unified_pipeline.py",
+          "tests/orchestrators/test_ado_orchestrator_v2.py",
+          "tests/unit/test_smoke.py",
+          "tests/mcp/test_capability_exposure.py",
+          "tests/unit/test_yaml_first_enforcement.py",
+          "tests/integration/test_edge_case_mitigations.py",
+          "tests/governance/test_audit_validation.py",
+          "tests/unit/test_silent_execution.py",
+          "tests/unit/test_orchestrator_lifecycle.py",
+          "tests/integration/test_todo_lifecycle.py",
+          "tests/unit/test_master_orchestrator_governance.py",
+          "tests/unit/test_todo_status_transitions.py",
+          "tests/orchestrators/test_maintenance_orchestrator_v2.py",
+          "tests/performance/test_feat07_performance.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/tools/test_md_to_yaml_converter.py",
+          "tests/unit/test_dag.py",
+          "tests/unit/test_file_utils.py",
+          "tests/unit/test_progress_throttler.py",
+          "tests/unit/test_state_manager.py",
+          "tests/unit/test_rollback_manager.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/integration/test_governance_todo_integration.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_structure_validator.py",
+          "tests/unit/test_yaml_to_todos.py",
+          "tests/unit/test_master_orchestrator_todo.py",
+          "tests/unit/test_todo_parallel.py",
+          "tests/unit/test_intelligence_middleware.py",
+          "tests/orchestrators/test_investigation_orchestrator_v2.py",
+          "tests/unit/test_audit_logger.py",
+          "tests/unit/test_trie_router.py",
+          "tests/unit/test_todo_critical_path.py",
+          "tests/unit/test_mistake_prevention.py",
+          "tests/mcp/test_mcp_integration.py",
+          "tests/mcp/test_jsonrpc_server.py",
+          "tests/unit/test_execution_and_progress.py",
+          "tests/unit/test_todo_crud.py",
+          "tests/integration/test_feat07_integration_suite.py"
+        ],
+        "count": 55,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "",
+      "feature_id": "feat01",
+      "feature_name": "Foundation Layer",
+      "description": "Provide YAML/JSON fixture data files for testing without external\ndependencies (sample governance rules, DAG structures, tier 0 rules).\n",
+      "priority": "P1_HIGH",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "tests/fixtures/sample_governance_rules.yaml",
+          "tests/fixtures/sample_dag.json"
+        ],
+        "count": 2,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/mcp/test_company_brain.py",
+          "tests/unit/test_checkpoint_manager.py",
+          "tests/unit/test_circuit_breaker.py",
+          "tests/unit/test_todo_orchestrator_persistence.py",
+          "tests/unit/test_phase_boundary_reporter.py",
+          "tests/governance/test_audit_validation_simple.py",
+          "tests/unit/test_rate_limiter.py",
+          "tests/unit/test_master_orchestrator_pipeline.py",
+          "tests/unit/test_enhanced_vacuum.py",
+          "tests/integration/test_feat04_end_to_end.py",
+          "tests/governance/test_governance_merger.py",
+          "tests/mcp/test_request_response_handling.py",
+          "tests/orchestrators/test_sanitization_orchestrator_v2.py",
+          "tests/mcp/test_multi_repo.py",
+          "tests/governance/test_governance_performance.py",
+          "tests/unit/test_resource_limiter.py",
+          "tests/integration/test_unified_pipeline.py",
+          "tests/orchestrators/test_ado_orchestrator_v2.py",
+          "tests/unit/test_smoke.py",
+          "tests/mcp/test_capability_exposure.py",
+          "tests/unit/test_yaml_first_enforcement.py",
+          "tests/integration/test_edge_case_mitigations.py",
+          "tests/governance/test_audit_validation.py",
+          "tests/unit/test_silent_execution.py",
+          "tests/unit/test_orchestrator_lifecycle.py",
+          "tests/integration/test_todo_lifecycle.py",
+          "tests/unit/test_master_orchestrator_governance.py",
+          "tests/unit/test_todo_status_transitions.py",
+          "tests/orchestrators/test_maintenance_orchestrator_v2.py",
+          "tests/performance/test_feat07_performance.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/tools/test_md_to_yaml_converter.py",
+          "tests/unit/test_dag.py",
+          "tests/unit/test_file_utils.py",
+          "tests/unit/test_progress_throttler.py",
+          "tests/unit/test_state_manager.py",
+          "tests/unit/test_rollback_manager.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/integration/test_governance_todo_integration.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_structure_validator.py",
+          "tests/unit/test_yaml_to_todos.py",
+          "tests/unit/test_master_orchestrator_todo.py",
+          "tests/unit/test_todo_parallel.py",
+          "tests/unit/test_intelligence_middleware.py",
+          "tests/orchestrators/test_investigation_orchestrator_v2.py",
+          "tests/unit/test_audit_logger.py",
+          "tests/unit/test_trie_router.py",
+          "tests/unit/test_todo_critical_path.py",
+          "tests/unit/test_mistake_prevention.py",
+          "tests/mcp/test_mcp_integration.py",
+          "tests/mcp/test_jsonrpc_server.py",
+          "tests/unit/test_execution_and_progress.py",
+          "tests/unit/test_todo_crud.py",
+          "tests/integration/test_feat07_integration_suite.py"
+        ],
+        "count": 55,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "",
+      "feature_id": "feat01",
+      "feature_name": "Foundation Layer",
+      "description": "Verify pytest can discover all tests in tests/ folder using\n--collect-only flag.\n",
+      "priority": "P1_HIGH",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/__init__.py",
+          "src/main.py",
+          "src/database/planning_state_db.py",
+          "src/database/state_manager.py",
+          "src/tools/feature_requirements_extractor.py",
+          "src/tools/md_to_yaml_converter.py",
+          "src/tools/requirements_auditor.py",
+          "src/tools/yaml_validator.py",
+          "src/tools/remediation_executor.py",
+          "src/tools/traceability_matrix_generator.py",
+          "src/tools/gap_detector.py",
+          "src/tools/checkpoint_manager.py",
+          "src/tools/dashboard_generator.py",
+          "src/tools/requirements_restructurer.py",
+          "src/entry_point/__init__.py",
+          "src/entry_point/cortex_entry.py",
+          "src/entry_point/fast_commands.py",
+          "src/config/__init__.py",
+          "src/utils/lazy_loader.py",
+          "src/utils/__init__.py",
+          "src/mcp/metadata.py",
+          "src/mcp/registry.py",
+          "src/mcp/capability_registry.py",
+          "src/mcp/__init__.py",
+          "src/mcp/jsonrpc_server.py",
+          "src/mcp/loader.py",
+          "src/mcp/company_brain_plugin.py",
+          "src/mcp/multi_repo_manager.py",
+          "src/mcp/request_handler.py",
+          "src/mcp/mcp_server.py",
+          "src/orchestrators/response_renderer.py",
+          "src/orchestrators/state_manager.py",
+          "src/orchestrators/execution_engine.py",
+          "src/orchestrators/__init__.py",
+          "src/orchestrators/master_orchestrator.py",
+          "src/orchestrators/audit_logger.py",
+          "src/orchestrators/context_middleware.py",
+          "src/orchestrators/response_middleware.py",
+          "src/orchestrators/epic_review_orchestrator.py",
+          "src/orchestrators/pattern_router.py",
+          "src/orchestrators/ado/__init__.py",
+          "src/orchestrators/ado/ado_orchestrator_v2.py",
+          "src/orchestrators/middleware/yaml_first_enforcement.py",
+          "src/orchestrators/middleware/phase_boundary_reporter.py",
+          "src/orchestrators/middleware/governance_checkpoint.py",
+          "src/orchestrators/middleware/rate_limiter.py",
+          "src/orchestrators/middleware/__init__.py",
+          "src/orchestrators/middleware/token_optimizer.py",
+          "src/orchestrators/middleware/resource_limiter.py",
+          "src/orchestrators/middleware/intelligence_middleware.py",
+          "src/orchestrators/middleware/progress_throttler.py",
+          "src/orchestrators/middleware/silent_execution.py",
+          "src/orchestrators/middleware/circuit_breaker.py",
+          "src/orchestrators/middleware/orchestrator_lifecycle.py",
+          "src/orchestrators/middleware/teardown_refactor.py",
+          "src/orchestrators/middleware/python_best_practices_validator.py",
+          "src/orchestrators/middleware/setup_verification.py",
+          "src/orchestrators/middleware/mistake_prevention.py",
+          "src/orchestrators/core/todo_orchestrator.py",
+          "src/orchestrators/core/governance_merger.py",
+          "src/orchestrators/core/dag.py",
+          "src/orchestrators/core/__init__.py",
+          "src/orchestrators/core/master_orchestrator.py",
+          "src/orchestrators/core/checkpoint_manager.py",
+          "src/orchestrators/plan_converter/plan_converter_orchestrator.py",
+          "src/orchestrators/vacuum/git_integration.py",
+          "src/orchestrators/vacuum/enhanced_vacuum.py",
+          "src/orchestrators/vacuum/filesystem_engine.py",
+          "src/orchestrators/vacuum/organization_intelligence.py",
+          "src/orchestrators/vacuum/safety_validator.py",
+          "src/orchestrators/vacuum/__init__.py",
+          "src/orchestrators/vacuum/gitignore_manager.py",
+          "src/orchestrators/vacuum/orphan_detector.py",
+          "src/orchestrators/vacuum/cli.py",
+          "src/orchestrators/vacuum/vacuum_orchestrator_v2.py",
+          "src/orchestrators/vacuum/duplicate_detector.py",
+          "src/orchestrators/vacuum/structure_validator.py",
+          "src/orchestrators/planning/governance_integrator.py",
+          "src/orchestrators/planning/acceptance_validator.py",
+          "src/orchestrators/planning/__init__.py",
+          "src/orchestrators/planning/knowledge_graph_query.py",
+          "src/orchestrators/planning/ast_scanner.py",
+          "src/orchestrators/planning/orphan_detector.py",
+          "src/orchestrators/planning/duplicate_detector.py",
+          "src/orchestrators/planning/planning_orchestrator_v5.py",
+          "src/orchestrators/investigation/__init__.py",
+          "src/orchestrators/investigation/investigation_orchestrator_v2.py",
+          "src/orchestrators/plan_migration/__init__.py",
+          "src/orchestrators/plan_migration/plan_migration_orchestrator.py",
+          "src/orchestrators/master/todo_manager.py",
+          "src/orchestrators/master/__init__.py",
+          "src/orchestrators/review/__init__.py",
+          "src/orchestrators/review/review_orchestrator_v2.py",
+          "src/orchestrators/review/analyzers/__init__.py",
+          "src/orchestrators/review/validators/__init__.py",
+          "src/orchestrators/review/reporters/__init__.py",
+          "src/orchestrators/maintenance/__init__.py",
+          "src/orchestrators/maintenance/maintenance_orchestrator_v2.py",
+          "src/orchestrators/routing/__init__.py",
+          "src/orchestrators/routing/trie_router.py",
+          "src/orchestrators/sanitization/__init__.py",
+          "src/orchestrators/sanitization/sanitization_orchestrator_v2.py",
+          "src/orchestrators/base/base_orchestrator.py",
+          "src/orchestrators/base/__init__.py",
+          "src/orchestrators/base/base_orchestrator_v4_1.py",
+          "src/infrastructure/file_utils.py",
+          "src/infrastructure/rollback_manager.py",
+          "src/infrastructure/risk_mitigations.py"
+        ],
+        "count": 108,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/mcp/test_company_brain.py",
+          "tests/unit/test_checkpoint_manager.py",
+          "tests/unit/test_circuit_breaker.py",
+          "tests/unit/test_todo_orchestrator_persistence.py",
+          "tests/unit/test_phase_boundary_reporter.py",
+          "tests/governance/test_audit_validation_simple.py",
+          "tests/unit/test_rate_limiter.py",
+          "tests/unit/test_master_orchestrator_pipeline.py",
+          "tests/unit/test_enhanced_vacuum.py",
+          "tests/integration/test_feat04_end_to_end.py",
+          "tests/governance/test_governance_merger.py",
+          "tests/mcp/test_request_response_handling.py",
+          "tests/orchestrators/test_sanitization_orchestrator_v2.py",
+          "tests/mcp/test_multi_repo.py",
+          "tests/governance/test_governance_performance.py",
+          "tests/unit/test_resource_limiter.py",
+          "tests/integration/test_unified_pipeline.py",
+          "tests/orchestrators/test_ado_orchestrator_v2.py",
+          "tests/unit/test_smoke.py",
+          "tests/mcp/test_capability_exposure.py",
+          "tests/unit/test_yaml_first_enforcement.py",
+          "tests/integration/test_edge_case_mitigations.py",
+          "tests/governance/test_audit_validation.py",
+          "tests/unit/test_silent_execution.py",
+          "tests/unit/test_todo_crud.py",
+          "tests/unit/test_orchestrator_lifecycle.py",
+          "tests/integration/test_todo_lifecycle.py",
+          "tests/unit/test_master_orchestrator_governance.py",
+          "tests/unit/test_todo_status_transitions.py",
+          "tests/orchestrators/test_maintenance_orchestrator_v2.py",
+          "tests/performance/test_feat07_performance.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/tools/test_md_to_yaml_converter.py",
+          "tests/unit/test_dag.py",
+          "tests/unit/test_file_utils.py",
+          "tests/unit/test_progress_throttler.py",
+          "tests/unit/test_state_manager.py",
+          "tests/unit/test_rollback_manager.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/integration/test_governance_todo_integration.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/orchestrators/test_investigation_orchestrator_v2.py",
+          "tests/unit/test_yaml_to_todos.py",
+          "tests/unit/test_intelligence_middleware.py",
+          "tests/unit/test_master_orchestrator_todo.py",
+          "tests/unit/test_todo_parallel.py",
+          "tests/unit/test_audit_logger.py",
+          "tests/unit/test_trie_router.py",
+          "tests/unit/test_todo_critical_path.py",
+          "tests/unit/test_mistake_prevention.py",
+          "tests/mcp/test_mcp_integration.py",
+          "tests/mcp/test_jsonrpc_server.py",
+          "tests/unit/test_execution_and_progress.py",
+          "tests/unit/test_structure_validator.py",
+          "tests/integration/test_feat07_integration_suite.py"
+        ],
+        "count": 55,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "",
+      "feature_id": "feat01",
+      "feature_name": "Foundation Layer",
+      "description": "Design and implement SQLite schema with todo_items, execution_state,\ncheckpoints tables. Include version column for optimistic locking.\n",
+      "priority": "P0_CRITICAL",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/database/schema.sql"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/mcp/test_company_brain.py",
+          "tests/unit/test_checkpoint_manager.py",
+          "tests/unit/test_circuit_breaker.py",
+          "tests/unit/test_todo_orchestrator_persistence.py",
+          "tests/unit/test_phase_boundary_reporter.py",
+          "tests/governance/test_audit_validation_simple.py",
+          "tests/unit/test_rate_limiter.py",
+          "tests/unit/test_master_orchestrator_pipeline.py",
+          "tests/unit/test_enhanced_vacuum.py",
+          "tests/integration/test_feat04_end_to_end.py",
+          "tests/governance/test_governance_merger.py",
+          "tests/mcp/test_request_response_handling.py",
+          "tests/orchestrators/test_sanitization_orchestrator_v2.py",
+          "tests/mcp/test_multi_repo.py",
+          "tests/governance/test_governance_performance.py",
+          "tests/unit/test_resource_limiter.py",
+          "tests/integration/test_unified_pipeline.py",
+          "tests/orchestrators/test_ado_orchestrator_v2.py",
+          "tests/unit/test_smoke.py",
+          "tests/mcp/test_capability_exposure.py",
+          "tests/unit/test_yaml_first_enforcement.py",
+          "tests/integration/test_edge_case_mitigations.py",
+          "tests/governance/test_audit_validation.py",
+          "tests/unit/test_silent_execution.py",
+          "tests/unit/test_orchestrator_lifecycle.py",
+          "tests/integration/test_todo_lifecycle.py",
+          "tests/unit/test_master_orchestrator_governance.py",
+          "tests/unit/test_todo_status_transitions.py",
+          "tests/orchestrators/test_maintenance_orchestrator_v2.py",
+          "tests/performance/test_feat07_performance.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/tools/test_md_to_yaml_converter.py",
+          "tests/unit/test_dag.py",
+          "tests/unit/test_file_utils.py",
+          "tests/unit/test_progress_throttler.py",
+          "tests/unit/test_state_manager.py",
+          "tests/unit/test_rollback_manager.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/integration/test_governance_todo_integration.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_structure_validator.py",
+          "tests/unit/test_yaml_to_todos.py",
+          "tests/unit/test_master_orchestrator_todo.py",
+          "tests/unit/test_todo_parallel.py",
+          "tests/unit/test_intelligence_middleware.py",
+          "tests/orchestrators/test_investigation_orchestrator_v2.py",
+          "tests/unit/test_audit_logger.py",
+          "tests/unit/test_trie_router.py",
+          "tests/unit/test_todo_critical_path.py",
+          "tests/unit/test_mistake_prevention.py",
+          "tests/mcp/test_mcp_integration.py",
+          "tests/mcp/test_jsonrpc_server.py",
+          "tests/unit/test_execution_and_progress.py",
+          "tests/unit/test_todo_crud.py",
+          "tests/integration/test_feat07_integration_suite.py"
+        ],
+        "count": 55,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "",
+      "feature_id": "feat01",
+      "feature_name": "Foundation Layer",
+      "description": "Implement SQLite-based StateManager with create, read, update, delete\noperations for state persistence across orchestrator executions.\n",
+      "priority": "P0_CRITICAL",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/database/state_manager.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/mcp/test_company_brain.py",
+          "tests/unit/test_checkpoint_manager.py",
+          "tests/unit/test_circuit_breaker.py",
+          "tests/unit/test_todo_orchestrator_persistence.py",
+          "tests/unit/test_phase_boundary_reporter.py",
+          "tests/governance/test_audit_validation_simple.py",
+          "tests/unit/test_rate_limiter.py",
+          "tests/unit/test_master_orchestrator_pipeline.py",
+          "tests/unit/test_enhanced_vacuum.py",
+          "tests/integration/test_feat04_end_to_end.py",
+          "tests/governance/test_governance_merger.py",
+          "tests/mcp/test_request_response_handling.py",
+          "tests/orchestrators/test_sanitization_orchestrator_v2.py",
+          "tests/mcp/test_multi_repo.py",
+          "tests/governance/test_governance_performance.py",
+          "tests/unit/test_resource_limiter.py",
+          "tests/integration/test_unified_pipeline.py",
+          "tests/orchestrators/test_ado_orchestrator_v2.py",
+          "tests/unit/test_smoke.py",
+          "tests/mcp/test_capability_exposure.py",
+          "tests/unit/test_yaml_first_enforcement.py",
+          "tests/integration/test_edge_case_mitigations.py",
+          "tests/governance/test_audit_validation.py",
+          "tests/unit/test_silent_execution.py",
+          "tests/unit/test_orchestrator_lifecycle.py",
+          "tests/integration/test_todo_lifecycle.py",
+          "tests/unit/test_master_orchestrator_governance.py",
+          "tests/unit/test_todo_status_transitions.py",
+          "tests/orchestrators/test_maintenance_orchestrator_v2.py",
+          "tests/performance/test_feat07_performance.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/tools/test_md_to_yaml_converter.py",
+          "tests/unit/test_dag.py",
+          "tests/unit/test_file_utils.py",
+          "tests/unit/test_progress_throttler.py",
+          "tests/unit/test_state_manager.py",
+          "tests/unit/test_rollback_manager.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/integration/test_governance_todo_integration.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_structure_validator.py",
+          "tests/unit/test_yaml_to_todos.py",
+          "tests/unit/test_master_orchestrator_todo.py",
+          "tests/unit/test_todo_parallel.py",
+          "tests/unit/test_intelligence_middleware.py",
+          "tests/orchestrators/test_investigation_orchestrator_v2.py",
+          "tests/unit/test_audit_logger.py",
+          "tests/unit/test_trie_router.py",
+          "tests/unit/test_todo_critical_path.py",
+          "tests/unit/test_mistake_prevention.py",
+          "tests/mcp/test_mcp_integration.py",
+          "tests/mcp/test_jsonrpc_server.py",
+          "tests/unit/test_execution_and_progress.py",
+          "tests/unit/test_todo_crud.py",
+          "tests/integration/test_feat07_integration_suite.py"
+        ],
+        "count": 55,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "",
+      "feature_id": "feat01",
+      "feature_name": "Foundation Layer",
+      "description": "Implement optimistic locking using version column to prevent lost\nupdates in concurrent execution scenarios.\n",
+      "priority": "P0_CRITICAL",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/database/state_manager.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/mcp/test_company_brain.py",
+          "tests/unit/test_checkpoint_manager.py",
+          "tests/unit/test_circuit_breaker.py",
+          "tests/unit/test_todo_orchestrator_persistence.py",
+          "tests/unit/test_phase_boundary_reporter.py",
+          "tests/governance/test_audit_validation_simple.py",
+          "tests/unit/test_rate_limiter.py",
+          "tests/unit/test_master_orchestrator_pipeline.py",
+          "tests/unit/test_enhanced_vacuum.py",
+          "tests/integration/test_feat04_end_to_end.py",
+          "tests/governance/test_governance_merger.py",
+          "tests/mcp/test_request_response_handling.py",
+          "tests/orchestrators/test_sanitization_orchestrator_v2.py",
+          "tests/mcp/test_multi_repo.py",
+          "tests/governance/test_governance_performance.py",
+          "tests/unit/test_resource_limiter.py",
+          "tests/integration/test_unified_pipeline.py",
+          "tests/orchestrators/test_ado_orchestrator_v2.py",
+          "tests/unit/test_smoke.py",
+          "tests/mcp/test_capability_exposure.py",
+          "tests/unit/test_yaml_first_enforcement.py",
+          "tests/integration/test_edge_case_mitigations.py",
+          "tests/governance/test_audit_validation.py",
+          "tests/unit/test_silent_execution.py",
+          "tests/unit/test_orchestrator_lifecycle.py",
+          "tests/integration/test_todo_lifecycle.py",
+          "tests/unit/test_master_orchestrator_governance.py",
+          "tests/unit/test_todo_status_transitions.py",
+          "tests/orchestrators/test_maintenance_orchestrator_v2.py",
+          "tests/performance/test_feat07_performance.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/tools/test_md_to_yaml_converter.py",
+          "tests/unit/test_dag.py",
+          "tests/unit/test_file_utils.py",
+          "tests/unit/test_progress_throttler.py",
+          "tests/unit/test_state_manager.py",
+          "tests/unit/test_rollback_manager.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/integration/test_governance_todo_integration.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_structure_validator.py",
+          "tests/unit/test_yaml_to_todos.py",
+          "tests/unit/test_master_orchestrator_todo.py",
+          "tests/unit/test_todo_parallel.py",
+          "tests/unit/test_intelligence_middleware.py",
+          "tests/orchestrators/test_investigation_orchestrator_v2.py",
+          "tests/unit/test_audit_logger.py",
+          "tests/unit/test_trie_router.py",
+          "tests/unit/test_todo_critical_path.py",
+          "tests/unit/test_mistake_prevention.py",
+          "tests/mcp/test_mcp_integration.py",
+          "tests/mcp/test_jsonrpc_server.py",
+          "tests/unit/test_execution_and_progress.py",
+          "tests/unit/test_todo_crud.py",
+          "tests/integration/test_feat07_integration_suite.py"
+        ],
+        "count": 55,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "",
+      "feature_id": "feat01",
+      "feature_name": "Foundation Layer",
+      "description": "Implement checkpoint creation and restoration to support resuming\norchestration after crash or interruption.\n",
+      "priority": "P0_CRITICAL",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/database/state_manager.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/mcp/test_company_brain.py",
+          "tests/unit/test_checkpoint_manager.py",
+          "tests/unit/test_circuit_breaker.py",
+          "tests/unit/test_todo_orchestrator_persistence.py",
+          "tests/unit/test_phase_boundary_reporter.py",
+          "tests/governance/test_audit_validation_simple.py",
+          "tests/unit/test_rate_limiter.py",
+          "tests/unit/test_master_orchestrator_pipeline.py",
+          "tests/unit/test_enhanced_vacuum.py",
+          "tests/integration/test_feat04_end_to_end.py",
+          "tests/governance/test_governance_merger.py",
+          "tests/mcp/test_request_response_handling.py",
+          "tests/orchestrators/test_sanitization_orchestrator_v2.py",
+          "tests/mcp/test_multi_repo.py",
+          "tests/governance/test_governance_performance.py",
+          "tests/unit/test_resource_limiter.py",
+          "tests/integration/test_unified_pipeline.py",
+          "tests/orchestrators/test_ado_orchestrator_v2.py",
+          "tests/unit/test_smoke.py",
+          "tests/mcp/test_capability_exposure.py",
+          "tests/unit/test_yaml_first_enforcement.py",
+          "tests/integration/test_edge_case_mitigations.py",
+          "tests/governance/test_audit_validation.py",
+          "tests/unit/test_silent_execution.py",
+          "tests/unit/test_orchestrator_lifecycle.py",
+          "tests/integration/test_todo_lifecycle.py",
+          "tests/unit/test_master_orchestrator_governance.py",
+          "tests/unit/test_todo_status_transitions.py",
+          "tests/orchestrators/test_maintenance_orchestrator_v2.py",
+          "tests/performance/test_feat07_performance.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/tools/test_md_to_yaml_converter.py",
+          "tests/unit/test_dag.py",
+          "tests/unit/test_file_utils.py",
+          "tests/unit/test_progress_throttler.py",
+          "tests/unit/test_state_manager.py",
+          "tests/unit/test_rollback_manager.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/integration/test_governance_todo_integration.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_structure_validator.py",
+          "tests/unit/test_yaml_to_todos.py",
+          "tests/unit/test_master_orchestrator_todo.py",
+          "tests/unit/test_todo_parallel.py",
+          "tests/unit/test_intelligence_middleware.py",
+          "tests/orchestrators/test_investigation_orchestrator_v2.py",
+          "tests/unit/test_audit_logger.py",
+          "tests/unit/test_trie_router.py",
+          "tests/unit/test_todo_critical_path.py",
+          "tests/unit/test_mistake_prevention.py",
+          "tests/mcp/test_mcp_integration.py",
+          "tests/mcp/test_jsonrpc_server.py",
+          "tests/unit/test_execution_and_progress.py",
+          "tests/unit/test_todo_crud.py",
+          "tests/integration/test_feat07_integration_suite.py"
+        ],
+        "count": 55,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "",
+      "feature_id": "feat01",
+      "feature_name": "Foundation Layer",
+      "description": "Refactor StateManager to extract connection pooling, add context manager\nsupport, and optimize query performance.\n",
+      "priority": "P1_HIGH",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/database/state_manager.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/mcp/test_company_brain.py",
+          "tests/unit/test_checkpoint_manager.py",
+          "tests/unit/test_circuit_breaker.py",
+          "tests/unit/test_todo_orchestrator_persistence.py",
+          "tests/unit/test_phase_boundary_reporter.py",
+          "tests/governance/test_audit_validation_simple.py",
+          "tests/unit/test_rate_limiter.py",
+          "tests/unit/test_master_orchestrator_pipeline.py",
+          "tests/unit/test_enhanced_vacuum.py",
+          "tests/integration/test_feat04_end_to_end.py",
+          "tests/governance/test_governance_merger.py",
+          "tests/mcp/test_request_response_handling.py",
+          "tests/orchestrators/test_sanitization_orchestrator_v2.py",
+          "tests/mcp/test_multi_repo.py",
+          "tests/governance/test_governance_performance.py",
+          "tests/unit/test_resource_limiter.py",
+          "tests/integration/test_unified_pipeline.py",
+          "tests/orchestrators/test_ado_orchestrator_v2.py",
+          "tests/unit/test_smoke.py",
+          "tests/mcp/test_capability_exposure.py",
+          "tests/unit/test_yaml_first_enforcement.py",
+          "tests/integration/test_edge_case_mitigations.py",
+          "tests/governance/test_audit_validation.py",
+          "tests/unit/test_silent_execution.py",
+          "tests/unit/test_orchestrator_lifecycle.py",
+          "tests/integration/test_todo_lifecycle.py",
+          "tests/unit/test_master_orchestrator_governance.py",
+          "tests/unit/test_todo_status_transitions.py",
+          "tests/orchestrators/test_maintenance_orchestrator_v2.py",
+          "tests/performance/test_feat07_performance.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/tools/test_md_to_yaml_converter.py",
+          "tests/unit/test_dag.py",
+          "tests/unit/test_file_utils.py",
+          "tests/unit/test_progress_throttler.py",
+          "tests/unit/test_state_manager.py",
+          "tests/unit/test_rollback_manager.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/integration/test_governance_todo_integration.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_structure_validator.py",
+          "tests/unit/test_yaml_to_todos.py",
+          "tests/unit/test_master_orchestrator_todo.py",
+          "tests/unit/test_todo_parallel.py",
+          "tests/unit/test_intelligence_middleware.py",
+          "tests/orchestrators/test_investigation_orchestrator_v2.py",
+          "tests/unit/test_audit_logger.py",
+          "tests/unit/test_trie_router.py",
+          "tests/unit/test_todo_critical_path.py",
+          "tests/unit/test_mistake_prevention.py",
+          "tests/mcp/test_mcp_integration.py",
+          "tests/mcp/test_jsonrpc_server.py",
+          "tests/unit/test_execution_and_progress.py",
+          "tests/unit/test_todo_crud.py",
+          "tests/integration/test_feat07_integration_suite.py"
+        ],
+        "count": 55,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "",
+      "feature_id": "feat01",
+      "feature_name": "Foundation Layer",
+      "description": "Enhance existing AuditLogger with correlation ID propagation to trace\noperations across orchestrator executions and system boundaries.\n",
+      "priority": "P0_CRITICAL",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/orchestrators/audit_logger.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/mcp/test_company_brain.py",
+          "tests/unit/test_checkpoint_manager.py",
+          "tests/unit/test_circuit_breaker.py",
+          "tests/unit/test_todo_orchestrator_persistence.py",
+          "tests/unit/test_phase_boundary_reporter.py",
+          "tests/governance/test_audit_validation_simple.py",
+          "tests/unit/test_rate_limiter.py",
+          "tests/unit/test_master_orchestrator_pipeline.py",
+          "tests/unit/test_enhanced_vacuum.py",
+          "tests/integration/test_feat04_end_to_end.py",
+          "tests/governance/test_governance_merger.py",
+          "tests/mcp/test_request_response_handling.py",
+          "tests/orchestrators/test_sanitization_orchestrator_v2.py",
+          "tests/mcp/test_multi_repo.py",
+          "tests/governance/test_governance_performance.py",
+          "tests/unit/test_resource_limiter.py",
+          "tests/integration/test_unified_pipeline.py",
+          "tests/orchestrators/test_ado_orchestrator_v2.py",
+          "tests/unit/test_smoke.py",
+          "tests/mcp/test_capability_exposure.py",
+          "tests/unit/test_yaml_first_enforcement.py",
+          "tests/integration/test_edge_case_mitigations.py",
+          "tests/governance/test_audit_validation.py",
+          "tests/unit/test_silent_execution.py",
+          "tests/unit/test_orchestrator_lifecycle.py",
+          "tests/integration/test_todo_lifecycle.py",
+          "tests/unit/test_master_orchestrator_governance.py",
+          "tests/unit/test_todo_status_transitions.py",
+          "tests/orchestrators/test_maintenance_orchestrator_v2.py",
+          "tests/performance/test_feat07_performance.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/tools/test_md_to_yaml_converter.py",
+          "tests/unit/test_dag.py",
+          "tests/unit/test_file_utils.py",
+          "tests/unit/test_progress_throttler.py",
+          "tests/unit/test_state_manager.py",
+          "tests/unit/test_rollback_manager.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/integration/test_governance_todo_integration.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_structure_validator.py",
+          "tests/unit/test_yaml_to_todos.py",
+          "tests/unit/test_master_orchestrator_todo.py",
+          "tests/unit/test_todo_parallel.py",
+          "tests/unit/test_intelligence_middleware.py",
+          "tests/orchestrators/test_investigation_orchestrator_v2.py",
+          "tests/unit/test_audit_logger.py",
+          "tests/unit/test_trie_router.py",
+          "tests/unit/test_todo_critical_path.py",
+          "tests/unit/test_mistake_prevention.py",
+          "tests/mcp/test_mcp_integration.py",
+          "tests/mcp/test_jsonrpc_server.py",
+          "tests/unit/test_execution_and_progress.py",
+          "tests/unit/test_todo_crud.py",
+          "tests/integration/test_feat07_integration_suite.py"
+        ],
+        "count": 55,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "",
+      "feature_id": "feat01",
+      "feature_name": "Foundation Layer",
+      "description": "Add methods to analyze audit logs by correlation ID, trace operations,\nand find errors within a correlation trace.\n",
+      "priority": "P1_HIGH",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/orchestrators/audit_logger.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/mcp/test_company_brain.py",
+          "tests/unit/test_checkpoint_manager.py",
+          "tests/unit/test_circuit_breaker.py",
+          "tests/unit/test_todo_orchestrator_persistence.py",
+          "tests/unit/test_phase_boundary_reporter.py",
+          "tests/governance/test_audit_validation_simple.py",
+          "tests/unit/test_rate_limiter.py",
+          "tests/unit/test_master_orchestrator_pipeline.py",
+          "tests/unit/test_enhanced_vacuum.py",
+          "tests/integration/test_feat04_end_to_end.py",
+          "tests/governance/test_governance_merger.py",
+          "tests/mcp/test_request_response_handling.py",
+          "tests/orchestrators/test_sanitization_orchestrator_v2.py",
+          "tests/mcp/test_multi_repo.py",
+          "tests/governance/test_governance_performance.py",
+          "tests/unit/test_resource_limiter.py",
+          "tests/integration/test_unified_pipeline.py",
+          "tests/orchestrators/test_ado_orchestrator_v2.py",
+          "tests/unit/test_smoke.py",
+          "tests/mcp/test_capability_exposure.py",
+          "tests/unit/test_yaml_first_enforcement.py",
+          "tests/integration/test_edge_case_mitigations.py",
+          "tests/governance/test_audit_validation.py",
+          "tests/unit/test_silent_execution.py",
+          "tests/unit/test_orchestrator_lifecycle.py",
+          "tests/integration/test_todo_lifecycle.py",
+          "tests/unit/test_master_orchestrator_governance.py",
+          "tests/unit/test_todo_status_transitions.py",
+          "tests/orchestrators/test_maintenance_orchestrator_v2.py",
+          "tests/performance/test_feat07_performance.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/tools/test_md_to_yaml_converter.py",
+          "tests/unit/test_dag.py",
+          "tests/unit/test_file_utils.py",
+          "tests/unit/test_progress_throttler.py",
+          "tests/unit/test_state_manager.py",
+          "tests/unit/test_rollback_manager.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/integration/test_governance_todo_integration.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_structure_validator.py",
+          "tests/unit/test_yaml_to_todos.py",
+          "tests/unit/test_master_orchestrator_todo.py",
+          "tests/unit/test_todo_parallel.py",
+          "tests/unit/test_intelligence_middleware.py",
+          "tests/orchestrators/test_investigation_orchestrator_v2.py",
+          "tests/unit/test_audit_logger.py",
+          "tests/unit/test_trie_router.py",
+          "tests/unit/test_todo_critical_path.py",
+          "tests/unit/test_mistake_prevention.py",
+          "tests/mcp/test_mcp_integration.py",
+          "tests/mcp/test_jsonrpc_server.py",
+          "tests/unit/test_execution_and_progress.py",
+          "tests/unit/test_todo_crud.py",
+          "tests/integration/test_feat07_integration_suite.py"
+        ],
+        "count": 55,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "",
+      "feature_id": "feat01",
+      "feature_name": "Foundation Layer",
+      "description": "Add AuditLogger methods to log phase start/end events and feature gate\nvalidation results for audit-driven build policy.\n",
+      "priority": "P0_CRITICAL",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/orchestrators/audit_logger.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/mcp/test_company_brain.py",
+          "tests/unit/test_checkpoint_manager.py",
+          "tests/unit/test_circuit_breaker.py",
+          "tests/unit/test_todo_orchestrator_persistence.py",
+          "tests/unit/test_phase_boundary_reporter.py",
+          "tests/governance/test_audit_validation_simple.py",
+          "tests/unit/test_rate_limiter.py",
+          "tests/unit/test_master_orchestrator_pipeline.py",
+          "tests/unit/test_enhanced_vacuum.py",
+          "tests/integration/test_feat04_end_to_end.py",
+          "tests/governance/test_governance_merger.py",
+          "tests/mcp/test_request_response_handling.py",
+          "tests/orchestrators/test_sanitization_orchestrator_v2.py",
+          "tests/mcp/test_multi_repo.py",
+          "tests/governance/test_governance_performance.py",
+          "tests/unit/test_resource_limiter.py",
+          "tests/integration/test_unified_pipeline.py",
+          "tests/orchestrators/test_ado_orchestrator_v2.py",
+          "tests/unit/test_smoke.py",
+          "tests/mcp/test_capability_exposure.py",
+          "tests/unit/test_yaml_first_enforcement.py",
+          "tests/integration/test_edge_case_mitigations.py",
+          "tests/governance/test_audit_validation.py",
+          "tests/unit/test_silent_execution.py",
+          "tests/unit/test_orchestrator_lifecycle.py",
+          "tests/integration/test_todo_lifecycle.py",
+          "tests/unit/test_master_orchestrator_governance.py",
+          "tests/unit/test_todo_status_transitions.py",
+          "tests/orchestrators/test_maintenance_orchestrator_v2.py",
+          "tests/performance/test_feat07_performance.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/tools/test_md_to_yaml_converter.py",
+          "tests/unit/test_dag.py",
+          "tests/unit/test_file_utils.py",
+          "tests/unit/test_progress_throttler.py",
+          "tests/unit/test_state_manager.py",
+          "tests/unit/test_rollback_manager.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/integration/test_governance_todo_integration.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_structure_validator.py",
+          "tests/unit/test_yaml_to_todos.py",
+          "tests/unit/test_master_orchestrator_todo.py",
+          "tests/unit/test_todo_parallel.py",
+          "tests/unit/test_intelligence_middleware.py",
+          "tests/orchestrators/test_investigation_orchestrator_v2.py",
+          "tests/unit/test_audit_logger.py",
+          "tests/unit/test_trie_router.py",
+          "tests/unit/test_todo_critical_path.py",
+          "tests/unit/test_mistake_prevention.py",
+          "tests/mcp/test_mcp_integration.py",
+          "tests/mcp/test_jsonrpc_server.py",
+          "tests/unit/test_execution_and_progress.py",
+          "tests/unit/test_todo_crud.py",
+          "tests/integration/test_feat07_integration_suite.py"
+        ],
+        "count": 55,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "",
+      "feature_id": "feat01",
+      "feature_name": "Foundation Layer",
+      "description": "Implement log rotation to prevent unbounded audit log growth with\nconfigurable max file size and retention policy.\n",
+      "priority": "P1_HIGH",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/orchestrators/audit_logger.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/mcp/test_company_brain.py",
+          "tests/unit/test_checkpoint_manager.py",
+          "tests/unit/test_circuit_breaker.py",
+          "tests/unit/test_todo_orchestrator_persistence.py",
+          "tests/unit/test_phase_boundary_reporter.py",
+          "tests/governance/test_audit_validation_simple.py",
+          "tests/unit/test_rate_limiter.py",
+          "tests/unit/test_master_orchestrator_pipeline.py",
+          "tests/unit/test_enhanced_vacuum.py",
+          "tests/integration/test_feat04_end_to_end.py",
+          "tests/governance/test_governance_merger.py",
+          "tests/mcp/test_request_response_handling.py",
+          "tests/orchestrators/test_sanitization_orchestrator_v2.py",
+          "tests/mcp/test_multi_repo.py",
+          "tests/governance/test_governance_performance.py",
+          "tests/unit/test_resource_limiter.py",
+          "tests/integration/test_unified_pipeline.py",
+          "tests/orchestrators/test_ado_orchestrator_v2.py",
+          "tests/unit/test_smoke.py",
+          "tests/mcp/test_capability_exposure.py",
+          "tests/unit/test_yaml_first_enforcement.py",
+          "tests/integration/test_edge_case_mitigations.py",
+          "tests/governance/test_audit_validation.py",
+          "tests/unit/test_silent_execution.py",
+          "tests/unit/test_orchestrator_lifecycle.py",
+          "tests/integration/test_todo_lifecycle.py",
+          "tests/unit/test_master_orchestrator_governance.py",
+          "tests/unit/test_todo_status_transitions.py",
+          "tests/orchestrators/test_maintenance_orchestrator_v2.py",
+          "tests/performance/test_feat07_performance.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/tools/test_md_to_yaml_converter.py",
+          "tests/unit/test_dag.py",
+          "tests/unit/test_file_utils.py",
+          "tests/unit/test_progress_throttler.py",
+          "tests/unit/test_state_manager.py",
+          "tests/unit/test_rollback_manager.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/integration/test_governance_todo_integration.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_structure_validator.py",
+          "tests/unit/test_yaml_to_todos.py",
+          "tests/unit/test_master_orchestrator_todo.py",
+          "tests/unit/test_todo_parallel.py",
+          "tests/unit/test_intelligence_middleware.py",
+          "tests/orchestrators/test_investigation_orchestrator_v2.py",
+          "tests/unit/test_audit_logger.py",
+          "tests/unit/test_trie_router.py",
+          "tests/unit/test_todo_critical_path.py",
+          "tests/unit/test_mistake_prevention.py",
+          "tests/mcp/test_mcp_integration.py",
+          "tests/mcp/test_jsonrpc_server.py",
+          "tests/unit/test_execution_and_progress.py",
+          "tests/unit/test_todo_crud.py",
+          "tests/integration/test_feat07_integration_suite.py"
+        ],
+        "count": 55,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "",
+      "feature_id": "feat01",
+      "feature_name": "Foundation Layer",
+      "description": "Design Trie-based router architecture with TrieNode and TrieRouter\nclasses, pattern tokenization strategy, and priority handling.\n",
+      "priority": "P0_CRITICAL",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/orchestrators/routing/trie_router.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/mcp/test_company_brain.py",
+          "tests/unit/test_checkpoint_manager.py",
+          "tests/unit/test_circuit_breaker.py",
+          "tests/unit/test_todo_orchestrator_persistence.py",
+          "tests/unit/test_phase_boundary_reporter.py",
+          "tests/governance/test_audit_validation_simple.py",
+          "tests/unit/test_rate_limiter.py",
+          "tests/unit/test_master_orchestrator_pipeline.py",
+          "tests/unit/test_enhanced_vacuum.py",
+          "tests/integration/test_feat04_end_to_end.py",
+          "tests/governance/test_governance_merger.py",
+          "tests/mcp/test_request_response_handling.py",
+          "tests/orchestrators/test_sanitization_orchestrator_v2.py",
+          "tests/mcp/test_multi_repo.py",
+          "tests/governance/test_governance_performance.py",
+          "tests/unit/test_resource_limiter.py",
+          "tests/integration/test_unified_pipeline.py",
+          "tests/orchestrators/test_ado_orchestrator_v2.py",
+          "tests/unit/test_smoke.py",
+          "tests/mcp/test_capability_exposure.py",
+          "tests/unit/test_yaml_first_enforcement.py",
+          "tests/integration/test_edge_case_mitigations.py",
+          "tests/governance/test_audit_validation.py",
+          "tests/unit/test_silent_execution.py",
+          "tests/unit/test_orchestrator_lifecycle.py",
+          "tests/integration/test_todo_lifecycle.py",
+          "tests/unit/test_master_orchestrator_governance.py",
+          "tests/unit/test_todo_status_transitions.py",
+          "tests/orchestrators/test_maintenance_orchestrator_v2.py",
+          "tests/performance/test_feat07_performance.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/tools/test_md_to_yaml_converter.py",
+          "tests/unit/test_dag.py",
+          "tests/unit/test_file_utils.py",
+          "tests/unit/test_progress_throttler.py",
+          "tests/unit/test_state_manager.py",
+          "tests/unit/test_rollback_manager.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/integration/test_governance_todo_integration.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_structure_validator.py",
+          "tests/unit/test_yaml_to_todos.py",
+          "tests/unit/test_master_orchestrator_todo.py",
+          "tests/unit/test_todo_parallel.py",
+          "tests/unit/test_intelligence_middleware.py",
+          "tests/orchestrators/test_investigation_orchestrator_v2.py",
+          "tests/unit/test_audit_logger.py",
+          "tests/unit/test_trie_router.py",
+          "tests/unit/test_todo_critical_path.py",
+          "tests/unit/test_mistake_prevention.py",
+          "tests/mcp/test_mcp_integration.py",
+          "tests/mcp/test_jsonrpc_server.py",
+          "tests/unit/test_execution_and_progress.py",
+          "tests/unit/test_todo_crud.py",
+          "tests/integration/test_feat07_integration_suite.py"
+        ],
+        "count": 55,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "",
+      "feature_id": "feat01",
+      "feature_name": "Foundation Layer",
+      "description": "Implement Trie router core with insert, search, remove methods for\nO(1) pattern matching across 100+ orchestrators.\n",
+      "priority": "P0_CRITICAL",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/orchestrators/routing/trie_router.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/mcp/test_company_brain.py",
+          "tests/unit/test_checkpoint_manager.py",
+          "tests/unit/test_circuit_breaker.py",
+          "tests/unit/test_todo_orchestrator_persistence.py",
+          "tests/unit/test_phase_boundary_reporter.py",
+          "tests/governance/test_audit_validation_simple.py",
+          "tests/unit/test_rate_limiter.py",
+          "tests/unit/test_master_orchestrator_pipeline.py",
+          "tests/unit/test_enhanced_vacuum.py",
+          "tests/integration/test_feat04_end_to_end.py",
+          "tests/governance/test_governance_merger.py",
+          "tests/mcp/test_request_response_handling.py",
+          "tests/orchestrators/test_sanitization_orchestrator_v2.py",
+          "tests/mcp/test_multi_repo.py",
+          "tests/governance/test_governance_performance.py",
+          "tests/unit/test_resource_limiter.py",
+          "tests/integration/test_unified_pipeline.py",
+          "tests/orchestrators/test_ado_orchestrator_v2.py",
+          "tests/unit/test_smoke.py",
+          "tests/mcp/test_capability_exposure.py",
+          "tests/unit/test_yaml_first_enforcement.py",
+          "tests/integration/test_edge_case_mitigations.py",
+          "tests/governance/test_audit_validation.py",
+          "tests/unit/test_silent_execution.py",
+          "tests/unit/test_orchestrator_lifecycle.py",
+          "tests/integration/test_todo_lifecycle.py",
+          "tests/unit/test_master_orchestrator_governance.py",
+          "tests/unit/test_todo_status_transitions.py",
+          "tests/orchestrators/test_maintenance_orchestrator_v2.py",
+          "tests/performance/test_feat07_performance.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/tools/test_md_to_yaml_converter.py",
+          "tests/unit/test_dag.py",
+          "tests/unit/test_file_utils.py",
+          "tests/unit/test_progress_throttler.py",
+          "tests/unit/test_state_manager.py",
+          "tests/unit/test_rollback_manager.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/integration/test_governance_todo_integration.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_structure_validator.py",
+          "tests/unit/test_yaml_to_todos.py",
+          "tests/unit/test_master_orchestrator_todo.py",
+          "tests/unit/test_todo_parallel.py",
+          "tests/unit/test_intelligence_middleware.py",
+          "tests/orchestrators/test_investigation_orchestrator_v2.py",
+          "tests/unit/test_audit_logger.py",
+          "tests/unit/test_trie_router.py",
+          "tests/unit/test_todo_critical_path.py",
+          "tests/unit/test_mistake_prevention.py",
+          "tests/mcp/test_mcp_integration.py",
+          "tests/mcp/test_jsonrpc_server.py",
+          "tests/unit/test_execution_and_progress.py",
+          "tests/unit/test_todo_crud.py",
+          "tests/integration/test_feat07_integration_suite.py"
+        ],
+        "count": 55,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "",
+      "feature_id": "feat01",
+      "feature_name": "Foundation Layer",
+      "description": "Optimize Trie router for O(1) lookup with pre-compiled regex patterns,\ncaching, and hash-based lookup. Target <5ms for 100 orchestrators.\n",
+      "priority": "P0_CRITICAL",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/orchestrators/routing/trie_router.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/mcp/test_company_brain.py",
+          "tests/unit/test_checkpoint_manager.py",
+          "tests/unit/test_circuit_breaker.py",
+          "tests/unit/test_todo_orchestrator_persistence.py",
+          "tests/unit/test_phase_boundary_reporter.py",
+          "tests/governance/test_audit_validation_simple.py",
+          "tests/unit/test_rate_limiter.py",
+          "tests/unit/test_master_orchestrator_pipeline.py",
+          "tests/unit/test_enhanced_vacuum.py",
+          "tests/integration/test_feat04_end_to_end.py",
+          "tests/governance/test_governance_merger.py",
+          "tests/mcp/test_request_response_handling.py",
+          "tests/orchestrators/test_sanitization_orchestrator_v2.py",
+          "tests/mcp/test_multi_repo.py",
+          "tests/governance/test_governance_performance.py",
+          "tests/unit/test_resource_limiter.py",
+          "tests/integration/test_unified_pipeline.py",
+          "tests/orchestrators/test_ado_orchestrator_v2.py",
+          "tests/unit/test_smoke.py",
+          "tests/mcp/test_capability_exposure.py",
+          "tests/unit/test_yaml_first_enforcement.py",
+          "tests/integration/test_edge_case_mitigations.py",
+          "tests/governance/test_audit_validation.py",
+          "tests/unit/test_silent_execution.py",
+          "tests/unit/test_orchestrator_lifecycle.py",
+          "tests/integration/test_todo_lifecycle.py",
+          "tests/unit/test_master_orchestrator_governance.py",
+          "tests/unit/test_todo_status_transitions.py",
+          "tests/orchestrators/test_maintenance_orchestrator_v2.py",
+          "tests/performance/test_feat07_performance.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/tools/test_md_to_yaml_converter.py",
+          "tests/unit/test_dag.py",
+          "tests/unit/test_file_utils.py",
+          "tests/unit/test_progress_throttler.py",
+          "tests/unit/test_state_manager.py",
+          "tests/unit/test_rollback_manager.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/integration/test_governance_todo_integration.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_structure_validator.py",
+          "tests/unit/test_yaml_to_todos.py",
+          "tests/unit/test_master_orchestrator_todo.py",
+          "tests/unit/test_todo_parallel.py",
+          "tests/unit/test_intelligence_middleware.py",
+          "tests/orchestrators/test_investigation_orchestrator_v2.py",
+          "tests/unit/test_audit_logger.py",
+          "tests/unit/test_trie_router.py",
+          "tests/unit/test_todo_critical_path.py",
+          "tests/unit/test_mistake_prevention.py",
+          "tests/mcp/test_mcp_integration.py",
+          "tests/mcp/test_jsonrpc_server.py",
+          "tests/unit/test_execution_and_progress.py",
+          "tests/unit/test_todo_crud.py",
+          "tests/integration/test_feat07_integration_suite.py"
+        ],
+        "count": 55,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "",
+      "feature_id": "feat01",
+      "feature_name": "Foundation Layer",
+      "description": "Integrate TrieRouter with existing pattern_router.py, maintain backward\ncompatibility, migrate to Trie backend.\n",
+      "priority": "P1_HIGH",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/orchestrators/pattern_router.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/mcp/test_company_brain.py",
+          "tests/unit/test_checkpoint_manager.py",
+          "tests/unit/test_circuit_breaker.py",
+          "tests/unit/test_todo_orchestrator_persistence.py",
+          "tests/unit/test_phase_boundary_reporter.py",
+          "tests/governance/test_audit_validation_simple.py",
+          "tests/unit/test_rate_limiter.py",
+          "tests/unit/test_master_orchestrator_pipeline.py",
+          "tests/unit/test_enhanced_vacuum.py",
+          "tests/integration/test_feat04_end_to_end.py",
+          "tests/governance/test_governance_merger.py",
+          "tests/mcp/test_request_response_handling.py",
+          "tests/orchestrators/test_sanitization_orchestrator_v2.py",
+          "tests/mcp/test_multi_repo.py",
+          "tests/governance/test_governance_performance.py",
+          "tests/unit/test_resource_limiter.py",
+          "tests/integration/test_unified_pipeline.py",
+          "tests/orchestrators/test_ado_orchestrator_v2.py",
+          "tests/unit/test_smoke.py",
+          "tests/mcp/test_capability_exposure.py",
+          "tests/unit/test_yaml_first_enforcement.py",
+          "tests/integration/test_edge_case_mitigations.py",
+          "tests/governance/test_audit_validation.py",
+          "tests/unit/test_silent_execution.py",
+          "tests/unit/test_orchestrator_lifecycle.py",
+          "tests/integration/test_todo_lifecycle.py",
+          "tests/unit/test_master_orchestrator_governance.py",
+          "tests/unit/test_todo_status_transitions.py",
+          "tests/orchestrators/test_maintenance_orchestrator_v2.py",
+          "tests/performance/test_feat07_performance.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/tools/test_md_to_yaml_converter.py",
+          "tests/unit/test_dag.py",
+          "tests/unit/test_file_utils.py",
+          "tests/unit/test_progress_throttler.py",
+          "tests/unit/test_state_manager.py",
+          "tests/unit/test_rollback_manager.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/integration/test_governance_todo_integration.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_structure_validator.py",
+          "tests/unit/test_yaml_to_todos.py",
+          "tests/unit/test_master_orchestrator_todo.py",
+          "tests/unit/test_todo_parallel.py",
+          "tests/unit/test_intelligence_middleware.py",
+          "tests/orchestrators/test_investigation_orchestrator_v2.py",
+          "tests/unit/test_audit_logger.py",
+          "tests/unit/test_trie_router.py",
+          "tests/unit/test_todo_critical_path.py",
+          "tests/unit/test_mistake_prevention.py",
+          "tests/mcp/test_mcp_integration.py",
+          "tests/mcp/test_jsonrpc_server.py",
+          "tests/unit/test_execution_and_progress.py",
+          "tests/unit/test_todo_crud.py",
+          "tests/integration/test_feat07_integration_suite.py"
+        ],
+        "count": 55,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "REQ-018",
+      "feature_id": "feat02",
+      "feature_name": "Todo Orchestrator",
+      "description": "Design and implement DAG (Directed Acyclic Graph) data structure with DAGNode, DAGEdge, and DAG classes for work tracking with >1000 node capacity",
+      "priority": "P0_CRITICAL",
+      "status": "COMPLETE",
+      "implementation": {
+        "files": [
+          "src/orchestrators/core/dag.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/unit/test_execution_and_progress.py",
+          "tests/unit/test_audit_logger.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/unit/test_dag.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/integration/test_todo_lifecycle.py"
+        ],
+        "count": 7,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "FULL"
+      }
+    },
+    {
+      "requirement_id": "REQ-019",
+      "feature_id": "feat02",
+      "feature_name": "Todo Orchestrator",
+      "description": "Implement DAG node operations (add, remove, update, get, has) for managing work items in the graph",
+      "priority": "P0_CRITICAL",
+      "status": "COMPLETE",
+      "implementation": {
+        "files": [
+          "src/orchestrators/core/dag.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/unit/test_execution_and_progress.py",
+          "tests/unit/test_audit_logger.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/unit/test_dag.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/integration/test_todo_lifecycle.py"
+        ],
+        "count": 7,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "FULL"
+      }
+    },
+    {
+      "requirement_id": "REQ-020",
+      "feature_id": "feat02",
+      "feature_name": "Todo Orchestrator",
+      "description": "Implement DAG edge operations (add, remove, get_dependencies, get_dependents) for dependency management",
+      "priority": "P0_CRITICAL",
+      "status": "COMPLETE",
+      "implementation": {
+        "files": [
+          "src/orchestrators/core/dag.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/unit/test_execution_and_progress.py",
+          "tests/unit/test_audit_logger.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/unit/test_dag.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/integration/test_todo_lifecycle.py"
+        ],
+        "count": 7,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "FULL"
+      }
+    },
+    {
+      "requirement_id": "REQ-021",
+      "feature_id": "feat02",
+      "feature_name": "Todo Orchestrator",
+      "description": "Implement circular dependency detection using iterative DFS to prevent invalid DAG states",
+      "priority": "P0_CRITICAL",
+      "status": "COMPLETE",
+      "implementation": {
+        "files": [
+          "src/orchestrators/core/dag.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/unit/test_execution_and_progress.py",
+          "tests/unit/test_audit_logger.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/unit/test_dag.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/integration/test_todo_lifecycle.py"
+        ],
+        "count": 7,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "FULL"
+      }
+    },
+    {
+      "requirement_id": "REQ-022",
+      "feature_id": "feat02",
+      "feature_name": "Todo Orchestrator",
+      "description": "Implement topological sort using Kahn's algorithm for correct execution order",
+      "priority": "P0_CRITICAL",
+      "status": "COMPLETE",
+      "implementation": {
+        "files": [
+          "src/orchestrators/core/dag.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/unit/test_execution_and_progress.py",
+          "tests/unit/test_audit_logger.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/unit/test_dag.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/integration/test_todo_lifecycle.py"
+        ],
+        "count": 7,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "FULL"
+      }
+    },
+    {
+      "requirement_id": "REQ-023",
+      "feature_id": "feat02",
+      "feature_name": "Todo Orchestrator",
+      "description": "Optimize DAG performance for <100ms operations on 1000+ node graphs",
+      "priority": "P1_HIGH",
+      "status": "COMPLETE",
+      "implementation": {
+        "files": [
+          "src/orchestrators/core/dag.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/unit/test_execution_and_progress.py",
+          "tests/unit/test_audit_logger.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/unit/test_dag.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/integration/test_todo_lifecycle.py"
+        ],
+        "count": 7,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "FULL"
+      }
+    },
+    {
+      "requirement_id": "REQ-024",
+      "feature_id": "feat02",
+      "feature_name": "Todo Orchestrator",
+      "description": "Design TodoOrchestrator with state machine (7 states, valid transitions) for TODO lifecycle management",
+      "priority": "P0_CRITICAL",
+      "status": "COMPLETE",
+      "implementation": {
+        "files": [
+          "src/orchestrators/core/todo_orchestrator.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/unit/test_audit_logger.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/unit/test_execution_and_progress.py",
+          "tests/integration/test_todo_lifecycle.py"
+        ],
+        "count": 6,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "FULL"
+      }
+    },
+    {
+      "requirement_id": "REQ-025",
+      "feature_id": "feat02",
+      "feature_name": "Todo Orchestrator",
+      "description": "Integrate DAG with StateManager for persistent TODO storage and recovery",
+      "priority": "P0_CRITICAL",
+      "status": "COMPLETE",
+      "implementation": {
+        "files": [
+          "src/orchestrators/core/todo_orchestrator.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/unit/test_audit_logger.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/unit/test_execution_and_progress.py",
+          "tests/integration/test_todo_lifecycle.py"
+        ],
+        "count": 6,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "FULL"
+      }
+    },
+    {
+      "requirement_id": "REQ-026",
+      "feature_id": "feat02",
+      "feature_name": "Todo Orchestrator",
+      "description": "Implement TODO CRUD operations with state validation",
+      "priority": "P0_CRITICAL",
+      "status": "COMPLETE",
+      "implementation": {
+        "files": [
+          "src/orchestrators/core/todo_orchestrator.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/unit/test_audit_logger.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/unit/test_execution_and_progress.py",
+          "tests/integration/test_todo_lifecycle.py"
+        ],
+        "count": 6,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "FULL"
+      }
+    },
+    {
+      "requirement_id": "REQ-027",
+      "feature_id": "feat02",
+      "feature_name": "Todo Orchestrator",
+      "description": "Implement state transition validation with audit logging",
+      "priority": "P0_CRITICAL",
+      "status": "COMPLETE",
+      "implementation": {
+        "files": [
+          "src/orchestrators/core/todo_orchestrator.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/unit/test_audit_logger.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/unit/test_execution_and_progress.py",
+          "tests/integration/test_todo_lifecycle.py"
+        ],
+        "count": 6,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "FULL"
+      }
+    },
+    {
+      "requirement_id": "REQ-028",
+      "feature_id": "feat02",
+      "feature_name": "Todo Orchestrator",
+      "description": "Implement parallel task identification for concurrent execution opportunities",
+      "priority": "P0_CRITICAL",
+      "status": "COMPLETE",
+      "implementation": {
+        "files": [
+          "src/orchestrators/core/todo_orchestrator.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/unit/test_audit_logger.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/unit/test_execution_and_progress.py",
+          "tests/integration/test_todo_lifecycle.py"
+        ],
+        "count": 6,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "FULL"
+      }
+    },
+    {
+      "requirement_id": "REQ-029",
+      "feature_id": "feat02",
+      "feature_name": "Todo Orchestrator",
+      "description": "Implement checkpoint creation with full DAG and state snapshot",
+      "priority": "P0_CRITICAL",
+      "status": "COMPLETE",
+      "implementation": {
+        "files": [
+          "src/orchestrators/core/checkpoint_manager.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/unit/test_checkpoint_manager.py",
+          "tests/unit/test_audit_logger.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/unit/test_execution_and_progress.py",
+          "tests/integration/test_todo_lifecycle.py"
+        ],
+        "count": 7,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "FULL"
+      }
+    },
+    {
+      "requirement_id": "REQ-030",
+      "feature_id": "feat02",
+      "feature_name": "Todo Orchestrator",
+      "description": "Implement checkpoint recovery with state restoration and validation",
+      "priority": "P0_CRITICAL",
+      "status": "COMPLETE",
+      "implementation": {
+        "files": [
+          "src/orchestrators/core/checkpoint_manager.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/unit/test_checkpoint_manager.py",
+          "tests/unit/test_audit_logger.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/unit/test_execution_and_progress.py",
+          "tests/integration/test_todo_lifecycle.py"
+        ],
+        "count": 7,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "FULL"
+      }
+    },
+    {
+      "requirement_id": "REQ-031",
+      "feature_id": "feat02",
+      "feature_name": "Todo Orchestrator",
+      "description": "Implement rollback mechanism to restore state before failed operations",
+      "priority": "P0_CRITICAL",
+      "status": "COMPLETE",
+      "implementation": {
+        "files": [
+          "src/orchestrators/core/checkpoint_manager.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/unit/test_checkpoint_manager.py",
+          "tests/unit/test_audit_logger.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/unit/test_execution_and_progress.py",
+          "tests/integration/test_todo_lifecycle.py"
+        ],
+        "count": 7,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "FULL"
+      }
+    },
+    {
+      "requirement_id": "REQ-032",
+      "feature_id": "feat02",
+      "feature_name": "Todo Orchestrator",
+      "description": "Implement YAML to TODO conversion for plan ingestion",
+      "priority": "P0_CRITICAL",
+      "status": "COMPLETE",
+      "implementation": {
+        "files": [
+          "src/orchestrators/core/todo_orchestrator.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/unit/test_audit_logger.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/unit/test_execution_and_progress.py",
+          "tests/integration/test_todo_lifecycle.py"
+        ],
+        "count": 6,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "FULL"
+      }
+    },
+    {
+      "requirement_id": "REQ-033",
+      "feature_id": "feat02",
+      "feature_name": "Todo Orchestrator",
+      "description": "Implement execution queue with priority ordering for task scheduling",
+      "priority": "P0_CRITICAL",
+      "status": "COMPLETE",
+      "implementation": {
+        "files": [
+          "src/orchestrators/core/todo_orchestrator.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/unit/test_audit_logger.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/unit/test_execution_and_progress.py",
+          "tests/integration/test_todo_lifecycle.py"
+        ],
+        "count": 6,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "FULL"
+      }
+    },
+    {
+      "requirement_id": "REQ-034",
+      "feature_id": "feat02",
+      "feature_name": "Todo Orchestrator",
+      "description": "Implement progress tracking API with percentage, ETA, and task counts",
+      "priority": "P0_CRITICAL",
+      "status": "COMPLETE",
+      "implementation": {
+        "files": [
+          "src/orchestrators/core/todo_orchestrator.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/unit/test_audit_logger.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/unit/test_execution_and_progress.py",
+          "tests/integration/test_todo_lifecycle.py"
+        ],
+        "count": 6,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "FULL"
+      }
+    },
+    {
+      "requirement_id": "REQ-035",
+      "feature_id": "feat02",
+      "feature_name": "Todo Orchestrator",
+      "description": "Full TODO lifecycle integration test covering YAML load through completion",
+      "priority": "P0_CRITICAL",
+      "status": "COMPLETE",
+      "implementation": {
+        "files": [
+          "src/orchestrators/core/todo_orchestrator.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/unit/test_audit_logger.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/unit/test_execution_and_progress.py",
+          "tests/integration/test_todo_lifecycle.py"
+        ],
+        "count": 6,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "FULL"
+      }
+    },
+    {
+      "requirement_id": "REQ-036",
+      "feature_id": "feat02",
+      "feature_name": "Todo Orchestrator",
+      "description": "HANDOFF VALIDATION: CORTEX self-management capability verification",
+      "priority": "P0_CRITICAL",
+      "status": "COMPLETE",
+      "implementation": {
+        "files": [
+          "src/orchestrators/core/todo_orchestrator.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/unit/test_audit_logger.py",
+          "tests/integration/test_cortex_self_management.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/unit/test_execution_and_progress.py",
+          "tests/integration/test_todo_lifecycle.py"
+        ],
+        "count": 6,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "FULL"
+      }
+    },
+    {
+      "requirement_id": "REQ-001",
+      "feature_id": "feat03",
+      "feature_name": "4-Category Governance System",
+      "description": "SKULL Rules Migration",
+      "priority": "P0_CRITICAL",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/tools/feature_requirements_extractor.py",
+          "src/tools/requirements_auditor.py",
+          "src/tools/gap_detector.py",
+          "src/tools/requirements_restructurer.py",
+          "src/orchestrators/core/governance_merger.py",
+          "src/orchestrators/core/master_orchestrator.py",
+          "src/orchestrators/planning/planning_orchestrator_v5.py"
+        ],
+        "count": 7,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/governance/test_governance_performance.py",
+          "tests/governance/test_audit_validation_simple.py",
+          "tests/tools/test_md_to_yaml_converter.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/governance/test_audit_validation.py",
+          "tests/governance/test_governance_merger.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/integration/test_governance_todo_integration.py"
+        ],
+        "count": 8,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "REQ-002",
+      "feature_id": "feat03",
+      "feature_name": "4-Category Governance System",
+      "description": "Governance Merger Implementation",
+      "priority": "P0_CRITICAL",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/tools/feature_requirements_extractor.py",
+          "src/tools/requirements_auditor.py",
+          "src/tools/gap_detector.py",
+          "src/orchestrators/core/governance_merger.py",
+          "src/orchestrators/core/master_orchestrator.py",
+          "src/orchestrators/planning/planning_orchestrator_v5.py"
+        ],
+        "count": 6,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/governance/test_governance_performance.py",
+          "tests/governance/test_audit_validation_simple.py",
+          "tests/tools/test_md_to_yaml_converter.py",
+          "tests/governance/test_audit_validation.py",
+          "tests/governance/test_governance_merger.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/integration/test_governance_todo_integration.py"
+        ],
+        "count": 7,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "REQ-003",
+      "feature_id": "feat03",
+      "feature_name": "4-Category Governance System",
+      "description": "Caching & Performance",
+      "priority": "P0_CRITICAL",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/tools/feature_requirements_extractor.py",
+          "src/tools/requirements_auditor.py",
+          "src/tools/gap_detector.py",
+          "src/orchestrators/core/governance_merger.py",
+          "src/orchestrators/core/master_orchestrator.py",
+          "src/orchestrators/planning/planning_orchestrator_v5.py"
+        ],
+        "count": 6,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/governance/test_governance_performance.py",
+          "tests/governance/test_audit_validation_simple.py",
+          "tests/tools/test_md_to_yaml_converter.py",
+          "tests/governance/test_audit_validation.py",
+          "tests/governance/test_governance_merger.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/integration/test_governance_todo_integration.py"
+        ],
+        "count": 7,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "REQ-004",
+      "feature_id": "feat03",
+      "feature_name": "4-Category Governance System",
+      "description": "Integration & Validation",
+      "priority": "P0_CRITICAL",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/tools/feature_requirements_extractor.py",
+          "src/tools/requirements_auditor.py",
+          "src/tools/gap_detector.py",
+          "src/orchestrators/core/governance_merger.py",
+          "src/orchestrators/core/master_orchestrator.py",
+          "src/orchestrators/planning/planning_orchestrator_v5.py"
+        ],
+        "count": 6,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/governance/test_governance_performance.py",
+          "tests/governance/test_audit_validation_simple.py",
+          "tests/tools/test_md_to_yaml_converter.py",
+          "tests/governance/test_audit_validation.py",
+          "tests/governance/test_governance_merger.py",
+          "tests/tools/test_yaml_validator.py",
+          "tests/integration/test_governance_todo_integration.py"
+        ],
+        "count": 7,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "REQ-001",
+      "feature_id": "feat04",
+      "feature_name": "Core Orchestration Layer",
+      "description": "Master Orchestrator Enhancement",
+      "priority": "P0_CRITICAL",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/tools/feature_requirements_extractor.py",
+          "src/tools/requirements_auditor.py",
+          "src/tools/requirements_restructurer.py",
+          "src/orchestrators/middleware/yaml_first_enforcement.py",
+          "src/orchestrators/middleware/phase_boundary_reporter.py",
+          "src/orchestrators/middleware/__init__.py",
+          "src/orchestrators/middleware/intelligence_middleware.py",
+          "src/orchestrators/middleware/progress_throttler.py",
+          "src/orchestrators/middleware/silent_execution.py",
+          "src/orchestrators/middleware/orchestrator_lifecycle.py",
+          "src/orchestrators/middleware/mistake_prevention.py",
+          "src/orchestrators/core/todo_orchestrator.py",
+          "src/orchestrators/core/governance_merger.py",
+          "src/orchestrators/core/master_orchestrator.py"
+        ],
+        "count": 14,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/unit/test_intelligence_middleware.py",
+          "tests/unit/test_master_orchestrator_governance.py",
+          "tests/integration/test_unified_pipeline.py",
+          "tests/unit/test_phase_boundary_reporter.py",
+          "tests/unit/test_yaml_first_enforcement.py",
+          "tests/unit/test_master_orchestrator_pipeline.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/tools/test_md_to_yaml_converter.py",
+          "tests/integration/test_feat04_end_to_end.py",
+          "tests/integration/test_feat07_integration_suite.py",
+          "tests/unit/test_mistake_prevention.py",
+          "tests/unit/test_silent_execution.py",
+          "tests/unit/test_progress_throttler.py",
+          "tests/unit/test_orchestrator_lifecycle.py",
+          "tests/unit/test_master_orchestrator_todo.py"
+        ],
+        "count": 15,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "REQ-002",
+      "feature_id": "feat04",
+      "feature_name": "Core Orchestration Layer",
+      "description": "TODO-Governance Integration",
+      "priority": "P0_CRITICAL",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/tools/feature_requirements_extractor.py",
+          "src/tools/requirements_auditor.py",
+          "src/orchestrators/middleware/yaml_first_enforcement.py",
+          "src/orchestrators/middleware/phase_boundary_reporter.py",
+          "src/orchestrators/middleware/__init__.py",
+          "src/orchestrators/middleware/intelligence_middleware.py",
+          "src/orchestrators/middleware/progress_throttler.py",
+          "src/orchestrators/middleware/silent_execution.py",
+          "src/orchestrators/middleware/orchestrator_lifecycle.py",
+          "src/orchestrators/middleware/mistake_prevention.py",
+          "src/orchestrators/core/todo_orchestrator.py",
+          "src/orchestrators/core/governance_merger.py",
+          "src/orchestrators/core/master_orchestrator.py"
+        ],
+        "count": 13,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/unit/test_intelligence_middleware.py",
+          "tests/unit/test_master_orchestrator_governance.py",
+          "tests/integration/test_unified_pipeline.py",
+          "tests/unit/test_phase_boundary_reporter.py",
+          "tests/unit/test_yaml_first_enforcement.py",
+          "tests/unit/test_master_orchestrator_pipeline.py",
+          "tests/tools/test_md_to_yaml_converter.py",
+          "tests/integration/test_feat07_integration_suite.py",
+          "tests/integration/test_feat04_end_to_end.py",
+          "tests/unit/test_mistake_prevention.py",
+          "tests/unit/test_silent_execution.py",
+          "tests/unit/test_progress_throttler.py",
+          "tests/unit/test_orchestrator_lifecycle.py",
+          "tests/unit/test_master_orchestrator_todo.py"
+        ],
+        "count": 14,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "REQ-003",
+      "feature_id": "feat04",
+      "feature_name": "Core Orchestration Layer",
+      "description": "Silent Execution Mode",
+      "priority": "P0_CRITICAL",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/tools/feature_requirements_extractor.py",
+          "src/tools/requirements_auditor.py",
+          "src/orchestrators/middleware/yaml_first_enforcement.py",
+          "src/orchestrators/middleware/phase_boundary_reporter.py",
+          "src/orchestrators/middleware/__init__.py",
+          "src/orchestrators/middleware/intelligence_middleware.py",
+          "src/orchestrators/middleware/progress_throttler.py",
+          "src/orchestrators/middleware/silent_execution.py",
+          "src/orchestrators/middleware/orchestrator_lifecycle.py",
+          "src/orchestrators/middleware/mistake_prevention.py",
+          "src/orchestrators/core/todo_orchestrator.py",
+          "src/orchestrators/core/governance_merger.py",
+          "src/orchestrators/core/master_orchestrator.py"
+        ],
+        "count": 13,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/unit/test_intelligence_middleware.py",
+          "tests/unit/test_master_orchestrator_governance.py",
+          "tests/integration/test_unified_pipeline.py",
+          "tests/unit/test_phase_boundary_reporter.py",
+          "tests/unit/test_yaml_first_enforcement.py",
+          "tests/unit/test_master_orchestrator_pipeline.py",
+          "tests/integration/test_feat07_integration_suite.py",
+          "tests/integration/test_feat04_end_to_end.py",
+          "tests/unit/test_mistake_prevention.py",
+          "tests/unit/test_silent_execution.py",
+          "tests/unit/test_progress_throttler.py",
+          "tests/unit/test_orchestrator_lifecycle.py",
+          "tests/unit/test_master_orchestrator_todo.py"
+        ],
+        "count": 13,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "REQ-004",
+      "feature_id": "feat04",
+      "feature_name": "Core Orchestration Layer",
+      "description": "Integration Testing",
+      "priority": "P0_CRITICAL",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/tools/feature_requirements_extractor.py",
+          "src/tools/requirements_auditor.py",
+          "src/orchestrators/middleware/yaml_first_enforcement.py",
+          "src/orchestrators/middleware/phase_boundary_reporter.py",
+          "src/orchestrators/middleware/__init__.py",
+          "src/orchestrators/middleware/intelligence_middleware.py",
+          "src/orchestrators/middleware/progress_throttler.py",
+          "src/orchestrators/middleware/silent_execution.py",
+          "src/orchestrators/middleware/orchestrator_lifecycle.py",
+          "src/orchestrators/middleware/mistake_prevention.py",
+          "src/orchestrators/core/todo_orchestrator.py",
+          "src/orchestrators/core/governance_merger.py",
+          "src/orchestrators/core/master_orchestrator.py"
+        ],
+        "count": 13,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/unit/test_intelligence_middleware.py",
+          "tests/unit/test_master_orchestrator_governance.py",
+          "tests/integration/test_unified_pipeline.py",
+          "tests/unit/test_phase_boundary_reporter.py",
+          "tests/unit/test_yaml_first_enforcement.py",
+          "tests/unit/test_master_orchestrator_pipeline.py",
+          "tests/integration/test_feat07_integration_suite.py",
+          "tests/integration/test_feat04_end_to_end.py",
+          "tests/unit/test_mistake_prevention.py",
+          "tests/unit/test_silent_execution.py",
+          "tests/unit/test_progress_throttler.py",
+          "tests/unit/test_orchestrator_lifecycle.py",
+          "tests/unit/test_master_orchestrator_todo.py"
+        ],
+        "count": 13,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "REQ-001",
+      "feature_id": "feat05",
+      "feature_name": "Resilience & Performance",
+      "description": "Resource Management",
+      "priority": "P0_CRITICAL",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/tools/requirements_auditor.py",
+          "src/tools/requirements_restructurer.py",
+          "src/orchestrators/epic_review_orchestrator.py",
+          "src/orchestrators/middleware/rate_limiter.py",
+          "src/orchestrators/middleware/resource_limiter.py",
+          "src/orchestrators/middleware/circuit_breaker.py"
+        ],
+        "count": 6,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/unit/test_resource_limiter.py",
+          "tests/unit/test_circuit_breaker.py",
+          "tests/unit/test_rate_limiter.py",
+          "tests/tools/test_md_to_yaml_converter.py",
+          "tests/unit/test_requirements_restructurer.py"
+        ],
+        "count": 5,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "REQ-002",
+      "feature_id": "feat05",
+      "feature_name": "Resilience & Performance",
+      "description": "Resilience Patterns",
+      "priority": "P0_CRITICAL",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/tools/requirements_auditor.py",
+          "src/orchestrators/epic_review_orchestrator.py",
+          "src/orchestrators/middleware/rate_limiter.py",
+          "src/orchestrators/middleware/resource_limiter.py",
+          "src/orchestrators/middleware/circuit_breaker.py"
+        ],
+        "count": 5,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/unit/test_rate_limiter.py",
+          "tests/unit/test_resource_limiter.py",
+          "tests/unit/test_circuit_breaker.py",
+          "tests/tools/test_md_to_yaml_converter.py"
+        ],
+        "count": 4,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "REQ-003",
+      "feature_id": "feat05",
+      "feature_name": "Resilience & Performance",
+      "description": "Performance Monitoring",
+      "priority": "P0_CRITICAL",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/tools/requirements_auditor.py",
+          "src/orchestrators/epic_review_orchestrator.py",
+          "src/orchestrators/middleware/rate_limiter.py",
+          "src/orchestrators/middleware/resource_limiter.py",
+          "src/orchestrators/middleware/circuit_breaker.py"
+        ],
+        "count": 5,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/unit/test_rate_limiter.py",
+          "tests/unit/test_resource_limiter.py",
+          "tests/unit/test_circuit_breaker.py"
+        ],
+        "count": 3,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "REQ-001",
+      "feature_id": "feat06",
+      "feature_name": "MCP & Multi-Repo Support",
+      "description": "MCP Server Implementation",
+      "priority": "P0_CRITICAL",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/tools/requirements_auditor.py",
+          "src/tools/requirements_restructurer.py"
+        ],
+        "count": 2,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/mcp/test_company_brain.py",
+          "tests/tools/test_md_to_yaml_converter.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/mcp/test_mcp_integration.py",
+          "tests/mcp/test_multi_repo.py"
+        ],
+        "count": 5,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "REQ-002",
+      "feature_id": "feat06",
+      "feature_name": "MCP & Multi-Repo Support",
+      "description": "Multi-Repo Manager",
+      "priority": "P0_CRITICAL",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/tools/requirements_auditor.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/mcp/test_company_brain.py",
+          "tests/mcp/test_multi_repo.py",
+          "tests/tools/test_md_to_yaml_converter.py",
+          "tests/mcp/test_mcp_integration.py"
+        ],
+        "count": 4,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "REQ-003",
+      "feature_id": "feat06",
+      "feature_name": "MCP & Multi-Repo Support",
+      "description": "Company Brain Plugin System",
+      "priority": "P0_CRITICAL",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/tools/requirements_auditor.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/mcp/test_company_brain.py",
+          "tests/mcp/test_multi_repo.py",
+          "tests/mcp/test_mcp_integration.py"
+        ],
+        "count": 3,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "REQ-004",
+      "feature_id": "feat06",
+      "feature_name": "MCP & Multi-Repo Support",
+      "description": "Integration Testing",
+      "priority": "P0_CRITICAL",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/tools/requirements_auditor.py"
+        ],
+        "count": 1,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/mcp/test_company_brain.py",
+          "tests/mcp/test_multi_repo.py",
+          "tests/mcp/test_mcp_integration.py"
+        ],
+        "count": 3,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "REQ-001",
+      "feature_id": "feat07",
+      "feature_name": "Integration & Polish",
+      "description": "Edge Case Mitigation",
+      "priority": "P0_CRITICAL",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/tools/requirements_auditor.py",
+          "src/tools/gap_detector.py",
+          "src/tools/requirements_restructurer.py",
+          "src/orchestrators/epic_review_orchestrator.py",
+          "src/infrastructure/risk_mitigations.py"
+        ],
+        "count": 5,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/performance/test_feat07_performance.py",
+          "tests/integration/test_edge_case_mitigations.py",
+          "tests/tools/test_md_to_yaml_converter.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/integration/test_feat07_integration_suite.py"
+        ],
+        "count": 5,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "REQ-002",
+      "feature_id": "feat07",
+      "feature_name": "Integration & Polish",
+      "description": "Integration Test Suite",
+      "priority": "P0_CRITICAL",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/tools/requirements_auditor.py",
+          "src/tools/gap_detector.py",
+          "src/orchestrators/epic_review_orchestrator.py",
+          "src/infrastructure/risk_mitigations.py"
+        ],
+        "count": 4,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/performance/test_feat07_performance.py",
+          "tests/integration/test_edge_case_mitigations.py",
+          "tests/tools/test_md_to_yaml_converter.py",
+          "tests/integration/test_feat07_integration_suite.py"
+        ],
+        "count": 4,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "REQ-003",
+      "feature_id": "feat07",
+      "feature_name": "Integration & Polish",
+      "description": "Performance Tuning",
+      "priority": "P0_CRITICAL",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/tools/requirements_auditor.py",
+          "src/tools/gap_detector.py",
+          "src/orchestrators/epic_review_orchestrator.py",
+          "src/infrastructure/risk_mitigations.py"
+        ],
+        "count": 4,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/performance/test_feat07_performance.py",
+          "tests/integration/test_edge_case_mitigations.py",
+          "tests/integration/test_feat07_integration_suite.py"
+        ],
+        "count": 3,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "REQ-004",
+      "feature_id": "feat07",
+      "feature_name": "Integration & Polish",
+      "description": "Documentation",
+      "priority": "P0_CRITICAL",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/tools/requirements_auditor.py",
+          "src/tools/gap_detector.py",
+          "src/orchestrators/epic_review_orchestrator.py",
+          "src/infrastructure/risk_mitigations.py"
+        ],
+        "count": 4,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/performance/test_feat07_performance.py",
+          "tests/integration/test_edge_case_mitigations.py",
+          "tests/integration/test_feat07_integration_suite.py"
+        ],
+        "count": 3,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "REQ-001",
+      "feature_id": "feat08",
+      "feature_name": "Vacuum & Repository Cleanup",
+      "description": "Vacuum Orchestrator Enhancement",
+      "priority": "P0_CRITICAL",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/tools/feature_requirements_extractor.py",
+          "src/tools/requirements_auditor.py",
+          "src/tools/gap_detector.py",
+          "src/tools/requirements_restructurer.py",
+          "src/orchestrators/vacuum/enhanced_vacuum.py",
+          "src/orchestrators/vacuum/__init__.py",
+          "src/orchestrators/vacuum/cli.py",
+          "src/orchestrators/vacuum/structure_validator.py"
+        ],
+        "count": 8,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/unit/test_structure_validator.py",
+          "tests/tools/test_md_to_yaml_converter.py",
+          "tests/unit/test_requirements_restructurer.py",
+          "tests/unit/test_enhanced_vacuum.py"
+        ],
+        "count": 4,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "REQ-002",
+      "feature_id": "feat08",
+      "feature_name": "Vacuum & Repository Cleanup",
+      "description": "Repository Structure Validation",
+      "priority": "P0_CRITICAL",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/tools/feature_requirements_extractor.py",
+          "src/tools/requirements_auditor.py",
+          "src/tools/gap_detector.py",
+          "src/orchestrators/vacuum/enhanced_vacuum.py",
+          "src/orchestrators/vacuum/__init__.py",
+          "src/orchestrators/vacuum/cli.py",
+          "src/orchestrators/vacuum/structure_validator.py"
+        ],
+        "count": 7,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/unit/test_structure_validator.py",
+          "tests/tools/test_md_to_yaml_converter.py",
+          "tests/unit/test_enhanced_vacuum.py"
+        ],
+        "count": 3,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "requirement_id": "REQ-003",
+      "feature_id": "feat08",
+      "feature_name": "Vacuum & Repository Cleanup",
+      "description": "Final Cleanup Execution",
+      "priority": "P0_CRITICAL",
+      "status": "NOT_STARTED",
+      "implementation": {
+        "files": [
+          "src/tools/feature_requirements_extractor.py",
+          "src/tools/requirements_auditor.py",
+          "src/tools/gap_detector.py",
+          "src/orchestrators/vacuum/enhanced_vacuum.py",
+          "src/orchestrators/vacuum/__init__.py",
+          "src/orchestrators/vacuum/cli.py",
+          "src/orchestrators/vacuum/structure_validator.py"
+        ],
+        "count": 7,
+        "exists": true
+      },
+      "tests": {
+        "files": [
+          "tests/unit/test_structure_validator.py",
+          "tests/unit/test_enhanced_vacuum.py"
+        ],
+        "count": 2,
+        "exists": true
+      },
+      "coverage": {
+        "has_implementation": true,
+        "has_tests": true,
+        "fully_traced": true,
+        "coverage_level": "NOT_APPLICABLE"
+      }
+    }
+  ]
+}
