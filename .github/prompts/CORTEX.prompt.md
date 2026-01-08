@@ -41,6 +41,7 @@
 
 | Pattern (Regex) | Orchestrator | Priority | Mode |
 |-----------------|--------------|----------|------|
+| `^(epic review\|review epic\|health check\|progress report\|cortex status\|epic status)` | **Epic Review** | 6 | autonomous |
 | `^(plan\|create a plan\|make a plan)` | **Planning v5** | 10 (highest) | autonomous |
 | `^(continue epic\|resume epic\|cortex 6 build\|continue build)` | **Epic Executor** | 9 | autonomous |
 | `^(cortex-planner\|manage plan\|planner\|continue plan)` | **Planner v1** | 8 | autonomous |
