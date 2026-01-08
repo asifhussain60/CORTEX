@@ -1,0 +1,293 @@
+phase_id: P0
+phase_name: "Foundation & Prerequisites"
+status: NOT_STARTED
+priority: CRITICAL
+blocking: true
+estimated_hours: 8
+actual_hours: 0
+snowball_impact: MAXIMUM
+
+rationale: |
+  This phase establishes the infrastructure and tooling needed for all subsequent work.
+  Without proper tooling, gap detection, and validation mechanisms, all other phases
+  will be inefficient and error-prone. This is the highest ROI phase.
+
+objectives:
+  - Create automated gap detection tooling
+  - Establish YAML validation schemas
+  - Create requirements conversion tooling
+  - Set up progress tracking dashboard
+  - Create rollback/checkpoint mechanisms
+
+tasks:
+  - task_id: P0-T1
+    name: "Create YAML Schema Validator"
+    description: |
+      Build validator for feature.yaml and requirements.yaml files.
+      Ensures all YAML follows consistent structure and has required fields.
+    priority: P0_CRITICAL
+    estimated_minutes: 90
+    dependencies: []
+    tdd_required: true
+    
+    deliverables:
+      - src/tools/yaml_validator.py
+      - tests/tools/test_yaml_validator.py
+      - cortex-brain/schemas/feature-schema.json
+      - cortex-brain/schemas/requirements-schema.json
+    
+    acceptance_criteria:
+      - Schema defines all required fields (id, name, description, status, etc.)
+      - Validator catches missing fields
+      - Validator catches invalid values
+      - Validator provides clear error messages
+      - Tests cover valid/invalid scenarios
+      - CLI interface: python -m src.tools.yaml_validator <file>
+    
+    validation:
+      type: test_passes
+      command: "pytest tests/tools/test_yaml_validator.py -v"
+      expected_tests: 15
+  
+  - task_id: P0-T2
+    name: "Create Gap Detection Engine"
+    description: |
+      Automated tool that compares requirements YAML against live implementation.
+      Scans src/ directory, maps to requirements, identifies gaps.
+    priority: P0_CRITICAL
+    estimated_minutes: 120
+    dependencies:
+      - P0-T1
+    tdd_required: true
+    
+    deliverables:
+      - src/tools/gap_detector.py
+      - tests/tools/test_gap_detector.py
+    
+    acceptance_criteria:
+      - Loads all feature.yaml files
+      - Scans src/ directory for Python files
+      - Maps requirements to implementation files
+      - Detects missing implementations
+      - Detects implementation drift
+      - Detects undocumented code
+      - Generates gap report in YAML format
+      - CLI: python -m src.tools.gap_detector --output gaps.yaml
+    
+    validation:
+      type: test_passes
+      command: "pytest tests/tools/test_gap_detector.py -v"
+      expected_tests: 20
+  
+  - task_id: P0-T3
+    name: "Create MD→YAML Conversion Tool"
+    description: |
+      Automated converter for markdown requirements to YAML format.
+      Preserves structure, handles edge cases, validates output.
+    priority: P0_CRITICAL
+    estimated_minutes: 90
+    dependencies:
+      - P0-T1
+    tdd_required: true
+    
+    deliverables:
+      - src/tools/md_to_yaml_converter.py
+      - tests/tools/test_md_to_yaml_converter.py
+    
+    acceptance_criteria:
+      - Parses markdown headings as structure
+      - Extracts requirements from lists/tables
+      - Preserves priority/status information
+      - Handles edge cases (malformed MD, missing sections)
+      - Validates output against schema
+      - Generates conversion report
+      - CLI: python -m src.tools.md_to_yaml_converter <input.md> <output.yaml>
+    
+    validation:
+      type: test_passes
+      command: "pytest tests/tools/test_md_to_yaml_converter.py -v"
+      expected_tests: 18
+  
+  - task_id: P0-T4
+    name: "Create Progress Dashboard Generator"
+    description: |
+      Real-time dashboard showing remediation progress, health metrics,
+      and acceptance criteria status. Updates automatically after each task.
+    priority: P1_HIGH
+    estimated_minutes: 60
+    dependencies:
+      - P0-T2
+    tdd_required: false
+    
+    deliverables:
+      - src/tools/dashboard_generator.py
+      - .asif/AI-Learning/cortex6-fixes/00-PROGRESS-DASHBOARD.yaml
+      - .asif/AI-Learning/cortex6-fixes/dashboard.html (optional)
+    
+    acceptance_criteria:
+      - Reads master plan YAML
+      - Calculates completion percentages
+      - Generates health metrics
+      - Shows validation gate status
+      - Updates in real-time after task completion
+      - ASCII progress bars for accessibility
+      - CLI: python -m src.tools.dashboard_generator
+    
+    validation:
+      type: manual_review
+      criteria: Dashboard accurately reflects plan status
+  
+  - task_id: P0-T5
+    name: "Create Checkpoint Manager"
+    description: |
+      Git-based checkpoint system with StateManager integration.
+      Creates tagged snapshots after each phase for easy rollback.
+    priority: P1_HIGH
+    estimated_minutes: 75
+    dependencies: []
+    tdd_required: true
+    
+    deliverables:
+      - src/tools/checkpoint_manager.py
+      - tests/tools/test_checkpoint_manager.py
+    
+    acceptance_criteria:
+      - Creates git tags for checkpoints
+      - Saves StateManager snapshot
+      - Lists available checkpoints
+      - Restores from checkpoint
+      - Validates checkpoint integrity
+      - CLI: python -m src.tools.checkpoint_manager create CP0
+      - CLI: python -m src.tools.checkpoint_manager restore CP0
+    
+    validation:
+      type: test_passes
+      command: "pytest tests/tools/test_checkpoint_manager.py -v"
+      expected_tests: 12
+  
+  - task_id: P0-T6
+    name: "Create Baseline Checkpoint (CP0)"
+    description: |
+      Capture current state before any remediation work.
+      This is the fallback point if everything goes wrong.
+    priority: P0_CRITICAL
+    estimated_minutes: 15
+    dependencies:
+      - P0-T5
+    tdd_required: false
+    
+    deliverables:
+      - Git tag: remediation-cp0-baseline
+      - StateManager snapshot: cortex-brain/checkpoints/cp0-baseline.db
+    
+    acceptance_criteria:
+      - Git tag created successfully
+      - All tracked files committed
+      - StateManager snapshot saved
+      - Checkpoint verified and restorable
+    
+    validation:
+      type: command_success
+      command: "python -m src.tools.checkpoint_manager verify CP0"
+  
+  - task_id: P0-T7
+    name: "Run Initial Gap Detection Report"
+    description: |
+      Execute gap detector against current state to establish baseline.
+      This report guides all subsequent remediation work.
+    priority: P0_CRITICAL
+    estimated_minutes: 30
+    dependencies:
+      - P0-T2
+      - P0-T6
+    tdd_required: false
+    
+    deliverables:
+      - .asif/AI-Learning/cortex6-fixes/reports/baseline-gap-report.yaml
+      - .asif/AI-Learning/cortex6-fixes/reports/baseline-gap-report.md (human-readable)
+    
+    acceptance_criteria:
+      - Report generated successfully
+      - All gaps categorized by severity
+      - All gaps mapped to requirements
+      - All gaps have remediation recommendations
+      - Report saved in YAML and MD formats
+    
+    validation:
+      type: file_exists
+      paths:
+        - .asif/AI-Learning/cortex6-fixes/reports/baseline-gap-report.yaml
+        - .asif/AI-Learning/cortex6-fixes/reports/baseline-gap-report.md
+
+phase_completion:
+  validation_gate: G0
+  gate_name: "Foundation Infrastructure Ready"
+  
+  exit_criteria:
+    - All 7 tasks completed
+    - All tools tested and working
+    - Baseline checkpoint created
+    - Gap report generated
+    - Zero tool failures
+    - Dashboard operational
+  
+  deliverables_checklist:
+    - YAML validator (with schema)
+    - Gap detection engine
+    - MD→YAML converter
+    - Progress dashboard
+    - Checkpoint manager
+    - Baseline checkpoint (CP0)
+    - Baseline gap report
+  
+  health_metrics:
+    tools_created: 5
+    tools_tested: 5
+    test_coverage: 100%
+    checkpoint_created: true
+    gap_report_generated: true
+  
+  next_phase: P1
+  next_phase_trigger: "All exit criteria met"
+
+snowball_benefits:
+  immediate:
+    - Automated gap detection saves hours of manual work
+    - YAML validation prevents errors in subsequent phases
+    - Checkpoint system provides safety net
+    - Dashboard provides visibility
+  
+  compound:
+    - Tools used in P1, P2, P3, P4, P5, P6 (6x reuse)
+    - Gap detector runs after each phase (continuous validation)
+    - Checkpoint system enables fearless refactoring
+    - Dashboard motivates progress
+  
+  long_term:
+    - Tools become part of CORTEX core capabilities
+    - Future epics use same tooling
+    - Gap detection becomes continuous quality gate
+    - Checkpoint system enables A/B testing
+
+estimated_timeline:
+  optimistic: 6 hours
+  realistic: 8 hours
+  pessimistic: 10 hours
+  
+  parallel_work_possible: true
+  parallel_groups:
+    - [P0-T1, P0-T5]  # Schema validator + checkpoint manager
+    - [P0-T2, P0-T3]  # Gap detector + MD converter (both need T1)
+    - [P0-T4]         # Dashboard (needs T2)
+    - [P0-T6, P0-T7]  # Sequential: checkpoint then gap report
+
+audit_requirements:
+  log_category: TOOLING
+  component: remediation_foundation
+  correlation_id_prefix: REM-P0
+  
+  critical_operations:
+    - Tool creation
+    - Tool validation
+    - Checkpoint creation
+    - Gap detection execution

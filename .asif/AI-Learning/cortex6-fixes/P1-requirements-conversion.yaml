@@ -1,0 +1,441 @@
+phase_id: P1
+phase_name: "Requirements Conversion & Alignment"
+status: NOT_STARTED
+priority: CRITICAL
+blocking: true
+estimated_hours: 16
+actual_hours: 0
+snowball_impact: HIGH
+depends_on:
+  - P0
+
+rationale: |
+  Converting all requirements to YAML creates a single source of truth that enables:
+  - Automated gap detection
+  - Specification compliance checking
+  - Traceability (requirement → implementation → test)
+  - Machine-readable requirements for CORTEX orchestrators
+  
+  This is the foundation for all quality improvements in subsequent phases.
+
+objectives:
+  - Convert all .md requirements to .yaml format
+  - Validate all feature.yaml files
+  - Create unified requirements catalog
+  - Establish traceability matrix
+  - Document conversion methodology
+
+tasks:
+  - task_id: P1-T1
+    name: "Audit Existing Requirements Documents"
+    description: |
+      Scan .asif/AI-Learning/cortex6 for all requirements documents.
+      Catalog by type (MD, YAML, TXT), feature, and status.
+    priority: P0_CRITICAL
+    estimated_minutes: 45
+    dependencies:
+      - P0-T2
+    tdd_required: false
+    
+    deliverables:
+      - .asif/AI-Learning/cortex6-fixes/reports/requirements-audit.yaml
+      - .asif/AI-Learning/cortex6-fixes/reports/requirements-audit.md
+    
+    acceptance_criteria:
+      - All requirements files discovered
+      - Files categorized by format (MD/YAML/TXT)
+      - Files categorized by feature (feat01-feat08)
+      - Conversion priority assigned (YAML already done, MD needs conversion)
+      - Estimated conversion effort calculated
+    
+    validation:
+      type: manual_review
+      criteria: Audit report complete and accurate
+  
+  - task_id: P1-T2
+    name: "Convert feat01-foundation Requirements"
+    description: |
+      Convert feat01 markdown/prose requirements to feature.yaml format.
+      feat01 is complete, so requirements should match implementation.
+    priority: P0_CRITICAL
+    estimated_minutes: 90
+    dependencies:
+      - P1-T1
+      - P0-T3
+    tdd_required: false
+    
+    deliverables:
+      - .asif/AI-Learning/cortex6/source-of-truth/features/feat01-foundation/requirements.yaml
+    
+    acceptance_criteria:
+      - All feat01 requirements in YAML
+      - Schema validation passes
+      - Each requirement has:
+        - Unique ID (req-01.XX)
+        - Priority level
+        - Acceptance criteria
+        - Implementation mapping
+        - Test mapping
+        - Status (COMPLETED for feat01)
+      - Cross-referenced with live implementation
+      - Zero conversion errors
+    
+    validation:
+      type: command_success
+      command: "python -m src.tools.yaml_validator .asif/AI-Learning/cortex6/source-of-truth/features/feat01-foundation/requirements.yaml"
+  
+  - task_id: P1-T3
+    name: "Convert feat02-todo-orchestrator Requirements"
+    description: |
+      Convert feat02 requirements to YAML. feat02 is operational.
+    priority: P0_CRITICAL
+    estimated_minutes: 120
+    dependencies:
+      - P1-T1
+      - P0-T3
+    tdd_required: false
+    
+    deliverables:
+      - .asif/AI-Learning/cortex6/source-of-truth/features/feat02-todo-orchestrator/requirements.yaml
+    
+    acceptance_criteria:
+      - All feat02 requirements in YAML (DAG, CRUD, checkpoints, self-management)
+      - Schema validation passes
+      - Requirements map to TodoOrchestrator implementation
+      - Status reflects completion state
+    
+    validation:
+      type: command_success
+      command: "python -m src.tools.yaml_validator .asif/AI-Learning/cortex6/source-of-truth/features/feat02-todo-orchestrator/requirements.yaml"
+  
+  - task_id: P1-T4
+    name: "Convert feat03-governance Requirements"
+    description: |
+      Convert feat03 requirements to YAML. feat03 is complete.
+    priority: P0_CRITICAL
+    estimated_minutes: 90
+    dependencies:
+      - P1-T1
+      - P0-T3
+    tdd_required: false
+    
+    deliverables:
+      - .asif/AI-Learning/cortex6/source-of-truth/features/feat03-governance/requirements.yaml
+    
+    acceptance_criteria:
+      - All feat03 requirements in YAML (4-category governance, SKULL, merge, cache)
+      - Schema validation passes
+      - Requirements map to GovernanceMerger implementation
+    
+    validation:
+      type: command_success
+      command: "python -m src.tools.yaml_validator .asif/AI-Learning/cortex6/source-of-truth/features/feat03-governance/requirements.yaml"
+  
+  - task_id: P1-T5
+    name: "Convert feat04-core-orchestration Requirements"
+    description: |
+      Convert feat04 requirements to YAML. feat04 is complete.
+    priority: P0_CRITICAL
+    estimated_minutes: 120
+    dependencies:
+      - P1-T1
+      - P0-T3
+    tdd_required: false
+    
+    deliverables:
+      - .asif/AI-Learning/cortex6/source-of-truth/features/feat04-core-orchestration/requirements.yaml
+    
+    acceptance_criteria:
+      - All feat04 requirements in YAML (intelligence, mistake prevention, YAML-first, lifecycle)
+      - Schema validation passes
+      - Requirements map to MasterOrchestrator and middleware
+    
+    validation:
+      type: command_success
+      command: "python -m src.tools.yaml_validator .asif/AI-Learning/cortex6/source-of-truth/features/feat04-core-orchestration/requirements.yaml"
+  
+  - task_id: P1-T6
+    name: "Convert feat05-resilience Requirements"
+    description: |
+      Convert feat05 requirements to YAML. feat05 is complete.
+    priority: P0_CRITICAL
+    estimated_minutes: 90
+    dependencies:
+      - P1-T1
+      - P0-T3
+    tdd_required: false
+    
+    deliverables:
+      - .asif/AI-Learning/cortex6/source-of-truth/features/feat05-resilience/requirements.yaml
+    
+    acceptance_criteria:
+      - All feat05 requirements in YAML (resource limits, rate limiting, circuit breakers)
+      - Schema validation passes
+      - Requirements map to resilience middleware
+    
+    validation:
+      type: command_success
+      command: "python -m src.tools.yaml_validator .asif/AI-Learning/cortex6/source-of-truth/features/feat05-resilience/requirements.yaml"
+  
+  - task_id: P1-T7
+    name: "Convert feat06-mcp Requirements"
+    description: |
+      Convert feat06 requirements to YAML. feat06 is complete.
+    priority: P0_CRITICAL
+    estimated_minutes: 90
+    dependencies:
+      - P1-T1
+      - P0-T3
+    tdd_required: false
+    
+    deliverables:
+      - .asif/AI-Learning/cortex6/source-of-truth/features/feat06-mcp/requirements.yaml
+    
+    acceptance_criteria:
+      - All feat06 requirements in YAML (MCP server, multi-repo, company brain)
+      - Schema validation passes
+      - Requirements map to MCP implementation
+    
+    validation:
+      type: command_success
+      command: "python -m src.tools.yaml_validator .asif/AI-Learning/cortex6/source-of-truth/features/feat06-mcp/requirements.yaml"
+  
+  - task_id: P1-T8
+    name: "Convert feat07-integration Requirements"
+    description: |
+      Convert feat07 requirements to YAML. feat07 is complete.
+    priority: P0_CRITICAL
+    estimated_minutes: 90
+    dependencies:
+      - P1-T1
+      - P0-T3
+    tdd_required: false
+    
+    deliverables:
+      - .asif/AI-Learning/cortex6/source-of-truth/features/feat07-integration/requirements.yaml
+    
+    acceptance_criteria:
+      - All feat07 requirements in YAML (integration testing, polish)
+      - Schema validation passes
+      - Requirements map to integration tests
+    
+    validation:
+      type: command_success
+      command: "python -m src.tools.yaml_validator .asif/AI-Learning/cortex6/source-of-truth/features/feat07-integration/requirements.yaml"
+  
+  - task_id: P1-T9
+    name: "Convert feat08-cleanup Requirements"
+    description: |
+      Convert feat08 requirements to YAML. feat08 is complete.
+    priority: P0_CRITICAL
+    estimated_minutes: 60
+    dependencies:
+      - P1-T1
+      - P0-T3
+    tdd_required: false
+    
+    deliverables:
+      - .asif/AI-Learning/cortex6/source-of-truth/features/feat08-cleanup/requirements.yaml
+    
+    acceptance_criteria:
+      - All feat08 requirements in YAML (cleanup operations)
+      - Schema validation passes
+      - Requirements map to cleanup implementation
+    
+    validation:
+      type: command_success
+      command: "python -m src.tools.yaml_validator .asif/AI-Learning/cortex6/source-of-truth/features/feat08-cleanup/requirements.yaml"
+  
+  - task_id: P1-T10
+    name: "Create Unified Requirements Catalog"
+    description: |
+      Aggregate all feature requirements into single master catalog.
+      Enables cross-feature queries and traceability.
+    priority: P1_HIGH
+    estimated_minutes: 60
+    dependencies:
+      - P1-T2
+      - P1-T3
+      - P1-T4
+      - P1-T5
+      - P1-T6
+      - P1-T7
+      - P1-T8
+      - P1-T9
+    tdd_required: false
+    
+    deliverables:
+      - .asif/AI-Learning/cortex6/source-of-truth/00-UNIFIED-REQUIREMENTS-CATALOG.yaml
+    
+    acceptance_criteria:
+      - All requirements from feat01-feat08 included
+      - Cross-feature dependencies identified
+      - Duplicate requirements merged
+      - Requirements indexed by:
+        - ID
+        - Feature
+        - Priority
+        - Status
+        - Component
+      - Statistics included (total, by feature, by status, by priority)
+    
+    validation:
+      type: manual_review
+      criteria: Catalog complete and comprehensive
+  
+  - task_id: P1-T11
+    name: "Create Traceability Matrix"
+    description: |
+      Map requirements → implementation → tests for full traceability.
+    priority: P1_HIGH
+    estimated_minutes: 90
+    dependencies:
+      - P1-T10
+      - P0-T2
+    tdd_required: false
+    
+    deliverables:
+      - .asif/AI-Learning/cortex6-fixes/reports/traceability-matrix.yaml
+      - .asif/AI-Learning/cortex6-fixes/reports/traceability-matrix.html (visual)
+    
+    acceptance_criteria:
+      - Each requirement linked to:
+        - Implementation file(s)
+        - Test file(s)
+        - Documentation
+      - Coverage metrics calculated:
+        - Requirements with implementation: X%
+        - Requirements with tests: Y%
+        - Requirements with docs: Z%
+      - Gaps highlighted (missing impl/tests/docs)
+      - Visual matrix generated for review
+    
+    validation:
+      type: file_exists
+      paths:
+        - .asif/AI-Learning/cortex6-fixes/reports/traceability-matrix.yaml
+        - .asif/AI-Learning/cortex6-fixes/reports/traceability-matrix.html
+  
+  - task_id: P1-T12
+    name: "Validate Conversion Quality"
+    description: |
+      Run comprehensive validation on all converted requirements.
+      Ensure no information loss during conversion.
+    priority: P0_CRITICAL
+    estimated_minutes: 45
+    dependencies:
+      - P1-T10
+      - P1-T11
+    tdd_required: false
+    
+    deliverables:
+      - .asif/AI-Learning/cortex6-fixes/reports/conversion-validation-report.yaml
+    
+    acceptance_criteria:
+      - All YAML files pass schema validation
+      - No requirements lost during conversion
+      - All priority levels preserved
+      - All acceptance criteria preserved
+      - All implementation mappings preserved
+      - Validation report shows 100% success rate
+    
+    validation:
+      type: command_success
+      command: "python -m src.tools.yaml_validator --recursive .asif/AI-Learning/cortex6/source-of-truth/features/"
+  
+  - task_id: P1-T13
+    name: "Create Checkpoint CP1"
+    description: |
+      Checkpoint after requirements conversion complete.
+    priority: P0_CRITICAL
+    estimated_minutes: 15
+    dependencies:
+      - P1-T12
+    tdd_required: false
+    
+    deliverables:
+      - Git tag: remediation-cp1-requirements
+      - StateManager snapshot: cortex-brain/checkpoints/cp1-requirements.db
+    
+    acceptance_criteria:
+      - All converted YAML files committed
+      - Git tag created
+      - StateManager snapshot saved
+      - Checkpoint verified
+    
+    validation:
+      type: command_success
+      command: "python -m src.tools.checkpoint_manager verify CP1"
+
+phase_completion:
+  validation_gate: G1
+  gate_name: "Requirements YAML Conversion Complete"
+  
+  exit_criteria:
+    - All 13 tasks completed
+    - All 8 features have requirements.yaml
+    - Unified catalog created
+    - Traceability matrix complete
+    - 100% schema validation pass rate
+    - Checkpoint CP1 created
+    - Zero conversion errors
+  
+  deliverables_checklist:
+    - 8 feature requirements.yaml files
+    - Unified requirements catalog
+    - Traceability matrix (YAML + HTML)
+    - Conversion validation report
+    - Checkpoint CP1
+  
+  health_metrics:
+    requirements_yaml_conversion: 100%
+    schema_validation_pass_rate: 100%
+    traceability_coverage: "TBD (calculated in P1-T11)"
+    information_loss: 0%
+  
+  next_phase: P2
+  next_phase_trigger: "Validation gate G1 passed"
+
+snowball_benefits:
+  immediate:
+    - Single source of truth established
+    - Automated validation enabled
+    - Gap detection accuracy improved
+    - Machine-readable requirements for CORTEX
+  
+  compound:
+    - P2 uses requirements to identify critical gaps
+    - P3 uses requirements to detect drift
+    - P4 uses requirements for test coverage mapping
+    - P5 uses requirements for performance criteria
+    - P6 uses requirements for final validation
+  
+  long_term:
+    - Future features follow YAML-first approach
+    - Requirements become living documentation
+    - Automated compliance checking
+    - AI-assisted requirement generation
+
+estimated_timeline:
+  optimistic: 12 hours
+  realistic: 16 hours
+  pessimistic: 20 hours
+  
+  parallel_work_possible: true
+  parallel_groups:
+    - [P1-T1]                                    # Sequential: audit first
+    - [P1-T2, P1-T3, P1-T4, P1-T5, P1-T6, P1-T7, P1-T8, P1-T9]  # Parallel: convert all features
+    - [P1-T10]                                   # Sequential: catalog after conversions
+    - [P1-T11]                                   # Sequential: traceability after catalog
+    - [P1-T12, P1-T13]                          # Sequential: validate then checkpoint
+
+audit_requirements:
+  log_category: REQUIREMENTS
+  component: requirements_conversion
+  correlation_id_prefix: REM-P1
+  
+  critical_operations:
+    - Requirements conversion
+    - Schema validation
+    - Traceability mapping
+    - Checkpoint creation

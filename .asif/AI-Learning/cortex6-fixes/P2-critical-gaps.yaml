@@ -1,0 +1,438 @@
+phase_id: P2
+phase_name: "Critical Implementation Gaps"
+status: NOT_STARTED
+priority: CRITICAL
+blocking: false
+estimated_hours: 24
+actual_hours: 0
+snowball_impact: HIGH
+depends_on:
+  - P0
+  - P1
+
+rationale: |
+  With requirements in YAML and gap detection automated, we can now systematically
+  address CRITICAL and HIGH severity gaps. These are features specified in
+  requirements but not yet implemented, blocking system completeness.
+  
+  Priority order ensures maximum impact: critical path items first, then
+  high-priority features that enable other work.
+
+objectives:
+  - Implement all CRITICAL severity gaps
+  - Implement HIGH severity gaps where feasible
+  - Achieve ≥90% implementation completeness
+  - Validate with tests (TDD where applicable)
+  - Update epic tracker with new implementations
+
+gap_categories:
+  critical_gaps:
+    - Missing core orchestrator capabilities
+    - Missing security features (auth, encryption)
+    - Missing data integrity features (backup/restore)
+    - Breaking architectural requirements
+  
+  high_priority_gaps:
+    - Missing monitoring/observability
+    - Missing performance benchmarking
+    - Missing disaster recovery
+    - Incomplete integration points
+
+tasks:
+  - task_id: P2-T1
+    name: "Run Gap Detection After P1"
+    description: |
+      Execute gap detector with updated requirements YAML.
+      Produces prioritized list of implementation gaps.
+    priority: P0_CRITICAL
+    estimated_minutes: 30
+    dependencies:
+      - P1-T13
+    tdd_required: false
+    
+    deliverables:
+      - .asif/AI-Learning/cortex6-fixes/reports/p2-gap-report.yaml
+    
+    acceptance_criteria:
+      - Gap report generated from YAML requirements
+      - Gaps categorized: CRITICAL, HIGH, MEDIUM, LOW
+      - Gaps mapped to features and components
+      - Implementation effort estimated per gap
+      - Priority order established for remediation
+    
+    validation:
+      type: file_exists
+      path: .asif/AI-Learning/cortex6-fixes/reports/p2-gap-report.yaml
+  
+  - task_id: P2-T2
+    name: "Analyze Gap Report & Create Implementation Plan"
+    description: |
+      Review gap report, prioritize by snowball effect,
+      create detailed implementation plan for critical gaps.
+    priority: P0_CRITICAL
+    estimated_minutes: 60
+    dependencies:
+      - P2-T1
+    tdd_required: false
+    
+    deliverables:
+      - .asif/AI-Learning/cortex6-fixes/P2-implementation-plan.yaml
+    
+    acceptance_criteria:
+      - All CRITICAL gaps listed
+      - All HIGH gaps listed
+      - Implementation order determined by:
+        - Severity
+        - Blocking factor (does it unblock other work?)
+        - Complexity (quick wins first)
+        - Risk (high-risk items with mitigation)
+      - Each gap has:
+        - Implementation strategy
+        - Test strategy
+        - Estimated effort
+        - Dependencies
+      - Plan approved for execution
+    
+    validation:
+      type: manual_review
+      criteria: Implementation plan comprehensive and executable
+  
+  - task_id: P2-T3
+    name: "Implement StateManager Checkpoint/Resume (if gap)"
+    description: |
+      If gap detected: Complete StateManager checkpoint/resume functionality.
+      Task 1.2.5 from feat01 may be incomplete.
+    priority: P0_CRITICAL
+    estimated_minutes: 120
+    dependencies:
+      - P2-T2
+    tdd_required: true
+    conditional: "if gap_exists('StateManager.checkpoint')"
+    
+    deliverables:
+      - src/database/state_manager.py (enhanced)
+      - tests/unit/test_state_manager_checkpoint.py
+    
+    acceptance_criteria:
+      - create_checkpoint() method implemented
+      - restore_from_checkpoint() method implemented
+      - list_checkpoints() method implemented
+      - Checkpoints stored in cortex-brain/checkpoints/
+      - Tests cover create, restore, list, verify
+      - All tests passing
+    
+    validation:
+      type: test_passes
+      command: "pytest tests/unit/test_state_manager_checkpoint.py -v"
+      expected_tests: 10
+  
+  - task_id: P2-T4
+    name: "Implement Security Module (if gap)"
+    description: |
+      If gap detected: Add authentication, encryption, input validation module.
+      This is likely a CRITICAL gap as no feat09-security exists.
+    priority: P0_CRITICAL
+    estimated_minutes: 240
+    dependencies:
+      - P2-T2
+    tdd_required: true
+    conditional: "if gap_exists('security_module')"
+    
+    deliverables:
+      - src/security/__init__.py
+      - src/security/authentication.py
+      - src/security/encryption.py
+      - src/security/input_validator.py
+      - tests/security/test_authentication.py
+      - tests/security/test_encryption.py
+      - tests/security/test_input_validation.py
+    
+    acceptance_criteria:
+      - Basic authentication framework
+      - Secret encryption/decryption (using cryptography lib)
+      - Input validation for SQL injection, XSS, path traversal
+      - Secure file handling
+      - Password hashing (argon2)
+      - Tests cover all security functions
+      - Security audit log integration
+    
+    validation:
+      type: test_passes
+      command: "pytest tests/security/ -v"
+      expected_tests: 30
+  
+  - task_id: P2-T5
+    name: "Implement Backup/Restore System (if gap)"
+    description: |
+      If gap detected: Add backup/restore for StateManager and cortex-brain.
+      Critical for disaster recovery.
+    priority: P0_CRITICAL
+    estimated_minutes: 180
+    dependencies:
+      - P2-T2
+      - P2-T3
+    tdd_required: true
+    conditional: "if gap_exists('backup_restore')"
+    
+    deliverables:
+      - src/operations/backup_manager.py
+      - tests/unit/test_backup_manager.py
+    
+    acceptance_criteria:
+      - create_backup() method (backs up StateManager DB + cortex-brain)
+      - restore_backup() method
+      - list_backups() method
+      - Backups stored in cortex-brain/backups/ (compressed)
+      - Automatic backup scheduling support
+      - Restore validation (integrity checks)
+      - Tests cover backup, restore, list, verify
+    
+    validation:
+      type: test_passes
+      command: "pytest tests/unit/test_backup_manager.py -v"
+      expected_tests: 15
+  
+  - task_id: P2-T6
+    name: "Implement Metrics/Observability Module (if gap)"
+    description: |
+      If gap detected: Add metrics collection and dashboard for observability.
+      HIGH priority for production monitoring.
+    priority: P1_HIGH
+    estimated_minutes: 180
+    dependencies:
+      - P2-T2
+    tdd_required: true
+    conditional: "if gap_exists('metrics_module')"
+    
+    deliverables:
+      - src/observability/metrics_collector.py
+      - src/observability/health_checker.py
+      - tests/observability/test_metrics.py
+      - tests/observability/test_health.py
+    
+    acceptance_criteria:
+      - Metrics collection (counters, gauges, histograms)
+      - Health check endpoints
+      - Integration with audit logs
+      - Prometheus-compatible export (optional)
+      - Dashboard generation (ASCII or web)
+      - Tests cover metric types and health checks
+    
+    validation:
+      type: test_passes
+      command: "pytest tests/observability/ -v"
+      expected_tests: 20
+  
+  - task_id: P2-T7
+    name: "Implement Performance Benchmarking (if gap)"
+    description: |
+      If gap detected: Add performance benchmarking suite for SLA validation.
+      HIGH priority for production readiness.
+    priority: P1_HIGH
+    estimated_minutes: 120
+    dependencies:
+      - P2-T2
+    tdd_required: false
+    conditional: "if gap_exists('performance_benchmarks')"
+    
+    deliverables:
+      - tests/performance/benchmarks/
+      - tests/performance/test_orchestrator_performance.py
+      - tests/performance/test_state_manager_performance.py
+      - tests/performance/test_governance_performance.py
+    
+    acceptance_criteria:
+      - Benchmarks for critical paths (routing, state ops, governance merge)
+      - SLA definitions (e.g., routing <5ms, merge <50ms)
+      - pytest-benchmark integration
+      - Baseline performance captured
+      - Regression detection enabled
+      - Results stored in cortex-brain/metrics-history/
+    
+    validation:
+      type: test_passes
+      command: "pytest tests/performance/ --benchmark-only"
+      expected_benchmarks: 10
+  
+  - task_id: P2-T8
+    name: "Implement Missing MasterOrchestrator Features (if gap)"
+    description: |
+      If gap detected: Add any missing MasterOrchestrator capabilities
+      identified in gap analysis.
+    priority: P1_HIGH
+    estimated_minutes: 150
+    dependencies:
+      - P2-T2
+    tdd_required: true
+    conditional: "if gap_exists('MasterOrchestrator.*')"
+    
+    deliverables:
+      - src/orchestrators/core/master_orchestrator.py (enhanced)
+      - tests/unit/test_master_orchestrator_missing.py
+    
+    acceptance_criteria:
+      - All required MasterOrchestrator methods implemented
+      - Integration with all middleware
+      - Error handling for all edge cases
+      - Tests cover new functionality
+      - Backward compatibility maintained
+    
+    validation:
+      type: test_passes
+      command: "pytest tests/unit/test_master_orchestrator*.py -v"
+  
+  - task_id: P2-T9
+    name: "Implement Missing TodoOrchestrator Features (if gap)"
+    description: |
+      If gap detected: Add any missing TodoOrchestrator capabilities.
+    priority: P1_HIGH
+    estimated_minutes: 150
+    dependencies:
+      - P2-T2
+    tdd_required: true
+    conditional: "if gap_exists('TodoOrchestrator.*')"
+    
+    deliverables:
+      - src/orchestrators/core/todo_orchestrator.py (enhanced)
+      - tests/unit/test_todo_orchestrator_missing.py
+    
+    acceptance_criteria:
+      - All required TodoOrchestrator methods implemented
+      - DAG operations complete
+      - Checkpoint/resume fully functional
+      - Tests cover new functionality
+    
+    validation:
+      type: test_passes
+      command: "pytest tests/unit/test_todo_orchestrator*.py -v"
+  
+  - task_id: P2-T10
+    name: "Update Epic Tracker with New Implementations"
+    description: |
+      Add all newly implemented features to epic tracker.
+      Update feature status and completion metrics.
+    priority: P0_CRITICAL
+    estimated_minutes: 60
+    dependencies:
+      - P2-T3
+      - P2-T4
+      - P2-T5
+      - P2-T6
+      - P2-T7
+      - P2-T8
+      - P2-T9
+    tdd_required: false
+    
+    deliverables:
+      - .asif/AI-Learning/cortex6/source-of-truth/todo/00-TODO-CONTINUITY-TRACKER.yaml (updated)
+      - .asif/AI-Learning/cortex6/source-of-truth/epic/00-CORTEX6-BUILD-EPIC.yaml (updated)
+    
+    acceptance_criteria:
+      - All new features added as tasks/phases
+      - Completion dates recorded
+      - Test counts updated
+      - Deliverables documented
+      - Progress percentages recalculated
+    
+    validation:
+      type: manual_review
+      criteria: Epic tracker accurately reflects new implementations
+  
+  - task_id: P2-T11
+    name: "Create Checkpoint CP2"
+    description: |
+      Checkpoint after critical gaps implemented.
+    priority: P0_CRITICAL
+    estimated_minutes: 15
+    dependencies:
+      - P2-T10
+    tdd_required: false
+    
+    deliverables:
+      - Git tag: remediation-cp2-critical-gaps
+      - StateManager snapshot: cortex-brain/checkpoints/cp2-critical-gaps.db
+    
+    acceptance_criteria:
+      - All new implementations committed
+      - Git tag created
+      - StateManager snapshot saved
+      - Checkpoint verified
+    
+    validation:
+      type: command_success
+      command: "python -m src.tools.checkpoint_manager verify CP2"
+
+phase_completion:
+  validation_gate: G2
+  gate_name: "Critical Gaps Remediated"
+  
+  exit_criteria:
+    - All CRITICAL gaps implemented
+    - All HIGH gaps addressed (or documented as deferred)
+    - ≥90% implementation completeness achieved
+    - All new implementations tested
+    - Epic tracker updated
+    - Checkpoint CP2 created
+    - Zero regressions in existing tests
+  
+  deliverables_checklist:
+    - Gap report analyzed
+    - Implementation plan created
+    - Security module (if needed)
+    - Backup/restore system (if needed)
+    - Metrics/observability (if needed)
+    - Performance benchmarks (if needed)
+    - Enhanced orchestrators (if needed)
+    - Updated epic tracker
+    - Checkpoint CP2
+  
+  health_metrics:
+    implementation_completeness: "≥90%"
+    critical_gaps_remaining: 0
+    high_gaps_remaining: "≤3 (documented)"
+    test_pass_rate: 100%
+    regression_count: 0
+  
+  next_phase: P3
+  next_phase_trigger: "Validation gate G2 passed"
+
+snowball_benefits:
+  immediate:
+    - System more complete and robust
+    - Security posture improved
+    - Disaster recovery enabled
+    - Observability enhanced
+  
+  compound:
+    - P3 has more complete system to align
+    - P4 has more features to test
+    - P5 has better metrics for optimization
+    - P6 has higher baseline for validation
+  
+  long_term:
+    - Production-ready security
+    - Automated monitoring
+    - Performance baselines established
+    - Disaster recovery tested
+
+estimated_timeline:
+  optimistic: 18 hours
+  realistic: 24 hours
+  pessimistic: 32 hours
+  
+  notes: |
+    Timeline highly dependent on number and complexity of gaps discovered.
+    Conditional tasks (if gap_exists) may not all execute.
+    Security module is largest estimated task (4 hours).
+
+audit_requirements:
+  log_category: IMPLEMENTATION
+  component: gap_remediation
+  correlation_id_prefix: REM-P2
+  
+  critical_operations:
+    - Gap detection
+    - Implementation
+    - Testing
+    - Epic updates
+    - Checkpoint creation
