@@ -1,0 +1,37 @@
+{
+  "workspace": "/Users/asifhussain/PROJECTS/CORTEX",
+  "timestamp": "2026-01-08T09:06:28.002643",
+  "valid": false,
+  "violations": [
+    {
+      "severity": "ERROR",
+      "category": "misplaced_test",
+      "path": "/Users/asifhussain/PROJECTS/CORTEX/.upgrades/backups/20260106_092858/cortex-brain/documents/planning/backups/CORTEX-5.0-acceptance-criteria-backup-20260104/epic-admin/artifacts/brittleness_test.py",
+      "message": "Test file outside tests/ directory: brittleness_test.py",
+      "recommendation": "Move to tests/ with appropriate subdirectory structure"
+    },
+    {
+      "severity": "ERROR",
+      "category": "misplaced_test",
+      "path": "/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/archives/backups/backups/backups/CORTEX-5.0-acceptance-criteria-backup-20260104/epic-admin/artifacts/brittleness_test.py",
+      "message": "Test file outside tests/ directory: brittleness_test.py",
+      "recommendation": "Move to tests/ with appropriate subdirectory structure"
+    }
+  ],
+  "stats": {
+    "total_violations": 2,
+    "errors": 2,
+    "warnings": 0,
+    "info": 0,
+    "by_category": {
+      "misplaced_test": 2
+    },
+    "src_files": 88,
+    "test_files": 54,
+    "has_brain": true
+  },
+  "recommendations": [
+    "Fix 2 ERROR violations before proceeding",
+    "Move 2 test files to tests/ directory"
+  ]
+}
