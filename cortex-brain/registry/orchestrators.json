@@ -1,4 +1,31 @@
 {
+  "epic_review": {
+    "id": "epic_review",
+    "name": "Epic Review Orchestrator",
+    "version": "1.0.0",
+    "type": "autonomous",
+    "category": "validation",
+    "class_name": "EpicReviewOrchestrator",
+    "module_path": "src.orchestrators.epic_review_orchestrator",
+    "description": "Epic health review with visual progress bars and gap detection",
+    "manifest_path": "cortex-brain/manifests/orchestrators/epic-review-orchestrator.yaml",
+    "patterns": [
+      "^(epic review|review epic|health check|progress report|cortex status|epic status).*$"
+    ],
+    "dependencies": [],
+    "capabilities": [
+      "health_monitoring",
+      "progress_analysis",
+      "gap_detection",
+      "epic_updates"
+    ],
+    "tags": {
+      "phase_integration": "Phase 6 (Epic Review System)",
+      "epic": "cortex6-build-epic",
+      "converted_from": "cortex-epic-review.prompt.md"
+    },
+    "enabled": true
+  },
   "planning_v5": {
     "id": "planning_v5",
     "name": "Planning System v5",

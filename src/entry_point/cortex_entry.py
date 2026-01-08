@@ -117,6 +117,20 @@ class CortexEntry:
         """Register core CORTEX orchestrators in registry."""
         from src.mcp.metadata import OrchestratorType, OrchestratorCategory
         
+        # Epic Review
+        self.registry.register(
+            id="epic_review",
+            name="Epic Review Orchestrator",
+            version="1.0.0",
+            type=OrchestratorType.AUTONOMOUS,
+            category=OrchestratorCategory.VALIDATION,
+            class_name="EpicReviewOrchestrator",
+            module_path="src.orchestrators.epic_review_orchestrator",
+            manifest_path="cortex-brain/manifests/orchestrators/epic-review-orchestrator.yaml",
+            patterns=[r"^(epic review|review epic|health check|progress report|cortex status|epic status).*$"],
+            capabilities=["health_monitoring", "progress_analysis", "gap_detection", "epic_updates"]
+        )
+        
         # Planning v5
         self.registry.register(
             id="planning_v5",

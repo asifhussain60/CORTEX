@@ -52,18 +52,23 @@ class ComponentUsage:
 class EpicReviewOrchestrator:
     """Orchestrator for epic health reviews."""
     
-    def __init__(self, workspace_root: Path, audit_logger: EnterpriseAuditLogger):
+    def __init__(
+        self, 
+        workspace_root: Optional[Path] = None, 
+        audit_logger: Optional[EnterpriseAuditLogger] = None,
+        config_path: Optional[str] = None
+    ):
         """Initialize the epic review orchestrator."""
-        self.workspace_root = workspace_root
-        self.audit_logger = audit_logger
+        self.workspace_root = workspace_root or Path.cwd()
+        self.audit_logger = audit_logger or EnterpriseAuditLogger()
         self.correlation_id = f"EPIC-REVIEW-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
         
         # Paths
-        self.tracker_path = workspace_root / ".asif/AI-Learning/cortex6/source-of-truth/todo/00-TODO-CONTINUITY-TRACKER.yaml"
-        self.epic_path = workspace_root / ".asif/AI-Learning/cortex6/source-of-truth/epic/00-CORTEX6-BUILD-EPIC.yaml"
-        self.audit_dir = workspace_root / "cortex-brain/audit-logs"
-        self.governance_rules = workspace_root / "cortex-brain/tier0/governance/core-rules.yaml"
-        self.brain_protection = workspace_root / "cortex-brain/brain-protection-rules.yaml"
+        self.tracker_path = self.workspace_root / ".asif/AI-Learning/cortex6/source-of-truth/todo/00-TODO-CONTINUITY-TRACKER.yaml"
+        self.epic_path = self.workspace_root / ".asif/AI-Learning/cortex6/source-of-truth/epic/00-CORTEX6-BUILD-EPIC.yaml"
+        self.audit_dir = self.workspace_root / "cortex-brain/audit-logs"
+        self.governance_rules = self.workspace_root / "cortex-brain/tier0/governance/core-rules.yaml"
+        self.brain_protection = self.workspace_root / "cortex-brain/brain-protection-rules.yaml"
         
     def execute(self) -> str:
         """Execute epic review and return formatted report."""
@@ -72,8 +77,8 @@ class EpicReviewOrchestrator:
             AuditCategory.EXECUTION,
             "epic_review_orchestrator",
             "execute",
-            {"action": "start", "correlation_id": self.correlation_id},
-            message="Starting epic review"
+            "Starting epic review",
+            context={"action": "start", "correlation_id": self.correlation_id}
         )
         
         try:
@@ -114,13 +119,13 @@ class EpicReviewOrchestrator:
                 AuditCategory.EXECUTION,
                 "epic_review_orchestrator",
                 "execute",
-                {
+                "Epic review completed",
+                context={
                     "action": "complete",
                     "correlation_id": self.correlation_id,
                     "health_score": metrics.health_score,
                     "gaps_found": len(gaps)
-                },
-                message="Epic review completed"
+                }
             )
             
             return report
@@ -131,8 +136,8 @@ class EpicReviewOrchestrator:
                 AuditCategory.EXECUTION,
                 "epic_review_orchestrator",
                 "execute",
-                {"error": str(e), "correlation_id": self.correlation_id},
-                message=f"Epic review failed: {str(e)}"
+                f"Epic review failed: {str(e)}",
+                context={"error": str(e), "correlation_id": self.correlation_id}
             )
             raise
     
