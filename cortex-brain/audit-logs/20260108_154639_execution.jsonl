@@ -1,0 +1,1 @@
+{"timestamp": "2026-01-08T15:46:39.516213", "level": "info", "category": "execution", "component": "todo_lifecycle_manager", "operation": "lifecycle_manager_initialized", "message": "TodoLifecycleManager initialized", "context": {"correlation_id": "FEAT02-P4-LIFECYCLE-20260108154639516193"}, "metadata": {}, "correlation_id": "CORTEX-0DFD9A923162", "duration_ms": null}
