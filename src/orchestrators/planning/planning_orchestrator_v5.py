@@ -47,9 +47,9 @@ from src.orchestrators.planning.acceptance_validator import (
 )
 # CORTEX v5.0 Epic P03: TodoManager Integration
 from src.orchestrators.master.todo_manager import TodoManager, Task, TaskStatus
-# CORTEX5 Phase 1: Knowledge Extension Layer
-from src.knowledge.company_knowledge_provider import CompanyKnowledgeProvider
-from src.knowledge.knowledge_merger import KnowledgeMerger
+# CORTEX5 Phase 1: Knowledge Extension Layer (TODO: feat03-governance)
+# from src.knowledge.company_knowledge_provider import CompanyKnowledgeProvider
+# from src.knowledge.knowledge_merger import KnowledgeMerger
 
 
 class PlanningOrchestratorV5(BaseOrchestratorV4_1):
