@@ -13,8 +13,21 @@ from .intelligence_middleware import (
     IntelligenceRule
 )
 
+from .mistake_prevention import (
+    MistakePreventionEngine,
+    PreventionRule,
+    PreventionResult,
+    OrchestrationIntent,
+    MistakeType
+)
+
 __all__ = [
     "IntelligenceMiddleware",
     "ValidationResult",
-    "IntelligenceRule"
+    "IntelligenceRule",
+    "MistakePreventionEngine",
+    "PreventionRule",
+    "PreventionResult",
+    "OrchestrationIntent",
+    "MistakeType"
 ]
