@@ -214,15 +214,30 @@ routing_rules:
       autonomous: true
       version: "1.0"
   
-  # Maintenance - DISABLED: orchestrator not yet registered
-  # - pattern: "^(maintenance|health check|system health).*$"
-  #   orchestrator: "maintenance_orchestrator"
-  #   confidence: 1.0
-  #   match_type: "regex"
-  #   priority: 50
-  #   metadata:
-  #     description: "System maintenance and health checks"
-  #     autonomous: false
+  # Maintenance Orchestrator v2 - Autonomous 12-Phase Health Pipeline
+  # Re-enabled: January 8, 2026 - Routing via MasterOrchestrator
+  - pattern: "^(maintenance|system maintenance|health check|system health).*$"
+    orchestrator: "maintenance_orchestrator_v2"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 50
+    metadata:
+      description: "Autonomous 12-phase health pipeline for CORTEX system maintenance"
+      autonomous: true
+      version: "2.0"
+      phases:
+        - "Cache cleanup"
+        - "Log rotation"
+        - "Dead code removal"
+        - "Dependency audit"
+        - "Security scan"
+        - "Performance profiling"
+        - "Database optimization"
+        - "Test suite health"
+        - "Documentation validation"
+        - "Git integrity"
+        - "Audit log analysis"
+        - "Metrics dashboard update"
   
   # Cleanup v2 (Selective Modes)
   - pattern: "^(cleanup|cleanup cache|cleanup logs|cleanup artifacts|cleanup full|cleanup git).*$"
