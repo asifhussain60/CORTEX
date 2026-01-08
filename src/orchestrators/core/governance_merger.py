@@ -173,6 +173,8 @@ class GovernanceMerger:
         governance_root: Optional[Path] = None,
         audit_logger: Optional[EnterpriseAuditLogger] = None,
         enable_cache: bool = True,
+        state_manager: Optional[Any] = None,
+        workspace_root: Optional[str] = None,
     ):
         """
         Initialize governance merger.
@@ -181,15 +183,23 @@ class GovernanceMerger:
             governance_root: Root directory for governance files
             audit_logger: Optional audit logger instance
             enable_cache: Enable rule caching for performance
+            state_manager: Optional state manager (for feat04 integration)
+            workspace_root: Optional workspace root (for feat04 integration)
         """
         if governance_root is None:
-            # Default to cortex-brain in project root
-            # Navigate up from this file to project root
-            governance_root = Path(__file__).parent.parent.parent.parent / "cortex-brain"
+            # If workspace_root provided, use that as base
+            if workspace_root:
+                governance_root = Path(workspace_root) / "cortex-brain"
+            else:
+                # Default to cortex-brain in project root
+                # Navigate up from this file to project root
+                governance_root = Path(__file__).parent.parent.parent.parent / "cortex-brain"
 
         self.governance_root = Path(governance_root)
         self.audit_logger = audit_logger or EnterpriseAuditLogger()
         self.enable_cache = enable_cache
+        self.state_manager = state_manager
+        self.workspace_root = workspace_root
 
         self.core_rules: List[GovernanceRule] = []
         self.business_rules: List[GovernanceRule] = []

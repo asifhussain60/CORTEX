@@ -331,6 +331,8 @@ class TodoOrchestrator:
         audit_logger: Optional[EnterpriseAuditLogger] = None,
         name: str = "cortex-todo-orchestrator",
         auto_checkpoint_interval: Optional[int] = None,
+        workspace_root: Optional[Path] = None,
+        governance_merger: Optional[Any] = None,
     ):
         """
         Initialize TODO Orchestrator.
@@ -340,10 +342,14 @@ class TodoOrchestrator:
             audit_logger: Optional audit logger (creates new if None)
             name: Name for this orchestrator instance
             auto_checkpoint_interval: Auto-checkpoint every N operations (None = disabled)
+            workspace_root: Root directory of workspace (for feat04 integration)
+            governance_merger: Optional GovernanceMerger for rule enforcement
         """
         self.name = name
         self.state_manager = state_manager
         self.audit_logger = audit_logger or EnterpriseAuditLogger()
+        self.workspace_root = workspace_root or Path.cwd()
+        self.governance_merger = governance_merger
         
         # Core state
         self.todos: Dict[str, Todo] = {}
@@ -1395,6 +1401,7 @@ class TodoOrchestrator:
             task_deps: List of task IDs
             task_mapping: Mapping of task IDs to TODO IDs
             
+            
         Returns:
             List of TODO IDs
         """
@@ -1403,3 +1410,139 @@ class TodoOrchestrator:
             if task_id in task_mapping:
                 resolved.append(task_mapping[task_id])
         return resolved
+    
+    # ==========================================================================
+    # FEAT04 PHASE 2: INTEGRATION METHODS
+    # ==========================================================================
+    
+    def create_todos_from_plan(self, plan_data: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """
+        Create TODOs from a plan specification.
+        
+        This is a simplified implementation for feat04 Phase 2 integration.
+        Full implementation with governance integration TBD in CORTEX 6.1.
+        
+        Args:
+            plan_data: Plan specification with phases and tasks
+            
+        Returns:
+            List of created TODO dictionaries
+        """
+        todos = []
+        
+        phases = plan_data.get("phases", [])
+        for phase in phases:
+            phase_id = phase.get("id")
+            phase_name = phase.get("name", f"Phase {phase_id}")
+            tasks = phase.get("tasks", [])
+            
+            for task in tasks:
+                task_id = task.get("id")
+                task_name = task.get("name", f"Task {task_id}")
+                dependencies = task.get("dependencies", [])
+                
+                # Create TODO
+                todo_id = self.create_todo(
+                    title=f"[{phase_name}] {task_name}",
+                    description=task.get("description", ""),
+                    priority=Priority.P2_MEDIUM,
+                    tags={f"phase-{phase_id}", "from-plan"},
+                    metadata={"task_id": task_id, "phase_id": phase_id}
+                )
+                
+                # Store task_id -> todo_id mapping for dependencies
+                if not hasattr(self, '_task_id_mapping'):
+                    self._task_id_mapping = {}
+                self._task_id_mapping[task_id] = todo_id
+                
+                todos.append({
+                    "todo_id": todo_id,
+                    "task_id": task_id,
+                    "phase_id": phase_id,
+                    "status": "NOT_STARTED"
+                })
+        
+        # Add dependencies after all TODOs created
+        for phase in phases:
+            for task in phase.get("tasks", []):
+                task_id = task.get("id")
+                dependencies = task.get("dependencies", [])
+                
+                if task_id in self._task_id_mapping and dependencies:
+                    todo_id = self._task_id_mapping[task_id]
+                    
+                    for dep_task_id in dependencies:
+                        if dep_task_id in self._task_id_mapping:
+                            dep_todo_id = self._task_id_mapping[dep_task_id]
+                            self.add_dependency(todo_id, dep_todo_id)
+        
+        return todos
+    
+    def mark_task_completed(self, task_id: str, result: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Mark a task as completed.
+        
+        Args:
+            task_id: Task identifier (can be TODO ID or task_id from plan)
+            result: Completion result data
+            
+        Returns:
+            Result dictionary with success status
+        """
+        # Resolve task_id to todo_id if needed
+        todo_id = task_id
+        if hasattr(self, '_task_id_mapping') and task_id in self._task_id_mapping:
+            todo_id = self._task_id_mapping[task_id]
+        
+        # Check if TODO exists
+        if todo_id not in self.todos:
+            raise ValueError(f"Task {task_id} not found")
+        
+        # Transition to completed
+        self.transition_status(todo_id, TodoStatus.COMPLETED)
+        
+        # Store result in metadata
+        todo = self.todos[todo_id]
+        todo.metadata["completion_result"] = result
+        
+        return {
+            "success": True,
+            "task_id": task_id,
+            "todo_id": todo_id,
+            "status": "COMPLETED",
+            "result": result
+        }
+    
+    def get_task_status(self, task_id: str) -> Dict[str, Any]:
+        """
+        Get status of a task.
+        
+        Args:
+            task_id: Task identifier (can be TODO ID or task_id from plan)
+            
+        Returns:
+            Status dictionary
+        """
+        # Resolve task_id to todo_id if needed
+        todo_id = task_id
+        if hasattr(self, '_task_id_mapping') and task_id in self._task_id_mapping:
+            todo_id = self._task_id_mapping[task_id]
+        
+        # Check if TODO exists
+        if todo_id not in self.todos:
+            raise ValueError(f"Task {task_id} not found")
+        
+        todo = self.todos[todo_id]
+        
+        return {
+            "task_id": task_id,
+            "todo_id": todo_id,
+            "status": todo.status.value,
+            "title": todo.title,
+            "description": todo.description,
+            "priority": todo.priority.value,
+            "created_at": todo.created_at.isoformat(),
+            "updated_at": todo.updated_at.isoformat(),
+            "metadata": todo.metadata
+        }
+
