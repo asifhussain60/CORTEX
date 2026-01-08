@@ -1,0 +1,69 @@
+feature_id: feat03
+feature_name: 4-Category Governance System
+description: 'Implements the intelligent 4-category governance merger that combines:
+
+  1. CORTEX Tier 0 (Core brain protection rules)
+
+  2. Business Tier 0 (Company compliance rules)
+
+  3. Company Best Practices (Engineering standards)
+
+  4. Knowledge Best Practices (Learned patterns)
+
+
+  Produces a Unified Instruction Set that drives TODO generation.
+
+  '
+created_date: '2026-01-08T14:30:04.270420'
+requirements:
+- requirement_id: REQ-001
+  description: SKULL Rules Migration
+  acceptance_criteria:
+  - Extract 61 SKULL rules from brain-protection-rules.yaml
+  - Create CORE-001 to CORE-061 mapping
+  - Create cortex-brain/tier0/governance/core-rules.yaml
+  - Add deprecation header to brain-protection-rules.yaml
+  priority: P0_CRITICAL
+  status: NOT_STARTED
+  category: TECHNICAL
+  feature_id: feat03
+  dependencies: []
+  estimated_hours: 12
+- requirement_id: REQ-002
+  description: Governance Merger Implementation
+  acceptance_criteria:
+  - Write failing governance merger tests
+  - Implement rule loading from all 4 categories
+  - Implement conflict detection algorithm
+  - Implement conflict resolution strategies
+  - Implement Unified Instruction Set generation
+  priority: P0_CRITICAL
+  status: NOT_STARTED
+  category: TECHNICAL
+  feature_id: feat03
+  dependencies: []
+  estimated_hours: 20
+- requirement_id: REQ-003
+  description: Caching & Performance
+  acceptance_criteria:
+  - Implement governance rule caching
+  - Implement cache invalidation
+  - Performance testing (<50ms merge)
+  priority: P0_CRITICAL
+  status: NOT_STARTED
+  category: TECHNICAL
+  feature_id: feat03
+  dependencies: []
+  estimated_hours: 8
+- requirement_id: REQ-004
+  description: Integration & Validation
+  acceptance_criteria:
+  - Integration test with TODO Orchestrator
+  - Audit log trace validation
+  - Documentation
+  priority: P0_CRITICAL
+  status: NOT_STARTED
+  category: TECHNICAL
+  feature_id: feat03
+  dependencies: []
+  estimated_hours: 8
