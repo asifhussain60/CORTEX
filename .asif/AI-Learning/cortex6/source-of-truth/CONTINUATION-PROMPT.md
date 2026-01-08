@@ -1,19 +1,46 @@
 # CORTEX 6.0 Build - Session Continuation
 
-**Current Position:** feat03-governance COMPLETED ✅  
-**Completed:** 56 tasks | **Status:** ✅ Phase 4 complete | **Last:** task-3.4.3  
-**Next Feature:** feat04-core-orchestration
+**Current Position:** feat04-core-orchestration Phase 1 Task 1.2 COMPLETED ✅  
+**Completed:** 58 tasks | **Status:** ✅ Next: Task 1.3 | **Last:** task-1.2-user-mistake-prevention  
+**Next Feature:** feat04-core-orchestration (in progress)
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Quick Start - AUTONOMOUS MODE
+
+### Option 1: Autonomous Execution (Recommended)
+
+```bash
+# Execute next task autonomously
+python3 .asif/AI-Learning/cortex6/source-of-truth/epic-executor.py
+
+# Execute multiple tasks
+python3 .asif/AI-Learning/cortex6/source-of-truth/epic-executor.py --tasks 5
+
+# Fully autonomous (no prompts)
+python3 .asif/AI-Learning/cortex6/source-of-truth/epic-executor.py --tasks 0 --auto
+```
+
+### Option 2: Manual Execution (Fallback)
 
 1. **Load State:** Read `.asif/AI-Learning/cortex6/source-of-truth/todo/00-TODO-CONTINUITY-TRACKER.yaml`
 2. **Find Position:** Check `current_position` section
-3. **Next Feature:** Load `features/feat04-core-orchestration/` (if exists) or `feat03-to-feat08/features-summary.yaml`
+3. **Next Feature:** Load `features/feat04-core-orchestration/` or `feat03-to-feat08/features-summary.yaml`
 4. **Execute Task:** Follow task instructions
 5. **Update Tracker:** Mark COMPLETED, update current_position
 6. **Update This File:** Run `python3 update_continuation_prompt.py`
+
+### Via Copilot Chat (Invokes Autonomous Mode)
+
+```
+continue epic
+```
+
+or
+
+```
+continue cortex 6 build
+```
 
 ---
 
