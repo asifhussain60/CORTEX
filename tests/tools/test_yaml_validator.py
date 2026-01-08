@@ -268,3 +268,82 @@ class TestYAMLValidator:
         assert isinstance(formatted, str)
         assert len(formatted) > 0
         assert "description" in formatted.lower()
+    
+    def test_schema_caching_works(self, validator, tmp_path):
+        """Test that schema caching is functional."""
+        # Clear global cache
+        YAMLValidator.clear_cache()
+        
+        # Verify cache is empty
+        cache_key = (str(validator.schema_dir), SchemaType.FEATURE)
+        assert cache_key not in YAMLValidator._global_schema_cache
+        
+        # Load schema - should populate cache
+        schema1 = validator.load_schema(SchemaType.FEATURE)
+        assert cache_key in YAMLValidator._global_schema_cache
+        
+        # Load again - should use cache (returns deep copy, not same object)
+        schema2 = validator.load_schema(SchemaType.FEATURE)
+        assert schema1 == schema2  # Same content
+        assert schema1 is not schema2  # Different objects (deep copy protection)
+        
+        # Verify cache protection: mutating returned schema doesn't affect cache
+        schema2["test_mutation"] = "should_not_affect_cache"
+        schema3 = validator.load_schema(SchemaType.FEATURE)
+        assert "test_mutation" not in schema3  # Cache remains pristine
+        
+        # Create new validator instance with SAME schema_dir - should use global cache
+        validator2 = YAMLValidator(validator.schema_dir)
+        schema4 = validator2.load_schema(SchemaType.FEATURE)
+        
+        # Content should match original, no mutations
+        assert schema4 == schema1
+        assert "test_mutation" not in schema4
+        
+        # Verify cache stores original unmutated schema
+        cached_schema = YAMLValidator._global_schema_cache[cache_key]
+        assert "test_mutation" not in cached_schema
+
+    
+    def test_clear_cache(self, validator, tmp_path):
+        """Test cache clearing functionality."""
+        # Load schema into cache
+        schema1 = validator.load_schema(SchemaType.FEATURE)
+        assert SchemaType.FEATURE in validator._schemas
+        
+        # Verify global cache has entry
+        cache_key = (str(validator.schema_dir), SchemaType.FEATURE)
+        assert cache_key in YAMLValidator._global_schema_cache
+        
+        # Clear cache
+        YAMLValidator.clear_cache()
+        
+        # Global cache should be empty
+        assert cache_key not in YAMLValidator._global_schema_cache
+        
+        # But instance cache should still work
+        schema2 = validator.load_schema(SchemaType.FEATURE)
+        assert schema2 == schema1  # Instance cache still has it
+    
+    def test_cache_shared_across_instances(self, tmp_path):
+        """Test that cache is shared across validator instances."""
+        # Create two separate validators
+        validator1 = YAMLValidator()
+        validator2 = YAMLValidator()
+        
+        # Clear cache
+        YAMLValidator.clear_cache()
+        
+        # First validator loads schema
+        schema1 = validator1.load_schema(SchemaType.FEATURE)
+        
+        # Second validator should get cached version (no disk read)
+        cache_key = (str(validator2.schema_dir), SchemaType.FEATURE)
+        assert cache_key in YAMLValidator._global_schema_cache
+        
+        schema2 = validator2.load_schema(SchemaType.FEATURE)
+        
+        # Both should have same content but be different objects (deep copy protection)
+        assert schema1 == schema2
+        assert schema1 is not schema2
+
