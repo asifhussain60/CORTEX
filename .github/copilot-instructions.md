@@ -39,7 +39,6 @@ All command routing is defined in `CORTEX.prompt.md`. Key orchestrators:
 | `sanitize`, `anonymize` | Sanitization v2 → PII/secret removal | 🛡️ AUTONOMOUS |
 | `maintenance`, `system maintenance` | Maintenance v2 → 12-phase health pipeline | 🛡️ AUTONOMOUS |
 | `refine`, `improve` | Refinement v2 → 7-phase code improvement | 🛡️ AUTONOMOUS |
-| `debug`, `fix bug` | Debug v2 → Autonomous debugging | 🛡️ AUTONOMOUS |
 | **Image attachments** | **Vision API → Auto-analysis** | Auto-trigger |
 
 **Orchestrator Architecture:**

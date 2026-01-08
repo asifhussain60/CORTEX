@@ -53,9 +53,8 @@
 | `^(investigate\|find root cause\|why is\|debug architecture\|fix brittleness)` | **Investigation** | 60 | autonomous |
 | `^(holistic review\|review holistically\|architectural review)` | **Holistic Review** | 5 | auto-trigger |
 | `^(tdd\|start tdd\|run tests\|test driven)` | **TDD v2** | 20 | autonomous |
-| `^(debug\|fix bug\|troubleshoot)` | **Debug v2** | 61 | autonomous |
 | `^(refine\|improve\|optimize)` | **Refinement v2** | 60 | autonomous |
-| `^(system maintenance\|health check)` | **Maintenance v2** | 50 | autonomous |
+| `^(maintenance\|system maintenance)` | **Maintenance v2** | 50 | autonomous |
 
 **⚡ Philosophy:** CORTEX is built for **Python-based orchestration via terminal invocation**. GitHub Copilot routes via `run_in_terminal`. Python orchestrators execute.
 
