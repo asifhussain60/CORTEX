@@ -29,6 +29,10 @@ class OrchestratorCategory(Enum):
     INVESTIGATION = "investigation"
     OPTIMIZATION = "optimization"
     DEPLOYMENT = "deployment"
+    INTEGRATION = "integration"  # For ADO, external systems
+    ANALYSIS = "analysis"  # For investigation, log analysis
+    SECURITY = "security"  # For sanitization, security checks
+    WORKFLOW = "workflow"  # For TODO, task orchestration
 
 
 @dataclass
