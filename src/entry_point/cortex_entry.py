@@ -159,4 +159,74 @@ class CortexEntry:
             capabilities=["cleanup", "duplicate_detection", "file_organization"]
         )
         
+        # Maintenance v2
+        self.registry.register(
+            id="maintenance_v2",
+            name="Maintenance Orchestrator v2",
+            version="2.0.0",
+            type=OrchestratorType.AUTONOMOUS,
+            category=OrchestratorCategory.MAINTENANCE,
+            class_name="MaintenanceOrchestratorV2",
+            module_path="src.orchestrators.maintenance.maintenance_orchestrator_v2",
+            manifest_path="cortex-brain/manifests/orchestrators/maintenance-orchestrator-v2.yaml",
+            patterns=[r"^(maintenance|system maintenance|run maintenance).*$"],
+            capabilities=["health_monitoring", "dependency_updates", "security_scan", "performance_optimization"]
+        )
+        
+        # ADO v2
+        self.registry.register(
+            id="ado_v2",
+            name="ADO Orchestrator v2",
+            version="2.0.0",
+            type=OrchestratorType.AUTONOMOUS,
+            category=OrchestratorCategory.INTEGRATION,
+            class_name="ADOOrchestratorV2",
+            module_path="src.orchestrators.ado.ado_orchestrator_v2",
+            manifest_path="cortex-brain/manifests/orchestrators/ado-orchestrator-v2.yaml",
+            patterns=[r"^(ado|ado story|ado feature|create ado|azure devops).*$"],
+            capabilities=["work_item_creation", "user_story_generation", "feature_creation", "epic_linking"]
+        )
+        
+        # Investigation v2
+        self.registry.register(
+            id="investigation_v2",
+            name="Investigation Orchestrator v2",
+            version="2.0.0",
+            type=OrchestratorType.AUTONOMOUS,
+            category=OrchestratorCategory.ANALYSIS,
+            class_name="InvestigationOrchestratorV2",
+            module_path="src.orchestrators.investigation.investigation_orchestrator_v2",
+            manifest_path="cortex-brain/manifests/orchestrators/investigation-orchestrator-v2.yaml",
+            patterns=[r"^(investigate|investigation|find root cause|analyze error|debug issue).*$"],
+            capabilities=["log_analysis", "error_detection", "dependency_analysis", "root_cause_analysis"]
+        )
+        
+        # Sanitization v2
+        self.registry.register(
+            id="sanitization_v2",
+            name="Sanitization Orchestrator v2",
+            version="2.0.0",
+            type=OrchestratorType.AUTONOMOUS,
+            category=OrchestratorCategory.SECURITY,
+            class_name="SanitizationOrchestratorV2",
+            module_path="src.orchestrators.sanitization.sanitization_orchestrator_v2",
+            manifest_path="cortex-brain/manifests/orchestrators/sanitization-orchestrator-v2.yaml",
+            patterns=[r"^(sanitize|sanitization|remove pii|remove secrets|anonymize).*$"],
+            capabilities=["pii_removal", "secret_detection", "data_anonymization", "compliance_validation"]
+        )
+        
+        # TODO Orchestrator (DAG-based task management)
+        self.registry.register(
+            id="todo_orchestrator",
+            name="TODO Orchestrator",
+            version="6.0.0",
+            type=OrchestratorType.AUTONOMOUS,
+            category=OrchestratorCategory.WORKFLOW,
+            class_name="TodoOrchestrator",
+            module_path="src.orchestrators.core.todo_orchestrator",
+            manifest_path="cortex-brain/manifests/orchestrators/todo-orchestrator.yaml",
+            patterns=[r"^(todo|manage todos|task management|dag|dependencies).*$"],
+            capabilities=["dag_management", "dependency_tracking", "task_parallelization", "checkpoint_recovery"]
+        )
+        
         self.logger.info("Registered core orchestrators")

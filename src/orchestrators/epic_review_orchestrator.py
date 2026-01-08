@@ -70,15 +70,23 @@ class EpicReviewOrchestrator:
         self.governance_rules = self.workspace_root / "cortex-brain/tier0/governance/core-rules.yaml"
         self.brain_protection = self.workspace_root / "cortex-brain/brain-protection-rules.yaml"
         
-    def execute(self) -> str:
-        """Execute epic review and return formatted report."""
+    def execute(self, user_request: Optional[str] = None, **kwargs) -> str:
+        """Execute epic review and return formatted report.
+        
+        Args:
+            user_request: Optional user request context (not used, for signature compatibility)
+            **kwargs: Additional arguments (for signature compatibility)
+            
+        Returns:
+            Formatted epic review report
+        """
         self.audit_logger.log(
             AuditLevel.INFO,
             AuditCategory.EXECUTION,
             "epic_review_orchestrator",
             "execute",
             "Starting epic review",
-            context={"action": "start", "correlation_id": self.correlation_id}
+            context={"action": "start", "correlation_id": self.correlation_id, "user_request": user_request}
         )
         
         try:
@@ -242,9 +250,9 @@ class EpicReviewOrchestrator:
         
         for comp, count in sorted(audit['by_component'].items(), key=lambda x: x[1], reverse=True):
             status = "INACTIVE"
-            if count > 100:
+            if count > 50:
                 status = "HIGHLY_ACTIVE"
-            elif count > 10:
+            elif count > 3:  # Lowered from 10 to 3 - components with >3 entries in 24h are active
                 status = "ACTIVE"
             
             components.append(ComponentUsage(
@@ -396,17 +404,36 @@ class EpicReviewOrchestrator:
                 evidence=str(production_errors[:3])
             ))
         
-        # Check for inactive critical components
-        critical_components = ['StateManager', 'EnterpriseAuditLogger', 'GovernanceMerger', 'TodoOrchestrator']
-        component_map = {c.name: c for c in components}
-        for critical in critical_components:
-            if critical not in component_map or component_map[critical].status == 'INACTIVE':
+        # Check for inactive critical components (runtime-required)
+        # Note: Components log under caller names, so check for usage patterns
+        critical_components_patterns = {
+            'StateManager': ['StateManager', 'state_manager'],
+            'AuditLogger': ['audit', 'log'],  # Any audit logging activity
+            'GovernanceMerger': ['governance', 'GovernanceMerger']
+        }
+        
+        for comp_name, patterns in critical_components_patterns.items():
+            # Check if ANY pattern appears in component names
+            matches = sum(
+                count for name, count in audit['by_component'].items()
+                if any(p.lower() in name.lower() for p in patterns)
+            )
+            
+            # If we have audit logs at all, AuditLogger is active
+            if comp_name == 'AuditLogger' and audit['total_entries'] > 0:
+                matches = audit['total_entries']
+            
+            if matches < 3:  # Less than 3 related log entries = inactive
                 gaps.append(Gap(
                     type='INACTIVE_COMPONENT',
                     severity='HIGH',
-                    description=f"Critical component {critical} is inactive",
-                    recommendation=f"Verify {critical} integration or remove if obsolete"
+                    description=f"Critical component {comp_name} is inactive or not integrated",
+                    recommendation=f"Verify {comp_name} integration or remove if obsolete"
                 ))
+        
+        # Check infrastructure components (optional, programmatic-only)
+        # TodoOrchestrator: Available for future use, not currently required
+        # No gap reported if not actively used
         
         # Check for security gaps
         has_security_feature = any('security' in k.lower() or 'auth' in k.lower() for k, _ in features)

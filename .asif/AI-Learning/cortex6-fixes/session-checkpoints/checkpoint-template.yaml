@@ -1,0 +1,181 @@
+checkpoint_id: CP-{timestamp}
+plan_id: CORTEX6-REMEDIATION-2026-01-08
+created_at: "{ISO-8601-timestamp}"
+token_usage: "{tokens_used}/1000000"
+trigger: "Automatic at 70% token budget"
+
+# ═══════════════════════════════════════════════════════════════════════════
+# SESSION CONTEXT
+# ═══════════════════════════════════════════════════════════════════════════
+
+session_context:
+  session_id: "{session_id}"
+  started_at: "{session_start_timestamp}"
+  duration_minutes: {duration}
+  
+  current_phase:
+    phase_id: "{phase_id}"
+    phase_name: "{phase_name}"
+    phase_status: "IN_PROGRESS"
+    phase_progress: "{completed_tasks}/{total_tasks} tasks ({percentage}%)"
+  
+  current_task:
+    task_id: "{current_task_id}"
+    task_name: "{task_name}"
+    task_status: "IN_PROGRESS"
+    started_at: "{task_start_timestamp}"
+    estimated_hours: {hours}
+    elapsed_hours: {elapsed}
+  
+  last_completed:
+    task_id: "{last_completed_task_id}"
+    task_name: "{last_completed_task_name}"
+    completed_at: "{completion_timestamp}"
+    deliverables: [...]
+    validation_status: "PASSED/FAILED"
+
+# ═══════════════════════════════════════════════════════════════════════════
+# PROGRESS METRICS
+# ═══════════════════════════════════════════════════════════════════════════
+
+progress_metrics:
+  overall:
+    phases_completed: {count}
+    phases_total: 7
+    tasks_completed: {count}
+    tasks_total: {count}
+    overall_progress: {percentage}%
+  
+  phase_breakdown:
+    - phase_id: P0
+      status: "{status}"
+      tasks_completed: {count}
+      tasks_total: {count}
+    - phase_id: P1
+      status: "{status}"
+      tasks_completed: {count}
+      tasks_total: {count}
+    # ... (repeat for all phases)
+  
+  health_metrics:
+    health_score: {score}/100
+    test_coverage: {percentage}%
+    tests_passing: {count}/{total}
+    critical_blockers: {count}
+    high_priority_items: {count}
+
+# ═══════════════════════════════════════════════════════════════════════════
+# WORK STATE
+# ═══════════════════════════════════════════════════════════════════════════
+
+work_state:
+  modified_files:
+    - path: "{file_path}"
+      changes: "{description}"
+      status: "modified/created/deleted"
+      committed: true/false
+  
+  test_status:
+    last_run: "{timestamp}"
+    result: "passing/failing"
+    tests_total: {count}
+    tests_passing: {count}
+    tests_skipped: {count}
+    tests_failed: {count}
+    failed_tests: [...]
+  
+  uncommitted_changes:
+    count: {count}
+    files: [...]
+    recommended_action: "commit/stash/review"
+  
+  audit_logs:
+    recent_errors: {count}
+    recent_warnings: {count}
+    recent_entries: {count}
+    concerning_patterns: [...]
+
+# ═══════════════════════════════════════════════════════════════════════════
+# VALIDATION STATUS
+# ═══════════════════════════════════════════════════════════════════════════
+
+validation_status:
+  acceptance_criteria:
+    - criterion: "{description}"
+      status: "PASSED/FAILED/PENDING"
+      evidence: "{evidence}"
+  
+  validation_gates:
+    - gate_id: "{gate_id}"
+      name: "{gate_name}"
+      status: "PASSED/FAILED/PENDING"
+      last_check: "{timestamp}"
+
+# ═══════════════════════════════════════════════════════════════════════════
+# NEXT STEPS
+# ═══════════════════════════════════════════════════════════════════════════
+
+next_steps:
+  immediate_next_task:
+    task_id: "{next_task_id}"
+    task_name: "{task_name}"
+    phase_id: "{phase_id}"
+    estimated_hours: {hours}
+    dependencies: [...]
+    dependencies_satisfied: true/false
+    ready_to_execute: true/false
+  
+  upcoming_tasks:
+    - task_id: "{task_id}"
+      task_name: "{task_name}"
+      sequence: {order}
+      estimated_hours: {hours}
+  
+  blocked_tasks:
+    - task_id: "{task_id}"
+      task_name: "{task_name}"
+      blocking_dependency: "{dependency}"
+      resolution_plan: "{plan}"
+
+# ═══════════════════════════════════════════════════════════════════════════
+# CONTINUATION
+# ═══════════════════════════════════════════════════════════════════════════
+
+continuation:
+  command: "continue CORTEX6-REMEDIATION-2026-01-08 from {last_task_id} - resume {phase_id}"
+  
+  alternative_commands:
+    - "continue cortex6-fixes from {last_task_id}"
+    - "resume {phase_id}"
+    - "pick up where we left off on cortex6-fixes"
+  
+  context_files_to_review:
+    - "cortex6-fixes/00-CURRENT-STATUS.md"
+    - "cortex6-fixes/{phase_id}.yaml"
+    - "cortex6-fixes/00-REMEDIATION-MASTER-PLAN.yaml"
+  
+  critical_context:
+    - "{critical_point_1}"
+    - "{critical_point_2}"
+    - "{critical_point_3}"
+  
+  user_notes: |
+    {Any user-specific notes or preferences discovered during session}
+
+# ═══════════════════════════════════════════════════════════════════════════
+# METADATA
+# ═══════════════════════════════════════════════════════════════════════════
+
+metadata:
+  copilot_version: "{version}"
+  workspace_root: "{path}"
+  git_branch: "{branch}"
+  git_commit: "{commit_hash}"
+  
+  checkpoint_quality:
+    completeness: "{HIGH/MEDIUM/LOW}"
+    context_preservation: "{EXCELLENT/GOOD/PARTIAL}"
+    resume_readiness: "{READY/NEEDS_REVIEW}"
+  
+  notes: |
+    {Any additional notes about the checkpoint or session state}
