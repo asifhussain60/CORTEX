@@ -143,11 +143,13 @@ self_healing_protocol:
 current_position:
   feature: "feat04-core-orchestration"
   phase: 1
-  task: "1.3"
+  task: "1.4"
   status: "COMPLETED"
   tdd_phase: "REFACTOR_COMPLETE"
-  last_completed: "task-1.3-yaml-first-enforcement"
-  completed_count: 59
+  last_completed: "task-1.4-orchestrator-lifecycle-management"
+  completed_count: 60
+  task_1_4_completed_at: "2026-01-08T06:00:00Z"
+  task_1_4_tests_passing: "27/27"
   task_1_3_completed_at: "2026-01-08T05:30:00Z"
   task_1_3_tests_passing: "16/16"
   task_1_2_completed_at: "2026-01-08T05:00:00Z"
@@ -1233,7 +1235,7 @@ feat04_core_orchestration:
   feature_name: "Core Orchestration Layer"
   status: IN_PROGRESS
   started_at: "2026-01-08T03:40:00Z"
-  progress: 25  # Tasks 1.1, 1.2, 1.3 complete (~25% of phase 1)
+  progress: 33  # Phase 1 complete (4/4 tasks = 33% of total feature)
   estimated_days: 12
   dependencies: ["feat02-todo-orchestrator", "feat03-governance"]
   executor: "CORTEX"
@@ -1273,6 +1275,24 @@ feat04_core_orchestration:
         - "tests/unit/test_yaml_first_enforcement.py"
       tests_passing: "16/16"
       tdd_phases: "RED → GREEN → REFACTOR"
+    
+    - id: "1.4"
+      name: "Orchestrator Lifecycle Management"
+      completed_at: "2026-01-08T06:00:00Z"
+      estimated_hours: 6
+      actual_hours: 0.83  # 50 minutes
+      deliverables:
+        - "src/orchestrators/middleware/orchestrator_lifecycle.py"
+        - "tests/unit/test_orchestrator_lifecycle.py"
+      tests_passing: "27/27"
+      tdd_phases: "RED → GREEN → REFACTOR"
+      features:
+        - "6 lifecycle states (INITIALIZED, READY, RUNNING, PAUSED, STOPPED, ERROR)"
+        - "State transition validation"
+        - "Health checks with HEALTHY/DEGRADED/UNHEALTHY status"
+        - "Callback system for state changes and errors"
+        - "History tracking with timestamps"
+        - "Audit logging integration"
   
 feat05_resilience:
   feature_id: "feat05-resilience"
