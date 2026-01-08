@@ -186,41 +186,46 @@ def _handle_phase8_operation(message: str, entry, args) -> str:
     
     Returns:
         Formatted response
+    
+    Note: Temporarily disabled - Phase8OperationHandler not yet implemented
     """
-    from src.orchestrators.phase8_operation_handler import Phase8OperationHandler
+    # TODO: Re-enable when Phase8OperationHandler is implemented
+    # from src.orchestrators.phase8_operation_handler import Phase8OperationHandler
     
-    # Determine brain path - try multiple sources
-    if args.brain:
-        brain_path = Path(args.brain)
-    elif hasattr(entry, 'config') and hasattr(entry.config, 'brain_path'):
-        brain_path = entry.config.brain_path
-    else:
-        # Fallback: auto-detect from current directory
-        brain_path = Path.cwd() / "cortex-brain"
+    return "[INFO] Phase 8 operations temporarily disabled. Handler not yet implemented."
     
-    # Create handler with minimal dependencies
-    handler = Phase8OperationHandler(brain_path, logger=logging.getLogger(__name__))
-    
-    msg_lower = message.lower().strip()
-    
-    # Build context from CLI args
-    context = {
-        'dry_run': getattr(args, 'dry_run', False),
-        'profile': getattr(args, 'operation_profile', 'standard'),
-        'output_path': getattr(args, 'output', None),
-        'verbose': args.verbose,
-        'format': args.format
-    }
-    
-    # Route to appropriate handler
-    if 'integration-cleanup' in msg_lower or 'integration cleanup' in msg_lower:
-        return handler.handle_integration_cleanup(context)
-    elif 'completion-report' in msg_lower or 'completion report' in msg_lower:
-        return handler.handle_completion_report(context)
-    elif 'phase8-status' in msg_lower or 'phase8 status' in msg_lower or 'phase 8 status' in msg_lower:
-        return handler.handle_phase8_status(context)
-    else:
-        return f"Unknown Phase 8 operation: {message}"
+    # # Determine brain path - try multiple sources
+    # if args.brain:
+    #     brain_path = Path(args.brain)
+    # elif hasattr(entry, 'config') and hasattr(entry.config, 'brain_path'):
+    #     brain_path = entry.config.brain_path
+    # else:
+    #     # Fallback: auto-detect from current directory
+    #     brain_path = Path.cwd() / "cortex-brain"
+    # 
+    # # Create handler with minimal dependencies
+    # handler = Phase8OperationHandler(brain_path, logger=logging.getLogger(__name__))
+    # 
+    # msg_lower = message.lower().strip()
+    # 
+    # # Build context from CLI args
+    # context = {
+    #     'dry_run': getattr(args, 'dry_run', False),
+    #     'profile': getattr(args, 'operation_profile', 'standard'),
+    #     'output_path': getattr(args, 'output', None),
+    #     'verbose': args.verbose,
+    #     'format': args.format
+    # }
+    # 
+    # # Route to appropriate handler
+    # if 'integration-cleanup' in msg_lower or 'integration cleanup' in msg_lower:
+    #     return handler.handle_integration_cleanup(context)
+    # elif 'completion-report' in msg_lower or 'completion report' in msg_lower:
+    #     return handler.handle_completion_report(context)
+    # elif 'phase8-status' in msg_lower or 'phase8 status' in msg_lower or 'phase 8 status' in msg_lower:
+    #     return handler.handle_phase8_status(context)
+    # else:
+    #     return f"Unknown Phase 8 operation: {message}"
 
 
 def main():
