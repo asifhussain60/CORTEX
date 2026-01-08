@@ -6,7 +6,7 @@
 # Version: 6.0.0
 # Created: 2026-01-08
 # 
-# CRITICAL: These are the 17 foundational rules that protect CORTEX's integrity.
+# CRITICAL: These are the 18 foundational rules that protect CORTEX's integrity.
 # They are IMMUTABLE and take precedence over all other governance categories.
 # ==============================================================================
 
@@ -19,8 +19,10 @@ metadata:
   migration_date: "2026-01-08T00:30:00Z"
   source: "cortex-brain/brain-protection-rules.yaml"
   migrated_by: "feat03-governance Phase 1"
-  rule_count: 17
+  rule_count: 18
   deprecated_file: "cortex-brain/brain-protection-rules.yaml"
+  last_updated: "2026-01-08T03:30:00Z"
+  last_updated_by: "feat04-core-orchestration Phase 1"
 
 categories:
   - orchestration_lifecycle    # Rules governing orchestrator execution
@@ -566,6 +568,112 @@ rules:
       - Track violations = true
       - Track overrides = false
 
+  # ==========================================================================
+  # CORE-018: YAML-First Enforcement
+  # ==========================================================================
+  - rule_id: CORE-018
+    original_id: YAML_FIRST_REQUIRED
+    category: architecture_integrity
+    severity: blocked
+    name: YAML-First Design Mandatory
+    description: |
+      ALL orchestrators, plans, and implementations MUST follow YAML-first
+      machine-readable design.
+      
+      Markdown plan files (*-PLAN.md, *-plan.md) are PROHIBITED. All planning
+      and tracking must use YAML files (00-TODO-CONTINUITY-TRACKER.yaml,
+      features-summary.yaml, etc.).
+      
+      Exceptions:
+      - Architecture documentation in cortex-brain/documents/architecture/ (optional)
+      - README.md files for quick-start guides
+      - CONTINUATION-PROMPT.md (auto-generated)
+      
+      VIOLATION EXAMPLES:
+      - feat04-core-orchestration-PLAN.md (should be in tracker YAML)
+      - intelligence-layer-design.md in docs/planning/ (should be YAML or deleted)
+    
+    enforcement:
+      trigger: file_creation
+      action: block_if_markdown_plan_file
+    
+    validation:
+      - No *-PLAN.md or *-plan.md files (use YAML tracker)
+      - No *-design.md files in planning/ (use architecture/ or YAML)
+      - No implementation-*.md files (should be YAML configs)
+      - Exception: architecture/ folder can have .md docs (optional, prefer YAML)
+      - Exception: README.md, CONTINUATION-PROMPT.md (auto-generated)
+    
+    implementation:
+      middleware: src.orchestrators.middleware.yaml_first_validator.YAMLFirstValidator
+      hook: pre_file_creation
+      priority: 3
+      audit_category: GOVERNANCE_VIOLATION
+      git_hook: pre-commit
+    
+    blocklist_patterns:
+      - "*-PLAN.md"
+      - "*-plan.md"
+      - "*-implementation-plan.md"
+      - "cortex-brain/documents/planning/**/*-design.md"
+      - "cortex-brain/documents/planning/**/*-architecture.md"
+    
+    allowlist_patterns:
+      - "README.md"
+      - "CONTINUATION-PROMPT.md"
+      - "cortex-brain/documents/architecture/**/*.md"
+      - "**/reports/*.md"  # Completion reports in plan folders OK
+      - "**/analysis/*.md"  # Analysis docs in plan folders OK
+    
+    examples:
+      pass:
+        - "Updated 00-TODO-CONTINUITY-TRACKER.yaml with feat04 tasks"
+        - "Created cortex-brain/config/intelligence-rules.yaml"
+        - "Created cortex-brain/documents/architecture/intelligence-layer.md (optional)"
+        - "Created tests/unit/test_intelligence_middleware.py"
+      fail:
+        - "Created cortex-brain/documents/planning/feat04-core-orchestration-PLAN.md"
+        - "Created cortex-brain/documents/architecture/intelligence-layer-design.md (wrong location)"
+        - "Created feat04-implementation-plan.md"
+    
+    audit_logging:
+      on_violation: true
+      severity: ERROR
+      correlation_prefix: "YAML-FIRST-VIOLATION"
+      message_template: "Blocked {file_path}: YAML-first violation - use YAML for plans/configs"
+    
+    git_hook_enforcement:
+      enabled: true
+      hook_type: "pre-commit"
+      reject_commit_if_violated: true
+      error_message: |
+        ❌ YAML-FIRST VIOLATION DETECTED
+        
+        The following files violate YAML-first principle:
+        {violated_files}
+        
+        ✅ CORRECT APPROACH:
+        - Use 00-TODO-CONTINUITY-TRACKER.yaml for task tracking
+        - Use YAML configs for orchestrator rules/settings
+        - Architecture docs (optional) go in cortex-brain/documents/architecture/
+        
+        ❌ Delete these files or move to correct location before committing.
+    
+    rationale: |
+      YAML-first prevents:
+      1. Markdown bloat (verbose text files that duplicate tracker data)
+      2. Parser ambiguity (Markdown requires LLM parsing, YAML is machine-readable)
+      3. Inconsistent planning (some use MD, some use YAML)
+      4. Workspace clutter (unnecessary planning documents)
+      5. Feature drift (implementation diverges from plan when not YAML-driven)
+      
+      Benefits of YAML-first:
+      1. Machine-readable (no LLM parsing needed)
+      2. Validation possible (JSON schema, linters)
+      3. Consistent structure (all plans follow same format)
+      4. Direct execution (YAML → Python execution without translation)
+      5. Token efficiency (compact, no natural language bloat)
+
 # ==============================================================================
 # GOVERNANCE CONFIGURATION
 # ==============================================================================
@@ -596,8 +704,9 @@ migration:
   from_file: "cortex-brain/brain-protection-rules.yaml"
   to_file: "cortex-brain/tier0/governance/core-rules.yaml"
   migration_date: "2026-01-08T00:30:00Z"
-  rules_migrated: 17
-  validation_status: "pending"
+  rules_migrated: 18
+  validation_status: "active"
+  last_enhancement: "2026-01-08T03:30:00Z"
   
   mapping:
     INCREMENTAL_AUTONOMOUS_EXECUTION: CORE-001
@@ -617,3 +726,4 @@ migration:
     PYTHON_IMPORT_ORGANIZATION_REQUIRED: CORE-015
     PYTHON_CODE_FORMATTING_REQUIRED: CORE-016
     GOVERNANCE_ENFORCEMENT: CORE-017
+    YAML_FIRST_REQUIRED: CORE-018  # Added in feat04
