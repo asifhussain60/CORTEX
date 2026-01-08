@@ -371,9 +371,9 @@ rules:
       workspace: Absolute path
       client_id: String (anonymized if needed)
       duration_ms: Integer
-      status: "success" | "failure"
+      status: '"success" | "failure"'
       error: String (if failed)
-      repo_type: "cortex" | "python" | "nodejs" | "generic"
+      repo_type: '"cortex" | "python" | "nodejs" | "generic"'
     
     sensitive_parameter_sanitization:
       - file_path: Replace user home with ~/ (privacy)
@@ -801,7 +801,7 @@ enforcement_summary:
 
 implementation_status:
   phase: P1  # To be implemented in Phase P1 of remediation
-  estimated_effort: 3 hours (P1-T10: MCP tool registration)
+  estimated_effort: "3 hours (P1-T10: MCP tool registration)"
   priority: HIGH
   blocking: false
 

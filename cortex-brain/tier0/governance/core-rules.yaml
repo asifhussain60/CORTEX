@@ -108,10 +108,10 @@ rules:
       action: block_if_summary_file
     
     validation:
-      - No files matching patterns: *-summary.md, *-report.md, *-explanation.md, completion-*.md
-      - No files in root with "summary", "report", "explanation" in name
-      - Exception: Required reports in plan_folder/reports/ (validation-report.md, etc.)
-      - Exception: Required analysis in plan_folder/analysis/ (gap-analysis.md, etc.)
+      - "No files matching patterns: *-summary.md, *-report.md, *-explanation.md, completion-*.md"
+      - "No files in root with 'summary', 'report', 'explanation' in name"
+      - "Exception: Required reports in plan_folder/reports/ (validation-report.md, etc.)"
+      - "Exception: Required analysis in plan_folder/analysis/ (gap-analysis.md, etc.)"
     
     implementation:
       middleware: src.orchestrators.middleware.file_creation_guard.FileCreationGuard

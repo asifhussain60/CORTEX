@@ -56,10 +56,10 @@ rules:
     
     validation:
       - State saved to Tier 1 (working memory) in structured format (YAML/JSON)
-      - State includes: current_phase, completed_tasks, pending_tasks, metrics, context
-      - State file location follows pattern: tier1/{orchestrator-name}/{session-id}/state.yaml
+      - "State includes: current_phase, completed_tasks, pending_tasks, metrics, context"
+      - "State file location follows pattern: tier1/{orchestrator-name}/{session-id}/state.yaml"
       - State includes continuation_prompt for resumption
-      - State is atomic (write to temp → rename to prevent corruption)
+      - State is atomic (write to temp -> rename to prevent corruption)
     
     implementation:
       middleware: src.infrastructure.state_manager.StateManager
@@ -143,7 +143,7 @@ rules:
     rationale: |
       Validation at write-time is 100x cheaper than debugging corrupt data:
       1. Catches errors immediately (clear error context)
-      2. Prevents downstream failures (garbage in → garbage out)
+      2. Prevents downstream failures (garbage in -> garbage out)
       3. Enforces schema compliance automatically
       4. Reduces technical debt accumulation
 
@@ -169,8 +169,8 @@ rules:
     
     validation:
       - Orchestrators categorize exceptions as CRITICAL or NON_CRITICAL
-      - Critical exceptions: Propagated immediately (halt execution)
-      - Non-critical exceptions: Logged with WARNING level, execution continues
+      - "Critical exceptions: Propagated immediately (halt execution)"
+      - "Non-critical exceptions: Logged with WARNING level, execution continues"
       - User notified of degraded functionality (clear message)
       - Degraded mode documented in state (for debugging)
     
@@ -233,8 +233,8 @@ rules:
     
     validation:
       - Retry decorator applied to transient operations
-      - Exponential backoff: wait = base_delay * (2 ** attempt)
-      - Max retries: 3 (default), configurable via config
+      - "Exponential backoff: wait = base_delay * (2 ** attempt)"
+      - "Max retries: 3 (default), configurable via config"
       - Retry only on specific exception types (not all exceptions)
       - Log each retry attempt (for debugging)
     
@@ -253,9 +253,9 @@ rules:
         - "Requirements auditor retries file reads on filesystem lock (exponential backoff)"
         - "MCP tool invocations retry on network timeout (with jitter)"
       fail:
-        - "Git operation fails once → abort (should retry 3x)"
-        - "File read fails on lock → immediate error (should wait + retry)"
-        - "API call fails → no retry (should distinguish transient vs permanent)"
+        - "Git operation fails once -> abort (should retry 3x)"
+        - "File read fails on lock -> immediate error (should wait + retry)"
+        - "API call fails -> no retry (should distinguish transient vs permanent)"
     
     related_rules:
       - "OE-003: Graceful degradation after max retries exhausted"
@@ -276,7 +276,7 @@ rules:
     severity: blocked
     name: All File Writes Must Be Atomic (Temp + Rename)
     description: |
-      File writes MUST use atomic operations (write to temp file → rename) to
+      File writes MUST use atomic operations (write to temp file -> rename) to
       prevent partial writes and file corruption on crashes.
       
       Non-atomic writes risk:
@@ -289,11 +289,11 @@ rules:
       action: block_if_non_atomic
     
     validation:
-      - Write to temporary file: {target_path}.tmp.{random_suffix}
-      - Fsync temp file (flush to disk)
-      - Rename temp → target (atomic operation on POSIX)
-      - Delete temp file on write failure
-      - Use pathlib for cross-platform compatibility
+      - "Write to temporary file: {target_path}.tmp.{random_suffix}"
+      - "Fsync temp file (flush to disk)"
+      - "Rename temp -> target (atomic operation on POSIX)"
+      - "Delete temp file on write failure"
+      - "Use pathlib for cross-platform compatibility"
     
     implementation:
       utility: src.infrastructure.file_utils.atomic_write
@@ -304,9 +304,9 @@ rules:
     
     examples:
       pass:
-        - "State manager writes state.tmp → renames to state.yaml"
-        - "Planning v5 writes master-plan.tmp → renames on success"
-        - "Checkpoint metadata writes CP0.tmp.yaml → renames atomically"
+        - "State manager writes state.tmp -> renames to state.yaml"
+        - "Planning v5 writes master-plan.tmp -> renames on success"
+        - "Checkpoint metadata writes CP0.tmp.yaml -> renames atomically"
       fail:
         - "Direct write to state.yaml (corruption on crash)"
         - "No fsync before rename (data lost on power failure)"
@@ -344,10 +344,10 @@ rules:
     
     validation:
       - Operations check existing state before acting
-      - File creation: Check if file exists first
-      - Task execution: Check if task already completed
-      - Data updates: Use upsert (insert or update, not duplicate insert)
-      - Side effects: Tracked in state to prevent duplication
+      - "File creation: Check if file exists first"
+      - "Task execution: Check if task already completed"
+      - "Data updates: Use upsert (insert or update, not duplicate insert)"
+      - "Side effects: Tracked in state to prevent duplication"
     
     implementation:
       pattern: |
@@ -404,8 +404,8 @@ rules:
     
     validation:
       - Checkpoint created before destructive operation
-      - Checkpoint includes: Original data, operation metadata, timestamp
-      - Checkpoint location: cortex-brain/tier1/rollback/{operation_id}/
+      - "Checkpoint includes: Original data, operation metadata, timestamp"
+      - "Checkpoint location: cortex-brain/tier1/rollback/{operation_id}/"
       - Rollback function implemented and tested
       - Automatic rollback on operation failure
     
@@ -464,8 +464,8 @@ rules:
     
     validation:
       - Progress updates every 5-10 seconds (not too frequent)
-      - Progress includes: Current step, completed/total, ETA
-      - ETA calculated from: average_time_per_unit * remaining_units
+      - "Progress includes: Current step, completed/total, ETA"
+      - "ETA calculated from: average_time_per_unit * remaining_units"
       - Progress persisted to state (survives interruption)
       - Progress displayed via ASCII progress bars (accessible)
     
@@ -534,13 +534,13 @@ rules:
       pattern: |
         dependencies:
           files:
-            - path: cortex-brain/config/master-orchestrator.yaml
+            - "path: cortex-brain/config/master-orchestrator.yaml"
               required: true
           commands:
-            - name: git
+            - "name: git"
               version: ">=2.0"
           permissions:
-            - path: cortex-brain/tier1/
+            - "path: cortex-brain/tier1/"
               access: write
     
     examples:
@@ -587,10 +587,10 @@ rules:
     
     validation:
       - Log entries are JSON (not free-form strings)
-      - Required fields: timestamp, level, correlation_id, orchestrator, operation, message
-      - Optional fields: duration_ms, task_id, phase_id, user_id, metadata
+      - "Required fields: timestamp, level, correlation_id, orchestrator, operation, message"
+      - "Optional fields: duration_ms, task_id, phase_id, user_id, metadata"
       - Correlation ID propagated across all related operations
-      - Correlation ID format: {orchestrator}-{session_id}-{timestamp}
+      - "Correlation ID format: {orchestrator}-{session_id}-{timestamp}"
     
     implementation:
       logger: src.infrastructure.audit_logger.AuditLogger
@@ -664,9 +664,9 @@ rules:
     
     examples:
       pass:
-        - "Planning v5 timeout: config/planning-orchestrator.yaml → timeout_seconds: 300"
-        - "Retry logic: config/retry-policy.yaml → max_retries: 3"
-        - "Dashboard refresh: config/dashboard-generator.yaml → refresh_interval_seconds: 10"
+        - "Planning v5 timeout: config/planning-orchestrator.yaml -> timeout_seconds: 300"
+        - "Retry logic: config/retry-policy.yaml -> max_retries: 3"
+        - "Dashboard refresh: config/dashboard-generator.yaml -> refresh_interval_seconds: 10"
       fail:
         - "Planning v5: timeout = 300  # Hardcoded (should be in config)"
         - "Retry logic: for i in range(3):  # Magic number (should be in config)"
@@ -705,8 +705,8 @@ rules:
       action: move_to_dlq
     
     validation:
-      - Failed operation moved to: cortex-brain/tier1/dlq/{orchestrator}/{timestamp}/
-      - DLQ entry includes: Original request, error details, retry history, timestamp
+      - "Failed operation moved to: cortex-brain/tier1/dlq/{orchestrator}/{timestamp}/"
+      - "DLQ entry includes: Original request, error details, retry history, timestamp"
       - DLQ monitored for accumulation (alert if >10 entries)
       - DLQ entries have TTL (auto-delete after 30 days)
       - Manual reprocessing tool available
@@ -727,13 +727,13 @@ rules:
     
     examples:
       pass:
-        - "Requirements conversion fails on malformed MD → DLQ (analyze later)"
-        - "Git operation fails after 3 retries → DLQ (investigate repo issue)"
-        - "YAML validation fails on invalid structure → DLQ (fix schema or data)"
+        - "Requirements conversion fails on malformed MD -> DLQ (analyze later)"
+        - "Git operation fails after 3 retries -> DLQ (investigate repo issue)"
+        - "YAML validation fails on invalid structure -> DLQ (fix schema or data)"
       fail:
-        - "Requirements conversion fails → silently skip (data loss)"
-        - "Git operation fails → abort entire operation (other work lost)"
-        - "YAML validation fails → discard file (no record of failure)"
+        - "Requirements conversion fails -> silently skip (data loss)"
+        - "Git operation fails -> abort entire operation (other work lost)"
+        - "YAML validation fails -> discard file (no record of failure)"
     
     related_rules:
       - "OE-004: DLQ is final destination after retry exhaustion"
@@ -768,8 +768,8 @@ rules:
       action: warn_if_no_health_check
     
     validation:
-      - Health check method: get_health_status() → dict
-      - Returns: status (healthy/degraded/unhealthy), active_operations, resource_usage
+      - "Health check method: get_health_status() -> dict"
+      - "Returns: status (healthy/degraded/unhealthy), active_operations, resource_usage"
       - Response time <100ms (lightweight check)
       - Health check doesn't block normal operations
       - Health history logged for trend analysis
@@ -827,13 +827,13 @@ rules:
       
       Compatible changes:
       - Add optional fields (with defaults)
-      - Widen types (string → string|null)
-      - Increase limits (max_length: 100 → 200)
+      - Widen types (string -> string|null)
+      - Increase limits (max_length: 100 -> 200)
       
       Incompatible changes (REQUIRE MIGRATION):
       - Remove required fields
       - Rename fields
-      - Change types (string → number)
+      - Change types (string -> number)
       - Add required fields (no default)
     
     enforcement:
@@ -841,7 +841,7 @@ rules:
       action: block_if_breaking_change_without_migration
     
     validation:
-      - Schema version incremented (semver: MAJOR.MINOR.PATCH)
+      - "Schema version incremented (semver: MAJOR.MINOR.PATCH)"
       - Breaking changes increment MAJOR version
       - Non-breaking changes increment MINOR version
       - Migration script provided for breaking changes
@@ -852,19 +852,19 @@ rules:
       validator: src.infrastructure.schema_validator.SchemaEvolutionValidator
       migration_dir: cortex-brain/migrations/schemas/
       pattern: |
-        # v1.0.0 → v2.0.0 (breaking: removed field)
+        # v1.0.0 -> v2.0.0 (breaking: removed field)
         # Migration: v1_to_v2_remove_deprecated_field.py
-        # Provides: migrate_data(old_data) → new_data
+        # Provides: migrate_data(old_data) -> new_data
     
     examples:
       pass:
-        - "Plan schema v1.0.0 → v1.1.0: Add optional 'tags' field (backward compatible)"
-        - "Requirements schema v2.0.0 → v3.0.0: Remove 'deprecated_status' + migration script"
-        - "State schema v1.2.0 → v1.2.1: Fix typo in comment (patch version)"
+        - "Plan schema v1.0.0 -> v1.1.0: Add optional 'tags' field (backward compatible)"
+        - "Requirements schema v2.0.0 -> v3.0.0: Remove 'deprecated_status' + migration script"
+        - "State schema v1.2.0 -> v1.2.1: Fix typo in comment (patch version)"
       fail:
         - "Plan schema: Remove required 'phase_id' field (no migration, breaks existing plans)"
-        - "Requirements schema: Rename 'name' → 'title' (no migration, breaks readers)"
-        - "State schema: Change 'progress' from number → string (breaks parsers)"
+        - "Requirements schema: Rename 'name' -> 'title' (no migration, breaks readers)"
+        - "State schema: Change 'progress' from number -> string (breaks parsers)"
     
     related_rules:
       - "OE-002: Validation enforces current schema version"
@@ -901,9 +901,9 @@ rules:
       action: block_if_no_resource_limits
     
     validation:
-      - Timeout configured (default: 5 minutes, max: 1 hour)
-      - Memory limit configured (default: 1GB, max: 4GB)
-      - Max items configured (default: 1000 files, 10000 records)
+      - "Timeout configured (default: 5 minutes, max: 1 hour)"
+      - "Memory limit configured (default: 1GB, max: 4GB)"
+      - "Max items configured (default: 1000 files, 10000 records)"
       - Limits enforced at runtime (operation aborted if exceeded)
       - Exceeded limits logged with ERROR level
     
@@ -932,8 +932,8 @@ rules:
     
     related_rules:
       - "CORE-001: Incremental execution prevents token limits"
-      - "OE-004: Timeout is transient failure → retry"
-      - "OE-012: Exceeded limits → DLQ for inspection"
+      - "OE-004: Timeout is transient failure -> retry"
+      - "OE-012: Exceeded limits -> DLQ for inspection"
     
     rationale: |
       Resource limits prevent catastrophic failures:
@@ -1076,8 +1076,9 @@ references:
     - .asif/AI-Learning/cortex6-fixes/P0-foundation-prerequisites.yaml
   
   best_practices:
-    - "12-Factor App" (externalized config)
-    - "Circuit Breaker Pattern" (graceful degradation)
-    - "Saga Pattern" (rollback support)
-    - "Retry with Exponential Backoff" (transient failures)
-    - "Write-Ahead Logging" (atomic operations)
+    - '"12-Factor App" (externalized config)'
+    - '"Circuit Breaker Pattern" (graceful degradation)'
+    - '"Saga Pattern" (rollback support)'
+    - '"Retry with Exponential Backoff" (transient failures)'
+    - '"Write-Ahead Logging" (atomic operations)'
+

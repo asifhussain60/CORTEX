@@ -22,8 +22,8 @@ executive_summary:
     - Critical path items unblock multiple downstream tasks
     - Each phase validates previous phases
   
-  estimated_duration: 5-7 days
-  estimated_effort: 120-150 hours
+  estimated_duration: 6-8 days
+  estimated_effort: 152-182 hours  # Updated from 120-150 to include P3 (32 hours)
   executor: GitHub Copilot + CORTEX (hybrid mode)
   
   success_criteria:
@@ -60,6 +60,14 @@ phases:
     rationale: "Fixes missing critical features that block other work"
     
   - phase_id: P3
+    name: "Missing Orchestrator Implementation"
+    priority: CRITICAL
+    estimated_hours: 32
+    blocking: false
+    snowball_impact: MAXIMUM
+    rationale: "Implements 3 CRITICAL missing orchestrators (TDD v2, Cleanup v2, Refinement v2) identified in Holistic Review. Increases orchestrator coverage from 50% to 69%, enables autonomous TDD workflow, automated cleanup, and code quality improvements. Maximum snowball impact as TDD v2 enables test-first development for all subsequent work."
+    
+  - phase_id: P4
     name: "Implementation Drift Correction"
     priority: HIGH
     estimated_hours: 20
@@ -67,7 +75,7 @@ phases:
     snowball_impact: MEDIUM
     rationale: "Aligns code with specs, improves maintainability"
     
-  - phase_id: P4
+  - phase_id: P5
     name: "Test Coverage & Documentation"
     priority: HIGH
     estimated_hours: 24
@@ -75,7 +83,7 @@ phases:
     snowball_impact: MEDIUM
     rationale: "Ensures quality and knowledge transfer"
     
-  - phase_id: P5
+  - phase_id: P6
     name: "Performance & Optimization"
     priority: MEDIUM
     estimated_hours: 16
@@ -83,7 +91,7 @@ phases:
     snowball_impact: LOW
     rationale: "Fine-tunes system for production readiness"
     
-  - phase_id: P6
+  - phase_id: P7
     name: "Final Validation & Epic Update"
     priority: MEDIUM
     estimated_hours: 12
@@ -94,11 +102,12 @@ phases:
 acceptance_criteria_tracker:
   overall_status: IN_PROGRESS
   phases_completed: 0
-  phases_total: 7
+  phases_total: 8  # Updated from 7 to include new P3
   tasks_completed: 3  # P2-T0.1, P2-T0.2, P2-T1
-  tasks_total: 50  # Updated from 47 to include 3 completed tasks
-  critical_blockers: 0  # Was 2, now 0 (TodoOrchestrator + Security gaps resolved)
-  high_priority_items: 0  # All high priority gaps resolved
+  tasks_total: 57  # Updated from 50 to include 7 new P3 tasks
+  critical_blockers: 3  # P3 CRITICAL gaps: TDD v2, Cleanup v2, Refinement v2
+  high_priority_items: 2  # P3-T4, P3-T6
+  orchestrator_gaps_identified: 3  # From Holistic Review 2026-01-08
   
   recent_progress:
     - timestamp: "2026-01-08T13:57:00Z"
@@ -161,8 +170,21 @@ acceptance_criteria_tracker:
       note: "feat09-security specified and planned; implementation scheduled"
       
     - gate_id: G3
-      name: "Specification Alignment Achieved"
+      name: "Missing Orchestrators Implemented"
       phase: P3
+      criteria:
+        - TDD Orchestrator v2 implemented and tested
+        - Cleanup Orchestrator v2 implemented and tested
+        - Refinement Orchestrator v2 implemented and tested
+        - All 3 orchestrators registered and routing correctly
+        - Orchestrator coverage ≥69% (11/16)
+        - Health score ≥90/100
+        - Epic Review shows zero CRITICAL gaps
+      status: PENDING
+      
+    - gate_id: G4
+      name: "Specification Alignment Achieved"
+      phase: P4
       criteria:
         - Implementation drift ≤5%
         - All components match specs
@@ -170,9 +192,9 @@ acceptance_criteria_tracker:
         - Integration tests passing
       status: PENDING
       
-    - gate_id: G4
+    - gate_id: G5
       name: "Quality Threshold Met"
-      phase: P4
+      phase: P5
       criteria:
         - Test coverage ≥95%
         - All features documented
@@ -180,9 +202,18 @@ acceptance_criteria_tracker:
         - Documentation validated
       status: PENDING
       
-    - gate_id: G5
-      name: "Epic Review Passes"
+    - gate_id: G6
+      name: "Performance Optimized"
       phase: P6
+      criteria:
+        - Performance benchmarks met
+        - Resource usage optimized
+        - No performance regressions
+      status: PENDING
+      
+    - gate_id: G7
+      name: "Epic Review Passes"
+      phase: P7
       criteria:
         - Epic health score ≥98/100
         - Zero gaps identified
@@ -194,10 +225,11 @@ dependencies:
   internal:
     - P1 requires P0 (prerequisites)
     - P2 requires P1 (requirements must be defined first)
-    - P3 requires P1 (specs define alignment targets)
-    - P4 requires P2, P3 (test what exists)
-    - P5 requires P2, P3, P4 (optimize validated code)
-    - P6 requires P0-P5 (final validation)
+    - P3 requires P0, P1 (orchestrators need foundation + specs)
+    - P4 requires P1, P3 (specs define alignment targets, orchestrators enable implementation)
+    - P5 requires P2, P3, P4 (test what exists)
+    - P6 requires P2, P3, P4, P5 (optimize validated code)
+    - P7 requires P0-P6 (final validation)
   
   external:
     - feat01-foundation must be complete
@@ -255,21 +287,26 @@ rollback_strategy:
       
     - checkpoint_id: CP3
       phase: P3
-      description: "Drift corrected"
+      description: "Missing orchestrators implemented (TDD v2, Cleanup v2, Refinement v2)"
       status: PENDING
       
     - checkpoint_id: CP4
       phase: P4
-      description: "Tests and docs complete"
+      description: "Implementation drift corrected"
       status: PENDING
       
     - checkpoint_id: CP5
       phase: P5
-      description: "Performance optimized"
+      description: "Tests and docs complete"
       status: PENDING
       
     - checkpoint_id: CP6
       phase: P6
+      description: "Performance optimized"
+      status: PENDING
+      
+    - checkpoint_id: CP7
+      phase: P7
       description: "Final validation passed"
       status: PENDING
 
