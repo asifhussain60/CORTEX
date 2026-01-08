@@ -38,7 +38,9 @@
 - Success criteria
 
 ### 2. Enhanced Continuation Prompt
-**File:** `CONTINUATION-PROMPT-V2.md` (917 lines)
+**File:** `CONTINUATION-PROMPT.md` (auto-updated)
+
+**Note:** Originally created as CONTINUATION-PROMPT-V2.md, but consolidated to single canonical file managed by `update_continuation_prompt.py`.
 
 **Structure:**
 ```
@@ -102,7 +104,7 @@ User: "continue"
 ```
 
 **That's it!** GitHub Copilot will:
-1. Read CONTINUATION-PROMPT-V2.md
+1. Read CONTINUATION-PROMPT.md (auto-updated by update_continuation_prompt.py)
 2. Find "IMMEDIATE NEXT TASK"
 3. Execute it (TDD: RED→GREEN→REFACTOR)
 4. Update tracker + prompt
@@ -256,14 +258,17 @@ graph LR
 ## 🎉 Conclusion
 
 **Status:** ✅ READY FOR USE  
-**Location:** `.asif/AI-Learning/cortex6/source-of-truth/CONTINUATION-PROMPT-V2.md`  
+**Location:** `.asif/AI-Learning/cortex6/source-of-truth/CONTINUATION-PROMPT.md` (canonical, auto-updated)  
 **Command:** Say "continue" in Copilot Chat  
-**Expected:** Fully autonomous execution of remaining 7 feat04 tasks  
+**Expected:** Fully autonomous execution of remaining epic tasks  
+
+**Note:** File consolidated from V2 version to single canonical file managed by `update_continuation_prompt.py`. V2 archived to backlog/
 
 **This is the autonomous execution system you envisioned!** 🚀
 
 ---
 
-**Commit:** `e851e82ab` - Autonomous execution system v2.0  
-**Files Changed:** 2 (917 lines added)  
+**Original Commit:** `e851e82ab` - Autonomous execution system v2.0  
+**Cleanup:** 2026-01-08 - Consolidated to single CONTINUATION-PROMPT.md file  
 **Ready:** ✅ Yes
+
