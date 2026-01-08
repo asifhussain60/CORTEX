@@ -90,6 +90,7 @@ class OrchestratorLifecycle:
             LifecycleState.ERROR
         },
         LifecycleState.RUNNING: {
+            LifecycleState.READY,  # Allow return to ready after execution
             LifecycleState.PAUSED,
             LifecycleState.STOPPED,
             LifecycleState.ERROR

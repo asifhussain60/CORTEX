@@ -1,0 +1,1 @@
+{"timestamp": "2026-01-08T05:14:08.946794", "level": "warning", "category": "validation", "component": "orchestrator_lifecycle", "operation": "health_check", "message": "Health check exception_check failed: Check failed", "context": {"orchestrator_id": "test-orchestrator"}, "metadata": {}, "correlation_id": "CORTEX-2DD7946DCB20", "duration_ms": null}
