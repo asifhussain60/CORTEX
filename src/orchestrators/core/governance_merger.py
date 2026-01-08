@@ -839,3 +839,58 @@ class GovernanceMerger:
         )
 
         return unified_set
+
+    def validate_request(self, request: str) -> Dict[str, Any]:
+        """
+        Validate request against governance rules (Task 2.2 integration).
+        
+        This method provides a simple validation interface for the Master Orchestrator.
+        
+        Args:
+            request: User request to validate
+            
+        Returns:
+            Dictionary with validation results
+        """
+        violations = []
+        warnings = []
+        rules_checked = 0
+        
+        # Merge all governance rules (uses feat03's merge() method)
+        unified = self.merge()
+        
+        # Check each rule against request
+        for rule in unified.rules:
+            rules_checked += 1
+            
+            # Simple keyword-based validation (stub)
+            if rule.severity == Severity.BLOCKED:
+                # Check for TDD violations
+                if "TDD" in rule.category.upper():
+                    if "skip test" in request.lower() or "no test" in request.lower():
+                        violations.append(f"{rule.id}: Tests are mandatory")
+                
+                # Check for planning isolation
+                if "PLANNING" in rule.category.upper():
+                    if "plan" in request.lower() and "implement" in request.lower():
+                        violations.append(f"{rule.id}: Plans should not implement code")
+            
+            elif rule.severity == Severity.WARNING:
+                # Collect warnings for info
+                if "deprecated" in rule.rule_text.lower():
+                    warnings.append(f"{rule.id}: Using deprecated pattern")
+        
+        passed = len(violations) == 0
+        
+        return {
+            "passed": passed,
+            "rules_checked": rules_checked,
+            "violations": violations,
+            "warnings": warnings,
+            "metadata": {
+                "request_length": len(request),
+                "tier_count": unified.tier_count,
+                "rule_count": unified.rule_count
+            }
+        }
+

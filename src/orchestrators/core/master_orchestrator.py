@@ -375,6 +375,7 @@ class MasterOrchestrator:
                     return ExecutionResult(
                         success=False,
                         orchestrator="pipeline",
+                        result={},
                         error=f"Governance check failed: {gov_result.error}"
                     )
                 
@@ -384,6 +385,7 @@ class MasterOrchestrator:
                     return ExecutionResult(
                         success=False,
                         orchestrator="pipeline",
+                        result={},
                         error=f"Governance violations: {', '.join(violations)}"
                     )
             
@@ -394,16 +396,28 @@ class MasterOrchestrator:
                 # Default routing logic
                 execution_result = self.execute(request)
             
-            # Step 3: Return execution result
+            # Step 3: Return execution result with error propagation
+            if not execution_result.success:
+                return ExecutionResult(
+                    success=False,
+                    orchestrator="pipeline",
+                    result={
+                        "governance_passed": enforce_governance,
+                        "execution_result": execution_result.result,
+                        "orchestrator_used": execution_result.orchestrator
+                    },
+                    error=execution_result.error
+                )
+            
             return ExecutionResult(
-                success=execution_result.success,
+                success=True,
                 orchestrator="pipeline",
                 result={
                     "governance_passed": enforce_governance,
                     "execution_result": execution_result.result,
                     "orchestrator_used": execution_result.orchestrator
                 },
-                error=execution_result.error
+                error=None
             )
             
         except Exception as e:
@@ -417,5 +431,6 @@ class MasterOrchestrator:
             return ExecutionResult(
                 success=False,
                 orchestrator="pipeline",
+                result={},
                 error=str(e)
             )
