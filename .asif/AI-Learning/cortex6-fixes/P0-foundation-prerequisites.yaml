@@ -219,16 +219,72 @@ tasks:
       paths:
         - .asif/AI-Learning/cortex6-fixes/reports/baseline-gap-report.yaml
         - .asif/AI-Learning/cortex6-fixes/reports/baseline-gap-report.md
+  
+  - task_id: P0-T8
+    name: "Enhance Governance Rules for Operational Efficiency"
+    description: |
+      Create comprehensive Tier 0 governance rules for operational efficiency
+      and brittleness prevention. Complements core-rules.yaml and mcp-tool-usage-rules.yaml
+      with 15 new rules covering state management, validation, error recovery,
+      data integrity, and performance optimization.
+    priority: P0_CRITICAL
+    estimated_minutes: 120
+    dependencies:
+      - P0-T1  # YAML validator needed for rule validation
+    tdd_required: false
+    
+    deliverables:
+      - cortex-brain/tier0/governance/operational-efficiency-rules.yaml (15 rules)
+      - .github/prompts/cortex-epic-review.prompt.yaml (updated with GOV validation step)
+      - .asif/AI-Learning/cortex6-fixes/CONTINUATION-PROMPT.md (updated with governance context)
+    
+    acceptance_criteria:
+      - 15 operational efficiency rules defined (OE-001 to OE-015)
+      - Rules categorized: state_management, validation_enforcement, error_recovery, data_integrity, orchestrator_coordination, performance_optimization
+      - Each rule has: rule_id, severity, enforcement trigger, validation criteria, implementation details, examples, rationale
+      - Severities properly set: 7 BLOCKED, 7 ENFORCED, 1 RECOMMENDED
+      - Epic review prompt updated with Step 6: Governance Validation (GOV-001 to GOV-006)
+      - Continuation prompt updated with governance context
+      - All governance YAML files validate against schema
+    
+    validation:
+      type: multi_check
+      checks:
+        - type: file_exists
+          path: cortex-brain/tier0/governance/operational-efficiency-rules.yaml
+        - type: yaml_valid
+          path: cortex-brain/tier0/governance/operational-efficiency-rules.yaml
+        - type: rule_count
+          path: cortex-brain/tier0/governance/operational-efficiency-rules.yaml
+          expected: 15
+        - type: file_updated
+          path: .github/prompts/cortex-epic-review.prompt.yaml
+          contains: "governance_validation"
+    
+    rationale: |
+      Without governance rules at Tier 0, brittleness accumulates:
+      1. State loss on crashes (no persistence enforcement)
+      2. Corrupt YAML files (no validation before write)
+      3. Cascading failures (no graceful degradation)
+      4. Data loss (no atomic operations)
+      5. Cannot resume work (no idempotency)
+      6. No rollback (no checkpoint support)
+      7. No visibility (no progress tracking)
+      8. Failed operations silent (no DLQ)
+      
+      These 15 rules prevent all of these failure modes by codifying
+      best practices as enforceable governance at the highest tier.
 
 phase_completion:
   validation_gate: G0
   gate_name: "Foundation Infrastructure Ready"
   
   exit_criteria:
-    - All 7 tasks completed
+    - All 8 tasks completed  # Updated from 7 to 8
     - All tools tested and working
     - Baseline checkpoint created
     - Gap report generated
+    - Governance rules defined and validated  # NEW
     - Zero tool failures
     - Dashboard operational
   
@@ -240,6 +296,7 @@ phase_completion:
     - Checkpoint manager
     - Baseline checkpoint (CP0)
     - Baseline gap report
+    - Operational efficiency governance rules  # NEW
   
   health_metrics:
     tools_created: 5
