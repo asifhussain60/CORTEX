@@ -1,8 +1,17 @@
 # CORTEX 6.0 Build - Session Continuation
 
-**Current Position:** feat04-core-orchestration Phase 1 Task 1.3 COMPLETED ✅  
-**Completed:** 59 tasks | **Status:** ✅ Next: Task 1.4 | **Last:** task-1.3-yaml-first-enforcement  
-**Next Feature:** feat04-core-orchestration (in progress)
+**Current Position:** feat04-core-orchestration Phase 2 Task 2.1 COMPLETED ✅  
+**Completed:** 61 tasks | **Status:** ✅ Next: Task 2.2 | **Last:** task-2.1-master-orchestrator-todo-integration  
+**Next Feature:** feat04-core-orchestration Phase 2-4 (in progress, 42% complete)
+
+---
+
+## 🎯 CORTEX.prompt.md Status: PRESERVED ✅
+
+**Confirmed:** CORTEX.prompt.md will NOT be deleted/replaced during CORTEX 6.0 build.  
+**Path:** `.github/prompts/CORTEX.prompt.md` (Intent Router component)  
+**After Build:** Will automatically use enhanced backend (PatternRouter, StateManager, TODO Orchestrator)  
+**Use Now:** Still works for all user-facing operations (planning, ADO, investigation)
 
 ---
 
@@ -21,14 +30,13 @@ python3 .asif/AI-Learning/cortex6/source-of-truth/epic-executor.py --tasks 5
 python3 .asif/AI-Learning/cortex6/source-of-truth/epic-executor.py --tasks 0 --auto
 ```
 
-### Option 2: Manual Execution (Fallback)
+### Option 2: Manual Execution (Current Path)
 
 1. **Load State:** Read `.asif/AI-Learning/cortex6/source-of-truth/todo/00-TODO-CONTINUITY-TRACKER.yaml`
-2. **Find Position:** Check `current_position` section
-3. **Next Feature:** Load `features/feat04-core-orchestration/` or `feat03-to-feat08/features-summary.yaml`
-4. **Execute Task:** Follow task instructions
-5. **Update Tracker:** Mark COMPLETED, update current_position
-6. **Update This File:** Run `python3 update_continuation_prompt.py`
+2. **Find Position:** Check `current_position` section (currently: feat04 phase 2 task 2.1)
+3. **Next Task:** Task 2.2 - Governance Merger-TODO Integration
+4. **Execute Task:** Follow TDD, update tracker, commit
+5. **Update This File:** Run `python3 update_continuation_prompt.py`
 
 ### Via Copilot Chat (Invokes Autonomous Mode)
 
@@ -41,6 +49,24 @@ or
 ```
 continue cortex 6 build
 ```
+
+---
+
+## ✅ Recent Completions
+
+### feat04-core-orchestration Phase 1 (COMPLETED)
+- ✅ Task 1.1: Intelligence Layer (19/20 tests, 35 min)
+- ✅ Task 1.2: Mistake Prevention (23/23 tests, 45 min)
+- ✅ Task 1.3: YAML-First Enforcement (16/16 tests, 40 min)
+- ✅ Task 1.4: Orchestrator Lifecycle (27/27 tests, 50 min)
+
+### feat04-core-orchestration Phase 2 (IN PROGRESS)
+- ✅ Task 2.1: Master Orchestrator-TODO Integration (4/4 tests, 10 min)
+  - Added RUNNING→READY lifecycle transition
+  - Master orchestrator delegates to TODO orchestrator
+  - Lifecycle state management working
+- ⏳ Task 2.2: Governance Merger-TODO Integration (NEXT)
+- ⏳ Task 2.3: Unified Execution Pipeline
 
 ---
 
