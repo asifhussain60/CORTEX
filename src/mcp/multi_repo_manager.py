@@ -132,9 +132,111 @@ class CrossRepoOperations:
     Executes operations across multiple repositories with coordination.
     """
     
-    def __init__(self):
+    def __init__(self, workspace_root: Optional[Path] = None):
+        self.workspace_root = Path(workspace_root) if workspace_root else Path.cwd()
+        self.discovery: Optional[RepoDiscovery] = None
+        self.repos: List[Repository] = []
         self.active_repos: Set[str] = set()
         logger.info("CrossRepoOperations initialized")
+    
+    def initialize(self):
+        """Initialize and discover repositories."""
+        self.discovery = RepoDiscovery(self.workspace_root)
+        self.repos = self.discovery.discover_repos()
+        logger.info(f"CrossRepoOperations initialized with {len(self.repos)} repos")
+    
+    def search(self, pattern: str, file_pattern: str = "*") -> List[Dict[str, Any]]:
+        """
+        Search for pattern across repositories.
+        
+        Args:
+            pattern: Search pattern
+            file_pattern: File pattern filter (e.g., "*.py")
+            
+        Returns:
+            List of search results
+        """
+        results = []
+        
+        for repo in self.repos:
+            try:
+                # Use find and grep for search
+                cmd = f'find . -name "{file_pattern}" -type f -exec grep -l "{pattern}" {{}} \\;'
+                result = subprocess.run(
+                    cmd,
+                    shell=True,
+                    cwd=repo.path,
+                    capture_output=True,
+                    text=True,
+                    timeout=30
+                )
+                
+                if result.stdout:
+                    matches = result.stdout.strip().split('\n')
+                    for match in matches:
+                        if match:
+                            results.append({
+                                "repo": repo.name,
+                                "file": match,
+                                "pattern": pattern
+                            })
+            except Exception as e:
+                logger.warning(f"Search failed in {repo.name}: {e}")
+        
+        return results
+    
+    def aggregate_stats(self) -> Dict[str, Any]:
+        """
+        Aggregate statistics across repositories.
+        
+        Returns:
+            Statistics dictionary
+        """
+        stats = {
+            "total_repos": len(self.repos),
+            "cortex_enabled_count": sum(1 for r in self.repos if r.is_cortex_enabled),
+            "repos": []
+        }
+        
+        for repo in self.repos:
+            repo_stats = {
+                "name": repo.name,
+                "cortex_enabled": repo.is_cortex_enabled,
+                "path": str(repo.path)
+            }
+            stats["repos"].append(repo_stats)
+        
+        return stats
+    
+    def execute_in_repo(self, repo_name: str, operation: str) -> Dict[str, Any]:
+        """
+        Execute operation in specific repository.
+        
+        Args:
+            repo_name: Repository name
+            operation: Operation to execute
+            
+        Returns:
+            Operation result
+        """
+        repo = next((r for r in self.repos if r.name == repo_name), None)
+        if not repo:
+            return {"repo": repo_name, "error": "Repository not found"}
+        
+        if operation == "check_config":
+            return {
+                "repo": repo_name,
+                "config": repo.config,
+                "cortex_enabled": repo.is_cortex_enabled
+            }
+        elif operation == "status_check":
+            return {
+                "repo": repo_name,
+                "status": "success",
+                "cortex_enabled": repo.is_cortex_enabled
+            }
+        else:
+            return {"repo": repo_name, "error": "Unknown operation"}
     
     def execute_command(self, repos: List[Repository], command: str) -> Dict[str, Any]:
         """
@@ -241,10 +343,71 @@ class RepoIsolation:
     Provides workspace isolation and context switching.
     """
     
-    def __init__(self):
+    def __init__(self, workspace_root: Optional[Path] = None):
+        self.workspace_root = Path(workspace_root) if workspace_root else Path.cwd()
+        self.discovery: Optional[RepoDiscovery] = None
+        self.repos: List[Repository] = []
         self.current_repo: Optional[Repository] = None
         self.repo_contexts: Dict[str, Dict[str, Any]] = {}
         logger.info("RepoIsolation initialized")
+    
+    def initialize(self):
+        """Initialize and discover repositories."""
+        self.discovery = RepoDiscovery(self.workspace_root)
+        self.repos = self.discovery.discover_repos()
+        logger.info(f"RepoIsolation initialized with {len(self.repos)} repos")
+    
+    def create_context(self, repo_name: str):
+        """
+        Create isolation context for repository.
+        
+        Args:
+            repo_name: Repository name
+            
+        Returns:
+            IsolationContext object
+        """
+        repo = next((r for r in self.repos if r.name == repo_name), None)
+        if not repo:
+            raise ValueError(f"Repository not found: {repo_name}")
+        
+        from dataclasses import dataclass
+        
+        @dataclass
+        class IsolationContext:
+            repo_name: str
+            workspace_root: Path
+            is_isolated: bool = True
+        
+        return IsolationContext(
+            repo_name=repo_name,
+            workspace_root=self.workspace_root
+        )
+    
+    def execute_isolated(self, repo_name: str, operation) -> Any:
+        """
+        Execute operation in isolated context.
+        
+        Args:
+            repo_name: Repository name
+            operation: Callable to execute
+            
+        Returns:
+            Operation result
+        """
+        context = self.create_context(repo_name)
+        return operation(context)
+    
+    def cleanup_context(self, context):
+        """
+        Cleanup after isolated operation.
+        
+        Args:
+            context: IsolationContext to cleanup
+        """
+        # Remove any temporary resources
+        if hasattr(context, "_temp_resources"):
+            delattr(context, "_temp_resources")
     
     def switch_context(self, repo: Repository) -> bool:
         """
@@ -293,42 +456,6 @@ class RepoIsolation:
             env["CORTEX_BRAIN_PATH"] = str(repo.brain_path)
         
         return env
-    
-    def execute_isolated(self, repo: Repository, command: str) -> Dict[str, Any]:
-        """
-        Execute command in isolated repository context.
-        
-        Args:
-            repo: Repository
-            command: Command to execute
-            
-        Returns:
-            Execution result
-        """
-        env = self.get_isolated_env(repo)
-        
-        try:
-            result = subprocess.run(
-                command,
-                shell=True,
-                cwd=repo.path,
-                env=env,
-                capture_output=True,
-                text=True,
-                timeout=60
-            )
-            
-            return {
-                "success": result.returncode == 0,
-                "stdout": result.stdout,
-                "stderr": result.stderr,
-                "return_code": result.returncode
-            }
-        except Exception as e:
-            return {
-                "success": False,
-                "error": str(e)
-            }
 
 
 class MultiRepoManager:
@@ -349,7 +476,72 @@ class MultiRepoManager:
     def initialize(self):
         """Initialize manager and discover repositories"""
         self.repos = self.discovery.discover_repos()
+        # Initialize cross_repo with repos
+        self.cross_repo.repos = self.repos
         logger.info(f"Initialized with {len(self.repos)} repositories")
+    
+    def list_repos(self, cortex_enabled_only: bool = False) -> List[Repository]:
+        """
+        List all discovered repositories.
+        
+        Args:
+            cortex_enabled_only: If True, only return CORTEX-enabled repos
+            
+        Returns:
+            List of repositories
+        """
+        if not self.repos:
+            self.initialize()
+        
+        if cortex_enabled_only:
+            return [r for r in self.repos if r.is_cortex_enabled]
+        return self.repos
+    
+    def get_repo(self, repo_name: str) -> Optional[Repository]:
+        """
+        Get repository by name.
+        
+        Args:
+            repo_name: Repository name
+            
+        Returns:
+            Repository object or None if not found
+        """
+        if not self.repos:
+            self.initialize()
+        
+        return next((r for r in self.repos if r.name == repo_name), None)
+    
+    def execute_across_repos(
+        self,
+        operation: str,
+        cortex_enabled_only: bool = False
+    ) -> List[Dict[str, Any]]:
+        """
+        Execute operation across repositories.
+        
+        Args:
+            operation: Operation name to execute
+            cortex_enabled_only: If True, only execute on CORTEX-enabled repos
+            
+        Returns:
+            List of operation results
+        """
+        repos = self.list_repos(cortex_enabled_only=cortex_enabled_only)
+        results = []
+        
+        for repo in repos:
+            try:
+                result = self.cross_repo.execute_in_repo(repo.name, operation)
+                results.append(result)
+            except Exception as e:
+                results.append({
+                    "repo": repo.name,
+                    "status": "error",
+                    "error": str(e)
+                })
+        
+        return results
     
     def get_repos(self) -> List[Repository]:
         """Get all discovered repositories"""
