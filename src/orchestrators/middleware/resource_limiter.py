@@ -15,7 +15,7 @@ from enum import Enum
 from typing import Dict, Optional
 from contextlib import contextmanager
 
-from src.orchestrators.audit_logger import AuditLogger, AuditLevel, AuditCategory
+from src.orchestrators.audit_logger import EnterpriseAuditLogger, AuditLevel, AuditCategory
 
 
 class ResourceType(Enum):
@@ -46,9 +46,9 @@ class ResourceLimiter:
     - Audit logging integration
     """
     
-    def __init__(self, audit_logger: Optional[AuditLogger] = None):
+    def __init__(self, audit_logger: Optional[EnterpriseAuditLogger] = None):
         """Initialize resource limiter."""
-        self.audit_logger = audit_logger or AuditLogger()
+        self.audit_logger = audit_logger or EnterpriseAuditLogger()
         self._quotas: Dict[ResourceType, ResourceQuota] = {}
         self._lock = threading.RLock()
         
@@ -57,6 +57,7 @@ class ResourceLimiter:
             category=AuditCategory.MIDDLEWARE,
             component="resource_limiter",
             operation="initialize",
+            message="Resource limiter initialized",
             correlation_id="FEAT05-P1-T1.1",
             context={"status": "initialized"}
         )
@@ -75,6 +76,7 @@ class ResourceLimiter:
                 category=AuditCategory.MIDDLEWARE,
                 component="resource_limiter",
                 operation="set_quota",
+                message=f"Quota set for {resource_type.value}",
                 correlation_id="FEAT05-P1-T1.1",
                 context={
                     "resource_type": resource_type.value,
@@ -104,6 +106,7 @@ class ResourceLimiter:
                         category=AuditCategory.MIDDLEWARE,
                         component="resource_limiter",
                         operation="acquire_resource_rejected",
+                        message=f"Resource acquisition rejected for {resource_type.value}",
                         correlation_id="FEAT05-P1-T1.1",
                         context={
                             "resource_type": resource_type.value,
@@ -120,6 +123,7 @@ class ResourceLimiter:
                         category=AuditCategory.MIDDLEWARE,
                         component="resource_limiter",
                         operation="acquire_resource_over_soft_limit",
+                        message=f"Resource acquisition exceeds soft limit for {resource_type.value}",
                         correlation_id="FEAT05-P1-T1.1",
                         context={
                             "resource_type": resource_type.value,
