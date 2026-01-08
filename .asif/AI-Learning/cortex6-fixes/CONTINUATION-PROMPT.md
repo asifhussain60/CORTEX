@@ -9,62 +9,97 @@
 ## 📍 Current Position
 
 **Phase:** P0 (Foundation Prerequisites)  
-**Status:** PARTIAL COMPLETION (T2 done, T1/T3/T4/T5/T6 remaining)  
-**Last Checkpoint:** Commit `ea9153a49` - Gap detection baseline generated
+**Status:** COMPLETE (all 8 tasks done including governance enhancement)  
+**Last Checkpoint:** Commit `666060f23` - Tier 0 Governance: MCP Tool Usage Rules + Operational Efficiency Rules
 
 **What's Complete:**
+- ✅ P0-T1: YAML Schema Validator (`src/tools/yaml_validator.py`)
 - ✅ P0-T2: Gap Detection Engine (`src/tools/gap_detector.py`)
-- ✅ Baseline gap report generated (10 gaps identified)
-- ✅ Remediation master plan created (7 phases, 47 tasks)
-- ✅ Epic review prompt (YAML-based validation rules)
+- ✅ P0-T3: MD→YAML Converter (`src/tools/md_to_yaml_converter.py`)
+- ✅ P0-T4: Progress Dashboard Generator (`src/tools/dashboard_generator.py`)
+- ✅ P0-T5: Checkpoint Manager (`src/tools/checkpoint_manager.py`)
+- ✅ P0-T6: Baseline Checkpoint CP0 (Git commit `2e4997c9`, tag `checkpoint-CP0`)
+- ✅ P0-T7: Requirements Auditor + Remediation Executor (bonus tools)
+- ✅ P0-T8: **Governance Enhancement** - 15 new operational efficiency rules
+
+**Governance Enhancements:**
+- 📋 **3 Tier 0 Governance Files Created:**
+  - `cortex-brain/tier0/governance/core-rules.yaml` (18 rules - CORE)
+  - `cortex-brain/tier0/governance/mcp-tool-usage-rules.yaml` (12 rules - MCP)
+  - `cortex-brain/tier0/governance/operational-efficiency-rules.yaml` (15 rules - OE) **NEW**
+- 📋 **Total: 45 governance rules** protecting CORTEX from brittleness
+- 📋 **Epic Review Enhanced:** Added Step 6 - Governance Validation (GOV-001 to GOV-006)
 
 **What's Pending:**
-- ⏳ P0-T1: YAML Schema Validator (2 hours)
-- ⏳ P0-T3: MD→YAML Converter (2 hours)
-- ⏳ P0-T4: Progress Dashboard Generator (1.5 hours)
-- ⏳ P0-T5: Checkpoint Manager (2 hours)
-- ⏳ P0-T6: Formalize Baseline Checkpoint CP0 (0.5 hours)
+- ⏳ P1: Requirements Conversion (16 hours) - Convert feat01-08 to YAML
+- ⏳ P2: Critical Gaps (24 hours) - Implement missing features (feat07-08)
+- ⏳ P3: Drift Correction (16 hours) - Align code with specs
+- ⏳ P4: Test Expansion (12 hours) - Expand test coverage to 95%+
+- ⏳ P5: Optimization (8 hours) - Performance tuning
+- ⏳ P6: Validation (8 hours) - Final validation + epic health 100/100
 
 ---
 
 ## 🎯 Resumption Command
 
-**Option 1 - Continue P0:**
+**Option 1 - Continue P1 (Requirements Conversion):**
 ```
-Continue CORTEX 6.0 Remediation Plan from Phase P0. 
+Continue CORTEX 6.0 Remediation Plan from Phase P1 (Requirements Conversion). 
 
 Context:
-- Read: .asif/AI-Learning/cortex6-fixes/reports/P0-COMPLETION-REPORT.md
-- Read: .asif/AI-Learning/cortex6-fixes/P0-foundation-prerequisites.yaml
-- Resume from: P0-T1 (YAML Schema Validator)
-- Complete remaining P0 tasks (T1, T3, T4, T5, T6) = 8 hours total
-- Use TDD for all tools (RED→GREEN→REFACTOR)
-- Create checkpoint after P0 completion
+- Read: .asif/AI-Learning/cortex6-fixes/reports/EXECUTION-SUMMARY.md
+- Read: .asif/AI-Learning/cortex6-fixes/P1-requirements-conversion.yaml
+- All P0 tools available (YAML validator, gap detector, MD converter, dashboard, checkpoint manager)
+- All governance rules defined (45 total: 18 CORE, 12 MCP, 15 OE)
+- Start with: P1-T2 (Convert feat03-08 requirements to YAML)
+- Complete P1 tasks (T2-T11) = 16 hours total
+- Use TDD for all tools
+- Create checkpoint after P1 completion
 
 Expected deliverables:
-1. src/tools/yaml_validator.py (with tests)
-2. src/tools/md_to_yaml_converter.py (with tests)
-3. src/tools/dashboard_generator.py (with tests)
-4. src/tools/checkpoint_manager.py (with tests)
-5. .asif/AI-Learning/cortex6-fixes/checkpoints/CP0.yaml
+1. feat03-08 feature.yaml files (8 files)
+2. feat03-08 requirements.yaml files (8 files)
+3. Traceability matrix (requirements ↔ code)
+4. Unified requirements catalog
+5. YAML validation passes for all files
 ```
 
-**Option 2 - Epic Review (Check Current State):**
+**Option 2 - Epic Review (Validate with Governance):**
 ```
-Run epic review on CORTEX 6.0 to validate current state.
+Run epic review on CORTEX 6.0 to validate current state with NEW governance validation.
 
 Context:
 - Baseline gap report exists: .asif/AI-Learning/cortex6-fixes/reports/baseline-gap-report.yaml
 - Epic review prompt: .github/prompts/cortex-epic-review.prompt.yaml
-- Validate: Requirements coverage, implementation completeness, test coverage
-- Generate: Epic health report with updated metrics
+- NEW: Step 6 - Governance Validation (GOV-001 to GOV-006)
+- Validates: Requirements coverage, implementation, test coverage, GOVERNANCE COMPLIANCE
+- Generate: Epic health report with governance metrics (20% weight)
 
-This will show current health score and confirm next steps.
+This will show:
+1. Overall health score (now includes governance weight)
+2. Governance compliance percentage (45 rules)
+3. Missing middleware implementations
+4. MCP security enforcement status
+5. Operational efficiency gaps
 ```
 
-**Option 3 - Jump to P1 (Requirements Conversion):**
+**Option 3 - Implement Governance Middleware:**
 ```
-Execute CORTEX 6.0 Remediation Plan Phase P1 (Requirements Conversion).
+Implement missing middleware from operational-efficiency-rules.yaml.
+
+Context:
+- Read: cortex-brain/tier0/governance/operational-efficiency-rules.yaml
+- Priority: Implement BLOCKED severity rules first (7 rules)
+- Create infrastructure components:
+  1. src/infrastructure/state_manager.py (OE-001)
+  2. src/infrastructure/file_utils.py (OE-005)
+  3. src/infrastructure/rollback_manager.py (OE-007)
+  4. src/infrastructure/dependency_validator.py (OE-009)
+  5. src/infrastructure/resource_limiter.py (OE-015)
+- Estimated: 8 hours for all BLOCKED rules
+
+This ensures resilience before P1 execution.
+```
 
 Prerequisites: P0 tools available (gap detector exists, others will be built as needed)
 Context:

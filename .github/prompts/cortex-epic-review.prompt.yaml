@@ -44,10 +44,14 @@ workflow:
       action: check_implementation_vs_requirements
       
     - step: 6
+      name: "Validate Governance Compliance"
+      action: check_governance_rules_implemented
+      
+    - step: 7
       name: "Generate Health Report"
       action: generate_yaml_report
       
-    - step: 7
+    - step: 8
       name: "Update Epic if Gaps Found"
       action: update_epic_files
 
@@ -670,7 +674,245 @@ implementation_validation:
           add_to: "P1-requirements-conversion.yaml"
 
 # ==============================================================================
-# STEP 6: GENERATE HEALTH REPORT
+# STEP 6: VALIDATE GOVERNANCE COMPLIANCE
+# ==============================================================================
+
+governance_validation:
+  governance_files:
+    - "cortex-brain/tier0/governance/core-rules.yaml"
+    - "cortex-brain/tier0/governance/mcp-tool-usage-rules.yaml"
+    - "cortex-brain/tier0/governance/operational-efficiency-rules.yaml"
+  
+  rules:
+    - rule_id: GOV-001
+      name: "Core Protection Rules Implemented"
+      check: "All 18 CORE rules from core-rules.yaml are enforced in codebase"
+      severity: CRITICAL
+      validation:
+        type: governance_implementation_check
+        rules_file: "cortex-brain/tier0/governance/core-rules.yaml"
+        expected_count: 18
+        
+        sample_checks:
+          - rule_id: CORE-001
+            name: "Incremental Autonomous Execution"
+            verify: "Orchestrators use StateManager for incremental execution"
+            check_files:
+              - "src/orchestrators/*/[orchestrator]*.py"
+            grep_pattern: "StateManager|state_manager|incremental"
+          
+          - rule_id: CORE-002
+            name: "No Summary File Generation"
+            verify: "No orchestrators create *-summary.md files"
+            check_files:
+              - "src/orchestrators/**/*.py"
+            grep_pattern: "-summary.md|-report.md|-explanation.md"
+            expect_no_matches: true
+          
+          - rule_id: CORE-006
+            name: "Git Isolation"
+            verify: "No CORTEX code in user repos"
+            check_command: "git log --all --grep='CORTEX' | grep -v 'CORTEX repo'"
+      
+      fail_action:
+        - type: ADD_GOVERNANCE_IMPLEMENTATION_TASKS
+          add_to: "P2-critical-gaps.yaml"
+    
+    - rule_id: GOV-002
+      name: "MCP Tool Usage Rules Implemented"
+      check: "All 12 MCP rules from mcp-tool-usage-rules.yaml are enforced"
+      severity: CRITICAL
+      validation:
+        type: governance_implementation_check
+        rules_file: "cortex-brain/tier0/governance/mcp-tool-usage-rules.yaml"
+        expected_count: 12
+        
+        sample_checks:
+          - rule_id: MCP-002
+            name: "Parameter Schema Validation"
+            verify: "MCP tools validate parameters before execution"
+            check_files:
+              - "src/mcp/mcp_server.py"
+              - "src/mcp/capability_registry.py"
+            grep_pattern: "validate_parameters|schema.validate|parameter_validation"
+          
+          - rule_id: MCP-003
+            name: "Workspace Boundary Enforcement"
+            verify: "Path traversal prevention implemented"
+            check_files:
+              - "src/mcp/security/*.py"
+            grep_pattern: "workspace_boundary|path_traversal|validate_path"
+          
+          - rule_id: MCP-006
+            name: "Audit Logging"
+            verify: "All MCP tool invocations logged"
+            check_files:
+              - "src/mcp/mcp_server.py"
+            grep_pattern: "audit_logger|log_tool_invocation|correlation_id"
+      
+      fail_action:
+        - type: ADD_MCP_GOVERNANCE_TASKS
+          add_to: "P1-requirements-conversion.yaml"
+          task_id: "P1-T12"
+    
+    - rule_id: GOV-003
+      name: "Operational Efficiency Rules Implemented"
+      check: "All 15 OE rules from operational-efficiency-rules.yaml are enforced"
+      severity: HIGH
+      validation:
+        type: governance_implementation_check
+        rules_file: "cortex-brain/tier0/governance/operational-efficiency-rules.yaml"
+        expected_count: 15
+        
+        priority_checks:
+          - rule_id: OE-001
+            name: "Mandatory State Persistence"
+            severity: BLOCKED
+            verify: "All orchestrators persist state after each phase"
+            check_files:
+              - "src/orchestrators/**/*.py"
+            grep_pattern: "save_state|persist_state|state_manager.save"
+            minimum_occurrences: 5  # At least 5 orchestrators
+          
+          - rule_id: OE-002
+            name: "YAML Schema Validation Before Persistence"
+            severity: BLOCKED
+            verify: "YAML files validated before write"
+            check_files:
+              - "src/tools/yaml_validator.py"
+              - "src/infrastructure/*.py"
+            grep_pattern: "validate_yaml|YAMLValidator|schema.validate"
+          
+          - rule_id: OE-005
+            name: "Atomic File Operations"
+            severity: BLOCKED
+            verify: "File writes use atomic operations (temp + rename)"
+            check_files:
+              - "src/infrastructure/file_utils.py"
+            grep_pattern: "atomic_write|\.tmp\.|rename|fsync"
+          
+          - rule_id: OE-007
+            name: "Rollback Support for Destructive Operations"
+            severity: BLOCKED
+            verify: "Destructive operations create rollback checkpoints"
+            check_files:
+              - "src/infrastructure/rollback_manager.py"
+              - "src/tools/checkpoint_manager.py"
+            grep_pattern: "rollback|create_checkpoint|restore"
+          
+          - rule_id: OE-009
+            name: "Dependency Validation Before Execution"
+            severity: BLOCKED
+            verify: "Orchestrators validate dependencies before execution"
+            check_files:
+              - "src/infrastructure/dependency_validator.py"
+            grep_pattern: "validate_dependencies|dependency_check|pre_flight"
+          
+          - rule_id: OE-010
+            name: "Structured Logging with Correlation IDs"
+            severity: ENFORCED
+            verify: "Logs use structured format with correlation IDs"
+            check_files:
+              - "src/infrastructure/audit_logger.py"
+            grep_pattern: "correlation_id|structured.*log|json.*log"
+          
+          - rule_id: OE-015
+            name: "Resource Limits"
+            severity: BLOCKED
+            verify: "Long-running operations have resource limits"
+            check_files:
+              - "src/infrastructure/resource_limiter.py"
+            grep_pattern: "timeout|max_memory|max_iterations|resource_limit"
+      
+      fail_action:
+        - type: ADD_OPERATIONAL_EFFICIENCY_TASKS
+          add_to: "P0-foundation-prerequisites.yaml"
+          task_id: "P0-T7"
+    
+    - rule_id: GOV-004
+      name: "Governance Files Exist and Are Valid"
+      check: "All governance YAML files exist, are valid, and have required fields"
+      severity: CRITICAL
+      validation:
+        type: file_existence_and_schema
+        files:
+          - path: "cortex-brain/tier0/governance/core-rules.yaml"
+            required_fields:
+              - schema_version
+              - governance_tier
+              - category
+              - rules
+            minimum_rules: 18
+          
+          - path: "cortex-brain/tier0/governance/mcp-tool-usage-rules.yaml"
+            required_fields:
+              - schema_version
+              - governance_tier
+              - category
+              - rules
+            minimum_rules: 12
+          
+          - path: "cortex-brain/tier0/governance/operational-efficiency-rules.yaml"
+            required_fields:
+              - schema_version
+              - governance_tier
+              - category
+              - rules
+            minimum_rules: 15
+      
+      fail_action:
+        - type: FIX_GOVERNANCE_FILES
+          severity: CRITICAL
+    
+    - rule_id: GOV-005
+      name: "Governance Enforcement Middleware Exists"
+      check: "Middleware exists to enforce governance rules"
+      severity: HIGH
+      validation:
+        type: implementation_existence
+        expected_files:
+          - "src/infrastructure/state_manager.py"  # OE-001
+          - "src/tools/yaml_validator.py"  # OE-002
+          - "src/infrastructure/error_handler.py"  # OE-003, OE-004
+          - "src/infrastructure/file_utils.py"  # OE-005
+          - "src/infrastructure/rollback_manager.py"  # OE-007
+          - "src/infrastructure/dependency_validator.py"  # OE-009
+          - "src/infrastructure/audit_logger.py"  # OE-010
+          - "src/infrastructure/config_loader.py"  # OE-011
+          - "src/infrastructure/dead_letter_queue.py"  # OE-012
+          - "src/infrastructure/resource_limiter.py"  # OE-015
+          - "src/mcp/security/workspace_boundary_validator.py"  # MCP-003
+          - "src/mcp/security/git_operation_validator.py"  # MCP-004
+          - "src/mcp/security/rate_limiter.py"  # MCP-009
+      
+      fail_action:
+        - type: CREATE_MISSING_MIDDLEWARE
+          add_to: "P0-foundation-prerequisites.yaml"
+    
+    - rule_id: GOV-006
+      name: "Governance Rules Have Automated Tests"
+      check: "All BLOCKED severity rules have automated validation tests"
+      severity: MEDIUM
+      validation:
+        type: test_coverage_check
+        scan: "tests/governance/"
+        expected_tests:
+          - "test_state_persistence_after_phase"  # OE-001
+          - "test_yaml_validation_before_write"  # OE-002
+          - "test_atomic_file_write_on_crash"  # OE-005
+          - "test_rollback_on_destructive_failure"  # OE-007
+          - "test_dependency_validation_before_execution"  # OE-009
+          - "test_resource_limits_enforcement"  # OE-015
+          - "test_mcp_parameter_validation"  # MCP-002
+          - "test_workspace_boundary_enforcement"  # MCP-003
+          - "test_git_operation_confirmation"  # MCP-004
+      
+      fail_action:
+        - type: ADD_GOVERNANCE_TESTS
+          add_to: "P4-test-documentation.yaml"
+
+# ==============================================================================
+# STEP 7: GENERATE HEALTH REPORT
 # ==============================================================================
 
 health_report:
@@ -715,6 +957,19 @@ health_report:
         - rules_warning
         - details_per_rule
     
+    - section: governance_validation
+      include:
+        - total_governance_rules
+        - governance_rules_implemented
+        - governance_rules_missing
+        - governance_compliance_percentage
+        - core_rules_compliance
+        - mcp_rules_compliance
+        - operational_efficiency_compliance
+        - middleware_implementation_status
+        - automated_test_coverage
+        - details_per_governance_category
+    
     - section: gaps_identified
       include:
         - critical_gaps
@@ -722,6 +977,7 @@ health_report:
         - medium_priority_gaps
         - low_priority_gaps
         - total_gaps
+        - governance_gaps  # NEW: Gaps from governance validation
     
     - section: recommendations
       prioritized_by_severity:
@@ -736,6 +992,7 @@ health_report:
         - phases_to_modify
         - acceptance_criteria_to_update
         - features_to_add
+        - governance_enforcement_tasks  # NEW: Tasks to implement governance
     
     - section: metrics
       include:
@@ -743,16 +1000,18 @@ health_report:
         - implementation_completeness_percentage
         - specification_alignment_percentage
         - test_coverage_percentage
+        - governance_compliance_percentage  # NEW: Governance metric
         - plan_accuracy_score
         - snowball_effect_validity_score
 
   health_score_calculation:
     formula: "weighted_average"
     weights:
-      completeness_validation: 30 # 30%
-      accuracy_validation: 25 # 25%
-      implementation_validation: 30 # 30%
-      plan_quality: 15 # 15%
+      completeness_validation: 25 # 25% (reduced from 30%)
+      accuracy_validation: 20 # 20% (reduced from 25%)
+      implementation_validation: 25 # 25% (reduced from 30%)
+      governance_validation: 20 # 20% (NEW: Governance weight)
+      plan_quality: 10 # 10% (reduced from 15%)
     
     thresholds:
       excellent: 95
