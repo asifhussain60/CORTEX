@@ -324,16 +324,38 @@ class EpicReviewOrchestrator:
         """Evaluate governance compliance."""
         score = 0
         max_score = 100
+        details = {}
         
-        # Check SKULL rules active
-        if self.governance_rules.exists():
-            score += 15
+        # Check Tier 0 governance files exist and load correctly (30 points)
+        gov_files = [
+            self.workspace_root / "cortex-brain/tier0/governance/core-rules.yaml",
+            self.workspace_root / "cortex-brain/tier0/governance/operational-efficiency-rules.yaml",
+            self.workspace_root / "cortex-brain/tier0/governance/mcp-tool-usage-rules.yaml"
+        ]
         
-        # Check YAML-first enforcement (tests passing)
+        loaded_rules = 0
+        for gov_file in gov_files:
+            if gov_file.exists():
+                try:
+                    import yaml
+                    with open(gov_file) as f:
+                        data = yaml.safe_load(f)
+                        rules = data.get('rules', [])
+                        loaded_rules += len(rules)
+                        score += 10  # 10 points per valid file
+                except Exception:
+                    pass  # File exists but not valid YAML
+        
+        details['governance_files'] = f"{len([f for f in gov_files if f.exists()])}/3 files, {loaded_rules} rules"
+        
+        # Check YAML-first enforcement (tests passing) (20 points)
         if tests['passing'] >= tests['total'] * 0.95:
-            score += 15
+            score += 20
+            details['yaml_enforcement'] = "ACTIVE (95%+ tests passing)"
+        else:
+            details['yaml_enforcement'] = f"PARTIAL ({tests['passing']/tests['total']*100:.1f}% passing)"
         
-        # Check TDD enforcement (tracker shows RED→GREEN→REFACTOR)
+        # Check TDD enforcement (tracker shows RED→GREEN→REFACTOR) (15 points)
         features = [(k, v) for k, v in tracker.items() if k.startswith('feat')]
         has_tdd = any(
             'tdd_phases' in task or 'tdd_required' in task
@@ -343,25 +365,38 @@ class EpicReviewOrchestrator:
         )
         if has_tdd:
             score += 15
+            details['tdd_enforcement'] = "ACTIVE"
+        else:
+            details['tdd_enforcement'] = "INACTIVE"
         
-        # Check git isolation (brain protection rules exist)
+        # Check git isolation (brain protection rules exist) (15 points)
         if self.brain_protection.exists():
             score += 15
+            details['git_isolation'] = "PROTECTED"
+        else:
+            details['git_isolation'] = "UNPROTECTED"
         
-        # Check merge performance (governance_merger logs present)
+        # Check merge performance (governance_merger logs present) (10 points)
         governance_logs = audit['by_component'].get('governance_merger', 0)
         if governance_logs > 0:
-            score += 20  # Assume <50ms if active
+            score += 10
+            details['merge_performance'] = f"ACTIVE ({governance_logs} operations)"
+        else:
+            details['merge_performance'] = "INACTIVE"
         
-        # Check violation tracking
+        # Check violation tracking (10 points)
         if governance_logs > 0:
-            score += 20
+            score += 10
+            details['violation_tracking'] = "ACTIVE"
+        else:
+            details['violation_tracking'] = "INACTIVE"
         
         return {
             'score': score,
             'max_score': max_score,
             'percentage': (score / max_score * 100),
-            'status': 'EXCELLENT' if score >= 90 else 'GOOD' if score >= 70 else 'NEEDS_IMPROVEMENT'
+            'status': 'EXCELLENT' if score >= 90 else 'GOOD' if score >= 70 else 'NEEDS_IMPROVEMENT',
+            'details': details
         }
     
     def _identify_gaps(
