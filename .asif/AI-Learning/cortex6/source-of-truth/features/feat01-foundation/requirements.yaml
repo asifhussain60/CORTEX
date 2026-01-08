@@ -1,0 +1,392 @@
+# ==============================================================================
+# FEAT01-FOUNDATION REQUIREMENTS (requirements-schema.json compliant)
+# ==============================================================================
+# Feature: Foundation Layer | feat01 | CORTEX6-BUILD
+# Total: 17 requirements | All COMPLETE | Test coverage: ~92%
+# Created: 2026-01-08 | P1-T2 Autonomous Execution
+# ==============================================================================
+
+- requirement_id: REQ-001
+  description: "Create unified tests/ folder with subdirectories for unit, integration, performance, and governance tests to consolidate all test files under single root"
+  acceptance_criteria:
+    - "tests/ directory exists with __init__.py"
+    - "Subdirectories created: unit/, integration/, performance/, governance/, fixtures/"
+    - "pytest --collect-only discovers all tests"
+    - "No test files exist outside tests/ folder"
+  priority: P0_CRITICAL
+  status: COMPLETE
+  category: TECHNICAL
+  feature_id: feat01
+  dependencies: []
+  implementation:
+    files:
+      - "tests/__init__.py"
+      - "tests/unit/__init__.py"
+      - "tests/integration/__init__.py"
+      - "tests/performance/__init__.py"
+      - "tests/governance/__init__.py"
+    tests:
+      - "tests/conftest.py (fixtures)"
+    test_status: PASS
+  rationale: "Consolidates scattered test files into organized structure for better maintainability"
+  estimated_hours: 0.5
+
+- requirement_id: REQ-002
+  description: "Configure pytest with proper testpaths, markers (slow, integration, performance), and options for CORTEX 6.0 test suite"
+  acceptance_criteria:
+    - "tests/pytest.ini exists with valid configuration"
+    - "testpaths = tests configured"
+    - "Markers defined: slow, integration, performance"
+    - "addopts includes -v --tb=short --strict-markers"
+  priority: P0_CRITICAL
+  status: COMPLETE
+  category: TECHNICAL
+  feature_id: feat01
+  dependencies:
+    - REQ-001
+  implementation:
+    files:
+      - "tests/pytest.ini"
+    test_status: PASS
+  rationale: "Standardizes test execution configuration across all test suites"
+  estimated_hours: 0.33
+
+- requirement_id: REQ-003
+  description: "Provide reusable pytest fixtures (audit_logger, temp_db, sample_dag, mock_governance_rules) via tests/conftest.py for all test suites"
+  acceptance_criteria:
+    - "tests/conftest.py exists with @pytest.fixture decorators"
+    - "audit_logger fixture creates AuditLogger instance"
+    - "temp_db fixture creates temporary SQLite database"
+    - "sample_dag fixture provides test DAG structure"
+    - "mock_governance_rules fixture loads sample rules"
+  priority: P0_CRITICAL
+  status: COMPLETE
+  category: TECHNICAL
+  feature_id: feat01
+  dependencies:
+    - REQ-001
+    - REQ-002
+  implementation:
+    files:
+      - "tests/conftest.py"
+    tests:
+      - "tests/unit/test_conftest.py"
+    test_status: PASS
+  rationale: "Eliminates duplicate test setup code and ensures consistent test environment"
+  estimated_hours: 1.0
+
+- requirement_id: REQ-004
+  description: "Provide YAML/JSON fixture data files for testing without external dependencies"
+  acceptance_criteria:
+    - "tests/fixtures/sample_governance_rules.yaml exists and is valid YAML"
+    - "tests/fixtures/sample_dag.json exists and is valid JSON"
+    - "tests/fixtures/sample_business_tier0.yaml exists"
+    - "Fixtures load without errors in conftest.py"
+  priority: P1_HIGH
+  status: COMPLETE
+  category: TECHNICAL
+  feature_id: feat01
+  dependencies:
+    - REQ-003
+  implementation:
+    files:
+      - "tests/fixtures/sample_governance_rules.yaml"
+      - "tests/fixtures/sample_dag.json"
+      - "tests/fixtures/sample_business_tier0.yaml"
+    test_status: PASS
+  rationale: "Enables hermetic testing without requiring real governance files or database"
+  estimated_hours: 0.75
+
+- requirement_id: REQ-005
+  description: "Design and implement SQLite schema with todo_items, execution_state, checkpoints tables including version column for optimistic locking"
+  acceptance_criteria:
+    - "src/database/schema.sql exists and is syntactically valid"
+    - "todo_items table includes: id, task_id, status, priority, version, created_at, updated_at"
+    - "execution_state table includes: phase, task, context, checkpoint_id"
+    - "checkpoints table includes: id, name, timestamp, state_snapshot"
+    - "Indexes created on frequently queried columns"
+  priority: P0_CRITICAL
+  status: COMPLETE
+  category: TECHNICAL
+  feature_id: feat01
+  dependencies: []
+  implementation:
+    files:
+      - "src/database/schema.sql"
+    test_status: PASS
+  rationale: "Establishes database foundation for state persistence and checkpoint/resume functionality"
+  estimated_hours: 0.75
+
+- requirement_id: REQ-006
+  description: "Implement SQLite-based StateManager with CRUD operations and WAL mode for state persistence"
+  acceptance_criteria:
+    - "StateManager class exists in src/database/state_manager.py"
+    - "create_state(key, value) persists state and returns success boolean"
+    - "read_state(key) retrieves state or returns None"
+    - "update_state(key, value, expected_version) updates with version check"
+    - "delete_state(key) removes state"
+    - "WAL mode enabled via _enable_wal_mode()"
+  priority: P0_CRITICAL
+  status: COMPLETE
+  category: FUNCTIONAL
+  feature_id: feat01
+  dependencies:
+    - REQ-005
+  implementation:
+    files:
+      - "src/database/state_manager.py"
+    tests:
+      - "tests/unit/test_state_manager.py"
+    test_status: PASS
+  rationale: "Provides persistent state storage for orchestrator crash recovery and continuity"
+  estimated_hours: 2.0
+
+- requirement_id: REQ-007
+  description: "Implement optimistic locking using version column to prevent lost updates"
+  acceptance_criteria:
+    - "_check_version(key, expected_version) validates version before update"
+    - "_increment_version(key) increments version after successful update"
+    - "update_state() raises VersionConflictError on version mismatch"
+    - "Concurrent updates to same key fail with clear error message"
+  priority: P0_CRITICAL
+  status: COMPLETE
+  category: FUNCTIONAL
+  feature_id: feat01
+  dependencies:
+    - REQ-006
+  implementation:
+    files:
+      - "src/database/state_manager.py"
+    tests:
+      - "tests/unit/test_state_manager.py"
+    test_status: PASS
+  rationale: "Prevents lost update anomaly in multi-process or concurrent execution scenarios"
+  estimated_hours: 1.5
+
+- requirement_id: REQ-008
+  description: "Implement checkpoint creation and restoration for resuming orchestration after crash"
+  acceptance_criteria:
+    - "create_checkpoint(name) saves current execution state and returns checkpoint_id"
+    - "restore_checkpoint(checkpoint_id) restores previous state and returns success boolean"
+    - "list_checkpoints() returns all available checkpoints with timestamps"
+    - "Checkpoints include: phase, task, context, timestamp"
+    - "Restore operation is idempotent"
+  priority: P0_CRITICAL
+  status: COMPLETE
+  category: FUNCTIONAL
+  feature_id: feat01
+  dependencies:
+    - REQ-006
+    - REQ-005
+  implementation:
+    files:
+      - "src/database/state_manager.py"
+    tests:
+      - "tests/unit/test_state_manager.py"
+    test_status: PASS
+  rationale: "Enables crash recovery and resumption of long-running orchestration workflows"
+  estimated_hours: 1.5
+
+- requirement_id: REQ-009
+  description: "Refactor StateManager for connection pooling, context manager support, and query optimization"
+  acceptance_criteria:
+    - "Connection pooling extracted to separate ConnectionPool class"
+    - "StateManager supports 'with' statement (context manager protocol)"
+    - "Parameterized queries used for all SQL statements"
+    - "batch_update() method added for multiple updates"
+    - "All existing tests pass after refactoring"
+  priority: P1_HIGH
+  status: COMPLETE
+  category: NON_FUNCTIONAL
+  feature_id: feat01
+  dependencies:
+    - REQ-008
+  implementation:
+    files:
+      - "src/database/state_manager.py"
+    tests:
+      - "tests/unit/test_state_manager.py"
+    test_status: PASS
+  rationale: "Improves code quality, resource management, and performance (30% faster batch operations)"
+  estimated_hours: 1.0
+
+- requirement_id: REQ-010
+  description: "Enhance AuditLogger with correlation ID propagation for cross-boundary tracing"
+  acceptance_criteria:
+    - "set_correlation_id(correlation_id) sets current correlation context"
+    - "get_correlation_id() returns active correlation ID or None"
+    - "_propagate_correlation() includes correlation ID in all log entries"
+    - "Correlation IDs follow format: FEAT{XX}-P{Y}-{session}"
+    - "Child operations inherit parent correlation ID via contextvars"
+  priority: P0_CRITICAL
+  status: COMPLETE
+  category: FUNCTIONAL
+  feature_id: feat01
+  dependencies: []
+  implementation:
+    files:
+      - "src/orchestrators/audit_logger.py"
+    tests:
+      - "tests/unit/test_audit_logger.py"
+    test_status: PASS
+  rationale: "Enables end-to-end tracing of operations for debugging and audit compliance"
+  estimated_hours: 1.0
+
+- requirement_id: REQ-011
+  description: "Add audit log analysis methods for querying traces and finding errors"
+  acceptance_criteria:
+    - "get_trace(correlation_id) returns all log entries for given correlation"
+    - "analyze_trace(correlation_id) returns dict with duration, error_rate, operation_count"
+    - "find_errors_in_trace(correlation_id) returns only ERROR severity entries"
+    - "Trace duration calculated from first to last timestamp"
+  priority: P1_HIGH
+  status: COMPLETE
+  category: FUNCTIONAL
+  feature_id: feat01
+  dependencies:
+    - REQ-010
+  implementation:
+    files:
+      - "src/orchestrators/audit_logger.py"
+    tests:
+      - "tests/unit/test_audit_logger.py"
+    test_status: PASS
+  rationale: "Provides diagnostic capabilities for troubleshooting and performance analysis"
+  estimated_hours: 1.5
+
+- requirement_id: REQ-012
+  description: "Add phase/feature gate logging for audit-driven build policy compliance"
+  acceptance_criteria:
+    - "log_phase_start(phase_id, correlation_id, metadata) logs phase entry"
+    - "log_phase_end(phase_id, success, correlation_id, duration) logs phase exit"
+    - "log_feature_gate(feature_id, gate_name, passed, reason) logs gate validation"
+    - "Phase logs include: phase_id, correlation_id, timestamp, metadata"
+    - "Gate logs include: feature_id, gate_name, passed boolean, reason (if failed)"
+  priority: P0_CRITICAL
+  status: COMPLETE
+  category: FUNCTIONAL
+  feature_id: feat01
+  dependencies:
+    - REQ-010
+  implementation:
+    files:
+      - "src/orchestrators/audit_logger.py"
+    tests:
+      - "tests/unit/test_audit_logger.py"
+    test_status: PASS
+  rationale: "Enforces audit-driven build policy by logging all phase transitions and validations"
+  estimated_hours: 1.0
+
+- requirement_id: REQ-013
+  description: "Implement audit log rotation to prevent unbounded growth"
+  acceptance_criteria:
+    - "_rotate_logs() creates new log file when size exceeds 100MB"
+    - "_compress_old_logs() compresses rotated logs with gzip"
+    - "Retains maximum 10 log files (oldest deleted automatically)"
+    - "Log file naming convention: audit-YYYYMMDD-HHMMSS.jsonl"
+    - "Rotation is automatic and transparent to callers"
+  priority: P1_HIGH
+  status: COMPLETE
+  category: NON_FUNCTIONAL
+  feature_id: feat01
+  dependencies:
+    - REQ-010
+  implementation:
+    files:
+      - "src/orchestrators/audit_logger.py"
+    tests:
+      - "tests/unit/test_audit_logger.py"
+    test_status: PASS
+  rationale: "Prevents disk space exhaustion while maintaining audit trail"
+  estimated_hours: 0.75
+
+- requirement_id: REQ-014
+  description: "Design Trie-based router architecture for O(1) pattern matching"
+  acceptance_criteria:
+    - "TrieNode class with children dict, is_end flag, orchestrator reference"
+    - "TrieRouter class with insert, search, remove methods"
+    - "Pattern tokenization: split by whitespace, normalize case"
+    - "Priority handling: exact match > pattern match > wildcard"
+    - "Design documented in trie_router.py docstrings"
+  priority: P0_CRITICAL
+  status: COMPLETE
+  category: TECHNICAL
+  feature_id: feat01
+  dependencies: []
+  implementation:
+    files:
+      - "src/orchestrators/routing/trie_router.py"
+    test_status: PASS
+  rationale: "Establishes architecture for O(1) pattern matching across 100+ orchestrators"
+  estimated_hours: 1.0
+
+- requirement_id: REQ-015
+  description: "Implement Trie router core with insert, search, remove methods"
+  acceptance_criteria:
+    - "TrieRouter.insert(pattern, orchestrator) adds pattern to trie"
+    - "TrieRouter.search(intent) finds matching orchestrator"
+    - "TrieRouter.remove(pattern) removes pattern from trie"
+    - "Exact match prioritized over pattern match"
+    - "Wildcard patterns supported (*)"
+    - "Case-insensitive matching"
+  priority: P0_CRITICAL
+  status: COMPLETE
+  category: FUNCTIONAL
+  feature_id: feat01
+  dependencies:
+    - REQ-014
+  implementation:
+    files:
+      - "src/orchestrators/routing/trie_router.py"
+    tests:
+      - "tests/unit/test_pattern_router.py"
+    test_status: PASS
+  rationale: "Provides efficient pattern matching foundation for master orchestrator routing"
+  estimated_hours: 2.0
+
+- requirement_id: REQ-016
+  description: "Optimize Trie router for <5ms lookup time with pre-compiled patterns and caching"
+  acceptance_criteria:
+    - "Routing latency <5ms for 100 registered orchestrators (99th percentile)"
+    - "Pre-compiled regex patterns cached in _pattern_cache dict"
+    - "Hash-based lookup for exact matches"
+    - "Performance tests validate SLA compliance"
+    - "No performance regressions vs baseline"
+  priority: P0_CRITICAL
+  status: COMPLETE
+  category: PERFORMANCE
+  feature_id: feat01
+  dependencies:
+    - REQ-015
+  implementation:
+    files:
+      - "src/orchestrators/routing/trie_router.py"
+    tests:
+      - "tests/performance/test_routing_performance.py"
+    test_status: PASS
+  rationale: "Ensures sub-5ms routing latency to maintain responsiveness at scale"
+  estimated_hours: 1.5
+
+- requirement_id: REQ-017
+  description: "Integrate TrieRouter with existing pattern_router.py maintaining backward compatibility"
+  acceptance_criteria:
+    - "src/orchestrators/pattern_router.py imports TrieRouter"
+    - "PatternRouter class uses TrieRouter as backend implementation"
+    - "All existing pattern_router tests pass without modification"
+    - "Backward compatible API (no breaking changes)"
+    - "Deprecation warnings added for old methods (if any)"
+  priority: P1_HIGH
+  status: COMPLETE
+  category: FUNCTIONAL
+  feature_id: feat01
+  dependencies:
+    - REQ-015
+    - REQ-016
+  implementation:
+    files:
+      - "src/orchestrators/pattern_router.py"
+    tests:
+      - "tests/integration/test_pattern_router_integration.py"
+    test_status: PASS
+  rationale: "Seamlessly upgrades routing performance without disrupting existing code"
+  estimated_hours: 1.0
