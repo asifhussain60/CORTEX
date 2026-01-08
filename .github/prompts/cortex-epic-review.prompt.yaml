@@ -1,0 +1,1000 @@
+prompt_id: cortex-epic-review
+prompt_name: "CORTEX Epic Review - Health & Accuracy Validation"
+version: 2.0.0
+format: yaml
+created_at: 2026-01-08T00:00:00Z
+purpose: |
+  Validate cortex6-fixes remediation plan accuracy against original cortex6 requirements.
+  All validation rules in YAML to eliminate misinterpretation and ensure completeness.
+
+invocation_patterns:
+  - "epic review"
+  - "review epic"
+  - "health check"
+  - "progress report"
+  - "cortex status"
+  - "epic status"
+  - "validate cortex6-fixes"
+  - "check remediation plan"
+
+execution_mode: AUTONOMOUS
+output_format: YAML_REPORT
+generate_code_snippets: false
+
+workflow:
+  steps:
+    - step: 1
+      name: "Load Source Requirements"
+      action: load_cortex6_requirements
+      
+    - step: 2
+      name: "Load Remediation Plan"
+      action: load_cortex6_fixes_plan
+      
+    - step: 3
+      name: "Validate Plan Completeness"
+      action: check_all_requirements_addressed
+      
+    - step: 4
+      name: "Validate Plan Accuracy"
+      action: check_plan_matches_requirements
+      
+    - step: 5
+      name: "Validate Live Implementation"
+      action: check_implementation_vs_requirements
+      
+    - step: 6
+      name: "Generate Health Report"
+      action: generate_yaml_report
+      
+    - step: 7
+      name: "Update Epic if Gaps Found"
+      action: update_epic_files
+
+# ==============================================================================
+# STEP 1: LOAD SOURCE REQUIREMENTS
+# ==============================================================================
+
+source_requirements:
+  locations:
+    cortex6_root: ".asif/AI-Learning/cortex6"
+    
+    source_of_truth:
+      - path: ".asif/AI-Learning/cortex6/source-of-truth"
+        priority: CRITICAL
+        files:
+          - "todo/00-TODO-CONTINUITY-TRACKER.yaml"
+          - "epic/00-CORTEX6-BUILD-EPIC.yaml"
+          - "features/*/feature.yaml"
+          - "00-CORTEX6-MASTER-SOURCE-OF-TRUTH.yaml"
+    
+    requirements:
+      - path: ".asif/AI-Learning/cortex6/requirements"
+        priority: CRITICAL
+        files:
+          - "00-GREENFIELD-REQUIREMENTS-MASTER.md"
+          - "01-CORE-ARCHITECTURE.yaml"
+          - "02-DATABASE-SCHEMAS.sql"
+    
+    analysis:
+      - path: ".asif/AI-Learning/cortex6/analysis"
+        priority: HIGH
+        files:
+          - "01-holistic-requirements-analysis.yaml"
+          - "02-edge-cases-failure-modes.yaml"
+    
+    architecture:
+      - path: ".asif/AI-Learning/cortex6/architecture"
+        priority: HIGH
+        files:
+          - "01-system-architecture.yaml"
+  
+  extraction_rules:
+    - rule_id: REQ-001
+      name: "Extract Feature Requirements"
+      pattern: "feature.yaml files in source-of-truth/features/"
+      extract:
+        - feature_id
+        - feature_name
+        - phases
+        - tasks
+        - requirements
+        - acceptance_criteria
+        - deliverables
+    
+    - rule_id: REQ-002
+      name: "Extract Critical Requirements"
+      pattern: "holistic-requirements-analysis.yaml CR-* entries"
+      extract:
+        - requirement_id
+        - requirement_name
+        - priority
+        - acceptance_criteria
+        - implementation_status
+    
+    - rule_id: REQ-003
+      name: "Extract Edge Cases"
+      pattern: "edge-cases-failure-modes.yaml entries"
+      extract:
+        - edge_case_id
+        - category
+        - severity
+        - mitigation_strategy
+        - test_scenario
+    
+    - rule_id: REQ-004
+      name: "Extract Architecture Requirements"
+      pattern: "system-architecture.yaml component definitions"
+      extract:
+        - component_name
+        - interfaces
+        - dependencies
+        - constraints
+
+# ==============================================================================
+# STEP 2: LOAD REMEDIATION PLAN
+# ==============================================================================
+
+remediation_plan:
+  location: ".asif/AI-Learning/cortex6-fixes"
+  
+  files_to_load:
+    - file: "00-REMEDIATION-MASTER-PLAN.yaml"
+      required: true
+      validates:
+        - phases_defined
+        - success_criteria
+        - snowball_strategy
+    
+    - file: "00-ACCEPTANCE-CRITERIA-TRACKER.yaml"
+      required: true
+      validates:
+        - acceptance_criteria_count
+        - validation_gates
+        - health_metrics
+    
+    - file: "P0-foundation-prerequisites.yaml"
+      required: true
+      validates:
+        - tasks_defined
+        - deliverables_listed
+        - acceptance_criteria
+    
+    - file: "P1-requirements-conversion.yaml"
+      required: true
+      validates:
+        - conversion_strategy
+        - yaml_schema
+        - traceability_matrix
+    
+    - file: "P2-critical-gaps.yaml"
+      required: true
+      validates:
+        - gap_detection_method
+        - implementation_strategy
+        - conditional_tasks
+  
+  extraction_rules:
+    - rule_id: PLAN-001
+      name: "Extract Phase Definitions"
+      extract:
+        - phase_id
+        - phase_name
+        - tasks
+        - estimated_hours
+        - deliverables
+        - acceptance_criteria
+    
+    - rule_id: PLAN-002
+      name: "Extract Task Definitions"
+      extract:
+        - task_id
+        - name
+        - description
+        - dependencies
+        - deliverables
+        - validation_criteria
+    
+    - rule_id: PLAN-003
+      name: "Extract Acceptance Criteria"
+      extract:
+        - criterion_id
+        - description
+        - target
+        - validation_method
+
+# ==============================================================================
+# STEP 3: VALIDATE PLAN COMPLETENESS
+# ==============================================================================
+
+completeness_validation:
+  rules:
+    - rule_id: COMP-001
+      name: "All Features Addressed"
+      check: "remediation_plan addresses all 8 features (feat01-feat08)"
+      severity: CRITICAL
+      validation:
+        type: count_match
+        source: "cortex6/source-of-truth/features/"
+        target: "cortex6-fixes phases/tasks"
+        expected: 8
+        tolerance: 0
+      
+      pass_criteria:
+        - "P1 includes conversion for feat01-feat08"
+        - "Each feature has corresponding tasks in plan"
+      
+      fail_action:
+        - type: ADD_MISSING_FEATURES
+          target: "remediation_plan"
+    
+    - rule_id: COMP-002
+      name: "All Critical Requirements Covered"
+      check: "All CR-001 through CR-010 addressed in plan"
+      severity: CRITICAL
+      validation:
+        type: requirement_coverage
+        source: "cortex6/analysis/01-holistic-requirements-analysis.yaml"
+        target: "cortex6-fixes/**/*.yaml"
+        expected_coverage: 100%
+      
+      pass_criteria:
+        - "CR-001 (DAG TODO Orchestrator) → P2 conditional tasks"
+        - "CR-002 (Audit Logging) → Already implemented, P3 validates"
+        - "CR-003 (Silent Execution) → Already implemented, P3 validates"
+        - "CR-004 (Race Conditions) → P2 StateManager checkpoint task"
+        - "CR-005 (Rollback/Recovery) → P0 checkpoint manager"
+        - "CR-006 (O(1) Pattern Matching) → Already implemented, P3 validates"
+        - "CR-007 (Circular Dependency) → Already implemented, P3 validates"
+        - "CR-008 (Knowledge Merge) → P3 governance drift correction"
+        - "CR-009 (Resource Limits) → Already implemented, P3 validates"
+        - "CR-010 (Markdown Blocking) → P1 YAML conversion"
+      
+      fail_action:
+        - type: ADD_MISSING_REQUIREMENTS
+          target: "appropriate_phase"
+    
+    - rule_id: COMP-003
+      name: "All Edge Cases Have Mitigation"
+      check: "All 25 edge cases have corresponding mitigation in plan"
+      severity: HIGH
+      validation:
+        type: edge_case_coverage
+        source: "cortex6/analysis/02-edge-cases-failure-modes.yaml"
+        target: "cortex6-fixes/**/*.yaml"
+        expected_coverage: 100%
+      
+      categories_to_check:
+        - "Concurrency & Race Conditions (4 cases)"
+        - "Integration Failures (5 cases)"
+        - "Deployment & Migration (5 cases)"
+        - "Security Vulnerabilities (5 cases)"
+        - "Performance Bottlenecks (5 cases)"
+      
+      fail_action:
+        - type: ADD_EDGE_CASE_MITIGATION
+          target: "appropriate_phase"
+    
+    - rule_id: COMP-004
+      name: "All Phases Have Acceptance Criteria"
+      check: "Each phase (P0-P6) has defined acceptance criteria"
+      severity: CRITICAL
+      validation:
+        type: criteria_completeness
+        expected_phases: 7
+        expected_criteria_per_phase: "≥3"
+      
+      pass_criteria:
+        - "P0: ≥5 criteria defined"
+        - "P1: ≥5 criteria defined"
+        - "P2: ≥5 criteria defined"
+        - "P3: ≥5 criteria defined"
+        - "P4: ≥5 criteria defined"
+        - "P5: ≥3 criteria defined"
+        - "P6: ≥5 criteria defined"
+      
+      fail_action:
+        - type: ADD_MISSING_CRITERIA
+          target: "phase_yaml_files"
+    
+    - rule_id: COMP-005
+      name: "Tooling Infrastructure Defined"
+      check: "P0 includes all necessary tools for automation"
+      severity: CRITICAL
+      validation:
+        type: tool_completeness
+        source: "cortex6-fixes/P0-foundation-prerequisites.yaml"
+      
+      required_tools:
+        - name: "YAML Schema Validator"
+          task_id: "P0-T1"
+          deliverable: "src/tools/yaml_validator.py"
+        
+        - name: "Gap Detection Engine"
+          task_id: "P0-T2"
+          deliverable: "src/tools/gap_detector.py"
+        
+        - name: "MD→YAML Converter"
+          task_id: "P0-T3"
+          deliverable: "src/tools/md_to_yaml_converter.py"
+        
+        - name: "Progress Dashboard Generator"
+          task_id: "P0-T4"
+          deliverable: "src/tools/dashboard_generator.py"
+        
+        - name: "Checkpoint Manager"
+          task_id: "P0-T5"
+          deliverable: "src/tools/checkpoint_manager.py"
+      
+      fail_action:
+        - type: ADD_MISSING_TOOLS
+          target: "P0-foundation-prerequisites.yaml"
+
+# ==============================================================================
+# STEP 4: VALIDATE PLAN ACCURACY
+# ==============================================================================
+
+accuracy_validation:
+  rules:
+    - rule_id: ACC-001
+      name: "Phase Sequencing Correct"
+      check: "Phases follow logical dependency order"
+      severity: CRITICAL
+      validation:
+        type: dependency_chain
+        expected_order:
+          - phase: P0
+            must_complete_before: [P1, P2, P3, P4, P5, P6]
+            rationale: "Tools needed by all phases"
+          
+          - phase: P1
+            must_complete_before: [P2, P3, P4, P5, P6]
+            rationale: "Requirements YAML needed for gap detection"
+          
+          - phase: P2
+            must_complete_before: [P3, P4, P5, P6]
+            rationale: "Implementation needed before alignment"
+          
+          - phase: P3
+            dependencies: [P1, P2]
+            must_complete_before: [P4, P5, P6]
+            rationale: "Alignment needed before testing"
+          
+          - phase: P4
+            dependencies: [P2, P3]
+            must_complete_before: [P5, P6]
+            rationale: "Tests needed before optimization"
+          
+          - phase: P5
+            dependencies: [P2, P3, P4]
+            must_complete_before: [P6]
+            rationale: "Optimization before final validation"
+          
+          - phase: P6
+            dependencies: [P0, P1, P2, P3, P4, P5]
+            rationale: "Final validation after all work"
+      
+      fail_action:
+        - type: FIX_DEPENDENCY_ORDER
+          target: "master_plan"
+    
+    - rule_id: ACC-002
+      name: "Snowball Effect Strategy Valid"
+      check: "Early phases actually enable later phases"
+      severity: HIGH
+      validation:
+        type: benefit_analysis
+        phases_to_check:
+          - phase: P0
+            claimed_benefit: "Tools reused 6+ times"
+            verify: "Tools from P0 used in P1, P2, P3, P4, P5, P6"
+            reuse_count: 6
+          
+          - phase: P1
+            claimed_benefit: "YAML enables automation"
+            verify: "YAML used in P2 gap detection, P3 drift detection, P4 test mapping"
+            reuse_count: 3
+          
+          - phase: P2
+            claimed_benefit: "More complete system to test"
+            verify: "P3 and P4 have more components to validate"
+          
+          - phase: P3
+            claimed_benefit: "Clean alignment makes testing reliable"
+            verify: "P4 references P3 alignment for test reliability"
+          
+          - phase: P4
+            claimed_benefit: "High coverage enables fearless optimization"
+            verify: "P5 references P4 coverage for optimization confidence"
+      
+      fail_action:
+        - type: UPDATE_SNOWBALL_CLAIMS
+          target: "phase_yamls"
+    
+    - rule_id: ACC-003
+      name: "Acceptance Criteria Measurable"
+      check: "All acceptance criteria have clear validation methods"
+      severity: CRITICAL
+      validation:
+        type: criteria_measurability
+        check_for:
+          - quantifiable_targets: true
+          - validation_method: true
+          - pass_fail_determination: true
+      
+      required_elements:
+        - "Specific target value (e.g., '100%', '≥95%', 'zero')"
+        - "Validation method (e.g., 'pytest', 'file_exists', 'manual_review')"
+        - "Evidence location (e.g., file path, command output)"
+      
+      examples:
+        good:
+          - "Test coverage ≥95% verified by pytest --cov"
+          - "Zero CRITICAL gaps verified by gap_detector output"
+          - "All YAML files pass schema validation"
+        
+        bad:
+          - "Good test coverage" # Not quantified
+          - "Most gaps fixed" # Not measurable
+          - "Code quality improved" # Subjective
+      
+      fail_action:
+        - type: MAKE_CRITERIA_MEASURABLE
+          target: "acceptance_criteria_tracker"
+    
+    - rule_id: ACC-004
+      name: "Task Estimates Realistic"
+      check: "Task time estimates align with complexity"
+      severity: MEDIUM
+      validation:
+        type: estimate_reasonableness
+        rules:
+          - task_type: "Create simple tool"
+            expected_range: [60, 120]
+            unit: minutes
+          
+          - task_type: "Create complex tool"
+            expected_range: [120, 240]
+            unit: minutes
+          
+          - task_type: "Convert single feature to YAML"
+            expected_range: [60, 120]
+            unit: minutes
+          
+          - task_type: "Implement security module"
+            expected_range: [180, 300]
+            unit: minutes
+          
+          - task_type: "Write comprehensive tests"
+            expected_range: [90, 180]
+            unit: minutes
+      
+      fail_action:
+        - type: ADJUST_ESTIMATES
+          target: "task_definitions"
+    
+    - rule_id: ACC-005
+      name: "Deliverables Match Acceptance Criteria"
+      check: "Each task's deliverables align with its acceptance criteria"
+      severity: HIGH
+      validation:
+        type: deliverable_alignment
+        check:
+          - "Deliverable files listed → Acceptance criteria check file exists"
+          - "Tests required → Acceptance criteria check test passes"
+          - "Tool created → Acceptance criteria check tool works"
+      
+      fail_action:
+        - type: ALIGN_DELIVERABLES_CRITERIA
+          target: "task_definitions"
+
+# ==============================================================================
+# STEP 5: VALIDATE LIVE IMPLEMENTATION
+# ==============================================================================
+
+implementation_validation:
+  source: "src/"
+  target_requirements: ".asif/AI-Learning/cortex6"
+  
+  rules:
+    - rule_id: IMPL-001
+      name: "All Completed Features Have Implementation"
+      check: "feat01-feat08 marked COMPLETED have corresponding src/ files"
+      severity: CRITICAL
+      validation:
+        type: implementation_existence
+        features:
+          - feature_id: feat01-foundation
+            status: COMPLETED
+            expected_files:
+              - "src/orchestrators/state_manager.py"
+              - "src/infrastructure/audit_logger.py"
+              - "src/orchestrators/routing/trie_router.py"
+              - "tests/unit/test_state_manager.py"
+              - "tests/unit/test_audit_logger.py"
+              - "tests/unit/test_trie_router.py"
+          
+          - feature_id: feat02-todo-orchestrator
+            status: COMPLETED
+            expected_files:
+              - "src/orchestrators/core/dag.py"
+              - "src/orchestrators/core/todo_orchestrator.py"
+              - "src/orchestrators/core/checkpoint_manager.py"
+              - "tests/unit/test_dag.py"
+              - "tests/unit/test_todo_orchestrator*.py"
+          
+          - feature_id: feat03-governance
+            status: COMPLETED
+            expected_files:
+              - "src/orchestrators/core/governance_merger.py"
+              - "cortex-brain/tier0/governance/core-rules.yaml"
+              - "tests/governance/test_governance_merger.py"
+          
+          - feature_id: feat04-core-orchestration
+            status: COMPLETED
+            expected_files:
+              - "src/orchestrators/core/master_orchestrator.py"
+              - "src/orchestrators/middleware/*.py"
+              - "tests/unit/test_master_orchestrator*.py"
+          
+          - feature_id: feat05-resilience
+            status: COMPLETED
+            expected_files:
+              - "src/orchestrators/middleware/resource_limiter.py"
+              - "src/orchestrators/middleware/rate_limiter.py"
+              - "src/orchestrators/middleware/circuit_breaker.py"
+              - "tests/unit/test_resource_limiter.py"
+              - "tests/unit/test_rate_limiter.py"
+          
+          - feature_id: feat06-mcp
+            status: COMPLETED
+            expected_files:
+              - "src/mcp/company_brain_plugin.py"
+              - "src/mcp/multi_repo_manager.py"
+              - "tests/mcp/test_multi_repo.py"
+              - "tests/mcp/test_company_brain.py"
+          
+          - feature_id: feat07-integration
+            status: COMPLETED
+            expected_files:
+              - "tests/integration/test_*.py"
+          
+          - feature_id: feat08-cleanup
+            status: COMPLETED
+            expected_files:
+              - "Documented in tracker"
+      
+      fail_action:
+        - type: IDENTIFY_MISSING_IMPLEMENTATIONS
+          add_to: "P2-critical-gaps.yaml"
+    
+    - rule_id: IMPL-002
+      name: "Implementation Matches Requirements"
+      check: "Code structure aligns with architectural requirements"
+      severity: HIGH
+      validation:
+        type: architecture_alignment
+        check:
+          - component: "StateManager"
+            requirement: "SQLite with WAL mode"
+            verify: "Code contains 'PRAGMA journal_mode=WAL'"
+          
+          - component: "StateManager"
+            requirement: "Optimistic locking"
+            verify: "Code has version-based conflict detection"
+          
+          - component: "TodoOrchestrator"
+            requirement: "DAG-based"
+            verify: "Code uses DAG data structure"
+          
+          - component: "GovernanceMerger"
+            requirement: "<50ms merge performance"
+            verify: "Performance tests validate SLA"
+          
+          - component: "PatternRouter"
+            requirement: "O(1) lookup with Trie"
+            verify: "Code implements Trie structure"
+      
+      fail_action:
+        - type: IDENTIFY_DRIFT
+          add_to: "P3-drift-correction.yaml"
+    
+    - rule_id: IMPL-003
+      name: "Test Coverage Adequate"
+      check: "Test coverage meets 80% minimum (target 95%)"
+      severity: HIGH
+      validation:
+        type: coverage_analysis
+        command: "pytest --cov --cov-report=term-missing"
+        thresholds:
+          minimum: 80
+          target: 95
+          excellent: 98
+        
+        per_module_check:
+          - module: "src/orchestrators/core/"
+            minimum_coverage: 90
+          
+          - module: "src/orchestrators/middleware/"
+            minimum_coverage: 85
+          
+          - module: "src/infrastructure/"
+            minimum_coverage: 90
+      
+      fail_action:
+        - type: IDENTIFY_COVERAGE_GAPS
+          add_to: "P4-test-documentation.yaml"
+    
+    - rule_id: IMPL-004
+      name: "Critical Components Active"
+      check: "Audit logs show critical components are being used"
+      severity: HIGH
+      validation:
+        type: audit_log_analysis
+        timeframe: "last 24 hours"
+        critical_components:
+          - name: "StateManager"
+            minimum_log_entries: 10
+          
+          - name: "AuditLogger"
+            minimum_log_entries: 50
+          
+          - name: "GovernanceMerger"
+            minimum_log_entries: 10
+          
+          - name: "TodoOrchestrator"
+            minimum_log_entries: 10
+          
+          - name: "MasterOrchestrator"
+            minimum_log_entries: 10
+      
+      fail_action:
+        - type: IDENTIFY_INACTIVE_COMPONENTS
+          add_to: "P3-drift-correction.yaml"
+    
+    - rule_id: IMPL-005
+      name: "No Undocumented Code"
+      check: "All significant implementations have requirements"
+      severity: MEDIUM
+      validation:
+        type: reverse_traceability
+        scan: "src/**/*.py"
+        check_for_requirement: true
+        exclude_patterns:
+          - "tests/**"
+          - "**/__init__.py"
+          - "**/conftest.py"
+      
+      fail_action:
+        - type: IDENTIFY_UNDOCUMENTED_CODE
+          add_to: "P1-requirements-conversion.yaml"
+
+# ==============================================================================
+# STEP 6: GENERATE HEALTH REPORT
+# ==============================================================================
+
+health_report:
+  output_format: YAML
+  output_file: ".asif/AI-Learning/cortex6-fixes/reports/epic-health-report.yaml"
+  
+  sections:
+    - section: metadata
+      include:
+        - report_id
+        - generated_at
+        - cortex_version
+        - validation_rules_version
+    
+    - section: overall_health
+      include:
+        - health_score # 0-100
+        - status # EXCELLENT/GOOD/WARNING/CRITICAL
+        - summary_message
+    
+    - section: completeness_validation
+      include:
+        - total_rules_checked
+        - rules_passed
+        - rules_failed
+        - rules_warning
+        - details_per_rule
+    
+    - section: accuracy_validation
+      include:
+        - total_rules_checked
+        - rules_passed
+        - rules_failed
+        - rules_warning
+        - details_per_rule
+    
+    - section: implementation_validation
+      include:
+        - total_rules_checked
+        - rules_passed
+        - rules_failed
+        - rules_warning
+        - details_per_rule
+    
+    - section: gaps_identified
+      include:
+        - critical_gaps
+        - high_priority_gaps
+        - medium_priority_gaps
+        - low_priority_gaps
+        - total_gaps
+    
+    - section: recommendations
+      prioritized_by_severity:
+        - IMMEDIATE # Critical gaps
+        - PRIORITY # High gaps
+        - PLANNED # Medium gaps
+        - BACKLOG # Low gaps
+    
+    - section: epic_updates_needed
+      include:
+        - tasks_to_add
+        - phases_to_modify
+        - acceptance_criteria_to_update
+        - features_to_add
+    
+    - section: metrics
+      include:
+        - requirements_coverage_percentage
+        - implementation_completeness_percentage
+        - specification_alignment_percentage
+        - test_coverage_percentage
+        - plan_accuracy_score
+        - snowball_effect_validity_score
+
+  health_score_calculation:
+    formula: "weighted_average"
+    weights:
+      completeness_validation: 30 # 30%
+      accuracy_validation: 25 # 25%
+      implementation_validation: 30 # 30%
+      plan_quality: 15 # 15%
+    
+    thresholds:
+      excellent: 95
+      good: 85
+      warning: 70
+      critical: 50
+
+# ==============================================================================
+# STEP 7: UPDATE EPIC IF GAPS FOUND
+# ==============================================================================
+
+epic_updates:
+  enabled: true
+  auto_update: true
+  
+  targets:
+    - file: ".asif/AI-Learning/cortex6/source-of-truth/todo/00-TODO-CONTINUITY-TRACKER.yaml"
+      update_if: "gaps_identified"
+      add:
+        - new_tasks
+        - updated_estimates
+    
+    - file: ".asif/AI-Learning/cortex6/source-of-truth/epic/00-CORTEX6-BUILD-EPIC.yaml"
+      update_if: "gaps_identified"
+      add:
+        - new_phases
+        - new_features
+    
+    - file: ".asif/AI-Learning/cortex6-fixes/00-REMEDIATION-MASTER-PLAN.yaml"
+      update_if: "plan_inaccuracies_found"
+      update:
+        - phase_definitions
+        - task_estimates
+        - dependencies
+    
+    - file: ".asif/AI-Learning/cortex6-fixes/00-ACCEPTANCE-CRITERIA-TRACKER.yaml"
+      update_if: "criteria_gaps_found"
+      add:
+        - missing_criteria
+        - updated_targets
+  
+  task_template:
+    id: "task-{feature}-{phase}-{number}"
+    name: "{Gap Description}"
+    description: "{Detailed description}"
+    estimated_hours: "{calculated_estimate}"
+    priority: "{CRITICAL|HIGH|MEDIUM|LOW}"
+    dependencies: []
+    tdd_required: true
+    audit_requirements:
+      category: "{category}"
+      correlation_id_prefix: "{prefix}"
+    exit_criteria:
+      - "{Verification method}"
+    gap_origin:
+      detected_by: "epic_review_yaml_validation"
+      detected_at: "{timestamp}"
+      validation_rule: "{rule_id}"
+      severity: "{severity}"
+      recommendation: "{recommendation}"
+
+# ==============================================================================
+# EXECUTION PROTOCOL
+# ==============================================================================
+
+execution:
+  mode: AUTONOMOUS
+  silent_operations: true
+  verbose_output: false
+  
+  steps:
+    - name: "Load Source Requirements"
+      silent: true
+      output: "requirements loaded in memory"
+    
+    - name: "Load Remediation Plan"
+      silent: true
+      output: "plan loaded in memory"
+    
+    - name: "Run Completeness Validation"
+      silent: false
+      output: "validation results"
+    
+    - name: "Run Accuracy Validation"
+      silent: false
+      output: "validation results"
+    
+    - name: "Run Implementation Validation"
+      silent: false
+      output: "validation results"
+    
+    - name: "Generate Health Report"
+      silent: false
+      output: "YAML report file"
+    
+    - name: "Update Epic Files"
+      silent: false
+      output: "files updated (if gaps found)"
+  
+  error_handling:
+    on_validation_failure:
+      - log_to_audit
+      - add_to_gaps_list
+      - continue_execution
+    
+    on_file_not_found:
+      - log_error
+      - add_to_critical_gaps
+      - continue_execution
+    
+    on_parse_error:
+      - log_error
+      - mark_file_as_invalid
+      - continue_execution
+
+# ==============================================================================
+# OUTPUT FORMAT
+# ==============================================================================
+
+output:
+  format: YAML
+  concise: true
+  visual_elements: true
+  
+  report_structure:
+    header:
+      - report_title
+      - generated_timestamp
+      - validation_version
+    
+    summary:
+      - overall_health_score
+      - health_status
+      - total_rules_checked
+      - rules_passed
+      - rules_failed
+      - gaps_identified
+    
+    detailed_results:
+      - completeness_validation_results
+      - accuracy_validation_results
+      - implementation_validation_results
+    
+    gaps_and_recommendations:
+      - critical_gaps
+      - high_priority_gaps
+      - medium_priority_gaps
+      - low_priority_gaps
+      - immediate_actions
+      - priority_actions
+      - planned_actions
+    
+    metrics:
+      - requirements_coverage
+      - implementation_completeness
+      - specification_alignment
+      - test_coverage
+      - plan_accuracy
+    
+    epic_updates:
+      - tasks_added
+      - phases_modified
+      - files_updated
+  
+  visual_indicators:
+    status_icons:
+      EXCELLENT: "🟢"
+      GOOD: "🟢"
+      WARNING: "🟡"
+      CRITICAL: "🔴"
+      PASSED: "✅"
+      FAILED: "❌"
+      PENDING: "⚪"
+    
+    severity_icons:
+      CRITICAL: "🚨"
+      HIGH: "⚠️"
+      MEDIUM: "⚡"
+      LOW: "ℹ️"
+    
+    progress_bars:
+      full: "████████████████████" # 100%
+      empty: "░░░░░░░░░░░░░░░░░░░░" # 0%
+
+# ==============================================================================
+# SUCCESS CRITERIA
+# ==============================================================================
+
+success_criteria:
+  - criterion: "All validation rules executed"
+    target: "100% rules checked"
+    
+  - criterion: "Health report generated"
+    target: "YAML file created"
+    
+  - criterion: "Gaps identified and categorized"
+    target: "All gaps have severity and recommendations"
+    
+  - criterion: "Epic updated if needed"
+    target: "Files updated when gaps found"
+    
+  - criterion: "Validation completes in reasonable time"
+    target: "<30 seconds for full validation"
+    
+  - criterion: "Report is machine-readable"
+    target: "Valid YAML output"
+    
+  - criterion: "Report is human-readable"
+    target: "Clear structure, visual indicators"
+
+# ==============================================================================
+# METADATA
+# ==============================================================================
+
+metadata:
+  version: "2.0.0"
+  format: "YAML"
+  created_at: "2026-01-08T00:00:00Z"
+  last_updated: "2026-01-08T00:00:00Z"
+  author: "GitHub Copilot + Asif Hussain"
+  purpose: "Eliminate ambiguity in epic review validation"
+  
+  changelog:
+    - version: "2.0.0"
+      date: "2026-01-08"
+      changes:
+        - "Converted from Markdown to YAML format"
+        - "Added 5 completeness validation rules"
+        - "Added 5 accuracy validation rules"
+        - "Added 5 implementation validation rules"
+        - "All rules have clear pass/fail criteria"
+        - "Measurable targets for all validation"
+        - "Machine-readable output format"
+    
+    - version: "1.0.0"
+      date: "2026-01-08"
+      changes:
+        - "Initial version (Markdown format)"
+        - "Prose-based rules (caused misinterpretation)"
+
+  references:
+    source_requirements: ".asif/AI-Learning/cortex6"
+    remediation_plan: ".asif/AI-Learning/cortex6-fixes"
+    epic_tracker: ".asif/AI-Learning/cortex6/source-of-truth/todo/00-TODO-CONTINUITY-TRACKER.yaml"
+    epic_definition: ".asif/AI-Learning/cortex6/source-of-truth/epic/00-CORTEX6-BUILD-EPIC.yaml"
