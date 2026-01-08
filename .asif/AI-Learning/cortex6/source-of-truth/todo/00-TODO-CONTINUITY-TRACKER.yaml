@@ -143,11 +143,13 @@ self_healing_protocol:
 current_position:
   feature: "feat04-core-orchestration"
   phase: 2
-  task: "2.1"
+  task: "2.2"
   status: "COMPLETED"
   tdd_phase: "REFACTOR_COMPLETE"
-  last_completed: "task-2.1-master-orchestrator-todo-integration"
-  completed_count: 61
+  last_completed: "task-2.2-governance-merger-todo-integration"
+  completed_count: 62
+  task_2_2_completed_at: "2026-01-08T05:50:00Z"
+  task_2_2_tests_passing: "21/21"
   task_2_1_completed_at: "2026-01-08T05:14:00Z"
   task_2_1_tests_passing: "4/4"
   task_1_4_completed_at: "2026-01-08T06:00:00Z"
@@ -1312,6 +1314,25 @@ feat04_core_orchestration:
         - "Delegates TODO operations with lifecycle management"
         - "Tracks lifecycle state transitions"
         - "Handles errors gracefully"
+    
+    - id: "2.2"
+      name: "Governance Merger-TODO Integration"
+      completed_at: "2026-01-08T05:50:00Z"
+      estimated_hours: 5
+      actual_hours: 0.05  # 3 minutes verification
+      deliverables:
+        - "src/orchestrators/core/master_orchestrator.py (connect_governance, _validate_governance_rules)"
+        - "tests/unit/test_master_orchestrator_governance.py"
+        - "Governance rule validation"
+        - "Violation-to-TODO conversion"
+      tests_passing: "21/21"
+      tdd_phases: "VERIFICATION"
+      features:
+        - "GovernanceMerger registration and connection"
+        - "Rule validation integration"
+        - "Violation-to-TODO conversion with priority mapping"
+        - "Complete governance-to-TODO flow"
+        - "Audit logging integration"
   
 feat05_resilience:
   feature_id: "feat05-resilience"
