@@ -481,7 +481,13 @@ class MasterOrchestrator:
             if hasattr(orchestrator, 'execute'):
                 # Direct execution (for simple orchestrators)
                 started_at = datetime.now()
-                result_data = orchestrator.execute()
+                
+                # Pass params to execute method
+                if params:
+                    result_data = orchestrator.execute(**params)
+                else:
+                    result_data = orchestrator.execute()
+                    
                 completed_at = datetime.now()
                 
                 # Wrap in ExecutionResult

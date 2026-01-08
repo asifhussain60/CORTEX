@@ -65,3 +65,15 @@ class TodoManager:
         if task_id in self.tasks:
             self.tasks[task_id].status = status
             self.tasks[task_id].updated_at = datetime.now()
+    
+    def start_task(self, task_id: str) -> None:
+        """Start a task (stub)."""
+        self.update_task(task_id, TaskStatus.IN_PROGRESS)
+    
+    def complete_task(self, task_id: str) -> None:
+        """Complete a task (stub)."""
+        self.update_task(task_id, TaskStatus.COMPLETE)
+    
+    def fail_task(self, task_id: str) -> None:
+        """Fail a task (stub)."""
+        self.update_task(task_id, TaskStatus.FAILED)

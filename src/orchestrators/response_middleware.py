@@ -26,3 +26,16 @@ class ResponseMiddleware:
     def process(self, response: str) -> str:
         """Process and enhance response."""
         return response
+    
+    def inject_system_messages(self, markdown: str, context: Dict[str, Any] = None) -> str:
+        """
+        Inject system messages into rendered markdown (stub).
+        
+        Args:
+            markdown: Rendered markdown to enhance
+            context: Context with messages to inject
+        
+        Returns:
+            Enhanced markdown with system messages
+        """
+        return markdown
