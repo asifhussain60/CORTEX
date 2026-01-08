@@ -8,7 +8,7 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import logging
-from typing import Dict, Any
+from typing import Dict, Any, Union
 
 
 class ResponseRenderer:
@@ -23,6 +23,24 @@ class ResponseRenderer:
         self.logger = logging.getLogger("cortex.orchestrators.response_renderer")
         self.logger.info("ResponseRenderer initialized (stub)")
     
-    def render(self, result: Dict[str, Any]) -> str:
-        """Render result as markdown."""
-        return result.get('message', 'No message')
+    def render(self, result: Any, tier: str = 'auto', context: Dict[str, Any] = None) -> str:
+        """
+        Render result as markdown.
+        
+        Args:
+            result: Orchestrator result to render (OrchestratorResult or dict)
+            tier: Response detail tier ('auto', 'concise', 'detailed')
+            context: Additional rendering context
+        
+        Returns:
+            Formatted markdown string
+        """
+        # Handle OrchestratorResult object
+        if hasattr(result, 'message'):
+            return result.message
+        # Handle dict
+        elif isinstance(result, dict):
+            return result.get('message', 'No message')
+        # Fallback
+        else:
+            return str(result)
