@@ -400,6 +400,99 @@ class CapabilityRegistry:
                     "ac_standard": "AC-ALIGN-001"
                 }
             ),
+            Capability(
+                name="cortex_search_references",
+                description="Search for file/text references across workspace",
+                parameters={
+                    "workspace_root": {
+                        "type": "string",
+                        "description": "Root directory to search",
+                        "required": True
+                    },
+                    "pattern": {
+                        "type": "string",
+                        "description": "Text or regex pattern to find",
+                        "required": True
+                    },
+                    "file_extensions": {
+                        "type": "array",
+                        "description": "File types to search (e.g., ['.md', '.yaml'])",
+                        "required": False
+                    },
+                    "exclude_dirs": {
+                        "type": "array",
+                        "description": "Directories to exclude from search",
+                        "required": False
+                    },
+                    "use_regex": {
+                        "type": "boolean",
+                        "description": "Treat pattern as regex",
+                        "required": False
+                    }
+                },
+                returns={"type": "object", "description": "Search results with file matches"},
+                orchestrator_id="reference_updater",
+                metadata={
+                    "category": "refactoring",
+                    "tags": ["search", "references", "refactoring"],
+                    "version": "1.0",
+                    "autonomous": True
+                }
+            ),
+            Capability(
+                name="cortex_update_references",
+                description="Search and replace file/text references across workspace",
+                parameters={
+                    "workspace_root": {
+                        "type": "string",
+                        "description": "Root directory to search",
+                        "required": True
+                    },
+                    "old_pattern": {
+                        "type": "string",
+                        "description": "Pattern to find",
+                        "required": True
+                    },
+                    "new_pattern": {
+                        "type": "string",
+                        "description": "Replacement text",
+                        "required": True
+                    },
+                    "file_extensions": {
+                        "type": "array",
+                        "description": "File types to search (e.g., ['.md', '.yaml'])",
+                        "required": False
+                    },
+                    "exclude_dirs": {
+                        "type": "array",
+                        "description": "Directories to exclude from search",
+                        "required": False
+                    },
+                    "use_regex": {
+                        "type": "boolean",
+                        "description": "Treat patterns as regex",
+                        "required": False
+                    },
+                    "dry_run": {
+                        "type": "boolean",
+                        "description": "Preview changes without applying (default: true)",
+                        "required": False
+                    },
+                    "backup": {
+                        "type": "boolean",
+                        "description": "Create .bak files before modifying (default: true)",
+                        "required": False
+                    }
+                },
+                returns={"type": "object", "description": "Update results with file changes"},
+                orchestrator_id="reference_updater",
+                metadata={
+                    "category": "refactoring",
+                    "tags": ["refactoring", "rename", "references", "automation"],
+                    "version": "1.0",
+                    "autonomous": True
+                }
+            ),
         ]
         
         for cap in common_capabilities:

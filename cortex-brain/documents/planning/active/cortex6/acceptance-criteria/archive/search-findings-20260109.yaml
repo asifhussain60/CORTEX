@@ -2,7 +2,7 @@
 # CORTEX Search Findings - Holistic Gap Detection Results
 # ==============================================================================
 # Generated: 2026-01-09T10:30:00Z
-# AC Source: cortex-brain/documents/planning/active/cortex6/acceptance-criteria/00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml
+# AC Source: cortex-brain/documents/planning/active/cortex6/acceptance-criteria/cortex-ac.yaml
 # AC Version: 10.0.0
 # Pipeline: 5-Phase Discovery (cortex-search.prompt.md v1.2.0)
 # ==============================================================================
@@ -10,7 +10,7 @@
 search_findings:
   generated_at: '2026-01-09T10:30:00Z'
   ac_version: '10.0.0'
-  ac_location: 'cortex-brain/documents/planning/active/cortex6/acceptance-criteria/00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml'
+  ac_location: 'cortex-brain/documents/planning/active/cortex6/acceptance-criteria/cortex-ac.yaml'
   total_criteria_scanned: 374
   
   summary:

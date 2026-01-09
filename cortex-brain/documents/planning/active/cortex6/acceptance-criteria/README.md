@@ -10,7 +10,7 @@
 
 ```
 cortex-brain/documents/planning/active/cortex6/acceptance-criteria/
-├── 00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml   # Source of Truth (382 AC)
+├── cortex-ac.yaml   # Source of Truth (382 AC)
 ├── remediation-plan.yaml                             # Active remediation
 ├── snowball-strategy.yaml                            # Prioritization framework
 ├── plan-viewer-dashboard-requirements.yaml           # Plan Viewer Dashboard specs
@@ -26,7 +26,7 @@ cortex-brain/documents/planning/active/cortex6/acceptance-criteria/
 
 **ALL acceptance criteria for CORTEX 6.0 are in:**
 ```
-00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml
+cortex-ac.yaml
 ```
 
 This consolidates:
@@ -85,7 +85,7 @@ This consolidates:
 The following locations are **NO LONGER USED** for acceptance criteria:
 
 - ❌ `.asif/AI-Learning/cortex6/acceptance/` - DEPRECATED
-- ❌ `.asif/AI-Learning/cortex6/00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml` - DEPRECATED
+- ❌ `.asif/AI-Learning/cortex6/cortex-ac.yaml` - DEPRECATED
 - ❌ `cortex-brain/config/acceptance-criteria.yaml` - DELETED (was v5.0)
 - ❌ Any `00-*-TRACKER.yaml` files in cortex6-fixes - DELETED
 
