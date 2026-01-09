@@ -2,7 +2,7 @@
 
 **Status:** ✅ AUTHORITATIVE  
 **Last Updated:** 2026-01-09  
-**Version:** 7.5.0
+**Version:** 9.0.0
 
 ---
 
@@ -13,7 +13,9 @@ cortex-brain/documents/planning/active/cortex6/acceptance-criteria/
 ├── 00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml   # Source of Truth
 ├── remediation-plan.yaml                             # Active remediation
 ├── snowball-strategy.yaml                            # Prioritization framework
+├── plan-viewer-dashboard-requirements.yaml           # Plan Viewer Dashboard specs
 ├── README.md                                         # This file
+├── CLEANUP-TODO.md                                   # Cleanup tasks
 └── archive/                                          # Historical remediations
     └── remediation-plan-{YYYY-MM-DD}.yaml
 ```
@@ -39,17 +41,19 @@ This consolidates:
 - ✅ MCP integration criteria
 - ✅ Version-agnostic design criteria
 - ✅ Unified test suite criteria
+- ✅ Plan Viewer Dashboard criteria (AC-PLAN-DASH-*)
 
 ---
 
-## 📊 Key Metrics (v7.5.0)
+## 📊 Key Metrics (v9.0.0)
 
 | Metric | Value |
 |--------|-------|
-| **Total Criteria** | 340+ |
-| **P0_CRITICAL** | 65+ |
+| **Total Criteria** | 350+ |
+| **P0_CRITICAL** | 70+ |
 | **Validation Gates** | 12 |
 | **Blocking Gates** | 8 |
+| **Plan Dashboard Criteria** | 7 |
 
 ---
 
