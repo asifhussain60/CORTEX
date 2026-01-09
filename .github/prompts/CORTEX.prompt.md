@@ -49,7 +49,7 @@
 | `^(ado wizard\|ado interactive)` | **ADO v2** | 29 | wizard |
 | `^(ado\|ado story\|ado feature\|azure devops)` | **ADO v2** | 30 | auto |
 | `^(sanitize\|anonymize\|redact\|remove sensitive)` | **Sanitization v2** | 40 | autonomous |
-| `^(vacuum\|deep clean\|organize files)` | **Vacuum v2** | 45 | autonomous |
+| `^(vacuum\|deep clean\|organize files)` | **Vacuum v2** | 45 | architecture-aware |
 | `^(cleanup\|cleanup cache\|cleanup logs\|cleanup artifacts\|cleanup full\|cleanup git)` | **Cleanup v2** | 55 | selective |
 | `^(investigate\|find root cause\|why is\|debug architecture\|fix brittleness)` | **Investigation** | 60 | autonomous |
 | `^(holistic review\|review holistically\|architectural review)` | **Holistic Review** | 5 | auto-trigger |
@@ -57,6 +57,8 @@
 | `^(refine\|improve\|optimize)` | **Refinement v2** | 60 | autonomous |
 
 **⚡ Philosophy:** CORTEX is built for **Python-based orchestration via terminal invocation**. GitHub Copilot routes via `run_in_terminal`. Python orchestrators execute.
+
+**🧹 Architecture-Aware Mode:** Vacuum v2 uses real-time epic scanning - see `.github/prompts/cortex-vacuum.prompt.md` for intelligent cleanup workflow.
 
 ### 🎭 Special Handlers (Templates Only)
 
@@ -108,6 +110,26 @@ python3 -m src.main "plan user authentication with OAuth2, JWT..." --format mark
 ```python
 python3 -m src.main "{transformed_user_request}" --format markdown
 ```
+
+### 🧹 ARCHITECTURE-AWARE - Specialized Workflow (Vacuum Only)
+
+**For Vacuum requests, use `.github/prompts/cortex-vacuum.prompt.md` workflow:**
+
+1. **Read CORTEX 6 epic** (`cortex-brain/documents/planning/active/cortex6/acceptance-criteria/`)
+2. **Extract AC-IDs** and protected component paths
+3. **Detect consolidation patterns** (old scattered → new unified)
+4. **Display scope + protection rules** to user
+5. **Wait for approval** (Y/N)
+6. **Invoke Python** with architecture context
+
+**Architecture-Aware Transformation:**
+```bash
+python3 -m src.main "vacuum {folder} with architecture protection from cortex6 epic, AC-IDs: {ac_ids}, protected paths: {paths}, consolidation candidates: {old→new}, dry-run mode enabled" --format markdown
+```
+
+**See:** `.github/prompts/cortex-vacuum.prompt.md` for complete workflow.
+
+### 🔄 Standard Execution Flow
 
 **Execution Flow:**
 1. ✅ Transform user request (add context per Step 3)
