@@ -34,46 +34,56 @@
 
 ## 🚧 Stage 1 Foundation Tasks (40-48h)
 
-### Task 1: AUDIT-001 - AuditLogger Infrastructure (16-20h) ⚠️ INVESTIGATION NEEDED
+### Task 1: AUDIT-001 - AuditLogger Infrastructure (12-16h) ✅ ANALYSIS COMPLETE
 
 **Priority:** P0_CRITICAL  
-**Status:** 🔍 PARTIAL IMPLEMENTATION FOUND  
+**Status:** � READY FOR IMPLEMENTATION (Analysis Complete)  
 **Blocks:** ALL 354+ AC validation
 
-**Discovery:**
-- ✅ AuditLogger EXISTS at `src/orchestrators/audit_logger.py` (1133 lines)
-- ✅ Test suite EXISTS at `tests/unit/test_audit_logger.py` (700 lines)
-- ✅ Implementation includes:
-  - `AuditLevel` enum (TRACE, INFO, WARNING, ERROR, CRITICAL)
-  - `AuditCategory` enum (7 categories)
-  - `AuditEntry` dataclass
-  - `EnterpriseAuditLogger` class
-  - Correlation ID tracking
-  - Error summary and trace analysis
+**Analysis Complete (2026-01-09):**
+- ✅ **Comprehensive refactoring plan created**
+- ✅ **Gap analysis complete:** 85% of code can be reused/adapted
+- ✅ **Strategy decided:** REFACTOR existing (not rewrite from scratch)
+- ✅ **7-phase implementation plan documented**
 
-**Architecture Gap:**
-- ❌ Located in `src/orchestrators/` (should be `src/infrastructure/`)
-- ❌ No SQLite backend (uses file-based logging)
-- ❌ No AC-ID tagging detected (needs verification)
-- ❌ No MCP tools (`mcp_audit_query`, `mcp_audit_validate`, `mcp_audit_export`)
+**Existing Implementation (Preserve 85%):**
+- ✅ AuditLogger at `src/orchestrators/audit_logger.py` (1133 lines)
+- ✅ Test suite at `tests/unit/test_audit_logger.py` (700 lines)
+- ✅ Core features: 7 categories, correlation tracking, error analysis, performance metrics
+- ✅ Phase/feature gate integration already implemented
 
-**Action Required:**
-1. **Analyze existing implementation** (current capabilities vs requirements)
-2. **Gap analysis** (what's missing from CX6 spec)
-3. **Decision:** Refactor existing OR implement new per spec
-4. **Architecture migration** (orchestrators → infrastructure)
-5. **Add missing features:**
-   - SQLite audit.db backend
-   - AC-ID tagging field
-   - MCP audit tools
-   - Retention policies
-   - Vacuum functionality
+**Required Enhancements:**
+1. ✅ **Architecture Migration:** Move to `src/infrastructure/audit_logger.py`
+2. ✅ **SQLite Backend:** Replace JSONL with `cortex-brain/state/audit.db`
+3. ✅ **AC-ID Tagging:** Add `ac_id` field to AuditEntry
+4. ✅ **Memory Buffer:** 4 flush triggers (count, memory, time, ERROR)
+5. ✅ **Per-Repo Isolation:** Each repo has dedicated audit.db
+6. ✅ **MCP Tools:** audit_query, audit_list, audit_export, audit_validate
+7. ✅ **Retention Policy:** Level-based (ERROR: 90d, INFO: 30d, DEBUG: 7d)
+8. ✅ **Vacuum Scheduler:** Automatic cleanup via HousekeepingOrchestrator
 
-**AC Criteria:**
-- AC-F01-005: Audit Logger operational with all 7 categories
-- AC-INT-006: Audit-first validation
-- AC-VAL-001: AC validation requires test pass + audit log trace
-- AC-AUDIT-001 through AC-AUDIT-006: Audit infrastructure features
+**Documentation Created:**
+- 📄 **Refactoring Plan:** `implementation-guides/AUDIT-001-Refactoring-Plan.md` (550+ lines)
+  - Complete architecture design
+  - Database schema (5 tables, 7 indexes)
+  - 7-phase implementation plan with code examples
+  - AC validation criteria and tests
+- 📄 **Analysis Summary:** `analysis/AUDIT-001-Analysis-Summary.md`
+
+**Revised Effort Estimate:**
+- Original: 16-20h (full implementation from scratch)
+- Adjusted: 12-16h (refactoring existing code)
+- Breakdown: Preparation (1-2h), New Components (4-6h), Refactoring (4-5h), MCP Tools (3-4h), Testing (2-3h)
+
+**AC Criteria (All 6 Validated in Plan):**
+- AC-AUDIT-001: Audit logs queryable by AC-ID, orchestrator, date range ✅
+- AC-AUDIT-002: Memory buffer with configurable flush thresholds ✅
+- AC-AUDIT-003: Per-repo SQLite audit database isolation ✅
+- AC-AUDIT-004: MCP tools: audit_query, audit_list, audit_export ✅
+- AC-AUDIT-005: Automatic vacuum removes logs older than retention period ✅
+- AC-AUDIT-006: Log level-based retention (ERROR: 90d, INFO: 30d, DEBUG: 7d) ✅
+
+**Next Action:** Begin Phase 1 (Preparation) - Setup directories and schemas (1-2h)
 
 ---
 
