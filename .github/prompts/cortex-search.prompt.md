@@ -1,7 +1,7 @@
 # 🔍 CORTEX Search - Holistic Gap Detection & Discrepancy Discovery
 
-**Version:** 1.0.0 | **Status:** ✅ PRODUCTION | **Type:** Autonomous Analysis  
-**Author:** Asif Hussain | **AC Reference:** `.asif/AI-Learning/cortex6/acceptance/00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml`  
+**Version:** 1.1.0 | **Status:** ✅ PRODUCTION | **Type:** Autonomous Analysis  
+**Author:** Asif Hussain | **AC Reference:** `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml`  
 **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
 ---
@@ -143,12 +143,13 @@ cortex-brain/tier0/      → Governance rules
 
 ## 📊 Output Format
 
-**Primary Output:** `cortex-brain/analysis/search-findings-{timestamp}.yaml`
+**Primary Output:** `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/search-findings-{timestamp}.yaml`
 
 ```yaml
 search_findings:
   generated_at: '2026-01-09T10:30:00Z'
-  ac_version: '7.0.0'
+  ac_version: '7.5.0'
+  ac_location: 'cortex-brain/documents/planning/active/cortex6/acceptance-criteria/00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml'
   
   summary:
     total_issues: 68
@@ -185,6 +186,18 @@ search_findings:
       gap_type: NO_AUDIT_COVERAGE
       recommendation: "Add audit logging for TODO state integration"
 ```
+
+---
+
+## 📁 File Locations (Canonical)
+
+| Artifact | Location |
+|----------|----------|
+| **AC Source of Truth** | `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml` |
+| **Search Findings** | `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/search-findings-{timestamp}.yaml` |
+| **Remediation Plan** | `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/remediation-plan.yaml` |
+| **Snowball Strategy** | `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/snowball-strategy.yaml` |
+| **Archive** | `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/archive/` |
 
 ---
 
