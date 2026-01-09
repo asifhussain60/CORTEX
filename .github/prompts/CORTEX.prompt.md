@@ -41,6 +41,8 @@
 
 | Pattern (Regex) | Orchestrator | Priority | Mode |
 |-----------------|--------------|----------|------|
+| `^(search\|find gaps\|find violations\|discrepancy check\|gap analysis)` | **Search** | 7 | autonomous |
+| `^(align\|realign\|fix plan\|remediate\|ac validation)` | **Align** | 7 | autonomous |
 | `^(epic review\|review epic\|health check\|progress report\|cortex status\|epic status)` | **Epic Review** | 6 | autonomous |
 | `^(plan\|create a plan\|make a plan)` | **Planning v5** | 10 (highest) | autonomous |
 | `^(continue epic\|resume epic\|cortex 6 build\|continue build)` | **Epic Executor** | 9 | autonomous |
@@ -54,7 +56,6 @@
 | `^(holistic review\|review holistically\|architectural review)` | **Holistic Review** | 5 | auto-trigger |
 | `^(tdd\|start tdd\|run tests\|test driven)` | **TDD v2** | 20 | autonomous |
 | `^(refine\|improve\|optimize)` | **Refinement v2** | 60 | autonomous |
-| `^(maintenance\|system maintenance)` | **Maintenance v2** | 50 | autonomous |
 
 **⚡ Philosophy:** CORTEX is built for **Python-based orchestration via terminal invocation**. GitHub Copilot routes via `run_in_terminal`. Python orchestrators execute.
 

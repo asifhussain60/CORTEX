@@ -1,0 +1,2274 @@
+# ==============================================================================
+# CORTEX 6.0 ENTERPRISE ACCEPTANCE CRITERIA
+# ==============================================================================
+# Purpose: Comprehensive holistic acceptance criteria consolidating all CORTEX 6.0
+#          requirements, capabilities, and validation gates into single source of truth
+# 
+# Author: Asif Hussain
+# Version: 1.0.0
+# Created: 2026-01-09
+# Status: AUTHORITATIVE
+#
+# Consolidates:
+#   - cortex6/source-of-truth (master requirements, epic, features)
+#   - cortex6-fixes (remediation tracker, gap analysis)
+#   - All feature requirements (feat01-feat09)
+#   - Governance framework (4-category system + 61 SKULL rules)
+#   - Orchestrator specifications (10+ orchestrators)
+#   - TDD requirements (RED→GREEN→REFACTOR)
+#   - Knowledge base validation
+#   - Audit logging & compliance
+#   - Performance SLAs
+#   - Security requirements
+# ==============================================================================
+
+metadata:
+  document_type: enterprise_acceptance_criteria
+  version: 7.0.0
+  status: AUTHORITATIVE
+  created: '2026-01-09'
+  updated: '2026-01-09'
+  author: Asif Hussain
+  epic_id: CORTEX6-BUILD
+  changelog:
+    v7.0.0:
+      date: '2026-01-09'
+      changes:
+        - "MAJOR VERSION: Added 47 critical gaps across 12 categories identified in final holistic review"
+        - "Added CATEGORY 1: Multi-Repo & Universal CORTEX.prompt.md (8 new criteria: AC-REPO-001 to AC-REPO-003, AC-FAIL-001, enhancements)"
+        - "Added CATEGORY 2: Concurrency & Race Conditions (7 new criteria: AC-RACE-001 to AC-RACE-003, enhancements)"
+        - "Added CATEGORY 3: Failure Modes & Resilience (8 new criteria: AC-FAIL-002 to AC-FAIL-006, enhancements)"
+        - "Added CATEGORY 4: Security Vulnerabilities (6 new criteria: AC-SEC-006 to AC-SEC-008, enhancements)"
+        - "Added CATEGORY 5: Performance & Scalability (6 new criteria: AC-PERF-006 to AC-PERF-007, enhancements)"
+        - "Added CATEGORY 6: Orchestrator Test Harnesses (5 new criteria: AC-ORC-TDD-001, AC-ORC-PLAN-001, AC-ORC-MAINT-001, AC-ORC-MASTER-001, AC-TEST-ORG-001)"
+        - "Added CATEGORY 7: Data Integrity & Validation (4 new criteria: AC-DATA-001 to AC-DATA-002, enhancements)"
+        - "Added CATEGORY 8: Deployment & Rollback (3 new criteria: AC-DEPLOY-001 to AC-DEPLOY-003)"
+        - "Added CATEGORY 9: Observability & Monitoring (3 new criteria: AC-OBSERVE-001 to AC-OBSERVE-003)"
+        - "Added CATEGORY 10: Edge Cases & Boundary Conditions (3 new criteria: AC-EDGE-001 to AC-EDGE-003)"
+        - "Added CATEGORY 11: Dependency Risks (2 new criteria: AC-DEP-001 to AC-DEP-002)"
+        - "Added CATEGORY 12: Maintainability & Technical Debt (2 new criteria: AC-MAINT-001 to AC-MAINT-002)"
+      reason: "Final holistic review identified 47 critical gaps for production-ready enterprise deployment: multi-repo operations, concurrency safety, failure resilience, security hardening, comprehensive orchestrator testing, data integrity, deployment strategies, observability, edge cases, dependency management, and maintainability standards"
+    v6.0.3:
+      date: '2026-01-09'
+      changes:
+        - "Enhanced AC-ARCH-005: Added acceptance directory cleanup validation (3-file structure maintained)"
+        - "Enhanced AC-F01-006: Added anti-bloat validation (no verbose markdown summaries post-execution)"
+        - "Added AC-INT-006: Audit-first validation - all criteria evidenced by audit logs, failures improve logging"
+      reason: "User requirements: (1) Vacuum should validate acceptance directory cleanup, (2) CORTEX must prevent verbose summary reports, (3) All criteria must be audit-log evidenced with feedback loop"
+    v6.0.2:
+      date: '2026-01-09'
+      changes:
+        - "Added AC-ARCH-001: Repository orphan detection and cleanup validation"
+        - "Added AC-ARCH-002: Brittleness prevention via schema validation (87.5% bug prevention)"
+        - "Added AC-ARCH-003: Architecture alignment validation (existing patterns)"
+        - "Added AC-ARCH-004: Anti-pattern detection (no poor practices from previous versions)"
+        - "Added AC-ARCH-005: Vacuum orchestrator targets (110MB+, 73-85MB savings)"
+        - "Added new SECTION 2: Architecture & Repository Cleanliness (5 criteria)"
+      reason: "Holistic review identified need to validate: (1) no orphaned code from previous CORTEX versions, (2) brittleness prevention system operational, (3) architecture quality enforcement, (4) vacuum cleanup targets"
+    v6.0.1:
+      date: '2026-01-09'
+      changes:
+        - "Added AC-GOV-008: Company Best Practices integration validation"
+        - "Added AC-GOV-009: Knowledge Best Practices integration validation"
+        - "Added AC-GOV-010: Company Domain Knowledge accessibility validation"
+        - "Enhanced AC-GOV-002: Explicit 4-category breakdown (CORE, Company, Knowledge, Business)"
+        - "Enhanced AC-ORC-001: Master Orchestrator intelligence requirements (decision-making, chaining)"
+        - "Enhanced AC-INT-003: Workflow trace reconstruction from audit logs"
+        - "Enhanced AC-MCP-001: MCP exposure of all tooling (cortex-toolkit, scripts, utilities)"
+        - "Added AC-INT-005: Trace analyzer for complete workflow reconstruction"
+      reason: "Gap analysis identified missing validation for governance YAMLs, master orchestrator intelligence, audit workflow traces, and MCP tooling exposure"
+  
+  supersedes:
+    - document: ".asif/AI-Learning/cortex6-fixes/00-ACCEPTANCE-CRITERIA-TRACKER.yaml"
+      reason: "Consolidated into enterprise criteria"
+    - document: "cortex-brain/config/acceptance-criteria.yaml"
+      reason: "CORTEX 5.0 criteria - replaced by 6.0"
+    - all_other: "All scattered acceptance criteria in archives/"
+      reason: "Eliminated duplication and conflicts"
+      
+  scope:
+    features: 9  # feat01-feat09
+    orchestrators: 10+
+    requirements: 200+  # Expanded from 150+
+    validation_gates: 13  # v6.0.2: Added GATE-00 for Architecture Quality
+    total_criteria: 340  # v7.0.0: Added 38 new criteria (302 → 340)
+    categories: 12  # v7.0.0: 12 categories covering all enterprise needs
+
+  health_tracking:
+    overall_score: 0
+    target_score: 100
+    status: NOT_STARTED
+    
+# ==============================================================================
+# SECTION 1: GOVERNANCE & COMPLIANCE (Foundation)
+# ==============================================================================
+
+governance_compliance:
+  category: foundation
+  priority: P0_CRITICAL
+  description: "4-Category Governance System + SKULL Rules enforcement"
+  
+  AC-GOV-001:
+    id: AC-GOV-001
+    criterion: "All 61 SKULL rules migrated to CORE-001 through CORE-061"
+    acceptance:
+      - "cortex-brain/tier0/governance/core-rules.yaml exists"
+      - "All 61 rules present with CORE-NNN numbering"
+      - "Severity levels preserved (BLOCKED, HIGH, MEDIUM)"
+      - "brain-protection-rules.yaml has deprecation header"
+    validation: automated
+    test_file: "tests/governance/test_skull_migration.py"
+    status: PENDING
+    blocking: true
+    
+  AC-GOV-002:
+    id: AC-GOV-002
+    criterion: "4-Category Governance Merger produces valid Unified Instruction Set"
+    acceptance:
+      - "GovernanceMerger loads all 4 categories (CORE, Company, Knowledge, Business)"
+      - "Tier0: CORE rules (61 SKULL rules migrated)"
+      - "Tier2: Company Best Practices (company-practices.yaml)"
+      - "Tier3: Knowledge Best Practices (knowledge-practices.yaml)"
+      - "Business: Compliance-only overrides"
+      - "Conflict detection identifies OVERRIDE, EXTENSION, ADVICE conflicts"
+      - "Conflict resolution applies correct strategies"
+      - "active-instruction-set.yaml generated in <50ms"
+      - "Validation ensures no circular dependencies"
+    validation: automated
+    test_file: "tests/governance/test_governance_merger.py"
+    status: PENDING
+    blocking: true
+    
+  AC-GOV-003:
+    id: AC-GOV-003
+    criterion: "Business Tier 0 override works ONLY for COMPLIANCE_RULES"
+    acceptance:
+      - "COMPLIANCE_RULES override CORTEX rules"
+      - "Non-compliance Business rules cannot override"
+      - "Override attempts logged with warnings"
+      - "Test suite validates override boundaries"
+    validation: automated
+    test_file: "tests/governance/test_business_override.py"
+    status: PENDING
+    blocking: true
+    
+  AC-GOV-004:
+    id: AC-GOV-004
+    criterion: "TDD_ENFORCEMENT mandatory - tests fail before implementation"
+    acceptance:
+      - "RED→GREEN→REFACTOR cycle enforced"
+      - "No code implementation without failing test"
+      - "Audit logs track TDD cycle compliance"
+      - "Governance blocks non-TDD workflows"
+    validation: automated
+    test_file: "tests/governance/test_tdd_enforcement.py"
+    status: PENDING
+    blocking: true
+    
+  AC-GOV-005:
+    id: AC-GOV-005
+    criterion: "HOLISTIC_DISCOVERY enforced - search before create"
+    acceptance:
+      - "Workspace search performed before file creation"
+      - "Duplicate detection prevents file conflicts"
+      - "Semantic search used for similar content"
+      - "Governance blocks duplicate creation attempts"
+    validation: automated
+    test_file: "tests/governance/test_holistic_discovery.py"
+    status: PENDING
+    blocking: true
+    
+  AC-GOV-006:
+    id: AC-GOV-006
+    criterion: "GIT_ISOLATION enforced - CORTEX code never commits to user repos"
+    acceptance:
+      - "Repo context detection identifies CORTEX vs user repos"
+      - "Commit operations validate target repository"
+      - "Governance blocks cross-repo contamination"
+      - "Audit logs track all git operations"
+    validation: automated
+    test_file: "tests/governance/test_git_isolation.py"
+    status: PENDING
+    blocking: true
+    
+  AC-GOV-007:
+    id: AC-GOV-007
+    criterion: "PLANNING_ISOLATION enforced - plans create structure, never implement"
+    acceptance:
+      - "Planning orchestrator generates folders/YAML only"
+      - "No code implementation during planning"
+      - "Governance validates planning outputs"
+      - "Implementation requires separate executor invocation"
+    validation: automated
+    test_file: "tests/governance/test_planning_isolation.py"
+    status: PENDING
+    blocking: true
+    
+  AC-GOV-008:
+    id: AC-GOV-008
+    criterion: "Company Best Practices (tier2) integrated into governance"
+    acceptance:
+      - "company-practices.yaml loaded from tier2/governance/"
+      - "Company rules extend CORTEX CORE rules"
+      - "Company rules cannot override BLOCKED CORE rules"
+      - "Conflict resolution favors CORE for safety-critical rules"
+      - "Company practices merged into Unified Instruction Set"
+    validation: automated
+    test_file: "tests/governance/test_company_practices_integration.py"
+    status: PENDING
+    blocking: true
+    
+  AC-GOV-009:
+    id: AC-GOV-009
+    criterion: "Knowledge Best Practices (tier3) integrated into governance"
+    acceptance:
+      - "knowledge-practices.yaml loaded from tier3/governance/"
+      - "Knowledge rules provide domain-specific guidance"
+      - "Knowledge rules lowest priority (CORE > Company > Knowledge)"
+      - "Knowledge practices enrich orchestrator execution context"
+      - "Knowledge practices available for consultation"
+    validation: automated
+    test_file: "tests/governance/test_knowledge_practices_integration.py"
+    status: PENDING
+    blocking: true
+    
+  AC-GOV-010:
+    id: AC-GOV-010
+    criterion: "Company Domain Knowledge (tier2) accessible to orchestrators"
+    acceptance:
+      - "company-knowledge/{company_id}/ structure validated"
+      - "Tech stack YAML (tech-stack.yaml) loaded"
+      - "Architecture docs (architecture.md) loaded"
+      - "API catalog (api-catalog.json) loaded"
+      - "Coding standards (coding-standards.md) loaded"
+      - "Orchestrators query company knowledge via CompanyKnowledgeProvider"
+      - "Company knowledge overrides CORTEX defaults (intelligently)"
+    validation: automated
+    test_file: "tests/knowledge/test_company_domain_knowledge.py"
+    status: PENDING
+    blocking: true
+
+# ==============================================================================
+# SECTION 2: ARCHITECTURE & REPOSITORY CLEANLINESS
+# ==============================================================================
+# Purpose: Ensure CORTEX 6.0 has NO orphaned functionality from previous versions
+#          Validates architecture quality and prevents brittleness regression
+# Critical: Implementation must stay within CORTEX 6.0 architecture boundaries
+# ==============================================================================
+
+architecture_cleanliness:
+  category: architecture_quality
+  priority: P0_CRITICAL
+  description: "Zero orphaned code, clean architecture, no brittleness regression"
+  
+  AC-ARCH-001:
+    id: AC-ARCH-001
+    criterion: "Repository has NO orphaned CORTEX functionality from previous versions"
+    acceptance:
+      - "Inventory scan identifies all src/, cortex-brain/, cortex-toolkit/ files"
+      - "Every file/folder validated against CORTEX 6.0 architecture requirements"
+      - "Orphaned orchestrators (not in registry) identified and marked for deletion"
+      - "Orphaned manifests (no corresponding orchestrator) identified and marked"
+      - "Deprecated governance files (pre-CORTEX 6.0) identified and marked"
+      - "Legacy scripts not used by CORTEX 6.0 identified and marked"
+      - "Cleanup plan generated with risk assessment (SAFE/REVIEW/DANGER)"
+      - "Zero orphaned files remaining after cleanup validation"
+    validation: automated
+    test_file: "tests/architecture/test_orphan_detection.py"
+    status: PENDING
+    blocking: true
+    evidence:
+      - "Orphan detection report: cortex-brain/documents/reports/orphan-analysis-*.md"
+      - "Cleanup manifest: cortex-brain/cleanup-manifests/orphan-cleanup-*.json"
+      
+  AC-ARCH-002:
+    id: AC-ARCH-002
+    criterion: "CORTEX 6.0 architecture boundaries enforced - NO regression to brittleness"
+    acceptance:
+      - "Schema validation system operational (orchestrator registry + routing config)"
+      - "Pre-commit hooks enforce schema validation before commits"
+      - "All orchestrators registered in cortex-brain/manifests/orchestrators/registry.json"
+      - "All routing patterns in cortex-brain/config/routing-config.yaml"
+      - "Cross-validation detects orphaned routing rules (no orchestrator)"
+      - "Cross-validation detects unroutable orchestrators (no routing rule)"
+      - "Python import validation confirms all orchestrators importable"
+      - "Validation completes in <1 second (performance requirement)"
+      - "87.5%+ historical bug prevention rate maintained"
+    validation: automated
+    test_file: "tests/architecture/test_brittleness_prevention.py"
+    status: PENDING
+    blocking: true
+    evidence:
+      - "Schema validation report: brittleness-removal-complete-2026-01-02.md"
+      - "Historical bug prevention: 7/8 bugs caught (87.5%)"
+      - "Validation performance: 0.3s (6000x faster than integration tests)"
+      
+  AC-ARCH-003:
+    id: AC-ARCH-003
+    criterion: "Architecture alignment validated - CORTEX 6.0 follows existing patterns"
+    acceptance:
+      - "StateManager usage validated across all orchestrators"
+      - "AuditLogger integration validated (7 categories: STATE, EXECUTION, MIDDLEWARE, RESPONSE, PERFORMANCE, SECURITY, VALIDATION)"
+      - "Response template v4 usage validated (INSTANT, FOCUSED, STRUCTURED, COMPREHENSIVE modes)"
+      - "Orchestrator lifecycle middleware validated (pre_execute, post_execute hooks)"
+      - "No direct file system access (must use StateManager)"
+      - "No manual JSON manipulation (must use existing utilities)"
+      - "No duplicate code patterns from previous CORTEX versions"
+      - "All orchestrators follow AutonomousOrchestrator base class pattern"
+    validation: automated
+    test_file: "tests/architecture/test_pattern_compliance.py"
+    status: PENDING
+    blocking: true
+    evidence:
+      - "Architecture alignment report: HOLISTIC-REVIEW-ANALYSIS-20260109.md - Part 4"
+      - "87.5% feature alignment validated (7/8 features)"
+      
+  AC-ARCH-004:
+    id: AC-ARCH-004
+    criterion: "No poor architecture practices from previous CORTEX versions"
+    acceptance:
+      - "Zero hardcoded file paths (must use Path objects)"
+      - "Zero direct database access (must use StateManager)"
+      - "Zero manual YAML parsing (must use existing loaders)"
+      - "Zero subprocess calls without error handling"
+      - "Zero missing type hints on public methods"
+      - "Zero missing docstrings on public classes/methods"
+      - "Zero circular dependencies detected"
+      - "Zero global state mutations outside StateManager"
+      - "All configuration in cortex-brain/ (not scattered)"
+      - "All orchestrators in src/orchestrators/ (not scattered)"
+    validation: automated
+    test_file: "tests/architecture/test_antipattern_detection.py"
+    status: PENDING
+    blocking: true
+    tools:
+      - "pylint with custom CORTEX rules"
+      - "mypy strict mode"
+      - "radon for cyclomatic complexity"
+      
+  AC-ARCH-005:
+    id: AC-ARCH-005
+    criterion: "Vacuum orchestrator integration - automated cleanup of identified targets"
+    acceptance:
+      - "Vacuum orchestrator registered and operational"
+      - "Archive analysis complete: 110MB+ cataloged"
+      - "4 vacuum targets defined with risk assessment"
+      - "Target 1: Compress pre-2026 plans (53MB → 40-45MB savings)"
+      - "Target 2: Remove legacy backups (45MB → 30-35MB savings)"
+      - "Target 3: Deduplicate archived plans (8.7MB → 2-4MB savings)"
+      - "Target 4: Compress CORTEX 5 snapshots (2.0MB → 1.5MB savings)"
+      - "Rollback strategies validated for all targets"
+      - "Vacuum execution generates audit trail"
+      - "Expected space savings: 73-85MB (66-77% reduction)"
+      - "**ACCEPTANCE DIRECTORY CLEANUP:** .asif/AI-Learning/cortex6/acceptance/ maintained at 3-file structure"
+      - "**ACCEPTANCE DIRECTORY CLEANUP:** Only 00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml, README-ACCEPTANCE-CRITERIA.md, ANALYSIS-ARCHIVE-COMPLETE.md"
+      - "**ACCEPTANCE DIRECTORY CLEANUP:** All interim analysis reports consolidated into single archive"
+      - "**ACCEPTANCE DIRECTORY CLEANUP:** Zero redundant markdown files"
+      - "**ACCEPTANCE DIRECTORY CLEANUP:** Vacuum validates 3-file structure is maintained"
+    validation: automated
+    test_file: "tests/orchestrators/test_vacuum_targets.py"
+    status: PENDING
+    blocking: false
+    priority: P1_HIGH
+    evidence:
+      - "Vacuum analysis: HOLISTIC-REVIEW-ANALYSIS-20260109.md - Part 2"
+      - "Archive inventory: du -sh cortex-brain/archives/*"
+      - "Acceptance directory cleanup: 9 files → 3 files (66.7% reduction)"
+
+# ==============================================================================
+# SECTION 3: FOUNDATION LAYER (feat01)
+# ==============================================================================
+
+foundation_layer:
+  category: infrastructure
+  priority: P0_CRITICAL
+  feature_id: feat01
+  description: "Unified test structure, pytest config, fixtures, and base infrastructure"
+  
+  AC-F01-001:
+    id: AC-F01-001
+    criterion: "Consolidated tests/ folder structure operational"
+    acceptance:
+      - "tests/ directory with unit/, integration/, performance/, governance/"
+      - "All subdirectories have __init__.py"
+      - "pytest --collect-only discovers all tests"
+      - "No test files exist outside tests/"
+      - "Zero test discovery errors"
+    validation: automated
+    test_command: "pytest --collect-only"
+    status: COMPLETE
+    blocking: true
+    
+  AC-F01-002:
+    id: AC-F01-002
+    criterion: "Pytest configuration complete and validated"
+    acceptance:
+      - "tests/pytest.ini exists with correct testpaths"
+      - "Markers defined: slow, integration, performance, governance"
+      - "addopts includes -v --tb=short --strict-markers"
+      - "pytest loads configuration without errors"
+    validation: automated
+    test_command: "pytest --version && pytest --co"
+    status: COMPLETE
+    blocking: true
+    
+  AC-F01-003:
+    id: AC-F01-003
+    criterion: "Shared test fixtures available across all suites"
+    acceptance:
+      - "tests/conftest.py provides audit_logger fixture"
+      - "tests/conftest.py provides temp_db fixture"
+      - "tests/conftest.py provides sample_dag fixture"
+      - "tests/conftest.py provides mock_governance_rules fixture"
+      - "All fixtures accessible from all test files"
+    validation: automated
+    test_file: "tests/test_fixtures_availability.py"
+    status: COMPLETE
+    blocking: true
+    
+  AC-F01-004:
+    id: AC-F01-004
+    criterion: "StateManager with SQLite WAL mode operational"
+    acceptance:
+      - "StateManager uses SQLite with WAL mode enabled"
+      - "Concurrent read operations supported"
+      - "Optimistic locking with version columns"
+      - "Automatic conflict detection and retry"
+      - "State persistence <100ms"
+    validation: automated
+    test_file: "tests/unit/test_state_manager.py"
+    status: PENDING
+    blocking: true
+    
+  AC-F01-005:
+    id: AC-F01-005
+    criterion: "Audit Logger operational with all 7 categories"
+    acceptance:
+      - "AuditLogger supports STATE_MANAGEMENT, EXECUTION, MIDDLEWARE"
+      - "Supports RESPONSE, PERFORMANCE, SECURITY, VALIDATION"
+      - "Correlation IDs tracked across operations"
+      - "Structured JSON logging with ISO timestamps"
+      - "Log files organized by date and category"
+    validation: automated
+    test_file: "tests/unit/test_audit_logger.py"
+    status: COMPLETE
+    blocking: true
+    
+  AC-F01-006:
+    id: AC-F01-006
+    criterion: "Response Template System v4 operational"
+    acceptance:
+      - "INSTANT, FOCUSED, STRUCTURED, COMPREHENSIVE modes"
+      - "Template rendering <50ms"
+      - "Concise mode (default) generates ≤40 lines"
+      - "Visual progress bars (ASCII) for accessibility"
+      - "Cognitive load reduction (updates only at phase boundaries)"
+      - "**ANTI-BLOAT:** CORTEX actively prevents GitHub Copilot from creating detailed markdown summary reports at end of epic/feature execution"
+      - "**ANTI-BLOAT:** No post-execution markdown summaries generated automatically"
+      - "**ANTI-BLOAT:** Orchestrators use INSTANT/FOCUSED templates for execution results (not COMPREHENSIVE)"
+      - "**ANTI-BLOAT:** Completion reports ≤40 lines (WCAG AA cognitive load compliance)"
+      - "**ANTI-BLOAT:** Audit logs verify no verbose summary generation post-execution"
+    validation: automated
+    test_file: "tests/unit/test_response_templates.py"
+    status: PENDING
+    blocking: false
+
+# ==============================================================================
+# SECTION 3: TODO ORCHESTRATOR (feat02) - HANDOFF POINT
+# ==============================================================================
+
+todo_orchestrator:
+  category: core_orchestration
+  priority: P0_CRITICAL
+  feature_id: feat02
+  description: "DAG-based work tracking with >1000 node capacity - CORTEX HANDOFF POINT"
+  handoff_trigger: true
+  
+  AC-F02-001:
+    id: AC-F02-001
+    criterion: "DAG data structure supports >1000 nodes"
+    acceptance:
+      - "DAGNode, DAGEdge, DAG classes implemented"
+      - "Performance test with 1000+ nodes passes"
+      - "Memory usage acceptable (<500MB for 1000 nodes)"
+      - "Node operations O(1) average case"
+    validation: automated
+    test_file: "tests/unit/test_dag.py"
+    status: COMPLETE
+    blocking: true
+    
+  AC-F02-002:
+    id: AC-F02-002
+    criterion: "DAG node operations (CRUD) functional"
+    acceptance:
+      - "add_node() adds nodes correctly"
+      - "remove_node() cleans up edges"
+      - "update_node() preserves relationships"
+      - "get_node() returns accurate data"
+      - "has_node() checks existence correctly"
+    validation: automated
+    test_file: "tests/unit/test_dag.py::test_node_operations"
+    status: COMPLETE
+    blocking: true
+    
+  AC-F02-003:
+    id: AC-F02-003
+    criterion: "DAG edge operations (dependency management) functional"
+    acceptance:
+      - "add_edge() creates dependencies"
+      - "remove_edge() cleans adjacency lists"
+      - "get_dependencies() returns correct upstream nodes"
+      - "get_dependents() returns correct downstream nodes"
+    validation: automated
+    test_file: "tests/unit/test_dag.py::test_edge_operations"
+    status: COMPLETE
+    blocking: true
+    
+  AC-F02-004:
+    id: AC-F02-004
+    criterion: "Circular dependency detection prevents invalid DAG states"
+    acceptance:
+      - "_detect_cycle() identifies cycles"
+      - "_dfs_cycle_check() performs DFS correctly"
+      - "validate() ensures DAG acyclic property"
+      - "CircularDependencyError raised with cycle path"
+    validation: automated
+    test_file: "tests/unit/test_dag.py::test_circular_detection"
+    status: COMPLETE
+    blocking: true
+    
+  AC-F02-005:
+    id: AC-F02-005
+    criterion: "Topological sort provides correct execution order"
+    acceptance:
+      - "topological_sort() uses Kahn's algorithm"
+      - "get_execution_order() returns valid ordering"
+      - "Handles multiple valid orderings correctly"
+      - "Detects cycles if sort cannot complete"
+    validation: automated
+    test_file: "tests/unit/test_dag.py::test_topological_sort"
+    status: COMPLETE
+    blocking: true
+    
+  AC-F02-006:
+    id: AC-F02-006
+    criterion: "TODO Orchestrator integrates DAG with StateManager"
+    acceptance:
+      - "TODOs persisted to StateManager database"
+      - "DAG state serializable and restorable"
+      - "Checkpoint/resume operations functional"
+      - "Concurrent TODO operations safe (locking)"
+    validation: automated
+    test_file: "tests/integration/test_todo_state_integration.py"
+    status: PENDING
+    blocking: true
+    
+  AC-F02-007:
+    id: AC-F02-007
+    criterion: "CORTEX can self-manage work (HANDOFF ACHIEVED)"
+    acceptance:
+      - "TODO Orchestrator creates TODOs from user requests"
+      - "Unified Instruction Set drives TODO generation"
+      - "Execution engine processes TODOs in DAG order"
+      - "Checkpoint/rollback functional"
+      - "GitHub Copilot can hand off control to CORTEX"
+    validation: manual + automated
+    test_file: "tests/integration/test_cortex_handoff.py"
+    status: PENDING
+    blocking: true
+    handoff_gate: true
+
+# ==============================================================================
+# SECTION 4: ORCHESTRATOR CAPABILITIES (10+ Orchestrators)
+# ==============================================================================
+
+orchestrator_capabilities:
+  category: orchestration
+  priority: P0_CRITICAL
+  description: "All orchestrators operational with autonomous execution"
+  
+  AC-ORC-001:
+    id: AC-ORC-001
+    criterion: "Master Orchestrator routing with built-in intelligence ≥95%"
+    acceptance:
+      - "Pattern matching via regex succeeds for known patterns"
+      - "LLM classification handles ambiguous requests (LLMIntentClassifier)"
+      - "Request transformation adds domain context"
+      - "Python invocation via terminal succeeds"
+      - "Routing accuracy measured across 100+ test cases"
+      - "**INTELLIGENCE:** Master Orchestrator decides WHICH orchestrator to use"
+      - "**INTELLIGENCE:** Master Orchestrator analyzes request complexity"
+      - "**INTELLIGENCE:** Master Orchestrator chains orchestrators when needed"
+      - "**INTELLIGENCE:** Master Orchestrator tracks orchestrator success rates"
+      - "Orchestrator selection strategy documented and tested"
+    validation: automated
+    test_file: "tests/orchestrators/test_master_routing.py"
+    status: PENDING
+    blocking: true
+    
+  AC-ORC-002:
+    id: AC-ORC-002
+    criterion: "Planning Orchestrator v5 generates 4-folder structure"
+    acceptance:
+      - "context/ folder with scope.yaml, constraints.yaml"
+      - "artifacts/ folder for generated code/docs"
+      - "reports/ folder for progress and summaries"
+      - "tracking/ folder with progress-tracker.json"
+      - "YAML-based requirements in context/"
+    validation: automated
+    test_file: "tests/orchestrators/test_planning_v5.py"
+    status: PENDING
+    blocking: false
+    
+  AC-ORC-003:
+    id: AC-ORC-003
+    criterion: "Epic Review Orchestrator generates health reports"
+    acceptance:
+      - "Visual progress bars (ASCII for accessibility)"
+      - "Health metrics: progress, test health, audit analysis"
+      - "Component usage tracking (active vs inactive)"
+      - "Self-healing evaluation (TDD, audit, validation)"
+      - "Gap detection with automatic epic updates"
+    validation: automated
+    test_file: "tests/orchestrators/test_epic_review.py"
+    status: PENDING
+    blocking: false
+    
+  AC-ORC-004:
+    id: AC-ORC-004
+    criterion: "TDD Orchestrator enforces RED→GREEN→REFACTOR"
+    acceptance:
+      - "RED phase: Generate failing test"
+      - "GREEN phase: Minimal implementation to pass"
+      - "REFACTOR phase: Code improvement without breaking tests"
+      - "Governance blocks non-TDD implementations"
+      - "Audit logs track TDD cycle compliance"
+    validation: automated
+    test_file: "tests/orchestrators/test_tdd_orchestrator.py"
+    status: PENDING
+    blocking: true
+    
+  AC-ORC-005:
+    id: AC-ORC-005
+    criterion: "ADO v2 Orchestrator generates Azure DevOps work items"
+    acceptance:
+      - "Story, Feature, Epic, Task generation"
+      - "Acceptance criteria auto-generated from requirements"
+      - "Traceability matrix links requirements→ADO items"
+      - "Wizard mode for interactive creation"
+      - "Auto mode for batch generation"
+    validation: automated
+    test_file: "tests/orchestrators/test_ado_v2.py"
+    status: PENDING
+    blocking: false
+    
+  AC-ORC-006:
+    id: AC-ORC-006
+    criterion: "Investigation Orchestrator performs root cause analysis"
+    acceptance:
+      - "Workspace scan for relevant files"
+      - "Semantic search for related code"
+      - "Audit log trace analysis"
+      - "Root cause hypothesis generation"
+      - "Remediation recommendations"
+    validation: automated
+    test_file: "tests/orchestrators/test_investigation.py"
+    status: PENDING
+    blocking: false
+    
+  AC-ORC-007:
+    id: AC-ORC-007
+    criterion: "Sanitization Orchestrator removes PII/secrets"
+    acceptance:
+      - "Detects PII patterns (email, phone, SSN, credit card)"
+      - "Detects secrets (API keys, passwords, tokens)"
+      - "Generates sanitization report"
+      - "Creates sanitization mappings for reversibility"
+      - "Validates sanitized output"
+    validation: automated
+    test_file: "tests/orchestrators/test_sanitization.py"
+    status: PENDING
+    blocking: false
+    
+  AC-ORC-008:
+    id: AC-ORC-008
+    criterion: "Vacuum Orchestrator performs deep filesystem cleanup"
+    acceptance:
+      - "Detects orphaned files (no references)"
+      - "Identifies duplicate content"
+      - "Suggests archive candidates (old, unused)"
+      - "Generates cleanup report"
+      - "Dry-run mode prevents data loss"
+    validation: automated
+    test_file: "tests/orchestrators/test_vacuum.py"
+    status: PENDING
+    blocking: false
+    
+  AC-ORC-009:
+    id: AC-ORC-009
+    criterion: "Maintenance Orchestrator performs 12-phase health pipeline"
+    acceptance:
+      - "All 12 phases execute in sequence"
+      - "Health checks detect issues"
+      - "Auto-remediation for common problems"
+      - "Maintenance report generated"
+      - "Rollback on failure"
+    validation: automated
+    test_file: "tests/orchestrators/test_maintenance.py"
+    status: PENDING
+    blocking: false
+    
+  AC-ORC-010:
+    id: AC-ORC-010
+    criterion: "Refinement Orchestrator performs 7-phase code improvement"
+    acceptance:
+      - "Code analysis (complexity, duplication, smells)"
+      - "Refactoring suggestions"
+      - "Test preservation during refactoring"
+      - "Performance metrics before/after"
+      - "Audit trail of all changes"
+    validation: automated
+    test_file: "tests/orchestrators/test_refinement.py"
+    status: PENDING
+    blocking: false
+
+# ==============================================================================
+# SECTION 5: PERFORMANCE & SCALABILITY
+# ==============================================================================
+
+performance_scalability:
+  category: performance
+  priority: P1_HIGH
+  description: "Performance SLAs and scalability targets"
+  
+  AC-PERF-001:
+    id: AC-PERF-001
+    criterion: "O(1) orchestrator routing <5ms (p95)"
+    acceptance:
+      - "Trie-based pattern router implemented"
+      - "100 orchestrators registered"
+      - "Routing latency measured across 10,000 requests"
+      - "p95 latency <5ms"
+      - "p99 latency <10ms"
+    validation: automated
+    test_file: "tests/performance/test_routing_performance.py"
+    status: PENDING
+    blocking: false
+    
+  AC-PERF-002:
+    id: AC-PERF-002
+    criterion: "State persistence <100ms (p95)"
+    acceptance:
+      - "StateManager persist() measured"
+      - "1000 state updates tested"
+      - "p95 latency <100ms"
+      - "WAL mode provides concurrent reads"
+    validation: automated
+    test_file: "tests/performance/test_state_persistence.py"
+    status: PENDING
+    blocking: false
+    
+  AC-PERF-003:
+    id: AC-PERF-003
+    criterion: "Governance merge <50ms"
+    acceptance:
+      - "4-Category Governance Merger timed"
+      - "Merge measured across 100 rule sets"
+      - "Average merge time <50ms"
+      - "Cache hit rate ≥95%"
+    validation: automated
+    test_file: "tests/performance/test_governance_merge.py"
+    status: PENDING
+    blocking: false
+    
+  AC-PERF-004:
+    id: AC-PERF-004
+    criterion: "DAG operations scale to 10,000 nodes"
+    acceptance:
+      - "DAG with 10,000 nodes created"
+      - "Topological sort completes in <1s"
+      - "Memory usage <2GB"
+      - "No performance degradation at scale"
+    validation: automated
+    test_file: "tests/performance/test_dag_scale.py"
+    status: PENDING
+    blocking: false
+    
+  AC-PERF-005:
+    id: AC-PERF-005
+    criterion: "Response template rendering <50ms"
+    acceptance:
+      - "All 4 template modes measured"
+      - "Average rendering time <50ms"
+      - "Large templates (1000+ lines) <200ms"
+    validation: automated
+    test_file: "tests/performance/test_template_rendering.py"
+    status: PENDING
+    blocking: false
+    
+  AC-PERF-006:
+    id: AC-PERF-006
+    criterion: "Multi-repo registry performance at scale"
+    acceptance:
+      - "Test: 10 repos → routing <50ms (p95)"
+      - "Test: 50 repos → registry load <100ms"
+      - "Test: 100 repos → context detection <200ms"
+      - "Test: Concurrent operations across 5 repos → no degradation"
+      - "Memory usage: <100MB for 100 repos"
+    validation: automated
+    test_file: "tests/performance/test_multi_repo_scale.py"
+    status: PENDING
+    blocking: false
+    priority: P1_HIGH
+    
+  AC-PERF-007:
+    id: AC-PERF-007
+    criterion: "Orchestrator memory limits validated"
+    acceptance:
+      - "Memory profiling for each orchestrator"
+      - "Maximum memory usage thresholds documented"
+      - "Planning Orchestrator: <500MB for 1000-task plan"
+      - "TDD Orchestrator: <200MB for 100-test execution"
+      - "Memory leak detection: 1000 operations → <10% memory growth"
+      - "Test: Detect memory leaks via pytest-memray"
+    validation: automated
+    test_file: "tests/performance/test_orchestrator_memory.py"
+    status: PENDING
+    blocking: false
+    priority: P1_HIGH
+
+# ==============================================================================
+# SECTION 5B: ORCHESTRATOR-SPECIFIC TEST HARNESSES (COMPREHENSIVE)
+# ==============================================================================
+# Purpose: Each orchestrator has comprehensive scenario-based test harness
+#          validating real-world workflows guided by Master Orchestrator
+# Critical: Industry-standard testing with governance compliance via audit traces
+# ==============================================================================
+
+orchestrator_test_harnesses:
+  category: orchestrator_testing
+  priority: P0_CRITICAL
+  description: "Comprehensive scenario validation for all orchestrators with audit trace evidence"
+  
+  AC-ORC-TDD-001:
+    id: AC-ORC-TDD-001
+    criterion: "TDD Orchestrator comprehensive scenario validation"
+    acceptance:
+      - "**Scenario 1: New Feature** - Multiple test files, RED→GREEN→REFACTOR cycle"
+      - "**Scenario 2: Modify Feature** - Tests must fail first, then implementation"
+      - "**Scenario 3: Delete Feature** - Tests + code cleanup validation"
+      - "**Scenario 4: Refactor** - Behavior unchanged, tests pass throughout"
+      - "**Scenario 5: Master Orchestrator Guided** - Knowledge YAML + Company Best Practices → Clean Code"
+      - "Audit log trace proves: (1) Test written first, (2) Test failed, (3) Code written, (4) Test passed, (5) Refactored"
+      - "Governance validation: TDD_ENFORCEMENT rule compliance"
+      - "Code quality metrics: coverage, complexity, duplication"
+      - "Test: Multi-language support (Python, C#, TypeScript, JavaScript)"
+    validation: automated
+    test_file: "tests/orchestrators/comprehensive/test_tdd_scenarios.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    evidence:
+      - "TDD scenario audit traces: cortex-brain/audit-logs/tdd-scenarios-*.json"
+      
+  AC-ORC-PLAN-001:
+    id: AC-ORC-PLAN-001
+    criterion: "Planning Orchestrator comprehensive scenario validation"
+    acceptance:
+      - "**Scenario 1: Simple Feature** - 1 service, 3 endpoints, folder structure validation"
+      - "**Scenario 2: Complex Epic** - 5 services, 15 endpoints, 3 databases, cross-dependencies"
+      - "**Scenario 3: Multi-Repo Plan** - CORTEX + user repo changes coordinated"
+      - "**Scenario 4: Plan Modification** - Add/remove tasks mid-execution (DAG update)"
+      - "Audit log proves: (1) Request analyzed, (2) DAG generated, (3) Folders created, (4) YAML artifacts"
+      - "Governance validation: PLANNING_ISOLATION (no code implementation)"
+      - "Folder structure: context/, artifacts/, reports/, tracking/"
+      - "YAML validation: all generated YAMLs schema-compliant"
+    validation: automated
+    test_file: "tests/orchestrators/comprehensive/test_planning_scenarios.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    
+  AC-ORC-MAINT-001:
+    id: AC-ORC-MAINT-001
+    criterion: "Maintenance Orchestrator comprehensive scenario validation"
+    acceptance:
+      - "**Scenario 1: Phase Failure Recovery** - Phase 3 fails → rollback → retry"
+      - "**Scenario 2: Concurrent Requests** - Queue or block (no parallel execution)"
+      - "**Scenario 3: Active Development Conflict** - Maintenance during dev → detection + warning"
+      - "Audit log proves: All 12 phases traced with timing data"
+      - "Rollback strategy: restore pre-maintenance state"
+      - "Health check report: issues detected + auto-remediation actions"
+      - "Test: Dry-run mode (no actual changes, report only)"
+    validation: automated
+    test_file: "tests/orchestrators/comprehensive/test_maintenance_scenarios.py"
+    status: PENDING
+    blocking: false
+    priority: P1_HIGH
+    
+  AC-ORC-MASTER-001:
+    id: AC-ORC-MASTER-001
+    criterion: "Master Orchestrator decision-making validation"
+    acceptance:
+      - "**Scenario 1: Ambiguous Request** - LLM classification → correct orchestrator"
+      - "**Scenario 2: Complex Request** - Orchestrator chaining (Planning → TDD → Epic Review)"
+      - "**Scenario 3: Knowledge YAML Consultation** - Domain knowledge → route to correct orchestrator"
+      - "**Scenario 4: Company Best Practices Override** - Company rules applied correctly"
+      - "Audit log shows: (1) Request received, (2) Analysis, (3) Orchestrator selection, (4) Rationale"
+      - "Intelligence metrics: routing accuracy, decision confidence, chaining success rate"
+      - "Test: 100+ requests across all orchestrators → ≥95% accuracy"
+    validation: automated
+    test_file: "tests/orchestrators/comprehensive/test_master_decision_making.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    
+  AC-TEST-ORG-001:
+    id: AC-TEST-ORG-001
+    criterion: "Centralized test suite organization - all tests in tests/"
+    acceptance:
+      - "ALL orchestrator tests in tests/orchestrators/"
+      - "ALL governance tests in tests/governance/"
+      - "ALL integration tests in tests/integration/"
+      - "ALL security tests in tests/security/"
+      - "ALL concurrency tests in tests/concurrency/"
+      - "ALL failure mode tests in tests/failure_modes/"
+      - "ALL multi-repo tests in tests/multi_repo/"
+      - "Zero test files outside tests/ directory"
+      - "Test discovery: pytest --collect-only finds all tests"
+    validation: automated
+    test_command: "find . -name 'test_*.py' -not -path './tests/*' | wc -l"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+
+# ==============================================================================
+# SECTION 6: TEST COVERAGE & QUALITY
+# ==============================================================================
+
+test_coverage_quality:
+  category: quality
+  priority: P1_HIGH
+  description: "Comprehensive test coverage and quality metrics"
+  
+  AC-TEST-001:
+    id: AC-TEST-001
+    criterion: "Overall test coverage ≥80%"
+    acceptance:
+      - "pytest-cov measures line coverage"
+      - "All modules under tests/"
+      - "Coverage report generated"
+      - "Overall coverage ≥80%"
+    validation: automated
+    test_command: "pytest --cov=src --cov-report=term-missing"
+    status: PENDING
+    blocking: false
+    
+  AC-TEST-002:
+    id: AC-TEST-002
+    criterion: "Core component coverage ≥90%"
+    acceptance:
+      - "StateManager coverage ≥90%"
+      - "DAG coverage ≥90%"
+      - "GovernanceMerger coverage ≥90%"
+      - "TODO Orchestrator coverage ≥90%"
+      - "Master Orchestrator coverage ≥90%"
+    validation: automated
+    test_command: "pytest --cov=src/orchestrators/core --cov-report=term"
+    status: PENDING
+    blocking: true
+    
+  AC-TEST-003:
+    id: AC-TEST-003
+    criterion: "All orchestrators have integration tests"
+    acceptance:
+      - "Integration test for each of 10+ orchestrators"
+      - "End-to-end request→response validated"
+      - "Audit log integration verified"
+      - "StateManager integration verified"
+    validation: automated
+    test_file: "tests/integration/test_orchestrator_integration.py"
+    status: PENDING
+    blocking: false
+    
+  AC-TEST-004:
+    id: AC-TEST-004
+    criterion: "Governance rules have enforcement tests"
+    acceptance:
+      - "Test for each of 61 SKULL rules"
+      - "Violation detection validated"
+      - "Enforcement actions verified"
+      - "Audit logging confirmed"
+    validation: automated
+    test_file: "tests/governance/test_rule_enforcement.py"
+    status: PENDING
+    blocking: true
+    
+  AC-TEST-005:
+    id: AC-TEST-005
+    criterion: "All 25 edge cases have passing tests"
+    acceptance:
+      - "Edge case tests in tests/edge_cases/"
+      - "All 25 scenarios covered"
+      - "Mitigation strategies validated"
+      - "Zero failing edge case tests"
+    validation: automated
+    test_file: "tests/edge_cases/test_all_edge_cases.py"
+    status: PENDING
+    blocking: false
+
+# ==============================================================================
+# SECTION 7: KNOWLEDGE BASE & LEARNING
+# ==============================================================================
+
+knowledge_base_learning:
+  category: intelligence
+  priority: P2_MEDIUM
+  description: "Knowledge graph, learning, and adaptive intelligence"
+  
+  AC-KB-001:
+    id: AC-KB-001
+    criterion: "Knowledge graph stores learned patterns"
+    acceptance:
+      - "Pattern storage in cortex-brain/tier2/knowledge-graph/"
+      - "Pattern retrieval functional"
+      - "Success rate tracking (patterns with >80% success)"
+      - "Pattern recommendation system"
+    validation: automated
+    test_file: "tests/knowledge/test_knowledge_graph.py"
+    status: PENDING
+    blocking: false
+    
+  AC-KB-002:
+    id: AC-KB-002
+    criterion: "Lessons learned system captures failures"
+    acceptance:
+      - "Failure capture with context"
+      - "Lessons storage in cortex-brain/tier2/lessons-learned/"
+      - "Retrieval by domain, error type, context"
+      - "Integration with Knowledge Best Practices"
+    validation: automated
+    test_file: "tests/knowledge/test_lessons_learned.py"
+    status: PENDING
+    blocking: false
+    
+  AC-KB-003:
+    id: AC-KB-003
+    criterion: "Domain expertise accumulated per company"
+    acceptance:
+      - "Company-specific knowledge partitions"
+      - "Domain plugin system operational"
+      - "Cross-company learning disabled by default"
+      - "Company ABC knowledge isolated from Company XYZ"
+    validation: automated
+    test_file: "tests/knowledge/test_domain_expertise.py"
+    status: PENDING
+    blocking: false
+    
+  AC-KB-004:
+    id: AC-KB-004
+    criterion: "Performance insights drive optimization"
+    acceptance:
+      - "Performance metrics collected"
+      - "Bottleneck detection"
+      - "Optimization recommendations"
+      - "Before/after performance comparison"
+    validation: automated
+    test_file: "tests/knowledge/test_performance_insights.py"
+    status: PENDING
+    blocking: false
+
+# ==============================================================================
+# SECTION 8: SECURITY & COMPLIANCE
+# ==============================================================================
+
+security_compliance:
+  category: security
+  priority: P0_CRITICAL
+  description: "Security controls, encryption, auth, compliance"
+  
+  AC-SEC-001:
+    id: AC-SEC-001
+    criterion: "Authentication and authorization implemented"
+    acceptance:
+      - "User authentication system"
+      - "Role-based access control (RBAC)"
+      - "Permission validation on sensitive operations"
+      - "Audit logging of auth events"
+    validation: automated
+    test_file: "tests/security/test_auth.py"
+    status: PENDING
+    blocking: false
+    
+  AC-SEC-002:
+    id: AC-SEC-002
+    criterion: "Encryption for sensitive data at rest"
+    acceptance:
+      - "StateManager database encrypted"
+      - "Secrets encrypted in configuration"
+      - "AES-256 or stronger encryption"
+      - "Key management secure"
+    validation: automated
+    test_file: "tests/security/test_encryption.py"
+    status: PENDING
+    blocking: false
+    
+  AC-SEC-003:
+    id: AC-SEC-003
+    criterion: "Input validation prevents injection attacks"
+    acceptance:
+      - "SQL injection prevention"
+      - "Command injection prevention"
+      - "Path traversal prevention"
+      - "Validation on all user inputs"
+    validation: automated
+    test_file: "tests/security/test_input_validation.py"
+    status: PENDING
+    blocking: true
+    
+  AC-SEC-004:
+    id: AC-SEC-004
+    criterion: "Audit logging CANNOT be bypassed"
+    acceptance:
+      - "Runtime AuditContextManager enforces logging"
+      - "Cannot disable via configuration"
+      - "Pre-commit hooks provide additional layer"
+      - "Phase gates require audit validation"
+      - "No --no-verify bypass for critical operations"
+    validation: automated
+    test_file: "tests/security/test_audit_enforcement.py"
+    status: PENDING
+    blocking: true
+    
+  AC-SEC-005:
+    id: AC-SEC-005
+    criterion: "Secrets never committed to repositories"
+    acceptance:
+      - "Pre-commit hooks scan for secrets"
+      - "Sanitization orchestrator detects leaked secrets"
+      - "Environment variable management"
+      - "Secrets vault integration"
+    validation: automated
+    test_file: "tests/security/test_secrets_protection.py"
+    status: PENDING
+    blocking: true
+    
+  AC-SEC-006:
+    id: AC-SEC-006
+    criterion: "YAML injection attacks prevented"
+    acceptance:
+      - "SafeLoader usage enforced everywhere (no yaml.load())"
+      - "Test: Arbitrary Python code execution attempt → blocked"
+      - "Test: YAML bomb attack (!anchor, !repeat) → resource limits prevent DOS"
+      - "Schema validation before YAML parsing"
+      - "Maximum YAML file size: 50MB"
+      - "Maximum nesting depth: 20 levels"
+    validation: automated
+    test_file: "tests/security/test_yaml_injection.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    
+  AC-SEC-007:
+    id: AC-SEC-007
+    criterion: "Audit log tampering prevented"
+    acceptance:
+      - "Append-only log file enforcement (no write/overwrite mode)"
+      - "HMAC signatures for log entries (integrity validation)"
+      - "Tamper detection on log rotation"
+      - "Corrupted log entries flagged with WARNING in next entry"
+      - "Test: Attempt to modify past log entry → detected on next read"
+      - "Test: Delete log file → emergency log created with tamper alert"
+    validation: automated
+    test_file: "tests/security/test_audit_tamper_prevention.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    
+  AC-SEC-008:
+    id: AC-SEC-008
+    criterion: "Supply chain security - dependency integrity"
+    acceptance:
+      - "requirements.txt includes hashes (pip --require-hashes)"
+      - "SBOM (Software Bill of Materials) generated"
+      - "Vulnerability scanning: safety check, bandit analysis"
+      - "Automated dependency updates with test suite validation"
+      - "Pinned versions for all dependencies"
+      - "Test: Modified dependency → hash mismatch → installation fails"
+    validation: automated
+    test_file: "tests/security/test_supply_chain_security.py"
+    status: PENDING
+    blocking: false
+    priority: P1_HIGH
+
+# ==============================================================================
+# SECTION 9: MCP & MULTI-REPO SUPPORT
+# ==============================================================================
+
+mcp_multi_repo:
+  category: integration
+  priority: P1_HIGH
+  feature_id: feat06
+  description: "Model Context Protocol server and multi-repository operations"
+  
+  AC-MCP-001:
+    id: AC-MCP-001
+    criterion: "MCP Server exposes all CORTEX capabilities (orchestrators + tooling)"
+    acceptance:
+      - "Server listens on configured port"
+      - "JSON-RPC 2.0 protocol compliant"
+      - "Orchestrator capabilities exposed via MCP"
+      - "**TOOLING EXPOSURE:** cortex-toolkit/ tools exposed as MCP methods"
+      - "**TOOLING EXPOSURE:** scripts/ utilities exposed as MCP methods"
+      - "**TOOLING EXPOSURE:** Python utilities (sanitization, investigation, etc.) via MCP"
+      - "**TOOLING EXPOSURE:** All tools documented in MCP method list"
+      - "Error responses follow JSON-RPC spec"
+    validation: automated
+    test_file: "tests/integration/test_mcp_server.py"
+    status: PENDING
+    blocking: false
+    
+  AC-MCP-002:
+    id: AC-MCP-002
+    criterion: "Multi-repo operations work across 3+ repositories"
+    acceptance:
+      - "Repo context detection"
+      - "Operations scoped to correct repository"
+      - "Git isolation enforced (no cross-repo contamination)"
+      - "Test with 3+ mock repositories"
+    validation: automated
+    test_file: "tests/integration/test_multi_repo.py"
+    status: PENDING
+    blocking: false
+    
+  AC-MCP-003:
+    id: AC-MCP-003
+    criterion: "Company Brain Plugin System operational"
+    acceptance:
+      - "Company-specific governance plugins loaded"
+      - "Domain plugins (Finance, HSA/FSA, Commuter) supported"
+      - "Plugin isolation (Company ABC ≠ Company XYZ)"
+      - "Plugin registry tracks active plugins"
+    validation: automated
+    test_file: "tests/integration/test_company_brain_plugins.py"
+    status: PENDING
+    blocking: false
+
+# ==============================================================================
+# SECTION 9B: MULTI-REPO & REPOSITORY REGISTRY (CRITICAL)
+# ==============================================================================
+# Purpose: Config-based registry for managing multiple repositories with complete
+#          segregation, universal CORTEX.prompt.md, and standardized MCP tooling
+# Critical: Live environment support with multiple repos, zero cross-contamination
+# ==============================================================================
+
+multi_repo_registry:
+  category: multi_repo_operations
+  priority: P0_CRITICAL
+  description: "Repository registry system, universal CORTEX.prompt.md, complete repo segregation"
+  
+  AC-REPO-001:
+    id: AC-REPO-001
+    criterion: "Repository Registry System operational with simple YAML config"
+    acceptance:
+      - "cortex-brain/config/repo-registry.yaml exists with schema validation"
+      - "Registry schema: {repo_id, repo_path, repo_type, governance_profile, enabled, tags, metadata}"
+      - "Startup validation: all registered repos exist and accessible"
+      - "Dynamic repo addition/removal via MCP methods (register_repo, unregister_repo)"
+      - "Registry load time <100ms with 50 repos"
+      - "Repo types supported: CORTEX (full operations), USER (restricted), ENTERPRISE (compliance overrides)"
+      - "Governance profiles linked: each repo can use different governance set"
+      - "Health check: periodic validation repos still accessible"
+      - "Auto-removal of invalid/deleted repos"
+    validation: automated
+    test_file: "tests/multi_repo/test_repo_registry.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    
+  AC-REPO-002:
+    id: AC-REPO-002
+    criterion: "Universal CORTEX.prompt.md works across all repository types"
+    acceptance:
+      - "Single .github/prompts/CORTEX.prompt.md routes correctly for all repo types"
+      - "Test: CORTEX repo (has cortex-brain/admin/) → full operations enabled"
+      - "Test: User repos (no cortex-brain/admin/) → user operations only (planning, ADO, investigation)"
+      - "Test: Enterprise repos → compliance overrides applied"
+      - "Test: Nested repos (CORTEX inside another repo) → correct context detection"
+      - "Test: Monorepos (multiple projects) → project-level scoping"
+      - "Test: Symlinked repos → resolves to canonical path"
+      - "Test: Network-mounted repos → timeout handling"
+      - "Context detection <50ms per repo"
+      - "Routing table validates against 5+ different repo types"
+    validation: automated
+    test_file: "tests/multi_repo/test_universal_prompt.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    
+  AC-REPO-003:
+    id: AC-REPO-003
+    criterion: "Repository isolation enforced - zero cross-repo contamination"
+    acceptance:
+      - "Operation on Repo A cannot access Repo B files"
+      - "Jail/chroot-style boundary enforcement"
+      - "Path canonicalization prevents ../../../ escapes"
+      - "Audit logs tagged with repo_id for all operations"
+      - "StateManager isolates state per repo (repo_id in all keys)"
+      - "Test: Attempt to access /etc/passwd from user repo → blocked"
+      - "Test: Attempt to read CORTEX secrets from user repo → blocked"
+      - "Test: Cross-repo file copy attempt → blocked with clear error"
+      - "Security scan validates no repo boundary bypass vulnerabilities"
+    validation: automated
+    test_file: "tests/security/test_repo_isolation.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    evidence:
+      - "Security audit report: repo-isolation-validation-*.md"
+
+# ==============================================================================
+# SECTION 10: INTEGRATION & POLISH
+# ==============================================================================
+
+integration_polish:
+  category: integration
+  priority: P1_HIGH
+  feature_id: feat07
+  description: "End-to-end integration and system polish"
+  
+  AC-INT-001:
+    id: AC-INT-001
+    criterion: "End-to-end user request→response flow validated"
+    acceptance:
+      - "User request enters via GitHub Copilot"
+      - "Master Orchestrator routes to correct orchestrator"
+      - "Orchestrator executes with audit logging"
+      - "Response template rendered"
+      - "Result displayed to user"
+    validation: automated
+    test_file: "tests/integration/test_e2e_flow.py"
+    status: PENDING
+    blocking: true
+    
+  AC-INT-002:
+    id: AC-INT-002
+    criterion: "All orchestrators integrated with StateManager"
+    acceptance:
+      - "State persistence for all orchestrators"
+      - "Checkpoint/resume functional"
+      - "Rollback on failure"
+      - "Concurrent operations safe"
+    validation: automated
+    test_file: "tests/integration/test_orchestrator_state_integration.py"
+    status: PENDING
+    blocking: true
+    
+  AC-INT-003:
+    id: AC-INT-003
+    criterion: "All orchestrators integrated with Audit Logger + workflow trace reconstruction"
+    acceptance:
+      - "Audit logs for all orchestrator operations"
+      - "Correlation IDs tracked end-to-end"
+      - "Structured logging with ISO timestamps"
+      - "Log files organized and queryable"
+      - "**WORKFLOW TRACE:** Audit logs contain full workflow reconstruction data"
+      - "**WORKFLOW TRACE:** Each log entry includes: orchestrator_id, operation, timestamp, context"
+      - "**WORKFLOW TRACE:** Success validation via audit log evidence (end-to-end trace)"
+      - "**WORKFLOW TRACE:** Trace analyzer can reconstruct: request→routing→execution→result"
+      - "**WORKFLOW TRACE:** Audit logs prove governance enforcement at each step"
+    validation: automated
+    test_file: "tests/integration/test_orchestrator_audit_integration.py"
+    status: PENDING
+    blocking: true
+    
+  AC-INT-004:
+    id: AC-INT-004
+    criterion: "All orchestrators respect governance rules"
+    acceptance:
+      - "Unified Instruction Set loaded"
+      - "Mandatory rules enforced"
+      - "Rule violations blocked"
+      - "Governance audit trail complete"
+    validation: automated
+    test_file: "tests/integration/test_orchestrator_governance_integration.py"
+    status: PENDING
+    blocking: true
+    
+  AC-INT-005:
+    id: AC-INT-005
+    criterion: "Audit trace analyzer reconstructs complete workflows"
+    acceptance:
+      - "Trace Analyzer tool exists (src/tools/trace_analyzer.py)"
+      - "Analyzer loads audit logs by correlation_id"
+      - "Analyzer reconstructs: user_request → master_routing → orchestrator_selection → execution → result"
+      - "Analyzer validates governance checkpoints in trace"
+      - "Analyzer generates visual workflow diagram (ASCII or JSON)"
+      - "Analyzer identifies bottlenecks and failures"
+      - "100% of workflows can be reconstructed from audit logs"
+    validation: automated
+    test_file: "tests/integration/test_trace_analyzer.py"
+    status: PENDING
+    blocking: true
+    
+  AC-INT-006:
+    id: AC-INT-006
+    criterion: "ALL acceptance criteria evidenced by audit log trace - failures improve logging"
+    acceptance:
+      - "**AUDIT-FIRST VALIDATION:** Every acceptance criterion validated via audit log evidence"
+      - "**AUDIT-FIRST VALIDATION:** Test failures indicate insufficient audit logging"
+      - "**AUDIT-FIRST VALIDATION:** Failed acceptance criteria trigger audit log enhancement"
+      - "**AUDIT-FIRST VALIDATION:** Audit logs contain sufficient evidence to prove/disprove each criterion"
+      - "**AUDIT-FIRST VALIDATION:** No acceptance criterion relies solely on code inspection"
+      - "**AUDIT-FIRST VALIDATION:** Trace analyzer can validate all 302 acceptance criteria from audit logs"
+      - "**FEEDBACK LOOP:** Test failure → Enhance audit logging → Fix functionality → Re-test"
+      - "**FEEDBACK LOOP:** Audit log gaps identified and remediated before marking criteria COMPLETE"
+      - "**FEEDBACK LOOP:** StateManager, AuditLogger, orchestrators log sufficient detail for validation"
+      - "**METRICS:** Track % of criteria validated via audit logs (target: 100%)"
+    validation: automated
+    test_file: "tests/integration/test_audit_evidence_coverage.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    evidence:
+      - "Audit log completeness report"
+      - "Criteria validation coverage matrix"
+      - "Audit enhancement tracking"
+
+# ==============================================================================
+# SECTION 10B: CONCURRENCY & RACE CONDITIONS (CRITICAL)
+# ==============================================================================
+# Purpose: Ensure thread-safety, prevent race conditions, validate concurrent operations
+# Critical: Production systems have concurrent users and operations
+# ==============================================================================
+
+concurrency_safety:
+  category: concurrency
+  priority: P0_CRITICAL
+  description: "Thread-safety, race condition prevention, concurrent operation validation"
+  
+  AC-RACE-001:
+    id: AC-RACE-001
+    criterion: "StateManager concurrent write race conditions prevented"
+    acceptance:
+      - "Test: 10 concurrent writes to same key → all succeed with correct final state"
+      - "Test: Read-modify-write race condition → optimistic locking prevents conflicts"
+      - "Transaction isolation levels validated (READ_COMMITTED minimum)"
+      - "Deadlock detection and automatic retry (max 3 retries)"
+      - "WAL mode provides concurrent readers without blocking"
+      - "Version columns track concurrent modifications"
+      - "Conflict resolution strategy: last-write-wins with audit trail"
+      - "Performance: 100 concurrent writes complete in <5 seconds"
+    validation: automated
+    test_file: "tests/concurrency/test_state_manager_race_conditions.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    
+  AC-RACE-002:
+    id: AC-RACE-002
+    criterion: "Concurrent orchestrator execution safe"
+    acceptance:
+      - "Test: Planning + TDD orchestrators running concurrently → no conflicts"
+      - "Test: 3 orchestrators access StateManager simultaneously → consistent results"
+      - "Test: Shared resource access (audit logs) → proper serialization"
+      - "Master Orchestrator coordinates concurrent requests"
+      - "Orchestrator coordination via queue (not parallel execution by default)"
+      - "Optional parallel execution flag for independent operations"
+      - "Audit logs record concurrent execution with timing data"
+    validation: automated
+    test_file: "tests/concurrency/test_orchestrator_concurrency.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    
+  AC-RACE-003:
+    id: AC-RACE-003
+    criterion: "File system race conditions handled gracefully"
+    acceptance:
+      - "Test: Vacuum deletes file while another orchestrator reads → proper error handling"
+      - "Test: Planning creates folder while another writes file → atomic operations"
+      - "File locking for critical operations"
+      - "Retry logic with exponential backoff (max 3 retries)"
+      - "Clear error messages on conflict (not stack traces)"
+      - "Atomic file operations: write to temp → rename (not in-place modification)"
+    validation: automated
+    test_file: "tests/concurrency/test_filesystem_race_conditions.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+
+# ==============================================================================
+# SECTION 10C: FAILURE MODES & RESILIENCE (CRITICAL)
+# ==============================================================================
+# Purpose: Comprehensive failure handling, recovery mechanisms, graceful degradation
+# Critical: Production systems must handle failures without data loss
+# ==============================================================================
+
+failure_resilience:
+  category: failure_handling
+  priority: P0_CRITICAL
+  description: "Failure modes, recovery mechanisms, rollback strategies, graceful degradation"
+  
+  AC-FAIL-001:
+    id: AC-FAIL-001
+    criterion: "Cross-repo operation failures isolated (no cascading)"
+    acceptance:
+      - "Failure in Repo A doesn't affect Repo B operations"
+      - "Rollback strategy for multi-repo transactions (all-or-nothing)"
+      - "Partial success handling: mark successful repos, report failed repos"
+      - "Audit log tracks which repos succeeded/failed"
+      - "User notification: clear breakdown of success/failure per repo"
+    validation: automated
+    test_file: "tests/failure_modes/test_cross_repo_failure_isolation.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    
+  AC-FAIL-002:
+    id: AC-FAIL-002
+    criterion: "Partial orchestrator failure recovery (checkpoint/resume)"
+    acceptance:
+      - "Scenario: Planning succeeds for 3/5 tasks, 2 fail → resume from task 4"
+      - "Checkpoint after each successful task"
+      - "Resume command: cortex resume <operation_id>"
+      - "Rollback only failed tasks (not entire workflow)"
+      - "Audit log tracks checkpoint/resume operations"
+      - "StateManager stores checkpoint data (task status, partial results)"
+    validation: automated
+    test_file: "tests/failure_modes/test_partial_failure_recovery.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    
+  AC-FAIL-003:
+    id: AC-FAIL-003
+    criterion: "StateManager corruption recovery (backup/restore)"
+    acceptance:
+      - "Automatic backup before major operations"
+      - "Corruption detection on startup (integrity check)"
+      - "Manual recovery command: cortex recover-state --from-backup"
+      - "Backup retention: last 5 backups kept"
+      - "Recovery time <10 seconds for typical database"
+      - "Test: Corrupt database file → auto-detects → restores from backup"
+    validation: automated
+    test_file: "tests/failure_modes/test_state_corruption_recovery.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    
+  AC-FAIL-004:
+    id: AC-FAIL-004
+    criterion: "Network failure handling for MCP operations"
+    acceptance:
+      - "Retry logic with exponential backoff (1s, 2s, 4s, 8s, fail)"
+      - "Circuit breaker pattern: after 5 failures, stop trying for 60s"
+      - "Graceful degradation: local fallback if MCP unavailable"
+      - "User notification: 'MCP server unavailable, using local mode'"
+      - "Timeout: 30s per MCP request (not indefinite)"
+      - "Test: Disconnect network mid-operation → proper error handling"
+    validation: automated
+    test_file: "tests/failure_modes/test_network_failure_handling.py"
+    status: PENDING
+    blocking: false
+    priority: P1_HIGH
+    
+  AC-FAIL-005:
+    id: AC-FAIL-005
+    criterion: "Missing dependency handling at runtime"
+    acceptance:
+      - "Dependency check on orchestrator startup"
+      - "Clear error message: 'Package X required, run: pip install X'"
+      - "Auto-install if within virtual environment (safe)"
+      - "requirements.txt validation: all deps listed"
+      - "Test: Remove optional dependency → orchestrator degrades gracefully"
+    validation: automated
+    test_file: "tests/failure_modes/test_missing_dependencies.py"
+    status: PENDING
+    blocking: false
+    priority: P1_HIGH
+    
+  AC-FAIL-006:
+    id: AC-FAIL-006
+    criterion: "Disk space exhaustion handling"
+    acceptance:
+      - "Pre-check disk space before large operations (>100MB)"
+      - "Emergency cleanup: trigger vacuum orchestrator auto-run if <10% free"
+      - "Graceful failure: 'Insufficient disk space (500MB required, 200MB available)'"
+      - "Prevent partial writes (all-or-nothing for large files)"
+      - "Test: Simulate full disk → operation fails safely without corruption"
+    validation: automated
+    test_file: "tests/failure_modes/test_disk_space_exhaustion.py"
+    status: PENDING
+    blocking: false
+    priority: P1_HIGH
+
+# ==============================================================================
+# SECTION 10D: DATA INTEGRITY & VALIDATION
+# ==============================================================================
+
+data_integrity:
+  category: data_quality
+  priority: P0_CRITICAL
+  description: "Data consistency, integrity checks, validation, drift detection"
+  
+  AC-DATA-001:
+    id: AC-DATA-001
+    criterion: "StateManager data consistency validated across restarts"
+    acceptance:
+      - "Checksum validation on database load"
+      - "Orphaned state detection (references to deleted entities)"
+      - "Automatic consistency repair (remove orphaned references)"
+      - "Consistency check command: cortex check-consistency"
+      - "Test: Create orphaned reference → auto-detected → repaired"
+      - "Test: Corrupt database → detected → restore from backup"
+    validation: automated
+    test_file: "tests/data_integrity/test_state_consistency.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    
+  AC-DATA-002:
+    id: AC-DATA-002
+    criterion: "Repository registry validation and health checks"
+    acceptance:
+      - "Startup validation: all registered repos exist"
+      - "Periodic health check (every 5 minutes): repos still accessible"
+      - "Auto-removal of invalid/deleted repos with notification"
+      - "Manual validation command: cortex validate-repos"
+      - "Test: Delete registered repo → next health check → auto-removed"
+      - "Test: Network drive unmounted → detected → graceful degradation"
+    validation: automated
+    test_file: "tests/data_integrity/test_repo_registry_validation.py"
+    status: PENDING
+    blocking: false
+    priority: P1_HIGH
+
+# ==============================================================================
+# SECTION 10E: DEPLOYMENT & ROLLBACK
+# ==============================================================================
+
+deployment_operations:
+  category: deployment
+  priority: P0_CRITICAL
+  description: "Deployment strategies, rollback procedures, smoke tests"
+  
+  AC-DEPLOY-001:
+    id: AC-DEPLOY-001
+    criterion: "Blue-Green deployment for zero-downtime"
+    acceptance:
+      - "Blue environment: current production"
+      - "Green environment: new version deployment"
+      - "Health check endpoint: /health (returns 200 OK if ready)"
+      - "Load balancer switches traffic: blue → green"
+      - "Rollback: switch traffic back to blue"
+      - "Graceful shutdown: drain existing requests (30s timeout)"
+    validation: manual + automated
+    test_file: "tests/deployment/test_blue_green_deployment.py"
+    status: PENDING
+    blocking: false
+    priority: P1_HIGH
+    
+  AC-DEPLOY-002:
+    id: AC-DEPLOY-002
+    criterion: "Version rollback procedure documented and tested"
+    acceptance:
+      - "One-command rollback: cortex rollback --to-version 6.0.0"
+      - "Database migration rollback (if schema changed)"
+      - "Configuration rollback (restore previous config)"
+      - "Rollback time: <5 minutes"
+      - "Test: Deploy v7.0.0 → rollback to v6.0.0 → validate functionality"
+    validation: manual + automated
+    test_file: "tests/deployment/test_version_rollback.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    
+  AC-DEPLOY-003:
+    id: AC-DEPLOY-003
+    criterion: "Smoke test suite (post-deployment validation)"
+    acceptance:
+      - "10 critical path tests (5-minute execution)"
+      - "Tests: Master routing, StateManager, Audit logging, Governance, MCP server"
+      - "Automated execution after deployment"
+      - "Rollback trigger on failure"
+      - "Smoke test report with pass/fail status"
+    validation: automated
+    test_file: "tests/deployment/test_smoke_suite.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+
+# ==============================================================================
+# SECTION 10F: OBSERVABILITY & MONITORING
+# ==============================================================================
+
+observability_monitoring:
+  category: observability
+  priority: P1_HIGH
+  description: "Real-time metrics, alerting, distributed tracing"
+  
+  AC-OBSERVE-001:
+    id: AC-OBSERVE-001
+    criterion: "Real-time metrics dashboard operational"
+    acceptance:
+      - "Metrics: Requests/sec, error rate, latency (p50, p95, p99)"
+      - "Orchestrator execution counts and success rates"
+      - "StateManager: database size, query performance"
+      - "Dashboard refresh: every 10 seconds"
+      - "Metrics retention: 30 days"
+      - "Prometheus-compatible metrics endpoint"
+    validation: manual + automated
+    test_file: "tests/observability/test_metrics_dashboard.py"
+    status: PENDING
+    blocking: false
+    priority: P1_HIGH
+    
+  AC-OBSERVE-002:
+    id: AC-OBSERVE-002
+    criterion: "Alerting system for critical failures"
+    acceptance:
+      - "Alert: Error rate >5% for 5 minutes"
+      - "Alert: Audit log write failures"
+      - "Alert: Disk space <10%"
+      - "Alert: Memory usage >80%"
+      - "Alert: Orchestrator failure (3 consecutive failures)"
+      - "Notification channels: email, Slack, PagerDuty"
+    validation: manual + automated
+    test_file: "tests/observability/test_alerting_system.py"
+    status: PENDING
+    blocking: false
+    priority: P1_HIGH
+    
+  AC-OBSERVE-003:
+    id: AC-OBSERVE-003
+    criterion: "Distributed tracing for multi-orchestrator workflows"
+    acceptance:
+      - "OpenTelemetry integration"
+      - "Trace ID propagation across orchestrators"
+      - "Span creation for each orchestrator operation"
+      - "Trace visualization (Jaeger or Zipkin)"
+      - "Test: Planning → TDD → Epic Review → full trace visible"
+    validation: manual + automated
+    test_file: "tests/observability/test_distributed_tracing.py"
+    status: PENDING
+    blocking: false
+    priority: P2_MEDIUM
+
+# ==============================================================================
+# SECTION 10G: EDGE CASES & BOUNDARY CONDITIONS
+# ==============================================================================
+
+edge_cases:
+  category: edge_case_handling
+  priority: P2_MEDIUM
+  description: "Zero-resource scenarios, maximum limits, extreme conditions"
+  
+  AC-EDGE-001:
+    id: AC-EDGE-001
+    criterion: "Zero-resource scenarios handled gracefully"
+    acceptance:
+      - "Test: Empty DAG (0 tasks) → no errors, appropriate message"
+      - "Test: Empty repo registry (0 repos) → warning, CORTEX repo only"
+      - "Test: Empty governance (only CORE rules) → functional, uses defaults"
+      - "Test: Empty audit log → creates first entry successfully"
+    validation: automated
+    test_file: "tests/edge_cases/test_zero_resources.py"
+    status: PENDING
+    blocking: false
+    
+  AC-EDGE-002:
+    id: AC-EDGE-002
+    criterion: "Maximum input size validation"
+    acceptance:
+      - "Maximum JSON-RPC request size: 10MB"
+      - "Maximum YAML file size: 50MB"
+      - "Maximum audit log entry size: 1MB"
+      - "Maximum DAG size: 1,000,000 nodes (documented limit)"
+      - "Test: Exceed limits → clear error message, no crash"
+    validation: automated
+    test_file: "tests/edge_cases/test_maximum_sizes.py"
+    status: PENDING
+    blocking: false
+    
+  AC-EDGE-003:
+    id: AC-EDGE-003
+    criterion: "Extreme clock skew handling"
+    acceptance:
+      - "Test: System clock 1 hour ahead → timestamps handled correctly"
+      - "Test: System clock 1 hour behind → timestamps handled correctly"
+      - "Test: Timezone mismatch → ISO timestamps prevent issues"
+      - "Audit log ordering by sequence number (not just timestamp)"
+    validation: automated
+    test_file: "tests/edge_cases/test_clock_skew.py"
+    status: PENDING
+    blocking: false
+
+# ==============================================================================
+# SECTION 10H: DEPENDENCY MANAGEMENT
+# ==============================================================================
+
+dependency_management:
+  category: dependencies
+  priority: P1_HIGH
+  description: "Dependency integrity, version management, optional dependency handling"
+  
+  AC-DEP-001:
+    id: AC-DEP-001
+    criterion: "Breaking dependency changes handled"
+    acceptance:
+      - "All dependencies pinned to exact versions"
+      - "Automated dependency update testing (Dependabot)"
+      - "Test suite runs on dependency update"
+      - "Rollback plan: revert to previous requirements.txt"
+      - "Test: Update dependency with breaking change → tests catch it"
+    validation: automated
+    test_file: "tests/dependencies/test_breaking_changes.py"
+    status: PENDING
+    blocking: false
+    priority: P1_HIGH
+    
+  AC-DEP-002:
+    id: AC-DEP-002
+    criterion: "Optional dependency handling"
+    acceptance:
+      - "Feature detection: if package missing, feature disabled"
+      - "Graceful degradation: clear message about missing optional features"
+      - "Example: Vision API requires Pillow (optional)"
+      - "Error message: 'Vision features disabled (pip install cortex[vision])'"
+      - "Test: Remove optional dep → feature disabled, no crash"
+    validation: automated
+    test_file: "tests/dependencies/test_optional_dependencies.py"
+    status: PENDING
+    blocking: false
+    priority: P2_MEDIUM
+
+# ==============================================================================
+# SECTION 10I: MAINTAINABILITY & TECHNICAL DEBT
+# ==============================================================================
+
+maintainability:
+  category: maintainability
+  priority: P2_MEDIUM
+  description: "Code complexity limits, technical debt tracking"
+  
+  AC-MAINT-001:
+    id: AC-MAINT-001
+    criterion: "Code complexity limits enforced"
+    acceptance:
+      - "Cyclomatic complexity <15 per function (radon check)"
+      - "Maximum function length: 100 lines"
+      - "Maximum file length: 500 lines"
+      - "Pre-commit hooks enforce complexity limits"
+      - "Test: Create overly complex function → pre-commit blocks"
+    validation: automated
+    test_file: "tests/maintainability/test_complexity_limits.py"
+    status: PENDING
+    blocking: false
+    
+  AC-MAINT-002:
+    id: AC-MAINT-002
+    criterion: "Technical debt tracking system"
+    acceptance:
+      - "Automated scanning for TODO, FIXME, HACK comments"
+      - "Technical debt dashboard (count, age, severity)"
+      - "Quarterly tech debt review process"
+      - "Debt reduction metric: track TODO count over time"
+      - "Test: Add TODO → appears in dashboard"
+    validation: manual + automated
+    test_file: "tests/maintainability/test_tech_debt_tracking.py"
+    status: PENDING
+    blocking: false
+
+# ==============================================================================
+# SECTION 11: DOCUMENTATION & USABILITY
+# ==============================================================================
+
+documentation_usability:
+  category: documentation
+  priority: P2_MEDIUM
+  description: "Complete documentation and user experience"
+  
+  AC-DOC-001:
+    id: AC-DOC-001
+    criterion: "All features have architecture documentation"
+    acceptance:
+      - "Architecture doc for each of 9 features"
+      - "Component diagrams (Mermaid)"
+      - "Data flow diagrams"
+      - "Integration points documented"
+    validation: manual
+    location: "docs/architecture/"
+    status: PENDING
+    blocking: false
+    
+  AC-DOC-002:
+    id: AC-DOC-002
+    criterion: "All orchestrators have usage guides"
+    acceptance:
+      - "Usage guide for each of 10+ orchestrators"
+      - "Example invocations"
+      - "Common patterns"
+      - "Troubleshooting section"
+    validation: manual
+    location: "docs/orchestrators/"
+    status: PENDING
+    blocking: false
+    
+  AC-DOC-003:
+    id: AC-DOC-003
+    criterion: "API documentation complete with examples"
+    acceptance:
+      - "All public APIs documented"
+      - "Request/response examples"
+      - "Error handling documented"
+      - "API versioning strategy"
+    validation: manual
+    location: "docs/api/"
+    status: PENDING
+    blocking: false
+    
+  AC-DOC-004:
+    id: AC-DOC-004
+    criterion: "Governance rules documented for users"
+    acceptance:
+      - "All 61 SKULL rules explained"
+      - "4-Category Governance system documented"
+      - "Conflict resolution strategies explained"
+      - "Examples of Business Tier 0 usage"
+    validation: manual
+    location: "docs/governance/"
+    status: PENDING
+    blocking: false
+    
+  AC-DOC-005:
+    id: AC-DOC-005
+    criterion: "Accessibility compliance (WCAG AA)"
+    acceptance:
+      - "Response templates use concise mode by default"
+      - "Visual progress bars (ASCII, not emoji)"
+      - "Cognitive load reduction (no narration)"
+      - "Updates only at phase boundaries"
+      - "Summary cap ≤40 lines"
+    validation: manual + automated
+    test_file: "tests/accessibility/test_wcag_compliance.py"
+    status: PENDING
+    blocking: false
+
+# ==============================================================================
+# SECTION 12: VALIDATION GATES (13 Gates)
+# ==============================================================================
+
+validation_gates:
+  description: "13 validation gates that must pass for production readiness"
+  
+  GATE-00:
+    id: GATE-00
+    name: "Architecture Quality & Cleanliness"
+    criteria: [AC-ARCH-001, AC-ARCH-002, AC-ARCH-003, AC-ARCH-004, AC-ARCH-005]
+    blocking: true
+    status: PENDING
+    priority: P0_CRITICAL
+    description: "Validates no orphaned code, brittleness prevention operational, architecture patterns followed"
+    rationale: "Must execute FIRST - ensures clean foundation before any CORTEX 6.0 development"
+    
+  GATE-01:
+    id: GATE-01
+    name: "Foundation Infrastructure Ready"
+    criteria: [AC-F01-001, AC-F01-002, AC-F01-003, AC-F01-004, AC-F01-005]
+    blocking: true
+    status: PENDING
+    
+  GATE-02:
+    id: GATE-02
+    name: "Governance System Operational"
+    criteria: [AC-GOV-001, AC-GOV-002, AC-GOV-003, AC-GOV-004, AC-GOV-005, AC-GOV-006, AC-GOV-007]
+    blocking: true
+    status: PENDING
+    
+  GATE-03:
+    id: GATE-03
+    name: "TODO Orchestrator Handoff Ready"
+    criteria: [AC-F02-001, AC-F02-002, AC-F02-003, AC-F02-004, AC-F02-005, AC-F02-006, AC-F02-007]
+    blocking: true
+    status: PENDING
+    handoff_gate: true
+    
+  GATE-04:
+    id: GATE-04
+    name: "Core Orchestrators Operational"
+    criteria: [AC-ORC-001, AC-ORC-002, AC-ORC-003, AC-ORC-004]
+    blocking: true
+    status: PENDING
+    
+  GATE-05:
+    id: GATE-05
+    name: "Secondary Orchestrators Operational"
+    criteria: [AC-ORC-005, AC-ORC-006, AC-ORC-007, AC-ORC-008, AC-ORC-009, AC-ORC-010]
+    blocking: false
+    status: PENDING
+    
+  GATE-06:
+    id: GATE-06
+    name: "Performance SLAs Met"
+    criteria: [AC-PERF-001, AC-PERF-002, AC-PERF-003, AC-PERF-004, AC-PERF-005]
+    blocking: false
+    status: PENDING
+    
+  GATE-07:
+    id: GATE-07
+    name: "Test Coverage Threshold Met"
+    criteria: [AC-TEST-001, AC-TEST-002, AC-TEST-003, AC-TEST-004, AC-TEST-005]
+    blocking: true
+    status: PENDING
+    
+  GATE-08:
+    id: GATE-08
+    name: "Security Controls Active"
+    criteria: [AC-SEC-001, AC-SEC-002, AC-SEC-003, AC-SEC-004, AC-SEC-005]
+    blocking: true
+    status: PENDING
+    
+  GATE-09:
+    id: GATE-09
+    name: "MCP Integration Complete"
+    criteria: [AC-MCP-001, AC-MCP-002, AC-MCP-003]
+    blocking: false
+    status: PENDING
+    
+  GATE-10:
+    id: GATE-10
+    name: "System Integration Validated"
+    criteria: [AC-INT-001, AC-INT-002, AC-INT-003, AC-INT-004, AC-INT-005]
+    blocking: true
+    status: PENDING
+    
+  GATE-11:
+    id: GATE-11
+    name: "Knowledge Base Operational"
+    criteria: [AC-KB-001, AC-KB-002, AC-KB-003, AC-KB-004]
+    blocking: false
+    status: PENDING
+    
+  GATE-12:
+    id: GATE-12
+    name: "Documentation Complete"
+    criteria: [AC-DOC-001, AC-DOC-002, AC-DOC-003, AC-DOC-004, AC-DOC-005]
+    blocking: false
+    status: PENDING
+
+# ==============================================================================
+# SECTION 13: PROGRESS TRACKING
+# ==============================================================================
+
+progress_tracking:
+  total_criteria: 340  # v7.0.0: Added 38 new criteria (302 → 340)
+  criteria_by_category:
+    governance_compliance: 10
+    architecture_cleanliness: 5
+    foundation_layer: 6
+    todo_orchestrator: 7
+    orchestrator_capabilities: 10
+    orchestrator_test_harnesses: 5  # NEW in v7.0.0
+    performance_scalability: 7  # +2 from v6.0.3 (AC-PERF-006, AC-PERF-007)
+    test_coverage_quality: 5
+    knowledge_base_learning: 4
+    security_compliance: 8  # +3 from v6.0.3 (AC-SEC-006, AC-SEC-007, AC-SEC-008)
+    multi_repo_registry: 3  # NEW in v7.0.0 (AC-REPO-001, AC-REPO-002, AC-REPO-003)
+    concurrency_safety: 3  # NEW in v7.0.0 (AC-RACE-001, AC-RACE-002, AC-RACE-003)
+    failure_resilience: 6  # NEW in v7.0.0 (AC-FAIL-001 to AC-FAIL-006)
+    mcp_multi_repo: 3
+    integration_polish: 6
+    data_integrity: 2  # NEW in v7.0.0 (AC-DATA-001, AC-DATA-002)
+    deployment_operations: 3  # NEW in v7.0.0 (AC-DEPLOY-001 to AC-DEPLOY-003)
+    observability_monitoring: 3  # NEW in v7.0.0 (AC-OBSERVE-001 to AC-OBSERVE-003)
+    edge_cases: 3  # NEW in v7.0.0 (AC-EDGE-001 to AC-EDGE-003)
+    dependency_management: 2  # NEW in v7.0.0 (AC-DEP-001, AC-DEP-002)
+    maintainability: 2  # NEW in v7.0.0 (AC-MAINT-001, AC-MAINT-002)
+    documentation_usability: 5
+    
+  criteria_by_priority:
+    P0_CRITICAL: 89  # v7.0.0: Added 37 new P0 criteria (52 → 89)
+    P1_HIGH: 48  # v7.0.0: Added 16 new P1 criteria (32 → 48)
+    P2_MEDIUM: 25  # v7.0.0: Added 7 new P2 criteria (18 → 25)
+    
+  criteria_by_status:
+    COMPLETE: 7
+    PENDING: 333  # v7.0.0: 340 total - 7 complete = 333 pending
+    BLOCKED: 0
+    FAILED: 0
+    
+  validation_gates:
+    total: 13
+    passed: 0
+    blocking_gates: 9
+    non_blocking_gates: 4
+    
+  health_score:
+    current: 2  # 7 COMPLETE / 340 total = 2.06%
+    target: 100
+    
+  completion_estimate:
+    total_hours: 500-600  # v7.0.0: Significant increase due to 38 new criteria (80-120 hours added)
+    duration_days: 62-75
+    effort_weeks: 12.5-15
+
+# ==============================================================================
+# SECTION 14: AUTOMATED VALIDATION
+# ==============================================================================
+
+automated_validation:
+  validation_script: "python -m src.tools.validate_acceptance_criteria"
+  
+  validation_steps:
+    step_1:
+      name: "YAML Schema Validation"
+      action: "Validate all YAML files against schema"
+      
+    step_2:
+      name: "Test Execution"
+      action: "Run pytest with coverage measurement"
+      
+    step_3:
+      name: "Performance Benchmarks"
+      action: "Execute performance test suite"
+      
+    step_4:
+      name: "Governance Compliance Check"
+      action: "Validate all 61 SKULL rules enforced"
+      
+    step_5:
+      name: "Integration Test Suite"
+      action: "Run end-to-end integration tests"
+      
+    step_6:
+      name: "Security Scan"
+      action: "Run security validation tests"
+      
+    step_7:
+      name: "Documentation Validation"
+      action: "Check documentation completeness"
+      
+    step_8:
+      name: "Epic Health Check"
+      action: "Run epic review orchestrator"
+      
+  validation_frequency:
+    automated: "After each task completion"
+    manual_review: "After each phase completion"
+    full_validation: "Before production deployment"
+    
+  validation_gates_enforcement:
+    blocking_gates_must_pass: true
+    non_blocking_gates_advisory: true
+    validation_artifacts: "cortex-brain/validation-reports/"
+
+# ==============================================================================
+# SECTION 15: AUDIT & COMPLIANCE TRACKING
+# ==============================================================================
+
+audit_compliance_tracking:
+  audit_trail:
+    location: "cortex-brain/audit-logs/"
+    format: "JSON structured logging"
+    retention: "90 days"
+    
+  compliance_requirements:
+    tdd_compliance:
+      rule: "CORE-001: TDD_ENFORCEMENT"
+      validation: "All code has failing test first"
+      
+    git_isolation:
+      rule: "CORE-003: GIT_ISOLATION"
+      validation: "CORTEX code never commits to user repos"
+      
+    planning_isolation:
+      rule: "CORE-004: PLANNING_ISOLATION"
+      validation: "Plans never implement code"
+      
+    audit_logging:
+      rule: "CORE-008: MANDATORY_AUDIT_LOGGING"
+      validation: "All operations logged, cannot be bypassed"
+      
+    holistic_discovery:
+      rule: "CORE-002: HOLISTIC_DISCOVERY"
+      validation: "Search before create (no duplicates)"
+
+# ==============================================================================
+# SECTION 16: SUCCESS CRITERIA (FINAL)
+# ==============================================================================
+
+success_criteria_final:
+  production_readiness:
+    description: "System is production-ready when all criteria below are met"
+    
+    governance:
+      - "All 61 SKULL rules migrated and enforced"
+      - "4-Category Governance Merger operational"
+      - "Business Tier 0 override works correctly"
+      - "No governance bypass possible"
+      
+    architecture:
+      - "TODO Orchestrator supports DAG with >1000 nodes"
+      - "State Manager handles concurrent writes"
+      - "MCP Server responds to JSON-RPC 2.0 calls"
+      - "Multi-repo operations work across 3+ repositories"
+      
+    testing:
+      - "All tests in single tests/ folder"
+      - "Overall coverage ≥80%"
+      - "Core component coverage ≥90%"
+      - "All 25 edge cases have passing tests"
+      
+    performance:
+      - "O(1) routing <5ms (p95)"
+      - "State persistence <100ms (p95)"
+      - "Governance merge <50ms"
+      - "DAG operations scale to 10,000 nodes"
+      
+    security:
+      - "Authentication and authorization implemented"
+      - "Encryption for sensitive data"
+      - "Input validation prevents injection"
+      - "Audit logging cannot be bypassed"
+      - "Secrets never committed"
+      
+    orchestrators:
+      - "All 10+ orchestrators operational"
+      - "Master Orchestrator routing ≥95% accuracy"
+      - "Autonomous execution without Copilot guidance"
+      
+    documentation:
+      - "All features documented"
+      - "All orchestrators have usage guides"
+      - "API documentation complete"
+      - "Governance rules explained"
+      
+    validation_gates:
+      - "All 8 blocking gates passed"
+      - "Epic health score ≥98/100"
+      - "Zero critical gaps"
+      
+  deployment_checklist:
+    pre_deployment:
+      - "Run full automated validation"
+      - "Execute manual validation checklist"
+      - "Review epic health report"
+      - "Confirm all blocking gates passed"
+      
+    deployment:
+      - "Create deployment artifact"
+      - "Execute deployment scripts"
+      - "Validate deployment success"
+      
+    post_deployment:
+      - "Monitor audit logs"
+      - "Validate performance metrics"
+      - "Confirm orchestrators operational"
+      - "User acceptance testing"
+
+# ==============================================================================
+# END OF ENTERPRISE ACCEPTANCE CRITERIA
+# ==============================================================================
+
+copyright: "Copyright © 2025-2026 Asif Hussain. All rights reserved."
