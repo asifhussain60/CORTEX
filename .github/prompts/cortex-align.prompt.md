@@ -1,6 +1,6 @@
 # 🔧 CORTEX Align - Plan Realignment with Visual Progress Tracking
 
-**Version:** 1.1.0 | **Status:** ✅ PRODUCTION | **Type:** Autonomous Remediation  
+**Version:** 1.3.0 | **Status:** ✅ PRODUCTION | **Type:** Autonomous Remediation  
 **Author:** Asif Hussain | **AC Reference:** `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml`  
 **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
@@ -110,14 +110,53 @@ def archive_existing_remediation(plan_path):
 - Generate partial reports and stop
 
 **✅ ALWAYS DO THESE:**
-- Execute ALL 6 phases in sequence automatically
+- Execute ALL 7 phases in sequence automatically
 - Show visual progress tracker at phase transitions
-- Generate final consolidated report at Phase 6 completion
+- Generate final consolidated report at Phase 7 completion
 - Proceed to next phase immediately after current phase completes
 
 ---
 
-## 🔬 Alignment Pipeline (6 Phases)
+## 🔬 Alignment Pipeline (8 Phases - including Phase 0)
+
+### Phase 0: MCP Tool Validation (Pre-Requisite)
+**Duration:** <5 seconds | **BLOCKING:** Yes
+
+**⚠️ CRITICAL: This phase MUST pass before proceeding**
+
+**Validation Checks:**
+| Check | File/Location | Required |
+|-------|---------------|----------|
+| MCP Tool Implementation | `src/mcp/align_plan_sync.py` | ✅ REQUIRED |
+| Capability Registration | `src/mcp/capability_registry.py` → `cortex_align_plan_sync` | ✅ REQUIRED |
+| MCP Export | `src/mcp/__init__.py` → `AlignPlanSyncTool` | ✅ REQUIRED |
+
+**Validation Command:**
+```bash
+python3 -c "from src.mcp.align_plan_sync import AlignPlanSyncTool, align_plan_sync; tool = AlignPlanSyncTool(); print(f'✅ MCP Tool: {tool.NAME}')"
+```
+
+**Phase 0 Output (Success):**
+```
+✅ Phase 0 - MCP Validation: Complete
+   └─ Tool: cortex_align_plan_sync ✅ Found
+   └─ Capability: Registered ✅
+   └─ Auto-proceeding to Phase 1...
+```
+
+**Phase 0 Output (Failure - BLOCKING):**
+```
+❌ Phase 0 - MCP Validation: FAILED
+   └─ Tool: cortex_align_plan_sync ❌ NOT FOUND
+   └─ Required File: src/mcp/align_plan_sync.py
+   └─ BLOCKING: Cannot proceed to Phase 7 without MCP tool
+   └─ Action: Create MCP tool or check imports
+   └─ ⚠️ ALIGN ABORTED - Fix MCP tool first
+```
+
+**If Phase 0 fails:** Generate remediation task and HALT execution.
+
+---
 
 ### 📊 Visual Progress Tracker Template
 
@@ -129,12 +168,14 @@ def archive_existing_remediation(plan_path):
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ Overall Progress: `████████░░░░░░░░░░░░` 40% 🔄 IN PROGRESS                 │
 ├─────────────────────────────────────────────────────────────────────────────┤
+│ Phase 0 - MCP Validation     `██████████` 100% ✅ Complete                  │
 │ Phase 1 - Load Findings      `██████████` 100% ✅ Complete                  │
 │ Phase 2 - Categorize         `██████████` 100% ✅ Complete                  │
 │ Phase 3 - Snowball Sort      `████████░░`  80% 🔄 In Progress               │
 │ Phase 4 - Plan Generation    `░░░░░░░░░░`   0% ⏳ Pending                   │
 │ Phase 5 - Plan Integration   `░░░░░░░░░░`   0% ⏳ Pending                   │
 │ Phase 6 - AC Enhancement     `░░░░░░░░░░`   0% ⏳ Pending                   │
+│ Phase 7 - Holistic Plan Sync `░░░░░░░░░░`   0% ⏳ Pending                   │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -570,6 +611,7 @@ def revise_existing_plan(ac, remediation, snowball, plan_path):
 
 | Phase | Progress | Status |
 |-------|----------|--------|
+| Phase 0 - MCP Validation | `██████████` | 100% ✅ |
 | Phase 1 - Load Findings | `██████████` | 100% ✅ |
 | Phase 2 - Categorize | `██████████` | 100% ✅ |
 | Phase 3 - Snowball Sort | `██████████` | 100% ✅ |
@@ -602,6 +644,7 @@ def revise_existing_plan(ac, remediation, snowball, plan_path):
 
 | Phase | Progress | Status |
 |-------|----------|--------|
+| Phase 0 - MCP Validation | `██████████` | 100% ✅ |
 | Phase 1 - Load Findings | `██████████` | 100% ✅ |
 | Phase 2 - Categorize | `██████████` | 100% ✅ |
 | Phase 3 - Snowball Sort | `██████████` | 100% ✅ |
@@ -737,6 +780,7 @@ Or continue existing plan:
 ---
 
 **Version History:**
+- v1.3.0 (2026-01-09): Added Phase 0 - MCP Tool Validation (blocking pre-requisite check)
 - v1.2.0 (2026-01-09): Added Phase 7 - Holistic Plan Synchronization via MCP Python script
 - v1.1.0 (2026-01-09): Added remediation lifecycle management (archive before regenerate)
 - v1.0.0 (2026-01-09): Initial release - visual progress tracking with snowball prioritization
