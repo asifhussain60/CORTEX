@@ -1,0 +1,757 @@
+# ==============================================================================
+# CORTEX 6.0 FOUNDATION TASKS - ACCEPTANCE CRITERIA
+# ==============================================================================
+# Purpose: Acceptance criteria for 4 critical foundation tasks discovered via
+#          investigation report (INVESTIGATION-REPORT-20260109.yaml)
+# 
+# Author: Asif Hussain  
+# Version: 1.0.0
+# Created: 2026-01-09
+# Status: ACTIVE
+#
+# Source: Investigation findings + Remediation plan v2.0.0
+# Dependencies: CX6-acceptance-criteria.yaml (master AC document)
+# ==============================================================================
+
+metadata:
+  document_type: foundation_tasks_acceptance_criteria
+  version: '1.0.0'
+  status: ACTIVE
+  created: '2026-01-09'
+  author: Asif Hussain
+  parent_document: 'CX6-acceptance-criteria.yaml'
+  investigation_source: 'INVESTIGATION-REPORT-20260109.yaml'
+  plan_source: 'CX6-comprehensive-remediation-plan.yaml v2.0.0'
+  
+  scope: |
+    Acceptance criteria for 4 foundation tasks that block all downstream work:
+    - AUDIT-001: AuditLogger Infrastructure Migration
+    - GOV-001: SKULL Rules Migration (COMPLETE - skip criteria)
+    - TRACE-001: AC-ID Traceability System
+    - HOUSE-001: Housekeeping Orchestrator
+    
+    These criteria are additive to CX6-acceptance-criteria.yaml and will be
+    merged into the master document after validation.
+
+# ==============================================================================
+# AUDIT-001: AUDITLOGGER INFRASTRUCTURE MIGRATION
+# ==============================================================================
+
+audit_logger_migration:
+  task_id: "AUDIT-001"
+  priority: P0_CRITICAL
+  blocking: true
+  estimated_effort: "16-20 hours"
+  investigation_findings: "85% code reuse from src/orchestrators/audit_logger.py"
+  
+  # --------------------------------------------------------------------------
+  # AC-AUDIT-MIGRATE-001: File Migration Success
+  # --------------------------------------------------------------------------
+  AC-AUDIT-MIGRATE-001:
+    id: "AC-AUDIT-MIGRATE-001"
+    description: "AuditLogger successfully migrated from orchestrators to infrastructure"
+    category: "migration"
+    priority: P0_CRITICAL
+    blocking: true
+    
+    acceptance_criteria:
+      - criteria: "Source file exists at src/orchestrators/audit_logger.py before migration"
+        validation: "test -f src/orchestrators/audit_logger.py"
+        
+      - criteria: "File moved to src/infrastructure/audit_logger.py"
+        validation: "test -f src/infrastructure/audit_logger.py && test ! -f src/orchestrators/audit_logger.py"
+        
+      - criteria: "EnterpriseAuditLogger class present in new location"
+        validation: "grep -q 'class EnterpriseAuditLogger' src/infrastructure/audit_logger.py"
+        
+      - criteria: "All 7 AuditCategory values preserved (STATE_MANAGEMENT, EXECUTION, MIDDLEWARE, RESPONSE, PERFORMANCE, SECURITY, VALIDATION)"
+        validation: "grep -A7 'class AuditCategory' src/infrastructure/audit_logger.py | grep -c '=' | test $(cat) -eq 7"
+    
+    test_evidence:
+      test_file: "tests/unit/test_audit_logger_migration.py"
+      test_functions:
+        - "test_audit_logger_moved_to_infrastructure"
+        - "test_enterprise_audit_logger_class_exists"
+        - "test_seven_audit_categories_present"
+      markers:
+        - "@pytest.mark.ac_id('AC-AUDIT-MIGRATE-001')"
+        - "@pytest.mark.acceptance"
+    
+    audit_evidence:
+      ac_id: "AC-AUDIT-MIGRATE-001"
+      operations_logged:
+        - "file_move: src/orchestrators/audit_logger.py → src/infrastructure/audit_logger.py"
+        - "validation: EnterpriseAuditLogger class verification"
+        - "validation: AuditCategory enum verification"
+  
+  # --------------------------------------------------------------------------
+  # AC-AUDIT-MIGRATE-002: Import Chain Updates
+  # --------------------------------------------------------------------------
+  AC-AUDIT-MIGRATE-002:
+    id: "AC-AUDIT-MIGRATE-002"
+    description: "All imports updated across codebase after AuditLogger migration"
+    category: "migration"
+    priority: P0_CRITICAL
+    blocking: true
+    
+    acceptance_criteria:
+      - criteria: "No references to 'from src.orchestrators.audit_logger' remain"
+        validation: "! grep -r 'from src\\.orchestrators\\.audit_logger' src/ tests/"
+        
+      - criteria: "All imports updated to 'from src.infrastructure.audit_logger'"
+        validation: "grep -r 'from src\\.infrastructure\\.audit_logger' src/ tests/ | wc -l | test $(cat) -ge 4"
+        affected_files:
+          - "src/orchestrators/master_orchestrator.py"
+          - "src/orchestrators/planning/planning_orchestrator_v5.py"
+          - "src/orchestrators/epic_review_orchestrator.py"
+          - "tests/conftest.py"
+        
+      - criteria: "AuditLogger imports without errors"
+        validation: "python3 -c 'from src.infrastructure.audit_logger import EnterpriseAuditLogger; print(\"✅ Import successful\")'"
+    
+    test_evidence:
+      test_file: "tests/integration/test_audit_logger_imports.py"
+      test_functions:
+        - "test_no_old_imports_remain"
+        - "test_new_imports_work"
+        - "test_import_from_infrastructure"
+      markers:
+        - "@pytest.mark.ac_id('AC-AUDIT-MIGRATE-002')"
+  
+  # --------------------------------------------------------------------------
+  # AC-AUDIT-ENHANCE-001: AC-ID Tagging Support
+  # --------------------------------------------------------------------------
+  AC-AUDIT-ENHANCE-001:
+    id: "AC-AUDIT-ENHANCE-001"
+    description: "AuditEntry dataclass enhanced with ac_id field for traceability"
+    category: "enhancement"
+    priority: P0_CRITICAL
+    blocking: true
+    
+    acceptance_criteria:
+      - criteria: "AuditEntry dataclass has ac_id field"
+        validation: "grep -q 'ac_id.*Optional\\[str\\]' src/infrastructure/audit_logger.py"
+        
+      - criteria: "log() method accepts ac_id parameter"
+        validation: "grep -A10 'def log' src/infrastructure/audit_logger.py | grep -q 'ac_id.*Optional'"
+        
+      - criteria: "search() method supports ac_id filtering"
+        validation: "grep -A20 'def search' src/infrastructure/audit_logger.py | grep -q 'ac_id.*Optional'"
+        
+      - criteria: "Entries logged with ac_id are queryable"
+        validation: "Test queries by ac_id return correct results"
+    
+    test_evidence:
+      test_file: "tests/unit/test_audit_logger.py"
+      test_functions:
+        - "test_audit_entry_has_ac_id_field"
+        - "test_log_with_ac_id"
+        - "test_search_by_ac_id"
+        - "test_ac_id_filtering_accuracy"
+      markers:
+        - "@pytest.mark.ac_id('AC-AUDIT-ENHANCE-001')"
+        - "@pytest.mark.ac_id('AC-F01-005')"  # Original AC for audit logger
+  
+  # --------------------------------------------------------------------------
+  # AC-AUDIT-SQLITE-001: SQLite Backend Implementation
+  # --------------------------------------------------------------------------
+  AC-AUDIT-SQLITE-001:
+    id: "AC-AUDIT-SQLITE-001"
+    description: "SQLite backend replaces JSONL file writes for audit persistence"
+    category: "enhancement"
+    priority: P0_CRITICAL
+    blocking: false  # Can use JSONL temporarily
+    
+    acceptance_criteria:
+      - criteria: "SQLite database created at cortex-brain/database/audit.db"
+        validation: "test -f cortex-brain/database/audit.db"
+        
+      - criteria: "audit_logs table exists with all required columns"
+        validation: "sqlite3 cortex-brain/database/audit.db '.schema audit_logs' | grep -q 'ac_id TEXT'"
+        required_columns:
+          - "id INTEGER PRIMARY KEY AUTOINCREMENT"
+          - "timestamp TEXT NOT NULL"
+          - "level TEXT NOT NULL"
+          - "category TEXT NOT NULL"
+          - "component TEXT NOT NULL"
+          - "operation TEXT NOT NULL"
+          - "message TEXT NOT NULL"
+          - "context_json TEXT"
+          - "metadata_json TEXT"
+          - "correlation_id TEXT"
+          - "ac_id TEXT"
+          - "duration_ms REAL"
+        
+      - criteria: "Indexes created for ac_id, timestamp, category, correlation_id"
+        validation: "sqlite3 cortex-brain/database/audit.db '.indexes audit_logs' | grep -c 'idx_audit' | test $(cat) -ge 4"
+        
+      - criteria: "Retention policy table exists with default values"
+        validation: "sqlite3 cortex-brain/database/audit.db 'SELECT COUNT(*) FROM audit_retention_policy' | test $(cat) -eq 6"
+        default_policies:
+          - "ERROR: 90 days"
+          - "CRITICAL: 90 days"
+          - "INFO: 30 days"
+          - "WARNING: 30 days"
+          - "TRACE: 7 days"
+          - "DEBUG: 7 days"
+    
+    test_evidence:
+      test_file: "tests/unit/test_audit_sqlite_backend.py"
+      test_functions:
+        - "test_sqlite_database_created"
+        - "test_audit_logs_table_schema"
+        - "test_indexes_created"
+        - "test_retention_policy_defaults"
+      markers:
+        - "@pytest.mark.ac_id('AC-AUDIT-SQLITE-001')"
+        - "@pytest.mark.ac_id('AC-AUDIT-003')"  # Per-repo SQLite isolation
+  
+  # --------------------------------------------------------------------------
+  # AC-AUDIT-BUFFER-001: Memory Buffer Implementation
+  # --------------------------------------------------------------------------
+  AC-AUDIT-BUFFER-001:
+    id: "AC-AUDIT-BUFFER-001"
+    description: "Memory buffer with configurable flush triggers implemented"
+    category: "enhancement"
+    priority: P0_CRITICAL
+    blocking: false
+    
+    acceptance_criteria:
+      - criteria: "AuditMemoryBuffer class exists"
+        validation: "grep -q 'class AuditMemoryBuffer' src/infrastructure/audit_logger.py"
+        
+      - criteria: "Buffer has configurable max_size (default: 100 entries)"
+        validation: "grep -q 'max_size.*int.*=.*100' src/infrastructure/audit_logger.py"
+        
+      - criteria: "Buffer has configurable max_age_seconds (default: 300)"
+        validation: "grep -q 'max_age_seconds.*int.*=.*300' src/infrastructure/audit_logger.py"
+        
+      - criteria: "Flush triggers: size, time, CRITICAL/ERROR level, manual"
+        validation: "Test all 4 flush triggers work correctly"
+        flush_triggers:
+          - "Buffer size >= max_size"
+          - "Time since last flush >= max_age_seconds"
+          - "CRITICAL or ERROR level entry (immediate flush)"
+          - "Manual flush() call"
+        
+      - criteria: "Batch INSERT using executemany() for performance"
+        validation: "grep -q 'executemany' src/infrastructure/audit_logger.py"
+    
+    test_evidence:
+      test_file: "tests/unit/test_audit_memory_buffer.py"
+      test_functions:
+        - "test_buffer_initialization"
+        - "test_flush_on_size_trigger"
+        - "test_flush_on_time_trigger"
+        - "test_flush_on_critical_error"
+        - "test_manual_flush"
+        - "test_batch_insert_performance"
+      markers:
+        - "@pytest.mark.ac_id('AC-AUDIT-BUFFER-001')"
+        - "@pytest.mark.ac_id('AC-AUDIT-002')"  # Memory buffer with configurable flush
+  
+  # --------------------------------------------------------------------------
+  # AC-AUDIT-MCP-001: MCP Tools Implementation
+  # --------------------------------------------------------------------------
+  AC-AUDIT-MCP-001:
+    id: "AC-AUDIT-MCP-001"
+    description: "MCP tools for audit log querying, listing, exporting, and validation"
+    category: "mcp_tools"
+    priority: P0_CRITICAL
+    blocking: false
+    
+    acceptance_criteria:
+      - criteria: "AuditQueryTool class exists in src/mcp/audit_query.py"
+        validation: "test -f src/mcp/audit_query.py && grep -q 'class AuditQueryTool' src/mcp/audit_query.py"
+        
+      - criteria: "mcp_audit_query supports filters: ac_id, category, level, date_range, correlation_id"
+        validation: "Tool accepts all required filter parameters"
+        
+      - criteria: "mcp_audit_list lists logs by orchestrator and date_range"
+        validation: "Tool returns logs grouped by orchestrator"
+        
+      - criteria: "mcp_audit_export supports formats: json, csv, yaml"
+        validation: "Tool exports to all 3 formats"
+        
+      - criteria: "mcp_audit_validate returns dual validation (test + audit evidence)"
+        validation: "Tool returns {test_evidence: bool, audit_evidence: bool, status: str}"
+        
+      - criteria: "All MCP tools registered in CapabilityRegistry"
+        validation: "grep -q 'audit_query\\|audit_list\\|audit_export\\|audit_validate' src/mcp/capability_registry.py"
+    
+    test_evidence:
+      test_file: "tests/mcp/test_audit_tools.py"
+      test_functions:
+        - "test_audit_query_tool"
+        - "test_audit_list_tool"
+        - "test_audit_export_tool"
+        - "test_audit_validate_tool"
+        - "test_mcp_tools_registered"
+      markers:
+        - "@pytest.mark.ac_id('AC-AUDIT-MCP-001')"
+        - "@pytest.mark.ac_id('AC-AUDIT-004')"  # MCP tools
+
+# ==============================================================================
+# GOV-001: SKULL RULES MIGRATION (COMPLETE - SKIP)
+# ==============================================================================
+
+skull_rules_migration:
+  task_id: "GOV-001"
+  status: "COMPLETE"
+  completed_date: "2026-01-08T00:30:00Z"
+  priority: P0_CRITICAL
+  blocking: false  # Not blocking because already complete
+  estimated_effort: "0 hours (COMPLETE)"
+  
+  # --------------------------------------------------------------------------
+  # AC-GOV-MIGRATE-001: SKULL Rules Migration (COMPLETE)
+  # --------------------------------------------------------------------------
+  AC-GOV-MIGRATE-001:
+    id: "AC-GOV-MIGRATE-001"
+    description: "SKULL rules migrated to CORE-* numbering (ALREADY COMPLETE)"
+    category: "governance"
+    priority: P0_CRITICAL
+    blocking: false
+    status: "COMPLETE"
+    
+    completion_evidence:
+      completed_by: "feat03-governance Phase 1"
+      completed_date: "2026-01-08T00:30:00Z"
+      
+      evidence_1:
+        file: "cortex-brain/tier0/governance/core-rules.yaml"
+        status: "EXISTS"
+        verification: "test -f cortex-brain/tier0/governance/core-rules.yaml"
+        content: "18 rules (CORE-001 to CORE-018) with schema version 6.0"
+        
+      evidence_2:
+        file: "cortex-brain/brain-protection-rules.yaml"
+        status: "DEPRECATED"
+        verification: "grep -q 'DEPRECATED.*2026-01-08' cortex-brain/brain-protection-rules.yaml"
+        
+    note: |
+      IMPORTANT: Investigation found 18 rules, not 61 as originally claimed.
+      This is NOT an error - the actual rule count is 18 (CORE-001 to CORE-018).
+      All references to "61 SKULL rules" should be updated to "18 CORE rules".
+    
+    execution_decision: "SKIP - Task already complete, no implementation needed"
+
+# ==============================================================================
+# TRACE-001: AC-ID TRACEABILITY SYSTEM
+# ==============================================================================
+
+ac_traceability_system:
+  task_id: "TRACE-001"
+  priority: P0_CRITICAL
+  blocking: true
+  estimated_effort: "8-10 hours"
+  investigation_findings: "pytest marker pattern identified at conftest.py:130"
+  
+  # --------------------------------------------------------------------------
+  # AC-TRACE-REGISTRY-001: Traceability Registry Implementation
+  # --------------------------------------------------------------------------
+  AC-TRACE-REGISTRY-001:
+    id: "AC-TRACE-REGISTRY-001"
+    description: "ACTraceabilityRegistry class implemented for bidirectional AC-test linkage"
+    category: "traceability"
+    priority: P0_CRITICAL
+    blocking: true
+    
+    acceptance_criteria:
+      - criteria: "ACTraceabilityRegistry class exists in src/infrastructure/ac_traceability.py"
+        validation: "test -f src/infrastructure/ac_traceability.py && grep -q 'class ACTraceabilityRegistry' src/infrastructure/ac_traceability.py"
+        
+      - criteria: "register_ac_test(ac_id, test_file, test_function) method implemented"
+        validation: "grep -q 'def register_ac_test' src/infrastructure/ac_traceability.py"
+        
+      - criteria: "query_ac_coverage(ac_id) returns tests + audit logs"
+        validation: "Method returns {ac_id, tests[], test_count, audit_logs_count, last_validated, coverage_percentage}"
+        
+      - criteria: "generate_ac_coverage_matrix() generates YAML structure"
+        validation: "Method outputs cortex-brain/registry/ac-test-coverage.yaml"
+        
+      - criteria: "detect_ac_gaps() identifies AC without tests"
+        validation: "Method returns List[str] of AC IDs with zero test coverage"
+        
+      - criteria: "detect_test_orphans() identifies tests without AC linkage"
+        validation: "Method returns List[str] of test file paths without markers"
+    
+    test_evidence:
+      test_file: "tests/architecture/test_ac_traceability.py"
+      test_functions:
+        - "test_registry_initialization"
+        - "test_register_ac_test"
+        - "test_query_ac_coverage"
+        - "test_generate_coverage_matrix"
+        - "test_detect_ac_gaps"
+        - "test_detect_test_orphans"
+      markers:
+        - "@pytest.mark.ac_id('AC-TRACE-REGISTRY-001')"
+        - "@pytest.mark.ac_id('AC-ARCH-014')"  # Acceptance criteria test harnessing
+  
+  # --------------------------------------------------------------------------
+  # AC-TRACE-PYTEST-001: Pytest Integration
+  # --------------------------------------------------------------------------
+  AC-TRACE-PYTEST-001:
+    id: "AC-TRACE-PYTEST-001"
+    description: "Pytest marker configuration and collection hooks implemented"
+    category: "traceability"
+    priority: P0_CRITICAL
+    blocking: true
+    
+    acceptance_criteria:
+      - criteria: "pytest_configure adds ac_id marker to tests/conftest.py"
+        validation: "grep -q 'pytest_configure' tests/conftest.py && grep -q 'ac_id.*Mark test as validating' tests/conftest.py"
+        
+      - criteria: "pytest_configure adds acceptance marker"
+        validation: "grep -q 'acceptance.*Mark test as acceptance test' tests/conftest.py"
+        
+      - criteria: "pytest_collection_modifyitems hook auto-registers markers"
+        validation: "grep -q 'pytest_collection_modifyitems' tests/conftest.py"
+        
+      - criteria: "Markers visible in pytest --markers output"
+        validation: "pytest --markers | grep -q 'ac_id'"
+        
+      - criteria: "Registry updated during test collection phase"
+        validation: "ACTraceabilityRegistry.save() called in collection hook"
+    
+    test_evidence:
+      test_file: "tests/architecture/test_pytest_integration.py"
+      test_functions:
+        - "test_markers_registered"
+        - "test_collection_hook_executes"
+        - "test_registry_updated_on_collection"
+        - "test_markers_visible"
+      markers:
+        - "@pytest.mark.ac_id('AC-TRACE-PYTEST-001')"
+  
+  # --------------------------------------------------------------------------
+  # AC-TRACE-COVERAGE-001: Coverage Matrix Generation
+  # --------------------------------------------------------------------------
+  AC-TRACE-COVERAGE-001:
+    id: "AC-TRACE-COVERAGE-001"
+    description: "AC coverage matrix generated with test-to-AC mapping"
+    category: "traceability"
+    priority: P0_CRITICAL
+    blocking: false
+    
+    acceptance_criteria:
+      - criteria: "Coverage matrix file generated at cortex-brain/registry/ac-test-coverage.yaml"
+        validation: "test -f cortex-brain/registry/ac-test-coverage.yaml"
+        
+      - criteria: "Matrix structure includes: ac_id, description, tests[], coverage_percentage, last_validated, status"
+        validation: "YAML contains all required fields for each AC"
+        
+      - criteria: "Existing 148 test files scanned for markers"
+        validation: "Coverage matrix includes entries from existing tests"
+        
+      - criteria: "Gap detection identifies AC with zero test coverage"
+        validation: "Matrix flags AC with coverage_percentage=0 as gap=true"
+        
+      - criteria: "Coverage percentage calculated correctly"
+        validation: "(tests_with_markers / total_tests) * 100 = coverage_percentage"
+    
+    test_evidence:
+      test_file: "tests/architecture/test_coverage_matrix.py"
+      test_functions:
+        - "test_matrix_file_generated"
+        - "test_matrix_structure_valid"
+        - "test_existing_tests_scanned"
+        - "test_gap_detection"
+        - "test_coverage_calculation"
+      markers:
+        - "@pytest.mark.ac_id('AC-TRACE-COVERAGE-001')"
+
+# ==============================================================================
+# HOUSE-001: HOUSEKEEPING ORCHESTRATOR
+# ==============================================================================
+
+housekeeping_orchestrator:
+  task_id: "HOUSE-001"
+  priority: P0_CRITICAL
+  blocking: true
+  estimated_effort: "12-16 hours"
+  investigation_findings: "Complete manifest exists (359 lines), reference patterns analyzed"
+  
+  # --------------------------------------------------------------------------
+  # AC-HOUSE-IMPL-001: Orchestrator Implementation
+  # --------------------------------------------------------------------------
+  AC-HOUSE-IMPL-001:
+    id: "AC-HOUSE-IMPL-001"
+    description: "HousekeepingOrchestrator class implemented with BaseOrchestratorV4_1"
+    category: "orchestrator"
+    priority: P0_CRITICAL
+    blocking: true
+    
+    acceptance_criteria:
+      - criteria: "HousekeepingOrchestrator class exists in src/orchestrators/housekeeping/housekeeping_orchestrator.py"
+        validation: "test -f src/orchestrators/housekeeping/housekeeping_orchestrator.py && grep -q 'class HousekeepingOrchestrator' src/orchestrators/housekeeping/housekeeping_orchestrator.py"
+        
+      - criteria: "Orchestrator inherits from BaseOrchestratorV4_1"
+        validation: "grep -q 'BaseOrchestratorV4_1' src/orchestrators/housekeeping/housekeeping_orchestrator.py"
+        
+      - criteria: "Manifest loaded from cortex-brain/manifests/orchestrators/housekeeping-orchestrator.yaml"
+        validation: "Orchestrator reads manifest on initialization"
+        
+      - criteria: "All 9 phases defined: Audit Log Analysis, Knowledge Absorption, Redundancy Elimination, Orchestrator Optimization, Governance Quality, Toolkit Cleanup, Performance Profiling, Health Report, Recommendations"
+        validation: "Orchestrator has 9 execute_phase_N methods"
+        
+      - criteria: "Directory structure created: cortex-brain/tier2/housekeeping/{bug-reports,knowledge-absorption,redundancy-reports,optimization-reports,health-reports}"
+        validation: "All 5 subdirectories exist"
+    
+    test_evidence:
+      test_file: "tests/orchestrators/housekeeping/test_housekeeping.py"
+      test_functions:
+        - "test_orchestrator_initialization"
+        - "test_inherits_base_orchestrator"
+        - "test_manifest_loaded"
+        - "test_nine_phases_defined"
+        - "test_directory_structure_created"
+      markers:
+        - "@pytest.mark.ac_id('AC-HOUSE-IMPL-001')"
+        - "@pytest.mark.ac_id('AC-ORC-011')"  # Housekeeping Orchestrator automatic execution
+  
+  # --------------------------------------------------------------------------
+  # AC-HOUSE-PHASE1-001: Phase 1 - Audit Log Analysis
+  # --------------------------------------------------------------------------
+  AC-HOUSE-PHASE1-001:
+    id: "AC-HOUSE-PHASE1-001"
+    description: "Phase 1 analyzes audit logs and generates bug reports"
+    category: "orchestrator_phase"
+    priority: P0_CRITICAL
+    blocking: false
+    
+    acceptance_criteria:
+      - criteria: "execute_phase_1_audit_log_analysis() method implemented"
+        validation: "grep -q 'def execute_phase_1_audit_log_analysis' src/orchestrators/housekeeping/housekeeping_orchestrator.py"
+        
+      - criteria: "Audit logs loaded using EnterpriseAuditLogger.search()"
+        validation: "Method calls audit_logger.search() with filters"
+        
+      - criteria: "Logs grouped by component, category, level"
+        validation: "Grouping logic implemented for analysis"
+        
+      - criteria: "Pattern detection identifies repeated failures and high error rates"
+        validation: "Bug detection algorithm implemented"
+        
+      - criteria: "Bug report generated at cortex-brain/tier2/housekeeping/bug-reports/audit-analysis-{timestamp}.yaml"
+        validation: "Bug report file created with correct structure"
+    
+    test_evidence:
+      test_file: "tests/orchestrators/housekeeping/test_housekeeping_phase1.py"
+      test_functions:
+        - "test_phase1_executes"
+        - "test_audit_logs_loaded"
+        - "test_logs_grouped_correctly"
+        - "test_pattern_detection"
+        - "test_bug_report_generated"
+      markers:
+        - "@pytest.mark.ac_id('AC-HOUSE-PHASE1-001')"
+        - "@pytest.mark.ac_id('AC-ORC-HOUSE-001')"  # Comprehensive scenario validation
+  
+  # --------------------------------------------------------------------------
+  # AC-HOUSE-PHASE8-001: Phase 8 - Health Report Generation
+  # --------------------------------------------------------------------------
+  AC-HOUSE-PHASE8-001:
+    id: "AC-HOUSE-PHASE8-001"
+    description: "Phase 8 generates comprehensive health report"
+    category: "orchestrator_phase"
+    priority: P0_CRITICAL
+    blocking: false
+    
+    acceptance_criteria:
+      - criteria: "execute_phase_8_health_report_generation() method implemented"
+        validation: "grep -q 'def execute_phase_8_health_report_generation' src/orchestrators/housekeeping/housekeeping_orchestrator.py"
+        
+      - criteria: "Health report aggregates findings from phases 1-7"
+        validation: "Report includes data from all previous phases"
+        
+      - criteria: "Health metrics calculated: brain health score, governance compliance, test coverage, audit coverage"
+        validation: "Report contains all required metrics"
+        
+      - criteria: "Health report generated at cortex-brain/tier2/housekeeping/health-reports/health-{timestamp}.yaml"
+        validation: "Health report file created with correct structure"
+        
+      - criteria: "Timing data included for all phases"
+        validation: "Report includes execution duration for each phase"
+    
+    test_evidence:
+      test_file: "tests/orchestrators/housekeeping/test_housekeeping_phase8.py"
+      test_functions:
+        - "test_phase8_executes"
+        - "test_report_aggregates_findings"
+        - "test_health_metrics_calculated"
+        - "test_health_report_generated"
+        - "test_timing_data_included"
+      markers:
+        - "@pytest.mark.ac_id('AC-HOUSE-PHASE8-001')"
+  
+  # --------------------------------------------------------------------------
+  # AC-HOUSE-REG-001: Orchestrator Registration
+  # --------------------------------------------------------------------------
+  AC-HOUSE-REG-001:
+    id: "AC-HOUSE-REG-001"
+    description: "Housekeeping orchestrator registered in MasterOrchestrator"
+    category: "registration"
+    priority: P0_CRITICAL
+    blocking: true
+    
+    acceptance_criteria:
+      - criteria: "Orchestrator registered in src/entry_point/cortex_entry.py"
+        validation: "grep -q 'housekeeping.*HousekeepingOrchestrator' src/entry_point/cortex_entry.py"
+        
+      - criteria: "Pattern routing configured: '^(housekeeping|maintenance|health check).*$'"
+        validation: "Pattern router includes housekeeping pattern"
+        
+      - criteria: "Orchestrator instantiable via registry"
+        validation: "registry.instantiate('housekeeping') returns HousekeepingOrchestrator instance"
+        
+      - criteria: "Pattern matching test passes"
+        validation: "Pattern router matches 'housekeeping' → housekeeping_orchestrator"
+    
+    test_evidence:
+      test_file: "tests/orchestrators/test_housekeeping_registration.py"
+      test_functions:
+        - "test_orchestrator_registered"
+        - "test_pattern_routing_configured"
+        - "test_orchestrator_instantiable"
+        - "test_pattern_matching"
+      markers:
+        - "@pytest.mark.ac_id('AC-HOUSE-REG-001')"
+        - "@pytest.mark.ac_id('AC-REG-001')"  # All orchestrators registered
+
+# ==============================================================================
+# CROSS-CUTTING ACCEPTANCE CRITERIA
+# ==============================================================================
+
+cross_cutting_criteria:
+  
+  # --------------------------------------------------------------------------
+  # AC-FOUNDATION-INTEGRATION-001: Task Integration
+  # --------------------------------------------------------------------------
+  AC-FOUNDATION-INTEGRATION-001:
+    id: "AC-FOUNDATION-INTEGRATION-001"
+    description: "All 3 foundation tasks integrate correctly (AUDIT-001, TRACE-001, HOUSE-001)"
+    category: "integration"
+    priority: P0_CRITICAL
+    blocking: true
+    
+    acceptance_criteria:
+      - criteria: "AuditLogger used by ACTraceabilityRegistry for audit evidence"
+        validation: "ACTraceabilityRegistry imports and uses EnterpriseAuditLogger"
+        
+      - criteria: "HousekeepingOrchestrator uses AuditLogger for Phase 1 analysis"
+        validation: "HousekeepingOrchestrator imports and uses EnterpriseAuditLogger"
+        
+      - criteria: "All orchestrators log with ac_id for traceability"
+        validation: "Orchestrators pass ac_id parameter to audit_logger.log()"
+        
+      - criteria: "Coverage matrix includes foundation task tests"
+        validation: "ac-test-coverage.yaml includes AC-AUDIT-*, AC-TRACE-*, AC-HOUSE-*"
+    
+    test_evidence:
+      test_file: "tests/integration/test_foundation_integration.py"
+      test_functions:
+        - "test_audit_logger_used_by_traceability"
+        - "test_audit_logger_used_by_housekeeping"
+        - "test_orchestrators_log_with_ac_id"
+        - "test_coverage_matrix_includes_foundation"
+      markers:
+        - "@pytest.mark.ac_id('AC-FOUNDATION-INTEGRATION-001')"
+        - "@pytest.mark.integration"
+  
+  # --------------------------------------------------------------------------
+  # AC-FOUNDATION-TDD-001: TDD Compliance
+  # --------------------------------------------------------------------------
+  AC-FOUNDATION-TDD-001:
+    id: "AC-FOUNDATION-TDD-001"
+    description: "All foundation tasks follow RED→GREEN→REFACTOR TDD cycle"
+    category: "tdd"
+    priority: P0_CRITICAL
+    blocking: true
+    
+    acceptance_criteria:
+      - criteria: "RED phase: Tests written before implementation for all tasks"
+        validation: "Git history shows test commits before implementation commits"
+        
+      - criteria: "GREEN phase: Tests pass after implementation"
+        validation: "pytest tests/ --tb=short returns 0 exit code"
+        
+      - criteria: "REFACTOR phase: Code quality improved without breaking tests"
+        validation: "Tests remain passing after refactoring"
+        
+      - criteria: "Test coverage ≥95% for all foundation components"
+        validation: "pytest --cov=src/infrastructure --cov=src/orchestrators/housekeeping --cov-report=term-missing | grep 'TOTAL.*9[5-9]%'"
+    
+    test_evidence:
+      test_file: "tests/meta/test_foundation_tdd_compliance.py"
+      test_functions:
+        - "test_tdd_cycle_followed"
+        - "test_all_tests_pass"
+        - "test_coverage_meets_threshold"
+      markers:
+        - "@pytest.mark.ac_id('AC-FOUNDATION-TDD-001')"
+  
+  # --------------------------------------------------------------------------
+  # AC-FOUNDATION-EVIDENCE-001: Dual Validation Evidence
+  # --------------------------------------------------------------------------
+  AC-FOUNDATION-EVIDENCE-001:
+    id: "AC-FOUNDATION-EVIDENCE-001"
+    description: "All foundation AC have both test evidence AND audit evidence"
+    category: "validation"
+    priority: P0_CRITICAL
+    blocking: true
+    
+    acceptance_criteria:
+      - criteria: "Every AC has at least one test with @pytest.mark.ac_id() marker"
+        validation: "Coverage matrix shows 100% test linkage for foundation AC"
+        
+      - criteria: "Every AC has audit log entries with ac_id tag"
+        validation: "mcp_audit_validate(ac_id) returns audit_evidence=True for all foundation AC"
+        
+      - criteria: "Dual validation query works for all foundation AC"
+        validation: "All foundation AC return {test_evidence: True, audit_evidence: True, status: 'PASS'}"
+    
+    test_evidence:
+      test_file: "tests/meta/test_foundation_dual_validation.py"
+      test_functions:
+        - "test_all_ac_have_test_evidence"
+        - "test_all_ac_have_audit_evidence"
+        - "test_dual_validation_passes"
+      markers:
+        - "@pytest.mark.ac_id('AC-FOUNDATION-EVIDENCE-001')"
+        - "@pytest.mark.ac_id('AC-VAL-001')"  # AC validation requires test pass + audit log trace
+
+# ==============================================================================
+# SUMMARY
+# ==============================================================================
+
+summary:
+  total_new_criteria: 19
+  blocking_criteria: 12
+  complete_criteria: 1  # GOV-001
+  
+  criteria_breakdown:
+    audit_logger: 6
+    skull_migration: 1  # COMPLETE
+    traceability: 3
+    housekeeping: 4
+    cross_cutting: 3
+    integration: 1
+    tdd: 1
+    evidence: 1
+  
+  integration_with_master_ac:
+    target_document: "CX6-acceptance-criteria.yaml"
+    merge_section: "SECTION 23: FOUNDATION TASKS"
+    merge_strategy: "Append to end, update metadata version"
+    
+  validation_coverage:
+    test_files_required: 13
+    test_functions_minimum: 50
+    integration_tests: 2
+    meta_tests: 2
+
+# ==============================================================================
+# END OF FOUNDATION TASKS ACCEPTANCE CRITERIA
+# ==============================================================================
