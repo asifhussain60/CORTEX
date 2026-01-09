@@ -6,5 +6,13 @@
         "workspaceRoot": "/Users/asifhussain/PROJECTS/CORTEX",
         "workspacePath": "cortex-brain/documents/planning/active/cortex6",
         "id": "ZvbYzE3xrnjFBqCQ"
+    },
+    {
+        "type": "Directory",
+        "name": "/Users/asifhussain/PROJECTS/CORTEX/.github/prompts",
+        "parent_id": null,
+        "workspaceRoot": "/Users/asifhussain/PROJECTS/CORTEX",
+        "workspacePath": ".github/prompts",
+        "id": "cDQd9H316KnFWkEa"
     }
 ]
