@@ -1,6 +1,6 @@
 # 🔍🔧 CORTEX Gap-Fix - Holistic Gap Detection & Remediation
 
-**Version:** 1.0.0 | **Status:** ✅ PRODUCTION | **Type:** Autonomous Analysis + Remediation  
+**Version:** 1.2.0 | **Status:** ✅ PRODUCTION | **Type:** Autonomous Analysis + Remediation  
 **Author:** Asif Hussain | **AC Reference:** `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml`  
 **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
@@ -29,33 +29,67 @@
 
 ---
 
-## 📊 Visual Progress Tracker Template
+## 📊 Visual Progress Display Standards
 
-**Show at EACH phase transition:**
+### Initial Display (Show ONCE at start)
 
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│               🔍🔧 CORTEX GAP-FIX - DETECTION & REMEDIATION                 │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ Overall Progress: `████████░░░░░░░░░░░░` 40% 🔄 IN PROGRESS                 │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ ─────────────────── 🔍 SEARCH PHASE ───────────────────                     │
-│ Phase 0  - AC Document Loading    `██████████` 100% ✅ Complete             │
-│ Phase 1  - Implementation Scan    `██████████` 100% ✅ Complete             │
-│ Phase 2  - Discrepancy Detection  `██████████` 100% ✅ Complete             │
-│ Phase 3  - Violation Scan         `████████░░`  80% 🔄 In Progress          │
-│ Phase 4  - Audit Gap Analysis     `░░░░░░░░░░`   0% ⏳ Pending              │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ ─────────────────── 🔧 ALIGN PHASE ───────────────────                      │
-│ Phase 5  - MCP Validation         `░░░░░░░░░░`   0% ⏳ Pending              │
-│ Phase 6  - Load Findings          `░░░░░░░░░░`   0% ⏳ Pending              │
-│ Phase 7  - Categorize             `░░░░░░░░░░`   0% ⏳ Pending              │
-│ Phase 8  - Snowball Sort          `░░░░░░░░░░`   0% ⏳ Pending              │
-│ Phase 9  - Plan Generation        `░░░░░░░░░░`   0% ⏳ Pending              │
-│ Phase 10 - Plan Integration       `░░░░░░░░░░`   0% ⏳ Pending              │
-│ Phase 11 - Holistic Plan Sync     `░░░░░░░░░░`   0% ⏳ Pending              │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
+**Full phase table shown only at pipeline start:**
+
+| Overall | Progress | Status |
+|---------|----------|--------|
+| 🔍🔧 Gap-Fix | `░░░░░░░░░░` 0% | 🔄 Starting |
+
+| Phase | Name | Status |
+|-------|------|--------|
+| 0 | AC Document Loading | ⏳ Pending |
+| 1 | Implementation Scan | ⏳ Pending |
+| 2 | Discrepancy Detection | ⏳ Pending |
+| 3 | Violation Scan | ⏳ Pending |
+| 4 | Audit Gap Analysis | ⏳ Pending |
+| 5 | MCP Validation | ⏳ Pending |
+| 6 | Load Findings | ⏳ Pending |
+| 7 | Categorize | ⏳ Pending |
+| 8 | Snowball Sort | ⏳ Pending |
+| 9 | Plan Generation | ⏳ Pending |
+| 10 | Plan Integration | ⏳ Pending |
+| 10B | Conflict Validation | ⏳ Pending |
+| 11 | Holistic Plan Sync | ⏳ Pending |
+
+---
+
+### During Execution (Minimal 3-Row Update)
+
+**After each phase completion, show ONLY:**
+
+| Overall | Completed | Next |
+|---------|-----------|------|
+| `████░░░░░░` 33% | ✅ Phase 3: Violation Scan | 🔄 Phase 4: Audit Gap Analysis |
+
+---
+
+### Final Display (Show complete table)
+
+| Overall | Progress | Status |
+|---------|----------|--------|
+| 🔍🔧 Gap-Fix | `██████████` 100% | ✅ Complete |
+
+| Phase | Name | Status |
+|-------|------|--------|
+| 0 | AC Document Loading | ✅ Complete |
+| 1 | Implementation Scan | ✅ Complete |
+| 2 | Discrepancy Detection | ✅ Complete |
+| 3 | Violation Scan | ✅ Complete |
+| 4 | Audit Gap Analysis | ✅ Complete |
+| 5 | MCP Validation | ✅ Complete |
+| 6 | Load Findings | ✅ Complete |
+| 7 | Categorize | ✅ Complete |
+| 8 | Snowball Sort | ✅ Complete |
+| 9 | Plan Generation | ✅ Complete |
+| 10 | Plan Integration | ✅ Complete |
+| 10B | Conflict Validation | ✅ Complete |
+| 11 | Holistic Plan Sync | ✅ Complete |
+
+📊 **Issues:** 78 | **Conflicts:** 0 | **Effort:** 48h
 
 ---
 
@@ -67,10 +101,14 @@
 - Output "Ready for next phase?" messages
 - Pause execution after analysis
 - Generate partial reports and stop
+- Generate Markdown files after every action (Master Orchestrator blocks this)
+- Display full progress table after every phase (use minimal 3-row update)
+- Use ASCII box-drawing characters (┌ ─ ┐ │ └ ┘) - breaks on mobile
 
 **✅ ALWAYS DO THESE:**
 - Execute ALL 12 phases in sequence automatically
-- Show visual progress tracker at phase transitions
+- Show full progress table ONLY at start and end
+- Use minimal 3-row update during execution
 - Generate final consolidated report at Phase 11 completion
 - Proceed to next phase immediately after current phase completes
 
@@ -460,7 +498,128 @@ remediation_plan:
    └─ New Phase Added: "Critical Blockers (Align)" at position 0
    └─ Tasks Added: {count} blocking + {count} high priority
    └─ Duration: 45s
+   └─ Auto-proceeding to Phase 10B...
+```
+
+---
+
+### Phase 10B: Conflict Detection & Validation (NEW)
+**Duration:** 1-2 minutes | **BLOCKING:** Yes
+
+**⚠️ CRITICAL: This phase prevents regressions and conflicts before final sync**
+
+**Validation Checks:**
+
+| Check | Description | Action on Failure |
+|-------|-------------|-------------------|
+| **CONFLICT_DETECTION** | Scan new gaps vs existing tasks for contradictions | Flag conflicts, require resolution |
+| **DUPLICATE_DETECTION** | Check if gap already exists with different ID | Merge duplicates, preserve earliest ID |
+| **REGRESSION_ANALYSIS** | Verify injected Phase 0 doesn't invalidate completed work | Warn if regression risk detected |
+| **TDD_ENFORCEMENT** | All remediation tasks must have test requirements | Block if no test_file specified |
+
+**Conflict Detection Algorithm:**
+```python
+def detect_conflicts(new_gaps, existing_plan):
+    """
+    Detects conflicts between new remediation gaps and existing plan tasks.
+    
+    Conflict Types:
+    1. CONTRADICTORY - New gap says "do X", existing task says "do opposite of X"
+    2. DUPLICATE - Same criterion addressed by different IDs
+    3. REGRESSION - Fixing gap would undo completed phase work
+    4. DEPENDENCY_BREAK - Gap fix breaks dependency chain
+    """
+    conflicts = []
+    
+    for gap in new_gaps:
+        # Check for contradictory requirements
+        for task in existing_plan.all_tasks():
+            if is_contradictory(gap.fix, task.implementation):
+                conflicts.append({
+                    "type": "CONTRADICTORY",
+                    "gap_id": gap.id,
+                    "task_id": task.id,
+                    "resolution_required": True
+                })
+        
+        # Check for duplicates
+        if existing_plan.has_criterion(gap.criterion):
+            conflicts.append({
+                "type": "DUPLICATE",
+                "gap_id": gap.id,
+                "existing_id": existing_plan.get_criterion_id(gap.criterion),
+                "action": "MERGE"
+            })
+        
+        # Check for regression risk
+        for completed_phase in existing_plan.completed_phases():
+            if gap.affects(completed_phase):
+                conflicts.append({
+                    "type": "REGRESSION_RISK",
+                    "gap_id": gap.id,
+                    "affected_phase": completed_phase.name,
+                    "severity": "WARNING"
+                })
+    
+    return conflicts
+```
+
+**Phase Completion Output (Success):**
+```
+✅ Phase 10B - Conflict Validation: Complete
+   └─ Conflicts Checked: {count} gaps × {count} existing tasks
+   └─ Duplicates Merged: {count}
+   └─ Regressions Detected: 0 ✅
+   └─ TDD Compliance: 100% ✅
+   └─ Duration: 60s
    └─ Auto-proceeding to Phase 11...
+```
+
+**Phase Output (Conflicts Found - BLOCKING):**
+```
+⚠️ Phase 10B - Conflict Validation: CONFLICTS DETECTED
+   └─ Contradictory: {count} (BLOCKING - requires resolution)
+   └─ Duplicates: {count} (auto-merged)
+   └─ Regression Risk: {count} (WARNING - review recommended)
+   └─ TDD Missing: {count} (BLOCKING - add test_file)
+   └─ Action: Resolve conflicts before Phase 11
+   └─ Output: conflict-report-{timestamp}.yaml
+   └─ ⚠️ PHASE 11 BLOCKED until conflicts resolved
+```
+
+**Conflict Report Structure:**
+```yaml
+conflict_report:
+  generated_at: '2026-01-09T12:00:00Z'
+  total_conflicts: 5
+  blocking_conflicts: 2
+  
+  conflicts:
+    - type: CONTRADICTORY
+      gap_id: AC-GAPFIX-NEW-001
+      task_id: TASK-042
+      gap_requirement: "Remove global state from StateManager"
+      task_implementation: "Add global cache to StateManager for performance"
+      resolution_options:
+        - "Keep task, reject gap"
+        - "Keep gap, mark task for revision"
+        - "Merge: Add scoped cache instead of global"
+      status: REQUIRES_RESOLUTION
+      
+    - type: DUPLICATE
+      gap_id: AC-SEC-NEW-007
+      existing_id: AC-SEC-003
+      action: MERGED
+      preserved_id: AC-SEC-003
+      status: AUTO_RESOLVED
+      
+    - type: REGRESSION_RISK
+      gap_id: AC-ARCH-NEW-012
+      affected_phase: "Phase 2: Foundation Layer"
+      affected_tasks: ["TASK-015", "TASK-016"]
+      severity: WARNING
+      recommendation: "Review before proceeding"
+      status: ACKNOWLEDGED
 ```
 
 ---
@@ -498,69 +657,63 @@ remediation_plan:
 ```markdown
 # 🔍🔧 CORTEX Gap-Fix Report
 
-**Date:** {date}
-**Duration:** {total_duration}
-**Status:** ✅ ALL PHASES COMPLETE
+**Date:** {date} | **Duration:** {total_duration} | **Status:** ✅ Complete
 
 ---
 
-## Visual Progress Tracker
+## Final Progress
 
-┌─────────────────────────────────────────────────────────────────────────────┐
-│               🔍🔧 CORTEX GAP-FIX - DETECTION & REMEDIATION                 │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ Overall Progress: `████████████████████` 100% ✅ COMPLETE                   │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ ─────────────────── 🔍 SEARCH PHASE ───────────────────                     │
-│ Phase 0  - AC Document Loading    `██████████` 100% ✅ Complete             │
-│ Phase 1  - Implementation Scan    `██████████` 100% ✅ Complete             │
-│ Phase 2  - Discrepancy Detection  `██████████` 100% ✅ Complete             │
-│ Phase 3  - Violation Scan         `██████████` 100% ✅ Complete             │
-│ Phase 4  - Audit Gap Analysis     `██████████` 100% ✅ Complete             │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ ─────────────────── 🔧 ALIGN PHASE ───────────────────                      │
-│ Phase 5  - MCP Validation         `██████████` 100% ✅ Complete             │
-│ Phase 6  - Load Findings          `██████████` 100% ✅ Complete             │
-│ Phase 7  - Categorize             `██████████` 100% ✅ Complete             │
-│ Phase 8  - Snowball Sort          `██████████` 100% ✅ Complete             │
-│ Phase 9  - Plan Generation        `██████████` 100% ✅ Complete             │
-│ Phase 10 - Plan Integration       `██████████` 100% ✅ Complete             │
-│ Phase 11 - Holistic Plan Sync     `██████████` 100% ✅ Complete             │
-└─────────────────────────────────────────────────────────────────────────────┘
+| Overall | Progress | Status |
+|---------|----------|--------|
+| 🔍🔧 Gap-Fix | `██████████` 100% | ✅ Complete |
 
-📊 **Issues Found:** {count} | **Remediated:** {count} | **Effort:** {hours}h
+| Phase | Name | Status |
+|-------|------|--------|
+| 0 | AC Document Loading | ✅ |
+| 1 | Implementation Scan | ✅ |
+| 2 | Discrepancy Detection | ✅ |
+| 3 | Violation Scan | ✅ |
+| 4 | Audit Gap Analysis | ✅ |
+| 5 | MCP Validation | ✅ |
+| 6 | Load Findings | ✅ |
+| 7 | Categorize | ✅ |
+| 8 | Snowball Sort | ✅ |
+| 9 | Plan Generation | ✅ |
+| 10 | Plan Integration | ✅ |
+| 10B | Conflict Validation | ✅ |
+| 11 | Holistic Plan Sync | ✅ |
+
+📊 **Issues:** {count} | **Conflicts:** {count} | **Effort:** {hours}h
 
 ---
 
-## Executive Summary
+## Summary
 
-| Category | Total | Blocking | Effort |
-|----------|-------|----------|--------|
-| Governance | {count} | {blocking} | {hours}h |
-| Architecture | {count} | {blocking} | {hours}h |
-| Security | {count} | {blocking} | {hours}h |
-| Concurrency | {count} | {blocking} | {hours}h |
-| Audit Gaps | {count} | {blocking} | {hours}h |
-| **TOTAL** | **{total}** | **{blocking_total}** | **{total_hours}h** |
+| Category | Total | Blocking |
+|----------|-------|----------|
+| Governance | {count} | {blocking} |
+| Architecture | {count} | {blocking} |
+| Security | {count} | {blocking} |
+| **TOTAL** | **{total}** | **{blocking_total}** |
 
 ---
 
-## 🌊 Snowball Execution Order
+## 🌊 Snowball Order
 
-**Phase 1:** Foundation Blockers ({hours}h) → Unlocks {count} criteria
-**Phase 2:** Concurrency Safety ({hours}h) → Enables parallel testing
-**Phase 3:** Audit Gaps ({hours}h) → Enables automated validation
-**Phase 4:** Security ({hours}h) → Risk mitigation
-**Phase 5:** Performance ({hours}h) → SLA compliance
-**Phase 6:** Quality ({hours}h) → Maintainability
+| Phase | Focus | Unlocks |
+|-------|-------|---------|
+| 1 | Foundation | {count} criteria |
+| 2 | Concurrency | Parallel testing |
+| 3 | Security | Risk mitigation |
 
 ---
 
-## 📁 Generated Artifacts
+## 📁 Artifacts
 
 - `search-findings-{timestamp}.yaml` (findings)
 - `remediation-plan.yaml` (active)
 - `archive/remediation-plan-{date}.yaml` (previous)
+- `conflict-report-{timestamp}.yaml` (if conflicts detected)
 - `snowball-strategy.yaml` (prioritization)
 - `progress-tracker.json` (updated)
 
@@ -621,6 +774,10 @@ Execute the remediation plan:
 | **GIT_ISOLATION** | ✅ Only modifies CORTEX planning files |
 | **ARCHIVE_BEFORE_REGENERATE** | ✅ Preserves remediation history |
 | **MCP_ONLY_TOOL_ACCESS** | ✅ Phase 11 uses MCP for Python execution |
+| **CONFLICT_DETECTION** | ✅ Phase 10B validates no contradictions or regressions |
+| **TDD_ENFORCEMENT** | ✅ Phase 10B enforces test_file on all remediation tasks |
+| **MINIMAL_RESPONSE** | ✅ 3-row progress during execution, full table only at start/end |
+| **NO_MD_GENERATION** | ✅ Master Orchestrator blocks MD file creation after actions |
 
 ---
 
@@ -634,5 +791,7 @@ Execute the remediation plan:
 ---
 
 **Version History:**
+- v1.2.0 (2026-01-09): Mobile-friendly progress display - removed ASCII borders, minimal 3-row updates during execution
+- v1.1.0 (2026-01-09): Added Phase 10B - Conflict Detection & Validation (AC-GAPFIX-001 to AC-GAPFIX-004)
 - v1.0.0 (2026-01-09): Initial release - combined search + align into unified 12-phase pipeline
 
