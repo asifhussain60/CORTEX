@@ -1,7 +1,7 @@
 # 🔍🔧 CORTEX Gap-Fix - Holistic Gap Detection & Remediation
 
 **Version:** 1.2.0 | **Status:** ✅ PRODUCTION | **Type:** Autonomous Analysis + Remediation  
-**Author:** Asif Hussain | **AC Reference:** `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/cortex-ac.yaml`  
+**Author:** Asif Hussain | **AC Reference:** `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/CX6-acceptance-criteria.yaml`  
 **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
 ---
@@ -121,7 +121,7 @@
 ## 📋 Analysis Categories
 
 ### Category 1: AC Implementation Gaps
-**Source of Truth:** `cortex-ac.yaml`
+**Source of Truth:** `CX6-acceptance-criteria.yaml`
 
 | AC Section | Risk Level | Criteria Count |
 |------------|------------|----------------|
@@ -170,7 +170,7 @@
 **Duration:** <10 seconds
 
 **Actions:**
-1. Load `cortex-ac.yaml`
+1. Load `CX6-acceptance-criteria.yaml`
 2. Parse all 370+ acceptance criteria
 3. Build validation checklist by category
 4. Identify blocking vs non-blocking criteria
@@ -267,7 +267,7 @@ cortex-brain/tier0/      → Governance rules
 search_findings:
   generated_at: '2026-01-09T10:30:00Z'
   ac_version: '10.0.0'
-  ac_location: 'cortex-brain/documents/planning/active/cortex6/acceptance-criteria/cortex-ac.yaml'
+  ac_location: 'cortex-brain/documents/planning/active/cortex6/acceptance-criteria/CX6-acceptance-criteria.yaml'
   
   summary:
     total_issues: 78
@@ -438,7 +438,7 @@ def snowball_prioritize(issues):
 **Pre-Step: Archive Existing Remediation**
 ```
 🔄 Phase 9.0 - Archive Existing: Starting
-   └─ Checking: {plan_path}/acceptance-criteria/remediation-plan.yaml
+   └─ Checking: {plan_path}/acceptance-criteria/CX6-requirements.yaml
    └─ Found existing → Moving to archive/remediation-plan-{date}.yaml
    └─ Archive complete ✅
 ```
@@ -446,8 +446,8 @@ def snowball_prioritize(issues):
 **Lifecycle Rules:**
 | Rule | Description |
 |------|-------------|
-| **ARCHIVE_BEFORE_REGENERATE** | Move existing `remediation-plan.yaml` to `archive/` with timestamp |
-| **SINGLE_ACTIVE_PLAN** | Only ONE `remediation-plan.yaml` exists (no timestamps in active) |
+| **ARCHIVE_BEFORE_REGENERATE** | Move existing `CX6-requirements.yaml` to `archive/` with timestamp |
+| **SINGLE_ACTIVE_PLAN** | Only ONE `CX6-requirements.yaml` exists (no timestamps in active) |
 | **PRESERVE_HISTORY** | Never delete archived remediations (audit trail) |
 
 **Plan Structure:**
@@ -476,7 +476,7 @@ remediation_plan:
 ✅ Phase 9 - Plan Generation: Complete
    └─ Archived: remediation-plan-{date}.yaml
    └─ Plan Phases: 7 | Total Effort: {hours}h | Blocking Fixed: {count}
-   └─ Output: remediation-plan.yaml
+   └─ Output: CX6-requirements.yaml
    └─ Duration: 90s
    └─ Auto-proceeding to Phase 10...
 ```
@@ -764,7 +764,7 @@ Recommendations:
 ## 📁 Artifacts
 
 - `search-findings-{timestamp}.yaml` (findings)
-- `remediation-plan.yaml` (active)
+- `CX6-requirements.yaml` (active)
 - `archive/remediation-plan-{date}.yaml` (previous)
 - `conflict-report-{timestamp}.yaml` (if conflicts detected)
 - `snowball-strategy.yaml` (prioritization)
@@ -790,11 +790,38 @@ Execute the remediation plan:
 
 | Artifact | Location |
 |----------|----------|
-| **AC Source of Truth** | `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/cortex-ac.yaml` |
+| **AC Source of Truth** | `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/CX6-acceptance-criteria.yaml` |
 | **Search Findings** | `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/search-findings-{timestamp}.yaml` |
-| **Remediation Plan** | `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/remediation-plan.yaml` |
+| **Remediation Plan** | `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/CX6-requirements.yaml` |
 | **Snowball Strategy** | `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/snowball-strategy.yaml` |
 | **Archive** | `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/archive/` |
+
+### 🚫 FORBIDDEN File Creation Locations
+
+**⚠️ SCOPE:** These restrictions apply **ONLY to CORTEX 6 planning files**. They do NOT restrict:
+- Global CORTEX source code (`src/`, `tests/`, etc.)
+- Brain infrastructure (`cortex-brain/tier*/`, `config/`, etc.)
+- User repository operations
+- Future CORTEX version planning
+
+**SKULL RULE:** All CORTEX 6 acceptance/planning files MUST be created in canonical location ONLY.
+
+**❌ NEVER create these CORTEX 6 files outside canonical location:**
+- `CX6-acceptance-criteria.yaml` (or any `cortex-ac*.yaml` for CORTEX 6)
+- `CX6-requirements.yaml` (or any `remediation-plan*.yaml` for CORTEX 6)
+- `search-findings-*.yaml` (CORTEX 6 gap detection results)
+- `snowball-strategy.yaml` (CORTEX 6 prioritization)
+- Any CORTEX 6 acceptance criteria files
+
+**✅ ONLY ALLOWED Location (CORTEX 6 Planning):**
+```
+cortex-brain/documents/planning/active/cortex6/acceptance-criteria/
+```
+
+**🛡️ Enforcement:**
+- Pre-execution validation checks file exists at canonical path
+- Gap-fix orchestrator rejects operations on files in wrong location
+- Archive old files to `acceptance-criteria/archive/` before regenerating
 
 ---
 
@@ -837,7 +864,7 @@ Execute the remediation plan:
 ## 📚 References
 
 - **Main Entry Point:** `.github/prompts/CORTEX.prompt.md`
-- **AC Source:** `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/cortex-ac.yaml`
+- **AC Source:** `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/CX6-acceptance-criteria.yaml`
 - **MCP Server:** `src/mcp/align_plan_sync.py` (Phase 11 implementation)
 - **Orchestrators Docs:** `cortex-brain/documents/orchestrators-quick-ref.md`
 
