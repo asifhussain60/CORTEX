@@ -2,7 +2,7 @@
 
 **Status:** ✅ AUTHORITATIVE  
 **Last Updated:** 2026-01-09  
-**Version:** 9.0.0
+**Version:** 12.0.0
 
 ---
 
@@ -10,14 +10,14 @@
 
 ```
 cortex-brain/documents/planning/active/cortex6/acceptance-criteria/
-├── 00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml   # Source of Truth
+├── 00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml   # Source of Truth (382 AC)
 ├── remediation-plan.yaml                             # Active remediation
 ├── snowball-strategy.yaml                            # Prioritization framework
 ├── plan-viewer-dashboard-requirements.yaml           # Plan Viewer Dashboard specs
 ├── README.md                                         # This file
-├── CLEANUP-TODO.md                                   # Cleanup tasks
-└── archive/                                          # Historical remediations
-    └── remediation-plan-{YYYY-MM-DD}.yaml
+└── archive/                                          # Historical artifacts
+    ├── remediation-plan-{YYYY-MM-DD}.yaml           # Archived remediations
+    └── search-findings-{YYYYMMDD}.yaml              # Archived findings
 ```
 
 ---
