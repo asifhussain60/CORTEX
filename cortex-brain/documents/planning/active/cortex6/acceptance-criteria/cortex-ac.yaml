@@ -545,7 +545,7 @@ architecture_cleanliness:
       - "Vacuum execution generates audit trail"
       - "Expected space savings: 73-85MB (66-77% reduction)"
       - "**ACCEPTANCE DIRECTORY CLEANUP:** .asif/AI-Learning/cortex6/acceptance/ maintained at 3-file structure"
-      - "**ACCEPTANCE DIRECTORY CLEANUP:** Only 00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml, README-ACCEPTANCE-CRITERIA.md, ANALYSIS-ARCHIVE-COMPLETE.md"
+      - "**ACCEPTANCE DIRECTORY CLEANUP:** Only cortex-ac.yaml, README-ACCEPTANCE-CRITERIA.md, ANALYSIS-ARCHIVE-COMPLETE.md"
       - "**ACCEPTANCE DIRECTORY CLEANUP:** All interim analysis reports consolidated into single archive"
       - "**ACCEPTANCE DIRECTORY CLEANUP:** Zero redundant markdown files"
       - "**ACCEPTANCE DIRECTORY CLEANUP:** Vacuum validates 3-file structure is maintained"

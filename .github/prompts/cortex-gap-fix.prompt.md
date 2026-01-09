@@ -1,7 +1,7 @@
 # 🔍🔧 CORTEX Gap-Fix - Holistic Gap Detection & Remediation
 
 **Version:** 1.2.0 | **Status:** ✅ PRODUCTION | **Type:** Autonomous Analysis + Remediation  
-**Author:** Asif Hussain | **AC Reference:** `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml`  
+**Author:** Asif Hussain | **AC Reference:** `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/cortex-ac.yaml`  
 **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
 ---
@@ -121,7 +121,7 @@
 ## 📋 Analysis Categories
 
 ### Category 1: AC Implementation Gaps
-**Source of Truth:** `00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml`
+**Source of Truth:** `cortex-ac.yaml`
 
 | AC Section | Risk Level | Criteria Count |
 |------------|------------|----------------|
@@ -170,7 +170,7 @@
 **Duration:** <10 seconds
 
 **Actions:**
-1. Load `00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml`
+1. Load `cortex-ac.yaml`
 2. Parse all 370+ acceptance criteria
 3. Build validation checklist by category
 4. Identify blocking vs non-blocking criteria
@@ -267,7 +267,7 @@ cortex-brain/tier0/      → Governance rules
 search_findings:
   generated_at: '2026-01-09T10:30:00Z'
   ac_version: '10.0.0'
-  ac_location: 'cortex-brain/documents/planning/active/cortex6/acceptance-criteria/00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml'
+  ac_location: 'cortex-brain/documents/planning/active/cortex6/acceptance-criteria/cortex-ac.yaml'
   
   summary:
     total_issues: 78
@@ -790,7 +790,7 @@ Execute the remediation plan:
 
 | Artifact | Location |
 |----------|----------|
-| **AC Source of Truth** | `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml` |
+| **AC Source of Truth** | `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/cortex-ac.yaml` |
 | **Search Findings** | `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/search-findings-{timestamp}.yaml` |
 | **Remediation Plan** | `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/remediation-plan.yaml` |
 | **Snowball Strategy** | `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/snowball-strategy.yaml` |
@@ -837,7 +837,7 @@ Execute the remediation plan:
 ## 📚 References
 
 - **Main Entry Point:** `.github/prompts/CORTEX.prompt.md`
-- **AC Source:** `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml`
+- **AC Source:** `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/cortex-ac.yaml`
 - **MCP Server:** `src/mcp/align_plan_sync.py` (Phase 11 implementation)
 - **Orchestrators Docs:** `cortex-brain/documents/orchestrators-quick-ref.md`
 

@@ -16,7 +16,7 @@
 metadata:
   generated_at: '2026-01-09T11:00:00Z'
   source_findings: cortex-brain/analysis/search-findings-2026-01-09.yaml
-  ac_file: cortex-brain/documents/planning/active/cortex6/acceptance-criteria/00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml
+  ac_file: cortex-brain/documents/planning/active/cortex6/acceptance-criteria/cortex-ac.yaml
   plan_name: cortex6
   total_issues: 23
   blocking_issues: 5

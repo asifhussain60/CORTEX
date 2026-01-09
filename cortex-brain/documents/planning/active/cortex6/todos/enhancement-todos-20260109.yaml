@@ -6,7 +6,7 @@
 # Author: Asif Hussain
 # Status: PARTIAL_COMPLETE
 # Epic: CORTEX6-BUILD
-# Related: 00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml
+# Related: cortex-ac.yaml
 # ==============================================================================
 
 metadata:
@@ -75,7 +75,7 @@ TODO-001:
         - "Add dependency graph ordering to Phase 8 (Snowball Sort)"
         - "Add test impact analysis to Phase 10B (Conflict Detection)"
         
-    - path: "cortex-brain/documents/planning/active/cortex6/acceptance-criteria/00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml"
+    - path: "cortex-brain/documents/planning/active/cortex6/acceptance-criteria/cortex-ac.yaml"
       changes:
         - "Add AC-GAPFIX-005 through AC-GAPFIX-007"
         - "Update gap_fix_validation category count"
@@ -162,7 +162,7 @@ TODO-002:
         - "Add trace_id for cross-correlation"
         - "Add test_context flag for test-generated logs"
         
-    - path: "cortex-brain/documents/planning/active/cortex6/acceptance-criteria/00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml"
+    - path: "cortex-brain/documents/planning/active/cortex6/acceptance-criteria/cortex-ac.yaml"
       changes:
         - "Add SECTION: AC VALIDATION FRAMEWORK (AC-VAL-001 to AC-VAL-004)"
         - "Update all AC entries with audit_trace_required: true"
@@ -279,7 +279,7 @@ TODO-003:
       changes:
         - "Export audit MCP tools"
         
-    - path: "cortex-brain/documents/planning/active/cortex6/acceptance-criteria/00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml"
+    - path: "cortex-brain/documents/planning/active/cortex6/acceptance-criteria/cortex-ac.yaml"
       changes:
         - "Add SECTION: AUDIT LOGGING FRAMEWORK (AC-AUDIT-001 to AC-AUDIT-006)"
         

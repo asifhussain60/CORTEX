@@ -349,7 +349,7 @@ validation:
 # ==============================================================================
 
 references:
-  parent_ac: "cortex-brain/documents/planning/active/cortex6/acceptance-criteria/00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml"
+  parent_ac: "cortex-brain/documents/planning/active/cortex6/acceptance-criteria/cortex-ac.yaml"
   planning_orchestrator: "src/orchestrators/planning_orchestrator.py"
   current_plan_viewer: "Generated at: {plan_path}/plan-viewer.html"
   design_inspiration:

@@ -2,13 +2,13 @@
 # CORTEX Search Findings
 # ==============================================================================
 # Generated: 2026-01-09T10:30:00Z
-# Source: 00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml (v7.2.0)
+# Source: cortex-ac.yaml (v7.2.0)
 # Total Issues: 23
 # ==============================================================================
 
 metadata:
   generated_at: '2026-01-09T10:30:00Z'
-  source_file: cortex-brain/documents/planning/active/cortex6/acceptance/00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml
+  source_file: cortex-brain/documents/planning/active/cortex6/acceptance/cortex-ac.yaml
   source_version: '7.2.0'
   analyzer: cortex-search
   total_issues: 23
