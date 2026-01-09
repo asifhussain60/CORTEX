@@ -40,9 +40,45 @@ metadata:
       decisions: 5
       additions: [Migrate Orchestrator]
       
-  total_decisions: 14
+    session_4:
+      date: 2026-01-09T19:00:00Z
+      questions: [Q17, Q18, Q19, Q20]
+      decisions: 4
+      topic: "Plan Viewer Dashboard (plan-viewer.html) DoR"
+      
+  total_decisions: 18
   ambiguity_level: 0  # Zero ambiguity achieved
   execution_readiness: true
+
+  dor_decisions:
+    # Dashboard-specific DoR decisions (Session 4)
+    Q17:
+      question: "Should plan-viewer.html be generated ONCE at plan creation or REGENERATED on every progress update?"
+      answer: "Generate once at plan creation, updates via WebSocket (no regeneration)"
+      rationale: "Static HTML + dynamic WebSocket updates = better performance, simpler architecture, no file thrashing"
+      impact: "Phase 3.3 (Orchestrator Integration) - dashboard_generator.py generates static HTML once"
+      decision: FINALIZED
+      
+    Q18:
+      question: "Should dashboard auto-launch browser on plan creation or require manual launch?"
+      answer: "Manual launch by default, optional auto-launch via --dashboard-launch flag"
+      rationale: "User control over browser pop-ups, headless CI/CD compatibility, optional convenience"
+      impact: "Planning Orchestrator adds --dashboard-launch flag, config: dashboard.auto_launch=false (default)"
+      decision: FINALIZED
+      
+    Q19:
+      question: "Should dashboard server run as background daemon or foreground process?"
+      answer: "Foreground process with graceful shutdown (Ctrl+C), optional background via --daemon flag"
+      rationale: "Development transparency (see logs), easy debugging, production flexibility, standard Unix pattern"
+      impact: "serve.py uses uvicorn.run() (foreground), --daemon flag uses subprocess.Popen()"
+      decision: FINALIZED
+      
+    Q20:
+      question: "Should dashboard data refresh via polling or WebSocket push?"
+      answer: "WebSocket push for real-time updates (no polling)"
+      rationale: "Efficient (<100ms latency), modern, scalable, battery-friendly (mobile), standard pattern"
+      impact: "Backend implements file watcher → WebSocket broadcast, frontend receives push events"
+      decision: FINALIZED
 
 # ==============================================================================
 # SECTION 1: STRATEGIC REQUIREMENTS
@@ -161,6 +197,52 @@ strategic_requirements:
     rationale: Fast user experience
     clarification: Q10, Q15 responses
     stage: 3
+  
+  SR-008:
+    id: SR-008
+    name: Interactive Plan Viewer Dashboard
+    priority: HIGH
+    description: |
+      Real-time, interactive dashboard for plan execution monitoring with
+      audit log evidence, test coverage metrics, and live progress updates.
+      Served on localhost:8000 with auto-refresh and modern glassmorphism UI.
+    acceptance_criteria:
+      - FastAPI server serves dashboard on localhost:8000
+      - Real-time updates via WebSocket (<500ms latency)
+      - Audit log viewer with filtering and pagination
+      - Test coverage dashboard with AC-ID traceability
+      - Glassmorphism dark theme with Tailwind CSS
+      - Integrated with Planning Orchestrator (auto-generation)
+      - Performance SLAs met (page load <2s, memory <200MB)
+    technical_details:
+      frontend: "HTML5 SPA with Tailwind CSS and Vanilla JS"
+      backend: "FastAPI with WebSocket support"
+      data_sources: "progress-tracker.json, audit-logs/*.jsonl, tests/"
+      deployment: "localhost:8000 (development), Docker (production)"
+      architecture:
+        generation: "Static HTML generated once at plan creation (Q17)"
+        launch: "Manual launch by default, --dashboard-launch flag optional (Q18)"
+        execution: "Foreground server (Ctrl+C to stop), --daemon flag optional (Q19)"
+        updates: "WebSocket push updates (no polling, <100ms latency) (Q20)"
+    implementation:
+      phases:
+        - "Phase 1: Backend API (4-5h)"
+        - "Phase 2: Frontend SPA (6-8h)"
+        - "Phase 3: Orchestrator Integration (3-4h)"
+        - "Phase 4: Polish & Deployment (3-4h)"
+      total_effort: "16-20 hours"
+    rationale: |
+      Developers and stakeholders need visual feedback on plan execution progress,
+      audit trail evidence, and test coverage metrics. Dashboard provides
+      transparency and real-time visibility into CORTEX 6.0 build progress.
+    clarifications:
+      - "Q17: Generate HTML once (not on every update) - WebSocket handles live data"
+      - "Q18: Manual launch default, --dashboard-launch flag for auto-open browser"
+      - "Q19: Foreground server default (see logs), --daemon flag for background"
+      - "Q20: WebSocket push (no polling) for <100ms real-time updates"
+    plan_reference: "artifacts/PLAN-VIEWER-DASHBOARD-PLAN.yaml"
+    stage: 3  # Features stage
+    blocking: false
 
 # ==============================================================================
 # SECTION 2: FOUNDATION REQUIREMENTS (STAGE 1)
@@ -693,6 +775,30 @@ decision_register:
       decision: README + setup.sh (both options)
       rationale: User convenience + control
       impact: Phase 3.2 (user setup automation)
+      
+    AD-013:
+      decision: Dashboard HTML generated once (not regenerated)
+      rationale: Static HTML + WebSocket updates = better performance
+      impact: Phase 3.3 (Dashboard auto-generation), no file regeneration overhead
+      clarification: Q17 response
+      
+    AD-014:
+      decision: Manual dashboard launch (optional auto-launch via flag)
+      rationale: User control, headless CI/CD compatibility
+      impact: Planning Orchestrator adds --dashboard-launch flag (default: false)
+      clarification: Q18 response
+      
+    AD-015:
+      decision: Dashboard server foreground by default (optional daemon)
+      rationale: Development transparency, easy debugging, production flexibility
+      impact: serve.py foreground mode, --daemon flag for background
+      clarification: Q19 response
+      
+    AD-016:
+      decision: WebSocket push (no polling)
+      rationale: Real-time efficiency (<100ms), modern, battery-friendly
+      impact: Backend file watcher + WebSocket broadcast pattern
+      clarification: Q20 response
 
 # ==============================================================================
 # SECTION 7: RISK REGISTER

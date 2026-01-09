@@ -24,13 +24,22 @@
 
 metadata:
   document_type: enterprise_acceptance_criteria
-  version: 16.1.0
+  version: 17.0.0
   status: AUTHORITATIVE
   created: '2026-01-09'
   updated: '2026-01-09'
   author: Asif Hussain
   epic_id: CORTEX6-BUILD
   changelog:
+    v17.0.0:
+      date: '2026-01-09'
+      changes:
+        - "Added Section 26: Plan Viewer Dashboard (AC-DASH-001 to AC-DASH-007)"
+        - "Dashboard integration with Planning Orchestrator v6"
+        - "Real-time progress updates via WebSocket"
+        - "Audit log viewer and test coverage dashboard"
+        - "Glassmorphism dark theme with Tailwind CSS"
+        - "Performance SLAs: <2s page load, <100ms WebSocket latency"
     v16.1.0:
       date: '2026-01-09'
       changes:
@@ -338,8 +347,8 @@ metadata:
     orchestrators: 11+  # v7.2.0: Added Housekeeping Orchestrator
     requirements: 200+  # Expanded from 150+
     validation_gates: 13  # v6.0.2: Added GATE-00 for Architecture Quality
-    total_criteria: 354  # v7.2.0: Added 9 new criteria (345 → 354)
-    categories: 13  # v7.2.0: Added Housekeeping category
+    total_criteria: 361  # v17.0.0: Added Section 26 Dashboard (7 criteria: 354 → 361)
+    categories: 14  # v17.0.0: Added Dashboard category (13 → 14)
 
   health_tracking:
     overall_score: 0
@@ -5439,6 +5448,267 @@ section_25_yaml_json_interchange:
     category: audit
     evidence:
       - "Audit log sample: cortex-brain/audit-logs/*.jsonl with AC-ID tags"
+
+# ==============================================================================
+# SECTION 26: PLAN VIEWER DASHBOARD (NEW - v17.0.0)
+# ==============================================================================
+# Purpose: Interactive real-time plan tracking dashboard with audit evidence
+# Stage: 3 (Features)
+# Priority: HIGH
+# Total Criteria: 7
+# Reference: artifacts/PLAN-VIEWER-DASHBOARD-PLAN.yaml
+# ==============================================================================
+
+plan_viewer_dashboard:
+  
+  AC-DASH-001:
+    id: AC-DASH-001
+    name: Dashboard Server Initialization
+    priority: P0_CRITICAL
+    stage: 3
+    phase: 3.7
+    
+    description: |
+      FastAPI server starts successfully on localhost:8000 with all routes
+      registered and WebSocket endpoint operational within 5 seconds.
+    
+    acceptance:
+      - "Server starts in <5 seconds"
+      - "All 5 REST endpoints registered (/api/plan, /api/progress, /api/audit-logs, /api/tests, /api/summary)"
+      - "WebSocket endpoint /ws operational"
+      - "Static files served correctly (HTML, CSS, JS)"
+      - "CORS middleware configured (allow all origins for localhost)"
+      - "Health check endpoint /health returns 200 OK"
+    
+    validation:
+      test: "pytest tests/integration/test_dashboard_api.py::test_server_startup"
+      audit: "Query audit.db for operation='dashboard_server_init', status='success'"
+      manual: "Open http://localhost:8000 → Dashboard loads without errors"
+    
+    evidence:
+      - "Server logs show successful startup"
+      - "All endpoints return 200 OK"
+      - "WebSocket connection established"
+    
+    test_file: "tests/integration/test_dashboard_api.py"
+    status: PENDING
+    blocking: false
+    category: dashboard
+  
+  AC-DASH-002:
+    id: AC-DASH-002
+    name: Real-Time Progress Updates
+    priority: P0_CRITICAL
+    stage: 3
+    phase: 3.7
+    
+    description: |
+      Dashboard displays real-time progress updates via WebSocket when
+      progress-tracker.json is modified, with updates appearing within 500ms.
+    
+    acceptance:
+      - "WebSocket connection established on page load"
+      - "File watcher detects progress-tracker.json changes within 1 second"
+      - "Update broadcast to all connected clients"
+      - "UI updates within 500ms of broadcast (progress bars, completion %)"
+      - "Auto-reconnect after disconnect (exponential backoff)"
+      - "Multiple clients supported simultaneously"
+    
+    validation:
+      test: "pytest tests/integration/test_dashboard_e2e.py::test_realtime_updates"
+      audit: "Query audit.db for operation='dashboard_update_broadcast'"
+      manual: "Modify progress-tracker.json → Dashboard updates within 500ms"
+    
+    evidence:
+      - "WebSocket message received within 500ms"
+      - "Progress bar animates to new value"
+      - "Audit log shows broadcast event"
+    
+    test_file: "tests/integration/test_dashboard_e2e.py"
+    status: PENDING
+    blocking: false
+    category: dashboard
+  
+  AC-DASH-003:
+    id: AC-DASH-003
+    name: Audit Log Viewer
+    priority: HIGH
+    stage: 3
+    phase: 3.7
+    
+    description: |
+      Dashboard displays audit logs in formatted table with category filtering,
+      pagination (50 entries/page), free-text search, and CSV/JSON export.
+    
+    acceptance:
+      - "Audit logs displayed in table format (columns: Timestamp, Category, Operation, Status, AC-ID, Metadata)"
+      - "Category filter works (7 categories: all, governance, orchestrator, validation, infrastructure, mcp, brain, integration)"
+      - "Status filter works (all, success, failure, warning)"
+      - "Free-text search works (searches operation and metadata fields)"
+      - "Pagination works (50 entries per page, prev/next buttons)"
+      - "Export to CSV and JSON (downloadable files)"
+      - "Handles 10,000+ entries smoothly (virtual scrolling)"
+      - "Expandable rows (click to see full metadata JSON)"
+      - "Color coding (green=success, red=failure, yellow=warning)"
+    
+    validation:
+      test: "pytest tests/unit/test_audit_log_viewer.py"
+      audit: "Query audit.db for operation='dashboard_audit_log_view'"
+      manual: "Filter logs by category → Results match filter"
+    
+    evidence:
+      - "10K audit logs load in <2 seconds"
+      - "Filters apply instantly (<100ms)"
+      - "Export generates valid CSV/JSON"
+    
+    test_file: "tests/unit/test_audit_log_viewer.py"
+    status: PENDING
+    blocking: false
+    category: dashboard
+  
+  AC-DASH-004:
+    id: AC-DASH-004
+    name: Test Coverage Dashboard
+    priority: HIGH
+    stage: 3
+    phase: 3.7
+    
+    description: |
+      Dashboard displays test coverage metrics with AC-ID traceability,
+      pass/fail rates, coverage charts, and section breakdown.
+    
+    acceptance:
+      - "Total tests created displayed (e.g., 148 tests)"
+      - "AC-ID coverage displayed (X/390 AC with tests)"
+      - "Pass/Fail rate visualization (horizontal bar chart)"
+      - "Test execution time displayed"
+      - "Coverage by section (stacked bar chart: Audit, Governance, Orchestrator, etc.)"
+      - "Missing AC-IDs list (206+ AC without tests)"
+      - "Click chart to drill down (e.g., click 'Governance' → show governance tests)"
+      - "Export chart as PNG"
+      - "Real-time updates when tests run"
+    
+    validation:
+      test: "pytest tests/unit/test_coverage_dashboard.py"
+      audit: "Query audit.db for operation='dashboard_test_metrics_load'"
+      manual: "Run pytest → Dashboard shows new test count"
+    
+    evidence:
+      - "Coverage percentage accurate (matches pytest coverage report)"
+      - "Missing AC-IDs list correct"
+      - "Charts render correctly"
+    
+    test_file: "tests/unit/test_coverage_dashboard.py"
+    status: PENDING
+    blocking: false
+    category: dashboard
+  
+  AC-DASH-005:
+    id: AC-DASH-005
+    name: Glassmorphism Theme
+    priority: MEDIUM
+    stage: 3
+    phase: 3.7
+    
+    description: |
+      Dashboard uses glassmorphism dark theme with Tailwind CSS,
+      Material Design aesthetic, and WCAG AA accessibility compliance.
+    
+    acceptance:
+      - "Dark blue background gradient (#0a1628 → #1a237e)"
+      - "Glass cards with backdrop blur (rgba(26,35,126,0.7))"
+      - "Smooth hover transitions (transform translateY, 0.3s ease)"
+      - "Consistent color palette (primary: #1a237e, accent: #7c4dff)"
+      - "Responsive breakpoints (640px, 768px, 1024px, 1280px)"
+      - "WCAG AA accessible (contrast ratio ≥4.5:1 for text)"
+      - "Focus indicators visible (keyboard navigation)"
+      - "ARIA labels for all interactive elements"
+    
+    validation:
+      test: "pytest tests/unit/test_dashboard_theme.py"
+      audit: "N/A (visual validation)"
+      manual: "Lighthouse accessibility audit score ≥90"
+    
+    evidence:
+      - "Lighthouse accessibility score ≥90"
+      - "WAVE accessibility tool: 0 errors"
+      - "Responsive on mobile (320px width)"
+    
+    test_file: "tests/unit/test_dashboard_theme.py"
+    status: PENDING
+    blocking: false
+    category: dashboard
+  
+  AC-DASH-006:
+    id: AC-DASH-006
+    name: Planning Orchestrator Integration
+    priority: HIGH
+    stage: 3
+    phase: 3.7
+    
+    description: |
+      Dashboard automatically generated in plan folder (dashboard/) when
+      Planning Orchestrator creates new plan, with optional auto-launch.
+    
+    acceptance:
+      - "Dashboard folder created in plan directory (e.g., cortex6/dashboard/)"
+      - "Static assets copied (index.html, app.js, styles.css)"
+      - "Paths configured correctly (relative to plan folder)"
+      - "Launch script generated (serve.py with FastAPI)"
+      - "Auto-launch works (optional, disabled by default)"
+      - "Config flag: planning_orchestrator.dashboard.auto_generate=true"
+      - "Command-line arg: --dashboard-launch"
+    
+    validation:
+      test: "pytest tests/integration/test_planning_dashboard_integration.py"
+      audit: "Query audit.db for operation='dashboard_generated'"
+      manual: "Create plan → Dashboard folder exists with all assets"
+    
+    evidence:
+      - "Dashboard folder exists after plan creation"
+      - "serve.py launches FastAPI on port 8000"
+      - "Browser opens to dashboard (if auto-launch enabled)"
+    
+    test_file: "tests/integration/test_planning_dashboard_integration.py"
+    status: PENDING
+    blocking: false
+    category: dashboard
+  
+  AC-DASH-007:
+    id: AC-DASH-007
+    name: Performance SLAs
+    priority: HIGH
+    stage: 3
+    phase: 3.7
+    
+    description: |
+      Dashboard meets performance SLAs for page load time, WebSocket latency,
+      memory usage, CPU usage, and animation smoothness.
+    
+    acceptance:
+      - "Page load time <2 seconds (initial HTML + CSS + JS)"
+      - "WebSocket latency <100ms (message round-trip)"
+      - "Memory usage <200 MB (Chrome DevTools profiler)"
+      - "CPU usage <10% idle (no active updates)"
+      - "Smooth animations at 60 FPS (no dropped frames)"
+      - "No memory leaks (heap size stable over 10 minutes)"
+      - "Handles 10K audit logs without lag"
+      - "Handles 100+ tasks in kanban board without lag"
+    
+    validation:
+      test: "pytest tests/performance/test_dashboard_performance.py"
+      audit: "Query audit.db for operation='dashboard_performance_test'"
+      manual: "Lighthouse performance audit score ≥90"
+    
+    evidence:
+      - "Lighthouse performance score ≥90"
+      - "Chrome DevTools profiler: no memory leaks"
+      - "WebSocket latency <100ms (network tab)"
+    
+    test_file: "tests/performance/test_dashboard_performance.py"
+    status: PENDING
+    blocking: false
+    category: dashboard
 
 # ==============================================================================
 # END OF ENTERPRISE ACCEPTANCE CRITERIA

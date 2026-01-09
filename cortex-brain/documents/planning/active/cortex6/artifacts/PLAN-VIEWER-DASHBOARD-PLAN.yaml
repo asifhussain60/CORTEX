@@ -1,0 +1,1232 @@
+# ==============================================================================
+# CORTEX PLAN VIEWER DASHBOARD - COMPREHENSIVE IMPLEMENTATION PLAN
+# ==============================================================================
+# Purpose: Interactive real-time plan tracking dashboard served on localhost:8000
+#          with live progress updates, audit log evidence, and test coverage metrics
+# 
+# Author: Asif Hussain
+# Version: 1.0.0
+# Created: 2026-01-09
+# Status: ACTIVE - READY FOR IMPLEMENTATION
+# 
+# Integration: Part of Planning Orchestrator v6 (embedded dashboard generation)
+# Deployment: SPA served via FastAPI backend on localhost:8000
+# Parent Plan: CORTEX6-COMPREHENSIVE-UPGRADE-PLAN.yaml
+# ==============================================================================
+
+metadata:
+  plan_id: "PLAN-VIEWER-DASHBOARD-V1"
+  version: "1.0.0"
+  status: "ACTIVE"
+  created: "2026-01-09T18:30:00Z"
+  author: "Asif Hussain"
+  epic_id: "CORTEX6-BUILD"
+  parent_plan: "CORTEX6-COMPREHENSIVE-UPGRADE-PLAN.yaml"
+  
+  estimated_effort:
+    total_hours_min: 16
+    total_hours_max: 20
+    duration_days: 2-3
+  
+  integration_point:
+    orchestrator: "Planning Orchestrator v6"
+    phase: "Plan Generation (Post-DoR)"
+    trigger: "Automatic dashboard generation after plan creation"
+    location: "cortex6/dashboard/"
+  
+  tech_stack:
+    frontend:
+      - "HTML5 SPA (Single Page Application)"
+      - "Tailwind CSS 3.4 (via CDN for dev, inlined for prod)"
+      - "Vanilla JavaScript (ES6+)"
+      - "Glassmorphism Dark Theme (Material Design inspired)"
+    backend:
+      - "FastAPI 0.104+ (Python 3.11+)"
+      - "WebSocket (real-time updates)"
+      - "Static file serving"
+      - "JSON API endpoints"
+    data_sources:
+      - "tracking/progress-tracker.json (live tracking)"
+      - "cortex-brain/audit-logs/*.jsonl (audit evidence)"
+      - "tests/ (test coverage metrics)"
+      - "artifacts/*.yaml (plan details)"
+
+# ==============================================================================
+# EXECUTIVE SUMMARY
+# ==============================================================================
+
+executive_summary:
+  mission: |
+    Create an interactive, real-time plan viewer dashboard that displays
+    comprehensive plan execution details, audit log evidence, and test
+    coverage metrics with auto-refresh capabilities and modern glassmorphism
+    dark theme design.
+    
+  key_features:
+    - "Real-time progress tracking with live auto-refresh"
+    - "Audit log viewer with formatted JSONL evidence display"
+    - "Test coverage metrics (AC-ID traceability, pass/fail rates)"
+    - "Phase timeline visualization with progress bars"
+    - "Task kanban board (Pending/In Progress/Complete/Blocked)"
+    - "WebSocket-based live updates (no polling)"
+    - "Glassmorphism dark theme with Tailwind CSS"
+    - "Responsive design (desktop/tablet/mobile)"
+    - "Export functionality (PDF reports, JSON data)"
+    
+  success_criteria:
+    - "Dashboard loads in <2 seconds"
+    - "Live updates appear within 500ms of file changes"
+    - "WCAG AA accessibility compliance"
+    - "Mobile-responsive (breakpoints: 640px, 768px, 1024px, 1280px)"
+    - "Zero console errors on page load"
+    - "Audit log viewer handles 10,000+ entries smoothly"
+
+# ==============================================================================
+# PHASE 1: BACKEND API INFRASTRUCTURE (4-5 hours)
+# ==============================================================================
+
+phase_1:
+  name: "Backend API Infrastructure"
+  priority: "P0_CRITICAL"
+  estimated_hours: "4-5"
+  dependencies: []
+  
+  deliverables:
+    - "FastAPI server (src/dashboard/api.py)"
+    - "WebSocket endpoint (/ws)"
+    - "REST API endpoints (5)"
+    - "File watcher for auto-refresh"
+    - "Static file serving"
+    
+  tasks:
+    task_1_1:
+      name: "FastAPI Server Setup"
+      estimated_hours: "1.0"
+      description: "Create FastAPI application with CORS, static files, and basic routing"
+      
+      files_to_create:
+        - path: "src/dashboard/__init__.py"
+          content: "Dashboard module initialization"
+        - path: "src/dashboard/api.py"
+          content: "FastAPI application with routes"
+        - path: "src/dashboard/config.py"
+          content: "Dashboard configuration (port, paths, refresh intervals)"
+      
+      endpoints:
+        - "GET / → Serve index.html"
+        - "GET /api/plan → Get current plan details"
+        - "GET /api/progress → Get progress tracker data"
+        - "GET /api/audit-logs → Get recent audit logs (paginated)"
+        - "GET /api/tests → Get test coverage metrics"
+        - "WS /ws → WebSocket for live updates"
+      
+      implementation:
+        imports: |
+          from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+          from fastapi.staticfiles import StaticFiles
+          from fastapi.responses import HTMLResponse, JSONResponse
+          from fastapi.middleware.cors import CORSMiddleware
+          import json
+          from pathlib import Path
+          from typing import List, Dict, Any
+          import asyncio
+        
+        app_initialization: |
+          app = FastAPI(title="CORTEX Plan Viewer", version="1.0.0")
+          
+          # CORS middleware
+          app.add_middleware(
+              CORSMiddleware,
+              allow_origins=["*"],
+              allow_credentials=True,
+              allow_methods=["*"],
+              allow_headers=["*"],
+          )
+          
+          # Mount static files
+          dashboard_path = Path(__file__).parent / "static"
+          app.mount("/static", StaticFiles(directory=str(dashboard_path)), name="static")
+      
+      validation:
+        - "Server starts on localhost:8000"
+        - "All endpoints return 200 OK"
+        - "CORS headers present"
+        - "Static files accessible"
+    
+    task_1_2:
+      name: "Data Loaders Implementation"
+      estimated_hours: "1.5"
+      description: "Create data loader functions for plan, progress, audit logs, tests"
+      
+      files_to_create:
+        - path: "src/dashboard/loaders.py"
+          content: "Data loading functions"
+      
+      functions:
+        load_plan_data:
+          signature: "def load_plan_data(plan_path: Path) -> Dict[str, Any]"
+          returns: "Plan YAML parsed to dict"
+          
+        load_progress_data:
+          signature: "def load_progress_data(tracker_path: Path) -> Dict[str, Any]"
+          returns: "Progress tracker JSON"
+          
+        load_audit_logs:
+          signature: "def load_audit_logs(audit_dir: Path, limit: int = 100, offset: int = 0) -> List[Dict]"
+          returns: "Paginated audit log entries"
+          
+        load_test_metrics:
+          signature: "def load_test_metrics(tests_dir: Path) -> Dict[str, Any]"
+          returns: "Test coverage metrics (total tests, AC coverage, pass/fail)"
+      
+      validation:
+        - "Loads CORTEX6 plan YAML successfully"
+        - "Parses progress-tracker.json"
+        - "Reads JSONL audit logs (handles 10K+ entries)"
+        - "Calculates test metrics (pytest markers)"
+    
+    task_1_3:
+      name: "WebSocket Live Updates"
+      estimated_hours: "1.5"
+      description: "Implement WebSocket for real-time progress updates"
+      
+      implementation:
+        connection_manager: |
+          class ConnectionManager:
+              def __init__(self):
+                  self.active_connections: List[WebSocket] = []
+              
+              async def connect(self, websocket: WebSocket):
+                  await websocket.accept()
+                  self.active_connections.append(websocket)
+              
+              def disconnect(self, websocket: WebSocket):
+                  self.active_connections.remove(websocket)
+              
+              async def broadcast(self, message: dict):
+                  for connection in self.active_connections:
+                      try:
+                          await connection.send_json(message)
+                      except Exception:
+                          pass
+          
+          manager = ConnectionManager()
+        
+        websocket_endpoint: |
+          @app.websocket("/ws")
+          async def websocket_endpoint(websocket: WebSocket):
+              await manager.connect(websocket)
+              try:
+                  while True:
+                      await websocket.receive_text()  # Keep connection alive
+              except WebSocketDisconnect:
+                  manager.disconnect(websocket)
+        
+        file_watcher: |
+          async def watch_files():
+              """Watch progress-tracker.json and audit logs for changes"""
+              last_modified = {}
+              
+              while True:
+                  files_to_watch = [
+                      Path("cortex-brain/documents/planning/active/cortex6/tracking/progress-tracker.json"),
+                      Path("cortex-brain/audit-logs/")
+                  ]
+                  
+                  for file_path in files_to_watch:
+                      if file_path.exists():
+                          mtime = file_path.stat().st_mtime
+                          if file_path not in last_modified or last_modified[file_path] != mtime:
+                              last_modified[file_path] = mtime
+                              await manager.broadcast({
+                                  "type": "file_changed",
+                                  "file": str(file_path),
+                                  "timestamp": mtime
+                              })
+                  
+                  await asyncio.sleep(1)  # Check every second
+      
+      validation:
+        - "WebSocket connection established"
+        - "File changes trigger broadcast within 1 second"
+        - "Multiple clients supported"
+        - "Graceful disconnect handling"
+    
+    task_1_4:
+      name: "REST API Endpoints"
+      estimated_hours: "1.0"
+      description: "Implement 5 REST API endpoints for data retrieval"
+      
+      endpoints_implementation:
+        get_plan:
+          route: "/api/plan"
+          method: "GET"
+          response: "Plan details (phases, tasks, metadata)"
+          
+        get_progress:
+          route: "/api/progress"
+          method: "GET"
+          response: "Progress tracker data (completion %, phase status)"
+          
+        get_audit_logs:
+          route: "/api/audit-logs"
+          method: "GET"
+          params: "?limit=100&offset=0&category=all"
+          response: "Audit log entries (paginated, filtered)"
+          
+        get_tests:
+          route: "/api/tests"
+          method: "GET"
+          response: "Test coverage metrics (total, AC coverage, pass/fail)"
+          
+        get_summary:
+          route: "/api/summary"
+          method: "GET"
+          response: "Dashboard summary (overall progress, recent logs, test health)"
+      
+      validation:
+        - "All endpoints return JSON"
+        - "Pagination works (limit/offset)"
+        - "Filtering works (category, status)"
+        - "Response time <500ms"
+
+# ==============================================================================
+# PHASE 2: FRONTEND SPA DEVELOPMENT (6-8 hours)
+# ==============================================================================
+
+phase_2:
+  name: "Frontend SPA Development"
+  priority: "P0_CRITICAL"
+  estimated_hours: "6-8"
+  dependencies: ["phase_1"]
+  
+  deliverables:
+    - "index.html (SPA shell)"
+    - "app.js (application logic)"
+    - "components.js (UI components)"
+    - "Tailwind CSS configuration"
+    - "Glassmorphism theme CSS"
+    
+  tasks:
+    task_2_1:
+      name: "HTML Shell & Tailwind Setup"
+      estimated_hours: "1.0"
+      description: "Create SPA shell with Tailwind CSS integration"
+      
+      files_to_create:
+        - path: "src/dashboard/static/index.html"
+          structure: |
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>CORTEX Plan Viewer Dashboard</title>
+                <script src="https://cdn.tailwindcss.com"></script>
+                <style>
+                    /* Glassmorphism Dark Theme */
+                    :root {
+                        --primary: #1a237e;
+                        --primary-light: #534bae;
+                        --accent: #7c4dff;
+                        --bg: #0a1628;
+                        --surface: rgba(26,35,126,0.7);
+                        --text: #ffffff;
+                        --text-secondary: #b0bec5;
+                    }
+                    
+                    body {
+                        background: linear-gradient(135deg, #0a1628 0%, #1a237e 100%);
+                        background-attachment: fixed;
+                    }
+                    
+                    .glass-card {
+                        background: linear-gradient(135deg, 
+                            rgba(26,35,126,0.8) 0%, 
+                            rgba(26,35,126,0.6) 100%);
+                        border: 1px solid rgba(255,255,255,0.1);
+                        border-radius: 16px;
+                        backdrop-filter: blur(10px);
+                        box-shadow: 
+                            0 8px 32px rgba(0,0,0,0.3),
+                            inset 0 1px 0 rgba(255,255,255,0.1);
+                    }
+                    
+                    .glass-card:hover {
+                        background: linear-gradient(135deg, 
+                            rgba(26,35,126,0.9) 0%, 
+                            rgba(26,35,126,0.7) 100%);
+                        transform: translateY(-2px);
+                        transition: all 0.3s ease;
+                    }
+                </style>
+            </head>
+            <body class="min-h-screen text-white">
+                <div id="app">
+                    <!-- React-like component mounting point -->
+                </div>
+                <script src="/static/app.js"></script>
+            </body>
+            </html>
+      
+      validation:
+        - "Page loads without errors"
+        - "Tailwind classes work"
+        - "Glassmorphism cards render correctly"
+        - "Responsive on mobile (320px width)"
+    
+    task_2_2:
+      name: "Dashboard Layout Components"
+      estimated_hours: "2.0"
+      description: "Create modular UI components (header, sidebar, main content, cards)"
+      
+      components:
+        DashboardHeader:
+          purpose: "Top navigation with plan name, refresh status, export button"
+          props: "planName, lastUpdate, isConnected"
+          
+        Sidebar:
+          purpose: "Phase navigation, quick stats, filters"
+          props: "phases, currentPhase, stats"
+          
+        PhaseTimeline:
+          purpose: "Visual timeline showing phase progression"
+          props: "phases, currentPhase"
+          
+        ProgressCard:
+          purpose: "Overall progress with animated progress bar"
+          props: "totalProgress, phaseProgress"
+          
+        TaskKanban:
+          purpose: "Kanban board (Pending, In Progress, Complete, Blocked)"
+          props: "tasks, onTaskClick"
+          
+        AuditLogViewer:
+          purpose: "Scrollable audit log table with filters"
+          props: "logs, filter, onFilterChange"
+          
+        TestCoveragePanel:
+          purpose: "Test metrics visualization (charts, AC coverage)"
+          props: "metrics, acCoverage"
+      
+      validation:
+        - "All components render independently"
+        - "Props update triggers re-render"
+        - "Smooth animations (<60 FPS)"
+        - "Accessible (ARIA labels)"
+    
+    task_2_3:
+      name: "Real-Time Data Integration"
+      estimated_hours: "2.0"
+      description: "Connect components to WebSocket + REST API"
+      
+      implementation:
+        websocket_client: |
+          class DashboardClient {
+              constructor() {
+                  this.ws = null;
+                  this.reconnectInterval = 3000;
+              }
+              
+              connect() {
+                  this.ws = new WebSocket('ws://localhost:8000/ws');
+                  
+                  this.ws.onopen = () => {
+                      console.log('WebSocket connected');
+                      updateConnectionStatus(true);
+                  };
+                  
+                  this.ws.onmessage = (event) => {
+                      const data = JSON.parse(event.data);
+                      this.handleUpdate(data);
+                  };
+                  
+                  this.ws.onclose = () => {
+                      console.log('WebSocket disconnected');
+                      updateConnectionStatus(false);
+                      setTimeout(() => this.connect(), this.reconnectInterval);
+                  };
+              }
+              
+              handleUpdate(data) {
+                  if (data.type === 'file_changed') {
+                      this.refreshData();
+                  }
+              }
+              
+              async refreshData() {
+                  const [plan, progress, logs, tests] = await Promise.all([
+                      fetch('/api/plan').then(r => r.json()),
+                      fetch('/api/progress').then(r => r.json()),
+                      fetch('/api/audit-logs?limit=100').then(r => r.json()),
+                      fetch('/api/tests').then(r => r.json())
+                  ]);
+                  
+                  updateDashboard({ plan, progress, logs, tests });
+              }
+          }
+        
+        auto_refresh: |
+          const client = new DashboardClient();
+          client.connect();
+          
+          // Initial load
+          client.refreshData();
+          
+          // Fallback polling (if WebSocket fails)
+          setInterval(() => {
+              if (!client.ws || client.ws.readyState !== WebSocket.OPEN) {
+                  client.refreshData();
+              }
+          }, 5000);
+      
+      validation:
+        - "WebSocket reconnects automatically"
+        - "Data updates within 500ms of file change"
+        - "Fallback polling works"
+        - "No memory leaks (disconnect cleanup)"
+    
+    task_2_4:
+      name: "Audit Log Viewer Implementation"
+      estimated_hours: "1.5"
+      description: "Create formatted audit log viewer with filtering and pagination"
+      
+      features:
+        - "Table view with columns: Timestamp, Category, Operation, Status, AC-ID, Metadata"
+        - "Filters: Category (all/governance/orchestrator/validation), Status (all/success/failure)"
+        - "Search: Free-text search across operation and metadata"
+        - "Pagination: 50 entries per page"
+        - "Export: Download as CSV or JSON"
+        - "Color coding: Green (success), Red (failure), Yellow (warning)"
+        - "Expandable rows: Click to see full metadata"
+      
+      implementation:
+        audit_log_table: |
+          <div class="glass-card p-6">
+              <div class="flex justify-between mb-4">
+                  <h2 class="text-2xl font-bold">Audit Log Evidence</h2>
+                  <div class="flex gap-2">
+                      <select id="category-filter" class="bg-gray-800 rounded px-3 py-2">
+                          <option value="all">All Categories</option>
+                          <option value="governance">Governance</option>
+                          <option value="orchestrator">Orchestrator</option>
+                          <option value="validation">Validation</option>
+                      </select>
+                      <button id="export-logs" class="bg-accent rounded px-4 py-2">Export</button>
+                  </div>
+              </div>
+              
+              <div class="overflow-x-auto">
+                  <table class="w-full">
+                      <thead>
+                          <tr class="border-b border-gray-700">
+                              <th class="text-left p-3">Timestamp</th>
+                              <th class="text-left p-3">Category</th>
+                              <th class="text-left p-3">Operation</th>
+                              <th class="text-left p-3">Status</th>
+                              <th class="text-left p-3">AC-ID</th>
+                          </tr>
+                      </thead>
+                      <tbody id="audit-log-body">
+                          <!-- Dynamically populated -->
+                      </tbody>
+                  </table>
+              </div>
+              
+              <div class="flex justify-between mt-4">
+                  <div>Showing 1-50 of 1,234 entries</div>
+                  <div class="flex gap-2">
+                      <button class="pagination-btn">← Prev</button>
+                      <button class="pagination-btn">Next →</button>
+                  </div>
+              </div>
+          </div>
+      
+      validation:
+        - "Filters work instantly"
+        - "Pagination maintains filter state"
+        - "Export generates valid CSV/JSON"
+        - "Handles 10K+ entries smoothly"
+    
+    task_2_5:
+      name: "Test Coverage Dashboard"
+      estimated_hours: "1.5"
+      description: "Visualize test metrics and AC-ID coverage"
+      
+      metrics_displayed:
+        - "Total tests created"
+        - "AC-ID coverage (X/390 AC with tests)"
+        - "Pass/Fail rate"
+        - "Test execution time"
+        - "Coverage by section (Audit, Governance, Orchestrator, etc.)"
+        - "Missing AC-IDs (tests not yet created)"
+      
+      visualizations:
+        coverage_chart:
+          type: "Progress ring chart"
+          data: "AC-ID coverage percentage"
+          
+        pass_fail_bar:
+          type: "Horizontal bar chart"
+          data: "Pass vs Fail count"
+          
+        section_breakdown:
+          type: "Stacked bar chart"
+          data: "Tests per AC section"
+      
+      validation:
+        - "Charts render correctly"
+        - "Data updates in real-time"
+        - "Click chart to drill down"
+        - "Export chart as PNG"
+
+# ==============================================================================
+# PHASE 3: PLANNING ORCHESTRATOR INTEGRATION (3-4 hours)
+# ==============================================================================
+
+phase_3:
+  name: "Planning Orchestrator Integration"
+  priority: "HIGH"
+  estimated_hours: "3-4"
+  dependencies: ["phase_1", "phase_2"]
+  
+  deliverables:
+    - "Dashboard generator module"
+    - "Auto-launch configuration"
+    - "Plan folder dashboard/ directory"
+    - "Integration tests"
+    
+  tasks:
+    task_3_1:
+      name: "Dashboard Generator Module"
+      estimated_hours: "1.5"
+      description: "Create module to generate dashboard for any plan"
+      
+      files_to_create:
+        - path: "src/orchestrators/planning/dashboard_generator.py"
+          content: "Dashboard generation logic"
+      
+      class_definition:
+        DashboardGenerator:
+          methods:
+            generate:
+              signature: "def generate(self, plan_path: Path, output_dir: Path) -> Path"
+              description: "Generate dashboard files in plan folder"
+              returns: "Path to generated index.html"
+              
+            copy_static_assets:
+              signature: "def copy_static_assets(self, output_dir: Path) -> None"
+              description: "Copy CSS, JS, images to output directory"
+              
+            configure_paths:
+              signature: "def configure_paths(self, plan_path: Path) -> Dict[str, Path]"
+              description: "Configure API paths for plan-specific data"
+              returns: "Dict of configured paths"
+      
+      implementation:
+        generation_workflow: |
+          def generate(self, plan_path: Path, output_dir: Path) -> Path:
+              # 1. Create dashboard/ directory in plan folder
+              dashboard_dir = output_dir / "dashboard"
+              dashboard_dir.mkdir(exist_ok=True)
+              
+              # 2. Copy static assets (HTML, CSS, JS)
+              self.copy_static_assets(dashboard_dir)
+              
+              # 3. Configure API paths (relative to plan folder)
+              paths_config = self.configure_paths(plan_path)
+              
+              # 4. Inject configuration into index.html
+              self.inject_config(dashboard_dir / "index.html", paths_config)
+              
+              # 5. Generate launch script (serve.py)
+              self.generate_launch_script(dashboard_dir)
+              
+              return dashboard_dir / "index.html"
+      
+      validation:
+        - "Generates dashboard in plan folder"
+        - "Static assets copied correctly"
+        - "Paths configured correctly"
+        - "Launch script works"
+    
+    task_3_2:
+      name: "Auto-Launch Configuration"
+      estimated_hours: "1.0"
+      description: "Add dashboard auto-launch option to Planning Orchestrator"
+      
+      configuration:
+        planning_orchestrator_config:
+          dashboard:
+            auto_generate: true
+            auto_launch: false  # User must manually launch
+            port: 8000
+            host: "localhost"
+            open_browser: true
+      
+      command_line_args:
+        - "--dashboard-launch: Launch dashboard after plan creation"
+        - "--dashboard-port <PORT>: Custom port (default: 8000)"
+        - "--dashboard-no-browser: Don't open browser automatically"
+      
+      implementation:
+        post_plan_hook: |
+          def on_plan_created(self, plan_path: Path):
+              if self.config.dashboard.auto_generate:
+                  generator = DashboardGenerator()
+                  dashboard_path = generator.generate(plan_path, plan_path.parent)
+                  
+                  if self.config.dashboard.auto_launch:
+                      self.launch_dashboard(dashboard_path)
+          
+          def launch_dashboard(self, dashboard_path: Path):
+              import subprocess
+              import webbrowser
+              
+              # Start FastAPI server
+              server_script = dashboard_path.parent / "serve.py"
+              subprocess.Popen([sys.executable, str(server_script)])
+              
+              # Open browser
+              if self.config.dashboard.open_browser:
+                  webbrowser.open(f"http://localhost:{self.config.dashboard.port}")
+      
+      validation:
+        - "Dashboard generates automatically"
+        - "Server starts on configured port"
+        - "Browser opens to dashboard"
+        - "Graceful shutdown on Ctrl+C"
+    
+    task_3_3:
+      name: "Integration Tests"
+      estimated_hours: "1.5"
+      description: "Create tests for dashboard generation and API"
+      
+      test_files:
+        - path: "tests/unit/test_dashboard_generator.py"
+          tests: "Dashboard generation, path configuration, asset copying"
+        - path: "tests/integration/test_dashboard_api.py"
+          tests: "API endpoints, WebSocket, data loading"
+        - path: "tests/integration/test_dashboard_e2e.py"
+          tests: "End-to-end dashboard workflow"
+      
+      test_cases:
+        test_dashboard_generation:
+          - "Generates dashboard in plan folder"
+          - "Creates dashboard/ directory"
+          - "Copies all static assets"
+          - "Configures paths correctly"
+          
+        test_api_endpoints:
+          - "GET /api/plan returns plan data"
+          - "GET /api/progress returns progress data"
+          - "GET /api/audit-logs returns logs (paginated)"
+          - "GET /api/tests returns test metrics"
+          - "WebSocket connects successfully"
+          
+        test_end_to_end:
+          - "Plan creation → Dashboard generation → Server launch → Browser open"
+          - "Real-time updates work (modify progress-tracker.json)"
+          - "Audit logs display correctly"
+          - "Export functionality works"
+      
+      validation:
+        - "All tests pass (100% success rate)"
+        - "Coverage ≥85%"
+        - "Integration tests run in <30 seconds"
+
+# ==============================================================================
+# PHASE 4: POLISH & DEPLOYMENT (3-4 hours)
+# ==============================================================================
+
+phase_4:
+  name: "Polish & Deployment"
+  priority: "MEDIUM"
+  estimated_hours: "3-4"
+  dependencies: ["phase_3"]
+  
+  deliverables:
+    - "Production build script"
+    - "Deployment guide"
+    - "User documentation"
+    - "Performance optimization"
+    
+  tasks:
+    task_4_1:
+      name: "Production Build"
+      estimated_hours: "1.0"
+      description: "Create production-ready build with optimizations"
+      
+      optimizations:
+        - "Inline Tailwind CSS (remove CDN dependency)"
+        - "Minify JavaScript (UglifyJS)"
+        - "Compress images (PNG → WebP)"
+        - "Enable gzip compression"
+        - "Cache static assets"
+      
+      build_script:
+        path: "scripts/build_dashboard.py"
+        actions:
+          - "Inline Tailwind CSS classes"
+          - "Minify app.js"
+          - "Generate service worker (offline support)"
+          - "Create production index.html"
+      
+      validation:
+        - "Build completes without errors"
+        - "Page load time <2 seconds"
+        - "JavaScript bundle <50 KB"
+        - "Works offline (service worker)"
+    
+    task_4_2:
+      name: "Documentation"
+      estimated_hours: "1.5"
+      description: "Create user and developer documentation"
+      
+      documents:
+        user_guide:
+          path: "docs/plan-viewer-dashboard-user-guide.md"
+          sections:
+            - "Launching the dashboard"
+            - "Navigating the interface"
+            - "Understanding progress metrics"
+            - "Reviewing audit logs"
+            - "Exporting reports"
+            
+        developer_guide:
+          path: "docs/plan-viewer-dashboard-dev-guide.md"
+          sections:
+            - "Architecture overview"
+            - "API documentation"
+            - "Adding new components"
+            - "Customizing the theme"
+            - "Deployment options"
+            
+        api_reference:
+          path: "docs/plan-viewer-dashboard-api.md"
+          sections:
+            - "REST API endpoints"
+            - "WebSocket protocol"
+            - "Data formats"
+            - "Error handling"
+      
+      validation:
+        - "All docs accurate and complete"
+        - "Screenshots included"
+        - "Examples work correctly"
+    
+    task_4_3:
+      name: "Performance Testing"
+      estimated_hours: "0.5"
+      description: "Test dashboard performance under load"
+      
+      test_scenarios:
+        - "10K+ audit log entries"
+        - "100+ tasks in kanban board"
+        - "10+ simultaneous WebSocket connections"
+        - "Rapid file changes (10/second)"
+      
+      performance_targets:
+        - "Page load: <2 seconds"
+        - "WebSocket latency: <100ms"
+        - "Memory usage: <200 MB"
+        - "CPU usage: <10% idle"
+      
+      validation:
+        - "All performance targets met"
+        - "No memory leaks detected"
+        - "Smooth animations (60 FPS)"
+    
+    task_4_4:
+      name: "Deployment Guide"
+      estimated_hours: "1.0"
+      description: "Create deployment guide for various environments"
+      
+      deployment_options:
+        local_development:
+          command: "python3 -m src.dashboard.api"
+          url: "http://localhost:8000"
+          
+        docker:
+          dockerfile: "Dockerfile.dashboard"
+          command: "docker run -p 8000:8000 cortex-dashboard"
+          
+        cloud_deployment:
+          platforms: ["Heroku", "AWS Lambda", "Google Cloud Run"]
+          guide: "Step-by-step deployment instructions"
+      
+      validation:
+        - "Local deployment works"
+        - "Docker image builds successfully"
+        - "Cloud deployment guide accurate"
+
+# ==============================================================================
+# ACCEPTANCE CRITERIA INTEGRATION
+# ==============================================================================
+
+acceptance_criteria:
+  
+  AC-DASH-001:
+    id: "AC-DASH-001"
+    name: "Dashboard Server Initialization"
+    priority: "P0_CRITICAL"
+    
+    criteria: |
+      FastAPI server starts successfully on localhost:8000 with all routes
+      registered and WebSocket endpoint operational.
+    
+    validation:
+      test: "pytest tests/integration/test_dashboard_api.py::test_server_startup"
+      audit: "Query audit.db for operation='dashboard_server_init', status='success'"
+    
+    acceptance:
+      - "✅ Server starts in <5 seconds"
+      - "✅ All 5 REST endpoints registered"
+      - "✅ WebSocket endpoint /ws operational"
+      - "✅ Static files served correctly"
+      - "✅ CORS middleware configured"
+  
+  AC-DASH-002:
+    id: "AC-DASH-002"
+    name: "Real-Time Progress Updates"
+    priority: "P0_CRITICAL"
+    
+    criteria: |
+      Dashboard displays real-time progress updates via WebSocket when
+      progress-tracker.json is modified.
+    
+    validation:
+      test: "pytest tests/integration/test_dashboard_e2e.py::test_realtime_updates"
+      audit: "Query audit.db for operation='dashboard_update_broadcast'"
+    
+    acceptance:
+      - "✅ WebSocket connection established on page load"
+      - "✅ File change detected within 1 second"
+      - "✅ Update broadcast to all connected clients"
+      - "✅ UI updates within 500ms of broadcast"
+      - "✅ Auto-reconnect after disconnect"
+  
+  AC-DASH-003:
+    id: "AC-DASH-003"
+    name: "Audit Log Viewer"
+    priority: "HIGH"
+    
+    criteria: |
+      Dashboard displays audit logs in formatted table with filtering,
+      pagination, and export functionality.
+    
+    validation:
+      test: "pytest tests/unit/test_audit_log_viewer.py"
+      audit: "Query audit.db for operation='dashboard_audit_log_view'"
+    
+    acceptance:
+      - "✅ Displays audit logs in table format"
+      - "✅ Category filter works (7 categories)"
+      - "✅ Pagination works (50 entries/page)"
+      - "✅ Search works (free-text)"
+      - "✅ Export to CSV and JSON"
+      - "✅ Handles 10K+ entries smoothly"
+  
+  AC-DASH-004:
+    id: "AC-DASH-004"
+    name: "Test Coverage Dashboard"
+    priority: "HIGH"
+    
+    criteria: |
+      Dashboard displays test coverage metrics with AC-ID traceability,
+      pass/fail rates, and coverage charts.
+    
+    validation:
+      test: "pytest tests/unit/test_coverage_dashboard.py"
+      audit: "Query audit.db for operation='dashboard_test_metrics_load'"
+    
+    acceptance:
+      - "✅ Displays total test count"
+      - "✅ Shows AC-ID coverage (X/390 AC)"
+      - "✅ Pass/Fail rate visualization"
+      - "✅ Section breakdown chart"
+      - "✅ Missing AC-IDs list"
+      - "✅ Click to drill down"
+  
+  AC-DASH-005:
+    id: "AC-DASH-005"
+    name: "Glassmorphism Theme"
+    priority: "MEDIUM"
+    
+    criteria: |
+      Dashboard uses glassmorphism dark theme with Tailwind CSS and
+      Material Design aesthetic.
+    
+    validation:
+      test: "pytest tests/unit/test_dashboard_theme.py"
+      audit: "N/A (visual validation)"
+    
+    acceptance:
+      - "✅ Dark blue background gradient"
+      - "✅ Glass cards with backdrop blur"
+      - "✅ Smooth hover transitions"
+      - "✅ Consistent color palette"
+      - "✅ Responsive breakpoints (4)"
+      - "✅ WCAG AA accessible"
+  
+  AC-DASH-006:
+    id: "AC-DASH-006"
+    name: "Planning Orchestrator Integration"
+    priority: "HIGH"
+    
+    criteria: |
+      Dashboard automatically generated in plan folder when Planning
+      Orchestrator creates new plan.
+    
+    validation:
+      test: "pytest tests/integration/test_planning_dashboard_integration.py"
+      audit: "Query audit.db for operation='dashboard_generated'"
+    
+    acceptance:
+      - "✅ Dashboard folder created in plan directory"
+      - "✅ Static assets copied"
+      - "✅ Paths configured correctly"
+      - "✅ Launch script generated"
+      - "✅ Auto-launch works (optional)"
+  
+  AC-DASH-007:
+    id: "AC-DASH-007"
+    name: "Performance SLAs"
+    priority: "HIGH"
+    
+    criteria: |
+      Dashboard meets performance SLAs for page load, WebSocket latency,
+      and resource usage.
+    
+    validation:
+      test: "pytest tests/performance/test_dashboard_performance.py"
+      audit: "Query audit.db for operation='dashboard_performance_test'"
+    
+    acceptance:
+      - "✅ Page load <2 seconds"
+      - "✅ WebSocket latency <100ms"
+      - "✅ Memory usage <200 MB"
+      - "✅ CPU usage <10% idle"
+      - "✅ Smooth animations (60 FPS)"
+      - "✅ No memory leaks"
+
+# ==============================================================================
+# REQUIREMENTS UPDATE (CX6-requirements.yaml)
+# ==============================================================================
+
+requirements_update:
+  location: "acceptance-criteria/requirements/CX6-requirements.yaml"
+  
+  new_requirement:
+    SR-008:
+      id: "SR-008"
+      name: "Interactive Plan Viewer Dashboard"
+      priority: "HIGH"
+      description: |
+        Provide real-time, interactive dashboard for plan execution monitoring
+        with audit log evidence, test coverage metrics, and live progress updates.
+        
+      rationale: |
+        Developers and stakeholders need visual feedback on plan execution progress,
+        audit trail evidence, and test coverage metrics. Dashboard provides
+        transparency and real-time visibility into CORTEX 6.0 build progress.
+        
+      acceptance_criteria:
+        - "FastAPI server serves dashboard on localhost:8000"
+        - "Real-time updates via WebSocket (<500ms latency)"
+        - "Audit log viewer with filtering and pagination"
+        - "Test coverage dashboard with AC-ID traceability"
+        - "Glassmorphism dark theme with Tailwind CSS"
+        - "Integrated with Planning Orchestrator (auto-generation)"
+        - "Performance SLAs met (page load <2s, memory <200MB)"
+        
+      technical_details:
+        frontend: "HTML5 SPA with Tailwind CSS and Vanilla JS"
+        backend: "FastAPI with WebSocket support"
+        data_sources: "progress-tracker.json, audit-logs/*.jsonl, tests/"
+        deployment: "localhost:8000 (development), Docker (production)"
+        
+      implementation_plan:
+        phases:
+          - "Phase 1: Backend API (4-5h)"
+          - "Phase 2: Frontend SPA (6-8h)"
+          - "Phase 3: Orchestrator Integration (3-4h)"
+          - "Phase 4: Polish & Deployment (3-4h)"
+        total_effort: "16-20 hours"
+        
+      stage: 3  # Features stage
+      blocking: false
+
+# ==============================================================================
+# FOLDER STRUCTURE
+# ==============================================================================
+
+folder_structure:
+  cortex6:
+    dashboard:
+      - "index.html (SPA shell)"
+      - "serve.py (FastAPI launch script)"
+      - "config.json (Dashboard configuration)"
+      - "README.md (Usage instructions)"
+    
+  src:
+    dashboard:
+      - "__init__.py"
+      - "api.py (FastAPI application)"
+      - "config.py (Configuration)"
+      - "loaders.py (Data loaders)"
+      - "generator.py (Dashboard generator for Planning Orchestrator)"
+      static:
+        - "app.js (Application logic)"
+        - "components.js (UI components)"
+        - "styles.css (Additional styles)"
+    
+    orchestrators:
+      planning:
+        - "dashboard_generator.py (Dashboard generation module)"
+    
+  tests:
+    unit:
+      - "test_dashboard_generator.py"
+      - "test_audit_log_viewer.py"
+      - "test_coverage_dashboard.py"
+      - "test_dashboard_theme.py"
+    integration:
+      - "test_dashboard_api.py"
+      - "test_dashboard_e2e.py"
+      - "test_planning_dashboard_integration.py"
+    performance:
+      - "test_dashboard_performance.py"
+    
+  docs:
+    - "plan-viewer-dashboard-user-guide.md"
+    - "plan-viewer-dashboard-dev-guide.md"
+    - "plan-viewer-dashboard-api.md"
+
+# ==============================================================================
+# CLEANUP ACTIONS
+# ==============================================================================
+
+cleanup_actions:
+  archive:
+    - "archive/requirements-consolidation-2026-01-09/plan-viewer-dashboard-requirements.yaml"
+      reason: "Old requirements superseded by this comprehensive plan"
+  
+  delete:
+    - "None (keep all for historical reference)"
+  
+  maintain_structure:
+    - "Keep cortex6/ folder clean"
+    - "Only essential files in root"
+    - "All plans in artifacts/"
+    - "All docs in summaries/"
+    - "All tracking in tracking/"
+
+# ==============================================================================
+# SUCCESS METRICS
+# ==============================================================================
+
+success_metrics:
+  development:
+    - "All 4 phases completed within 16-20 hours"
+    - "100% test coverage for dashboard code"
+    - "All 7 acceptance criteria met"
+    - "Zero console errors on page load"
+    
+  performance:
+    - "Page load <2 seconds"
+    - "WebSocket latency <100ms"
+    - "Memory usage <200 MB"
+    - "CPU usage <10% idle"
+    - "Handles 10K+ audit logs smoothly"
+    
+  usability:
+    - "WCAG AA accessible"
+    - "Mobile responsive (4 breakpoints)"
+    - "Intuitive navigation (no user training needed)"
+    - "Export functionality works (CSV, JSON, PDF)"
+    
+  integration:
+    - "Seamlessly integrated with Planning Orchestrator"
+    - "Auto-generation works"
+    - "Launch script works"
+    - "Paths configured correctly"
+
+# ==============================================================================
+# RISKS & MITIGATION
+# ==============================================================================
+
+risks:
+  risk_1:
+    description: "WebSocket connection instability"
+    probability: "MEDIUM"
+    impact: "HIGH"
+    mitigation: "Implement automatic reconnection with exponential backoff + fallback polling"
+    
+  risk_2:
+    description: "Performance degradation with 10K+ audit logs"
+    probability: "LOW"
+    impact: "MEDIUM"
+    mitigation: "Implement virtual scrolling + pagination + lazy loading"
+    
+  risk_3:
+    description: "Browser compatibility issues (glassmorphism)"
+    probability: "LOW"
+    impact: "LOW"
+    mitigation: "Use CSS-only glassmorphism (no backdrop-filter dependency) + progressive enhancement"
+    
+  risk_4:
+    description: "Planning Orchestrator integration breaks existing workflow"
+    probability: "MEDIUM"
+    impact: "HIGH"
+    mitigation: "Make dashboard generation optional (config flag) + comprehensive integration tests"
+
+# ==============================================================================
+# NEXT STEPS
+# ==============================================================================
+
+next_steps:
+  immediate:
+    - "Update CX6-requirements.yaml with SR-008"
+    - "Update CX6-acceptance-criteria.yaml with AC-DASH-001 to AC-DASH-007"
+    - "Create branch: feature/plan-viewer-dashboard"
+    - "Start Phase 1: Backend API Infrastructure"
+    
+  after_implementation:
+    - "Deploy to localhost:8000 for testing"
+    - "Gather user feedback"
+    - "Iterate on UI/UX based on feedback"
+    - "Prepare for production deployment (Docker)"
+
+# ==============================================================================
+# APPENDIX
+# ==============================================================================
+
+appendix:
+  glossary:
+    SPA: "Single Page Application (client-side routing, no page reloads)"
+    Glassmorphism: "UI design trend using frosted glass aesthetic (backdrop blur, transparency)"
+    WebSocket: "Protocol for bi-directional real-time communication"
+    AC-ID: "Acceptance Criteria ID (traceability marker in tests)"
+    JSONL: "JSON Lines (newline-delimited JSON for streaming)"
+    
+  references:
+    - "CORTEX6-COMPREHENSIVE-UPGRADE-PLAN.yaml"
+    - "CX6-requirements.yaml"
+    - "CX6-acceptance-criteria.yaml"
+    - "Tailwind CSS Documentation: https://tailwindcss.com/docs"
+    - "FastAPI Documentation: https://fastapi.tiangolo.com"
+    - "Material Design: https://material.io/design"
+
+# ==============================================================================
+# METADATA
+# ==============================================================================
+
+document_metadata:
+  created: "2026-01-09T18:30:00Z"
+  updated: "2026-01-09T18:30:00Z"
+  author: "Asif Hussain"
+  version: "1.0.0"
+  status: "ACTIVE"
+  next_review: "2026-01-10"
+  copyright: "© 2025-2026 Asif Hussain. All rights reserved."
