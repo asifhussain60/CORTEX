@@ -24,13 +24,42 @@
 
 metadata:
   document_type: enterprise_acceptance_criteria
-  version: 14.2.0
+  version: 14.4.0
   status: AUTHORITATIVE
   created: '2026-01-09'
   updated: '2026-01-09'
   author: Asif Hussain
   epic_id: CORTEX6-BUILD
   changelog:
+    v14.4.0:
+      date: '2026-01-09'
+      changes:
+        - "CORRECTED AC-ORC-002: Planning folder structure - 3 root files allowed (continuation-prompt.md, thoughts.txt, plan-viewer.html)"
+        - "Added AC-ORC-013: plan-viewer.html generation, registration, and activation"
+        - "Added AC-ORC-014: launch_plan_viewer.py generation and background execution"
+        - "Added SECTION 20: REGISTRATION FRAMEWORK (AC-REG-001 to AC-REG-008)"
+        - "AC-REG-001: All orchestrators registered in OrchestratorRegistry with validation"
+        - "AC-REG-002: All MCP tools registered in CapabilityRegistry with metadata"
+        - "AC-REG-003: All modules registered with import validation"
+        - "AC-REG-004: Registration integrity tests for every component"
+        - "AC-REG-005: Orchestrator instantiation tests via registry"
+        - "AC-REG-006: MCP tool discovery and invocation tests"
+        - "AC-REG-007: Module dependency validation"
+        - "AC-REG-008: Registration failure handling and rollback"
+        - "Planning file format: NO '00-' prefixes (kebab-case for YAML/JSON files)"
+        - "Planning root files: EXACTLY 3 allowed (continuation-prompt.md, thoughts.txt, plan-viewer.html)"
+        - "Planning folder structure: 5 subfolders (analysis, artifacts, context, reports, tracking)"
+      reason: "CRITICAL: Planning orchestrator creating incorrect folder structure (00- prefixes, wrong root files, missing registration). Aligned AC-ORC-002 with AC-ORC-PLAN-002 (approved structure with thoughts.txt for random notes)."
+    v14.3.0:
+      date: '2026-01-09'
+      changes:
+        - "Added AC-ORC-012: Planning Orchestrator persistence bug fix"
+        - "Bug discovered: OrchestratorResult(success=True) returned but plan not persisted to planning.db"
+        - "Root cause hypothesis: StateManager INSERT executes but transaction not committed OR silent exception"
+        - "Acceptance criteria: Database transaction commit verification, SELECT query validation"
+        - "Test file: tests/orchestrators/test_planning_persistence.py"
+        - "Priority: P1_HIGH (blocking holistic planning capability)"
+      reason: "BUG TRACKING: Planning orchestrator reports success but fails to persist plans to database. Discovered during CX6 Stage 1 holistic planning execution. Manual YAML creation required as workaround."
     v14.2.0:
       date: '2026-01-09'
       changes:
@@ -978,17 +1007,34 @@ orchestrator_capabilities:
     
   AC-ORC-002:
     id: AC-ORC-002
-    criterion: "Planning Orchestrator v5 generates 4-folder structure"
+    criterion: "Planning Orchestrator v5 generates correct folder structure (NO '00-' prefixes)"
     acceptance:
-      - "context/ folder with scope.yaml, constraints.yaml"
-      - "artifacts/ folder for generated code/docs"
-      - "reports/ folder for progress and summaries"
-      - "tracking/ folder with progress-tracker.json"
-      - "YAML-based requirements in context/"
+      - "**FOLDER STRUCTURE:** 5 subfolders created: analysis/, artifacts/, context/, reports/, tracking/"
+      - "**ROOT FILES:** EXACTLY 3 files allowed: continuation-prompt.md, thoughts.txt, plan-viewer.html"
+      - "**FILE NAMING:** NO '00-' prefixes on any files (kebab-case pattern for YAML/JSON)"
+      - "**MASTER PLAN:** Plan YAML in artifacts/ or tracking/ (NOT root, MUST be .yaml format)"
+      - "**PROGRESS TRACKER:** tracking/progress-tracker.json exists and valid JSON"
+      - "**CONTINUATION PROMPT:** continuation-prompt.md at root (NOT in tracking/)"
+      - "**RANDOM THOUGHTS:** thoughts.txt at root for ad-hoc notes during execution"
+      - "**CONTEXT FILES:** context/scope.yaml, context/constraints.yaml, context/discovery.md"
+      - "**REPORTS:** reports/ folder for progress and completion reports"
+      - "**ENFORCEMENT:** Validation fails if ANY file on root except the 3 allowed files"
+      - "**ENFORCEMENT:** Validation fails if ANY file has '00-' prefix"
+      - "**ENFORCEMENT:** All plan artifacts (except 3 root files) must be YAML (.yaml) or JSON (.json)"
+      - "Test: Create plan → verify structure → no 00- prefixes → exactly 3 root files"
     validation: automated
-    test_file: "tests/orchestrators/test_planning_v5.py"
+    test_file: "tests/orchestrators/test_planning_v5_structure.py"
     status: PENDING
-    blocking: false
+    blocking: true
+    priority: P0_CRITICAL
+    evidence:
+      - "Plan folder structure audit: cortex-brain/audit-logs/planning-structure-*.json"
+      - "Validation report: {plan_folder}/reports/structure-validation.json"
+    skull_rules:
+      - "PLAN_FILE_ORGANIZATION: EXACTLY 3 files on root (continuation-prompt.md, thoughts.txt, plan-viewer.html)"
+      - "NO_00_PREFIX_FILES: NO files may start with 00-"
+      - "FIVE_SUBFOLDER_STRUCTURE: analysis, artifacts, context, reports, tracking REQUIRED"
+      - "YAML_JSON_ONLY: All plan artifacts (except 3 root files) MUST be .yaml or .json format"
     
   AC-ORC-003:
     id: AC-ORC-003
@@ -1150,6 +1196,94 @@ orchestrator_capabilities:
     evidence:
       - "Housekeeping audit trails: cortex-brain/audit-logs/housekeeping-*.json"
       - "Health reports: cortex-brain/health-reports/housekeeping-*.json"
+  
+  AC-ORC-012:
+    id: AC-ORC-012
+    criterion: "Planning Orchestrator persists plans to planning.db successfully"
+    acceptance:
+      - "**BUG FIX:** Orchestrator returns OrchestratorResult(success=True) with plan_id but plan not persisted to database"
+      - "**STATE PERSISTENCE:** Plan record inserted into cortex-brain/state/planning.db (plans table)"
+      - "**TRANSACTION COMMIT:** Database transaction explicitly committed after INSERT operation"
+      - "**VERIFICATION QUERY:** SELECT * FROM plans WHERE plan_id='{plan_id}' returns exactly 1 row"
+      - "**PHASE PERSISTENCE:** All plan phases inserted into phases table with correct plan_id foreign key"
+      - "**TASK PERSISTENCE:** All phase tasks inserted into tasks table with correct phase_id foreign key"
+      - "**ARTIFACT PERSISTENCE:** All task artifacts inserted into artifacts table"
+      - "**IDEMPOTENCY:** Duplicate plan_id INSERT fails gracefully with appropriate error message"
+      - "**ERROR HANDLING:** Database write failures return OrchestratorResult(success=False) with error details"
+      - "Audit log proves: Plan creation → database write → commit → verification query success"
+    validation: automated
+    test_file: "tests/orchestrators/test_planning_persistence.py"
+    status: PENDING
+    blocking: true
+    priority: P1_HIGH
+    bug_context:
+      discovered: "2026-01-09 during CX6 Stage 1 planning"
+      command: "python3 -m src.main 'plan CORTEX 6.0 Stage 1 Foundation...'"
+      symptom: "OrchestratorResult(success=True, plan_id='plan-328e6a48-66d9-4e87-b727-5106af36b33d') returned but sqlite3 query showed 'No plans found'"
+      impact: "Blocks holistic planning capability; manual YAML creation required as workaround"
+      root_cause_hypothesis: "StateManager INSERT operation executes but transaction not committed OR silent exception swallowed"
+    evidence:
+      - "Reproduction: python3 -m src.main 'plan {any_request}' then sqlite3 cortex-brain/state/planning.db 'SELECT * FROM plans;'"
+      - "Database schema exists: cortex-brain/state/planning.db with tables (plans, phases, tasks, artifacts, validations, snapshots)"
+      - "Workaround: Manual plan creation works (CX6-STAGE1-HOLISTIC-EXECUTION-PLAN.yaml)"
+  
+  AC-ORC-013:
+    id: AC-ORC-013
+    criterion: "plan-viewer.html generated, registered, and activated on plan approval"
+    acceptance:
+      - "**GENERATION:** plan-viewer.html created in plan root folder on plan approval"
+      - "**TIMING:** Generated AFTER plan structure validated (Phase 999 or approval phase)"
+      - "**MODE DETECTION:** Auto-detects EPIC vs FEATURE mode from folder structure"
+      - "**EPIC MODE:** Reads epic-progress-tracker.json if exists (multi-phase epics)"
+      - "**FEATURE MODE:** Reads progress-tracker.json if exists (single-feature plans)"
+      - "**UNIVERSAL VIEWER:** Single HTML file works for both EPIC and FEATURE plans"
+      - "**VISUALIZATION:** Interactive progress bars, phase status, completion percentage"
+      - "**ACCESSIBILITY:** WCAG AA compliant (keyboard navigation, screen reader support)"
+      - "**STANDALONE:** No external dependencies (CSS/JS embedded)"
+      - "**REGISTRATION:** Viewer registered in plan manifest with activation timestamp"
+      - "**VALIDATION:** plan-viewer.html is ONLY file on root (all others in subfolders)"
+      - "Test: Approve plan → verify plan-viewer.html exists → validate ONLY root file → open in browser"
+    validation: automated
+    test_file: "tests/orchestrators/test_plan_viewer_generation.py"
+    status: PENDING
+    blocking: true
+    priority: P1_HIGH
+    evidence:
+      - "Plan viewer generation audit: cortex-brain/audit-logs/plan-viewer-generation-*.json"
+      - "Viewer HTML validation: {plan_folder}/reports/viewer-validation.json"
+    skull_rules:
+      - "PLAN_VIEWER_MANDATORY: Every approved plan MUST have plan-viewer.html"
+      - "PLAN_VIEWER_ROOT_ONLY: plan-viewer.html is the ONLY allowed root file"
+      - "VIEWER_UPDATE_MANDATORY: Update plan-viewer.html after EVERY phase completion"
+  
+  AC-ORC-014:
+    id: AC-ORC-014
+    criterion: "launch_plan_viewer.py generated and auto-launches HTTP server (background)"
+    acceptance:
+      - "**GENERATION:** launch_plan_viewer.py created alongside plan-viewer.html"
+      - "**AUTO-DETECTION:** Script detects CORTEX project root via .git or parent navigation"
+      - "**PORT MANAGEMENT:** Finds available port in range 8000-8010 (configurable)"
+      - "**HTTP SERVER:** Launches Python HTTP server on detected port"
+      - "**BACKGROUND EXECUTION:** Runs non-blocking (separate terminal/process)"
+      - "**AUTO-LAUNCH:** Automatically executed after plan-viewer.html generation (if enabled)"
+      - "**SUCCESS INDICATOR:** Prints 'Server started on port {port}' with URL"
+      - "**BROWSER OPEN:** Optionally opens browser to http://localhost:{port}/plan-viewer.html"
+      - "**GRACEFUL SHUTDOWN:** Handles Ctrl+C and cleans up resources"
+      - "**CONFIGURATION:** Respects server_config.auto_launch_enabled in manifest"
+      - "**TIMEOUT:** Startup timeout of 30 seconds with error handling"
+      - "Test: Generate launcher → execute in background → verify server running → access viewer → shutdown"
+    validation: automated
+    test_file: "tests/orchestrators/test_plan_viewer_launcher.py"
+    status: PENDING
+    blocking: false
+    priority: P2_MEDIUM
+    evidence:
+      - "Launcher execution audit: cortex-brain/audit-logs/plan-viewer-launch-*.json"
+      - "HTTP server logs: {plan_folder}/reports/viewer-server.log"
+    skull_rules:
+      - "VIEWER_LAUNCHER_GENERATION: launch_plan_viewer.py generated with plan-viewer.html"
+      - "NON_BLOCKING_EXECUTION: HTTP server runs in background (doesn't block orchestrator)"
+      - "GRACEFUL_SHUTDOWN: Server cleanup on termination"
 
 # ==============================================================================
 # SECTION 5: PERFORMANCE & SCALABILITY
@@ -2955,6 +3089,187 @@ maintainability:
     test_file: "tests/maintainability/test_tech_debt_tracking.py"
     status: PENDING
     blocking: false
+
+# ==============================================================================
+# SECTION 20: REGISTRATION FRAMEWORK
+# ==============================================================================
+
+registration_framework:
+  category: infrastructure
+  priority: P0_CRITICAL
+  description: "Comprehensive registration and discovery system for all CORTEX components"
+  
+  AC-REG-001:
+    id: AC-REG-001
+    criterion: "All orchestrators registered in OrchestratorRegistry with full metadata validation"
+    acceptance:
+      - "**REGISTRATION:** Every orchestrator registered on startup with metadata (id, name, version, type, category, class_name, module_path, patterns, dependencies, capabilities)"
+      - "**ORCHESTRATOR LIST:** Planning v5, Epic Review, Gap-Fix, ADO v2, TDD v2, Investigation v2, Vacuum v2, Cleanup v2, Sanitization v2, Refinement v2, Maintenance v2, Housekeeping, Planner v1, Master Orchestrator, TODO Orchestrator"
+      - "**VALIDATION:** Registry validates class exists, module importable, patterns compile as regex"
+      - "**PERSISTENCE:** Registry persisted to cortex-brain/state/orchestrator-registry.json"
+      - "**HEALTH CHECK:** Registry health check validates all registered orchestrators instantiable"
+      - "**MISSING REGISTRATION:** Startup fails with clear error if orchestrator implementation exists but not registered"
+      - "**DUPLICATE DETECTION:** Registration fails gracefully if orchestrator ID already registered (unless overwrite=True)"
+      - "**PATTERN VALIDATION:** All routing patterns validated as valid regex at registration"
+      - "**DEPENDENCY VALIDATION:** All orchestrator dependencies resolved at registration"
+      - "Test: Query registry for each orchestrator → verify metadata → instantiate → verify functional"
+    validation: automated
+    test_file: "tests/infrastructure/test_orchestrator_registry.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    evidence:
+      - "Registry persistence: cortex-brain/state/orchestrator-registry.json"
+      - "Health check report: cortex-brain/health-reports/registry-health-*.json"
+    
+  AC-REG-002:
+    id: AC-REG-002
+    criterion: "All MCP tools registered in CapabilityRegistry with complete metadata"
+    acceptance:
+      - "**TOOL REGISTRATION:** Every MCP tool registered with metadata (name, description, parameters, return_type, permissions, orchestrator_source)"
+      - "**TOOL CATEGORIES:** Audit tools (query, list, export, validate), State tools (save, load, snapshot), Repo tools (list, scan, analyze), Knowledge tools (search, retrieve, learn), Git tools (commit, push, status)"
+      - "**PARAMETER VALIDATION:** Tool parameters validated against JSON schema at registration"
+      - "**PERMISSION SYSTEM:** Tool permissions defined (read, write, admin) and enforced"
+      - "**DISCOVERY:** Tools discoverable via capability_registry.list_tools(category=...)"
+      - "**INVOCATION:** Tools invocable via capability_registry.invoke_tool(name, params)"
+      - "**ERROR HANDLING:** Missing parameters → clear error with schema reference"
+      - "**AUDIT LOGGING:** All tool invocations logged with AC-ID tagging"
+      - "**PERSISTENCE:** Tool registry persisted to cortex-brain/state/mcp-tools-registry.json"
+      - "Test: Register tool → discover → invoke with valid params → verify result → invoke with invalid params → verify error"
+    validation: automated
+    test_file: "tests/mcp/test_capability_registry.py"
+    status: PENDING
+    blocking: true
+    priority: P1_HIGH
+    evidence:
+      - "Tool registry: cortex-brain/state/mcp-tools-registry.json"
+      - "Invocation audit: cortex-brain/audit-logs/mcp-tool-invocations-*.json"
+    
+  AC-REG-003:
+    id: AC-REG-003
+    criterion: "All modules registered with import path validation"
+    acceptance:
+      - "**MODULE REGISTRATION:** Every Python module registered with full import path"
+      - "**CORE MODULES:** src.orchestrators.*, src.mcp.*, src.infrastructure.*, src.cortex_agents.*, src.database.*"
+      - "**IMPORT VALIDATION:** Module import attempted at registration to catch missing dependencies"
+      - "**CIRCULAR DEPENDENCY DETECTION:** Module dependency graph analyzed for cycles"
+      - "**VERSION TRACKING:** Module versions tracked (from __version__ or git commit)"
+      - "**LAZY LOADING:** Modules registered but not imported until first use (performance)"
+      - "**NAMESPACE ISOLATION:** Modules namespaced to prevent conflicts (cortex.orchestrators.planning vs user.planning)"
+      - "**RELOAD CAPABILITY:** Modules reloadable during development (hot reload support)"
+      - "**DEPENDENCY GRAPH:** Module dependencies visualized (graphviz or mermaid)"
+      - "Test: Register module → validate import → check dependencies → reload → verify works"
+    validation: automated
+    test_file: "tests/infrastructure/test_module_registry.py"
+    status: PENDING
+    blocking: false
+    priority: P2_MEDIUM
+    
+  AC-REG-004:
+    id: AC-REG-004
+    criterion: "Registration integrity tests for every component (orchestrators, tools, modules)"
+    acceptance:
+      - "**ORCHESTRATOR TESTS:** test_orchestrator_registration_{name}.py for each orchestrator"
+      - "**TEST COVERAGE:** Registration → instantiation → execution → teardown for each orchestrator"
+      - "**TOOL TESTS:** test_tool_registration_{name}.py for each MCP tool"
+      - "**TOOL COVERAGE:** Registration → discovery → invocation → error handling for each tool"
+      - "**MODULE TESTS:** test_module_registration_{name}.py for each core module"
+      - "**MODULE COVERAGE:** Import → usage → reload for each module"
+      - "**CI VALIDATION:** Registration tests run on every commit (CI pipeline)"
+      - "**FAILURE DETECTION:** Missing registration detected within 5 seconds of startup"
+      - "**ERROR REPORTING:** Clear error messages with fix instructions (e.g., 'Add orchestrator to src/entry_point/cortex_entry.py')"
+      - "Test: Run full registration test suite → verify 100% pass rate → verify <30 seconds execution"
+    validation: automated
+    test_file: "tests/infrastructure/test_registration_integrity.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    evidence:
+      - "Test results: tests/reports/registration-tests-*.xml (JUnit format)"
+      - "Coverage report: tests/reports/registration-coverage.html"
+    
+  AC-REG-005:
+    id: AC-REG-005
+    criterion: "Orchestrator instantiation tests via registry for all orchestrators"
+    acceptance:
+      - "**INSTANTIATION:** Every orchestrator instantiable via registry.instantiate(orchestrator_id)"
+      - "**PARAMETER PASSING:** Orchestrator __init__ parameters passed via init_args dict"
+      - "**CACHING:** Orchestrator instances cached (singleton pattern unless init_args provided)"
+      - "**LIFECYCLE:** Orchestrator lifecycle methods tested (initialize → execute → teardown)"
+      - "**ERROR STATES:** Orchestrator error states tested (missing dependencies, invalid config, execution failures)"
+      - "**CONCURRENCY:** Multiple simultaneous orchestrator instances supported (no shared state conflicts)"
+      - "**RESOURCE CLEANUP:** Orchestrator resources cleaned up on teardown (files, connections, processes)"
+      - "**HEALTH CHECK:** Orchestrator health check method tested (returns status, errors, warnings)"
+      - "Test: Instantiate each orchestrator → execute simple operation → verify result → teardown → verify cleanup"
+    validation: automated
+    test_file: "tests/infrastructure/test_orchestrator_instantiation.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    
+  AC-REG-006:
+    id: AC-REG-006
+    criterion: "MCP tool discovery and invocation tests for all tools"
+    acceptance:
+      - "**DISCOVERY:** All tools discoverable via list_tools() with filtering (category, permissions, orchestrator)"
+      - "**INVOCATION:** All tools invocable via invoke_tool(name, params) with parameter validation"
+      - "**PARAMETER SCHEMAS:** Tool parameters validated against JSON schemas"
+      - "**RETURN VALUES:** Tool return values validated against return_type schema"
+      - "**ERROR HANDLING:** Invalid parameters → clear error with schema + example"
+      - "**PERMISSION CHECKS:** Tool permissions enforced (read/write/admin)"
+      - "**AUDIT LOGGING:** All invocations logged with AC-ID, user context, parameters, results"
+      - "**TIMEOUT HANDLING:** Long-running tools timeout after configurable limit"
+      - "Test: Discover tools by category → invoke with valid params → invoke with invalid params → verify error → check audit log"
+    validation: automated
+    test_file: "tests/mcp/test_tool_invocation.py"
+    status: PENDING
+    blocking: true
+    priority: P1_HIGH
+    
+  AC-REG-007:
+    id: AC-REG-007
+    criterion: "Module dependency validation prevents circular dependencies and missing imports"
+    acceptance:
+      - "**DEPENDENCY GRAPH:** Module dependencies extracted via AST analysis (import statements)"
+      - "**CIRCULAR DETECTION:** Circular dependencies detected and reported (A → B → C → A)"
+      - "**MISSING IMPORTS:** Missing imports detected before runtime (static analysis)"
+      - "**DEPENDENCY ORDER:** Module load order computed from dependency graph (topological sort)"
+      - "**OPTIONAL DEPENDENCIES:** Optional imports handled gracefully (try/except with clear error)"
+      - "**EXTERNAL DEPENDENCIES:** External package dependencies validated against requirements.txt"
+      - "**VERSION CONFLICTS:** Dependency version conflicts detected (package A requires B>=2.0, package C requires B<2.0)"
+      - "**VISUALIZATION:** Dependency graph visualized as mermaid diagram"
+      - "Test: Analyze module dependencies → detect cycles → verify no missing imports → validate load order"
+    validation: automated
+    test_file: "tests/infrastructure/test_module_dependencies.py"
+    status: PENDING
+    blocking: false
+    priority: P2_MEDIUM
+    evidence:
+      - "Dependency graph: cortex-brain/reports/module-dependency-graph.mmd (mermaid)"
+      - "Validation report: cortex-brain/reports/dependency-validation-*.json"
+    
+  AC-REG-008:
+    id: AC-REG-008
+    criterion: "Registration failure handling and rollback for all component types"
+    acceptance:
+      - "**ORCHESTRATOR FAILURE:** Failed orchestrator registration doesn't prevent system startup (degraded mode)"
+      - "**TOOL FAILURE:** Failed tool registration disables specific tool, not entire category"
+      - "**MODULE FAILURE:** Failed module registration logged, system continues with reduced functionality"
+      - "**ROLLBACK:** Failed registration rolled back (no partial state, all-or-nothing)"
+      - "**ERROR REPORTING:** Clear error messages with fix instructions and documentation links"
+      - "**GRACEFUL DEGRADATION:** System functional with subset of registered components"
+      - "**HEALTH DASHBOARD:** Registration failures visible in health dashboard"
+      - "**RETRY MECHANISM:** Failed registrations retried on next startup"
+      - "**ADMIN NOTIFICATION:** Critical registration failures trigger admin notification"
+      - "Test: Inject registration failure → verify rollback → verify degraded mode → fix issue → verify recovery"
+    validation: automated
+    test_file: "tests/infrastructure/test_registration_failure_handling.py"
+    status: PENDING
+    blocking: false
+    priority: P2_MEDIUM
+    evidence:
+      - "Failure logs: cortex-brain/audit-logs/registration-failures-*.json"
+      - "Health dashboard: cortex-brain/health-reports/registration-health-*.json"
 
 # ==============================================================================
 # SECTION 11: DOCUMENTATION & USABILITY
