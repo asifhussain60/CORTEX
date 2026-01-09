@@ -89,6 +89,14 @@ class VacuumOrchestratorV2(BaseOrchestratorV4_1):
         self.safety_rules = self.config.get('safety', {})
         self.exclusions = self.config.get('exclusions', [])
         
+        # Initialize Jinja2 environment for report templates
+        from jinja2 import Environment, FileSystemLoader
+        template_dir = Path("cortex-brain/response-templates")
+        if template_dir.exists():
+            self.jinja_env = Environment(loader=FileSystemLoader(str(template_dir)))
+        else:
+            self.jinja_env = None
+        
         # Initialize components (lazy loading)
         self._filesystem_engine = None
         self._safety_validator = None
@@ -205,16 +213,27 @@ class VacuumOrchestratorV2(BaseOrchestratorV4_1):
         # Validate target path
         if not target_path.exists():
             return OrchestratorResult(
+                success=False,
                 status=OrchestratorStatus.FAILURE,
                 message=f"Target path not found: {target_path}",
-                artifacts=[],
-                errors=[f"Path does not exist: {target_path}"]
+                data={'errors': [f"Path does not exist: {target_path}"]}
             )
         
         self.project_root = target_path
         
         # Create or resume plan
         if not self.plan_id:
+            # Filter kwargs to only include JSON-serializable values
+            serializable_params = {}
+            for key, value in kwargs.items():
+                try:
+                    import json
+                    json.dumps(value)
+                    serializable_params[key] = value
+                except (TypeError, ValueError):
+                    # Skip non-serializable objects
+                    serializable_params[key] = str(value)
+            
             self.plan_id = self.state_db.create_plan(
                 feature_name=f"Vacuum {target_path}",
                 metadata={
@@ -224,7 +243,7 @@ class VacuumOrchestratorV2(BaseOrchestratorV4_1):
                     'aggressive': aggressive,
                     'reorganize': reorganize,
                     'checkpoint': checkpoint,
-                    'params': kwargs
+                    'params': serializable_params
                 }
             )
         
@@ -280,11 +299,12 @@ class VacuumOrchestratorV2(BaseOrchestratorV4_1):
                 dry_run_message = "Dry-run completed successfully. Review report to proceed."
                 
                 return OrchestratorResult(
+                    success=True,
                     status=OrchestratorStatus.SUCCESS,
                     message=dry_run_message,
-                    artifacts=artifacts,
-                    errors=errors,
                     data={
+                        'artifacts': artifacts,
+                        'errors': errors,
                         'token_usage_percentage': token_check.get('percentage', 0),  # For middleware
                         'dry_run': True
                     }
@@ -296,10 +316,13 @@ class VacuumOrchestratorV2(BaseOrchestratorV4_1):
                 
                 if approval_result.status == PhaseStatus.FAILED:
                     return OrchestratorResult(
+                        success=False,
                         status=OrchestratorStatus.CANCELLED,
                         message="User cancelled vacuum operation",
-                        artifacts=artifacts,
-                        errors=approval_result.data.get("errors", [])
+                        data={
+                            'artifacts': artifacts,
+                            'errors': approval_result.data.get("errors", [])
+                        }
                     )
             
             # Phase 5: EXECUTION

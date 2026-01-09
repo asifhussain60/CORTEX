@@ -1,0 +1,822 @@
+# 🧹 CORTEX Vacuum - Architecture-Aware Cleanup
+
+**Version:** 1.1.---
+
+## 🧠 Implementation Details (For GitHub Copilot)
+
+### **Architecture Discovery (Silent)**
+1. Read: `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/`
+2. Extract AC-IDs: `AC-[A-Z]+-[A-Z0-9]+-\d{3}` with paths
+3. Build protection map (in memory, no output)
+
+### **Consolidation Detection (Silent)**
+1. Detect version progressions: `*-v1.md`, `*-v2.md`, `*-v3.md`
+2. Detect summaries: `*-SUMMARY.md`, `*-UPDATE-*.md`, `*-IMPLEMENTATION-*.md`
+3. Analyze overlap, extract unique content
+4. Create consolidation plan (in memory, no output)
+
+### **Consolidation Execution (Silent)**
+1. For each group: read base, extract unique, merge intelligently
+2. Archive old files to `archive/{filename}-{date}.ext`
+3. Write consolidated files
+4. Track metrics (files consolidated, lines eliminated)
+
+### **Cleanup Execution (Silent)**
+1. Remove: temp files, build artifacts, duplicates, empty dirs
+2. Track metrics (files removed, space freed)
+3. Respect protection rules (AC-protected paths never touched) **Status:** ✅ PRODUCTION | **Type:** Autonomous Execution  
+**Author:** Asif Hussain | **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
+
+---
+
+## 🎯 Purpose
+
+**Autonomous filesystem cleanup with intelligent document consolidation.**
+
+### **Execution Mode: SILENT**
+- ✅ Architecture discovery (automatic)
+- ✅ Consolidation detection (automatic)
+- ✅ Git checkpoint (automatic)
+- ✅ Execute cleanup (automatic)
+- ✅ Executive summary only (concise report)
+
+---
+
+## 📋 Execution Protocol (AUTONOMOUS)
+
+### **When user says:** `vacuum <folder>`
+
+**You execute silently:**
+
+1. **Create git checkpoint** (automatic safety backup)
+2. **Scan architecture** (read CORTEX 6 epic for AC-IDs and protected paths)
+3. **Detect consolidation** (version progressions, summaries, duplicates)
+4. **Execute consolidation** (merge + archive with 100% data preservation)
+5. **Execute cleanup** (temp files, build artifacts, duplicates)
+6. **Report executive summary** (concise results)
+
+**NO verbose output. NO step-by-step narration. NO approval prompts.**
+
+---
+
+## 🎯 Executive Summary Format
+
+**After execution, display ONLY this:**
+
+```markdown
+## 🧹 Vacuum Complete - {folder_name}
+
+**Git Checkpoint:** {commit_id} - "{commit_message}"
+
+### 📦 Consolidation
+- {n} files consolidated → {m} enhanced + {k} archived
+- {lines} duplicate lines eliminated
+- 100% data preserved in archive/
+
+### 🗑️ Cleanup
+- {n} temporary files removed
+- {n} build artifacts removed  
+- {n} duplicate files removed
+- {size} freed
+
+### 🛡️ Protected
+- {n} AC-protected components skipped
+- {list of key AC-IDs}
+
+**Details:** `{report_path}`
+```
+
+**That's it. Concise. Actionable. Complete.**
+
+---
+
+## � Intelligent File Consolidation
+
+### **Phase 0.5: Document Consolidation Detection**
+
+**CRITICAL:** When multiple versions/summaries exist, consolidate WITHOUT data loss.
+
+### **Consolidation Patterns:**
+
+#### **Pattern 1: Version Progression Files**
+
+**Detect:**
+- `filename-v1.md` + `filename-v2.md` + `filename-v3.md`
+- `*-UPDATE-v14.*.md` + `*-UPDATE-v15.*.md`
+- Same base name with version suffixes
+
+**Action:**
+```markdown
+### Consolidation Plan:
+
+**Files Detected:**
+- CX6-planning-orchestrator-workflow.md (v6.0, 1200 lines)
+- CX6-planning-orchestrator-workflow-v3.md (v3.0, 709 lines)
+
+**Strategy:** Create unified changelog + keep latest version ONLY
+
+**New Structure:**
+```yaml
+# CX6-planning-orchestrator-workflow.md (CONSOLIDATED)
+version: 6.0.0
+status: CURRENT
+
+# Version History section (embedded changelog)
+changelog:
+  - version: 6.0.0
+    date: 2026-01-09
+    changes: ["Initial 4-phase workflow design"]
+  - version: 3.0.0
+    date: 2026-01-09
+    changes: ["Added CORTEX Toolkit", "Added Realignment orchestrator"]
+```
+
+**Outcome:**
+- ✅ Keep: `CX6-planning-orchestrator-workflow.md` (enhanced with v3 innovations)
+- 🗑️ Archive: `CX6-planning-orchestrator-workflow-v3.md` → `archive/workflow-v3-2026-01-09.md`
+```
+
+#### **Pattern 2: Summary/Implementation Files**
+
+**Detect:**
+- `*-SUMMARY.md` (describes what was done)
+- `*-IMPLEMENTATION-PLAN.md` (describes what to do)
+- Redundant update summaries
+
+**Action:**
+```markdown
+### Consolidation Plan:
+
+**Files Detected:**
+- WORKFLOW-V3-UPDATE-SUMMARY.md (241 lines) - "What was updated in v3"
+- VACUUM-PROMPT-IMPLEMENTATION-SUMMARY.md (347 lines) - "What vacuum prompt does"
+- CX6-AC-UPDATE-v14.4.0-CORRECTED-SUMMARY.md (256 lines)
+- CX6-AC-UPDATE-v15.0.0-SUMMARY.md (504 lines)
+
+**Strategy:** Convert to structured changelog in main documents
+
+**For Planning Workflow:**
+- ✅ Extract v3 changes from WORKFLOW-V3-UPDATE-SUMMARY.md
+- ✅ Merge into CX6-planning-orchestrator-workflow.md as "## Version History"
+- 🗑️ Archive: WORKFLOW-V3-UPDATE-SUMMARY.md
+
+**For Acceptance Criteria Updates:**
+- ✅ Merge v14 + v15 summaries into CX6-acceptance-criteria.yaml header
+- ✅ Add `changelog:` section at top of YAML
+- 🗑️ Archive: Both update summary files
+
+**Outcome:**
+- Information preserved in canonical locations
+- No orphaned summaries
+- Clear version history embedded in source documents
+```
+
+#### **Pattern 3: Duplicate Base Names**
+
+**Detect:**
+- Multiple files with same semantic purpose but different names
+- `README.md` + `00-INDEX.md` (both serve as index)
+- `ARCHITECTURE-*.md` duplicates
+
+**Action:**
+```markdown
+### Consolidation Plan:
+
+**Files Detected:**
+- 00-INDEX.md (382 lines) - "Quick reference guide"
+- README.md (unknown lines) - Potential duplicate
+
+**Strategy:** Merge into single authoritative index
+
+**Decision Tree:**
+1. Compare content overlap (>70% = consolidate)
+2. Keep more comprehensive version
+3. Extract unique sections from other
+4. Archive redundant file
+
+**Outcome:**
+- ✅ Keep: 00-INDEX.md (more comprehensive)
+- 🗑️ Archive: README.md (if redundant) OR enhance 00-INDEX with README content
+```
+
+### **Consolidation Execution Protocol:**
+
+**Step 1: Detect Consolidation Opportunities**
+```python
+consolidation_candidates = detect_consolidation_patterns([
+    "version_progression",  # v1, v2, v3 files
+    "summary_duplicates",   # *-SUMMARY.md files
+    "redundant_indexes",    # README + INDEX files
+    "update_summaries"      # *-UPDATE-*.md files
+])
+```
+
+**Step 2: Analyze Data Uniqueness**
+```python
+for group in consolidation_candidates:
+    base_file = group['latest_version']
+    older_files = group['older_versions']
+    
+    unique_content = {}
+    for old_file in older_files:
+        unique_sections = extract_unique_content(old_file, base_file)
+        if unique_sections:
+            unique_content[old_file] = unique_sections
+```
+
+**Step 3: Create Consolidation Plan**
+```yaml
+consolidation_plan:
+  - group: "planning-orchestrator-workflow"
+    action: "merge_with_changelog"
+    base_file: "CX6-planning-orchestrator-workflow.md"
+    merge_from:
+      - file: "CX6-planning-orchestrator-workflow-v3.md"
+        extract: ["CORTEX Toolkit section", "Realignment section"]
+        destination: "## Version History → v3.0 innovations"
+    archive:
+      - "CX6-planning-orchestrator-workflow-v3.md"
+  
+  - group: "acceptance-criteria-updates"
+    action: "merge_to_yaml_header"
+    base_file: "CX6-acceptance-criteria.yaml"
+    merge_from:
+      - file: "CX6-AC-UPDATE-v14.4.0-CORRECTED-SUMMARY.md"
+        extract: ["AC-ORC-002 correction", "Planning structure rules"]
+      - file: "CX6-AC-UPDATE-v15.0.0-SUMMARY.md"
+        extract: ["AC-ALIGN-001 to 005", "AC-DIGEST-001 to 006"]
+    archive:
+      - "CX6-AC-UPDATE-v14.4.0-CORRECTED-SUMMARY.md"
+      - "CX6-AC-UPDATE-v15.0.0-SUMMARY.md"
+```
+
+**Step 4: Display Consolidation Preview**
+```markdown
+## 📦 Consolidation Opportunities Detected
+
+### Group 1: Planning Orchestrator Workflow
+- **Current:** CX6-planning-orchestrator-workflow.md (v6.0, 1200 lines)
+- **Merge:** CX6-planning-orchestrator-workflow-v3.md (v3.0, 709 lines)
+- **Strategy:** Extract v3 innovations → Add to v6.0 as version history
+- **Result:** 1 consolidated file + 1 archived
+
+### Group 2: Acceptance Criteria Updates
+- **Current:** CX6-acceptance-criteria.yaml (237KB)
+- **Merge:** 2 update summary files (v14, v15)
+- **Strategy:** Convert summaries to YAML changelog header
+- **Result:** Enhanced YAML + 2 summaries archived
+
+### Group 3: Implementation Summaries
+- **Files:** WORKFLOW-V3-UPDATE-SUMMARY.md, VACUUM-PROMPT-IMPLEMENTATION-SUMMARY.md
+- **Strategy:** Extract key info → Merge into parent documents → Archive summaries
+- **Result:** 2 files archived, info preserved in canonical locations
+
+**Total Impact:**
+- ✅ 5 files consolidated
+- 📦 5 files archived (not deleted, safe in archive/)
+- 💾 ~1.5MB preserved without duplication
+- 🎯 Cleaner directory, zero data loss
+
+**Approve consolidation? (Y/N)**
+```
+
+**Step 5: Execute Consolidation (User Approved)**
+```python
+def execute_consolidation(plan):
+    for group in plan:
+        # 1. Create enhanced base file
+        enhanced_content = merge_with_preservation(
+            base=group['base_file'],
+            sources=group['merge_from']
+        )
+        
+        # 2. Write consolidated file
+        write_file(group['base_file'], enhanced_content)
+        
+        # 3. Archive old files (NOT delete)
+        for old_file in group['archive']:
+            archive_path = f"archive/{old_file.stem}-{today()}{old_file.suffix}"
+            move_file(old_file, archive_path)
+        
+        # 4. Log consolidation
+        log_consolidation(group, preserved=True)
+```
+
+### **Consolidation Rules:**
+
+✅ **ALWAYS:**
+- Extract ALL unique content before archiving
+- Move to `archive/` (NEVER delete)
+- Add changelog/version history to consolidated file
+- Preserve metadata (dates, authors, AC-IDs)
+- Log consolidation with data preservation audit trail
+
+❌ **NEVER:**
+- Delete files without archiving
+- Lose unique information during merge
+- Create "version dumps" (entire old file as text block)
+- Break AC-ID references or links
+- Consolidate files with >50% unique content
+
+---
+
+## �🛡️ Brain Protection Rules
+
+### **CRITICAL: NEVER Delete These (Static Protection)**
+
+**Governance (Tier 0):**
+- `cortex-brain/tier0/**` - Core rules, SKULL protection
+- `cortex-brain/brain-protection-rules.yaml`
+- `.github/prompts/CORTEX.prompt.md`
+
+**Active Plans (Tier 1):**
+- `cortex-brain/tier1/dags/**` - Active execution graphs
+- `cortex-brain/documents/planning/active/**` - All active plans
+
+**Knowledge (Tier 2):**
+- `cortex-brain/tier2/knowledge-graph.db` - Learned patterns
+- `cortex-brain/knowledge/**` - Permanent knowledge base
+
+**Configuration:**
+- `cortex-brain/config/**` - System configuration
+- `cortex-brain/manifests/**` - Orchestrator manifests
+
+**Source Code:**
+- `src/orchestrators/**` - All orchestrators (unless consolidation candidate)
+- `src/infrastructure/**` - Core infrastructure
+- `src/main.py` - Entry point
+
+---
+
+## 🔄 Real-Time Adaptation Logic
+
+### **On Every Invocation:**
+
+1. **Epic Freshness Check**
+   ```python
+   # Check if epic documents were modified since last run
+   epic_path = "cortex-brain/documents/planning/active/cortex6/"
+   latest_modification = get_latest_mtime(epic_path)
+   
+   if latest_modification > last_scan_time:
+       print("📋 Epic updated since last scan - refreshing protection rules...")
+       rescan_architecture()
+   ```
+
+2. **New AC-ID Detection**
+   ```python
+   # Compare current AC-IDs with previous scan
+   current_ac_ids = extract_ac_ids(epic_documents)
+   new_ac_ids = current_ac_ids - previous_ac_ids
+   
+   if new_ac_ids:
+       print(f"🆕 New acceptance criteria detected: {new_ac_ids}")
+       add_protection_rules(new_ac_ids)
+   ```
+
+3. **Implementation Progress Tracking**
+   ```python
+   # Check roadmap phase completion
+   for ac_id, component in protected_components.items():
+       if is_implemented(component['path']):
+           print(f"✅ {ac_id} implementation detected at {component['path']}")
+           upgrade_protection_priority(component['path'], priority=100)
+   ```
+
+4. **Consolidation Validation**
+   ```python
+   # Verify old implementations still exist
+   for old_path, new_path in consolidation_map.items():
+       if not exists(old_path):
+           print(f"✅ {old_path} already removed (consolidation complete)")
+           remove_from_consolidation_map(old_path)
+       elif exists(new_path) and not imports_exist(old_path):
+           print(f"⚠️ {old_path} safe to remove (no active imports)")
+           upgrade_consolidation_recommendation(old_path, "safe_to_delete")
+   ```
+
+---
+
+## 📊 Architecture Intelligence Queries
+
+### **Query 1: Find All Protected Paths**
+
+```python
+def get_protected_paths():
+    epic_path = Path("cortex-brain/documents/planning/active/cortex6/acceptance-criteria")
+    protected = []
+    
+    for doc in epic_path.glob("**/*.md"):
+        content = doc.read_text()
+        
+        # Find AC-IDs with surrounding context
+        matches = re.finditer(
+            r'([^\n]+)(AC-[A-Z]+-[A-Z0-9]+-\d{3})([^\n]+)',
+            content
+        )
+        
+        for match in matches:
+            context = match.group(0)
+            ac_id = match.group(2)
+            
+            # Extract file paths from context
+            paths = re.findall(r'`([^`]+\.(py|yaml|json|md))`', context)
+            paths += re.findall(r'src/[\w/]+', context)
+            
+            for path in paths:
+                protected.append({
+                    'path': path,
+                    'ac_id': ac_id,
+                    'source': doc.name,
+                    'context': context.strip()
+                })
+    
+    return protected
+```
+
+### **Query 2: Detect Consolidation Patterns**
+
+```python
+def detect_consolidations():
+    epic_path = Path("cortex-brain/documents/planning/active/cortex6/acceptance-criteria")
+    consolidations = []
+    
+    # Keywords indicating consolidation
+    keywords = [
+        'unified', 'toolkit', 'consolidated', 'replaces', 
+        'supersedes', 'superseded', 'migration', 'extract',
+        'refactor', 'old scattered', 'new unified'
+    ]
+    
+    for doc in epic_path.glob("**/*.md"):
+        content = doc.read_text()
+        
+        for keyword in keywords:
+            if keyword in content.lower():
+                # Extract context around keyword
+                paragraphs = content.split('\n\n')
+                for para in paragraphs:
+                    if keyword in para.lower():
+                        # Look for old → new path mappings
+                        old_paths = re.findall(r'old[:\s]+`?([^`\n]+)`?', para, re.I)
+                        new_paths = re.findall(r'new[:\s]+`?([^`\n]+)`?', para, re.I)
+                        
+                        if old_paths and new_paths:
+                            consolidations.append({
+                                'old': old_paths[0],
+                                'new': new_paths[0],
+                                'reason': para[:200],
+                                'source': doc.name
+                            })
+    
+    return consolidations
+```
+
+### **Query 3: Check Implementation Status**
+
+```python
+def check_implementation_status(ac_id, path):
+    # Check if component exists
+    if not Path(path).exists():
+        return "not_started"
+    
+    # Check for recent commits
+    result = subprocess.run(
+        ['git', 'log', '--since=7.days', '--oneline', '--', path],
+        capture_output=True,
+        text=True
+    )
+    
+    if result.stdout.strip():
+        return "in_progress"
+    
+    # Check for tests
+    test_path = path.replace('src/', 'tests/').replace('.py', '_test.py')
+    if Path(test_path).exists():
+        return "complete"
+    
+    return "unknown"
+```
+
+---
+
+## 🎯 Example Invocations
+
+### **Example 1: Vacuum Entire Repo**
+
+**User:** `vacuum`
+
+**Your Response:**
+```markdown
+## 🧠 Architecture Discovery
+
+Reading active CORTEX 6 epic for real-time protection rules...
+
+**Scanning:** `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/`
+
+### ✅ Protected Components Detected:
+1. **CORTEX Toolkit** (AC-PLAN-TOOLKIT-001) - `src/toolkit/**`
+2. **MCP Toolkit Server** (AC-PLAN-MCP-001) - `src/mcp/toolkit_server.py`
+3. **Realignment Orchestrator** (AC-REALIGN-001) - `src/orchestrators/realignment_orchestrator.py`
+
+### ⚠️ Consolidation Candidates:
+1. `src/orchestrators/planning/ast_scanner.py` → `src/toolkit/ast_parser.py`
+
+---
+
+## 🎯 Vacuum Scope
+
+**Target:** `/Users/asifhussain/PROJECTS/CORTEX`
+**Scope:** Full repository
+
+**Proceed with vacuum? (Y/N)**
+```
+
+---
+
+### **Example 2: Vacuum Specific Folder**
+
+**User:** `vacuum src/orchestrators/`
+
+**Your Response:**
+```markdown
+## 🧠 Architecture Discovery
+
+Reading active CORTEX 6 epic for real-time protection rules...
+
+### ✅ Protected in src/orchestrators/:
+- `src/orchestrators/realignment_orchestrator.py` (AC-REALIGN-001)
+
+### ⚠️ Consolidation Candidates in src/orchestrators/:
+- `src/orchestrators/planning/ast_scanner.py` → `src/toolkit/ast_parser.py`
+- `src/orchestrators/vacuum/duplicate_detector.py` → `src/toolkit/duplicate_detector.py`
+
+---
+
+## 🎯 Vacuum Scope
+
+**Target:** `src/orchestrators/`
+**Scope:** Folder
+
+**Proceed with vacuum? (Y/N)**
+```
+
+---
+
+### **Example 3: User Says No**
+
+**User Response:** `N` or `no`
+
+**Your Response:**
+```markdown
+## ❌ Vacuum Cancelled
+
+No files were modified. Architecture protection rules were updated for future use.
+
+**Tip:** To see what would be cleaned without confirmation, use: `vacuum --dry-run`
+```
+
+---
+
+## ⚠️ Error Handling
+
+### **Epic Not Found**
+```markdown
+⚠️ **Warning:** Active CORTEX 6 epic not found at expected path.
+
+Falling back to static protection rules from `cortex-brain/brain-protection-rules.yaml`.
+
+**Note:** Real-time architecture awareness disabled. Consider verifying epic path.
+```
+
+### **No AC-IDs Found**
+```markdown
+⚠️ **Warning:** No acceptance criteria (AC-IDs) found in epic documents.
+
+Using standard Vacuum protection rules. New features may not be automatically protected.
+```
+
+### **MCP Connection Failed**
+```markdown
+❌ **Error:** Cannot connect to Vacuum Orchestrator via MCP.
+
+**Troubleshooting:**
+1. Verify Python environment: `python3 -m src.main --version`
+2. Check Vacuum Orchestrator: `python3 -m src.orchestrators.vacuum.vacuum_orchestrator_v2 --help`
+3. Review logs: `cortex-brain/logs/vacuum-orchestrator.log`
+```
+
+---
+
+## 🧠 Learning & Adaptation
+
+### **After Each Run:**
+
+1. **Store Architecture Snapshot**
+   ```python
+   snapshot = {
+       'timestamp': datetime.now().isoformat(),
+       'ac_ids': list(protected_ac_ids),
+       'protected_paths': list(protected_paths),
+       'consolidation_map': consolidation_map,
+       'files_cleaned': cleanup_stats
+   }
+   
+   save_to_knowledge_graph(snapshot)
+   ```
+
+2. **Update Protection Patterns**
+   ```python
+   # Learn from what was protected
+   for path in protected_paths:
+       pattern = extract_pattern(path)
+       add_to_learned_patterns(pattern, reason="architecture_protection")
+   ```
+
+3. **Track Consolidation Progress**
+   ```python
+   # Monitor consolidation completion
+   for old_path, new_path in consolidation_map.items():
+       if not exists(old_path):
+           mark_consolidation_complete(old_path, new_path)
+   ```
+
+---
+
+## 📋 Checklist for Every Invocation
+
+- [ ] **Step 1:** Parse user request (extract folder/scope)
+- [ ] **Step 2:** Read CORTEX 6 epic (`cortex-brain/documents/planning/active/cortex6/acceptance-criteria/`)
+- [ ] **Step 2.5:** Detect document consolidation opportunities (NEW)
+- [ ] **Step 3:** Extract AC-IDs and component paths
+- [ ] **Step 4:** Build protection map (architecture + static rules)
+- [ ] **Step 5:** Detect code consolidation patterns (superseded implementations)
+- [ ] **Step 6:** Display scope, protection rules, AND consolidation plan to user
+- [ ] **Step 7:** Wait for user approval (Y/N)
+- [ ] **Step 8:** If approved, execute document consolidation first
+- [ ] **Step 9:** Then invoke Vacuum Orchestrator via MCP for cleanup
+- [ ] **Step 10:** Display results with protection/cleanup/consolidation stats
+- [ ] **Step 11:** Store architecture snapshot in knowledge graph
+
+---
+
+## 🎯 Success Criteria
+
+**This prompt is working correctly if:**
+
+✅ Every invocation scans CORTEX 6 epic before cleanup  
+✅ New AC-IDs are automatically detected and protected  
+✅ **Document consolidation patterns detected (version progressions, summaries)**  
+✅ **Consolidation preserves 100% of unique content**  
+✅ **Consolidated files enhanced with version history (NOT version dumps)**  
+✅ **Old files archived (NOT deleted) for safety**  
+✅ Consolidation candidates are flagged (not deleted)  
+✅ User approval is required before any cleanup OR consolidation  
+✅ Protected components are never deleted  
+✅ Dry-run mode is used by default  
+✅ Detailed reports are generated  
+✅ Architecture snapshots are stored in knowledge graph  
+✅ Real-time adaptation works (new features protected immediately)  
+✅ No false positives (legitimate code NOT flagged for deletion)  
+✅ **No data loss during consolidation (audit trail verifiable)**
+
+---
+
+## 📚 Examples of Good Consolidation
+
+### ✅ Example 1: Version Progression with Changelog
+
+**Before:**
+```
+CX6-planning-orchestrator-workflow.md (v6.0, 1200 lines)
+CX6-planning-orchestrator-workflow-v3.md (v3.0, 709 lines)
+```
+
+**After Consolidation:**
+```markdown
+# CX6-planning-orchestrator-workflow.md
+
+**Version:** 6.0.0  
+**Status:** ✅ CURRENT
+
+---
+
+## Version History
+
+### v6.0.0 (2026-01-09)
+- Initial 4-phase interactive workflow design
+- Config-based approval enforcement
+- Zero-ambiguity plan validation
+
+### v3.0.0 (2026-01-09) - MERGED FROM v3 DOCUMENT
+- **Added:** CORTEX Toolkit architecture (8 modular tools)
+- **Added:** Realignment Orchestrator integration
+- **Added:** Centralized audit infrastructure
+- **Reference:** See archive/workflow-v3-2026-01-09.md for full v3 spec
+
+---
+
+[Rest of v6.0 content...]
+```
+
+**Archived:**
+```
+archive/CX6-planning-orchestrator-workflow-v3-2026-01-09.md (full original preserved)
+```
+
+**✅ Result:** Clean version progression, all innovations captured, original archived
+
+---
+
+### ✅ Example 2: Update Summaries to YAML Changelog
+
+**Before:**
+```
+CX6-AC-UPDATE-v14.4.0-CORRECTED-SUMMARY.md (256 lines)
+CX6-AC-UPDATE-v15.0.0-SUMMARY.md (504 lines)
+CX6-acceptance-criteria.yaml (237KB, no changelog)
+```
+
+**After Consolidation:**
+```yaml
+# CX6-acceptance-criteria.yaml
+
+# Changelog
+changelog:
+  - version: "15.0.0"
+    date: "2026-01-09"
+    summary: "Holistic alignment system + Digest utility"
+    new_ac_ids:
+      - AC-ALIGN-001: "Holistic plan review triggers"
+      - AC-ALIGN-002: "Complexity-based plan recreation"
+      - AC-ALIGN-003: "Gap detection with remediation"
+      - AC-DIGEST-001: "Universal file-to-YAML converter"
+      - AC-DIGEST-002: "MCP server exposure"
+    reference: "archive/CX6-AC-UPDATE-v15.0.0-SUMMARY-2026-01-09.md"
+  
+  - version: "14.4.0"
+    date: "2026-01-09"
+    summary: "Planning structure correction (AC-ORC-002 aligned)"
+    corrections:
+      - AC-ORC-002: "Corrected to match AC-ORC-PLAN-002 approved structure"
+    new_ac_ids:
+      - AC-ORC-PLAN-004: "CORTEX logo requirements (200x200px)"
+    reference: "archive/CX6-AC-UPDATE-v14.4.0-CORRECTED-SUMMARY-2026-01-09.md"
+
+# Acceptance Criteria
+acceptance_criteria:
+  [... existing AC ...]
+```
+
+**Archived:**
+```
+archive/CX6-AC-UPDATE-v14.4.0-CORRECTED-SUMMARY-2026-01-09.md
+archive/CX6-AC-UPDATE-v15.0.0-SUMMARY-2026-01-09.md
+```
+
+**✅ Result:** Structured changelog, easy to parse, originals archived for reference
+
+---
+
+### ❌ Example of BAD Consolidation (DO NOT DO THIS)
+
+**BAD - Version Dump:**
+```markdown
+# CX6-planning-orchestrator-workflow.md
+
+[v6.0 content here...]
+
+---
+
+## APPENDIX: Full v3.0 Document
+
+[ENTIRE 709-line v3 document pasted here verbatim]
+```
+
+**❌ Why This is BAD:**
+- Massive file bloat (1200 + 709 = 1909 lines)
+- Redundant information (v6 already supersedes v3)
+- Hard to process (no clear structure)
+- Defeats purpose of consolidation
+
+**✅ Correct Approach:**
+Extract v3 INNOVATIONS → Add to v6 as version history → Archive v3
+
+---
+
+## 📚 References
+
+- **Vacuum Orchestrator v2:** `src/orchestrators/vacuum/vacuum_orchestrator_v2.py`
+- **Vacuum Config:** `cortex-brain/manifests/orchestrators/vacuum-orchestrator-v2.yaml`
+- **Phase 0 Spec:** `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/CX6-vacuum-phase-0-enhancement.md`
+- **CORTEX 6 Epic:** `cortex-brain/documents/planning/active/cortex6/`
+- **Brain Protection Rules:** `cortex-brain/brain-protection-rules.yaml`
+- **Master Orchestrator:** `.github/prompts/CORTEX.prompt.md`
+
+---
+
+**Version History:**
+- v1.0.0: Initial architecture-aware vacuum prompt with real-time adaptation
+- v1.1.0: Added intelligent document consolidation (version progressions, summaries)
+
+**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
