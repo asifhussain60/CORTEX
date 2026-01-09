@@ -1,0 +1,451 @@
+# ==============================================================================
+# CORTEX 6.0 Enhancement TODOs
+# ==============================================================================
+# Created: 2026-01-09T12:00:00Z
+# Author: Asif Hussain
+# Status: ACTIVE
+# Epic: CORTEX6-BUILD
+# Related: 00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml
+# ==============================================================================
+
+metadata:
+  created: '2026-01-09T12:00:00Z'
+  status: ACTIVE
+  total_todos: 3
+  priority_breakdown:
+    P0_CRITICAL: 2
+    P1_HIGH: 1
+  estimated_total_effort: "24h"
+  blocking_count: 2
+
+# ==============================================================================
+# TODO-001: Gap-Fix AC/Test Reorganization (Test Stability)
+# ==============================================================================
+
+TODO-001:
+  id: TODO-001
+  title: "Gap-Fix AC Reorganization for Test Stability"
+  status: PENDING
+  priority: P0_CRITICAL
+  blocking: true
+  created: '2026-01-09'
+  
+  description: |
+    Ensure cortex-gap-fix.prompt.md reorganizes acceptance criteria and requirements
+    in an efficient manner so that as tests progress, previous tests don't become 
+    useless or invalidated by later changes.
+    
+  problem_statement: |
+    Current gap-fix pipeline injects remediation gaps without considering test 
+    execution order. This can cause:
+    - Earlier tests to fail when later gaps modify shared dependencies
+    - Test suite instability as coverage grows
+    - Wasted effort on tests that become obsolete
+    - Regression snowball effects
+    
+  requirements:
+    - AC and requirements ordered by dependency graph (not just priority)
+    - Foundation/shared components validated BEFORE dependent components
+    - Test execution order mirrors AC dependency order
+    - Gap injection preserves test stability (no orphaned tests)
+    - Snowball strategy includes test impact analysis
+    
+  acceptance_criteria:
+    - AC-GAPFIX-005: "AC reorganization preserves test execution order stability"
+    - AC-GAPFIX-006: "Dependency graph validation before gap injection"
+    - AC-GAPFIX-007: "Test impact analysis prevents orphaned/useless tests"
+    
+  files_to_modify:
+    - path: ".github/prompts/cortex-gap-fix.prompt.md"
+      changes:
+        - "Add Phase 10C: Test Stability Validation"
+        - "Add dependency graph ordering to Phase 8 (Snowball Sort)"
+        - "Add test impact analysis to Phase 10B (Conflict Detection)"
+        
+    - path: "cortex-brain/documents/planning/active/cortex6/acceptance-criteria/00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml"
+      changes:
+        - "Add AC-GAPFIX-005 through AC-GAPFIX-007"
+        - "Update gap_fix_validation category count"
+        - "Update progress_tracking totals"
+        
+  implementation_approach:
+    phase_1:
+      name: "Dependency Graph Analysis"
+      tasks:
+        - "Parse AC criteria for depends_on relationships"
+        - "Build directed acyclic graph (DAG) of AC dependencies"
+        - "Topological sort for optimal test execution order"
+      effort: "4h"
+      
+    phase_2:
+      name: "Test Stability Validation"
+      tasks:
+        - "Map test files to AC criteria"
+        - "Detect tests that would be invalidated by gap injection"
+        - "Reorder gaps to minimize test churn"
+      effort: "4h"
+      
+    phase_3:
+      name: "Snowball Enhancement"
+      tasks:
+        - "Integrate dependency order into snowball algorithm"
+        - "Add test stability score to priority calculation"
+        - "Generate test execution manifest alongside remediation plan"
+      effort: "4h"
+      
+  estimated_effort: "12h"
+  depends_on: []
+  unlocks:
+    - "Stable test suite growth"
+    - "Predictable CI/CD pipelines"
+    - "Reduced test maintenance overhead"
+
+# ==============================================================================
+# TODO-002: AC + Test Harness + Audit Log Validation
+# ==============================================================================
+
+TODO-002:
+  id: TODO-002
+  title: "AC Validation via Test Harness + Audit Log Trace"
+  status: PENDING
+  priority: P0_CRITICAL
+  blocking: true
+  created: '2026-01-09'
+  
+  description: |
+    ALL acceptance criteria should be validated by the combination of:
+    1. Test harness execution (pytest)
+    2. Audit log file trace information (evidence of execution)
+    
+  problem_statement: |
+    Current AC validation relies solely on test pass/fail. This misses:
+    - Whether the feature actually executed (vs mocked)
+    - Audit trail for compliance/governance
+    - Evidence that production paths were exercised
+    - Correlation between AC and actual system behavior
+    
+  requirements:
+    - Every AC has corresponding test file(s)
+    - Every test generates audit log entries
+    - Audit logs traceable to specific AC criteria
+    - Validation combines test result + audit evidence
+    - AC marked COMPLETE only when BOTH conditions met
+    
+  acceptance_criteria:
+    - AC-VAL-001: "AC validation requires test pass + audit log trace"
+    - AC-VAL-002: "Audit logger tags entries with AC-ID for traceability"
+    - AC-VAL-003: "AC completion report includes audit evidence summary"
+    - AC-VAL-004: "Test harness generates audit-verifiable events"
+    
+  files_to_modify:
+    - path: "src/infrastructure/audit_logger.py"
+      changes:
+        - "Add ac_id parameter to log methods"
+        - "Add trace_id for cross-correlation"
+        - "Add test_context flag for test-generated logs"
+        
+    - path: "cortex-brain/documents/planning/active/cortex6/acceptance-criteria/00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml"
+      changes:
+        - "Add SECTION: AC VALIDATION FRAMEWORK (AC-VAL-001 to AC-VAL-004)"
+        - "Update all AC entries with audit_trace_required: true"
+        
+    - path: "tests/conftest.py"
+      changes:
+        - "Add audit_logger fixture with AC context"
+        - "Add audit_evidence_collector fixture"
+        
+  implementation_approach:
+    phase_1:
+      name: "Audit Logger Enhancement"
+      tasks:
+        - "Add ac_id, trace_id, test_context parameters"
+        - "Implement audit entry correlation"
+        - "Add queryable audit trail interface"
+      effort: "3h"
+      
+    phase_2:
+      name: "Test Harness Integration"
+      tasks:
+        - "Create pytest fixtures for audit integration"
+        - "Generate audit events from test execution"
+        - "Map test functions to AC criteria"
+      effort: "3h"
+      
+    phase_3:
+      name: "Validation Framework"
+      tasks:
+        - "Build AC validation runner (test + audit)"
+        - "Generate combined validation report"
+        - "Integrate with gap-fix pipeline"
+      effort: "2h"
+      
+  estimated_effort: "8h"
+  depends_on: 
+    - "TODO-003"  # Audit logger enhancement required first
+  unlocks:
+    - "Audit-evidenced AC completion"
+    - "Compliance-ready validation"
+    - "Production behavior verification"
+
+# ==============================================================================
+# TODO-003: Enhanced Audit Logging Framework
+# ==============================================================================
+
+TODO-003:
+  id: TODO-003
+  title: "Enhanced Audit Logging Framework with MCP Access"
+  status: PENDING
+  priority: P1_HIGH
+  blocking: false
+  created: '2026-01-09'
+  
+  description: |
+    Enhance the audit logging framework to be:
+    - Queryable (search by AC-ID, date range, severity, orchestrator)
+    - Listable (paginated views, filtering)
+    - Accessible via MCP for the respective REPO
+    - Intelligent memory vs file logging
+    - Efficient organization and vacuuming
+    
+  problem_statement: |
+    Current audit logging (audit-trail.jsonl) has limitations:
+    - Append-only with no query capability
+    - No repo segregation for multi-repo
+    - No memory vs file optimization
+    - No automatic cleanup/vacuum
+    - Not exposed via MCP for orchestrator access
+    
+  requirements:
+    - SQLite-backed audit storage (queryable)
+    - Memory buffer for high-frequency operations
+    - File flush on thresholds (count, time, memory)
+    - Per-repo database isolation
+    - MCP tools for query/list/export
+    - Automatic vacuum strategy
+    - Retention policies per log level
+    
+  acceptance_criteria:
+    - AC-AUDIT-001: "Audit logs queryable by AC-ID, orchestrator, date range"
+    - AC-AUDIT-002: "Memory buffer with configurable flush thresholds"
+    - AC-AUDIT-003: "Per-repo SQLite audit database isolation"
+    - AC-AUDIT-004: "MCP tools: audit_query, audit_list, audit_export"
+    - AC-AUDIT-005: "Automatic vacuum removes logs older than retention period"
+    - AC-AUDIT-006: "Log level-based retention (ERROR: 90d, INFO: 30d, DEBUG: 7d)"
+    
+  files_to_create:
+    - path: "src/infrastructure/audit_storage.py"
+      purpose: "SQLite-backed audit storage with query interface"
+      
+    - path: "src/infrastructure/audit_memory_buffer.py"
+      purpose: "In-memory buffer with flush strategies"
+      
+    - path: "src/mcp/audit_tools.py"
+      purpose: "MCP tools for audit access"
+      
+    - path: "cortex-brain/config/audit-config.yaml"
+      purpose: "Audit configuration (thresholds, retention, vacuum)"
+      
+  files_to_modify:
+    - path: "src/infrastructure/audit_logger.py"
+      changes:
+        - "Replace jsonl with SQLite backend"
+        - "Add memory buffer layer"
+        - "Implement repo context"
+        
+    - path: "src/mcp/__init__.py"
+      changes:
+        - "Export audit MCP tools"
+        
+    - path: "cortex-brain/documents/planning/active/cortex6/acceptance-criteria/00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml"
+      changes:
+        - "Add SECTION: AUDIT LOGGING FRAMEWORK (AC-AUDIT-001 to AC-AUDIT-006)"
+        
+  implementation_approach:
+    phase_1:
+      name: "SQLite Backend"
+      tasks:
+        - "Design audit schema (entries, indexes, views)"
+        - "Implement AuditStorage class"
+        - "Add query methods (by AC-ID, date, orchestrator)"
+        - "Add list methods (pagination, filtering)"
+      effort: "4h"
+      
+    phase_2:
+      name: "Memory Buffer"
+      tasks:
+        - "Implement MemoryBuffer with flush strategies"
+        - "Add threshold configs (count: 1000, time: 60s, memory: 10MB)"
+        - "Add graceful shutdown flush"
+      effort: "2h"
+      
+    phase_3:
+      name: "MCP Integration"
+      tasks:
+        - "Create audit_query MCP tool"
+        - "Create audit_list MCP tool"
+        - "Create audit_export MCP tool"
+        - "Register in capability registry"
+      effort: "2h"
+      
+    phase_4:
+      name: "Vacuum & Retention"
+      tasks:
+        - "Implement vacuum strategy (Housekeeping Orchestrator)"
+        - "Add retention policies per log level"
+        - "Add automatic scheduled cleanup"
+      effort: "2h"
+      
+    phase_5:
+      name: "Multi-Repo Isolation"
+      tasks:
+        - "Per-repo database paths"
+        - "Context-aware database selection"
+        - "Cross-repo audit queries (admin only)"
+      effort: "2h"
+      
+  audit_schema:
+    tables:
+      audit_entries:
+        columns:
+          - "id INTEGER PRIMARY KEY AUTOINCREMENT"
+          - "timestamp TEXT NOT NULL"
+          - "level TEXT NOT NULL"  # DEBUG, INFO, WARNING, ERROR
+          - "ac_id TEXT"  # e.g., AC-GOV-001
+          - "orchestrator TEXT"
+          - "operation TEXT NOT NULL"
+          - "message TEXT NOT NULL"
+          - "context JSON"  # Additional metadata
+          - "trace_id TEXT"  # Cross-correlation
+          - "repo_id TEXT"  # Multi-repo support
+          - "session_id TEXT"
+        indexes:
+          - "idx_timestamp ON audit_entries(timestamp)"
+          - "idx_ac_id ON audit_entries(ac_id)"
+          - "idx_orchestrator ON audit_entries(orchestrator)"
+          - "idx_level ON audit_entries(level)"
+          - "idx_trace_id ON audit_entries(trace_id)"
+          
+    retention_policy:
+      ERROR: "90 days"
+      WARNING: "60 days"
+      INFO: "30 days"
+      DEBUG: "7 days"
+      
+    vacuum_strategy:
+      frequency: "daily"
+      trigger: "Housekeeping Orchestrator"
+      method: "DELETE + VACUUM"
+      
+  memory_buffer_config:
+    max_entries: 1000
+    max_memory_mb: 10
+    flush_interval_seconds: 60
+    flush_on_shutdown: true
+    flush_on_error: true  # Immediate flush on ERROR level
+    
+  mcp_tools:
+    audit_query:
+      description: "Query audit logs by criteria"
+      parameters:
+        - "ac_id: Optional[str]"
+        - "orchestrator: Optional[str]"
+        - "level: Optional[str]"
+        - "start_date: Optional[str]"
+        - "end_date: Optional[str]"
+        - "limit: int = 100"
+      returns: "List[AuditEntry]"
+      
+    audit_list:
+      description: "List audit logs with pagination"
+      parameters:
+        - "page: int = 1"
+        - "page_size: int = 50"
+        - "filters: Optional[Dict]"
+      returns: "PaginatedAuditResult"
+      
+    audit_export:
+      description: "Export audit logs to file"
+      parameters:
+        - "format: str = 'jsonl'"  # jsonl, csv, json
+        - "filters: Optional[Dict]"
+        - "output_path: str"
+      returns: "ExportResult"
+      
+  estimated_effort: "12h"
+  depends_on: []
+  unlocks:
+    - "TODO-002"  # AC + Test + Audit validation
+    - "Queryable audit trail"
+    - "MCP-accessible audit tools"
+    - "Multi-repo audit isolation"
+    - "Efficient storage management"
+
+# ==============================================================================
+# EXECUTION ORDER (Snowball Strategy)
+# ==============================================================================
+
+execution_order:
+  rationale: |
+    TODO-003 (Audit Enhancement) must complete first as it provides the foundation
+    for TODO-002 (AC Validation). TODO-001 (Gap-Fix Reorganization) can run in 
+    parallel with TODO-003 but should complete before TODO-002 for optimal test ordering.
+    
+  phases:
+    phase_1:
+      name: "Foundation"
+      todos: ["TODO-003"]
+      effort: "12h"
+      unlocks: ["Queryable audit logs", "MCP audit tools"]
+      
+    phase_2:
+      name: "Parallel Enhancement"
+      todos: ["TODO-001"]
+      effort: "12h"
+      can_parallel_with: "phase_1"
+      unlocks: ["Test stability", "Dependency ordering"]
+      
+    phase_3:
+      name: "Integration"
+      todos: ["TODO-002"]
+      effort: "8h"
+      depends_on: ["phase_1"]
+      unlocks: ["Complete AC validation framework"]
+      
+  total_effort: "24h (20h with parallelization)"
+  
+  dependency_graph:
+    TODO-001: []
+    TODO-002: ["TODO-003"]
+    TODO-003: []
+
+# ==============================================================================
+# RELATED AC CRITERIA (To Be Added)
+# ==============================================================================
+
+related_ac_additions:
+  gap_fix_validation:
+    - AC-GAPFIX-005: "AC reorganization preserves test execution order stability"
+    - AC-GAPFIX-006: "Dependency graph validation before gap injection"  
+    - AC-GAPFIX-007: "Test impact analysis prevents orphaned tests"
+    
+  ac_validation_framework:
+    - AC-VAL-001: "AC validation requires test pass + audit log trace"
+    - AC-VAL-002: "Audit logger tags entries with AC-ID for traceability"
+    - AC-VAL-003: "AC completion report includes audit evidence summary"
+    - AC-VAL-004: "Test harness generates audit-verifiable events"
+    
+  audit_logging_framework:
+    - AC-AUDIT-001: "Audit logs queryable by AC-ID, orchestrator, date range"
+    - AC-AUDIT-002: "Memory buffer with configurable flush thresholds"
+    - AC-AUDIT-003: "Per-repo SQLite audit database isolation"
+    - AC-AUDIT-004: "MCP tools: audit_query, audit_list, audit_export"
+    - AC-AUDIT-005: "Automatic vacuum removes logs older than retention period"
+    - AC-AUDIT-006: "Log level-based retention (ERROR: 90d, INFO: 30d, DEBUG: 7d)"
+    
+  total_new_ac: 13
+
+# ==============================================================================
+# END OF ENHANCEMENT TODOS
+# ==============================================================================
+
+copyright: "Copyright © 2025-2026 Asif Hussain. All rights reserved."
