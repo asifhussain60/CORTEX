@@ -207,7 +207,7 @@ src/                       # Implementation (Python)
 | `cortex-brain/response-templates-v4.yaml` | **Response templates** (INSTANT/FOCUSED/STRUCTURED/COMPREHENSIVE) |
 | `cortex-brain/config/master-orchestrator.yaml` | **Master orchestrator config** (routing patterns, priorities) |
 | `cortex-brain/manifests/orchestrators/` | **All orchestrator manifests** (YAML configs) |
-| `.asif/AI-Learning/cortex6/source-of-truth/` | **CORTEX 6.0 build epic** (tracker, features, plans) |
+| `cortex-brain/documents/planning/active/cortex6/` | **CORTEX 6.0 build epic** (source of truth, acceptance criteria, todos) |
 
 ---
 

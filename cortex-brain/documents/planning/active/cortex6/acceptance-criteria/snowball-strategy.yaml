@@ -609,7 +609,7 @@ references:
       focus: "Feature-level iterative refinement, live feedback loop, quality gates"
   
   related_documents:
-    - ".asif/AI-Learning/cortex6/acceptance/cortex-ac.yaml"
+    - "cortex-brain/documents/planning/active/cortex6/acceptance-criteria/CX6-acceptance-criteria.yaml"
     - ".asif/AI-Learning/cortex6/acceptance/FINAL-HOLISTIC-REVIEW-CRITICAL-GAPS.md"
     - ".github/prompts/CORTEX.prompt.md"
     - "cortex-brain/tier0/brain-protection-rules.yaml"
