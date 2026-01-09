@@ -1,0 +1,337 @@
+# ==============================================================================
+# CORTEX AC Remediation Plan (ACTIVE)
+# ==============================================================================
+# Generated: 2026-01-09T11:00:00Z
+# Source: search-findings-2026-01-09.yaml
+# Plan: cortex6
+# Total Issues: 23
+# Blocking Issues: 5
+# Estimated Effort: 18h 30m
+#
+# LIFECYCLE: This file is the ACTIVE remediation plan.
+# Previous versions archived at: acceptance-criteria/archive/
+# Per AC-ALIGN-001: Archive before regenerate
+# ==============================================================================
+
+metadata:
+  generated_at: '2026-01-09T11:00:00Z'
+  source_findings: cortex-brain/analysis/search-findings-2026-01-09.yaml
+  ac_file: cortex-brain/documents/planning/active/cortex6/acceptance-criteria/00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml
+  plan_name: cortex6
+  total_issues: 23
+  blocking_issues: 5
+  estimated_effort: "18h 30m"
+  lifecycle:
+    archive_location: acceptance-criteria/archive/
+    previous_version: remediation-plan-2026-01-09.yaml
+    archive_policy: AC-ALIGN-001
+
+# ==============================================================================
+# PHASE 1: BLOCKING CRITERIA (Must fix first)
+# ==============================================================================
+
+phases:
+  - phase: 1
+    name: "Blocking Criteria Resolution"
+    priority: "🔴 CRITICAL"
+    snowball_impact: "Unlocks all downstream work and accurate planning"
+    estimated_hours: 5
+    
+    tasks:
+      - id: TASK-001
+        finding_ref: DISC-001
+        description: "Fix priority count mismatch in progress_tracking"
+        action: |
+          Audit all 355 criteria and verify priority assignments.
+          Update progress_tracking.criteria_by_priority to reflect actual counts.
+        effort: "2h"
+        blocking: true
+        status: PENDING
+        
+      - id: TASK-002
+        finding_ref: DISC-002
+        description: "Fix category count mismatch in progress_tracking"
+        action: |
+          Recalculate criteria counts per category.
+          Ensure sum of all categories equals total_criteria (355).
+        effort: "1h"
+        blocking: true
+        status: PENDING
+        
+      - id: TASK-003
+        finding_ref: CONF-001
+        description: "Resolve test organization conflict"
+        action: |
+          Update AC-TEST-ORG-001 to allow orchestrator subfolders.
+          Document rationale: orchestrator subfolders improve organization.
+          Pattern: tests/{unit,integration}/orchestrators/{orchestrator_name}/
+        effort: "30m"
+        blocking: true
+        status: PENDING
+        
+      - id: TASK-004
+        finding_ref: GAP-002
+        description: "Add Epic Review Orchestrator test harness criteria"
+        action: |
+          Add AC-ORC-EPIC-001 through AC-ORC-EPIC-003.
+          Include visual progress bars, health metrics, gap detection.
+        effort: "1h"
+        blocking: true
+        status: PENDING
+        
+      - id: TASK-005
+        finding_ref: GAP-008
+        description: "Add Sanitization Orchestrator test harness criteria"
+        action: |
+          Add AC-ORC-SAN-001 through AC-ORC-SAN-003.
+          Include PII detection, secret removal, mapping preservation.
+          Critical: Security-sensitive orchestrator requires formal validation.
+        effort: "1h"
+        blocking: true
+        status: PENDING
+
+# ==============================================================================
+# PHASE 2: FOUNDATION FIXES (Enable accurate planning)
+# ==============================================================================
+
+  - phase: 2
+    name: "Foundation & Progress Tracking Fixes"
+    priority: "🟠 HIGH"
+    snowball_impact: "Enables accurate progress tracking and plan generation"
+    estimated_hours: 3
+    
+    tasks:
+      - id: TASK-006
+        finding_ref: DISC-003
+        description: "Fix health score calculation precision"
+        action: |
+          Use precise calculation: health_score = (COMPLETE / total_criteria) * 100
+          Document rounding method (floor vs round).
+        effort: "15m"
+        blocking: false
+        status: PENDING
+        
+      - id: TASK-007
+        finding_ref: DISC-004
+        description: "Update orchestrator count references"
+        action: |
+          Update AC-DOC-002 to reference "11+ orchestrators".
+          Ensure all documentation references consistent count.
+        effort: "15m"
+        blocking: false
+        status: PENDING
+        
+      - id: TASK-008
+        finding_ref: CONF-002
+        description: "Clarify governance rule counts"
+        action: |
+          Update AC-GOV-001 and AC-GOV-011 to use consistent terminology:
+          - "61 SKULL rules" = Core brain protection rules
+          - "64+ governance patterns" = SKULL + 3 comprehensive governance patterns
+        effort: "30m"
+        blocking: false
+        status: PENDING
+        
+      - id: TASK-009
+        finding_ref: STRUCT-001
+        description: "Add last_validated timestamp to AC entries"
+        action: |
+          Add optional `last_validated: ISO-8601` field to AC schema.
+          Enables validation freshness tracking.
+        effort: "2h"
+        blocking: false
+        status: PENDING
+
+# ==============================================================================
+# PHASE 3: MISSING ORCHESTRATOR CRITERIA (Security priority)
+# ==============================================================================
+
+  - phase: 3
+    name: "Critical Orchestrator AC Additions"
+    priority: "🟡 MEDIUM-HIGH"
+    snowball_impact: "Complete orchestrator test coverage"
+    estimated_hours: 5
+    
+    tasks:
+      - id: TASK-010
+        finding_ref: GAP-001
+        description: "Add Vision API criteria"
+        action: |
+          Add AC-ORC-VISION-001: Vision middleware auto-engages on images
+          Add AC-ORC-VISION-002: Image analysis injected into context
+        effort: "1h"
+        blocking: false
+        status: PENDING
+        
+      - id: TASK-011
+        finding_ref: GAP-003
+        description: "Add Refinement Orchestrator test harness criteria"
+        action: |
+          Add AC-ORC-REF-001 through AC-ORC-REF-003.
+          Include 7-phase improvement pipeline validation.
+        effort: "1h"
+        blocking: false
+        status: PENDING
+        
+      - id: TASK-012
+        finding_ref: GAP-004
+        description: "Add Cleanup Orchestrator criteria"
+        action: |
+          Add AC-ORC-CLEAN-001: Cleanup removes cache/logs per rules
+          Add AC-ORC-CLEAN-002: Dry-run mode supported
+        effort: "1h"
+        blocking: false
+        status: PENDING
+        
+      - id: TASK-013
+        finding_ref: GAP-006
+        description: "Add Vacuum Orchestrator test harness criteria"
+        action: |
+          Add AC-ORC-VAC-001: Deep filesystem cleanup
+          Add AC-ORC-VAC-002: Dry-run with impact report
+        effort: "1h"
+        blocking: false
+        status: PENDING
+        
+      - id: TASK-014
+        finding_ref: GAP-007
+        description: "Add Investigation Orchestrator test harness criteria"
+        action: |
+          Add AC-ORC-INV-001: Root cause analysis with evidence chain
+          Add AC-ORC-INV-002: Investigation report generation
+        effort: "1h"
+        blocking: false
+        status: PENDING
+
+# ==============================================================================
+# PHASE 4: SUPPORTING ORCHESTRATOR CRITERIA
+# ==============================================================================
+
+  - phase: 4
+    name: "Supporting Orchestrator AC Additions"
+    priority: "🟢 MEDIUM"
+    snowball_impact: "Complete orchestrator validation coverage"
+    estimated_hours: 3
+    
+    tasks:
+      - id: TASK-015
+        finding_ref: GAP-005
+        description: "Add LLM Intent Classifier criteria"
+        action: |
+          Add AC-AGENT-001: LLMIntentClassifier routes with ≥95% accuracy
+          Add AC-AGENT-002: Fallback to regex patterns on LLM failure
+        effort: "1h"
+        blocking: false
+        status: PENDING
+        
+      - id: TASK-016
+        finding_ref: GAP-009
+        description: "Add ADO Orchestrator test harness criteria"
+        action: |
+          Add AC-ORC-ADO-001: Work item hierarchy generation
+          Add AC-ORC-ADO-002: Feature → Story → Task breakdown
+        effort: "1h"
+        blocking: false
+        status: PENDING
+
+# ==============================================================================
+# PHASE 5: STRUCTURAL IMPROVEMENTS
+# ==============================================================================
+
+  - phase: 5
+    name: "Structural Enhancements"
+    priority: "⚪ LOW"
+    snowball_impact: "Maintainability and automation enablement"
+    estimated_hours: 5
+    
+    tasks:
+      - id: TASK-017
+        finding_ref: STRUCT-002
+        description: "Add explicit depends_on field for AC dependencies"
+        action: |
+          Add optional `depends_on: [AC-xxx, AC-yyy]` field to schema.
+          Enables automated execution ordering in planning.
+        effort: "3h"
+        blocking: false
+        status: PENDING
+        
+      - id: TASK-018
+        finding_ref: STRUCT-003
+        description: "Add phase_mapping to snowball-strategy integration"
+        action: |
+          Map each AC to snowball-strategy phase.
+          Enables automatic plan generation from AC.
+        effort: "2h"
+        blocking: false
+        status: PENDING
+
+# ==============================================================================
+# PHASE 6: DOCUMENTATION POLISH
+# ==============================================================================
+
+  - phase: 6
+    name: "Documentation Consistency"
+    priority: "⚪ LOW"
+    snowball_impact: "Improved AC navigability"
+    estimated_hours: 1
+    
+    tasks:
+      - id: TASK-019
+        finding_ref: STRUCT-004
+        description: "Add priority_by_section summary table"
+        action: |
+          Add summary table at top of each major section showing:
+          - Total criteria in section
+          - P0/P1/P2 breakdown
+          - Blocking count
+        effort: "1h"
+        blocking: false
+        status: PENDING
+
+# ==============================================================================
+# EXECUTION SUMMARY
+# ==============================================================================
+
+execution_summary:
+  total_phases: 6
+  total_tasks: 19
+  blocking_tasks: 5
+  completed_tasks: 0
+  
+  effort_by_phase:
+    phase_1: "5h (BLOCKING)"
+    phase_2: "3h"
+    phase_3: "5h"
+    phase_4: "2h"
+    phase_5: "2.5h"
+    phase_6: "1h"
+  
+  total_effort: "18h 30m"
+  
+  execution_order:
+    priority_1: "Phase 1 - MUST complete before any other work"
+    priority_2: "Phase 2 + Phase 3 can run in parallel"
+    priority_3: "Phase 4 depends on Phase 3 completion"
+    priority_4: "Phase 5 + Phase 6 can run in parallel"
+  
+  dependencies:
+    TASK-006: []
+    TASK-007: []
+    TASK-008: []
+    TASK-009: [TASK-001, TASK-002]
+    TASK-010: [TASK-003]
+    TASK-011: [TASK-003]
+    TASK-012: [TASK-003]
+    TASK-013: [TASK-003]
+    TASK-014: [TASK-003]
+    TASK-015: [TASK-003]
+    TASK-016: [TASK-003]
+    TASK-017: [TASK-001, TASK-002]
+    TASK-018: [TASK-017]
+    TASK-019: [TASK-001, TASK-002]
+
+# ==============================================================================
+# END OF REMEDIATION PLAN
+# ==============================================================================
+
+copyright: "Copyright © 2025-2026 Asif Hussain. All rights reserved."
