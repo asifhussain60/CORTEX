@@ -1,36 +1,54 @@
 # CORTEX 6.0 DOCUMENTATION INDEX
-**Generated:** 2026-01-09  
+**Generated:** 2026-01-09 (Post-Vacuum Consolidation)  
 **Location:** `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/`  
 **Purpose:** Quick reference guide to all CORTEX 6.0 planning documents
 
 ---
 
-## 📚 Document Hierarchy
+## 📚 Document Hierarchy (Organized)
 
 ```
-CORTEX 6.0 Documentation
+CORTEX 6.0 Acceptance Criteria (Consolidated Structure)
 │
-├── 🎯 EPIC LEVEL (Business Requirements)
-│   └── 00-CORTEX6-MASTER-SOURCE-OF-TRUTH.yaml
-│       ├── WHY: Business value & strategic goals
-│       ├── WHAT: Feature catalog (feat01-feat09)
-│       └── WHO: User personas & stakeholders
+├── 📑 ROOT (Core Governance & Reference)
+│   ├── 00-INDEX.md (This file)
+│   ├── README.md (Overview)
+│   ├── CX6-acceptance-criteria.yaml (390+ AC)
+│   ├── CX6-autonomous-safeguards-AC.yaml
+│   ├── CX6-foundation-tasks-AC.yaml
+│   ├── CX6-build-sequence.yaml (12 phases)
+│   ├── CX6-completion-criteria.yaml (DoD gates)
+│   └── CX6-GOVERNANCE.yaml (Machine-readable rules)
 │
-├── 📋 VALIDATION LEVEL (How to Verify)
-│   └── acceptance-criteria/
-│       ├── CX6-acceptance-criteria.yaml (390+ AC)
-│       ├── CX6-GOVERNANCE.yaml (Machine-readable rules)
-│       └── CX6-requirements.yaml (Active remediation)
+├── 📊 analysis/ (Architecture & Design Analysis)
+│   └── ARCHITECTURE-ANALYSIS-AND-RECOMMENDATIONS.md
 │
-├── 🔨 EXECUTION LEVEL (When & How to Build)
-│   └── acceptance-criteria/
-│       ├── CX6-build-sequence.yaml (12 phases)
-│       ├── snowball-strategy.yaml (Momentum framework)
-│       └── CX6-completion-criteria.yaml (Definition of Done)
+├── 📦 archive/ (Historical Versions & Superseded Docs)
+│   ├── CX6-planning-orchestrator-workflow-v6.0.0-20260109.md
+│   ├── cortex6-build-plan-legacy.md
+│   ├── remediation-plan-2026-01-09*.yaml
+│   └── search-findings-20260109*.yaml
 │
-└── 🎨 FEATURE SPECS (Detailed Requirements)
-    └── acceptance-criteria/
-        └── plan-viewer-dashboard-requirements.yaml
+├── � enhancements/ (Feature Enhancements & Extensions)
+│   └── CX6-vacuum-phase-0-enhancement.md
+│
+├── 📋 requirements/ (Feature Requirements & Specs)
+│   ├── CX6-requirements.yaml
+│   └── plan-viewer-dashboard-requirements.yaml
+│
+├── 🎯 strategies/ (Execution Strategies & Frameworks)
+│   └── snowball-strategy.yaml
+│
+├── 📝 summaries/ (Update Summaries & Implementation Reports)
+│   ├── CX6-AC-UPDATE-v14.4.0-CORRECTED-SUMMARY.md
+│   ├── CX6-AC-UPDATE-v15.0.0-SUMMARY.md
+│   ├── GAP-FIX-IMPLEMENTATION-PLAN.md
+│   ├── VACUUM-CONSOLIDATION-ENHANCEMENT-SUMMARY.md
+│   ├── VACUUM-PROMPT-IMPLEMENTATION-SUMMARY.md
+│   └── WORKFLOW-V3-UPDATE-SUMMARY.md
+│
+└── 🔄 workflows/ (Orchestrator Workflows & Processes)
+    └── CX6-planning-orchestrator-workflow.md (v3.0 - Latest)
 ```
 
 ---
@@ -38,21 +56,21 @@ CORTEX 6.0 Documentation
 ## 🗂️ Quick Reference by Use Case
 
 ### **Planning a New Epic**
-1. Start: `00-CORTEX6-MASTER-SOURCE-OF-TRUTH.yaml` (understand business goals)
+1. Start: `00-CORTEX6-MASTER-SOURCE-OF-TRUTH.yaml` (in parent folder)
 2. Validate: `CX6-acceptance-criteria.yaml` (check what needs validation)
 3. Sequence: `CX6-build-sequence.yaml` (plan phase order)
-4. Execute: `snowball-strategy.yaml` (apply momentum strategy)
+4. Execute: `strategies/snowball-strategy.yaml` (apply momentum strategy)
 
 ### **Building CORTEX 6.0**
 1. Start: `CX6-build-sequence.yaml` → Phase 1 (Foundation Layer)
-2. Track: `snowball-strategy.yaml` → Monitor momentum level
+2. Track: `strategies/snowball-strategy.yaml` → Monitor momentum level
 3. Validate: `CX6-acceptance-criteria.yaml` → Check AC fulfillment
 4. Complete: `CX6-completion-criteria.yaml` → Verify DoD gates
 
 ### **Fixing Gaps**
 1. Detect: Run `cortex gap-fix` → Generates `search-findings-*.yaml`
-2. Review: `CX6-requirements.yaml` → Current issues (23 items)
-3. Remediate: Follow tasks in `CX6-requirements.yaml`
+2. Review: `requirements/CX6-requirements.yaml` → Current issues
+3. Remediate: Follow tasks in requirements files
 4. Archive: Move to `archive/remediation-plan-{date}.yaml`
 
 ### **Checking Progress**
@@ -60,6 +78,27 @@ CORTEX 6.0 Documentation
 2. Build Status: `CX6-build-sequence.yaml` → Check phase completion
 3. Health Metrics: Run `epic review cortex6`
 4. Completion: `CX6-completion-criteria.yaml` → Validate 20 gates
+
+### **Reviewing Workflows**
+1. Latest Workflow: `workflows/CX6-planning-orchestrator-workflow.md` (v3.0)
+2. Analysis: `analysis/ARCHITECTURE-ANALYSIS-AND-RECOMMENDATIONS.md`
+3. Updates: Check `summaries/` for implementation reports
+
+---
+
+## 📊 Consolidation Results
+
+**Before Vacuum:**
+- 23 files at root level
+- No organizational structure
+- Multiple workflow versions at root
+- Scattered summaries and updates
+
+**After Vacuum (2026-01-09):**
+- 8 files at root (core governance only)
+- 7 categorical subfolders (clear purpose-based organization)
+- 26 total files (1 workflow consolidated, duplicates archived)
+- 100% data preserved in `archive/`
 
 ---
 
