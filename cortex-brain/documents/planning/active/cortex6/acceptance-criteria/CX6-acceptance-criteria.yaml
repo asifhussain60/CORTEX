@@ -24,13 +24,56 @@
 
 metadata:
   document_type: enterprise_acceptance_criteria
-  version: 15.0.0
+  version: 16.1.0
   status: AUTHORITATIVE
   created: '2026-01-09'
   updated: '2026-01-09'
   author: Asif Hussain
   epic_id: CORTEX6-BUILD
   changelog:
+    v16.1.0:
+      date: '2026-01-09'
+      changes:
+        - "Added AC-GOV-011: TDD-Master Orchestrator required for ALL development (CORE-019)"
+        - "Enhanced AC-TDD-MASTER-000: TDD-Master supports independent execution (unplanned mode)"
+        - "Updated Section 24 criteria count: 7 → 8"
+        - "TDD-Master can execute WITHOUT Planning Orchestrator (unplanned development)"
+        - "Copilot BLOCKED from direct implementation (must route to TDD-Master)"
+        - "CORE-019 governance rule: All 'implement', 'build', 'create', 'fix' → TDD-Master"
+        - "Unplanned mode: Lightweight requirements gathering + toolkit analysis"
+        - "Planned mode: Execute after Planning Orchestrator completion"
+        - "DevelopmentRouter middleware: Priority 10 (highest) to intercept implementation"
+      reason: "CRITICAL GOVERNANCE: (1) Prevent Copilot from writing code directly - ALL development must go through TDD-Master for test coverage + governance enforcement, (2) Enable unplanned development (quick fixes, small features) without full Planning workflow, (3) TDD-Master becomes universal entry point for all development work"
+    v16.0.0:
+      date: '2026-01-09'
+      changes:
+        - "Added SECTION 23: CORTEX TOOLKIT INTEGRATION (AC-TOOLKIT-001 to AC-TOOLKIT-008)"
+        - "AC-TOOLKIT-001: All 8 toolkit tools implement BaseTool interface"
+        - "AC-TOOLKIT-002: JSON input/output schemas (JSON Schema v7)"
+        - "AC-TOOLKIT-003: MCP server registration for all 8 tools"
+        - "AC-TOOLKIT-004: Audit logging with AC-ID traceability"
+        - "AC-TOOLKIT-005: Input validation against JSON schemas"
+        - "AC-TOOLKIT-006: Structured JSON error responses"
+        - "AC-TOOLKIT-007: 85%+ test coverage requirement"
+        - "AC-TOOLKIT-008: SOLID/DRY principles compliance"
+        - "Added SECTION 24: TDD-MASTER ORCHESTRATOR COORDINATION (AC-TDD-MASTER-001 to AC-TDD-MASTER-007)"
+        - "AC-TDD-MASTER-001: Plan detection via config.yaml validation"
+        - "AC-TDD-MASTER-002: Planning → TDD context transformation (JSON)"
+        - "AC-TDD-MASTER-003: TDD Orchestrator invocation with enriched context"
+        - "AC-TDD-MASTER-004: 100% AC coverage validation post-TDD"
+        - "AC-TDD-MASTER-005: Tier0-3 governance continuity enforcement"
+        - "AC-TDD-MASTER-006: plan-viewer.html dashboard updates"
+        - "AC-TDD-MASTER-007: Unified completion report generation"
+        - "Added SECTION 25: YAML/JSON DATA INTERCHANGE (AC-DATA-001 to AC-DATA-005)"
+        - "AC-DATA-001: NO MARKDOWN files during orchestrator execution (P0_CRITICAL)"
+        - "AC-DATA-002: Schema validation for all data files"
+        - "AC-DATA-003: tdd-context.json handoff artifact"
+        - "AC-DATA-004: TDD context consumption (no regeneration)"
+        - "AC-DATA-005: JSONL audit logs with AC-ID tags"
+        - "Total new criteria: 20 (8 + 7 + 5)"
+        - "Updated CX6-requirements.yaml with 5 implementation phases (80-108 hours)"
+        - "Created CX6-unified-orchestration-system.yaml (complete system design)"
+      reason: "CRITICAL GOVERNANCE & ARCHITECTURE: (1) Unified orchestration system design with CORTEX Toolkit (8 modular tools) + MCP exposure, (2) TDD-Master Orchestrator coordination layer for seamless Planning → TDD handoff, (3) YAML/JSON-only data interchange (NO MARKDOWN per governance), (4) Complete schema validation framework, (5) AC coverage tracking across orchestrator boundaries, (6) Tier0-3 governance continuity, (7) Implementation roadmap (Phases 7-11 in requirements)"
     v15.0.0:
       date: '2026-01-09'
       changes:
@@ -358,7 +401,7 @@ governance_compliance:
     
   AC-GOV-004:
     id: AC-GOV-004
-    criterion: "TDD_ENFORCEMENT mandatory - tests fail before implementation"
+    criterion: "TDD_ENFORCEMENT mandatory - tests fail before implementation (CORE-008)"
     acceptance:
       - "RED→GREEN→REFACTOR cycle enforced"
       - "No code implementation without failing test"
@@ -368,6 +411,32 @@ governance_compliance:
     test_file: "tests/governance/test_tdd_enforcement.py"
     status: PENDING
     blocking: true
+  
+  AC-GOV-011:
+    id: AC-GOV-011
+    criterion: "TDD-Master Orchestrator required for ALL development (CORE-019)"
+    acceptance:
+      - "**ROUTING ENFORCEMENT:** All implementation requests route to TDD-Master Orchestrator"
+      - "**COPILOT BLOCKED:** GitHub Copilot NEVER writes implementation code directly"
+      - "**PATTERN MATCHING:** Requests with 'implement', 'build', 'create', 'fix' → TDD-Master"
+      - "**UNPLANNED MODE:** TDD-Master supports standalone execution (no Planning required)"
+      - "**PLANNED MODE:** TDD-Master executes after Planning Orchestrator completion"
+      - "**EXCEPTIONS:** Documentation, configuration, JSON/YAML files can be created directly"
+      - "**RESPONSE TEMPLATE:** Copilot suggests TDD-Master when user requests implementation"
+      - "**MIDDLEWARE:** DevelopmentRouter intercepts implementation requests at priority 10"
+      - "Test: User says 'implement login' → Copilot routes to TDD-Master (no direct code)"
+      - "Test: User says 'fix this bug' → Copilot routes to TDD-Master (unplanned mode)"
+      - "Test: User says 'document this function' → Copilot creates docs directly (exception)"
+    validation: automated
+    test_file: "tests/governance/test_tdd_master_enforcement.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    category: governance
+    evidence:
+      - "CORE-019 governance rule enforced"
+      - "DevelopmentRouter middleware active"
+      - "Zero direct implementation by Copilot"
     
   AC-GOV-005:
     id: AC-GOV-005
@@ -4900,6 +4969,476 @@ digest_utility:
       - "cortex-brain/schemas/digest-output.schema.json"
     evidence:
       - "Implementation complete: All files created with tests"
+
+# ==============================================================================
+# SECTION 23: CORTEX TOOLKIT INTEGRATION (NEW - v16.0.0)
+# ==============================================================================
+# Purpose: Acceptance criteria for CORTEX Toolkit (8 modular analysis tools)
+#          exposed via MCP for unified orchestration system
+# Reference: CX6-unified-orchestration-system.yaml
+# ==============================================================================
+
+section_23_cortex_toolkit:
+  section_id: 23
+  name: "CORTEX Toolkit Integration"
+  description: "8 modular analysis tools with MCP exposure for YAML/JSON-based orchestration"
+  total_criteria: 8
+  reference_document: "cortex-brain/documents/planning/active/cortex6/acceptance-criteria/workflows/CX6-unified-orchestration-system.yaml"
+  
+  AC-TOOLKIT-001:
+    id: AC-TOOLKIT-001
+    criterion: "All 8 toolkit tools implement BaseTool interface"
+    acceptance:
+      - "**BASE TOOL:** src/toolkit/base_tool.py defines abstract BaseTool class"
+      - "**INTERFACE:** execute(input_data: dict) → dict method (abstract)"
+      - "**VALIDATION:** validate_input(input_data: dict, schema: dict) → bool"
+      - "**SCHEMA:** All tools define input_schema and output_schema (JSON Schema v7)"
+      - "**AUDIT:** All tools integrate EnterpriseAuditLogger with AC-ID tagging"
+      - "**ERROR HANDLING:** Structured error responses (JSON format)"
+      - "**TOOLS:** SemanticSearch, ASTParser, GitAnalyzer, KnowledgeGraph, PatternDetector, DependencyMapper, DuplicateDetector, OrphanDetector"
+      - "Test: Instantiate all 8 tools → all inherit BaseTool, all implement execute()"
+    validation: automated
+    test_file: "tests/toolkit/test_base_tool_compliance.py"
+    status: PENDING
+    blocking: true
+    priority: P1_HIGH
+    category: architecture
+    evidence:
+      - "Unit tests: 100% pass rate for BaseTool compliance"
+      - "Code inspection: All 8 tools extend BaseTool"
+
+  AC-TOOLKIT-002:
+    id: AC-TOOLKIT-002
+    criterion: "All toolkit tools expose JSON input/output schemas"
+    acceptance:
+      - "**INPUT SCHEMA:** Each tool has input_schema property (JSON Schema v7)"
+      - "**OUTPUT SCHEMA:** Each tool has output_schema property (JSON Schema v7)"
+      - "**SCHEMA LOCATION:** Schemas stored in cortex-brain/schemas/toolkit-{tool_name}.json"
+      - "**REQUIRED FIELDS:** Input schemas specify required parameters"
+      - "**TYPE VALIDATION:** Schemas enforce type constraints (string, integer, array, object)"
+      - "**SCHEMA VERSIONING:** Schemas include $schema: http://json-schema.org/draft-07/schema#"
+      - "Test: Load all 8 tool schemas → all valid JSON Schema v7 format"
+    validation: automated
+    test_file: "tests/toolkit/test_toolkit_schemas.py"
+    status: PENDING
+    blocking: true
+    priority: P1_HIGH
+    category: architecture
+    evidence:
+      - "Schema files: cortex-brain/schemas/toolkit-*.json (8 files)"
+      - "Schema validation: All pass jsonschema validation"
+
+  AC-TOOLKIT-003:
+    id: AC-TOOLKIT-003
+    criterion: "All toolkit tools registered in MCP server"
+    acceptance:
+      - "**MCP SERVER:** src/mcp/toolkit_server.py (JSON-RPC 2.0)"
+      - "**TOOL METHODS:** cortex_semantic_search, cortex_ast_parse, cortex_git_analyze, cortex_knowledge_query, cortex_detect_patterns, cortex_map_dependencies, cortex_detect_duplicates, cortex_detect_orphans"
+      - "**REGISTRATION:** All 8 tools auto-registered on server startup"
+      - "**INTEGRITY CHECK:** Startup validation ensures all tools discoverable"
+      - "**ERROR HANDLING:** MCP methods return structured error responses"
+      - "Test: Start MCP server → query tool list → all 8 toolkit tools present"
+    validation: automated
+    test_file: "tests/mcp/test_toolkit_server_registration.py"
+    status: PENDING
+    blocking: true
+    priority: P1_HIGH
+    category: integration
+    evidence:
+      - "MCP server startup log: All 8 tools registered"
+      - "Tool discovery test: 100% pass rate"
+
+  AC-TOOLKIT-004:
+    id: AC-TOOLKIT-004
+    criterion: "All toolkit executions logged with AC-ID traceability"
+    acceptance:
+      - "**AUDIT LOGGER:** EnterpriseAuditLogger integration in all tools"
+      - "**AC-ID TAGGING:** Audit entries include ac_id field (e.g., AC-PLAN-SEARCH-001)"
+      - "**EXECUTION CONTEXT:** Log tool name, input parameters (sanitized), execution time"
+      - "**OUTPUT SUMMARY:** Log output structure (no sensitive data)"
+      - "**ERROR LOGGING:** Exceptions logged with stack trace and context"
+      - "**QUERY SUPPORT:** Audit logs queryable by AC-ID via cortex_audit_query MCP tool"
+      - "Test: Execute SemanticSearch → audit log contains AC-PLAN-SEARCH-001"
+    validation: automated
+    test_file: "tests/toolkit/test_toolkit_audit_logging.py"
+    status: PENDING
+    blocking: false
+    priority: P1_HIGH
+    category: audit
+    evidence:
+      - "Audit log query: cortex_audit_query(ac_id='AC-PLAN-SEARCH-001') → results found"
+
+  AC-TOOLKIT-005:
+    id: AC-TOOLKIT-005
+    criterion: "Toolkit tools validate input against JSON schema"
+    acceptance:
+      - "**VALIDATION METHOD:** validate_input(input_data, schema) in BaseTool"
+      - "**SCHEMA ENFORCEMENT:** All tools call validate_input() before execute()"
+      - "**VALIDATION ERRORS:** Raise ValueError with detailed schema violation message"
+      - "**REQUIRED FIELDS:** Missing required fields → immediate rejection"
+      - "**TYPE CHECKING:** Type mismatches → immediate rejection"
+      - "Test: Invoke SemanticSearch with invalid input → ValueError with schema details"
+    validation: automated
+    test_file: "tests/toolkit/test_toolkit_validation.py"
+    status: PENDING
+    blocking: false
+    priority: P2_MEDIUM
+    category: validation
+    evidence:
+      - "Validation tests: 100% pass rate for all 8 tools"
+
+  AC-TOOLKIT-006:
+    id: AC-TOOLKIT-006
+    criterion: "Toolkit tools return errors as structured JSON"
+    acceptance:
+      - "**ERROR STRUCTURE:** {\"error\": true, \"error_type\": \"ValidationError\", \"message\": \"...\", \"details\": {...}}"
+      - "**ERROR TYPES:** ValidationError, ExecutionError, TimeoutError, NotFoundError"
+      - "**STACK TRACES:** Include in development mode, exclude in production"
+      - "**RECOVERY HINTS:** Provide actionable suggestions in error message"
+      - "Test: Trigger toolkit error → response is valid JSON with error structure"
+    validation: automated
+    test_file: "tests/toolkit/test_toolkit_error_handling.py"
+    status: PENDING
+    blocking: false
+    priority: P2_MEDIUM
+    category: error_handling
+    evidence:
+      - "Error response tests: 100% structured JSON responses"
+
+  AC-TOOLKIT-007:
+    id: AC-TOOLKIT-007
+    criterion: "Toolkit tools have 85%+ test coverage"
+    acceptance:
+      - "**UNIT TESTS:** Each tool has dedicated test file in tests/toolkit/"
+      - "**COVERAGE TARGET:** 85%+ line coverage per tool"
+      - "**EDGE CASES:** Tests cover invalid input, empty results, timeout scenarios"
+      - "**INTEGRATION TESTS:** MCP invocation tests in tests/mcp/"
+      - "**REGRESSION TESTS:** Prevent recurring bugs from past issues"
+      - "Test: Run pytest --cov=src.toolkit → all tools ≥ 85% coverage"
+    validation: automated
+    test_file: "tests/toolkit/test_*.py (8 files)"
+    status: PENDING
+    blocking: false
+    priority: P1_HIGH
+    category: testing
+    evidence:
+      - "Coverage report: src/toolkit/ overall coverage ≥ 85%"
+
+  AC-TOOLKIT-008:
+    id: AC-TOOLKIT-008
+    criterion: "Toolkit tools follow SOLID/DRY principles"
+    acceptance:
+      - "**SINGLE RESPONSIBILITY:** Each tool has one clear purpose"
+      - "**OPEN/CLOSED:** Tools extensible via inheritance (BaseTool)"
+      - "**LISKOV SUBSTITUTION:** All tools interchangeable via BaseTool interface"
+      - "**INTERFACE SEGREGATION:** BaseTool defines minimal required interface"
+      - "**DEPENDENCY INVERSION:** Tools depend on abstractions (BaseTool), not concretions"
+      - "**DRY:** Common logic (validation, audit, error handling) in BaseTool"
+      - "Code review: SOLID/DRY compliance verified by architect"
+    validation: manual
+    status: PENDING
+    blocking: false
+    priority: P2_MEDIUM
+    category: code_quality
+    evidence:
+      - "Code review document: Architecture approval with SOLID/DRY compliance"
+
+# ==============================================================================
+# SECTION 24: TDD-MASTER ORCHESTRATOR COORDINATION (NEW - v16.0.0)
+# ==============================================================================
+# Purpose: Acceptance criteria for TDD-Master Orchestrator (coordination layer)
+#          bridging Planning → TDD with governance continuity
+# Reference: CX6-unified-orchestration-system.yaml
+# ==============================================================================
+
+section_24_tdd_master_orchestrator:
+  section_id: 24
+  name: "TDD-Master Orchestrator Coordination"
+  description: "Coordination layer for Planning → TDD handoff OR standalone unplanned development"
+  total_criteria: 8  # Updated from 7
+  reference_document: "cortex-brain/documents/planning/active/cortex6/acceptance-criteria/workflows/CX6-unified-orchestration-system.yaml"
+  
+  AC-TDD-MASTER-000:
+    id: AC-TDD-MASTER-000
+    criterion: "TDD-Master supports independent execution (unplanned development)"
+    acceptance:
+      - "**DUAL MODES:** Planned mode (after Planning) + Unplanned mode (standalone)"
+      - "**MODE DETECTION:** Check for tdd-context.json → If exists: PLANNED, else: UNPLANNED"
+      - "**UNPLANNED PROMPTS:** Lightweight interactive requirements (feature, AC, constraints)"
+      - "**TOOLKIT INVOCATION:** Use SemanticSearch, ASTParser, GitAnalyzer, PatternDetector in unplanned mode"
+      - "**CONTEXT GENERATION:** Create tdd-context-unplanned.json from user input + toolkit"
+      - "**ROUTING PATTERNS:** 'implement', 'build', 'create', 'fix', 'refactor' → TDD-Master (unplanned)"
+      - "**NO PLANNING REQUIRED:** TDD-Master executes independently without Planning Orchestrator"
+      - "**GOVERNANCE ENFORCEMENT:** CORE-019 requires ALL implementation via TDD-Master"
+      - "Test: User 'implement login' → TDD-Master (unplanned) → No Planning Orchestrator"
+      - "Test: User 'fix bug' → TDD-Master (unplanned) → Lightweight requirements → TDD execution"
+    validation: automated
+    test_file: "tests/orchestrators/tdd_master/test_unplanned_mode.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    category: orchestration
+    evidence:
+      - "Unplanned mode execution: tdd-context-unplanned.json created"
+      - "Independent execution: No dependency on Planning Orchestrator"
+      - "CORE-019 compliance: All implementation routed to TDD-Master"
+  
+  AC-TDD-MASTER-001:
+    id: AC-TDD-MASTER-001
+    criterion: "TDD-Master detects completed plans via config.yaml validation (PLANNED MODE)"
+    acceptance:
+      - "**PLAN DETECTION:** Monitor {plan-id}/config.yaml for approval_granted=true"
+      - "**VALIDATION CHECKS:** Verify config.yaml, requirements.yaml, {plan-id}.yaml existence"
+      - "**STRUCTURE VALIDATION:** Validate requirements.yaml has user_stories array"
+      - "**AC COVERAGE:** Confirm acceptance_criteria coverage = 100%"
+      - "**GOVERNANCE CHECK:** Verify governance_validated=true in config.yaml"
+      - "**VALIDATION REPORT:** Generate tracking/plan-validation-report.json"
+      - "Test: Complete plan → TDD-Master detects and validates → report generated"
+    validation: automated
+    test_file: "tests/orchestrators/tdd_master/test_plan_detection.py"
+    status: PENDING
+    blocking: true
+    priority: P1_HIGH
+    category: integration
+    evidence:
+      - "Plan validation report: tracking/plan-validation-report.json"
+      - "Audit log: TDD-Master plan detection with AC coverage confirmation"
+
+  AC-TDD-MASTER-002:
+    id: AC-TDD-MASTER-002
+    criterion: "TDD-Master transforms Planning data → TDD context (JSON)"
+    acceptance:
+      - "**CONTEXT FILE:** Generate tracking/tdd-context.json from plan data"
+      - "**USER STORIES → FEATURES:** Map requirements.yaml::user_stories → tdd_context.features"
+      - "**AC → TEST REQUIREMENTS:** Map acceptance_criteria → test_requirements"
+      - "**DOMAIN KNOWLEDGE:** Copy analysis/domain-knowledge-final.json → tdd_context.domain_knowledge"
+      - "**DEPENDENCIES:** Transform analysis/dependencies-discovered.yaml → tdd_context.dependencies (JSON)"
+      - "**GOVERNANCE RULES:** Load Tier0-3 from cortex-brain/ → tdd_context.governance_rules"
+      - "**SCHEMA VALIDATION:** Validate tdd-context.json against cortex-brain/schemas/tdd-context-schema.json"
+      - "Test: Transform completed plan → tdd-context.json created and valid"
+    validation: automated
+    test_file: "tests/orchestrators/tdd_master/test_context_transfer.py"
+    status: PENDING
+    blocking: true
+    priority: P1_HIGH
+    category: data_transformation
+    evidence:
+      - "Generated context: tracking/tdd-context.json"
+      - "Schema validation: tdd-context.json passes JSON Schema validation"
+
+  AC-TDD-MASTER-003:
+    id: AC-TDD-MASTER-003
+    criterion: "TDD-Master invokes TDD Orchestrator with enriched context"
+    acceptance:
+      - "**TDD INVOCATION:** Call TDD Orchestrator v4 execute() with context_file='tracking/tdd-context.json'"
+      - "**CONTEXT INJECTION:** TDD Orchestrator loads tdd-context.json (no user prompts)"
+      - "**PHASE MONITORING:** Track TDD phases in real-time (DISCOVERY, RED, GREEN, REFACTOR, VALIDATION)"
+      - "**PROGRESS TRACKING:** Update tracking/tdd-progress.json per phase completion"
+      - "**ERROR HANDLING:** Catch TDD execution errors, log to audit, generate error report"
+      - "Test: Invoke TDD Orchestrator with context → all phases execute, progress tracked"
+    validation: automated
+    test_file: "tests/orchestrators/tdd_master/test_tdd_invocation.py"
+    status: PENDING
+    blocking: true
+    priority: P1_HIGH
+    category: orchestration
+    evidence:
+      - "TDD progress log: tracking/tdd-progress.json"
+      - "Audit log: TDD phase completions with timestamps"
+
+  AC-TDD-MASTER-004:
+    id: AC-TDD-MASTER-004
+    criterion: "TDD-Master validates 100% AC coverage post-TDD"
+    acceptance:
+      - "**AC MAPPING:** Compare requirements.yaml::acceptance_criteria → generated test cases"
+      - "**COVERAGE CALCULATION:** coverage_percentage = (criteria_validated / total_criteria) * 100"
+      - "**COVERAGE THRESHOLD:** Require 100% coverage (all AC have tests)"
+      - "**GAP DETECTION:** Identify AC without corresponding tests"
+      - "**COVERAGE REPORT:** Generate tracking/ac-coverage-report.json"
+      - "**VALIDATION GATE:** Block completion if coverage < 100%"
+      - "Test: Complete TDD → AC coverage report shows 100%"
+    validation: automated
+    test_file: "tests/orchestrators/tdd_master/test_ac_validation.py"
+    status: PENDING
+    blocking: true
+    priority: P1_HIGH
+    category: validation
+    evidence:
+      - "AC coverage report: tracking/ac-coverage-report.json (coverage_percentage=100)"
+
+  AC-TDD-MASTER-005:
+    id: AC-TDD-MASTER-005
+    criterion: "TDD-Master enforces Tier0-3 governance continuity"
+    acceptance:
+      - "**TIER0 VALIDATION:** Verify TDD_ENFORCEMENT (RED phase executed first)"
+      - "**TIER1 VALIDATION:** Verify CLEAN_CODE (SOLID/DRY/KISS checks pass)"
+      - "**TIER2 VALIDATION:** Verify SECURITY_PATTERNS (security tests generated)"
+      - "**TIER3 VALIDATION:** Verify GIT_ISOLATION (no cross-repo contamination)"
+      - "**GOVERNANCE REPORT:** Generate tracking/governance-audit.json"
+      - "**VIOLATION HANDLING:** Log violations, block completion if P0/P1 violations exist"
+      - "Test: Complete TDD → governance audit shows tier0-3 compliant=true"
+    validation: automated
+    test_file: "tests/orchestrators/tdd_master/test_governance_enforcement.py"
+    status: PENDING
+    blocking: true
+    priority: P1_HIGH
+    category: governance
+    evidence:
+      - "Governance audit: tracking/governance-audit.json (all tiers compliant)"
+
+  AC-TDD-MASTER-006:
+    id: AC-TDD-MASTER-006
+    criterion: "TDD-Master updates plan-viewer.html with TDD progress"
+    acceptance:
+      - "**DASHBOARD INTEGRATION:** Update {plan-id}/plan-viewer.html during TDD execution"
+      - "**UPDATE MECHANISM:** File write or WebSocket (if server running)"
+      - "**UPDATE FREQUENCY:** Real-time per TDD phase completion"
+      - "**PROGRESS DATA:** Show current phase, completed phases, test counts, coverage %"
+      - "**VISUAL INDICATORS:** Progress bars (ASCII), status badges, phase timeline"
+      - "Test: Start TDD → plan-viewer.html updates in real-time"
+    validation: manual
+    test_file: "tests/orchestrators/tdd_master/test_dashboard_updates.py"
+    status: PENDING
+    blocking: false
+    priority: P2_MEDIUM
+    category: dashboard
+    evidence:
+      - "Dashboard screenshot: plan-viewer.html showing TDD progress"
+
+  AC-TDD-MASTER-007:
+    id: AC-TDD-MASTER-007
+    criterion: "TDD-Master generates unified completion report (JSON)"
+    acceptance:
+      - "**REPORT FILE:** tracking/completion-report.json"
+      - "**PLAN SUMMARY:** plan_id, name, phases_completed, estimated_hours, actual_hours"
+      - "**TDD SUMMARY:** phases_executed, tests_generated, tests_passing, clean_code_score, security_tests_count"
+      - "**AC COVERAGE:** total_criteria, criteria_validated, coverage_percentage, gaps[]"
+      - "**GOVERNANCE AUDIT:** tier0-3 compliance, violations[]"
+      - "**ARTIFACTS:** plan_files[], test_files[], implementation_files[], reports[]"
+      - "**SCHEMA VALIDATION:** Validate against cortex-brain/schemas/completion-report-schema.json"
+      - "Test: Complete workflow → completion-report.json generated and valid"
+    validation: automated
+    test_file: "tests/orchestrators/tdd_master/test_completion_report.py"
+    status: PENDING
+    blocking: false
+    priority: P2_MEDIUM
+    category: reporting
+    evidence:
+      - "Completion report: tracking/completion-report.json (schema-valid)"
+
+# ==============================================================================
+# SECTION 25: YAML/JSON DATA INTERCHANGE (NEW - v16.0.0)
+# ==============================================================================
+# Purpose: Acceptance criteria for YAML/JSON-only data interchange
+#          (NO MARKDOWN files during orchestrator execution)
+# Reference: CX6-unified-orchestration-system.yaml
+# ==============================================================================
+
+section_25_yaml_json_interchange:
+  section_id: 25
+  name: "YAML/JSON Data Interchange"
+  description: "Governance requirement: All orchestrator outputs are YAML or JSON (NO MARKDOWN)"
+  total_criteria: 5
+  reference_document: "cortex-brain/documents/planning/active/cortex6/acceptance-criteria/workflows/CX6-unified-orchestration-system.yaml"
+  
+  AC-DATA-001:
+    id: AC-DATA-001
+    criterion: "All orchestrator outputs are YAML or JSON (NO MARKDOWN)"
+    acceptance:
+      - "**PLANNING OUTPUTS:** requirements.yaml, {plan-id}.yaml, config.yaml, *.json (analysis, tracking)"
+      - "**TDD-MASTER OUTPUTS:** tdd-context.json, plan-validation-report.json, ac-coverage-report.json, governance-audit.json, completion-report.json"
+      - "**TDD OUTPUTS:** tdd-progress.json, tdd-execution-report.json"
+      - "**NO MARKDOWN:** Zero .md files created during orchestrator execution (except plan-viewer.html for dashboard)"
+      - "**GOVERNANCE RULE:** AC-DOC-001 enforced by Master Orchestrator middleware"
+      - "**FILE VALIDATION:** Pre-commit hook blocks .md file commits from orchestrators"
+      - "Test: Run Planning → TDD workflow → validate zero .md files created"
+    validation: automated
+    test_file: "tests/integration/test_yaml_json_only.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    category: governance
+    evidence:
+      - "File audit: Zero .md files in plan directories post-execution"
+      - "Pre-commit hook: Blocks .md commits from orchestrators"
+
+  AC-DATA-002:
+    id: AC-DATA-002
+    criterion: "All data files validate against JSON schemas"
+    acceptance:
+      - "**SCHEMA REGISTRY:** cortex-brain/schemas/ contains all schemas"
+      - "**VALIDATION LIBRARY:** Use jsonschema Python library"
+      - "**PRE-SAVE VALIDATION:** All orchestrators validate output before writing"
+      - "**VALIDATION ERRORS:** Log schema violations to audit log with details"
+      - "**SCHEMA VERSIONING:** Schemas include $schema field and version number"
+      - "Test: Generate requirements.yaml → validate against requirements-schema.json → passes"
+    validation: automated
+    test_file: "tests/schemas/test_schema_validation.py"
+    status: PENDING
+    blocking: true
+    priority: P1_HIGH
+    category: validation
+    evidence:
+      - "Schema validation: 100% pass rate for all data files"
+
+  AC-DATA-003:
+    id: AC-DATA-003
+    criterion: "Planning → TDD-Master data transfer uses tdd-context.json"
+    acceptance:
+      - "**CONTEXT FILE:** tracking/tdd-context.json is authoritative handoff artifact"
+      - "**NO REGENERATION:** TDD Orchestrator NEVER regenerates requirements (consumes context)"
+      - "**SCHEMA ENFORCEMENT:** tdd-context.json validated against schema before TDD invocation"
+      - "**CONTEXT DETECTION:** TDD Orchestrator checks for tdd-context.json existence"
+      - "**FALLBACK MODE:** If no context, TDD Orchestrator enters interactive mode (legacy)"
+      - "Test: Planning generates context → TDD consumes context → no user prompts"
+    validation: automated
+    test_file: "tests/integration/test_context_transfer.py"
+    status: PENDING
+    blocking: true
+    priority: P1_HIGH
+    category: integration
+    evidence:
+      - "TDD execution log: Context loaded, no interactive prompts"
+
+  AC-DATA-004:
+    id: AC-DATA-004
+    criterion: "TDD Orchestrator consumes tdd-context.json instead of prompting"
+    acceptance:
+      - "**CONTEXT LOADING:** TDD Orchestrator loads tdd-context.json in execute() method"
+      - "**FEATURE MAPPING:** Use tdd_context.features instead of prompting for features"
+      - "**TEST REQUIREMENTS:** Use tdd_context.test_requirements for RED phase"
+      - "**DOMAIN KNOWLEDGE:** Use tdd_context.domain_knowledge for GREEN phase implementation hints"
+      - "**GOVERNANCE RULES:** Use tdd_context.governance_rules for REFACTOR phase validation"
+      - "**SKIP INTERACTIVE:** If context exists, skip ALL interactive prompts"
+      - "Test: TDD execution with context → zero user prompts, all data from context"
+    validation: automated
+    test_file: "tests/orchestrators/tdd/test_context_consumption.py"
+    status: PENDING
+    blocking: true
+    priority: P1_HIGH
+    category: automation
+    evidence:
+      - "TDD audit log: Context consumption, zero interactive events"
+
+  AC-DATA-005:
+    id: AC-DATA-005
+    criterion: "All audit logs in JSONL format with AC-ID tags"
+    acceptance:
+      - "**FORMAT:** JSON Lines (one JSON object per line, newline-delimited)"
+      - "**AC-ID FIELD:** All audit entries include ac_id field (e.g., \"ac_id\": \"AC-TOOLKIT-001\")"
+      - "**TIMESTAMP:** ISO 8601 datetime in timestamp field"
+      - "**STRUCTURED DATA:** event_type, orchestrator_id, details (object)"
+      - "**LOG ROTATION:** Logs rotate daily, archived per retention policy (AC-AUDIT-006)"
+      - "**QUERY SUPPORT:** cortex_audit_query MCP tool filters by AC-ID"
+      - "Test: Execute toolkit tool → audit log entry with ac_id field present"
+    validation: automated
+    test_file: "tests/infrastructure/test_audit_jsonl.py"
+    status: PENDING
+    blocking: false
+    priority: P1_HIGH
+    category: audit
+    evidence:
+      - "Audit log sample: cortex-brain/audit-logs/*.jsonl with AC-ID tags"
 
 # ==============================================================================
 # END OF ENTERPRISE ACCEPTANCE CRITERIA

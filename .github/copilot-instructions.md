@@ -30,8 +30,9 @@ All command routing is defined in `CORTEX.prompt.md`. Key orchestrators:
 | `introduce yourself`, `intro`, `hello`, `hi cortex` | Introduction → ASCII banner + capabilities | — |
 | `epic review`, `review epic`, `health check`, `progress report`, `cortex status` | Epic Review → Health & gap analysis | 🛡️ AUTONOMOUS |
 | `plan`, `create a plan`, `make a plan` | Planning System v5 → YAML-based execution | 🛡️ AUTONOMOUS |
+| **`implement`, `build`, `create`, `fix`, `refactor`, `add feature`** | **TDD-Master v1 → Unplanned development** | 🛡️ **AUTONOMOUS** |
 | `continue epic`, `resume epic`, `cortex 6 build` | Epic Executor → Resume CORTEX 6.0 build | 🛡️ AUTONOMOUS |
-| `tdd`, `start tdd`, `run tests` | TDD v2 → RED→GREEN→REFACTOR | 🛡️ AUTONOMOUS |
+| `tdd`, `start tdd`, `run tests` | TDD-Master v1 → RED→GREEN→REFACTOR | 🛡️ AUTONOMOUS |
 | `ado`, `ado story`, `ado feature` | ADO v2 → Azure DevOps work items | 🛡️ AUTONOMOUS |
 | `vacuum`, `deep clean` | Vacuum v2 → Deep filesystem cleanup | 🛡️ AUTONOMOUS |
 | `cleanup`, `cleanup cache` | Cleanup v2 → Cache/log removal | 🛡️ AUTONOMOUS |
@@ -68,13 +69,13 @@ When you see 🛡️ in Intent Router, these orchestrators **execute via Python 
 |--------------|---------|----------|--------|
 | **Epic Review** | `epic review`, `health check` | `autonomous_execution_progress` | `## 🛡️🧠 CORTEX Epic Review` |
 | **Planning** | `plan`, `create a plan` | `autonomous_execution_progress` | `## 🛡️🧠 CORTEX Plan Execution` |
-| **Epic Executor** | `continue epic`, `resume epic` | `autonomous_execution_progress` | `## �️🧠 CORTEX Epic Execution` |
+| **TDD-Master** | `implement`, `build`, `create`, `fix`, `refactor`, `tdd` | `autonomous_execution_progress` | `## 🛡️🧠 CORTEX TDD-Master Execution` |
+| **Epic Executor** | `continue epic`, `resume epic` | `autonomous_execution_progress` | `## 🛡️🧠 CORTEX Epic Execution` |
 | **ADO** | `ado story`, `ado feature` | `ado_execution_progress` | `## 🛡️🧠 CORTEX ADO Work Item Generation` |
 | **Vacuum** | `vacuum`, `deep clean` | `autonomous_execution_progress` | `## 🛡️🧠 CORTEX Vacuum Execution` |
 | **Cleanup** | `cleanup`, `cleanup cache` | `autonomous_execution_progress` | `## 🛡️🧠 CORTEX Cleanup Execution` |
 | **Investigation** | `investigate`, `find root cause` | `autonomous_execution_progress` | `## 🛡️🧠 CORTEX Investigation` |
 | **Sanitization** | `sanitize`, `anonymize` | `autonomous_execution_progress` | `## 🛡️🧠 CORTEX Sanitization` |
-| **TDD** | `tdd`, `start tdd` | `autonomous_execution_progress` | `## 🛡️🧠 CORTEX TDD Execution` |
 | **Maintenance** | `maintenance`, `system maintenance` | `autonomous_execution_progress` | `## 🛡️🧠 CORTEX Maintenance` |
 
 **🛡️ Shield Icon Meaning:** Autonomous orchestrator invoked via `run_in_terminal` tool - GitHub Copilot routes, Python executes.
@@ -129,6 +130,8 @@ When you see 🛡️ in Intent Router, these orchestrators **execute via Python 
 
 | Rule | Action |
 |------|--------|
+| **TDD_MASTER_REQUIRED** | ALL code implementation MUST go through TDD-Master Orchestrator (CORE-019) |
+| **NO_DIRECT_CODING** | Copilot NEVER writes implementation code directly (routes to TDD-Master) |
 | **TDD_ENFORCEMENT** | Tests must fail before implementation (RED→GREEN→REFACTOR) |
 | **HOLISTIC_DISCOVERY** | Search workspace before creating files (prevent duplication) |
 | **GIT_ISOLATION** | CORTEX code never commits to user repos |
@@ -138,7 +141,7 @@ When you see 🛡️ in Intent Router, these orchestrators **execute via Python 
 | **AUTONOMOUS_ONLY** | NO manual orchestration. Python executes everything. |
 | **TRANSFORMATION_REQUIRED** | Raw user requests MUST be transformed before routing |
 
-**Full rules:** `cortex-brain/brain-protection-rules.yaml` (61 rules)
+**Full rules:** `cortex-brain/tier0/governance/core-rules.yaml` (19 CORE rules)
 
 ---
 

@@ -19,10 +19,18 @@ metadata:
   migration_date: "2026-01-08T00:30:00Z"
   source: "cortex-brain/brain-protection-rules.yaml"
   migrated_by: "feat03-governance Phase 1"
-  rule_count: 18
+  rule_count: 19  # Updated from 18
   deprecated_file: "cortex-brain/brain-protection-rules.yaml"
-  last_updated: "2026-01-08T03:30:00Z"
-  last_updated_by: "feat04-core-orchestration Phase 1"
+  last_updated: "2026-01-09T17:00:00Z"  # Updated
+  last_updated_by: "CX6 Unified Orchestration System Design"
+  enhancements:
+    - date: "2026-01-08T03:30:00Z"
+      by: "feat04-core-orchestration Phase 1"
+      added: ["CORE-018"]
+    - date: "2026-01-09T17:00:00Z"
+      by: "CX6 Unified Orchestration System Design"
+      added: ["CORE-019"]
+      reason: "Enforce TDD-Master for all development (planned and unplanned)"
 
 categories:
   - orchestration_lifecycle    # Rules governing orchestrator execution
@@ -674,6 +682,120 @@ rules:
       4. Direct execution (YAML → Python execution without translation)
       5. Token efficiency (compact, no natural language bloat)
 
+  # ==========================================================================
+  # CORE-019: TDD-Master Orchestrator Required for All Development
+  # ==========================================================================
+  - rule_id: CORE-019
+    category: development_workflow
+    severity: blocked
+    name: All Development Must Go Through TDD-Master Orchestrator
+    description: |
+      ALL code implementation (planned or unplanned) MUST be executed through
+      the TDD-Master Orchestrator. GitHub Copilot MUST NEVER write implementation
+      code directly.
+      
+      TDD-Master Orchestrator ensures:
+      - RED→GREEN→REFACTOR workflow enforcement
+      - 100% test coverage before implementation
+      - Governance rule compliance (Tier0-3)
+      - Acceptance criteria validation
+      - Clean code principles (SOLID/DRY/KISS)
+      - Security pattern enforcement
+      
+      Exception: Documentation, configuration, and non-code files may be
+      created directly by Copilot.
+    
+    enforcement:
+      trigger: user_request_contains_implementation_intent
+      action: route_to_tdd_master_orchestrator
+    
+    validation:
+      - User requests "implement", "build", "create", "fix" → Route to TDD-Master
+      - User requests "plan" → Route to Planning Orchestrator (which may invoke TDD-Master)
+      - User provides code snippet → Suggest TDD-Master instead of direct implementation
+      - GitHub Copilot NEVER writes Python/TypeScript/JavaScript implementation files
+      - Exception: README.md, YAML config, JSON data files can be created directly
+    
+    implementation:
+      middleware: src.orchestrators.middleware.development_router.DevelopmentRouter
+      hook: pre_request_processing
+      priority: 10  # Highest priority (blocks all implementation attempts)
+      router: src.orchestrators.routing.trie_router.TrieRouter
+    
+    pattern_routing:
+      route_to_tdd_master:
+        - "implement *"
+        - "build *"
+        - "create *"
+        - "add feature *"
+        - "fix bug *"
+        - "refactor *"
+        - "write code *"
+        - "develop *"
+        - "code this *"
+        - "make this *"
+        - "quick implement *"
+        - "tdd *"
+        - "test and implement *"
+      
+      route_to_planning:
+        - "plan *"
+        - "design *"
+        - "architect *"
+        - "requirements for *"
+      
+      allow_direct_copilot:
+        - "explain *"
+        - "document *"
+        - "analyze *"
+        - "review *"
+        - "find *"
+        - "search *"
+    
+    examples:
+      pass:
+        - "User: 'implement user authentication' → Copilot: Routes to TDD-Master"
+        - "User: 'fix login bug' → Copilot: Routes to TDD-Master (unplanned mode)"
+        - "User: 'plan OAuth system' → Copilot: Routes to Planning Orchestrator"
+        - "User: 'document this function' → Copilot: Creates documentation directly"
+      
+      fail:
+        - "User: 'implement login' → Copilot writes src/auth/login.py directly ❌"
+        - "User: 'add validation' → Copilot adds code to existing file ❌"
+        - "User: 'quick fix this bug' → Copilot edits code without tests ❌"
+    
+    copilot_response_template: |
+      I can't implement code directly. All development must go through the
+      TDD-Master Orchestrator to ensure:
+      
+      ✅ Tests written first (RED phase)
+      ✅ Implementation (GREEN phase)
+      ✅ Refactoring (REFACTOR phase)
+      ✅ 100% test coverage
+      ✅ Governance compliance
+      
+      Would you like me to route this to TDD-Master Orchestrator?
+      
+      Options:
+      1. **Unplanned Mode** (quick implementation): "tdd implement [feature]"
+      2. **Planned Mode** (full planning first): "plan and implement [feature]"
+    
+    rationale: |
+      TDD-Master enforcement prevents:
+      1. Untested code (code written without tests)
+      2. Governance violations (rules bypassed when Copilot writes directly)
+      3. Technical debt (quick fixes without refactoring)
+      4. Security vulnerabilities (no security test enforcement)
+      5. Inconsistent code quality (SOLID/DRY not enforced)
+      
+      Benefits of TDD-Master routing:
+      1. 100% test coverage guarantee (RED phase enforced)
+      2. Consistent quality (all code passes same governance checks)
+      3. Security by default (security tests in RED phase)
+      4. Maintainable code (REFACTOR phase mandatory)
+      5. Audit trail (all development logged with AC validation)
+      6. Flexibility (both planned and unplanned modes supported)
+
 # ==============================================================================
 # GOVERNANCE CONFIGURATION
 # ==============================================================================
@@ -726,4 +848,5 @@ migration:
     PYTHON_IMPORT_ORGANIZATION_REQUIRED: CORE-015
     PYTHON_CODE_FORMATTING_REQUIRED: CORE-016
     GOVERNANCE_ENFORCEMENT: CORE-017
-    YAML_FIRST_REQUIRED: CORE-018  # Added in feat04
+    YAML_FIRST_REQUIRED: CORE-018
+    TDD_MASTER_REQUIRED: CORE-019  # Added 2026-01-09
