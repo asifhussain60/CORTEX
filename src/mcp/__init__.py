@@ -12,9 +12,12 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 from .registry import OrchestratorRegistry
 from .loader import OrchestratorLoader
 from .metadata import OrchestratorMetadata
+from .align_plan_sync import AlignPlanSyncTool, align_plan_sync
 
 __all__ = [
     'OrchestratorRegistry',
     'OrchestratorLoader',
     'OrchestratorMetadata',
+    'AlignPlanSyncTool',
+    'align_plan_sync',
 ]

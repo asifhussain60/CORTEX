@@ -1,7 +1,7 @@
 # 🔧 CORTEX Align - Plan Realignment with Visual Progress Tracking
 
-**Version:** 1.0.0 | **Status:** ✅ PRODUCTION | **Type:** Autonomous Remediation  
-**Author:** Asif Hussain | **AC Reference:** `.asif/AI-Learning/cortex6/acceptance/00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml`  
+**Version:** 1.1.0 | **Status:** ✅ PRODUCTION | **Type:** Autonomous Remediation  
+**Author:** Asif Hussain | **AC Reference:** `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml`  
 **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
 ---
@@ -9,17 +9,75 @@
 ## 🎯 Purpose
 
 **AUTONOMOUS PLAN REALIGNMENT** - Consumes findings from `cortex-search` and:
-1. **Prioritizes fixes** using snowball effect ordering
-2. **Generates remediation plan** with effort estimates
-3. **Integrates into existing feature plans** (if applicable)
-4. **Proposes AC enhancements** for uncovered patterns
-5. **Shows incremental progress** via ASCII visual progress bars
+1. **Archives previous remediation plans** (lifecycle management)
+2. **Prioritizes fixes** using snowball effect ordering
+3. **Generates fresh remediation plan** with effort estimates
+4. **Integrates into existing feature plans** (if applicable)
+5. **Proposes AC enhancements** for uncovered patterns
+6. **Shows incremental progress** via ASCII visual progress bars
 
 **⚠️ CRITICAL: This is FULLY AUTONOMOUS - executes all phases without user confirmation.**
 
 ---
 
-## 🔀 Intent Routing
+## � Remediation Plan Lifecycle Management
+
+**⚠️ CRITICAL STANDARD (AC-ALIGN-001):**
+
+### File Organization
+```
+cortex-brain/documents/planning/active/{plan-name}/acceptance-criteria/
+├── 00-{PLAN}-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml   # Source of truth
+├── snowball-strategy.yaml                           # Prioritization framework
+├── remediation-plan.yaml                            # ACTIVE remediation (singular)
+└── archive/                                         # Previous remediations
+    ├── remediation-plan-2026-01-08.yaml
+    ├── remediation-plan-2026-01-07.yaml
+    └── ...
+```
+
+### Lifecycle Rules
+| Rule | Description |
+|------|-------------|
+| **ARCHIVE_BEFORE_REGENERATE** | Move existing `remediation-plan.yaml` to `archive/` with timestamp suffix before creating new |
+| **SINGLE_ACTIVE_PLAN** | Only ONE `remediation-plan.yaml` exists (no timestamps in active filename) |
+| **PLAN_SPECIFIC_LOCATION** | Remediation generated in plan's `acceptance-criteria/` folder, NOT in `cortex-brain/analysis/` |
+| **TIMESTAMP_ON_ARCHIVE** | Archived files get `-{YYYY-MM-DD}` suffix |
+| **PRESERVE_HISTORY** | Never delete archived remediations (audit trail) |
+
+### Archive Protocol (Phase 4 Pre-Step)
+```python
+def archive_existing_remediation(plan_path):
+    """
+    Archive existing remediation before generating new one.
+    
+    Args:
+        plan_path: e.g., cortex-brain/documents/planning/active/cortex6
+    """
+    ac_path = f"{plan_path}/acceptance-criteria"
+    active_remediation = f"{ac_path}/remediation-plan.yaml"
+    archive_dir = f"{ac_path}/archive"
+    
+    if file_exists(active_remediation):
+        # Ensure archive directory exists
+        create_directory(archive_dir)
+        
+        # Get timestamp from file or use current date
+        timestamp = get_file_date(active_remediation) or today()
+        archived_name = f"remediation-plan-{timestamp}.yaml"
+        
+        # Move to archive
+        move_file(active_remediation, f"{archive_dir}/{archived_name}")
+        
+        log_audit("REMEDIATION_ARCHIVED", {
+            "from": active_remediation,
+            "to": f"{archive_dir}/{archived_name}"
+        })
+```
+
+---
+
+## �🔀 Intent Routing
 
 **Patterns:**
 - `^(align|realign|fix plan|remediate|generate fix plan).*$`
@@ -198,11 +256,20 @@ def snowball_prioritize(issues):
 ### Phase 4: Generate Remediation Plan
 **Duration:** 2-3 minutes
 
+**Pre-Step: Archive Existing Remediation**
+```
+🔄 Phase 4.0 - Archive Existing: Starting
+   └─ Checking: {plan_path}/acceptance-criteria/remediation-plan.yaml
+   └─ Found existing → Moving to archive/remediation-plan-{date}.yaml
+   └─ Archive complete ✅
+```
+
 **Actions:**
-1. Generate phased remediation plan
-2. Assign effort estimates per phase
-3. Calculate total effort
-4. Create YAML plan structure
+1. **Archive existing remediation** (if exists) to `archive/` folder
+2. Generate phased remediation plan
+3. Assign effort estimates per phase
+4. Calculate total effort
+5. Create YAML plan structure at `{plan_path}/acceptance-criteria/remediation-plan.yaml`
 
 **Plan Structure:**
 ```yaml
@@ -243,8 +310,9 @@ remediation_plan:
 **Phase Completion Output:**
 ```
 ✅ Phase 4 - Plan Generation: Complete
+   └─ Archived: remediation-plan-2026-01-08.yaml
    └─ Plan Phases: 7 | Total Effort: 40h | Blocking Fixed: 12
-   └─ Output: cortex-brain/analysis/remediation-plan-{timestamp}.yaml
+   └─ Output: {plan_path}/acceptance-criteria/remediation-plan.yaml
    └─ Duration: 90s
    └─ Auto-proceeding to Phase 5...
 
@@ -337,6 +405,167 @@ def integrate_with_plan(remediation_plan, plan_path):
    └─ Enhancements Proposed: 5
    └─ Output: cortex-brain/analysis/ac-enhancements-{timestamp}.md
    └─ Duration: 30s
+   └─ Auto-proceeding to Phase 7...
+
+| Phase | Progress | Status |
+|-------|----------|--------|
+| Phase 1 - Load Findings | `██████████` | 100% ✅ |
+| Phase 2 - Categorize | `██████████` | 100% ✅ |
+| Phase 3 - Snowball Sort | `██████████` | 100% ✅ |
+| Phase 4 - Plan Generation | `██████████` | 100% ✅ |
+| Phase 5 - Plan Integration | `██████████` | 100% ✅ |
+| Phase 6 - AC Enhancement | `██████████` | 100% ✅ |
+| Phase 7 - Holistic Plan Sync | `░░░░░░░░░░` | 0% 🔄 Starting |
+```
+
+---
+
+### Phase 7: Holistic Plan Synchronization (MCP)
+**Duration:** 2-5 minutes
+
+**⚠️ CRITICAL: This phase invokes Python via MCP for holistic alignment**
+
+**Pre-Requisite:** Phases 1-6 must be complete
+
+**Actions:**
+1. **Invoke MCP Tool:** `cortex_align_plan_sync` via MCP server
+2. **Holistic Review:** AC YAML + Remediation Plan + Snowball Strategy
+3. **Plan Decision:**
+   - **No Plan Exists:** Create new plan following Planning Orchestrator structure
+   - **Plan Exists:** Revise and realign incorporating gaps, enhancements, user requests
+4. **Snowball Optimization:** Reorder for maximum momentum building
+5. **Alignment Validation:** Ensure AC, requirements.yaml, plan are perfectly aligned
+
+**MCP Invocation:**
+```python
+# Invoke via MCP (NEVER direct execution)
+mcp_request = {
+    "method": "cortex_align_plan_sync",
+    "params": {
+        "ac_file": "{plan_path}/acceptance-criteria/00-*-ACCEPTANCE-CRITERIA.yaml",
+        "remediation_file": "{plan_path}/acceptance-criteria/remediation-plan.yaml",
+        "snowball_file": "{plan_path}/acceptance-criteria/snowball-strategy.yaml",
+        "plan_path": "{plan_path}",
+        "mode": "auto"  # "create" | "revise" | "auto"
+    }
+}
+```
+
+**Plan Sync Logic:**
+```python
+def align_plan_sync(ac_file, remediation_file, snowball_file, plan_path, mode="auto"):
+    """
+    Holistic plan synchronization - creates or revises plan for snowball alignment.
+    
+    1. Load all source files (AC, remediation, snowball)
+    2. Detect if plan exists
+    3. If no plan: Create using Planning Orchestrator structure
+    4. If plan exists: Revise incorporating gaps and enhancements
+    5. Ensure perfect alignment between AC ↔ requirements.yaml ↔ plan
+    6. Optimize for snowball effect (blocking → foundation → security → ...)
+    """
+    
+    # Step 1: Load sources
+    ac = load_yaml(ac_file)
+    remediation = load_yaml(remediation_file)
+    snowball = load_yaml(snowball_file)
+    
+    # Step 2: Check plan existence
+    plan_exists = check_plan_structure(plan_path)
+    
+    if mode == "auto":
+        mode = "revise" if plan_exists else "create"
+    
+    # Step 3: Execute appropriate action
+    if mode == "create":
+        return create_new_plan(ac, remediation, snowball, plan_path)
+    else:
+        return revise_existing_plan(ac, remediation, snowball, plan_path)
+
+
+def create_new_plan(ac, remediation, snowball, plan_path):
+    """
+    Create new plan following Planning Orchestrator v5 structure.
+    
+    Structure determined by scope:
+    - Epic (>50 criteria, multi-phase): Full epic structure with features/
+    - Feature (<50 criteria, focused): Simple feature structure
+    """
+    
+    criteria_count = count_pending_criteria(ac)
+    
+    if criteria_count > 50:
+        structure = "epic"
+        # Create: context/, artifacts/, reports/, tracking/, features/
+    else:
+        structure = "feature"
+        # Create: context/, artifacts/, reports/, tracking/
+    
+    # Generate requirements.yaml from AC + remediation
+    requirements = generate_requirements_from_ac(ac, remediation)
+    
+    # Apply snowball ordering
+    requirements = apply_snowball_ordering(requirements, snowball)
+    
+    # Create plan files
+    create_plan_structure(plan_path, structure, requirements)
+    
+    return {"action": "created", "structure": structure, "criteria": criteria_count}
+
+
+def revise_existing_plan(ac, remediation, snowball, plan_path):
+    """
+    Revise existing plan incorporating gaps, enhancements, user requests.
+    
+    Steps:
+    1. Load existing plan state
+    2. Identify gaps (AC criteria not in plan)
+    3. Identify enhancements (new remediation tasks)
+    4. Merge into plan phases
+    5. Reorder for snowball effect
+    6. Update requirements.yaml
+    7. Regenerate progress-tracker.json
+    """
+    
+    # Load existing
+    existing_plan = load_plan(plan_path)
+    existing_requirements = load_yaml(f"{plan_path}/context/requirements.yaml")
+    
+    # Find gaps
+    gaps = find_ac_gaps(ac, existing_plan)
+    enhancements = find_remediation_enhancements(remediation, existing_plan)
+    
+    # Merge
+    merged_plan = merge_into_plan(existing_plan, gaps, enhancements)
+    
+    # Snowball reorder
+    merged_plan = apply_snowball_ordering(merged_plan, snowball)
+    
+    # Update requirements.yaml
+    updated_requirements = sync_requirements_with_plan(existing_requirements, merged_plan, ac)
+    save_yaml(f"{plan_path}/context/requirements.yaml", updated_requirements)
+    
+    # Regenerate tracker
+    regenerate_progress_tracker(plan_path, merged_plan)
+    
+    return {
+        "action": "revised",
+        "gaps_added": len(gaps),
+        "enhancements_added": len(enhancements),
+        "total_tasks": count_tasks(merged_plan)
+    }
+```
+
+**Phase Completion Output:**
+```
+✅ Phase 7 - Holistic Plan Sync: Complete
+   └─ Mode: {create|revise}
+   └─ Plan Structure: {epic|feature}
+   └─ Gaps Added: {count}
+   └─ Enhancements: {count}
+   └─ Snowball Optimized: ✅
+   └─ AC ↔ Requirements ↔ Plan: ALIGNED
+   └─ Duration: 120s
    └─ ALL PHASES COMPLETE
 
 | Phase | Progress | Status |
@@ -347,13 +576,14 @@ def integrate_with_plan(remediation_plan, plan_path):
 | Phase 4 - Plan Generation | `██████████` | 100% ✅ |
 | Phase 5 - Plan Integration | `██████████` | 100% ✅ |
 | Phase 6 - AC Enhancement | `██████████` | 100% ✅ |
+| Phase 7 - Holistic Plan Sync | `██████████` | 100% ✅ |
 ```
 
 ---
 
 ## 📝 Final Report Template
 
-**Generated ONLY after Phase 6 completion:**
+**Generated ONLY after Phase 7 completion:**
 
 ```markdown
 # 🔧 CORTEX Align Report
@@ -378,6 +608,7 @@ def integrate_with_plan(remediation_plan, plan_path):
 | Phase 4 - Plan Generation | `██████████` | 100% ✅ |
 | Phase 5 - Plan Integration | `██████████` | 100% ✅ |
 | Phase 6 - AC Enhancement | `██████████` | 100% ✅ |
+| Phase 7 - Holistic Plan Sync | `██████████` | 100% ✅ |
 
 📊 **Issues Processed:** {count} | **Plan Phases:** {phases} | **Effort:** {hours}h
 
@@ -407,6 +638,20 @@ def integrate_with_plan(remediation_plan, plan_path):
 
 ---
 
+## 🔄 Holistic Plan Sync Results
+
+| Metric | Value |
+|--------|-------|
+| **Mode** | {create \| revise} |
+| **Plan Structure** | {epic \| feature} |
+| **Gaps Added** | {count} |
+| **Enhancements Added** | {count} |
+| **Total Tasks** | {count} |
+| **Snowball Optimized** | ✅ |
+| **Alignment Status** | AC ↔ Requirements ↔ Plan: ALIGNED |
+
+---
+
 ## 📈 AC Enhancement Proposals
 
 1. **{AC-NEW-001}:** {description}
@@ -417,9 +662,11 @@ def integrate_with_plan(remediation_plan, plan_path):
 
 ## 📁 Generated Artifacts
 
-- `cortex-brain/analysis/remediation-plan-{timestamp}.yaml`
+- `{plan_path}/acceptance-criteria/remediation-plan.yaml` (active)
+- `{plan_path}/acceptance-criteria/archive/remediation-plan-{date}.yaml` (previous)
 - `cortex-brain/analysis/ac-enhancements-{timestamp}.md`
 - `{plan_path}/tracking/progress-tracker.json` (updated)
+- `{plan_path}/context/requirements.yaml` (synced with AC)
 
 ---
 
@@ -460,6 +707,11 @@ Or continue existing plan:
 /CORTEX search and align
 ```
 
+**Phase 7 only (plan sync):**
+```
+/CORTEX align --phase 7
+```
+
 ---
 
 ## 🛡️ Brain Protection Compliance
@@ -469,16 +721,22 @@ Or continue existing plan:
 | **PLANNING_ISOLATION** | ✅ Generates plans, does NOT implement fixes |
 | **HOLISTIC_DISCOVERY** | ✅ Considers entire findings set |
 | **GIT_ISOLATION** | ✅ Only modifies CORTEX planning files |
+| **ARCHIVE_BEFORE_REGENERATE** | ✅ Preserves remediation history |
+| **MCP_ONLY_TOOL_ACCESS** | ✅ Phase 7 uses MCP for Python execution |
 
 ---
 
 ## 📚 References
 
 - **Search Prompt:** `.github/prompts/cortex-search.prompt.md`
-- **AC Source:** `.asif/AI-Learning/cortex6/acceptance/00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml`
-- **Snowball Strategy:** `cortex-brain/documents/planning/active/*/tracking/snowball.md`
+- **AC Source:** `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml`
+- **Snowball Strategy:** `cortex-brain/documents/planning/active/*/acceptance-criteria/snowball-strategy.yaml`
+- **AC Standard:** `AC-ALIGN-001` (Remediation Plan Lifecycle Management)
+- **MCP Server:** `src/mcp/align_plan_sync.py` (Phase 7 implementation)
 
 ---
 
 **Version History:**
+- v1.2.0 (2026-01-09): Added Phase 7 - Holistic Plan Synchronization via MCP Python script
+- v1.1.0 (2026-01-09): Added remediation lifecycle management (archive before regenerate)
 - v1.0.0 (2026-01-09): Initial release - visual progress tracking with snowball prioritization
