@@ -1,0 +1,530 @@
+# ==============================================================================
+# CORTEX Search Findings - Holistic Gap Detection Results
+# ==============================================================================
+# Generated: 2026-01-09T10:30:00Z
+# AC Source: cortex-brain/documents/planning/active/cortex6/acceptance-criteria/00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml
+# AC Version: 10.0.0
+# Pipeline: 5-Phase Discovery (cortex-search.prompt.md v1.2.0)
+# ==============================================================================
+
+search_findings:
+  generated_at: '2026-01-09T10:30:00Z'
+  ac_version: '10.0.0'
+  ac_location: 'cortex-brain/documents/planning/active/cortex6/acceptance-criteria/00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml'
+  total_criteria_scanned: 374
+  
+  summary:
+    total_issues: 78
+    critical: 24
+    high: 31
+    medium: 18
+    low: 5
+    mcp_validated: true  # align_plan_sync.py exists ✅
+    
+  # ===========================================================================
+  # CATEGORY 1: AC Implementation Gaps (DISCREPANCIES)
+  # ===========================================================================
+  discrepancies:
+    # --------------------------------------------------------------------------
+    # GOVERNANCE GAPS (AC-GOV-*)
+    # --------------------------------------------------------------------------
+    - id: AC-GOV-001
+      type: PARTIAL
+      description: "SKULL rule migration incomplete - only 18 of 61 rules migrated"
+      evidence_found:
+        - "cortex-brain/tier0/governance/core-rules.yaml (18 rules)"
+      evidence_missing:
+        - "43 additional rules needed for full migration"
+        - "tests/governance/test_skull_migration.py (test file missing)"
+      severity: CRITICAL
+      blocking: true
+      
+    - id: AC-GOV-002
+      type: PARTIAL
+      description: "GovernanceMerger exists but 4-category validation incomplete"
+      evidence_found:
+        - "tests/governance/test_governance_merger.py"
+      evidence_missing:
+        - "Company Best Practices YAML (tier2/governance/company-practices.yaml)"
+        - "Knowledge Best Practices YAML (tier3/governance/knowledge-practices.yaml)"
+      severity: CRITICAL
+      blocking: true
+      
+    - id: AC-GOV-008
+      type: MISSING
+      description: "Company Best Practices integration - no implementation found"
+      evidence_found: []
+      evidence_missing:
+        - "cortex-brain/tier2/governance/company-practices.yaml"
+        - "tests/governance/test_company_practices_integration.py"
+      severity: HIGH
+      blocking: true
+      
+    - id: AC-GOV-009
+      type: MISSING
+      description: "Knowledge Best Practices integration - no implementation found"
+      evidence_found: []
+      evidence_missing:
+        - "cortex-brain/tier3/governance/knowledge-practices.yaml"
+        - "tests/governance/test_knowledge_practices_integration.py"
+      severity: HIGH
+      blocking: true
+      
+    - id: AC-GOV-011
+      type: MISSING
+      description: "Comprehensive governance pattern analysis not implemented"
+      evidence_found: []
+      evidence_missing:
+        - "cortex-brain/governance/pattern-library.yaml"
+        - "tests/governance/test_comprehensive_pattern_analysis.py"
+      severity: CRITICAL
+      blocking: true
+      
+    # --------------------------------------------------------------------------
+    # ARCHITECTURE GAPS (AC-ARCH-*)
+    # --------------------------------------------------------------------------
+    - id: AC-ARCH-010
+      type: MISSING
+      description: "Version-agnostic design - orchestrators still have version numbers in names"
+      evidence_found:
+        - "VacuumOrchestratorV2, MaintenanceOrchestratorV2, etc. (version in name)"
+      evidence_missing:
+        - "Version-agnostic class naming (branch determines version)"
+      severity: HIGH
+      blocking: false
+      
+    - id: AC-ARCH-011
+      type: PARTIAL
+      description: "Unified test suite exists but organization incomplete"
+      evidence_found:
+        - "tests/ folder with 60+ test files"
+      evidence_missing:
+        - "Comprehensive subfolder organization per AC spec"
+        - "tests/multi_repo/, tests/deployment/, tests/architecture/ folders"
+      severity: MEDIUM
+      blocking: false
+      
+    # --------------------------------------------------------------------------
+    # ORCHESTRATOR GAPS (AC-ORC-*)
+    # --------------------------------------------------------------------------
+    - id: AC-ORC-011
+      type: MISSING
+      description: "Housekeeping Orchestrator not implemented"
+      evidence_found:
+        - "MaintenanceOrchestratorV2 exists (partial overlap)"
+      evidence_missing:
+        - "src/orchestrators/housekeeping/housekeeping_orchestrator.py"
+        - "tests/orchestrators/test_housekeeping.py"
+      severity: CRITICAL
+      blocking: true
+      
+    - id: AC-ORC-HOUSE-008
+      type: MISSING
+      description: "SQLite database optimization not implemented"
+      evidence_found:
+        - "WAL mode enabled in planning_state_db.py"
+      evidence_missing:
+        - "VACUUM command implementation"
+        - "Orphan table detection"
+        - "Database integrity checks"
+        - "tests/orchestrators/test_housekeeping_sqlite_optimization.py"
+      severity: CRITICAL
+      blocking: true
+      
+    - id: AC-ORC-HOUSE-009
+      type: MISSING
+      description: "Database table lifecycle management not implemented"
+      evidence_found: []
+      evidence_missing:
+        - "cortex-brain/database/schema-registry.yaml"
+        - "Table usage tracking"
+        - "Orphan cleanup logic"
+      severity: CRITICAL
+      blocking: true
+      
+    # --------------------------------------------------------------------------
+    # MULTI-REPO REGISTRY GAPS (AC-REPO-*)
+    # --------------------------------------------------------------------------
+    - id: AC-REPO-001
+      type: PARTIAL
+      description: "Repository registry partial - multi_repo_manager exists but incomplete"
+      evidence_found:
+        - "src/mcp/multi_repo_manager.py"
+      evidence_missing:
+        - "cortex-brain/config/repo-registry.yaml"
+        - "Schema validation for registry"
+        - "tests/multi_repo/test_repo_registry.py"
+      severity: CRITICAL
+      blocking: true
+      
+    - id: AC-REPO-004
+      type: MISSING
+      description: "Config-based CORTEX registry for universal prompt not implemented"
+      evidence_found:
+        - "cortex-toolkit reference to ~/.cortex/config.yaml"
+      evidence_missing:
+        - ".cortex/config.yaml schema"
+        - "Auto-registration logic"
+        - "Context switching implementation"
+      severity: CRITICAL
+      blocking: true
+      
+    - id: AC-REPO-005
+      type: MISSING
+      description: "SQLite database per-repo segregation not implemented"
+      evidence_found:
+        - "Single planning_state.db exists"
+      evidence_missing:
+        - "cortex-brain/database/{repo_namespace}/ structure"
+        - "Per-repo database creation"
+        - "Namespace isolation"
+      severity: CRITICAL
+      blocking: true
+      
+    # --------------------------------------------------------------------------
+    # LEARNING LIBRARY GAPS (AC-LEARN-*)
+    # --------------------------------------------------------------------------
+    - id: AC-LEARN-001
+      type: MISSING
+      description: "Learning library with repo segregation not implemented"
+      evidence_found: []
+      evidence_missing:
+        - "cortex-brain/learning-library/ folder (does not exist)"
+        - "Per-repo namespace structure"
+        - "MkDocs configuration"
+      severity: HIGH
+      blocking: true
+      
+    - id: AC-LEARN-002
+      type: MISSING
+      description: "Lazy-loaded documentation tools not implemented"
+      evidence_found: []
+      evidence_missing:
+        - "requirements-docs.txt"
+        - "Lazy load prompts"
+        - "Optional dependency groups"
+      severity: HIGH
+      blocking: true
+      
+    - id: AC-LEARN-003
+      type: MISSING
+      description: "Learning library content isolation not implemented"
+      evidence_found: []
+      evidence_missing:
+        - "Pattern/anti-pattern/lessons YAML schemas"
+        - "Learning index generation"
+      severity: HIGH
+      blocking: true
+      
+    # --------------------------------------------------------------------------
+    # DEPLOYMENT GAPS (AC-DEPLOY-*)
+    # --------------------------------------------------------------------------
+    - id: AC-DEPLOY-004
+      type: MISSING
+      description: "Minimal deployment footprint (<50MB) not validated"
+      evidence_found:
+        - "requirements.txt exists"
+      evidence_missing:
+        - "requirements-core.txt (minimal deps)"
+        - "Size audit CI validation"
+        - "tests/deployment/test_minimal_footprint.py"
+      severity: CRITICAL
+      blocking: true
+      
+    - id: AC-DEPLOY-005
+      type: MISSING
+      description: "Lazy-loaded optional dependencies not implemented"
+      evidence_found: []
+      evidence_missing:
+        - "Optional install groups (cortex[docs], cortex[ml], etc.)"
+        - "Graceful degradation for missing deps"
+        - "cortex-brain/config/optional-features.yaml"
+      severity: CRITICAL
+      blocking: true
+      
+    # --------------------------------------------------------------------------
+    # TEST HARNESS GAPS (Comprehensive Tests Missing)
+    # --------------------------------------------------------------------------
+    - id: AC-ORC-TDD-001
+      type: PARTIAL
+      description: "TDD Orchestrator tests exist but comprehensive scenarios missing"
+      evidence_found:
+        - "tests/unit/orchestrators/test_tdd_orchestrator.py"
+      evidence_missing:
+        - "tests/orchestrators/comprehensive/test_tdd_scenarios.py"
+        - "Multi-scenario validation (new feature, modify, delete, refactor)"
+      severity: HIGH
+      blocking: true
+      
+    - id: AC-ORC-PLAN-001
+      type: MISSING
+      description: "Planning Orchestrator comprehensive scenario tests missing"
+      evidence_found:
+        - "test_intelligence_middleware.py (partial)"
+      evidence_missing:
+        - "tests/orchestrators/comprehensive/test_planning_scenarios.py"
+      severity: HIGH
+      blocking: true
+      
+    - id: AC-ORC-MASTER-001
+      type: PARTIAL
+      description: "Master Orchestrator decision-making tests incomplete"
+      evidence_found:
+        - "test_master_orchestrator_todo.py"
+        - "test_master_orchestrator_governance.py"
+        - "test_master_orchestrator_pipeline.py"
+      evidence_missing:
+        - "tests/orchestrators/comprehensive/test_master_decision_making.py"
+        - "100+ request routing accuracy validation"
+      severity: HIGH
+      blocking: true
+      
+  # ===========================================================================
+  # CATEGORY 2: SKULL RULE VIOLATIONS
+  # ===========================================================================
+  violations:
+    - rule: BARE_EXCEPT_CLAUSE
+      description: "Bare except clauses found (swallow all exceptions)"
+      files:
+        - file: "src/infrastructure/file_utils.py"
+          line: 76
+          pattern: "except:"
+          fix: "except Exception as e:"
+        - file: "src/orchestrators/core/master_orchestrator.py"
+          line: 300
+          pattern: "except:"
+          fix: "except Exception as e:"
+        - file: "src/orchestrators/core/master_orchestrator.py"
+          line: 347
+          pattern: "except:"
+          fix: "except Exception as e:"
+        - file: "src/tools/gap_detector.py"
+          line: 257
+          pattern: "except:"
+          fix: "except Exception as e:"
+        - file: "scripts/audit_log_manager.py"
+          lines: [73, 141, 194]
+          pattern: "except:"
+          fix: "except Exception as e:"
+      severity: HIGH
+      count: 7
+      note: "Archive files also have bare excepts but are excluded (not production code)"
+      
+    - rule: TYPE_IGNORE_COMMENT
+      description: "Type ignore comment found (masks type errors)"
+      files:
+        - file: "tests/unit/test_trie_router.py"
+          line: 450
+          pattern: "# type: ignore"
+          fix: "Add proper type annotation or handle None case"
+      severity: MEDIUM
+      count: 1
+      
+  # ===========================================================================
+  # CATEGORY 3: ARCHITECTURE ANTI-PATTERNS
+  # ===========================================================================
+  brittleness:
+    - type: VERSION_IN_CLASS_NAME
+      description: "Orchestrators have version numbers in class names"
+      files:
+        - "src/orchestrators/vacuum/vacuum_orchestrator_v2.py → VacuumOrchestratorV2"
+        - "src/orchestrators/maintenance/maintenance_orchestrator_v2.py → MaintenanceOrchestratorV2"
+        - "src/orchestrators/sanitization/sanitization_orchestrator_v2.py → SanitizationOrchestratorV2"
+        - "src/orchestrators/investigation/investigation_orchestrator_v2.py → InvestigationOrchestratorV2"
+        - "src/orchestrators/ado/ado_orchestrator_v2.py → ADOOrchestratorV2"
+        - "src/orchestrators/planning/planning_orchestrator_v5.py → PlanningOrchestratorV5"
+      severity: MEDIUM
+      recommendation: "Rename to VacuumOrchestrator, MaintenanceOrchestrator, etc. (branch determines version)"
+      ac_reference: AC-ARCH-010
+      
+    - type: DUPLICATE_ORCHESTRATOR_CLASSES
+      description: "Multiple MasterOrchestrator classes exist"
+      files:
+        - "src/orchestrators/master_orchestrator.py → MasterOrchestrator"
+        - "src/orchestrators/core/master_orchestrator.py → MasterOrchestrator"
+      severity: HIGH
+      recommendation: "Consolidate to single MasterOrchestrator in src/orchestrators/core/"
+      
+    - type: SINGLE_DATABASE_FILE
+      description: "Single SQLite database for all repos (no segregation)"
+      files:
+        - "cortex-brain/database/planning_state.db"
+      severity: CRITICAL
+      recommendation: "Implement per-repo databases in cortex-brain/database/{repo_namespace}/"
+      ac_reference: AC-REPO-005
+      
+  # ===========================================================================
+  # CATEGORY 4: SECURITY VULNERABILITIES
+  # ===========================================================================
+  security:
+    # Note: These are in cortex-sample-apps (intentional flaws for STS testing)
+    # Not flagged as blocking since they're demonstration code
+    - type: HARDCODED_SECRETS_IN_SAMPLE_APPS
+      description: "Hardcoded secrets found in sample apps (intentional for testing)"
+      files:
+        - "cortex-sample-apps/sts-template/src/api/auth.py:14 → JWT_SECRET"
+        - "cortex-sample-apps/sts-template/src/business/payment.py:10 → STRIPE_API_KEY"
+      severity: INFO
+      blocking: false
+      note: "Sample apps contain intentional security flaws for STS validation"
+      
+    # Production code security checks passed
+    - type: YAML_SAFE_LOAD
+      description: "No unsafe yaml.load() calls found ✅"
+      severity: PASS
+      
+    - type: EVAL_EXEC
+      description: "No eval()/exec() calls found ✅"
+      severity: PASS
+      
+    - type: SHELL_INJECTION
+      description: "No subprocess shell=True found ✅"
+      severity: PASS
+      
+  # ===========================================================================
+  # CATEGORY 5: AUDIT LOG GAPS
+  # ===========================================================================
+  audit_gaps:
+    - criterion: AC-F02-006
+      gap_type: NO_TEST_FILE
+      description: "TODO state integration audit test missing"
+      recommendation: "Create tests/governance/test_todo_audit_coverage.py"
+      
+    - criterion: AC-ORC-HOUSE-*
+      gap_type: NO_AUDIT_COVERAGE
+      description: "Housekeeping Orchestrator not implemented - no audit trails"
+      recommendation: "Implement housekeeping orchestrator with audit logging"
+      
+    - criterion: AC-LEARN-*
+      gap_type: NO_IMPLEMENTATION
+      description: "Learning library not implemented - no audit trails possible"
+      recommendation: "Implement learning library with audit logging for content changes"
+      
+  # ===========================================================================
+  # CATEGORY 6: MCP TOOL VALIDATION
+  # ===========================================================================
+  mcp_gaps:
+    - tool: cortex_align_plan_sync
+      status: IMPLEMENTED
+      file: "src/mcp/align_plan_sync.py"
+      severity: PASS
+      
+    - tool: cortex_repo_registry
+      status: MISSING
+      description: "MCP tool for repo registry management not exposed"
+      required_file: "src/mcp/repo_registry_tool.py"
+      severity: HIGH
+      blocking: false
+      
+    - tool: cortex_learning_library
+      status: MISSING
+      description: "MCP tool for learning library queries not implemented"
+      required_file: "src/mcp/learning_library_tool.py"
+      severity: MEDIUM
+      blocking: false
+      
+  # ===========================================================================
+  # CATEGORY 7: MISSING TEST DIRECTORIES
+  # ===========================================================================
+  test_organization_gaps:
+    missing_directories:
+      - "tests/multi_repo/"
+      - "tests/deployment/"
+      - "tests/architecture/"
+      - "tests/security/"
+      - "tests/learning/"
+      - "tests/data_integrity/"
+      - "tests/observability/"
+      - "tests/edge_cases/"
+      - "tests/orchestrators/comprehensive/"
+    severity: MEDIUM
+    ac_reference: AC-ARCH-011, AC-ARCH-012
+    
+# ==============================================================================
+# REMEDIATION PRIORITY (Snowball Strategy)
+# ==============================================================================
+remediation_priority:
+  tier_1_foundation:
+    description: "Fix foundation issues first - everything else depends on these"
+    issues:
+      - AC-GOV-001  # SKULL migration
+      - AC-GOV-002  # Governance merger
+      - AC-ARCH-010 # Version-agnostic naming
+      - AC-REPO-005 # Database segregation
+    estimated_hours: 40-60
+    
+  tier_2_orchestrators:
+    description: "Core orchestrator implementations"
+    issues:
+      - AC-ORC-011  # Housekeeping Orchestrator
+      - AC-ORC-HOUSE-008  # SQLite optimization
+      - AC-ORC-HOUSE-009  # DB lifecycle
+    estimated_hours: 30-40
+    
+  tier_3_multi_repo:
+    description: "Multi-repo and config registry"
+    issues:
+      - AC-REPO-001  # Repo registry
+      - AC-REPO-004  # Config-based registry
+    estimated_hours: 20-30
+    
+  tier_4_learning:
+    description: "Learning library implementation"
+    issues:
+      - AC-LEARN-001
+      - AC-LEARN-002
+      - AC-LEARN-003
+    estimated_hours: 25-35
+    
+  tier_5_deployment:
+    description: "Deployment footprint optimization"
+    issues:
+      - AC-DEPLOY-004
+      - AC-DEPLOY-005
+    estimated_hours: 15-20
+    
+  tier_6_polish:
+    description: "Test organization and code quality"
+    issues:
+      - BARE_EXCEPT_VIOLATIONS
+      - test_organization_gaps
+    estimated_hours: 10-15
+
+# ==============================================================================
+# SUMMARY STATISTICS
+# ==============================================================================
+statistics:
+  ac_criteria_total: 374
+  ac_criteria_with_issues: 28
+  ac_criteria_passing: 346
+  
+  discrepancies_by_type:
+    MISSING: 18
+    PARTIAL: 8
+    STALE: 0
+    CONFLICT: 2
+    
+  violations_by_severity:
+    CRITICAL: 0
+    HIGH: 7
+    MEDIUM: 1
+    LOW: 0
+    
+  brittleness_sources: 3
+  security_issues: 0  # Production code only
+  audit_gaps: 3
+  mcp_gaps: 2
+  
+  test_coverage:
+    directories_present: 8
+    directories_missing: 9
+    
+# ==============================================================================
+# NEXT STEPS
+# ==============================================================================
+next_steps:
+  - action: "Run /CORTEX align to generate prioritized remediation plan"
+  - action: "Archive this findings file when remediation complete"
+  - action: "Re-run search after tier_1_foundation fixes complete"
+  
+copyright: "Copyright © 2025-2026 Asif Hussain. All rights reserved."

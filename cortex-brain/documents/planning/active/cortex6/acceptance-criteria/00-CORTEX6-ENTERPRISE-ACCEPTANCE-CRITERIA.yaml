@@ -24,13 +24,27 @@
 
 metadata:
   document_type: enterprise_acceptance_criteria
-  version: 9.0.0
+  version: 10.0.0
   status: AUTHORITATIVE
   created: '2026-01-09'
   updated: '2026-01-09'
   author: Asif Hussain
   epic_id: CORTEX6-BUILD
   changelog:
+    v10.0.0:
+      date: '2026-01-09'
+      changes:
+        - "Added SECTION 18: LEARNING LIBRARY & DOCUMENTATION (AC-LEARN-001 to AC-LEARN-005)"
+        - "Added AC-LEARN-001: Learning library repo segregation with MkDocs/fxdocs rendering"
+        - "Added AC-LEARN-002: Lazy-loaded documentation tools for minimal installation footprint"
+        - "Added AC-LEARN-003: Learning library per-repo isolation in CORTEX brain"
+        - "Added AC-DEPLOY-004: Minimal deployment footprint (<50MB base installation)"
+        - "Added AC-DEPLOY-005: Lazy-loaded optional dependencies"
+        - "Added AC-REPO-004: Config-based CORTEX registry enabling universal CORTEX.prompt.md"
+        - "Added AC-REPO-005: SQLite database per-repo segregation and isolation"
+        - "Added AC-ORC-HOUSE-008: SQLite database optimization and orphan cleanup"
+        - "Added AC-ORC-HOUSE-009: Database table/object lifecycle management"
+      reason: "User requirements: (1) Learning library with repo distinction and MkDocs/fxdocs hosting, (2) Lazy-loaded tools for small footprint, (3) Minimal deployment footprint, (4) Config-based CORTEX registry for universal prompt, (5) SQLite optimization via Housekeeping Orchestrator"
     v9.0.0:
       date: '2026-01-09'
       changes:
@@ -1578,6 +1592,56 @@ orchestrator_test_harnesses:
     status: PENDING
     blocking: true
     priority: P0_CRITICAL
+
+  AC-ORC-HOUSE-008:
+    id: AC-ORC-HOUSE-008
+    criterion: "Housekeeping Orchestrator SQLite database optimization and cleanup"
+    acceptance:
+      - "**REGULAR OPTIMIZATION:** SQLite VACUUM and ANALYZE commands run on schedule (weekly)"
+      - "**ORPHAN TABLE DETECTION:** Identifies tables not referenced by any orchestrator or schema"
+      - "**ORPHAN INDEX DETECTION:** Identifies indexes on non-existent or unused columns"
+      - "**ORPHAN TRIGGER DETECTION:** Identifies triggers without valid references"
+      - "**STALE DATA CLEANUP:** Removes records older than retention policy (configurable, default: 90 days)"
+      - "**FRAGMENTATION CHECK:** Reports database fragmentation percentage"
+      - "**SIZE OPTIMIZATION:** Targets database size reduction ≥20% after cleanup"
+      - "**INTEGRITY CHECK:** Runs PRAGMA integrity_check before and after optimization"
+      - "**BACKUP BEFORE OPTIMIZE:** Creates timestamped backup before any destructive operations"
+      - "**WAL CHECKPOINT:** Forces WAL checkpoint to reclaim space"
+      - "**AUDIT TRAIL:** All optimization actions logged with before/after metrics"
+      - "**PERFORMANCE METRICS:** Reports query performance improvement post-optimization"
+      - "Test: Database with orphaned tables → cleanup removes orphans, integrity preserved"
+    validation: automated
+    test_file: "tests/orchestrators/test_housekeeping_sqlite_optimization.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    evidence:
+      - "Optimization report: cortex-brain/health-reports/sqlite-optimization-*.json"
+      - "Orphan detection log: cortex-brain/audit-logs/sqlite-orphan-cleanup-*.json"
+
+  AC-ORC-HOUSE-009:
+    id: AC-ORC-HOUSE-009
+    criterion: "Housekeeping Orchestrator database table/object lifecycle management"
+    acceptance:
+      - "**SCHEMA REGISTRY:** All valid tables/indexes/triggers documented in schema-registry.yaml"
+      - "**CREATION TRACKING:** New database objects logged with creator orchestrator and timestamp"
+      - "**USAGE TRACKING:** Table access patterns tracked (read/write counts per table)"
+      - "**DEPRECATION WORKFLOW:** Tables marked deprecated get 30-day grace period before removal"
+      - "**USAGE THRESHOLD:** Tables with 0 access in 60 days flagged as candidates for removal"
+      - "**CROSS-REFERENCE CHECK:** Validates foreign key relationships still valid"
+      - "**MIGRATION TRACKING:** Schema migrations logged with version and rollback capability"
+      - "**ZOMBIE DETECTION:** Identifies partially-created objects from failed migrations"
+      - "**CLEANUP APPROVAL:** High-risk deletions require explicit approval in cleanup-manifest.yaml"
+      - "**RESTORATION PATH:** Deleted tables archived to cortex-brain/database/archive/ for 30 days"
+      - "Audit log proves: Lifecycle events tracked, orphans identified, cleanup executed safely"
+    validation: automated
+    test_file: "tests/orchestrators/test_housekeeping_db_lifecycle.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    evidence:
+      - "Schema registry: cortex-brain/database/schema-registry.yaml"
+      - "Lifecycle report: cortex-brain/health-reports/db-lifecycle-*.json"
     
   AC-ORC-MASTER-001:
     id: AC-ORC-MASTER-001
@@ -2079,6 +2143,56 @@ multi_repo_registry:
     evidence:
       - "Security audit report: repo-isolation-validation-*.md"
 
+  AC-REPO-004:
+    id: AC-REPO-004
+    criterion: "Config-based CORTEX registry enables universal CORTEX.prompt.md with single production clone"
+    acceptance:
+      - "**SINGLE CORTEX CLONE:** One production CORTEX repo clone serves all user repositories"
+      - "**REPO CONFIG FILE:** Each user repo has .cortex/config.yaml for CORTEX registration"
+      - "**CONFIG SCHEMA:** {repo_id, cortex_version, governance_profile, features_enabled, brain_namespace}"
+      - "**AUTO-REGISTRATION:** CORTEX detects new repos via .cortex/config.yaml on first access"
+      - "**UNIVERSAL PROMPT:** Same CORTEX.prompt.md works for ALL registered repos"
+      - "**CONTEXT SWITCHING:** CORTEX switches context based on active repo (cwd detection)"
+      - "**FEATURE FLAGS:** Per-repo feature enablement (planning, tdd, ado, etc.)"
+      - "**PROFILE INHERITANCE:** Repos can inherit from base profiles (e.g., 'enterprise', 'startup')"
+      - "**OFFLINE MODE:** Repos work offline with cached CORTEX brain subset"
+      - "**VERSION PINNING:** Repos can pin CORTEX version for stability"
+      - "Test: Single CORTEX clone → work on 5 different repos → complete isolation maintained"
+      - "Test: Add new repo → auto-registered → immediately operational"
+    validation: automated
+    test_file: "tests/multi_repo/test_config_based_registry.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    evidence:
+      - "Config schema: cortex-brain/schemas/repo-config-schema.yaml"
+      - "Registration log: cortex-brain/audit-logs/repo-registration-*.json"
+
+  AC-REPO-005:
+    id: AC-REPO-005
+    criterion: "SQLite database and CORTEX brain segregation per repository"
+    acceptance:
+      - "**DATABASE ISOLATION:** Each repo has dedicated SQLite database file"
+      - "**DATABASE PATH:** cortex-brain/database/{repo_namespace}/cortex.db"
+      - "**NAMESPACE SCHEMA:** repo_namespace = sanitized(repo_id) (alphanumeric + hyphen only)"
+      - "**BRAIN SEGREGATION:** Per-repo state in cortex-brain/state/{repo_namespace}/"
+      - "**LEARNING ISOLATION:** Per-repo learning in cortex-brain/learning/{repo_namespace}/"
+      - "**AUDIT ISOLATION:** Per-repo audit logs in cortex-brain/audit-logs/{repo_namespace}/"
+      - "**SHARED CORE:** Governance rules, orchestrators, and core config are shared (read-only)"
+      - "**ZERO CROSS-CONTAMINATION:** Repo A data NEVER appears in Repo B namespace"
+      - "**CLEANUP SUPPORT:** Unregistering repo archives and removes namespace data"
+      - "**MIGRATION SUPPORT:** Schema migrations applied per-repo database independently"
+      - "**SIZE LIMITS:** Per-repo database soft limit 100MB, hard limit 500MB (configurable)"
+      - "Test: Operations on Repo A → verify Repo B database unchanged"
+      - "Test: Query across repos → only returns data from active repo"
+    validation: automated
+    test_file: "tests/multi_repo/test_database_segregation.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    evidence:
+      - "Segregation validation: cortex-brain/health-reports/repo-segregation-*.json"
+
 # ==============================================================================
 # SECTION 10: INTEGRATION & POLISH
 # ==============================================================================
@@ -2451,6 +2565,55 @@ deployment_operations:
     blocking: true
     priority: P0_CRITICAL
 
+  AC-DEPLOY-004:
+    id: AC-DEPLOY-004
+    criterion: "Minimal deployment footprint (<50MB base installation)"
+    acceptance:
+      - "**BASE INSTALLATION:** Core CORTEX package <50MB (excludes optional dependencies)"
+      - "**CORE COMPONENTS:** Master Orchestrator, StateManager, AuditLogger, basic governance"
+      - "**MINIMAL DEPENDENCIES:** Only essential Python packages in requirements-core.txt"
+      - "**NO BUNDLED DOCS:** Documentation hosted externally (MkDocs/fxdocs), not bundled"
+      - "**NO DEV TOOLS:** Test frameworks, linters, formatters NOT in production install"
+      - "**COMPRESSED ASSETS:** All static assets gzipped/minified"
+      - "**TREE-SHAKING:** Unused orchestrators can be excluded from installation"
+      - "**SIZE AUDIT:** CI pipeline fails if base install exceeds 50MB"
+      - "**COMPARISON:** CORTEX 5.x ~150MB → CORTEX 6.x <50MB (66%+ reduction)"
+      - "Test: Fresh install → measure size → validate <50MB"
+      - "Test: Full install (all optional) → measure size → document breakdown"
+    validation: automated
+    test_file: "tests/deployment/test_minimal_footprint.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    evidence:
+      - "Size audit report: cortex-brain/health-reports/deployment-size-*.json"
+      - "Dependency analysis: requirements-core.txt vs requirements-full.txt"
+
+  AC-DEPLOY-005:
+    id: AC-DEPLOY-005
+    criterion: "Lazy-loaded optional dependencies for modular installation"
+    acceptance:
+      - "**LAZY LOADING:** Optional features load dependencies on first use, not at startup"
+      - "**OPTIONAL GROUPS:** pip install cortex[docs], cortex[ml], cortex[enterprise], cortex[dev]"
+      - "**DOCS GROUP:** MkDocs, fxdocs, documentation rendering (lazy-loaded)"
+      - "**ML GROUP:** Machine learning dependencies for intelligent analysis (lazy-loaded)"
+      - "**ENTERPRISE GROUP:** Advanced compliance, multi-tenant features (lazy-loaded)"
+      - "**DEV GROUP:** pytest, mypy, black, ruff for development (never in production)"
+      - "**GRACEFUL DEGRADATION:** Missing optional dependency → clear error message with install command"
+      - "**STARTUP TIME:** Base installation starts in <2 seconds"
+      - "**FEATURE DETECTION:** cortex features command shows available vs missing features"
+      - "**NO IMPORT ERRORS:** Missing optional deps don't cause import failures"
+      - "Test: Install base → use optional feature → prompted to install → works after install"
+      - "Test: Startup time with base install <2s"
+    validation: automated
+    test_file: "tests/deployment/test_lazy_loading.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    evidence:
+      - "Feature matrix: cortex-brain/config/optional-features.yaml"
+      - "Startup benchmark: cortex-brain/health-reports/startup-time-*.json"
+
 # ==============================================================================
 # SECTION 10F: OBSERVABILITY & MONITORING
 # ==============================================================================
@@ -2814,7 +2977,7 @@ validation_gates:
 # ==============================================================================
 
 progress_tracking:
-  total_criteria: 360  # v7.4.0: Added 5 new criteria (355 → 360)
+  total_criteria: 374  # v10.0.0: Added 14 new criteria (360 → 374)
   criteria_by_category:
     governance_compliance: 13  # v7.2.0: +3 (AC-GOV-011, AC-GOV-012, AC-GOV-013)
     architecture_cleanliness: 5
@@ -2822,32 +2985,33 @@ progress_tracking:
     todo_orchestrator: 7
     orchestrator_capabilities: 11  # v7.2.0: +1 (AC-ORC-011 Housekeeping)
     orchestrator_test_harnesses: 18  # v7.4.0: +3 (AC-ORC-MCP-001 to AC-ORC-MCP-003)
-    orchestrator_housekeeping: 7  # v7.4.0: +2 (AC-ORC-HOUSE-006, AC-ORC-HOUSE-007)
+    orchestrator_housekeeping: 9  # v10.0.0: +2 (AC-ORC-HOUSE-008, AC-ORC-HOUSE-009) - SQLite optimization
     performance_scalability: 7  # +2 from v6.0.3 (AC-PERF-006, AC-PERF-007)
     test_coverage_quality: 5
     knowledge_base_learning: 4
     security_compliance: 8  # +3 from v6.0.3 (AC-SEC-006, AC-SEC-007, AC-SEC-008)
-    multi_repo_registry: 3  # NEW in v7.0.0 (AC-REPO-001, AC-REPO-002, AC-REPO-003)
+    multi_repo_registry: 5  # v10.0.0: +2 (AC-REPO-004, AC-REPO-005) - Config registry, DB segregation
     concurrency_safety: 3  # NEW in v7.0.0 (AC-RACE-001, AC-RACE-002, AC-RACE-003)
     failure_resilience: 6  # NEW in v7.0.0 (AC-FAIL-001 to AC-FAIL-006)
     mcp_multi_repo: 3
     integration_polish: 6
     data_integrity: 2  # NEW in v7.0.0 (AC-DATA-001, AC-DATA-002)
-    deployment_operations: 3  # NEW in v7.0.0 (AC-DEPLOY-001 to AC-DEPLOY-003)
+    deployment_operations: 5  # v10.0.0: +2 (AC-DEPLOY-004, AC-DEPLOY-005) - Minimal footprint, lazy-load
     observability_monitoring: 3  # NEW in v7.0.0 (AC-OBSERVE-001 to AC-OBSERVE-003)
     edge_cases: 3  # NEW in v7.0.0 (AC-EDGE-001 to AC-EDGE-003)
     dependency_management: 2  # NEW in v7.0.0 (AC-DEP-001, AC-DEP-002)
     maintainability: 2  # NEW in v7.0.0 (AC-MAINT-001, AC-MAINT-002)
     documentation_usability: 5
+    learning_library: 5  # v10.0.0: NEW (AC-LEARN-001 to AC-LEARN-005) - MkDocs/fxdocs, repo segregation
     
   criteria_by_priority:
-    P0_CRITICAL: 108  # v7.4.0: Added 5 new P0 criteria (103 → 108)
-    P1_HIGH: 49  # v7.1.0: Added 1 new P1 criteria (48 → 49)
-    P2_MEDIUM: 25  # v7.0.0: Added 7 new P2 criteria (18 → 25)
+    P0_CRITICAL: 116  # v10.0.0: +8 new P0 criteria (108 → 116)
+    P1_HIGH: 53  # v10.0.0: +4 new P1 criteria (49 → 53)
+    P2_MEDIUM: 27  # v10.0.0: +2 new P2 criteria (25 → 27)
     
   criteria_by_status:
     COMPLETE: 7
-    PENDING: 353  # v7.4.0: 360 total - 7 complete = 353 pending
+    PENDING: 367  # v10.0.0: 374 total - 7 complete = 367 pending
     BLOCKED: 0
     FAILED: 0
     
@@ -2858,13 +3022,13 @@ progress_tracking:
     non_blocking_gates: 4
     
   health_score:
-    current: 2  # 7 COMPLETE / 354 total = 1.98%
+    current: 2  # 7 COMPLETE / 374 total = 1.87%
     target: 100
     
   completion_estimate:
-    total_hours: 530-650  # v7.2.0: +20-30 hours for 9 new criteria
-    duration_days: 66-81
-    effort_weeks: 13-16
+    total_hours: 560-700  # v10.0.0: +30-50 hours for 14 new criteria
+    duration_days: 70-88
+    effort_weeks: 14-18
 
 # ==============================================================================
 # SECTION 14: AUTOMATED VALIDATION
@@ -2946,6 +3110,141 @@ audit_compliance_tracking:
     holistic_discovery:
       rule: "CORE-002: HOLISTIC_DISCOVERY"
       validation: "Search before create (no duplicates)"
+
+# ==============================================================================
+# SECTION 15B: LEARNING LIBRARY & DOCUMENTATION
+# ==============================================================================
+# Purpose: Learning library with per-repo segregation, MkDocs/fxdocs hosting,
+#          and lazy-loaded tooling for minimal installation footprint
+# Critical: Repo distinction maintained, documentation rendered via static site generators
+# ==============================================================================
+
+learning_library:
+  category: knowledge_management
+  priority: P1_HIGH
+  description: "Learning library with repo segregation, MkDocs/fxdocs hosting, lazy-loaded tools"
+
+  AC-LEARN-001:
+    id: AC-LEARN-001
+    criterion: "Learning library maintains strict repo distinction with MkDocs/fxdocs rendering"
+    acceptance:
+      - "**REPO SEGREGATION:** cortex-brain/learning-library/{repo_namespace}/ per repository"
+      - "**NAMESPACE STRUCTURE:** Each repo has isolated docs/, guides/, patterns/, lessons/"
+      - "**MKDOCS SUPPORT:** MkDocs configuration per repo (mkdocs.yml in repo namespace)"
+      - "**FXDOCS SUPPORT:** fxdocs configuration supported as alternative (fxdocs.yaml)"
+      - "**AUTO-DETECTION:** CORTEX detects preferred doc generator from config"
+      - "**STATIC RENDERING:** Documentation renders to static HTML (no server required)"
+      - "**CROSS-REPO INDEX:** Global index links to all repo-specific documentation"
+      - "**SEARCH ISOLATION:** Search scoped to active repo (no cross-repo results)"
+      - "**THEME CONSISTENCY:** Unified CORTEX theme across all rendered docs"
+      - "**VERSIONED DOCS:** Documentation versioned alongside CORTEX version"
+      - "Test: Create learning for Repo A → verify NOT visible in Repo B search"
+      - "Test: Render docs → static HTML works offline (file:// protocol)"
+    validation: automated
+    test_file: "tests/learning/test_repo_segregation.py"
+    status: PENDING
+    blocking: true
+    priority: P1_HIGH
+    evidence:
+      - "Learning library structure: cortex-brain/learning-library/"
+      - "MkDocs config template: cortex-brain/templates/mkdocs-template.yml"
+
+  AC-LEARN-002:
+    id: AC-LEARN-002
+    criterion: "Documentation tools (MkDocs/fxdocs) are lazy-loaded for minimal footprint"
+    acceptance:
+      - "**LAZY LOAD:** MkDocs/fxdocs packages NOT installed by default"
+      - "**ON-DEMAND INSTALL:** First doc generation prompts: 'Install docs tools? [Y/n]'"
+      - "**OPTIONAL GROUP:** pip install cortex[docs] for explicit installation"
+      - "**GRACEFUL FALLBACK:** Without tools, raw markdown displayed with install prompt"
+      - "**CACHED BUILDS:** Rendered HTML cached (rebuild only on source change)"
+      - "**ZERO BASE IMPACT:** Base CORTEX install has NO doc generator dependencies"
+      - "**TOOL DETECTION:** cortex docs status shows installed vs available tools"
+      - "**VERSION PINNING:** Docs tools version pinned for reproducible builds"
+      - "**PLUGIN LAZY-LOAD:** MkDocs plugins also lazy-loaded (material, search, etc.)"
+      - "Test: Fresh install → no mkdocs in pip list"
+      - "Test: cortex docs build → prompted to install → works after install"
+    validation: automated
+    test_file: "tests/deployment/test_lazy_docs_tools.py"
+    status: PENDING
+    blocking: true
+    priority: P1_HIGH
+    evidence:
+      - "Optional deps: requirements-docs.txt"
+      - "Lazy load log: cortex-brain/audit-logs/lazy-load-*.json"
+
+  AC-LEARN-003:
+    id: AC-LEARN-003
+    criterion: "Learning library content isolated per-repo in CORTEX brain"
+    acceptance:
+      - "**CONTENT TYPES:** Patterns, anti-patterns, lessons-learned, best-practices per repo"
+      - "**PATTERN LIBRARY:** cortex-brain/learning-library/{repo}/patterns/*.yaml"
+      - "**ANTI-PATTERNS:** cortex-brain/learning-library/{repo}/anti-patterns/*.yaml"
+      - "**LESSONS LEARNED:** cortex-brain/learning-library/{repo}/lessons/*.yaml"
+      - "**BEST PRACTICES:** cortex-brain/learning-library/{repo}/best-practices/*.yaml"
+      - "**INDEXING:** Each repo has searchable index (learning-index.json)"
+      - "**TAGGING:** Content tagged for discoverability (language, framework, domain)"
+      - "**LINKING:** Related content linked across categories (pattern→lesson→best-practice)"
+      - "**FRESHNESS:** Last-updated timestamp on all learning content"
+      - "**ARCHIVAL:** Outdated content archived to {repo}/archive/ with reason"
+      - "Test: Add pattern to Repo A → search in Repo B → not found"
+      - "Test: Learning content searchable by tag"
+    validation: automated
+    test_file: "tests/learning/test_content_isolation.py"
+    status: PENDING
+    blocking: true
+    priority: P1_HIGH
+    evidence:
+      - "Learning schema: cortex-brain/schemas/learning-content-schema.yaml"
+      - "Index example: cortex-brain/learning-library/example/learning-index.json"
+
+  AC-LEARN-004:
+    id: AC-LEARN-004
+    criterion: "Documentation hosting via MkDocs Material or fxdocs with CORTEX branding"
+    acceptance:
+      - "**MKDOCS MATERIAL:** Primary recommendation for rich feature set"
+      - "**FXDOCS FALLBACK:** Lightweight alternative for minimal setups"
+      - "**CORTEX BRANDING:** Custom theme with CORTEX logo, colors, typography"
+      - "**DARK MODE:** Dark mode support matching CORTEX UI"
+      - "**RESPONSIVE:** Mobile-friendly responsive layout"
+      - "**SEARCH:** Full-text search within repo documentation"
+      - "**NAVIGATION:** Auto-generated navigation from folder structure"
+      - "**CODE HIGHLIGHTING:** Syntax highlighting for Python, YAML, JSON, etc."
+      - "**DIAGRAMS:** Mermaid diagram support for architecture docs"
+      - "**OFFLINE MODE:** Generated docs work completely offline"
+      - "Test: Generate docs → validate CORTEX branding applied"
+      - "Test: Open generated docs → search works offline"
+    validation: automated
+    test_file: "tests/learning/test_docs_hosting.py"
+    status: PENDING
+    blocking: false
+    priority: P2_MEDIUM
+    evidence:
+      - "Theme config: cortex-brain/templates/mkdocs-material-theme.yml"
+      - "Sample rendered: cortex-brain/learning-library/sample-rendered/"
+
+  AC-LEARN-005:
+    id: AC-LEARN-005
+    criterion: "Learning library supports CORTEX-wide knowledge vs repo-specific knowledge"
+    acceptance:
+      - "**GLOBAL KNOWLEDGE:** cortex-brain/learning-library/global/ for CORTEX-wide patterns"
+      - "**REPO KNOWLEDGE:** cortex-brain/learning-library/{repo}/ for repo-specific"
+      - "**INHERITANCE:** Repos can inherit from global patterns (extend, don't duplicate)"
+      - "**OVERRIDE:** Repo patterns can override global patterns (with audit trail)"
+      - "**MERGE DISPLAY:** UI shows both global and repo patterns with source indication"
+      - "**SEARCH SCOPE:** Search can target: global-only, repo-only, or both"
+      - "**CONFLICT DETECTION:** Detects conflicting advice between global and repo"
+      - "**PROMOTION:** Repo patterns can be promoted to global (governance approval)"
+      - "Test: Global pattern exists → repo extends it → both visible with lineage"
+      - "Test: Repo overrides global → audit log shows override reason"
+    validation: automated
+    test_file: "tests/learning/test_knowledge_hierarchy.py"
+    status: PENDING
+    blocking: false
+    priority: P2_MEDIUM
+    evidence:
+      - "Hierarchy spec: cortex-brain/schemas/learning-hierarchy.yaml"
+      - "Conflict report: cortex-brain/health-reports/learning-conflicts-*.json"
 
 # ==============================================================================
 # SECTION 16: SUCCESS CRITERIA (FINAL)

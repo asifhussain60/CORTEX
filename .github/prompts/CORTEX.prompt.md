@@ -1,6 +1,6 @@
 # 🎯 CORTEX Universal Entry Point - Master Orchestrator Gateway
 
-**Version:** 5.2.0 | **Status:** ✅ PRODUCTION | **Type:** Terminal-Based Python Execution  
+**Version:** 5.3.0 | **Status:** ✅ PRODUCTION | **Type:** Terminal-Based Python Execution  
 **Author:** Asif Hussain | **Docs:** [Orchestrators](../../cortex-brain/documents/orchestrators-quick-ref.md) | [Architecture](../../cortex-brain/documents/cortex-architecture-quick-ref.md)  
 **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
@@ -41,8 +41,7 @@
 
 | Pattern (Regex) | Orchestrator | Priority | Mode |
 |-----------------|--------------|----------|------|
-| `^(search\|find gaps\|find violations\|discrepancy check\|gap analysis)` | **Search** | 7 | autonomous |
-| `^(align\|realign\|fix plan\|remediate\|ac validation)` | **Align** | 7 | autonomous |
+| `^(gap-fix\|gapfix\|search and align\|find and fix\|detect and remediate)` | **Gap-Fix** | 7 | autonomous |
 | `^(epic review\|review epic\|health check\|progress report\|cortex status\|epic status)` | **Epic Review** | 6 | autonomous |
 | `^(plan\|create a plan\|make a plan)` | **Planning v5** | 10 (highest) | autonomous |
 | `^(continue epic\|resume epic\|cortex 6 build\|continue build)` | **Epic Executor** | 9 | autonomous |
@@ -223,3 +222,4 @@ python3 -m src.main "continue plan c150-remediation-plan from phase 3..." --form
 - v5.0.1: Added request transformation pipeline + LLM proxy behavior
 - v5.1.0: **AUTONOMOUS-ONLY architecture** - Removed all GUIDED orchestrator concepts
 - v5.2.0: **Terminal Execution Bridge** - GitHub Copilot invokes Python via `run_in_terminal`
+- v5.3.0: **Unified Gap-Fix** - Merged cortex-search + cortex-align into cortex-gap-fix.prompt.md
