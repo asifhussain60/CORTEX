@@ -359,6 +359,47 @@ class CapabilityRegistry:
                     "autonomous": True
                 }
             ),
+            Capability(
+                name="cortex_align_plan_sync",
+                description="Holistic plan synchronization - creates or revises plan for snowball alignment",
+                parameters={
+                    "ac_file": {
+                        "type": "string",
+                        "description": "Path to AC YAML file (supports glob patterns)",
+                        "required": True
+                    },
+                    "remediation_file": {
+                        "type": "string",
+                        "description": "Path to remediation-plan.yaml",
+                        "required": True
+                    },
+                    "snowball_file": {
+                        "type": "string",
+                        "description": "Path to snowball-strategy.yaml",
+                        "required": True
+                    },
+                    "plan_path": {
+                        "type": "string",
+                        "description": "Path to plan directory",
+                        "required": True
+                    },
+                    "mode": {
+                        "type": "string",
+                        "description": "Mode: auto (detect), create (new plan), revise (update existing)",
+                        "required": False
+                    }
+                },
+                returns={"type": "object", "description": "Sync results with action, counts, alignment status"},
+                orchestrator_id="align_orchestrator",
+                metadata={
+                    "category": "alignment",
+                    "tags": ["planning", "alignment", "synchronization", "snowball"],
+                    "version": "1.0",
+                    "autonomous": True,
+                    "phase": 7,
+                    "ac_standard": "AC-ALIGN-001"
+                }
+            ),
         ]
         
         for cap in common_capabilities:
