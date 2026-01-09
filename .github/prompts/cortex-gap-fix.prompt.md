@@ -1,19 +1,22 @@
 # 🔍🔧 CORTEX Gap-Fix - Holistic Gap Detection & Remediation
 
-**Version:** 1.2.0 | **Status:** ✅ PRODUCTION | **Type:** Autonomous Analysis + Remediation  
-**Author:** Asif Hussain | **AC Reference:** `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/CX6-acceptance-criteria.yaml`  
+**Version:** 1.4.0 | **Status:** ✅ PRODUCTION | **Type:** Autonomous Analysis + Remediation  
+**Author:** Asif Hussain | **Source of Truth:** CORTEX 6.0 Canonical Requirements  
 **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
 ---
 
 ## 🎯 Purpose
 
-**UNIFIED GAP DETECTION + REMEDIATION** - Combines search and alignment in one autonomous pipeline:
+**UNIFIED GAP DETECTION + REMEDIATION** - Keeps CORTEX 6.0 plan aligned with canonical sources:
 
-1. **🔍 SEARCH (Phases 0-4):** Discover gaps, violations, brittleness, audit issues
+1. **🔍 SEARCH (Phases 0-4):** Discover gaps vs CX6-requirements.yaml & CX6-acceptance-criteria.yaml
 2. **🔧 ALIGN (Phases 5-11):** Prioritize, remediate, sync plans with snowball ordering
+3. **🎯 VALIDATION:** Ensure active plan matches 18 SR requirements + 361 AC criteria
 
 **⚠️ CRITICAL: This is FULLY AUTONOMOUS - executes all 12 phases without user confirmation.**
+
+**🎯 Goal:** Maintain plan alignment with canonical sources during CORTEX 6.0 build (210-288h effort)
 
 ---
 
@@ -118,35 +121,104 @@
 
 # 🔍 SEARCH PIPELINE (Phases 0-4)
 
-## 📋 Analysis Categories
+## 📋 Canonical Source of Truth (CORTEX 6.0)
 
-### Category 1: AC Implementation Gaps
-**Source of Truth:** `CX6-acceptance-criteria.yaml`
+**Primary Sources:**
+- **Requirements:** `cortex6/acceptance-criteria/requirements/CX6-requirements.yaml` (820 lines)
+  - 18 Strategic/Foundation/Cross-Repo requirements
+  - 18 DoR decisions (Q1-Q20, 100% complete)
+  - 16 Architectural decisions (AD-001 to AD-016)
+  - Risk register, success metrics
 
-| AC Section | Risk Level | Criteria Count |
-|------------|------------|----------------|
-| `governance_compliance` (AC-GOV-*) | 🔴 CRITICAL | 10 |
-| `architecture_cleanliness` (AC-ARCH-*) | 🔴 CRITICAL | 5 |
-| `foundation_layer` (AC-F01-*) | 🔴 CRITICAL | 6 |
-| `todo_orchestrator` (AC-F02-*) | 🔴 CRITICAL | 7 |
-| `orchestrator_capabilities` (AC-ORC-*) | 🟠 HIGH | 10+ |
-| `plan_viewer_dashboard` (AC-PLAN-DASH-*) | 🔴 CRITICAL | 7 |
-| `concurrency_safety` (AC-RACE-*) | 🔴 CRITICAL | 3 |
-| `security_compliance` (AC-SEC-*) | 🔴 CRITICAL | 8 |
-| `multi_repo_registry` (AC-REPO-*) | 🔴 CRITICAL | 5 |
-| `learning_library` (AC-LEARN-*) | 🟠 HIGH | 5 |
+- **Acceptance Criteria:** `cortex6/acceptance-criteria/CX6-acceptance-criteria.yaml` (5,717 lines)
+  - 361 acceptance criteria across 26 sections
+  - 14 categories (governance, audit, orchestrators, dashboard, toolkit, etc.)
+  - Test files, validation methods, evidence requirements
 
-### Category 2: SKULL Rule Violations
+- **Master Plan:** `cortex6/artifacts/CORTEX6-COMPREHENSIVE-UPGRADE-PLAN.yaml` (1,403 lines)
+  - 5 stages: Foundation (40-48h) → Quality (24-32h) → Features (60-80h) → Hardening (40-60h) → Enhancements (40-60h)
+  - Total effort: 210-288 hours (5.3-7.2 weeks)
+  - DOR status: 100% (zero ambiguity)
 
-| Rule | Detection Pattern | Severity |
-|------|-------------------|----------|
-| TDD_ENFORCEMENT | Code without failing test first | 🔴 BLOCKED |
-| HOLISTIC_DISCOVERY | File creation without workspace search | 🔴 BLOCKED |
-| GIT_ISOLATION | CORTEX commits to user repos | 🔴 BLOCKED |
-| PLANNING_ISOLATION | Plans implement code | 🔴 BLOCKED |
-| YAML_SAFE_LOADER | `yaml.load()` without SafeLoader | 🔴 CRITICAL |
+- **Dashboard Plan:** `cortex6/artifacts/PLAN-VIEWER-DASHBOARD-PLAN.yaml` (1,233 lines)
+  - 4 phases: Backend API (4-5h), Frontend SPA (6-8h), Integration (3-4h), Polish (3-4h)
+  - 7 acceptance criteria (AC-DASH-001 to AC-DASH-007)
+  - Tech stack: FastAPI + WebSocket + Tailwind CSS
 
-### Category 3: Architecture Anti-Patterns
+## 📊 Analysis Categories
+
+### Category 1: Strategic Requirements Gap Detection (18 Requirements)
+
+**Source:** `CX6-requirements.yaml` Section 1
+
+| SR-ID | Requirement | Stage | Priority | AC Count |
+|-------|-------------|-------|----------|----------|
+| SR-001 | Comprehensive Audit Logging | 1 | P0_CRITICAL | AC-AUDIT-001 to AC-AUDIT-006 |
+| SR-002 | AC-ID Traceability Framework | 1 | P0_CRITICAL | AC-VAL-001 to AC-VAL-004 |
+| SR-003 | SKULL → CORE Rules Migration | 1 | P0_CRITICAL | AC-GOV-001 to AC-GOV-011 |
+| SR-004 | Manual Housekeeping Orchestrator | 1 | HIGH | AC-HOUSE-001 to AC-HOUSE-009 |
+| SR-005 | Cross-Repo Architecture | 3 | HIGH | AC-CROSS-001 to AC-CROSS-005 |
+| SR-006 | Migrate Orchestrator (On-Demand) | 3 | MEDIUM | AC-MIGRATE-001 to AC-MIGRATE-006 |
+| SR-007 | Fast Startup via Lazy Loading | 3 | MEDIUM | Performance SLA <500ms |
+| SR-008 | Interactive Plan Viewer Dashboard | 3 | HIGH | AC-DASH-001 to AC-DASH-007 |
+
+**Gap Detection:**
+- Check if plan phases map to all 18 SR requirements
+- Verify each SR has corresponding AC coverage
+- Validate implementation tasks exist for each SR
+
+### Category 2: Acceptance Criteria Implementation Gaps (361 Criteria)
+
+**Source:** `CX6-acceptance-criteria.yaml` (26 sections)
+
+| Section | AC Range | Risk Level | Criteria Count |
+|---------|----------|------------|----------------|
+| Section 1-4 | Governance & Compliance | 🔴 CRITICAL | AC-GOV-001 to AC-GOV-011 (11) |
+| Section 15 | Audit Logging Framework | 🔴 CRITICAL | AC-AUDIT-001 to AC-AUDIT-006 (6) |
+| Section 5-14 | Orchestrators | 🟠 HIGH | AC-ORC-* (100+) |
+| Section 24 | TDD-Master Orchestrator | 🔴 CRITICAL | AC-TDD-MASTER-001 to AC-TDD-MASTER-007 (7) |
+| Section 26 | Plan Viewer Dashboard | 🟠 HIGH | AC-DASH-001 to AC-DASH-007 (7) |
+| Section 23 | CORTEX Toolkit | 🟠 HIGH | AC-TOOLKIT-001 to AC-TOOLKIT-008 (8) |
+| Section 25 | YAML/JSON Data Interchange | 🔴 CRITICAL | AC-DATA-001 to AC-DATA-005 (5) |
+
+**Gap Detection Checks:**
+1. **Missing Implementation:** AC exists, no code/test found
+2. **Partial Implementation:** Code exists but incomplete per AC
+3. **Test Coverage Gap:** AC has no test file with @pytest.mark.ac_id() marker
+4. **Audit Evidence Gap:** AC has no audit log coverage (per AC-VAL-002)
+5. **Dual Validation Gap:** AC lacks both test + audit evidence (per AC-VAL-003)
+
+### Category 3: CORE Rules Violations (61 Rules)
+
+**Source:** `cortex-brain/tier0/governance/core-rules.yaml` (post-Stage 1.2 migration)
+
+| Rule | Detection Pattern | Severity | Stage |
+|------|-------------------|----------|-------|
+| CORE-019 | TDD_MASTER_REQUIRED - Code without TDD-Master execution | 🔴 BLOCKED | 1 |
+| CORE-001 | HOLISTIC_DISCOVERY - File creation without workspace search | 🔴 BLOCKED | 1 |
+| CORE-015 | GIT_ISOLATION - CORTEX commits to user repos | 🔴 BLOCKED | All |
+| CORE-012 | PLANNING_ISOLATION - Plans implement code | 🔴 BLOCKED | All |
+| CORE-030 | YAML_SAFE_LOADER - yaml.load() without SafeLoader | 🔴 CRITICAL | All |
+
+**Note:** Pre-Stage 1.2, check legacy `brain-protection-rules.yaml` for SKULL rules.
+
+### Category 4: DoR Decision Alignment (18 Decisions)
+
+**Source:** `CX6-requirements.yaml` metadata.dor_decisions (Q1-Q20)
+
+| Decision | Question | Impact on Plan |
+|----------|----------|----------------|
+| Q3 | Backward compatibility? | Clean SKULL deletion (no migration code) |
+| Q4 | Housekeeping triggers? | Manual only (no auto-triggers in plan) |
+| Q5 | Deployment model? | Clone + PATH (no global install tasks) |
+| Q17 | Dashboard HTML regen? | Generate once (no regeneration tasks) |
+| Q18 | Auto-launch browser? | Manual default (--dashboard-launch flag optional) |
+| Q19 | Server daemon mode? | Foreground default (--daemon optional) |
+| Q20 | Data refresh pattern? | WebSocket push (no polling implementation) |
+
+**Gap Detection:** Verify plan tasks comply with all 18 DoR decisions (no conflicting implementations)
+
+### Category 5: Architecture Anti-Patterns
 
 | Anti-Pattern | Detection Regex | Risk |
 |--------------|-----------------|------|
@@ -166,21 +238,25 @@
 
 ---
 
-### Phase 0: AC Document Loading
+### Phase 0: Canonical Sources Loading
 **Duration:** <10 seconds
 
 **Actions:**
-1. Load `CX6-acceptance-criteria.yaml`
-2. Parse all 370+ acceptance criteria
-3. Build validation checklist by category
-4. Identify blocking vs non-blocking criteria
+1. Load `CX6-requirements.yaml` (820 lines, 18 requirements, 18 DoR decisions)
+2. Load `CX6-acceptance-criteria.yaml` (5,717 lines, 361 criteria, 26 sections)
+3. Load `CORTEX6-COMPREHENSIVE-UPGRADE-PLAN.yaml` (1,403 lines, 5 stages)
+4. Parse all strategic requirements, acceptance criteria, DoR decisions
+5. Build validation checklist by category and stage
+6. Identify blocking vs non-blocking criteria
 
 **Phase Completion Output:**
 ```
-✅ Phase 0 - AC Document Loading: Complete
-   └─ Criteria Loaded: 374 | Categories: 15 | Blocking: 42
-   └─ AC Version: 10.0.0
-   └─ Duration: 3s
+✅ Phase 0 - Canonical Sources Loading: Complete
+   └─ Requirements Loaded: 18 SR | DoR Decisions: 18 | AD: 16
+   └─ Criteria Loaded: 361 | Sections: 26 | Categories: 14
+   └─ Plan Loaded: 5 stages, 210-288h effort
+   └─ AC Version: 17.0.0 | Requirements Version: 1.1.0
+   └─ Duration: 5s
    └─ Auto-proceeding to Phase 1...
 ```
 
@@ -259,49 +335,98 @@ cortex-brain/tier0/      → Governance rules
 ### Phase 4: Audit Gap Analysis & Findings Output
 **Duration:** 1-2 minutes
 
-**Per AC-INT-006:** Verify every criterion has audit log coverage
+**Per AC-VAL-002:** Verify every criterion has audit log coverage
 
-**Primary Output:** `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/search-findings-{timestamp}.yaml`
+**Primary Output:** `cortex6/acceptance-criteria/search-findings-{timestamp}.yaml`
 
 ```yaml
 search_findings:
-  generated_at: '2026-01-09T10:30:00Z'
-  ac_version: '10.0.0'
-  ac_location: 'cortex-brain/documents/planning/active/cortex6/acceptance-criteria/CX6-acceptance-criteria.yaml'
+  generated_at: '2026-01-09T19:00:00Z'
+  requirements_version: '1.1.0'
+  ac_version: '17.0.0'
+  plan_version: '2.0.0'
+  
+  sources:
+    requirements: 'cortex6/acceptance-criteria/requirements/CX6-requirements.yaml'
+    acceptance_criteria: 'cortex6/acceptance-criteria/CX6-acceptance-criteria.yaml'
+    master_plan: 'cortex6/artifacts/CORTEX6-COMPREHENSIVE-UPGRADE-PLAN.yaml'
   
   summary:
     total_issues: 78
-    critical: 24
-    high: 31
-    medium: 18
-    low: 5
+    critical: 24  # Blocking Stage 1 execution
+    high: 31      # Should address in current stage
+    medium: 18    # Address in next stage
+    low: 5        # Enhancements stage
     
-  discrepancies:
-    - id: AC-GOV-001
-      type: PARTIAL
-      description: "SKULL rule migration incomplete"
-      evidence_found: ["cortex-brain/tier0/governance/"]
-      evidence_missing: ["tests/governance/test_skull_migration.py"]
+  strategic_requirements_gaps:
+    - sr_id: SR-001
+      name: "Comprehensive Audit Logging"
+      stage: 1
+      gap_type: PARTIAL_IMPLEMENTATION
+      description: "AuditLogger exists but missing <5ms latency validation"
+      evidence_found: ["src/infrastructure/audit_logger.py"]
+      evidence_missing: ["tests/performance/test_audit_latency.py"]
       severity: CRITICAL
       blocking: true
+      ac_coverage: ["AC-AUDIT-001", "AC-AUDIT-002"]
+      
+    - sr_id: SR-008
+      name: "Interactive Plan Viewer Dashboard"
+      stage: 3
+      gap_type: NOT_STARTED
+      description: "Dashboard plan exists but no implementation"
+      evidence_found: ["cortex6/artifacts/PLAN-VIEWER-DASHBOARD-PLAN.yaml"]
+      evidence_missing: ["src/dashboard/", "cortex6/dashboard/"]
+      severity: HIGH
+      blocking: false
+      ac_coverage: ["AC-DASH-001" to "AC-DASH-007"]
+      
+  acceptance_criteria_gaps:
+    - ac_id: AC-GOV-001
+      section: "Governance & Compliance"
+      type: PARTIAL
+      description: "SKULL → CORE migration incomplete"
+      evidence_found: ["cortex-brain/tier0/governance/"]
+      evidence_missing: ["tests/governance/test_core_rules.py"]
+      severity: CRITICAL
+      blocking: true
+      stage: 1
+      phase: "1.2"
+      
+  dor_violations:
+    - decision_id: Q17
+      decision: "Dashboard HTML generated once (not regenerated)"
+      violation_type: NOT_YET_IMPLEMENTED
+      description: "Dashboard generator not yet built"
+      severity: MEDIUM
+      blocking: false
+      stage: 3
       
   violations:
-    - rule: YAML_SAFE_LOADER
+    - rule: CORE-030
+      rule_name: "YAML_SAFE_LOADER"
       file: "src/utils/config_loader.py"
       line: 45
       pattern: "yaml.load(f)"
       fix: "yaml.safe_load(f)"
       severity: CRITICAL
+      stage: 1
       
   brittleness:
     - type: RACE_CONDITION
       file: "src/database/state_manager.py"
       description: "Concurrent writes without locking"
       severity: CRITICAL
+      ac_reference: "AC-CONC-001"
+      stage: 1
       
   audit_gaps:
-    - criterion: AC-F02-006
+    - ac_id: AC-DASH-001
+      section: "Plan Viewer Dashboard"
       gap_type: NO_AUDIT_COVERAGE
+      description: "Dashboard server init has no audit logging"
+      severity: HIGH
+      stage: 3
       recommendation: "Add audit logging for TODO state integration"
 ```
 
@@ -786,15 +911,35 @@ Execute the remediation plan:
 
 ---
 
-## 📁 File Locations (Canonical)
+## 📁 File Locations (Canonical - CORTEX 6.0)
 
-| Artifact | Location |
-|----------|----------|
-| **AC Source of Truth** | `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/CX6-acceptance-criteria.yaml` |
-| **Search Findings** | `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/search-findings-{timestamp}.yaml` |
-| **Remediation Plan** | `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/CX6-requirements.yaml` |
-| **Snowball Strategy** | `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/snowball-strategy.yaml` |
-| **Archive** | `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/archive/` |
+### Source of Truth Files
+
+| Artifact | Location | Lines | Purpose |
+|----------|----------|-------|---------|
+| **Requirements** | `cortex6/acceptance-criteria/requirements/CX6-requirements.yaml` | 820 | 18 SR, 18 DoR, 16 AD decisions |
+| **Acceptance Criteria** | `cortex6/acceptance-criteria/CX6-acceptance-criteria.yaml` | 5,717 | 361 AC across 26 sections |
+| **Master Plan** | `cortex6/artifacts/CORTEX6-COMPREHENSIVE-UPGRADE-PLAN.yaml` | 1,403 | 5-stage implementation plan |
+| **Dashboard Plan** | `cortex6/artifacts/PLAN-VIEWER-DASHBOARD-PLAN.yaml` | 1,233 | Dashboard 4-phase plan |
+| **Plan Config** | `cortex6/plan/config.yaml` | 164 | Execution configuration |
+| **Navigation** | `cortex6/00-SOURCE-OF-TRUTH-README.md` | - | Canonical file guide |
+
+### Gap-Fix Output Files
+
+| Artifact | Location | Purpose |
+|----------|----------|---------|
+| **Search Findings** | `cortex6/acceptance-criteria/search-findings-{timestamp}.yaml` | Gap detection results |
+| **Snowball Strategy** | `cortex6/acceptance-criteria/snowball-strategy.yaml` | Prioritization order |
+| **Conflict Report** | `cortex6/acceptance-criteria/conflict-report-{timestamp}.yaml` | Phase 10B results |
+| **Archive** | `cortex6/acceptance-criteria/archive/` | Historical findings |
+
+### Progress Tracking Files
+
+| Artifact | Location | Purpose |
+|----------|----------|---------|
+| **Progress Tracker** | `cortex6/tracking/progress-tracker.json` | Machine-readable progress |
+| **TODO List** | `cortex6/tracking/TODO.md` | Human-readable tasks |
+| **Audit Logs** | `cortex-brain/audit-logs/*.jsonl` | Execution evidence |
 
 ### 🚫 FORBIDDEN File Creation Locations
 
@@ -864,13 +1009,17 @@ cortex-brain/documents/planning/active/cortex6/acceptance-criteria/
 ## 📚 References
 
 - **Main Entry Point:** `.github/prompts/CORTEX.prompt.md`
-- **AC Source:** `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/CX6-acceptance-criteria.yaml`
+- **Canonical Requirements:** `cortex6/acceptance-criteria/requirements/CX6-requirements.yaml` (820 lines)
+- **Canonical AC:** `cortex6/acceptance-criteria/CX6-acceptance-criteria.yaml` (5,717 lines)
+- **Master Plan:** `cortex6/artifacts/CORTEX6-COMPREHENSIVE-UPGRADE-PLAN.yaml` (1,403 lines)
+- **Dashboard Plan:** `cortex6/artifacts/PLAN-VIEWER-DASHBOARD-PLAN.yaml` (1,233 lines)
 - **MCP Server:** `src/mcp/align_plan_sync.py` (Phase 11 implementation)
 - **Orchestrators Docs:** `cortex-brain/documents/orchestrators-quick-ref.md`
 
 ---
 
 **Version History:**
+- v1.4.0 (2026-01-09): **Aligned with CORTEX 6.0 Canonical Sources** - Updated to reference CX6-requirements.yaml (18 SR, 18 DoR, 16 AD), CX6-acceptance-criteria.yaml (361 AC, 26 sections), CORTEX6-COMPREHENSIVE-UPGRADE-PLAN.yaml (5 stages, 210-288h), phase outputs now include strategic requirements gaps, DoR decision violations, stage/phase mapping
 - v1.3.0 (2026-01-09): Added Phase 10C - Test Stability Validation (AC-GAPFIX-005 to AC-GAPFIX-007)
 - v1.2.0 (2026-01-09): Mobile-friendly progress display - removed ASCII borders, minimal 3-row updates during execution
 - v1.1.0 (2026-01-09): Added Phase 10B - Conflict Detection & Validation (AC-GAPFIX-001 to AC-GAPFIX-004)
