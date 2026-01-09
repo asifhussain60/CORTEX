@@ -24,13 +24,33 @@
 
 metadata:
   document_type: enterprise_acceptance_criteria
-  version: 14.4.0
+  version: 15.0.0
   status: AUTHORITATIVE
   created: '2026-01-09'
   updated: '2026-01-09'
   author: Asif Hussain
   epic_id: CORTEX6-BUILD
   changelog:
+    v15.0.0:
+      date: '2026-01-09'
+      changes:
+        - "Added SECTION 21: HOLISTIC PLAN ALIGNMENT & VALIDATION (AC-ALIGN-001 to AC-ALIGN-005)"
+        - "AC-ALIGN-001: Holistic plan review triggers on every gap-fix execution"
+        - "AC-ALIGN-002: Complexity-based plan recreation (auto-delete if score ≥ 76)"
+        - "AC-ALIGN-003: Prompt file alignment validation and synchronization"
+        - "AC-ALIGN-004: Plan structure validation against AC-ORC-PLAN-002"
+        - "AC-ALIGN-005: Multiple alignment validation triggers (gap-fix, manual, pre-flight, scheduled, git hook)"
+        - "Added SECTION 22: DIGEST UTILITY - FILE FORMAT CONVERSION (AC-DIGEST-001 to AC-DIGEST-006)"
+        - "AC-DIGEST-001: Universal file-to-YAML converter (MD, TXT, JSON, CSV, HTML, PDF, DOCX)"
+        - "AC-DIGEST-002: Auto-classification and CORTEX governance-compliant storage"
+        - "AC-DIGEST-003: MCP tool exposure as cortex_digest"
+        - "AC-DIGEST-004: Batch processing and directory recursion support"
+        - "AC-DIGEST-005: YAML output schema validation"
+        - "AC-DIGEST-006: Implementation files and documentation requirements"
+        - "Complexity scoring algorithm: (structural_violations × 10) + (coverage_gaps × 5) + (obsolete_tasks × 3)"
+        - "Plan recreation thresholds: LOW (0-20), MEDIUM (21-50), HIGH (51-75), CRITICAL (76-100)"
+        - "Digest supports 7 formats: Markdown, Text, JSON, CSV, HTML, PDF, DOCX"
+      reason: "CRITICAL GOVERNANCE: (1) Plans drift from AC over time - need continuous alignment validation with complexity-based recreation triggers, (2) Prompt files become stale - need sync mechanism, (3) Need universal ingestion tool for converting any file format to YAML for CORTEX knowledge base, (4) Digest utility enables structured knowledge capture from documentation, specs, and external sources."
     v14.4.0:
       date: '2026-01-09'
       changes:
@@ -4625,6 +4645,261 @@ future_enhancements:
       timeline: "Q3 2026"
       items: ["ENH-008"]
       rationale: "Requires historical data from earlier phases"
+
+# ==============================================================================
+# SECTION 21: HOLISTIC PLAN ALIGNMENT & VALIDATION
+# ==============================================================================
+# Purpose: Continuous plan-to-requirements alignment validation with complexity-based
+#          recreation triggers and prompt file synchronization
+# Critical: Ensures plans remain aligned with evolving AC and prevents drift
+# ==============================================================================
+
+holistic_alignment_validation:
+  category: plan_governance
+  priority: P0_CRITICAL
+  description: "Continuous validation of plan alignment with CX6 requirements and AC with automatic remediation"
+
+  AC-ALIGN-001:
+    id: AC-ALIGN-001
+    criterion: "Holistic plan review triggers on every gap-fix execution"
+    acceptance:
+      - "**AUTOMATIC TRIGGER:** Every gap-fix execution MUST perform holistic plan review"
+      - "**REVIEW SCOPE:** CX6-acceptance-criteria.yaml + CX6-requirements.yaml + cortex6-planner/ structure"
+      - "**ALIGNMENT CHECK:** Verify all AC sections have corresponding plan phases/tasks"
+      - "**GAP DETECTION:** Identify missing AC coverage, obsolete tasks, structural violations"
+      - "**COMPLEXITY SCORING:** Calculate plan complexity score (0-100) based on drift metrics"
+      - "Audit log proves: (1) Review triggered, (2) Alignment checked, (3) Gaps detected, (4) Complexity scored"
+    validation: automated
+    test_file: "tests/orchestrators/test_holistic_alignment.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    evidence:
+      - "Holistic review audit: cortex-brain/audit-logs/holistic-alignment-*.json"
+      - "Complexity report: cortex6/acceptance-criteria/alignment-complexity-{timestamp}.yaml"
+
+  AC-ALIGN-002:
+    id: AC-ALIGN-002
+    criterion: "Complexity-based plan recreation with automatic threshold detection"
+    acceptance:
+      - "**COMPLEXITY METRICS:** Structural drift (file violations), Coverage drift (missing AC), Task drift (obsolete tasks)"
+      - "**SCORING ALGORITHM:** `complexity = (structural_violations × 10) + (coverage_gaps × 5) + (obsolete_tasks × 3)`"
+      - "**THRESHOLD: LOW** - Score 0-20: Minor alignment corrections only"
+      - "**THRESHOLD: MEDIUM** - Score 21-50: Major restructuring required (reorder phases, inject gaps)"
+      - "**THRESHOLD: HIGH** - Score 51-75: Plan recreation recommended but not required"
+      - "**THRESHOLD: CRITICAL** - Score 76-100: AUTOMATIC plan deletion + recreation (too much drift)"
+      - "**USER NOTIFICATION:** If score > 50, notify user before recreation with drift summary"
+      - "**AUTOMATIC RECREATION:** If score ≥ 76, delete cortex6-planner/ and regenerate from AC"
+      - "Audit log proves: Complexity calculated, threshold evaluated, action taken (align/recreate)"
+    validation: automated
+    test_file: "tests/orchestrators/test_complexity_recreation.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    metrics:
+      - metric: "plan_complexity_score"
+        unit: "0-100"
+        threshold_low: 20
+        threshold_medium: 50
+        threshold_high: 75
+        threshold_critical: 76
+    evidence:
+      - "Complexity calculation: cortex6/acceptance-criteria/complexity-score-{timestamp}.yaml"
+      - "Recreation decision: cortex-brain/audit-logs/plan-recreation-*.json"
+
+  AC-ALIGN-003:
+    id: AC-ALIGN-003
+    criterion: "Prompt file alignment validation and synchronization"
+    acceptance:
+      - "**PROMPT FILES CHECKED:** .github/prompts/*.prompt.md (all orchestrator prompts)"
+      - "**ALIGNMENT VALIDATION:** Verify prompt instructions match current AC requirements"
+      - "**VERSION TRACKING:** Each prompt has version metadata matching AC version"
+      - "**DRIFT DETECTION:** Identify prompts referencing outdated AC IDs, removed features, or obsolete workflows"
+      - "**AUTO-SYNC:** If drift detected, regenerate prompt file sections from AC templates"
+      - "**COMPLEXITY THRESHOLD:** If prompt drift > 30%, flag for manual review (LLM regeneration risky)"
+      - "Audit log proves: Prompt files scanned, drift detected, sync performed"
+    validation: automated
+    test_file: "tests/orchestrators/test_prompt_alignment.py"
+    status: PENDING
+    blocking: false
+    priority: P1_HIGH
+    evidence:
+      - "Prompt drift report: cortex6/acceptance-criteria/prompt-drift-{timestamp}.yaml"
+      - "Prompt sync audit: cortex-brain/audit-logs/prompt-sync-*.json"
+
+  AC-ALIGN-004:
+    id: AC-ALIGN-004
+    criterion: "Plan structure validation against AC-ORC-PLAN-002 on every review"
+    acceptance:
+      - "**ROOT FILE CHECK:** EXACTLY 3 files (continuation-prompt.md, thoughts.txt, plan-viewer.html)"
+      - "**PREFIX CHECK:** NO files with 00-, 01-, etc. prefixes"
+      - "**FORMAT CHECK:** All plan artifacts (except 3 root files) MUST be .yaml or .json"
+      - "**FOLDER CHECK:** 5 required subfolders (analysis, artifacts, context, reports, tracking)"
+      - "**AUTO-REMEDIATION:** If violations found, trigger structure migration automatically"
+      - "**BACKUP BEFORE FIX:** Archive current structure to archive/ before remediation"
+      - "Audit log proves: Structure validated, violations found, remediation performed"
+    validation: automated
+    test_file: "tests/orchestrators/test_plan_structure_validation.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    skull_rules:
+      - "PLAN_FILE_ORGANIZATION: Enforced on every holistic review"
+      - "NO_00_PREFIX_FILES: Enforced on every holistic review"
+      - "YAML_JSON_ONLY: Enforced on every holistic review"
+    evidence:
+      - "Structure validation: cortex6/acceptance-criteria/structure-validation-{timestamp}.yaml"
+      - "Remediation audit: cortex-brain/audit-logs/structure-remediation-*.json"
+
+  AC-ALIGN-005:
+    id: AC-ALIGN-005
+    criterion: "Alignment validation triggered by multiple entry points"
+    acceptance:
+      - "**TRIGGER 1:** Every gap-fix execution (Phase 11 holistic sync)"
+      - "**TRIGGER 2:** Manual command: `/CORTEX align cortex6`"
+      - "**TRIGGER 3:** Before plan execution: `/CORTEX continue cortex6` (pre-flight check)"
+      - "**TRIGGER 4:** Scheduled: Daily alignment check (if plan modified in last 24h)"
+      - "**TRIGGER 5:** AC file update: When CX6-acceptance-criteria.yaml modified (git hook)"
+      - "**NO DUPLICATE WORK:** Cache alignment results for 1 hour (skip if already validated)"
+      - "Audit log proves: Trigger source, alignment executed, cache status"
+    validation: automated
+    test_file: "tests/orchestrators/test_alignment_triggers.py"
+    status: PENDING
+    blocking: false
+    priority: P1_HIGH
+    evidence:
+      - "Trigger audit: cortex-brain/audit-logs/alignment-trigger-*.json"
+
+# ==============================================================================
+# SECTION 22: DIGEST UTILITY - FILE FORMAT CONVERSION
+# ==============================================================================
+# Purpose: Universal file-to-YAML converter for CORTEX knowledge ingestion
+# Critical: Enables structured knowledge capture from any source format
+# ==============================================================================
+
+digest_utility:
+  category: utilities
+  priority: P1_HIGH
+  description: "MCP-exposed Python utility for converting any file format to YAML with intelligent classification"
+
+  AC-DIGEST-001:
+    id: AC-DIGEST-001
+    criterion: "Digest utility converts any file format to YAML"
+    acceptance:
+      - "**SUPPORTED FORMATS:** Markdown (.md), Text (.txt), JSON (.json), CSV (.csv), HTML (.html), PDF (.pdf), DOCX (.docx)"
+      - "**CONVERSION LOGIC:** Extract structured data (headings, lists, tables, code blocks, metadata)"
+      - "**YAML OUTPUT:** Well-formatted YAML with schema validation"
+      - "**METADATA PRESERVATION:** Original filename, format, creation date, author (if available)"
+      - "**CONTENT CHUNKING:** Large files split into sections with cross-references"
+      - "Test: Convert sample.md → sample.yaml with preserved structure"
+    validation: automated
+    test_file: "tests/utilities/test_digest_conversion.py"
+    status: PENDING
+    blocking: false
+    priority: P1_HIGH
+    evidence:
+      - "Conversion audit: cortex-brain/audit-logs/digest-conversion-*.json"
+
+  AC-DIGEST-002:
+    id: AC-DIGEST-002
+    criterion: "Digest utility auto-classifies and stores files per CORTEX governance"
+    acceptance:
+      - "**NO TARGET SPECIFIED:** Auto-classify based on content analysis (LLM-powered)"
+      - "**CLASSIFICATION RULES:** Plans → documents/planning/, Docs → documents/, Code → artifacts/, Knowledge → tier2/"
+      - "**GOVERNANCE COMPLIANCE:** Follows brain-protection-rules.yaml placement rules"
+      - "**TIER DETECTION:** Analyze content to determine correct tier (tier0/tier1/tier2/tier3)"
+      - "**FOLDER CREATION:** Create subfolders if missing (e.g., tier2/domain-knowledge/api-specs/)"
+      - "**COLLISION DETECTION:** If file exists, append timestamp or prompt user"
+      - "Test: Digest API spec → auto-stored at tier2/domain-knowledge/api-specs/api-spec.yaml"
+    validation: automated
+    test_file: "tests/utilities/test_digest_classification.py"
+    status: PENDING
+    blocking: false
+    priority: P1_HIGH
+    skull_rules:
+      - "HOLISTIC_DISCOVERY: Search before creating files"
+      - "TIER_PLACEMENT: Respect brain tier organization"
+    evidence:
+      - "Classification audit: cortex-brain/audit-logs/digest-classification-*.json"
+
+  AC-DIGEST-003:
+    id: AC-DIGEST-003
+    criterion: "Digest utility exposed via MCP as cortex-toolkit tool"
+    acceptance:
+      - "**MCP TOOL NAME:** `cortex_digest`"
+      - "**PARAMETERS:** file_path (required), target_location (optional), format (auto-detect or override)"
+      - "**RETURN VALUE:** { success: bool, yaml_path: str, classification: str, metadata: dict }"
+      - "**REGISTRATION:** Registered in CapabilityRegistry with metadata"
+      - "**INVOCATION:** Callable via `mcp.invoke('cortex_digest', {'file_path': '...'})`"
+      - "**ERROR HANDLING:** Unsupported format → graceful fallback (store as text blob in YAML)"
+      - "Test: Invoke via MCP → verify tool registered, callable, returns valid response"
+    validation: automated
+    test_file: "tests/mcp/test_digest_tool.py"
+    status: PENDING
+    blocking: false
+    priority: P1_HIGH
+    evidence:
+      - "MCP registration: cortex-brain/audit-logs/mcp-digest-registration-*.json"
+      - "Tool invocation: cortex-brain/audit-logs/mcp-digest-invocation-*.json"
+
+  AC-DIGEST-004:
+    id: AC-DIGEST-004
+    criterion: "Digest utility supports batch processing and directory recursion"
+    acceptance:
+      - "**BATCH MODE:** Digest entire directory with `--recursive` flag"
+      - "**FILE FILTERING:** `--include` and `--exclude` patterns (e.g., `--include *.md --exclude *-backup.md`)"
+      - "**PROGRESS REPORTING:** Real-time progress bar (ASCII for accessibility)"
+      - "**ERROR RECOVERY:** Continue on individual file errors, log failures"
+      - "**SUMMARY REPORT:** Generate digest-summary.yaml with conversion stats"
+      - "Test: Digest 50-file directory → all converted, summary report generated"
+    validation: automated
+    test_file: "tests/utilities/test_digest_batch.py"
+    status: PENDING
+    blocking: false
+    priority: P2_MEDIUM
+    evidence:
+      - "Batch processing audit: cortex-brain/audit-logs/digest-batch-*.json"
+      - "Summary report: cortex-brain/documents/utilities/digest-summary-{timestamp}.yaml"
+
+  AC-DIGEST-005:
+    id: AC-DIGEST-005
+    criterion: "Digest utility validates YAML output schema before storage"
+    acceptance:
+      - "**SCHEMA VALIDATION:** Validate against cortex-brain/schemas/digest-output.schema.json"
+      - "**REQUIRED FIELDS:** metadata (source_file, format, created_at), content (structured data)"
+      - "**VALIDATION FAILURE:** Reject invalid YAML, log error with details"
+      - "**SCHEMA AUTO-GENERATION:** If no schema exists for content type, generate minimal schema"
+      - "Test: Digest file with invalid schema → validation error, file not stored"
+    validation: automated
+    test_file: "tests/utilities/test_digest_validation.py"
+    status: PENDING
+    blocking: false
+    priority: P2_MEDIUM
+    evidence:
+      - "Validation audit: cortex-brain/audit-logs/digest-validation-*.json"
+
+  AC-DIGEST-006:
+    id: AC-DIGEST-006
+    criterion: "Digest utility implementation and documentation"
+    acceptance:
+      - "**IMPLEMENTATION:** src/utilities/digest.py (Python module)"
+      - "**MCP WRAPPER:** src/mcp/digest_tool.py (MCP tool wrapper)"
+      - "**CLI INTERFACE:** Invoke via `python -m src.utilities.digest <file>`"
+      - "**DOCUMENTATION:** README.md in src/utilities/ with usage examples"
+      - "**UNIT TESTS:** 95%+ coverage for all conversion functions"
+      - "**INTEGRATION TESTS:** End-to-end MCP invocation tests"
+    validation: automated
+    test_file: "tests/utilities/test_digest_implementation.py"
+    status: PENDING
+    blocking: false
+    priority: P1_HIGH
+    implementation_files:
+      - "src/utilities/digest.py"
+      - "src/utilities/converters/" # Format-specific converters
+      - "src/mcp/digest_tool.py"
+      - "cortex-brain/schemas/digest-output.schema.json"
+    evidence:
+      - "Implementation complete: All files created with tests"
 
 # ==============================================================================
 # END OF ENTERPRISE ACCEPTANCE CRITERIA
