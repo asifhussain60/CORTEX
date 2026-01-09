@@ -53,6 +53,7 @@
 | 9 | Plan Generation | ⏳ Pending |
 | 10 | Plan Integration | ⏳ Pending |
 | 10B | Conflict Validation | ⏳ Pending |
+| 10C | Test Stability Validation | ⏳ Pending |
 | 11 | Holistic Plan Sync | ⏳ Pending |
 
 ---
@@ -87,6 +88,7 @@
 | 9 | Plan Generation | ✅ Complete |
 | 10 | Plan Integration | ✅ Complete |
 | 10B | Conflict Validation | ✅ Complete |
+| 10C | Test Stability Validation | ✅ Complete |
 | 11 | Holistic Plan Sync | ✅ Complete |
 
 📊 **Issues:** 78 | **Conflicts:** 0 | **Effort:** 48h
@@ -624,6 +626,57 @@ conflict_report:
 
 ---
 
+### Phase 10C: Test Stability Validation
+**Duration:** 2-4 minutes
+
+**⚠️ CRITICAL: Ensures gap-fix changes don't destabilize existing tests**
+
+**Purpose:**
+Validate that all generated remediation code has corresponding test coverage and that existing tests remain stable after modifications.
+
+**Actions:**
+1. **Dependency Graph Analysis:** Build test dependency map for affected modules
+2. **Test Impact Analysis:** Identify which tests may be affected by gap-fix changes
+3. **Stability Validation:** Verify no circular dependencies or fragile test patterns introduced
+4. **Coverage Gap Detection:** Ensure all new AC criteria have corresponding test requirements
+
+**Validation Criteria:**
+- [ ] All modified modules have corresponding test files
+- [ ] No test-to-test dependencies that could cause cascade failures
+- [ ] Test isolation verified (no shared mutable state)
+- [ ] AC-to-test traceability maintained
+
+**Phase Completion Output:**
+```
+📊 TEST STABILITY VALIDATION COMPLETE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Modules Analyzed: {count}
+Test Files Mapped: {count}
+Dependency Depth: {max_depth}
+
+Impact Analysis:
+- Tests Affected: {count}
+- New Tests Required: {count}
+- Stability Risk: {LOW|MEDIUM|HIGH}
+
+Coverage Mapping:
+- AC Criteria: {total_ac}
+- With Test Coverage: {covered}
+- Coverage Gap: {gap_count} ({percentage}%)
+
+Recommendations:
+- {recommendation_1}
+- {recommendation_2}
+```
+
+**Integration with Audit Logging:**
+- Log test stability metrics to `audit_test_stability` table
+- Enable MCP query: `mcp_audit_test_stability_report`
+- Track stability trends over time for regression detection
+
+---
+
 ### Phase 11: Holistic Plan Synchronization (MCP)
 **Duration:** 2-5 minutes
 
@@ -747,7 +800,7 @@ Execute the remediation plan:
 
 ## ⚡ Invocation
 
-**Standard (full 12-phase pipeline):**
+**Standard (full 14-phase pipeline):**
 ```
 /CORTEX gap-fix
 ```
@@ -791,6 +844,7 @@ Execute the remediation plan:
 ---
 
 **Version History:**
+- v1.3.0 (2026-01-09): Added Phase 10C - Test Stability Validation (AC-GAPFIX-005 to AC-GAPFIX-007)
 - v1.2.0 (2026-01-09): Mobile-friendly progress display - removed ASCII borders, minimal 3-row updates during execution
 - v1.1.0 (2026-01-09): Added Phase 10B - Conflict Detection & Validation (AC-GAPFIX-001 to AC-GAPFIX-004)
 - v1.0.0 (2026-01-09): Initial release - combined search + align into unified 12-phase pipeline

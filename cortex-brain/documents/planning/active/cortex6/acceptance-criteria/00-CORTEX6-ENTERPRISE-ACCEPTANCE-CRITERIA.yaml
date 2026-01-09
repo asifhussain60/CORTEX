@@ -24,13 +24,32 @@
 
 metadata:
   document_type: enterprise_acceptance_criteria
-  version: 12.0.0
+  version: 13.0.0
   status: AUTHORITATIVE
   created: '2026-01-09'
   updated: '2026-01-09'
   author: Asif Hussain
   epic_id: CORTEX6-BUILD
   changelog:
+    v13.0.0:
+      date: '2026-01-09'
+      changes:
+        - "Added AC-GAPFIX-005: AC reorganization preserves test execution order stability"
+        - "Added AC-GAPFIX-006: Dependency graph validation before gap injection"
+        - "Added AC-GAPFIX-007: Test impact analysis prevents orphaned/useless tests"
+        - "Added SECTION 15D: AC VALIDATION FRAMEWORK (AC-VAL-001 to AC-VAL-004)"
+        - "Added AC-VAL-001: AC validation requires test pass + audit log trace"
+        - "Added AC-VAL-002: Audit logger tags entries with AC-ID for traceability"
+        - "Added AC-VAL-003: AC completion report includes audit evidence summary"
+        - "Added AC-VAL-004: Test harness generates audit-verifiable events"
+        - "Added SECTION 15E: ENHANCED AUDIT LOGGING FRAMEWORK (AC-AUDIT-001 to AC-AUDIT-006)"
+        - "Added AC-AUDIT-001: Audit logs queryable by AC-ID, orchestrator, date range"
+        - "Added AC-AUDIT-002: Memory buffer with configurable flush thresholds"
+        - "Added AC-AUDIT-003: Per-repo SQLite audit database isolation"
+        - "Added AC-AUDIT-004: MCP tools: audit_query, audit_list, audit_export"
+        - "Added AC-AUDIT-005: Automatic vacuum removes logs older than retention period"
+        - "Added AC-AUDIT-006: Log level-based retention (ERROR: 90d, INFO: 30d, DEBUG: 7d)"
+      reason: "Enhancement TODOs: (1) Gap-fix test stability validation, (2) Dual AC validation (test + audit), (3) Enhanced queryable audit logging with MCP access"
     v12.0.0:
       date: '2026-01-09'
       changes:
@@ -3082,7 +3101,7 @@ validation_gates:
 # ==============================================================================
 
 progress_tracking:
-  total_criteria: 382  # v12.0.0: Added 4 new criteria (378 → 382)
+  total_criteria: 395  # v13.0.0: Added 13 new criteria (382 → 395)
   criteria_by_category:
     governance_compliance: 13  # v7.2.0: +3 (AC-GOV-011, AC-GOV-012, AC-GOV-013)
     architecture_cleanliness: 5
@@ -3108,17 +3127,19 @@ progress_tracking:
     maintainability: 2  # NEW in v7.0.0 (AC-MAINT-001, AC-MAINT-002)
     documentation_usability: 5
     learning_library: 5  # v10.0.0: NEW (AC-LEARN-001 to AC-LEARN-005) - MkDocs/fxdocs, repo segregation
-    gap_fix_validation: 4  # v11.0.0: NEW (AC-GAPFIX-001 to AC-GAPFIX-004) - Conflict, duplicate, regression, TDD
+    gap_fix_validation: 7  # v13.0.0: +3 (AC-GAPFIX-005 to AC-GAPFIX-007) - Test stability, dependency graph, impact analysis
     autonomous_execution: 4  # v12.0.0: NEW (AC-PLAN-DASH-008 to AC-PLAN-DASH-011) - Progress display, minimal response
+    ac_validation_framework: 4  # v13.0.0: NEW (AC-VAL-001 to AC-VAL-004) - Dual test+audit validation
+    enhanced_audit_logging: 6  # v13.0.0: NEW (AC-AUDIT-001 to AC-AUDIT-006) - Queryable, MCP, retention
     
   criteria_by_priority:
-    P0_CRITICAL: 119  # v12.0.0: +3 new P0 criteria (116 → 119)
-    P1_HIGH: 58  # v12.0.0: +1 new P1 criteria (57 → 58)
-    P2_MEDIUM: 27  # v10.0.0: +2 new P2 criteria (25 → 27)
+    P0_CRITICAL: 127  # v13.0.0: +8 new P0 criteria (119 → 127)
+    P1_HIGH: 63  # v13.0.0: +5 new P1 criteria (58 → 63)
+    P2_MEDIUM: 29  # v13.0.0: +2 new P2 criteria (27 → 29)
     
   criteria_by_status:
     COMPLETE: 7
-    PENDING: 375  # v12.0.0: 382 total - 7 complete = 375 pending
+    PENDING: 388  # v13.0.0: 395 total - 7 complete = 388 pending
     BLOCKED: 0
     FAILED: 0
     
@@ -3129,13 +3150,13 @@ progress_tracking:
     non_blocking_gates: 4
     
   health_score:
-    current: 2  # 7 COMPLETE / 378 total = 1.85%
+    current: 2  # 7 COMPLETE / 395 total = 1.77%
     target: 100
     
   completion_estimate:
-    total_hours: 570-720  # v11.0.0: +10-20 hours for 4 new criteria (560-700 → 570-720)
-    duration_days: 71-90
-    effort_weeks: 14-18
+    total_hours: 600-750  # v13.0.0: +30-40 hours for 13 new criteria (570-720 → 600-750)
+    duration_days: 75-94
+    effort_weeks: 15-19
 
 # ==============================================================================
 # SECTION 14: AUTOMATED VALIDATION
@@ -3450,6 +3471,313 @@ gap_fix_validation:
     evidence:
       - "TDD compliance report: cortex-brain/health-reports/tdd-compliance-*.json"
       - "Exemption list: cortex-brain/config/tdd-exemptions.yaml"
+
+  AC-GAPFIX-005:
+    id: AC-GAPFIX-005
+    criterion: "AC reorganization preserves test execution order stability"
+    acceptance:
+      - "**DEPENDENCY ORDERING:** AC criteria ordered by dependency graph, not just priority"
+      - "**FOUNDATION FIRST:** Foundation/shared components validated BEFORE dependent components"
+      - "**TEST ORDER MIRROR:** Test execution order mirrors AC dependency order"
+      - "**STABILITY CHECK:** Gap injection validates test stability before proceeding"
+      - "**ORPHAN PREVENTION:** No orphaned tests created by gap injection"
+      - "**REGRESSION GUARD:** Earlier tests remain valid after later gaps injected"
+      - "**EXECUTION MANIFEST:** Generate test-execution-manifest.yaml alongside remediation"
+      - "Test: Inject gap affecting foundation → dependent tests not invalidated"
+      - "Test: Execution order matches AC dependency topological sort"
+    validation: automated
+    test_file: "tests/gap_fix/test_ac_reorganization.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    evidence:
+      - "Execution manifest: cortex-brain/analysis/test-execution-manifest.yaml"
+      - "Dependency graph: cortex-brain/analysis/ac-dependency-graph.yaml"
+
+  AC-GAPFIX-006:
+    id: AC-GAPFIX-006
+    criterion: "Dependency graph validation before gap injection"
+    acceptance:
+      - "**DAG CONSTRUCTION:** Build DAG from AC depends_on relationships"
+      - "**CYCLE DETECTION:** Detect and block circular dependencies before injection"
+      - "**TOPOLOGICAL SORT:** Generate valid execution order via Kahn's algorithm"
+      - "**LAYER IDENTIFICATION:** Group criteria into dependency layers (foundation → dependent)"
+      - "**CROSS-REFERENCE:** Validate test_file references exist for all dependencies"
+      - "**VISUALIZATION:** Generate dependency graph visualization (Mermaid format)"
+      - "**BLOCKING:** Invalid dependency graph blocks Phase 11"
+      - "Test: Create circular dependency → detected → injection blocked"
+      - "Test: Valid DAG → topological sort → correct execution order"
+    validation: automated
+    test_file: "tests/gap_fix/test_dependency_graph.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    evidence:
+      - "DAG validation: cortex-brain/analysis/dependency-graph-validation.yaml"
+      - "Mermaid graph: cortex-brain/documents/reports/ac-dependencies.mermaid"
+
+  AC-GAPFIX-007:
+    id: AC-GAPFIX-007
+    criterion: "Test impact analysis prevents orphaned/useless tests"
+    acceptance:
+      - "**TEST MAPPING:** Map all test files to their corresponding AC criteria"
+      - "**IMPACT SCAN:** Identify tests affected by each proposed gap"
+      - "**ORPHAN DETECTION:** Detect tests that would become orphaned by gap changes"
+      - "**USELESS DETECTION:** Detect tests that would become obsolete after gap fixes"
+      - "**STABILITY SCORE:** Calculate test stability score (0-100) for each gap"
+      - "**THRESHOLD:** Block injection if stability score <70"
+      - "**RECOMMENDATIONS:** Suggest test updates/deletions for affected tests"
+      - "**AUDIT TRAIL:** Log all test impact decisions with rationale"
+      - "Test: Gap orphans 3 tests → stability score <70 → blocked"
+      - "Test: Gap affects 1 test, fixable → stability score 85 → proceeds"
+    validation: automated
+    test_file: "tests/gap_fix/test_impact_analysis.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    evidence:
+      - "Impact report: cortex-brain/analysis/test-impact-analysis.yaml"
+      - "Stability scores: cortex-brain/metrics/test-stability-scores.json"
+
+# ==============================================================================
+# SECTION 15D: AC VALIDATION FRAMEWORK
+# ==============================================================================
+# Purpose: Ensure ALL acceptance criteria validated by combination of test harness
+#          execution AND audit log trace evidence
+# Added: v13.0.0 | Source: Enhancement TODOs
+# ==============================================================================
+
+ac_validation_framework:
+  category: validation
+  priority: P0_CRITICAL
+  description: "Dual validation: test harness + audit log trace evidence"
+  
+  AC-VAL-001:
+    id: AC-VAL-001
+    criterion: "AC validation requires test pass + audit log trace"
+    acceptance:
+      - "**DUAL REQUIREMENT:** AC marked COMPLETE only when test passes AND audit trace exists"
+      - "**TEST EVIDENCE:** pytest result confirms test_file passed"
+      - "**AUDIT EVIDENCE:** Audit log contains entry with matching ac_id"
+      - "**CORRELATION:** Test execution generates audit event with trace_id"
+      - "**VERIFICATION:** AC validation runner checks both conditions"
+      - "**FAILURE MODE:** Missing either evidence → AC remains PENDING"
+      - "**REPORT GENERATION:** Combined validation report shows both evidences"
+      - "Test: Test passes, no audit → AC PENDING (audit evidence missing)"
+      - "Test: Audit exists, test fails → AC PENDING (test evidence missing)"
+      - "Test: Both present → AC COMPLETE"
+    validation: automated
+    test_file: "tests/validation/test_dual_validation.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    evidence:
+      - "Validation report: cortex-brain/health-reports/ac-validation-*.json"
+      - "Evidence matrix: cortex-brain/reports/ac-evidence-matrix.yaml"
+
+  AC-VAL-002:
+    id: AC-VAL-002
+    criterion: "Audit logger tags entries with AC-ID for traceability"
+    acceptance:
+      - "**AC-ID PARAMETER:** Audit log methods accept ac_id: Optional[str] parameter"
+      - "**AUTO-INJECTION:** Test fixtures auto-inject ac_id from test metadata"
+      - "**CORRELATION ID:** trace_id links related audit entries across operations"
+      - "**TEST CONTEXT:** test_context: bool flag distinguishes test vs production logs"
+      - "**QUERYABLE:** Audit entries queryable by ac_id"
+      - "**INDEX:** SQLite index on ac_id for fast lookups"
+      - "Test: Log with ac_id='AC-GOV-001' → queryable by AC-GOV-001"
+      - "Test: Fixture injects ac_id → audit entry has correct AC reference"
+    validation: automated
+    test_file: "tests/validation/test_audit_tagging.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    evidence:
+      - "Audit schema: cortex-brain/schemas/audit-entry-schema.yaml"
+      - "Query interface: src/infrastructure/audit_storage.py"
+
+  AC-VAL-003:
+    id: AC-VAL-003
+    criterion: "AC completion report includes audit evidence summary"
+    acceptance:
+      - "**EVIDENCE SECTION:** AC report has 'audit_evidence' section per criterion"
+      - "**ENTRY COUNT:** Shows count of audit entries per AC"
+      - "**TIME RANGE:** Shows first/last audit entry timestamps"
+      - "**COVERAGE:** Shows % of AC criteria with audit evidence"
+      - "**GAPS HIGHLIGHTED:** AC without audit evidence flagged"
+      - "**EXPORT FORMAT:** Report exportable as JSON/YAML/Markdown"
+      - "Test: Generate report → includes audit evidence summary"
+      - "Test: AC missing audit → highlighted in gaps section"
+    validation: automated
+    test_file: "tests/validation/test_evidence_report.py"
+    status: PENDING
+    blocking: false
+    priority: P1_HIGH
+    evidence:
+      - "Report template: cortex-brain/templates/ac-completion-report.yaml"
+      - "Sample report: cortex-brain/documents/reports/ac-completion-sample.md"
+
+  AC-VAL-004:
+    id: AC-VAL-004
+    criterion: "Test harness generates audit-verifiable events"
+    acceptance:
+      - "**FIXTURE INTEGRATION:** tests/conftest.py provides audit_context fixture"
+      - "**AUTO-LOGGING:** Fixture auto-logs test start/end with AC context"
+      - "**EVENT TYPES:** TEST_START, TEST_PASS, TEST_FAIL, TEST_SKIP events"
+      - "**METADATA:** Events include test_name, ac_id, duration, result"
+      - "**COLLECTION:** Audit evidence collector aggregates test events"
+      - "**VERIFICATION:** Post-test hook verifies audit events generated"
+      - "Test: Run test with fixture → audit entries created automatically"
+      - "Test: Test failure → TEST_FAIL event with error details logged"
+    validation: automated
+    test_file: "tests/validation/test_harness_audit.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    evidence:
+      - "Fixture code: tests/conftest.py::audit_context"
+      - "Event schema: cortex-brain/schemas/test-audit-event.yaml"
+
+# ==============================================================================
+# SECTION 15E: ENHANCED AUDIT LOGGING FRAMEWORK
+# ==============================================================================
+# Purpose: Queryable, MCP-accessible audit logging with intelligent storage
+# Added: v13.0.0 | Source: Enhancement TODOs
+# ==============================================================================
+
+enhanced_audit_logging:
+  category: infrastructure
+  priority: P1_HIGH
+  description: "SQLite-backed queryable audit with MCP access and intelligent storage"
+  
+  AC-AUDIT-001:
+    id: AC-AUDIT-001
+    criterion: "Audit logs queryable by AC-ID, orchestrator, date range"
+    acceptance:
+      - "**QUERY BY AC-ID:** audit_storage.query(ac_id='AC-GOV-001') returns entries"
+      - "**QUERY BY ORCHESTRATOR:** audit_storage.query(orchestrator='planning')"
+      - "**QUERY BY DATE:** audit_storage.query(start='2026-01-01', end='2026-01-09')"
+      - "**QUERY BY LEVEL:** audit_storage.query(level='ERROR')"
+      - "**COMBINED QUERIES:** Multiple filters combinable (AND logic)"
+      - "**PAGINATION:** Results paginated (default 100, configurable)"
+      - "**ORDERING:** Results ordered by timestamp DESC (configurable)"
+      - "Test: Query by ac_id → returns matching entries only"
+      - "Test: Combined query → returns intersection of filters"
+    validation: automated
+    test_file: "tests/audit/test_audit_queries.py"
+    status: PENDING
+    blocking: false
+    priority: P1_HIGH
+    evidence:
+      - "Query interface: src/infrastructure/audit_storage.py"
+      - "Query tests: tests/audit/test_audit_queries.py"
+
+  AC-AUDIT-002:
+    id: AC-AUDIT-002
+    criterion: "Memory buffer with configurable flush thresholds"
+    acceptance:
+      - "**BUFFER SIZE:** In-memory buffer holds up to max_entries (default 1000)"
+      - "**MEMORY LIMIT:** Flush when buffer exceeds max_memory_mb (default 10MB)"
+      - "**TIME THRESHOLD:** Auto-flush after flush_interval_seconds (default 60s)"
+      - "**ERROR FLUSH:** Immediate flush on ERROR level entries"
+      - "**SHUTDOWN FLUSH:** Graceful flush on process shutdown"
+      - "**CONFIGURATION:** Thresholds configurable via audit-config.yaml"
+      - "**PERFORMANCE:** <1ms per log entry (buffered)"
+      - "Test: Log 1001 entries → flush triggered at 1000"
+      - "Test: Log ERROR → immediate flush regardless of count"
+    validation: automated
+    test_file: "tests/audit/test_memory_buffer.py"
+    status: PENDING
+    blocking: false
+    priority: P1_HIGH
+    evidence:
+      - "Buffer implementation: src/infrastructure/audit_memory_buffer.py"
+      - "Config: cortex-brain/config/audit-config.yaml"
+
+  AC-AUDIT-003:
+    id: AC-AUDIT-003
+    criterion: "Per-repo SQLite audit database isolation"
+    acceptance:
+      - "**REPO ISOLATION:** Each repo has dedicated audit database"
+      - "**PATH CONVENTION:** {repo_path}/cortex-brain/state/audit.db"
+      - "**CONTEXT AWARE:** AuditLogger detects current repo context"
+      - "**NO CROSS-CONTAMINATION:** Repo A logs never appear in repo B database"
+      - "**ADMIN QUERY:** Cross-repo queries available for admin tools only"
+      - "**MIGRATION:** Existing jsonl logs migrated to per-repo SQLite"
+      - "Test: Log from repo A → only in repo A audit.db"
+      - "Test: Switch repo context → new logs go to new repo's database"
+    validation: automated
+    test_file: "tests/audit/test_repo_isolation.py"
+    status: PENDING
+    blocking: false
+    priority: P1_HIGH
+    evidence:
+      - "Repo detection: src/infrastructure/repo_context.py"
+      - "Isolation tests: tests/multi_repo/test_audit_isolation.py"
+
+  AC-AUDIT-004:
+    id: AC-AUDIT-004
+    criterion: "MCP tools: audit_query, audit_list, audit_export"
+    acceptance:
+      - "**audit_query TOOL:** Query audit logs via MCP with filters"
+      - "**audit_list TOOL:** Paginated list view of audit logs"
+      - "**audit_export TOOL:** Export logs to jsonl/csv/json formats"
+      - "**MCP REGISTRATION:** Tools registered in capability_registry.py"
+      - "**JSON-RPC:** Tools accessible via JSON-RPC 2.0 protocol"
+      - "**AUTHORIZATION:** Tools require appropriate permissions"
+      - "Test: MCP call to audit_query → returns filtered results"
+      - "Test: audit_export to csv → valid CSV file generated"
+    validation: automated
+    test_file: "tests/mcp/test_audit_tools.py"
+    status: PENDING
+    blocking: false
+    priority: P1_HIGH
+    evidence:
+      - "MCP tools: src/mcp/audit_tools.py"
+      - "Tool registration: src/mcp/capability_registry.py"
+
+  AC-AUDIT-005:
+    id: AC-AUDIT-005
+    criterion: "Automatic vacuum removes logs older than retention period"
+    acceptance:
+      - "**RETENTION POLICY:** Configurable retention per log level"
+      - "**DEFAULT RETENTION:** ERROR: 90d, WARNING: 60d, INFO: 30d, DEBUG: 7d"
+      - "**VACUUM TRIGGER:** Housekeeping Orchestrator triggers daily vacuum"
+      - "**VACUUM METHOD:** DELETE expired → VACUUM to reclaim space"
+      - "**SPACE REPORTING:** Report space reclaimed after vacuum"
+      - "**AUDIT OF AUDIT:** Vacuum operations themselves logged"
+      - "Test: 31-day-old INFO log → deleted by vacuum"
+      - "Test: 89-day-old ERROR log → preserved by vacuum"
+    validation: automated
+    test_file: "tests/audit/test_audit_vacuum.py"
+    status: PENDING
+    blocking: false
+    priority: P2_MEDIUM
+    evidence:
+      - "Vacuum config: cortex-brain/config/audit-config.yaml"
+      - "Vacuum implementation: src/infrastructure/audit_vacuum.py"
+
+  AC-AUDIT-006:
+    id: AC-AUDIT-006
+    criterion: "Log level-based retention (ERROR: 90d, INFO: 30d, DEBUG: 7d)"
+    acceptance:
+      - "**LEVEL-BASED:** Different retention periods per log level"
+      - "**ERROR:** 90 days retention (critical for post-mortem)"
+      - "**WARNING:** 60 days retention"
+      - "**INFO:** 30 days retention"
+      - "**DEBUG:** 7 days retention (high volume, low value)"
+      - "**CONFIGURABLE:** Retention periods in audit-config.yaml"
+      - "**OVERRIDE:** Per-repo overrides supported"
+      - "Test: Check retention for each level → matches configured values"
+      - "Test: Override in repo config → repo-specific retention applied"
+    validation: automated
+    test_file: "tests/audit/test_retention_policy.py"
+    status: PENDING
+    blocking: false
+    priority: P2_MEDIUM
+    evidence:
+      - "Retention config: cortex-brain/config/audit-config.yaml"
+      - "Level definitions: src/infrastructure/audit_levels.py"
 
 # ==============================================================================
 # SECTION 16: SUCCESS CRITERIA (FINAL)
