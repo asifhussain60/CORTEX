@@ -1,0 +1,23 @@
+# CORTEX 6.0 Build - Random Thoughts & Observations
+
+This file tracks random thoughts, observations, and insights during plan execution per AC-ORC-PLAN-002.
+
+---
+
+## Observations
+
+- Planning orchestrator v5 has persistence bug (AC-ORC-012)
+- cortex6-planner/ structure violated AC-ORC-PLAN-002 (had 00- prefixes, wrong root files)
+- Gap-fix orchestrator prompt exists but no Python implementation
+- Vacuum orchestrator has JSON serialization bug with OrchestratorMatch objects
+- Cleanup orchestrator not registered properly
+
+---
+
+## Next Steps
+
+1. Fix vacuum/cleanup orchestrator bugs
+2. Implement gap-fix orchestrator Phase 10
+3. Implement holistic alignment orchestrator
+4. Implement digest utility
+
