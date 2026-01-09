@@ -1,6 +1,6 @@
 # 🔍 CORTEX Search - Holistic Gap Detection & Discrepancy Discovery
 
-**Version:** 1.1.0 | **Status:** ✅ PRODUCTION | **Type:** Autonomous Analysis  
+**Version:** 1.2.0 | **Status:** ✅ PRODUCTION | **Type:** Autonomous Analysis  
 **Author:** Asif Hussain | **AC Reference:** `cortex-brain/documents/planning/active/cortex6/acceptance-criteria/00-CORTEX6-ENTERPRISE-ACCEPTANCE-CRITERIA.yaml`  
 **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
@@ -219,14 +219,44 @@ search_findings:
 
 ---
 
-## 🛡️ Brain Protection Compliance
+## � MCP Tool Validation (Pre-Requisite Check)
+
+**⚠️ CRITICAL: Before completing Phase 4, validate MCP tool exists:**
+
+| Check | File | Status |
+|-------|------|--------|
+| **MCP Tool Implementation** | `src/mcp/align_plan_sync.py` | Required |
+| **Capability Registration** | `src/mcp/capability_registry.py` → `cortex_align_plan_sync` | Required |
+| **MCP Export** | `src/mcp/__init__.py` → `AlignPlanSyncTool` | Required |
+
+**Validation Command:**
+```bash
+python3 -c "from src.mcp.align_plan_sync import AlignPlanSyncTool; print('✅ MCP tool ready')"
+```
+
+**If validation fails:** Add to findings as CRITICAL blocking issue:
+```yaml
+mcp_gaps:
+  - tool: cortex_align_plan_sync
+    gap_type: MISSING_IMPLEMENTATION
+    required_file: src/mcp/align_plan_sync.py
+    severity: CRITICAL
+    blocking: true
+    reason: "Phase 7 of cortex-align requires this MCP tool for holistic plan synchronization"
+```
+
+---
+
+## �🛡️ Brain Protection Compliance
 
 | SKULL Rule | Compliance |
 |------------|------------|
 | **HOLISTIC_DISCOVERY** | ✅ Searches entire workspace |
 | **PLANNING_ISOLATION** | ✅ Generates findings, no code changes |
 | **GIT_ISOLATION** | ✅ Does not modify any files |
+| **MCP_VALIDATION** | ✅ Validates MCP tools exist before align phase |
 
 ---
 
 **Next Step:** Run `/CORTEX align` to generate prioritized fix plan with visual progress tracking.
+
