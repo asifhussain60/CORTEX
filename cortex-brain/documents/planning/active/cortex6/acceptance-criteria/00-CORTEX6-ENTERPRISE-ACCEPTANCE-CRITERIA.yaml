@@ -24,13 +24,31 @@
 
 metadata:
   document_type: enterprise_acceptance_criteria
-  version: 10.0.0
+  version: 12.0.0
   status: AUTHORITATIVE
   created: '2026-01-09'
   updated: '2026-01-09'
   author: Asif Hussain
   epic_id: CORTEX6-BUILD
   changelog:
+    v12.0.0:
+      date: '2026-01-09'
+      changes:
+        - "Added SECTION: AUTONOMOUS EXECUTION & MINIMAL RESPONSE (AC-EXEC-001 to AC-EXEC-004)"
+        - "Added AC-EXEC-001: Autonomous plan execution by default with minimal chat responses"
+        - "Added AC-EXEC-002: Visual progress display using mobile-friendly tabular format"
+        - "Added AC-EXEC-003: Master Orchestrator blocks Copilot's default MD file generation"
+        - "Added AC-EXEC-004: Progress display format standardization across all orchestrators"
+      reason: "User requirements: (1) Autonomous execution default, (2) Mobile-friendly progress display without ASCII borders, (3) Block MD generation during execution, (4) Minimal 3-row progress updates"
+    v11.0.0:
+      date: '2026-01-09'
+      changes:
+        - "Added SECTION 15C: GAP-FIX VALIDATION (AC-GAPFIX-001 to AC-GAPFIX-004)"
+        - "Added AC-GAPFIX-001: Conflict detection scan before plan injection"
+        - "Added AC-GAPFIX-002: Requirement deduplication check"
+        - "Added AC-GAPFIX-003: Regression impact analysis on existing phases"
+        - "Added AC-GAPFIX-004: TDD enforcement on all remediation tasks"
+      reason: "Gap-fix validation safeguards: Prevent conflicts, duplicates, regressions when injecting remediation gaps into existing plans"
     v10.0.0:
       date: '2026-01-09'
       changes:
@@ -1404,6 +1422,93 @@ orchestrator_test_harnesses:
     status: PENDING
     blocking: true
     priority: P0_CRITICAL
+
+  # ============================================================================
+  # AUTONOMOUS EXECUTION & MINIMAL RESPONSE (AC-EXEC-*)
+  # Added: 2026-01-09 | Source: User Request - Progress Display Standards
+  # ============================================================================
+
+  AC-EXEC-001:
+    id: AC-EXEC-001
+    criterion: "Autonomous plan execution by default with minimal chat responses"
+    acceptance:
+      - "**DEFAULT_MODE:** All plan executions run autonomously without user confirmation"
+      - "**NO_PROMPTS:** FORBIDDEN: 'Should I proceed?', 'Do you want me to continue?', 'Ready for next phase?'"
+      - "**MINIMAL_OUTPUT:** During execution, only 3-row progress update shown per phase completion"
+      - "**PROGRESS_FORMAT:** | Overall | Completed | Next | (3 columns max during execution)"
+      - "**FULL_TABLE_ONLY:** Complete phase table shown ONLY at start and end of execution"
+      - "**NO_NARRATION:** Eliminate verbose commentary ('Now I'll...', 'Perfect!', 'Excellent!')"
+      - "**AUDIT_TRACKING:** All execution steps logged, but NOT displayed in chat"
+      - "Test: Execute 10-phase plan → user sees max 12 chat messages (start + 10 updates + end)"
+    validation: automated
+    test_file: "tests/orchestrators/test_autonomous_execution.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    evidence:
+      - "Response template: cortex-brain/response-templates-v4.yaml"
+      - "Audit log: cortex-brain/audit-logs/execution-*.jsonl"
+
+  AC-EXEC-002:
+    id: AC-EXEC-002
+    criterion: "Visual progress display using mobile-friendly tabular format"
+    acceptance:
+      - "**NO_ASCII_BORDERS:** FORBIDDEN: Box-drawing characters (┌ ─ ┐ │ └ ┘) - breaks on mobile"
+      - "**MARKDOWN_TABLES:** Use standard Markdown table syntax for all progress displays"
+      - "**MAX_4_COLUMNS:** Progress tables never exceed 4 columns (mobile readability)"
+      - "**PROGRESS_BAR:** Use backtick-wrapped block characters (`████░░░░░░`) for progress"
+      - "**INITIAL_DISPLAY:** Full phase table shown once at pipeline start"
+      - "**DURING_EXECUTION:** Minimal 3-row update: | Overall | Completed | Next |"
+      - "**FINAL_DISPLAY:** Complete phase table with all statuses at pipeline end"
+      - "Test: Render progress on 320px viewport → all content visible without horizontal scroll"
+    validation: automated
+    test_file: "tests/orchestrators/test_progress_display.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    evidence:
+      - "Display spec: .github/prompts/cortex-gap-fix.prompt.md (Visual Progress Display Standards)"
+
+  AC-EXEC-003:
+    id: AC-EXEC-003
+    criterion: "Master Orchestrator blocks Copilot's default MD file generation after actions"
+    acceptance:
+      - "**BLOCK_MD_GENERATION:** Master Orchestrator intercepts and blocks automatic MD file creation"
+      - "**COPILOT_HABIT:** GitHub Copilot's default behavior creates MD summary after every action"
+      - "**MASTER_OVERRIDE:** Master Orchestrator enforces: 'Report final status ONLY, no intermediate MD files'"
+      - "**FINAL_REPORT_ONLY:** MD/report generation allowed ONLY at pipeline completion"
+      - "**AUDIT_PROOF:** Audit log shows MD generation attempts blocked during execution"
+      - "**EXCEPTION:** User explicitly requests 'generate report' or 'save summary'"
+      - "Test: Execute 5-phase plan → zero MD files created until final phase"
+      - "Test: Audit log shows blocked MD attempts with reason 'MASTER_OVERRIDE'"
+    validation: automated
+    test_file: "tests/orchestrators/test_md_generation_blocking.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    evidence:
+      - "Master Orchestrator config: cortex-brain/config/master-orchestrator.yaml"
+      - "Block audit: cortex-brain/audit-logs/md-block-*.jsonl"
+
+  AC-EXEC-004:
+    id: AC-EXEC-004
+    criterion: "Progress display format standardization across all orchestrators"
+    acceptance:
+      - "**UNIVERSAL_FORMAT:** All orchestrators use identical progress display format"
+      - "**3_ROW_UPDATE:** During execution: | Overall | Completed | Next |"
+      - "**OVERALL_BAR:** Progress bar showing epic/feature completion percentage"
+      - "**COMPLETED_ITEM:** Shows phase/task just completed with ✅ status"
+      - "**NEXT_ITEM:** Shows phase/task being started with 🔄 status"
+      - "**STATUS_ICONS:** ✅ Complete | 🔄 In Progress | ⏳ Pending | ❌ Failed"
+      - "**CONSISTENT_RENDERING:** Same visual output regardless of orchestrator"
+      - "Test: Compare outputs from 3 different orchestrators → identical format"
+    validation: automated
+    test_file: "tests/orchestrators/test_progress_format_consistency.py"
+    status: PENDING
+    blocking: true
+    priority: P1_HIGH
+    evidence:
+      - "Format spec: cortex-brain/response-templates-v4.yaml (progress_display section)"
     
   AC-ORC-PLAN-005:
     id: AC-ORC-PLAN-005
@@ -2977,7 +3082,7 @@ validation_gates:
 # ==============================================================================
 
 progress_tracking:
-  total_criteria: 374  # v10.0.0: Added 14 new criteria (360 → 374)
+  total_criteria: 382  # v12.0.0: Added 4 new criteria (378 → 382)
   criteria_by_category:
     governance_compliance: 13  # v7.2.0: +3 (AC-GOV-011, AC-GOV-012, AC-GOV-013)
     architecture_cleanliness: 5
@@ -3003,15 +3108,17 @@ progress_tracking:
     maintainability: 2  # NEW in v7.0.0 (AC-MAINT-001, AC-MAINT-002)
     documentation_usability: 5
     learning_library: 5  # v10.0.0: NEW (AC-LEARN-001 to AC-LEARN-005) - MkDocs/fxdocs, repo segregation
+    gap_fix_validation: 4  # v11.0.0: NEW (AC-GAPFIX-001 to AC-GAPFIX-004) - Conflict, duplicate, regression, TDD
+    autonomous_execution: 4  # v12.0.0: NEW (AC-PLAN-DASH-008 to AC-PLAN-DASH-011) - Progress display, minimal response
     
   criteria_by_priority:
-    P0_CRITICAL: 116  # v10.0.0: +8 new P0 criteria (108 → 116)
-    P1_HIGH: 53  # v10.0.0: +4 new P1 criteria (49 → 53)
+    P0_CRITICAL: 119  # v12.0.0: +3 new P0 criteria (116 → 119)
+    P1_HIGH: 58  # v12.0.0: +1 new P1 criteria (57 → 58)
     P2_MEDIUM: 27  # v10.0.0: +2 new P2 criteria (25 → 27)
     
   criteria_by_status:
     COMPLETE: 7
-    PENDING: 367  # v10.0.0: 374 total - 7 complete = 367 pending
+    PENDING: 375  # v12.0.0: 382 total - 7 complete = 375 pending
     BLOCKED: 0
     FAILED: 0
     
@@ -3022,12 +3129,12 @@ progress_tracking:
     non_blocking_gates: 4
     
   health_score:
-    current: 2  # 7 COMPLETE / 374 total = 1.87%
+    current: 2  # 7 COMPLETE / 378 total = 1.85%
     target: 100
     
   completion_estimate:
-    total_hours: 560-700  # v10.0.0: +30-50 hours for 14 new criteria
-    duration_days: 70-88
+    total_hours: 570-720  # v11.0.0: +10-20 hours for 4 new criteria (560-700 → 570-720)
+    duration_days: 71-90
     effort_weeks: 14-18
 
 # ==============================================================================
@@ -3245,6 +3352,104 @@ learning_library:
     evidence:
       - "Hierarchy spec: cortex-brain/schemas/learning-hierarchy.yaml"
       - "Conflict report: cortex-brain/health-reports/learning-conflicts-*.json"
+
+# ==============================================================================
+# SECTION 15C: GAP-FIX VALIDATION
+# ==============================================================================
+# Purpose: Ensure gap-fix pipeline doesn't introduce conflicts, duplicates, or
+#          regressions when injecting remediation gaps into existing plans
+# Prompt: .github/prompts/cortex-gap-fix.prompt.md (Phase 10B)
+# ==============================================================================
+
+gap_fix_validation:
+
+  AC-GAPFIX-001:
+    id: AC-GAPFIX-001
+    criterion: "Conflict detection scan before plan injection"
+    acceptance:
+      - "**CONTRADICTORY CHECK:** Scan new gaps vs existing tasks for opposing requirements"
+      - "**DETECTION ALGORITHM:** Compare gap.fix against task.implementation for contradictions"
+      - "**CONFLICT TYPES:** CONTRADICTORY, DUPLICATE, REGRESSION_RISK, DEPENDENCY_BREAK"
+      - "**BLOCKING BEHAVIOR:** CONTRADICTORY conflicts block Phase 11 until resolved"
+      - "**RESOLUTION OPTIONS:** Keep task, keep gap, or merge (human decision)"
+      - "**CONFLICT REPORT:** Generate conflict-report-{timestamp}.yaml with all conflicts"
+      - "**AUDIT TRAIL:** All conflict resolutions logged with rationale"
+      - "Test: Inject contradictory gap → conflict detected → Phase 11 blocked"
+      - "Test: Resolve conflict → Phase 11 unblocked → audit log shows resolution"
+    validation: automated
+    test_file: "tests/gap_fix/test_conflict_detection.py"
+    status: PENDING
+    blocking: true
+    priority: P1_HIGH
+    evidence:
+      - "Conflict report schema: cortex-brain/schemas/conflict-report-schema.yaml"
+      - "Sample conflict: cortex-brain/analysis/sample-conflict-report.yaml"
+
+  AC-GAPFIX-002:
+    id: AC-GAPFIX-002
+    criterion: "Requirement deduplication check"
+    acceptance:
+      - "**DUPLICATE DETECTION:** Check if gap criterion already exists with different ID"
+      - "**CRITERION MATCHING:** Compare gap.criterion text against existing plan criteria"
+      - "**FUZZY MATCHING:** Use semantic similarity for near-duplicate detection (>85% match)"
+      - "**AUTO-MERGE:** Duplicate gaps auto-merged, preserving earliest ID"
+      - "**MERGE NOTIFICATION:** User notified of auto-merged duplicates"
+      - "**ID PRESERVATION:** Original criterion ID preserved (not the new gap ID)"
+      - "**EVIDENCE MERGE:** Evidence from both duplicates combined"
+      - "Test: Add duplicate gap with new ID → auto-merged → earliest ID preserved"
+      - "Test: Near-duplicate (86% match) → flagged for review"
+    validation: automated
+    test_file: "tests/gap_fix/test_deduplication.py"
+    status: PENDING
+    blocking: true
+    priority: P1_HIGH
+    evidence:
+      - "Deduplication log: cortex-brain/audit-logs/deduplication-*.jsonl"
+      - "Similarity threshold: configurable in cortex-brain/config/gap-fix.yaml"
+
+  AC-GAPFIX-003:
+    id: AC-GAPFIX-003
+    criterion: "Regression impact analysis on existing phases"
+    acceptance:
+      - "**REGRESSION DETECTION:** Verify injected Phase 0 doesn't invalidate completed work"
+      - "**COMPLETED PHASE SCAN:** Check all completed phases for affected tasks"
+      - "**IMPACT ASSESSMENT:** Calculate which completed tasks would be undone by gap fix"
+      - "**SEVERITY LEVELS:** WARNING (review recommended), CRITICAL (blocks injection)"
+      - "**AFFECTED TASK LIST:** List all tasks impacted by each gap"
+      - "**RECOMMENDATION:** Provide guidance on how to proceed (review, skip, force)"
+      - "**FORCE OPTION:** Allow override with explicit acknowledgment (audit logged)"
+      - "Test: Gap affects completed phase → WARNING severity → recommendation shown"
+      - "Test: Gap would undo critical foundation → CRITICAL → blocks without override"
+    validation: automated
+    test_file: "tests/gap_fix/test_regression_analysis.py"
+    status: PENDING
+    blocking: true
+    priority: P1_HIGH
+    evidence:
+      - "Regression report: cortex-brain/analysis/regression-impact-*.yaml"
+      - "Override audit: cortex-brain/audit-logs/regression-overrides.jsonl"
+
+  AC-GAPFIX-004:
+    id: AC-GAPFIX-004
+    criterion: "TDD enforcement on all remediation tasks"
+    acceptance:
+      - "**TEST REQUIREMENT:** Every remediation task must have test_file specified"
+      - "**VALIDATION CHECK:** Phase 10B blocks if any remediation task lacks test_file"
+      - "**TEST FILE FORMAT:** test_file must be valid path in tests/ directory"
+      - "**TEST EXISTENCE:** Warn if test file doesn't exist yet (planning phase OK)"
+      - "**TDD WORKFLOW:** Gap → test_file specified → RED test → implementation → GREEN"
+      - "**BLOCKING BEHAVIOR:** Missing test_file blocks Phase 11"
+      - "**EXCEPTION HANDLING:** Documentation-only gaps exempt (marked with tdd_exempt: true)"
+      - "Test: Remediation task without test_file → Phase 10B fails"
+      - "Test: All tasks have test_file → Phase 10B passes → Phase 11 proceeds"
+    validation: automated
+    test_file: "tests/gap_fix/test_tdd_enforcement.py"
+    status: PENDING
+    blocking: true
+    priority: P1_HIGH
+    evidence:
+      - "TDD compliance report: cortex-brain/health-reports/tdd-compliance-*.json"
+      - "Exemption list: cortex-brain/config/tdd-exemptions.yaml"
 
 # ==============================================================================
 # SECTION 16: SUCCESS CRITERIA (FINAL)
