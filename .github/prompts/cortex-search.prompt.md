@@ -44,6 +44,7 @@
 | `foundation_layer` (AC-F01-*) | 🔴 CRITICAL | 6 |
 | `todo_orchestrator` (AC-F02-*) | 🔴 CRITICAL | 7 |
 | `orchestrator_capabilities` (AC-ORC-*) | 🟠 HIGH | 10+ |
+| `plan_viewer_dashboard` (AC-PLAN-DASH-*) | 🔴 CRITICAL | 7 |
 | `concurrency_safety` (AC-RACE-*) | 🔴 CRITICAL | 3 |
 | `security_compliance` (AC-SEC-*) | 🔴 CRITICAL | 8 |
 | `multi_repo_registry` (AC-REPO-*) | 🔴 CRITICAL | 3 |

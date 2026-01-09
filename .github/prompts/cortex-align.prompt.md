@@ -665,6 +665,7 @@ def revise_existing_plan(ac, remediation, snowball, plan_path):
 | Architecture | {count} | {blocking} | {hours}h |
 | Security | {count} | {blocking} | {hours}h |
 | Concurrency | {count} | {blocking} | {hours}h |
+| Plan Viewer Dashboard | {count} | {blocking} | {hours}h |
 | Audit Gaps | {count} | {blocking} | {hours}h |
 | **TOTAL** | **{total}** | **{blocking_total}** | **{total_hours}h** |
 
@@ -676,8 +677,9 @@ def revise_existing_plan(ac, remediation, snowball, plan_path):
 **Phase 2:** Concurrency Safety ({hours}h) → Enables parallel testing
 **Phase 3:** Audit Gaps ({hours}h) → Enables automated validation
 **Phase 4:** Security ({hours}h) → Risk mitigation
-**Phase 5:** Performance ({hours}h) → SLA compliance
-**Phase 6:** Quality ({hours}h) → Maintainability
+**Phase 5:** Plan Viewer Dashboard ({hours}h) → Visual progress tracking
+**Phase 6:** Performance ({hours}h) → SLA compliance
+**Phase 7:** Quality ({hours}h) → Maintainability
 
 ---
 

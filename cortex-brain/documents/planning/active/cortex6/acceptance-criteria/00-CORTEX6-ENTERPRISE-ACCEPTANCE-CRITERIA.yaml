@@ -24,13 +24,24 @@
 
 metadata:
   document_type: enterprise_acceptance_criteria
-  version: 8.0.0
+  version: 9.0.0
   status: AUTHORITATIVE
   created: '2026-01-09'
   updated: '2026-01-09'
   author: Asif Hussain
   epic_id: CORTEX6-BUILD
   changelog:
+    v9.0.0:
+      date: '2026-01-09'
+      changes:
+        - "Added AC-PLAN-DASH-001: plan-viewer.html transforms into comprehensive development dashboard"
+        - "Added AC-PLAN-DASH-002: Material Design + Dark Blue Glassmorphism styling"
+        - "Added AC-PLAN-DASH-003: file:// protocol compatibility (static HTML, no CDN)"
+        - "Added AC-PLAN-DASH-004: Visual progress tracking components"
+        - "Added AC-PLAN-DASH-005: Acceptance Criteria fulfillment display"
+        - "Added AC-PLAN-DASH-006: CSS-only glassmorphism (no backdrop-filter dependency)"
+        - "Added AC-PLAN-DASH-007: Dashboard data structure and JSON embedding"
+      reason: "User requirement: Transform plan-viewer.html into full development dashboard with visual progress tracking, AC fulfillment display, Material Design + Glassmorphism styling, file:// compatible (no CDN, inline styles)"
     v8.0.0:
       date: '2026-01-09'
       changes:
@@ -1256,6 +1267,129 @@ orchestrator_test_harnesses:
     status: PENDING
     blocking: false
     priority: P1_HIGH
+
+  # ============================================================================
+  # PLAN VIEWER DASHBOARD ENHANCEMENT (AC-PLAN-DASH-*)
+  # Added: 2026-01-09 | Source: User Request - Visual Progress Dashboard
+  # ============================================================================
+    
+  AC-PLAN-DASH-001:
+    id: AC-PLAN-DASH-001
+    criterion: "plan-viewer.html transforms into comprehensive development dashboard"
+    acceptance:
+      - "**DASHBOARD:** plan-viewer.html is a full development progress dashboard, not just plan viewer"
+      - "**VISUAL PROGRESS:** Shows development progress with visual indicators (progress bars, completion %)"
+      - "**AC DISPLAY:** Shows Acceptance Criteria fulfillment status alongside plan tasks"
+      - "**REAL-TIME:** Dashboard reflects current state from progress-tracker.json and AC YAML"
+      - "**NAVIGATION:** Quick navigation between phases, tasks, and AC criteria"
+      - "Audit log proves: Dashboard generation includes progress + AC data merge"
+    validation: automated
+    test_file: "tests/orchestrators/test_plan_viewer_dashboard.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    
+  AC-PLAN-DASH-002:
+    id: AC-PLAN-DASH-002
+    criterion: "plan-viewer.html uses Material Design + Dark Blue Glassmorphism styling"
+    acceptance:
+      - "**MATERIAL DESIGN:** Clean, modern aesthetic following Material Design principles"
+      - "**GLASSMORPHISM:** Dark blue frosted glass effects (rgba backgrounds, backdrop-blur simulation)"
+      - "**COLOR PALETTE:** Primary: #1a237e (dark blue), Accent: #7c4dff, Surface: rgba(26,35,126,0.7)"
+      - "**TYPOGRAPHY:** System fonts (sans-serif stack) - no external fonts required"
+      - "**CARDS:** Glassmorphic cards with subtle borders and shadows"
+      - "**CONSISTENCY:** All components follow unified design system"
+      - "Audit log proves: Style validation confirms design system compliance"
+    validation: automated
+    test_file: "tests/orchestrators/test_plan_viewer_styling.py"
+    status: PENDING
+    blocking: false
+    priority: P1_HIGH
+    
+  AC-PLAN-DASH-003:
+    id: AC-PLAN-DASH-003
+    criterion: "plan-viewer.html compatible with file:// protocol (static HTML)"
+    acceptance:
+      - "**FILE_PROTOCOL:** Works when opened directly from filesystem (file://)"
+      - "**NO_CDN:** Zero external CDN dependencies (blocked by CORS on file://)"
+      - "**INLINE_STYLES:** All CSS embedded in <style> blocks within HTML"
+      - "**INLINE_SCRIPTS:** All JavaScript embedded in <script> blocks within HTML"
+      - "**NO_FETCH:** No fetch() or XMLHttpRequest calls (blocked on file://)"
+      - "**EMBEDDED_DATA:** Plan data embedded as JSON in <script> tags or data attributes"
+      - "**SINGLE_FILE:** Entire dashboard contained in single .html file"
+      - "Audit log proves: file:// compatibility validated during generation"
+    validation: automated
+    test_file: "tests/orchestrators/test_plan_viewer_file_protocol.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    
+  AC-PLAN-DASH-004:
+    id: AC-PLAN-DASH-004
+    criterion: "plan-viewer dashboard displays visual progress tracking components"
+    acceptance:
+      - "**OVERALL_PROGRESS:** Main progress bar showing epic/feature completion percentage"
+      - "**PHASE_PROGRESS:** Individual progress bars per phase with task completion"
+      - "**AC_PROGRESS:** Acceptance Criteria fulfillment progress bar"
+      - "**TASK_STATUS:** Color-coded task status indicators (NOT_STARTED, IN_PROGRESS, COMPLETE, BLOCKED)"
+      - "**METRICS_PANEL:** Summary metrics (total tasks, completed, remaining, blocked)"
+      - "**TIMELINE:** Visual timeline showing phase progression"
+      - "Audit log proves: All progress components rendered with accurate data"
+    validation: automated
+    test_file: "tests/orchestrators/test_plan_viewer_progress_components.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    
+  AC-PLAN-DASH-005:
+    id: AC-PLAN-DASH-005
+    criterion: "plan-viewer dashboard includes Acceptance Criteria fulfillment display"
+    acceptance:
+      - "**AC_SECTION:** Dedicated section showing AC criteria status"
+      - "**AC_CATEGORIES:** Grouped by category (Governance, Architecture, Security, etc.)"
+      - "**AC_STATUS:** Each criterion shows status (PENDING, PARTIAL, COMPLETE, BLOCKED)"
+      - "**AC_LINK:** Criteria linked to corresponding tasks in plan"
+      - "**AC_COVERAGE:** Shows which plan tasks fulfill which AC criteria"
+      - "**AC_GAPS:** Highlights AC criteria with no linked tasks (gaps)"
+      - "Audit log proves: AC data loaded and mapped to plan tasks"
+    validation: automated
+    test_file: "tests/orchestrators/test_plan_viewer_ac_display.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
+    
+  AC-PLAN-DASH-006:
+    id: AC-PLAN-DASH-006
+    criterion: "plan-viewer uses CSS-only glassmorphism (no backdrop-filter dependency)"
+    acceptance:
+      - "**NO_BACKDROP_FILTER:** Avoid backdrop-filter CSS (inconsistent browser support)"
+      - "**CSS_FALLBACK:** Glassmorphism effect achieved with layered gradients and opacity"
+      - "**TECHNIQUE:** Use rgba backgrounds, box-shadows, and border colors for glass effect"
+      - "**DARK_THEME:** Dark blue base (#0a1628) with translucent card overlays"
+      - "**BROWSER_COMPAT:** Works in Chrome, Firefox, Safari, Edge without CSS prefixes"
+      - "Audit log proves: CSS validated for cross-browser compatibility"
+    validation: automated
+    test_file: "tests/orchestrators/test_plan_viewer_css_compat.py"
+    status: PENDING
+    blocking: false
+    priority: P1_HIGH
+    
+  AC-PLAN-DASH-007:
+    id: AC-PLAN-DASH-007
+    criterion: "plan-viewer dashboard data structure and JSON embedding"
+    acceptance:
+      - "**DATA_STRUCTURE:** Dashboard data embedded as JSON in <script id='plan-data' type='application/json'>"
+      - "**PLAN_DATA:** Includes phases, tasks, dependencies, status, timestamps"
+      - "**AC_DATA:** Includes AC criteria, status, linked tasks, coverage"
+      - "**METRICS_DATA:** Pre-calculated metrics (totals, percentages, counts)"
+      - "**PARSE_SAFE:** JSON is valid and parseable by JSON.parse()"
+      - "**ESCAPE_SAFE:** Special characters properly escaped to prevent XSS"
+      - "Audit log proves: JSON data validated and sanitized before embedding"
+    validation: automated
+    test_file: "tests/orchestrators/test_plan_viewer_data_embed.py"
+    status: PENDING
+    blocking: true
+    priority: P0_CRITICAL
     
   AC-ORC-PLAN-005:
     id: AC-ORC-PLAN-005
