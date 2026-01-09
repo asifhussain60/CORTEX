@@ -53,3 +53,10 @@ htmlcov/
 # Audit logs
 cortex-brain/audit-logs/*.jsonl
 cortex-brain/audit-logs/**/*.jsonl
+
+# AI Learning validation artifacts (build process artifacts)
+.asif/AI-Learning/cortex6/validation/
+
+# Generated architecture audit reports
+cortex-brain/documents/reports/architecture-audit-*.json
+cortex-brain/documents/reports/master-orchestrator-architecture-audit-*.json
