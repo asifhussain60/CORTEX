@@ -1,0 +1,1175 @@
+# ==============================================================================
+# CORTEX 6.0 COMPREHENSIVE REMEDIATION PLAN
+# ==============================================================================
+# Generated: 2026-01-09
+# Plan Type: Holistic gap remediation with snowball momentum strategy
+# Source: search-findings-20260109.yaml (487 issues identified)
+# Architecture: Evidence-based validation (test + audit log for every AC)
+# ==============================================================================
+
+metadata:
+  plan_id: "CORTEX6-REMEDIATION-COMPREHENSIVE"
+  generated_at: '2026-01-09T00:00:00Z'
+  version: '1.0.0'
+  status: ACTIVE
+  total_issues: 487
+  blocking_issues: 124
+  estimated_total_effort: "204-268 hours (5-7 weeks)"
+  
+  strategy:
+    type: "snowball_momentum"
+    description: "Foundation first → unlock downstream work → accelerate"
+    stages: 5  # SMALL → GROWING → ACCELERATING → PEAK → MAXIMUM
+    
+  evidence_requirements:
+    test_evidence: "REQUIRED - Every AC linked to passing test"
+    audit_evidence: "REQUIRED - Every AC has audit log trace"
+    validation: "Dual validation (test pass + audit trace) for completion"
+    
+  ac_source:
+    file: "cortex-brain/documents/planning/active/cortex6/acceptance-criteria/CX6-acceptance-criteria.yaml"
+    version: "15.0.0"
+    total_criteria: 203
+    target_criteria: 355+
+    note: "203 current criteria, target 355+ after gap remediation (152 criteria to add)"
+    
+  findings_source:
+    file: "cortex-brain/documents/planning/active/cortex6/cortex6-planner/search-findings-20260109.yaml"
+    categories: 7
+    total_gaps: 487
+
+# ==============================================================================
+# SNOWBALL STAGE 1: FOUNDATION (SMALL MOMENTUM)
+# ==============================================================================
+# Duration: Week 1 | Effort: 40-48h | Priority: P0_CRITICAL
+# Unlocks: All AC validation, governance enforcement, test linkage
+# ==============================================================================
+
+stage_1_foundation:
+  stage_id: "STAGE-1-FOUNDATION"
+  momentum_level: "SMALL"
+  duration: "Week 1"
+  estimated_effort: "40-48 hours"
+  priority: P0_CRITICAL
+  blocking: true
+  
+  description: |
+    FOUNDATION LAYER - These issues BLOCK all other work. Without AuditLogger,
+    no AC can be validated with evidence. Without SKULL migration, governance
+    enforcement is incomplete. Without traceability, tests cannot prove AC coverage.
+    
+    SNOWBALL IMPACT: Completing these 4 tasks unlocks 354+ AC for validation.
+  
+  tasks:
+    # ==========================================================================
+    # TASK 1.1: AUDIT LOGGER INFRASTRUCTURE
+    # ==========================================================================
+    - task_id: "AUDIT-001"
+      name: "Implement AuditLogger Infrastructure"
+      description: "Create complete audit logging system with 7 categories, AC-ID tagging, and MCP tools"
+      priority: P0_CRITICAL
+      blocking: true
+      estimated_effort: "16-20 hours"
+      
+      ac_criteria_addressed:
+        - "AC-F01-005: Audit Logger operational with all 7 categories"
+        - "AC-INT-006: Audit-first validation"
+        - "AC-VAL-001: AC validation requires test pass + audit log trace"
+        - "AC-AUDIT-001: Audit logs queryable by AC-ID, orchestrator, date range"
+        - "AC-AUDIT-002: Memory buffer with configurable flush thresholds"
+        - "AC-AUDIT-003: Per-repo SQLite audit database isolation"
+        - "AC-AUDIT-004: MCP tools: audit_query, audit_list, audit_export"
+        - "AC-AUDIT-005: Automatic vacuum removes logs older than retention period"
+        - "AC-AUDIT-006: Log level-based retention (ERROR: 90d, INFO: 30d, DEBUG: 7d)"
+      
+      ac_criteria_unblocked: "354+ (ALL AC require audit evidence for validation)"
+      
+      deliverables:
+        - file: "src/infrastructure/audit_logger.py"
+          description: "AuditLogger class with 7 categories (STATE_MANAGEMENT, EXECUTION, MIDDLEWARE, RESPONSE, PERFORMANCE, SECURITY, VALIDATION)"
+          components:
+            - "AuditLevel enum (DEBUG, INFO, WARNING, ERROR, CRITICAL)"
+            - "AuditCategory enum (7 categories)"
+            - "AuditEntry dataclass (timestamp, level, category, component, operation, message, context, ac_id, correlation_id)"
+            - "AuditLogger class (log, query, export methods)"
+            - "Memory buffer with configurable flush (default: 100 entries or 5 minutes)"
+            - "AC-ID tagging: All entries tagged with ac_id for traceability"
+            - "Correlation ID tracking: Links related operations across components"
+            
+        - file: "cortex-brain/database/audit.db"
+          description: "SQLite database for audit log persistence"
+          schema:
+            - "audit_logs: id, timestamp, level, category, component, operation, message, context_json, ac_id, correlation_id"
+            - "audit_categories: id, category_name, description"
+            - "audit_ac_mapping: ac_id, log_id (many-to-many)"
+            - "audit_queries: id, query_name, query_template, created_at"
+          indexes:
+            - "idx_ac_id: ON audit_logs(ac_id)"
+            - "idx_timestamp: ON audit_logs(timestamp)"
+            - "idx_category: ON audit_logs(category)"
+            - "idx_correlation: ON audit_logs(correlation_id)"
+            
+        - file: "src/mcp/audit_query.py"
+          description: "MCP tool: Query audit logs by AC-ID, date range, category"
+          methods:
+            - "mcp_audit_query(ac_id, date_range, category, level)"
+            - "mcp_audit_list(orchestrator, date_range)"
+            - "mcp_audit_export(format, output_file)"
+            - "mcp_audit_validate(ac_id) → returns test + audit evidence"
+            
+        - file: "tests/unit/test_audit_logger.py"
+          description: "Comprehensive AuditLogger test harness"
+          test_scenarios:
+            - "test_audit_logger_initialization"
+            - "test_log_entry_with_ac_id"
+            - "test_correlation_id_tracking"
+            - "test_memory_buffer_flush"
+            - "test_query_by_ac_id"
+            - "test_query_by_date_range"
+            - "test_query_by_category"
+            - "test_retention_policy_enforcement"
+            - "test_audit_export_json"
+            - "test_audit_validate_ac_criteria"
+          markers:
+            - "@pytest.mark.acceptance"
+            - "@pytest.mark.ac_id('AC-F01-005')"
+            
+      validation_criteria:
+        test_evidence:
+          - "All tests in test_audit_logger.py pass"
+          - "Test coverage ≥95% for audit_logger.py"
+          - "All 7 categories tested"
+          - "AC-ID tagging validated"
+          
+        audit_evidence:
+          - "AuditLogger logs its own initialization (self-audit)"
+          - "Test execution generates audit entries"
+          - "Query by AC-F01-005 returns test execution traces"
+          - "Audit log proves: log(), query(), export() all functional"
+          
+      tdd_cycle:
+        - phase: "RED"
+          action: "Write failing tests in test_audit_logger.py"
+          expected: "10 tests fail (AuditLogger not implemented)"
+          
+        - phase: "GREEN"
+          action: "Implement AuditLogger class to pass tests"
+          expected: "All 10 tests pass"
+          
+        - phase: "REFACTOR"
+          action: "Optimize memory buffer, add docstrings, improve error handling"
+          expected: "Tests still pass, code quality improved"
+          
+      snowball_impact:
+        description: "Unlocks ALL 354+ AC for evidence-based validation"
+        downstream_tasks_unblocked: "All tasks in Stages 2-5 depend on audit logging"
+        
+    # ==========================================================================
+    # TASK 1.2: SKULL RULE MIGRATION
+    # ==========================================================================
+    - task_id: "GOV-001"
+      name: "Migrate 61 SKULL Rules to CORE-* Numbering"
+      description: "Migrate all SKULL rules to tier0 CORE-* numbering system"
+      priority: P0_CRITICAL
+      blocking: true
+      estimated_effort: "4-6 hours"
+      
+      ac_criteria_addressed:
+        - "AC-GOV-001: All 61 SKULL rules migrated to CORE-001 through CORE-061"
+      
+      ac_criteria_unblocked:
+        - "AC-GOV-002: 4-Category Governance Merger (needs CORE rules)"
+        - "AC-GOV-003 to AC-GOV-013: All governance AC"
+        
+      deliverables:
+        - file: "cortex-brain/tier0/governance/core-rules.yaml"
+          description: "61 SKULL rules with CORE-* numbering"
+          structure:
+            core_rules:
+              CORE-001:
+                name: "TDD_ENFORCEMENT"
+                severity: "BLOCKED"
+                description: "Tests must fail before implementation (RED→GREEN→REFACTOR)"
+                # ... and 60 more rules
+                
+        - file: "cortex-brain/brain-protection-rules.yaml"
+          description: "Add deprecation header, keep file for backward compatibility"
+          header: |
+            # DEPRECATED: This file is deprecated as of 2026-01-09
+            # All SKULL rules migrated to tier0/governance/core-rules.yaml
+            # This file preserved for backward compatibility only
+            # DO NOT MODIFY - Update core-rules.yaml instead
+            
+        - file: "tests/governance/test_skull_migration.py"
+          description: "Validate SKULL → CORE migration"
+          test_scenarios:
+            - "test_core_rules_file_exists"
+            - "test_all_61_rules_present"
+            - "test_severity_levels_preserved"
+            - "test_rule_numbering_sequential"
+            - "test_brain_protection_has_deprecation_header"
+          markers:
+            - "@pytest.mark.ac_id('AC-GOV-001')"
+            
+      validation_criteria:
+        test_evidence:
+          - "All tests in test_skull_migration.py pass"
+          - "61 rules validated present in core-rules.yaml"
+          
+        audit_evidence:
+          - "Migration script logs all rule conversions"
+          - "Audit log proves: 61 rules migrated with before/after comparison"
+          
+      tdd_cycle:
+        - phase: "RED"
+          action: "Write tests expecting core-rules.yaml with 61 rules"
+          expected: "Tests fail (file doesn't exist)"
+          
+        - phase: "GREEN"
+          action: "Create core-rules.yaml with all 61 SKULL rules renumbered"
+          expected: "Tests pass"
+          
+        - phase: "REFACTOR"
+          action: "Add categorization, improve descriptions"
+          expected: "Tests still pass"
+          
+      snowball_impact:
+        description: "Enables 4-Category Governance Merger to load CORE rules"
+        downstream_tasks_unblocked: "All governance-related tasks (Stages 2-3)"
+        
+    # ==========================================================================
+    # TASK 1.3: AC-ID TRACEABILITY SYSTEM
+    # ==========================================================================
+    - task_id: "TRACE-001"
+      name: "Implement AC-ID Traceability System"
+      description: "Create bidirectional linkage between AC criteria, tests, and code"
+      priority: P0_CRITICAL
+      blocking: true
+      estimated_effort: "8-10 hours"
+      
+      ac_criteria_addressed:
+        - "AC-ARCH-011: Unified CORTEX test suite"
+        - "AC-ARCH-014: Acceptance criteria test harnessing"
+        - "AC-VAL-001: AC validation requires test pass + audit log trace"
+        - "AC-VAL-002: Audit logger tags entries with AC-ID"
+        - "AC-VAL-003: AC completion report includes audit evidence summary"
+        
+      deliverables:
+        - file: "src/infrastructure/ac_traceability.py"
+          description: "AC traceability system"
+          components:
+            - "ACTraceabilityRegistry class"
+            - "register_ac_test(ac_id, test_file, test_function)"
+            - "query_ac_coverage(ac_id) → returns tests + audit logs"
+            - "generate_ac_coverage_matrix() → AC × Tests mapping"
+            - "detect_ac_gaps() → AC without tests"
+            - "detect_test_orphans() → tests without AC linkage"
+            
+        - file: "tests/conftest.py"
+          description: "Add pytest marker for AC traceability"
+          additions: |
+            def pytest_configure(config):
+                config.addinivalue_line(
+                    "markers",
+                    "ac_id(id): Mark test as validating specific AC criterion"
+                )
+                
+        - file: "cortex-brain/registry/ac-test-coverage.yaml"
+          description: "AC coverage matrix"
+          structure:
+            ac_coverage:
+              AC-GOV-001:
+                tests:
+                  - "tests/governance/test_skull_migration.py::test_all_61_rules_present"
+                coverage_percentage: 100
+                last_validated: "2026-01-09T12:00:00Z"
+                
+        - file: "tests/architecture/test_ac_traceability.py"
+          description: "Validate traceability system"
+          test_scenarios:
+            - "test_ac_marker_registration"
+            - "test_query_ac_coverage"
+            - "test_generate_coverage_matrix"
+            - "test_detect_ac_gaps"
+            - "test_detect_test_orphans"
+          markers:
+            - "@pytest.mark.ac_id('AC-ARCH-014')"
+            
+      validation_criteria:
+        test_evidence:
+          - "All tests in test_ac_traceability.py pass"
+          - "Coverage matrix generated successfully"
+          - "148 existing tests linked to AC (where applicable)"
+          
+        audit_evidence:
+          - "AC registry generation logged"
+          - "Gap detection execution traced"
+          - "Coverage matrix update events logged"
+          
+      tdd_cycle:
+        - phase: "RED"
+          action: "Write tests for traceability system"
+          expected: "Tests fail (system not implemented)"
+          
+        - phase: "GREEN"
+          action: "Implement ACTraceabilityRegistry"
+          expected: "Tests pass"
+          
+        - phase: "REFACTOR"
+          action: "Optimize coverage queries, add caching"
+          expected: "Tests still pass, performance improved"
+          
+      snowball_impact:
+        description: "Enables identification of 206 AC with zero test coverage"
+        downstream_tasks_unblocked: "All test harness creation tasks (Stage 2)"
+        
+    # ==========================================================================
+    # TASK 1.4: HOUSEKEEPING ORCHESTRATOR
+    # ==========================================================================
+    - task_id: "HOUSE-001"
+      name: "Implement Housekeeping Orchestrator"
+      description: "Create autonomous brain health maintenance orchestrator"
+      priority: P0_CRITICAL
+      blocking: true
+      estimated_effort: "12-16 hours"
+      
+      ac_criteria_addressed:
+        - "AC-ORC-011: Housekeeping Orchestrator executes automatically"
+        - "AC-ORC-HOUSE-001: Comprehensive scenario validation"
+        - "AC-ORC-HOUSE-002: Governance health check"
+        - "AC-ORC-HOUSE-003: Vacuum integration"
+        - "AC-ORC-HOUSE-004: Knowledge YAML synchronization"
+        - "AC-ORC-HOUSE-005: Brittleness prevention"
+        - "AC-ORC-HOUSE-006: Toolkit management and consolidation"
+        - "AC-ORC-HOUSE-007: Prevent tool duplication proactively"
+        - "AC-ORC-HOUSE-008: SQLite database optimization"
+        - "AC-ORC-HOUSE-009: Database table/object lifecycle management"
+        
+      deliverables:
+        - file: "src/orchestrators/housekeeping_orchestrator.py"
+          description: "Autonomous brain health maintenance"
+          components:
+            - "HousekeepingOrchestrator class"
+            - "execute() → runs all 9 phases"
+            - "Phase 1: Governance health check"
+            - "Phase 2: Vacuum integration"
+            - "Phase 3: Knowledge YAML sync"
+            - "Phase 4: Brittleness scan"
+            - "Phase 5: Toolkit consolidation"
+            - "Phase 6: Duplication prevention"
+            - "Phase 7: SQLite optimization"
+            - "Phase 8: Database lifecycle management"
+            - "Phase 9: Health report generation"
+            
+        - file: "cortex-brain/manifests/orchestrators/housekeeping.yaml"
+          description: "Housekeeping orchestrator configuration"
+          trigger_conditions:
+            - "session_start: true"
+            - "daily_schedule: '00:00 UTC'"
+            - "post_orchestrator: configurable"
+            - "low_resource: disk<10% OR memory<20%"
+          silent_operation: true
+          
+        - file: "tests/orchestrators/test_housekeeping.py"
+          description: "Housekeeping orchestrator test harness"
+          test_scenarios:
+            - "test_session_start_trigger"
+            - "test_daily_schedule_execution"
+            - "test_governance_health_check"
+            - "test_vacuum_integration"
+            - "test_knowledge_sync"
+            - "test_brittleness_scan"
+            - "test_toolkit_consolidation"
+            - "test_sqlite_optimization"
+            - "test_silent_operation"
+          markers:
+            - "@pytest.mark.ac_id('AC-ORC-011')"
+            
+      validation_criteria:
+        test_evidence:
+          - "All 9 phases tested and pass"
+          - "Trigger conditions validated"
+          - "Silent operation confirmed (no user notifications)"
+          
+        audit_evidence:
+          - "Each housekeeping execution logged with timing data"
+          - "Health report generated with before/after metrics"
+          - "All 9 phases traced in audit log"
+          
+      tdd_cycle:
+        - phase: "RED"
+          action: "Write tests for all 9 housekeeping phases"
+          expected: "Tests fail (orchestrator doesn't exist)"
+          
+        - phase: "GREEN"
+          action: "Implement HousekeepingOrchestrator with all phases"
+          expected: "Tests pass"
+          
+        - phase: "REFACTOR"
+          action: "Optimize phase execution order, improve error handling"
+          expected: "Tests still pass, reliability improved"
+          
+      snowball_impact:
+        description: "Enables autonomous brain health monitoring and maintenance"
+        downstream_tasks_unblocked: "Governance quality tasks, toolkit cleanup (Stages 2-3)"
+
+# ==============================================================================
+# SNOWBALL STAGE 2: QUALITY (GROWING MOMENTUM)
+# ==============================================================================
+# Duration: Week 2 | Effort: 24-32h | Priority: P1_HIGH
+# Unlocks: Architecture compliance, maintainability, test confidence
+# ==============================================================================
+
+stage_2_quality:
+  stage_id: "STAGE-2-QUALITY"
+  momentum_level: "GROWING"
+  duration: "Week 2"
+  estimated_effort: "24-32 hours"
+  priority: P1_HIGH
+  blocking: false
+  
+  description: |
+    QUALITY LAYER - With foundation in place, improve code quality and architecture
+    compliance. Version-agnostic design eliminates confusion. Brittleness fixes
+    improve reliability. Comprehensive test harnesses provide confidence.
+    
+    SNOWBALL IMPACT: Quality improvements reduce technical debt by 40-50%.
+  
+  tasks:
+    # ==========================================================================
+    # TASK 2.1: VERSION-AGNOSTIC REFACTORING
+    # ==========================================================================
+    - task_id: "VERSION-001"
+      name: "Rename Versioned Files to Version-Agnostic"
+      description: "Remove version numbers from all module/orchestrator names per AC-ARCH-010"
+      priority: P1_HIGH
+      blocking: false
+      estimated_effort: "4-6 hours"
+      
+      ac_criteria_addressed:
+        - "AC-ARCH-010: Version-agnostic design"
+        
+      deliverables:
+        - refactoring: "File renaming"
+          files_to_rename:
+            - "src/orchestrators/planning/planning_orchestrator_v5.py → planning_orchestrator.py"
+            - "src/orchestrators/vacuum/vacuum_orchestrator_v2.py → vacuum_orchestrator.py"
+            - "src/orchestrators/ado/ado_orchestrator_v2.py → ado_orchestrator.py"
+            - "src/orchestrators/investigation/investigation_orchestrator_v2.py → investigation_orchestrator.py"
+            - "src/orchestrators/sanitization/sanitization_orchestrator_v2.py → sanitization_orchestrator.py"
+            - "src/orchestrators/maintenance/maintenance_orchestrator_v2.py → maintenance_orchestrator.py"
+            - "src/orchestrators/base/base_orchestrator_v4_1.py → enhanced_base_orchestrator.py"
+            
+        - refactoring: "Update all imports"
+          files_affected: "~50 files importing versioned modules"
+          
+        - file: "tests/architecture/test_version_agnostic.py"
+          description: "Static analysis to detect version suffixes"
+          test_scenarios:
+            - "test_no_version_suffixes_in_filenames"
+            - "test_no_version_suffixes_in_imports"
+            - "test_no_version_suffixes_in_registry"
+          markers:
+            - "@pytest.mark.ac_id('AC-ARCH-010')"
+            
+      validation_criteria:
+        test_evidence:
+          - "Static analysis finds 0 versioned filenames"
+          - "All imports updated and working"
+          
+        audit_evidence:
+          - "Refactoring script logs all renames"
+          - "Import validation logged"
+          
+      tdd_cycle:
+        - phase: "RED"
+          action: "Write static analysis tests"
+          expected: "Tests fail (versioned files exist)"
+          
+        - phase: "GREEN"
+          action: "Rename all versioned files and update imports"
+          expected: "Tests pass"
+          
+        - phase: "REFACTOR"
+          action: "Validate no broken imports, update documentation"
+          expected: "Tests still pass, clean architecture"
+          
+    # ==========================================================================
+    # TASK 2.2: BRITTLENESS REMEDIATION
+    # ==========================================================================
+    - task_id: "BRITTLE-001"
+      name: "Fix Bare Except Clauses in Core Code"
+      description: "Replace 4 bare except clauses with specific exception handling"
+      priority: P1_HIGH
+      blocking: false
+      estimated_effort: "2-3 hours"
+      
+      ac_criteria_addressed:
+        - "AC-ARCH-004: No poor architecture practices"
+        
+      deliverables:
+        - fix: "src/infrastructure/file_utils.py:76"
+          before: "except:"
+          after: "except (IOError, OSError) as e:"
+          add_logging: true
+          
+        - fix: "src/orchestrators/core/master_orchestrator.py:300"
+          before: "except:"
+          after: "except (ValueError, KeyError) as e:"
+          add_logging: true
+          
+        - fix: "src/orchestrators/core/master_orchestrator.py:347"
+          before: "except:"
+          after: "except OrchestratorError as e:"
+          add_logging: true
+          
+        - fix: "src/tools/gap_detector.py:257"
+          before: "except:"
+          after: "except (FileNotFoundError, yaml.YAMLError) as e:"
+          add_logging: true
+          
+        - file: "tests/architecture/test_antipattern_detection.py"
+          description: "Validate no bare except clauses in core code"
+          test_scenarios:
+            - "test_no_bare_except_in_core_code"
+          markers:
+            - "@pytest.mark.ac_id('AC-ARCH-004')"
+            
+      validation_criteria:
+        test_evidence:
+          - "Static analysis finds 0 bare except in src/ (excluding samples)"
+          - "Error handling tests pass"
+          
+        audit_evidence:
+          - "Brittleness scan logs fixes applied"
+          
+      tdd_cycle:
+        - phase: "RED"
+          action: "Write tests for specific exception handling"
+          expected: "Tests fail (bare except still present)"
+          
+        - phase: "GREEN"
+          action: "Replace bare except with specific exceptions"
+          expected: "Tests pass"
+          
+        - phase: "REFACTOR"
+          action: "Add error recovery logic, improve logging"
+          expected: "Tests still pass, better error handling"
+          
+    # ==========================================================================
+    # TASK 2.3: ORCHESTRATOR TEST HARNESSES
+    # ==========================================================================
+    - task_id: "TEST-001"
+      name: "Create Comprehensive Orchestrator Test Harnesses"
+      description: "Implement comprehensive scenario tests for all orchestrators"
+      priority: P1_HIGH
+      blocking: false
+      estimated_effort: "12-16 hours"
+      
+      ac_criteria_addressed:
+        - "AC-ORC-TDD-001: TDD Orchestrator comprehensive scenario validation"
+        - "AC-ORC-PLAN-001: Planning Orchestrator comprehensive scenario validation"
+        - "AC-ORC-MAINT-001: Maintenance Orchestrator comprehensive scenario validation"
+        - "AC-ORC-MASTER-001: Master Orchestrator decision-making validation"
+        
+      deliverables:
+        - file: "tests/orchestrators/comprehensive/test_tdd_scenarios.py"
+          description: "TDD Orchestrator 5-scenario validation"
+          test_scenarios:
+            - "test_new_feature_red_green_refactor"
+            - "test_modify_feature_tdd_cycle"
+            - "test_delete_feature_cleanup"
+            - "test_refactor_behavior_unchanged"
+            - "test_master_orchestrator_guided_tdd"
+          markers:
+            - "@pytest.mark.ac_id('AC-ORC-TDD-001')"
+            
+        - file: "tests/orchestrators/comprehensive/test_planning_scenarios.py"
+          description: "Planning Orchestrator 4-scenario validation"
+          test_scenarios:
+            - "test_simple_feature_planning"
+            - "test_complex_epic_planning"
+            - "test_multi_repo_plan"
+            - "test_plan_modification_mid_execution"
+          markers:
+            - "@pytest.mark.ac_id('AC-ORC-PLAN-001')"
+            
+        - file: "tests/orchestrators/comprehensive/test_maintenance_scenarios.py"
+          description: "Maintenance Orchestrator 3-scenario validation"
+          test_scenarios:
+            - "test_phase_failure_recovery"
+            - "test_concurrent_request_handling"
+            - "test_active_development_conflict_detection"
+          markers:
+            - "@pytest.mark.ac_id('AC-ORC-MAINT-001')"
+            
+        - file: "tests/orchestrators/comprehensive/test_master_decision_making.py"
+          description: "Master Orchestrator 4-scenario validation"
+          test_scenarios:
+            - "test_ambiguous_request_llm_classification"
+            - "test_complex_request_orchestrator_chaining"
+            - "test_knowledge_yaml_consultation"
+            - "test_company_best_practices_override"
+          markers:
+            - "@pytest.mark.ac_id('AC-ORC-MASTER-001')"
+            
+      validation_criteria:
+        test_evidence:
+          - "All 16 scenario tests pass"
+          - "Coverage ≥90% for tested orchestrators"
+          
+        audit_evidence:
+          - "Each scenario execution logged with timing"
+          - "Orchestrator decision-making traced"
+          
+      tdd_cycle:
+        - phase: "RED"
+          action: "Write 16 comprehensive scenario tests"
+          expected: "Tests fail (scenarios not implemented)"
+          
+        - phase: "GREEN"
+          action: "Implement missing orchestrator features"
+          expected: "Tests pass"
+          
+        - phase: "REFACTOR"
+          action: "Optimize orchestrator logic, improve error handling"
+          expected: "Tests still pass, performance improved"
+          
+    # ==========================================================================
+    # TASK 2.4: ORPHAN DETECTION SCANNER
+    # ==========================================================================
+    - task_id: "ORPHAN-001"
+      name: "Implement Orphan Detection Scanner"
+      description: "Create scanner to identify orphaned code from previous CORTEX versions"
+      priority: P1_HIGH
+      blocking: false
+      estimated_effort: "6-8 hours"
+      
+      ac_criteria_addressed:
+        - "AC-ARCH-001: Repository has NO orphaned CORTEX functionality"
+        
+      deliverables:
+        - file: "src/tools/orphan_scanner.py"
+          description: "Orphan detection scanner"
+          components:
+            - "OrphanScanner class"
+            - "scan_orchestrators() → orphaned orchestrators not in registry"
+            - "scan_manifests() → manifests without orchestrators"
+            - "scan_governance() → deprecated governance files"
+            - "scan_scripts() → legacy scripts not used"
+            - "generate_cleanup_plan() → risk assessment (SAFE/REVIEW/DANGER)"
+            
+        - file: "tests/architecture/test_orphan_detection.py"
+          description: "Validate orphan detection"
+          test_scenarios:
+            - "test_detect_orphaned_orchestrators"
+            - "test_detect_orphaned_manifests"
+            - "test_cleanup_plan_generation"
+          markers:
+            - "@pytest.mark.ac_id('AC-ARCH-001')"
+            
+      validation_criteria:
+        test_evidence:
+          - "Scanner detects known orphans in test environment"
+          - "Cleanup plan risk assessment validated"
+          
+        audit_evidence:
+          - "Orphan scan execution logged"
+          - "Cleanup plan generation traced"
+          
+      tdd_cycle:
+        - phase: "RED"
+          action: "Write tests for orphan detection"
+          expected: "Tests fail (scanner doesn't exist)"
+          
+        - phase: "GREEN"
+          action: "Implement OrphanScanner"
+          expected: "Tests pass"
+          
+        - phase: "REFACTOR"
+          action: "Optimize scan algorithms, improve reporting"
+          expected: "Tests still pass, faster scans"
+
+# ==============================================================================
+# SNOWBALL STAGE 3: FEATURES (ACCELERATING MOMENTUM)
+# ==============================================================================
+# Duration: Week 3-4 | Effort: 60-80h | Priority: P1_HIGH
+# Unlocks: Full autonomous operation, health monitoring, scalability
+# ==============================================================================
+
+stage_3_features:
+  stage_id: "STAGE-3-FEATURES"
+  momentum_level: "ACCELERATING"
+  duration: "Week 3-4"
+  estimated_effort: "60-80 hours"
+  priority: P1_HIGH
+  blocking: false
+  
+  description: |
+    FEATURES LAYER - With quality foundation, implement major features:
+    Plan Viewer Dashboard (visual progress), Multi-Repo Registry (scalability),
+    Governance Enhancements (pattern analysis, holistic review).
+    
+    SNOWBALL IMPACT: Accelerates development velocity by 60-70%.
+  
+  tasks:
+    # ==========================================================================
+    # TASK 3.1: PLAN VIEWER DASHBOARD ENHANCEMENT
+    # ==========================================================================
+    - task_id: "DASHBOARD-001"
+      name: "Transform plan-viewer.html into Development Dashboard"
+      description: "Enhance plan-viewer with visual progress tracking, AC display, Material Design + Glassmorphism"
+      priority: P1_HIGH
+      blocking: false
+      estimated_effort: "16-20 hours"
+      
+      ac_criteria_addressed:
+        - "AC-PLAN-DASH-001: Dashboard with visual progress and AC display"
+        - "AC-PLAN-DASH-002: Material Design + Dark Blue Glassmorphism styling"
+        - "AC-PLAN-DASH-003: file:// protocol compatibility"
+        - "AC-PLAN-DASH-004: Visual progress tracking components"
+        - "AC-PLAN-DASH-005: Acceptance Criteria fulfillment display"
+        - "AC-PLAN-DASH-006: CSS-only glassmorphism"
+        - "AC-PLAN-DASH-007: Dashboard data structure and JSON embedding"
+        
+      deliverables:
+        - file: "src/tools/plan_viewer_generator.py"
+          description: "Enhanced plan-viewer HTML generator"
+          components:
+            - "Generate Material Design + Glassmorphism styles (inline CSS)"
+            - "Embed plan data as JSON (phases, tasks, AC)"
+            - "Render visual progress bars"
+            - "Display AC fulfillment status"
+            - "Single-file HTML (no external dependencies)"
+            
+        - file: "tests/orchestrators/test_plan_viewer_dashboard.py"
+          description: "Plan Viewer Dashboard test harness (7 AC)"
+          test_scenarios:
+            - "test_dashboard_structure"
+            - "test_material_design_styling"
+            - "test_file_protocol_compatibility"
+            - "test_visual_progress_components"
+            - "test_ac_display"
+            - "test_css_only_glassmorphism"
+            - "test_data_embedding"
+          markers:
+            - "@pytest.mark.ac_id('AC-PLAN-DASH-001')"
+            - "@pytest.mark.ac_id('AC-PLAN-DASH-002')"
+            - "@pytest.mark.ac_id('AC-PLAN-DASH-003')"
+            - "@pytest.mark.ac_id('AC-PLAN-DASH-004')"
+            - "@pytest.mark.ac_id('AC-PLAN-DASH-005')"
+            - "@pytest.mark.ac_id('AC-PLAN-DASH-006')"
+            - "@pytest.mark.ac_id('AC-PLAN-DASH-007')"
+            
+      validation_criteria:
+        test_evidence:
+          - "All 7 dashboard tests pass"
+          - "HTML validates as single-file static page"
+          - "Works on file:// protocol without CORS errors"
+          
+        audit_evidence:
+          - "Dashboard generation logged"
+          - "Style validation logged"
+          - "Data embedding logged"
+          
+      tdd_cycle:
+        - phase: "RED"
+          action: "Write 7 dashboard feature tests"
+          expected: "Tests fail (dashboard features not implemented)"
+          
+        - phase: "GREEN"
+          action: "Implement dashboard generator with all features"
+          expected: "Tests pass"
+          
+        - phase: "REFACTOR"
+          action: "Optimize CSS, improve layout responsiveness"
+          expected: "Tests still pass, better UX"
+          
+    # ==========================================================================
+    # TASK 3.2: MULTI-REPO REGISTRY
+    # ==========================================================================
+    - task_id: "MULTI-REPO-001"
+      name: "Implement Multi-Repo Registry and Context Detection"
+      description: "Enable CORTEX to operate across multiple repositories with universal CORTEX.prompt.md"
+      priority: P1_HIGH
+      blocking: false
+      estimated_effort: "16-20 hours"
+      
+      ac_criteria_addressed:
+        - "AC-REPO-001: Multi-repo registry segregates context"
+        - "AC-REPO-002: Universal CORTEX.prompt.md works across repos"
+        - "AC-REPO-003: Context detection identifies CORTEX vs user repos"
+        - "AC-REPO-004: Config-based CORTEX registry"
+        - "AC-REPO-005: SQLite database per-repo segregation"
+        
+      deliverables:
+        - file: "src/infrastructure/multi_repo_registry.py"
+          description: "Multi-repo context management"
+          components:
+            - "MultiRepoRegistry class"
+            - "register_repo(repo_path, repo_type)"
+            - "detect_context(file_path) → repo info"
+            - "get_repo_config(repo_path) → config"
+            - "segregate_database(repo_path) → repo-specific DB"
+            
+        - file: "cortex-brain/registry/repo-registry.yaml"
+          description: "Repository registry"
+          structure:
+            repos:
+              cortex:
+                path: "/Users/asifhussain/PROJECTS/CORTEX"
+                type: "CORTEX"
+                database: "cortex-brain/database/cortex.db"
+              user_repo_1:
+                path: "/path/to/user/repo"
+                type: "USER"
+                database: "cortex-brain/database/user_repo_1.db"
+                
+        - file: "tests/multi_repo/test_multi_repo_registry.py"
+          description: "Multi-repo test harness (5 AC)"
+          test_scenarios:
+            - "test_repo_registration"
+            - "test_context_detection"
+            - "test_database_segregation"
+            - "test_universal_prompt_routing"
+          markers:
+            - "@pytest.mark.ac_id('AC-REPO-001')"
+            
+      validation_criteria:
+        test_evidence:
+          - "All multi-repo tests pass"
+          - "Context detection works across 10 test repos"
+          
+        audit_evidence:
+          - "Repo registration logged"
+          - "Context detection traced"
+          
+      tdd_cycle:
+        - phase: "RED"
+          action: "Write multi-repo tests"
+          expected: "Tests fail (registry not implemented)"
+          
+        - phase: "GREEN"
+          action: "Implement MultiRepoRegistry"
+          expected: "Tests pass"
+          
+        - phase: "REFACTOR"
+          action: "Optimize context detection, improve config loading"
+          expected: "Tests still pass, faster detection"
+          
+    # ==========================================================================
+    # TASK 3.3: GOVERNANCE PATTERN ANALYSIS
+    # ==========================================================================
+    - task_id: "GOV-PATTERN-001"
+      name: "Implement Comprehensive Governance Pattern Analysis"
+      description: "Analyze knowledge YAMLs, brittleness patterns, essential rules for governance gaps"
+      priority: P1_HIGH
+      blocking: false
+      estimated_effort: "12-16 hours"
+      
+      ac_criteria_addressed:
+        - "AC-GOV-011: Comprehensive governance pattern analysis"
+        - "AC-GOV-012: Holistic governance tier review"
+        - "AC-GOV-013: Governance rule completeness"
+        
+      deliverables:
+        - file: "src/tools/governance_pattern_analyzer.py"
+          description: "Governance pattern analysis tool"
+          components:
+            - "PatternAnalyzer class"
+            - "scan_knowledge_yamls() → extract patterns"
+            - "analyze_brittleness() → brittleness patterns"
+            - "extract_essential_rules() → rule candidates"
+            - "generate_pattern_library() → pattern-library.yaml"
+            - "detect_gaps() → missing patterns"
+            - "generate_remediation_candidates() → new rule suggestions"
+            
+        - file: "cortex-brain/governance/pattern-library.yaml"
+          description: "Pattern library (50+ patterns)"
+          structure:
+            patterns:
+              PATTERN-001:
+                name: "Bare Except Anti-Pattern"
+                description: "except: without specific exception"
+                category: "error_handling"
+                severity: HIGH
+                remediation: "Use specific exception types"
+                
+        - file: "tests/governance/test_comprehensive_pattern_analysis.py"
+          description: "Pattern analysis test harness (3 AC)"
+          test_scenarios:
+            - "test_knowledge_yaml_scanning"
+            - "test_brittleness_pattern_detection"
+            - "test_essential_rule_extraction"
+            - "test_pattern_library_generation"
+            - "test_gap_detection"
+          markers:
+            - "@pytest.mark.ac_id('AC-GOV-011')"
+            
+      validation_criteria:
+        test_evidence:
+          - "Pattern analysis tests pass"
+          - "50+ patterns identified and cataloged"
+          
+        audit_evidence:
+          - "Pattern analysis execution logged"
+          - "Pattern library updates traced"
+          
+      tdd_cycle:
+        - phase: "RED"
+          action: "Write pattern analysis tests"
+          expected: "Tests fail (analyzer not implemented)"
+          
+        - phase: "GREEN"
+          action: "Implement PatternAnalyzer"
+          expected: "Tests pass"
+          
+        - phase: "REFACTOR"
+          action: "Optimize pattern matching algorithms"
+          expected: "Tests still pass, faster analysis"
+          
+    # ==========================================================================
+    # TASK 3.4: HOLISTIC GOVERNANCE TIER REVIEW
+    # ==========================================================================
+    - task_id: "GOV-TIER-001"
+      name: "Implement Holistic Governance Tier Review"
+      description: "Cross-tier conflict detection, complement validation, coverage analysis"
+      priority: P1_HIGH
+      blocking: false
+      estimated_effort: "8-12 hours"
+      
+      ac_criteria_addressed:
+        - "AC-GOV-012: Holistic governance tier review"
+        
+      deliverables:
+        - file: "src/tools/governance_tier_analyzer.py"
+          description: "Governance tier review tool"
+          components:
+            - "TierAnalyzer class"
+            - "scan_all_tiers() → load all governance YAMLs"
+            - "detect_conflicts() → cross-tier conflicts"
+            - "validate_complement() → rules complement each other"
+            - "detect_orphan_rules() → rules with no use cases"
+            - "generate_coverage_map() → execution path coverage"
+            - "generate_health_report() → tier review report"
+            
+        - file: "cortex-brain/health-reports/governance-tier-review-{timestamp}.json"
+          description: "Tier review report"
+          structure:
+            tier_review:
+              timestamp: "2026-01-09T12:00:00Z"
+              conflicts: []
+              orphan_rules: []
+              coverage_percentage: 98
+              
+        - file: "tests/governance/test_holistic_tier_review.py"
+          description: "Tier review test harness (1 AC)"
+          test_scenarios:
+            - "test_tier_scanning"
+            - "test_conflict_detection"
+            - "test_complement_validation"
+            - "test_orphan_rule_detection"
+            - "test_coverage_map_generation"
+          markers:
+            - "@pytest.mark.ac_id('AC-GOV-012')"
+            
+      validation_criteria:
+        test_evidence:
+          - "Tier review tests pass"
+          - "Zero conflicts detected in test environment"
+          
+        audit_evidence:
+          - "Tier review execution logged"
+          - "Health report generation traced"
+          
+      tdd_cycle:
+        - phase: "RED"
+          action: "Write tier review tests"
+          expected: "Tests fail (analyzer not implemented)"
+          
+        - phase: "GREEN"
+          action: "Implement TierAnalyzer"
+          expected: "Tests pass"
+          
+        - phase: "REFACTOR"
+          action: "Optimize tier scanning, improve conflict detection"
+          expected: "Tests still pass, better accuracy"
+
+# ==============================================================================
+# SNOWBALL STAGE 4: HARDENING (PEAK MOMENTUM)
+# ==============================================================================
+# Duration: Week 5-6 | Effort: 40-60h | Priority: P2_MEDIUM
+# Unlocks: Production readiness, enterprise deployment, security compliance
+# ==============================================================================
+
+stage_4_hardening:
+  stage_id: "STAGE-4-HARDENING"
+  momentum_level: "PEAK"
+  duration: "Week 5-6"
+  estimated_effort: "40-60 hours"
+  priority: P2_MEDIUM
+  blocking: false
+  
+  description: |
+    HARDENING LAYER - Prepare for production: security hardening, concurrency
+    safety, failure resilience, comprehensive testing.
+    
+    SNOWBALL IMPACT: Production-ready CORTEX 6.0 for enterprise deployment.
+  
+  tasks:
+    - task_id: "SECURITY-001"
+      name: "Implement Security Hardening"
+      description: "8 security AC (AC-SEC-001 to AC-SEC-008)"
+      priority: P2_MEDIUM
+      estimated_effort: "12-16h"
+      ac_criteria_addressed: "AC-SEC-001 to AC-SEC-008"
+      
+    - task_id: "CONCURRENCY-001"
+      name: "Implement Concurrency Safety"
+      description: "Race condition prevention (AC-RACE-001 to AC-RACE-003)"
+      priority: P2_MEDIUM
+      estimated_effort: "10-14h"
+      ac_criteria_addressed: "AC-RACE-001 to AC-RACE-003"
+      
+    - task_id: "RESILIENCE-001"
+      name: "Implement Failure Mode Resilience"
+      description: "6 failure mode AC (AC-FAIL-001 to AC-FAIL-006)"
+      priority: P2_MEDIUM
+      estimated_effort: "10-14h"
+      ac_criteria_addressed: "AC-FAIL-001 to AC-FAIL-006"
+      
+    - task_id: "PERFORMANCE-001"
+      name: "Implement Performance Benchmarks"
+      description: "7 performance AC (AC-PERF-001 to AC-PERF-007)"
+      priority: P2_MEDIUM
+      estimated_effort: "8-12h"
+      ac_criteria_addressed: "AC-PERF-001 to AC-PERF-007"
+
+# ==============================================================================
+# SNOWBALL STAGE 5: ENHANCEMENTS (MAXIMUM MOMENTUM)
+# ==============================================================================
+# Duration: Week 7+ | Effort: 40-60h | Priority: P3_LOW
+# Unlocks: Advanced capabilities, monitoring, continuous improvement
+# ==============================================================================
+
+stage_5_enhancements:
+  stage_id: "STAGE-5-ENHANCEMENTS"
+  momentum_level: "MAXIMUM"
+  duration: "Week 7+"
+  estimated_effort: "40-60 hours"
+  priority: P3_LOW
+  blocking: false
+  
+  description: |
+    ENHANCEMENTS LAYER - Advanced features: observability tools, deployment
+    automation, learning library, continuous improvement.
+    
+    SNOWBALL IMPACT: CORTEX 6.0 becomes self-improving, enterprise-scale platform.
+  
+  tasks:
+    - task_id: "OBSERVE-001"
+      name: "Implement Observability Tools"
+      description: "3 observability AC (AC-OBSERVE-001 to AC-OBSERVE-003)"
+      priority: P3_LOW
+      estimated_effort: "8-12h"
+      ac_criteria_addressed: "AC-OBSERVE-001 to AC-OBSERVE-003"
+      
+    - task_id: "DEPLOY-001"
+      name: "Implement Deployment Automation"
+      description: "5 deployment AC (AC-DEPLOY-001 to AC-DEPLOY-005)"
+      priority: P3_LOW
+      estimated_effort: "12-16h"
+      ac_criteria_addressed: "AC-DEPLOY-001 to AC-DEPLOY-005"
+      
+    - task_id: "LEARN-001"
+      name: "Enhance Learning Library"
+      description: "5 learning AC (AC-LEARN-001 to AC-LEARN-005)"
+      priority: P3_LOW
+      estimated_effort: "10-14h"
+      ac_criteria_addressed: "AC-LEARN-001 to AC-LEARN-005"
+      
+    - task_id: "IMPROVE-001"
+      name: "Continuous Improvement Loop"
+      description: "2 maintainability AC (AC-MAINT-001 to AC-MAINT-002)"
+      priority: P3_LOW
+      estimated_effort: "10-14h"
+      ac_criteria_addressed: "AC-MAINT-001 to AC-MAINT-002"
+
+# ==============================================================================
+# COMPLETION CRITERIA
+# ==============================================================================
+
+completion_criteria:
+  stage_1_foundation:
+    required: true
+    criteria:
+      - "AuditLogger implemented and all tests pass"
+      - "61 SKULL rules migrated to CORE-*"
+      - "AC-ID traceability system operational"
+      - "Housekeeping Orchestrator implemented"
+      - "All Stage 1 audit logs prove functionality"
+      
+  stage_2_quality:
+    required: true
+    criteria:
+      - "All versioned files renamed"
+      - "4 bare except clauses fixed"
+      - "16 orchestrator scenario tests pass"
+      - "Orphan detection scanner operational"
+      
+  stage_3_features:
+    required: false
+    criteria:
+      - "Plan Viewer Dashboard enhanced"
+      - "Multi-repo registry operational"
+      - "Governance pattern analysis complete"
+      - "Holistic tier review operational"
+      
+  stage_4_hardening:
+    required: false
+    criteria:
+      - "Security hardening complete"
+      - "Concurrency safety validated"
+      - "Failure resilience tested"
+      - "Performance benchmarks met"
+      
+  stage_5_enhancements:
+    required: false
+    criteria:
+      - "Observability tools operational"
+      - "Deployment automation complete"
+      - "Learning library enhanced"
+      - "Continuous improvement loop active"
+
+# ==============================================================================
+# EVIDENCE VALIDATION PROTOCOL
+# ==============================================================================
+
+evidence_validation:
+  description: "Every AC must have BOTH test evidence AND audit evidence"
+  
+  test_evidence_requirements:
+    - "Test file exists and is executable"
+    - "Test linked to AC via @pytest.mark.ac_id()"
+    - "Test passes successfully"
+    - "Test coverage ≥80% for tested component"
+    
+  audit_evidence_requirements:
+    - "Audit log entry exists with ac_id tag"
+    - "Operation traced from start to completion"
+    - "Timing data captured"
+    - "Success/failure status logged"
+    
+  dual_validation_query:
+    command: "mcp_audit_validate(ac_id='AC-F01-005')"
+    returns:
+      test_evidence:
+        test_file: "tests/unit/test_audit_logger.py"
+        test_status: "PASS"
+        coverage: "95%"
+      audit_evidence:
+        log_count: 47
+        first_entry: "2026-01-09T10:15:00Z"
+        last_entry: "2026-01-09T10:15:02Z"
+        operations: ["log()", "query()", "export()"]
+      validation_result: "PASS"

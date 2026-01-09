@@ -85,14 +85,13 @@ critical_gap_fix_foundation:
       low: 65        # Enhancement
       
     category_breakdown:
-      missing_implementation: 152  # Gap to target (355 - 203 current)
+      missing_implementation: 354  # AC criteria with ZERO code
       audit_infrastructure_missing: 42  # No AuditLogger
       brittleness_violations: 13  # Bare except clauses
       test_traceability_gaps: 148  # Tests without AC linkage
       architecture_gaps: 47  # Multi-repo, concurrency, security
       governance_gaps: 61  # SKULL rules not migrated
       orchestrator_gaps: 89  # Orchestrators incomplete
-      note: "203 AC exist in v15.0.0, target 355+ requires adding 152 criteria"
       
   blocking_issues:
     description: |
