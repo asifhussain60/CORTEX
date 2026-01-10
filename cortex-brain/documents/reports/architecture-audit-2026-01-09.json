@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-01-09T16:41:22.034956",
+  "timestamp": "2026-01-09T18:46:30.786163",
   "success": true,
   "passed": [
     "\u2713 tests/__init__.py",
@@ -12,9 +12,9 @@
     "\u2713 src/orchestrators/pattern_router.py",
     "\u2713 src/main.py",
     "\u2713 Audit log directory exists",
-    "\u2713 Found 67 recent audit log(s)",
+    "\u2713 Found 63 recent audit log(s)",
     "\u2713 Session audit log has 6 entries",
-    "\u2713 Checked 2 staged file(s)"
+    "\u2713 Checked 5 staged file(s)"
   ],
   "warnings": [],
   "errors": []

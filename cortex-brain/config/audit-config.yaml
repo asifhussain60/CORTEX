@@ -1,0 +1,53 @@
+# ==============================================================================
+# CORTEX 6.0 AUDIT CONFIGURATION
+# ==============================================================================
+# Purpose: Configure audit logging behavior across CORTEX
+# Implements: AC-AUDIT-002 (buffer), AC-AUDIT-005 (vacuum), AC-AUDIT-006 (retention)
+#
+# Author: Asif Hussain
+# Version: 1.0.0
+# Created: 2026-01-09
+# ==============================================================================
+
+# Memory buffer configuration (AC-AUDIT-002)
+buffer:
+  max_entries: 1000          # Flush after 1000 entries
+  max_memory_mb: 10.0        # Flush when buffer exceeds 10MB
+  flush_interval_seconds: 60 # Auto-flush every 60 seconds
+  immediate_flush_levels:    # Levels that trigger immediate flush
+    - ERROR
+    - CRITICAL
+
+# Retention policy (AC-AUDIT-006)
+# Different retention periods per log level
+retention_policy:
+  ERROR: 90      # 90 days (critical for post-mortem)
+  CRITICAL: 90   # 90 days
+  WARNING: 60    # 60 days
+  INFO: 30       # 30 days
+  DEBUG: 7       # 7 days (high volume, low value)
+  TRACE: 7       # 7 days
+
+# Vacuum configuration (AC-AUDIT-005)
+vacuum:
+  enabled: true
+  schedule: daily          # Run vacuum daily
+  run_time: "02:00"        # Run at 2 AM (low activity time)
+  report_space: true       # Report space reclaimed
+  audit_vacuum: true       # Log vacuum operations to audit log
+
+# Query performance
+query:
+  default_page_size: 100   # Default results per page
+  max_page_size: 1000      # Maximum page size allowed
+  default_order_by: timestamp
+  default_order_dir: DESC
+
+# Per-repo overrides
+# Individual repos can override settings by creating:
+# {repo_path}/cortex-brain/config/repo-audit-config.yaml
+allow_repo_overrides: true
+
+# ==============================================================================
+# END OF CONFIGURATION
+# ==============================================================================
