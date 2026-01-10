@@ -17,58 +17,69 @@ This document explains the **clean, intuitive folder structure** for CORTEX 6.0 
 
 ```
 cortex6/
-├── 📋 requirements/          # Canonical sources (2 files ONLY)
-│   ├── CX6-requirements.yaml
-│   └── CX6-acceptance-criteria.yaml
+├── 📋 Navigation Files (root)
+│   ├── 00-SOURCE-OF-TRUTH-README.md      # Primary navigation
+│   ├── 00-FOLDER-STRUCTURE-GUIDE.md      # This file
+│   └── QUICK-REFERENCE.md                 # Quick access guide
+│
+├── 📋 requirements/          # Canonical sources (SINGLE SOURCE OF TRUTH)
+│   ├── CX6-requirements.yaml              # 54 KB - Strategic + Foundation + Cross-Repo
+│   └── CX6-acceptance-criteria.yaml       # 304 KB - 180+ AC with DoD structure
 │
 ├── 🚀 execution/             # Active plan execution
 │   ├── config.yaml
+│   ├── plan-index.yaml
 │   ├── phases/
 │   ├── tracking/
 │   │   ├── progress-tracker.json
 │   │   └── TODO.md
 │   └── dashboard/
-│       ├── index.html
-│       └── app.js
-│
-├── 📊 analysis/              # Planning artifacts & strategies
-│   ├── architecture-analysis.md
-│   ├── context-discovery.md
-│   ├── search-findings-*.yaml
-│   └── snowball-strategy-*.yaml
+│       ├── plan-viewer.html
+│       └── serve-dashboard.sh
 │
 ├── 📦 artifacts/             # Generated deliverables
-│   ├── CORTEX6-COMPREHENSIVE-UPGRADE-PLAN.yaml
-│   ├── PLAN-VIEWER-DASHBOARD-PLAN.yaml
-│   └── completion-reports/
+│   └── CORTEX6-COMPREHENSIVE-UPGRADE-PLAN.yaml  # Master execution plan
 │
-├── 📝 summaries/             # Documentation & reports
-│   ├── stage-summaries/
-│   └── GAP-FIX-IMPROVEMENT-SUMMARY.md
-│
-└── 🗄️ archive/              # Historical artifacts
-    ├── old-structure-20260110/
-    ├── requirements-consolidation-2026-01-09/
-    └── plans-2026-01-09/
+└── � reports/               # Operation reports & validation docs
+    ├── README.md
+    ├── VACUUM-REPORT-2026-01-10.md
+    ├── VACUUM-OPERATION-COMPLETE.md
+    ├── POST-VACUUM-VALIDATION-PLAN.md
+    ├── REQUIREMENTS-VERIFICATION-REPORT.md
+    └── CLEANUP-RECORD-2026-01-10.md
 ```
 
 ---
 
-## 📋 requirements/ - Canonical Sources
+## 📋 requirements/ - Canonical Sources (SINGLE SOURCE OF TRUTH)
 
-**Purpose:** Single source of truth for requirements and acceptance criteria.
+**Purpose:** Single source of truth for ALL requirements and acceptance criteria.
 
 **Contents:**
-- `CX6-requirements.yaml` (820 lines, 18 SR, 18 DoR, 16 AD)
-- `CX6-acceptance-criteria.yaml` (5,717 lines, 361 AC across 26 sections)
+- `CX6-requirements.yaml` (54 KB, 1,353 lines)
+  - Strategic Requirements (SR-001 to SR-010)
+  - Foundation Requirements (FR-001 to FR-004)
+  - Cross-Repo Requirements (CR-001 to CR-005)
+  - 19+ DoR decisions (Q1-Q21)
+  - Zero ambiguity achieved
+  
+- `CX6-acceptance-criteria.yaml` (304 KB, 6,214 lines)
+  - 180+ unique acceptance criteria (AC-XXX-NNN format)
+  - 27 sections covering all features
+  - Complete DoD structure (validation + testing + evidence)
+  - Full traceability (SR→AC→Tests→Audit)
+
+**Status:**
+- ✅ DoR: 100% COMPLETE (zero ambiguity)
+- ✅ DoD: 100% COMPLETE (dual evidence: test + audit)
+- ✅ Can generate comprehensive plans independently
+- ✅ No external references needed
 
 **Rules:**
 - ✅ ONLY 2 files allowed in this folder
 - ✅ All other orchestrators/tools reference these 2 files
-- ❌ NO subdirectories (previously had `requirements/` subfolder - now flat)
-- ❌ NO additional YAML files
-
-**Previous Location:** `acceptance-criteria/` and `acceptance-criteria/requirements/`
+- ❌ NO subdirectories
+- ❌ NO additional files
 
 ---
 
@@ -84,43 +95,69 @@ cortex6/
 - Stage status documents
 
 ### `execution/dashboard/`
-- `index.html` - Plan Viewer Dashboard
-- `app.js` - Dashboard logic
+- `plan-viewer.html` - Plan Viewer Dashboard  
+- `serve-dashboard.sh` - Dashboard server script
 - `static/` - CSS, images, assets
 
 ### `execution/phases/`
-- Phase definition files
+- Phase definition files (CX6-005, CX6-006, CX6-007, CX6-008)
 - Phase execution logs
 
 ### `execution/config.yaml`
 - Plan execution configuration
 - Orchestrator settings
 
-**Previous Locations:** `plan/`, `cortex6-planner/tracking/`, `dashboard/`
+### `execution/plan-index.yaml`
+- Master execution index
+- Layer tracking and progress
 
 ---
 
-## 📊 analysis/ - Planning Artifacts
+## � artifacts/ - Generated Deliverables
 
-**Purpose:** Analysis outputs from planning orchestrators.
+**Purpose:** Master execution plan only (other artifacts archived/deleted).
 
 **Contents:**
-- **Architecture Analysis:** `architecture-analysis.md`
-- **Context Discovery:** `context-discovery.md`
-- **Gap Detection:** `search-findings-{timestamp}.yaml`
-- **Snowball Strategies:** `snowball-strategy-{timestamp}.yaml`
-- **Conflict Reports:** `conflict-report-{timestamp}.yaml`
-
-**Previous Locations:** `acceptance-criteria/analysis/`, `acceptance-criteria/strategies/`, `cortex6-planner/analysis/`
+- **Master Plan:** `CORTEX6-COMPREHENSIVE-UPGRADE-PLAN.yaml` (1,403 lines)
+  - 5-stage snowball remediation strategy
+  - 210-288 hours estimated effort
+  - Complete phase definitions
+  - Acceptance criteria traceability
 
 ---
 
-## 📦 artifacts/ - Generated Deliverables
+## 📊 reports/ - Operation Reports
 
-**Purpose:** Final outputs from orchestrators.
+**Purpose:** Historical operation reports and validation documentation.
 
 **Contents:**
-- **Master Plan:** `CORTEX6-COMPREHENSIVE-UPGRADE-PLAN.yaml`
+- `README.md` - Report index and summary
+- `VACUUM-REPORT-2026-01-10.md` - Vacuum cleanup details
+- `VACUUM-OPERATION-COMPLETE.md` - Success summary
+- `POST-VACUUM-VALIDATION-PLAN.md` - Validation tests and recovery
+- `REQUIREMENTS-VERIFICATION-REPORT.md` - DoR/DoD verification
+- `CLEANUP-RECORD-2026-01-10.md` - Git commit references
+
+**Git References:**
+- Vacuum: `3f9b037b4`
+- Verification: `5365c3277`
+- Final cleanup: `9e92e54c8`
+
+---
+
+## 🗑️ Deleted Folders (No Unique Requirements)
+
+### analysis/ (DELETED 2026-01-10)
+- Historical analysis captured in requirements
+- Recovery: `git checkout 5365c3277 -- cortex-brain/documents/planning/active/cortex6/analysis/`
+
+### summaries/ (DELETED 2026-01-10)
+- Session notes with no unique requirements  
+- Recovery: `git checkout 5365c3277 -- cortex-brain/documents/planning/active/cortex6/summaries/`
+
+### archive/ (DELETED 2026-01-10)
+- Historical artifacts from pre-vacuum state
+- Recovery: `git checkout c705c950f -- cortex-brain/documents/planning/active/cortex6/archive/`
 - **Dashboard Plan:** `PLAN-VIEWER-DASHBOARD-PLAN.yaml`
 - **Completion Reports:** `completion-reports/`
 
