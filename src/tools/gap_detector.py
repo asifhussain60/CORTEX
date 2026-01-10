@@ -254,7 +254,8 @@ class GapDetector:
                 lines = src_file.read_text().split("\n")
                 if len(lines) > 100:
                     substantial_modules.append(src_file)
-            except:
+            except (OSError, UnicodeDecodeError, PermissionError) as e:
+                # Skip files that can't be read (binary, permission denied, corrupted, etc.)
                 pass
         
         # For now, just report count (detailed analysis would require requirement mapping)

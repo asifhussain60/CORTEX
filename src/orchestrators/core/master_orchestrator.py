@@ -297,8 +297,9 @@ class MasterOrchestrator:
             if lifecycle and lifecycle.current_state not in [LifecycleState.ERROR, LifecycleState.STOPPED]:
                 try:
                     lifecycle.transition_to(LifecycleState.ERROR, error=str(e))
-                except:
-                    pass  # Ignore transition errors during error handling
+                except (LifecycleError, ValueError, TypeError) as transition_error:
+                    # Ignore transition errors during error handling to prevent cascading failures
+                    pass
             
             return ExecutionResult(
                 success=False,
@@ -344,7 +345,8 @@ class MasterOrchestrator:
             if lifecycle and lifecycle.current_state not in [LifecycleState.ERROR, LifecycleState.STOPPED]:
                 try:
                     lifecycle.transition_to(LifecycleState.ERROR, error=str(e))
-                except:
+                except (LifecycleError, ValueError, TypeError) as transition_error:
+                    # Ignore transition errors during error handling to prevent cascading failures
                     pass
             
             return ExecutionResult(

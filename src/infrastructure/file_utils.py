@@ -73,7 +73,8 @@ class FileUtils:
             # Clean up temp file on failure
             try:
                 os.unlink(temp_path)
-            except:
+            except (OSError, FileNotFoundError):
+                # Ignore cleanup failures - file may not exist or be inaccessible
                 pass
             raise
     
