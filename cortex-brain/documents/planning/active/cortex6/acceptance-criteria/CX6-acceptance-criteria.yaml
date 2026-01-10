@@ -24,13 +24,20 @@
 
 metadata:
   document_type: enterprise_acceptance_criteria
-  version: 17.0.0
+  version: 17.1.0
   status: AUTHORITATIVE
   created: '2026-01-09'
-  updated: '2026-01-09'
+  updated: '2026-01-09T20:30:00Z'
   author: Asif Hussain
   epic_id: CORTEX6-BUILD
   changelog:
+    v17.1.0:
+      date: '2026-01-09T20:30:00Z'
+      changes:
+        - "Section 26: Updated to Option A (Integrated) implementation"
+        - "Dashboard auto-generated in plan's dashboard/ folder"
+        - "Q21 decision: Selected integrated approach over standalone utility"
+        - "Reference updated: Standalone plan archived"
     v17.0.0:
       date: '2026-01-09'
       changes:
@@ -46,7 +53,7 @@ metadata:
         - "Added AC-GOV-011: TDD-Master Orchestrator required for ALL development (CORE-019)"
         - "Enhanced AC-TDD-MASTER-000: TDD-Master supports independent execution (unplanned mode)"
         - "Updated Section 24 criteria count: 7 → 8"
-        - "TDD-Master can execute WITHOUT Planning Orchestrator (unplanned development)"
+        - "TDD-Master can execute WITHOUT Planning Orchestrator (unplanned mode)"
         - "Copilot BLOCKED from direct implementation (must route to TDD-Master)"
         - "CORE-019 governance rule: All 'implement', 'build', 'create', 'fix' → TDD-Master"
         - "Unplanned mode: Lightweight requirements gathering + toolkit analysis"
@@ -5450,13 +5457,16 @@ section_25_yaml_json_interchange:
       - "Audit log sample: cortex-brain/audit-logs/*.jsonl with AC-ID tags"
 
 # ==============================================================================
-# SECTION 26: PLAN VIEWER DASHBOARD (NEW - v17.0.0)
+# SECTION 26: PLAN VIEWER DASHBOARD - OPTION A (INTEGRATED) (NEW - v17.0.0)
 # ==============================================================================
 # Purpose: Interactive real-time plan tracking dashboard with audit evidence
+#          Integrated into Planning Orchestrator v6 (auto-generated in plan folder)
 # Stage: 3 (Features)
 # Priority: HIGH
 # Total Criteria: 7
-# Reference: artifacts/PLAN-VIEWER-DASHBOARD-PLAN.yaml
+# Implementation: Option A (dashboard/ folder embedded in plan structure)
+# Reference: archive/requirements-consolidation-2026-01-09/PLAN-VIEWER-DASHBOARD-STANDALONE.yaml
+# Decision: Q21 (Option A selected for integrated approach)
 # ==============================================================================
 
 plan_viewer_dashboard:
