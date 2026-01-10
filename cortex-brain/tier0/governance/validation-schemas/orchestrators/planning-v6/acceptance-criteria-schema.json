@@ -1,0 +1,367 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://cortex.ai/schemas/planning-v6-acceptance-criteria.json",
+  "title": "Planning v6 Acceptance Criteria Schema",
+  "description": "Validates acceptance-criteria-gathered.yaml from Planning v6 Phase 1",
+  "version": "1.0.0",
+  
+  "definitions": {
+    "ac_id": {
+      "type": "string",
+      "pattern": "^AC-[A-Z]+-\\d{3}$",
+      "description": "Acceptance criteria ID (e.g., AC-AUTH-001)"
+    },
+    
+    "req_id": {
+      "type": "string",
+      "pattern": "^REQ-\\d{3}$"
+    },
+    
+    "task_id": {
+      "type": "string",
+      "pattern": "^TASK-\\d{3}$"
+    },
+    
+    "priority": {
+      "type": "string",
+      "enum": ["P0_CRITICAL", "HIGH", "MEDIUM", "LOW"]
+    },
+    
+    "validation_method": {
+      "type": "string",
+      "enum": ["test", "manual", "audit", "demonstration", "dual"],
+      "description": "test=pytest, manual=human check, audit=audit log, demonstration=UI demo, dual=test+audit"
+    },
+    
+    "ac_status": {
+      "type": "string",
+      "enum": ["not_started", "in_progress", "implemented", "tested", "validated", "accepted"],
+      "description": "Lifecycle status of AC"
+    },
+    
+    "acceptance_criterion": {
+      "type": "object",
+      "required": ["id", "name", "description", "validation_method", "priority", "requirement_id"],
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/ac_id"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 100,
+          "description": "Short AC name"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 20,
+          "maxLength": 500,
+          "description": "Detailed AC description (must be measurable)"
+        },
+        "validation_method": {
+          "$ref": "#/definitions/validation_method"
+        },
+        "priority": {
+          "$ref": "#/definitions/priority"
+        },
+        "requirement_id": {
+          "$ref": "#/definitions/req_id",
+          "description": "Parent requirement this AC validates"
+        },
+        "assigned_tasks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/task_id"
+          },
+          "description": "Tasks that implement this AC"
+        },
+        "test_file": {
+          "type": "string",
+          "pattern": "^test_.*\\.py$|^.*\\.test\\.(ts|js)$",
+          "description": "Test file path (if validation_method includes 'test')"
+        },
+        "test_function": {
+          "type": "string",
+          "pattern": "^test_.*|^it\\(|^describe\\(",
+          "description": "Test function name"
+        },
+        "audit_ac_id_tag": {
+          "type": "string",
+          "$ref": "#/definitions/ac_id",
+          "description": "AC-ID tag for audit log queries (if validation_method includes 'audit')"
+        },
+        "given_when_then": {
+          "type": "object",
+          "required": ["given", "when", "then"],
+          "properties": {
+            "given": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 200,
+              "description": "Preconditions (Given state)"
+            },
+            "when": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 200,
+              "description": "Action (When event occurs)"
+            },
+            "then": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 200,
+              "description": "Expected outcome (Then result)"
+            }
+          },
+          "additionalProperties": false,
+          "description": "BDD-style AC specification"
+        },
+        "success_criteria": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 5,
+            "maxLength": 200
+          },
+          "minItems": 1,
+          "description": "Measurable success criteria"
+        },
+        "status": {
+          "$ref": "#/definitions/ac_status"
+        },
+        "implemented_by": {
+          "type": "string",
+          "enum": ["tdd_master", "manual", "autonomous", "not_implemented"],
+          "description": "Who implements this AC"
+        },
+        "validation_evidence": {
+          "type": "object",
+          "properties": {
+            "test_passed": {
+              "type": "boolean",
+              "description": "True if test evidence exists"
+            },
+            "test_run_timestamp": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "audit_log_entries": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Number of audit log entries with this AC-ID"
+            },
+            "audit_query_correlation_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "description": "Correlation IDs from audit logs"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    
+    "category": {
+      "type": "object",
+      "required": ["name", "prefix", "acceptance_criteria"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 50,
+          "description": "Category name (e.g., 'Authentication')"
+        },
+        "prefix": {
+          "type": "string",
+          "pattern": "^[A-Z]+$",
+          "minLength": 2,
+          "maxLength": 10,
+          "description": "AC-ID prefix (e.g., 'AUTH' for AC-AUTH-001)"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 200
+        },
+        "acceptance_criteria": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ac_id"
+          },
+          "minItems": 1,
+          "description": "AC IDs in this category"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  
+  "type": "object",
+  "required": ["metadata", "acceptance_criteria", "summary"],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "required": ["plan_id", "created_at", "correlation_id", "phase"],
+      "properties": {
+        "plan_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]{5,50}$"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "correlation_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "phase": {
+          "type": "string",
+          "const": "phase_1_requirements_gathering",
+          "description": "AC gathered during Phase 1"
+        },
+        "conversation_turns": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Number of turns AC were refined"
+        }
+      },
+      "additionalProperties": false
+    },
+    
+    "acceptance_criteria": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/acceptance_criterion"
+      },
+      "minItems": 1,
+      "description": "Must have at least one AC"
+    },
+    
+    "categories": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/category"
+      },
+      "description": "AC grouped by category"
+    },
+    
+    "summary": {
+      "type": "object",
+      "required": ["total_count", "by_priority", "by_validation_method", "coverage_target"],
+      "properties": {
+        "total_count": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Total number of AC"
+        },
+        "by_priority": {
+          "type": "object",
+          "required": ["P0_CRITICAL", "HIGH", "MEDIUM", "LOW"],
+          "properties": {
+            "P0_CRITICAL": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "HIGH": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "MEDIUM": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "LOW": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "additionalProperties": false
+        },
+        "by_validation_method": {
+          "type": "object",
+          "required": ["test", "manual", "audit", "demonstration", "dual"],
+          "properties": {
+            "test": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "manual": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "audit": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "demonstration": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "dual": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Test + audit evidence required"
+            }
+          },
+          "additionalProperties": false
+        },
+        "coverage_target": {
+          "type": "number",
+          "minimum": 85,
+          "maximum": 100,
+          "description": "Target validation percentage (≥95% recommended)"
+        },
+        "estimated_test_files": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Number of test files needed"
+        }
+      },
+      "additionalProperties": false
+    },
+    
+    "dor_compliance": {
+      "type": "object",
+      "required": ["all_ac_measurable", "all_ac_have_validation_method", "compliance_score"],
+      "properties": {
+        "all_ac_measurable": {
+          "type": "boolean",
+          "description": "True if all AC have measurable success criteria"
+        },
+        "all_ac_have_validation_method": {
+          "type": "boolean",
+          "description": "True if all AC have validation_method specified"
+        },
+        "all_ac_have_bdd_spec": {
+          "type": "boolean",
+          "description": "True if all AC have given_when_then"
+        },
+        "compliance_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Overall DoR compliance (target ≥95%)"
+        },
+        "non_compliant_ac_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ac_id"
+          },
+          "description": "AC IDs that don't meet DoR criteria"
+        }
+      },
+      "additionalProperties": false
+    },
+    
+    "extensions": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}
