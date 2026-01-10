@@ -103,7 +103,7 @@ When you see 🛡️ in Intent Router, these orchestrators **execute via Python 
 - ✅ Use **CONCISE** response template (3-5 lines) by default
 - ✅ Display orchestrator's output to user
 
-**Visual Confirmation:** 🛡️ in response header = Orchestrator correctly invoked
+**Vision Confirmation:** 🛡️ in response header = Orchestrator correctly invoked
 
 ---
 
@@ -126,7 +126,7 @@ When you see 🛡️ in Intent Router, these orchestrators **execute via Python 
 
 ---
 
-## 🛡️ Brain Protection (SKULL Rules)
+## 🛡️ Brain Protection (CORE Rules)
 
 | Rule | Action |
 |------|--------|
@@ -140,6 +140,7 @@ When you see 🛡️ in Intent Router, these orchestrators **execute via Python 
 | **HAND_OFF_PROTOCOL** | ALL orchestrators → Transform + **Invoke Python via terminal** |
 | **AUTONOMOUS_ONLY** | NO manual orchestration. Python executes everything. |
 | **TRANSFORMATION_REQUIRED** | Raw user requests MUST be transformed before routing |
+| **GOVERNANCE_COMPLIANCE** | CORE rules enforcement (19 protection rules) |
 
 **Full rules:** `cortex-brain/tier0/governance/core-rules.yaml` (19 CORE rules)
 
@@ -173,7 +174,7 @@ Categories: `reports/`, `analysis/`, `summaries/`, `investigations/`, `planning/
 
 ```
 cortex-brain/              # Long-term memory (4-tier brain)
-├── tier0/                 # Governance (SKULL rules, core rules)
+├── tier0/                 # Governance (CORE rules, core governance)
 ├── tier1/                 # Working memory (active plans, TODO state)
 ├── tier2/                 # Knowledge graph (learned patterns)
 ├── tier3/                 # Dev context (repos, tech stack)
@@ -206,7 +207,7 @@ src/                       # Implementation (Python)
 |------|---------|
 | `.github/prompts/CORTEX.prompt.md` | **Intent router** (source of truth for all routing) |
 | `.github/prompts/cortex-epic-review.prompt.md` | **Epic review specification** (health checks, gap detection) |
-| `cortex-brain/brain-protection-rules.yaml` | **SKULL rules** (61 protection rules) |
+| `cortex-brain/tier0/governance/core-rules.yaml` | **CORE rules** (19 protection rules, migrated from SKULL) |
 | `cortex-brain/response-templates-v4.yaml` | **Response templates** (INSTANT/FOCUSED/STRUCTURED/COMPREHENSIVE) |
 | `cortex-brain/config/master-orchestrator.yaml` | **Master orchestrator config** (routing patterns, priorities) |
 | `cortex-brain/manifests/orchestrators/` | **All orchestrator manifests** (YAML configs) |
