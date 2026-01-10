@@ -2,20 +2,33 @@
 # CORTEX 6.0 Acceptance Criteria Index
 # ==============================================================================
 # Purpose: Single source of truth for all acceptance criteria
-# Version: 6.0.3
+# Version: 6.0.4
 # Created: 2026-01-10
-# Updated: 2026-01-10 (DoR Round 2 RESOLVED - 18 total specifications)
+# Updated: 2026-01-10 (GPT Analysis Integration - Security, Routing, Rollout, SDLC)
 # Author: Asif Hussain
 #
 # This file tracks ALL acceptance criteria for CORTEX 6.0.
 # Each AC-ID maps to implementation status, tests, and audit trail.
 # ==============================================================================
 
-schema_version: "1.3"
-last_updated: "2026-01-10T17:00:00Z"
-total_ac_count: 57  # Added AC-INTERACT-001 to AC-INTERACT-003
+schema_version: "1.4"
+last_updated: "2026-01-10T20:00:00Z"
+total_ac_count: 72  # Added AC-SECURITY-*, AC-ROUTE-*, AC-ROLLOUT-*, AC-SDLC-*, AC-TEST-*, AC-CLEAN-*, SPEC-019
 completed_count: 0
 in_progress_count: 0
+
+# ==============================================================================
+# GPT ANALYSIS INTEGRATION (2026-01-10)
+# ==============================================================================
+# Accepted valid recommendations from external GPT-4 holistic design review:
+# 1. AC-SECURITY-001 to AC-SECURITY-004: Action Security Layer (CRITICAL)
+# 2. AC-ROUTE-001 to AC-ROUTE-003: Deterministic Routing Engine (HIGH)
+# 3. AC-ROLLOUT-001 to AC-ROLLOUT-003: Staged Rollout System (HIGH)
+# 4. SPEC-019: Canonical Routing Table Location (HIGH)
+# 5. AC-SDLC-001 to AC-SDLC-005: Full SDLC Management (MEDIUM)
+# 6. AC-TEST-001 to AC-TEST-004: STS Test Strategy (MEDIUM)
+# 7. AC-CLEAN-001 to AC-CLEAN-003: Folder Structure Enforcement (MEDIUM)
+# ==============================================================================
 
 # ==============================================================================
 # DEFINITION OF READY (DoR) - RESOLVED SPECIFICATIONS
@@ -2247,6 +2260,426 @@ git_history_recovery:
     files_count: 28
     key_files:
       - "parallel_processor.py"
+
+# ==============================================================================
+# NEW AC-IDs: GPT ANALYSIS INTEGRATION (2026-01-10)
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# AC-SECURITY: Action Security Layer (CRITICAL - Phase 1)
+# ------------------------------------------------------------------------------
+ac_security:
+  description: "Runtime security controls for file operations, commands, and secrets"
+  priority: "P0-CRITICAL"
+  phase: 1
+  category: "security"
+  
+  AC-SECURITY-001:
+    title: "ActionPolicyEngine Core"
+    description: "Central authorization engine for all file/command operations"
+    status: "not_started"
+    priority: "P0-CRITICAL"
+    phase: 1
+    acceptance_criteria:
+      - "Intercepts all file write/delete operations"
+      - "Intercepts all terminal command executions"
+      - "Policy evaluation <10ms per operation"
+      - "Allowlist/denylist configurable via YAML"
+      - "Audit logs ALL denied operations with reason"
+    tests:
+      - "tests/unit/security/test_action_policy_engine.py"
+      - "tests/integration/security/test_policy_enforcement.py"
+    dependencies: ["AC-AUDIT-001", "AC-GOV-001"]
+    
+  AC-SECURITY-002:
+    title: "Path Sandboxing"
+    description: "Restrict file operations to repo root + approved paths"
+    status: "not_started"
+    priority: "P0-CRITICAL"
+    phase: 1
+    acceptance_criteria:
+      - "All paths resolved to absolute, checked against repo root"
+      - "Denylist: .git/, secrets/, $HOME, system dirs"
+      - "Symlink traversal blocked outside sandbox"
+      - "Path traversal attacks (../) detected and blocked"
+    tests:
+      - "tests/unit/security/test_path_sandbox.py"
+      - "tests/integration/security/test_path_traversal_blocked.py"
+    dependencies: ["AC-SECURITY-001"]
+    
+  AC-SECURITY-003:
+    title: "Command Allowlist"
+    description: "Whitelist approved terminal commands, block dangerous operations"
+    status: "not_started"
+    priority: "P0-CRITICAL"
+    phase: 1
+    acceptance_criteria:
+      - "Allowlist: python, git, pytest, pip (configurable)"
+      - "Denylist: rm -rf, dd, mkfs, shutdown, eval"
+      - "Shell injection detection (;, &&, |, $())"
+      - "Argument validation (no --force without approval)"
+    tests:
+      - "tests/unit/security/test_command_allowlist.py"
+      - "tests/integration/security/test_command_injection_blocked.py"
+    dependencies: ["AC-SECURITY-001"]
+    
+  AC-SECURITY-004:
+    title: "Secret Redaction"
+    description: "Automatic secret detection and redaction in logs/audit trails"
+    status: "not_started"
+    priority: "P0-CRITICAL"
+    phase: 1
+    acceptance_criteria:
+      - "Regex patterns: API keys, tokens, passwords, connection strings"
+      - "Redacts secrets in audit logs (replace with [REDACTED])"
+      - "Prevents secrets in error messages"
+      - "Environment variable secrets not logged"
+    tests:
+      - "tests/unit/security/test_secret_redaction.py"
+      - "tests/integration/security/test_no_secrets_in_audit.py"
+    dependencies: ["AC-AUDIT-001"]
+
+# ------------------------------------------------------------------------------
+# AC-ROUTE: Deterministic Routing Engine (HIGH - Phase 2)
+# ------------------------------------------------------------------------------
+ac_route:
+  description: "Conflict-free routing with pattern validation and contract tests"
+  priority: "P1-HIGH"
+  phase: 2
+  category: "orchestration"
+  
+  AC-ROUTE-001:
+    title: "Routing Conflict Detection"
+    description: "Startup validation for overlapping patterns"
+    status: "not_started"
+    priority: "P1-HIGH"
+    phase: 2
+    acceptance_criteria:
+      - "Detects overlapping regex patterns at startup"
+      - "Fails fast if priority tie without explicit resolution"
+      - "Logs all routing ambiguities with severity=ERROR"
+      - "Provides pattern conflict report with suggestions"
+    tests:
+      - "tests/unit/routing/test_conflict_detection.py"
+      - "tests/integration/routing/test_startup_validation.py"
+    dependencies: ["AC-ORCH-006", "SPEC-019"]
+    
+  AC-ROUTE-002:
+    title: "Routing Contract Tests"
+    description: "Corpus of intents → expected orchestrator mappings"
+    status: "not_started"
+    priority: "P1-HIGH"
+    phase: 2
+    acceptance_criteria:
+      - "100+ test cases covering all orchestrators"
+      - "Edge cases: ambiguous intents, multi-word patterns"
+      - "Regression tests for historical routing changes"
+      - "Contract tests run on every routing table change"
+    tests:
+      - "tests/integration/routing/test_routing_contracts.py"
+    dependencies: ["AC-ROUTE-001", "SPEC-019"]
+    
+  AC-ROUTE-003:
+    title: "Explicit Matching Semantics"
+    description: "Formal precedence: exact > prefix > regex"
+    status: "not_started"
+    priority: "P1-HIGH"
+    phase: 2
+    acceptance_criteria:
+      - "Exact string match wins over regex"
+      - "Prefix match wins over general regex"
+      - "Priority field breaks ties (higher number wins)"
+      - "Documented matching algorithm in routing-table.yaml"
+    tests:
+      - "tests/unit/routing/test_matching_semantics.py"
+    dependencies: ["AC-ROUTE-001"]
+
+# ------------------------------------------------------------------------------
+# AC-ROLLOUT: Staged Rollout System (HIGH - Phase 2)
+# ------------------------------------------------------------------------------
+ac_rollout:
+  description: "Progressive activation: REGISTERED → SHADOW → CANARY → ACTIVE"
+  priority: "P1-HIGH"
+  phase: 2
+  category: "orchestration"
+  
+  AC-ROLLOUT-001:
+    title: "Activation State Machine"
+    description: "Orchestrator lifecycle states with transition rules"
+    status: "not_started"
+    priority: "P1-HIGH"
+    phase: 2
+    acceptance_criteria:
+      - "States: REGISTERED, SHADOW, CANARY, ACTIVE"
+      - "Transitions: REGISTERED→SHADOW→CANARY→ACTIVE"
+      - "Rollback: ACTIVE→CANARY→SHADOW on error threshold"
+      - "State persisted in tier1/tracking/activation-state.json"
+    tests:
+      - "tests/unit/rollout/test_state_machine.py"
+      - "tests/integration/rollout/test_state_transitions.py"
+    dependencies: ["AC-ORCH-006", "AC-STATE-001"]
+    
+  AC-ROLLOUT-002:
+    title: "Traffic Routing Weights"
+    description: "Percentage-based traffic splitting for canary testing"
+    status: "not_started"
+    priority: "P1-HIGH"
+    phase: 2
+    acceptance_criteria:
+      - "SHADOW: weight=0 (logs only, no execution)"
+      - "CANARY: weight=0.01 to 0.20 (1-20% traffic)"
+      - "ACTIVE: weight=1.0 (100% traffic)"
+      - "Weighted random selection with deterministic seed for testing"
+    tests:
+      - "tests/unit/rollout/test_traffic_weights.py"
+      - "tests/integration/rollout/test_canary_routing.py"
+    dependencies: ["AC-ROLLOUT-001"]
+    
+  AC-ROLLOUT-003:
+    title: "Automatic Rollback Triggers"
+    description: "Error-rate monitoring with automatic rollback"
+    status: "not_started"
+    priority: "P1-HIGH"
+    phase: 2
+    acceptance_criteria:
+      - "Error rate threshold: >5% failures"
+      - "Latency threshold: >2x baseline"
+      - "AC validation threshold: <90% pass rate"
+      - "Rollback to previous ACTIVE orchestrator within 30s"
+    tests:
+      - "tests/integration/rollout/test_automatic_rollback.py"
+    dependencies: ["AC-ROLLOUT-001", "AC-AUDIT-001"]
+
+# ------------------------------------------------------------------------------
+# SPEC-019: Canonical Routing Table (HIGH - Phase 1)
+# ------------------------------------------------------------------------------
+specifications:
+  SPEC-019:
+    title: "Canonical Routing Table Location"
+    status: "RESOLVED"
+    affected_acs: ["AC-ROUTE-001", "AC-ROUTE-002", "AC-ROLLOUT-001"]
+    decision:
+      source_of_truth: "cortex-brain/tier0/routing/routing-table.yaml"
+      generated_artifacts:
+        - ".github/prompts/CORTEX.prompt.md (for GitHub Copilot)"
+        - ".github/copilot-instructions.md (for IDE integration)"
+      sync_mechanism: "scripts/sync_routing_table.py regenerates artifacts on YAML change"
+    rationale: |
+      Single source of truth prevents drift between routing configurations.
+      YAML is machine-readable, supports comments, enables validation.
+      Generated artifacts ensure consistency across tooling.
+    validation:
+      - "routing-table.yaml passes JSON Schema validation"
+      - "No manual edits to generated artifacts"
+      - "sync_routing_table.py runs on pre-commit hook"
+
+# ------------------------------------------------------------------------------
+# AC-SDLC: Full SDLC Management (MEDIUM - Phase 2)
+# ------------------------------------------------------------------------------
+ac_sdlc:
+  description: "End-to-end software development lifecycle tracking"
+  priority: "P2-MEDIUM"
+  phase: 2
+  category: "orchestration"
+  
+  AC-SDLC-001:
+    title: "Phase Gate Validation"
+    description: "Automatic validation before phase transitions"
+    status: "not_started"
+    priority: "P2-MEDIUM"
+    phase: 2
+    acceptance_criteria:
+      - "Checklist validation for Phase 1→2, 2→3, 3→4 gates"
+      - "Blocks transition if any checklist item fails"
+      - "Audit trail of gate validation attempts"
+      - "Manual override requires justification logged"
+    tests:
+      - "tests/integration/sdlc/test_phase_gates.py"
+    dependencies: ["AC-STATE-001", "AC-AUDIT-001"]
+    
+  AC-SDLC-002:
+    title: "Incremental Activation Tracking"
+    description: "Monitor feature progression through activation states"
+    status: "not_started"
+    priority: "P2-MEDIUM"
+    phase: 2
+    acceptance_criteria:
+      - "Dashboard shows: features in SHADOW, CANARY, ACTIVE"
+      - "Timeline view of activation progression"
+      - "Metrics: error rates, latency, AC success by state"
+    tests:
+      - "tests/integration/sdlc/test_activation_tracking.py"
+    dependencies: ["AC-ROLLOUT-001", "AC-ROLLOUT-002"]
+    
+  AC-SDLC-003:
+    title: "Test Coverage Reporting"
+    description: "Track unit/integration/performance test coverage"
+    status: "not_started"
+    priority: "P2-MEDIUM"
+    phase: 2
+    acceptance_criteria:
+      - "Unit test coverage >= 90%"
+      - "Integration test coverage for all AC-IDs"
+      - "Performance tests for critical paths"
+      - "Coverage report in tier1/metrics/test-coverage.yaml"
+    tests:
+      - "tests/integration/sdlc/test_coverage_reporting.py"
+    dependencies: ["AC-TEST-001", "AC-TEST-002"]
+    
+  AC-SDLC-004:
+    title: "Technical Debt Tracking"
+    description: "Monitor and prioritize technical debt items"
+    status: "not_started"
+    priority: "P2-MEDIUM"
+    phase: 2
+    acceptance_criteria:
+      - "Debt items tagged in code with # TECH-DEBT-XXX"
+      - "Automated scanning for debt tags"
+      - "Prioritization: CRITICAL, HIGH, MEDIUM, LOW"
+      - "Debt report in tier1/metrics/technical-debt.yaml"
+    tests:
+      - "tests/integration/sdlc/test_debt_tracking.py"
+    dependencies: ["AC-CLEAN-001"]
+    
+  AC-SDLC-005:
+    title: "SDLC Metrics Dashboard"
+    description: "Real-time metrics for development velocity"
+    status: "not_started"
+    priority: "P2-MEDIUM"
+    phase: 2
+    acceptance_criteria:
+      - "Metrics: AC-IDs completed/in-progress, test coverage, debt"
+      - "Phase completion percentages"
+      - "Velocity: AC-IDs per week"
+      - "Web dashboard accessible at localhost:8000/sdlc"
+    tests:
+      - "tests/integration/sdlc/test_metrics_dashboard.py"
+    dependencies: ["AC-SDLC-001", "AC-SDLC-002", "AC-SDLC-003", "AC-SDLC-004"]
+
+# ------------------------------------------------------------------------------
+# AC-TEST: STS Test Strategy (MEDIUM - Phase 1)
+# ------------------------------------------------------------------------------
+ac_test:
+  description: "Sharpen The Saw test environment with reset capability"
+  priority: "P2-MEDIUM"
+  phase: 1
+  category: "testing"
+  
+  AC-TEST-001:
+    title: "STS Environment Setup"
+    description: "Isolated test environment in sharpening-cortex/sts-template/"
+    status: "not_started"
+    priority: "P2-MEDIUM"
+    phase: 1
+    acceptance_criteria:
+      - "Clean SQLite databases for each test run"
+      - "Temporary directories auto-created and cleaned"
+      - "Environment variables isolated from production"
+      - "Test fixtures in tests/fixtures/"
+    tests:
+      - "tests/integration/sts/test_environment_isolation.py"
+    dependencies: []
+    
+  AC-TEST-002:
+    title: "Reset on Teardown"
+    description: "Automatic cleanup after each test"
+    status: "not_started"
+    priority: "P2-MEDIUM"
+    phase: 1
+    acceptance_criteria:
+      - "pytest fixtures with scope='function' teardown"
+      - "All test artifacts deleted (files, DB records)"
+      - "Database tables truncated or dropped"
+      - "No test pollution between runs"
+    tests:
+      - "tests/integration/sts/test_teardown_cleanup.py"
+    dependencies: ["AC-TEST-001"]
+    
+  AC-TEST-003:
+    title: "Test Isolation Guarantees"
+    description: "No shared state between tests"
+    status: "not_started"
+    priority: "P2-MEDIUM"
+    phase: 1
+    acceptance_criteria:
+      - "Each test gets fresh database connection"
+      - "Mocked external dependencies (no real API calls)"
+      - "Parallel test execution safe (no race conditions)"
+      - "Test order independence verified"
+    tests:
+      - "tests/integration/sts/test_isolation.py"
+    dependencies: ["AC-TEST-001", "AC-TEST-002"]
+    
+  AC-TEST-004:
+    title: "Coverage Requirements Enforcement"
+    description: "Block merges if coverage drops"
+    status: "not_started"
+    priority: "P2-MEDIUM"
+    phase: 1
+    acceptance_criteria:
+      - "Unit test coverage >= 90% (enforced)"
+      - "Integration tests for all AC-IDs (enforced)"
+      - "Pre-commit hook runs coverage check"
+      - "CI/CD pipeline fails on coverage drop"
+    tests:
+      - "tests/integration/sts/test_coverage_enforcement.py"
+    dependencies: ["AC-TEST-003"]
+
+# ------------------------------------------------------------------------------
+# AC-CLEAN: Folder Structure Enforcement (MEDIUM - Phase 1)
+# ------------------------------------------------------------------------------
+ac_clean:
+  description: "Keep CORTEX folder structure clean, lean, and organized"
+  priority: "P2-MEDIUM"
+  phase: 1
+  category: "infrastructure"
+  
+  AC-CLEAN-001:
+    title: "Root-Level File Restrictions"
+    description: "Block non-essential files in repository root"
+    status: "not_started"
+    priority: "P2-MEDIUM"
+    phase: 1
+    acceptance_criteria:
+      - "Allowed: README.md, LICENSE, CHANGELOG.md, CONTRIBUTING.md, setup.py"
+      - "Blocked: All other .md files, .py files, .txt files"
+      - "Pre-commit hook rejects root-level file additions"
+      - "Vacuum orchestrator auto-flags violators"
+    tests:
+      - "tests/integration/clean/test_root_restrictions.py"
+    dependencies: []
+    
+  AC-CLEAN-002:
+    title: "Folder Depth Limits"
+    description: "Prevent excessive nesting (max 5 levels)"
+    status: "not_started"
+    priority: "P2-MEDIUM"
+    phase: 1
+    acceptance_criteria:
+      - "Max depth: 5 levels from repo root"
+      - "Linting check detects violations"
+      - "Suggestions for refactoring deep hierarchies"
+      - "CI/CD pipeline warns on depth violations"
+    tests:
+      - "tests/integration/clean/test_depth_limits.py"
+    dependencies: ["AC-CLEAN-001"]
+    
+  AC-CLEAN-003:
+    title: "File Size Limits"
+    description: "Enforce CORE-001 incremental principle"
+    status: "not_started"
+    priority: "P2-MEDIUM"
+    phase: 1
+    acceptance_criteria:
+      - "Python files: max 500 LOC (soft limit), 1000 LOC (hard limit)"
+      - "Pre-commit hook warns on >500 LOC"
+      - "Pre-commit hook rejects >1000 LOC"
+      - "Suggestions for splitting large files"
+    tests:
+      - "tests/integration/clean/test_file_size_limits.py"
+    dependencies: ["AC-CLEAN-001"]
+
+# ==============================================================================
       - "crawler_orchestrator.py"
       - "analyzers/python_analyzer.py"
       - "analyzers/javascript_analyzer.py"

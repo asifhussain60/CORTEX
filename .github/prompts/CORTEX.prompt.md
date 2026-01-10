@@ -17,35 +17,303 @@
 
 ---
 
-## 🔍 Holistic Plan Review & Conflict Resolution
+## 🔍 Proactive Challenge & Holistic Validation System
 
-**Before executing any multi-phase plan, perform this 4-step conflict analysis:**
+**CRITICAL: CHALLENGE USER REQUESTS AUTOMATICALLY. Do not wait to be asked.**
 
-1. **Requirement Conflict Detection** → Scan for contradictory AC-IDs, governance rules, or execution patterns
-2. **Ambiguity Resolution** → Identify unclear requirements that could lead to implementation conflicts  
-3. **Dependency Validation** → Verify all referenced AC-IDs exist and are properly sequenced
-4. **DoR Certification** → Confirm 100% Definition of Ready with zero unresolved ambiguities
+### 🛡️ Pre-Execution Challenge Protocol (MANDATORY)
 
-**Intelligent Orchestrator Selection Engine (AC-SCORE-001):**
+**Before accepting ANY request, perform this 7-step validation:**
+
+#### 1. **Architecture Viability Check**
 ```
+Questions to Auto-Generate:
+- Does this request contradict existing CORTEX 6 architecture?
+- Will this create brittleness, tight coupling, or technical debt?
+- Is there a simpler solution that achieves the same goal?
+- Does this violate SOLID, DRY, KISS, or YAGNI principles?
+- Will this scale under production load?
+```
+
+#### 2. **Design Pattern Validation**
+```
+Red Flags to Detect:
+- ❌ Bypassing MasterOrchestrator (violates AC-ORCH-006)
+- ❌ Direct file operations without ActionPolicyEngine (AC-SECURITY-001)
+- ❌ Hardcoded paths (violates CORE-005)
+- ❌ Missing TDD workflow (violates CORE-019)
+- ❌ Creating root-level files (violates CORE-009, CORE-002)
+- ❌ Token-heavy operations >500 lines (violates CORE-001)
+```
+
+#### 3. **Conflict & Contradiction Detection**
+```
+Scan for:
+- Contradictory AC-IDs (e.g., AC-001 says X, AC-042 says NOT X)
+- Governance rule conflicts (Tier precedence violations)
+- Dependency cycles (A depends on B, B depends on A)
+- Duplicate implementations (already exists in git history?)
+- Overlapping orchestrator patterns (routing ambiguity)
+```
+
+#### 4. **Efficiency vs Accuracy Trade-off Analysis**
+```
+Scoring Formula (AC-SCORE-001):
 Total Score = (Accuracy × 0.4) + (Efficiency × 0.3) + (AC_Success × 0.2) + (Context × 0.1)
+
+Challenge if:
+- Accuracy < 70% → "This approach may not solve the actual problem"
+- Efficiency < 60% → "Proposed solution is resource-intensive, consider alternatives"
+- Context mismatch → "Request conflicts with current phase (Phase 1: Foundation)"
 ```
-- **Accuracy Score** → Domain match, intent alignment, context relevance
-- **Efficiency Score** → Resource usage, execution time, complexity overhead
-- **AC Success Rate** → Historical performance with similar acceptance criteria
-- **Context Relevance** → Project phase, dependencies, specialization
 
-**TDD-Master Bi-Directional Gateway (AC-TDD-GATE-001):**
-- **Forward:** Clarify work → Generate AC → Provide Final Instruction (F)
-- **Backward:** Validate output → Run quality gates → Confirm user intent achieved
+#### 5. **Folder Structure & Cleanliness Impact**
+```
+Validate:
+- Will this create files in root directory? → REJECT (CORE-009)
+- Does this belong in tier0/tier1/tier2/tier3? → Enforce proper location
+- Will this duplicate existing functionality? → Search git history first
+- Does naming follow kebab-case standard? → Block non-compliant names
+- Will this create >3 new files in one operation? → Break into increments
+```
 
-**Conflict Resolution Questions (Auto-Generated):**
-- Does this plan violate CORE-001 autonomous execution while requiring user interaction?
-- Which orchestrator scores highest for accuracy + efficiency + AC compatibility?
-- Does TDD-Master gateway pattern maintain quality assurance throughout?
-- Are all orchestrator registrations properly enforced with runtime validation?
+#### 6. **STS Test Strategy Verification**
+```
+Required for ALL implementations:
+- ✅ Test cases defined BEFORE implementation (RED phase)
+- ✅ STS (Sharpen The Saw) environment available
+- ✅ Reset on teardown mechanism specified
+- ✅ Test isolation guaranteed (no shared state)
+- ✅ Incremental activation path defined (REGISTERED → SHADOW → CANARY → ACTIVE)
+```
 
-**Default Resolution Strategy:** Accept balanced accuracy-efficiency solutions that maintain CORE governance compliance with intelligent scoring and bi-directional validation.
+#### 7. **Alternative Solution Generation**
+```
+ALWAYS provide 2-3 alternatives:
+1. Simpler approach (trade features for simplicity)
+2. Existing solution (search git history, reuse instead of rebuild)
+3. Deferred approach (is this actually needed in Phase 1?)
+
+Format:
+"❓ CHALLENGE: Your request proposes X. Consider these alternatives:
+  A) [Simpler] Use existing Y with minor enhancement
+  B) [Reuse] CORTEX-4.0 already has Z (commit:abc123)
+  C) [Defer] This is Phase 3 work, current phase is Phase 1
+  
+  Recommendation: [A/B/C] because [reason]
+  Proceed with original request? [Requires explicit confirmation]"
+```
+
+---
+
+### 🎯 Challenge Response Templates
+
+**When Request is NON-VIABLE:**
+```
+🚫 DESIGN CHALLENGE: This request cannot proceed as specified.
+
+Issues Detected:
+1. [Specific conflict with architecture/governance]
+2. [Brittleness/coupling concern]
+3. [Efficiency/scalability concern]
+
+Alternative Solutions:
+A) [Better approach aligned with CX6 design]
+B) [Reuse existing component from git history]
+C) [Simpler solution with fewer moving parts]
+
+Recommendation: Proceed with Alternative [A/B/C]
+Rationale: [Explain why alternative is superior]
+
+If you still want the original approach, please confirm understanding of:
+- Risk: [Specific production risk]
+- Technical Debt: [What will need refactoring later]
+- Mitigation: [How to reduce blast radius]
+```
+
+**When Request NEEDS CLARIFICATION:**
+```
+⚠️ AMBIGUITY DETECTED: Request needs clarification before proceeding.
+
+Unclear Aspects:
+1. [Specific ambiguity that could lead to wrong implementation]
+2. [Missing context about user intent]
+3. [Assumption that needs validation]
+
+Questions for Clarification:
+- Q1: [Specific question]
+- Q2: [Specific question]
+- Q3: [Specific question]
+
+Cannot proceed until these are resolved (prevents wasted effort).
+```
+
+**When Request is VIABLE with IMPROVEMENTS:**
+```
+✅ VIABLE with ENHANCEMENTS: Request can proceed with these improvements.
+
+Original Request: [Summary]
+Enhancements Suggested:
+1. [Improvement that increases robustness]
+2. [Improvement that aligns with CORTEX patterns]
+3. [Improvement that reduces complexity]
+
+Modified Approach:
+[Detailed description of enhanced approach]
+
+Benefits of Enhancement:
+- [Specific benefit #1]
+- [Specific benefit #2]
+
+Proceed with enhanced approach? [If yes, continue; if no, explain why original is better]
+```
+
+---
+
+### 🔄 Holistic SDLC Management (AC-SDLC-001 to AC-SDLC-005)
+
+**CORTEX 6 Goal: Develop entire SDLC with incremental activation**
+
+#### Phase Gates (Must Pass to Continue)
+
+**Phase 1: Foundation → Phase 2 Gate:**
+```
+Validation Checklist:
+☐ AC-AUDIT-001 to AC-AUDIT-006 fully implemented with tests
+☐ AC-GOV-001 to AC-GOV-005 enforcing 4-tier precedence
+☐ AC-STATE-001 to AC-STATE-003 with SQLite WAL + transactions
+☐ All tests passing in STS environment
+☐ Zero root-level files created
+☐ Audit trail shows governance enforcement working
+☐ Performance: <100ms for governance merge
+☐ Security: No hardcoded paths, no exposed secrets
+
+BLOCKED UNTIL: All checkboxes complete
+```
+
+**Phase 2: Orchestration Core → Phase 3 Gate:**
+```
+Validation Checklist:
+☐ AC-SECURITY-001: ActionPolicyEngine operational (path sandbox, allowlist, secret redaction)
+☐ AC-ROUTE-001: Deterministic routing with conflict detection + contract tests
+☐ AC-ROLLOUT-001: Staged activation (SHADOW/CANARY/ACTIVE) with error-rate rollback
+☐ MasterOrchestrator enforces @require_master_routing
+☐ TodoManager persisting to progress-tracker.json
+☐ TDD-Master gateway (forward + backward validation)
+☐ All Phase 1 + Phase 2 tests passing
+☐ Routing table canonical source: tier0/routing/routing-table.yaml (SPEC-019)
+
+BLOCKED UNTIL: All checkboxes complete + Phase 1 validation passed
+```
+
+#### Incremental Activation Strategy
+
+**New Feature Rollout Process:**
+```
+Step 1: REGISTERED
+- Code exists, tests pass
+- NOT in routing table yet
+- Shadow logging active (observe pattern matches)
+- Duration: 24-48 hours observation
+
+Step 2: SHADOW
+- Add to routing table with shadow=true flag
+- Logs matches but doesn't execute
+- Compare: "Would have routed to X" vs "Actually routed to Y"
+- Duration: 1 week shadow mode
+
+Step 3: CANARY (1-5% traffic)
+- Set routing_weight: 0.05 (5% traffic)
+- Monitor error rates, execution time, AC validation success
+- Rollback trigger: error_rate > 5% OR avg_time > 2x baseline
+- Duration: 1 week canary
+
+Step 4: ACTIVE (100% traffic)
+- Set routing_weight: 1.0
+- Full production traffic
+- Continuous monitoring
+- Rollback to previous orchestrator on sustained errors
+```
+
+#### STS Test Strategy (AC-TEST-001 to AC-TEST-004)
+
+**Test Environment: Sharpen The Saw (STS)**
+```
+Location: sharpening-cortex/sts-template/
+Purpose: Isolated test environment with reset capability
+
+Test Structure:
+tests/
+  smoke/          # Fast (<1s) smoke tests
+  unit/           # Isolated unit tests (mocked dependencies)
+  integration/    # Multi-component tests (real dependencies)
+  performance/    # Load tests, profiling
+
+Reset on Teardown:
+@pytest.fixture(scope="function")
+def sts_environment():
+    # Setup: Clean SQLite, empty temp dirs
+    setup_clean_sts()
+    yield
+    # Teardown: Delete all test artifacts, reset DB
+    teardown_sts()
+```
+
+**Test Coverage Requirements:**
+- Unit: 90% code coverage minimum
+- Integration: All AC-IDs validated
+- Performance: <100ms for critical paths
+- Security: Penetration tests for ActionPolicyEngine
+
+---
+
+### 🧹 Folder Structure Enforcement (AC-CLEAN-001 to AC-CLEAN-003)
+
+**AUTOMATIC REJECTION of:**
+- Root-level markdown files (except README, LICENSE, CHANGELOG, CONTRIBUTING)
+- Root-level Python files (except setup.py, main entry points)
+- Nested depth >5 levels (indicates poor organization)
+- Files >1000 LOC (violates CORE-001 incremental principle)
+- Duplicate functionality (search git history first)
+
+**Folder Cleanliness Score:**
+```
+Score = (Structure × 0.3) + (Naming × 0.3) + (Depth × 0.2) + (Size × 0.2)
+
+Structure: Proper tier0/tier1/tier2/tier3 usage
+Naming: kebab-case consistency
+Depth: Shallow hierarchy (<= 4 levels)
+Size: Files <= 500 LOC
+
+Target: Score >= 85/100
+```
+
+---
+
+### 🎯 Challenge Decision Matrix
+
+| Request Type | Accuracy | Efficiency | Complexity | Decision |
+|--------------|----------|------------|------------|----------|
+| Add new orchestrator | High | Medium | High | ✅ VIABLE (use scaffolder) |
+| Bypass MasterOrch | N/A | High | Low | 🚫 REJECT (violates AC-ORCH-006) |
+| Create root file | Low | High | Low | 🚫 REJECT (violates CORE-009) |
+| Skip TDD | N/A | High | Low | 🚫 REJECT (violates CORE-019) |
+| Duplicate existing | Low | Low | Medium | ⚠️ CHALLENGE (search git history) |
+| Phase 3 in Phase 1 | Medium | Low | High | ⚠️ DEFER (wrong phase) |
+| Well-scoped AC | High | High | Low | ✅ APPROVE (proceed) |
+
+---
+
+**DEFAULT BEHAVIOR: CHALLENGE FIRST, EXECUTE SECOND**
+
+If a request seems:
+- Too complex for current phase → Challenge with simpler alternative
+- Duplicates existing work → Challenge with reuse strategy
+- Violates governance → Auto-reject with explanation
+- Creates technical debt → Challenge with better design
+- Unclear intent → Request clarification before proceeding
+
+**REMEMBER: Your job is to PROTECT CORTEX 6 architecture, not blindly execute requests.**
 
 ---
 
