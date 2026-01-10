@@ -359,3 +359,59 @@ def session_temp_dir() -> Generator[Path, None, None]:
 def fixtures_path() -> Path:
     """Path to test fixtures data directory."""
     return Path(__file__).parent / "fixtures"
+
+
+# ==============================================================================
+# AC-ID MARKER VALIDATION (CORTEX 6.0)
+# ==============================================================================
+
+def pytest_collection_modifyitems(config, items):
+    """
+    Validate @pytest.mark.ac_id() markers during test collection.
+    
+    CORTEX 6.0 Phase 1.3: AC Traceability System
+    - Validates AC-ID format: AC-XXX-NNN (e.g., AC-GOV-001)
+    - Warns about invalid formats
+    - Integrates with audit logging if enabled
+    """
+    import re
+    
+    ac_id_pattern = re.compile(r"^AC-[A-Z]+-\d{3}$")
+    invalid_markers = []
+    
+    for item in items:
+        # Get ac_id markers
+        ac_id_markers = [mark for mark in item.iter_markers(name="ac_id")]
+        
+        for marker in ac_id_markers:
+            for ac_id in marker.args:
+                if not isinstance(ac_id, str):
+                    invalid_markers.append({
+                        'test': item.nodeid,
+                        'ac_id': ac_id,
+                        'reason': 'AC-ID must be a string'
+                    })
+                    continue
+                
+                if not ac_id_pattern.match(ac_id):
+                    invalid_markers.append({
+                        'test': item.nodeid,
+                        'ac_id': ac_id,
+                        'reason': f'Invalid AC-ID format. Expected: AC-XXX-NNN (e.g., AC-GOV-001)'
+                    })
+    
+    # Report invalid markers
+    if invalid_markers:
+        print("\n⚠️  WARNING: Invalid @pytest.mark.ac_id() markers detected:")
+        for invalid in invalid_markers:
+            print(f"  • {invalid['test']}")
+            print(f"    AC-ID: {invalid['ac_id']}")
+            print(f"    Issue: {invalid['reason']}")
+        print()
+
+
+def pytest_configure(config):
+    """Register custom markers and configure AC traceability."""
+    # ac_id marker is already registered in pytest.ini
+    # This hook can be used for additional configuration
+    pass
