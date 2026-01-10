@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX 6.0 Plan Viewer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Glassmorphism Dark Theme */
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            min-height: 100vh;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+        
+        .glass {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        
+        .glass-hover:hover {
+            background: rgba(30, 41, 59, 0.8);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #3b82f6 0%, #06b6d4 50%, #8b5cf6 100%);
+            animation: shimmer 2s infinite;
+            border-radius: 9999px;
+        }
+        
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .status-dot {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        /* Connection status indicator */
+        .ws-connected { color: #10b981; }
+        .ws-disconnected { color: #ef4444; }
+        .ws-connecting { color: #f59e0b; }
+    </style>
+</head>
+<body class="p-8">
+    <!-- Header -->
+    <header class="glass p-6 mb-8">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-4xl font-bold text-white mb-2">🧠 CORTEX 6.0 Plan Viewer</h1>
+                <p class="text-gray-400">Snowball Strategy Execution Dashboard</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="flex items-center gap-2">
+                    <div id="ws-status-dot" class="w-3 h-3 rounded-full status-dot ws-connecting"></div>
+                    <span id="ws-status-text" class="text-sm ws-connecting">Connecting...</span>
+                </div>
+                <button onclick="location.reload()" class="px-4 py-2 glass glass-hover text-white rounded-lg">
+                    🔄 Refresh
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Overall Progress -->
+    <section class="glass p-6 mb-8">
+        <h2 class="text-2xl font-bold text-white mb-4">📊 Overall Progress</h2>
+        <div class="mb-4">
+            <div class="flex justify-between text-sm text-gray-400 mb-2">
+                <span>Completion</span>
+                <span id="overall-percentage">48.6%</span>
+            </div>
+            <div class="w-full h-4 bg-gray-800 rounded-full overflow-hidden">
+                <div id="overall-progress" class="progress-bar h-full" style="width: 48.6%"></div>
+            </div>
+        </div>
+        <div class="grid grid-cols-4 gap-4 mt-6">
+            <div class="glass p-4">
+                <div class="text-gray-400 text-sm mb-1">Hours Completed</div>
+                <div id="hours-completed" class="text-3xl font-bold text-white">34h</div>
+            </div>
+            <div class="glass p-4">
+                <div class="text-gray-400 text-sm mb-1">Hours Remaining</div>
+                <div id="hours-remaining" class="text-3xl font-bold text-white">36h</div>
+            </div>
+            <div class="glass p-4">
+                <div class="text-gray-400 text-sm mb-1">Current Layer</div>
+                <div id="current-layer" class="text-3xl font-bold text-white">4</div>
+            </div>
+            <div class="glass p-4">
+                <div class="text-gray-400 text-sm mb-1">Current Phase</div>
+                <div id="current-phase" class="text-xl font-bold text-white">CX6-005</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Layer Progress -->
+    <section class="glass p-6 mb-8">
+        <h2 class="text-2xl font-bold text-white mb-4">🔄 Layer Progress (Snowball Strategy)</h2>
+        <div id="layers-container" class="space-y-4">
+            <!-- Layers will be rendered here -->
+        </div>
+    </section>
+
+    <!-- Phases Grid -->
+    <section class="glass p-6 mb-8">
+        <h2 class="text-2xl font-bold text-white mb-4">📋 Phase Details</h2>
+        <div id="phases-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Phases will be rendered here -->
+        </div>
+    </section>
+
+    <!-- Acceptance Criteria Coverage -->
+    <section class="glass p-6 mb-8">
+        <h2 class="text-2xl font-bold text-white mb-4">✅ Acceptance Criteria Coverage</h2>
+        <div id="ac-coverage-container">
+            <div class="text-gray-400">Loading coverage data...</div>
+        </div>
+    </section>
+
+    <!-- Audit Log Viewer -->
+    <section class="glass p-6">
+        <h2 class="text-2xl font-bold text-white mb-4">📄 Recent Audit Logs</h2>
+        <div class="mb-4 flex gap-2">
+            <input 
+                type="text" 
+                id="log-search" 
+                placeholder="Search logs..." 
+                class="flex-1 px-4 py-2 bg-gray-800 text-white rounded-lg border border-gray-700 focus:border-blue-500 outline-none"
+            />
+            <select id="log-category" class="px-4 py-2 bg-gray-800 text-white rounded-lg border border-gray-700">
+                <option value="">All Categories</option>
+                <option value="PLANNING">Planning</option>
+                <option value="TDD">TDD</option>
+                <option value="AUDIT">Audit</option>
+                <option value="MIGRATION">Migration</option>
+            </select>
+        </div>
+        <div id="audit-logs-container" class="space-y-2 max-h-96 overflow-y-auto">
+            <div class="text-gray-400">Loading audit logs...</div>
+        </div>
+    </section>
+
+    <script>
+        // Mock data (replace with API calls when backend is ready)
+        const mockData = {
+            overall: {
+                completion: 48.6,
+                hoursCompleted: 34,
+                hoursRemaining: 36,
+                currentLayer: 4,
+                currentPhase: "CX6-005"
+            },
+            layers: [
+                { id: 1, name: "Governance Foundation", status: "COMPLETE", effort: "4h", phases: ["SNOWBALL-001"] },
+                { id: 2, name: "TDD-Master Orchestrator", status: "COMPLETE", effort: "16h", phases: ["SNOWBALL-002"] },
+                { id: 3, name: "Audit Validation", status: "COMPLETE", effort: "14h", phases: ["SNOWBALL-003", "SNOWBALL-004"] },
+                { id: 4, name: "AC-ID Traceability", status: "IN_PROGRESS", effort: "4h", phases: ["CX6-005"] },
+                { id: 5, name: "Dashboard & Features", status: "PENDING", effort: "32h", phases: ["CX6-006", "CX6-007", "CX6-008"] }
+            ],
+            phases: [
+                { id: "CX6-005", name: "AC-ID Traceability", status: "IN_PROGRESS", duration: "4h", priority: "HIGH" },
+                { id: "CX6-006", name: "Plan Viewer Dashboard", status: "PENDING", duration: "20h", priority: "MEDIUM" },
+                { id: "CX6-007", name: "Migrate Orchestrator", status: "PENDING", duration: "8h", priority: "HIGH" },
+                { id: "CX6-008", name: "CLI Entry Point", status: "PENDING", duration: "4h", priority: "HIGH" }
+            ],
+            acCoverage: {
+                total: 361,
+                covered: 175,
+                percentage: 48.5,
+                gaps: 186
+            },
+            auditLogs: [
+                { timestamp: "2026-01-11T06:30:00Z", category: "TDD", message: "Gap-Fix orchestrator: 12/12 tests passing", ac_id: "AC-SKULL-001" },
+                { timestamp: "2026-01-11T06:25:00Z", category: "PLANNING", message: "Folder reorganization complete: 7 → 6 folders", ac_id: null },
+                { timestamp: "2026-01-11T06:20:00Z", category: "AUDIT", message: "Progress tracker updated: CX6-005 started", ac_id: "AC-TRACE-001" }
+            ]
+        };
+
+        // WebSocket connection (mock for now)
+        let ws = null;
+        
+        function connectWebSocket() {
+            const statusDot = document.getElementById('ws-status-dot');
+            const statusText = document.getElementById('ws-status-text');
+            
+            // Mock connection (replace with real WebSocket when backend ready)
+            setTimeout(() => {
+                statusDot.className = 'w-3 h-3 rounded-full status-dot ws-connected';
+                statusText.className = 'text-sm ws-connected';
+                statusText.textContent = 'Connected';
+            }, 1000);
+            
+            // Real WebSocket code (commented out until backend ready):
+            /*
+            ws = new WebSocket('ws://localhost:8000/ws');
+            
+            ws.onopen = () => {
+                statusDot.className = 'w-3 h-3 rounded-full status-dot ws-connected';
+                statusText.className = 'text-sm ws-connected';
+                statusText.textContent = 'Connected';
+            };
+            
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                updateDashboard(data);
+            };
+            
+            ws.onerror = () => {
+                statusDot.className = 'w-3 h-3 rounded-full status-dot ws-disconnected';
+                statusText.className = 'text-sm ws-disconnected';
+                statusText.textContent = 'Disconnected';
+            };
+            */
+        }
+
+        function renderLayers(layers) {
+            const container = document.getElementById('layers-container');
+            container.innerHTML = layers.map(layer => {
+                const statusIcon = layer.status === 'COMPLETE' ? '✅' : 
+                                   layer.status === 'IN_PROGRESS' ? '🔄' : '⏸️';
+                const statusColor = layer.status === 'COMPLETE' ? 'text-green-500' : 
+                                    layer.status === 'IN_PROGRESS' ? 'text-blue-500' : 'text-gray-500';
+                
+                return `
+                    <div class="glass glass-hover p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="text-lg font-bold text-white">
+                                ${statusIcon} Layer ${layer.id}: ${layer.name}
+                            </h3>
+                            <span class="${statusColor} font-bold">${layer.status}</span>
+                        </div>
+                        <div class="flex justify-between text-sm text-gray-400">
+                            <span>Effort: ${layer.effort}</span>
+                            <span>Phases: ${layer.phases.join(', ')}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderPhases(phases) {
+            const container = document.getElementById('phases-container');
+            container.innerHTML = phases.map(phase => {
+                const statusIcon = phase.status === 'COMPLETE' ? '✅' : 
+                                   phase.status === 'IN_PROGRESS' ? '🔄' : '⏸️';
+                const priorityColor = phase.priority === 'HIGH' ? 'bg-red-600' : 
+                                      phase.priority === 'MEDIUM' ? 'bg-yellow-600' : 'bg-green-600';
+                
+                return `
+                    <div class="glass glass-hover p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="text-lg font-bold text-white">${statusIcon} ${phase.id}</h3>
+                            <span class="${priorityColor} text-white text-xs px-2 py-1 rounded">${phase.priority}</span>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-2">${phase.name}</p>
+                        <div class="text-xs text-gray-500">Duration: ${phase.duration}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderACCoverage(coverage) {
+            const container = document.getElementById('ac-coverage-container');
+            container.innerHTML = `
+                <div class="grid grid-cols-4 gap-4">
+                    <div class="glass p-4">
+                        <div class="text-gray-400 text-sm mb-1">Total AC</div>
+                        <div class="text-3xl font-bold text-white">${coverage.total}</div>
+                    </div>
+                    <div class="glass p-4">
+                        <div class="text-gray-400 text-sm mb-1">Covered</div>
+                        <div class="text-3xl font-bold text-green-500">${coverage.covered}</div>
+                    </div>
+                    <div class="glass p-4">
+                        <div class="text-gray-400 text-sm mb-1">Coverage %</div>
+                        <div class="text-3xl font-bold text-blue-500">${coverage.percentage}%</div>
+                    </div>
+                    <div class="glass p-4">
+                        <div class="text-gray-400 text-sm mb-1">Gaps</div>
+                        <div class="text-3xl font-bold text-red-500">${coverage.gaps}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderAuditLogs(logs) {
+            const container = document.getElementById('audit-logs-container');
+            container.innerHTML = logs.map(log => {
+                const date = new Date(log.timestamp);
+                const timeStr = date.toLocaleTimeString();
+                const categoryColor = log.category === 'TDD' ? 'bg-blue-600' : 
+                                      log.category === 'PLANNING' ? 'bg-purple-600' : 
+                                      log.category === 'AUDIT' ? 'bg-green-600' : 'bg-gray-600';
+                
+                return `
+                    <div class="glass p-3 text-sm">
+                        <div class="flex justify-between items-start mb-1">
+                            <span class="${categoryColor} text-white text-xs px-2 py-1 rounded">${log.category}</span>
+                            <span class="text-gray-500 text-xs">${timeStr}</span>
+                        </div>
+                        <p class="text-gray-300">${log.message}</p>
+                        ${log.ac_id ? `<div class="text-blue-400 text-xs mt-1">AC: ${log.ac_id}</div>` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function initDashboard() {
+            // Update overall stats
+            document.getElementById('overall-percentage').textContent = `${mockData.overall.completion}%`;
+            document.getElementById('overall-progress').style.width = `${mockData.overall.completion}%`;
+            document.getElementById('hours-completed').textContent = `${mockData.overall.hoursCompleted}h`;
+            document.getElementById('hours-remaining').textContent = `${mockData.overall.hoursRemaining}h`;
+            document.getElementById('current-layer').textContent = mockData.overall.currentLayer;
+            document.getElementById('current-phase').textContent = mockData.overall.currentPhase;
+            
+            // Render sections
+            renderLayers(mockData.layers);
+            renderPhases(mockData.phases);
+            renderACCoverage(mockData.acCoverage);
+            renderAuditLogs(mockData.auditLogs);
+            
+            // Connect WebSocket
+            connectWebSocket();
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', initDashboard);
+    </script>
+</body>
+</html>

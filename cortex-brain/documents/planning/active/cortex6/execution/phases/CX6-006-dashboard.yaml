@@ -1,0 +1,424 @@
+# ==============================================================================
+# PHASE CX6-006: Plan Viewer Dashboard
+# ==============================================================================
+# Layer: 5 | Priority: 🟡 MEDIUM | Status: ⏸️ PENDING
+# Estimated Effort: 20h | Blocking: No | Snowball Impact: Unlocks 3 downstream criteria
+# ==============================================================================
+
+metadata:
+  phase_id: "CX6-006"
+  phase_name: "Plan Viewer Dashboard"
+  layer: 5
+  layer_name: "Dashboard & Features"
+  status: "PENDING"
+  priority: "MEDIUM"
+  blocking: false
+  estimated_hours: 20
+  actual_hours: 0
+  started_at: null
+  completed_at: null
+  
+strategic_requirement:
+  sr_id: "SR-008"
+  sr_name: "Interactive Plan Viewer Dashboard (OPTION A - INTEGRATED)"
+  implementation_approach: "OPTION_A_INTEGRATED"
+  description: "Real-time dashboard integrated into Planning Orchestrator"
+  
+acceptance_criteria:
+  - id: "AC-DASH-001"
+    description: "Dashboard auto-generated in {plan}/dashboard/ folder"
+    priority: "CRITICAL"
+    
+  - id: "AC-DASH-002"
+    description: "FastAPI server serves on localhost:8000"
+    priority: "CRITICAL"
+    
+  - id: "AC-DASH-003"
+    description: "Real-time updates via WebSocket (<500ms latency)"
+    priority: "HIGH"
+    
+  - id: "AC-DASH-004"
+    description: "Audit log viewer with filtering"
+    priority: "HIGH"
+    
+  - id: "AC-DASH-005"
+    description: "Test coverage dashboard with AC-ID traceability"
+    priority: "HIGH"
+    
+  - id: "AC-DASH-006"
+    description: "Glassmorphism dark theme with Tailwind CSS"
+    priority: "MEDIUM"
+    
+  - id: "AC-DASH-007"
+    description: "Performance SLAs: page load <2s, memory <200MB"
+    priority: "HIGH"
+
+objective:
+  summary: |
+    Build modern, real-time plan viewer dashboard with WebSocket updates,
+    audit log evidence, test coverage metrics, and glassmorphism UI.
+    Dashboard auto-generated in plan folder, served on localhost:8000.
+  
+  deliverables:
+    - "{plan}/dashboard/index.html (SPA entry point)"
+    - "{plan}/dashboard/app.js (dashboard logic)"
+    - "{plan}/dashboard/styles.css (Tailwind + glassmorphism)"
+    - "{plan}/dashboard/api.py (FastAPI server)"
+    - "{plan}/dashboard/serve.sh (launch script)"
+    - "tests/dashboard/test_plan_viewer.py (dashboard tests)"
+  
+  success_criteria:
+    - "Dashboard loads in <2s"
+    - "WebSocket updates <500ms latency"
+    - "Real-time progress tracking"
+    - "Audit log viewer functional"
+    - "Test coverage metrics displayed"
+    - "Mobile-responsive design"
+    - "Dark theme with glassmorphism"
+
+definition_of_ready:
+  checklist:
+    - "✅ DoR decisions finalized (Q17-Q21)"
+    - "✅ progress-tracker.json structure defined"
+    - "✅ Audit logs available (JSONL format)"
+    - "✅ AC coverage data available (from CX6-005)"
+    - "✅ Tailwind CSS CDN accessible"
+    - "✅ FastAPI installed"
+
+dor_decisions:
+  Q17:
+    question: "Generate dashboard HTML once or regenerate on updates?"
+    answer: "Generate once, updates via WebSocket (no regeneration)"
+    impact: "Static HTML + dynamic WebSocket = better performance"
+    
+  Q18:
+    question: "Auto-launch browser or manual launch?"
+    answer: "Manual launch by default, --dashboard-launch flag optional"
+    impact: "User control, headless CI/CD compatibility"
+    
+  Q19:
+    question: "Background daemon or foreground process?"
+    answer: "Foreground (Ctrl+C to stop), --daemon flag optional"
+    impact: "Development transparency, easy debugging"
+    
+  Q20:
+    question: "Polling or WebSocket for data refresh?"
+    answer: "WebSocket push for real-time updates (no polling)"
+    impact: "Efficient <100ms latency, battery-friendly"
+    
+  Q21:
+    question: "Integrated (Option A) or standalone (Option B)?"
+    answer: "Option A: Integrated into Planning Orchestrator"
+    impact: "Simpler deployment, automatic generation"
+
+definition_of_done:
+  required:
+    - "[ ] Dashboard auto-generated in plan/dashboard/ folder"
+    - "[ ] FastAPI server runs on localhost:8000"
+    - "[ ] WebSocket updates <500ms latency"
+    - "[ ] Audit log viewer with filtering and pagination"
+    - "[ ] Test coverage dashboard with AC-ID links"
+    - "[ ] Glassmorphism dark theme applied"
+    - "[ ] Mobile-responsive (tested on 3 screen sizes)"
+    - "[ ] Performance: page load <2s, memory <200MB"
+    - "[ ] Tests passing: test_plan_viewer.py"
+    - "[ ] serve.sh script working (manual launch)"
+    - "[ ] Documentation: DASHBOARD-USER-GUIDE.md"
+  
+  optional:
+    - "[ ] --dashboard-launch flag (auto-open browser)"
+    - "[ ] --daemon flag (background execution)"
+    - "[ ] Export to PDF feature"
+    - "[ ] Dark/light theme toggle"
+
+implementation_steps:
+  
+  # PHASE 1: Backend API (4-5h)
+  phase_1_backend:
+    name: "Backend API Development"
+    duration: "4-5h"
+    description: "FastAPI server with WebSocket support"
+    
+    step_1_1:
+      name: "Setup FastAPI Server"
+      duration: "1h"
+      tasks:
+        - "Create api.py with FastAPI app"
+        - "Setup CORS for localhost"
+        - "Configure uvicorn server"
+        - "Add health check endpoint"
+      outputs:
+        - "{plan}/dashboard/api.py"
+      acceptance:
+        - "Server starts on localhost:8000"
+        - "Health check: GET /api/health returns 200"
+    
+    step_1_2:
+      name: "Implement Progress Endpoint"
+      duration: "1h"
+      tasks:
+        - "GET /api/progress → Read progress-tracker.json"
+        - "Parse JSON, return structured data"
+        - "Add caching (5s TTL)"
+        - "Error handling"
+      acceptance:
+        - "Endpoint returns valid JSON"
+        - "Data matches progress-tracker.json"
+        - "Response time <100ms"
+    
+    step_1_3:
+      name: "Implement Audit Log Endpoint"
+      duration: "1h"
+      tasks:
+        - "GET /api/audit-logs?page=1&limit=100"
+        - "Read JSONL files from audit-logs/"
+        - "Pagination support"
+        - "Filtering by category, AC-ID"
+      acceptance:
+        - "Pagination working correctly"
+        - "Filtering returns accurate results"
+        - "Performance: <500ms for 1000 logs"
+    
+    step_1_4:
+      name: "Implement WebSocket Updates"
+      duration: "1-2h"
+      tasks:
+        - "WebSocket endpoint: ws://localhost:8000/ws"
+        - "File watcher for progress-tracker.json"
+        - "Broadcast updates to connected clients"
+        - "Heartbeat ping/pong"
+      acceptance:
+        - "WebSocket connects successfully"
+        - "Updates broadcast <500ms after file change"
+        - "Connection stays alive (heartbeat working)"
+  
+  # PHASE 2: Frontend SPA (6-8h)
+  phase_2_frontend:
+    name: "Frontend SPA Development"
+    duration: "6-8h"
+    description: "HTML5 SPA with Tailwind CSS and WebSocket"
+    
+    step_2_1:
+      name: "Create HTML Structure"
+      duration: "1h"
+      tasks:
+        - "Create index.html with semantic HTML5"
+        - "Setup Tailwind CSS CDN"
+        - "Define sections: header, sidebar, main, footer"
+        - "Add viewport meta for mobile"
+      outputs:
+        - "{plan}/dashboard/index.html"
+      acceptance:
+        - "HTML validates (W3C validator)"
+        - "Mobile-responsive layout"
+        - "Tailwind classes applied"
+    
+    step_2_2:
+      name: "Implement Progress View"
+      duration: "2h"
+      tasks:
+        - "Fetch progress data from API"
+        - "Render progress bars (overall, per-layer)"
+        - "Display current phase"
+        - "Show completion percentage"
+      acceptance:
+        - "Progress bars animate smoothly"
+        - "Data updates via WebSocket"
+        - "Percentages accurate"
+    
+    step_2_3:
+      name: "Implement Audit Log Viewer"
+      duration: "2h"
+      tasks:
+        - "Fetch audit logs from API"
+        - "Render table with pagination"
+        - "Add filtering: category, AC-ID, date"
+        - "Add search box"
+      acceptance:
+        - "Pagination working"
+        - "Filtering responsive"
+        - "Search returns relevant results"
+    
+    step_2_4:
+      name: "Implement Test Coverage View"
+      duration: "1h"
+      tasks:
+        - "Fetch coverage data from API"
+        - "Render coverage percentage by section"
+        - "Display gap count"
+        - "Link to AC details"
+      acceptance:
+        - "Coverage percentages displayed"
+        - "Gap count accurate"
+        - "Links navigate correctly"
+    
+    step_2_5:
+      name: "WebSocket Integration"
+      duration: "1-2h"
+      tasks:
+        - "Connect to ws://localhost:8000/ws"
+        - "Handle incoming updates"
+        - "Update UI reactively"
+        - "Show connection status indicator"
+      acceptance:
+        - "WebSocket connects on page load"
+        - "UI updates without page refresh"
+        - "Connection indicator accurate"
+  
+  # PHASE 3: Styling & Polish (3-4h)
+  phase_3_styling:
+    name: "Styling & Polish"
+    duration: "3-4h"
+    description: "Glassmorphism dark theme and UX polish"
+    
+    step_3_1:
+      name: "Apply Glassmorphism Theme"
+      duration: "2h"
+      tasks:
+        - "Create glassmorphism CSS classes"
+        - "Apply frosted glass effect to cards"
+        - "Dark background with gradients"
+        - "Add subtle animations"
+      outputs:
+        - "{plan}/dashboard/styles.css"
+      acceptance:
+        - "Glassmorphism effect visible"
+        - "Dark theme applied consistently"
+        - "Animations smooth (60fps)"
+    
+    step_3_2:
+      name: "Mobile Optimization"
+      duration: "1h"
+      tasks:
+        - "Test on mobile viewport (375px)"
+        - "Adjust layout for small screens"
+        - "Touch-friendly buttons"
+        - "Collapse sidebar on mobile"
+      acceptance:
+        - "Layout responsive on 3 screen sizes"
+        - "Touch targets ≥44px"
+        - "No horizontal scroll"
+    
+    step_3_3:
+      name: "Performance Optimization"
+      duration: "1h"
+      tasks:
+        - "Lazy-load audit logs (virtual scroll)"
+        - "Debounce WebSocket updates"
+        - "Optimize CSS (remove unused classes)"
+        - "Add loading states"
+      acceptance:
+        - "Page load <2s"
+        - "Memory usage <200MB"
+        - "Smooth scrolling (60fps)"
+  
+  # PHASE 4: Testing & Documentation (3-4h)
+  phase_4_testing:
+    name: "Testing & Documentation"
+    duration: "3-4h"
+    description: "Automated tests and user guide"
+    
+    step_4_1:
+      name: "Write Dashboard Tests"
+      duration: "2h"
+      tasks:
+        - "Test: FastAPI endpoints return correct data"
+        - "Test: WebSocket connection works"
+        - "Test: File watcher triggers updates"
+        - "Test: API error handling"
+      outputs:
+        - "tests/dashboard/test_plan_viewer.py"
+      acceptance:
+        - "All tests passing"
+        - "Coverage ≥80%"
+    
+    step_4_2:
+      name: "Create Launch Script"
+      duration: "0.5h"
+      tasks:
+        - "Create serve.sh script"
+        - "Check for port 8000 availability"
+        - "Launch uvicorn server"
+        - "Print dashboard URL"
+      outputs:
+        - "{plan}/dashboard/serve.sh"
+      acceptance:
+        - "Script launches server"
+        - "Port conflict handled gracefully"
+        - "URL printed correctly"
+    
+    step_4_3:
+      name: "Write User Guide"
+      duration: "1-1.5h"
+      tasks:
+        - "Document dashboard features"
+        - "Add screenshots"
+        - "Explain launch procedure"
+        - "List keyboard shortcuts"
+      outputs:
+        - "../evidence/DASHBOARD-USER-GUIDE.md"
+      acceptance:
+        - "User guide comprehensive"
+        - "Screenshots included"
+        - "Launch steps clear"
+
+dependencies:
+  required:
+    - "progress-tracker.json structure (exists)"
+    - "AC coverage data (from CX6-005)"
+    - "FastAPI, uvicorn installed"
+    - "Audit logs in JSONL format"
+  
+  optional:
+    - "Planning Orchestrator integration (for auto-generation)"
+    - "Export to PDF library"
+
+risks:
+  risk_1:
+    description: "WebSocket connection drops on long-idle"
+    mitigation: "Implement heartbeat ping/pong every 30s"
+    likelihood: "MEDIUM"
+    impact: "LOW"
+  
+  risk_2:
+    description: "Large audit log files slow down viewer"
+    mitigation: "Pagination + virtual scroll + lazy loading"
+    likelihood: "HIGH"
+    impact: "MEDIUM"
+  
+  risk_3:
+    description: "Port 8000 already in use"
+    mitigation: "serve.sh checks port, suggests alternatives"
+    likelihood: "MEDIUM"
+    impact: "LOW"
+
+validation:
+  automated:
+    - "pytest tests/dashboard/test_plan_viewer.py"
+    - "Lighthouse performance audit (score ≥90)"
+    - "WebSocket latency test (<500ms)"
+  
+  manual:
+    - "Test on 3 browsers (Chrome, Firefox, Safari)"
+    - "Test on mobile (iOS, Android)"
+    - "Verify all features functional"
+    - "Check UI/UX polish"
+
+performance_sla:
+  page_load: "<2s (measured with Lighthouse)"
+  api_response: "<100ms (GET /api/progress)"
+  websocket_latency: "<500ms (file change → UI update)"
+  memory_usage: "<200MB (after 1h runtime)"
+  concurrent_users: "≥10 (WebSocket connections)"
+
+evidence_location:
+  dashboard_files: "{plan}/dashboard/"
+  tests: "tests/dashboard/test_plan_viewer.py"
+  user_guide: "../evidence/DASHBOARD-USER-GUIDE.md"
+  screenshots: "../evidence/dashboard-screenshots/"
+
+next_phase:
+  phase_id: "CX6-007"
+  phase_name: "Migrate Orchestrator"
+  unlocks: "Dashboard can display migration status"
+  handoff: "Dashboard ready for integration testing"
