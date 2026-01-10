@@ -1,1 +1,0 @@
-{"timestamp": "2026-01-08T12:52:44.383261", "level": "info", "category": "state_management", "component": "StateManager", "operation": "initialize", "message": "StateManager initialized with state_file=/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/state/planning.db", "context": {}, "metadata": {}, "correlation_id": "CORTEX-CA486406812C", "duration_ms": null}

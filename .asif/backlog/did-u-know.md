@@ -1,1 +1,0 @@
-Update the user response templates to have a a "Did you know?" section in markdown formated presented in the Github copilot conversation chat . This should show one true fact about something from the knowledge library. This should be short and concise not exceeding 2 sentences.

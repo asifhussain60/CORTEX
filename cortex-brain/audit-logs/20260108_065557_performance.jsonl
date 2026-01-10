@@ -1,1 +1,0 @@
-{"timestamp": "2026-01-08T06:55:57.410925", "level": "info", "category": "performance", "component": "governance_merger", "operation": "merge", "message": "Merge complete (cached): 0 rules, 0.09ms", "context": {}, "metadata": {}, "correlation_id": "FEAT03-P3-T3.3", "duration_ms": null}

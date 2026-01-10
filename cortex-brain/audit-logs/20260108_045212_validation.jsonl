@@ -1,1 +1,0 @@
-{"timestamp": "2026-01-08T04:52:12.150696", "level": "info", "category": "validation", "component": "yaml_first_enforcement", "operation": "check_request", "message": "Planning request detected - allowed", "context": {"request": "create a plan for the planning system"}, "metadata": {}, "correlation_id": "YAML-FIRST-20260108045212", "duration_ms": null}
