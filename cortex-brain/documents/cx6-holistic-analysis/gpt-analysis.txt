@@ -1,0 +1,215 @@
+Design Quality Score: 72 / 100 (Concerning gaps that will cause issues at scale)
+
+You’ve got a strong backbone: audit-first, central MasterOrchestrator, tiered governance, and explicit DoD/quality gates are the right instincts for a system meant to survive imperfect humans at scale. 
+
+architecture-overview
+
+ 
+
+dod-matrix
+
+The score lands in the low 70s because several “looks clean on paper” areas are currently underspecified where reality bites: safe rollout, trust boundaries, plugin/registration safety, routing determinism, and ops-grade guardrails around anything that can execute actions.
+
+Findings (concrete issues only)
+1) “Live wiring” is a production-footgun without a rollout safety mechanism
+
+Issue: Orchestrators become “immediately available for production use” upon AC validation + routing table update.
+
+Impact: A single bad routing pattern or subtle regression becomes an instant global behavior change; you’ll get hard-to-debug misroutes and correctness incidents (especially with overlapping patterns and priorities).
+
+Evidence: “Live Wiring Protocol… orchestrator immediately available for production use” and routing table updates on completion. 
+
+implementation-plan
+
+Severity: High
+
+2) Routing + intent classification is not defined tightly enough to be deterministic
+
+Issue: “Intent classification” is described as pattern matching from a routing table, but there’s no spec for ambiguity resolution beyond “priority”. Regex/pattern overlaps are inevitable (“implement”, “build”, “fix” style patterns are basically landmines).
+
+Impact: Non-deterministic or surprising routing; “works on my prompt” failures; difficult to reproduce behavior across versions.
+
+Evidence: MasterOrchestrator classification “matches patterns from routing table”; routing picks “highest priority matching orchestrator”. 
+
+dod-matrix
+
+Severity: High
+
+3) Import-time registration is fragile in real deployments (and “last registration wins” is dangerous)
+
+Issue: Orchestrators register at import time; duplicates are “last wins”. Import order changes across packaging, tests, lazy imports, plugin discovery, and refactors.
+
+Impact: Heisenbugs where routing differs between environments; accidental override of an orchestrator; security risk if an unexpected module is imported.
+
+Evidence: “Registration happens at import time via decorator”; “Duplicate Handling: Last registration wins (WARNING logged)”. 
+
+architecture-overview
+
+Severity: High
+
+4) Trust boundaries are implied, not enforced (especially around “execute commands / modify files” style actions)
+
+Issue: The architecture talks about RequiredActions and automation via TodoManager, but the security model for actions isn’t spelled out: allowlist/denylist, sandboxing, path controls, secret handling, and “who is authorized to do what”.
+
+Impact: A prompt injection or misclassification could turn into filesystem damage, credential leakage, or destructive commands. “Audit logs” don’t prevent incidents; they just memorialize them.
+
+Evidence: System frames “assume imperfect humans”; TodoManager executes tasks; rollback includes command execution and file edits; no explicit action sandbox described. 
+
+implementation-plan
+
+ 
+
+architecture-overview
+
+Severity: Critical
+
+5) Governance cache invalidation on “file changes” is underspecified and easy to get wrong
+
+Issue: “Cache refreshes on file changes” is stated, but file watching across OSes / containers / CI is tricky; atomicity and consistency of multi-file tier loads isn’t defined.
+
+Impact: Stale governance decisions; inconsistent merges mid-run; hard-to-reproduce behavior when rules change during execution.
+
+Evidence: GovernanceMerger includes “cache invalidation on YAML file changes”. 
+
+implementation-plan
+
+Severity: Medium
+
+6) SQLite everywhere is fine—until concurrency and performance become real
+
+Issue: You’re using SQLite for audit + state, with WAL and async buffered logging. That’s good, but you haven’t specified throughput targets, backpressure strategy, or what happens under sustained write pressure.
+
+Impact: Log loss (if buffer overflows), latency spikes, lock contention, growth/retention pain, and “the system melts under its own observability”.
+
+Evidence: Audit logger: buffered async logging with overflow handling + retention policy. 
+
+implementation-plan
+
+Severity: Medium
+
+7) Inconsistency: which file is the authoritative routing table?
+
+Issue: Some places refer to updating CORTEX.prompt.md, rollback references editing .github/copilot-instructions.md. Those cannot both be “the routing table” without a sync story.
+
+Impact: Drift between “what you think is live” vs what actually routes; broken rollbacks.
+
+Evidence: Live wiring says update CORTEX.prompt.md; rollback says edit .github/copilot-instructions.md. 
+
+implementation-plan
+
+ 
+
+implementation-plan
+
+Severity: High
+
+8) The autonomy vs interaction boundary is defined, but enforcement details are still a trap
+
+Issue: “No prompts within phase; approval between phases” is clear, but enforcement depends on all orchestrators behaving. You need a hard gate at the task/execution layer, not “best effort”.
+
+Impact: One orchestrator that asks mid-phase breaks CORE-001 semantics; user experience becomes chaotic.
+
+Evidence: Resolution: interaction points at phase boundaries; TodoManager marks tasks awaiting approval. 
+
+analysis-requirements
+
+Severity: Medium
+
+Recommendations (Critical/High only)
+A) Add an Action Security Layer (Critical) — simplest viable fix
+
+Fix: Put a single “ActionPolicyEngine” between RequiredActions and execution:
+
+allowlist action types
+
+path sandboxing (repo-root + denylist like .git/, secrets, home dir)
+
+command allowlist (or “no shell” by default)
+
+secret redaction + “never log secrets” enforcement
+
+per-action authorization and “interactive required” policy
+
+Trade-offs: Slight upfront complexity, huge reduction in blast radius.
+
+Redesign vs patch: Patch (but must be centralized and mandatory).
+
+B) Make routing deterministic and testable (High)
+
+Fix: Formalize routing as data + validation:
+
+explicit matching semantics (exact > prefix > regex, etc.)
+
+conflict detection at startup (fail fast if overlaps without explicit tie-break)
+
+“routing contract tests” suite that asserts stable mapping for a corpus of intents
+
+Trade-offs: More up-front work defining semantics; massively better predictability.
+
+Redesign vs patch: Patch (but needs to be enforced centrally, not “guidelines”).
+
+C) Replace import-time registration with explicit discovery + locked registry builds (High)
+
+Fix: Build the registry explicitly at startup:
+
+discover orchestrators from a manifest (or entry points)
+
+require unique IDs; duplicates hard-fail unless explicitly overridden in config
+
+registry build produces a hash/version logged and persisted
+
+Trade-offs: Slightly more boilerplate; eliminates import-order chaos.
+
+Redesign vs patch: Patch (doable without rewriting everything).
+
+D) Add staged rollout for “live wiring” (High)
+
+Fix: Introduce an activation state machine:
+
+REGISTERED → SHADOW → CANARY → ACTIVE
+
+route a small % (or only explicit test mode) before full activation
+
+automatic rollback on error-rate thresholds
+
+Trade-offs: Adds operational scaffolding; prevents instant “global oops”.
+
+Redesign vs patch: Patch, but requires basic metrics.
+
+E) Pick one canonical routing table source of truth (High)
+
+Fix: One file is authoritative. Everything else is generated.
+
+e.g., routing-table.yaml as source of truth, then generate CORTEX.prompt.md / copilot instructions artifacts.
+
+Trade-offs: One-time migration, permanent reduction in drift.
+
+Redesign vs patch: Patch.
+
+Improvement Summary
+
+Top 3 fixes with highest risk reduction
+
+ActionPolicyEngine + sandbox/allowlists (prevents destructive execution and credential leakage). 
+
+implementation-plan
+
+Deterministic routing spec + conflict detection + contract tests (stops misroutes and “random” behavior). 
+
+dod-matrix
+
+Staged rollout for live wiring (prevents instant production-wide regressions). 
+
+implementation-plan
+
+One thing that should not be changed
+
+Keep the central gatekeeper concept (MasterOrchestrator + governance merge + audit trail). That’s the correct “spine” for survivability. 
+
+architecture-overview
+
+Long-term architectural direction
+
+Treat CORTEX less like “a set of orchestrators” and more like a policy-controlled execution platform: routing is configuration + contracts; execution is sandboxed + authorized; activation is staged; and everything emits metrics that allow automated rollback.
+
+If you want this pushed even harder, the next step is to write a single-page Threat Model + Trust Boundaries doc for “what can execute actions”, because that’s where systems like this either become reliable infrastructure… or a very polite chainsaw.
