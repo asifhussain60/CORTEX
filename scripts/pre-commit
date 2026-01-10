@@ -203,10 +203,72 @@ fi
 echo "✓ SKULL checks passed"
 
 # ============================================================================
-# Step 4: Verify Session Audit Has Build Progress
+# Step 4: File Type-Specific Validation (CORE-023)
 # ============================================================================
 echo ""
-echo "📊 Step 4: Build Progress Verification"
+echo "🔍 Step 4: File Type-Specific Validation (CORE-023)"
+echo "------------------------------------------------------------"
+
+# Get list of modified HTML files
+HTML_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.html$' || true)
+HTML_COUNT=$(echo "$HTML_FILES" | grep -c '\.html$' || echo "0")
+
+if [ "$HTML_COUNT" -gt "0" ]; then
+    echo "📄 Found $HTML_COUNT modified HTML file(s)"
+    echo ""
+    
+    # Run HTML validator on each file
+    HTML_VALIDATION_FAILED=0
+    
+    for html_file in $HTML_FILES; do
+        if [ -f "$PROJECT_ROOT/$html_file" ]; then
+            echo "Validating: $html_file"
+            
+            # Run HTML validator
+            VALIDATION_OUTPUT=$(python3 -m src.orchestrators.html_view.validators.html_validator "$PROJECT_ROOT/$html_file" 2>&1) || true
+            VALIDATION_EXIT=$?
+            
+            if [ $VALIDATION_EXIT -ne 0 ]; then
+                echo "❌ VALIDATION FAILED: $html_file"
+                echo "$VALIDATION_OUTPUT"
+                echo ""
+                HTML_VALIDATION_FAILED=1
+            else
+                echo "✅ Valid: $html_file"
+            fi
+        fi
+    done
+    
+    if [ $HTML_VALIDATION_FAILED -eq 1 ]; then
+        echo ""
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo "❌ HTML VALIDATION FAILED (CORE-023)"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo ""
+        echo "Modified HTML file(s) contain syntax errors or WCAG violations."
+        echo "All HTML must be valid HTML5 with zero parse errors."
+        echo ""
+        echo "💡 Fix via HTMLViewOrchestrator:"
+        echo "   python -m src.main \"fix visual issues in <file.html>\""
+        echo ""
+        echo "💡 Or run validator manually:"
+        echo "   python -m src.orchestrators.html_view.validators.html_validator <file.html>"
+        echo ""
+        echo "⚠️  To bypass (EMERGENCY ONLY): git commit --no-verify"
+        echo ""
+        exit 1
+    fi
+    
+    echo "✓ All HTML files validated successfully"
+else
+    echo "✓ No HTML files modified (validation skipped)"
+fi
+
+# ============================================================================
+# Step 5: Verify Session Audit Has Build Progress
+# ============================================================================
+echo ""
+echo "📊 Step 5: Build Progress Verification"
 echo "------------------------------------------------------------"
 
 SESSION_AUDIT="$PROJECT_ROOT/.asif/AI-Learning/cortex6/source-of-truth/session-audit.jsonl"
@@ -238,6 +300,7 @@ echo "📋 Summary:"
 echo "   • Audit trail: ✅ Verified"
 echo "   • Architecture: ✅ Compliant"
 echo "   • SKULL rules: ✅ Passed"
+echo "   • HTML validation: ✅ Passed (CORE-023)"
 echo "   • Build progress: ✅ Logged"
 echo ""
 

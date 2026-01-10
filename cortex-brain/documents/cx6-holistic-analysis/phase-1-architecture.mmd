@@ -1,0 +1,193 @@
+%% Phase 1 Architecture: Foundation Enhancement
+%% CORTEX 6.0 Component Dependencies and Data Flow
+
+graph TB
+    %% ============================================================================
+    %% SECURITY LAYER (Entry Point)
+    %% ============================================================================
+    SEC[Security Layer<br/>AC-SECURITY-001 to 008]
+    SEC_PATH[Path Validation<br/>CORE-005]
+    SEC_SECRET[Secret Detection<br/>Pre-commit]
+    SEC_INPUT[Input Sanitization<br/>SQL/XSS/Injection]
+    SEC_AUTH[Authentication<br/>Role-Based]
+    SEC_ENCRYPT[Encryption<br/>At Rest/Transit]
+    SEC_RATE[Rate Limiting<br/>100 req/hr]
+    SEC_VULN[Vuln Scanning<br/>Bandit/Trivy]
+    SEC_INCIDENT[Incident Response<br/>Auto-containment]
+    
+    SEC --> SEC_PATH
+    SEC --> SEC_SECRET
+    SEC --> SEC_INPUT
+    SEC --> SEC_AUTH
+    SEC --> SEC_ENCRYPT
+    SEC --> SEC_RATE
+    SEC --> SEC_VULN
+    SEC --> SEC_INCIDENT
+    
+    %% ============================================================================
+    %% AUDIT INFRASTRUCTURE (Foundation Layer 1)
+    %% ============================================================================
+    AUDIT[Audit Infrastructure<br/>AC-AUDIT-001 to 007]
+    AUDIT_LOGGER[EnhancedAuditLogger<br/><5ms latency]
+    AUDIT_HASH[Hash Chain<br/>SHA-256 integrity]
+    AUDIT_CORR[Correlation Tracking<br/>UUID4]
+    AUDIT_QUERY[Query Interface<br/>By AC-ID/Category]
+    AUDIT_ROTATE[Log Rotation<br/>Daily+Compression]
+    AUDIT_PERF[Performance Monitor<br/>Latency alerts]
+    AUDIT_EXPORT[Export/Compliance<br/>JSON/CSV]
+    
+    SEC_PATH -.->|validates| AUDIT
+    SEC_SECRET -.->|logs to| AUDIT
+    SEC_AUTH -.->|logs to| AUDIT
+    
+    AUDIT --> AUDIT_LOGGER
+    AUDIT_LOGGER --> AUDIT_HASH
+    AUDIT_LOGGER --> AUDIT_CORR
+    AUDIT_LOGGER --> AUDIT_QUERY
+    AUDIT_LOGGER --> AUDIT_ROTATE
+    AUDIT_LOGGER --> AUDIT_PERF
+    AUDIT_LOGGER --> AUDIT_EXPORT
+    
+    %% ============================================================================
+    %% STATE MANAGEMENT (Foundation Layer 1)
+    %% ============================================================================
+    STATE[State Management<br/>AC-STATE-001 to 003]
+    STATE_TRACKER[Progress Tracker<br/>progress-tracker.json]
+    STATE_ATOMIC[Atomic Updates<br/>File locking]
+    STATE_RECOVERY[State Recovery<br/>Hourly backups]
+    
+    SEC_ENCRYPT -.->|protects| STATE
+    
+    STATE --> STATE_TRACKER
+    STATE --> STATE_ATOMIC
+    STATE --> STATE_RECOVERY
+    
+    %% ============================================================================
+    %% GOVERNANCE MERGER (Foundation Layer 2)
+    %% ============================================================================
+    GOV[Governance Merger<br/>AC-GOV-001 to 005]
+    GOV_LOAD[Rule Loading<br/>4-Tier Schema]
+    GOV_CONFLICT[Conflict Resolution<br/>Tier 0 wins]
+    GOV_INJECT[Dynamic Injection<br/>Epic-specific]
+    GOV_HOOKS[Enforcement Hooks<br/>@governance_enforced]
+    GOV_HEALTH[Health Check<br/>Hourly validation]
+    
+    AUDIT --> GOV
+    STATE --> GOV
+    SEC_INPUT -.->|enforces| GOV
+    
+    GOV --> GOV_LOAD
+    GOV --> GOV_CONFLICT
+    GOV --> GOV_INJECT
+    GOV --> GOV_HOOKS
+    GOV --> GOV_HEALTH
+    
+    %% Load from 4 tiers
+    TIER0[Tier 0: SKULL Rules<br/>core-rules.yaml]
+    TIER1[Tier 1: Business<br/>active-epic.yaml]
+    TIER2[Tier 2: Standards<br/>company-practices.yaml]
+    TIER3[Tier 3: Learned<br/>knowledge-patterns.yaml]
+    
+    TIER0 -->|HIGHEST| GOV_LOAD
+    TIER1 -->|HIGH| GOV_LOAD
+    TIER2 -->|MEDIUM| GOV_LOAD
+    TIER3 -->|LOW| GOV_LOAD
+    
+    %% ============================================================================
+    %% LIFECYCLE MANAGEMENT (Orchestration Layer)
+    %% ============================================================================
+    LIFECYCLE[Lifecycle Management<br/>AC-LIFECYCLE-001 to 003]
+    LIFECYCLE_FSM[State Machine<br/>NOT_STARTED→COMPLETED]
+    LIFECYCLE_DEP[Dependency Resolution<br/>Block if incomplete]
+    LIFECYCLE_MON[Execution Monitor<br/>Heartbeat/Timeout]
+    
+    GOV --> LIFECYCLE
+    STATE --> LIFECYCLE
+    AUDIT -.->|logs transitions| LIFECYCLE
+    
+    LIFECYCLE --> LIFECYCLE_FSM
+    LIFECYCLE --> LIFECYCLE_DEP
+    LIFECYCLE --> LIFECYCLE_MON
+    
+    %% ============================================================================
+    %% EVIDENCE BUNDLE SYSTEM (Quality Layer)
+    %% ============================================================================
+    EVIDENCE[Evidence Bundle<br/>AC-EVIDENCE-001 to 003]
+    EVIDENCE_TEMPLATE[Bundle Template<br/>manifest.yaml]
+    EVIDENCE_VALIDATE[Automated Validation<br/>Tests/Coverage/Perf]
+    EVIDENCE_QUERY[Evidence Queries<br/>Completion proof]
+    
+    LIFECYCLE --> EVIDENCE
+    AUDIT -.->|provides trace| EVIDENCE
+    GOV -.->|validates rules| EVIDENCE
+    
+    EVIDENCE --> EVIDENCE_TEMPLATE
+    EVIDENCE --> EVIDENCE_VALIDATE
+    EVIDENCE --> EVIDENCE_QUERY
+    
+    %% Evidence bundle structure
+    BUNDLE[Evidence Bundle Structure]
+    MANIFEST[manifest.yaml<br/>Completion proof]
+    TESTS[test_results.json<br/>All tests passing]
+    AUDIT_TRACE[audit_trace.jsonl<br/>Governance log]
+    PERF_METRICS[performance_metrics.json<br/>Latency data]
+    SEC_SCAN[security_scan.json<br/>Vuln results]
+    
+    EVIDENCE --> BUNDLE
+    BUNDLE --> MANIFEST
+    BUNDLE --> TESTS
+    BUNDLE --> AUDIT_TRACE
+    BUNDLE --> PERF_METRICS
+    BUNDLE --> SEC_SCAN
+    
+    %% ============================================================================
+    %% DATA FLOWS (Critical Paths)
+    %% ============================================================================
+    
+    %% Flow 1: Operation Logging
+    AUDIT_LOGGER -.->|writes to| DB[(SQLite WAL<br/>governance.db)]
+    
+    %% Flow 2: State Persistence
+    STATE_TRACKER -.->|writes to| JSON[(progress-tracker.json<br/>Atomic updates)]
+    
+    %% Flow 3: Governance Enforcement
+    GOV_HOOKS -.->|blocks| OPERATION[Orchestrator Operation]
+    
+    %% Flow 4: Evidence Validation
+    EVIDENCE_VALIDATE -.->|checks| TESTS
+    EVIDENCE_VALIDATE -.->|checks| PERF_METRICS
+    EVIDENCE_VALIDATE -.->|checks| SEC_SCAN
+    
+    %% ============================================================================
+    %% PHASE 2 DEPENDENCY (What comes next)
+    %% ============================================================================
+    PHASE2[Phase 2: Orchestration Core<br/>BLOCKED until Phase 1 complete]
+    
+    EVIDENCE -.->|enables| PHASE2
+    LIFECYCLE -.->|enables| PHASE2
+    GOV -.->|enables| PHASE2
+    AUDIT -.->|enables| PHASE2
+    STATE -.->|enables| PHASE2
+    SEC -.->|enables| PHASE2
+    
+    %% ============================================================================
+    %% STYLING
+    %% ============================================================================
+    
+    classDef security fill:#ff6b6b,stroke:#c92a2a,stroke-width:3px,color:#fff
+    classDef audit fill:#4dabf7,stroke:#1971c2,stroke-width:3px,color:#fff
+    classDef state fill:#51cf66,stroke:#2f9e44,stroke-width:3px,color:#fff
+    classDef governance fill:#ffd43b,stroke:#f59f00,stroke-width:3px,color:#000
+    classDef lifecycle fill:#a78bfa,stroke:#7c3aed,stroke-width:3px,color:#fff
+    classDef evidence fill:#ff8787,stroke:#fa5252,stroke-width:3px,color:#fff
+    classDef phase2 fill:#e9ecef,stroke:#868e96,stroke-width:2px,color:#000,stroke-dasharray: 5 5
+    classDef data fill:#ffc9c9,stroke:#fa5252,stroke-width:2px,color:#000
+    
+    class SEC,SEC_PATH,SEC_SECRET,SEC_INPUT,SEC_AUTH,SEC_ENCRYPT,SEC_RATE,SEC_VULN,SEC_INCIDENT security
+    class AUDIT,AUDIT_LOGGER,AUDIT_HASH,AUDIT_CORR,AUDIT_QUERY,AUDIT_ROTATE,AUDIT_PERF,AUDIT_EXPORT audit
+    class STATE,STATE_TRACKER,STATE_ATOMIC,STATE_RECOVERY state
+    class GOV,GOV_LOAD,GOV_CONFLICT,GOV_INJECT,GOV_HOOKS,GOV_HEALTH,TIER0,TIER1,TIER2,TIER3 governance
+    class LIFECYCLE,LIFECYCLE_FSM,LIFECYCLE_DEP,LIFECYCLE_MON lifecycle
+    class EVIDENCE,EVIDENCE_TEMPLATE,EVIDENCE_VALIDATE,EVIDENCE_QUERY,BUNDLE,MANIFEST,TESTS,AUDIT_TRACE,PERF_METRICS,SEC_SCAN evidence
+    class PHASE2 phase2
+    class DB,JSON data

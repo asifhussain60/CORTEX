@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX 6.0 - Holistic Implementation Plan</title>
+    
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-color: #00d4ff;
+            --secondary-color: #7b2cbf;
+            --accent-color: #ff006e;
+            --success-color: #06ffa5;
+            --warning-color: #ffbe0b;
+            --danger-color: #ff006e;
+            --bg-dark: #0a0a0f;
+            --bg-darker: #050508;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0c0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--bg-darker) 0%, var(--bg-dark) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Animated background particles */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(123, 44, 191, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(255, 0, 110, 0.05) 0%, transparent 50%);
+            z-index: 0;
+            animation: pulse 15s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        /* Glassmorphism card */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Header */
+        header {
+            display: flex;
+            align-items: center;
+            padding: 30px;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+        
+        .logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 212, 255, 0.3);
+        }
+        
+        .header-content {
+            flex: 1;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1em;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        
+        .status-ready {
+            background: rgba(6, 255, 165, 0.2);
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+        
+        /* Metrics Dashboard */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .metric-card {
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+        }
+        
+        .metric-label {
+            font-size: 0.9em;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        
+        .metric-value {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .metric-sublabel {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            margin-top: 5px;
+        }
+        
+        /* Progress Chart */
+        .chart-container {
+            padding: 30px;
+            margin-bottom: 30px;
+            height: 400px;
+        }
+        
+        /* Phase Cards */
+        .phases-grid {
+            display: grid;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .phase-card {
+            padding: 30px;
+        }
+        
+        .phase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        
+        .phase-number {
+            font-size: 3em;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0.3;
+        }
+        
+        .phase-info h3 {
+            font-size: 1.8em;
+            margin-bottom: 8px;
+        }
+        
+        .phase-duration {
+            color: var(--text-secondary);
+            font-size: 0.95em;
+        }
+        
+        .phase-status {
+            padding: 6px 14px;
+            border-radius: 16px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        
+        .status-in-progress {
+            background: rgba(0, 212, 255, 0.2);
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+        
+        .status-blocked {
+            background: rgba(255, 190, 11, 0.2);
+            color: var(--warning-color);
+            border: 1px solid var(--warning-color);
+        }
+        
+        .status-completed {
+            background: rgba(6, 255, 165, 0.2);
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+        
+        .phase-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .components-list {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .component-item {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 3px solid var(--primary-color);
+        }
+        
+        .component-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .ac-ids {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .ac-badge {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--primary-color);
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.75em;
+            font-weight: 600;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+        
+        /* Audit Log Viewer */
+        .audit-section {
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .audit-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .filter-btn:hover {
+            background: rgba(0, 212, 255, 0.2);
+            border-color: var(--primary-color);
+        }
+        
+        .filter-btn.active {
+            background: rgba(0, 212, 255, 0.3);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .audit-log {
+            max-height: 500px;
+            overflow-y: auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+        
+        .log-entry {
+            padding: 12px;
+            margin-bottom: 10px;
+            border-left: 3px solid var(--primary-color);
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .log-timestamp {
+            color: var(--text-secondary);
+            font-size: 0.85em;
+        }
+        
+        .log-category {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .log-message {
+            margin-top: 5px;
+            color: var(--text-primary);
+        }
+        
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-color);
+        }
+        
+        /* Evidence Bundle Viewer */
+        .evidence-section {
+            padding: 30px;
+        }
+        
+        .evidence-grid {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .evidence-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid var(--glass-border);
+        }
+        
+        .evidence-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .evidence-title {
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+        
+        .completeness-score {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: var(--success-color);
+        }
+        
+        .evidence-files {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .file-badge {
+            background: rgba(123, 44, 191, 0.2);
+            color: var(--secondary-color);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            border: 1px solid var(--secondary-color);
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-secondary);
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="glass">
+            <img src="../../docs/assets/images/CORTEX-logo-200.png" alt="CORTEX Logo" class="logo">
+            <div class="header-content">
+                <h1>CORTEX 6.0</h1>
+                <div class="subtitle">Holistic Snowball Implementation Plan</div>
+                <span class="status-badge status-ready">READY TO IMPLEMENT</span>
+            </div>
+        </header>
+        
+        <!-- Metrics Dashboard -->
+        <div class="metrics-grid">
+            <div class="metric-card glass">
+                <div class="metric-label">Design Score</div>
+                <div class="metric-value">97<span style="font-size: 0.5em; color: var(--text-secondary);">/100</span></div>
+                <div class="metric-sublabel">Exceeds target by 2 points</div>
+            </div>
+            
+            <div class="metric-card glass">
+                <div class="metric-label">Total AC-IDs</div>
+                <div class="metric-value">102</div>
+                <div class="metric-sublabel">90 original + 12 hybrid</div>
+            </div>
+            
+            <div class="metric-card glass">
+                <div class="metric-label">Implementation Duration</div>
+                <div class="metric-value">8<span style="font-size: 0.5em; color: var(--text-secondary);"> weeks</span></div>
+                <div class="metric-sublabel">4 phases, snowball strategy</div>
+            </div>
+            
+            <div class="metric-card glass">
+                <div class="metric-label">Current Phase</div>
+                <div class="metric-value" style="font-size: 2em;">Phase 1</div>
+                <div class="metric-sublabel">Foundation Enhancement</div>
+            </div>
+        </div>
+        
+        <!-- Progress Chart -->
+        <div class="chart-container glass">
+            <canvas id="progressChart"></canvas>
+        </div>
+        
+        <!-- Phase 1: Foundation -->
+        <div class="phases-grid">
+            <div class="phase-card glass" onclick="window.location.href='phase-detail-viewer.html?phase=1'" style="cursor: pointer;">
+                <div class="phase-header">
+                    <div style="display: flex; gap: 20px; flex: 1;">
+                        <div class="phase-number">01</div>
+                        <div class="phase-info">
+                            <h3>Foundation Enhancement</h3>
+                            <div class="phase-duration">Week 1-2 • 13-24 January 2026</div>
+                        </div>
+                    </div>
+                    <span class="phase-status status-in-progress">IN PROGRESS</span>
+                </div>
+                
+                <div class="phase-description">
+                    Build the core infrastructure that EVERY other component depends on. 
+                    All orchestrators log to audit, enforce governance, persist state. 
+                    Without this foundation, nothing else can reliably operate.
+                </div>
+                
+                <div class="components-list">
+                    <div class="component-item">
+                        <div class="component-name">🔍 Audit Infrastructure with Hash Chain</div>
+                        <div class="ac-ids">
+                            <span class="ac-badge">AC-AUDIT-001</span>
+                            <span class="ac-badge">AC-AUDIT-002</span>
+                            <span class="ac-badge">AC-AUDIT-003</span>
+                            <span class="ac-badge">AC-AUDIT-004</span>
+                            <span class="ac-badge">AC-AUDIT-005</span>
+                            <span class="ac-badge">AC-AUDIT-006</span>
+                            <span class="ac-badge">AC-AUDIT-007</span>
+                        </div>
+                    </div>
+                    
+                    <div class="component-item">
+                        <div class="component-name">🛡️ 4-Tier Governance Merger</div>
+                        <div class="ac-ids">
+                            <span class="ac-badge">AC-GOV-001</span>
+                            <span class="ac-badge">AC-GOV-002</span>
+                            <span class="ac-badge">AC-GOV-003</span>
+                            <span class="ac-badge">AC-GOV-004</span>
+                            <span class="ac-badge">AC-GOV-005</span>
+                        </div>
+                    </div>
+                    
+                    <div class="component-item">
+                        <div class="component-name">💾 State Manager with SQLite</div>
+                        <div class="ac-ids">
+                            <span class="ac-badge">AC-STATE-001</span>
+                            <span class="ac-badge">AC-STATE-002</span>
+                            <span class="ac-badge">AC-STATE-003</span>
+                        </div>
+                    </div>
+                    
+                    <div class="component-item">
+                        <div class="component-name">♻️ Extended Orchestrator Lifecycle</div>
+                        <div class="ac-ids">
+                            <span class="ac-badge">AC-LIFECYCLE-001</span>
+                            <span class="ac-badge">AC-LIFECYCLE-002</span>
+                            <span class="ac-badge">AC-LIFECYCLE-003</span>
+                        </div>
+                    </div>
+                    
+                    <div class="component-item">
+                        <div class="component-name">📦 Evidence Bundle Generation</div>
+                        <div class="ac-ids">
+                            <span class="ac-badge">AC-EVIDENCE-001</span>
+                            <span class="ac-badge">AC-EVIDENCE-002</span>
+                            <span class="ac-badge">AC-EVIDENCE-003</span>
+                        </div>
+                    </div>
+                    
+                    <div class="component-item">
+                        <div class="component-name">🔒 Action Security Layer</div>
+                        <div class="ac-ids">
+                            <span class="ac-badge">AC-SECURITY-001</span>
+                            <span class="ac-badge">AC-SECURITY-002</span>
+                            <span class="ac-badge">AC-SECURITY-003</span>
+                            <span class="ac-badge">AC-SECURITY-004</span>
+                            <span class="ac-badge">AC-SECURITY-005</span>
+                            <span class="ac-badge">AC-SECURITY-006</span>
+                            <span class="ac-badge">AC-SECURITY-007</span>
+                            <span class="ac-badge">AC-SECURITY-008</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Phase 2: Core Workflow -->
+            <div class="phase-card glass" onclick="window.location.href='phase-detail-viewer.html?phase=2'" style="cursor: pointer;">
+                <div class="phase-header">
+                    <div style="display: flex; gap: 20px; flex: 1;">
+                        <div class="phase-number">02</div>
+                        <div class="phase-info">
+                            <h3>Orchestration Core (CORE WORKFLOW)</h3>
+                            <div class="phase-duration">Week 3-4 • 27 Jan - 7 Feb 2026</div>
+                        </div>
+                    </div>
+                    <span class="phase-status status-blocked">BLOCKED BY PHASE 1</span>
+                </div>
+                
+                <div class="phase-description">
+                    Establishes THE DEFAULT WORKING MECHANISM at the core of CORTEX operations. 
+                    MasterOrchestrator is IN CHARGE: evaluates requests, creates tasks, executes. 
+                    This is the central controller that all user requests flow through.
+                </div>
+                
+                <div class="components-list">
+                    <div class="component-item">
+                        <div class="component-name">🎯 MasterOrchestrator (Central Controller)</div>
+                        <div class="ac-ids">
+                            <span class="ac-badge">AC-ORCH-001</span>
+                            <span class="ac-badge">AC-ORCH-002</span>
+                            <span class="ac-badge">AC-ORCH-003</span>
+                            <span class="ac-badge">AC-ORCH-004</span>
+                            <span class="ac-badge">AC-ORCH-005</span>
+                            <span class="ac-badge">AC-ORCH-006</span>
+                            <span class="ac-badge">AC-ORCH-007</span>
+                            <span class="ac-badge">AC-ORCH-008</span>
+                        </div>
+                    </div>
+                    
+                    <div class="component-item">
+                        <div class="component-name">✅ TodoManager (Task Tracking)</div>
+                        <div class="ac-ids">
+                            <span class="ac-badge">AC-TODO-001</span>
+                            <span class="ac-badge">AC-TODO-002</span>
+                            <span class="ac-badge">AC-TODO-003</span>
+                            <span class="ac-badge">AC-TODO-004</span>
+                        </div>
+                    </div>
+                    
+                    <div class="component-item">
+                        <div class="component-name">🧪 TDD-Master v1 (Test-Driven Development)</div>
+                        <div class="ac-ids">
+                            <span class="ac-badge">AC-TDD-001</span>
+                            <span class="ac-badge">AC-TDD-002</span>
+                            <span class="ac-badge">AC-TDD-003</span>
+                            <span class="ac-badge">AC-TDD-004</span>
+                            <span class="ac-badge">AC-TDD-005</span>
+                            <span class="ac-badge">AC-TDD-006</span>
+                            <span class="ac-badge">AC-TDD-007</span>
+                            <span class="ac-badge">AC-TDD-008</span>
+                            <span class="ac-badge">AC-TDD-009</span>
+                            <span class="ac-badge">AC-TDD-010</span>
+                        </div>
+                    </div>
+                    
+                    <div class="component-item">
+                        <div class="component-name">📋 Planning v5 (Intelligent Planning)</div>
+                        <div class="ac-ids">
+                            <span class="ac-badge">AC-PLAN-001</span>
+                            <span class="ac-badge">AC-PLAN-002</span>
+                            <span class="ac-badge">AC-PLAN-003</span>
+                            <span class="ac-badge">AC-PLAN-004</span>
+                            <span class="ac-badge">AC-PLAN-005</span>
+                            <span class="ac-badge">AC-PLAN-006</span>
+                            <span class="ac-badge">AC-PLAN-007</span>
+                            <span class="ac-badge">AC-PLAN-008</span>
+                        </div>
+                    </div>
+                    
+                    <div class="component-item">
+                        <div class="component-name">🔀 Deterministic Routing Engine</div>
+                        <div class="ac-ids">
+                            <span class="ac-badge">AC-ROUTE-001</span>
+                            <span class="ac-badge">AC-ROUTE-002</span>
+                            <span class="ac-badge">AC-ROUTE-003</span>
+                            <span class="ac-badge">AC-ROUTE-004</span>
+                            <span class="ac-badge">AC-ROUTE-005</span>
+                        </div>
+                    </div>
+                    
+                    <div class="component-item">
+                        <div class="component-name">🔬 STS as Capability 0 (Framework Validation)</div>
+                        <div class="ac-ids">
+                            <span class="ac-badge">AC-STS-001</span>
+                            <span class="ac-badge">AC-STS-002</span>
+                            <span class="ac-badge">AC-STS-003</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Phase 3: Feature Orchestrators -->
+            <div class="phase-card glass" onclick="window.location.href='phase-detail-viewer.html?phase=3'" style="cursor: pointer;">
+                <div class="phase-header">
+                    <div style="display: flex; gap: 20px; flex: 1;">
+                        <div class="phase-number">03</div>
+                        <div class="phase-info">
+                            <h3>Feature Orchestrators</h3>
+                            <div class="phase-duration">Week 5-6 • 10-21 Feb 2026</div>
+                        </div>
+                    </div>
+                    <span class="phase-status status-blocked">BLOCKED BY PHASE 2</span>
+                </div>
+                
+                <div class="phase-description">
+                    Build specialized orchestrators that leverage the core workflow. 
+                    Each orchestrator reuses: Audit, Governance, State, Lifecycle, Evidence. 
+                    Snowball effect: implementation becomes easier with solid foundation.
+                </div>
+                
+                <div class="components-list">
+                    <div class="component-item">
+                        <div class="component-name">🔄 Azure DevOps Integration v2</div>
+                        <div class="ac-ids">
+                            <span class="ac-badge">AC-ADO-001</span>
+                            <span class="ac-badge">AC-ADO-002</span>
+                            <span class="ac-badge">AC-ADO-003</span>
+                            <span class="ac-badge">AC-ADO-004</span>
+                            <span class="ac-badge">AC-ADO-005</span>
+                            <span class="ac-badge">AC-ADO-006</span>
+                        </div>
+                    </div>
+                    
+                    <div class="component-item">
+                        <div class="component-name">🧹 Vacuum and Cleanup v2</div>
+                        <div class="ac-ids">
+                            <span class="ac-badge">AC-VAC-001</span>
+                            <span class="ac-badge">AC-VAC-002</span>
+                            <span class="ac-badge">AC-VAC-003</span>
+                            <span class="ac-badge">AC-CLEAN-001</span>
+                            <span class="ac-badge">AC-CLEAN-002</span>
+                            <span class="ac-badge">AC-CLEAN-003</span>
+                        </div>
+                    </div>
+                    
+                    <div class="component-item">
+                        <div class="component-name">🔍 Investigation Orchestrator</div>
+                        <div class="ac-ids">
+                            <span class="ac-badge">AC-INV-001</span>
+                            <span class="ac-badge">AC-INV-002</span>
+                            <span class="ac-badge">AC-INV-003</span>
+                        </div>
+                    </div>
+                    
+                    <div class="component-item">
+                        <div class="component-name">✨ Sanitization and Refinement v2</div>
+                        <div class="ac-ids">
+                            <span class="ac-badge">AC-SAN-001</span>
+                            <span class="ac-badge">AC-SAN-002</span>
+                            <span class="ac-badge">AC-REF-001</span>
+                            <span class="ac-badge">AC-REF-002</span>
+                        </div>
+                    </div>
+                    
+                    <div class="component-item">
+                        <div class="component-name">🕷️ Crawler Orchestrator</div>
+                        <div class="ac-ids">
+                            <span class="ac-badge">AC-CRAWLER-001</span>
+                            <span class="ac-badge">AC-CRAWLER-002</span>
+                            <span class="ac-badge">AC-CRAWLER-003</span>
+                        </div>
+                    </div>
+                    
+                    <div class="component-item">
+                        <div class="component-name">📊 Progressive Rollout System</div>
+                        <div class="ac-ids">
+                            <span class="ac-badge">AC-ROLLOUT-SIMPLE-001</span>
+                            <span class="ac-badge">AC-ROLLOUT-SIMPLE-002</span>
+                            <span class="ac-badge">AC-ROLLOUT-SIMPLE-003</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Phase 4: Intelligence Layer -->
+            <div class="phase-card glass" onclick="window.location.href='phase-detail-viewer.html?phase=4'" style="cursor: pointer;">
+                <div class="phase-header">
+                    <div style="display: flex; gap: 20px; flex: 1;">
+                        <div class="phase-number">04</div>
+                        <div class="phase-info">
+                            <h3>Intelligence Layer</h3>
+                            <div class="phase-duration">Week 7-8 • 24 Feb - 7 Mar 2026</div>
+                        </div>
+                    </div>
+                    <span class="phase-status status-blocked">BLOCKED BY PHASE 3</span>
+                </div>
+                
+                <div class="phase-description">
+                    AI-native features that enhance orchestration with intelligence. 
+                    Leverages all previous components: audit history, execution patterns, 
+                    governance rules, and orchestrator behaviors.
+                </div>
+                
+                <div class="components-list">
+                    <div class="component-item">
+                        <div class="component-name">🤖 LLM Intent Classifier</div>
+                        <div class="ac-ids">
+                            <span class="ac-badge">AC-ROUTE-003</span>
+                        </div>
+                    </div>
+                    
+                    <div class="component-item">
+                        <div class="component-name">📚 Tier 3 Knowledge Practices</div>
+                        <div class="ac-ids">
+                            <span class="ac-badge">AC-KNOW-001</span>
+                            <span class="ac-badge">AC-KNOW-002</span>
+                            <span class="ac-badge">AC-KNOW-003</span>
+                        </div>
+                    </div>
+                    
+                    <div class="component-item">
+                        <div class="component-name">👁️ Vision API Integration</div>
+                        <div class="ac-ids">
+                            <span class="ac-badge">AC-VISION-001</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Audit Log Viewer -->
+        <div class="audit-section glass">
+            <h2 style="margin-bottom: 20px;">📜 Audit Trail Evidence <span id="logCount" style="font-size: 0.6em; color: var(--text-secondary);"></span></h2>
+            
+            <div class="audit-controls">
+                <button class="filter-btn active" data-filter="all">All Logs</button>
+                <button class="filter-btn" data-filter="GOVERNANCE">Governance</button>
+                <button class="filter-btn" data-filter="ORCHESTRATOR">Orchestrator</button>
+                <button class="filter-btn" data-filter="VALIDATION">Validation</button>
+                <button class="filter-btn" data-filter="INFRASTRUCTURE">Infrastructure</button>
+                
+                <input type="text" id="searchLogs" placeholder="Search logs..." style="
+                    background: rgba(255, 255, 255, 0.05);
+                    border: 1px solid var(--glass-border);
+                    color: var(--text-primary);
+                    padding: 10px 20px;
+                    border-radius: 8px;
+                    flex: 1;
+                    max-width: 300px;
+                ">
+            </div>
+            
+            <div class="audit-log" id="auditLog">
+                <div style="text-align: center; padding: 40px; color: var(--text-secondary);">
+                    Loading audit logs...
+                </div>
+            </div>
+        </div>
+        
+        <!-- Evidence Bundle Viewer -->
+        <div class="evidence-section glass">
+            <h2 style="margin-bottom: 20px;">📦 Evidence Bundles</h2>
+            
+            <div class="evidence-grid">
+                <div class="evidence-item">
+                    <div class="evidence-header">
+                        <div class="evidence-title">TodoOrchestrator Evidence Bundle</div>
+                        <div class="completeness-score">100%</div>
+                    </div>
+                    
+                    <div class="evidence-files">
+                        <span class="file-badge">✓ manifest.yaml</span>
+                        <span class="file-badge">✓ test_results.json</span>
+                        <span class="file-badge">✓ audit_trace.jsonl</span>
+                    </div>
+                    
+                    <div style="margin-top: 15px; color: var(--text-secondary); font-size: 0.9em;">
+                        <div>✓ Test Coverage: 85%</div>
+                        <div>✓ Audit Completeness: 100%</div>
+                        <div>✓ Governance Compliance: 100%</div>
+                    </div>
+                </div>
+                
+                <div class="evidence-item" style="opacity: 0.5;">
+                    <div class="evidence-header">
+                        <div class="evidence-title">Planning v5 Evidence Bundle</div>
+                        <div class="completeness-score" style="color: var(--warning-color);">PENDING</div>
+                    </div>
+                    
+                    <div style="margin-top: 15px; color: var(--text-secondary); font-size: 0.9em;">
+                        Awaiting Phase 2 completion...
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Architecture Documentation Navigation -->
+        <div style="margin-top: 60px;">
+            <h2 style="font-size: 2.2em; margin-bottom: 15px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                📚 Architecture Documentation
+            </h2>
+            <p style="color: var(--text-secondary); margin-bottom: 40px; font-size: 1.1em;">
+                Comprehensive guides to understanding CORTEX 6.0 architecture, governance, and orchestration design
+            </p>
+            
+            <div class="metrics-grid" style="grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));">
+                <!-- Governance Rules -->
+                <a href="../../docs/architecture/governance-rules.html" style="text-decoration: none; color: inherit;">
+                    <div class="metric-card" style="cursor: pointer; transition: all 0.3s;">
+                        <div style="font-size: 3em; margin-bottom: 15px;">🛡️</div>
+                        <div style="font-size: 1.8em; font-weight: 600; margin-bottom: 10px; color: var(--primary-color);">
+                            Governance Rules
+                        </div>
+                        <div style="color: var(--text-secondary); font-size: 1em; line-height: 1.6;">
+                            23 SKULL rules organized by category. Learn the 4-tier hierarchy protecting CORTEX integrity.
+                        </div>
+                        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+                            <span style="color: var(--primary-color); font-size: 0.9em;">→ Read Documentation</span>
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- Orchestration Design -->
+                <a href="../../docs/architecture/orchestration-design.html" style="text-decoration: none; color: inherit;">
+                    <div class="metric-card" style="cursor: pointer; transition: all 0.3s;">
+                        <div style="font-size: 3em; margin-bottom: 15px;">🎭</div>
+                        <div style="font-size: 1.8em; font-weight: 600; margin-bottom: 10px; color: var(--primary-color);">
+                            Orchestration Design
+                        </div>
+                        <div style="color: var(--text-secondary); font-size: 1em; line-height: 1.6;">
+                            How MasterOrchestrator routes requests, manages orchestrators, and enforces lifecycle phases.
+                        </div>
+                        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+                            <span style="color: var(--primary-color); font-size: 0.9em;">→ Read Documentation</span>
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- Brain Architecture -->
+                <a href="../../docs/architecture/brain-architecture.html" style="text-decoration: none; color: inherit;">
+                    <div class="metric-card" style="cursor: pointer; transition: all 0.3s;">
+                        <div style="font-size: 3em; margin-bottom: 15px;">🧠</div>
+                        <div style="font-size: 1.8em; font-weight: 600; margin-bottom: 10px; color: var(--primary-color);">
+                            Brain Architecture
+                        </div>
+                        <div style="color: var(--text-secondary); font-size: 1em; line-height: 1.6;">
+                            4-tier knowledge hierarchy, CORTEX vs Business separation, memory systems explained.
+                        </div>
+                        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+                            <span style="color: var(--primary-color); font-size: 0.9em;">→ Read Documentation</span>
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- Phase 1 Deep Dive -->
+                <a href="../../cortex-brain/documents/cx6-holistic-analysis/phase-1-foundation.md" style="text-decoration: none; color: inherit;">
+                    <div class="metric-card" style="cursor: pointer; transition: all 0.3s;">
+                        <div style="font-size: 3em; margin-bottom: 15px;">🏗️</div>
+                        <div style="font-size: 1.8em; font-weight: 600; margin-bottom: 10px; color: var(--primary-color);">
+                            Phase 1 Foundation
+                        </div>
+                        <div style="color: var(--text-secondary); font-size: 1em; line-height: 1.6;">
+                            Detailed breakdown of 28 AC-IDs: Audit, Governance, State, Lifecycle, Evidence, Security.
+                        </div>
+                        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+                            <span style="color: var(--primary-color); font-size: 0.9em;">→ View Phase Details</span>
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- Four Tier Brain -->
+                <a href="../../docs/architecture/four-tier-brain.html" style="text-decoration: none; color: inherit;">
+                    <div class="metric-card" style="cursor: pointer; transition: all 0.3s;">
+                        <div style="font-size: 3em; margin-bottom: 15px;">🎯</div>
+                        <div style="font-size: 1.8em; font-weight: 600; margin-bottom: 10px; color: var(--primary-color);">
+                            Four Tier Brain
+                        </div>
+                        <div style="color: var(--text-secondary); font-size: 1em; line-height: 1.6;">
+                            Visual guide to Tier 0-3 precedence, conflict resolution, and knowledge flow.
+                        </div>
+                        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+                            <span style="color: var(--primary-color); font-size: 0.9em;">→ Read Documentation</span>
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- Orchestrator Ecosystem -->
+                <a href="../../docs/architecture/orchestrator-ecosystem.html" style="text-decoration: none; color: inherit;">
+                    <div class="metric-card" style="cursor: pointer; transition: all 0.3s;">
+                        <div style="font-size: 3em; margin-bottom: 15px;">🌐</div>
+                        <div style="font-size: 1.8em; font-weight: 600; margin-bottom: 10px; color: var(--primary-color);">
+                            Orchestrator Ecosystem
+                        </div>
+                        <div style="color: var(--text-secondary); font-size: 1em; line-height: 1.6;">
+                            Complete catalog of all orchestrators: Planning, TDD-Master, ADO, Vacuum, Crawlers.
+                        </div>
+                        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+                            <span style="color: var(--primary-color); font-size: 0.9em;">→ Read Documentation</span>
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- SKULL Protection -->
+                <a href="../../docs/architecture/skull-protection.html" style="text-decoration: none; color: inherit;">
+                    <div class="metric-card" style="cursor: pointer; transition: all 0.3s;">
+                        <div style="font-size: 3em; margin-bottom: 15px;">💀</div>
+                        <div style="font-size: 1.8em; font-weight: 600; margin-bottom: 10px; color: var(--danger-color);">
+                            SKULL Protection
+                        </div>
+                        <div style="color: var(--text-secondary); font-size: 1em; line-height: 1.6;">
+                            Deep dive into immutable Tier 0 rules. Why they exist and how they prevent failures.
+                        </div>
+                        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+                            <span style="color: var(--danger-color); font-size: 0.9em;">→ Read Documentation</span>
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- Working Memory -->
+                <a href="../../docs/architecture/working-memory.html" style="text-decoration: none; color: inherit;">
+                    <div class="metric-card" style="cursor: pointer; transition: all 0.3s;">
+                        <div style="font-size: 3em; margin-bottom: 15px;">📝</div>
+                        <div style="font-size: 1.8em; font-weight: 600; margin-bottom: 10px; color: var(--primary-color);">
+                            Working Memory
+                        </div>
+                        <div style="color: var(--text-secondary); font-size: 1em; line-height: 1.6;">
+                            How progress-tracker.json maintains state, handles recovery, and enables continuation.
+                        </div>
+                        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+                            <span style="color: var(--primary-color); font-size: 0.9em;">→ Read Documentation</span>
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- Knowledge Graph -->
+                <a href="../../docs/architecture/knowledge-graph.html" style="text-decoration: none; color: inherit;">
+                    <div class="metric-card" style="cursor: pointer; transition: all 0.3s;">
+                        <div style="font-size: 3em; margin-bottom: 15px;">🕸️</div>
+                        <div style="font-size: 1.8em; font-weight: 600; margin-bottom: 10px; color: var(--primary-color);">
+                            Knowledge Graph
+                        </div>
+                        <div style="color: var(--text-secondary); font-size: 1em; line-height: 1.6;">
+                            Relationships between components, AC-IDs, dependencies visualized as interactive graph.
+                        </div>
+                        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+                            <span style="color: var(--primary-color); font-size: 0.9em;">→ Read Documentation</span>
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- Intelligence Evolution -->
+                <a href="../../docs/architecture/intelligence-evolution.html" style="text-decoration: none; color: inherit;">
+                    <div class="metric-card" style="cursor: pointer; transition: all 0.3s;">
+                        <div style="font-size: 3em; margin-bottom: 15px;">🧠</div>
+                        <div style="font-size: 1.8em; font-weight: 600; margin-bottom: 10px; color: var(--success-color);">
+                            Intelligence Evolution
+                        </div>
+                        <div style="color: var(--text-secondary); font-size: 1em; line-height: 1.6;">
+                            How CORTEX incrementally builds AI-powered capabilities across 4 phases with operational data.
+                        </div>
+                        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+                            <span style="color: var(--success-color); font-size: 0.9em;">→ Read Documentation</span>
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- Knowledge Flow -->
+                <a href="../../docs/architecture/knowledge-flow.html" style="text-decoration: none; color: inherit;">
+                    <div class="metric-card" style="cursor: pointer; transition: all 0.3s;">
+                        <div style="font-size: 3em; margin-bottom: 15px;">🌊</div>
+                        <div style="font-size: 1.8em; font-weight: 600; margin-bottom: 10px; color: var(--primary-color);">
+                            Knowledge Flow
+                        </div>
+                        <div style="color: var(--text-secondary); font-size: 1em; line-height: 1.6;">
+                            Visual guide to how knowledge flows from MasterOrchestrator → TDD-Master → Code Generation.
+                        </div>
+                        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+                            <span style="color: var(--primary-color); font-size: 0.9em;">→ Read Documentation</span>
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- AST Crawler -->
+                <a href="../../docs/architecture/ast-crawler.html" style="text-decoration: none; color: inherit;">
+                    <div class="metric-card" style="cursor: pointer; transition: all 0.3s;">
+                        <div style="font-size: 3em; margin-bottom: 15px;">🔍</div>
+                        <div style="font-size: 1.8em; font-weight: 600; margin-bottom: 10px; color: var(--accent-color);">
+                            AST Crawler
+                        </div>
+                        <div style="color: var(--text-secondary); font-size: 1em; line-height: 1.6;">
+                            How code is analyzed, knowledge extracted, and filtered to keep valuable patterns (Phase 3).
+                        </div>
+                        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+                            <span style="color: var(--accent-color); font-size: 0.9em;">→ Read Documentation</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <footer>
+            <div>CORTEX 6.0 - Production-Grade AI Orchestration</div>
+            <div style="margin-top: 10px;">© 2025-2026 Asif Hussain. All rights reserved.</div>
+            <div style="margin-top: 10px; font-size: 0.85em;">Design Score: 97/100 | Strategy: Snowball Implementation</div>
+        </footer>
+    </div>
+    
+    <!-- Audit Log Viewer Script -->
+    <script src="audit-log-viewer.js"></script>
+    
+    <script>
+        // Progress Chart
+        const ctx = document.getElementById('progressChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8'],
+                datasets: [
+                    {
+                        label: 'AC-IDs Completed',
+                        data: [0, 15, 43, 65, 80, 90, 98, 102],
+                        borderColor: 'rgba(0, 212, 255, 1)',
+                        backgroundColor: 'rgba(0, 212, 255, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    },
+                    {
+                        label: 'Test Coverage %',
+                        data: [0, 70, 75, 78, 80, 82, 84, 85],
+                        borderColor: 'rgba(6, 255, 165, 1)',
+                        backgroundColor: 'rgba(6, 255, 165, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#b0b0c0',
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Implementation Progress Projection',
+                        color: '#ffffff',
+                        font: {
+                            size: 18,
+                            weight: 'bold'
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#b0b0c0'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#b0b0c0'
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Search functionality
+        const searchInput = document.getElementById('searchLogs');
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                if (window.auditViewer) {
+                    window.auditViewer.search(e.target.value);
+                }
+            });
+        }
+    </script>
+    
+    <script>
+        // Load progress data dynamically
+        async function loadProgressData() {
+            try {
+                const response = await fetch('../../cortex-brain/tier1/tracking/progress-tracker.json');
+                const data = await response.json();
+                
+                // Update metrics with real data
+                if (data.active_epic) {
+                    console.log('Progress data loaded:', data.active_epic);
+                }
+            } catch (error) {
+                console.log('Running in file:// protocol, using static data');
+            }
+        }
+        
+        loadProgressData();
+    </script>
+</body>
+</html>

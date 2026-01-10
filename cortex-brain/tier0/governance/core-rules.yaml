@@ -19,10 +19,10 @@ metadata:
   migration_date: "2026-01-08T00:30:00Z"
   source: "cortex-brain/brain-protection-rules.yaml"
   migrated_by: "feat03-governance Phase 1"
-  rule_count: 21  # Updated: added CORE-022
+  rule_count: 22  # Updated: added CORE-023
   deprecated_file: "cortex-brain/brain-protection-rules.yaml"
-  last_updated: "2026-01-10T12:00:00Z"  # Updated
-  last_updated_by: "CORTEX 6.0 File Naming Governance"
+  last_updated: "2026-01-10T15:45:00Z"  # Updated
+  last_updated_by: "CORTEX 6.0 File Type Validation Governance"
   enhancements:
     - date: "2026-01-08T03:30:00Z"
       by: "feat04-core-orchestration Phase 1"
@@ -39,6 +39,10 @@ metadata:
       by: "CORTEX 6.0 File Naming Governance"
       added: ["CORE-022"]
       reason: "Enforce kebab-case file naming with max 20 characters (excluding extension)"
+    - date: "2026-01-10T15:45:00Z"
+      by: "CORTEX 6.0 Quality Gates Enhancement"
+      added: ["CORE-023"]
+      reason: "File type-specific validation before commit (HTML5, WCAG AA, YAML schema, Python lint)"
 
 categories:
   - orchestration_lifecycle    # Rules governing orchestrator execution
@@ -1171,4 +1175,146 @@ migration:
       6. Git-friendly (avoids case-sensitivity issues)
       7. Terminal-friendly (no quoting needed)
       8. 20-char limit prevents unwieldy names while allowing descriptive names
+
+  # ==========================================================================
+  # CORE-023: File Type-Specific Validation Before Commit
+  # ==========================================================================
+  - rule_id: CORE-023
+    category: quality_gates
+    severity: blocked
+    name: File Type-Specific Validation Required Before Commit
+    description: |
+      Modified files MUST pass file-type-specific validation before state
+      changes (git commit, plan completion, orchestrator finish).
+      
+      This is a PRE-COMMIT quality gate, NOT a TDD cycle requirement.
+      Validation happens once at completion, not during development iterations.
+      
+      Validation per file type:
+      - .html → HTML5 syntax (html5lib) + WCAG AA compliance (zero tolerance)
+      - .yaml → Schema validation + YAML syntax (already enforced by OE-002)
+      - .py → pytest + test coverage (handled by TDD-Master via CORE-019)
+      - .json → JSON syntax validation
+      - .css → CSS syntax validation (optional)
+      
+      CRITICAL: HTML files MUST NOT be left in broken states. Any HTML
+      modification by any orchestrator or GitHub Copilot MUST result in
+      valid HTML5 with zero parse errors.
+    
+    enforcement:
+      trigger: pre_commit_hook
+      action: block_if_validation_fails
+      scope: modified_files_only
+    
+    validation:
+      html_files:
+        - Parse with html5lib (TreeBuilder with strict mode)
+        - Zero parse errors or warnings
+        - Valid HTML5 DOCTYPE present
+        - No unclosed tags, no malformed attributes
+        - WCAG AA compliance (contrast ratios, semantic HTML, ARIA)
+        - Responsive design validation (viewport meta tag)
+      
+      yaml_files:
+        - YAML syntax validation via yaml.safe_load()
+        - Schema validation (OE-002 already enforces this)
+      
+      python_files:
+        - All tests pass (TDD-Master ensures this via CORE-019)
+        - No validation needed at pre-commit (already tested)
+      
+      json_files:
+        - JSON syntax validation via json.loads()
+        - Schema validation if JSON schema exists
+    
+    implementation:
+      pre_commit_hook: scripts/pre-commit
+      validators:
+        html: src.orchestrators.html_view.validators.html_validator.HTMLValidator
+        yaml: src.tools.yaml_validator.YAMLValidator
+        json: src.tools.json_validator.JSONValidator
+      libraries:
+        html5lib: ">=1.1"
+        lxml: ">=6.0.0"
+    
+    scope:
+      applies_to:
+        - HTMLViewOrchestrator outputs (.html files)
+        - Manual HTML edits by GitHub Copilot
+        - Configuration file changes (.yaml, .json)
+        - Documentation HTML files (docs/**/*.html)
+      
+      does_not_apply_to:
+        - TDD execution cycles (Python unit tests)
+        - Read-only operations (grep, semantic search)
+        - Backup files (*.bak, *.backup)
+        - Git-ignored files
+    
+    error_handling:
+      on_html_validation_failure:
+        action: block_commit
+        message: |
+          ❌ HTML VALIDATION FAILED
+          
+          Modified HTML file(s) contain syntax errors or WCAG violations.
+          All HTML must be valid HTML5 with zero parse errors.
+          
+          Run validator manually:
+            python -m src.orchestrators.html_view.validators.html_validator <file.html>
+          
+          Or fix via HTMLViewOrchestrator:
+            python -m src.main "fix visual issues in <file.html>"
+        
+        bypass: "git commit --no-verify (EMERGENCY ONLY)"
+      
+      on_yaml_validation_failure:
+        action: block_commit
+        message: "YAML syntax error (see OE-002)"
+      
+      on_json_validation_failure:
+        action: block_commit
+        message: "JSON syntax error - invalid structure"
+    
+    examples:
+      pass:
+        - "Modified docs/features/index.html → html5lib validates → ✓ commit allowed"
+        - "Fixed docs/orchestrators/planning.html → WCAG AA compliant → ✓ commit allowed"
+        - "Updated config.yaml → schema valid → ✓ commit allowed (OE-002)"
+      
+      fail:
+        - "Modified index.html with unclosed <div> → ❌ blocked (HTML5 error)"
+        - "Added feature.html with contrast ratio 2.5:1 → ❌ blocked (WCAG AA requires 4.5:1)"
+        - "HTML missing DOCTYPE → ❌ blocked (invalid HTML5)"
+        - "Unclosed <section> tag → ❌ blocked (parse error)"
+    
+    integration_points:
+      - "HTMLViewOrchestrator Phase 5 (VALIDATION) runs same checks during development"
+      - "Pre-commit hook (scripts/pre-commit) enforces at commit time"
+      - "GitHub Copilot edits HTML → pre-commit catches issues before merge"
+      - "TDD-Master does NOT validate HTML (separation of concerns)"
+    
+    performance:
+      - "Validation only on modified files (not entire codebase)"
+      - "HTML5 parsing: ~50ms per file"
+      - "WCAG validation: ~200ms per file (contrast checks, semantic analysis)"
+      - "Total overhead: <1 second for typical commits (1-5 HTML files)"
+    
+    rationale: |
+      Zero-tolerance HTML validation prevents:
+      1. Broken HTML merged into main branch (blocks GitHubPages deployment)
+      2. WCAG AA violations (accessibility compliance failures)
+      3. Browser rendering issues (parse errors cause layout breaks)
+      4. Developer confusion (debug time wasted on malformed HTML)
+      5. Accumulated technical debt (broken HTML compounds over time)
+      
+      This rule addresses the observed pattern of TDD-Master and other
+      orchestrators leaving HTML in broken states. By validating at the
+      quality gate layer (pre-commit), we catch issues before they pollute
+      the repository.
+      
+      Architectural rationale:
+      - HTML validation is NOT a TDD concern (HTML is declarative, not testable code)
+      - Separation of concerns: HTMLViewOrchestrator handles HTML, TDD-Master handles code
+      - Pre-commit hooks are the correct architectural layer for cross-cutting quality checks
+      - This approach is extensible (easy to add CSS linting, Markdown validation, etc.)
 

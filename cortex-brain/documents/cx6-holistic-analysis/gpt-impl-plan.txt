@@ -1,174 +1,201 @@
-Alright. If you want zero ambiguity and no “we’ll discover it later”, then the plan has to be designed like a regulated system: every phase has explicit inputs, outputs, invariants, acceptance criteria, and “cannot proceed unless” gates. That costs time up front, but it’s exactly how you get the snowball effect without building a fragile mess.
+Alright. You want the fully-designed, no-ambiguity implementation plan for the CORTEX “snowball” (capabilities activate only after completion + tests + AC), with audit logging as a first-class spine, and a TDD orchestration loop proven against STS (sharpen-cortex) before you let the system build itself faster.
 
-Below is a fully specified implementation plan for CORTEX’s snowball rollout, with audit logging and cross-layer test verification baked in as hard gates, not suggestions.
+So this is a closed-world plan: every gate is defined, every artifact required is enumerated, every state transition is explicit, and nothing “discovers” requirements mid-flight.
 
-System Invariants (non-negotiable, global)
+Below is the plan I’d ship as the canonical blueprint.
 
-These invariants must be true in every environment, for every capability, at every stage.
+CORTEX Snowball Implementation Plan (Deterministic, Auditable, TDD-First)
+Core invariant
 
-I1. Deterministic Processing
+No capability may become ACTIVE unless CORTEX can produce a complete, verifiable evidence trail showing:
 
-For the same request, same manifest, same policy_snapshot, same normalization_version, and same capability_version, CORTEX MUST produce the same:
+deterministic routing,
 
-normalized intent string + request_hash
+enforced security policy,
 
-route selection
+verified tests across all layers,
 
-policy decision
+complete audit chain with integrity checks,
 
-planned actions
+zero drift between the evidence bundle and deployed runtime.
 
-If not deterministic, the capability is blocked from activation.
+If any item cannot be proven, the system fails closed.
 
-I2. Fail Closed
+1) Explicit lifecycle states and transition rules
+1.1 Capability lifecycle state machine
 
-If any of the following is missing or invalid, decision MUST be DENY:
+A capability exists in exactly one state at a time:
 
-policy snapshot
+DRAFT — exists as a spec proposal; cannot run.
 
-audit write availability (see I6)
+SPEC_LOCKED — spec is immutable (signed/hashed); test plan locked.
 
-approval token validity (when required)
+IMPLEMENTED — code exists; tests not yet proven in CI evidence.
 
-sandbox verification
+VERIFIED — evidence bundle exists and passes all gates.
 
-test evidence bundle for activation
+SHADOW — receives mirrored inputs; actions are NOOP by construction.
 
-manifest integrity verification
+CANARY — receives limited traffic; actions live; rollback triggers armed.
 
-I3. No Side-Effects in SHADOW
+ACTIVE — full traffic; drift monitors armed.
 
-In SHADOW stage, no action with side effects may execute. Specifically:
+QUARANTINED — auto-demotion due to drift or safety violation.
 
-WRITE/DELETE/EXECUTE/NETWORK are NOOP at executor level, regardless of upstream decisions.
+RETIRED — no longer routable.
 
-Audit MUST still log “planned actions” and “executed actions = NOOP”.
+Transition table (no ambiguity)
 
-I4. Approval Is Cryptographically Bound
+Only these transitions are allowed:
 
-Any approval must be bound to:
+DRAFT → SPEC_LOCKED
+Requires: Spec bundle complete + approvals for spec lock.
 
-trace_id
+SPEC_LOCKED → IMPLEMENTED
+Requires: Implementation PR merged (code exists).
 
-request_hash (normalized)
+IMPLEMENTED → VERIFIED
+Requires: Evidence Bundle generated and passes gates.
 
-policy_snapshot_id
+VERIFIED → SHADOW
+Requires: Rollout plan exists; shadow safety invariant proven.
 
-action_set_hash (hash of planned actions)
+SHADOW → CANARY
+Requires: Shadow parity thresholds met + zero safety violations.
 
-expiry timestamp
-Approvals are single-use. Late approvals (after expiry) are invalid.
+CANARY → ACTIVE
+Requires: Canary success thresholds met continuously for defined window.
 
-I5. Policy Snapshot Integrity
+ANY → QUARANTINED
+Requires: Drift, missing audit spans, policy violation, trigger breach.
 
-Every decision must reference a policy_snapshot_id which is:
+QUARANTINED → VERIFIED
+Requires: new Evidence Bundle fixes root cause and re-verifies.
 
-a cryptographic hash of the entire effective policy config (rules + allowlists + deny lists + versions)
+ACTIVE → RETIRED
+Requires: explicit retirement plan + route removal + audit closure.
 
-stored and retrievable for audit replay
+Any other transition is invalid and must be rejected by the controller.
 
-I6. Audit Is a Gate, Not a Log
+2) Artifacts: what must exist, exactly, before each gate
+2.1 Spec Bundle (required for SPEC_LOCKED)
 
-Audit writes MUST succeed for the system to proceed. If audit is unavailable:
+A Spec Bundle is a directory or logical package that contains:
 
-system enters AUDIT_DEGRADED mode
+capability.yaml
 
-ALL capabilities are forced to SHADOW with NOOP execution
-
-activation and CANARY are blocked
-
-No “best effort”.
-
-Canonical Data Contracts (explicit, used everywhere)
-C1. Capability Manifest (per capability, versioned)
-
-Fields (required):
-
-capability_id, capability_version
-
-owner_team, contact, pager (operational ownership)
+capability_id, version, owner, description
 
 trust_boundaries (explicit list)
 
-action_surface: {READ, WRITE, DELETE, EXECUTE, NETWORK} with per-action constraints
+action_surface (READ/WRITE/DELETE/EXECUTE/NETWORK as booleans)
 
-routing_rules: patterns + priority + match type
+routing_rules (patterns + match type + priority)
 
-policy_rules: rule IDs + conditions + outcomes
+acceptance_criteria.yaml
 
-required_tests: exact test suites and minimum coverage
+each AC is executable as an assertion (see §5)
 
-rollout_policy: min-samples, thresholds, windows, fallback behavior
+threat_model.md
 
-audit_requirements: required event types and required fields
+enumerated threats + mitigations + out-of-scope
 
-dependencies: other capability IDs/versions required
+test_plan.yaml
 
-This manifest is validated at startup; invalid manifest blocks deployment.
+required test categories and minimum counts (see §4)
 
-C2. Evidence Bundle (immutable, activation prerequisite)
+observability_plan.yaml
 
-Evidence bundle is a signed, immutable artifact containing:
+required metrics + logs + traces + alert thresholds
 
-manifest_hash
+rollout_plan.yaml
 
-policy_snapshot_id
+SHADOW parity thresholds + CANARY triggers + success criteria
 
-routing_manifest_hash
+policy_delta.yaml
 
-test results:
+explicit policy updates (allowlist/denylist/approval requirements)
 
-unit: pass/fail + suite ID + duration + commit hash
+spec_hash.txt
 
-integration: pass/fail + suite ID + environment signature
+SHA256 of canonicalized Spec Bundle contents
 
-e2e: pass/fail + suite ID + environment signature
+spec_signoff.yaml
 
-negative tests: pass/fail (required)
+reviewer signoffs with timestamps and identities
 
-audit completeness test: pass/fail (required)
+Spec Lock is a one-way operation: after SPEC_LOCKED, the spec_hash cannot change; any change = new version.
 
-coverage metrics (minimum thresholds specified in manifest)
+2.2 Evidence Bundle (required for VERIFIED)
 
-SBOM / dependency scan result (pass required for EXECUTE/NETWORK capabilities)
+An Evidence Bundle is immutable and contains:
 
-signature: evidence_signature by CI key
-
-Activation requires evidence bundle match against deployed hashes.
-
-C3. Audit Event Schema (immutable append-only)
-
-Every event contains:
-
-event_type, event_version
-
-timestamp_utc
-
-trace_id, correlation_id, span_id, parent_span_id
+evidence_manifest.yaml
 
 capability_id, capability_version
 
-request_hash, normalization_version
+spec_hash, policy_snapshot_id, routing_snapshot_id
 
-route_result: {match_type, pattern_id, orchestrator_id, orchestrator_version}
+build_id, git_sha, environment_fingerprint
+
+test_run_ids[]
+
+test_results/
+
+unit, integration, e2e, negative/security tests
+
+coverage reports
+
+audit_trace_samples/
+
+canonical request → route → policy decision → approval → action plan → execution result → test result chain
+
+runtime_artifacts/
+
+built binaries / package version references
+
+metrics_baseline/
+
+baseline stats used for canary comparisons
+
+integrity/
+
+hash of every file + overall bundle hash
+
+optional signing key metadata
+
+VERIFIED requires the Evidence Bundle to be produced by CI under controlled runners, not locally.
+
+3) The audit ledger: canonical schema and integrity rules
+3.1 Audit is not “logs.” It’s a ledger.
+
+Every event is append-only, immutable, and integrity protected.
+
+Required shared fields on every event
+
+trace_id (UUIDv7 preferred)
+
+span_id
+
+parent_span_id (except root)
+
+timestamp
+
+capability_id, capability_version
+
+execution_mode (DRY_RUN | SHADOW | CANARY | ACTIVE)
+
+actor_type (human | system)
+
+actor_id (or service_id)
+
+environment_fingerprint
 
 policy_snapshot_id
 
-decision: ALLOW/DENY/REQUIRE_APPROVAL/NOOP
+routing_snapshot_id
 
-rule_attribution[]: list of rule IDs that influenced decision
-
-actions_planned_hash, actions_planned[]
-
-actions_executed_hash, actions_executed[]
-
-approval: {approval_id, approver_id, outcome, expiry, approval_hash} optional
-
-test_context: {evidence_bundle_id, suite_ids} (when relevant)
-
-environment: {env_name, host_id, runner_id, build_id, git_sha}
-
-Required event types:
+Required event types (must exist in this order)
 
 REQUEST_RECEIVED
 
@@ -176,310 +203,378 @@ INTENT_NORMALIZED
 
 ROUTE_SELECTED
 
-POLICY_DECIDED
+POLICY_EVALUATED
 
-APPROVAL_REQUESTED (if applicable)
+APPROVAL_REQUESTED (only if required)
 
-APPROVAL_RESOLVED (if applicable)
+APPROVAL_RESOLVED (only if requested)
 
-ACTIONS_PLANNED
+ACTION_PLAN_CREATED
 
-ACTIONS_EXECUTED
+ACTION_EXECUTED (or ACTION_NOOP in SHADOW/DRY_RUN)
 
-RESPONSE_EMITTED
+RESULT_EMITTED
 
-ROLL_OUT_STATE_CHANGED (when rollout transitions)
+TESTS_VERIFIED (in verification/CI context)
 
-Audit completeness requires a full chain for each trace_id.
+STATE_TRANSITION (lifecycle changes)
 
-Snowball Implementation Plan (phased, gated, no ambiguities)
-Phase 1 — Build the Governance Kernel (no capability activation allowed)
+Ledger integrity invariants
 
-Objective: Implement the reusable rails that every capability will use.
+Every action must have a preceding POLICY_EVALUATED.
 
-Deliverables (must exist)
+Every approval resolution must reference a prior approval request.
 
-Normalization Engine
+Every state transition must reference an evidence bundle (except DRAFT→SPEC_LOCKED).
 
-Implements NFKC + zero-width removal + whitespace collapse + punctuation normalization + lowercase.
+No missing spans: the chain must be complete; missing event = fail gate.
 
-Produces normalized_intent and request_hash.
+Each event includes event_hash and prev_event_hash to form a hash chain per trace_id.
 
-Versioned as normalization_version.
+4) Test strategy: required categories, minimums, and STS anchoring
+4.1 “Sharpen the saw” first: STS as the ground truth harness
 
-Routing Engine
+STS (sharpen-cortex) is the pre-capability test system whose only job is to validate:
 
-Loads routing manifest at startup.
+the orchestration framework,
 
-Validates no ambiguity under the exact normalization rules.
+the gating controller,
 
-Implements deterministic tie-break:
+the audit chain,
 
-Match type precedence (EXACT > PREFIX > CONTAINS > REGEX)
+the determinism of routing and policy,
 
-Longest match wins within match type
+the safety invariants of execution modes.
 
-If tie: higher priority wins
+No real capability work begins until STS passes at defined thresholds.
 
-If tie: startup validation FAILS (deployment blocked)
+4.2 Required test categories (for every capability)
 
-Policy Engine
+Each capability must have tests in these categories, with minimums:
 
-Evaluates action requests against policy snapshot.
+Spec Validation Tests (min 10 assertions)
 
-Produces decision + rule_attribution[].
+schema validity, required fields, versioning rules, hash canonicalization
 
-Exposes policy_snapshot_id generation + retrieval.
+Routing Determinism Tests (min 20 cases)
 
-Approval Engine
+normalization equivalence classes
 
-Stateful: REQUESTED → APPROVED/DENIED → EXPIRED/CANCELLED
+tie-break rules
 
-Must bind approval to request_hash, policy_snapshot_id, actions_planned_hash, and trace_id.
+startup conflict detection
 
-Non-interactive contexts default to DENY.
+confusables policy behavior
 
-Late approvals rejected deterministically.
+Policy Engine Tests (min 20 cases)
 
-Executor
+allow/deny rules
 
-shell=False always.
+approval requirements
 
-Enforces sandbox canonicalization before any filesystem operation.
+fail-closed behavior
 
-Enforces SHADOW NOOP centrally (executor refuses side effects in SHADOW).
+regression tests for previous vulnerabilities
 
-Emits planned vs executed action lists.
+Executor Safety Tests (min 20 cases)
 
-Audit Ledger
+shell=False invariants
 
-Append-only store (local + remote acceptable, but must be durable).
+argument grammar validation
 
-Write must be synchronous for gating decisions (I6).
+filesystem sandbox escapes (symlink/junction/..)
 
-Provides query + replay API for verification.
+SHADOW / DRY_RUN NOOP behavior
 
-Phase 1 Acceptance Criteria (all must pass)
+Integration Tests (min 10)
 
-AC1: Audit chain completeness test passes for all golden-path flows.
+router→policy→executor end-to-end in controlled environment
 
-AC2: Determinism test passes: repeated runs produce identical hashes/routes/decisions/actions.
+Negative / Abuse Tests (min 15)
 
-AC3: SHADOW executes zero side effects, verified by executor-level guard + audit proof.
+malicious intent strings, unicode tricks, injection payloads, path escapes
 
-AC4: Sandbox escape tests pass (symlink/junction traversal denied).
+expected outcome is DENY or REQUIRE_APPROVAL, not “best effort”
 
-AC5: Approval replay tests pass (late approval rejected, cancellation honored, replay blocked).
+Observability Tests (min 10)
 
-Gate: No capability beyond internal “noop demo” can activate until Phase 1 passes.
+required metrics emitted
 
-Phase 2 — Build the Evidence Factory (the snowball accelerator)
+audit spans complete
 
-Objective: Make verification and activation cheap by standardizing proof.
+alerts fire under forced conditions
 
-Deliverables
+Drift Tests (min 10)
 
-Test Harness
+mutation of policy/routing manifests forces QUARANTINE
 
-Generates test runs for each capability using test vectors defined in manifest.
+evidence bundle mismatch prevents activation
 
-Runs unit/integration/e2e/negative/audit-completeness tests.
+Hard rule: test counts are minimums; failures are blocking.
 
-Produces canonical results format.
+4.3 STS must test the orchestration itself (TDD Orchestration)
 
-Evidence Bundle Builder
+STS includes:
 
-Collects artifacts + hashes + suite results.
+golden request corpus (100+ intents)
 
-Signs evidence bundle with CI key.
+expected normalized outputs
 
-Stores bundle immutably and returns evidence_bundle_id.
+expected routes
 
-Activation Gatekeeper
+expected policy decisions
 
-Enforces: deployed manifest hash == evidence manifest hash.
+expected audit event sequences
 
-Enforces: deployed policy snapshot hash == evidence policy snapshot hash.
+expected lifecycle transitions
 
-Enforces: audit requirements satisfied.
+STS is run in CI and produces its own Evidence Bundle.
 
-Blocks activation if any mismatch.
+5) Acceptance criteria are executable assertions (no prose-only ACs)
 
-Phase 2 Acceptance Criteria
+Each AC is expressed as a machine-evaluable rule:
 
-AC6: Evidence bundle cannot be reused across different deployed hashes (tamper resistance).
+AC format
 
-AC7: Activation fails closed if audit ledger unavailable (forces SHADOW).
+id
 
-AC8: Every capability must ship with a passing negative test suite.
+scope (routing | policy | audit | rollout | executor)
 
-Gate: No CANARY or ACTIVE stages until Evidence Factory is operational.
+assertion (a declarative condition evaluated against evidence + runtime)
 
-Phase 3 — Capability Rollout Pipeline (standard lifecycle, enforced)
+evidence_required (list of test IDs / metrics / logs)
 
-Objective: Turn each capability into a managed unit with deterministic rollout.
+severity (blocker/high/medium)
 
-Capability Lifecycle (enforced state machine)
+Examples (not ambiguous)
 
-REGISTERED — manifest is valid + ownership set
+“SHADOW must execute NOOP for write/delete/execute/network”
 
-VERIFIED — evidence bundle exists and matches deployed hashes
+Assertion: forall actions where action.type in [WRITE, DELETE, EXECUTE, NETWORK], ACTION_EXECUTED must be absent and ACTION_NOOP must exist
 
-SHADOW — receives real traffic, executor NOOP enforced
+“Every EXECUTE must validate args against a defined grammar”
 
-CANARY — receives controlled traffic, side effects allowed (subject to approval/policy)
+Assertion: ACTION_PLAN_CREATED.args_validation == PASS && validator_id exists
 
-ACTIVE — default route target
+“No missing audit spans”
 
-QUARANTINED — forced SHADOW if drift/violations detected
+Assertion: event_set contains all required event types in order for every trace_id
 
-RETIRED — removed from routing and disabled
+If an AC can’t be expressed as an assertion, it’s not an AC yet.
 
-Rollout Rules (explicit, deterministic)
+6) Rollout mechanics: deterministic thresholds, sample sizing, and auto-demotion
+6.1 SHADOW parity gates
 
-CANARY uses a specified percentage p (manifest-defined) and MUST meet:
+SHADOW runs mirrored inputs, but NOOP execution. You compare:
 
-min_canary_requests over window_size
+route parity: % of requests routed identically vs baseline
 
-min_total_requests over window_size for statistical sanity
+policy parity: % of decisions matching expected
 
-Rollback triggers require:
+output parity: semantic diff thresholds (explicitly defined per capability)
 
-k consecutive windows exceeding threshold (manifest-defined)
+audit completeness: 100% required
 
-AND min_events in each window
+SHADOW success conditions
 
-Cold-start baseline rule:
+All must be true over a rolling window:
 
-If no 7-day baseline exists, use last N hours from SHADOW as baseline.
+route_parity >= 99.5%
 
-If insufficient, rollout remains in SHADOW and emits ROLL_OUT_BLOCKED_LOW_DATA.
+policy_parity >= 99.9%
 
-Drift Rules (automatic enforcement)
+audit_completeness == 100%
 
-If any of these change without a new evidence bundle:
+safety_violations == 0
 
-routing manifest hash
+minimum sample size: N >= 1000 (or capability-specific, but must be declared)
 
-policy snapshot hash
+6.2 CANARY rules
 
-executor version
+Canary traffic percentage is fixed per capability (default 5%).
 
-normalization version
-Then:
+Rollback triggers are armed only when sample size minimum is met.
 
-capability transitions to QUARANTINED
+Triggers use consecutive-window logic (single unified policy):
 
-routes revert to previous stable orchestrator
+breach must occur in K consecutive windows (default K=3)
 
-audit logs include a DRIFT_DETECTED event
+window length default 5 minutes
 
-Snowball Mechanics: Why speed increases
+minimum canary events per window must be met (declared in rollout plan)
 
-Once Phases 1–3 are built, a “new capability” is mostly:
+6.3 Drift and QUARANTINE
 
-add routing entries
+Any of these forces immediate QUARANTINE:
 
-add policy rules
+policy snapshot hash mismatch
 
-add test vectors + expected audit chain
+routing snapshot hash mismatch
 
-run harness → produce evidence bundle → activate
+executor version mismatch
 
-You’re not reinventing security, logging, approvals, rollout, or test verification each time. That’s the flywheel.
+audit schema version mismatch
 
-“No Misinterpretation / No Brittleness” Verification (explicit, automated)
+missing audit spans
 
-Before a capability can leave VERIFIED:
+safety rule violated (e.g., write executed in SHADOW)
 
-V1. Cross-layer Replay Test (required)
+QUARANTINE action is deterministic:
 
-For a canonical corpus of requests:
+route to safe fallback orchestrator (or DENY)
 
-normalization replay identical → same request_hash
+disable execution actions
 
-routing replay identical → same route result
+require new Evidence Bundle to recover
 
-policy replay identical → same decision + rule attribution
+7) The Snowball: how speed increases without losing safety
+7.1 Capability factory (scaffold)
 
-executor planning identical → same actions_planned_hash
+After STS is green, you build a generator that outputs:
 
-audit chain complete with required fields
+Spec Bundle skeleton
 
-V2. Negative Tests (required)
+AC assertion templates
 
-Must include at least:
+test vectors + expected audit chain templates
 
-sandbox escape attempt
+default deny policy deltas
 
-unauthorized write attempt
+rollout plan defaults
 
-approval bypass attempt
+This is what makes later work fast and consistent.
 
-routing ambiguity attempt
+7.2 Reuse rails as mandatory dependency
 
-audit ledger unavailability attempt (must fail closed)
+Every new capability must use:
 
-V3. Layer-to-layer Contract Tests (required)
+the same router engine
 
-router output schema matches policy input schema
+the same policy engine
 
-policy output schema matches executor input schema
+the same approval engine
 
-every action execution references the policy decision ID
+the same executor wrappers
 
-If any contract test fails, capability stays in VERIFIED.
+the same audit ledger library
 
-Implementation Ordering (precise)
+the same evidence bundler
 
-To get snowball speed fastest, build in this exact order:
+Any exception requires a new capability version and explicit signoff.
 
-Audit ledger + trace propagation (Phase 1.6 first)
+8) Implementation plan sequence (explicit, staged deliverables)
+Milestone A — STS Foundation (blocking)
 
-Normalization engine (Phase 1.1)
+Deliverables:
 
-Routing engine + startup validation (Phase 1.2)
+Audit ledger library + hash-chaining
 
-Policy engine + snapshot hashing + rule attribution (Phase 1.3)
+Trace propagation across router/policy/executor
 
-Approval engine (Phase 1.4)
+Spec validator + canonical hashing
 
-Executor with SHADOW NOOP + sandbox enforcement (Phase 1.5)
+Evidence bundler + CI integration
 
-Test harness + evidence builder + activation gatekeeper (Phase 2)
+Orchestration controller state machine (enforces transitions)
 
-Rollout controller + drift/quarantine automation (Phase 3)
+Exit criteria:
 
-Capability scaffolding generator (optional but recommended)
+STS Evidence Bundle produced in CI
 
-Start onboarding capabilities
+100% audit completeness
 
-This sequence ensures every later capability is cheap to ship and hard to break.
+deterministic normalization + routing for golden corpus
 
-One hard truth
+drift tests demonstrate auto-quarantine
 
-You can’t get “no discovery during implementation” unless you force all unknowns into the design as explicit decisions or explicit out-of-scope assumptions. That means you must write down, now, things like:
+Milestone B — Security & Execution Rail Hardening (blocking)
 
-which OSes are supported
+Deliverables:
 
-how you treat Windows reparse points and hardlinks (deny? scope out?)
+Canonical path sandbox with platform-specific canonicalization
 
-whether routing is a security boundary or just an optimization layer
+Approval engine (state machine, timeout, replay protection)
 
-audit durability requirements (local fallback allowed or not?)
+Executor wrappers (no PowerShell -Command strings; argument vector only)
 
-If any of those are not decided, the plan is ambiguous by definition.
+Argument grammar validators per command class (no {args} free-form)
 
-If you implement this plan, you’ll have:
+Exit criteria:
 
-a proof-driven activation pipeline
+STS security abuse suite passes
 
-a fully traceable audit spine
+no known escape vectors in test corpus
 
-deterministic routing/policy/execution behavior
+approval and non-interactive fail-closed proven
 
-SHADOW that cannot mutate reality
+Milestone C — Routing + Rollout Rails (blocking)
 
-drift controls that stop entropy
+Deliverables:
 
-And the snowball effect happens automatically: once the rails exist, each new capability is mostly “config + tests + evidence,” not bespoke engineering.
+Normalization pipeline (NFKC, zero-width removal, whitespace collapse, etc.)
+
+Tie-breaking rules + startup conflict detection identical to runtime
+
+Rollout controller (SHADOW parity, CANARY triggers, min sample)
+
+Exit criteria:
+
+router never raises runtime ambiguity
+
+shadow mode proves NOOP invariants
+
+canary triggers validated via simulation tests
+
+Milestone D — Capability Factory (snowball begins)
+
+Deliverables:
+
+capability scaffolder
+
+AC assertion library
+
+test vector generator
+
+“expected audit chain” comparator tool
+
+Exit criteria:
+
+new “toy capability” can be generated and verified end-to-end using only config + tests (no bespoke glue)
+
+Milestone E — Real capability onboarding (repeatable)
+
+For each capability:
+
+generate bundle
+
+implement adapters (if needed)
+
+write tests + negative tests
+
+produce evidence bundle
+
+promote through SHADOW → CANARY → ACTIVE with deterministic thresholds
+
+9) Non-negotiable design decisions (so there’s no ambiguity later)
+
+Audit ledger is mandatory: missing audit = fail closed.
+
+SHADOW is dry-run: cannot execute non-read actions, ever.
+
+No free-form EXECUTE placeholders: every argument must match a declared grammar.
+
+Startup validation must prove runtime determinism: runtime cannot throw ambiguity.
+
+Evidence Bundle binds activation: activation must reference evidence bundle hash; mismatch blocks.
+
+Drift triggers quarantine automatically: no “manual overrides” without a recorded approval trace.
+
+If you implement this exact plan, the snowball effect happens naturally:
+
+early work is slow because you’re building rails + proof machinery,
+
+then each new capability becomes mostly “declare → test → verify → activate,”
+
+and audit + TDD orchestration keep you from building a brittle monster that only works when you’re the one driving.
+
+Next step on paper (not discovery): formalize STS as its own Spec Bundle + Evidence Bundle standard and treat it as Capability 0. Once Capability 0 is VERIFIED, you unlock the factory.
