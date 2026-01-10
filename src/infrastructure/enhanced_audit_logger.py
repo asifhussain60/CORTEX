@@ -129,6 +129,8 @@ class AuditStorage:
             conn.execute("CREATE INDEX IF NOT EXISTS idx_level ON audit_logs(level)")
             conn.execute("CREATE INDEX IF NOT EXISTS idx_timestamp ON audit_logs(timestamp)")
             conn.execute("CREATE INDEX IF NOT EXISTS idx_category ON audit_logs(category)")
+            conn.execute("CREATE INDEX IF NOT EXISTS idx_correlation ON audit_logs(correlation_id)")
+            conn.execute("CREATE INDEX IF NOT EXISTS idx_created_at ON audit_logs(created_at)")
             conn.commit()
     
     def log(

@@ -67,6 +67,7 @@ class TDDResult:
 @dataclass
 class PhaseResultData:
     """Data for TDD phase results."""
+    status: PhaseStatus = PhaseStatus.PENDING
     tests: List[Test] = field(default_factory=list)
     tests_generated: int = 0
     domain_knowledge_used: bool = False
@@ -168,19 +169,31 @@ class TDDOrchestrator(BaseOrchestratorV4_1):
         logger.info(f"TDDOrchestrator initialized (workspace={workspace_root}, dry_run={dry_run})")
     
     def _load_manifest_config(self) -> Dict[str, Any]:
-        """Load configuration from manifest file."""
+        """Load configuration from manifest file, merged with defaults."""
+        default_config = self._get_default_config()
+        
         if not self.manifest_path.exists():
             logger.warning(f"Manifest not found: {self.manifest_path}")
-            return self._get_default_config()
+            return default_config
         
         try:
             import yaml
             with open(self.manifest_path) as f:
                 manifest = yaml.safe_load(f)
-            return manifest
+            
+            # Merge manifest with defaults (defaults fill in missing keys)
+            merged = default_config.copy()
+            if manifest:
+                for key, value in manifest.items():
+                    if isinstance(value, dict) and key in merged and isinstance(merged[key], dict):
+                        merged[key] = {**merged[key], **value}
+                    else:
+                        merged[key] = value
+            
+            return merged
         except Exception as e:
             logger.error(f"Failed to load manifest: {e}")
-            return self._get_default_config()
+            return default_config
     
     def _get_default_config(self) -> Dict[str, Any]:
         """Get default configuration."""
@@ -251,7 +264,7 @@ class TDDOrchestrator(BaseOrchestratorV4_1):
         """
         logger.info(f"RED Phase: Generating failing tests for '{feature_description}'")
         
-        result = PhaseResultData()
+        result = PhaseResultData(status=PhaseStatus.IN_PROGRESS)
         
         # Query domain knowledge (mock implementation)
         if self.brain_connector:
@@ -275,6 +288,7 @@ class TDDOrchestrator(BaseOrchestratorV4_1):
         result.tests.extend(security_tests)
         
         result.tests_generated = len(result.tests)
+        result.status = PhaseStatus.COMPLETE
         
         logger.info(f"RED Phase complete: {result.tests_generated} tests generated")
         
@@ -383,7 +397,7 @@ def {test_name}():
         """
         logger.info("GREEN Phase: Creating minimal implementation")
         
-        result = PhaseResultData()
+        result = PhaseResultData(status=PhaseStatus.IN_PROGRESS)
         result.implementation_created = True
         result.iterations = 1
         
@@ -396,6 +410,7 @@ def {test_name}():
         # Mock: Assume tests pass after implementation
         result.all_tests_passing = True
         result.test_failures = 0
+        result.status = PhaseStatus.COMPLETE
         
         logger.info("GREEN Phase complete: Implementation created, tests passing")
         
@@ -413,20 +428,36 @@ def {test_name}():
         """
         logger.info("REFACTOR Phase: Enforcing clean code principles")
         
-        result = PhaseResultData()
+        result = PhaseResultData(status=PhaseStatus.IN_PROGRESS)
         
-        # Check code metrics (mock implementation)
-        code_metrics = green_result.code_metrics or {}
+        # Check code metrics (handle Mock objects and None)
+        code_metrics = getattr(green_result, 'code_metrics', None)
+        if code_metrics is None or not isinstance(code_metrics, dict):
+            code_metrics = {}
         
         # Detect code smells
-        if code_metrics.get('function_length', 0) > self.config['clean_code']['max_function_length']:
-            result.code_smells_detected.append('long_function')
+        function_length = code_metrics.get('function_length', 0)
+        complexity = code_metrics.get('complexity', 0)
+        duplications = code_metrics.get('duplications', 0)
         
-        if code_metrics.get('complexity', 0) > self.config['clean_code']['max_complexity']:
-            result.code_smells_detected.append('high_complexity')
+        # Ensure numeric comparison (handle any non-numeric values)
+        try:
+            if int(function_length) > self.config['clean_code']['max_function_length']:
+                result.code_smells_detected.append('long_function')
+        except (TypeError, ValueError):
+            pass
         
-        if code_metrics.get('duplications', 0) > 0:
-            result.code_smells_detected.append('duplication')
+        try:
+            if int(complexity) > self.config['clean_code']['max_complexity']:
+                result.code_smells_detected.append('high_complexity')
+        except (TypeError, ValueError):
+            pass
+        
+        try:
+            if int(duplications) > 0:
+                result.code_smells_detected.append('duplication')
+        except (TypeError, ValueError):
+            pass
         
         # Apply refactorings
         result.refactorings_applied = len(result.code_smells_detected)
@@ -437,6 +468,7 @@ def {test_name}():
         # Verify tests still pass
         result.tests_still_passing = True
         result.test_failures = 0
+        result.status = PhaseStatus.COMPLETE
         
         logger.info(f"REFACTOR Phase complete: {result.refactorings_applied} refactorings, score: {result.clean_code_score}")
         

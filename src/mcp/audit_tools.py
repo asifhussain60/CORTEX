@@ -225,3 +225,107 @@ def _export_csv(entries: List[Dict[str, Any]], output_path: Path):
                 else:
                     row[key] = value
             writer.writerow(row)
+
+
+def audit_validate(
+    db_path: str,
+    ac_id: str
+) -> Dict[str, Any]:
+    """
+    Validate an acceptance criterion against audit evidence.
+    
+    Implements AC-AUDIT-004: audit_validate MCP tool.
+    
+    This tool queries audit logs for a specific AC-ID and determines:
+    - Whether audit traces exist for the AC
+    - Validation status based on log levels and coverage
+    - Evidence summary for compliance reporting
+    
+    Args:
+        db_path: Path to audit database
+        ac_id: Acceptance criteria ID to validate (e.g., "AC-GOV-001")
+    
+    Returns:
+        Validation result with status and evidence
+    """
+    try:
+        storage = AuditStorage(Path(db_path))
+        
+        # Query all entries for this AC-ID
+        entries = storage.query(ac_id=ac_id, page_size=1000)
+        
+        if not entries:
+            return {
+                "success": True,
+                "ac_id": ac_id,
+                "validation_status": "NO_DATA",
+                "audit_trace_exists": False,
+                "evidence": {
+                    "total_entries": 0,
+                    "error_count": 0,
+                    "warning_count": 0,
+                    "info_count": 0,
+                    "components": [],
+                    "operations": [],
+                    "date_range": None
+                },
+                "message": f"No audit entries found for {ac_id}"
+            }
+        
+        # Analyze entries
+        error_count = sum(1 for e in entries if e.get('level') in ('error', 'critical'))
+        warning_count = sum(1 for e in entries if e.get('level') == 'warning')
+        info_count = sum(1 for e in entries if e.get('level') in ('info', 'debug', 'trace'))
+        
+        components = list(set(e.get('component', '') for e in entries if e.get('component')))
+        operations = list(set(e.get('operation', '') for e in entries if e.get('operation')))
+        
+        # Determine date range
+        timestamps = [e.get('timestamp', '') for e in entries if e.get('timestamp')]
+        date_range = {
+            "earliest": min(timestamps) if timestamps else None,
+            "latest": max(timestamps) if timestamps else None
+        }
+        
+        # Determine validation status
+        # FAILED: Has critical/error entries
+        # INCOMPLETE: Only warnings or missing required operations
+        # VALIDATED: Has successful execution traces without errors
+        if error_count > 0:
+            validation_status = "FAILED"
+            message = f"AC {ac_id} has {error_count} error(s) in audit trail"
+        elif warning_count > 0 and info_count == 0:
+            validation_status = "INCOMPLETE"
+            message = f"AC {ac_id} has warnings but no success traces"
+        elif info_count > 0:
+            validation_status = "VALIDATED"
+            message = f"AC {ac_id} has {info_count} successful execution trace(s)"
+        else:
+            validation_status = "INCOMPLETE"
+            message = f"AC {ac_id} has insufficient audit data"
+        
+        return {
+            "success": True,
+            "ac_id": ac_id,
+            "validation_status": validation_status,
+            "audit_trace_exists": True,
+            "evidence": {
+                "total_entries": len(entries),
+                "error_count": error_count,
+                "warning_count": warning_count,
+                "info_count": info_count,
+                "components": components,
+                "operations": operations,
+                "date_range": date_range
+            },
+            "message": message
+        }
+    
+    except Exception as e:
+        return {
+            "success": False,
+            "ac_id": ac_id,
+            "validation_status": "ERROR",
+            "audit_trace_exists": False,
+            "error": str(e)
+        }
