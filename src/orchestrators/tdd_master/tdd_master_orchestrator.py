@@ -430,7 +430,7 @@ class TDDMasterOrchestrator(BaseOrchestrator):
         if self._tdd_orchestrator is None:
             try:
                 from src.orchestrators.tdd.tdd_orchestrator import TDDOrchestrator
-                self._tdd_orchestrator = TDDOrchestrator(project_root=self.workspace_path)
+                self._tdd_orchestrator = TDDOrchestrator(workspace_root=self.workspace_path)
             except ImportError:
                 self.logger.error("TDD Orchestrator not available")
                 return None
@@ -458,8 +458,9 @@ class TDDMasterOrchestrator(BaseOrchestrator):
             )
         
         try:
-            # Execute TDD with context
+            # Execute TDD with context - pass user_request as required positional arg
             result = tdd_orchestrator.execute(
+                user_request=f"Implement {context.feature_name} with AC: {', '.join(context.acceptance_criteria[:3])}",
                 context={
                     "tdd_context": context.to_dict(),
                     "feature_name": context.feature_name,
@@ -469,7 +470,7 @@ class TDDMasterOrchestrator(BaseOrchestrator):
             )
             
             return TDDInvocationResult(
-                success=result.success if hasattr(result, 'success') else False,
+                success=(result.status == OrchestratorStatus.SUCCESS) if hasattr(result, 'status') else False,
                 message=result.message if hasattr(result, 'message') else "TDD execution complete",
                 tdd_result=result,
             )
@@ -756,15 +757,19 @@ class TDDMasterOrchestrator(BaseOrchestrator):
     
     def execute(
         self, 
-        plan_id: Optional[str] = None,
-        context: Optional[Dict[str, Any]] = None
+        user_request: Optional[str] = None,
+        context: Optional[Dict[str, Any]] = None,
+        routing_match: Optional[Any] = None,
+        plan_id: Optional[str] = None
     ) -> TDDMasterResult:
         """
         Execute TDD-Master workflow.
         
         Args:
+            user_request: User's request text (from MasterOrchestrator)
+            context: Execution context (from MasterOrchestrator)
+            routing_match: Routing match data (from MasterOrchestrator)
             plan_id: Optional specific plan ID to execute
-            context: Optional execution context
             
         Returns:
             TDDMasterResult with full execution details
@@ -778,6 +783,7 @@ class TDDMasterOrchestrator(BaseOrchestrator):
             "governance_validated": False,
             "dashboard_updated": False,
             "report_generated": False,
+            "user_request": user_request,
         }
         
         try:

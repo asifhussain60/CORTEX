@@ -103,6 +103,24 @@ routing_rules:
       description: "Test-Driven Development orchestrator"
       autonomous: false
   
+  # TDD-Master Orchestrator (Implementation + AC Validation + Evidence Generation)
+  - pattern: "^(implement|build|create|fix|add feature).*$"
+    orchestrator: "tdd_master"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 15
+    metadata:
+      description: "TDD-Master for full implementation lifecycle with evidence bundles"
+      autonomous: true
+      version: "1.0"
+      features:
+        - "Plan detection and context transformation"
+        - "TDD workflow orchestration"
+        - "AC validation with evidence bundles"
+        - "Governance enforcement"
+        - "Dashboard updates"
+        - "Completion reports"
+  
   # Refactor Orchestrator v2 - NEW (Parent-Child Architecture)
   # Coordinates specialized refactoring children (code quality, architecture, docs, tests)
   - pattern: "^(refactor|improve code|optimize code|clean up code|code quality|architecture refactor|improve docs|improve tests).*$"

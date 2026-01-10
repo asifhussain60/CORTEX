@@ -11,16 +11,18 @@
 
 plan_metadata:
   plan_id: "CORTEX-6.0-SNOWBALL-MASTER"
-  version: "1.0.0"
+  version: "1.1.0"
   created: "2026-01-10T23:50:00Z"
+  updated: "2026-01-10T17:20:00Z"
   author: "Asif Hussain"
   strategy: "Snowball Implementation"
   philosophy: "Infrastructure-first compound growth"
   design_score: 97
   total_weeks: 8
-  total_ac_ids: 102
+  total_ac_ids: 111  # 102 (original) + 8 (AC-TEMPLATE-001 to 008) + 1 (CORE-023)
   hybrid_approach: true
   gpt_influence: "70% rigor, 30% overhead"
+  latest_addition: "3-Layer Response Template Architecture (AC-TEMPLATE-001 to 008)"
 
 # ==============================================================================
 # SNOWBALL STRATEGY OVERVIEW
@@ -396,6 +398,68 @@ phase_2_orchestration_core:
       evidence_bundle:
         test_coverage: ">=80%"
         planning_quality: "Generated plans validated"
+    
+    response_template_architecture:
+      name: "3-Layer Response Template Architecture"
+      ac_ids: ["AC-TEMPLATE-001", "AC-TEMPLATE-002", "AC-TEMPLATE-003", "AC-TEMPLATE-004", "AC-TEMPLATE-005", "AC-TEMPLATE-006", "AC-TEMPLATE-007", "AC-TEMPLATE-008"]
+      priority: "HIGH"
+      duration: "4 weeks (3 phases)"
+      owner: "Infrastructure Team"
+      
+      rationale: "Replace 2046-line response-templates-v4.yaml (CORE-002 violation)"
+      
+      capabilities:
+        - "Layer 1: Core blocks (tier0/response-blocks.yaml, 50 lines)"
+        - "Layer 2: Category templates (5 files × 50 lines = 250 lines)"
+        - "Layer 3: Orchestrator overrides (15 lines per manifest)"
+        - "86% reduction: 2046 lines → <300 lines"
+        - "Backwards compatibility during migration"
+        - "Multi-category inheritance support"
+      
+      phases:
+        phase_1_foundation:
+          name: "Foundation"
+          duration: "Week 1"
+          ac_ids: ["AC-TEMPLATE-001", "AC-TEMPLATE-002", "AC-TEMPLATE-003"]
+          deliverables:
+            - "Extract core blocks from v4.yaml"
+            - "Block schema validator"
+            - "ResponseRenderer loader with caching"
+        
+        phase_2_categories:
+          name: "Categories"
+          duration: "Week 2"
+          ac_ids: ["AC-TEMPLATE-004", "AC-TEMPLATE-005", "AC-TEMPLATE-006"]
+          deliverables:
+            - "5 category templates (core, integration, maintenance, conversion, security)"
+            - "Inheritance resolver (precedence: orchestrator > category > core)"
+            - "Backwards compatibility layer"
+        
+        phase_3_migration:
+          name: "Migration"
+          duration: "Week 3-4"
+          ac_ids: ["AC-TEMPLATE-007", "AC-TEMPLATE-008"]
+          deliverables:
+            - "Migrate 40+ orchestrators"
+            - "Performance validation (<50ms render time)"
+            - "Delete response-templates-v4.yaml"
+      
+      dependencies: ["AC-ORCH-001"]
+      
+      targets:
+        total_lines: "<300 (86% reduction from 2046)"
+        render_time: "<50ms"
+        duplication: "0%"
+        consistency: "100% (all use core blocks)"
+      
+      evidence_bundle:
+        test_coverage: ">=80%"
+        performance_validated: "Render time <50ms"
+        governance_compliance: "CORE-002 enforced"
+        migration_complete: "All 40+ orchestrators validated"
+      
+      plan_file: "cortex-brain/tier1/acceptance-criteria/TEMPLATE-ARCHITECTURE-PLAN.yaml"
+      approval_doc: "cortex-brain/tier1/tracking/TEMPLATE-ARCHITECTURE-APPROVED.md"
     
     deterministic_routing:
       name: "Deterministic Routing Engine"

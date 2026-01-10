@@ -1,0 +1,108 @@
+{
+  "schema_version": "1.0",
+  "last_updated": "2026-01-10T17:45:00Z",
+  "links": {
+    "phase-detail-viewer.html?phase=1": {
+      "state": "enabled",
+      "exists": true,
+      "clickable": true,
+      "tooltip": "View documentation"
+    },
+    "phase-detail-viewer.html?phase=2": {
+      "state": "enabled",
+      "exists": true,
+      "clickable": true,
+      "tooltip": "View documentation"
+    },
+    "template-architecture-detail.html": {
+      "state": "enabled",
+      "exists": true,
+      "clickable": true,
+      "tooltip": "View documentation"
+    },
+    "phase-detail-viewer.html?phase=3": {
+      "state": "enabled",
+      "exists": true,
+      "clickable": true,
+      "tooltip": "View documentation"
+    },
+    "phase-detail-viewer.html?phase=4": {
+      "state": "enabled",
+      "exists": true,
+      "clickable": true,
+      "tooltip": "View documentation"
+    },
+    "../../docs/architecture/governance-rules.html": {
+      "state": "enabled",
+      "exists": true,
+      "clickable": true,
+      "tooltip": "View documentation"
+    },
+    "../../docs/architecture/orchestration-design.html": {
+      "state": "enabled",
+      "exists": true,
+      "clickable": true,
+      "tooltip": "View documentation"
+    },
+    "../../docs/architecture/brain-architecture.html": {
+      "state": "enabled",
+      "exists": true,
+      "clickable": true,
+      "tooltip": "View documentation"
+    },
+    "../../cortex-brain/documents/cx6-holistic-analysis/phase-1-foundation.md": {
+      "state": "enabled",
+      "exists": true,
+      "clickable": true,
+      "tooltip": "View documentation"
+    },
+    "../../docs/architecture/four-tier-brain.html": {
+      "state": "enabled",
+      "exists": true,
+      "clickable": true,
+      "tooltip": "View documentation"
+    },
+    "../../docs/architecture/orchestrator-ecosystem.html": {
+      "state": "enabled",
+      "exists": true,
+      "clickable": true,
+      "tooltip": "View documentation"
+    },
+    "../../docs/architecture/skull-protection.html": {
+      "state": "enabled",
+      "exists": true,
+      "clickable": true,
+      "tooltip": "View documentation"
+    },
+    "../../docs/architecture/working-memory.html": {
+      "state": "enabled",
+      "exists": true,
+      "clickable": true,
+      "tooltip": "View documentation"
+    },
+    "../../docs/architecture/knowledge-graph.html": {
+      "state": "enabled",
+      "exists": true,
+      "clickable": true,
+      "tooltip": "View documentation"
+    },
+    "../../docs/architecture/intelligence-evolution.html": {
+      "state": "enabled",
+      "exists": true,
+      "clickable": true,
+      "tooltip": "View documentation"
+    },
+    "../../docs/architecture/knowledge-flow.html": {
+      "state": "enabled",
+      "exists": true,
+      "clickable": true,
+      "tooltip": "View documentation"
+    },
+    "../../docs/architecture/ast-crawler.html": {
+      "state": "enabled",
+      "exists": true,
+      "clickable": true,
+      "tooltip": "View documentation"
+    }
+  }
+}

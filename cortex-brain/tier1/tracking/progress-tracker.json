@@ -1,7 +1,7 @@
 {
   "schema_version": "1.8",
-  "last_updated": "2026-01-10T15:50:00Z",
-  "updated_by": "CORE-023 HTML Validation Governance Implemented",
+  "last_updated": "2026-01-10T17:52:00Z",
+  "updated_by": "CORTEX Logo Path Fixed for Plan Viewer",
   
   "active_epic": {
     "id": "CORTEX-6.0",
@@ -29,7 +29,8 @@
       "Evidence Bundle Generation (AC-EVIDENCE-001 to AC-EVIDENCE-003)",
       "STS as Capability 0 (AC-STS-001 to AC-STS-003)",
       "Simplified Progressive Rollout (AC-ROLLOUT-SIMPLE-001 to AC-ROLLOUT-003)",
-      "HTML Validation Governance (CORE-023)"
+      "HTML Validation Governance (CORE-023)",
+      "3-Layer Response Template Architecture (AC-TEMPLATE-001 to AC-TEMPLATE-008)"
     ]
   },
   
@@ -82,17 +83,80 @@
     ]
   },
   
-  "current_todo": {
-    "id": "TODO-011",
-    "name": "Regenerate Design Docs with Reviewer Guidance",
-    "description": "Create comprehensive review instructions guiding GPT to 95+ score, preventing invalid recommendations",
-    "status": "completed",
-    "ac_id": "AC-SECURITY-005",
-    "priority": 1,
-    "completed_at": "2026-01-10T22:30:00Z"
-  },
-  
   "completed_todos": [
+    {
+      "id": "TODO-016",
+      "name": "Link Validation & State Management System",
+      "description": "Implement comprehensive link validation and dynamic state management for plan-viewer",
+      "completed_at": "2026-01-10T17:45:00Z",
+      "deliverables": [
+        "scripts/validate_plan_viewer_links.py (link validation script)",
+        "templates/plan-viewer/documentation-status.json (link state tracking)",
+        "templates/plan-viewer/link-validation-report.json (detailed validation report)",
+        "Updated templates/plan-viewer/cortex-plan-viewer.html (dynamic link state management)",
+        "Updated templates/plan-viewer/README.md (link management documentation)",
+        "Updated TEMPLATE-ARCHITECTURE-PLAN.yaml (documentation status tracking)"
+      ],
+      "key_features": [
+        "Validates all 18 links in plan-viewer HTML",
+        "100% validation success rate (18/18 valid)",
+        "Dynamic UI updates based on documentation readiness",
+        "Visual states: enabled (✓ indicator), disabled (50% opacity), missing (red warning)",
+        "Tooltips showing link status",
+        "Automatic detection of query string parameters",
+        "JavaScript-based state management on page load",
+        "Grayscale filter and overlay for disabled documentation"
+      ],
+      "validation_results": {
+        "total_links": 18,
+        "valid_links": 18,
+        "broken_links": 0,
+        "success_rate": "100%",
+        "last_run": "2026-01-10T17:45:00Z"
+      },
+      "rationale": "User requested fix for non-working links and proper disabled state management when documentation doesn't exist. Implemented comprehensive validation system with visual feedback."
+    },
+    {
+      "id": "TODO-015",
+      "name": "Correct AC-COPILOT Requirements - VS Code TODO List Integration",
+      "description": "Clarified misunderstanding: CORTEX should write TODO comments to .cortex/copilot-todos.md for VS Code's Copilot TODO panel, not JSON API bridge",
+      "completed_at": "2026-01-10T18:00:00Z",
+      "correction_type": "requirements_clarification",
+      "affected_acs": [
+        "AC-COPILOT-001 to AC-COPILOT-012"
+      ],
+      "changes": [
+        "Renamed component: GitHubCopilotTodoBridge → VSCodeCopilotTodoBridge",
+        "Changed mechanism: JSON API calls → File-based TODO comments",
+        "Changed output: manage_todo_list payload → .cortex/copilot-todos.md with Markdown TODO comments",
+        "Added emoji status indicators: ⏳ 🔄 ✅ ❌ 🚫",
+        "Added AC-COPILOT-012: Bidirectional sync (file watcher)"
+      ],
+      "deliverables": [
+        "cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml (corrected AC-COPILOT-001 to 012)",
+        "cortex-brain/documents/corrections/ac-copilot-clarification.md (detailed explanation)"
+      ],
+      "rationale": "VS Code's GitHub Copilot uses comment-based TODO detection (<!-- TODO: --> format), not a JSON API. File-based approach is simpler, more performant, and aligns with built-in VS Code functionality."
+    },
+    {
+      "id": "TODO-014",
+      "name": "3-Layer Response Template Architecture Documentation",
+      "description": "Generate comprehensive HTML and Markdown documentation for AC-TEMPLATE-001 to AC-TEMPLATE-008",
+      "completed_at": "2026-01-10T17:30:00Z",
+      "deliverables": [
+        "templates/plan-viewer/template-architecture-detail.html (comprehensive guide with Mermaid diagrams)",
+        "cortex-brain/documents/architecture/response-template-architecture.md (technical documentation)",
+        "Updated templates/plan-viewer/cortex-plan-viewer.html (clickable Phase 2 component)"
+      ],
+      "key_features": [
+        "Full architecture diagram with 3-layer precedence",
+        "8 AC-ID breakdown with acceptance criteria",
+        "Problem statement (2046-line bloat)",
+        "Solution architecture (85% reduction)",
+        "Success metrics and governance alignment",
+        "Risk mitigation strategies"
+      ]
+    },
     {
       "id": "TODO-001",
       "name": "Add CORE-021 Forward-Only Compliance",
@@ -201,11 +265,30 @@
         "Team allocation (infrastructure, orchestration, security, QA, governance)",
         "Success metrics: 18 AC-IDs in 4 weeks, 60% complexity reduction"
       ]
+    },
+    {
+      "id": "TODO-014",
+      "name": "3-Layer Response Template Architecture Documentation",
+      "description": "Generate comprehensive HTML and Markdown documentation for AC-TEMPLATE-001 to AC-TEMPLATE-008",
+      "completed_at": "2026-01-10T17:30:00Z",
+      "deliverables": [
+        "templates/plan-viewer/template-architecture-detail.html (comprehensive guide with Mermaid diagrams)",
+        "cortex-brain/documents/architecture/response-template-architecture.md (technical documentation)",
+        "Updated templates/plan-viewer/cortex-plan-viewer.html (clickable Phase 2 component)"
+      ],
+      "key_features": [
+        "Full architecture diagram with 3-layer precedence",
+        "8 AC-ID breakdown with acceptance criteria",
+        "Problem statement (2046-line bloat)",
+        "Solution architecture (85% reduction)",
+        "Success metrics and governance alignment",
+        "Risk mitigation strategies"
+      ]
     }
   ],
   
   "current_todo": {
-    "id": "TODO-014",
+    "id": "TODO-015",
     "name": "Begin Phase 1 Implementation",
     "description": "Start Week 1-2: Foundation Enhancement (AC-AUDIT-007, AC-LIFECYCLE-001-003, AC-EVIDENCE-001-003)",
     "status": "not_started",
@@ -226,33 +309,6 @@
     "total_gain": 28,
     "realistic_target": "95-97 (some edge cases acceptable)"
   },
-
-  "completed_todos": [
-    {
-      "id": "TODO-004",
-      "name": "Complete Exhaustive Governance Review with Refinement",
-      "description": "Conducted detailed review adding AC-SECURITY-005 (approval protocol), AC-SECURITY-006 (path sandboxing), AC-ROUTE-004-005 (tie-breaking), design score now 97",
-      "completed_at": "2026-01-10T16:00:00Z"
-    },
-    {
-      "id": "TODO-005",
-      "name": "Capture Onboarding Orchestrator Requirements",
-      "description": "Added 11 ACs (AC-ONBOARD-001 to AC-ONBOARD-011) for comprehensive repo onboarding with AST crawlers, git history, knowledge graphs",
-      "completed_at": "2026-01-10T17:00:00Z"
-    },
-    {
-      "id": "TODO-006",
-      "name": "Add Setup/Installation Integration Requirement",
-      "description": "Added AC-ONBOARD-012 - Onboarding orchestrator auto-runs during setup/installation (pip install, cortex setup CLI, first request, VS Code startup)",
-      "completed_at": "2026-01-10T18:00:00Z"
-    },
-    {
-      "id": "TODO-007",
-      "name": "Design Enhanced Interactive Orchestration",
-      "description": "Created AC-INTERACT-001 to AC-INTERACT-003 for configuration-driven interaction, InteractionGuard middleware, and front-loaded clarification maintaining CORE-001 compliance",
-      "completed_at": "2026-01-10T19:00:00Z"
-    }
-  ],
   
   "blockers": [],
   

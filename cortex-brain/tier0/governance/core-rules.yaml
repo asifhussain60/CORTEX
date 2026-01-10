@@ -969,9 +969,10 @@ migration:
     ORCHESTRATOR_SCAFFOLDER_COMPLIANCE: CORE-021  # Added 2026-01-10
     KEBAB_CASE_FILE_NAMING: CORE-022  # Added 2026-01-10
 
-  # ==========================================================================
-  # CORE-021: Orchestrator Scaffolder Compliance (Forward-Only)
-  # ==========================================================================
+# ==============================================================================
+# CORE-021: Orchestrator Scaffolder Compliance (Forward-Only)
+# ==============================================================================
+rules:
   - rule_id: CORE-021
     original_id: ORCHESTRATOR_SCAFFOLDER_COMPLIANCE
     category: architecture_integrity
