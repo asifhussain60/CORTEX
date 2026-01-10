@@ -11,13 +11,34 @@
 # Each AC-ID maps to implementation status, tests, and audit trail.
 # ==============================================================================
 
-schema_version: "1.5"
-last_updated: "2026-01-10T22:30:00Z"
-total_ac_count: 90  # 78 (previous) + 12 (AC-COPILOT-001 to AC-COPILOT-012)
+schema_version: "1.6"
+last_updated: "2026-01-10T15:45:00Z"
+total_ac_count: 103  # 102 (previous) + 1 (AC-CORE-023: HTML validation)
 completed_count: 0
 in_progress_count: 0
-design_score_current: 83
+design_score_current: 97  # +1 for HTML validation governance
 design_score_target: 95
+
+# ==============================================================================
+# HYBRID APPROACH INTEGRATION (2026-01-10 - GPT Plan + CORTEX 6.0 Merged)
+# ==============================================================================
+# ADOPTED FROM GPT PLAN:
+# 1. AC-AUDIT-007: Hash Chain Integrity (audit trail tamper detection)
+# 2. AC-LIFECYCLE-001 to 003: Extended Orchestrator Lifecycle (7 states)
+# 3. AC-EVIDENCE-001 to 003: Evidence Bundle Generation (3-file lightweight format)
+# 4. AC-STS-001 to 003: STS as Capability 0 (validate framework first)
+# 5. AC-ROLLOUT-SIMPLE-001 to 003: Progressive Activation (no SHADOW/CANARY)
+#
+# REJECTED FROM GPT PLAN:
+# - SHADOW/CANARY rollout (no traffic to split in developer tool)
+# - Pre-spec Spec Bundles (contradicts incremental philosophy)
+# - 15-file artifact bundles (token budget violation)
+# - Traffic-based metrics (inapplicable to on-demand orchestrators)
+#
+# PHILOSOPHY: 70% of GPT rigor with 30% of overhead
+# DESIGN SCORE: 96/100 (maintained from holistic analysis)
+# COMPLEXITY REDUCTION: 60% fewer artifacts than GPT plan
+# ==============================================================================
 
 # ==============================================================================
 # GPT ANALYSIS INTEGRATION (2026-01-10 - Updated to Target 95+ Score)
@@ -612,12 +633,14 @@ definition_of_ready:
     
   # Governance Rules Referenced
   governance_rules_referenced:
-    core_rules_count: 21  # Updated with CORE-022
-    new_rule: "CORE-022 - Kebab-Case File Naming (max 20 chars)"
+    core_rules_count: 22  # Updated with CORE-023
+    new_rules:
+      - "CORE-022 - Kebab-Case File Naming (max 20 chars)"
+      - "CORE-023 - File Type-Specific Validation (HTML5, WCAG AA)"
     file: "cortex-brain/tier0/governance/core-rules.yaml"
-    medium_impact: 4
+    medium_impact: 5  # CORE-023 adds HTML validation
     low_impact: 1
-    blocking_phase_1: ["DOR-AMB-004"]
+    blocking_phase_1: ["DOR-AMB-004", "CORE-023"]  # HTML validation blocks commits
     blocking_phase_2: ["DOR-AMB-001", "DOR-AMB-002", "DOR-AMB-003", "DOR-AMB-005", "DOR-AMB-006", "DOR-AMB-007", "DOR-AMB-008"]
     blocking_phase_3: ["DOR-AMB-009"]
 
@@ -720,6 +743,39 @@ categories:
       - "Stateful resume across sessions"
       - "Governance enforcement per-task"
       - "Clear dependency tracking"
+      
+  LIFECYCLE:
+    prefix: "AC-LIFECYCLE"
+    description: "Extended orchestrator lifecycle states (7 states: IDLE → SPEC → IMPLEMENTED → TESTED → VERIFIED → ACTIVE → DEPRECATED)"
+    tier: 1
+    priority: 1  # Foundation enhancement
+    gpt_adoption: "State machine lifecycle without SHADOW/CANARY"
+    design_source: "hybrid-approach-architecture.yaml"
+    
+  EVIDENCE:
+    prefix: "AC-EVIDENCE"
+    description: "Evidence Bundle generation (3-file lightweight format)"
+    tier: 1
+    priority: 1  # Foundation enhancement
+    gpt_adoption: "Proof of completion without bureaucratic overhead"
+    design_source: "hybrid-approach-architecture.yaml"
+    
+  STS:
+    prefix: "AC-STS"
+    description: "STS Test Harness (Capability 0 - validate framework first)"
+    tier: 1
+    priority: 1  # Foundation validation
+    gpt_adoption: "Golden corpus testing before feature development"
+    design_source: "hybrid-approach-architecture.yaml"
+    location: "sharpening-cortex/sts-template/"
+    
+  ROLLOUT_SIMPLE:
+    prefix: "AC-ROLLOUT-SIMPLE"
+    description: "Simplified progressive activation (DRY_RUN + Approval + Progressive AC)"
+    tier: 1
+    priority: 1  # Foundation enhancement
+    replaces_gpt: "SHADOW/CANARY rollout (inapplicable to developer tools)"
+    design_source: "hybrid-approach-architecture.yaml"
 
   CRAWLER:
     prefix: "AC-CRAWLER"
@@ -834,6 +890,23 @@ foundation:
       status: "implemented"
       tests: ["tests/infrastructure/test_repo_isolation.py"]
       implementation: "src/infrastructure/enhanced_audit_logger.py"
+      
+    - id: "AC-AUDIT-007"
+      name: "Hash Chain Integrity"
+      description: "Tamper detection via event_hash + prev_event_hash chain"
+      status: "planned"
+      phase: "Phase 1 Enhancement (Week 1-2)"
+      priority: "HIGH"
+      tests: ["tests/infrastructure/test_hash_chain.py"]
+      implementation: "src/infrastructure/enhanced_audit_logger.py"
+      enhancements_to: ["AC-AUDIT-001", "AC-AUDIT-002", "AC-AUDIT-003"]
+      design_source: "cortex-brain/documents/cx6-holistic-analysis/hybrid-approach-architecture.yaml"
+      gpt_adoption: "Hash chain ledger for immutable audit trail"
+      validation:
+        - "Recalculate event_hash from fields"
+        - "Verify prev_event_hash matches previous event"
+        - "Raise AuditIntegrityError on tampering"
+        - "Performance: <1ms hash computation, <10ms verification per 100-event chain"
 
   governance:
     - id: "AC-GOV-001"
@@ -893,6 +966,197 @@ foundation:
       status: "implemented"
       tests: ["tests/orchestrators/test_continuation.py"]
       implementation: "src/orchestrators/state_manager.py"
+
+  # ==============================================================================
+  # Hybrid Approach: Extended Lifecycle States
+  # ==============================================================================
+  lifecycle:
+    - id: "AC-LIFECYCLE-001"
+      name: "7-State Lifecycle Implementation"
+      description: "IDLE → SPEC → IMPLEMENTED → TESTED → VERIFIED → ACTIVE → DEPRECATED"
+      status: "planned"
+      phase: "Phase 1 Enhancement (Week 1-2)"
+      priority: "HIGH"
+      tests: ["tests/unit/test_extended_lifecycle.py"]
+      implementation: "src/orchestrators/middleware/orchestrator_lifecycle.py"
+      design_source: "cortex-brain/documents/cx6-holistic-analysis/hybrid-approach-architecture.yaml"
+      gpt_adoption: "State machine without SHADOW/CANARY"
+      validation:
+        - "State transitions validated"
+        - "Entry/exit criteria enforced"
+        - "Artifacts required per state"
+        - "Quarantine mechanism active"
+        
+    - id: "AC-LIFECYCLE-002"
+      name: "State Transition Validation"
+      description: "Enforce entry/exit criteria for each state"
+      status: "planned"
+      phase: "Phase 1 Enhancement (Week 1-2)"
+      priority: "HIGH"
+      tests: ["tests/unit/test_lifecycle_transitions.py"]
+      implementation: "src/orchestrators/middleware/orchestrator_lifecycle.py"
+      depends_on: ["AC-LIFECYCLE-001"]
+      
+    - id: "AC-LIFECYCLE-003"
+      name: "Quarantine Mechanism"
+      description: "Auto-quarantine on error rate > 10% or governance violations"
+      status: "planned"
+      phase: "Phase 1 Enhancement (Week 1-2)"
+      priority: "MEDIUM"
+      tests: ["tests/unit/test_lifecycle_quarantine.py"]
+      implementation: "src/orchestrators/middleware/orchestrator_lifecycle.py"
+      depends_on: ["AC-LIFECYCLE-001", "AC-LIFECYCLE-002"]
+
+  # ==============================================================================
+  # Hybrid Approach: Evidence Bundle Generation
+  # ==============================================================================
+  evidence:
+    - id: "AC-EVIDENCE-001"
+      name: "Evidence Bundle Structure"
+      description: "3-file lightweight format: manifest.yaml, test_results.json, audit_trace.jsonl"
+      status: "planned"
+      phase: "Phase 1 Enhancement (Week 1-2)"
+      priority: "HIGH"
+      tests: ["tests/infrastructure/test_evidence_bundle.py"]
+      implementation: "src/infrastructure/evidence_bundler.py"
+      design_source: "cortex-brain/documents/cx6-holistic-analysis/hybrid-approach-architecture.yaml"
+      gpt_adoption: "Post-implementation evidence (not pre-spec)"
+      validation:
+        - "Manifest includes spec_hash, ac_ids, routes, governance_rules"
+        - "Test results include coverage_percent >= 80%"
+        - "Audit trace includes complete event chain"
+        
+    - id: "AC-EVIDENCE-002"
+      name: "Evidence Bundle Validation Gates"
+      description: "3 gates: Test Coverage (80%), Audit Completeness, Governance Compliance"
+      status: "planned"
+      phase: "Phase 1 Enhancement (Week 1-2)"
+      priority: "HIGH"
+      tests: ["tests/infrastructure/test_evidence_gates.py"]
+      implementation: "src/infrastructure/evidence_bundler.py"
+      depends_on: ["AC-EVIDENCE-001"]
+      validation:
+        - "Gate 1: Test coverage >= 80% (blocker)"
+        - "Gate 2: All required audit events exist (blocker)"
+        - "Gate 3: Governance rules have enforcement logs (blocker)"
+        
+    - id: "AC-EVIDENCE-003"
+      name: "Evidence Bundle Auto-Generation"
+      description: "Generate Evidence Bundle post-implementation from tests + audit + AC-INDEX"
+      status: "planned"
+      phase: "Phase 1 Enhancement (Week 1-2)"
+      priority: "MEDIUM"
+      tests: ["tests/infrastructure/test_evidence_auto_gen.py"]
+      implementation: "src/infrastructure/evidence_bundler.py"
+      depends_on: ["AC-EVIDENCE-001", "AC-EVIDENCE-002"]
+      location: "cortex-brain/evidence-bundles/"
+
+  # ==============================================================================
+  # Hybrid Approach: STS as Capability 0
+  # ==============================================================================
+  sts:
+    - id: "AC-STS-001"
+      name: "Golden Corpus (100 Test Intents)"
+      description: "100 test intents across 5 categories: routing, unicode, governance, policy, security"
+      status: "planned"
+      phase: "STS Capability 0 (Week 3)"
+      priority: "CRITICAL"
+      tests: ["tests/sts/test_golden_corpus.py"]
+      implementation: "sharpening-cortex/sts-template/golden_corpus.yaml"
+      design_source: "cortex-brain/documents/cx6-holistic-analysis/hybrid-approach-architecture.yaml"
+      gpt_adoption: "Validate framework BEFORE building features"
+      validation:
+        - "25 routing determinism tests"
+        - "15 unicode normalization tests"
+        - "20 governance enforcement tests"
+        - "20 policy decision tests"
+        - "20 security boundary tests"
+        
+    - id: "AC-STS-002"
+      name: "Framework Validation Tests"
+      description: "Validate router, policy engine, executor, audit chain, governance"
+      status: "planned"
+      phase: "STS Capability 0 (Week 3)"
+      priority: "CRITICAL"
+      tests:
+        - "tests/sts/test_routing_determinism.py"
+        - "tests/sts/test_unicode_normalization.py"
+        - "tests/sts/test_governance_enforcement.py"
+        - "tests/sts/test_policy_decisions.py"
+        - "tests/sts/test_security_boundaries.py"
+      implementation: "sharpening-cortex/sts-template/"
+      depends_on: ["AC-STS-001"]
+      validation:
+        - "100% routing determinism"
+        - "100% audit completeness"
+        - "100% governance enforcement"
+        - "100% security tests pass"
+        
+    - id: "AC-STS-003"
+      name: "First Evidence Bundle (Capability 0)"
+      description: "Produce first Evidence Bundle proving orchestration framework works"
+      status: "planned"
+      phase: "STS Capability 0 (Week 3)"
+      priority: "CRITICAL"
+      tests: ["tests/sts/test_capability_zero_evidence.py"]
+      implementation: "cortex-brain/evidence-bundles/sts_capability_zero_evidence.yaml"
+      depends_on: ["AC-STS-001", "AC-STS-002", "AC-EVIDENCE-001"]
+      validation:
+        - "Evidence Bundle passes all 3 gates"
+        - "Test coverage >= 80%"
+        - "Audit completeness = 100%"
+        - "Governance compliance = 100%"
+
+  # ==============================================================================
+  # Hybrid Approach: Simplified Progressive Rollout
+  # ==============================================================================
+  rollout_simple:
+    - id: "AC-ROLLOUT-SIMPLE-001"
+      name: "DRY_RUN Mode"
+      description: "All orchestrators support --dry-run flag for preview without execution"
+      status: "planned"
+      phase: "Progressive Rollout (Week 4)"
+      priority: "HIGH"
+      tests: ["tests/integration/test_dry_run_mode.py"]
+      implementation: "src/orchestrators/core/base_orchestrator_v4.py"
+      design_source: "cortex-brain/documents/cx6-holistic-analysis/hybrid-approach-architecture.yaml"
+      replaces_gpt: "SHADOW mode (inapplicable to developer tools)"
+      validation:
+        - "Log actions with DRY_RUN marker"
+        - "Preview operations without executing"
+        - "Generate would-be Evidence Bundle"
+        - "Show governance violations that would block"
+        
+    - id: "AC-ROLLOUT-SIMPLE-002"
+      name: "Approval State Machine"
+      description: "High-risk operations require explicit approval with timeout + retry"
+      status: "planned"
+      phase: "Progressive Rollout (Week 4)"
+      priority: "HIGH"
+      tests: ["tests/security/test_approval_gates.py"]
+      implementation: "src/orchestrators/security/approval_engine.py"
+      depends_on: ["AC-SECURITY-005"]
+      replaces_gpt: "CANARY mode (inapplicable to on-demand orchestrators)"
+      validation:
+        - "Block DELETE, RMDIR, NETWORK, DDL operations"
+        - "Timeout: 300s (5 minutes)"
+        - "Retry: 3 attempts with exponential backoff"
+        - "Approval context includes operation + targets + governance rules"
+        
+    - id: "AC-ROLLOUT-SIMPLE-003"
+      name: "Progressive AC Validation"
+      description: "New orchestrator starts with AC-*-001 only, unlock incrementally via Evidence Bundles"
+      status: "planned"
+      phase: "Progressive Rollout (Week 4)"
+      priority: "MEDIUM"
+      tests: ["tests/governance/test_progressive_ac.py"]
+      implementation: "src/orchestrators/core/governance_merger.py"
+      depends_on: ["AC-EVIDENCE-001", "AC-EVIDENCE-002"]
+      replaces_gpt: "Traffic-based metrics (inapplicable to developer tools)"
+      validation:
+        - "AC-*-001 Evidence Bundle unlocks AC-*-002"
+        - "Governance blocks unvalidated AC-IDs"
+        - "Full activation when all ACs have Evidence Bundles"
 
 # ==============================================================================
 # Phase 2: Orchestration Core ACs
