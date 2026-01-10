@@ -1,8 +1,8 @@
-# GitHub Copilot Instructions for CORTEX
+# GitHub Copilot Instructions for CORTEX 6.0
 
-**Purpose:** AI Assistant with long-term memory, context awareness, and strategic planning  
-**Version:** 6.0.0 | **Author:** Asif Hussain  
-**Updated:** 2026-01-08 | **Architecture:** Python-based autonomous orchestration
+**Purpose:** Production-grade AI orchestration with long-term memory, governance enforcement, and audit traceability  
+**Version:** 6.0.0 | **Author:** Asif Hussain | **Updated:** 2026-01-10  
+**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
 ---
 
@@ -11,311 +11,380 @@
 **Primary:** Load `.github/prompts/CORTEX.prompt.md` for all intent routing.
 
 **Context Detection:**
-- **CORTEX repo** (has `cortex-brain/admin/`): Full operations enabled
-- **User repos**: User operations only (planning, ADO, investigation, etc.)
+- **CORTEX repo** (has `cortex-brain/tier0/`): Full operations enabled
+- **User repos**: User operations only (planning, ADO, investigation)
 
-**Philosophy:** GitHub Copilot is a **routing proxy**. You transform requests and invoke Python via terminal. Python orchestrators execute all logic.
-
----
-
-## 🔀 Intent Routing
-
-All command routing is defined in `CORTEX.prompt.md`. Key orchestrators:
-
-**Legend:**
-- 🛡️ **AUTONOMOUS** = Python-based self-executing (GitHub Copilot routes via terminal, Python executes)
-
-| Intent Pattern | Route To | Type |
-|----------------|----------|------|
-| `introduce yourself`, `intro`, `hello`, `hi cortex` | Introduction → ASCII banner + capabilities | — |
-| `epic review`, `review epic`, `health check`, `progress report`, `cortex status` | Epic Review → Health & gap analysis | 🛡️ AUTONOMOUS |
-| `plan`, `create a plan`, `make a plan` | Planning System v5 → YAML-based execution | 🛡️ AUTONOMOUS |
-| **`implement`, `build`, `create`, `fix`, `refactor`, `add feature`** | **TDD-Master v1 → Unplanned development** | 🛡️ **AUTONOMOUS** |
-| `continue epic`, `resume epic`, `cortex 6 build` | Epic Executor → Resume CORTEX 6.0 build | 🛡️ AUTONOMOUS |
-| `tdd`, `start tdd`, `run tests` | TDD-Master v1 → RED→GREEN→REFACTOR | 🛡️ AUTONOMOUS |
-| `ado`, `ado story`, `ado feature` | ADO v2 → Azure DevOps work items | 🛡️ AUTONOMOUS |
-| `vacuum`, `deep clean` | Vacuum v2 → Deep filesystem cleanup | 🛡️ AUTONOMOUS |
-| `cleanup`, `cleanup cache` | Cleanup v2 → Cache/log removal | 🛡️ AUTONOMOUS |
-| `investigate`, `find root cause` | Investigation v2 → Root cause analysis | 🛡️ AUTONOMOUS |
-| `sanitize`, `anonymize` | Sanitization v2 → PII/secret removal | 🛡️ AUTONOMOUS |
-| `maintenance`, `system maintenance` | Maintenance v2 → 12-phase health pipeline | 🛡️ AUTONOMOUS |
-| `refine`, `improve` | Refinement v2 → 7-phase code improvement | 🛡️ AUTONOMOUS |
-| **Image attachments** | **Vision API → Auto-analysis** | Auto-trigger |
-
-**Orchestrator Architecture:**
-- 🛡️ **AUTONOMOUS**: Python implementation in `src/orchestrators/`
-- **NO GUIDED MODE**: All orchestrators are autonomous executors
-- **Terminal Invocation**: GitHub Copilot calls `python3 -m src.main "{request}"`
-
-**LLM Intent Classification:** Use `LLMIntentClassifier` (`src/cortex_agents/llm_intent_classifier.py`) for intelligent routing when exact patterns don't match.
-
-**Manifest Location:** `cortex-brain/manifests/orchestrators/` (YAML-based configs)
+**Philosophy:** GitHub Copilot is a **routing proxy**. You transform requests and invoke Python via terminal. Python orchestrators execute all logic. You NEVER execute orchestrator logic yourself.
 
 ---
 
-### 🔍 Vision API Auto-Engagement
+## 🏗️ 4-Tier Governance Architecture
 
-**AUTOMATIC:** When images (PNG/JPG/JPEG) are attached, Vision API analyzes them WITHOUT user prompting. Analysis injected into context for all orchestrators.
+CORTEX 6 uses hierarchical governance with strict precedence:
 
-**Middleware:** `src/operations/utilities/vision_context_middleware.py`
+| Tier | Category | Precedence | Content | Runtime Behavior |
+|------|----------|------------|---------|------------------|
+| **0** | `CORTEX_CORE` | HIGHEST | 19 SKULL rules (immutable) | Blocks violating operations |
+| **1** | `BUSINESS_TIER_0` | HIGH | Active epic, requirements, compliance | Guides implementation scope |
+| **2** | `COMPANY_PRACTICES` | MEDIUM | Engineering standards, contracts | Enforces quality gates |
+| **3** | `KNOWLEDGE_PRACTICES` | LOW | Learned patterns, insights | Suggests optimizations |
 
----
+**Conflict Resolution:** `GovernanceMerger` merges rules with Tier 0 winning all conflicts.
 
-### 🛡️ AUTONOMOUS Orchestrators - Invocation Protocol
-
-When you see 🛡️ in Intent Router, these orchestrators **execute via Python terminal invocation**:
-
-| Orchestrator | Trigger | Template | Header |
-|--------------|---------|----------|--------|
-| **Epic Review** | `epic review`, `health check` | `autonomous_execution_progress` | `## 🛡️🧠 CORTEX Epic Review` |
-| **Planning** | `plan`, `create a plan` | `autonomous_execution_progress` | `## 🛡️🧠 CORTEX Plan Execution` |
-| **TDD-Master** | `implement`, `build`, `create`, `fix`, `refactor`, `tdd` | `autonomous_execution_progress` | `## 🛡️🧠 CORTEX TDD-Master Execution` |
-| **Epic Executor** | `continue epic`, `resume epic` | `autonomous_execution_progress` | `## 🛡️🧠 CORTEX Epic Execution` |
-| **ADO** | `ado story`, `ado feature` | `ado_execution_progress` | `## 🛡️🧠 CORTEX ADO Work Item Generation` |
-| **Vacuum** | `vacuum`, `deep clean` | `autonomous_execution_progress` | `## 🛡️🧠 CORTEX Vacuum Execution` |
-| **Cleanup** | `cleanup`, `cleanup cache` | `autonomous_execution_progress` | `## 🛡️🧠 CORTEX Cleanup Execution` |
-| **Investigation** | `investigate`, `find root cause` | `autonomous_execution_progress` | `## 🛡️🧠 CORTEX Investigation` |
-| **Sanitization** | `sanitize`, `anonymize` | `autonomous_execution_progress` | `## 🛡️🧠 CORTEX Sanitization` |
-| **Maintenance** | `maintenance`, `system maintenance` | `autonomous_execution_progress` | `## 🛡️🧠 CORTEX Maintenance` |
-
-**🛡️ Shield Icon Meaning:** Autonomous orchestrator invoked via `run_in_terminal` tool - GitHub Copilot routes, Python executes.
+**File Locations:**
+- `cortex-brain/tier0/governance/` → CORE rules (SKULL)
+- `cortex-brain/tier1/` → Working memory, active state
+- `cortex-brain/tier2/` → Engineering practices
+- `cortex-brain/tier3/` → Knowledge patterns
 
 ---
 
-### ⚡ Invocation Protocol - YOU MUST FOLLOW
+## 📋 Context Preservation Protocol (CRITICAL)
 
-**For ALL 🛡️ AUTONOMOUS orchestrators:**
+**The #1 failure mode is building plans on stale context.** Before ANY operation:
 
-1. **Transform Request** (add context from Step 3 in CORTEX.prompt.md)
-2. **Invoke Python via Terminal** (use `run_in_terminal` tool)
-3. **Display Python's Output** (orchestrator returns formatted results)
+### Step 1: Load Working State
+```
+READ: cortex-brain/tier1/tracking/progress-tracker.json
+EXTRACT: active_epic, current_phase, current_todo, blockers
+```
+
+### Step 2: Verify Governance
+```
+READ: cortex-brain/tier0/governance/core-rules.yaml
+VERIFY: 19 CORE rules loaded, enforcement hooks active
+```
+
+### Step 3: Check AC Registry
+```
+READ: cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml
+VERIFY: All referenced AC-IDs exist and are valid
+```
+
+### Step 4: Check Git History (BEFORE creating new code)
+```
+SEARCH: python -m src.tools.git_history_intelligence search "{capability}"
+CHECK: Does existing implementation exist in CORTEX-4.0, CORTEX-5.0, etc.?
+EXTRACT: If found, bring in and transform rather than recreate
+```
+
+**If ANY file is missing or corrupted:** Create/repair before proceeding. Do NOT route with stale state.
+
+---
+
+## 🔄 Git History Intelligence (RULE: Check Before Creating)
+
+**CRITICAL:** Before implementing ANY new feature, search git history first.
+
+```bash
+# Search for existing implementations
+python -m src.tools.git_history_intelligence search "authentication oauth"
+
+# Search specific branch
+python -m src.tools.git_history_intelligence search "skull rules" --branch CORTEX-4.0
+
+# Extract found asset
+python -m src.tools.git_history_intelligence extract CORTEX-4.0 src/crawlers/git_history_analyzer.py
+```
+
+**Available branches:** CORTEX-5.5, CORTEX-5.0, CORTEX-4.0, CORTEX-3.0, CORTEX-2.0, CORTEX-1.0
+
+**Output location:** `cortex-brain/git-history-assets/`
+- `index/` → Searchable indexes
+- `extracted/` → Recovered code by category
+- `search-results/` → Query results (JSON/YAML)
+
+---
+
+## 🔀 Intent Routing Table
+
+| Pattern | Orchestrator | Priority | Mode | AC-ID Prefix |
+|---------|--------------|----------|------|--------------|
+| `git history`, `search branches`, `find existing`, `did we have` | Git History Intel | 5 | autonomous | AC-GIT-* |
+| `epic review`, `health check` | Epic Review | 6 | autonomous | AC-EPIC-* |
+| `plan`, `create a plan` | Planning v5 | 10 | autonomous | AC-PLAN-* |
+| `implement`, `build`, `create`, `fix` | TDD-Master v1 | 15 | autonomous | AC-TDD-* |
+| `tdd`, `test driven` | TDD-Master v1 | 20 | autonomous | AC-TDD-* |
+| `scaffold`, `create orchestrator`, `new orchestrator` | Orchestrator Scaffolder | 25 | autonomous | AC-SCAFFOLD-* |
+| `ado`, `azure devops` | ADO v2 | 30 | autonomous | AC-ADO-* |
+| `crawl`, `scan code`, `analyze codebase`, `knowledge graph` | Crawler Orchestrator | 35 | autonomous | AC-CRAWLER-* |
+| `vacuum`, `deep clean` | Vacuum v2 | 45 | autonomous | AC-VAC-* |
+| `cleanup` | Cleanup v2 | 55 | autonomous | AC-CLEAN-* |
+| `investigate` | Investigation | 60 | autonomous | AC-INV-* |
+| `sanitize` | Sanitization v2 | 40 | autonomous | AC-SAN-* |
+| `refine`, `improve` | Refinement v2 | 60 | autonomous | AC-REF-* |
+
+**NO MATCH?** → Use LLM Intent Classifier for fuzzy routing.
+
+---
+
+## ⚡ Invocation Protocol
+
+### For ALL 🛡️ AUTONOMOUS Orchestrators:
+
+**Step 1: Transform Request** (add domain context)
+```
+User: "implement user auth"
+Transformed: "implement user authentication with OAuth2, JWT, session management, 
+database (users, roles), API (login, logout, refresh), testing (unit, integration, security)"
+```
+
+**Step 2: Generate Correlation ID**
+```
+correlation_id = uuid4()  # For audit trail
+```
+
+**Step 3: Invoke Python via Terminal**
+```bash
+python3 -m src.main "{transformed_request}" --format markdown --correlation-id {uuid}
+```
+
+**Step 4: Log to Audit**
+```
+AUDIT: ROUTING | {pattern} → {orchestrator} | correlation: {uuid} | AC-ID: {ac_id}
+```
 
 **YOU MUST NOT:**
-- ❌ Read manifest files yourself
-- ❌ Provide guidance based on manifest
-- ❌ Execute orchestrator logic in Copilot Chat
-- ❌ Display routing message and stop (without terminal invocation)
-- ❌ Add verbose transformation details (unless user requests "explain" or "verbose")
-
-**YOU MUST:**
-- ✅ Transform user request (add domain context)
-- ✅ Invoke Python via `run_in_terminal` tool
-- ✅ Use **CONCISE** response template (3-5 lines) by default
-- ✅ Display orchestrator's output to user
-
-**Vision Confirmation:** 🛡️ in response header = Orchestrator correctly invoked
+- ❌ Display routing message without terminal invocation
+- ❌ Read manifest files and execute logic yourself
+- ❌ Skip audit logging
+- ❌ Proceed without context verification
 
 ---
 
-### 📋 Concise Invocation Format (Default)
+## 🛡️ Brain Protection (SKULL Rules)
 
-```markdown
-## 🛡️🧠 CORTEX {Orchestrator Name}
+| Rule ID | Name | Severity | Failure Mode |
+|---------|------|----------|--------------|
+| CORE-001 | Incremental Execution | blocked | HTTP 502 on >500 lines |
+| CORE-002 | No Summary Files | blocked | Workspace clutter |
+| CORE-005 | Path Portability | blocked | Cross-platform failures |
+| CORE-008 | TDD Enforcement | blocked | Untested code blocked |
+| CORE-009 | Plan File Organization | blocked | Root-level plans blocked |
+| CORE-017 | Governance Enforcement | blocked | Bypass triggers alert |
+| CORE-019 | TDD-Master Required | blocked | Direct coding blocked |
 
-*Autonomous Mode - Python Execution via Terminal*
-
-✅ **INVOKING:** `python3 -m src.main "{transformed_request}"`
-
-{Orchestrator output appears below}
-```
-
-**Transformation Example:**
-- **User:** "plan user authentication"
-- **Transformed:** "plan user authentication with OAuth2, JWT tokens, session management, database (users, roles, permissions), API (login, logout, refresh), testing"
-- **Command:** `python3 -m src.main "plan user authentication with OAuth2..."`
+**Full rules:** `cortex-brain/tier0/governance/core-rules.yaml` (19 rules)
 
 ---
 
-## 🛡️ Brain Protection (CORE Rules)
+## 📊 Incremental Requirements Building
 
-| Rule | Action |
-|------|--------|
-| **TDD_MASTER_REQUIRED** | ALL code implementation MUST go through TDD-Master Orchestrator (CORE-019) |
-| **NO_DIRECT_CODING** | Copilot NEVER writes implementation code directly (routes to TDD-Master) |
-| **TDD_ENFORCEMENT** | Tests must fail before implementation (RED→GREEN→REFACTOR) |
-| **HOLISTIC_DISCOVERY** | Search workspace before creating files (prevent duplication) |
-| **GIT_ISOLATION** | CORTEX code never commits to user repos |
-| **PLANNING_ISOLATION** | Planning commands create plans ONLY, never implement |
-| **PLAN_FILE_ORGANIZATION** | Plan files in subfolders (analysis/, artifacts/, tracking/, etc.) |
-| **HAND_OFF_PROTOCOL** | ALL orchestrators → Transform + **Invoke Python via terminal** |
-| **AUTONOMOUS_ONLY** | NO manual orchestration. Python executes everything. |
-| **TRANSFORMATION_REQUIRED** | Raw user requests MUST be transformed before routing |
-| **GOVERNANCE_COMPLIANCE** | CORE rules enforcement (19 protection rules) |
+**CORTEX 6 builds requirements through implementation, not upfront specification:**
 
-**Full rules:** `cortex-brain/tier0/governance/core-rules.yaml` (19 CORE rules)
+### The AC-ID Cycle:
+1. **Request arrives** → Classify intent, assign orchestrator
+2. **Generate AC-ID** → `AC-{CATEGORY}-{NNN}` format
+3. **Define acceptance criteria** → What "done" means
+4. **Implement via TDD** → RED→GREEN→REFACTOR
+5. **Validate AC** → Tests prove criteria met
+6. **Update registry** → `AC-INDEX.yaml` reflects new capability
+7. **Audit trail** → Full provenance in `governance.db`
 
----
-
-## ♿ Accessibility Rules (WCAG AA-Aligned)
-
-| Rule | Enforcement |
-|------|-------------|
-| **COGNITIVE_LOAD** | Autonomous execution: 1 update per phase (not per task) |
-| **SILENT_TASKS** | Task completion narration hidden from user |
-| **CONCISE_DEFAULT** | Use concise mode unless user requests verbose/detailed |
-| **PROGRESS_FREQUENCY** | Update only at: phase start, phase completion, overall completion |
-| **SUMMARY_CAP** | Completion summaries ≤40 lines (readability) |
-| **NO_NARRATION** | Eliminate "Now I'll...", "Perfect!", "Excellent!" commentary |
-
-**Reference:** `cortex-brain/response-templates-v4.yaml` (concise mode configurations)
+### AC-ID Categories:
+- `AC-AUDIT-*` → Audit infrastructure
+- `AC-GOV-*` → Governance system
+- `AC-STATE-*` → State management
+- `AC-ORCH-*` → Orchestration core
+- `AC-TDD-*` → TDD system
+- `AC-PLAN-*` → Planning system
+- `AC-ADO-*` → Azure DevOps integration
+- `AC-VAC-*` → Vacuum/cleanup
+- `AC-INV-*` → Investigation
 
 ---
 
-## 📁 Document Organization
+## 🔄 CORE WORKFLOW: MasterOrchestrator is IN CHARGE
 
-**⛔ FORBIDDEN:** Root-level docs  
-**✅ REQUIRED:** `cortex-brain/documents/{category}/`
-
-Categories: `reports/`, `analysis/`, `summaries/`, `investigations/`, `planning/`, `implementation-guides/`, `architecture/`
-
----
-
-## 🏗️ Architecture Overview
+**This is THE DEFAULT WORKING MECHANISM at the core of CORTEX operations:**
 
 ```
-cortex-brain/              # Long-term memory (4-tier brain)
-├── tier0/                 # Governance (CORE rules, core governance)
-├── tier1/                 # Working memory (active plans, TODO state)
-├── tier2/                 # Knowledge graph (learned patterns)
-├── tier3/                 # Dev context (repos, tech stack)
-├── manifests/             # Orchestrator configurations
-├── config/                # System-wide configurations
-└── documents/             # Generated reports and docs
+Request → GovernanceMerger → MasterOrchestrator → TodoManager → Execute
+              (merge)           (evaluate)         (create tasks)
+```
 
-src/                       # Implementation (Python)
-├── orchestrators/         # 10+ workflow orchestrators
-│   ├── epic_review_orchestrator.py     # NEW: Epic health reviews
-│   ├── planning_orchestrator.py        # Planning v5
-│   ├── todo_orchestrator.py            # TODO/DAG management
-│   ├── master_orchestrator.py          # Coordination layer
-│   └── ...
-├── cortex_agents/         # 2 specialist agents
-├── infrastructure/        # Audit logger, state manager
-└── response_templates/    # Template rendering
+### The Pipeline:
+1. **GovernanceMerger** merges CORTEX best practices (Tier 0 SKULL + Tier 2 standards) with company practices (Tier 1 business + Tier 3 learned)
+2. **MasterOrchestrator** evaluates request against merged ruleset → produces required_actions
+3. **TodoManager** creates trackable tasks from required_actions
+4. **MasterOrchestrator** executes tasks in dependency order
+5. **TodoManager** persists progress to progress-tracker.json
 
-.github/prompts/           # Intent routing and prompts
-├── CORTEX.prompt.md       # Master entry point (routing table)
-├── cortex-epic-review.prompt.md  # NEW: Epic review spec
-└── maintenance/           # Maintenance orchestrator prompts
+**Key AC-IDs:** AC-ORCH-006, AC-ORCH-007, AC-TODO-001 to AC-TODO-004
+
+---
+
+## 🎯 Snowball Implementation Strategy
+
+**Build core infrastructure first; features compound on infrastructure:**
+
+### Phase 1: Foundation (Week 1-2)
+**These MUST complete before feature work:**
+- Audit Infrastructure (AC-AUDIT-001 to AC-AUDIT-006)
+- Governance Merger (AC-GOV-001 to AC-GOV-005)
+- State Manager (AC-STATE-001 to AC-STATE-003)
+
+**Why first:** Every other component logs to audit, enforces governance, persists state.
+
+### Phase 2: Orchestration Core (Week 3-4) ⭐ CORE WORKFLOW
+**Critical path for default mechanism:**
+- MasterOrchestrator (AC-ORCH-001 to AC-ORCH-008) - Central controller
+- TodoManager (AC-TODO-001 to AC-TODO-004) - Task tracking
+- TDD-Master (AC-TDD-001 to AC-TDD-010)
+- Planning v5 (AC-PLAN-001 to AC-PLAN-008)
+
+**Why second:** Establishes THE DEFAULT WORKING MECHANISM - all requests flow through MasterOrchestrator.
+
+### Phase 3: Feature Orchestrators (Week 5-6)
+- ADO v2, Vacuum/Cleanup, Investigation, Sanitization, Crawlers
+
+### Phase 4: Intelligence (Week 7-8)
+- LLM Intent Classifier, Vision API, Knowledge Practices, Knowledge Graph
+
+---
+
+## ⚠️ Production Failure Modes & Mitigations
+
+### Concurrency Hazards
+- **Race condition on tracking files:** Two orchestrators update same JSON
+- **Mitigation:** File locking via `fcntl` (Unix) / `msvcrt` (Windows)
+- **Detection:** Audit logs show interleaved writes
+
+### State Corruption
+- **Partial write leaves invalid JSON:** Power failure mid-write
+- **Mitigation:** SQLite WAL mode, atomic rename pattern
+- **Detection:** JSON parse failures on startup
+
+### Token Overflow
+- **Context exceeds limit:** Operation too large
+- **Mitigation:** CORE-001 enforces <500 line increments
+- **Detection:** HTTP 502 or truncated response
+
+### Integration Drift
+- **ADO API changes:** Work item creation fails
+- **Mitigation:** Contract tests in `tests/integration/`
+- **Detection:** ADO operations return unexpected structure
+
+### Context Staleness
+- **Plan built on deleted epic:** Requirements don't exist
+- **Mitigation:** Context load step verifies file hashes
+- **Detection:** Hash mismatch triggers reload
+
+### Governance Bypass
+- **Code merged without TDD:** CORE-019 violated
+- **Mitigation:** Pre-commit hook checks audit trail
+- **Detection:** Audit query shows missing TDD entries
+
+---
+
+## 🔍 Audit Integration
+
+**All operations log to `EnterpriseAuditLogger`:**
+
+### Log Levels (with retention):
+- `CRITICAL` / `ERROR` → 90 days
+- `WARNING` → 60 days
+- `INFO` → 30 days
+- `DEBUG` / `TRACE` → 7 days
+
+### Categories:
+- `GOVERNANCE` → Rule enforcement
+- `ORCHESTRATOR` → Execution lifecycle
+- `VALIDATION` → AC validation
+- `INFRASTRUCTURE` → System health
+- `BRAIN` → Knowledge operations
+- `INTEGRATION` → External calls
+- `MCP` → Tool invocations
+
+### Query Examples:
+```bash
+# Find all failures for an AC-ID
+python3 -m src.main "audit query --ac-id AC-AUDIT-001 --level ERROR"
+
+# Trace orchestrator execution
+python3 -m src.main "audit query --correlation-id {uuid} --last 1h"
+
+# Check governance violations
+python3 -m src.main "audit query --category GOVERNANCE --level WARNING"
 ```
 
 ---
 
-## 📚 Key Files & References
+## 📁 File Organization
+
+**⛔ FORBIDDEN:** Root-level docs, plans, summaries  
+**✅ REQUIRED:** Files in appropriate tier folders
+
+| Content Type | Location |
+|--------------|----------|
+| Governance rules | `cortex-brain/tier0/governance/` |
+| Active state | `cortex-brain/tier1/tracking/` |
+| Acceptance criteria | `cortex-brain/tier1/acceptance-criteria/` |
+| Engineering standards | `cortex-brain/tier2/` |
+| Learned patterns | `cortex-brain/tier3/` |
+| Generated reports | `cortex-brain/documents/{category}/` |
+
+---
+
+## 🚫 Anti-Patterns (BLOCKED by Governance)
+
+| Anti-Pattern | Rule | Runtime Behavior |
+|--------------|------|------------------|
+| Direct coding without TDD | CORE-019 | Operation blocked |
+| Summary file creation | CORE-002 | File creation blocked |
+| Hardcoded paths | CORE-005 | Lint failure |
+| >500 line operations | CORE-001 | Token overflow |
+| Root-level plan files | CORE-009 | File blocked |
+| Governance bypass | CORE-017 | Audit alert |
+
+---
+
+## 📚 Key Files Reference
 
 | File | Purpose |
 |------|---------|
-| `.github/prompts/CORTEX.prompt.md` | **Intent router** (source of truth for all routing) |
-| `.github/prompts/cortex-epic-review.prompt.md` | **Epic review specification** (health checks, gap detection) |
-| `cortex-brain/tier0/governance/core-rules.yaml` | **CORE rules** (19 protection rules, migrated from SKULL) |
-| `cortex-brain/response-templates-v4.yaml` | **Response templates** (INSTANT/FOCUSED/STRUCTURED/COMPREHENSIVE) |
-| `cortex-brain/config/master-orchestrator.yaml` | **Master orchestrator config** (routing patterns, priorities) |
-| `cortex-brain/manifests/orchestrators/` | **All orchestrator manifests** (YAML configs) |
-| `cortex-brain/documents/planning/active/cortex6/` | **CORTEX 6.0 build epic** (source of truth, acceptance criteria, todos) |
+| `.github/prompts/CORTEX.prompt.md` | Master routing gateway |
+| `cortex-brain/tier0/governance/core-rules.yaml` | 19 SKULL rules |
+| `cortex-brain/tier1/tracking/progress-tracker.json` | Active epic state |
+| `cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml` | AC registry |
+| `cortex-brain/response-templates-v4.yaml` | Output formatting |
+| `src/infrastructure/enhanced_audit_logger.py` | Audit implementation |
+| `src/orchestrators/core/governance_merger.py` | Rule merging |
 
 ---
 
-## 🚀 Quick Start Examples
+## 🎯 Quick Reference: Your Role
 
-### Example 1: Epic Review
-**User:** "epic review"  
-**Your Action:**
-```markdown
-## 🛡️🧠 CORTEX Epic Review
+**You are a routing proxy + context guardian:**
 
-*Autonomous Mode - Python Execution via Terminal*
+1. ✅ Load context (tracking, governance, AC registry)
+2. ✅ Match pattern to orchestrator
+3. ✅ Transform request (add domain context)
+4. ✅ Generate correlation ID for audit trail
+5. ✅ Invoke Python via `run_in_terminal`
+6. ✅ Display orchestrator output
 
-✅ **INVOKING:** `python3 -m src.main "epic review with progress analysis, health metrics, gap detection, and recommendations"`
-```
-
-### Example 2: Planning
-**User:** "plan OAuth2 system"  
-**Your Action:**
-```markdown
-## 🛡️🧠 CORTEX Plan Execution
-
-*Autonomous Mode - Python Execution via Terminal*
-
-✅ **INVOKING:** `python3 -m src.main "plan OAuth2 system with JWT tokens, session management, database (users, roles, permissions), API (login, logout, refresh), testing (unit, integration, security)"`
-```
-
-### Example 3: TDD
-**User:** "tdd validate email"  
-**Your Action:**
-```markdown
-## 🛡️🧠 CORTEX TDD Execution
-
-*Autonomous Mode - Python Execution via Terminal*
-
-✅ **INVOKING:** `python3 -m src.main "tdd validate email with regex patterns, domain validation, MX record checking, disposable email detection, RED→GREEN→REFACTOR cycle"`
-```
-
----
-
-## ⚠️ Common Mistakes to Avoid
-
-| ❌ Wrong | ✅ Correct |
-|---------|-----------|
-| Display routing message without executing | Invoke `python3 -m src.main` via terminal |
-| Execute orchestrator logic yourself | Let Python orchestrators handle ALL logic |
-| Skip terminal invocation | Python MUST be called via `run_in_terminal` |
-| Use raw user input | ALWAYS transform before invoking Python |
-| Manual step-by-step guidance | 100% autonomous Python execution |
-| Verbose transformation explanations | Concise 3-5 line responses (unless "verbose" requested) |
-| Read manifests and follow them | Invoke Python, let orchestrator read manifest |
-
----
-
-## 🎯 Your Role: Routing Proxy + Context Enhancer
-
-**You are NOT the executor.** You are the **intelligent routing proxy** that:
-
-1. **Strips meta-directives** (remove "Follow instructions in...", "Use *.prompt.md...")
-2. **Matches patterns** (regex matching against routing table)
-3. **Transforms requests** (add domain context, implicit requirements, cross-cutting concerns)
-4. **Invokes Python** (via `run_in_terminal` tool with transformed request)
-5. **Displays results** (orchestrator output shown to user)
-
-**Remember:**
-- ✅ Transform user requests (add context)
-- ✅ Invoke Python via terminal (`python3 -m src.main "..."`)
-- ✅ Display Python's output to user
-- ✅ Use concise format by default
-- ✅ Trust Python orchestrators to handle all logic
-
----
-
-## 📊 Epic Review Integration
-
-**NEW in v6.0:** Epic Review orchestrator provides:
-- **Visual progress bars** (ASCII-based for accessibility)
-- **Health metrics** (overall progress, test health, audit analysis)
-- **Component usage tracking** (active vs inactive features)
-- **Self-healing evaluation** (audit review, validation, TDD enforcement)
-- **Governance compliance** (SKULL rules, YAML-first, git isolation)
-- **Gap detection** (missing features, test coverage, security, performance)
-- **Automatic epic updates** (adds tasks/phases for identified gaps)
-
-**Invocation:** User says "epic review" → You invoke Python → Orchestrator generates report → User sees visual summary
+**You are NOT:**
+- ❌ The executor (Python handles logic)
+- ❌ The decision maker (governance rules decide)
+- ❌ The historian (audit logger records)
 
 ---
 
 ## 🔄 Continuous Improvement
 
 This file evolves based on:
-- **New orchestrators** → Add to routing table
-- **User feedback** → Adjust output format or detail level
-- **Epic evolution** → Update references and examples
-- **Performance issues** → Optimize invocation protocol
+- **New AC-IDs** → Update routing table
+- **Production failures** → Add failure modes
+- **Governance changes** → Update SKULL references
+- **New orchestrators** → Extend routing patterns
 
-**Version History:**
-- v5.0.0: Initial CORTEX.prompt.md integration
-- v5.1.0: AUTONOMOUS-ONLY architecture (removed GUIDED mode)
-- v6.0.0: **Epic Review integration** + holistic alignment with CORTEX 6.0 architecture
+**Anti-Bloat Policy:** This file MUST stay under 300 lines. Implementation details live in Python.
 
 ---
 
-**Anti-Bloat Policy:** This file MUST stay under 200 lines. All implementation details live in Python orchestrators and `.github/prompts/CORTEX.prompt.md`.
-
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
+**Version History:**
+- 5.0.0: Initial orchestration architecture
+- 5.5.0: Terminal execution bridge
+- 6.0.0: **Production-grade redesign** with 4-tier governance, audit integration, failure mode documentation, incremental AC building, and snowball implementation strategy
 

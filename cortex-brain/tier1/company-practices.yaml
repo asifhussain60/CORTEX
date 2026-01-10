@@ -1,0 +1,285 @@
+# ==============================================================================
+# CORTEX Tier 1: Company Best Practices
+# ==============================================================================
+# Purpose: Organization-specific rules, compliance, and business requirements
+# Version: 6.0.0
+# Created: 2026-01-10
+# Author: Asif Hussain
+# AC-ID: AC-KNOW-003
+#
+# These practices are merged with SKULL rules (Tier 0), engineering standards
+# (Tier 2), and domain patterns (Tier 3) to form Final Instruction (F) for TDD.
+#
+# CUSTOMIZATION: Modify this file for your organization's specific requirements.
+# ==============================================================================
+
+schema_version: "1.0"
+governance_tier: 1
+category: "BUSINESS_TIER_0"
+precedence: "HIGH"
+
+# ==============================================================================
+# COMPANY INFORMATION (Customize for your organization)
+# ==============================================================================
+company:
+  name: "Your Organization"
+  industry: "Technology"
+  compliance_frameworks:
+    - "SOC 2 Type II"
+    - "GDPR"
+    - "HIPAA"  # Remove if not applicable
+
+# ==============================================================================
+# CODE REVIEW REQUIREMENTS
+# ==============================================================================
+code_review:
+  required: true
+  minimum_approvers: 1
+  
+  checklist:
+    functional:
+      - "Code does what the ticket describes"
+      - "Edge cases handled"
+      - "Error handling appropriate"
+      
+    quality:
+      - "Code follows team style guide"
+      - "No obvious code smells"
+      - "Appropriate test coverage"
+      
+    security:
+      - "No hardcoded secrets"
+      - "Input validation present"
+      - "Authorization checks in place"
+      
+    documentation:
+      - "Public APIs documented"
+      - "Complex logic explained"
+      - "README updated if needed"
+      
+  prohibited_patterns:
+    - "console.log() in production code"
+    - "print() statements for debugging"
+    - "TODO comments without ticket reference"
+    - "Disabled tests without explanation"
+    - "Hardcoded credentials or API keys"
+
+# ==============================================================================
+# DEPLOYMENT PROCEDURES
+# ==============================================================================
+deployment:
+  environments:
+    development:
+      approval_required: false
+      automated_tests: true
+      
+    staging:
+      approval_required: false
+      automated_tests: true
+      smoke_tests: true
+      
+    production:
+      approval_required: true
+      approvers: ["tech_lead", "product_owner"]
+      automated_tests: true
+      smoke_tests: true
+      rollback_plan_required: true
+      
+  requirements:
+    - "All tests must pass"
+    - "No critical security vulnerabilities"
+    - "Documentation updated"
+    - "Changelog entry added"
+    - "Database migrations tested"
+    
+  rollback:
+    strategy: "blue-green"
+    max_rollback_time: "5 minutes"
+    monitoring_period: "30 minutes"
+
+# ==============================================================================
+# COMPLIANCE REQUIREMENTS
+# ==============================================================================
+compliance:
+  gdpr:
+    enabled: true
+    requirements:
+      data_collection:
+        - "Collect only necessary data"
+        - "Obtain explicit consent"
+        - "Document data processing purposes"
+        
+      data_storage:
+        - "Encrypt PII at rest"
+        - "Set data retention limits"
+        - "Enable data portability"
+        
+      data_access:
+        - "Log all PII access"
+        - "Implement access controls"
+        - "Support right to be forgotten"
+        
+      breach_notification:
+        - "Notify within 72 hours"
+        - "Document breach details"
+        - "Notify affected users"
+        
+  soc2:
+    enabled: true
+    requirements:
+      security:
+        - "Access control policies"
+        - "Encryption in transit and at rest"
+        - "Vulnerability management"
+        
+      availability:
+        - "Uptime SLA: 99.9%"
+        - "Disaster recovery plan"
+        - "Regular backups"
+        
+      confidentiality:
+        - "Data classification"
+        - "Access logging"
+        - "NDA with third parties"
+        
+  hipaa:
+    enabled: false  # Enable if handling PHI
+    requirements:
+      phi_protection:
+        - "Encrypt all PHI"
+        - "Access logging required"
+        - "Minimum necessary access"
+        
+      audit_trail:
+        - "Log all PHI access"
+        - "Retain logs for 6 years"
+        - "Regular audit reviews"
+
+# ==============================================================================
+# SECURITY POLICIES
+# ==============================================================================
+security_policies:
+  authentication:
+    password_requirements:
+      min_length: 12
+      require_uppercase: true
+      require_lowercase: true
+      require_numbers: true
+      require_special: true
+      max_age_days: 90
+      
+    mfa:
+      required: true
+      methods: ["totp", "sms", "hardware_key"]
+      
+    session:
+      max_duration: "8 hours"
+      idle_timeout: "30 minutes"
+      concurrent_sessions: 3
+      
+  api_security:
+    rate_limiting:
+      enabled: true
+      default_limit: "100 requests per minute"
+      
+    api_keys:
+      rotation_required: true
+      max_age_days: 365
+      
+    cors:
+      allowed_origins: ["https://yourdomain.com"]
+      allowed_methods: ["GET", "POST", "PUT", "DELETE"]
+      
+  vulnerability_management:
+    scanning:
+      frequency: "weekly"
+      tools: ["Snyk", "OWASP ZAP", "SonarQube"]
+      
+    patching:
+      critical: "24 hours"
+      high: "7 days"
+      medium: "30 days"
+      low: "90 days"
+
+# ==============================================================================
+# INCIDENT RESPONSE
+# ==============================================================================
+incident_response:
+  severity_levels:
+    critical:
+      description: "Service completely down or major data breach"
+      response_time: "15 minutes"
+      escalation: ["on-call", "engineering_manager", "cto"]
+      
+    high:
+      description: "Major feature broken or significant performance degradation"
+      response_time: "1 hour"
+      escalation: ["on-call", "engineering_manager"]
+      
+    medium:
+      description: "Minor feature broken, workaround available"
+      response_time: "4 hours"
+      escalation: ["on-call"]
+      
+    low:
+      description: "Cosmetic issues or minor bugs"
+      response_time: "24 hours"
+      escalation: []
+      
+  post_incident:
+    - "Conduct blameless post-mortem"
+    - "Document root cause"
+    - "Create action items"
+    - "Share learnings"
+
+# ==============================================================================
+# DEVELOPMENT WORKFLOW
+# ==============================================================================
+development_workflow:
+  branching:
+    strategy: "gitflow"
+    main_branch: "main"
+    develop_branch: "develop"
+    feature_prefix: "feature/"
+    bugfix_prefix: "bugfix/"
+    hotfix_prefix: "hotfix/"
+    
+  commits:
+    format: "conventional"
+    types: ["feat", "fix", "docs", "style", "refactor", "test", "chore"]
+    require_ticket_reference: true
+    
+  pull_requests:
+    template_required: true
+    ci_must_pass: true
+    minimum_approvals: 1
+    squash_on_merge: true
+
+# ==============================================================================
+# MONITORING & OBSERVABILITY
+# ==============================================================================
+monitoring:
+  required_metrics:
+    - "Request latency (p50, p95, p99)"
+    - "Error rate"
+    - "Request throughput"
+    - "CPU/Memory utilization"
+    - "Database connection pool"
+    
+  alerting:
+    channels: ["slack", "pagerduty"]
+    on_call_rotation: true
+    
+  logging:
+    format: "JSON"
+    required_fields: ["timestamp", "level", "message", "correlation_id"]
+    retention: "30 days"
+    
+  tracing:
+    enabled: true
+    sample_rate: 0.1
+    propagation: "W3C Trace Context"
+
+# ==============================================================================
+# END OF COMPANY PRACTICES
+# ==============================================================================

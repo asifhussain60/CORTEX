@@ -1,0 +1,263 @@
+# ==============================================================================
+# CORTEX Tier 2: Engineering Standards & Best Practices
+# ==============================================================================
+# Purpose: CORTEX engineering best practices for code quality, testing, and docs
+# Version: 6.0.0
+# Created: 2026-01-10
+# Author: Asif Hussain
+# AC-ID: AC-KNOW-001
+#
+# These standards are merged with SKULL rules (Tier 0) and company practices
+# (Tier 1) to form the Final Instruction (F) for TDD Orchestrator.
+# ==============================================================================
+
+schema_version: "1.0"
+governance_tier: 2
+category: "COMPANY_PRACTICES"
+precedence: "MEDIUM"
+
+# ==============================================================================
+# CODE STYLE GUIDELINES
+# ==============================================================================
+code_style:
+  python:
+    formatter: "black"
+    line_length: 88
+    docstring_style: "google"
+    type_hints: "required"
+    imports:
+      style: "isort"
+      sections: ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
+    naming:
+      classes: "PascalCase"
+      functions: "snake_case"
+      constants: "UPPER_SNAKE_CASE"
+      private: "_leading_underscore"
+      
+  javascript:
+    formatter: "prettier"
+    semicolons: true
+    single_quotes: true
+    trailing_commas: "es5"
+    
+  general:
+    max_line_length: 120
+    indent_size: 4
+    use_spaces: true
+    trailing_whitespace: "remove"
+    final_newline: true
+
+# ==============================================================================
+# TESTING STANDARDS
+# ==============================================================================
+testing:
+  coverage:
+    minimum_percentage: 80
+    exclude_patterns:
+      - "**/tests/**"
+      - "**/conftest.py"
+      - "**/__init__.py"
+      
+  unit_tests:
+    naming_convention: "test_<function_name>_<scenario>"
+    arrange_act_assert: true
+    one_assertion_per_test: "recommended"
+    mock_external_dependencies: true
+    
+  integration_tests:
+    database_isolation: true
+    api_mocking: "when_external"
+    cleanup_after_test: true
+    
+  test_categories:
+    - name: "functional"
+      description: "Happy path functionality tests"
+      required: true
+      
+    - name: "edge_case"
+      description: "Boundary conditions and edge cases"
+      required: true
+      
+    - name: "security"
+      description: "Security-focused tests (injection, auth, XSS)"
+      required: "when_applicable"
+      
+    - name: "performance"
+      description: "Performance and load tests"
+      required: false
+      
+  tdd_workflow:
+    red_phase:
+      - "Write test BEFORE implementation"
+      - "Test MUST fail initially"
+      - "Include functional, edge case, security tests"
+    green_phase:
+      - "Write MINIMAL code to pass tests"
+      - "No over-engineering"
+      - "No premature optimization"
+    refactor_phase:
+      - "Apply SOLID principles"
+      - "Remove duplication (DRY)"
+      - "Keep it simple (KISS)"
+      - "Remove unused code (YAGNI)"
+
+# ==============================================================================
+# CLEAN CODE PRINCIPLES
+# ==============================================================================
+clean_code:
+  solid_principles:
+    SRP:
+      name: "Single Responsibility Principle"
+      description: "A class should have only one reason to change"
+      enforcement: "required"
+      
+    OCP:
+      name: "Open/Closed Principle"
+      description: "Open for extension, closed for modification"
+      enforcement: "required"
+      
+    LSP:
+      name: "Liskov Substitution Principle"
+      description: "Subtypes must be substitutable for base types"
+      enforcement: "required"
+      
+    ISP:
+      name: "Interface Segregation Principle"
+      description: "Many specific interfaces over one general interface"
+      enforcement: "recommended"
+      
+    DIP:
+      name: "Dependency Inversion Principle"
+      description: "Depend on abstractions, not concretions"
+      enforcement: "required"
+      
+  metrics:
+    max_function_length: 50
+    max_cyclomatic_complexity: 10
+    max_class_methods: 20
+    max_parameters: 5
+    max_nesting_depth: 4
+    min_clean_code_score: 80
+    
+  code_smells:
+    - name: "long_method"
+      threshold: 50
+      action: "extract_method"
+      
+    - name: "large_class"
+      threshold: 500
+      action: "extract_class"
+      
+    - name: "duplicate_code"
+      threshold: 3
+      action: "extract_common"
+      
+    - name: "dead_code"
+      threshold: 0
+      action: "remove"
+      
+    - name: "complex_conditional"
+      threshold: 3
+      action: "extract_or_simplify"
+
+# ==============================================================================
+# DOCUMENTATION REQUIREMENTS
+# ==============================================================================
+documentation:
+  required:
+    - type: "module_docstring"
+      location: "top_of_file"
+      content: ["purpose", "author", "copyright"]
+      
+    - type: "class_docstring"
+      location: "after_class_definition"
+      content: ["description", "attributes", "example"]
+      
+    - type: "function_docstring"
+      location: "after_function_definition"
+      content: ["description", "args", "returns", "raises"]
+      
+  api_documentation:
+    format: "OpenAPI 3.0"
+    required_sections:
+      - "description"
+      - "parameters"
+      - "responses"
+      - "examples"
+      
+  readme:
+    required_sections:
+      - "Installation"
+      - "Usage"
+      - "Configuration"
+      - "Contributing"
+
+# ==============================================================================
+# SECURITY CHECKLIST
+# ==============================================================================
+security:
+  input_validation:
+    - "Validate all user inputs"
+    - "Use parameterized queries (no string concatenation)"
+    - "Sanitize HTML output"
+    - "Validate file uploads"
+    
+  authentication:
+    - "Use secure password hashing (bcrypt, argon2)"
+    - "Implement proper session management"
+    - "Use HTTPS everywhere"
+    - "Implement rate limiting"
+    
+  authorization:
+    - "Implement role-based access control"
+    - "Validate permissions on every request"
+    - "Use principle of least privilege"
+    
+  data_protection:
+    - "Encrypt sensitive data at rest"
+    - "Use secure communication channels"
+    - "Implement proper logging (no secrets)"
+    - "Follow GDPR/privacy requirements"
+
+# ==============================================================================
+# ERROR HANDLING
+# ==============================================================================
+error_handling:
+  principles:
+    - "Fail fast, fail loudly"
+    - "Use specific exceptions, not generic"
+    - "Log errors with context"
+    - "Return meaningful error messages"
+    - "Never expose stack traces to users"
+    
+  patterns:
+    try_except:
+      - "Catch specific exceptions"
+      - "Always handle or re-raise"
+      - "Include cleanup in finally"
+      
+    result_types:
+      - "Use Result<T, E> pattern for expected failures"
+      - "Use exceptions for unexpected failures"
+
+# ==============================================================================
+# LOGGING STANDARDS
+# ==============================================================================
+logging:
+  levels:
+    DEBUG: "Detailed diagnostic information"
+    INFO: "General operational events"
+    WARNING: "Something unexpected but handled"
+    ERROR: "Error that prevented operation"
+    CRITICAL: "System-level failure"
+    
+  requirements:
+    - "Include correlation ID in all logs"
+    - "Include timestamp in ISO 8601 format"
+    - "Include source module and function"
+    - "Never log sensitive data (passwords, tokens)"
+    - "Use structured logging (JSON) in production"
+
+# ==============================================================================
+# END OF ENGINEERING STANDARDS
+# ==============================================================================

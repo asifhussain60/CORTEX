@@ -1,0 +1,152 @@
+{
+  "schema_version": "1.5",
+  "last_updated": "2026-01-10T18:00:00Z",
+  "updated_by": "CORTEX 6.0 Setup Integration Requirement",
+  
+  "active_epic": {
+    "id": "CORTEX-6.0",
+    "name": "CORTEX 6.0 Production-Grade Rebuild",
+    "description": "Complete rebuild with 4-tier governance, audit integration, and incremental AC building",
+    "started": "2026-01-10",
+    "target_completion": "2026-02-28",
+    "status": "in_progress"
+  },
+  
+  "current_phase": {
+    "number": 1,
+    "name": "Foundation",
+    "description": "Audit, Governance, State infrastructure",
+    "started": "2026-01-10",
+    "target_completion": "2026-01-24",
+    "status": "in_progress",
+    "ac_ids": ["AC-AUDIT-001", "AC-AUDIT-002", "AC-AUDIT-003", "AC-AUDIT-004", "AC-AUDIT-005", "AC-AUDIT-006", "AC-GOV-001", "AC-GOV-002", "AC-GOV-003", "AC-GOV-004", "AC-GOV-005", "AC-STATE-001", "AC-STATE-002", "AC-STATE-003"]
+  },
+  
+  "current_todo": {
+    "id": "TODO-008",
+    "name": "Begin Phase 1 Implementation",
+    "description": "Start implementing foundation ACs with TDD",
+    "status": "pending",
+    "ac_id": "AC-AUDIT-001",
+    "priority": 1
+  },
+  
+  "completed_todos": [
+    {
+      "id": "TODO-001",
+      "name": "Add CORE-021 Forward-Only Compliance",
+      "description": "New orchestrators MUST use scaffolder - legacy exempt until AC-MIGRATE-001",
+      "completed_at": "2026-01-10T12:00:00Z"
+    },
+    {
+      "id": "TODO-002",
+      "name": "Resolve DoR Ambiguities Round 1",
+      "description": "10 Definition of Ready ambiguities resolved with accepted defaults (SPEC-001 to SPEC-010)",
+      "completed_at": "2026-01-10T14:00:00Z"
+    },
+    {
+      "id": "TODO-003",
+      "name": "Resolve DoR Ambiguities Round 2",
+      "description": "8 additional ambiguities resolved with accepted defaults (SPEC-011 to SPEC-018)",
+      "completed_at": "2026-01-10T16:00:00Z"
+    },
+    {
+      "id": "TODO-004",
+      "name": "Add CORE-022 File Naming Rule",
+      "description": "Kebab-case file naming with max 20 characters (excluding extension)",
+      "completed_at": "2026-01-10T16:00:00Z"
+    },
+    {
+      "id": "TODO-005",
+      "name": "Capture Onboarding Orchestrator Requirements",
+      "description": "Added 11 ACs (AC-ONBOARD-001 to AC-ONBOARD-011) for comprehensive repo onboarding with AST crawlers, git history, knowledge graphs",
+      "completed_at": "2026-01-10T17:00:00Z"
+    },
+    {
+      "id": "TODO-006",
+      "name": "Add Setup/Installation Integration Requirement",
+      "description": "Added AC-ONBOARD-012 - Onboarding orchestrator auto-runs during setup/installation (pip install, cortex setup CLI, first request, VS Code startup)",
+      "completed_at": "2026-01-10T18:00:00Z"
+    },
+    {
+      "id": "TODO-007",
+      "name": "Design Enhanced Interactive Orchestration",
+      "description": "Created AC-INTERACT-001 to AC-INTERACT-003 for configuration-driven interaction, InteractionGuard middleware, and front-loaded clarification maintaining CORE-001 compliance",
+      "completed_at": "2026-01-10T19:00:00Z"
+    }
+  ],
+  
+  "blockers": [],
+  
+  "upcoming_phases": [
+    {
+      "number": 2,
+      "name": "Orchestration Core",
+      "ac_ids": ["AC-ORCH-001", "AC-ORCH-002", "AC-ORCH-003", "AC-ORCH-004", "AC-ORCH-005", "AC-ORCH-006", "AC-ORCH-007", "AC-ORCH-008", "AC-TDD-001", "AC-TDD-002", "AC-TDD-003", "AC-TDD-004", "AC-TDD-005", "AC-TDD-006", "AC-TDD-007", "AC-TDD-008", "AC-TODO-001", "AC-TODO-002", "AC-TODO-003", "AC-TODO-004", "AC-PLAN-001", "AC-PLAN-008", "AC-KNOW-001", "AC-KNOW-002", "AC-KNOW-003", "AC-INTERACT-001", "AC-INTERACT-002", "AC-INTERACT-003", "AC-SCAFFOLD-001", "AC-SCAFFOLD-002", "AC-SCAFFOLD-003", "AC-SCAFFOLD-004", "AC-SCAFFOLD-005", "AC-SCAFFOLD-006", "AC-SCAFFOLD-007"]
+    },
+    {
+      "number": 3,
+      "name": "Feature Orchestrators + Onboarding",
+      "ac_ids": ["AC-ADO-001", "AC-ADO-006", "AC-VAC-001", "AC-VAC-004", "AC-INV-001", "AC-INV-003", "AC-CRAWLER-001", "AC-CRAWLER-002", "AC-CRAWLER-003", "AC-CRAWLER-004", "AC-CRAWLER-005", "AC-ONBOARD-001", "AC-ONBOARD-002", "AC-ONBOARD-003", "AC-ONBOARD-004", "AC-ONBOARD-005", "AC-ONBOARD-006", "AC-ONBOARD-007", "AC-ONBOARD-008", "AC-ONBOARD-009", "AC-ONBOARD-010", "AC-ONBOARD-011", "AC-ONBOARD-012"],
+      "notes": "Onboarding orchestrator builds context from AST crawlers, git history, stores in tier1. AC-ONBOARD-012 enables auto-run during setup/installation."
+    },
+    {
+      "number": 4,
+      "name": "Intelligence Layer",
+      "ac_ids": ["AC-LLM-001", "AC-LLM-004", "AC-VIS-001", "AC-VIS-003", "AC-GRAPH-001", "AC-GRAPH-002", "AC-GRAPH-003", "AC-GRAPH-004"]
+    },
+    {
+      "number": 5,
+      "name": "Legacy Migration",
+      "ac_ids": ["AC-MIGRATE-001", "AC-MIGRATE-002", "AC-MIGRATE-003"],
+      "prerequisites": ["Phase 1-4 complete", "AC-STATE-002 resolved"]
+    }
+  ],
+  
+  "governance_updates": [
+    {
+      "rule_id": "CORE-021",
+      "name": "Orchestrator Scaffolder Compliance",
+      "added": "2026-01-10T12:00:00Z",
+      "description": "New orchestrators MUST use scaffolder - forward-only compliance"
+    },
+    {
+      "rule_id": "CORE-022",
+      "name": "Kebab-Case File Naming",
+      "added": "2026-01-10T16:00:00Z",
+      "description": "All file names must be kebab-case, max 20 chars (excluding extension)"
+    }
+  ],
+  
+  "dor_resolution": {
+    "status": "FULLY_RESOLVED",
+    "resolved_date": "2026-01-10T18:30:00Z",
+    "round_1_count": 10,
+    "round_2_count": 8,
+    "round_3_count": 7,
+    "total_specifications": 25,
+    "all_defaults_accepted": true,
+    "round_3_philosophy": "YAGNI - simplified from over-engineered to practical",
+    "deferred_specs": ["SPEC-021 (VS Code Extension -> Phase 4+)"]
+  },
+  
+  "metrics": {
+    "total_ac_ids": 69, 
+    "completed": 12,
+    "in_progress": 2,
+    "not_started": 52,
+    "deferred": 3,
+    "completion_percentage": 17, 
+    "dor_status": "FULLY_RESOLVED",
+    "core_rules_count": 21,
+    "onboarding_acs_added": 12,
+    "specifications_resolved": 25
+  },
+  
+  "audit_trail": {
+    "last_operation": "Enhanced interactive orchestration design with distributed approach maintaining CORE-001 compliance",
+    "last_timestamp": "2026-01-10T19:00:00Z",
+    "correlation_id": "INTERACT-DESIGN-001"
+  }
+}
+

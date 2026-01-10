@@ -19,10 +19,10 @@ metadata:
   migration_date: "2026-01-08T00:30:00Z"
   source: "cortex-brain/brain-protection-rules.yaml"
   migrated_by: "feat03-governance Phase 1"
-  rule_count: 19  # Updated from 18
+  rule_count: 21  # Updated: added CORE-022
   deprecated_file: "cortex-brain/brain-protection-rules.yaml"
-  last_updated: "2026-01-09T17:00:00Z"  # Updated
-  last_updated_by: "CX6 Unified Orchestration System Design"
+  last_updated: "2026-01-10T12:00:00Z"  # Updated
+  last_updated_by: "CORTEX 6.0 File Naming Governance"
   enhancements:
     - date: "2026-01-08T03:30:00Z"
       by: "feat04-core-orchestration Phase 1"
@@ -31,6 +31,14 @@ metadata:
       by: "CX6 Unified Orchestration System Design"
       added: ["CORE-019"]
       reason: "Enforce TDD-Master for all development (planned and unplanned)"
+    - date: "2026-01-10T00:00:00Z"
+      by: "CORTEX 6.0 Governance Enhancement"
+      added: ["CORE-020"]
+      reason: "No markdown in cortex-brain/ - all knowledge files must be machine-readable (YAML/JSON)"
+    - date: "2026-01-10T12:00:00Z"
+      by: "CORTEX 6.0 File Naming Governance"
+      added: ["CORE-022"]
+      reason: "Enforce kebab-case file naming with max 20 characters (excluding extension)"
 
 categories:
   - orchestration_lifecycle    # Rules governing orchestrator execution
@@ -796,6 +804,110 @@ rules:
       5. Audit trail (all development logged with AC validation)
       6. Flexibility (both planned and unplanned modes supported)
 
+  # ==========================================================================
+  # CORE-020: No Markdown Files for Orchestrator Work Products
+  # ==========================================================================
+  - rule_id: CORE-020
+    category: response_formatting
+    severity: blocked
+    name: Orchestrators Must Not Create Markdown Work Products
+    description: |
+      Orchestrators MUST NOT create markdown (.md) files as work products,
+      outputs, or intermediate artifacts. All orchestrator outputs should use:
+      
+      - YAML (.yaml) for structured data, configs, plans, tracking
+      - JSON (.json) for API responses, data interchange
+      - Python (.py) for executable scripts and tools
+      
+      Markdown is ONLY acceptable for:
+      - Human-authored documentation (docs/, README.md at project root)
+      - System prompts (.github/prompts/*.md)
+      
+      STRICTLY FORBIDDEN in cortex-brain/:
+      - cortex-brain/tier0/ → YAML only (governance rules)
+      - cortex-brain/tier1/ → YAML/JSON only (tracking, acceptance criteria)
+      - cortex-brain/tier2/ → YAML only (engineering standards)
+      - cortex-brain/tier3/ → YAML only (domain patterns)
+      - cortex-brain/config/ → YAML only
+      - cortex-brain/manifests/ → YAML only
+      
+      All knowledge files MUST be machine-readable. No markdown in brain.
+    
+    enforcement:
+      trigger: orchestrator_file_creation
+      action: block_if_markdown_work_product
+    
+    validation:
+      - Orchestrator outputs use YAML/JSON/Python, not markdown
+      - Plans stored in YAML (00-TODO-CONTINUITY-TRACKER.yaml pattern)
+      - Reports use YAML structure (not *-report.md)
+      - Analysis results use JSON (not *-analysis.md)
+      - Progress tracking uses JSON (progress-tracker.json)
+      - cortex-brain/**/*.md is BLOCKED (no exceptions)
+      - Exception: Human documentation (README.md at root, docs/)
+      - Exception: Prompt files (.github/prompts/*.md)
+    
+    implementation:
+      middleware: src.orchestrators.middleware.file_creation_guard.FileCreationGuard
+      hook: pre_file_creation
+      priority: 2
+    
+    blocklist_for_orchestrators:
+      - "*.md"  # Default block all markdown from orchestrators
+      - "cortex-brain/**/*.md"  # STRICT: No markdown in brain (no exceptions)
+    
+    allowlist_exceptions:
+      - "README.md"  # Project root readme only
+      - "docs/**/*.md"  # Human documentation folder
+      - ".github/prompts/*.md"  # System prompts
+      - ".asif/**/*.md"  # Personal notes/chat history
+    
+    explicitly_blocked:
+      - "cortex-brain/tier0/**/*.md"
+      - "cortex-brain/tier1/**/*.md"
+      - "cortex-brain/tier2/**/*.md"
+      - "cortex-brain/tier3/**/*.md"
+      - "cortex-brain/config/**/*.md"
+      - "cortex-brain/manifests/**/*.md"
+      - "cortex-brain/documents/**/*.md"  # Use YAML for all brain documents
+    
+    alternatives:
+      instead_of: "analysis-report.md"
+      use: "analysis-report.yaml or analysis-report.json"
+      
+      instead_of: "implementation-plan.md"
+      use: "00-TODO-CONTINUITY-TRACKER.yaml"
+      
+      instead_of: "progress-summary.md"
+      use: "progress-tracker.json"
+      
+      instead_of: "gap-analysis.md"
+      use: "gap-analysis.yaml"
+    
+    examples:
+      pass:
+        - "Orchestrator creates cortex-brain/tier1/tracking/progress-tracker.json"
+        - "Orchestrator creates cortex-brain/config/audit-config.yaml"
+        - "Orchestrator creates src/tools/analyzer.py"
+        - "User creates docs/getting-started.md (human-authored documentation)"
+      fail:
+        - "Orchestrator creates cortex-brain/analysis-report.md"
+        - "Orchestrator creates cortex-brain/tier1/epic-summary.md"
+        - "Orchestrator creates implementation-notes.md"
+        - "Orchestrator creates feature-design.md"
+    
+    rationale: |
+      Markdown-free orchestrator outputs ensure:
+      1. Machine-readability (YAML/JSON parse without LLM interpretation)
+      2. Efficiency (scripts execute directly, no translation needed)
+      3. Validation (schema validation for YAML/JSON)
+      4. Token efficiency (structured data vs. verbose prose)
+      5. Automation (CI/CD can process YAML/JSON natively)
+      6. Consistency (single format per data type)
+      
+      Markdown is designed for human reading, not machine processing.
+      Orchestrators work with machines, so they should output machine formats.
+
 # ==============================================================================
 # GOVERNANCE CONFIGURATION
 # ==============================================================================
@@ -850,3 +962,213 @@ migration:
     GOVERNANCE_ENFORCEMENT: CORE-017
     YAML_FIRST_REQUIRED: CORE-018
     TDD_MASTER_REQUIRED: CORE-019  # Added 2026-01-09
+    ORCHESTRATOR_SCAFFOLDER_COMPLIANCE: CORE-021  # Added 2026-01-10
+    KEBAB_CASE_FILE_NAMING: CORE-022  # Added 2026-01-10
+
+  # ==========================================================================
+  # CORE-021: Orchestrator Scaffolder Compliance (Forward-Only)
+  # ==========================================================================
+  - rule_id: CORE-021
+    original_id: ORCHESTRATOR_SCAFFOLDER_COMPLIANCE
+    category: architecture_integrity
+    severity: blocked
+    name: New Orchestrators MUST Use Scaffolder
+    description: |
+      ALL NEW orchestrators MUST be created via the Orchestrator Scaffolder
+      (`src/tools/orchestrator_scaffolder.py`). This ensures:
+      1. MasterOrchestrator registration (@register_with_master decorator)
+      2. 4-tier governance compliance injection
+      3. Manifest contract validation
+      4. Test stub generation
+      5. Team ownership tracking
+      
+      EXCEPTION: Legacy orchestrators created before this rule may remain
+      non-compliant until formal migration (AC-MIGRATE-001 in Phase 5).
+      
+      CRITICAL: MasterOrchestrator is IN CHARGE - never bypassed.
+    
+    enforcement:
+      trigger: orchestrator_creation
+      action: block_if_not_scaffolded
+    
+    validation:
+      - Orchestrator created via `orchestrator_scaffolder.py` CLI
+      - Extends BaseOrchestratorV4
+      - Has @register_with_master decorator on class
+      - Has @require_master_routing decorator on execute()
+      - Manifest exists in cortex-brain/manifests/orchestrators/
+      - Tier3 domain patterns file created
+      - Test stubs generated
+    
+    implementation:
+      middleware: src.orchestrators.middleware.orchestrator_creation_guard.OrchestratorCreationGuard
+      hook: pre_file_creation
+      priority: 3
+    
+    exceptions:
+      legacy_orchestrators:
+        description: "Orchestrators created before CORE-021 are exempt until AC-MIGRATE-001"
+        list:
+          - TDDMasterOrchestrator
+          - PlanningOrchestratorV5
+          - ADOOrchestratorV2
+          - VacuumOrchestratorV2
+          - InvestigationOrchestratorV2
+          - SanitizationOrchestratorV2
+          - MaintenanceOrchestratorV2
+          - ReviewOrchestratorV2
+          - GapFixOrchestrator
+          - TDDOrchestrator
+          - MasterOrchestrator  # Special: top-level controller
+        migration_tracked_by: "AC-MIGRATE-001"
+        migration_phase: 5
+    
+    ac_ids:
+      - AC-SCAFFOLD-001  # Scaffolder CLI
+      - AC-SCAFFOLD-003  # MasterOrchestrator registration
+      - AC-SCAFFOLD-005  # Manifest validation
+    
+    future_work:
+      migration_ac: "AC-MIGRATE-001"
+      phase: 5
+      weeks: "9-10"
+      description: "Migrate legacy orchestrators to scaffolder compliance"
+    
+    examples:
+      pass:
+        - "python -m src.tools.orchestrator_scaffolder --name 'Finance Report' --domain finance"
+        - "New FinanceReportOrchestrator extends BaseOrchestratorV4"
+        - "FinanceReportOrchestrator has @register_with_master decorator"
+      fail:
+        - "Manually creating src/orchestrators/new/new_orchestrator.py"
+        - "New orchestrator without @register_with_master"
+        - "New orchestrator without manifest in cortex-brain/manifests/"
+
+  # ==========================================================================
+  # CORE-022: Kebab-Case File Naming (FINAL - Supersedes All Conflicts)
+  # ==========================================================================
+  - rule_id: CORE-022
+    original_id: KEBAB_CASE_FILE_NAMING
+    category: architecture_integrity
+    severity: blocked
+    name: Kebab-Case File Naming with 20-Character Limit
+    description: |
+      ALL file names MUST follow kebab-case format (lowercase, hyphen-separated)
+      with a maximum of 20 characters EXCLUDING the file extension.
+      
+      This rule is FINAL and SUPERSEDES any conflicting naming conventions
+      elsewhere in the codebase or documentation.
+      
+      Format: `{name}.{ext}` where:
+      - `name` = 1-20 lowercase alphanumeric characters with hyphens
+      - Hyphens cannot be leading, trailing, or consecutive
+      - Extension is NOT counted in the 20-character limit
+      
+      EXCEPTIONS (grandfathered):
+      - Python files with underscores in src/ (Python module convention)
+      - __init__.py, __main__.py, conftest.py (Python special files)
+      - LICENSE, README.md, Makefile (standard project files)
+      - .gitignore, .env, .editorconfig (dotfiles)
+    
+    enforcement:
+      trigger: file_creation
+      action: block_if_invalid_filename
+    
+    validation:
+      - File name (excluding extension) <= 20 characters
+      - File name matches pattern: ^[a-z][a-z0-9]*(-[a-z0-9]+)*$
+      - No uppercase characters in file name
+      - No underscores in file name (except Python src/ files)
+      - No spaces or special characters
+      - No consecutive hyphens (--)
+      - No leading or trailing hyphens
+    
+    implementation:
+      middleware: src.orchestrators.middleware.file_naming_validator.FileNamingValidator
+      hook: pre_file_creation
+      priority: 1  # Highest priority - runs first
+      regex_pattern: "^[a-z][a-z0-9]*(-[a-z0-9]+)*$"
+      max_length: 20
+    
+    exceptions:
+      python_modules:
+        description: "Python files in src/ may use underscores per PEP 8"
+        pattern: "src/**/*.py"
+        allowed_pattern: "^[a-z][a-z0-9_]*$"
+      
+      python_special:
+        description: "Python special files"
+        files:
+          - "__init__.py"
+          - "__main__.py"
+          - "__pycache__"
+          - "conftest.py"
+          - "pytest.ini"
+      
+      project_standard:
+        description: "Standard project files (case-sensitive names)"
+        files:
+          - "LICENSE"
+          - "README.md"
+          - "CHANGELOG.md"
+          - "CONTRIBUTING.md"
+          - "Makefile"
+          - "Dockerfile"
+          - "requirements.txt"
+          - "setup.py"
+          - "pyproject.toml"
+      
+      dotfiles:
+        description: "Configuration dotfiles"
+        pattern: "^\\..*"
+        files:
+          - ".gitignore"
+          - ".env"
+          - ".env.example"
+          - ".editorconfig"
+          - ".pre-commit-config.yaml"
+    
+    supersedes:
+      description: "This rule is FINAL and overrides any conflicting rules"
+      conflicting_patterns:
+        - "camelCase file names"
+        - "PascalCase file names"
+        - "snake_case file names (except Python src/)"
+        - "SCREAMING_CASE file names"
+        - "File names > 20 characters"
+      resolution: "CORE-022 wins all naming conflicts"
+    
+    examples:
+      pass:
+        - "ac-index.yaml (8 chars) ✓"
+        - "core-rules.yaml (10 chars) ✓"
+        - "progress-tracker.json (16 chars) ✓"
+        - "audit-config.yaml (12 chars) ✓"
+        - "api.py (3 chars) ✓"
+        - "src/utils/token_counter.py (Python module - underscore OK) ✓"
+        - "README.md (standard file - exempt) ✓"
+      
+      fail:
+        - "AC-INDEX.yaml (uppercase) ✗"
+        - "progressTracker.json (camelCase) ✗"
+        - "progress_tracker.json (snake_case outside src/) ✗"
+        - "my-very-long-file-name.yaml (21 chars) ✗"
+        - "--invalid.yaml (leading hyphen) ✗"
+        - "also--invalid.yaml (consecutive hyphens) ✗"
+    
+    migration_guidance:
+      description: "Existing files violating this rule should be renamed"
+      priority: "LOW - rename during regular maintenance"
+      tooling: "scripts/rename_to_kebab.py (to be created)"
+    
+    rationale: |
+      Kebab-case with length limits ensures:
+      1. Cross-platform compatibility (Windows, macOS, Linux)
+      2. URL-safe file names (no encoding needed)
+      3. Readable file names (hyphens more readable than underscores)
+      4. Consistent naming across entire codebase
+      5. Predictable file discovery and sorting
+      6. Git-friendly (avoids case-sensitivity issues)
+      7. Terminal-friendly (no quoting needed)
+      8. 20-char limit prevents unwieldy names while allowing descriptive names
+

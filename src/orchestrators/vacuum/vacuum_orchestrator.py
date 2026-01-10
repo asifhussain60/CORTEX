@@ -3,12 +3,22 @@ Vacuum Orchestrator v2 - Pure Autonomous Filesystem Cleanup.
 
 Comprehensive filesystem cleanup with:
 - 10 cleanup categories (temp files, build artifacts, duplicates, etc.)
+- Generic cleanup intelligence (CORTEX v6.0 patterns from chat01.md)
+- 6 cleanup categories from real-world cleanup operation (~140 MB, 22,400 files)
 - Transactional operations with rollback capability
 - Safety validation (critical file protection, git integration)
 - CORTEX brain protection enforcement
 - Dry-run mode (default)
 - Checkpoint/rollback system
 - Master Orchestrator integration
+
+Generic Cleanup Intelligence (from CORTEX v6.0 rebuild):
+1. Brain Structure Cleanup - Tier-based architecture enforcement
+2. Documents Folder Cleanup - Historical vs essential content (970+ files)
+3. Root Cortex-* Cleanup - Tool/sample/output folders (21,400 files, 115 MB)
+4. Gitignored Cache Cleanup - Build artifacts (.pytest_cache, htmlcov, etc.)
+5. Root Config Files Cleanup - Obsolete linter/test configs
+6. GitHub Configuration Cleanup - CI/CD workflows and obsolete prompts
 
 Migration from:
 - v0 (Python): AST analysis, SQLite VACUUM, duplicate detection
@@ -102,12 +112,14 @@ class VacuumOrchestratorV2(BaseOrchestratorV4):
         self._safety_validator = None
         self._duplicate_detector = None
         self._orphan_detector = None
+        self._generic_cleanup = None
         
         # Execution state
         self.inventory: Dict[str, List[Path]] = {}
         self.cleanup_plan: Dict[str, Any] = {}
         self.validated_plan: Dict[str, Any] = {}
         self.execution_result: Dict[str, Any] = {}
+        self.generic_cleanup_analysis: Dict[str, Any] = {}
     
     def check_token_usage(self) -> Dict[str, Any]:
         """
@@ -161,6 +173,14 @@ class VacuumOrchestratorV2(BaseOrchestratorV4):
             ast_engine = ASTEngine(self.project_root)
             self._orphan_detector = OrphanDetector(self.project_root, ast_engine)
         return self._orphan_detector
+    
+    @property
+    def generic_cleanup(self):
+        """Lazy-load GenericCleanupIntelligence."""
+        if self._generic_cleanup is None:
+            from src.orchestrators.vacuum.generic_cleanup_intelligence import GenericCleanupIntelligence
+            self._generic_cleanup = GenericCleanupIntelligence(self.project_root)
+        return self._generic_cleanup
     
     def execute(self, user_request: str, **kwargs) -> OrchestratorResult:
         """
@@ -381,7 +401,8 @@ class VacuumOrchestratorV2(BaseOrchestratorV4):
             1. Scan directory recursively
             2. Apply exclusion patterns
             3. Categorize files by cleanup category (10 categories)
-            4. Store inventory in state
+            4. Apply generic cleanup intelligence (CORTEX v6.0 patterns)
+            5. Store inventory in state
         
         Args:
             target_path: Root directory to scan
@@ -402,6 +423,10 @@ class VacuumOrchestratorV2(BaseOrchestratorV4):
                 exclude_patterns=set(self.exclusions)
             )
             
+            # Apply generic cleanup intelligence
+            self.logger.info("Applying generic cleanup intelligence...")
+            self.generic_cleanup_analysis = self.generic_cleanup.analyze_project()
+            
             # Calculate statistics
             total_files = sum(len(files) for files in self.inventory.values())
             total_size = sum(
@@ -409,9 +434,17 @@ class VacuumOrchestratorV2(BaseOrchestratorV4):
                 for files in self.inventory.values()
             )
             
+            # Add generic cleanup opportunities
+            generic_files = self.generic_cleanup_analysis.get('total_files', 0)
+            generic_size_mb = self.generic_cleanup_analysis.get('total_size_mb', 0)
+            
             self.logger.info(
                 f"Discovery complete: {total_files} files found "
                 f"({total_size / (1024*1024):.1f} MB)"
+            )
+            self.logger.info(
+                f"Generic cleanup: {generic_files} additional files identified "
+                f"({generic_size_mb:.1f} MB potential recovery)"
             )
             
             # Store inventory in phase metadata
@@ -420,6 +453,12 @@ class VacuumOrchestratorV2(BaseOrchestratorV4):
                 'total_size_mb': total_size / (1024 * 1024),
                 'categories': {
                     cat: len(files) for cat, files in self.inventory.items()
+                },
+                'generic_cleanup': {
+                    'files': generic_files,
+                    'size_mb': generic_size_mb,
+                    'categories': list(self.generic_cleanup_analysis.get('categories', {}).keys()),
+                    'recommendations': self.generic_cleanup_analysis.get('recommendations', [])
                 }
             }
             phase_result.status = PhaseStatus.COMPLETE
@@ -439,8 +478,9 @@ class VacuumOrchestratorV2(BaseOrchestratorV4):
             1. Detect duplicates (hash-based)
             2. Identify orphaned tests (AST)
             3. Detect unused imports (AST)
-            4. Calculate disk space recovery
-            5. Generate cleanup plan
+            4. Merge generic cleanup plan with standard cleanup
+            5. Calculate disk space recovery
+            6. Generate cleanup plan
         
         Args:
             aggressive: Enable aggressive cleanup (duplicates, orphans)
@@ -476,7 +516,8 @@ class VacuumOrchestratorV2(BaseOrchestratorV4):
                 'move': [],
                 'archive': [],
                 'duplicates': duplicates,
-                'orphaned_tests': orphaned_tests
+                'orphaned_tests': orphaned_tests,
+                'generic_cleanup': {}
             }
             
             # Add files to cleanup plan by category
@@ -484,6 +525,25 @@ class VacuumOrchestratorV2(BaseOrchestratorV4):
             for category, files in self.inventory.items():
                 if category in safe_categories:
                     self.cleanup_plan['delete'].extend(files)
+            
+            # Merge generic cleanup intelligence
+            if self.generic_cleanup_analysis.get('total_files', 0) > 0:
+                self.logger.info("Merging generic cleanup plan...")
+                generic_plan = self.generic_cleanup.get_cleanup_plan(
+                    categories=None,  # All categories
+                    safety_level='MEDIUM'  # Only LOW and MEDIUM risk
+                )
+                
+                self.cleanup_plan['generic_cleanup'] = generic_plan
+                
+                # Add generic cleanup files to delete list
+                for category, paths in generic_plan.items():
+                    self.cleanup_plan['delete'].extend(paths)
+                
+                self.logger.info(
+                    f"Added {len(self.cleanup_plan['delete']) - len([f for cat, files in self.inventory.items() if cat in safe_categories for f in files])} "
+                    f"files from generic cleanup intelligence"
+                )
             
             # Calculate space recovery
             space_recovery = sum(
@@ -495,6 +555,7 @@ class VacuumOrchestratorV2(BaseOrchestratorV4):
                 'files_to_move': len(self.cleanup_plan['move']),
                 'duplicate_groups': len(duplicates),
                 'orphaned_tests': len(orphaned_tests),
+                'generic_cleanup_categories': len(self.cleanup_plan['generic_cleanup']),
                 'space_recovery_mb': space_recovery / (1024 * 1024)
             }
             phase_result.status = PhaseStatus.COMPLETE
