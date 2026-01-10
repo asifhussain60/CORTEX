@@ -1,0 +1,963 @@
+# ==============================================================================
+# CORTEX 6.0 DETERMINISTIC ROUTING SPECIFICATION
+# ==============================================================================
+# Purpose: Define routing semantics, conflict resolution, and contract tests
+# Version: 2.0.0
+# Created: 2026-01-10
+# Updated: 2026-01-10 (Round 3 GPT Review Integration)
+# Author: Asif Hussain
+# Copyright © 2025-2026 Asif Hussain. All rights reserved.
+#
+# AC-IDs: AC-ROUTE-001 to AC-ROUTE-005, SPEC-019
+# Priority: HIGH (Phase 2 Orchestration Core)
+#
+# REVIEWER NOTE:
+# This is a DESIGN SPECIFICATION with partial implementation.
+# - Routing table EXISTS in .github/prompts/CORTEX.prompt.md (IMPLEMENTED)
+# - DeterministicRoutingEngine does NOT exist yet (DESIGNED)
+# Review for: ambiguity resolution logic, conflict detection, testability.
+#
+# ROUND 3 UPDATES:
+# - Changed normalization from lower().strip() to NFKC + zero-width strip + whitespace collapse
+# - Added confusable attack policy (AC-ROUTE-004)
+# - Added startup validation for PREFIX tie-breaking (AC-ROUTE-005)
+# ==============================================================================
+
+schema_version: "2.0"
+last_updated: "2026-01-10T23:30:00Z"
+
+# ==============================================================================
+# PROBLEM STATEMENT
+# ==============================================================================
+problem_statement:
+  current_issues:
+    - "Non-deterministic routing: Same intent may route to different orchestrators"
+    - "Pattern overlaps: 'implement' matches both 'implement' and 'implement auth'"
+    - "Priority collisions: Multiple patterns at same priority"
+    - "Regex ambiguity: Overlapping regex patterns"
+    - "Import-order dependency: Last-registered orchestrator wins"
+    - "No validation: Conflicts discovered at runtime, not startup"
+  
+  production_impact:
+    - "Flaky behavior: 'Works on my machine' failures"
+    - "Difficult debugging: Cannot reproduce routing decisions"
+    - "Version drift: Different behavior across deployments"
+    - "Security risk: Unexpected orchestrator handles sensitive request"
+  
+  goal:
+    "Same user intent MUST route to same orchestrator, every time."
+
+# ==============================================================================
+# ROUTING SEMANTICS (AC-ROUTE-001)
+# ==============================================================================
+routing_semantics:
+  
+  purpose: "Define unambiguous matching rules with explicit precedence"
+  
+  # ----------------------------------------------------------------------------
+  # Match Types (in order of evaluation)
+  # ----------------------------------------------------------------------------
+  match_types:
+    
+    EXACT:
+      definition: "Pattern equals intent string (case-insensitive)"
+      priority: 1
+      
+      behavior: "If exact match found, return immediately (no further evaluation)"
+      
+      examples:
+        pattern: "epic review"
+        matches:
+          - input: "epic review"
+            result: MATCH
+          - input: "EPIC REVIEW"
+            result: MATCH
+        
+        no_match:
+          - input: "epic review health"
+            result: NO_MATCH
+          - input: "review epic"
+            result: NO_MATCH
+      
+      use_case: "Commands with precise syntax (e.g., 'vacuum', 'epic review')"
+    
+    PREFIX:
+      definition: "Intent starts with pattern (case-insensitive)"
+      priority: 2
+      
+      behavior: "Evaluated after EXACT; longest prefix wins"
+      
+      examples:
+        pattern: "implement"
+        matches:
+          - input: "implement user auth"
+            result: MATCH
+          - input: "implement database schema"
+            result: MATCH
+        
+        no_match:
+          - input: "build and implement"
+            result: NO_MATCH
+          - input: "fix implementation bug"
+            result: NO_MATCH
+      
+      longest_prefix_rule: |
+        If multiple PREFIX patterns match:
+          Pattern "implement auth" (14 chars) > "implement" (9 chars)
+          → Route to "implement auth" orchestrator
+      
+      use_case: "Action-oriented requests (e.g., 'implement', 'plan', 'fix')"
+    
+    CONTAINS:
+      definition: "Pattern appears anywhere in intent (case-insensitive)"
+      priority: 3
+      
+      behavior: "Evaluated after EXACT and PREFIX; use explicit priority for ties"
+      
+      examples:
+        pattern: "tdd"
+        matches:
+          - input: "use tdd for auth"
+            result: MATCH
+          - input: "implement with tdd approach"
+            result: MATCH
+          - input: "tdd workflow"
+            result: MATCH
+        
+        no_match:
+          - input: "test driven development"
+            result: NO_MATCH (pattern is "tdd", not "test driven")
+      
+      use_case: "Keywords that may appear anywhere (e.g., 'tdd', 'security', 'database')"
+    
+    REGEX:
+      definition: "Pattern is compiled regex (case-insensitive by default)"
+      priority: 4
+      
+      behavior: "Evaluated last; use explicit priority for multiple matches"
+      
+      examples:
+        pattern: "^(plan|create a plan|build plan)"
+        matches:
+          - input: "plan epic for auth"
+            result: MATCH
+          - input: "create a plan for database"
+            result: MATCH
+          - input: "build plan"
+            result: MATCH
+        
+        no_match:
+          - input: "epic planning"
+            result: NO_MATCH (doesn't start with pattern)
+      
+      regex_flags: "re.IGNORECASE | re.UNICODE"
+      
+      use_case: "Complex patterns with alternation or optional words"
+
+  # ----------------------------------------------------------------------------
+  # Conflict Resolution Rules
+  # ----------------------------------------------------------------------------
+  conflict_resolution:
+    
+    rule_1_match_type_precedence:
+      description: "EXACT > PREFIX > CONTAINS > REGEX"
+      
+      example:
+        intent: "epic review"
+        candidates:
+          - pattern: "epic review"
+            type: EXACT
+            orchestrator: "EpicReview"
+          
+          - pattern: "epic"
+            type: PREFIX
+            orchestrator: "EpicManagement"
+          
+          - pattern: "review"
+            type: CONTAINS
+            orchestrator: "CodeReview"
+        
+        winner: "EpicReview (EXACT wins)"
+    
+    rule_2_longest_match:
+      description: "Within same match type, longest pattern wins"
+      
+      example:
+        intent: "implement authentication"
+        candidates:
+          - pattern: "implement auth"
+            type: PREFIX
+            length: 14
+            orchestrator: "AuthOrchestrator"
+          
+          - pattern: "implement"
+            type: PREFIX
+            length: 9
+            orchestrator: "TDD-Master"
+        
+        winner: "AuthOrchestrator (14 chars > 9 chars)"
+    
+    rule_3_explicit_priority:
+      description: "If match type and length tie, use explicit priority (lower number wins)"
+      
+      example:
+        intent: "security audit"
+        candidates:
+          - pattern: "security"
+            type: CONTAINS
+            priority: 10
+            orchestrator: "SecurityOrchestrator"
+          
+          - pattern: "audit"
+            type: CONTAINS
+            priority: 20
+            orchestrator: "AuditOrchestrator"
+        
+        winner: "SecurityOrchestrator (priority 10 < 20)"
+    
+    rule_4_fail_fast_on_ambiguity:
+      description: "If no rule resolves conflict, FAIL AT STARTUP (not runtime)"
+      
+      example:
+        intent: "Could match multiple patterns"
+        candidates:
+          - pattern: "pattern A"
+            type: CONTAINS
+            priority: 10
+            orchestrator: "OrchestratorA"
+          
+          - pattern: "pattern B"
+            type: CONTAINS
+            priority: 10
+            orchestrator: "OrchestratorB"
+        
+        result: "STARTUP VALIDATION FAILURE"
+        message: "Ambiguous routing: patterns 'pattern A' and 'pattern B' have same type, length, and priority"
+
+  # ----------------------------------------------------------------------------
+  # Intent Normalization (AC-ROUTE-004)
+  # ----------------------------------------------------------------------------
+  intent_normalization:
+    
+    purpose: "Prevent Unicode-based routing attacks and ensure consistent matching"
+    
+    algorithm: |
+      import unicodedata
+      import re
+      
+      def normalize_intent(intent: str) -> str:
+          # Step 1: Apply NFKC normalization (compatibility composition)
+          # Converts composed characters to canonical form
+          # Example: "ﬁ" (U+FB01) → "fi" (U+0066 U+0069)
+          normalized = unicodedata.normalize('NFKC', intent)
+          
+          # Step 2: Strip zero-width characters (invisible attack vectors)
+          # Remove: Zero-width space, zero-width joiner, zero-width non-joiner, etc.
+          zero_width_chars = [
+              '\u200B',  # Zero-width space
+              '\u200C',  # Zero-width non-joiner
+              '\u200D',  # Zero-width joiner
+              '\uFEFF',  # Zero-width no-break space (BOM)
+              '\u2060',  # Word joiner
+          ]
+          for char in zero_width_chars:
+              normalized = normalized.replace(char, '')
+          
+          # Step 3: Normalize whitespace
+          # Collapse multiple spaces, tabs, newlines into single space
+          normalized = re.sub(r'\s+', ' ', normalized)
+          
+          # Step 4: Normalize quotes and dashes
+          # Prevents "implement" vs "implement" (curly quotes) mismatch
+          quote_mappings = {
+              '\u2018': "'",  # Left single quote
+              '\u2019': "'",  # Right single quote
+              '\u201C': '"',  # Left double quote
+              '\u201D': '"',  # Right double quote
+          }
+          for unicode_quote, ascii_quote in quote_mappings.items():
+              normalized = normalized.replace(unicode_quote, ascii_quote)
+          
+          dash_mappings = {
+              '\u2013': '-',  # En dash
+              '\u2014': '-',  # Em dash
+              '\u2212': '-',  # Minus sign
+          }
+          for unicode_dash, ascii_dash in dash_mappings.items():
+              normalized = normalized.replace(unicode_dash, ascii_dash)
+          
+          # Step 5: Case normalization (after Unicode normalization)
+          normalized = normalized.lower()
+          
+          # Step 6: Strip leading/trailing whitespace
+          normalized = normalized.strip()
+          
+          return normalized
+    
+    examples:
+      input: "implement  authentication" # Multiple spaces
+      output: "implement authentication"
+      
+      input: "implement\u200Bauthentication" # Zero-width space
+      output: "implement authentication"
+      
+      input: "implement "authentication"" # Curly quotes
+      output: "implement \"authentication\""
+      
+      input: "plan — phase 1" # Em dash
+      output: "plan - phase 1"
+      
+      input: "IMPLEMENT\nAUTH" # Newline + uppercase
+      output: "implement auth"
+    
+    # --------------------------------------------------------------------------
+    # Confusable Attack Policy
+    # --------------------------------------------------------------------------
+    confusable_handling:
+      
+      threat_model:
+        scenario: "Attacker uses visually similar characters from different scripts"
+        examples:
+          - "implement" (Latin) vs "іmplеmеnt" (Cyrillic і, е)"
+          - "plan" vs "рlan" (Cyrillic р)"
+          - "admin" vs "аdmin" (Cyrillic а)"
+        
+        risk: "HIGH in environments with mixed-language users or internationalization"
+        impact: "Malicious intent routes to unintended orchestrator"
+      
+      detection:
+        library: "confusables (PyPI package)"
+        method: "confusables.is_confusable(text, preferred_aliases=['LATIN'])"
+        
+        algorithm: |
+          from confusables import is_confusable, confusable_regex
+          
+          def detect_confusables(intent: str) -> tuple[bool, list[str]]:
+              # Check if intent contains confusable characters
+              if is_confusable(intent, preferred_aliases=['LATIN']):
+                  # Identify which characters are confusable
+                  confusable_chars = []
+                  for char in intent:
+                      if unicodedata.name(char, '').startswith(('CYRILLIC', 'GREEK')):
+                          confusable_chars.append(char)
+                  return True, confusable_chars
+              return False, []
+      
+      policy_stance: "WARN_AND_LOG (Phase 1)"
+      
+      rationale: |
+        Most systems don't encounter confusable attacks until they do.
+        Start with warning/logging to gather data on false-positive rate.
+        Escalate to DENY if attacks detected in production.
+      
+      enforcement:
+        warn_and_log:
+          behavior: "Allow intent to proceed, log warning to audit trail"
+          audit_level: "WARNING"
+          audit_category: "GOVERNANCE"
+          audit_fields:
+            - "intent (original)"
+            - "intent_normalized (after NFKC)"
+            - "confusable_chars (detected suspicious characters)"
+            - "correlation_id"
+          
+          log_message: "Potential confusable attack detected: {intent} contains {confusable_chars}"
+        
+        deny_if_detected:
+          behavior: "Reject intent, raise ConfusableAttackError"
+          when_to_use: "If production logs show actual attacks"
+          implementation: |
+            if detect_confusables(intent)[0]:
+                raise ConfusableAttackError(f"Intent contains confusable characters: {intent}")
+        
+        normalize_to_ascii:
+          behavior: "Map confusable characters to ASCII equivalents"
+          complexity: "HIGH (requires comprehensive mapping table)"
+          when_to_use: "For internationalized systems with legitimate mixed-script input"
+          not_recommended_for_phase_1: true
+
+  # ----------------------------------------------------------------------------
+  # Routing Algorithm
+  # ----------------------------------------------------------------------------
+  routing_algorithm: |
+    def route_intent(intent: str, routing_table: list[RoutingEntry]) -> Orchestrator:
+        # Step 1: Normalize intent (NFKC + zero-width strip + whitespace collapse)
+        normalized = normalize_intent(intent)
+        
+        # Step 1.5: Check for confusables (warn/log policy)
+        is_confusable_detected, confusable_chars = detect_confusables(normalized)
+        if is_confusable_detected:
+            audit_logger.log(
+                f"Confusable attack detected: {normalized} contains {confusable_chars}",
+                level="WARNING",
+                category="GOVERNANCE"
+            )
+        
+        # Step 2: Find all matching patterns by type
+        exact_matches = [entry for entry in routing_table if entry.match_type == "EXACT" and entry.pattern.lower() == normalized]
+        
+        if exact_matches:
+            return exact_matches[0].orchestrator  # EXACT wins immediately
+        
+        # Step 3: Find PREFIX matches
+        prefix_matches = [entry for entry in routing_table if entry.match_type == "PREFIX" and normalized.startswith(entry.pattern.lower())]
+        
+        if prefix_matches:
+            # Longest prefix wins
+            longest = max(prefix_matches, key=lambda e: len(e.pattern))
+            return longest.orchestrator
+        
+        # Step 4: Find CONTAINS matches
+        contains_matches = [entry for entry in routing_table if entry.match_type == "CONTAINS" and entry.pattern.lower() in normalized]
+        
+        if contains_matches:
+            # Lowest priority wins
+            sorted_by_priority = sorted(contains_matches, key=lambda e: e.priority)
+            if len(sorted_by_priority) > 1 and sorted_by_priority[0].priority == sorted_by_priority[1].priority:
+                raise AmbiguousRoutingError(f"Multiple CONTAINS matches at priority {sorted_by_priority[0].priority}")
+            return sorted_by_priority[0].orchestrator
+        
+        # Step 5: Find REGEX matches
+        regex_matches = []
+        for entry in routing_table:
+            if entry.match_type == "REGEX":
+                pattern = re.compile(entry.pattern, re.IGNORECASE | re.UNICODE)
+                if pattern.search(normalized):
+                    regex_matches.append(entry)
+        
+        if regex_matches:
+            # Lowest priority wins
+            sorted_by_priority = sorted(regex_matches, key=lambda e: e.priority)
+            if len(sorted_by_priority) > 1 and sorted_by_priority[0].priority == sorted_by_priority[1].priority:
+                raise AmbiguousRoutingError(f"Multiple REGEX matches at priority {sorted_by_priority[0].priority}")
+            return sorted_by_priority[0].orchestrator
+        
+        # Step 6: No match - route to fallback (LLM Intent Classifier)
+        return FallbackOrchestrator()
+
+# ==============================================================================
+# MANIFEST-BASED DISCOVERY (AC-ROUTE-002)
+# ==============================================================================
+manifest_based_discovery:
+  
+  purpose: "Replace import-time registration with explicit, deterministic discovery"
+  
+  # ----------------------------------------------------------------------------
+  # Current Problem (Import-Time Registration)
+  # ----------------------------------------------------------------------------
+  current_problem:
+    mechanism: "@orchestrator_registry decorator at import time"
+    
+    issues:
+      - "Import order determines registration order"
+      - "Last registration wins (duplicates silently overwrite)"
+      - "Heisenbugs: Different behavior across test/prod/IDE"
+      - "Circular import risks"
+      - "No validation until runtime"
+    
+    example_failure: |
+      # File A imports File B
+      from orchestrators.tdd_master import TDDMaster  # Registers with pattern "implement"
+      
+      # File B imports File C
+      from orchestrators.feature_impl import FeatureImpl  # Also registers "implement"
+      
+      # Result: FeatureImpl overwrites TDDMaster (last wins)
+      # Routing breaks, no error raised
+  
+  # ----------------------------------------------------------------------------
+  # Target Solution (Manifest-Based)
+  # ----------------------------------------------------------------------------
+  target_solution:
+    manifest_file: "cortex-brain/tier0/routing-manifest.yaml"
+    
+    schema:
+      orchestrators:
+        - id: "tdd-master-v1"
+          module: "src.orchestrators.tdd_master"
+          class: "TDDMaster"
+          version: "1.0.0"
+          patterns:
+            - pattern: "implement"
+              match_type: "PREFIX"
+              priority: 15
+            - pattern: "build"
+              match_type: "PREFIX"
+              priority: 15
+            - pattern: "create"
+              match_type: "PREFIX"
+              priority: 15
+          ac_id_prefix: "AC-TDD"
+          mode: "autonomous"
+          rollout_state: "ACTIVE"
+        
+        - id: "planning-v5"
+          module: "src.orchestrators.planning_v5"
+          class: "PlanningOrchestrator"
+          version: "5.0.0"
+          patterns:
+            - pattern: "plan"
+              match_type: "PREFIX"
+              priority: 10
+            - pattern: "create a plan"
+              match_type: "EXACT"
+              priority: 5
+          ac_id_prefix: "AC-PLAN"
+          mode: "autonomous"
+          rollout_state: "ACTIVE"
+    
+    loading_process: |
+      def load_orchestrator_registry() -> dict[str, Orchestrator]:
+          # Step 1: Load manifest
+          manifest = yaml.safe_load(open("routing-manifest.yaml"))
+          
+          # Step 2: Validate manifest schema
+          validate_manifest(manifest)
+          
+          # Step 3: Detect conflicts (startup validation)
+          detect_routing_conflicts(manifest["orchestrators"])
+          
+          # Step 4: Import and instantiate orchestrators
+          registry = {}
+          for entry in manifest["orchestrators"]:
+              module = importlib.import_module(entry["module"])
+              orchestrator_class = getattr(module, entry["class"])
+              instance = orchestrator_class()
+              
+              registry[entry["id"]] = {
+                  "orchestrator": instance,
+                  "patterns": entry["patterns"],
+                  "rollout_state": entry["rollout_state"]
+              }
+          
+          # Step 5: Build routing table
+          routing_table = build_routing_table(registry)
+          
+          # Step 6: Persist registry hash for audit
+          registry_hash = hashlib.sha256(str(manifest).encode()).hexdigest()
+          persist_registry_version(registry_hash)
+          
+          return registry
+    
+    startup_validation:
+      purpose: "Guarantee runtime determinism by detecting conflicts before production"
+      
+      # --------------------------------------------------------------------------
+      # AC-ROUTE-005: PREFIX Tie-Breaking Validation
+      # --------------------------------------------------------------------------
+      prefix_tie_breaking_validation:
+        
+        algorithm: |
+          def validate_prefix_tie_breaking(routing_table: list[RoutingEntry]) -> list[str]:
+              conflicts = []
+              
+              # Step 1: Group PREFIX entries by length
+              prefix_entries = [e for e in routing_table if e.match_type == "PREFIX"]
+              entries_by_length = {}
+              for entry in prefix_entries:
+                  length = len(entry.pattern)
+                  if length not in entries_by_length:
+                      entries_by_length[length] = []
+                  entries_by_length[length].append(entry)
+              
+              # Step 2: Check each length group for priority conflicts
+              for length, entries in entries_by_length.items():
+                  if len(entries) < 2:
+                      continue  # No conflict possible with single entry
+                  
+                  # Check if entries have different priorities
+                  priorities = [e.priority for e in entries]
+                  if len(set(priorities)) != len(priorities):
+                      # Duplicate priorities found
+                      priority_counts = {}
+                      for e in entries:
+                          if e.priority not in priority_counts:
+                              priority_counts[e.priority] = []
+                          priority_counts[e.priority].append(e)
+                      
+                      for priority, conflicting_entries in priority_counts.items():
+                          if len(conflicting_entries) > 1:
+                              patterns = [e.pattern for e in conflicting_entries]
+                              conflicts.append(
+                                  f"PREFIX tie-break conflict: patterns {patterns} "
+                                  f"have same length ({length}) and priority ({priority})"
+                              )
+              
+              return conflicts
+          
+          # Fail fast at startup
+          conflicts = validate_prefix_tie_breaking(routing_table)
+          if conflicts:
+              error_message = "\n".join(conflicts)
+              raise RoutingAmbiguityError(f"PREFIX routing ambiguity detected:\n{error_message}")
+        
+        examples:
+          conflict_detected:
+            patterns:
+              - pattern: "implement auth"
+                length: 14
+                priority: 15
+              - pattern: "implement user"
+                length: 14
+                priority: 15
+            
+            error: |
+              PREFIX tie-break conflict: patterns ['implement auth', 'implement user']
+              have same length (14) and priority (15)
+              
+              RESOLUTION: Assign different priorities or use explicit routing rules
+          
+          no_conflict:
+            patterns:
+              - pattern: "implement auth"
+                length: 14
+                priority: 15
+              - pattern: "implement user"
+                length: 14
+                priority: 16
+            
+            result: "Valid (priority tie-breaker exists)"
+      
+      checks:
+        - "No duplicate orchestrator IDs"
+        - "No conflicting patterns (same match_type, length, priority)"
+        - "PREFIX patterns with same length MUST have different priorities"
+        - "All module paths resolvable"
+        - "All classes instantiable"
+        - "All AC-ID prefixes unique"
+      
+      failure_mode: "Raise RegistryValidationError, prevent startup"
+
+  # ----------------------------------------------------------------------------
+  # Migration Path (CORE-021 Compliance)
+  # ----------------------------------------------------------------------------
+  migration_path:
+    rule: "CORE-021: New orchestrators MUST use manifest; legacy exempt until AC-MIGRATE-001"
+    
+    phases:
+      phase_1:
+        description: "Create manifest with current orchestrators"
+        action: "Document existing @orchestrator_registry usages in manifest"
+        status: "Not started"
+      
+      phase_2:
+        description: "Load from manifest, but keep decorator support"
+        action: "DeterministicRoutingEngine reads manifest, falls back to decorator"
+        status: "Not started"
+      
+      phase_3:
+        description: "Migrate legacy orchestrators to manifest"
+        action: "AC-MIGRATE-001: Remove @orchestrator_registry decorators"
+        status: "Not started"
+      
+      phase_4:
+        description: "Deprecate decorator support"
+        action: "Remove OrchestratorRegistry.register() method"
+        status: "Not started"
+
+# ==============================================================================
+# ROUTING CONTRACT TESTS (AC-ROUTE-003)
+# ==============================================================================
+routing_contract_tests:
+  
+  purpose: "Ensure stable routing behavior across versions"
+  
+  test_file: "tests/integration/routing_contract_tests.py"
+  
+  # ----------------------------------------------------------------------------
+  # Test Corpus (Golden Set)
+  # ----------------------------------------------------------------------------
+  test_corpus:
+    description: "Representative user intents with expected routing"
+    
+    corpus:
+      - intent: "epic review"
+        expected_orchestrator: "EpicReview"
+        rationale: "EXACT match"
+      
+      - intent: "implement user authentication"
+        expected_orchestrator: "TDD-Master"
+        rationale: "PREFIX match on 'implement'"
+      
+      - intent: "plan epic for Q1"
+        expected_orchestrator: "Planning v5"
+        rationale: "PREFIX match on 'plan'"
+      
+      - intent: "use tdd for this feature"
+        expected_orchestrator: "TDD-Master"
+        rationale: "CONTAINS match on 'tdd'"
+      
+      - intent: "ado sync work items"
+        expected_orchestrator: "ADO v2"
+        rationale: "PREFIX match on 'ado'"
+      
+      - intent: "vacuum cleanup workspace"
+        expected_orchestrator: "Vacuum v2"
+        rationale: "EXACT match on 'vacuum' (takes precedence over PREFIX 'cleanup')"
+      
+      - intent: "investigate test failure"
+        expected_orchestrator: "Investigation"
+        rationale: "PREFIX match on 'investigate'"
+      
+      - intent: "search git history for auth implementation"
+        expected_orchestrator: "Git History Intelligence"
+        rationale: "PREFIX match on 'search' or 'git history'"
+  
+  # ----------------------------------------------------------------------------
+  # Test Implementation
+  # ----------------------------------------------------------------------------
+  test_implementation: |
+    import pytest
+    from src.orchestrators.core.routing_engine import DeterministicRoutingEngine
+    
+    @pytest.fixture
+    def routing_engine():
+        return DeterministicRoutingEngine.from_manifest("routing-manifest.yaml")
+    
+    @pytest.mark.parametrize("intent,expected_orchestrator", [
+        ("epic review", "EpicReview"),
+        ("implement user auth", "TDD-Master"),
+        ("plan epic for Q1", "Planning v5"),
+        # ... (full corpus)
+    ])
+    def test_routing_contract(routing_engine, intent, expected_orchestrator):
+        """Ensure stable routing for known intents"""
+        result = routing_engine.route(intent)
+        assert result.orchestrator_id == expected_orchestrator, \
+            f"Intent '{intent}' routed to {result.orchestrator_id}, expected {expected_orchestrator}"
+  
+  # ----------------------------------------------------------------------------
+  # Conflict Detection Tests
+  # ----------------------------------------------------------------------------
+  conflict_detection_tests:
+    
+    test_ambiguous_patterns:
+      scenario: "Two CONTAINS patterns with same priority"
+      manifest_snippet: |
+        patterns:
+          - pattern: "security"
+            match_type: "CONTAINS"
+            priority: 10
+          - pattern: "audit"
+            match_type: "CONTAINS"
+            priority: 10
+      
+      intent: "security audit"
+      expected_result: "STARTUP FAILURE (AmbiguousRoutingError)"
+    
+    test_overlapping_prefix:
+      scenario: "Two PREFIX patterns, one is substring of other"
+      manifest_snippet: |
+        patterns:
+          - pattern: "implement"
+            priority: 15
+          - pattern: "implement auth"
+            priority: 20
+      
+      intent: "implement authentication service"
+      expected_result: "Route to 'implement auth' (longest prefix wins)"
+    
+    test_duplicate_orchestrator_id:
+      scenario: "Two orchestrators with same ID"
+      manifest_snippet: |
+        orchestrators:
+          - id: "tdd-master-v1"
+          - id: "tdd-master-v1"  # Duplicate
+      
+      expected_result: "STARTUP FAILURE (DuplicateOrchestratorIdError)"
+
+# ==============================================================================
+# CANONICAL ROUTING TABLE LOCATION (SPEC-019)
+# ==============================================================================
+canonical_routing_table:
+  
+  decision: "CORTEX.prompt.md is SOURCE OF TRUTH"
+  
+  rationale: |
+    - MasterOrchestrator and IntentClassifier read from this file
+    - Updated frequently as orchestrators are added (per DoD completion)
+    - Structured format (YAML table in markdown)
+    - Version-controlled with full audit trail
+  
+  file: ".github/prompts/CORTEX.prompt.md"
+  
+  format: |
+    ## Routing Table
+    
+    | Pattern | Orchestrator | Priority | Mode | AC-ID Prefix | Match Type |
+    |---------|--------------|----------|------|--------------|------------|
+    | epic review | Epic Review | 6 | autonomous | AC-EPIC-* | EXACT |
+    | plan | Planning v5 | 10 | autonomous | AC-PLAN-* | PREFIX |
+    | implement | TDD-Master | 15 | autonomous | AC-TDD-* | PREFIX |
+    | tdd | TDD-Master | 20 | autonomous | AC-TDD-* | CONTAINS |
+  
+  secondary_file: ".github/copilot-instructions.md"
+  
+  relationship: |
+    - copilot-instructions.md is STABLE REFERENCE for GitHub Copilot UI
+    - Updated only for major workflow changes
+    - NOT consumed by DeterministicRoutingEngine
+    - Documents overall agent behavior, not runtime routing
+  
+  update_protocol:
+    trigger: "Orchestrator completes DoD validation"
+    who: "TDD-Master or Orchestrator Scaffolder"
+    steps:
+      - "Add entry to routing table in CORTEX.prompt.md"
+      - "Run routing contract tests"
+      - "If conflicts detected: Adjust priority or pattern"
+      - "Commit changes with AC-ID reference"
+    
+    validation: "Routing contract tests MUST pass before merge"
+
+# ==============================================================================
+# DETERMINISTIC ROUTING ENGINE IMPLEMENTATION
+# ==============================================================================
+deterministic_routing_engine:
+  
+  file: "src/orchestrators/core/routing_engine.py"
+  status: "DESIGNED (AC-ROUTE-001, AC-ROUTE-002, AC-ROUTE-003)"
+  
+  class_structure: |
+    class DeterministicRoutingEngine:
+        def __init__(self, manifest_path: str):
+            self.manifest = self.load_manifest(manifest_path)
+            self.routing_table = self.build_routing_table()
+            self.validate_routing_table()  # Fail fast on conflicts
+        
+        @classmethod
+        def from_manifest(cls, manifest_path: str) -> "DeterministicRoutingEngine":
+            return cls(manifest_path)
+        
+        def route(self, intent: str) -> RoutingResult:
+            """Route intent to orchestrator using deterministic algorithm"""
+            normalized = intent.lower().strip()
+            
+            # Apply routing algorithm (see routing_semantics section)
+            orchestrator_id = self._apply_routing_algorithm(normalized)
+            
+            # Check rollout state
+            entry = self.routing_table[orchestrator_id]
+            if entry.rollout_state != "ACTIVE":
+                # Handle SHADOW, CANARY, etc.
+                return self._handle_rollout_state(orchestrator_id, entry.rollout_state)
+            
+            return RoutingResult(
+                orchestrator_id=orchestrator_id,
+                pattern_matched=entry.matched_pattern,
+                match_type=entry.match_type,
+                confidence=1.0  # Deterministic = always confident
+            )
+        
+        def validate_routing_table(self):
+            """Detect conflicts at startup"""
+            conflicts = self._detect_conflicts()
+            if conflicts:
+                raise RoutingConflictError(conflicts)
+        
+        def _detect_conflicts(self) -> list[str]:
+            """Check for ambiguous patterns"""
+            conflicts = []
+            
+            # Check for duplicate orchestrator IDs
+            ids = [entry.id for entry in self.routing_table]
+            duplicates = [id for id in ids if ids.count(id) > 1]
+            if duplicates:
+                conflicts.append(f"Duplicate orchestrator IDs: {duplicates}")
+            
+            # Check for ambiguous patterns (same match_type, length, priority)
+            # ... (implementation details)
+            
+            return conflicts
+  
+  integration_with_master_orchestrator: |
+    class MasterOrchestrator:
+        def __init__(self):
+            self.routing_engine = DeterministicRoutingEngine.from_manifest(
+                "cortex-brain/tier0/routing-manifest.yaml"
+            )
+        
+        def classify_intent(self, request: str) -> Orchestrator:
+            routing_result = self.routing_engine.route(request)
+            
+            # Log routing decision
+            self.audit_logger.log(
+                f"Routed '{request}' to {routing_result.orchestrator_id} (pattern: {routing_result.pattern_matched})",
+                level="INFO",
+                category="ROUTING"
+            )
+            
+            return self.routing_engine.get_orchestrator(routing_result.orchestrator_id)
+
+# ==============================================================================
+# TESTING & VALIDATION
+# ==============================================================================
+testing_validation:
+  
+  unit_tests:
+    file: "tests/unit/routing/test_deterministic_routing_engine.py"
+    
+    test_cases:
+      - "test_exact_match_priority"
+      - "test_prefix_match_longest_wins"
+      - "test_contains_match_priority_resolution"
+      - "test_regex_match_fallback"
+      - "test_conflict_detection_fails_fast"
+      - "test_duplicate_id_rejected"
+      - "test_ambiguous_patterns_rejected"
+      - "test_manifest_schema_validation"
+  
+  integration_tests:
+    file: "tests/integration/routing/test_routing_contract.py"
+    
+    test_cases:
+      - "test_routing_corpus_stable_across_versions"
+      - "test_routing_decision_logged_to_audit"
+      - "test_manifest_reload_on_file_change"
+      - "test_rollout_state_integration"
+  
+  contract_tests:
+    file: "tests/integration/routing/routing_contract_tests.py"
+    
+    purpose: "Golden set of intents with expected routing"
+    corpus_size: "50+ representative user requests"
+    
+    test_strategy: |
+      @pytest.mark.parametrize("intent,expected_orchestrator", load_routing_corpus())
+      def test_routing_contract(intent, expected_orchestrator):
+          result = routing_engine.route(intent)
+          assert result.orchestrator_id == expected_orchestrator
+
+# ==============================================================================
+# DEPLOYMENT CHECKLIST
+# ==============================================================================
+deployment_checklist:
+  
+  pre_deployment:
+    - "AC-ROUTE-001: Routing semantics implemented"
+    - "AC-ROUTE-002: Manifest-based discovery implemented"
+    - "AC-ROUTE-003: Routing contract tests pass (50+ intents)"
+    - "SPEC-019: CORTEX.prompt.md confirmed as canonical source"
+    - "Unit tests: 100% coverage on DeterministicRoutingEngine"
+    - "Integration tests: Routing logged to audit trail"
+    - "Startup validation: Conflict detection prevents launch"
+  
+  post_deployment:
+    - "Monitor audit logs for routing decisions (INFO level)"
+    - "Track fallback rate (intents not matching any pattern)"
+    - "Review contract test failures (may indicate drift)"
+    - "Update routing corpus as new orchestrators added"
+
+# ==============================================================================
+# VERSION HISTORY
+# ==============================================================================
+version_history:
+  - version: "1.0.0"
+    date: "2026-01-10"
+    author: "Asif Hussain"
+    changes:
+      - "Initial routing specification"
+      - "Deterministic routing semantics defined"
+      - "Manifest-based discovery designed"
+      - "Routing contract tests specified"
+      - "SPEC-019 canonical routing table location"
